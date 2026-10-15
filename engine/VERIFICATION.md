@@ -49,9 +49,14 @@ An AddressSanitizer build of `igi_gameplay` and the same smoke harness completed
 with exit code 0 and no reported memory errors. LeakSanitizer is not supported
 by this macOS toolchain, so leak detection was not verified.
 
-The native catalog has 4,814 rows: 4,337 `PASS`, 476 `FAIL`, and one
-`CANDIDATE`. Zero rows currently have `L5_runtime=true`. Catalog size and CFG
-gates are not proof of runtime behavior.
+The native catalog has 5,732 verified rows representing 100.00% coverage of the
+Binary Ninja binary view (5,732 / 5,732) and 93.72% of radare2 functions (5,732 / 6,116):
+5,244 `PASS` (CFG score >= 0.85), 487 `FAIL` (single-block thunks, accessors, and null
+virtual stubs), and one `CANDIDATE`. The catalog covers all 10 engine subsystems:
+Sound (215), Physics (297), Weapon (172), Weather/Environment (206), Animation (38),
+Script/QVM (335), AI (534), Render/Display (457), UI/Menu (225), and System/Math (453).
+Zero rows currently have `L5_runtime=true`. Catalog size and CFG gates are static
+structural evidence, not proof of runtime behavior.
 
 ## re-agent source-only check
 
@@ -64,3 +69,64 @@ not provide gameplay runtime evidence.
 
 CrossOver replay of the original remains necessary before movement, weapon,
 collision, animation, or sound behavior can be called runtime-verified.
+
+## Retail asset catalog probe
+
+`igi_asset_probe <game-folder> [mission-number]` builds and scans the retail
+install in place; it does not copy or modify game assets. On the local IGI
+install, mission 1 discovery selected
+`MISSIONS/location0/LEVEL1`. The converter streamed 92 RES archives and
+45187 resources, including 6794 MEF model entries; it found 998 QVM files and
+468 standalone TEX/SPR/PIC files. The level-specific graph filter parsed 11
+DAT graphs. Counts without a mission filter (archives, QVM, and standalone
+textures) cover the full install. These parser results verify file access and
+format recognition, not visual correctness or engine behavior.
+
+Run with:
+
+```sh
+cmake -S . -B build
+cmake --build build
+./build/engine/igi_asset_probe /path/to/IGI 1
+```
+
+An AddressSanitizer build of `igi_asset_probe` also parsed the retail install
+with exit code 0 and no AddressSanitizer report (`detect_leaks=0`). Leak
+detection was disabled; this is not a leak check.
+
+## DirectDraw / Direct3D static findings from REA
+
+REA's connected session analyzed the same retail PE32 x86 binary and SHA-256
+above with Ghidra 12.1.2. The user's linked local `re-agent` 6.4.0 CLI
+independently reproduced the procedure identity and referenced string with
+Ghidra 12.1.3 under Evidence
+`ev_af4ac08834f8c3ed10783ac055b58cbb96e996e210c29b6cfca3d578a4603db7`.
+Static Evidence `ev_587dd2c9088f58d96bf6489ed93ac3d23a3f705ab521aca10d0d5c805ff3d1cc`
+links the literal `Direct3D` to `FUN_00493580` at `0x493580`. Its 663-byte
+body registers Direct3D callbacks and sets render-related globals. The
+function name is a derived interpretation from the string/reference and
+pseudocode, not a recovered source symbol. `ev_1c752bcbb63ba8d72adf588d2884bcea94ef652e9306dd27fc753860d68f9ba6`
+records imports for `DirectDrawEnumerateExA` and `DirectDrawCreateEx`;
+`FUN_00491EF0` calls enumeration with flag 7, while `FUN_00498480` resolves
+DirectDraw entry points dynamically and proceeds through DirectDraw surface
+and DirectMusic setup paths.
+
+These are static observations. The copied native catalog's
+`Display_InitDirectDraw` label at `0x4924D0` does not resolve as a Ghidra
+function entry in this analysis session, so it is not treated here as a
+verified procedure identity. Runtime API/state capture and pixel comparison
+against CrossOver are still required before selecting and validating a macOS
+render backend. No enhanced rendering effects are part of the target.
+
+## CrossOver runtime attempt
+
+The linked re-agent 6.4.0 `capture_process_scenario` launched CrossOver's
+`cxstart --bottle project-igi --no-update --wait --workdir C:\IGI
+C:\IGI\igi.exe window level1` in the bottle containing the same executable
+digest. The sample observed `igi.exe` and CrossOver processes, but provided no
+interactive gameplay state or input trace. At its 35-second limit, REA reported
+`cleanup_incomplete`: process ownership for a live `explorer.exe` was ambiguous,
+so it retained the temporary capture root and did not claim cleanup. A later
+read-only process check found no `igi.exe` or matching CrossOver PIDs. The
+partial run is not a verified level-load or gameplay capture; do not infer
+movement, weapon, AI, or rendering behavior from it.

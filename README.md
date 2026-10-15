@@ -1,18 +1,18 @@
 # Project Open I.G.I.
 
 A native macOS reimplementation of the Project I.G.I. game engine, built in
-C++20. The first implementation milestone focuses on gameplay fidelity:
-locomotion, physics, player and weapon motion, animation integration, and
-gameplay audio. Original game data is loaded from a user-provided game folder.
+C++20. The first implementation milestone focuses on player locomotion,
+physics, weapons, and enemy AI. Original game data is loaded from the retail
+game folder.
 
 ## Current state
 
-The repository currently contains a small, buildable gameplay library with a
-49-state human locomotion graph and initial reverse-engineered movement
-equations. It is not yet a complete game engine and does not yet produce
-`igi.app`. The graph is cross-checked against OpenIGI source; the movement
-equations are recorded against static REA evidence in `engine/VERIFICATION.md`.
-Runtime parity against the original game remains to be measured.
+The repository currently contains a buildable gameplay library with a
+49-state human locomotion graph, initial movement equations, and a
+converter-backed retail asset catalog probe. It is not yet a playable game and
+does not yet produce `igi.app`. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
+and [verification notes](engine/VERIFICATION.md). Runtime parity against the
+original game remains to be measured.
 
 ## Build
 
@@ -41,8 +41,11 @@ large generated scratch artifacts to Git commits.
 
 ## Gameplay priority
 
-1. Match player movement, locomotion state transitions, and physics.
-2. Match weapon selection, aiming, firing, recoil, and reload timing.
-3. Integrate original animation and sound assets through native systems.
+1. Match player movement, locomotion transitions, and collision physics.
+2. Match weapon selection, aiming, firing, recoil, and reload behavior.
+3. Match Level 1 enemy sensing, orders, patrol, movement, and combat.
 4. Compare recorded input and state traces against `igi.exe` under CrossOver.
-5. Add presentation systems after gameplay behavior has evidence-backed parity.
+5. Implement the original fixed-function rendering behavior and compare frames.
+
+Main menu, audio, animation polish, and app packaging are deferred until after
+the first gameplay demo.
