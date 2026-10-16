@@ -1,6 +1,6 @@
 # Project Open I.G.I.
 
-**Version 0.1 ALPHA**
+**Version 0.1 BETA**
 
 An open-source native implementation of the Project I.G.I. game engine, built
 in C++20 for all major desktop operating systems — Windows, macOS, and Linux.
@@ -14,9 +14,30 @@ locomotion, physics, weapons, and enemy AI.
 
 The repository builds a C++20 gameplay library, a fixed-step application loop,
 asset and native diagnostic probes, and a C++ SDL2 application shell packaged
-as `igi.app` on macOS (native binaries on Windows and Linux). The shell opens a window and runs a provisional 60 Hz loop;
-player control, level rendering, collision queries, weapons, and AI are not
-integrated yet, so it is not a playable game. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
+as `igi.app` on macOS (native binaries on Windows and Linux).
+
+**Working in 0.1 BETA (demo):**
+
+- Player
+- AI
+- Weapons
+- Graphs
+- Terrain
+- Textures
+- MEF models
+
+None of these are complete, but together they are enough to play a short demo
+from `igi.app`.
+
+**Not working yet:**
+
+- Main Menu
+- Magic Objects
+- Sound
+- Movies
+- Cutscenes
+
+See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
 and [verification notes](engine/VERIFICATION.md). Runtime parity against the
 original game remains to be measured.
 
@@ -64,9 +85,9 @@ Linux — and is not tied to any single platform.
 of `develop`. Stable version tags such as `v0.1.0` create GitHub releases only
 when their commit is part of `main`. Feature branches are not release sources.
 
-The release workflow currently publishes source snapshots only. This repository
-does not yet build a playable game; its current `igi.app` is only a window and
-fixed-step-loop shell, so releases must not claim to contain a playable macOS port. See [release policy](docs/RELEASE_POLICY.md).
+The release workflow currently publishes source snapshots only. The `igi.app`
+runs a playable demo slice (see Current state); releases must describe the
+demo honestly and list what is not working yet. See [release policy](docs/RELEASE_POLICY.md).
 
 ## Build
 
