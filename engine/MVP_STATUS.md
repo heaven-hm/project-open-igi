@@ -1,14 +1,23 @@
 # Experimental gameplay status
 
-Updated 2026-10-16. Actual source tree: `/Users/haseeb-mir/Documents/Code/project-igi-natives`, branch `feature/native-gameplay-mvp`. The other active agent uses a separate repository/worktree; see [AGENT_COORDINATION.md](AGENT_COORDINATION.md).
+Updated 2026-10-16. Current game source: `/Users/haseeb-mir/Documents/Code/project-open-igi`,
+branch `feature/gameplay-prototype`. Earlier measurements and delivery paths below
+were imported from the native-MVP predecessor; they are historical evidence and
+do not establish acceptance of the current checkout.
 
 ## Acceptance status
 
-Original gameplay equivalence is **NOT VERIFIED**. Sound, menus, exact text drawing, and cutscenes are deferred by the owner. Other gameplay requirements remain active. Functional regressions passing does not establish matching original behavior.
+Original gameplay equivalence is **NOT VERIFIED**. The first acceptance milestone
+is Level 1 only. Movement/building entry, weapons/health, AI/navigation, mission
+logic, original graphics/assets and gameplay animations remain required.
+Sound, movies/movie animation, cutscenes, subtitles, smoke, optional effects and
+menu presentation are deferred. After Level 1 verification, hand off the build
+and wait for the owner's manual test before expanding to other levels.
+Functional regressions passing does not establish matching original behavior.
 
 ## Implemented and checked
 
-- Original converter parsers: 52 files copied unchanged, with the existing SHA manifest and notices. No proprietary assets are committed or embedded.
+- Original converter parsers are reused with their notices and baseline SHA manifest; local formatting and compatibility adaptations exist. Proprietary assets stay external.
 - Native macOS C++20 loop, original mission selection, config.qvm input profiles, timestamped logs, replay, state trace, screenshot, and bounded execution.
 - Original terrain/models/textures, original movement parameters/root tracks, capsule world collision, jump/crouch, several original weapons, shared ammunition, pickups, simplified projectiles/health/combat.
 - Original navigation graphs and authored patrol commands; basic perception and combat. AI scheduling and combat policy remain provisional.

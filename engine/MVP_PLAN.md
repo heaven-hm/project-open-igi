@@ -2,8 +2,17 @@
 
 **Document Version:** 2.0  
 
-**Active MVP scope, 2026-10-16:** Gameplay only. Sound/audio implementation,
-cutscenes, movies, and menu presentation remain deferred by the owner.
+**First acceptance milestone, owner update 2026-10-16:** Level 1 only, matched
+against the original retail `igi.exe`. Movement, jumping, building entry,
+weapons and damage, health, AI/navigation, gameplay scripting/objectives,
+original models/textures, graphics, and player/weapon/enemy animations remain
+required. Other levels are later milestones.
+
+**Deferred:** Sound/audio implementation, movies and movie animation,
+cutscenes, subtitles, smoke, optional effects, and menu presentation.
+Gameplay animation is not part of the movie/cutscene deferral.
+After Level 1 passes the relevant implementation and retail comparisons,
+hand off the build and wait for the owner's manual test before expanding scope.
 The historical phases below do not authorize starting those deferred systems.
 Use the C# `-vanilla` configuration as a candidate reference and retail IGI.exe
 as the authority. CFG similarity is one static check, not proof of behavior.
