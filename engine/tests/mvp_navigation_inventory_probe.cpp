@@ -43,7 +43,7 @@ MissionScene test_scene()
     pickup.ammunition_identifier = "AMMO_ID_762";
     scene.weapons = {pistol, rifle, knife, pickup};
     scene.weapon_categories = {{"WEAPON_ID_KNIFE"}, {"WEAPON_ID_GLOCK"}, {"WEAPON_ID_MP5SD"}};
-    scene.weapon_pickups.push_back({{0, 0, -2}, "WEAPON_ID_AK47"});
+    scene.weapon_pickups.push_back({{0, 1.2f, -2}, "WEAPON_ID_AK47"});
     return scene;
 }
 

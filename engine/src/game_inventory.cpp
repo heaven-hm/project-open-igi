@@ -57,7 +57,7 @@ void GameSimulation::select_weapon(std::size_t slot)
                      "Selected slot " + std::to_string(slot + 1) + ": " + weapon_parameters().name);
 }
 
-void GameSimulation::collect_weapons()
+void GameSimulation::collect_weapons(const PlayerInput& input)
 {
     const auto acquire = [&](const std::string& identifier)
     {
@@ -131,7 +131,9 @@ void GameSimulation::collect_weapons()
         const float dy = pickup.position.y - player_position().y;
         const float dz = std::abs(pickup.position.z - player_position().z);
         const float planar = std::sqrt(dx * dx + dy * dy);
-        if ((planar < 1.5f && dz < 2.0f) || length(pickup.position - player_position()) < 2.5f)
+        const bool auto_pickup = (planar < 0.70f && dz < 1.0f);
+        const bool interact_pickup = input.interacting && (length(pickup.position - player_position()) < 2.5f);
+        if (auto_pickup || interact_pickup)
         {
             pickups_collected_[pickup_index] = acquire(pickup.weapon_identifier);
         }
@@ -145,7 +147,10 @@ void GameSimulation::collect_weapons()
             const float dy = actors_[actor_index].position.y - player_position().y;
             const float dz = std::abs(actors_[actor_index].position.z - player_position().z);
             const float planar = std::sqrt(dx * dx + dy * dy);
-            if ((planar < 1.5f && dz < 2.0f) || length(actors_[actor_index].position - player_position()) < 2.5f)
+            const bool auto_pickup = (planar < 0.70f && dz < 1.0f);
+            const bool interact_pickup =
+                input.interacting && (length(actors_[actor_index].position - player_position()) < 2.5f);
+            if (auto_pickup || interact_pickup)
             {
                 soldier_weapons_collected_[actor_index] = acquire(scene_.actors[actor_index].weapon_identifier);
             }

@@ -224,7 +224,7 @@ void GameSimulation::tick(const PlayerInput& input)
                 (static_cast<int>(selected_weapon_slot_) + (input.weapon_cycle > 0 ? 1 : -1) + count) % count;
             select_weapon(static_cast<std::size_t>(next));
         }
-        collect_weapons();
+        collect_weapons(input);
         advance_player(input);
         advance_weapon(input);
         advance_view_animation(input);

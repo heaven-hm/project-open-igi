@@ -208,7 +208,7 @@ class GameSimulation final : private HumanMovementWorld
     void advance_actor_animations();
     void advance_view_animation(const PlayerInput& input);
     void select_weapon(std::size_t slot);
-    void collect_weapons();
+    void collect_weapons(const PlayerInput& input);
     void advance_patrol(std::size_t actor_index);
     void move_actor(std::size_t actor_index, Vector3 destination, float speed);
     [[nodiscard]] Vector3 animation_delta(int state);
