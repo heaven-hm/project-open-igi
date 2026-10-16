@@ -9,11 +9,21 @@
 namespace igi::gameplay
 {
 
+struct FreeCamera
+{
+    Vector3 position{};
+    float heading{};
+    float pitch{};
+    bool active = false;
+};
+
 class SceneRenderer final
 {
   public:
     SceneRenderer(int width, int height, std::size_t worker_count = 0);
-    void render(const MissionScene& scene, const GameSimulation& simulation);
+    void render(const MissionScene& scene,
+                const GameSimulation& simulation,
+                const FreeCamera* free_camera = nullptr);
 
     [[nodiscard]] std::span<const std::uint32_t> pixels() const noexcept
     {

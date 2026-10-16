@@ -499,7 +499,7 @@ int run(RuntimeOptions options, const char* executable)
     log(Severity::information,
         "application",
         "Mission ready. Controls loaded from original config.qvm; Enter "
-        "restarts, F11 toggles fullscreen, Escape quits");
+        "restarts, F11 toggles fullscreen, F12 toggles free camera, Escape quits");
     bool running = true;
     std::uint64_t frame_count = 0;
     auto previous_time = Clock::now();
@@ -510,6 +510,7 @@ int run(RuntimeOptions options, const char* executable)
     int requested_weapon_slot = -1;
     int requested_weapon_cycle = 0;
     bool paused = false;
+    igi::gameplay::FreeCamera free_camera{};
     while (running && (!options.frames || frame_count < *options.frames))
     {
         SDL_Event event{};
@@ -557,6 +558,12 @@ int run(RuntimeOptions options, const char* executable)
                 if (event.key.keysym.sym == SDLK_RETURN)
                 {
                     simulation.restart();
+                    if (free_camera.active)
+                    {
+                        free_camera.position = simulation.camera_position();
+                        free_camera.heading = simulation.heading();
+                        free_camera.pitch = simulation.pitch();
+                    }
                 }
                 if (event.key.keysym.sym == SDLK_F11 && window)
                 {
@@ -568,16 +575,45 @@ int run(RuntimeOptions options, const char* executable)
                         log(Severity::warning, "display", SDL_GetError());
                     }
                 }
+                if (event.key.keysym.sym == SDLK_F12)
+                {
+                    free_camera.active = !free_camera.active;
+                    if (free_camera.active)
+                    {
+                        free_camera.position = simulation.camera_position();
+                        free_camera.heading = simulation.heading();
+                        free_camera.pitch = simulation.pitch();
+                        log(Severity::information,
+                            "camera",
+                            "Free camera enabled (WASD: roam, Space: up, Shift: down, F12: toggle)");
+                    }
+                    else
+                    {
+                        log(Severity::information, "camera", "Free camera disabled");
+                    }
+                }
             }
             if (event.type == SDL_MOUSEMOTION)
             {
                 const float sensitivity = controls.mouse_sensitivity() * 0.00625f;
-                heading_change -= static_cast<float>(event.motion.xrel) * sensitivity;
-                pitch_change +=
-                    static_cast<float>(event.motion.yrel) * sensitivity * (controls.invert_mouse() ? 1 : -1);
+                if (free_camera.active)
+                {
+                    free_camera.heading -= static_cast<float>(event.motion.xrel) * sensitivity;
+                    free_camera.pitch += static_cast<float>(event.motion.yrel) * sensitivity *
+                                         (controls.invert_mouse() ? 1 : -1);
+                    free_camera.pitch = std::clamp(free_camera.pitch, -1.50f, 1.50f);
+                }
+                else
+                {
+                    heading_change -= static_cast<float>(event.motion.xrel) * sensitivity;
+                    pitch_change +=
+                        static_cast<float>(event.motion.yrel) * sensitivity * (controls.invert_mouse() ? 1 : -1);
+                }
             }
         }
         const auto now = Clock::now();
+        const double delta_seconds =
+            std::min(std::chrono::duration<double>(now - previous_time).count(), 0.1);
         accumulator += options.headless
                            ? 1.0 / 30.0
                            : std::min(std::chrono::duration<double>(now - previous_time).count(), 0.25);
@@ -587,6 +623,54 @@ int run(RuntimeOptions options, const char* executable)
             accumulator = 0;
             SDL_Delay(25);
             continue;
+        }
+        if (free_camera.active && !options.headless)
+        {
+            const auto* keys = SDL_GetKeyboardState(nullptr);
+            if (keys)
+            {
+                const float dt = static_cast<float>(delta_seconds > 0.0 ? delta_seconds : (1.0 / 60.0));
+                constexpr float speed = 30.0f;
+
+                const float heading = free_camera.heading;
+                const float pitch = free_camera.pitch;
+                const Vector3 forward{-std::sin(heading) * std::cos(pitch),
+                                      std::cos(heading) * std::cos(pitch),
+                                      std::sin(pitch)};
+                const Vector3 right{std::cos(heading), std::sin(heading), 0.0f};
+
+                Vector3 move_dir{};
+                if (keys[SDL_SCANCODE_W])
+                {
+                    move_dir = move_dir + forward;
+                }
+                if (keys[SDL_SCANCODE_S])
+                {
+                    move_dir = move_dir - forward;
+                }
+                if (keys[SDL_SCANCODE_D])
+                {
+                    move_dir = move_dir + right;
+                }
+                if (keys[SDL_SCANCODE_A])
+                {
+                    move_dir = move_dir - right;
+                }
+
+                const float len = length(move_dir);
+                if (len > 0.001f)
+                {
+                    free_camera.position = free_camera.position + (move_dir * (speed * dt / len));
+                }
+                if (keys[SDL_SCANCODE_SPACE])
+                {
+                    free_camera.position.z += speed * dt;
+                }
+                if (keys[SDL_SCANCODE_LSHIFT] || keys[SDL_SCANCODE_RSHIFT])
+                {
+                    free_camera.position.z -= speed * dt;
+                }
+            }
         }
         while (accumulator + 0.00000001 >= 1.0 / 30.0)
         {
@@ -604,17 +688,24 @@ int run(RuntimeOptions options, const char* executable)
             }
             else if (!options.headless)
             {
-                int keyboard_size = 0;
-                const auto* keys = SDL_GetKeyboardState(&keyboard_size);
-                const auto buttons = SDL_GetMouseState(nullptr, nullptr);
-                input = controls.sample({keys, static_cast<std::size_t>(keyboard_size)}, buttons);
-                input.weapon_slot = requested_weapon_slot;
-                if (requested_weapon_cycle != 0)
+                if (free_camera.active)
                 {
-                    input.weapon_cycle = requested_weapon_cycle;
+                    input = {};
                 }
-                input.heading_change = heading_change;
-                input.pitch_change = pitch_change;
+                else
+                {
+                    int keyboard_size = 0;
+                    const auto* keys = SDL_GetKeyboardState(&keyboard_size);
+                    const auto buttons = SDL_GetMouseState(nullptr, nullptr);
+                    input = controls.sample({keys, static_cast<std::size_t>(keyboard_size)}, buttons);
+                    input.weapon_slot = requested_weapon_slot;
+                    if (requested_weapon_cycle != 0)
+                    {
+                        input.weapon_cycle = requested_weapon_cycle;
+                    }
+                    input.heading_change = heading_change;
+                    input.pitch_change = pitch_change;
+                }
             }
             heading_change = 0;
             pitch_change = 0;
@@ -644,7 +735,7 @@ int run(RuntimeOptions options, const char* executable)
         const bool final_frame = options.frames && frame_count == *options.frames;
         if (!options.headless || options.benchmark || (final_frame && !options.screenshot.empty()))
         {
-            frame.render(scene, simulation);
+            frame.render(scene, simulation, free_camera.active ? &free_camera : nullptr);
             if (display)
             {
                 if (SDL_UpdateTexture(texture.get(), nullptr, frame.pixels().data(), options.width * 4) !=

@@ -344,7 +344,9 @@ void SceneRenderer::text(int left, int top, std::string_view message, std::uint3
     }
 }
 
-void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simulation)
+void SceneRenderer::render(const MissionScene& scene,
+                           const GameSimulation& simulation,
+                           const FreeCamera* free_camera)
 {
     if (scene.textures.empty())
     {
@@ -357,7 +359,9 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
         for (const auto& worker : render_workers_)
         {
             pending_frames.push_back(std::async(std::launch::async,
-                [&scene, &simulation, renderer = worker.get()] { renderer->render(scene, simulation); }));
+                [&scene, &simulation, free_camera, renderer = worker.get()] {
+                    renderer->render(scene, simulation, free_camera);
+                }));
         }
         for (auto& pending_frame : pending_frames)
         {
@@ -381,11 +385,17 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
         const auto sky = mix_color(0xff899dacu, 0xffc4c2afu, static_cast<float>(row) / height_);
         std::fill_n(pixels_.begin() + static_cast<std::ptrdiff_t>(row) * width_, width_, sky);
     }
-    const auto camera = simulation.camera_position();
-    const auto forward = simulation.aim_direction();
-    const Vector3 right{std::cos(simulation.heading()), std::sin(simulation.heading()), 0};
+    const bool is_free_camera = free_camera && free_camera->active;
+    const auto camera = is_free_camera ? free_camera->position : simulation.camera_position();
+    const float heading = is_free_camera ? free_camera->heading : simulation.heading();
+    const float pitch = is_free_camera ? free_camera->pitch : simulation.pitch();
+    const auto forward = is_free_camera
+        ? Vector3{-std::sin(heading) * std::cos(pitch), std::cos(heading) * std::cos(pitch), std::sin(pitch)}
+        : simulation.aim_direction();
+    const Vector3 right{std::cos(heading), std::sin(heading), 0};
     const Vector3 up = normalized(cross(right, forward));
-    const float focal_length = static_cast<float>(width_) * (simulation.aiming() ? 0.85f : 0.55f);
+    const float focal_length =
+        static_cast<float>(width_) * ((simulation.aiming() && !is_free_camera) ? 0.85f : 0.55f);
     for (const auto& surface : scene.static_triangles)
     {
         if (surface.firing_only)
@@ -457,7 +467,7 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
         }
     }
     const auto equipped_mesh = simulation.weapon_mesh();
-    if (equipped_mesh && simulation.health() > 0)
+    if (equipped_mesh && simulation.health() > 0 && !is_free_camera)
     {
         std::fill(depth_.begin(), depth_.end(), 0.0f);
         if (scene.first_person_mesh && scene.first_person_animations &&
@@ -535,11 +545,15 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
     }
     const int center_x = width_ / 2;
     const int center_y = height_ / 2;
-    const auto crosshair_color = simulation.weapon().hit_marker_remaining > 0 ? 0xffffb171u : 0xffdce1d1u;
-    rectangle(center_x - 9, center_y, 5, 1, crosshair_color);
-    rectangle(center_x + 5, center_y, 5, 1, crosshair_color);
-    rectangle(center_x, center_y - 9, 1, 5, crosshair_color);
-    rectangle(center_x, center_y + 5, 1, 5, crosshair_color);
+    if (!is_free_camera)
+    {
+        const auto crosshair_color =
+            simulation.weapon().hit_marker_remaining > 0 ? 0xffffb171u : 0xffdce1d1u;
+        rectangle(center_x - 9, center_y, 5, 1, crosshair_color);
+        rectangle(center_x + 5, center_y, 5, 1, crosshair_color);
+        rectangle(center_x, center_y - 9, 1, 5, crosshair_color);
+        rectangle(center_x, center_y + 5, 1, 5, crosshair_color);
+    }
     rectangle(14, height_ - 55, 195, 40, 0xff17211bu);
     text(24, height_ - 46, "HEALTH", 0xffa8bd99u);
     const float health_fraction =
@@ -553,7 +567,7 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
          std::to_string(simulation.weapon().magazine) + " / " + std::to_string(simulation.weapon().reserve),
          0xffe5e7cfu,
          2);
-    if (simulation.weapon().reload_remaining > 0)
+    if (simulation.weapon().reload_remaining > 0 && !is_free_camera)
     {
         text(center_x - 30, center_y + 25, "RELOADING", 0xffdce1d1u);
     }
@@ -563,6 +577,12 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
          "WEAPON " + std::to_string(simulation.selected_weapon_slot() + 1) + " / " +
              std::to_string(simulation.inventory_size()) + "   CONTROLS FROM CONFIG",
          0xffe5e7cfu);
+    if (is_free_camera)
+    {
+        rectangle(center_x - 200, 14, 400, 42, 0xff17211bu);
+        text(center_x - 185, 20, "FREE CAMERA ACTIVE [F12 TO EXIT]", 0xff66ccffu, 2);
+        text(center_x - 185, 38, "WASD: ROAM | SPACE: UP | SHIFT: DOWN", 0xffdce1d1u);
+    }
     if (simulation.damage_flash_remaining() > 0)
     {
         const int border = std::max(3, width_ / 200);
