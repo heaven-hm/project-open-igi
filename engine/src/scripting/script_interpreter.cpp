@@ -381,10 +381,13 @@ bool QvmExecutionContext::ExecuteLoopBinary(uint8_t opcode) {
 
     const int32_t left_value = left.int_val;
     const int32_t right_value = right.int_val;
+    const auto left_bits = std::bit_cast<uint32_t>(left_value);
+    const auto right_bits = std::bit_cast<uint32_t>(right_value);
+    const auto shift_count = right_bits & 31u;
     switch (opcode) {
-        case 0x19: Push(QvmRuntimeValue::FromInt(left_value + right_value)); break;
-        case 0x1A: Push(QvmRuntimeValue::FromInt(left_value - right_value)); break;
-        case 0x1B: Push(QvmRuntimeValue::FromInt(left_value * right_value)); break;
+        case 0x19: Push(QvmRuntimeValue::FromInt(std::bit_cast<int32_t>(left_bits + right_bits))); break;
+        case 0x1A: Push(QvmRuntimeValue::FromInt(std::bit_cast<int32_t>(left_bits - right_bits))); break;
+        case 0x1B: Push(QvmRuntimeValue::FromInt(std::bit_cast<int32_t>(left_bits * right_bits))); break;
         case 0x1C:
             if (right_value == 0) {
                 SetError("Divide by zero in QVM");
@@ -392,8 +395,8 @@ bool QvmExecutionContext::ExecuteLoopBinary(uint8_t opcode) {
             }
             Push(QvmRuntimeValue::FromInt(left_value / right_value));
             break;
-        case 0x1D: Push(QvmRuntimeValue::FromInt(left_value << right_value)); break;
-        case 0x1E: Push(QvmRuntimeValue::FromInt(left_value >> right_value)); break;
+        case 0x1D: Push(QvmRuntimeValue::FromInt(std::bit_cast<int32_t>(left_bits << shift_count))); break;
+        case 0x1E: Push(QvmRuntimeValue::FromInt(left_value >> shift_count)); break;
         case 0x1F: Push(QvmRuntimeValue::FromInt(left_value & right_value)); break;
         case 0x20: Push(QvmRuntimeValue::FromInt(left_value | right_value)); break;
         case 0x21: Push(QvmRuntimeValue::FromInt(left_value ^ right_value)); break;
@@ -437,7 +440,7 @@ bool QvmExecutionContext::ExecuteLoopUnary(uint8_t opcode) {
 
     switch (opcode) {
         case 0x2B: Push(QvmRuntimeValue::FromInt(operand.int_val)); break;
-        case 0x2C: Push(QvmRuntimeValue::FromInt(-operand.int_val)); break;
+        case 0x2C: Push(QvmRuntimeValue::FromInt(std::bit_cast<int32_t>(0u - std::bit_cast<uint32_t>(operand.int_val)))); break;
         case 0x2D: Push(QvmRuntimeValue::FromInt(~operand.int_val)); break;
         case 0x2E: Push(QvmRuntimeValue::FromInt(operand.int_val == 0)); break;
         default:
