@@ -7,14 +7,17 @@ backend targets macOS; Windows and Linux backends are later work and are not
 currently supported or verified.
 
 `igi_gameplay` is the C++20 gameplay layer. It contains the retail human
-locomotion transition table, observed movement equations, and a catalog for
+locomotion transition table, observed movement equations, mission navigation
+graph data and an REA-backed graph-coordinate transform, plus a catalog for
 original game files. Converter parsers are vendored under `formats/vendor`
 with their upstream license notices in `formats/vendor/notices`.
 
-This is still an engine prototype; it does not yet implement grounded movement,
-collision response, weapon state, AI, renderer, or an app bundle. Those require
-matching native body semantics and runtime traces from the retail executable;
-do not infer them from a graph.
+This is still an engine prototype. The macOS `igi_game` bundle is a C++ SDL2
+application shell with a fixed-step loop; it does not yet implement grounded
+movement,
+collision response, weapon state, AI routing/runtime, or level rendering. Those
+require matching native body semantics and runtime traces from the retail
+executable; do not infer them from a graph.
 
 Configure from the repository root with `cmake -S . -B build`.
 

@@ -17,29 +17,35 @@ movement, but polish and sound are deferred.
 
 ## Evidence and implementation order
 
-1. **Retail capture:** launch the exact `igi.exe` in the existing CrossOver
+1. **Application loop:** build the macOS `igi.app` shell with `main.cpp`, a
+   C++ SDL2 window/event loop, and a portable fixed-step update clock. Keep the
+   game loop independent of SDL2. Feed physical
+   input events into the portable input state and consume transitions per tick.
+   Verify the bundle, tick scheduling, and input edges before adding gameplay
+   systems. The current shell has no level rendering or playable state.
+2. **Retail capture:** launch the exact `igi.exe` in the existing CrossOver
    bottle with `window level1`. Capture a fixed input sequence, rendered frames,
    process/module identity, and available player/weapon/AI state. Keep the
    binary digest with every capture. Static-only evidence cannot stand in for
    runtime behavior.
-2. **Movement slice:** use REA to map the active player update, input dispatch,
+3. **Movement slice:** use REA to map the active player update, input dispatch,
    movement integration, ground/ladder/jump transitions, collision response,
    and animation root-motion inputs. Implement only values and branch order
    supported by binary or runtime evidence. Keep unknown retail tuning values
    explicit until captured.
-3. **Weapon slice:** map the active fire/reload functions and weapon QVM/config
+4. **Weapon slice:** map the active fire/reload functions and weapon QVM/config
    fields; capture shot timing, ammo changes, recoil, projectile/hit behavior,
    and state transitions. Port those observations and replay the same sequence.
-4. **AI slice:** map the mission graph, task/sensor/order handlers, patrol,
+5. **AI slice:** map the mission graph, task/sensor/order handlers, patrol,
    detection, combat, movement, and damage responses. Use Level 1 source data;
    compare enemy transitions and coordinates on a fixed timeline.
-5. **Native render harness:** render the original geometry/textures with the
+6. **Native render harness:** render the original geometry/textures with the
    game's resolution, camera, texture, depth, blending, lighting, and frame
    order. First capture the legacy output under CrossOver; then map observed
    state to the macOS MVP backend. Keep rendering rules in the OS-independent
    core and graphics APIs in platform backends. Windows and Linux backends come
    after the MVP. No backend is accepted on API similarity alone.
-6. **Parity gate:** feed identical tick-stamped inputs to the original and the
+7. **Parity gate:** feed identical tick-stamped inputs to the original and the
    prototype. Compare player transforms/velocities/state, weapon state and
    events, AI state/positions, and frame captures. Report exact matches,
    measured numeric tolerances, unexplained differences, and uncovered paths.

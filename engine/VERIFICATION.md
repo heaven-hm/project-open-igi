@@ -14,6 +14,50 @@ sources, and the core builds with the macOS toolchain. This source inspection an
 build establish a portable code boundary only; they do not establish successful
 Windows or Linux builds.
 
+## Native application shell and fixed-step loop
+
+- The macOS CMake target `igi_game` produces
+  `engine/igi.app/Contents/MacOS/igi` and uses the C++ SDL2 backend in
+  `engine/platform/sdl/sdl_application.cpp`. The portable `GameLoop` lives in
+  `engine/src/game_loop.cpp` and currently advances at a provisional 60 Hz,
+  caps catch-up at eight steps per frame, and reports discarded backlog. The
+  60 Hz interval is scaffolding, not a retail timing measurement; measure the
+  original loop before using it to drive gameplay physics.
+- Configure/build command: `cmake -S . -B /tmp/project-open-igi-build` followed
+  by `cmake --build /tmp/project-open-igi-build -j4`. AppleClang 16 configured
+  C++20 with SDL2; all targets, including `igi_game`, built successfully for
+  arm64.
+- A direct launch with SDL_VIDEODRIVER=dummy logged that the C++ SDL loop
+  started and remained active until stopped. `open -n` also launched the built
+  macOS app bundle, and its exact executable remained alive until the smoke
+  process was stopped. The macOS SDL window title displays frame and simulation
+  counters; the app does not yet run gameplay updates or render a level.
+- A temporary external C++ harness passed checks for sub-tick accumulation,
+  60 Hz advancement, six-step catch-up, the eight-step cap, dropped backlog,
+  non-finite elapsed time, and reset behavior. The harness was not added to the
+  repository.
+- Physical key and mouse events map to portable input codes in the macOS
+  backend. The shared `InputState` retains held controls and one-tick press/release
+  edges; the window consumes those edges once per fixed simulation step. The
+  visible IGI gameplay bindings remain unverified and are not assigned.
+- A temporary input harness passed checks for invalid input codes, held state,
+  duplicate key-down events, one-tick press/release edges, a quick press-and-
+  release between ticks, and reset behavior. Platform key-event mapping has
+  compile coverage but has not been manually exercised in the app window.
+- The portable fixed-step scheduler dispatches the fixed delta to a callback
+  once for each simulation step. The macOS frame pump consumes one input
+  snapshot in that callback. It does not yet call a gameplay-session update.
+  `GameSession` updates, assets, player physics, level rendering, weapons, and
+  AI are not integrated. The app is a loop shell, not a playable demo. The next
+  implementation step is to call one central session update from this callback
+  before adding more gameplay subsystems.
+- The changed `game_loop.cpp`, `input_state.cpp`, `main.cpp`, and SDL C++
+  translation unit each passed an individual compile or syntax check. A separate
+  temporary callback harness confirmed three elapsed ticks produce exactly three
+  fixed-delta callback invocations and consume a press edge only on the first
+  tick; the harness also passed AddressSanitizer and UndefinedBehaviorSanitizer.
+  The full CMake build then passed.
+
 ## Locomotion graph
 
 - CMake builds `igi_gameplay` with AppleClang in C++20 mode.
