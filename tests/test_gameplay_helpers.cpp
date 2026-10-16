@@ -1,7 +1,10 @@
 #include "test_framework.hpp"
+#include "igi/hud_font.hpp"
 #include "igi/mission_world.hpp"
 #include "igi/player_fall_impact.hpp"
 #include "igi/player_ladder.hpp"
+#include "igi/player_view_bob.hpp"
+#include "igi/sight_zoom.hpp"
 #include "igi/weapon_view_recoil.hpp"
 #include "igi/weapon_view_sway.hpp"
 
@@ -166,4 +169,129 @@ TEST_CASE(GameplayHelpers, WorldObjectInteractionAndDestruction) {
     ASSERT_TRUE(world.damage_object(2, 15.0f)); // 10 - 15 <= 0 (destroyed!)
     ASSERT_TRUE(world.placed_objects()[2].is_destroyed);
 }
+
+TEST_CASE(GameplayHelpers, SightZoomMechanics) {
+    igi::gameplay::SightZoom zoom;
+
+    // Test MP5SD toggle zoom and 0.8 / 1.25 glide factor
+    zoom.set_weapon("MP5SD");
+    ASSERT_TRUE(zoom.mode() == igi::gameplay::ZoomMode::Mp5Sight);
+    ASSERT_FALSE(zoom.is_active());
+    ASSERT_NEAR(zoom.current_tan_x(), igi::gameplay::SightZoom::kDefaultTanX, 1e-4f);
+
+    // Rising edge of alternate fire toggles zoom ON
+    zoom.tick(true, true);
+    ASSERT_TRUE(zoom.is_active());
+    // 1 tick of zoom in: tanX narrows by factor 0.8
+    ASSERT_NEAR(zoom.current_tan_x(), igi::gameplay::SightZoom::kDefaultTanX * 0.8f, 1e-3f);
+
+    // After several ticks, reaches min_tan_x (0.35f)
+    for (int i = 0; i < 10; ++i) {
+        zoom.tick(false, true);
+    }
+    ASSERT_NEAR(zoom.current_tan_x(), 0.35f, 1e-3f);
+    ASSERT_TRUE(zoom.magnification() > 1.9f);
+
+    // Another toggle rising edge turns zoom OFF
+    zoom.tick(true, true);
+    ASSERT_FALSE(zoom.is_active());
+    // Glides back out by factor 1.25 per tick
+    for (int i = 0; i < 10; ++i) {
+        zoom.tick(false, false);
+    }
+    ASSERT_NEAR(zoom.current_tan_x(), igi::gameplay::SightZoom::kDefaultTanX, 1e-4f);
+
+    // Test Dragunov Sniper Scope
+    zoom.set_weapon("Dragunov");
+    ASSERT_TRUE(zoom.mode() == igi::gameplay::ZoomMode::DragunovScope);
+    // Hold alternate fire engages scope
+    zoom.tick(true, true);
+    ASSERT_TRUE(zoom.is_active());
+    for (int i = 0; i < 60; ++i) {
+        zoom.tick(false, true);
+    }
+    ASSERT_NEAR(zoom.current_tan_x(), 0.1051f, 1e-3f);
+    // Dragunov provides ~6.6x optical magnification
+    ASSERT_TRUE(zoom.magnification() > 6.0f);
+    ASSERT_NEAR(zoom.current_fov_radians(), 2.0f * std::atan(0.1051f), 1e-3f);
+
+    // Reset restores default FOV
+    zoom.reset();
+    ASSERT_FALSE(zoom.is_active());
+    ASSERT_NEAR(zoom.current_tan_x(), igi::gameplay::SightZoom::kDefaultTanX, 1e-4f);
+}
+
+TEST_CASE(GameplayHelpers, PlayerViewBobLocomotion) {
+    igi::gameplay::PlayerViewBob bob;
+
+    // Stationary on ground: amplitude settles to 0
+    bob.update(1.0f / 30.0f, true, 0.0f, false, false);
+    ASSERT_NEAR(bob.amplitude(), 0.0f, 1e-4f);
+    auto off = bob.current_offset();
+    ASSERT_NEAR(off.vertical_offset, 0.0f, 1e-4f);
+    ASSERT_NEAR(off.lateral_offset, 0.0f, 1e-4f);
+
+    // Running forward: amplitude ramps up to ~65 units, phase advances by 0.22/tick
+    for (int tick = 0; tick < 30; ++tick) {
+        bob.update(1.0f / 30.0f, true, 680.0f, true, false);
+    }
+    ASSERT_TRUE(bob.amplitude() > 50.0f);
+    off = bob.current_offset();
+    ASSERT_TRUE(std::fabs(off.vertical_offset) > 0.0f);
+    ASSERT_TRUE(std::fabs(off.lateral_offset) > 0.0f);
+
+    // Stopping: amplitude decays back towards 0
+    for (int tick = 0; tick < 60; ++tick) {
+        bob.update(1.0f / 30.0f, true, 0.0f, false, false);
+    }
+    ASSERT_TRUE(bob.amplitude() < 5.0f);
+}
+
+TEST_CASE(GameplayHelpers, HudFontMonospaceRenderer) {
+    ASSERT_EQ(igi::gameplay::HudFont::string_width("M16A2", 1), 5 * 8);
+    ASSERT_EQ(igi::gameplay::HudFont::string_width("HP 100%", 2), 7 * 16);
+    ASSERT_EQ(igi::gameplay::HudFont::line_height(1), 8);
+    ASSERT_EQ(igi::gameplay::HudFont::line_height(2), 16);
+
+    std::vector<std::uint32_t> buffer(64 * 32, 0xFF000000u);
+    igi::gameplay::HudFont::draw_string(
+        buffer.data(), 64, 32, 2, 2, "TEST", 0xFFFFFFFFu, 1, true);
+
+    // Verify some pixels were written as text and shadow
+    bool found_white = false;
+    for (std::uint32_t px : buffer) {
+        if (px == 0xFFFFFFFFu) {
+            found_white = true;
+            break;
+        }
+    }
+    ASSERT_TRUE(found_white);
+}
+
+TEST_CASE(GameplayHelpers, InteractionHintAndAlarmState) {
+    igi::gameplay::MissionWorld world;
+    ASSERT_FALSE(world.is_alarm_active());
+    world.set_alarm_active(true);
+    ASSERT_TRUE(world.is_alarm_active());
+
+    // Add closed door at (1000, 0, 0)
+    auto& objects = world.placed_objects_mutable();
+    igi::gameplay::PlacedObject door;
+    door.class_name = "Door";
+    door.instance_name = "security_gate";
+    door.kind = igi::gameplay::PlacedObjectKind::Door;
+    door.is_interactive = true;
+    door.position = {1000.0, 0.0, 0.0};
+    objects.push_back(door);
+
+    // Player at origin looking at door (+X, yaw = 0)
+    const std::string hint = world.get_interaction_hint({0.0, 0.0, 0.0}, 0.0f);
+    ASSERT_EQ(hint, "[E] OPEN DOOR");
+
+    // Player looking away (-X, yaw = pi)
+    constexpr float kPi = 3.14159265f;
+    const std::string no_hint = world.get_interaction_hint({0.0, 0.0, 0.0}, kPi);
+    ASSERT_TRUE(no_hint.empty());
+}
+
 

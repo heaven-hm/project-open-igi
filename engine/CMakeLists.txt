@@ -20,6 +20,9 @@ add_library(igi_gameplay STATIC
     src/mission_expression.cpp
     src/level_flow.cpp
     src/mission_objective_loader.cpp
+    src/sight_zoom.cpp
+    src/player_view_bob.cpp
+    src/hud_font.cpp
 )
 target_include_directories(igi_gameplay PUBLIC include)
 target_compile_features(igi_gameplay PUBLIC cxx_std_20)

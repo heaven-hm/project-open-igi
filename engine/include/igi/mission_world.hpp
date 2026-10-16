@@ -242,6 +242,13 @@ public:
     // Applies damage to destructible placed objects (security cameras, explosive props)
     [[nodiscard]] bool damage_object(int object_index, float damage) noexcept;
 
+    [[nodiscard]] std::string get_interaction_hint(
+        NavigationPosition eye,
+        float yaw) const noexcept;
+
+    void set_alarm_active(bool active) noexcept { is_alarm_active_ = active; }
+    [[nodiscard]] bool is_alarm_active() const noexcept { return is_alarm_active_; }
+
     [[nodiscard]] static Basis3x3 basis_from_euler(float alpha, float beta, float gamma) noexcept;
     [[nodiscard]] static Vector3 transform_local_to_world_offset(
         Vector3 local_point,
@@ -261,6 +268,7 @@ private:
     std::filesystem::path game_root_;
     std::filesystem::path level_root_;
     bool is_loaded_{};
+    bool is_alarm_active_{false};
     std::string status_message_;
 
     NavigationPosition player_spawn_position_{24578514.0, -55852816.0, 174421680.0};

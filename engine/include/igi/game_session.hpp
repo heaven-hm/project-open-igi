@@ -5,6 +5,8 @@
 #include "igi/level_flow.hpp"
 #include "igi/mission_expression.hpp"
 #include "igi/mission_world.hpp"
+#include "igi/player_view_bob.hpp"
+#include "igi/sight_zoom.hpp"
 #include "igi/software_renderer.hpp"
 #include "igi/weapon_system.hpp"
 #include "igi/world_collision.hpp"
@@ -44,6 +46,8 @@ public:
     [[nodiscard]] LevelFlow& level_flow() noexcept { return level_flow_; }
     [[nodiscard]] const MissionExpressionState& expression_state() const noexcept { return expression_state_; }
     [[nodiscard]] MissionExpressionState& expression_state() noexcept { return expression_state_; }
+    [[nodiscard]] const SightZoom& sight_zoom() const noexcept { return sight_zoom_; }
+    [[nodiscard]] const PlayerViewBob& view_bob() const noexcept { return view_bob_; }
 
     [[nodiscard]] std::uint64_t simulation_tick_count() const noexcept;
     [[nodiscard]] double simulation_time_seconds() const noexcept;
@@ -64,7 +68,10 @@ private:
     AiSystem ai_;
     LevelFlow level_flow_;
     MissionExpressionState expression_state_;
+    SightZoom sight_zoom_;
+    PlayerViewBob view_bob_;
     float hit_marker_seconds_{};
+    bool hit_marker_headshot_{false};
     float pending_mouse_x_{};
     float pending_mouse_y_{};
 };

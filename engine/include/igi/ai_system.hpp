@@ -45,6 +45,8 @@ struct SoldierShotHit {
     bool hit{};
     std::size_t soldier_index{};
     float fraction{1.0f};
+    bool is_headshot{};
+    bool is_lethal{};
 };
 
 // Portable enemy AI. Thresholds follow AI_PERCEPTION_AND_PURSUIT_RESEARCH.md.

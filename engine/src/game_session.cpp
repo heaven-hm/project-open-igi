@@ -24,10 +24,13 @@ bool GameSession::load_mission(const std::filesystem::path& game_root, int missi
         player_.position = world_->player_spawn_position();
         player_.yaw = world_->player_spawn_gamma();
         weapons_ = WeaponSystem{};
+        sight_zoom_.set_weapon(weapons_.current_stats().name);
+        view_bob_.reset();
         ai_.initialize(*world_);
         level_flow_.initialize_mission(static_cast<std::uint32_t>(mission_number));
         expression_state_.clear();
         hit_marker_seconds_ = 0.0f;
+        hit_marker_headshot_ = false;
         IGI_LOG_INFO("Session", "Mission " << mission_number << " loaded and initialized successfully.");
         return true;
     } catch (const std::exception& e) {
@@ -48,8 +51,10 @@ const std::string& GameSession::mission_status() const noexcept {
 
 void GameSession::add_mouse_motion(float delta_x, float delta_y) noexcept {
     if (std::isfinite(delta_x) && std::isfinite(delta_y)) {
-        pending_mouse_x_ += delta_x;
-        pending_mouse_y_ += delta_y;
+        const float mag = sight_zoom_.magnification();
+        const float scale = (mag > 1.0f) ? (1.0f / mag) : 1.0f;
+        pending_mouse_x_ += delta_x * scale;
+        pending_mouse_y_ += delta_y * scale;
     }
 }
 
@@ -82,11 +87,21 @@ bool GameSession::update(
         for (std::size_t i = 0; i < 5; ++i) {
             if (input_snapshot.was_pressed(slot_keys[i])) {
                 weapons_.select_slot(i);
+                sight_zoom_.set_weapon(weapons_.current_stats().name);
             }
         }
         if (input_snapshot.was_pressed(InputCode::KeyR)) {
             weapons_.request_reload();
         }
+
+        // Sight zoom tick (alternate fire / right mouse click)
+        sight_zoom_.tick(
+            input_snapshot.was_pressed(InputCode::MouseRight),
+            input_snapshot.is_down(InputCode::MouseRight));
+
+        // Player view bobbing update
+        const float horiz_speed = std::hypot(player_.velocity.x, player_.velocity.y);
+        view_bob_.update(dt, player_.is_grounded, horiz_speed, player_.is_running, player_.is_crouching);
 
         // Player interaction with world objects (doors, terminals, pickups)
         if (input_snapshot.was_pressed(InputCode::KeyF) || input_snapshot.was_pressed(InputCode::KeyE)) {
@@ -122,11 +137,14 @@ bool GameSession::update(
             };
             const RaycastHit wall = collision_.raycast(*world_, fire.shot.origin, far_end, false, true);
             const float limit = wall.hit ? wall.fraction : 1.0f;
-            if (ai_.apply_shot(fire.shot, limit).hit) {
-                hit_marker_seconds_ = 0.2f;
+            const SoldierShotHit shot_hit = ai_.apply_shot(fire.shot, limit);
+            if (shot_hit.hit) {
+                hit_marker_seconds_ = 0.25f;
+                hit_marker_headshot_ = shot_hit.is_headshot;
             } else if (wall.hit && wall.object_index >= 0) {
                 if (world_->damage_object(wall.object_index, fire.shot.damage)) {
-                    hit_marker_seconds_ = 0.2f;
+                    hit_marker_seconds_ = 0.25f;
+                    hit_marker_headshot_ = false;
                 }
             }
         }
@@ -172,8 +190,18 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
     }
     CameraView camera;
     camera.eye = player_.eye_position();
+
+    // Apply view bobbing
+    const ViewBobOffset bob = view_bob_.current_offset();
+    camera.eye.z += static_cast<double>(bob.vertical_offset);
+    const float cy = std::cos(player_.yaw);
+    const float sy = std::sin(player_.yaw);
+    camera.eye.x += static_cast<double>(sy * bob.lateral_offset);
+    camera.eye.y -= static_cast<double>(cy * bob.lateral_offset);
+
     camera.yaw = player_.yaw + weapons_.yaw_recoil() + weapons_.view_sway_yaw() + weapons_.view_recoil_yaw();
-    camera.pitch = player_.pitch + weapons_.pitch_recoil() + weapons_.view_sway_pitch() + weapons_.view_recoil_pitch();
+    camera.pitch = player_.pitch + weapons_.pitch_recoil() + weapons_.view_sway_pitch() + weapons_.view_recoil_pitch() + bob.pitch_bob;
+    camera.vertical_fov_radians = sight_zoom_.current_fov_radians();
 
     std::vector<SoldierRenderData> soldier_renders;
     soldier_renders.reserve(ai_.agents().size());
@@ -186,17 +214,29 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
         soldier_renders.push_back(srd);
     }
     renderer_.render_world(*world_, camera, soldier_renders);
+
     HudState hud;
     hud.health_fraction = player_.health / 100.0f;
-    const int magazine = weapons_.current_stats().magazine_capacity;
+    hud.health_percent = std::clamp(static_cast<int>(player_.health), 0, 100);
+    const auto& cur_wep = weapons_.current_stats();
+    const int magazine = cur_wep.magazine_capacity;
     hud.ammo_fraction = magazine > 0
         ? static_cast<float>(weapons_.rounds_in_magazine()) / static_cast<float>(magazine)
         : 0.0f;
+    hud.rounds_in_magazine = weapons_.rounds_in_magazine();
+    hud.reserve_ammo = weapons_.reserve_ammo();
+    hud.weapon_name = cur_wep.name;
+    hud.fire_mode = (cur_wep.burst_count == 1) ? "SEMI" : ((cur_wep.burst_count >= magazine) ? "AUTO" : "BURST");
     hud.hit_marker_active = hit_marker_seconds_ > 0.0f;
+    hud.is_headshot = hit_marker_headshot_;
     hud.muzzle_flash = weapons_.muzzle_flash();
     hud.objective_text = level_flow_.get_objective_display_text();
+    hud.interaction_prompt = world_->get_interaction_hint(player_.eye_position(), player_.yaw);
     hud.mission_success = (level_flow_.status() == MissionStatus::Success);
     hud.mission_failed = (level_flow_.status() == MissionStatus::Failed);
+    hud.is_alarm_active = world_->is_alarm_active();
+    hud.is_sniper_scope = (sight_zoom_.mode() == ZoomMode::DragunovScope && sight_zoom_.is_active());
+    hud.zoom_magnification = sight_zoom_.magnification();
     renderer_.render_hud(hud);
 }
 
@@ -226,6 +266,10 @@ void GameSession::reset() noexcept {
     current_input_ = {};
     pending_mouse_x_ = 0.0f;
     pending_mouse_y_ = 0.0f;
+    sight_zoom_.reset();
+    view_bob_.reset();
+    hit_marker_seconds_ = 0.0f;
+    hit_marker_headshot_ = false;
     if (world_) {
         player_ = PlayerPhysicsState{};
         player_.position = world_->player_spawn_position();

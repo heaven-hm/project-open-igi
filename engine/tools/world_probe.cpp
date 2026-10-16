@@ -8,10 +8,11 @@
 
 int main(int argc, char** argv) {
     const std::filesystem::path root = argc > 1 ? argv[1] : "/Users/haseeb-mir/Downloads/IGI";
-    const std::filesystem::path out_path = argc > 2 ? argv[2] : "world_probe.ppm";
+    const int mission_number = argc > 2 ? std::max(1, std::atoi(argv[2])) : 1;
+    const std::filesystem::path out_path = argc > 3 ? argv[3] : "world_probe.ppm";
 
     igi::gameplay::GameSession session;
-    if (!session.load_mission(root, 1)) {
+    if (!session.load_mission(root, mission_number)) {
         std::cout << "FAIL: " << session.mission_status() << '\n';
         return 1;
     }

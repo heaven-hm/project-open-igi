@@ -124,8 +124,8 @@ void AiSystem::update_perception(
     const double dx = player.position.x - agent.position.x;
     const double dy = player.position.y - agent.position.y;
     const double dist = std::sqrt(dx * dx + dy * dy);
-    const double primary = static_cast<double>(kPrimarySightMeters) * 4096.0;
-    const double secondary = static_cast<double>(kSecondarySightMeters) * 4096.0;
+    const double primary = static_cast<double>(world.is_alarm_active() ? 60.0f : kPrimarySightMeters) * 4096.0;
+    const double secondary = static_cast<double>(world.is_alarm_active() ? 25.0f : kSecondarySightMeters) * 4096.0;
 
     bool in_cone = false;
     if (dist > 1.0) {
@@ -360,24 +360,29 @@ SoldierShotHit AiSystem::apply_shot(const ShotRay& shot, float max_fraction) noe
         if (hit_z < agent.position.z || hit_z > agent.position.z + kCylinderHeight) {
             continue;
         }
+        const double rel_z = hit_z - agent.position.z;
         const float fraction = static_cast<float>(t / static_cast<double>(shot.range_units));
         if (fraction < best.fraction) {
             best.hit = true;
             best.soldier_index = i;
             best.fraction = fraction;
+            best.is_headshot = (rel_z >= 5800.0);
         }
     }
     if (best.hit) {
         SoldierAgent& victim = agents_[best.soldier_index];
-        const bool headshot = false; // hit locations are not yet modelled
-        victim.health -= shot.damage * (headshot ? 3.0f : 1.0f);
+        const float damage_mult = best.is_headshot ? 2.5f : 1.0f;
+        victim.health -= shot.damage * damage_mult;
         victim.last_known_player = shot.origin;
         victim.lose_sight_timer = 0.0f;
         if (victim.health <= 0.0f) {
             victim.state = SoldierState::Dead;
-            IGI_LOG_INFO("AI", "Soldier " << victim.spawn_index << " killed by shot.");
+            best.is_lethal = true;
+            IGI_LOG_INFO("AI", "Soldier " << victim.spawn_index << " killed ("
+                         << (best.is_headshot ? "HEADSHOT" : "body") << ").");
         } else {
             victim.state = SoldierState::Investigate;
+            best.is_lethal = false;
             IGI_LOG_DEBUG("AI", "Soldier " << victim.spawn_index << " wounded (health=" << victim.health << ").");
         }
     }

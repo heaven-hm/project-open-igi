@@ -1623,5 +1623,57 @@ bool MissionWorld::damage_object(int object_index, float damage) noexcept {
     return false;
 }
 
+std::string MissionWorld::get_interaction_hint(
+    NavigationPosition eye,
+    float yaw) const noexcept {
+    constexpr double kMaxInteractDist = 8192.0; // 2 meters
+    double best_dist = kMaxInteractDist;
+    std::string hint;
+
+    const double cy = std::cos(yaw);
+    const double sy = std::sin(yaw);
+
+    for (const PlacedObject& obj : placed_objects_) {
+        if (!obj.is_interactive || obj.is_destroyed || obj.is_picked_up) {
+            continue;
+        }
+        const double dx = obj.position.x - eye.x;
+        const double dy = obj.position.y - eye.y;
+        const double dz = obj.position.z - eye.z;
+        const double dist = std::hypot(dx, dy, dz);
+        if (dist > kMaxInteractDist || dist >= best_dist) {
+            continue;
+        }
+        const double horiz_dist = std::hypot(dx, dy);
+        if (horiz_dist > 1.0) {
+            const double dot = (dx * cy + dy * sy) / horiz_dist;
+            if (dot < 0.7071) { // 45 degree forward cone
+                continue;
+            }
+        }
+        best_dist = dist;
+        switch (obj.kind) {
+            case PlacedObjectKind::Door:
+                hint = obj.is_open ? "[E] CLOSE DOOR" : "[E] OPEN DOOR";
+                break;
+            case PlacedObjectKind::Terminal:
+            case PlacedObjectKind::Switch:
+                hint = "[E] ACCESS COMPUTER TERMINAL";
+                break;
+            case PlacedObjectKind::GunPickup:
+            case PlacedObjectKind::AmmoPickup:
+                hint = "[E] PICK UP AMMO";
+                break;
+            case PlacedObjectKind::ClimbLadder:
+                hint = "[SPACE] CLIMB LADDER";
+                break;
+            default:
+                hint = "[E] INTERACT";
+                break;
+        }
+    }
+    return hint;
+}
+
 } // namespace igi::gameplay
 

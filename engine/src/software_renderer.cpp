@@ -1,4 +1,5 @@
 #include "igi/software_renderer.hpp"
+#include "igi/hud_font.hpp"
 
 #include <algorithm>
 #include <cmath>
@@ -410,43 +411,120 @@ void SoftwareRenderer::render_hud(const HudState& hud) {
     const int h = static_cast<int>(height_);
     const int cx = w / 2;
     const int cy = h / 2;
+    const int margin = 12;
 
-    // Crosshair
-    const std::uint32_t cross = hud.hit_marker_active ? 0xFFFF3030u : 0xFFE8FFE8u;
-    fill_rect(cx - 8, cy, cx - 3, cy + 1, cross);
-    fill_rect(cx + 4, cy, cx + 9, cy + 1, cross);
-    fill_rect(cx, cy - 8, cx + 1, cy - 3, cross);
-    fill_rect(cx, cy + 4, cx + 1, cy + 9, cross);
+    // 1. Sniper Scope Overlay (for Dragunov zoom)
+    if (hud.is_sniper_scope) {
+        const float radius = static_cast<float>(std::min(w, h)) * 0.44f;
+        const float r_sq = radius * radius;
+        for (int y = 0; y < h; ++y) {
+            const float dy = static_cast<float>(y - cy);
+            for (int x = 0; x < w; ++x) {
+                const float dx = static_cast<float>(x - cx);
+                if (dx * dx + dy * dy > r_sq) {
+                    color_[static_cast<std::size_t>(y) * width_ + static_cast<std::size_t>(x)] = 0xFF080808u;
+                }
+            }
+        }
+        // Scope crosshair lines
+        const int r_int = static_cast<int>(radius);
+        fill_rect(cx - r_int, cy, cx + r_int, cy + 1, 0xFF102018u);
+        fill_rect(cx, cy - r_int, cx + 1, cy + r_int, 0xFF102018u);
+        // Mil-dot tick marks along scope axes
+        for (int step = -4; step <= 4; ++step) {
+            if (step == 0) continue;
+            const int offset = step * (r_int / 5);
+            fill_rect(cx + offset, cy - 3, cx + offset + 1, cy + 4, 0xFF204030u);
+            fill_rect(cx - 3, cy + offset, cx + 4, cy + offset + 1, 0xFF204030u);
+        }
+        // Center cross point
+        const std::uint32_t reticle_color = hud.hit_marker_active
+            ? (hud.is_headshot ? 0xFFFFD000u : 0xFFFF3030u)
+            : 0xFF40D050u;
+        fill_rect(cx - 2, cy - 2, cx + 3, cy + 3, reticle_color);
 
-    // Health (bottom left) and ammo (bottom right) bars
+        // Zoom readout
+        const std::string zoom_str = "MAG: " + std::to_string(static_cast<int>(hud.zoom_magnification * 10.0f) / 10) + "X";
+        HudFont::draw_string(color_.data(), w, h, cx - r_int + 16, cy - r_int + 16, zoom_str, 0xFF40D060u, 1, true);
+    } else {
+        // Standard First-Person Crosshair
+        const std::uint32_t cross = hud.hit_marker_active
+            ? (hud.is_headshot ? 0xFFFFD000u : 0xFFFF3030u)
+            : 0xFFE8FFE8u;
+        fill_rect(cx - 8, cy, cx - 3, cy + 1, cross);
+        fill_rect(cx + 4, cy, cx + 9, cy + 1, cross);
+        fill_rect(cx, cy - 8, cx + 1, cy - 3, cross);
+        fill_rect(cx, cy + 4, cx + 1, cy + 9, cross);
+    }
+
+    // 2. Health bar (bottom left) and text
     const int bar_w = w / 4;
     const int bar_h = std::max(6, h / 40);
-    const int margin = 12;
     const float health = std::clamp(hud.health_fraction, 0.0f, 1.0f);
-    const float ammo = std::clamp(hud.ammo_fraction, 0.0f, 1.0f);
     fill_rect(margin - 2, h - margin - bar_h - 2, margin + bar_w + 2, h - margin + 2, 0xFF101010u);
     fill_rect(margin, h - margin - bar_h, margin + static_cast<int>(static_cast<float>(bar_w) * health),
               h - margin, health > 0.3f ? 0xFF38B848u : 0xFFD03020u);
+    const std::string hp_text = "HP " + std::to_string(hud.health_percent) + "%";
+    HudFont::draw_string(color_.data(), w, h, margin, h - margin - bar_h - 11, hp_text, 0xFFE0FFE0u, 1, true);
+
+    // 3. Ammo bar (bottom right) and text
+    const float ammo = std::clamp(hud.ammo_fraction, 0.0f, 1.0f);
     fill_rect(w - margin - bar_w - 2, h - margin - bar_h - 2, w - margin + 2, h - margin + 2, 0xFF101010u);
     fill_rect(w - margin - static_cast<int>(static_cast<float>(bar_w) * ammo), h - margin - bar_h,
               w - margin, h - margin, 0xFFE0B030u);
+    const std::string ammo_text = hud.weapon_name + " [" + hud.fire_mode + "] " +
+                                  std::to_string(hud.rounds_in_magazine) + "/" +
+                                  std::to_string(hud.reserve_ammo);
+    const int ammo_text_w = HudFont::string_width(ammo_text, 1);
+    HudFont::draw_string(color_.data(), w, h, w - margin - ammo_text_w, h - margin - bar_h - 11,
+                         ammo_text, 0xFFFFE080u, 1, true);
 
+    // 4. Muzzle flash
     if (hud.muzzle_flash > 0.0f) {
         const int fl = static_cast<int>(static_cast<float>(h) * 0.08f * std::min(1.0f, hud.muzzle_flash));
         fill_rect(cx + w / 8 - fl, h - h / 4 - fl, cx + w / 8 + fl, h - h / 4 + fl, 0xFFFFE890u);
     }
 
-    // Top objective banner
+    // 5. Top objective / status banner
+    const int banner_y = margin;
+    const int banner_h = std::max(18, bar_h + 6);
     if (hud.mission_failed) {
-        fill_rect(margin, margin, w - margin, margin + bar_h + 2, 0xFFB82020u);
+        fill_rect(margin - 2, banner_y - 2, w - margin + 2, banner_y + banner_h + 2, 0xFF101010u);
+        fill_rect(margin, banner_y, w - margin, banner_y + banner_h, 0xFFB82020u);
+        HudFont::draw_string(color_.data(), w, h, margin + 12, banner_y + 4,
+                             "MISSION FAILED: KIA", 0xFFFFFFFFu, 1, true);
     } else if (hud.mission_success) {
-        fill_rect(margin, margin, w - margin, margin + bar_h + 2, 0xFF28B840u);
+        fill_rect(margin - 2, banner_y - 2, w - margin + 2, banner_y + banner_h + 2, 0xFF101010u);
+        fill_rect(margin, banner_y, w - margin, banner_y + banner_h, 0xFF28B840u);
+        HudFont::draw_string(color_.data(), w, h, margin + 12, banner_y + 4,
+                             "MISSION ACCOMPLISHED", 0xFFFFFFFFu, 1, true);
     } else if (!hud.objective_text.empty()) {
-        const int banner_x0 = w / 4;
-        const int banner_x1 = 3 * w / 4;
-        fill_rect(banner_x0 - 2, margin - 2, banner_x1 + 2, margin + bar_h + 2, 0xFF101010u);
-        fill_rect(banner_x0, margin, banner_x1, margin + bar_h, 0xFF183038u);
-        fill_rect(banner_x0, margin, banner_x0 + 4, margin + bar_h, 0xFF30D0A0u);
+        const int banner_x0 = w / 8;
+        const int banner_x1 = 7 * w / 8;
+        fill_rect(banner_x0 - 2, banner_y - 2, banner_x1 + 2, banner_y + banner_h + 2, 0xFF101010u);
+        fill_rect(banner_x0, banner_y, banner_x1, banner_y + banner_h, 0xFF183038u);
+        fill_rect(banner_x0, banner_y, banner_x0 + 4, banner_y + banner_h, 0xFF30D0A0u);
+        HudFont::draw_string(color_.data(), w, h, banner_x0 + 12, banner_y + 5,
+                             hud.objective_text, 0xFFD8F8F0u, 1, true);
+    }
+
+    // 6. Security Alarm Banner
+    if (hud.is_alarm_active) {
+        const std::string alarm_text = "[!] BASE SECURITY ALARM ACTIVE [!]";
+        const int alarm_w = HudFont::string_width(alarm_text, 1);
+        const int alarm_x = cx - alarm_w / 2;
+        const int alarm_y = banner_y + banner_h + 8;
+        fill_rect(alarm_x - 6, alarm_y - 2, alarm_x + alarm_w + 6, alarm_y + 11, 0xFF801010u);
+        HudFont::draw_string(color_.data(), w, h, alarm_x, alarm_y, alarm_text, 0xFFFFD020u, 1, true);
+    }
+
+    // 7. Interaction Prompt (centered on screen)
+    if (!hud.interaction_prompt.empty()) {
+        const int prompt_w = HudFont::string_width(hud.interaction_prompt, 1);
+        const int prompt_x = cx - prompt_w / 2;
+        const int prompt_y = cy + 40;
+        fill_rect(prompt_x - 6, prompt_y - 3, prompt_x + prompt_w + 6, prompt_y + 11, 0xCC101824u);
+        HudFont::draw_string(color_.data(), w, h, prompt_x, prompt_y, hud.interaction_prompt, 0xFFFFFFFFu, 1, true);
     }
 }
 

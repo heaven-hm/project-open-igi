@@ -17,12 +17,22 @@ struct CameraView {
 
 struct HudState {
     float health_fraction{1.0f};
+    int health_percent{100};
     float ammo_fraction{1.0f};
+    int rounds_in_magazine{30};
+    int reserve_ammo{120};
+    std::string weapon_name{"M16A2"};
+    std::string fire_mode{"BURST"};
     bool hit_marker_active{};
+    bool is_headshot{};
     float muzzle_flash{};
     std::string objective_text{};
+    std::string interaction_prompt{};
     bool mission_success{};
     bool mission_failed{};
+    bool is_alarm_active{};
+    bool is_sniper_scope{};
+    float zoom_magnification{1.0f};
 };
 
 struct SoldierRenderData {
