@@ -259,10 +259,15 @@ void SceneRenderer::triangle(const SceneTriangle& original,
         if (current_inside != previous_inside)
         {
             const float fraction = (0.05f - previous.position.z) / (current.position.z - previous.position.z);
-            clipped[vertex_count++] = {
-                previous.position + (current.position - previous.position) * fraction,
-                previous.texture_u + (current.texture_u - previous.texture_u) * fraction,
-                previous.texture_v + (current.texture_v - previous.texture_v) * fraction};
+            SceneVertex intersection = previous;
+            intersection.position = previous.position + (current.position - previous.position) * fraction;
+            intersection.texture_u = previous.texture_u + (current.texture_u - previous.texture_u) * fraction;
+            intersection.texture_v = previous.texture_v + (current.texture_v - previous.texture_v) * fraction;
+            intersection.lightmap_u =
+                previous.lightmap_u + (current.lightmap_u - previous.lightmap_u) * fraction;
+            intersection.lightmap_v =
+                previous.lightmap_v + (current.lightmap_v - previous.lightmap_v) * fraction;
+            clipped[vertex_count++] = intersection;
         }
         if (current_inside)
         {
@@ -273,18 +278,41 @@ void SceneRenderer::triangle(const SceneTriangle& original,
     {
         throw std::runtime_error("Render triangle references an unavailable texture");
     }
+    if (original.lightmap_texture_index < -1)
+    {
+        throw std::runtime_error("Render triangle contains an invalid negative lightmap texture index");
+    }
+    const SceneTexture* lightmap_texture = nullptr;
+    if (original.lightmap_texture_index >= 0)
+    {
+        const auto lightmap_texture_index = static_cast<std::size_t>(original.lightmap_texture_index);
+        if (lightmap_texture_index >= textures.size())
+        {
+            throw std::runtime_error("Render triangle references an unavailable lightmap texture");
+        }
+        lightmap_texture = &textures[lightmap_texture_index];
+    }
     for (std::size_t corner = 1; corner + 1 < vertex_count; ++corner)
     {
         SceneTriangle clipped_triangle{{clipped[0], clipped[corner], clipped[corner + 1]},
                                        original.texture_index};
         clipped_triangle.firing_only = original.firing_only;
+        clipped_triangle.lightmap_page_index = original.lightmap_page_index;
+        clipped_triangle.lightmap_texture_index = original.lightmap_texture_index;
         rasterize(
-            clipped_triangle, textures[original.texture_index], focal_length, illumination, weapon, fog);
+            clipped_triangle,
+            textures[original.texture_index],
+            lightmap_texture,
+            focal_length,
+            illumination,
+            weapon,
+            fog);
     }
 }
 
 void SceneRenderer::rasterize(const SceneTriangle& triangle,
                               const SceneTexture& texture,
+                              const SceneTexture* lightmap_texture,
                               float focal_length,
                               float illumination,
                               bool weapon,
@@ -297,6 +325,8 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
         float inverse_depth;
         float texture_u;
         float texture_v;
+        float lightmap_u;
+        float lightmap_v;
         float fog_factor;
     };
 
@@ -311,6 +341,8 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
             inverse,
             vertex.texture_u * inverse,
             vertex.texture_v * inverse,
+            vertex.lightmap_u * inverse,
+            vertex.lightmap_v * inverse,
             fog.density_per_metre > 0.0f ? std::exp(-fog.density_per_metre * vertex.position.z) : 1.0f};
     }
     const auto& first = projected[0];
@@ -424,6 +456,14 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                 const float texture_v = (first_weight * first.texture_v + second_weight * second.texture_v +
                                          third_weight * third.texture_v) *
                                         pixel_depth;
+                const float lightmap_u =
+                    (first_weight * first.lightmap_u + second_weight * second.lightmap_u +
+                     third_weight * third.lightmap_u) *
+                    pixel_depth;
+                const float lightmap_v =
+                    (first_weight * first.lightmap_v + second_weight * second.lightmap_v +
+                     third_weight * third.lightmap_v) *
+                    pixel_depth;
                 float mip_level = 0.0f;
                 float texture_u_horizontal_derivative = 0.0f;
                 float texture_u_vertical_derivative = 0.0f;
@@ -471,12 +511,26 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                                                     texture_u_vertical_derivative,
                                                     texture_v_vertical_derivative,
                                                     maximum_anisotropy_);
+                std::uint32_t sampled_surface = sampled;
+                if (lightmap_texture != nullptr)
+                {
+                    const std::uint32_t sampled_lightmap =
+                        texture_sample_level(*lightmap_texture, 0, lightmap_u, lightmap_v);
+                    sampled_surface = sampled & 0xff000000u;
+                    for (const int channel_shift : {0, 8, 16})
+                    {
+                        const std::uint32_t diffuse_channel = (sampled >> channel_shift) & 255u;
+                        const std::uint32_t lightmap_channel = (sampled_lightmap >> channel_shift) & 255u;
+                        sampled_surface |= ((diffuse_channel * lightmap_channel + 127u) / 255u)
+                                           << channel_shift;
+                    }
+                }
                 if (triangle.firing_only)
                 {
-                    const std::uint32_t r = (sampled >> 16) & 255;
-                    const std::uint32_t g = (sampled >> 8) & 255;
-                    const std::uint32_t b = sampled & 255;
-                    const std::uint32_t a = (sampled >> 24) & 255;
+                    const std::uint32_t r = (sampled_surface >> 16) & 255;
+                    const std::uint32_t g = (sampled_surface >> 8) & 255;
+                    const std::uint32_t b = sampled_surface & 255;
+                    const std::uint32_t a = (sampled_surface >> 24) & 255;
                     if (r + g + b < 30 || a < 32)
                     {
                         continue;
@@ -491,12 +545,12 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                     pixels_[pixel_index] = 0xff000000u | (out_r << 16) | (out_g << 8) | out_b;
                     continue;
                 }
-                if ((sampled >> 24) >= 96)
+                if ((sampled_surface >> 24) >= 96)
                 {
                     std::uint32_t shaded = 0xff000000u;
                     for (const auto shift : {0, 8, 16})
                     {
-                        shaded |= static_cast<std::uint32_t>(static_cast<float>((sampled >> shift) & 255) *
+                        shaded |= static_cast<std::uint32_t>(static_cast<float>((sampled_surface >> shift) & 255) *
                                                              illumination)
                                   << shift;
                     }

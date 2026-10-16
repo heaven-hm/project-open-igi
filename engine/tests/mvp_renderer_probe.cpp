@@ -59,6 +59,56 @@ int main()
             throw std::runtime_error(
                 "Depth buffer must keep the nearer red triangle over the farther green triangle");
         }
+
+        MissionScene object_lightmap_scene;
+        object_lightmap_scene.collision_triangles = scene.collision_triangles;
+        object_lightmap_scene.textures = {{1, 1, {0xfffafafaU}}, {1, 1, {0xff804020U}}};
+        SceneTriangle lightmapped_triangle{
+            {SceneVertex{{-4, 4, -1}, 0, 0}, SceneVertex{{4, 4, -1}, 1, 0}, SceneVertex{{0, 4, 5}, 0.5f, 1}},
+            0};
+        for (auto& vertex : lightmapped_triangle.vertices)
+        {
+            vertex.lightmap_u = 0.5f;
+            vertex.lightmap_v = 0.5f;
+        }
+        lightmapped_triangle.lightmap_texture_index = 1;
+        object_lightmap_scene.static_triangles.push_back(lightmapped_triangle);
+        GameSimulation object_lightmap_simulation(object_lightmap_scene);
+        SceneRenderer object_lightmap_renderer(640, 480);
+        object_lightmap_renderer.render(object_lightmap_scene, object_lightmap_simulation);
+        const std::uint32_t lightmapped_pixel = object_lightmap_renderer.pixels()[250 * 640 + 340];
+        object_lightmap_scene.static_triangles.front().lightmap_texture_index = -1;
+        object_lightmap_renderer.render(object_lightmap_scene, object_lightmap_simulation);
+        const std::uint32_t diffuse_only_pixel = object_lightmap_renderer.pixels()[250 * 640 + 340];
+        for (const int channel_shift : {0, 8, 16})
+        {
+            const std::uint32_t diffuse_channel = (diffuse_only_pixel >> channel_shift) & 255U;
+            const std::uint32_t lightmap_channel =
+                (object_lightmap_scene.textures[1].pixels.front() >> channel_shift) & 255U;
+            const std::uint32_t expected_channel = (diffuse_channel * lightmap_channel + 127U) / 255U;
+            const std::uint32_t actual_channel = (lightmapped_pixel >> channel_shift) & 255U;
+            if (actual_channel > expected_channel + 1U || expected_channel > actual_channel + 1U)
+            {
+                throw std::runtime_error("Object lightmap channel mismatch: expected " +
+                                         std::to_string(expected_channel) + ", got " +
+                                         std::to_string(actual_channel));
+            }
+        }
+        object_lightmap_scene.static_triangles.front().lightmap_texture_index = 99;
+        bool rejected_missing_lightmap = false;
+        try
+        {
+            object_lightmap_renderer.render(object_lightmap_scene, object_lightmap_simulation);
+        }
+        catch (const std::runtime_error&)
+        {
+            rejected_missing_lightmap = true;
+        }
+        if (!rejected_missing_lightmap)
+        {
+            throw std::runtime_error("Renderer must reject unavailable object lightmap texture indices");
+        }
+
         scene.terrain_triangle_count = scene.static_triangles.size();
         scene.terrain_fog = {{0.0f, 0.0f, 1.0f}, 0.5f};
         renderer.render(scene, simulation);
@@ -206,11 +256,12 @@ int main()
                         anisotropic_renderer.pixels().end(),
                         parallel_anisotropic_renderer.pixels().begin()))
         {
-            throw std::runtime_error(
-                "Anisotropic filtering must retain detail along a stretched texture footprint and match parallel rendering");
+            throw std::runtime_error("Anisotropic filtering must retain detail along a stretched texture "
+                                     "footprint and match parallel rendering");
         }
         std::cout << "Renderer probe passed: perspective projection, nearest depth, near-plane clipping, "
-                     "invalid texture, mip filtering and anisotropic filtering\n";
+                     "diffuse/lightmap modulation, invalid texture references, mip filtering and anisotropic "
+                     "filtering\n";
         return 0;
     }
     catch (const std::exception& exception)

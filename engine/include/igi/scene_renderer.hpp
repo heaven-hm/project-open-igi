@@ -67,6 +67,7 @@ class SceneRenderer final
                   SceneFogParameters fog = {});
     void rasterize(const SceneTriangle& triangle,
                    const SceneTexture& texture,
+                   const SceneTexture* lightmap_texture,
                    float focal_length,
                    float illumination,
                    bool weapon,

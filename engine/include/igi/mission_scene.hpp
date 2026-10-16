@@ -91,6 +91,7 @@ struct SceneTriangle final
     std::uint32_t texture_index{};
     bool firing_only{};
     std::int32_t lightmap_page_index = -1;
+    std::int32_t lightmap_texture_index = -1;
 };
 
 struct SceneSkinTriangle final
