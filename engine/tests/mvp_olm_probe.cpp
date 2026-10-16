@@ -194,6 +194,8 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
     const auto scene_mesh = mission_assets.model("435_01_1");
     require(scene_mesh != nullptr && !scene_mesh->triangles.empty(),
             "Mission asset adapter must emit the retail model triangles");
+    require(scene_mesh->attachment_count > 0 && scene_mesh->maximum_attachment_depth > 0,
+            "Retail Level 1 model must resolve MEF attachments through magicobj.qvm");
     require(std::all_of(scene_mesh->triangles.begin(),
                         scene_mesh->triangles.end(),
                         [](const igi::gameplay::SceneTriangle& triangle)
@@ -227,11 +229,14 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
                                          static_cast<std::uint32_t>(sample_pixel[2]);
     require(!loaded_lightmap_texture.pixels.empty() && loaded_lightmap_texture.pixels.front() == expected_pixel,
             "Mission asset adapter must preserve the first retail OLM RGBA pixel");
-    std::cout << "[PASS] Retail OLM pages load as mission textures with stable cache indices and exact pixel bytes\n";
+    std::cout << "[PASS] Retail OLM pages load as mission textures with stable cache indices and exact pixel "
+                 "bytes\n";
 
     std::cout << "[PASS] Retail lightmapped model 435_01_1.mef: " << geometry.vertices.size() << " vertices, "
               << geometry.triangles.size() << " triangles, " << geometry.renderBlocks.size()
-              << " draw blocks; UV2/page metadata reaches scene mesh\n";
+              << " draw blocks; scene mesh resolves " << scene_mesh->attachment_count
+              << " MEF attachment(s) to depth " << scene_mesh->maximum_attachment_depth
+              << "; UV2/page metadata reaches scene mesh\n";
 }
 
 } // namespace
