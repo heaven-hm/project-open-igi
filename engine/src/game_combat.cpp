@@ -73,7 +73,7 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
     if (!std::isfinite(parameters.shots_per_minute) || !std::isfinite(parameters.muzzle_velocity) ||
         !std::isfinite(parameters.reload_seconds) || !std::isfinite(parameters.damage) ||
         !std::isfinite(parameters.maximum_distance) || parameters.maximum_distance <= 0 ||
-        parameters.shots_per_minute <= 0 || parameters.magazine_capacity == 0 ||
+        parameters.shots_per_minute < 1 || parameters.magazine_capacity == 0 ||
         parameters.muzzle_velocity <= 0 || parameters.reload_seconds <= 0 || parameters.damage <= 0)
     {
         throw std::runtime_error("Original weapon parameters are invalid");
@@ -82,7 +82,10 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
     {
         weapon_.rounds_in_current_burst = 0;
     }
-    weapon_.cooldown -= tick_duration;
+    if (weapon_.cooldown_ticks_remaining > 0)
+    {
+        --weapon_.cooldown_ticks_remaining;
+    }
     weapon_.muzzle_flash_remaining = std::max(0.0f, weapon_.muzzle_flash_remaining - tick_duration);
     weapon_.hit_marker_remaining = std::max(0.0f, weapon_.hit_marker_remaining - tick_duration);
     if (weapon_.reload_remaining > 0)
@@ -108,7 +111,7 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         return;
     }
     if (input.firing && (parameters.automatic || !fire_was_pressed_) && weapon_.magazine != 0 &&
-        weapon_.cooldown <= 0 &&
+        weapon_.cooldown_ticks_remaining == 0 &&
         weapon_.rounds_in_current_burst != static_cast<std::uint32_t>(parameters.maximum_rounds_per_burst))
     {
         if (!parameters.melee)
@@ -137,7 +140,8 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         ++weapon_.shots_fired;
         ++weapon_.rounds_in_current_burst;
-        weapon_.cooldown = std::max(weapon_.cooldown, -tick_duration) + 60.0f / parameters.shots_per_minute;
+        weapon_.cooldown_ticks_remaining =
+            WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
         weapon_.muzzle_flash_remaining = 0.055f;
         const auto recoil = WeaponAccuracy::sample_recoil(parameters, random_generator_);
         weapon_.sampled_recoil_pitch = recoil.pitch;
@@ -148,10 +152,6 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
                              ", burst round=" + std::to_string(weapon_.rounds_in_current_burst) +
                              ", cone=" + std::to_string(cone) +
                              ", projectiles=" + std::to_string(parameters.projectiles_per_round));
-    }
-    else if (!input.firing)
-    {
-        weapon_.cooldown = std::max(weapon_.cooldown, 0.0f);
     }
 }
 

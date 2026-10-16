@@ -63,7 +63,7 @@ struct WeaponState final
     float sampled_recoil_yaw{};
     std::uint32_t magazine{};
     std::uint32_t reserve = 196;
-    float cooldown{};
+    std::int32_t cooldown_ticks_remaining{};
     float reload_remaining{};
     float muzzle_flash_remaining{};
     float hit_marker_remaining{};

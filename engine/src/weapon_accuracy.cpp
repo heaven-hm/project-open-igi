@@ -1,9 +1,34 @@
 #include "igi/weapon_accuracy.hpp"
 
+#include <cfenv>
 #include <cmath>
+#include <stdexcept>
 
 namespace igi::gameplay
 {
+
+std::int32_t WeaponAccuracy::cooldown_ticks(std::int32_t rounds_per_minute)
+{
+    if (rounds_per_minute <= 0)
+    {
+        throw std::invalid_argument("Original firing rate must be positive");
+    }
+    const int previous_rounding = std::fegetround();
+    if (previous_rounding == -1 || std::fesetround(FE_TOWARDZERO) != 0)
+    {
+        throw std::runtime_error("Cannot select retail weapon rounding");
+    }
+    volatile double seconds_per_minute = 60.0;
+    volatile double rate = static_cast<double>(rounds_per_minute);
+    volatile double seconds_per_round = seconds_per_minute / rate;
+    volatile double ticks_per_round = seconds_per_round * 30.0;
+    const auto result = static_cast<std::int32_t>(ticks_per_round);
+    if (std::fesetround(previous_rounding) != 0)
+    {
+        throw std::runtime_error("Cannot restore caller floating-point rounding");
+    }
+    return result;
+}
 
 float WeaponAccuracy::cone_angle(const WeaponParameters& parameters, std::uint32_t rounds_this_burst) noexcept
 {

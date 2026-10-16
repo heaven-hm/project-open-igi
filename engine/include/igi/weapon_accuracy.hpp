@@ -34,6 +34,8 @@ class WeaponAccuracy final
         float cone_angle, Vector3 forward, Vector3 right, Vector3 up, RetailRandomGenerator& random) noexcept;
     [[nodiscard]] static WeaponRecoilSample sample_recoil(const WeaponParameters& parameters,
                                                           RetailRandomGenerator& random) noexcept;
+    // Retail converts rounds-per-minute to 30 Hz ticks with each step rounded toward zero (53-bit precision).
+    [[nodiscard]] static std::int32_t cooldown_ticks(std::int32_t rounds_per_minute);
 };
 
 } // namespace igi::gameplay

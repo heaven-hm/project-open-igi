@@ -113,6 +113,31 @@ int main()
             rejected = true;
         }
         require(rejected, "Invalid spread must fail through a controlled runtime exception");
+        {
+            auto cadence_scene = make_scene();
+            cadence_scene.weapon_parameters.automatic = true;
+            cadence_scene.weapon_parameters.projectiles_per_round = 1;
+            cadence_scene.weapon_parameters.shots_per_minute = 600;
+            cadence_scene.weapon_parameters.maximum_rounds_per_burst = 1000;
+            igi::gameplay::GameSimulation cadence(cadence_scene);
+            igi::gameplay::PlayerInput held;
+            held.firing = true;
+            for (int tick = 0; tick < 12; ++tick)
+            {
+                cadence.tick(held);
+            }
+            require(cadence.weapon().shots_fired == 6,
+                    "600 RPM retail cooldown is two ticks, so twelve held ticks fire six rounds");
+        }
+        // Values executed from the original cooldown block under 53-bit, round-toward-zero control word 0x0E7F.
+        const std::pair<std::int32_t, std::int32_t> retail_cooldowns[] = {
+            {9, 199}, {18, 99}, {25, 71}, {36, 49}, {45, 39}, {300, 5}, {400, 4}, {600, 2}, {700, 2},
+            {750, 2}, {900, 1}, {1800, 0}};
+        for (const auto& [rate, ticks] : retail_cooldowns)
+        {
+            require(igi::gameplay::WeaponAccuracy::cooldown_ticks(rate) == ticks,
+                    "Cooldown ticks must match the original rounding-toward-zero calculation");
+        }
         std::cout << "Weapon projectile count, spread, normalization and restart checks passed\n";
         return 0;
     }
