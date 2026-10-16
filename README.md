@@ -2,16 +2,19 @@
 
 **Version 0.1 ALPHA**
 
-A macOS-first native reimplementation of the Project I.G.I. game engine, built
-in C++20. The current MVP targets macOS; Windows and Linux support will follow a
-playable macOS gameplay slice. The first implementation milestone focuses on player locomotion, physics,
-weapons, and enemy AI. Original game data is loaded from the retail game folder.
+An open-source native implementation of the Project I.G.I. game engine, built
+in C++20 for all major desktop operating systems — Windows, macOS, and Linux.
+This is not a from-scratch re-implementation in the style of the C#
+[OpenIGI](https://github.com/OpenIGI/OpenIGI) project: original game data is
+loaded from the retail game folder and the runtime reproduces the original game
+byte-for-byte. The first implementation milestone focuses on player
+locomotion, physics, weapons, and enemy AI.
 
 ## Current state
 
 The repository builds a C++20 gameplay library, a fixed-step application loop,
-asset and native diagnostic probes, and a C++ SDL2 macOS application shell
-packaged as `igi.app`. The shell opens a window and runs a provisional 60 Hz loop;
+asset and native diagnostic probes, and a C++ SDL2 application shell packaged
+as `igi.app` on macOS (native binaries on Windows and Linux). The shell opens a window and runs a provisional 60 Hz loop;
 player control, level rendering, collision queries, weapons, and AI are not
 integrated yet, so it is not a playable game. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
 and [verification notes](engine/VERIFICATION.md). Runtime parity against the
@@ -27,13 +30,31 @@ Level spawn renders captured from the engine (1280x960):
 
 ![Level 3 spawn](screenshots/screenshot_03_level3_spawn.png)
 
+## Derived from
+
+This project builds on earlier open-source projects:
+
+- [project-igi-editor](https://github.com/heaven-hm/project-igi-editor) — 3D
+  level editor for Project I.G.I. 1 (renderer attachment transforms, format
+  and level knowledge).
+- [project-igi-converter](https://github.com/heaven-hm/project-igi-converter) —
+  IGI1Conv/IGI2Conv asset converter (the runtime format parsers).
+- [OpenIGI](https://github.com/OpenIGI/OpenIGI) — C# reference implementation,
+  used as a cross-check reference only; this project is a native,
+  byte-for-byte game reproduction, not a re-implementation.
+- [Project-IGI-Terrain](https://github.com/hjcminus/Project-IGI-Terrain) —
+  the Terrain Editor by hjcminus that project-igi-editor is based on.
+
+Retained upstream license and provenance notices live in
+`engine/third_party/licenses/`.
+
 ## Platform scope
 
 The game core is designed to be OS-independent: gameplay, physics, AI, weapons,
 scripting, and file formats must not call operating-system APIs. Windowing,
 graphics, input, filesystem, and audio APIs belong behind platform interfaces.
-The current product MVP targets macOS. Windows and Linux backends are later work
-and are not supported or verified yet.
+The project targets all major desktop operating systems — Windows, macOS, and
+Linux — and is not tied to any single platform.
 
 ## Branch and release policy
 
@@ -62,7 +83,25 @@ native ABI and deterministic low-level control. C and Rust can be used for
 specific components when their ABI or performance benefits are concrete; the
 current gameplay core is C++.
 
-## Reverse-engineering rules
+## Reverse engineering
+
+The original game behavior was established through reverse engineering of the
+retail `igi.exe` (PE32, Innerloop Studios, 2000). Tools used:
+
+- **Binary Ninja** (plus its MCP service) — disassembly, decompilation, and the
+  verified native-function catalogs.
+- **Ghidra** — decompilation and independent cross-checks of control flow,
+  constants, and object layouts.
+- **Radare2** — independent disassembly and CFG cross-checks.
+- **REA / re-agent** — automated reverse-engineering agent for function,
+  call-site, and data-structure analysis.
+- **CrossOver** — runs the retail `igi.exe` for reference captures
+  (`igi.exe window level1`).
+- **Frida-style instrumentation, debuggers, and memory inspection** — used when
+  installed and available for runtime evidence.
+- **Cross-checked format documentation** from
+  [igipy](https://github.com/artiom-rotari/igipy) and the derived projects
+  listed above.
 
 `RE.md` defines the evidence and confidence requirements for analysis. Treat
 related-game symbols as clues, never as IGI 1 ground truth. Keep observations,
@@ -83,3 +122,10 @@ large generated scratch artifacts to Git commits.
 
 Main menu, audio, animation polish, and app packaging are deferred until after
 the first gameplay demo.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Copyright © 2026 Heaven HM. Retained
+third-party license and provenance notices live in
+`engine/third_party/licenses/`. Game assets remain subject to their
+respective owners' rights.
