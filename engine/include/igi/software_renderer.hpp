@@ -41,6 +41,8 @@ struct SoldierRenderData {
     float yaw{};
     bool is_alive{true};
     bool is_combat{false};
+    float walk_phase{0.0f};
+    bool is_firing{false};
 };
 
 // Portable software rasterizer: writes ARGB8888 into an owned framebuffer.
@@ -61,6 +63,11 @@ public:
         const MissionWorld& world,
         const CameraView& camera,
         const std::vector<SoldierRenderData>& soldiers);
+    void render_first_person_weapon(
+        const HudState& hud,
+        float bob_phase,
+        float sway_yaw = 0.0f,
+        float sway_pitch = 0.0f);
     void render_hud(const HudState& hud);
     void clear_with_sky(const CameraView& camera);
 

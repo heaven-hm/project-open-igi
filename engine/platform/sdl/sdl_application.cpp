@@ -5,6 +5,8 @@
 
 #include <SDL.h>
 
+#include <algorithm>
+#include <cctype>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
@@ -54,6 +56,11 @@ namespace {
         case SDL_SCANCODE_7: input_code = InputCode::Digit7; return true;
         case SDL_SCANCODE_8: input_code = InputCode::Digit8; return true;
         case SDL_SCANCODE_9: input_code = InputCode::Digit9; return true;
+        case SDL_SCANCODE_KP_1: input_code = InputCode::Digit1; return true;
+        case SDL_SCANCODE_KP_2: input_code = InputCode::Digit2; return true;
+        case SDL_SCANCODE_KP_3: input_code = InputCode::Digit3; return true;
+        case SDL_SCANCODE_KP_4: input_code = InputCode::Digit4; return true;
+        case SDL_SCANCODE_KP_5: input_code = InputCode::Digit5; return true;
         case SDL_SCANCODE_RETURN: input_code = InputCode::Return; return true;
         case SDL_SCANCODE_ESCAPE: input_code = InputCode::Escape; return true;
         case SDL_SCANCODE_SPACE: input_code = InputCode::Space; return true;
@@ -138,6 +145,15 @@ void process_event(
             (void)set_mouse_button_state(
                 event.button, event.type == SDL_MOUSEBUTTONDOWN, input_state);
             break;
+        case SDL_MOUSEWHEEL:
+            if (event.wheel.y > 0) {
+                (void)input_state.set_control_state(igi::gameplay::InputCode::MouseWheelUp, true);
+                (void)input_state.set_control_state(igi::gameplay::InputCode::MouseWheelUp, false);
+            } else if (event.wheel.y < 0) {
+                (void)input_state.set_control_state(igi::gameplay::InputCode::MouseWheelDown, true);
+                (void)input_state.set_control_state(igi::gameplay::InputCode::MouseWheelDown, false);
+            }
+            break;
         default:
             break;
     }
@@ -181,13 +197,24 @@ int run_application(int argument_count, char** arguments) {
     std::cout << "[INFO] [Application] C++ SDL application loop started.\n";
 
     std::filesystem::path game_root = "/Users/haseeb-mir/Downloads/IGI";
-    if (argument_count > 1) {
-        game_root = arguments[1];
-    } else if (std::filesystem::exists("COMMON") || std::filesystem::exists("MISSIONS")) {
+    if (std::filesystem::exists("COMMON") || std::filesystem::exists("MISSIONS")) {
         game_root = ".";
     }
-    const int mission_number =
-        argument_count > 2 ? std::max(1, std::atoi(arguments[2])) : 1;
+    int mission_number = 1;
+    if (argument_count > 1) {
+        const std::string arg1 = arguments[1];
+        const bool is_number = !arg1.empty() && std::all_of(arg1.begin(), arg1.end(), [](unsigned char c) {
+            return std::isdigit(c);
+        });
+        if (is_number) {
+            mission_number = std::max(1, std::atoi(arg1.c_str()));
+        } else {
+            game_root = arg1;
+            if (argument_count > 2) {
+                mission_number = std::max(1, std::atoi(arguments[2]));
+            }
+        }
+    }
     if (game_session.load_mission(game_root, mission_number)) {
         std::cout << "[INFO] [Application] " << game_session.mission_status() << '\n';
         (void)SDL_SetRelativeMouseMode(SDL_TRUE);

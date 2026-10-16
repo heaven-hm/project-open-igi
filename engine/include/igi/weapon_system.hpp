@@ -54,6 +54,8 @@ public:
     [[nodiscard]] static std::vector<WeaponStats> default_loadout();
 
     void select_slot(std::size_t slot) noexcept;
+    void cycle_next() noexcept;
+    void cycle_prev() noexcept;
     [[nodiscard]] std::size_t current_slot() const noexcept { return current_slot_; }
     [[nodiscard]] const WeaponStats& current_stats() const noexcept;
     [[nodiscard]] int rounds_in_magazine() const noexcept;
@@ -104,6 +106,7 @@ private:
     float reload_remaining_seconds_{};
     int burst_shots_fired_{};
     bool burst_trigger_released_{true};
+    float burst_recycle_timer_{};
     float pitch_recoil_{};
     float yaw_recoil_{};
     float muzzle_flash_{};

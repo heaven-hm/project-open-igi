@@ -45,7 +45,11 @@ void AiSystem::initialize(const MissionWorld& world) {
             agent.spawn_index = i;
             agent.position = spawns[i].position;
             agent.yaw = spawns[i].gamma;
-            agent.state = spawns[i].patrol_commands.empty() ? SoldierState::Idle : SoldierState::Patrol;
+            const bool has_patrol = !spawns[i].patrol_commands.empty();
+            const auto graph_it = world.world_navigation_graphs().find(spawns[i].graph_id);
+            const bool has_graph = (graph_it != world.world_navigation_graphs().end() &&
+                                    !graph_it->second.nodes.empty());
+            agent.state = (has_patrol || has_graph) ? SoldierState::Patrol : SoldierState::Idle;
             agent.perception_timer = next_random() * kPerceptionIntervalSeconds;
             agents_.push_back(agent);
         }
@@ -90,6 +94,7 @@ bool AiSystem::step_toward(
     const double dy = target.y - agent.position.y;
     const double dist = std::sqrt(dx * dx + dy * dy);
     if (dist <= static_cast<double>(kWaypointArrivalUnits)) {
+        agent.walk_phase = 0.0f;
         return true;
     }
     turn_toward(agent, target, dt);
@@ -113,6 +118,7 @@ bool AiSystem::step_toward(
         next.z = ground.ground_z;
     }
     agent.position = next;
+    agent.walk_phase += dt * (speed_units_per_second / 1000.0f);
     return false;
 }
 
@@ -140,14 +146,22 @@ void AiSystem::update_perception(
         const NavigationPosition from{agent.position.x, agent.position.y, agent.position.z + kEyeHeight};
         const NavigationPosition to = player.eye_position();
         const RaycastHit hit = collision.raycast(world, from, to, false, true);
-        visible = !hit.hit || hit.fraction >= kLosClearFraction;
+        visible = !hit.hit || hit.fraction >= 0.98f;
     }
 
+    const bool newly_seen = visible && !agent.sees_player;
     agent.sees_player = visible;
     if (visible) {
         agent.last_known_player = player.position;
         agent.lose_sight_timer = 0.0f;
-        agent.state = SoldierState::Combat;
+        if (agent.state != SoldierState::Combat) {
+            agent.state = SoldierState::Combat;
+            agent.reaction_timer = 0.9f + next_random() * 0.4f;
+            agent.burst_shots = 0;
+            agent.burst_cooldown = 0.0f;
+        } else if (newly_seen) {
+            agent.reaction_timer = 0.5f;
+        }
     }
 }
 
@@ -161,6 +175,18 @@ void AiSystem::update_patrol(SoldierAgent& agent, const MissionWorld& world, flo
         return; // movement handled by caller
     }
     if (spawn.patrol_commands.empty()) {
+        const auto graph_it = world.world_navigation_graphs().find(spawn.graph_id);
+        if (graph_it != world.world_navigation_graphs().end() && !graph_it->second.nodes.empty()) {
+            if (agent.patrol_cursor >= graph_it->second.nodes.size()) {
+                agent.patrol_cursor = 0;
+            }
+            const auto& node = graph_it->second.nodes[agent.patrol_cursor++];
+            agent.walk_target = {node.x, node.y, node.z};
+            agent.has_walk_target = true;
+            agent.walk_is_run = false;
+            agent.wait_seconds = 2.0f;
+            return;
+        }
         agent.state = SoldierState::Idle;
         return;
     }
@@ -266,6 +292,14 @@ float AiSystem::update(
                 break;
             }
             case SoldierState::Combat: {
+                agent.is_firing = false;
+                const NavigationPosition eye_from{agent.position.x, agent.position.y, agent.position.z + kEyeHeight};
+                const NavigationPosition player_eye = player.eye_position();
+                const RaycastHit los = collision.raycast(world, eye_from, player_eye, false, true);
+                if (los.hit && los.fraction < 0.98f) {
+                    agent.sees_player = false;
+                }
+
                 if (!agent.sees_player) {
                     agent.lose_sight_timer += delta_seconds;
                     if (agent.lose_sight_timer >= kLoseSightSeconds) {
@@ -281,30 +315,56 @@ float AiSystem::update(
                 const double dx = player.position.x - agent.position.x;
                 const double dy = player.position.y - agent.position.y;
                 const double dist = std::sqrt(dx * dx + dy * dy);
-                // Close in until within 12 m, then hold position and shoot.
-                if (dist > 12.0 * 4096.0) {
+                if (dist > 14.0 * 4096.0) {
                     (void)step_toward(
                         agent, collision, world, player.position,
                         kRunSpeedUnitsPerSecond, delta_seconds);
+                } else {
+                    agent.walk_phase = 0.0f;
                 }
-                agent.fire_timer -= delta_seconds;
-                if (agent.fire_timer <= 0.0f && dist > 1.0) {
-                    const float facing = static_cast<float>(
-                        (dx * std::cos(agent.yaw) + dy * std::sin(agent.yaw)) / dist);
-                    if (facing >= kFireConeCosine) {
-                        agent.fire_timer = kFireIntervalSeconds;
-                        // Accuracy falls off with distance (provisional).
-                        const float hit_chance = std::clamp(
-                            0.55f - static_cast<float>(dist) / (60.0f * 4096.0f), 0.08f, 0.55f);
-                        if (next_random() < hit_chance) {
-                            player_damage += kSoldierShotDamage;
+
+                if (agent.reaction_timer > 0.0f) {
+                    agent.reaction_timer -= delta_seconds;
+                    break;
+                }
+
+                if (agent.burst_cooldown > 0.0f) {
+                    agent.burst_cooldown -= delta_seconds;
+                } else {
+                    agent.fire_timer -= delta_seconds;
+                    if (agent.fire_timer <= 0.0f && dist > 1.0) {
+                        const float facing = static_cast<float>(
+                            (dx * std::cos(agent.yaw) + dy * std::sin(agent.yaw)) / dist);
+                        if (facing >= kFireConeCosine) {
+                            agent.fire_timer = 0.14f;
+                            agent.is_firing = true;
+                            ++agent.burst_shots;
+                            if (agent.burst_shots >= 3) {
+                                agent.burst_shots = 0;
+                                agent.burst_cooldown = 1.6f + next_random() * 0.8f;
+                            }
+                            float hit_chance = std::clamp(
+                                0.32f - static_cast<float>(dist) / (70.0f * 4096.0f), 0.04f, 0.32f);
+                            if (player.is_running) {
+                                hit_chance *= 0.5f;
+                            } else if (player.is_crouching) {
+                                hit_chance *= 0.6f;
+                            }
+                            if (next_random() < hit_chance) {
+                                player_damage += 7.0f;
+                            }
                         }
                     }
                 }
                 break;
             }
             case SoldierState::Idle:
+                agent.walk_phase = 0.0f;
+                agent.is_firing = false;
+                break;
             case SoldierState::Dead:
+                agent.walk_phase = 0.0f;
+                agent.is_firing = false;
                 break;
         }
     }

@@ -247,33 +247,33 @@ RaycastHit WorldCollision::raycast(
     }
 
     if (include_terrain) {
-        float terrain_z = 0.0f;
-        Vector3 terrain_n{0.0f, 0.0f, 1.0f};
-        if (world.sample_terrain_height(
-                end.x,
-                end.y,
-                std::min(start.z, end.z),
-                std::max(start.z, end.z),
-                terrain_z,
-                terrain_n)) {
-            const double start_above = start.z - static_cast<double>(terrain_z);
-            const double end_above = end.z - static_cast<double>(terrain_z);
-            if (start_above >= -32.0 && end_above <= 0.0) {
-                const double denom = start_above - end_above;
-                const float t = (denom > 1.0e-4)
-                    ? std::clamp(static_cast<float>(start_above / denom), 0.0f, 1.0f)
-                    : 0.0f;
-                if (t < best_hit.fraction) {
+        constexpr int kTerrainRaySteps = 16;
+        for (int i = 1; i <= kTerrainRaySteps; ++i) {
+            const float t = static_cast<float>(i) / static_cast<float>(kTerrainRaySteps);
+            if (t >= best_hit.fraction) {
+                break;
+            }
+            const double sx = start.x + (end.x - start.x) * static_cast<double>(t);
+            const double sy = start.y + (end.y - start.y) * static_cast<double>(t);
+            const double sz = start.z + (end.z - start.z) * static_cast<double>(t);
+
+            float terrain_z = 0.0f;
+            Vector3 terrain_n{0.0f, 0.0f, 1.0f};
+            if (world.sample_terrain_height(
+                    sx,
+                    sy,
+                    std::min(start.z, end.z) - 1000.0,
+                    std::max(start.z, end.z) + 1000.0,
+                    terrain_z,
+                    terrain_n)) {
+                if (sz <= static_cast<double>(terrain_z) + 16.0) {
                     best_hit.hit = true;
                     best_hit.fraction = t;
-                    best_hit.point = {
-                        start.x + (end.x - start.x) * static_cast<double>(t),
-                        start.y + (end.y - start.y) * static_cast<double>(t),
-                        static_cast<double>(terrain_z),
-                    };
+                    best_hit.point = {sx, sy, static_cast<double>(terrain_z)};
                     best_hit.unit_normal = terrain_n;
                     best_hit.material_id = 0;
                     best_hit.object_index = -1;
+                    break;
                 }
             }
         }

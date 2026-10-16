@@ -23,6 +23,8 @@ bool GameSession::load_mission(const std::filesystem::path& game_root, int missi
         player_ = PlayerPhysicsState{};
         player_.position = world_->player_spawn_position();
         player_.yaw = world_->player_spawn_gamma();
+        last_terrain_center_x_ = player_.position.x;
+        last_terrain_center_y_ = player_.position.y;
         weapons_ = WeaponSystem{};
         sight_zoom_.set_weapon(weapons_.current_stats().name);
         view_bob_.reset();
@@ -80,15 +82,32 @@ bool GameSession::update(
         collision_.step_player(
             *world_, input_snapshot, pending_mouse_x_, pending_mouse_y_, blockers, player_);
 
-        // Weapon slot selection (digits 1-5) and reload.
+        // Dynamic continuous terrain streaming around player
+        const double dtx = player_.position.x - last_terrain_center_x_;
+        const double dty = player_.position.y - last_terrain_center_y_;
+        if (dtx * dtx + dty * dty > (16.0 * 4096.0) * (16.0 * 4096.0)) {
+            world_->extract_nearby_terrain_mesh(player_.position.x, player_.position.y, 160.0 * 4096.0);
+            last_terrain_center_x_ = player_.position.x;
+            last_terrain_center_y_ = player_.position.y;
+        }
+
+        // Weapon slot selection (digits 1-5, mouse wheel, or Q to cycle)
         const InputCode slot_keys[] = {
             InputCode::Digit1, InputCode::Digit2, InputCode::Digit3,
             InputCode::Digit4, InputCode::Digit5};
         for (std::size_t i = 0; i < 5; ++i) {
-            if (input_snapshot.was_pressed(slot_keys[i])) {
+            if (input_snapshot.was_pressed(slot_keys[i]) || input_snapshot.is_down(slot_keys[i])) {
                 weapons_.select_slot(i);
                 sight_zoom_.set_weapon(weapons_.current_stats().name);
             }
+        }
+        if (input_snapshot.was_pressed(InputCode::MouseWheelDown) ||
+            input_snapshot.was_pressed(InputCode::KeyQ)) {
+            weapons_.cycle_next();
+            sight_zoom_.set_weapon(weapons_.current_stats().name);
+        } else if (input_snapshot.was_pressed(InputCode::MouseWheelUp)) {
+            weapons_.cycle_prev();
+            sight_zoom_.set_weapon(weapons_.current_stats().name);
         }
         if (input_snapshot.was_pressed(InputCode::KeyR)) {
             weapons_.request_reload();
@@ -121,10 +140,14 @@ bool GameSession::update(
         world_->update_doors(dt);
 
         // Fire. The aim includes accumulated recoil, as the retail camera does.
+        const bool fire_held = input_snapshot.is_down(InputCode::MouseLeft) ||
+                               input_snapshot.is_down(InputCode::LeftControl);
+        const bool fire_pressed = input_snapshot.was_pressed(InputCode::MouseLeft) ||
+                                  input_snapshot.was_pressed(InputCode::LeftControl);
         const WeaponFireResult fire = weapons_.update(
             dt,
-            input_snapshot.is_down(InputCode::MouseLeft),
-            input_snapshot.was_pressed(InputCode::MouseLeft),
+            fire_held,
+            fire_pressed,
             player_.eye_position(),
             player_.yaw + weapons_.yaw_recoil(),
             player_.pitch + weapons_.pitch_recoil());
@@ -211,6 +234,8 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
         srd.yaw = a.yaw;
         srd.is_alive = a.alive();
         srd.is_combat = (a.state == SoldierState::Combat);
+        srd.walk_phase = a.walk_phase;
+        srd.is_firing = a.is_firing;
         soldier_renders.push_back(srd);
     }
     renderer_.render_world(*world_, camera, soldier_renders);
@@ -237,6 +262,12 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
     hud.is_alarm_active = world_->is_alarm_active();
     hud.is_sniper_scope = (sight_zoom_.mode() == ZoomMode::DragunovScope && sight_zoom_.is_active());
     hud.zoom_magnification = sight_zoom_.magnification();
+
+    renderer_.render_first_person_weapon(
+        hud,
+        view_bob_.phase(),
+        weapons_.view_sway_yaw(),
+        weapons_.view_sway_pitch());
     renderer_.render_hud(hud);
 }
 

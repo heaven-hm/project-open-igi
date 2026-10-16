@@ -17,6 +17,7 @@ enum class InputCode : std::uint8_t {
     LeftShift, RightShift, LeftControl, RightControl, LeftAlt, RightAlt,
     ArrowLeft, ArrowRight, ArrowDown, ArrowUp,
     MouseLeft, MouseRight, MouseMiddle,
+    MouseWheelUp, MouseWheelDown,
     Count,
 };
 

@@ -145,7 +145,7 @@ void SoftwareRenderer::draw_triangle(
 
             const float u = (w0 * a.u * iz0 + w1 * b.u * iz1 + w2 * c.u * iz2) * z;
             const float v = (w0 * a.v * iz0 + w1 * b.v * iz1 + w2 * c.v * iz2) * z;
-            const float light = a.light;
+            const float light = w0 * a.light + w1 * b.light + w2 * c.light;
 
             std::uint32_t texel = 0xFF8C9088u;
             if (texture != nullptr) {
@@ -189,7 +189,7 @@ void SoftwareRenderer::draw_clipped_triangle(
             m.z = kNearPlane;
             m.u = cur.u + (nxt.u - cur.u) * t;
             m.v = cur.v + (nxt.v - cur.v) * t;
-            m.light = cur.light;
+            m.light = cur.light + (nxt.light - cur.light) * t;
             out[out_count++] = m;
         }
     }
@@ -267,8 +267,9 @@ void SoftwareRenderer::render_world(
         ClipVertex a = world_to_clip(tri.v0.x, tri.v0.y, tri.v0.z, tri.u0 * 4.0f, tri.v0_uv * 4.0f);
         ClipVertex b = world_to_clip(tri.v1.x, tri.v1.y, tri.v1.z, tri.u1 * 4.0f, tri.v1_uv * 4.0f);
         ClipVertex c = world_to_clip(tri.v2.x, tri.v2.y, tri.v2.z, tri.u2 * 4.0f, tri.v2_uv * 4.0f);
-        const float light = light_for_normal(tri.normal.x, tri.normal.y, tri.normal.z);
-        a.light = b.light = c.light = light;
+        a.light = light_for_normal(tri.n0.x, tri.n0.y, tri.n0.z);
+        b.light = light_for_normal(tri.n1.x, tri.n1.y, tri.n1.z);
+        c.light = light_for_normal(tri.n2.x, tri.n2.y, tri.n2.z);
         if (a.z < kNearPlane && b.z < kNearPlane && c.z < kNearPlane) {
             continue;
         }
@@ -306,6 +307,13 @@ void SoftwareRenderer::render_world(
             world_pts[i] = off;
             verts[i] = world_to_clip(
                 obj.position.x + off.x, obj.position.y + off.y, obj.position.z + off.z, mv.u, mv.v);
+            const Vector3 wn = MissionWorld::transform_local_to_world_offset(mv.normal, obj.basis);
+            const float len_sq = wn.x * wn.x + wn.y * wn.y + wn.z * wn.z;
+            if (len_sq > 0.01f) {
+                verts[i].light = light_for_normal(wn.x, wn.y, wn.z);
+            } else {
+                verts[i].light = -1.0f;
+            }
         }
 
         const auto draw_range = [&](std::size_t start, std::size_t count, const TextureImage* tex) {
@@ -321,14 +329,19 @@ void SoftwareRenderer::render_world(
                 if (a.z < kNearPlane && b.z < kNearPlane && c.z < kNearPlane) {
                     continue;
                 }
-                const Vector3& p0 = world_pts[idx[0]];
-                const Vector3& p1 = world_pts[idx[1]];
-                const Vector3& p2 = world_pts[idx[2]];
-                const float e1x = p1.x - p0.x, e1y = p1.y - p0.y, e1z = p1.z - p0.z;
-                const float e2x = p2.x - p0.x, e2y = p2.y - p0.y, e2z = p2.z - p0.z;
-                const float light = light_for_normal(
-                    e1y * e2z - e1z * e2y, e1z * e2x - e1x * e2z, e1x * e2y - e1y * e2x);
-                a.light = b.light = c.light = std::max(light, 0.55f);
+                if (a.light < 0.0f || b.light < 0.0f || c.light < 0.0f) {
+                    const Vector3& p0 = world_pts[idx[0]];
+                    const Vector3& p1 = world_pts[idx[1]];
+                    const Vector3& p2 = world_pts[idx[2]];
+                    const float e1x = p1.x - p0.x, e1y = p1.y - p0.y, e1z = p1.z - p0.z;
+                    const float e2x = p2.x - p0.x, e2y = p2.y - p0.y, e2z = p2.z - p0.z;
+                    const float light = light_for_normal(
+                        e1y * e2z - e1z * e2y, e1z * e2x - e1x * e2z, e1x * e2y - e1y * e2x);
+                    const float cl = std::max(light, 0.55f);
+                    if (a.light < 0.0f) a.light = cl;
+                    if (b.light < 0.0f) b.light = cl;
+                    if (c.light < 0.0f) c.light = cl;
+                }
                 draw_clipped_triangle(a, b, c, tex, focal);
             }
         };
@@ -376,19 +389,274 @@ void SoftwareRenderer::render_world(
         return t;
     }();
 
+    // Multi-part soldier rendering with animated walking legs, torso, helmet, aiming rifle, and muzzle flash
     for (const SoldierRenderData& s : soldiers) {
-        const float half_w = s.is_alive ? 1000.0f : 1500.0f;
-        const float h = s.is_alive ? 7372.8f : 800.0f;
-        const double rx = static_cast<double>(basis.right.x) * half_w;
-        const double ry = static_cast<double>(basis.right.y) * half_w;
-        ClipVertex bl = world_to_clip(s.position.x - rx, s.position.y - ry, s.position.z, 0.0f, 1.0f);
-        ClipVertex br = world_to_clip(s.position.x + rx, s.position.y + ry, s.position.z, 1.0f, 1.0f);
-        ClipVertex tl = world_to_clip(s.position.x - rx, s.position.y - ry, s.position.z + h, 0.0f, 0.0f);
-        ClipVertex tr = world_to_clip(s.position.x + rx, s.position.y + ry, s.position.z + h, 1.0f, 0.0f);
-        bl.light = br.light = tl.light = tr.light = 1.0f;
-        const TextureImage* tex = !s.is_alive ? &kDeadTexture : (s.is_combat ? &kCombatTexture : &kPatrolTexture);
-        draw_clipped_triangle(bl, br, tr, tex, focal);
-        draw_clipped_triangle(bl, tr, tl, tex, focal);
+        if (!s.is_alive) {
+            const float corpse_len = 4500.0f;
+            const float corpse_w = 1200.0f;
+            const double fx = static_cast<double>(std::cos(s.yaw)) * corpse_len;
+            const double fy = static_cast<double>(std::sin(s.yaw)) * corpse_len;
+            const double rx = static_cast<double>(basis.right.x) * corpse_w * 0.5;
+            const double ry = static_cast<double>(basis.right.y) * corpse_w * 0.5;
+            ClipVertex bl = world_to_clip(s.position.x - rx, s.position.y - ry, s.position.z + 200.0, 0.0f, 1.0f);
+            ClipVertex br = world_to_clip(s.position.x + rx, s.position.y + ry, s.position.z + 200.0, 1.0f, 1.0f);
+            ClipVertex tl = world_to_clip(s.position.x + fx - rx, s.position.y + fy - ry, s.position.z + 200.0, 0.0f, 0.0f);
+            ClipVertex tr = world_to_clip(s.position.x + fx + rx, s.position.y + fy + ry, s.position.z + 200.0, 1.0f, 0.0f);
+            bl.light = br.light = tl.light = tr.light = 0.55f;
+            draw_clipped_triangle(bl, br, tr, &kDeadTexture, focal);
+            draw_clipped_triangle(bl, tr, tl, &kDeadTexture, focal);
+            continue;
+        }
+
+        const TextureImage* uniform_tex = s.is_combat ? &kCombatTexture : &kPatrolTexture;
+        const double rx = static_cast<double>(basis.right.x);
+        const double ry = static_cast<double>(basis.right.y);
+
+        // 1. Torso & Tactical Vest (Z: 3200 to 5800, width: 900)
+        {
+            const float tw = 900.0f;
+            ClipVertex bl = world_to_clip(s.position.x - rx * tw, s.position.y - ry * tw, s.position.z + 3200.0, 0.0f, 1.0f);
+            ClipVertex br = world_to_clip(s.position.x + rx * tw, s.position.y + ry * tw, s.position.z + 3200.0, 1.0f, 1.0f);
+            ClipVertex tl = world_to_clip(s.position.x - rx * tw, s.position.y - ry * tw, s.position.z + 5800.0, 0.0f, 0.0f);
+            ClipVertex tr = world_to_clip(s.position.x + rx * tw, s.position.y + ry * tw, s.position.z + 5800.0, 1.0f, 0.0f);
+            bl.light = br.light = tl.light = tr.light = 0.95f;
+            draw_clipped_triangle(bl, br, tr, uniform_tex, focal);
+            draw_clipped_triangle(bl, tr, tl, uniform_tex, focal);
+        }
+
+        // 2. Helmet & Head (Z: 5800 to 7200, width: 550)
+        {
+            const float hw = 550.0f;
+            ClipVertex bl = world_to_clip(s.position.x - rx * hw, s.position.y - ry * hw, s.position.z + 5800.0, 0.0f, 1.0f);
+            ClipVertex br = world_to_clip(s.position.x + rx * hw, s.position.y + ry * hw, s.position.z + 5800.0, 1.0f, 1.0f);
+            ClipVertex tl = world_to_clip(s.position.x - rx * hw, s.position.y - ry * hw, s.position.z + 7200.0, 0.0f, 0.0f);
+            ClipVertex tr = world_to_clip(s.position.x + rx * hw, s.position.y + ry * hw, s.position.z + 7200.0, 1.0f, 0.0f);
+            bl.light = br.light = tl.light = tr.light = 1.05f;
+            draw_clipped_triangle(bl, br, tr, uniform_tex, focal);
+            draw_clipped_triangle(bl, tr, tl, uniform_tex, focal);
+        }
+
+        // 3. Animated Walking Legs (Z: 0 to 3200, swinging forward/backward with walk_phase)
+        {
+            const float leg_w = 350.0f;
+            const float swing = std::sin(s.walk_phase) * 800.0f;
+            const double fwd_x = std::cos(s.yaw);
+            const double fwd_y = std::sin(s.yaw);
+
+            // Left leg
+            const double ll_fx = fwd_x * swing - rx * 450.0;
+            const double ll_fy = fwd_y * swing - ry * 450.0;
+            ClipVertex ll_bl = world_to_clip(s.position.x + ll_fx - rx * leg_w, s.position.y + ll_fy - ry * leg_w, s.position.z, 0.0f, 1.0f);
+            ClipVertex ll_br = world_to_clip(s.position.x + ll_fx + rx * leg_w, s.position.y + ll_fy + ry * leg_w, s.position.z, 1.0f, 1.0f);
+            ClipVertex ll_tl = world_to_clip(s.position.x - rx * (450.0 + leg_w), s.position.y - ry * (450.0 + leg_w), s.position.z + 3200.0, 0.0f, 0.0f);
+            ClipVertex ll_tr = world_to_clip(s.position.x - rx * (450.0 - leg_w), s.position.y - ry * (450.0 - leg_w), s.position.z + 3200.0, 1.0f, 0.0f);
+            ll_bl.light = ll_br.light = ll_tl.light = ll_tr.light = 0.85f;
+            draw_clipped_triangle(ll_bl, ll_br, ll_tr, uniform_tex, focal);
+            draw_clipped_triangle(ll_bl, ll_tr, ll_tl, uniform_tex, focal);
+
+            // Right leg
+            const double rl_fx = -fwd_x * swing + rx * 450.0;
+            const double rl_fy = -fwd_y * swing + ry * 450.0;
+            ClipVertex rl_bl = world_to_clip(s.position.x + rl_fx - rx * leg_w, s.position.y + rl_fy - ry * leg_w, s.position.z, 0.0f, 1.0f);
+            ClipVertex rl_br = world_to_clip(s.position.x + rl_fx + rx * leg_w, s.position.y + rl_fy + ry * leg_w, s.position.z, 1.0f, 1.0f);
+            ClipVertex rl_tl = world_to_clip(s.position.x + rx * (450.0 - leg_w), s.position.y + ry * (450.0 - leg_w), s.position.z + 3200.0, 0.0f, 0.0f);
+            ClipVertex rl_tr = world_to_clip(s.position.x + rx * (450.0 + leg_w), s.position.y + ry * (450.0 + leg_w), s.position.z + 3200.0, 1.0f, 0.0f);
+            rl_bl.light = rl_br.light = rl_tl.light = rl_tr.light = 0.85f;
+            draw_clipped_triangle(rl_bl, rl_br, rl_tr, uniform_tex, focal);
+            draw_clipped_triangle(rl_bl, rl_tr, rl_tl, uniform_tex, focal);
+        }
+
+        // 4. Raised Rifle pointing in s.yaw direction
+        {
+            const double fwd_x = std::cos(s.yaw);
+            const double fwd_y = std::sin(s.yaw);
+            const double gun_ox = s.position.x + rx * 300.0;
+            const double gun_oy = s.position.y + ry * 300.0;
+            const double gun_oz = s.position.z + 4600.0;
+            const double tip_x = gun_ox + fwd_x * 1600.0;
+            const double tip_y = gun_oy + fwd_y * 1600.0;
+
+            ClipVertex g_bl = world_to_clip(gun_ox, gun_oy, gun_oz - 120.0, 0.0f, 1.0f);
+            ClipVertex g_br = world_to_clip(tip_x, tip_y, gun_oz - 120.0, 1.0f, 1.0f);
+            ClipVertex g_tl = world_to_clip(gun_ox, gun_oy, gun_oz + 120.0, 0.0f, 0.0f);
+            ClipVertex g_tr = world_to_clip(tip_x, tip_y, gun_oz + 120.0, 1.0f, 0.0f);
+            g_bl.light = g_br.light = g_tl.light = g_tr.light = 0.70f;
+            draw_clipped_triangle(g_bl, g_br, g_tr, &kDeadTexture, focal);
+            draw_clipped_triangle(g_bl, g_tr, g_tl, &kDeadTexture, focal);
+
+            // 5. Enemy Muzzle Flash when firing
+            if (s.is_firing) {
+                const float mfl = 700.0f;
+                ClipVertex mf_bl = world_to_clip(tip_x - rx * mfl, tip_y - ry * mfl, gun_oz - mfl, 0.0f, 1.0f);
+                ClipVertex mf_br = world_to_clip(tip_x + rx * mfl, tip_y + ry * mfl, gun_oz - mfl, 1.0f, 1.0f);
+                ClipVertex mf_tl = world_to_clip(tip_x - rx * mfl, tip_y - ry * mfl, gun_oz + mfl, 0.0f, 0.0f);
+                ClipVertex mf_tr = world_to_clip(tip_x + rx * mfl, tip_y + ry * mfl, gun_oz + mfl, 1.0f, 0.0f);
+                mf_bl.light = mf_br.light = mf_tl.light = mf_tr.light = 2.0f;
+                static const TextureImage kMuzzleTex = [] {
+                    TextureImage t;
+                    t.name = "soldier_flash";
+                    t.width = 1;
+                    t.height = 1;
+                    t.argb_pixels = {0xFFFFF060u};
+                    return t;
+                }();
+                draw_clipped_triangle(mf_bl, mf_br, mf_tr, &kMuzzleTex, focal);
+                draw_clipped_triangle(mf_bl, mf_tr, mf_tl, &kMuzzleTex, focal);
+            }
+        }
+    }
+}
+
+void SoftwareRenderer::render_first_person_weapon(
+    const HudState& hud,
+    float bob_phase,
+    float sway_yaw,
+    float sway_pitch) {
+    if (width_ == 0 || height_ == 0 || hud.is_sniper_scope) {
+        return;
+    }
+    const int w = static_cast<int>(width_);
+    const int h = static_cast<int>(height_);
+
+    // Compute weapon bobbing and sway offsets in screen pixels
+    const float bob_x = std::cos(bob_phase * 0.5f) * (static_cast<float>(w) * 0.012f);
+    const float bob_y = std::abs(std::sin(bob_phase)) * (static_cast<float>(h) * 0.016f);
+    const float sway_x = std::clamp(sway_yaw * 25.0f, -30.0f, 30.0f) * (static_cast<float>(w) / 480.0f);
+    const float sway_y = std::clamp(sway_pitch * 20.0f, -25.0f, 25.0f) * (static_cast<float>(h) / 300.0f);
+
+    // Recoil kickback translation
+    const float recoil_y = hud.muzzle_flash * (static_cast<float>(h) * 0.05f);
+    const float recoil_x = hud.muzzle_flash * (static_cast<float>(w) * 0.008f);
+
+    // Anchor point for weapon base (bottom right)
+    const int base_x = static_cast<int>(static_cast<float>(w) * 0.64f + bob_x + sway_x - recoil_x);
+    const int base_y = static_cast<int>(static_cast<float>(h) * 0.52f + bob_y + sway_y - recoil_y);
+
+    const std::string& name = hud.weapon_name;
+
+    const bool is_ak = name.find("AK") != std::string::npos;
+    const bool is_m16 = name.find("M16") != std::string::npos;
+    const bool is_mp5 = name.find("MP5") != std::string::npos;
+    const bool is_dragunov = name.find("Drag") != std::string::npos;
+    const bool is_glock = name.find("Glock") != std::string::npos;
+
+    const int scale = std::max(1, h / 300);
+    const int gun_w = (is_glock ? 32 : 54) * scale;
+    const int gun_h = (is_glock ? 90 : 150) * scale;
+    const int barrel_w = (is_glock ? 18 : (is_mp5 ? 24 : 14)) * scale;
+    const int barrel_len = (is_glock ? 45 : (is_dragunov ? 110 : 80)) * scale;
+
+    const int gx0 = base_x;
+    const int gy0 = base_y;
+
+    // 1. Hands / Glove (tactical glove holding the weapon)
+    fill_rect(gx0 - 12 * scale, gy0 + 40 * scale, gx0 + 38 * scale, gy0 + 110 * scale, 0xFF1C221Au);
+    fill_rect(gx0 - 8 * scale, gy0 + 50 * scale, gx0 + 32 * scale, gy0 + 95 * scale, 0xFF283024u);
+
+    // 2. Weapon Receiver / Slide
+    const std::uint32_t steel_main = is_glock ? 0xFF222426u : 0xFF2A2E32u;
+    const std::uint32_t steel_dark = 0xFF16181Au;
+    const std::uint32_t steel_highlight = 0xFF42484Eu;
+
+    fill_rect(gx0, gy0, gx0 + gun_w, gy0 + gun_h, steel_main);
+    fill_rect(gx0, gy0, gx0 + 3 * scale, gy0 + gun_h, steel_dark);
+    fill_rect(gx0 + gun_w - 3 * scale, gy0, gx0 + gun_w, gy0 + gun_h, steel_highlight);
+
+    // 3. Barrel & Handguard / Furniture
+    const int bx0 = gx0 + (gun_w - barrel_w) / 2;
+    const int by0 = gy0 - barrel_len;
+
+    if (is_ak || is_dragunov) {
+        const std::uint32_t wood_base = 0xFF7A3618u;
+        const std::uint32_t wood_light = 0xFF964B22u;
+        const std::uint32_t wood_dark = 0xFF58240Eu;
+        fill_rect(bx0 - 4 * scale, gy0 - 35 * scale, bx0 + barrel_w + 4 * scale, gy0 + 5 * scale, wood_base);
+        fill_rect(bx0 - 2 * scale, gy0 - 32 * scale, bx0 + barrel_w + 2 * scale, gy0 - 20 * scale, wood_light);
+        fill_rect(bx0 - 4 * scale, gy0 - 5 * scale, bx0 + barrel_w + 4 * scale, gy0 + 5 * scale, wood_dark);
+        fill_rect(bx0 + 2 * scale, by0, bx0 + barrel_w - 2 * scale, gy0 - 35 * scale, steel_main);
+    } else if (is_mp5) {
+        fill_rect(bx0 - 5 * scale, by0, bx0 + barrel_w + 5 * scale, gy0, 0xFF1E2022u);
+        for (int rib = by0 + 4 * scale; rib < gy0 - 4 * scale; rib += 6 * scale) {
+            fill_rect(bx0 - 5 * scale, rib, bx0 + barrel_w + 5 * scale, rib + 2 * scale, 0xFF121415u);
+        }
+    } else if (is_m16) {
+        fill_rect(bx0 - 3 * scale, gy0 - 45 * scale, bx0 + barrel_w + 3 * scale, gy0, 0xFF1E2224u);
+        for (int rib = gy0 - 42 * scale; rib < gy0 - 5 * scale; rib += 5 * scale) {
+            fill_rect(bx0 - 3 * scale, rib, bx0 + barrel_w + 3 * scale, rib + 1 * scale, 0xFF121416u);
+        }
+        fill_rect(bx0 + 1 * scale, by0, bx0 + barrel_w - 1 * scale, gy0 - 45 * scale, steel_main);
+        fill_rect(gx0 + 10 * scale, gy0 - 16 * scale, gx0 + 36 * scale, gy0, 0xFF202428u);
+    } else {
+        fill_rect(bx0, by0, bx0 + barrel_w, gy0, steel_main);
+        fill_rect(bx0 + 1 * scale, by0, bx0 + 3 * scale, gy0, steel_highlight);
+    }
+
+    // 4. Front Iron Sight Post
+    fill_rect(bx0 + barrel_w / 2 - 1 * scale, by0 - 6 * scale, bx0 + barrel_w / 2 + 2 * scale, by0, 0xFF101214u);
+    fill_rect(bx0 + barrel_w / 2, by0 - 5 * scale, bx0 + barrel_w / 2 + 1 * scale, by0 - 2 * scale, 0xFFFFFFFFu);
+
+    // 5. Magazine / Magazine Well
+    if (!is_glock) {
+        const int mag_w = 16 * scale;
+        const int mag_h = 45 * scale;
+        const int mx0 = gx0 + 8 * scale;
+        const int my0 = gy0 + 45 * scale;
+        const std::uint32_t mag_col = is_ak ? 0xFF3E2C22u : 0xFF181B1Du;
+        fill_rect(mx0, my0, mx0 + mag_w, my0 + mag_h, mag_col);
+    }
+
+    const int muzzle_x = bx0 + barrel_w / 2;
+    const int muzzle_y = by0 - 4 * scale;
+
+    // 6. Brass Ejected Shell Casing
+    if (hud.muzzle_flash > 0.15f) {
+        const float t = 1.0f - hud.muzzle_flash;
+        const int case_x = gx0 + gun_w + static_cast<int>(t * 55.0f * static_cast<float>(scale));
+        const int case_y = gy0 + 10 * scale + static_cast<int>((t * 40.0f - 8.0f) * static_cast<float>(scale));
+        const int case_w = 4 * scale;
+        const int case_h = 7 * scale;
+        fill_rect(case_x, case_y, case_x + case_w, case_y + case_h, 0xFFE0B830u);
+        fill_rect(case_x + 1, case_y + 1, case_x + case_w - 1, case_y + case_h - 1, 0xFFFFF070u);
+    }
+
+    // 7. Dynamic First-Person 8-point Starburst Muzzle Flash
+    if (hud.muzzle_flash > 0.0f) {
+        const float intensity = std::min(1.0f, hud.muzzle_flash);
+        const int radius = static_cast<int>(32.0f * intensity * static_cast<float>(scale));
+
+        const int cr = std::max(2, radius / 3);
+        fill_rect(muzzle_x - cr, muzzle_y - cr, muzzle_x + cr + 1, muzzle_y + cr + 1, 0xFFFFFFFFu);
+
+        for (int d = -radius; d <= radius; ++d) {
+            const int span = radius - std::abs(d);
+            const int py = muzzle_y + d;
+            if (py >= 0 && py < h) {
+                const int px0 = std::max(0, muzzle_x - span / 2);
+                const int px1 = std::min(w - 1, muzzle_x + span / 2);
+                for (int px = px0; px <= px1; ++px) {
+                    const std::size_t idx = static_cast<std::size_t>(py) * width_ + static_cast<std::size_t>(px);
+                    color_[idx] = blend(color_[idx], 0xFFFFE050u, 0.75f * intensity);
+                }
+            }
+        }
+
+        const int spike_len = static_cast<int>(42.0f * intensity * static_cast<float>(scale));
+        fill_rect(muzzle_x - spike_len, muzzle_y - 1, muzzle_x + spike_len + 1, muzzle_y + 2, 0xFFFFFA80u);
+        fill_rect(muzzle_x - 1, muzzle_y - spike_len, muzzle_x + 2, muzzle_y + spike_len + 1, 0xFFFFFA80u);
+        const int diag_len = spike_len * 7 / 10;
+        for (int step = -diag_len; step <= diag_len; ++step) {
+            const int px = muzzle_x + step;
+            const int py1 = muzzle_y + step;
+            const int py2 = muzzle_y - step;
+            if (px >= 0 && px < w) {
+                if (py1 >= 0 && py1 < h) {
+                    color_[static_cast<std::size_t>(py1) * width_ + static_cast<std::size_t>(px)] = 0xFFFFC040u;
+                }
+                if (py2 >= 0 && py2 < h) {
+                    color_[static_cast<std::size_t>(py2) * width_ + static_cast<std::size_t>(px)] = 0xFFFFC040u;
+                }
+            }
+        }
     }
 }
 

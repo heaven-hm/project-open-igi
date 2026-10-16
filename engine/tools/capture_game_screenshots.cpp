@@ -129,6 +129,20 @@ int main(int argc, char** argv) {
         std::cout << "[INFO] Mission 2 load skipped or fallback.\n";
     }
 
+    // -------------------------------------------------------------
+    // Scenario 7: Mission 4 (GOD / Comm Base) Multi-Level Verification
+    // -------------------------------------------------------------
+    std::cout << "[SCENARIO 7] Testing Mission 4 (GOD Base) Loading...\n";
+    igi::gameplay::GameSession session_m4;
+    if (session_m4.load_mission(game_root, 4)) {
+        for (int t = 0; t < 60; ++t) {
+            (void)session_m4.update(1.0 / 30.0, input.consume_tick());
+        }
+        capture_scene(session_m4, out_dir / "screenshot_07_mission4_base.bmp");
+    } else {
+        std::cout << "[INFO] Mission 4 load skipped or fallback.\n";
+    }
+
     std::cout << "\nAll test screenshots generated successfully!\n";
     return 0;
 }

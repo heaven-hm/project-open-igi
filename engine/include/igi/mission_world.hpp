@@ -138,6 +138,9 @@ struct TerrainTriangle {
     Vector3 v1{};
     Vector3 v2{};
     Vector3 normal{0.0f, 0.0f, 1.0f};
+    Vector3 n0{0.0f, 0.0f, 1.0f};
+    Vector3 n1{0.0f, 0.0f, 1.0f};
+    Vector3 n2{0.0f, 0.0f, 1.0f};
     float u0{}, v0_uv{};
     float u1{}, v1_uv{};
     float u2{}, v2_uv{};
@@ -249,6 +252,7 @@ public:
     void set_alarm_active(bool active) noexcept { is_alarm_active_ = active; }
     [[nodiscard]] bool is_alarm_active() const noexcept { return is_alarm_active_; }
 
+    void extract_nearby_terrain_mesh(double center_x, double center_y, double radius);
     [[nodiscard]] static Basis3x3 basis_from_euler(float alpha, float beta, float gamma) noexcept;
     [[nodiscard]] static Vector3 transform_local_to_world_offset(
         Vector3 local_point,
@@ -263,7 +267,6 @@ private:
     void load_referenced_models_and_textures();
     void load_terrain_octree_and_heightmaps();
     void load_animation_banks();
-    void extract_nearby_terrain_mesh(double center_x, double center_y, double radius);
 
     std::filesystem::path game_root_;
     std::filesystem::path level_root_;
@@ -282,6 +285,7 @@ private:
 
     std::vector<PlacedObject> placed_objects_;
     std::vector<SoldierSpawn> soldier_spawns_;
+    std::vector<std::vector<PatrolCommand>> all_patrol_paths_;
     std::unordered_map<int, NavigationPosition> ai_graph_offsets_;
     std::unordered_map<int, igi::assets::NavigationGraph> world_navigation_graphs_;
 

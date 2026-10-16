@@ -496,6 +496,7 @@ bool MissionWorld::load_from_retail_install(
 bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
     placed_objects_.clear();
     soldier_spawns_.clear();
+    all_patrol_paths_.clear();
     ai_graph_offsets_.clear();
     height_maps_.clear();
     player_initial_weapons_.clear();
@@ -539,6 +540,10 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
             offset.y = parse_double_safe(root_call.scalar_args[4]);
             offset.z = parse_double_safe(root_call.scalar_args[5]);
             ai_graph_offsets_[task_id] = offset;
+            if (root_call.scalar_args.size() >= 8) {
+                const int graph_file_id = parse_int_safe(root_call.scalar_args[7], task_id);
+                ai_graph_offsets_[graph_file_id] = offset;
+            }
             continue;
         }
 
@@ -555,8 +560,6 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
         }
 
         if (class_name == "PatrolPath") {
-            // In objects.qsc a PatrolPath is emitted as a sibling immediately
-            // before the soldier that owns it; attach it to the next soldier.
             pending_patrol.clear();
             for (const QscCallNode& cmd_node : root_call.child_calls) {
                 if (cmd_node.scalar_args.size() >= 4 &&
@@ -566,6 +569,9 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
                     cmd.argument = parse_int_safe(cmd_node.scalar_args[3], 0);
                     pending_patrol.push_back(cmd);
                 }
+            }
+            if (!pending_patrol.empty()) {
+                all_patrol_paths_.push_back(pending_patrol);
             }
             continue;
         }
@@ -612,10 +618,53 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
                 }
             }
             if (soldier.patrol_commands.empty() && !pending_patrol.empty()) {
-                soldier.patrol_commands = std::move(pending_patrol);
+                soldier.patrol_commands = pending_patrol;
+            } else if (soldier.patrol_commands.empty() && !all_patrol_paths_.empty() &&
+                       (soldier.ai_type.find("PATROL") != std::string::npos ||
+                        soldier.ai_type.find("GUARD") != std::string::npos)) {
+                soldier.patrol_commands =
+                    all_patrol_paths_[soldier_spawns_.size() % all_patrol_paths_.size()];
             }
             pending_patrol.clear();
             soldier_spawns_.push_back(std::move(soldier));
+            continue;
+        }
+
+        if (class_name == "SplineObj") {
+            for (const QscCallNode& wp_node : root_call.child_calls) {
+                if (wp_node.scalar_args.size() >= 10 &&
+                    wp_node.scalar_args[1] == "SplineObjWaypoint") {
+                    const float wp_alpha = static_cast<float>(parse_double_safe(wp_node.scalar_args[3], 0.0));
+                    const float wp_beta = static_cast<float>(parse_double_safe(wp_node.scalar_args[4], 0.0));
+                    const float wp_gamma = static_cast<float>(parse_double_safe(wp_node.scalar_args[5], 0.0));
+                    const double wp_x = parse_double_safe(wp_node.scalar_args[6], 0.0);
+                    const double wp_y = parse_double_safe(wp_node.scalar_args[7], 0.0);
+                    const double wp_z = parse_double_safe(wp_node.scalar_args[8], 0.0);
+
+                    std::string chosen_model;
+                    if (wp_node.scalar_args.size() > 10 && looks_like_model_id(wp_node.scalar_args[10])) {
+                        chosen_model = wp_node.scalar_args[10];
+                    } else if (looks_like_model_id(wp_node.scalar_args[9])) {
+                        chosen_model = wp_node.scalar_args[9];
+                    }
+
+                    if (!chosen_model.empty()) {
+                        PlacedObject wp_obj{};
+                        wp_obj.task_id = parse_int_safe(wp_node.scalar_args[0], -1);
+                        wp_obj.class_name = "SplineSegment";
+                        wp_obj.instance_name = "spline_segment";
+                        wp_obj.model_id = chosen_model;
+                        wp_obj.position = {wp_x, wp_y, wp_z};
+                        wp_obj.closed_position = wp_obj.position;
+                        wp_obj.alpha = wp_alpha;
+                        wp_obj.beta = wp_beta;
+                        wp_obj.gamma = wp_gamma;
+                        wp_obj.basis = basis_from_euler(wp_alpha, wp_beta, wp_gamma);
+                        wp_obj.kind = PlacedObjectKind::SplineProp;
+                        placed_objects_.push_back(std::move(wp_obj));
+                    }
+                }
+            }
             continue;
         }
 
@@ -633,7 +682,6 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
             class_name == "Car" ||
             class_name == "Heli" ||
             class_name == "Train" ||
-            class_name == "SplineObj" ||
             class_name == "DynamicObject" ||
             class_name == "ClimbArea";
 
@@ -790,26 +838,41 @@ void MissionWorld::load_referenced_models_and_textures() {
     needed_models["015_01_1"] = true;
     needed_models["019_01_1"] = true;
 
-    const std::filesystem::path unpacked_models_dir = level_root_ / "MODELS" / "models";
-    const std::filesystem::path unpacked_textures_dir = level_root_ / "TEXTURES" / "textures";
+    const std::vector<std::filesystem::path> candidate_model_dirs = {
+        level_root_ / "MODELS" / "models",
+        level_root_ / "MODELS",
+        game_root_ / "COMMON" / "MODELS",
+        game_root_ / "WEAPONS",
+    };
+    const std::vector<std::filesystem::path> candidate_texture_dirs = {
+        level_root_ / "TEXTURES" / "textures",
+        level_root_ / "TEXTURES",
+        game_root_ / "COMMON" / "TEXTURES" / "textures",
+        game_root_ / "COMMON" / "TEXTURES",
+        game_root_ / "WEAPONS",
+    };
 
-    // Index unpacked files case-insensitively
+    // Index unpacked files case-insensitively across all candidate directories
     std::unordered_map<std::string, std::filesystem::path> model_file_index;
-    if (std::filesystem::exists(unpacked_models_dir)) {
-        for (const auto& entry : std::filesystem::directory_iterator(unpacked_models_dir)) {
-            if (entry.is_regular_file()) {
-                model_file_index[strip_extension_and_lower(entry.path().filename().string())] =
-                    entry.path();
+    for (const auto& dir : candidate_model_dirs) {
+        if (std::filesystem::exists(dir)) {
+            for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+                if (entry.is_regular_file()) {
+                    const std::string name = strip_extension_and_lower(entry.path().filename().string());
+                    model_file_index.try_emplace(name, entry.path());
+                }
             }
         }
     }
 
     std::unordered_map<std::string, std::filesystem::path> texture_file_index;
-    if (std::filesystem::exists(unpacked_textures_dir)) {
-        for (const auto& entry : std::filesystem::directory_iterator(unpacked_textures_dir)) {
-            if (entry.is_regular_file()) {
-                texture_file_index[strip_extension_and_lower(entry.path().filename().string())] =
-                    entry.path();
+    for (const auto& dir : candidate_texture_dirs) {
+        if (std::filesystem::exists(dir)) {
+            for (const auto& entry : std::filesystem::directory_iterator(dir)) {
+                if (entry.is_regular_file()) {
+                    const std::string name = strip_extension_and_lower(entry.path().filename().string());
+                    texture_file_index.try_emplace(name, entry.path());
+                }
             }
         }
     }
@@ -1309,8 +1372,8 @@ void MissionWorld::extract_nearby_terrain_mesh(
     double center_y,
     double radius) {
     terrain_triangles_.clear();
-    const double step = 16384.0; // 4m grid cells matching depth-16 terrain leaf spacing
-    const int half_steps = static_cast<int>(radius / step);
+    const double step = 8192.0; // 2m high-density grid cells for smooth terrain
+    const int half_steps = std::min(60, static_cast<int>(radius / step));
     const double base_x = std::floor(center_x / step) * step;
     const double base_y = std::floor(center_y / step) * step;
 
@@ -1360,6 +1423,9 @@ void MissionWorld::extract_nearby_terrain_mesh(
             t0.v1 = {x1, y0, heights[i10]};
             t0.v2 = {x1, y1, heights[i11]};
             t0.normal = normals[i00];
+            t0.n0 = normals[i00];
+            t0.n1 = normals[i10];
+            t0.n2 = normals[i11];
             t0.u0 = 0.0f; t0.v0_uv = 0.0f;
             t0.u1 = 1.0f; t0.v1_uv = 0.0f;
             t0.u2 = 1.0f; t0.v2_uv = 1.0f;
@@ -1371,6 +1437,9 @@ void MissionWorld::extract_nearby_terrain_mesh(
             t1.v1 = {x1, y1, heights[i11]};
             t1.v2 = {x0, y1, heights[i01]};
             t1.normal = normals[i01];
+            t1.n0 = normals[i00];
+            t1.n1 = normals[i11];
+            t1.n2 = normals[i01];
             t1.u0 = 0.0f; t1.v0_uv = 0.0f;
             t1.u1 = 1.0f; t1.v1_uv = 1.0f;
             t1.u2 = 0.0f; t1.v2_uv = 1.0f;

@@ -96,6 +96,18 @@ void WeaponSystem::select_slot(std::size_t slot) noexcept {
     }
 }
 
+void WeaponSystem::cycle_next() noexcept {
+    if (!slots_.empty()) {
+        select_slot((current_slot_ + 1) % slots_.size());
+    }
+}
+
+void WeaponSystem::cycle_prev() noexcept {
+    if (!slots_.empty()) {
+        select_slot((current_slot_ + slots_.size() - 1) % slots_.size());
+    }
+}
+
 const WeaponStats& WeaponSystem::current_stats() const noexcept {
     return slots_[current_slot_].stats;
 }
@@ -175,6 +187,21 @@ WeaponFireResult WeaponSystem::update(
     if (!trigger_held) {
         burst_shots_fired_ = 0;
         burst_trigger_released_ = true;
+        burst_recycle_timer_ = 0.0f;
+    }
+
+    if (trigger_pressed) {
+        burst_shots_fired_ = 0;
+        burst_recycle_timer_ = 0.0f;
+    }
+
+    if (trigger_held && stats.burst_count < stats.magazine_capacity &&
+        burst_shots_fired_ >= stats.burst_count && cooldown_seconds_ <= 0.0f) {
+        burst_recycle_timer_ += delta_seconds;
+        if (burst_recycle_timer_ >= 0.22f) {
+            burst_shots_fired_ = 0;
+            burst_recycle_timer_ = 0.0f;
+        }
     }
 
     const bool wants_fire = trigger_held && (trigger_pressed || burst_shots_fired_ > 0 ||

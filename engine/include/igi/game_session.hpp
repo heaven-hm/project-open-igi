@@ -81,6 +81,8 @@ private:
     bool hit_marker_headshot_{false};
     float pending_mouse_x_{};
     float pending_mouse_y_{};
+    double last_terrain_center_x_{};
+    double last_terrain_center_y_{};
 };
 
 } // namespace igi::gameplay

@@ -35,8 +35,13 @@ struct SoldierAgent {
     float perception_timer{};
     float lose_sight_timer{};
     float fire_timer{};
+    float reaction_timer{0.8f};
+    float burst_cooldown{0.0f};
+    int burst_shots{0};
     float death_seconds{};
     bool sees_player{};
+    float walk_phase{0.0f};
+    bool is_firing{false};
 
     [[nodiscard]] bool alive() const noexcept { return state != SoldierState::Dead; }
 };
