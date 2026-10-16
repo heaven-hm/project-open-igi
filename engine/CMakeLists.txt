@@ -195,18 +195,18 @@ if(BUILD_TESTING)
     target_link_libraries(qvm_integer_operands_probe PRIVATE igi_assets)
     add_test(NAME qvm_signed_integer_operands COMMAND qvm_integer_operands_probe)
 
-    add_library(igi_qvm_runtime_reference STATIC
-        third_party/igi-editor-qvm/qvm_interpreter.cpp
-        third_party/igi-editor-qvm/qvm_native_registry.cpp)
-    target_include_directories(igi_qvm_runtime_reference PUBLIC third_party/igi-editor-qvm)
-    target_compile_features(igi_qvm_runtime_reference PUBLIC cxx_std_20)
-    set_target_properties(igi_qvm_runtime_reference PROPERTIES CXX_EXTENSIONS OFF)
-    target_link_libraries(igi_qvm_runtime_reference PUBLIC igi_formats)
+    add_library(igi_scripting STATIC
+        src/scripting/script_interpreter.cpp
+        src/scripting/native_function_registry.cpp)
+    target_include_directories(igi_scripting PUBLIC include)
+    target_compile_features(igi_scripting PUBLIC cxx_std_20)
+    set_target_properties(igi_scripting PROPERTIES CXX_EXTENSIONS OFF)
+    target_link_libraries(igi_scripting PUBLIC igi_formats)
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
-        target_compile_options(igi_qvm_runtime_reference PRIVATE -Wall -Wextra -Wpedantic -Werror)
+        target_compile_options(igi_scripting PRIVATE -Wall -Wextra -Wpedantic -Werror)
     endif()
     add_executable(level_one_qvm_probe tests/level_one_qvm_probe.cpp)
-    target_link_libraries(level_one_qvm_probe PRIVATE igi_qvm_runtime_reference igi_assets)
+    target_link_libraries(level_one_qvm_probe PRIVATE igi_scripting igi_assets)
     if(IGI_GAME_PATH)
         add_test(NAME level_one_original_ai_script COMMAND level_one_qvm_probe "${IGI_GAME_PATH}")
     endif()

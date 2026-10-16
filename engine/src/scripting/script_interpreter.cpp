@@ -1,5 +1,5 @@
 // qvm_interpreter.cpp - Bounded QVM bytecode runtime interpreter implementation
-#include "qvm_interpreter.h"
+#include "igi/scripting/script_interpreter.hpp"
 #include <algorithm>
 #include <bit>
 #include <cstdint>

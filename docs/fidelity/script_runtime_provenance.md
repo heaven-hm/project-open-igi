@@ -3,7 +3,7 @@
 Copied from `/Users/haseeb-mir/Documents/Code/project-igi-editor/source/level/`,
 upstream `https://github.com/heaven-hm/project-igi-editor.git`, checkout
 `c506cd8305aad03dd3d9f24ea1546cbdef689e97`, on 2026-10-16.
-Source naming and comments are retained. The editor working tree, rather
+The runtime is organized under the engine scripting module. The editor working tree, rather
 than an assumed pristine commit, supplied these exact source hashes:
 
 | File | Source SHA-256 |
@@ -13,7 +13,7 @@ than an assumed pristine commit, supplied these exact source hashes:
 | qvm_native_registry.h | `b48ea4892ce146cee1e2a357d820b2ddfc7ca086a75f75fc8400494b5cbd0012` |
 | qvm_native_registry.cpp | `e66e9cd13804612d2aadcc136087f874c7876798551520b71d9cc0b6a72e5a97` |
 
-Applicable notices are retained in `../licenses/igi-editor-ref/`, including
+Applicable notices are retained in `../../engine/third_party/licenses/igi-editor-ref/`, including
 the source project's license, scope notice and previous license.
 The owner explicitly requested reuse across these projects. This import
 does not change the licensing of third-party source or proprietary assets.
@@ -27,7 +27,7 @@ does not change the licensing of third-party source or proprietary assets.
 - Remove automatic placeholder Print and `std::rand` Random registrations.
   Required native bindings must be supplied explicitly.
 
-The copied runtime is compiled as `igi_qvm_runtime_reference` only under
+The copied runtime is compiled as `igi_scripting` only under
 BUILD_TESTING. It is not linked into `igi_game`: incomplete arithmetic,
 native behavior and scheduler integration must not silently replace gameplay.
 Its normalized synthetic instruction path is inherited editor code and is
@@ -67,3 +67,12 @@ remain required. Missing Ghidra definitions were recorded explicitly; exact
 raw instruction windows were analyzed separately and are not mislabeled as
 full-binary evidence. Artifacts remain under `/tmp/igi-qvm-retail-evidence/`
 and `/tmp/igi-qvm-reuse.zkkHIg/`.
+
+## Engine source locations
+
+- `engine/include/igi/scripting/script_interpreter.hpp`
+- `engine/include/igi/scripting/native_function_registry.hpp`
+- `engine/src/scripting/script_interpreter.cpp`
+- `engine/src/scripting/native_function_registry.cpp`
+
+The hashes above identify the original editor files before local adaptations and renaming.

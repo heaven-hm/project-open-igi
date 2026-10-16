@@ -1,4 +1,4 @@
-// qvm_native_registry.h - QVM Native function and symbol registry
+// native_function_registry.hpp - QVM Native function and symbol registry
 #pragma once
 
 #include <cstdint>

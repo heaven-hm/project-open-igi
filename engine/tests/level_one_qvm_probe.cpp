@@ -1,4 +1,4 @@
-#include "qvm_interpreter.h"
+#include "igi/scripting/script_interpreter.hpp"
 #include "igi/asset_io.hpp"
 
 #include <array>

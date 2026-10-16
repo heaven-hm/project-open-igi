@@ -1,6 +1,6 @@
 // qvm_native_registry.cpp - QVM Native function and symbol registry implementation
-#include "qvm_native_registry.h"
-#include "qvm_interpreter.h"
+#include "igi/scripting/native_function_registry.hpp"
+#include "igi/scripting/script_interpreter.hpp"
 #include <algorithm>
 #include <exception>
 #include <utility>

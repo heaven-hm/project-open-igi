@@ -1,4 +1,4 @@
-// qvm_interpreter.h - Bounded QVM bytecode runtime interpreter
+// script_interpreter.hpp - Bounded QVM bytecode runtime interpreter
 #pragma once
 
 #include <cstdint>
@@ -7,7 +7,7 @@
 #include <memory>
 #include <unordered_map>
 #include "qvm_parser.h"
-#include "qvm_native_registry.h"
+#include "igi/scripting/native_function_registry.hpp"
 
 namespace igi {
 
