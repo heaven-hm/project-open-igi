@@ -6,7 +6,7 @@ The operating-system interface and graphics backend may differ. Core movement, c
 
 ## Active gameplay scope
 
-The current milestone excludes sound, cutscenes, main menus, and exact text rendering. These exclusions do not relax movement, building collision, weapons, enemies, animation, navigation, gameplay scripts, models, textures, or gameplay rendering requirements. Deferred systems remain part of the eventual full-game goal, but are not required capture scenarios for this milestone. See [MVP_PLAN.md](MVP_PLAN.md).
+The current milestone excludes sound, cutscenes, main menus, vehicles, and exact text rendering. These exclusions do not relax movement, building collision, weapons, enemies, animation, navigation, gameplay scripts, models, textures, or gameplay rendering requirements. Deferred systems remain part of the eventual full-game goal, but are not required capture scenarios for this milestone. See [the Level 1 plan](../GAMEPLAY_DEMO_PLAN.md).
 
 ## Required evidence
 

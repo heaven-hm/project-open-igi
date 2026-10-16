@@ -11,9 +11,33 @@ player movement and collision, a usable weapon, and one enemy using the
 retail mission's navigation/behavior data. The DirectX 7 era image and update
 behavior are the reference. Do not add post-processing or redesign the look.
 
-Main menu, sound, finished animation blending, and packaging are outside this
-first demo. Animation state must still follow locomotion state where needed for
-movement, but polish and sound are deferred.
+Main menu, sound, movies/cutscenes, subtitles and vehicles are deferred.
+Gameplay skeletal animation, weapon handling and original movement timing are
+required for Level 1 acceptance. The packaged application remains experimental
+until the recorded retail-versus-port gameplay comparisons pass.
+
+Use this project's `RE.md` as the reverse-engineering workflow. Existing native
+exports and vanilla C# implementations are the porting sources; confirm their
+semantics against retail instructions and runtime observations. The converter
+and editor supply the existing C++ format parsers.
+
+## Current Level 1 checkpoints
+
+- The application loop, original asset loading and playable scene are present.
+- [Retail RNG](docs/fidelity/retail_random_generator.md): original constructor,
+  integer draws, float bits and mutated state compared against original x86 code.
+- [Jump motion](docs/fidelity/jump_motion_fields.md): separate airborne/impact
+  velocities, previous-animation launch direction, takeoff tick and landing stop.
+- [Weapon accuracy](docs/fidelity/weapon_accuracy.md): original script fields,
+  projectile count, cone sampling and recoil samples integrated in the runtime.
+- [REA/Frida](docs/fidelity/frida_runtime.md): an owned macOS primitive traced;
+  this is separate from retail Windows game instrumentation.
+
+Acceptance is incomplete. Next priorities remain integer weapon cadence and
+view recoil; retail player-state/animation transitions; building and edge
+collision coverage; AI graph/task/combat script integration; and original
+rendering/graphics settings. Capture corresponding original and port state for
+each scenario. Passing functional tests does not satisfy the full retail gate.
 
 ## Evidence and implementation order
 
@@ -21,8 +45,9 @@ movement, but polish and sound are deferred.
    C++ SDL2 window/event loop, and a portable fixed-step update clock. Keep the
    game loop independent of SDL2. Feed physical
    input events into the portable input state and consume transitions per tick.
-   Verify the bundle, tick scheduling, and input edges before adding gameplay
-   systems. The current shell has no level rendering or playable state.
+   Verify the bundle, tick scheduling, and input edges before extending gameplay
+   systems. The current prototype has level rendering and playable state;
+   fixed-step scheduling still requires aligned original-game capture evidence.
 2. **Retail capture:** launch the exact `igi.exe` in the existing CrossOver
    bottle with `window level1`. Capture a fixed input sequence, rendered frames,
    process/module identity, and available player/weapon/AI state. Keep the
