@@ -57,6 +57,7 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
     const auto& parameters = weapon_parameters();
     if (!std::isfinite(parameters.shots_per_minute) || !std::isfinite(parameters.muzzle_velocity) ||
         !std::isfinite(parameters.reload_seconds) || !std::isfinite(parameters.damage) ||
+        !std::isfinite(parameters.maximum_distance) || parameters.maximum_distance <= 0 ||
         parameters.shots_per_minute <= 0 || parameters.magazine_capacity == 0 ||
         parameters.muzzle_velocity <= 0 || parameters.reload_seconds <= 0 || parameters.damage <= 0)
     {

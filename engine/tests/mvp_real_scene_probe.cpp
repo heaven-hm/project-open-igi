@@ -51,6 +51,17 @@ int main(int argument_count, char** arguments)
             }
         }
         require(disabled_cinematic_actor, "Level 1's cinematic train actor must remain outside gameplay");
+        for (const auto& weapon : scene.weapons)
+        {
+            const float expected_range = weapon.identifier == "WEAPON_ID_AK47" ? 2000.0f
+                : weapon.identifier == "WEAPON_ID_MP5SD" || weapon.identifier == "WEAPON_ID_GLOCK" ? 80.0f
+                : weapon.identifier == "WEAPON_ID_KNIFE" ? 1.0f : -1.0f;
+            if (expected_range > 0)
+            {
+                require(weapon.parameters.maximum_distance == expected_range,
+                        "Loaded weapon range must match its original DefineWeaponType argument");
+            }
+        }
         GameSimulation movement(scene);
         const auto start = movement.player_position();
         PlayerInput input;

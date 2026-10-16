@@ -340,7 +340,15 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                                  static_cast<float>(arguments[12].number)};
             weapon.parameters.melee = melee;
             weapon.parameters.automatic = !melee && arguments[17].number > 1;
-            weapon.parameters.maximum_distance = melee ? 1.8f : 400.0f;
+            weapon.parameters.maximum_distance = static_cast<float>(arguments[25].number);
+            if (!std::isfinite(weapon.parameters.maximum_distance) || weapon.parameters.maximum_distance <= 0)
+            {
+                throw std::runtime_error("Invalid original effective range for " + weapon.identifier);
+            }
+            diagnostics::log(diagnostics::Severity::debug,
+                             "weapon-data",
+                             weapon.identifier + " effective range=" +
+                                 std::to_string(weapon.parameters.maximum_distance) + " metres");
             weapon.initially_owned = owned_weapons.contains(weapon.identifier);
             const auto ammunition_key = "AMMO_ID_" + std::to_string(static_cast<int>(arguments[9].number));
             weapon.ammunition_identifier = ammunition_key;

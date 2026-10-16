@@ -266,7 +266,7 @@ void GameSimulation::advance_actors()
         const auto muzzle = actor.position + Vector3{0, 0, 1.5f};
         projectiles_.push_back({muzzle,
                                 normalized(player_eye + aim_error - muzzle),
-                                100.0f,
+                                parameters.maximum_distance,
                                 parameters.muzzle_velocity,
                                 parameters.damage * scene_.actors[actor_index].damage_scale,
                                 static_cast<int>(actor_index)});

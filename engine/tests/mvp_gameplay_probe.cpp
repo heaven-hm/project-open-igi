@@ -39,6 +39,17 @@ int main()
 {
     try
     {
+        auto short_range_scene = make_scene(true, false);
+        short_range_scene.weapon_parameters.maximum_distance = 1.0f;
+        GameSimulation short_range_enemy(short_range_scene);
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            short_range_enemy.tick({});
+        }
+        require(short_range_enemy.actors().front().shots_fired > 0,
+                "Range regression must exercise actual enemy shots");
+        require(short_range_enemy.health() == short_range_scene.player_parameters.maximum_health,
+                "Enemy rounds must expire at their configured range before reaching the player");
         const auto movement_scene = make_scene(false, false);
         GameSimulation movement(movement_scene);
         PlayerInput input;

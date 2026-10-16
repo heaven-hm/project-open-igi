@@ -32,6 +32,8 @@ Functional regressions passing does not establish matching original behavior.
 3. Enemy firing: shots and damage already occurred, but only idle/walk poses were displayed. Firing events now have counters, debug logs, muzzle visibility and soldier firing pose 56 from the original state table. Clear-sight combat holds position rather than applying the previous chase movement above 35 metres. Full original tactical/burst behavior remains unverified.
 4. Graphics controls: accept both `--graphics high` and `--gfx high` after macOS `open --args`. Log actual terrain detail, triangle count and viewport. High/low original terrain density differs in regression tests. Retail lightmaps, material blending, sky, shadows and lighting remain incomplete; this setting does not fix all visual differences.
 
+5. Weapon effective range: load the original DefineWeaponType argument 25 for player and enemy projectiles instead of fixed 400/100-metre ranges (knife was 1.8 metres). Original script values include MP5/Glock 80m, AK47 2000m and knife 1m. Two regressions failed before correction and passed afterward. All 19 functional tests pass; controlled CrossOver execution of the retail shot-slot routine verifies eight range conversions and complete shot-object writes. See [range evidence and limits](../docs/fidelity/weapon_effective_range.md). This does not verify spread/recoil or full combat parity.
+
 ## Measured original Level 2
 
 | Item | Measurement |
