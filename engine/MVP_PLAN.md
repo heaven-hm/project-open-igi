@@ -105,20 +105,23 @@ Your goal is not a "behavioral approximation" or a "look-alike" project. The goa
 The engine must build and run out-of-the-box on **macOS** (Apple Silicon M-series & Intel), **Linux** (x86_64 / arm64), and **Windows** (MSVC / Clang) using a modern CMake structure.
 
 ### Minimal Dependency Policy
-To ensure long-term maintenance and zero DLL hell, use only rock-solid cross-platform foundational libraries:
+Keep game logic, assets, simulation, and scene submission platform independent. Select the graphics backend at the platform boundary; backend choice must not alter game rules or asset interpretation:
 * **Windowing & Input:** SDL3 (or SDL2)
-* **Graphics API:** Modern OpenGL 3.3 Core (via `glad`) or cross-platform Vulkan (via `MoltenVK` on macOS)
+* **Windows vanilla graphics:** Planned Direct3D 7 / DirectDraw backend to follow the retail API and fixed-function state. The legacy build target and SDK compatibility still need validation.
+* **macOS and Linux graphics:** Planned hardware renderer that reproduces the retail fixed-function pipeline and material behavior through a supported cross-platform API. OpenGL/Vulkan are implementation candidates, not proof of visual parity.
 * **Audio Backend:** `miniaudio.h` (single-file, header-only, zero dependencies, supports CoreAudio, WASAPI, ALSA, PulseAudio)
 * **Math:** `glm` (matches GLSL & SIMD layouts)
 * **Compiler:** C++20 standard (`-std=c++20` / `/std:c++20`)
 
+These graphics backends are planned, not implemented. The current C++ renderer is a CPU software rasterizer. A Windows D3D7 backend may reproduce retail raster behavior more directly; it does not solve the macOS/Linux renderer gap, which needs matched scenes and pixel/runtime comparisons against the retail executable.
+
 ### Platform Build Matrix
 
-| Platform | Compiler | Graphics Backend | Audio Backend | Build Command |
+| Platform | Compiler | Vanilla graphics backend (planned) | Audio backend | Build status |
 | :--- | :--- | :--- | :--- | :--- |
-| **macOS (Apple Silicon / Intel)** | Apple Clang / LLVM 16+ | OpenGL 3.3 Core / Metal (MoltenVK) | CoreAudio (miniaudio) | `cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j` |
-| **Linux (Ubuntu / Fedora / Arch)** | GCC 13+ / Clang 17+ | OpenGL 3.3 Core / Vulkan | ALSA / PulseAudio (miniaudio) | `cmake -B build -DCMAKE_BUILD_TYPE=Release && cmake --build build -j` |
-| **Windows 10 / 11** | MSVC 2022 / Clang-cl | DirectX 11/12 or OpenGL 3.3 | WASAPI (miniaudio) | `cmake -B build -G "Visual Studio 17 2022" && cmake --build build --config Release` |
+| **macOS (Apple Silicon / Intel)** | Apple Clang | Retail fixed-function emulation over a supported API | CoreAudio adapter planned | Current C++ prototype only; renderer parity unverified |
+| **Linux (x86_64 / arm64)** | GCC / Clang | Retail fixed-function emulation over a supported API | ALSA/PulseAudio adapter planned | Not runtime-verified |
+| **Windows vanilla** | MSVC / Clang-cl | Direct3D 7 / DirectDraw | WASAPI adapter planned | Backend not implemented; legacy target unverified |
 
 ---
 
@@ -405,11 +408,11 @@ To ensure long-term maintenance and zero DLL hell, use only rock-solid cross-pla
 
 #### Actionable C++ Implementation Plan
 * **Target Files:**
-  * `engine/src/gpu_renderer.cpp` (using SDL3 + modern OpenGL 3.3 Core or Vulkan)
+  * A renderer interface plus platform backends; Windows vanilla targets Direct3D 7 / DirectDraw, while macOS/Linux backends reproduce the retail fixed-function state through a supported API.
   * `engine/src/menu_system.cpp`
-* **Step 1:** Replace the CPU software rasterizer with hardware OpenGL 3.3 Core / Vulkan.
-  * Upload textures to GPU once via `glTexImage2D`.
-  * Draw terrain and models using VBOs/VAOs and standard vertex/fragment shaders.
+* **Step 1:** Replace the CPU software rasterizer with a hardware backend while preserving retail texture, lightmap, fog, depth, blend, and terrain behavior.
+  * Keep backend-specific resource upload and draw calls behind the renderer interface.
+  * Verify the same captured Level 1 scenes and settings against retail before calling a backend visually faithful.
 * **Step 2:** Port `MenuRenderer.cs` into C++ so `mainmenu.qvm` renders the original **Project I.G.I. v1.0** title screen and menus.
 
 ---
@@ -454,9 +457,8 @@ To ensure your C++ engine remains an exact mathematical replica of `IGI.exe`, ev
 ## 5. Sequential Execution Phases
 
 ```
-PHASE 1: Hardware Graphics & Sound Foundation
-├── Replace CPU software rasterizer with SDL3 + OpenGL 3.3 Core (Instant 120+ FPS)
-└── Integrate miniaudio.h for 32-voice WAV audio playback
+PHASE 1: Hardware Graphics Foundation
+└── Replace CPU software rasterizer with platform backends while matching the retail fixed-function pipeline
 
 PHASE 2: Full QVM Script Virtual Machine
 ├── Expand QvmInitializer to complete instruction set (branches, loops, stack frames)
