@@ -61,6 +61,8 @@ struct WeaponState final
 {
     float sampled_recoil_pitch{};
     float sampled_recoil_yaw{};
+    float accumulated_recoil_pitch{};
+    float accumulated_recoil_yaw{};
     std::uint32_t magazine{};
     std::uint32_t reserve = 196;
     std::int32_t cooldown_ticks_remaining{};
@@ -111,6 +113,16 @@ class GameSimulation final : private HumanMovementWorld
     [[nodiscard]] float pitch() const noexcept
     {
         return pitch_;
+    }
+
+    [[nodiscard]] float view_heading() const noexcept
+    {
+        return heading_ + weapon_.accumulated_recoil_yaw;
+    }
+
+    [[nodiscard]] float view_pitch() const noexcept
+    {
+        return pitch_ + weapon_.accumulated_recoil_pitch;
     }
 
     [[nodiscard]] float health() const noexcept

@@ -708,8 +708,8 @@ void SceneRenderer::render(const MissionScene& scene,
     }
     const bool is_free_camera = free_camera && free_camera->active;
     const auto camera = is_free_camera ? free_camera->position : simulation.camera_position();
-    const float heading = is_free_camera ? free_camera->heading : simulation.heading();
-    const float pitch = is_free_camera ? free_camera->pitch : simulation.pitch();
+    const float heading = is_free_camera ? free_camera->heading : simulation.view_heading();
+    const float pitch = is_free_camera ? free_camera->pitch : simulation.view_pitch();
     const auto forward = is_free_camera
         ? Vector3{-std::sin(heading) * std::cos(pitch), std::cos(heading) * std::cos(pitch), std::sin(pitch)}
         : simulation.aim_direction();

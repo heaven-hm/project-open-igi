@@ -310,7 +310,8 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         const float cone = WeaponAccuracy::cone_angle(parameters, weapon_.rounds_in_current_burst);
         const Vector3 forward = aim_direction();
-        const Vector3 right{std::cos(heading_), std::sin(heading_), 0};
+        const float current_view_heading = view_heading();
+        const Vector3 right{std::cos(current_view_heading), std::sin(current_view_heading), 0};
         const Vector3 up = cross(right, forward);
         for (std::int32_t projectile_index = 0; projectile_index < parameters.projectiles_per_round;
              ++projectile_index)
@@ -345,7 +346,9 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
                          "Projectile fired; magazine=" + std::to_string(weapon_.magazine) +
                              ", burst round=" + std::to_string(weapon_.rounds_in_current_burst) +
                              ", cone=" + std::to_string(cone) +
-                             ", projectiles=" + std::to_string(parameters.projectiles_per_round));
+                             ", projectiles=" + std::to_string(parameters.projectiles_per_round) +
+                             ", recoil_pitch=" + std::to_string(weapon_.sampled_recoil_pitch) +
+                             ", recoil_yaw=" + std::to_string(weapon_.sampled_recoil_yaw));
     }
     else if (!input.firing && !weapon_.is_striking)
     {

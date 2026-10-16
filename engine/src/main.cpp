@@ -534,7 +534,8 @@ int run(RuntimeOptions options, const char* executable)
             throw std::runtime_error("Cannot open state trace: " + options.trace.string());
         }
         trace << "tick,x,y,z,grounded,locomotion,health,magazine,reserve,shots,"
-                 "hits,kills,projectiles,recoil_pitch,recoil_yaw,random_accumulator,"
+                 "hits,kills,projectiles,recoil_pitch,recoil_yaw,accumulated_recoil_pitch,"
+                 "accumulated_recoil_yaw,view_heading,view_pitch,random_accumulator,"
                  "random_feedback,random_shift\n";
         trace << std::setprecision(9);
     }
@@ -655,8 +656,8 @@ int run(RuntimeOptions options, const char* executable)
                     if (free_camera.active)
                     {
                         free_camera.position = simulation.camera_position();
-                        free_camera.heading = simulation.heading();
-                        free_camera.pitch = simulation.pitch();
+                        free_camera.heading = simulation.view_heading();
+                        free_camera.pitch = simulation.view_pitch();
                     }
                 }
                 if (event.key.keysym.sym == SDLK_F10 && window)
@@ -683,8 +684,8 @@ int run(RuntimeOptions options, const char* executable)
                     if (free_camera.active)
                     {
                         free_camera.position = simulation.camera_position();
-                        free_camera.heading = simulation.heading();
-                        free_camera.pitch = simulation.pitch();
+                        free_camera.heading = simulation.view_heading();
+                        free_camera.pitch = simulation.view_pitch();
                         log(Severity::information,
                             "camera",
                             "Free camera enabled (WASD: roam, Space: up, Shift: down, F12/T: resume gameplay)");
@@ -853,7 +854,9 @@ int run(RuntimeOptions options, const char* executable)
                       << ',' << simulation.health() << ',' << weapon.magazine << ',' << weapon.reserve << ','
                       << weapon.shots_fired << ',' << weapon.hits << ',' << weapon.kills << ','
                       << simulation.projectiles().size() << ',' << weapon.sampled_recoil_pitch << ','
-                      << weapon.sampled_recoil_yaw << ',' << random_state[0] << ',' << random_state[1] << ','
+                      << weapon.sampled_recoil_yaw << ',' << weapon.accumulated_recoil_pitch << ','
+                      << weapon.accumulated_recoil_yaw << ',' << simulation.view_heading() << ','
+                      << simulation.view_pitch() << ',' << random_state[0] << ',' << random_state[1] << ','
                       << random_state[2] << '\n';
                 if (!trace)
                 {

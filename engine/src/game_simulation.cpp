@@ -217,7 +217,11 @@ Vector3 GameSimulation::camera_position() const noexcept
 
 Vector3 GameSimulation::aim_direction() const noexcept
 {
-    return {-std::sin(heading_) * std::cos(pitch_), std::cos(heading_) * std::cos(pitch_), std::sin(pitch_)};
+    const float current_view_heading = view_heading();
+    const float current_view_pitch = view_pitch();
+    return {-std::sin(current_view_heading) * std::cos(current_view_pitch),
+            std::cos(current_view_heading) * std::cos(current_view_pitch),
+            std::sin(current_view_pitch)};
 }
 
 bool GameSimulation::grounded() const noexcept
@@ -286,6 +290,15 @@ void GameSimulation::tick(const PlayerInput& input)
         collect_weapons(input);
         advance_player(input);
         advance_weapon(input);
+        weapon_.accumulated_recoil_pitch =
+            (weapon_.sampled_recoil_pitch + weapon_.accumulated_recoil_pitch) * 0.899999976f;
+        weapon_.accumulated_recoil_yaw =
+            (weapon_.sampled_recoil_yaw + weapon_.accumulated_recoil_yaw) * 0.899999976f;
+        if (!std::isfinite(weapon_.accumulated_recoil_pitch) ||
+            !std::isfinite(weapon_.accumulated_recoil_yaw))
+        {
+            throw std::runtime_error("Accumulated player view recoil became non-finite");
+        }
         advance_view_animation(input);
 
         // Interactive doors & prompt

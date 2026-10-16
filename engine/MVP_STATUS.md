@@ -46,6 +46,8 @@ Functional regressions passing does not establish matching original behavior.
 
 11. Texture filtering: retain authored TEX v11 mip levels, generate additional levels for enhanced filtering, and expose `--texture-filter nearest|trilinear` plus `--texture-anisotropy 1|2|4|8|16`. Default ratios follow the C# presets; the focused renderer probe verifies authored/generated selection, anisotropic detail retention, and serial/parallel consistency. Level 1 runtime captures verify 1x and 16x produce different output. Retail `GR_MIPMAP_NEAREST_DITHER` is not yet reproduced, and this does not establish Vanilla or Enhanced image parity. The CPU 16x path is too expensive for high-resolution gameplay; a GPU renderer remains outstanding.
 
+12. Player weapon view recoil: the retail `Muzzle_Eye` routine at `0x462E50` adds callback pitch/yaw outputs to retained values at `+0x128` and `+0x134`, then multiplies by `0.899999976`. The C++ simulation now accumulates and decays the sampled values each live tick and uses them in rendered aim and subsequent shot direction without turning the movement heading. The state trace records sampled recoil, accumulated recoil, and effective view angles. The isolated weapon regression and Level 1 gameplay, renderer, navigation, and Ultra tests pass. The accumulator operation is statically verified by Ghidra and radare2; the retained-field-to-view mapping has not yet been compared to a retail runtime capture.
+
 ## Measured original Level 2
 
 | Item | Measurement |

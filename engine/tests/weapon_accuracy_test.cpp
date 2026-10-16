@@ -88,6 +88,44 @@ int main()
         require(igi::gameplay::length(simulation.projectiles().front().direction - first_direction) == 0,
                 "Restart must restore the initial random stream for reproducible port replays");
 
+        auto recoil_scene = make_scene();
+        recoil_scene.weapon_parameters.projectiles_per_round = 1;
+        recoil_scene.weapon_parameters.minimum_spread_degrees = 0;
+        recoil_scene.weapon_parameters.maximum_spread_degrees = 0;
+        recoil_scene.weapon_parameters.fixed_recoil_pitch_degrees = 2;
+        recoil_scene.weapon_parameters.fixed_recoil_yaw_degrees = 3;
+        recoil_scene.weapon_parameters.random_recoil_pitch_degrees = 0;
+        recoil_scene.weapon_parameters.random_recoil_yaw_degrees = 0;
+        recoil_scene.weapon_parameters.shots_per_minute = 1800;
+        igi::gameplay::GameSimulation recoil_simulation(recoil_scene);
+        recoil_simulation.tick(input);
+        const float fixed_pitch_kick = 2 * igi::gameplay::WeaponAccuracy::degrees_to_radians;
+        const float fixed_yaw_kick = 3 * igi::gameplay::WeaponAccuracy::degrees_to_radians;
+        require(std::abs(recoil_simulation.weapon().accumulated_recoil_pitch - fixed_pitch_kick * 0.899999976f) <
+                        0.000001f &&
+                    std::abs(recoil_simulation.weapon().accumulated_recoil_yaw - fixed_yaw_kick * 0.899999976f) <
+                        0.000001f,
+                "Retail view recoil must add the sampled kick and retain 0.9 of the accumulated value");
+        require(std::abs(recoil_simulation.aim_direction().x +
+                         std::sin(recoil_simulation.view_heading()) * std::cos(recoil_simulation.view_pitch())) <
+                        0.000001f &&
+                    std::abs(recoil_simulation.aim_direction().z - std::sin(recoil_simulation.view_pitch())) <
+                        0.000001f,
+                "The accumulated recoil must affect the rendered and fired view direction");
+        igi::gameplay::PlayerInput release_fire;
+        recoil_simulation.tick(release_fire);
+        require(std::abs(recoil_simulation.weapon().accumulated_recoil_pitch -
+                         fixed_pitch_kick * 0.899999976f * 0.899999976f) < 0.000001f &&
+                    std::abs(recoil_simulation.weapon().accumulated_recoil_yaw -
+                         fixed_yaw_kick * 0.899999976f * 0.899999976f) < 0.000001f,
+                "Retail recoil must decay by 0.9 on each subsequent live simulation tick");
+        const auto recoiled_barrel_direction = recoil_simulation.aim_direction();
+        recoil_simulation.tick(input);
+        require(!recoil_simulation.projectiles().empty() &&
+                    igi::gameplay::length(recoil_simulation.projectiles().back().direction -
+                                          recoiled_barrel_direction) < 0.000001f,
+                "The next fired round must use the accumulated view recoil from the preceding tick");
+
         auto straight_scene = make_scene();
         igi::gameplay::GameSimulation straight(straight_scene);
         straight.tick(input);
