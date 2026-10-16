@@ -1,6 +1,17 @@
 # Project IGI C++ Native Engine — Master Replication & MVP Plan
 
 **Document Version:** 2.0  
+
+**Active MVP scope, 2026-10-16:** Gameplay only. Sound/audio implementation,
+cutscenes, movies, and menu presentation remain deferred by the owner.
+The historical phases below do not authorize starting those deferred systems.
+Use the C# `-vanilla` configuration as a candidate reference and retail IGI.exe
+as the authority. CFG similarity is one static check, not proof of behavior.
+
+**First verified correction:** Signed QVM integer initializer operands; see
+[evidence and controlled runtime comparison](../docs/fidelity/qvm-integer-operands.md).
+The complete script VM, task hierarchy, combat/physics, AI, animation and rendering
+requirements remain open. No subsystem-wide parity percentage is established.
 **Target Projects:**
 - **Source Under Development (C++):** `/Users/haseeb-mir/Documents/Code/project-open-igi`
 - **Reference Specification (C#):** `/Users/haseeb-mir/Documents/Code/open-igi`

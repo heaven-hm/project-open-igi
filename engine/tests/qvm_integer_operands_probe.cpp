@@ -2,6 +2,7 @@
 
 #include <array>
 #include <cstdint>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 
@@ -42,7 +43,8 @@ igi::assets::FileBytes integer_argument(std::uint8_t opcode, std::uint32_t opera
     return file;
 }
 
-void verify_operand(std::uint8_t opcode, std::uint32_t operand, std::size_t width, double expected)
+void verify_operand(std::uint8_t opcode, std::uint32_t operand, std::size_t width, double expected,
+                    std::ostream* trace)
 {
     const auto file = integer_argument(opcode, operand, width);
     const igi::assets::QvmInitializer initializer{igi::assets::BinaryView(file)};
@@ -53,30 +55,61 @@ void verify_operand(std::uint8_t opcode, std::uint32_t operand, std::size_t widt
                                  ", encoded=" + std::to_string(operand) +
                                  ", expected=" + std::to_string(expected));
     }
+    if (trace != nullptr)
+    {
+        *trace << static_cast<unsigned>(opcode) << ',' << operand << ','
+               << static_cast<std::int64_t>(initializer.calls()[0].arguments[0].number) << '\n';
+        if (!*trace)
+        {
+            throw std::runtime_error("Cannot write C++ operand trace");
+        }
+    }
 }
 
 } // namespace
 
-int main()
+int main(int argument_count, char** arguments)
 {
     try
     {
+        if (argument_count > 2)
+        {
+            throw std::runtime_error("Usage: qvm_integer_operands_probe [output.csv]");
+        }
+        std::ofstream trace;
+        if (argument_count == 2)
+        {
+            trace.open(arguments[1], std::ios::binary);
+            if (!trace)
+            {
+                throw std::runtime_error("Cannot create C++ operand trace");
+            }
+        }
+        auto* output = trace.is_open() ? &trace : nullptr;
         for (std::uint32_t operand = 0; operand < 256; ++operand)
         {
             const double expected = operand < 128 ? operand : static_cast<double>(operand) - 256;
-            verify_operand(3, operand, 1, expected);
+            verify_operand(3, operand, 1, expected, output);
         }
         for (std::uint32_t operand = 0; operand < 65536; ++operand)
         {
             const double expected = operand < 32768 ? operand : static_cast<double>(operand) - 65536;
-            verify_operand(4, operand, 2, expected);
+            verify_operand(4, operand, 2, expected, output);
         }
         for (const std::uint32_t operand :
              {0u, 1u, 127u, 128u, 32767u, 32768u, 65535u, 0x7fffffffu, 0x80000000u, 0xffffffffu})
         {
             const double expected = operand < 0x80000000u ? operand
                                                         : static_cast<double>(operand) - 4294967296.0;
-            verify_operand(2, operand, 4, expected);
+            verify_operand(2, operand, 4, expected, output);
+        }
+        if (trace.is_open())
+        {
+            trace.close();
+            if (!trace)
+            {
+                throw std::runtime_error("Cannot flush C++ operand trace");
+            }
         }
         std::cout << "QVM integer operands passed: all 256 byte encodings, all 65536 word encodings, "
                      "and 10 doubleword boundary cases\n";
