@@ -6,6 +6,7 @@
 #include "igi/log_macros.hpp"
 #include "igi/logger.hpp"
 #include "igi/scene_renderer.hpp"
+#include "igi/vector_math.hpp"
 
 #include <SDL.h>
 #include <algorithm>
@@ -27,7 +28,10 @@ namespace
 
 using igi::diagnostics::log;
 using igi::diagnostics::Severity;
+using igi::gameplay::FreeCamera;
+using igi::gameplay::length;
 using igi::gameplay::PlayerInput;
+using igi::gameplay::Vector3;
 using Clock = std::chrono::steady_clock;
 
 struct RuntimeOptions final
