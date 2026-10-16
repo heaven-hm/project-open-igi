@@ -301,18 +301,17 @@ void GameSimulation::advance_player(const PlayerInput& input)
                                        : direction + (crouching_      ? 19
                                                       : input.walking ? 8
                                                                       : 0);
+    bool took_off_this_tick = false;
     if (input.jumping && !jump_was_pressed_ && grounded() && !crouching_)
     {
-        const Vector3 movement_direction = normalized(Vector3{input.sideways, input.forward, 0});
         const float horizontal_impulse = scene_.player_parameters.jump_horizontal_per_tick * units_per_metre;
-        player_.velocity = {movement_direction.x * horizontal_impulse,
-                            movement_direction.y * horizontal_impulse,
-                            scene_.player_parameters.jump_vertical_per_tick * units_per_metre};
-        const float cosine = std::cos(heading_);
-        const float sine = std::sin(heading_);
-        const float previous_horizontal = player_.velocity.x;
-        player_.velocity.x = cosine * previous_horizontal - sine * player_.velocity.y;
-        player_.velocity.y = sine * previous_horizontal + cosine * player_.velocity.y;
+        player_.movement_velocity =
+            HumanMotion::launch_velocity(player_.animation_movement,
+                                         player_.position_adjustment,
+                                         horizontal_impulse,
+                                         scene_.player_parameters.jump_vertical_per_tick * units_per_metre);
+        player_.position_adjustment = {};
+        took_off_this_tick = true;
         player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
         diagnostics::log(
             diagnostics::Severity::debug, "player", "Jump impulse applied from original player parameters");
@@ -328,15 +327,18 @@ void GameSimulation::advance_player(const PlayerInput& input)
     }
     if (!grounded())
     {
-        locomotion_state_ = player_.velocity.z > 0 ? 28 : 29;
-        player_.velocity = HumanMotion::integrate_airborne(
-            player_.velocity,
-            input.sideways < 0,
-            input.sideways > 0,
-            input.forward > 0,
-            input.forward < 0,
-            basis,
-            scene_.player_parameters.airborne_control_per_tick * units_per_metre);
+        locomotion_state_ = player_.movement_velocity.z > 0 ? 28 : 29;
+        if (!took_off_this_tick)
+        {
+            player_.movement_velocity = HumanMotion::integrate_airborne(
+                player_.movement_velocity,
+                input.sideways < 0,
+                input.sideways > 0,
+                input.forward > 0,
+                input.forward < 0,
+                basis,
+                scene_.player_parameters.airborne_control_per_tick * units_per_metre);
+        }
     }
     else if (moving)
     {
@@ -373,7 +375,7 @@ void GameSimulation::sweep_walls(HumanMovementState& human,
     }
     if (requested.z > 0 && resolved.z < metres(destination).z - 0.001f)
     {
-        human.velocity.z = 0;
+        human.movement_velocity.z = 0;
     }
     destination = engine_position(resolved);
     delta = {static_cast<float>(destination.x - starting.x),
@@ -395,12 +397,21 @@ void GameSimulation::query_ground(HumanMovementState& human,
                                                : std::max(0.1f, from.z - target.z + 0.08f);
     const auto ground = movement_world_.raycast(
         {target.x, target.y, from.z + upward_budget}, {0, 0, -1}, upward_budget + downward_budget, true);
-    if (ground.hit && human.velocity.z <= 0 && (was_grounded || target.z <= ground.position.z + 0.04f))
+    if (ground.hit && human.movement_velocity.z <= 0 &&
+        (was_grounded || target.z <= ground.position.z + 0.04f))
     {
         target.z = ground.position.z;
         human.movement_flags |= HumanMovementIntegrator::grounded_flag;
         human.slope_normal = ground.normal;
-        human.velocity.z = 0;
+        if (!was_grounded)
+        {
+            human.movement_velocity = {};
+            human.impact_velocity = {};
+        }
+        else
+        {
+            human.movement_velocity.z = 0;
+        }
     }
     else
     {

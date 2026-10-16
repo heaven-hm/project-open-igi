@@ -171,11 +171,11 @@ void HumanMovementIntegrator::update(HumanMovementState& human, HumanMovementWor
     const bool is_sliding = update_slope_slide(human);
 
     damp_vector(human.slide_acceleration);
-    damp_vector(human.velocity);
+    damp_vector(human.impact_velocity);
     human.movement_flags &= ~roof_contact_flag;
 
-    Vector3 movement_delta =
-        add_vectors(human.base_movement, human.animation_movement, human.velocity, human.slide_acceleration);
+    Vector3 movement_delta = add_vectors(
+        human.movement_velocity, human.animation_movement, human.impact_velocity, human.slide_acceleration);
 
     WorldPosition3 starting_position{
         human.world_position.x + static_cast<double>(human.position_adjustment.x),

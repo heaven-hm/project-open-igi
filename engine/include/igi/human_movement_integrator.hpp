@@ -18,9 +18,9 @@ struct HumanMovementState final
 {
     WorldPosition3 world_position{};
     Vector3 position_adjustment{};
-    Vector3 base_movement{};
+    Vector3 movement_velocity{}; // Human + 0x664; airborne motion is not damped.
     Vector3 animation_movement{};
-    Vector3 velocity{};
+    Vector3 impact_velocity{}; // Human + 0x670; separate impulse damped by 0.9.
     Vector3 slide_acceleration{};
     Vector3 slope_normal{};
     Vector3 committed_movement{};

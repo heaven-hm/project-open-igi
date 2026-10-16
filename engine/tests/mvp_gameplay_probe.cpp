@@ -88,6 +88,46 @@ int main()
         require(burst_fire.weapon().shots_fired == 6,
                 "A fresh trigger pull must allow another complete burst");
         const auto movement_scene = make_scene(false, false);
+        GameSimulation jump_timing(movement_scene);
+        const float jump_floor = jump_timing.player_position().z;
+        PlayerInput jump_input;
+        jump_input.jumping = true;
+        jump_timing.tick(jump_input);
+        const float launch_distance = movement_scene.player_parameters.jump_vertical_per_tick;
+        require(std::abs(jump_timing.player_position().z - jump_floor - launch_distance) < 0.000001f,
+                "Retail jump launch must apply its full velocity without gravity or impulse damping");
+        jump_timing.tick({});
+        const float second_jump_distance = launch_distance - HumanMotion::gravity_per_tick / 4096.0f;
+        require(std::abs(jump_timing.player_position().z - jump_floor - launch_distance -
+                         second_jump_distance) < 0.000001f,
+                "Retail airborne gravity starts after launch and does not damp movement velocity");
+
+        GameSimulation running_jump(movement_scene);
+        PlayerInput running_input;
+        running_input.forward = 1;
+        running_jump.tick(running_input);
+        const auto jump_start = running_jump.player_position();
+        running_jump.tick(jump_input);
+        const float launch_forward = running_jump.player_position().y - jump_start.y;
+        require(std::abs(launch_forward - movement_scene.player_parameters.jump_horizontal_per_tick) <
+                    0.000001f,
+                "Jump direction must come from the previous animation step after movement is released");
+        const float launch_position = running_jump.player_position().y;
+        running_jump.tick({});
+        require(std::abs(running_jump.player_position().y - launch_position - launch_forward) < 0.000001f,
+                "Airborne horizontal momentum must survive without the separate hit-impulse damping");
+        for (int tick_index = 0; tick_index < 60; ++tick_index)
+        {
+            running_jump.tick({});
+        }
+        require(running_jump.grounded(), "Corrected running jump must land on the original floor");
+        const auto landing_position = running_jump.player_position();
+        for (int tick_index = 0; tick_index < 10; ++tick_index)
+        {
+            running_jump.tick({});
+        }
+        require(length(running_jump.player_position() - landing_position) == 0,
+                "Landing must clear motion and impact velocities instead of sliding on the ground");
         GameSimulation movement(movement_scene);
         PlayerInput input;
         input.forward = 1;

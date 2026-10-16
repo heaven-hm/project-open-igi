@@ -1,7 +1,32 @@
 #include "igi/human_motion.hpp"
 
+#include <cmath>
+
 namespace igi::gameplay
 {
+
+Vector3 HumanMotion::launch_velocity(Vector3 previous_animation_movement,
+                                     Vector3 inherited_velocity,
+                                     float horizontal_speed,
+                                     float vertical_speed) noexcept
+{
+    long double horizontal_motion = previous_animation_movement.x;
+    long double forward_motion = previous_animation_movement.y;
+    if (horizontal_motion != 0 || forward_motion != 0)
+    {
+        const long double inverse_length =
+            1.0L / std::sqrt(horizontal_motion * horizontal_motion + forward_motion * forward_motion);
+        const float normalized_horizontal = static_cast<float>(horizontal_motion * inverse_length);
+        horizontal_motion = static_cast<float>(static_cast<long double>(horizontal_speed) *
+                                                normalized_horizontal);
+        forward_motion = forward_motion * inverse_length * horizontal_speed;
+    }
+    return {
+        static_cast<float>(horizontal_motion + inherited_velocity.x),
+        static_cast<float>(forward_motion + inherited_velocity.y),
+        vertical_speed + inherited_velocity.z,
+    };
+}
 
 Vector3 HumanMotion::integrate_airborne(Vector3 velocity,
                                         bool axis_negative,

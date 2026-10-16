@@ -98,9 +98,9 @@ bool verify_movement_composition_and_query_order()
     HumanMovementState human{};
     human.world_position = {100.0, 200.0, 300.0};
     human.position_adjustment = {0.5f, -1.0f, 2.0f};
-    human.base_movement = {1.0f, 2.0f, 3.0f};
+    human.movement_velocity = {1.0f, 2.0f, 3.0f};
     human.animation_movement = {4.0f, 5.0f, 6.0f};
-    human.velocity = {10.0f, -20.0f, 30.0f};
+    human.impact_velocity = {10.0f, -20.0f, 30.0f};
     human.movement_flags =
         HumanMovementIntegrator::grounded_flag | HumanMovementIntegrator::roof_contact_flag;
     human.wall_sweep_enabled = true;
@@ -131,7 +131,7 @@ bool verify_movement_composition_and_query_order()
         !approximately_equal(world.recorded_movement_delta.y, -11.0) ||
         !approximately_equal(world.recorded_movement_delta.z, 36.0))
     {
-        return fail("damped velocity and movement vectors were not composed correctly");
+        return fail("damped impact velocity and movement vectors were not composed correctly");
     }
     if (world.recorded_ground_query_budget != 2048.0f)
     {
@@ -144,10 +144,11 @@ bool verify_movement_composition_and_query_order()
     {
         return fail("the adjusted destination or collision radius was not committed");
     }
-    if (!approximately_equal(human.velocity.x, 9.0) || !approximately_equal(human.velocity.y, -18.0) ||
-        !approximately_equal(human.velocity.z, 27.0))
+    if (!approximately_equal(human.impact_velocity.x, 9.0) ||
+        !approximately_equal(human.impact_velocity.y, -18.0) ||
+        !approximately_equal(human.impact_velocity.z, 27.0))
     {
-        return fail("velocity did not receive the retail 0.9 damping");
+        return fail("impact velocity did not receive the retail 0.9 damping");
     }
     if (!approximately_equal(human.committed_movement.x, 14.5) ||
         !approximately_equal(human.committed_movement.y, -12.0) ||

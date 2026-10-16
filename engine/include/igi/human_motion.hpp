@@ -25,6 +25,11 @@ class HumanMotion final
     static constexpr float ladder_gravity_per_tick = 44.600887f;
     static constexpr float ladder_drag_per_tick = 0.99f;
 
+    [[nodiscard]] static Vector3 launch_velocity(Vector3 previous_animation_movement,
+                                                 Vector3 inherited_velocity,
+                                                 float horizontal_speed,
+                                                 float vertical_speed) noexcept;
+
     // Four retail movement slots contribute signed air-control speed on the
     // body's two horizontal axes, then on its vertical axis, after gravity.
     [[nodiscard]] static Vector3 integrate_airborne(Vector3 velocity,
