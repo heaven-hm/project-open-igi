@@ -1,7 +1,5 @@
 # Project Open I.G.I.
 
-**Version 0.1 BETA**
-
 An open-source native implementation of the Project I.G.I. game engine, built
 in C++20 for all major desktop operating systems — Windows, macOS, and Linux.
 It was written from scratch in C++, reverse-engineered with Binary Ninja and

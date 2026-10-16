@@ -56,6 +56,7 @@ float capsule_intersection(
 void GameSimulation::advance_weapon(const PlayerInput& input)
 {
     const auto& parameters = weapon_parameters();
+    const auto* definition = weapon_definition();
     for (const float scalar : {parameters.minimum_spread_degrees,
                                parameters.maximum_spread_degrees,
                                parameters.fixed_recoil_pitch_degrees,
