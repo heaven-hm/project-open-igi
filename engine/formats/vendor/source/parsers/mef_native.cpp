@@ -828,9 +828,6 @@ ParsedGeometry ParseMefGeometry(const std::vector<uint8_t>& bytes, const std::ve
                     geometry.bones[i].name = names[i];
                 }
             }
-            geometry.attachments = ParseAttachments(bytes, chunks);
-
-            // Bake world-space bone offsets into vertex positions
             const std::vector<glm::vec3> boneWorldPos = ComputeBoneWorldPositions(geometry.bones);
             if (!boneWorldPos.empty()) {
                 for (auto& v : geometry.vertices) {
@@ -1056,6 +1053,11 @@ ParsedGeometry ParseMefGeometry(const std::vector<uint8_t>& bytes, const std::ve
             }
         }
     }
+
+    // Retail ATTA attachments are independent of model type and of the
+    // render/collision geometry path above (the collision fallback rebuilds
+    // `geometry`, which used to discard them). Parse unconditionally.
+    geometry.attachments = ParseAttachments(bytes, chunks);
 
     return geometry;
 }

@@ -3,6 +3,7 @@
 #include "igi/ai_navigation.hpp"
 #include "igi/game_assets.hpp"
 #include "igi/human_motion.hpp"
+#include "igi/magic_object_registry.hpp"
 
 #include <array>
 #include <cstddef>
@@ -58,6 +59,14 @@ struct MeshBone {
     Vector3 rest_world_position{};
 };
 
+// Retail MEF attachment (ATTA chunk): a named mount point (weapon, prop)
+// at a model-local offset, optionally bound to a skeleton bone.
+struct ModelAttachment {
+    std::string name;
+    Vector3 local_offset{};
+    int bone_index{-1};
+};
+
 struct ModelMesh {
     std::string model_id;
     std::vector<MeshVertex> vertices;
@@ -67,6 +76,7 @@ struct ModelMesh {
     std::vector<CollisionTriangle> collision_triangles_set0;
     std::vector<CollisionTriangle> collision_triangles_set1;
     std::vector<MeshBone> bones;
+    std::vector<ModelAttachment> attachments;
     Vector3 min_bounds{};
     Vector3 max_bounds{};
     float bounding_radius{};
@@ -197,6 +207,7 @@ public:
     [[nodiscard]] const std::unordered_map<int, igi::assets::NavigationGraph>& world_navigation_graphs() const noexcept {
         return world_navigation_graphs_;
     }
+    [[nodiscard]] const MagicObjectRegistry& magic_objects() const noexcept { return magic_objects_; }
 
     [[nodiscard]] const ModelMesh* find_model(const std::string& model_id) const noexcept;
     [[nodiscard]] const TextureImage* find_texture(const std::string& texture_name) const noexcept;
@@ -266,6 +277,12 @@ private:
     bool parse_qsc_scene(const std::string& qsc_text);
     void load_mtp_packages();
     void load_referenced_models_and_textures();
+    // Converts one parsed MEF file into the model store; shared by the
+    // unpacked-file path and the RES-archive fallback below.
+    bool load_single_model_file(
+        const std::string& model_key,
+        const std::filesystem::path& file_path,
+        std::unordered_map<std::string, bool>& needed_textures);
     void load_terrain_octree_and_heightmaps();
     void load_animation_banks();
 
@@ -296,6 +313,7 @@ private:
     std::vector<TerrainTriangle> terrain_triangles_;
 
     std::unordered_map<int, SkeletalAnimationBank> animation_banks_;
+    MagicObjectRegistry magic_objects_;
 };
 
 } // namespace igi::gameplay

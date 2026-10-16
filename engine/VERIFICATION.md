@@ -361,3 +361,58 @@ narrower than the hint range:
   `update_doors` to `open_progress > 0.85`, and proves the axis is passable.
   Full suite 62/62 pass on a pristine checkout.
 
+## Magic-object registry from retail data (2026-10-16, branch feature/gameplay-parity)
+
+Retail `MAGICOBJ/MAGICOBJ.QVM` was previously ignored entirely (zero
+references in the engine). Now decoded through the existing QVM
+decompiler (`igi_qvm_dump`, new `engine/tools/qvm_dump.cpp` probe):
+
+- New portable `MagicObjectRegistry` (`engine/include/igi/magic_object_registry.hpp`,
+  `engine/src/magic_object_registry.cpp`, zero OS APIs): parses
+  `DefineMagicObj(name, model, TASKTYPE_*, ...)` lines. Retail calls are
+  variable-arity (EXPLODEMAGICOBJ explosion/sound params, RUDDER deflections,
+  COCKPITSHIELD values), so the parser takes the first three fields.
+- `MissionWorld` loads the registry at mission load and reports the count in
+  the status line; behavior is unchanged (data layer only — no effect
+  rendering reads it yet, pending coordination on effect lanes).
+- Tests: new `MagicObjects` suite (`tests/test_magic_objects.cpp`, 3 cases:
+  synthetic parse incl. malformed-line rejection, empty input, retail catalog
+  shape = 374 entries with `108_02_1`->GUNCLIP and `410_03_1`->GLASS spot
+  checks). Full suite 65/65 pass; new TU strict-compiles
+  (`-Wall -Wextra -Werror`); `igi_world_probe` L1 reports
+  `374 magic objects` with unchanged simulation.
+
+## Combat both directions, RES model fallback, ATTA fix, 14-level sweep (2026-10-16, branch feature/gameplay-parity)
+
+- New `CombatIntegration` suite (`tests/test_combat_integration.cpp`, retail
+  Mission 1 data): `ExposedPlayerTakesEnemyFire` places the player 8 m in
+  front of a soldier with verified-clear LOS, steps 600 retail ticks, and
+  asserts cumulative enemy damage > 0 plus a Combat transition;
+  `AimedFireKillsExposedSoldier` drives the real firing chain
+  (`WeaponSystem::update` -> wall-limited raycast -> `AiSystem::apply_shot`)
+  at 15 m and asserts wounding plus a kill. Full suite 68/68 pass.
+- Fixed zero-model loads on RES-packed levels: `MissionWorld` now falls back
+  to `LEVEL< N >.RES` + `location0.res` for models missing from unpacked dirs
+  (mirrors the existing texture fallback), via an extracted
+  `load_single_model_file` shared by both paths. L3 went 0/0 -> 93 models /
+  336 textures; L5 74/266; L6 92/377; L7 91/357.
+- Fixed ATTA loss at the parser: `ParseMefGeometry` only ran
+  `ParseAttachments` for skeletal (`modelType == 1`) meshes and the
+  collision-fallback reassignment wiped even those. ATTA is now parsed
+  unconditionally at function end; `ModelMesh::attachments` (`ModelAttachment`
+  name/offset/bone) is filled during conversion. 83 L1-referenced models
+  carry ATTA bytes; `RetailAttaMountsPreservedOnModels` proves mounts survive
+  into the loaded store.
+- 14/14 retail missions load read-only (objects / models / textures /
+  soldiers / graphs / terrain tris): L1 499/80/304/29/11/24784, L2
+  229/46/237/25/14/15858, L3 549/93/336/56/18/24870, L4 125/42/228/50/13/20164,
+  L5 395/74/266/39/13/16280, L6 586/92/377/55/23/18764, L7 822/91/357/47/31/28800,
+  L8 543/106/392/41/33/23082, L9 543/85/309/35/18/10248, L10 435/76/310/39/14/25596,
+  L11 460/100/367/56/24/8556, L12 460/87/344/54/34/10724, L13 910/101/353/72/20/23114,
+  L14 740/95/221/94/34/0 (L14 ships no heightmap terrain; noted, open).
+- Render throughput measured (`world_probe`, Release): high 960x600 ranges
+  6.7 ms (L4) to 45.6 ms (L1) per frame; low 480x300 ranges 2.3-12.5 ms.
+  L1-high exceeds the 33 ms frame budget and is the "slow" feel source;
+  simulation itself is ~0.06 ms/tick. Fog-range terrain clamp is the planned
+  exactness-preserving next step, not yet implemented.
+

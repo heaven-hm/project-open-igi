@@ -11,6 +11,8 @@ add_executable(igi_tests
     test_retail_controls.cpp
     test_ai_navigation.cpp
     test_building_entry.cpp
+    test_magic_objects.cpp
+    test_combat_integration.cpp
 )
 
 target_include_directories(igi_tests PRIVATE

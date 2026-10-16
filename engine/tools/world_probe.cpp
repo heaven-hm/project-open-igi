@@ -69,6 +69,19 @@ int main(int argc, char** argv) {
 
     session.render(640, 400);
     const auto& px = session.renderer().pixels();
+    // Render throughput at both graphics settings (software rasterizer).
+    for (const auto [w, h, label] : {std::tuple{480u, 300u, "low"}, {960u, 600u, "high"}}) {
+        const auto r0 = std::chrono::steady_clock::now();
+        constexpr int kFrames = 20;
+        for (int f = 0; f < kFrames; ++f) {
+            session.render(w, h);
+        }
+        const auto r1 = std::chrono::steady_clock::now();
+        std::cout << "render " << label << " (" << w << "x" << h << "): "
+                  << std::chrono::duration<double, std::milli>(r1 - r0).count() / kFrames
+                  << " ms/frame\n";
+    }
+    session.render(640, 400);
     std::ofstream out(out_path, std::ios::binary);
     out << "P6\n640 400\n255\n";
     for (std::uint32_t p : px) {

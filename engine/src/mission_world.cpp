@@ -513,6 +513,21 @@ bool MissionWorld::load_from_retail_install(
         // 6. Load skeletal animation banks (000.IFF, 001.IFF)
         load_animation_banks();
 
+        // 7. Load retail magic-object definitions (models bound to TASKTYPE_*).
+        // Data only; behavior stays unchanged until effect handling reads it.
+        {
+            magic_objects_.clear();
+            const std::filesystem::path magic_path = game_root_ / "MAGICOBJ" / "MAGICOBJ.QVM";
+            if (std::filesystem::exists(magic_path)) {
+                const QVMFile magic_qvm = QVM_Parse(magic_path.string());
+                if (magic_qvm.valid) {
+                    const std::size_t accepted =
+                        magic_objects_.load_from_qsc_text(QVM_DecompileToString(magic_qvm));
+                    IGI_LOG_INFO("World", "Loaded " << accepted << " magic-object definitions.");
+                }
+            }
+        }
+
         is_loaded_ = true;
         std::ostringstream msg;
         msg << "Loaded Mission " << mission_number
@@ -521,7 +536,8 @@ bool MissionWorld::load_from_retail_install(
             << textures_.size() << " TEX textures, "
             << soldier_spawns_.size() << " AI soldiers, "
             << world_navigation_graphs_.size() << " nav graphs, "
-            << terrain_triangles_.size() << " terrain tris)";
+            << terrain_triangles_.size() << " terrain tris, "
+            << magic_objects_.entry_count() << " magic objects)";
         status_message_ = msg.str();
         IGI_LOG_INFO("World", status_message_);
         return true;
@@ -857,6 +873,137 @@ void MissionWorld::load_mtp_packages() {
     }
 }
 
+bool MissionWorld::load_single_model_file(
+    const std::string& model_key,
+    const std::filesystem::path& file_path,
+    std::unordered_map<std::string, bool>& needed_textures) {
+    try {
+        const ParsedGeometry parsed = ParseMefFile(file_path.string());
+        ModelMesh mesh{};
+        mesh.model_id = model_key;
+
+        // Convert vertices to raw world units (4096.0 = 1m)
+        mesh.vertices.reserve(parsed.vertices.size());
+        mesh.min_bounds = {1.0e9f, 1.0e9f, 1.0e9f};
+        mesh.max_bounds = {-1.0e9f, -1.0e9f, -1.0e9f};
+        float max_r_sq = 0.0f;
+
+        for (const RenderVertex& rv : parsed.vertices) {
+            MeshVertex mv{};
+            // Note: ParseMefFile divides rv.pos by 40.96f (with bone offsets baked in)
+            mv.position = {
+                rv.pos.x * 40.96f,
+                rv.pos.y * 40.96f,
+                rv.pos.z * 40.96f,
+            };
+            mv.normal = {rv.normal.x, rv.normal.y, rv.normal.z};
+            mv.u = rv.uv.x;
+            mv.v = rv.uv.y;
+            mv.bone_index = rv.boneIndex;
+            mesh.vertices.push_back(mv);
+
+            mesh.min_bounds.x = std::min(mesh.min_bounds.x, mv.position.x);
+            mesh.min_bounds.y = std::min(mesh.min_bounds.y, mv.position.y);
+            mesh.min_bounds.z = std::min(mesh.min_bounds.z, mv.position.z);
+            mesh.max_bounds.x = std::max(mesh.max_bounds.x, mv.position.x);
+            mesh.max_bounds.y = std::max(mesh.max_bounds.y, mv.position.y);
+            mesh.max_bounds.z = std::max(mesh.max_bounds.z, mv.position.z);
+
+            const float r_sq =
+                mv.position.x * mv.position.x +
+                mv.position.y * mv.position.y +
+                mv.position.z * mv.position.z;
+            if (r_sq > max_r_sq) {
+                max_r_sq = r_sq;
+            }
+        }
+
+        mesh.triangles = parsed.triangles;
+        for (const auto& rb : parsed.renderBlocks) {
+            mesh.sub_blocks.push_back({
+                rb.triangleStart,
+                rb.triangleCount,
+                rb.materialSlot,
+                rb.opacity,
+            });
+        }
+
+        build_collision_triangles(
+            parsed.xtvcVerts,
+            parsed.ecfcFaces,
+            parsed.tamcRecords,
+            mesh.collision_triangles_set0);
+        build_collision_triangles(
+            parsed.xtvcVerts1,
+            parsed.ecfcFaces1,
+            parsed.tamcRecords1,
+            mesh.collision_triangles_set1);
+
+        for (const CollisionTriangle& ctri : mesh.collision_triangles_set0) {
+            for (const Vector3& pt : {ctri.v0, ctri.v1, ctri.v2}) {
+                const float r_sq = pt.x * pt.x + pt.y * pt.y + pt.z * pt.z;
+                if (r_sq > max_r_sq) {
+                    max_r_sq = r_sq;
+                }
+            }
+        }
+        mesh.bounding_radius = std::sqrt(max_r_sq);
+
+        const std::vector<glm::vec3> rest_positions =
+            ComputeBoneWorldPositions(parsed.bones);
+        mesh.bones.reserve(parsed.bones.size());
+        for (std::size_t bi = 0; bi < parsed.bones.size(); ++bi) {
+            MeshBone bone{};
+            bone.name = parsed.bones[bi].name;
+            bone.parent = parsed.bones[bi].parent;
+            bone.pivot = {
+                parsed.bones[bi].pivot.x,
+                parsed.bones[bi].pivot.y,
+                parsed.bones[bi].pivot.z,
+            };
+            if (bi < rest_positions.size()) {
+                bone.rest_world_position = {
+                    rest_positions[bi].x,
+                    rest_positions[bi].y,
+                    rest_positions[bi].z,
+                };
+            }
+            mesh.bones.push_back(std::move(bone));
+        }
+
+        // Preserve retail ATTA attachment mounts (previously dropped).
+        mesh.attachments.reserve(parsed.attachments.size());
+        for (const auto& atta : parsed.attachments) {
+            ModelAttachment mount{};
+            mount.name = atta.name;
+            mount.local_offset = {atta.pos.x, atta.pos.y, atta.pos.z};
+            mount.bone_index = static_cast<int>(atta.boneId);
+            mesh.attachments.push_back(std::move(mount));
+        }
+
+        auto mtp_it = mtp_model_textures_.find(model_key);
+        if (mtp_it != mtp_model_textures_.end()) {
+            mesh.slot_texture_names = mtp_it->second;
+        } else {
+            for (const std::string& ptex : parsed.pmtlTextures) {
+                mesh.slot_texture_names.push_back(strip_extension_and_lower(ptex));
+            }
+        }
+
+        for (const std::string& tname : mesh.slot_texture_names) {
+            if (!tname.empty()) {
+                needed_textures[tname] = true;
+            }
+        }
+
+        models_.emplace(model_key, std::move(mesh));
+        return true;
+    } catch (...) {
+        // Skip malformed model file without failing level load
+        return false;
+    }
+}
+
 void MissionWorld::load_referenced_models_and_textures() {
     models_.clear();
     textures_.clear();
@@ -924,121 +1071,43 @@ void MissionWorld::load_referenced_models_and_textures() {
         if (file_it == model_file_index.end()) {
             continue;
         }
-
-        try {
-            const ParsedGeometry parsed = ParseMefFile(file_it->second.string());
-            ModelMesh mesh{};
-            mesh.model_id = model_key;
-
-            // Convert vertices to raw world units (4096.0 = 1m)
-            mesh.vertices.reserve(parsed.vertices.size());
-            mesh.min_bounds = {1.0e9f, 1.0e9f, 1.0e9f};
-            mesh.max_bounds = {-1.0e9f, -1.0e9f, -1.0e9f};
-            float max_r_sq = 0.0f;
-
-            for (const RenderVertex& rv : parsed.vertices) {
-                MeshVertex mv{};
-                // Note: ParseMefFile divides rv.pos by 40.96f (with bone offsets baked in)
-                mv.position = {
-                    rv.pos.x * 40.96f,
-                    rv.pos.y * 40.96f,
-                    rv.pos.z * 40.96f,
-                };
-                mv.normal = {rv.normal.x, rv.normal.y, rv.normal.z};
-                mv.u = rv.uv.x;
-                mv.v = rv.uv.y;
-                mv.bone_index = rv.boneIndex;
-                mesh.vertices.push_back(mv);
-
-                mesh.min_bounds.x = std::min(mesh.min_bounds.x, mv.position.x);
-                mesh.min_bounds.y = std::min(mesh.min_bounds.y, mv.position.y);
-                mesh.min_bounds.z = std::min(mesh.min_bounds.z, mv.position.z);
-                mesh.max_bounds.x = std::max(mesh.max_bounds.x, mv.position.x);
-                mesh.max_bounds.y = std::max(mesh.max_bounds.y, mv.position.y);
-                mesh.max_bounds.z = std::max(mesh.max_bounds.z, mv.position.z);
-
-                const float r_sq =
-                    mv.position.x * mv.position.x +
-                    mv.position.y * mv.position.y +
-                    mv.position.z * mv.position.z;
-                if (r_sq > max_r_sq) {
-                    max_r_sq = r_sq;
-                }
-            }
-
-            mesh.triangles = parsed.triangles;
-            for (const auto& rb : parsed.renderBlocks) {
-                mesh.sub_blocks.push_back({
-                    rb.triangleStart,
-                    rb.triangleCount,
-                    rb.materialSlot,
-                    rb.opacity,
-                });
-            }
-
-            build_collision_triangles(
-                parsed.xtvcVerts,
-                parsed.ecfcFaces,
-                parsed.tamcRecords,
-                mesh.collision_triangles_set0);
-            build_collision_triangles(
-                parsed.xtvcVerts1,
-                parsed.ecfcFaces1,
-                parsed.tamcRecords1,
-                mesh.collision_triangles_set1);
-
-            for (const CollisionTriangle& ctri : mesh.collision_triangles_set0) {
-                for (const Vector3& pt : {ctri.v0, ctri.v1, ctri.v2}) {
-                    const float r_sq = pt.x * pt.x + pt.y * pt.y + pt.z * pt.z;
-                    if (r_sq > max_r_sq) {
-                        max_r_sq = r_sq;
-                    }
-                }
-            }
-            mesh.bounding_radius = std::sqrt(max_r_sq);
-
-            const std::vector<glm::vec3> rest_positions =
-                ComputeBoneWorldPositions(parsed.bones);
-            mesh.bones.reserve(parsed.bones.size());
-            for (std::size_t bi = 0; bi < parsed.bones.size(); ++bi) {
-                MeshBone bone{};
-                bone.name = parsed.bones[bi].name;
-                bone.parent = parsed.bones[bi].parent;
-                bone.pivot = {
-                    parsed.bones[bi].pivot.x,
-                    parsed.bones[bi].pivot.y,
-                    parsed.bones[bi].pivot.z,
-                };
-                if (bi < rest_positions.size()) {
-                    bone.rest_world_position = {
-                        rest_positions[bi].x,
-                        rest_positions[bi].y,
-                        rest_positions[bi].z,
-                    };
-                }
-                mesh.bones.push_back(std::move(bone));
-            }
-
-            auto mtp_it = mtp_model_textures_.find(model_key);
-            if (mtp_it != mtp_model_textures_.end()) {
-                mesh.slot_texture_names = mtp_it->second;
-            } else {
-                for (const std::string& ptex : parsed.pmtlTextures) {
-                    mesh.slot_texture_names.push_back(strip_extension_and_lower(ptex));
-                }
-            }
-
-            for (const std::string& tname : mesh.slot_texture_names) {
-                if (!tname.empty()) {
-                    needed_textures[tname] = true;
-                }
-            }
-
-            models_.emplace(model_key, std::move(mesh));
-        } catch (...) {
-            // Skip malformed model file without failing level load
-        }
+        (void)load_single_model_file(model_key, file_it->second, needed_textures);
     }
+
+    // Fall back to RES archives for models that are not unpacked on disk
+    // (e.g. LEVEL3/MODELS/LEVEL3.RES). Mirrors the texture fallback below.
+    const std::array<std::filesystem::path, 2> model_res_archives = {
+        level_root_ / "MODELS" / (level_root_.filename().string() + ".RES"),
+        level_root_.parent_path() / "COMMON" / "MODELS" / "location0.res",
+    };
+    const std::filesystem::path temp_mef_path =
+        std::filesystem::temp_directory_path() / "igi_temp_extract.mef";
+    for (const auto& res_path : model_res_archives) {
+        if (!std::filesystem::exists(res_path)) {
+            continue;
+        }
+        std::string res_err;
+        (void)RES_ForEachEntry(
+            res_path.string(),
+            [&](const std::string& entry_name, const std::uint8_t* data, std::size_t size) {
+                const std::string key = strip_extension_and_lower(entry_name);
+                if (needed_models.find(key) == needed_models.end() ||
+                    models_.find(key) != models_.end()) {
+                    return;
+                }
+                std::ofstream out(temp_mef_path, std::ios::binary);
+                if (!out) {
+                    return;
+                }
+                out.write(
+                    reinterpret_cast<const char*>(data), static_cast<std::streamsize>(size));
+                out.close();
+                (void)load_single_model_file(key, temp_mef_path, needed_textures);
+            },
+            res_err);
+    }
+    std::error_code model_cleanup_status;
+    std::filesystem::remove(temp_mef_path, model_cleanup_status);
 
     // Load referenced .tex files from unpacked_textures_dir
     for (const auto& [tex_key, _] : needed_textures) {

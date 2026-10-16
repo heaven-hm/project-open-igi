@@ -19,6 +19,7 @@ add_library(igi_gameplay STATIC
     src/player_ladder.cpp
     src/mission_expression.cpp
     src/level_flow.cpp
+    src/magic_object_registry.cpp
     src/mission_objective_loader.cpp
     src/sight_zoom.cpp
     src/player_view_bob.cpp
@@ -43,6 +44,11 @@ add_executable(igi_world_probe tools/world_probe.cpp)
 target_link_libraries(igi_world_probe PRIVATE igi_gameplay)
 target_compile_features(igi_world_probe PRIVATE cxx_std_20)
 set_target_properties(igi_world_probe PROPERTIES CXX_EXTENSIONS OFF)
+
+add_executable(igi_qvm_dump tools/qvm_dump.cpp)
+target_link_libraries(igi_qvm_dump PRIVATE igi_gameplay)
+target_compile_features(igi_qvm_dump PRIVATE cxx_std_20)
+set_target_properties(igi_qvm_dump PROPERTIES CXX_EXTENSIONS OFF)
 
 add_executable(igi_capture_screenshots tools/capture_game_screenshots.cpp)
 target_link_libraries(igi_capture_screenshots PRIVATE igi_gameplay)
