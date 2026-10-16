@@ -258,3 +258,41 @@ Checks performed:
   - `MissionFlow`: QSC arithmetic/relational/boolean expression parser, fallback objectives for all 14 missions, objective completion progression, and authored objective set loading.
 - `igi_world_probe` loaded retail Mission 1 read-only: 481 placed objects, 77 MEF models, 304 textures, 29 soldiers, 11 nav graphs, 6,492 terrain triangles. After 240 simulated ticks the player settles grounded. Firing M16A2 executes a 3-round burst (mag 30 -> 27), generates recoil, broadcasts gunshot sound, alerts nearby soldier to combat, moves 49.8m in 10s at 0.010 ms/tick, and dumps rendered frame to `/tmp/world_probe.ppm`.
 
+## Graphics quality: bilinear filtering and low/high render setting (2026-10-16)
+
+Outer-layer graphics only (retail DirectX 7 behavior is not replicated; no
+texture or polygon data is altered — texel/model bytes still come from retail
+files unchanged):
+
+- `TextureImage::sample_bilinear` was a stub forwarding to `sample_nearest`.
+  It now performs a true 4-texel bilinear blend with retail-style UV wrapping
+  (`engine/src/mission_world.cpp`). The software rasterizer samples via
+  `sample_bilinear` (`engine/src/software_renderer.cpp`), matching the
+  bilinear filtering retail Direct3D used instead of blocky nearest-neighbor.
+- New portable `AppLaunchOptions::parse`
+  (`engine/include/igi/launch_options.hpp`, zero OS APIs — pure string
+  parsing, safe for all OS backends): `--gfx low|high`, `--width N`,
+  `--height N`, `--mission N` / `-m N`, `--game-root PATH`, plus the legacy
+  positional `<mission-number>` / `<game-root>` forms. Defaults to high
+  (960x600); low selects 480x300. SDL backend
+  (`engine/platform/sdl/sdl_application.cpp`) renders at the selected size
+  instead of the fixed 480x300 upscale.
+- Tests: new `GraphicsQuality` suite in `tests/test_graphics_quality.cpp`
+  (7 cases: 4-texel center blend, texel-center agreement with nearest, UV
+  wrap parity, default high 960x600, low flag 480x300, explicit size survival,
+  mission/root arg forms). Full suite: 48/48 pass (`ctest`).
+- Runtime integration: `igi_world_probe` missions 1 and 2 both load and settle
+  grounded after 240 ticks (L1: 499 objects / 79 models / 304 textures /
+  29 soldiers / 11 graphs / 24784 tris; L2: 229 objects / 46 models /
+  237 textures / 25 soldiers / 14 graphs / 15858 tris). Frames dumped to
+  `/tmp/world_l1.ppm` and `/tmp/world_l2.ppm`.
+- REA static context: `binary_overview` on `igi.exe` (SHA-256
+  `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`)
+  confirms PE32 x86, 6 segments, 3,926 procedures, 2,444 strings
+  (evidence `ev_270be182d280bb1afa522d4378fd2b0a9f649d7d3b95360537bb49277a625a5a`,
+  Ghidra 12.1.2). No parity claim: rasterizer output has not been
+  pixel-compared against a retail Direct3D capture.
+- Remaining graphics gaps: terrain streaming cap (`half_steps <= 60`) still
+  bounds high-mode view distance; retail lightmaps not yet applied; no
+  retail-capture pixel comparison yet.
+

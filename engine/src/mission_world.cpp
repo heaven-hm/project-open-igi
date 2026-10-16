@@ -329,7 +329,47 @@ std::uint32_t TextureImage::sample_nearest(float u, float v) const noexcept {
 }
 
 std::uint32_t TextureImage::sample_bilinear(float u, float v) const noexcept {
-    return sample_nearest(u, v);
+    if (width == 0 || height == 0 || argb_pixels.empty()) {
+        return 0xFF909890u;
+    }
+    float uf = u - std::floor(u);
+    float vf = v - std::floor(v);
+    if (!std::isfinite(uf)) uf = 0.0f;
+    if (!std::isfinite(vf)) vf = 0.0f;
+    // Texel-space position with centers at half-integers; wrap like nearest.
+    const float x = uf * static_cast<float>(width) - 0.5f;
+    const float y = vf * static_cast<float>(height) - 0.5f;
+    const int x0 = static_cast<int>(std::floor(x));
+    const int y0 = static_cast<int>(std::floor(y));
+    const float fx = x - static_cast<float>(x0);
+    const float fy = y - static_cast<float>(y0);
+    const auto wrapped = [&](int ix, int iy) -> std::uint32_t {
+        const int wx = ((ix % static_cast<int>(width)) + static_cast<int>(width)) %
+                       static_cast<int>(width);
+        const int wy = ((iy % static_cast<int>(height)) + static_cast<int>(height)) %
+                       static_cast<int>(height);
+        return argb_pixels[static_cast<std::size_t>(wy) * width + static_cast<std::size_t>(wx)];
+    };
+    const std::uint32_t c00 = wrapped(x0, y0);
+    const std::uint32_t c10 = wrapped(x0 + 1, y0);
+    const std::uint32_t c01 = wrapped(x0, y0 + 1);
+    const std::uint32_t c11 = wrapped(x0 + 1, y0 + 1);
+    const auto channel = [&](std::uint32_t c, int shift) {
+        return static_cast<float>((c >> shift) & 0xFFu);
+    };
+    const float tx = std::clamp(fx, 0.0f, 1.0f);
+    const float ty = std::clamp(fy, 0.0f, 1.0f);
+    std::uint32_t out = 0;
+    for (int shift = 0; shift <= 24; shift += 8) {
+        const float top = channel(c00, shift) + (channel(c10, shift) - channel(c00, shift)) * tx;
+        const float bottom =
+            channel(c01, shift) + (channel(c11, shift) - channel(c01, shift)) * tx;
+        const float value = top + (bottom - top) * ty;
+        const std::uint32_t byte =
+            static_cast<std::uint32_t>(std::clamp(value, 0.0f, 255.0f) + 0.5f);
+        out |= (byte & 0xFFu) << shift;
+    }
+    return out;
 }
 
 Basis3x3 MissionWorld::basis_from_euler(float alpha, float beta, float gamma) noexcept {

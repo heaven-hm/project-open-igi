@@ -149,7 +149,7 @@ void SoftwareRenderer::draw_triangle(
 
             std::uint32_t texel = 0xFF8C9088u;
             if (texture != nullptr) {
-                texel = texture->sample_nearest(u, v);
+                texel = texture->sample_bilinear(u, v);
                 if (texture->has_alpha && (texel >> 24) < 128u) {
                     continue;
                 }

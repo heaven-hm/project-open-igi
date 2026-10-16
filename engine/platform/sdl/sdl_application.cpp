@@ -1,6 +1,7 @@
 #include "igi/game_loop.hpp"
 #include "igi/game_session.hpp"
 #include "igi/input_state.hpp"
+#include "igi/launch_options.hpp"
 #include "igi/platform_application.hpp"
 
 #include <SDL.h>
@@ -196,25 +197,26 @@ int run_application(int argument_count, char** arguments) {
 
     std::cout << "[INFO] [Application] C++ SDL application loop started.\n";
 
-    std::filesystem::path game_root = "/Users/haseeb-mir/Downloads/IGI";
+    std::vector<std::string> launch_args;
+    launch_args.reserve(argument_count > 1 ? static_cast<std::size_t>(argument_count - 1) : 0);
+    for (int i = 1; i < argument_count; ++i) {
+        launch_args.emplace_back(arguments[i]);
+    }
+    const igi::gameplay::AppLaunchOptions launch_options =
+        igi::gameplay::AppLaunchOptions::parse(launch_args);
+    std::filesystem::path game_root = launch_options.game_root;
     if (std::filesystem::exists("COMMON") || std::filesystem::exists("MISSIONS")) {
         game_root = ".";
     }
-    int mission_number = 1;
-    if (argument_count > 1) {
-        const std::string arg1 = arguments[1];
-        const bool is_number = !arg1.empty() && std::all_of(arg1.begin(), arg1.end(), [](unsigned char c) {
-            return std::isdigit(c);
-        });
-        if (is_number) {
-            mission_number = std::max(1, std::atoi(arg1.c_str()));
-        } else {
-            game_root = arg1;
-            if (argument_count > 2) {
-                mission_number = std::max(1, std::atoi(arguments[2]));
-            }
-        }
-    }
+    const int mission_number = launch_options.mission_number;
+    std::uint32_t render_width = launch_options.render_width;
+    std::uint32_t render_height = launch_options.render_height;
+    std::cout << "[INFO] [Application] Graphics quality: "
+              << (launch_options.graphics_quality == igi::gameplay::GraphicsQuality::High
+                      ? "high"
+                      : "low")
+              << " (" << render_width << "x" << render_height << "). "
+              << "Override with --gfx low|high [--width N --height N].\n";
     if (game_session.load_mission(game_root, mission_number)) {
         std::cout << "[INFO] [Application] " << game_session.mission_status() << '\n';
         (void)SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -260,19 +262,21 @@ int run_application(int argument_count, char** arguments) {
             break;
         }
 
-        constexpr std::uint32_t kRenderWidth = 480;
-        constexpr std::uint32_t kRenderHeight = 300;
-        game_session.render(kRenderWidth, kRenderHeight);
+        constexpr std::uint32_t kFallbackWidth = 480;
+        constexpr std::uint32_t kFallbackHeight = 300;
+        const std::uint32_t active_width = render_width > 0 ? render_width : kFallbackWidth;
+        const std::uint32_t active_height = render_height > 0 ? render_height : kFallbackHeight;
+        game_session.render(active_width, active_height);
 
         bool presented = false;
         if (game_session.has_mission()) {
             const auto& frame_pixels = game_session.renderer().pixels();
             SDL_Surface* frame_surface = SDL_CreateRGBSurfaceWithFormatFrom(
                 const_cast<std::uint32_t*>(frame_pixels.data()),
-                static_cast<int>(kRenderWidth),
-                static_cast<int>(kRenderHeight),
+                static_cast<int>(active_width),
+                static_cast<int>(active_height),
                 32,
-                static_cast<int>(kRenderWidth * sizeof(std::uint32_t)),
+                static_cast<int>(active_width * sizeof(std::uint32_t)),
                 SDL_PIXELFORMAT_ARGB8888);
             if (frame_surface != nullptr) {
                 presented = SDL_BlitScaled(frame_surface, nullptr, window_surface, nullptr) == 0;
