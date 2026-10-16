@@ -12,6 +12,7 @@
 #include <limits>
 #include <numbers>
 #include <stdexcept>
+#include <string>
 #include <unordered_set>
 
 using namespace igi::gameplay;
@@ -338,6 +339,70 @@ int main(int argument_count, char** arguments)
         }
         std::cout << "Original soldier target: " << scene.actors[target_index].identifier
                   << "; distance=" << target_distance << '\n';
+        GameSimulation ai_combat_simulation = combat;
+        std::size_t visible_guard_index = scene.actors.size();
+        for (std::size_t actor_index = 0;
+             actor_index < scene.actors.size() && visible_guard_index == scene.actors.size();
+             ++actor_index)
+        {
+            const auto& actor_definition = scene.actors[actor_index];
+            const auto& actor_state = ai_combat_simulation.actors()[actor_index];
+            if (!actor_state.active || actor_definition.team == 0 || !actor_definition.gameplay_enabled)
+            {
+                continue;
+            }
+            const Vector3 actor_eye_position = actor_state.position + Vector3{0, 0, 1.5f};
+            const Vector3 actor_facing{-std::sin(actor_state.heading), std::cos(actor_state.heading), 0};
+            for (int candidate_direction_index = 0; candidate_direction_index < 16; ++candidate_direction_index)
+            {
+                const float candidate_azimuth = static_cast<float>(candidate_direction_index) *
+                                                std::numbers::pi_v<float> / 8.0f;
+                const Vector3 candidate_position =
+                    actor_state.position + Vector3{std::cos(candidate_azimuth) * 5.0f,
+                                                   std::sin(candidate_azimuth) * 5.0f,
+                                                   0};
+                ai_combat_simulation.teleport_player(candidate_position, 0, 0);
+                const Vector3 player_detection_position =
+                    ai_combat_simulation.player_position() + Vector3{0, 0, 0.69f};
+                const Vector3 direction_to_player = normalized(player_detection_position - actor_eye_position);
+                if (dot(actor_facing, direction_to_player) <= 0.35f)
+                {
+                    continue;
+                }
+                const float player_detection_distance = length(player_detection_position - actor_eye_position);
+                const auto line_of_sight_obstruction = ai_combat_simulation.world().raycast(
+                    actor_eye_position, direction_to_player, player_detection_distance);
+                if (!line_of_sight_obstruction.hit ||
+                    line_of_sight_obstruction.distance > player_detection_distance - 0.3f)
+                {
+                    visible_guard_index = actor_index;
+                    break;
+                }
+            }
+        }
+        require(visible_guard_index < scene.actors.size(),
+                "Level 1 must provide a clear, in-cone gameplay guard for the AI firing check");
+        require(scene.actors[visible_guard_index].maximum_health == 0.5f &&
+                    scene.actors[visible_guard_index].hit_probability_at_minimum_range == 1.0f &&
+                    scene.actors[visible_guard_index].hit_probability_at_maximum_range < 1.0f &&
+                    scene.actors[visible_guard_index].aim_precision > 0.0f,
+                "Level 1 guard health and combat values must load from the original difficulty-specific AI row");
+        for (int tick_index = 0; tick_index < 90; ++tick_index)
+        {
+            ai_combat_simulation.tick({});
+        }
+        require(ai_combat_simulation.actors()[visible_guard_index].shots_fired > 0,
+                "The Level 1 guard must fire through the real mission AI configuration");
+        const auto ai_combat_log_entries = igi::logging::Logger::instance().snapshot_recent_entries(4096);
+        const std::string target_shot_message =
+            "Soldier " + std::to_string(scene.actors[visible_guard_index].identifier) + " fired shot";
+        const bool verified_timestamped_ai_shot = std::any_of(
+            ai_combat_log_entries.begin(),
+            ai_combat_log_entries.end(),
+            [&](const igi::logging::LogEntry& entry)
+            { return entry.subsystem == "ai" && entry.message.find(target_shot_message) != std::string::npos; });
+        require(verified_timestamped_ai_shot,
+                "A real Level 1 AI projectile must be present in the timestamped gameplay log");
         const auto& target_definition = scene.actors[target_index];
         const auto& target_state = combat.actors()[target_index];
         const auto target_pose = sample_bone_pose(

@@ -214,6 +214,34 @@ int main()
                 "An unopposed visible guard must damage the player before it is defeated");
         require(length(distant_combat.actors().front().position - guard_start) < 0.01f,
                 "A guard with a clear firing line must hold its firing position rather than chase-run");
+        auto zero_accuracy_scene = make_scene(true, false);
+        zero_accuracy_scene.actors.front().position.y = 12;
+        zero_accuracy_scene.actors.front().hit_probability_at_minimum_range = 0.0f;
+        zero_accuracy_scene.actors.front().hit_probability_at_maximum_range = 0.0f;
+        GameSimulation zero_accuracy_combat(zero_accuracy_scene);
+        for (int tick_index = 0; tick_index < 75; ++tick_index)
+        {
+            zero_accuracy_combat.tick({});
+        }
+        require(zero_accuracy_combat.actors().front().shots_fired > 0,
+                "Zero hit probability must still allow visible guards to fire rounds");
+        require(zero_accuracy_combat.health() == zero_accuracy_scene.player_parameters.maximum_health,
+                "An AI round that fails the configured hit-probability check must not damage the player");
+        auto standard_maximum_health_scene = make_scene(true, false);
+        standard_maximum_health_scene.actors.front().position.y = 12;
+        auto reduced_maximum_health_scene = standard_maximum_health_scene;
+        reduced_maximum_health_scene.actors.front().maximum_health = 0.25f;
+        GameSimulation standard_maximum_health_simulation(standard_maximum_health_scene);
+        GameSimulation reduced_maximum_health_simulation(reduced_maximum_health_scene);
+        require(reduced_maximum_health_simulation.actors().front().health == 0.25f,
+                "The AI difficulty row's damage-scale value must initialize soldier maximum health");
+        for (int tick_index = 0; tick_index < 75; ++tick_index)
+        {
+            standard_maximum_health_simulation.tick({});
+            reduced_maximum_health_simulation.tick({});
+        }
+        require(standard_maximum_health_simulation.health() == reduced_maximum_health_simulation.health(),
+                "An AI soldier's maximum health must not scale the damage of its weapon rounds");
         auto low_cover_scene = make_scene(true, false);
         low_cover_scene.collision_triangles.push_back(
             {{Vector3{-3, 3, -2}, Vector3{3, 3, -2}, Vector3{3, 3, -0.9025f}}});

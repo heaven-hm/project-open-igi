@@ -169,7 +169,8 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
     const auto configuration = gameplay::parse_input_configuration(configuration_script.calls());
     const auto settings_bytes = read_file(resolve_path(scene.game_directory, "common/ai/settings.qvm"));
     const QvmInitializer settings_script{BinaryView(settings_bytes)};
-    std::unordered_map<std::string, float> damage_scales;
+    std::unordered_map<std::string, float> maximum_health_by_ai_type;
+    std::unordered_map<std::string, std::unordered_map<std::string, std::array<float, 3>>> hit_probabilities;
     for (const auto& call : settings_script.calls())
     {
         if (call.function == "Task_New" && call.arguments.size() > 5 &&
@@ -179,9 +180,27 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
             const float scale = static_cast<float>(call.arguments[5].number);
             if (!std::isfinite(scale) || scale < 0 || scale > 10)
             {
-                throw std::runtime_error("Original AI damage scale is invalid");
+                throw std::runtime_error("Original AI maximum-health setting is invalid");
             }
-            damage_scales[call.arguments[3].text] = scale;
+            maximum_health_by_ai_type[call.arguments[3].text] = scale;
+            if (call.arguments.size() > 18)
+            {
+                const float minimum_range_probability = static_cast<float>(call.arguments[17].number);
+                const float maximum_range_probability = static_cast<float>(call.arguments[18].number);
+                const float aim_precision = call.arguments.size() > 20
+                                                ? static_cast<float>(call.arguments[20].number)
+                                                : 0.2f;
+                if (!std::isfinite(minimum_range_probability) || minimum_range_probability < 0.0f ||
+                    minimum_range_probability > 1.0f || !std::isfinite(maximum_range_probability) ||
+                    maximum_range_probability < 0.0f || maximum_range_probability > 1.0f ||
+                    !std::isfinite(aim_precision) || aim_precision < 0.0f || aim_precision > 1.0f)
+                {
+                    throw std::runtime_error("Original AI hit-probability settings are invalid for " +
+                                             call.arguments[3].text);
+                }
+                hit_probabilities[call.arguments[3].text][call.arguments[4].text] = {
+                    minimum_range_probability, maximum_range_probability, aim_precision};
+            }
         }
     }
     std::unordered_set<std::string> owned_weapons;
@@ -284,10 +303,34 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 }
                 if (child->arguments[1].text == "HumanAI")
                 {
-                    const auto scale = damage_scales.find(child->arguments[3].text);
-                    if (scale != damage_scales.end())
+                    const auto maximum_health = maximum_health_by_ai_type.find(child->arguments[3].text);
+                    if (maximum_health != maximum_health_by_ai_type.end())
                     {
-                        actor->damage_scale = scale->second;
+                        actor->maximum_health = maximum_health->second;
+                    }
+                    const auto type_probabilities = hit_probabilities.find(child->arguments[3].text);
+                    if (type_probabilities != hit_probabilities.end())
+                    {
+                        const auto difficulty_probabilities =
+                            type_probabilities->second.find(configuration.difficulty);
+                        if (difficulty_probabilities != type_probabilities->second.end())
+                        {
+                            actor->hit_probability_at_minimum_range = difficulty_probabilities->second[0];
+                            actor->hit_probability_at_maximum_range = difficulty_probabilities->second[1];
+                            actor->aim_precision = difficulty_probabilities->second[2];
+                            diagnostics::log(
+                                diagnostics::Severity::debug,
+                                "ai",
+                                "Loaded retail AI combat accuracy for soldier " +
+                                    std::to_string(actor->identifier) + "; type=" + child->arguments[3].text +
+                                    "; difficulty=" + configuration.difficulty + "; maximum health=" +
+                                    std::to_string(actor->maximum_health) + "; hit probability=" +
+                                    std::to_string(actor->hit_probability_at_minimum_range) + ".." +
+                                    std::to_string(actor->hit_probability_at_maximum_range) +
+                                    "; aim precision=" + std::to_string(actor->aim_precision) +
+                                    "; primary view length=" +
+                                    std::to_string(actor->primary_view_length) + " m");
+                        }
                     }
                     actor->navigation_graph_identifier = static_cast<int>(child->arguments[4].number);
                     actor->patrol_path_identifier =

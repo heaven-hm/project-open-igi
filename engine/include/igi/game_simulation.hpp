@@ -43,6 +43,10 @@ struct ActorState final
     float awareness_time{};
     ActorBehavior behavior = ActorBehavior::guarding;
     float reaction_time{};
+    Vector3 tracked_aim_position{};
+    float hit_probability = 1.0f;
+    bool has_tracked_aim_position{};
+    bool first_fire = true;
     float patrol_delay{};
     std::size_t patrol_command_index{};
     std::vector<Vector3> route;
@@ -87,6 +91,7 @@ struct Projectile final
     float speed{};
     float damage{};
     int owner = -1;
+    float hit_probability = 1.0f;
 };
 
 struct InventoryWeapon final

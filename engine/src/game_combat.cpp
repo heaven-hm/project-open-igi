@@ -487,6 +487,14 @@ void GameSimulation::advance_projectiles()
                 target_player = true;
             }
         }
+        if (target_player && projectile.hit_probability < random_generator_.next_single())
+        {
+            diagnostics::log(diagnostics::Severity::debug,
+                             "combat",
+                             "AI round missed the player hit-probability check; probability=" +
+                                 std::to_string(projectile.hit_probability));
+            target_player = false;
+        }
         if (target_actor >= 0)
         {
             auto& actor = actors_[static_cast<std::size_t>(target_actor)];

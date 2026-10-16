@@ -159,6 +159,7 @@ void GameSimulation::restart()
         actor.position = position;
         actor.last_seen_position = position;
         actor.heading = original_actor.heading;
+        actor.health = original_actor.maximum_health;
         actor.active = original_actor.gameplay_enabled;
         actor.animation_previous_position = position;
         actor.animation_identifier = original_actor.stand_animation;

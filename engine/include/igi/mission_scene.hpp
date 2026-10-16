@@ -139,7 +139,11 @@ struct SceneActor final
     int skeleton_identifier = 1;
     int stand_animation = 2;
     std::shared_ptr<SkeletalAnimationSet> animations{};
-    float damage_scale = 1.0f;
+    float maximum_health = 1.0f;
+    float hit_probability_at_minimum_range = 1.0f;
+    float hit_probability_at_maximum_range = 0.25f;
+    float aim_precision = 0.2f;
+    float primary_view_length = 26.0f;
 };
 
 struct NavigationNode final

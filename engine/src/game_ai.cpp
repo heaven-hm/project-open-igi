@@ -163,7 +163,6 @@ void GameSimulation::advance_patrol(std::size_t actor_index)
 
 void GameSimulation::advance_actors()
 {
-    const auto player_eye = camera_position();
     const auto player_feet = player_position();
     const float detection_height =
         crouching_ ? retail_crouched_detection_raise_metres : retail_standing_detection_raise_metres;
@@ -182,7 +181,6 @@ void GameSimulation::advance_actors()
         const Vector3 eye = actor.position + Vector3{0, 0, 1.5f};
         const Vector3 to_detection_mark = player_detection_mark - eye;
         const float detection_distance = length(to_detection_mark);
-        const float aim_distance = length(player_eye - eye);
         const Vector3 direction = normalized(to_detection_mark);
         const Vector3 facing{-std::sin(actor.heading), std::cos(actor.heading), 0};
         const bool within_view = dot(facing, direction) > 0.35f || actor.behavior != ActorBehavior::guarding;
@@ -213,6 +211,8 @@ void GameSimulation::advance_actors()
             {
                 actor.reaction_time = 0;
                 actor.route.clear();
+                actor.has_tracked_aim_position = false;
+                actor.first_fire = true;
                 diagnostics::log(diagnostics::Severity::debug,
                                  "ai",
                                  "Soldier " + std::to_string(scene_.actors[actor_index].identifier) +
@@ -249,6 +249,18 @@ void GameSimulation::advance_actors()
         else
         {
             actor.heading = std::atan2(-to_detection_mark.x, to_detection_mark.y);
+            const Vector3 authored_aim_point = player_feet + Vector3{0, 0, crouching_ ? 0.25f : 0.5f};
+            if (!actor.has_tracked_aim_position)
+            {
+                actor.tracked_aim_position = authored_aim_point;
+                actor.has_tracked_aim_position = true;
+            }
+            else
+            {
+                const float aim_precision = std::clamp(scene_.actors[actor_index].aim_precision, 0.0f, 1.0f);
+                actor.tracked_aim_position = actor.tracked_aim_position +
+                                             (authored_aim_point - actor.tracked_aim_position) * aim_precision;
+            }
         }
         if (!visible)
         {
@@ -256,8 +268,6 @@ void GameSimulation::advance_actors()
         }
         actor.reaction_time += tick_duration;
         const float diff_reaction = difficulty_ == 0 ? 0.85f : difficulty_ == 2 ? 0.35f : 0.60f;
-        const float diff_damage_mult = difficulty_ == 0 ? 0.6f : difficulty_ == 2 ? 1.5f : 1.0f;
-        const float diff_aim_scale = difficulty_ == 0 ? 1.5f : difficulty_ == 2 ? 0.65f : 1.0f;
         if (actor.reaction_time < diff_reaction || actor.cooldown > 0)
         {
             continue;
@@ -265,10 +275,27 @@ void GameSimulation::advance_actors()
         actor.cooldown = 0.45f;
         actor.muzzle_flash_remaining = 0.055f;
         ++actor.shots_fired;
+        const auto& actor_definition = scene_.actors[actor_index];
+        const float primary_view_length = std::max(actor_definition.primary_view_length, 0.01f);
+        const float distance_to_target = length(player_feet - actor.position);
+        const float clamped_target_distance = std::min(distance_to_target, primary_view_length);
+        const float hit_probability_range = actor_definition.hit_probability_at_maximum_range -
+                                            actor_definition.hit_probability_at_minimum_range;
+        actor.hit_probability = clamped_target_distance < 0.01f
+                                    ? actor_definition.hit_probability_at_minimum_range
+                                    : actor_definition.hit_probability_at_minimum_range +
+                                          hit_probability_range * (clamped_target_distance / primary_view_length);
+        if (actor.first_fire)
+        {
+            actor.hit_probability *= 0.5f;
+            actor.first_fire = false;
+        }
+        actor.hit_probability = std::clamp(actor.hit_probability, 0.0f, 1.0f);
         diagnostics::log(diagnostics::Severity::debug,
                          "ai",
                          "Soldier " + std::to_string(scene_.actors[actor_index].identifier) + " fired shot " +
-                             std::to_string(actor.shots_fired));
+                             std::to_string(actor.shots_fired) + "; hit probability=" +
+                             std::to_string(actor.hit_probability));
         const auto definition =
             std::find_if(scene_.weapons.begin(),
                          scene_.weapons.end(),
@@ -276,17 +303,17 @@ void GameSimulation::advance_actors()
                          { return candidate.identifier == scene_.actors[actor_index].weapon_identifier; });
         const auto& parameters =
             definition == scene_.weapons.end() ? scene_.weapon_parameters : definition->parameters;
-        const float phase = static_cast<float>((tick_count_ * 17 + actor_index * 37) % 101);
-        const Vector3 aim_error{std::sin(phase * 1.7f) * aim_distance * 0.018f * diff_aim_scale,
-                                std::cos(phase * 2.3f) * aim_distance * 0.018f * diff_aim_scale,
-                                std::sin(phase * 0.9f) * aim_distance * 0.012f * diff_aim_scale};
-        const auto muzzle = actor.position + Vector3{0, 0, 1.5f};
-        projectiles_.push_back({muzzle,
-                                normalized(player_eye + aim_error - muzzle),
+        const auto weapon_muzzle_position = actor.position + Vector3{0, 0, 1.5f};
+        const auto target_aim_position = actor.has_tracked_aim_position
+                                             ? actor.tracked_aim_position
+                                             : player_feet + Vector3{0, 0, crouching_ ? 0.25f : 0.5f};
+        projectiles_.push_back({weapon_muzzle_position,
+                                normalized(target_aim_position - weapon_muzzle_position),
                                 parameters.maximum_distance,
                                 parameters.muzzle_velocity,
-                                parameters.damage * scene_.actors[actor_index].damage_scale * diff_damage_mult,
-                                static_cast<int>(actor_index)});
+                                parameters.damage,
+                                static_cast<int>(actor_index),
+                                actor.hit_probability});
     }
 }
 
