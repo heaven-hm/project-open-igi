@@ -198,6 +198,26 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
             "Mission asset adapter must emit the retail model triangles");
     require(scene_mesh->attachment_count > 0 && scene_mesh->maximum_attachment_depth > 0,
             "Retail Level 1 model must resolve MEF attachments through magicobj.qvm");
+    const auto model_lightmap_layout = mission_assets.model_lightmap_layout("435_01_1");
+    require(model_lightmap_layout.size() > 1 && model_lightmap_layout.front().model_name == "435_01_1" &&
+                model_lightmap_layout.front().lightmap_index == 0 &&
+                model_lightmap_layout.front().lightmapped,
+            "Retail model lightmap layout must start with its lightmapped LOD at index zero");
+    std::size_t expected_lod_count = 0;
+    for (std::size_t lod_index = 0; lod_index < 5; ++lod_index)
+    {
+        const std::string expected_lod_name = "435_01_" + std::to_string(lod_index + 1);
+        if (!mission_assets.has_model(expected_lod_name))
+        {
+            break;
+        }
+        require(lod_index < model_lightmap_layout.size() &&
+                    model_lightmap_layout[lod_index].model_name == expected_lod_name &&
+                    model_lightmap_layout[lod_index].lightmap_index == static_cast<std::int64_t>(lod_index),
+                "Retail model LODs must use incremental names and consecutive lightmap indices");
+        ++expected_lod_count;
+    }
+    require(expected_lod_count > 0, "Retail model must resolve at least its authored first LOD");
     const auto magic_script_bytes = igi::assets::read_file(game_directory / "magicobj/magicobj.qvm");
     const igi::assets::QvmInitializer magic_script{igi::assets::BinaryView(magic_script_bytes)};
     const MefAttachment* attached_geometry = nullptr;
@@ -225,6 +245,25 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
     }
     require(attached_geometry != nullptr && !attached_model_name.empty(),
             "Retail MEF attachment must resolve to a drawable magic-object model");
+    require(std::any_of(model_lightmap_layout.begin(),
+                        model_lightmap_layout.end(),
+                        [&](const igi::assets::ModelLightmapEntry& entry)
+                        { return entry.model_name == igi::assets::normalize_name(attached_model_name); }),
+            "Retail lightmap layout must include the attachment's magic-object model");
+    const auto repeated_root_layout =
+        mission_assets.model_lightmap_layout(std::vector<std::string>{"435_01_1", "435_01_1"});
+    require(repeated_root_layout.size() == model_lightmap_layout.size() * 2,
+            "BuildAll-style model layout must preserve both root subtrees");
+    std::int32_t next_owner_lightmap_index = 0;
+    for (const auto& entry : model_lightmap_layout)
+    {
+        if (entry.lightmap_index >= next_owner_lightmap_index)
+        {
+            next_owner_lightmap_index = static_cast<std::int32_t>(entry.lightmap_index + 1);
+        }
+    }
+    require(repeated_root_layout[model_lightmap_layout.size()].lightmap_index == next_owner_lightmap_index,
+            "BuildAll-style model layout must continue lightmap indices across root placements");
     const auto attached_mesh = mission_assets.model(attached_model_name);
     require(scene_mesh->triangles.size() == geometry.triangles.size() + attached_mesh->triangles.size(),
             "Flattened Level 1 MEF must include the mapped child model triangles exactly once");

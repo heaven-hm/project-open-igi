@@ -13,6 +13,8 @@
 #include <algorithm>
 #include <array>
 #include <fstream>
+#include <functional>
+#include <limits>
 #include <glm/gtc/matrix_transform.hpp>
 #include <iomanip>
 #include <sstream>
@@ -272,6 +274,169 @@ void MissionAssets::index_lightmap_archive(const std::filesystem::path& path)
                      "lightmap-assets",
                      "Indexed " + std::to_string(lightmap_entries_.size()) + " object lightmap resources from " +
                          path.string());
+}
+
+std::vector<ModelLightmapEntry> MissionAssets::model_lightmap_layout(const std::string& model_name)
+{
+    return model_lightmap_layout(std::vector<std::string>{model_name});
+}
+
+std::vector<ModelLightmapEntry>
+MissionAssets::model_lightmap_layout(const std::vector<std::string>& model_names)
+{
+    struct LayoutModel final
+    {
+        std::string name;
+        std::uint32_t model_type{};
+        bool is_sector{};
+        std::vector<MefAttachment> attachments;
+    };
+
+    std::unordered_map<std::string, LayoutModel> parsed_models;
+    const auto load_model = [&](const std::string& requested_name) -> const LayoutModel*
+    {
+        const std::string normalized = normalize_name(requested_name);
+        if (const auto cached = parsed_models.find(normalized); cached != parsed_models.end())
+        {
+            return &cached->second;
+        }
+        const auto resource = files_.find(normalized + ".mef");
+        if (resource == files_.end())
+        {
+            return nullptr;
+        }
+
+        const ParsedGeometry geometry = ParseMefFile(resource->second.string());
+        LayoutModel model;
+        model.name = normalized;
+        model.model_type = geometry.modelType;
+        model.is_sector = std::any_of(geometry.rawChunks.begin(),
+                                      geometry.rawChunks.end(),
+                                      [](const ParsedGeometry::RawChunk& chunk)
+                                      { return chunk.isTag("TROP") && !chunk.data.empty(); });
+        model.attachments = geometry.mefAttachments;
+        return &parsed_models.emplace(normalized, std::move(model)).first->second;
+    };
+
+    const auto load_lod_chain = [&](const std::string& requested_name)
+    {
+        std::vector<const LayoutModel*> models;
+        std::string candidate = normalize_name(requested_name);
+        if (candidate.empty())
+        {
+            return models;
+        }
+        for (std::size_t lod_index = 0; lod_index < 5; ++lod_index)
+        {
+            const LayoutModel* model = load_model(candidate);
+            if (model == nullptr)
+            {
+                break;
+            }
+            models.push_back(model);
+            const auto final_character = static_cast<unsigned char>(candidate.back());
+            if (final_character == std::numeric_limits<unsigned char>::max())
+            {
+                break;
+            }
+            candidate.back() = static_cast<char>(final_character + 1u);
+        }
+        return models;
+    };
+
+    std::vector<ModelLightmapEntry> entries;
+    std::unordered_set<std::string> active_models;
+    std::uint64_t next_lightmap_index = 0;
+    std::function<void(const std::string&, std::size_t)> append_model_tree;
+    append_model_tree = [&](const std::string& requested_name, std::size_t depth)
+    {
+        constexpr std::size_t maximum_attachment_depth = 16;
+        if (depth > maximum_attachment_depth)
+        {
+            throw std::runtime_error("MEF lightmap attachment tree exceeds its depth limit: " +
+                                     requested_name);
+        }
+        const auto lod_models = load_lod_chain(requested_name);
+        if (lod_models.empty())
+        {
+            return;
+        }
+
+        const std::string& normalized_name = lod_models.front()->name;
+        if (!active_models.insert(normalized_name).second)
+        {
+            throw std::runtime_error("MEF lightmap attachment cycle detected: " + normalized_name);
+        }
+        try
+        {
+            const bool lightmapped = lod_models.front()->model_type == 3;
+            if (lightmapped && next_lightmap_index + lod_models.size() - 1 >
+                                   static_cast<std::uint64_t>(std::numeric_limits<std::int32_t>::max()))
+            {
+                throw std::runtime_error("MEF lightmap index exceeds the retail signed index range");
+            }
+            const std::int32_t first_lightmap_index =
+                lightmapped ? static_cast<std::int32_t>(next_lightmap_index) : -1;
+            for (std::size_t lod_index = 0; lod_index < lod_models.size(); ++lod_index)
+            {
+                const auto& lod_model = *lod_models[lod_index];
+                entries.push_back(
+                    {lod_model.name,
+                     lightmapped ? first_lightmap_index + static_cast<std::int32_t>(lod_index) : -1,
+                     lightmapped && lod_model.model_type == 3});
+            }
+            if (lightmapped)
+            {
+                next_lightmap_index += lod_models.size();
+            }
+
+            std::vector<std::string> ordinary_children;
+            std::vector<std::string> sector_children;
+            for (const MefAttachment& attachment : lod_models.front()->attachments)
+            {
+                const auto attachment_name_end =
+                    std::find(std::begin(attachment.name), std::end(attachment.name), '\0');
+                const std::string attachment_name(std::begin(attachment.name), attachment_name_end);
+                const auto definition = magic_attachment_models_.find(normalize_name(attachment_name));
+                if (attachment_name.empty() || definition == magic_attachment_models_.end())
+                {
+                    continue;
+                }
+
+                std::string child_model_name = definition->second;
+                auto child_lod_models = load_lod_chain(child_model_name);
+                if (child_lod_models.empty())
+                {
+                    child_model_name = "missing";
+                    child_lod_models = load_lod_chain(child_model_name);
+                }
+                if (child_lod_models.empty())
+                {
+                    continue;
+                }
+                (child_lod_models.front()->is_sector ? sector_children : ordinary_children)
+                    .push_back(std::move(child_model_name));
+            }
+
+            ordinary_children.insert(ordinary_children.end(), sector_children.begin(), sector_children.end());
+            for (const std::string& child_model_name : ordinary_children)
+            {
+                append_model_tree(child_model_name, depth + 1);
+            }
+        }
+        catch (...)
+        {
+            active_models.erase(normalized_name);
+            throw;
+        }
+        active_models.erase(normalized_name);
+    };
+
+    for (const std::string& root_model_name : model_names)
+    {
+        append_model_tree(root_model_name, 0);
+    }
+    return entries;
 }
 
 std::vector<std::uint32_t> MissionAssets::lightmap_textures(std::string_view set_name,

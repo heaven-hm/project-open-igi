@@ -2,6 +2,7 @@
 
 #include "igi/mission_scene.hpp"
 
+#include <cstdint>
 #include <string_view>
 #include <unordered_map>
 #include <unordered_set>
@@ -12,6 +13,17 @@ namespace igi::assets
 {
 
 [[nodiscard]] gameplay::SceneTexture decode_original_texture(const TEXImage& image);
+
+/// <summary>One model LOD and its slot in an object's depth-first lightmap layout.</summary>
+struct ModelLightmapEntry final
+{
+    std::string model_name;
+    /// <summary>Zero-based retail OLM index, or -1 when the node claims no lightmap slots.</summary>
+    std::int64_t lightmap_index{-1};
+
+    /// <summary>Whether this LOD uses the lightmapped MEF format.</summary>
+    bool lightmapped{};
+};
 
 class MissionAssets final
 {
@@ -24,6 +36,12 @@ class MissionAssets final
     [[nodiscard]] std::vector<std::uint32_t> terrain_textures(const std::filesystem::path& path);
     [[nodiscard]] std::vector<std::uint32_t> lightmap_textures(std::string_view set_name,
                                                                std::uint32_t model_index);
+    /// <summary>Builds one model's retail LOD and recursive attachment lightmap layout.</summary>
+    [[nodiscard]] std::vector<ModelLightmapEntry> model_lightmap_layout(const std::string& model_name);
+
+    /// <summary>Builds several model trees with the shared index sequence used by retail BuildAll.</summary>
+    [[nodiscard]] std::vector<ModelLightmapEntry>
+    model_lightmap_layout(const std::vector<std::string>& model_names);
 
     [[nodiscard]] std::vector<gameplay::SceneTexture> take_textures()
     {
