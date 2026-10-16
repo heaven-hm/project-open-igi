@@ -63,6 +63,10 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
     {
         throw std::runtime_error("Original weapon parameters are invalid");
     }
+    if (!input.firing)
+    {
+        weapon_.rounds_in_current_burst = 0;
+    }
     weapon_.cooldown -= tick_duration;
     weapon_.muzzle_flash_remaining = std::max(0.0f, weapon_.muzzle_flash_remaining - tick_duration);
     weapon_.hit_marker_remaining = std::max(0.0f, weapon_.hit_marker_remaining - tick_duration);
@@ -89,13 +93,15 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         return;
     }
     if (input.firing && (parameters.automatic || !fire_was_pressed_) && weapon_.magazine != 0 &&
-        weapon_.cooldown <= 0)
+        weapon_.cooldown <= 0 &&
+        weapon_.rounds_in_current_burst != static_cast<std::uint32_t>(parameters.maximum_rounds_per_burst))
     {
         if (!parameters.melee)
         {
             --weapon_.magazine;
         }
         ++weapon_.shots_fired;
+        ++weapon_.rounds_in_current_burst;
         weapon_.cooldown = std::max(weapon_.cooldown, -tick_duration) + 60.0f / parameters.shots_per_minute;
         weapon_.muzzle_flash_remaining = 0.055f;
         projectiles_.push_back({camera_position(),
@@ -106,7 +112,8 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
                                 -1});
         diagnostics::log(diagnostics::Severity::debug,
                          "weapon",
-                         "Projectile fired; magazine=" + std::to_string(weapon_.magazine));
+                         "Projectile fired; magazine=" + std::to_string(weapon_.magazine) +
+                             ", burst round=" + std::to_string(weapon_.rounds_in_current_burst));
     }
     else if (!input.firing)
     {

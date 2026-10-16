@@ -67,6 +67,7 @@ struct WeaponState final
     std::uint64_t shots_fired{};
     std::uint64_t hits{};
     std::uint64_t kills{};
+    std::uint32_t rounds_in_current_burst{};
     int animation_identifier = -1;
     float animation_time{};
 };

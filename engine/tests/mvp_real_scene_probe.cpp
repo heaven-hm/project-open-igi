@@ -56,6 +56,14 @@ int main(int argument_count, char** arguments)
             const float expected_range = weapon.identifier == "WEAPON_ID_AK47" ? 2000.0f
                 : weapon.identifier == "WEAPON_ID_MP5SD" || weapon.identifier == "WEAPON_ID_GLOCK" ? 80.0f
                 : weapon.identifier == "WEAPON_ID_KNIFE" ? 1.0f : -1.0f;
+            const int expected_burst = weapon.identifier == "WEAPON_ID_AK47" ? 30
+                : weapon.identifier == "WEAPON_ID_MP5SD" ? 32
+                : weapon.identifier == "WEAPON_ID_GLOCK" || weapon.identifier == "WEAPON_ID_KNIFE" ? 1 : -1;
+            if (expected_burst > 0)
+            {
+                require(weapon.parameters.maximum_rounds_per_burst == expected_burst,
+                        "Loaded burst limit must match original DefineWeaponType argument 17");
+            }
             if (expected_range > 0)
             {
                 require(weapon.parameters.maximum_distance == expected_range,

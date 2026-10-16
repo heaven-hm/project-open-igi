@@ -123,6 +123,7 @@ struct WeaponParameters final
     float maximum_distance = 400.0f;
     bool automatic = true;
     bool melee{};
+    std::int32_t maximum_rounds_per_burst = 32;
 };
 
 struct SceneWeapon final

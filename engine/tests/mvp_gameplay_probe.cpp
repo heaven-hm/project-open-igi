@@ -50,6 +50,26 @@ int main()
                 "Range regression must exercise actual enemy shots");
         require(short_range_enemy.health() == short_range_scene.player_parameters.maximum_health,
                 "Enemy rounds must expire at their configured range before reaching the player");
+        auto burst_scene = make_scene(false, false);
+        burst_scene.weapon_parameters.maximum_rounds_per_burst = 3;
+        GameSimulation burst_fire(burst_scene);
+        PlayerInput held_trigger;
+        held_trigger.firing = true;
+        for (int tick_index = 0; tick_index < 60; ++tick_index)
+        {
+            burst_fire.tick(held_trigger);
+        }
+        require(burst_fire.weapon().shots_fired == 3,
+                "Holding the trigger must stop at the original configured burst limit");
+        burst_fire.tick({});
+        require(burst_fire.weapon().rounds_in_current_burst == 0,
+                "Releasing the trigger must reset the current burst count");
+        for (int tick_index = 0; tick_index < 60; ++tick_index)
+        {
+            burst_fire.tick(held_trigger);
+        }
+        require(burst_fire.weapon().shots_fired == 6,
+                "A fresh trigger pull must allow another complete burst");
         const auto movement_scene = make_scene(false, false);
         GameSimulation movement(movement_scene);
         PlayerInput input;

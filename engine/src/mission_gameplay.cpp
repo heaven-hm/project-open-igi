@@ -9,6 +9,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <stdexcept>
 #include <unordered_map>
 #include <unordered_set>
@@ -340,6 +341,15 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                                  static_cast<float>(arguments[12].number)};
             weapon.parameters.melee = melee;
             weapon.parameters.automatic = !melee && arguments[17].number > 1;
+            const double maximum_rounds_per_burst = arguments[17].number;
+            if (!std::isfinite(maximum_rounds_per_burst) ||
+                maximum_rounds_per_burst != std::trunc(maximum_rounds_per_burst) ||
+                maximum_rounds_per_burst < std::numeric_limits<std::int32_t>::min() ||
+                maximum_rounds_per_burst > std::numeric_limits<std::int32_t>::max())
+            {
+                throw std::runtime_error("Invalid original burst limit for " + weapon.identifier);
+            }
+            weapon.parameters.maximum_rounds_per_burst = static_cast<std::int32_t>(maximum_rounds_per_burst);
             weapon.parameters.maximum_distance = static_cast<float>(arguments[25].number);
             if (!std::isfinite(weapon.parameters.maximum_distance) || weapon.parameters.maximum_distance <= 0)
             {
