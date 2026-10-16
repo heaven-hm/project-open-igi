@@ -11,6 +11,8 @@ namespace
 {
 
 constexpr float tick_duration = 1.0f / 30.0f;
+constexpr float retail_standing_detection_raise_metres = 0.69f;
+constexpr float retail_crouched_detection_raise_metres = 0.35f;
 
 const NavigationGraph* actor_graph(const MissionScene& scene, std::size_t actor_index)
 {
@@ -162,6 +164,10 @@ void GameSimulation::advance_patrol(std::size_t actor_index)
 void GameSimulation::advance_actors()
 {
     const auto player_eye = camera_position();
+    const auto player_feet = player_position();
+    const float detection_height =
+        crouching_ ? retail_crouched_detection_raise_metres : retail_standing_detection_raise_metres;
+    const auto player_detection_mark = player_feet + Vector3{0, 0, detection_height};
     for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)
     {
         auto& actor = actors_[actor_index];
@@ -174,16 +180,17 @@ void GameSimulation::advance_actors()
         actor.cooldown = std::max(0.0f, actor.cooldown - tick_duration);
         actor.route_retry_time = std::max(0.0f, actor.route_retry_time - tick_duration);
         const Vector3 eye = actor.position + Vector3{0, 0, 1.5f};
-        const Vector3 to_player = player_eye - eye;
-        const float distance = length(to_player);
-        const Vector3 direction = normalized(to_player);
+        const Vector3 to_detection_mark = player_detection_mark - eye;
+        const float detection_distance = length(to_detection_mark);
+        const float aim_distance = length(player_eye - eye);
+        const Vector3 direction = normalized(to_detection_mark);
         const Vector3 facing{-std::sin(actor.heading), std::cos(actor.heading), 0};
         const bool within_view = dot(facing, direction) > 0.35f || actor.behavior != ActorBehavior::guarding;
         bool visible = false;
-        if (within_view && distance > 0.1f && distance < 80.0f)
+        if (within_view && detection_distance > 0.1f && detection_distance < 80.0f)
         {
-            const auto obstruction = world_.raycast(eye, direction, distance);
-            visible = !obstruction.hit || obstruction.distance > distance - 0.3f;
+            const auto obstruction = world_.raycast(eye, direction, detection_distance);
+            visible = !obstruction.hit || obstruction.distance > detection_distance - 0.3f;
         }
         float hearing_radius = 45.0f;
         const auto* cur_weapon = weapon_definition();
@@ -196,10 +203,11 @@ void GameSimulation::advance_actors()
         {
             hearing_radius = 2.0f;
         }
-        const bool heard_shot = weapon_.muzzle_flash_remaining > 0 && distance < hearing_radius;
+        const bool heard_shot =
+            weapon_.muzzle_flash_remaining > 0 && length(player_feet - eye) < hearing_radius;
         if (visible || heard_shot)
         {
-            actor.last_seen_position = player_position();
+            actor.last_seen_position = player_feet;
             actor.awareness_time = 5.0f;
             if (actor.behavior == ActorBehavior::guarding)
             {
@@ -240,7 +248,7 @@ void GameSimulation::advance_actors()
         }
         else
         {
-            actor.heading = std::atan2(-to_player.x, to_player.y);
+            actor.heading = std::atan2(-to_detection_mark.x, to_detection_mark.y);
         }
         if (!visible)
         {
@@ -269,9 +277,9 @@ void GameSimulation::advance_actors()
         const auto& parameters =
             definition == scene_.weapons.end() ? scene_.weapon_parameters : definition->parameters;
         const float phase = static_cast<float>((tick_count_ * 17 + actor_index * 37) % 101);
-        const Vector3 aim_error{std::sin(phase * 1.7f) * distance * 0.018f * diff_aim_scale,
-                                std::cos(phase * 2.3f) * distance * 0.018f * diff_aim_scale,
-                                std::sin(phase * 0.9f) * distance * 0.012f * diff_aim_scale};
+        const Vector3 aim_error{std::sin(phase * 1.7f) * aim_distance * 0.018f * diff_aim_scale,
+                                std::cos(phase * 2.3f) * aim_distance * 0.018f * diff_aim_scale,
+                                std::sin(phase * 0.9f) * aim_distance * 0.012f * diff_aim_scale};
         const auto muzzle = actor.position + Vector3{0, 0, 1.5f};
         projectiles_.push_back({muzzle,
                                 normalized(player_eye + aim_error - muzzle),

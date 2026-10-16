@@ -36,6 +36,8 @@ Functional regressions passing does not establish matching original behavior.
 
 6. Object placement orientation: compare Level 1 emitted static mesh vertices against an independent matrix evaluation of the retail `Z(gamma) * Y(beta) * X(alpha)` row-vector transform at `0x4B38E0`. The 413-object Level 1 audit, rotated-mesh requirement, and per-object finite/tolerance checks pass. Actor and door transforms are checked from their runtime scene records, while static geometry is checked from emitted vertices. This is a port-side transform check, not a paired retail runtime capture; see [verification evidence](VERIFICATION.md).
 
+7. AI sight target height: use the retail human descriptor at `0x465820` to aim visibility at the target's feet plus `0.69 m` standing or `0.35 m` crouched. REA instruction immediates differ from the current vanilla C# reference's `0.7 m` and `0.319 m`; the port follows the retail bytes. Standing and crouched low-cover probes and the original Level 1 scene probe pass. This change does not establish parity for AI cones, scan cadence, hearing, or combat policy; see [verification evidence](VERIFICATION.md).
+
 ## Measured original Level 2
 
 | Item | Measurement |

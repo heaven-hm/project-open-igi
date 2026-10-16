@@ -213,6 +213,32 @@ int main()
                 "A visible armed guard must produce observable firing events");
         require(length(distant_combat.actors().front().position - guard_start) < 0.01f,
                 "A guard with a clear firing line must hold its firing position rather than chase-run");
+        auto low_cover_scene = make_scene(true, false);
+        low_cover_scene.collision_triangles.push_back(
+            {{Vector3{-3, 3, -2}, Vector3{3, 3, -2}, Vector3{3, 3, -0.9025f}}});
+        low_cover_scene.collision_triangles.push_back(
+            {{Vector3{-3, 3, -2}, Vector3{3, 3, -0.9025f}, Vector3{-3, 3, -0.9025f}}});
+        GameSimulation low_cover_perception(low_cover_scene);
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            low_cover_perception.tick({});
+        }
+        require(low_cover_perception.actors().front().shots_fired == 0,
+                "Retail AI sight must trace to the exact standing target mark below low cover");
+        auto crouched_cover_scene = make_scene(true, false);
+        crouched_cover_scene.collision_triangles.push_back(
+            {{Vector3{-3, 3, -2}, Vector3{3, 3, -2}, Vector3{3, 3, -1.083f}}});
+        crouched_cover_scene.collision_triangles.push_back(
+            {{Vector3{-3, 3, -2}, Vector3{3, 3, -1.083f}, Vector3{-3, 3, -1.083f}}});
+        GameSimulation crouched_cover_perception(crouched_cover_scene);
+        PlayerInput crouch_behind_low_cover;
+        crouch_behind_low_cover.crouching = true;
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            crouched_cover_perception.tick(crouch_behind_low_cover);
+        }
+        require(crouched_cover_perception.actors().front().shots_fired > 0,
+                "Retail AI sight must use the exact crouched target mark above this low-cover edge");
         input = {};
         input.reloading = true;
         combat.tick(input);

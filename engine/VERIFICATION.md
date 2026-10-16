@@ -36,6 +36,33 @@ against the `objects.qvm` values and the retail matrix convention; no paired
 retail runtime transform capture or pixel comparison was made, so it does not
 prove full placement or graphics parity.
 
+## AI target point used for sight checks
+
+REA/Ghidra evidence `ev_164003cd4b7a63ba28fac9384ce6fe4b714e1001ff3033b44b02ca64a0c2378b` and its instruction listing
+`ev_fe8785a0d7d95647db2602a46dc07dd010bd8a230360cf40006e7d6d506f82e4` cover
+retail `0x465820`. The function copies the human position and adds one of two
+encoded double constants to its Z coordinate. The instructions initialize
+`0x40a6147ae147ae14` for standing and replace it with `0x4096666666666666` when
+`0x463180` reports crouching. Decoded in the game's 4096-units-per-metre scale,
+these are `0.69 m` standing and `0.35 m` crouched.
+
+REA evidence `ev_2d149c40fd645df3e6316075ba5c660cf01755df94dfc35a040a4d28a42775a6`
+for `0x489960` confirms the cone test consumes the candidate point after
+transforming it to the observer's local axes; `0x4898D0` calls that cone test
+before the sight query at `0x489B20` (evidence
+`ev_155cf31c35ef30d3fc03eb1f13037c857c48c859ec6f84967085e394522a65b6`). The
+current vanilla C# reference uses `0.7 m` and `0.319 m` for the corresponding
+raises, which differ from the instruction immediates. The C++ port uses the
+retail values for its sight target and keeps the camera eye for shot direction.
+
+The C++ gameplay probe passed synthetic standing and crouched low-cover cases;
+the original Level 1 probe also passed with 413 objects and 28 soldiers loaded.
+This verifies the C++ target point against REA's static instruction evidence
+and those port-side scenarios. It does not verify a retail runtime trace. The
+surrounding C++ AI still uses its existing simplified view cone, visibility
+range, event timing, hearing, and combat policy; those are not claimed as
+retail-equivalent by this change.
+
 ## Native application loop
 
 - `igi_game` is a C++20 executable using SDL2 2.32.72 through SDL's C API. It
