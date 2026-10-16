@@ -1761,23 +1761,24 @@ std::string MissionWorld::get_interaction_hint(
             }
         }
         best_dist = dist;
+        // Key labels follow retail config.qvm: Activate=Q, Jump=E.
         switch (obj.kind) {
             case PlacedObjectKind::Door:
-                hint = obj.is_open ? "[E] CLOSE DOOR" : "[E] OPEN DOOR";
+                hint = obj.is_open ? "[Q] CLOSE DOOR" : "[Q] OPEN DOOR";
                 break;
             case PlacedObjectKind::Terminal:
             case PlacedObjectKind::Switch:
-                hint = "[E] ACCESS COMPUTER TERMINAL";
+                hint = "[Q] ACCESS COMPUTER TERMINAL";
                 break;
             case PlacedObjectKind::GunPickup:
             case PlacedObjectKind::AmmoPickup:
-                hint = "[E] PICK UP AMMO";
+                hint = "[Q] PICK UP AMMO";
                 break;
             case PlacedObjectKind::ClimbLadder:
-                hint = "[SPACE] CLIMB LADDER";
+                hint = "[W] CLIMB LADDER";
                 break;
             default:
-                hint = "[E] INTERACT";
+                hint = "[Q] INTERACT";
                 break;
         }
     }

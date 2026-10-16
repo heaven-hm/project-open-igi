@@ -234,10 +234,11 @@ public:
     };
 
     // Attempts to interact with the nearest interactive object within interaction_radius_units.
+    // Default 8192 units (2 m) matches the HUD hint range in get_interaction_hint.
     [[nodiscard]] InteractionResult try_interact(
         NavigationPosition player_pos,
         float player_yaw,
-        float interaction_radius_units = 6144.0f) noexcept;
+        float interaction_radius_units = 8192.0f) noexcept;
 
     // Advances animated doors (open/close movement).
     void update_doors(float delta_seconds) noexcept;

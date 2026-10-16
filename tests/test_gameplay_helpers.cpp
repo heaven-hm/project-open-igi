@@ -284,9 +284,9 @@ TEST_CASE(GameplayHelpers, InteractionHintAndAlarmState) {
     door.position = {1000.0, 0.0, 0.0};
     objects.push_back(door);
 
-    // Player at origin looking at door (+X, yaw = 0)
+    // Player at origin looking at door (+X, yaw = 0); retail Activate key is Q.
     const std::string hint = world.get_interaction_hint({0.0, 0.0, 0.0}, 0.0f);
-    ASSERT_EQ(hint, "[E] OPEN DOOR");
+    ASSERT_EQ(hint, "[Q] OPEN DOOR");
 
     // Player looking away (-X, yaw = pi)
     constexpr float kPi = 3.14159265f;

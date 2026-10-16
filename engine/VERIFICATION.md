@@ -346,3 +346,18 @@ navigation edges (walls/buildings crossed). Now:
   grounded, and simulate (L1: patrol=28 combat=1; L2: patrol=23 combat=1
   investigate=1).
 
+## Building entry end-to-end (2026-10-16, branch feature/gameplay-parity)
+
+Entry mechanics (toggle + slide-aside + collision skip past 0.85 progress)
+already existed; the defects were misleading HUD labels and an interact range
+narrower than the hint range:
+
+- `get_interaction_hint` labels now name retail keys (`[Q]` Activate,
+  `[W]` ladder climb) instead of `[E]`/`[SPACE]`.
+- `try_interact` default radius 6144 -> 8192 units, matching the hint range.
+- New `BuildingEntry` suite (`tests/test_building_entry.cpp`) runs against
+  retail Mission 1: finds a modeled door, proves a horizontal axis through it
+  is blocked while closed, opens it through the Activate flow, animates
+  `update_doors` to `open_progress > 0.85`, and proves the axis is passable.
+  Full suite 62/62 pass on a pristine checkout.
+
