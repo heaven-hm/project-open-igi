@@ -8,6 +8,7 @@ add_executable(igi_tests
     test_gameplay_helpers.cpp
     test_mission_flow.cpp
     test_graphics_quality.cpp
+    test_retail_controls.cpp
 )
 
 target_include_directories(igi_tests PRIVATE

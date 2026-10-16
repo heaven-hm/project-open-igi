@@ -296,3 +296,29 @@ files unchanged):
   bounds high-mode view distance; retail lightmaps not yet applied; no
   retail-capture pixel comparison yet.
 
+## Retail control bindings from config.qvm (2026-10-16)
+
+Core input now follows the retail remap table, not FPS guesses:
+
+- New portable single-source header `engine/include/igi/retail_controls.hpp`
+  (zero OS APIs): `InputAction` enum plus `is_action_down` /
+  `was_action_pressed` helpers over a constexpr 24-row table transcribed from
+  `config.qvm` GOInRemap bytes (Move WASD, Fire=Mouse1, Reload=F, Activate=Q,
+  Crouch=C, Jump=E, NextWeapon=Mouse2, PrevWeapon=O, AltFire=Backspace,
+  Binoculars=Space, Map=M, WalkRun=Shift, Categories=digits 1-9).
+- `WorldCollision::step_player`: jump (ground + ladder release) moved from
+  Space to retail KEY_E; movement/crouch/walk-modifier read through the table.
+- `GameSession::update`: reload reads Reload action (F, R kept as documented
+  convenience); world interaction reads Activate (Q) instead of F/E; weapon
+  cycling is wheel/digits + O (Q now means Activate); fire reads the Fire
+  action (Mouse1).
+- Documented deviations in-header: MouseRight keeps the sniper sight zoom
+  (retail binds NextWeapon to mouse2 — needs a retail runtime capture to
+  disambiguate scope-vs-cycle); Peek/numpad and PageUp/PageDown zoom have no
+  `InputCode` yet.
+- Tests: new `RetailControls` suite (`tests/test_retail_controls.cpp`, 7
+  cases incl. E-jump, Space-is-binoculars, F-reload, Q-activate, 24-row table
+  size). Full suite 55/55 pass; changed TUs compile under
+  `-Wall -Wextra -Werror`; `igi_world_probe` mission 1 unchanged (grounded,
+  burst 30->27, 49.8 m / 10 s walk).
+

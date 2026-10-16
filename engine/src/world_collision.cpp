@@ -1,5 +1,6 @@
 #include "igi/world_collision.hpp"
 #include "igi/logger.hpp"
+#include "igi/retail_controls.hpp"
 
 #include <algorithm>
 #include <array>
@@ -555,10 +556,10 @@ void WorldCollision::step_player(
         -kPitchLimitRadians,
         kPitchLimitRadians);
 
-    // 2. Crouch state & eye-height easing (400 units/tick)
+    // 2. Crouch state & eye-height easing (400 units/tick).
+    // Retail Crouch=KEY_C (config.qvm); right Control kept as convenience.
     io_player.is_crouching =
-        input.is_down(InputCode::KeyC) ||
-        input.is_down(InputCode::LeftControl) ||
+        retail::is_action_down(input, retail::InputAction::Crouch) ||
         input.is_down(InputCode::RightControl);
     const float target_eye = io_player.is_crouching ? kCrouchingEyeHeight : kStandingEyeHeight;
     if (io_player.eye_height < target_eye) {
@@ -567,13 +568,13 @@ void WorldCollision::step_player(
         io_player.eye_height = std::max(target_eye, io_player.eye_height - kCrouchEasePerTick);
     }
 
-    // 3. Movement intents (WASD)
-    const bool move_forward = input.is_down(InputCode::KeyW);
-    const bool move_backward = input.is_down(InputCode::KeyS);
-    const bool strafe_left = input.is_down(InputCode::KeyA);
-    const bool strafe_right = input.is_down(InputCode::KeyD);
+    // 3. Movement intents (retail WASD from config.qvm GOInRemap).
+    const bool move_forward = retail::is_action_down(input, retail::InputAction::MoveUp);
+    const bool move_backward = retail::is_action_down(input, retail::InputAction::MoveDown);
+    const bool strafe_left = retail::is_action_down(input, retail::InputAction::MoveLeft);
+    const bool strafe_right = retail::is_action_down(input, retail::InputAction::MoveRight);
     const bool shift_held =
-        input.is_down(InputCode::LeftShift) || input.is_down(InputCode::RightShift);
+        retail::is_action_down(input, retail::InputAction::ToggleWalkRun);
     io_player.is_running = !shift_held && !io_player.is_crouching;
 
     // Check if near a ClimbLadder object using verified LadderPlacement
@@ -629,7 +630,7 @@ void WorldCollision::step_player(
         } else if (move_backward) {
             io_player.velocity.z = -360.0f;
         }
-        if (input.was_pressed(InputCode::Space)) {
+        if (retail::was_action_pressed(input, retail::InputAction::Jump)) {
             io_player.is_climbing_ladder = false;
             io_player.is_grounded = false;
             io_player.velocity.z = 620.0f;
@@ -665,7 +666,7 @@ void WorldCollision::step_player(
         io_player.velocity.y = world_step.y;
         io_player.velocity.z = 0.0f;
 
-        if (input.was_pressed(InputCode::Space)) {
+        if (retail::was_action_pressed(input, retail::InputAction::Jump)) {
             io_player.is_grounded = false;
             io_player.velocity.z = 740.0f;
         }

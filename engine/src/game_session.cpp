@@ -1,5 +1,6 @@
 #include "igi/game_session.hpp"
 #include "igi/logger.hpp"
+#include "igi/retail_controls.hpp"
 
 #include <cmath>
 #include <limits>
@@ -91,25 +92,28 @@ bool GameSession::update(
             last_terrain_center_y_ = player_.position.y;
         }
 
-        // Weapon slot selection (digits 1-5, mouse wheel, or Q to cycle)
-        const InputCode slot_keys[] = {
-            InputCode::Digit1, InputCode::Digit2, InputCode::Digit3,
-            InputCode::Digit4, InputCode::Digit5};
+        // Weapon slot selection (retail WeaponCategory1..5 = digits 1-5,
+        // wheel cycles; Q is retail Activate, not a cycle key).
+        const retail::InputAction slot_actions[] = {
+            retail::InputAction::WeaponCategory1, retail::InputAction::WeaponCategory2,
+            retail::InputAction::WeaponCategory3, retail::InputAction::WeaponCategory4,
+            retail::InputAction::WeaponCategory5};
         for (std::size_t i = 0; i < 5; ++i) {
-            if (input_snapshot.was_pressed(slot_keys[i]) || input_snapshot.is_down(slot_keys[i])) {
+            if (retail::was_action_pressed(input_snapshot, slot_actions[i]) ||
+                retail::is_action_down(input_snapshot, slot_actions[i])) {
                 weapons_.select_slot(i);
                 sight_zoom_.set_weapon(weapons_.current_stats().name);
             }
         }
-        if (input_snapshot.was_pressed(InputCode::MouseWheelDown) ||
-            input_snapshot.was_pressed(InputCode::KeyQ)) {
+        if (input_snapshot.was_pressed(InputCode::MouseWheelDown)) {
             weapons_.cycle_next();
             sight_zoom_.set_weapon(weapons_.current_stats().name);
-        } else if (input_snapshot.was_pressed(InputCode::MouseWheelUp)) {
+        } else if (input_snapshot.was_pressed(InputCode::MouseWheelUp) ||
+                   retail::was_action_pressed(input_snapshot, retail::InputAction::PrevWeapon)) {
             weapons_.cycle_prev();
             sight_zoom_.set_weapon(weapons_.current_stats().name);
         }
-        if (input_snapshot.was_pressed(InputCode::KeyR)) {
+        if (retail::was_action_pressed(input_snapshot, retail::InputAction::Reload)) {
             weapons_.request_reload();
         }
 
@@ -122,8 +126,8 @@ bool GameSession::update(
         const float horiz_speed = std::hypot(player_.velocity.x, player_.velocity.y);
         view_bob_.update(dt, player_.is_grounded, horiz_speed, player_.is_running, player_.is_crouching);
 
-        // Player interaction with world objects (doors, terminals, pickups)
-        if (input_snapshot.was_pressed(InputCode::KeyF) || input_snapshot.was_pressed(InputCode::KeyE)) {
+        // Player interaction with world objects (retail Activate = Q).
+        if (retail::was_action_pressed(input_snapshot, retail::InputAction::Activate)) {
             const auto interact = world_->try_interact(player_.position, player_.yaw);
             if (interact.interacted) {
                 if (!interact.script_variable.empty()) {
@@ -139,11 +143,10 @@ bool GameSession::update(
         // Advance dynamic world entities (doors)
         world_->update_doors(dt);
 
-        // Fire. The aim includes accumulated recoil, as the retail camera does.
-        const bool fire_held = input_snapshot.is_down(InputCode::MouseLeft) ||
-                               input_snapshot.is_down(InputCode::LeftControl);
-        const bool fire_pressed = input_snapshot.was_pressed(InputCode::MouseLeft) ||
-                                  input_snapshot.was_pressed(InputCode::LeftControl);
+        // Fire (retail Fire = mouse button 1, from config.qvm GOInRemap).
+        const bool fire_held = retail::is_action_down(input_snapshot, retail::InputAction::Fire);
+        const bool fire_pressed =
+            retail::was_action_pressed(input_snapshot, retail::InputAction::Fire);
         const WeaponFireResult fire = weapons_.update(
             dt,
             fire_held,
