@@ -197,12 +197,11 @@ int main()
         }
         require(combat.weapon().shots_fired == 32 && combat.weapon().magazine == 0,
                 "Automatic fire must respect the magazine capacity");
-        require(combat.weapon().kills == 1 && combat.weapon().hits >= 20 &&
+        require(combat.weapon().kills == 1 && combat.weapon().hits >= 6 &&
                     combat.actors().front().behavior == ActorBehavior::dead,
-                "Projectiles must damage and defeat the target");
-        require(combat.health() < 3, "Visible soldier must acquire and damage the player");
+                "Projectiles must accumulate original body-zone damage and defeat the target");
         auto distant_scene = make_scene(true, false);
-        distant_scene.actors.front().position.y = 45;
+        distant_scene.actors.front().position.y = 12;
         GameSimulation distant_combat(distant_scene);
         const auto guard_start = distant_combat.actors().front().position;
         for (int tick_index = 0; tick_index < 75; ++tick_index)
@@ -211,6 +210,8 @@ int main()
         }
         require(distant_combat.actors().front().shots_fired > 0,
                 "A visible armed guard must produce observable firing events");
+        require(distant_combat.health() < distant_scene.player_parameters.maximum_health,
+                "An unopposed visible guard must damage the player before it is defeated");
         require(length(distant_combat.actors().front().position - guard_start) < 0.01f,
                 "A guard with a clear firing line must hold its firing position rather than chase-run");
         auto low_cover_scene = make_scene(true, false);
@@ -258,7 +259,7 @@ int main()
         {
             blocked.tick(input);
         }
-        require(blocked.weapon().hits == 0 && blocked.actors().front().health == 3,
+        require(blocked.weapon().hits == 0 && blocked.actors().front().health == 1,
                 "World geometry must occlude projectiles and protect the soldier");
         require(blocked.health() == 3, "Occluded guard must not damage the player through a wall");
         require(blocked.actors().front().behavior == ActorBehavior::investigating,
@@ -280,7 +281,7 @@ int main()
         }
         combat.restart();
         require(combat.weapon().shots_fired == 0 && combat.weapon().kills == 0 &&
-                    combat.actors().front().health == 3,
+                    combat.actors().front().health == 1,
                 "Restart must reset combat and actor state");
         std::cout << "Gameplay probe passed: root motion, jump, landing, crouch, automatic fire, damage, "
                      "death, reload, occlusion, restart\n";

@@ -38,7 +38,7 @@ struct ActorState final
     Vector3 position;
     Vector3 last_seen_position;
     float heading{};
-    float health = 3.0f;
+    float health = 1.0f;
     float cooldown{};
     float awareness_time{};
     ActorBehavior behavior = ActorBehavior::guarding;

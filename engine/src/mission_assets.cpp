@@ -302,6 +302,34 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
     decode_collision(geometry.ecfcFaces, geometry.xtvcVerts, geometry.tamcRecords, mesh->collision);
     decode_collision(
         geometry.ecfcFaces1, geometry.xtvcVerts1, geometry.tamcRecords1, mesh->movement_collision);
+    for (const auto& face : geometry.ecfcFaces)
+    {
+        const std::array<std::uint16_t, 3> vertex_indices{face.a, face.b, face.c};
+        gameplay::SceneSkinTriangle triangle;
+        for (std::size_t corner_index = 0; corner_index < vertex_indices.size(); ++corner_index)
+        {
+            if (vertex_indices[corner_index] >= geometry.xtvcVerts.size())
+            {
+                throw std::runtime_error("Decoded skinned collision index is invalid: " + name);
+            }
+            const auto& source_vertex = geometry.xtvcVerts[vertex_indices[corner_index]];
+            const gameplay::Vector3 position{source_vertex.px / 4096.0f,
+                                             source_vertex.py / 4096.0f,
+                                             source_vertex.pz / 4096.0f};
+            if (!gameplay::finite(position))
+            {
+                throw std::runtime_error("Decoded skinned collision vertex is not finite: " + name);
+            }
+            auto& vertex = triangle.vertices[corner_index];
+            vertex.position = position;
+            if (source_vertex.boneIndex < mesh->bone_rest_positions.size())
+            {
+                vertex.bone_index = source_vertex.boneIndex;
+                vertex.bone_local_position = position - mesh->bone_rest_positions[source_vertex.boneIndex];
+            }
+        }
+        mesh->skinned_collision.push_back(std::move(triangle));
+    }
     loading_models_.insert(normalized);
     try
     {

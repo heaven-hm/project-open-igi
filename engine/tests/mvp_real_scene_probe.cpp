@@ -1,12 +1,16 @@
 #include "igi/diagnostics.hpp"
 #include "igi/game_simulation.hpp"
 #include "igi/scene_renderer.hpp"
+#include "igi/skeletal_animation.hpp"
 
+#include <algorithm>
+#include <cmath>
 #include <exception>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <limits>
+#include <numbers>
 #include <stdexcept>
 #include <unordered_set>
 
@@ -20,10 +24,54 @@ void require(bool condition, const char* message)
     }
 }
 
+bool ray_intersects_triangle(Vector3 origin,
+                             Vector3 direction,
+                             Vector3 first,
+                             Vector3 second,
+                             Vector3 third,
+                             float maximum_distance)
+{
+    const auto cross_product = [](Vector3 first_vector, Vector3 second_vector)
+    {
+        return Vector3{first_vector.y * second_vector.z - first_vector.z * second_vector.y,
+                       first_vector.z * second_vector.x - first_vector.x * second_vector.z,
+                       first_vector.x * second_vector.y - first_vector.y * second_vector.x};
+    };
+    const auto dot_product = [](Vector3 first_vector, Vector3 second_vector)
+    {
+        return first_vector.x * second_vector.x + first_vector.y * second_vector.y +
+               first_vector.z * second_vector.z;
+    };
+    const Vector3 first_edge = second - first;
+    const Vector3 second_edge = third - first;
+    const Vector3 perpendicular = cross_product(direction, second_edge);
+    const float determinant = dot_product(first_edge, perpendicular);
+    if (std::abs(determinant) < 0.000001f)
+    {
+        return false;
+    }
+    const float inverse_determinant = 1.0f / determinant;
+    const Vector3 offset = origin - first;
+    const float horizontal = dot_product(offset, perpendicular) * inverse_determinant;
+    if (horizontal < 0.0f || horizontal > 1.0f)
+    {
+        return false;
+    }
+    const Vector3 cross_offset = cross_product(offset, first_edge);
+    const float vertical = dot_product(direction, cross_offset) * inverse_determinant;
+    if (vertical < 0.0f || horizontal + vertical > 1.0f)
+    {
+        return false;
+    }
+    const float distance = dot_product(second_edge, cross_offset) * inverse_determinant;
+    return distance >= 0.0f && distance <= maximum_distance;
+}
+
 int main(int argument_count, char** arguments)
 {
     try
     {
+        igi::logging::Logger::instance().set_min_level(igi::logging::LogLevel::Debug);
         if (argument_count != 3 && argument_count != 4)
         {
             throw std::runtime_error(
@@ -47,6 +95,32 @@ int main(int argument_count, char** arguments)
                 "Every loaded original object must retain an objects.qvm placement audit");
         require(scene.verified_object_count == scene.loaded_object_count && scene.mismatch_object_count == 0,
                 "Every Level 1 object placement must verify against the emitted runtime scene");
+        std::size_t soldier_collision_triangle_count = 0;
+        std::size_t bone_mapped_collision_triangle_count = 0;
+        for (const auto& actor : scene.actors)
+        {
+            if (!actor.gameplay_enabled || !actor.mesh)
+            {
+                continue;
+            }
+            soldier_collision_triangle_count += actor.mesh->skinned_collision.size();
+            for (const auto& triangle : actor.mesh->skinned_collision)
+            {
+                const bool all_vertices_have_bones = std::all_of(
+                    triangle.vertices.begin(),
+                    triangle.vertices.end(),
+                    [&](const SceneVertex& vertex)
+                    { return vertex.bone_index < actor.mesh->bone_rest_positions.size(); });
+                if (all_vertices_have_bones)
+                {
+                    ++bone_mapped_collision_triangle_count;
+                }
+            }
+        }
+        require(soldier_collision_triangle_count > 0 && bone_mapped_collision_triangle_count > 0,
+                "Level 1 gameplay guards must load collision triangles that retain their rig bone indices");
+        std::cout << "Level 1 soldier collision: triangles=" << soldier_collision_triangle_count
+                  << ", bone-mapped=" << bone_mapped_collision_triangle_count << '\n';
         std::unordered_set<std::size_t> audited_source_calls;
         bool verified_rotated_geometry = false;
         for (const auto& audit : scene.object_placement_audits)
@@ -187,6 +261,7 @@ int main(int argument_count, char** arguments)
         GameSimulation combat(scene);
         std::size_t target_index = scene.actors.size();
         float target_distance = std::numeric_limits<float>::max();
+        Vector3 target_aim_position{};
         for (std::size_t actor_index = 0; actor_index < combat.actors().size(); ++actor_index)
         {
             if (!combat.actors()[actor_index].active || scene.actors[actor_index].team == 0)
@@ -203,6 +278,45 @@ int main(int argument_count, char** arguments)
             {
                 target_index = actor_index;
                 target_distance = distance;
+                target_aim_position = aim_point;
+            }
+        }
+        if (target_index == scene.actors.size())
+        {
+            for (std::size_t actor_index = 0; actor_index < combat.actors().size() &&
+                                                   target_index == scene.actors.size();
+                 ++actor_index)
+            {
+                const auto& actor = combat.actors()[actor_index];
+                const auto& definition = scene.actors[actor_index];
+                if (!actor.active || definition.team == 0 || !definition.mesh ||
+                    definition.mesh->skinned_collision.empty())
+                {
+                    continue;
+                }
+                const auto aim_point = actor.position + Vector3{0, 0, 1.2f};
+                for (int candidate_index = 0; candidate_index < 16; ++candidate_index)
+                {
+                    const float candidate_heading =
+                        static_cast<float>(candidate_index) * std::numbers::pi_v<float> / 8.0f;
+                    const Vector3 candidate_position =
+                        actor.position + Vector3{std::cos(candidate_heading) * 5.0f,
+                                                std::sin(candidate_heading) * 5.0f,
+                                                0};
+                    combat.teleport_player(candidate_position, 0, 0);
+                    const auto difference = aim_point - combat.camera_position();
+                    const float distance = length(difference);
+                    const auto obstruction =
+                        combat.world().raycast(combat.camera_position(), normalized(difference), distance);
+                    if ((!obstruction.hit || obstruction.distance > distance - 0.3f) && distance < 350)
+                    {
+                        target_index = actor_index;
+                        target_distance = distance;
+                        target_aim_position = aim_point;
+                        std::cout << "Level 1 combat probe moved near guard " << definition.identifier << '\n';
+                        break;
+                    }
+                }
             }
         }
         if (target_index == scene.actors.size())
@@ -224,11 +338,108 @@ int main(int argument_count, char** arguments)
         }
         std::cout << "Original soldier target: " << scene.actors[target_index].identifier
                   << "; distance=" << target_distance << '\n';
+        const auto& target_definition = scene.actors[target_index];
+        const auto& target_state = combat.actors()[target_index];
+        const auto target_pose = sample_bone_pose(
+            *target_definition.animations, target_state.animation_identifier, target_state.animation_time);
+        bool target_point_intersects_mesh = false;
+        for (int height_step = 1; height_step <= 50 && !target_point_intersects_mesh; ++height_step)
+        {
+            const float relative_height = static_cast<float>(height_step) * 0.05f;
+            const Vector3 candidate_aim_position = target_state.position + Vector3{0, 0, relative_height};
+            const Vector3 candidate_direction =
+                normalized(candidate_aim_position - combat.camera_position());
+            std::size_t candidate_intersections = 0;
+            for (const auto& triangle : target_definition.mesh->skinned_collision)
+            {
+                std::array<Vector3, 3> world_positions;
+                for (std::size_t vertex_index = 0; vertex_index < triangle.vertices.size(); ++vertex_index)
+                {
+                    const auto local = skin_vertex(triangle.vertices[vertex_index], target_pose);
+                    const float cosine = std::cos(target_state.heading);
+                    const float sine = std::sin(target_state.heading);
+                    world_positions[vertex_index] = {local.x * cosine - local.y * sine + target_state.position.x,
+                                                     local.x * sine + local.y * cosine + target_state.position.y,
+                                                     local.z + target_state.position.z};
+                }
+                if (ray_intersects_triangle(combat.camera_position(),
+                                            candidate_direction,
+                                            world_positions[0],
+                                            world_positions[1],
+                                            world_positions[2],
+                                            8.0f))
+                {
+                    ++candidate_intersections;
+                }
+            }
+            if (candidate_intersections > 0)
+            {
+                target_aim_position = candidate_aim_position;
+                target_point_intersects_mesh = true;
+                std::cout << "Collision-mesh aim height=" << relative_height
+                          << " m; intersected faces=" << candidate_intersections << '\n';
+            }
+        }
+        require(target_point_intersects_mesh,
+                "The head-to-feet scan must find a visible projectile ray through the guard collision mesh");
+        Vector3 collision_minimum{std::numeric_limits<float>::max(),
+                                  std::numeric_limits<float>::max(),
+                                  std::numeric_limits<float>::max()};
+        Vector3 collision_maximum{-std::numeric_limits<float>::max(),
+                                  -std::numeric_limits<float>::max(),
+                                  -std::numeric_limits<float>::max()};
+        for (const auto& triangle : target_definition.mesh->skinned_collision)
+        {
+            for (const auto& vertex : triangle.vertices)
+            {
+                const auto local = skin_vertex(vertex, target_pose);
+                const float cosine = std::cos(target_state.heading);
+                const float sine = std::sin(target_state.heading);
+                const Vector3 world_position{local.x * cosine - local.y * sine + target_state.position.x,
+                                             local.x * sine + local.y * cosine + target_state.position.y,
+                                             local.z + target_state.position.z};
+                collision_minimum.x = std::min(collision_minimum.x, world_position.x);
+                collision_minimum.y = std::min(collision_minimum.y, world_position.y);
+                collision_minimum.z = std::min(collision_minimum.z, world_position.z);
+                collision_maximum.x = std::max(collision_maximum.x, world_position.x);
+                collision_maximum.y = std::max(collision_maximum.y, world_position.y);
+                collision_maximum.z = std::max(collision_maximum.z, world_position.z);
+            }
+        }
+        std::cout << "Target skinned collision bounds: min=(" << collision_minimum.x << ',' << collision_minimum.y
+                  << ',' << collision_minimum.z << ") max=(" << collision_maximum.x << ','
+                  << collision_maximum.y << ',' << collision_maximum.z << ") target=("
+                  << target_state.position.x << ',' << target_state.position.y << ',' << target_state.position.z
+                  << ")\n";
+        const auto centerline_direction = normalized(target_aim_position - combat.camera_position());
+        std::size_t centerline_collision_count = 0;
+        for (const auto& triangle : target_definition.mesh->skinned_collision)
+        {
+            std::array<Vector3, 3> world_positions;
+            for (std::size_t vertex_index = 0; vertex_index < triangle.vertices.size(); ++vertex_index)
+            {
+                const auto local = skin_vertex(triangle.vertices[vertex_index], target_pose);
+                const float cosine = std::cos(target_state.heading);
+                const float sine = std::sin(target_state.heading);
+                world_positions[vertex_index] = {local.x * cosine - local.y * sine + target_state.position.x,
+                                                 local.x * sine + local.y * cosine + target_state.position.y,
+                                                 local.z + target_state.position.z};
+            }
+            if (ray_intersects_triangle(combat.camera_position(),
+                                        centerline_direction,
+                                        world_positions[0],
+                                        world_positions[1],
+                                        world_positions[2],
+                                        8.0f))
+            {
+                ++centerline_collision_count;
+            }
+        }
+        std::cout << "Target centerline skinned-face hits=" << centerline_collision_count << '\n';
         for (int tick_index = 0; tick_index < 120 && combat.weapon().kills == 0 && combat.health() > 0;
              ++tick_index)
         {
-            const auto difference =
-                combat.actors()[target_index].position + Vector3{0, 0, 1.2f} - combat.camera_position();
+            const auto difference = target_aim_position - combat.camera_position();
             input = {};
             input.heading_change = std::atan2(-difference.x, difference.y) - combat.heading();
             input.pitch_change =
@@ -245,6 +456,17 @@ int main(int argument_count, char** arguments)
         }
         require(combat.weapon().hits > 0 && combat.weapon().kills == 1,
                 "Player projectiles must defeat an original scene soldier");
+        const auto combat_log_entries = igi::logging::Logger::instance().snapshot_recent_entries(4096);
+        const bool verified_mesh_hit = std::any_of(
+            combat_log_entries.begin(),
+            combat_log_entries.end(),
+            [](const igi::logging::LogEntry& entry)
+            {
+                return entry.subsystem == "combat" &&
+                       entry.message.find("hit zone=5, bone=14") != std::string::npos;
+            });
+        require(verified_mesh_hit,
+                "A Level 1 player hit must report the struck collision-mesh bone and retail damage zone");
         if (replay_output.is_open())
         {
             replay_output.flush();

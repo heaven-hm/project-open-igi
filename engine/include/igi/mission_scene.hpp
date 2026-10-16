@@ -75,6 +75,11 @@ struct SceneTriangle final
     bool firing_only{};
 };
 
+struct SceneSkinTriangle final
+{
+    std::array<SceneVertex, 3> vertices;
+};
+
 struct CollisionTriangle final
 {
     std::array<Vector3, 3> positions;
@@ -84,6 +89,7 @@ struct CollisionTriangle final
 struct SceneMesh final
 {
     std::vector<SceneTriangle> triangles;
+    std::vector<SceneSkinTriangle> skinned_collision;
     std::vector<CollisionTriangle> collision;
     std::vector<Vector3> bone_rest_positions;
     std::size_t attachment_count{};

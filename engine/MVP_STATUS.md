@@ -40,6 +40,8 @@ Functional regressions passing does not establish matching original behavior.
 
 8. Terrain quality controls: separate `--graphics ultra` from `enhanced`; Level 2 proves strictly increasing original terrain triangle counts for low, medium, high, enhanced, and ultra. Level 1 headless single-frame runs show the software renderer remains far too slow for dense presets: High 261,144 triangles / 0.345 s, Enhanced 2,087,084 / 1.047 s, Ultra 5,655,922 / 2.453 s. These are one-run application timings, not a stable benchmark. Ultra is opt-in; hardware rendering is still required for a playable high-detail mode.
 
+9. Soldier projectile damage zones: skinned collision triangles retain their MEF bone indices, and player projectiles trace the posed Level 1 soldier mesh before applying the original soldier zone multiplier. The retail mapping and damage tables were read from the executable; the real Level 1 probe hit gameplay guard 2017 on bone 14 / zone 5 and defeated it in seven registered hits. This does not yet implement per-body-part damage reactions, enemy damage zones against the player, or prove a retail-versus-port shot trace. See [the verification record](VERIFICATION.md).
+
 ## Measured original Level 2
 
 | Item | Measurement |
@@ -63,6 +65,7 @@ The count and health results describe this deterministic prototype scenario, not
 
 - Clean committed-source archive and working-tree Release functional suite: **16/16 passed** after portal, muzzle, firing-presentation and graphics-option changes.
 - Current orientation slice: Debug build of the affected C++ targets succeeded; **5/5 focused CTests passed**, including the Level 1 original-asset probe. This validates loaded scene geometry against authored `objects.qvm` transforms, not against a recorded retail scene.
+- Soldier hit-zone slice: the updated C++ targets built; `mvp_gameplay_probe` and the real Level 1 combat probe passed; the five focused CTests passed. The real-asset run hit active guard 2017 on bone 14 / zone 5 and defeated it after seven logged hits. This is a port-side integration result, not a paired retail combat trace.
 - AddressSanitizer + UndefinedBehaviorSanitizer: **10/10 MVP probes passed**, including original Levels 1 and 2. Leak detection disabled; this is not a leak audit.
 - Clang static analyzer: **13 authored translation units checked**, no diagnostics reported.
 - Focused doorway, idle/fire/flame expiry and clear-line guard tests failed before their fixes and passed afterward.

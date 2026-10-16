@@ -1,6 +1,7 @@
 #include "igi/diagnostics.hpp"
 #include "igi/game_simulation.hpp"
 #include "igi/skeletal_animation.hpp"
+#include "igi/vector_math.hpp"
 #include "igi/weapon_accuracy.hpp"
 
 #include <algorithm>
@@ -13,6 +14,161 @@ namespace
 {
 
 constexpr float tick_duration = 1.0f / 30.0f;
+constexpr std::array<float, 17> soldier_hit_zone_multipliers{
+    0.5f, 0.75f, 1.0f, 0.5f, 0.75f, 1.0f, 0.5f, 0.75f, 1.0f,
+    0.5f, 0.75f, 1.0f, 1.0f, 1.0f, 1.0f, 100.0f, 100.0f};
+
+struct HumanMeshHit final
+{
+    float distance{};
+    int bone_index{};
+    int zone_index{};
+};
+
+int hit_zone_for_bone(std::uint32_t bone_index)
+{
+    constexpr std::array<int, 30> body_part_zones{
+        12, 12, 12, 12, 16, 16, 16, 16, 11, 10, 9, 9, 9, 9, 5,
+        4, 3, 3, 3, 3, 8, 7, 6, 6, 6, 2, 1, 0, 0, 0};
+    if (bone_index >= 20 && bone_index < 23)
+    {
+        return 12;
+    }
+    const std::uint32_t body_part_index = bone_index >= 23 ? bone_index - 3 : bone_index;
+    return body_part_index < body_part_zones.size() ? body_part_zones[body_part_index] : 12;
+}
+
+Vector3 actor_local_to_world(Vector3 position, float heading, Vector3 actor_position)
+{
+    const float cosine = std::cos(heading);
+    const float sine = std::sin(heading);
+    return {position.x * cosine - position.y * sine + actor_position.x,
+            position.x * sine + position.y * cosine + actor_position.y,
+            position.z + actor_position.z};
+}
+
+bool intersect_ray_triangle(Vector3 origin,
+                            Vector3 direction,
+                            Vector3 first,
+                            Vector3 second,
+                            Vector3 third,
+                            float maximum_distance,
+                            float& hit_distance)
+{
+    const Vector3 first_edge = second - first;
+    const Vector3 second_edge = third - first;
+    const Vector3 perpendicular = cross(direction, second_edge);
+    const float determinant = dot(first_edge, perpendicular);
+    if (std::abs(determinant) < 0.000001f)
+    {
+        return false;
+    }
+    const float inverse_determinant = 1.0f / determinant;
+    const Vector3 offset = origin - first;
+    const float horizontal = dot(offset, perpendicular) * inverse_determinant;
+    if (horizontal < 0.0f || horizontal > 1.0f)
+    {
+        return false;
+    }
+    const Vector3 cross_offset = cross(offset, first_edge);
+    const float vertical = dot(direction, cross_offset) * inverse_determinant;
+    if (vertical < 0.0f || horizontal + vertical > 1.0f)
+    {
+        return false;
+    }
+    const float distance = dot(second_edge, cross_offset) * inverse_determinant;
+    if (distance < 0.0f || distance >= maximum_distance)
+    {
+        return false;
+    }
+    hit_distance = distance;
+    return true;
+}
+
+std::optional<HumanMeshHit> trace_human_mesh(Vector3 origin,
+                                             Vector3 direction,
+                                             float maximum_distance,
+                                             const SceneActor& definition,
+                                             const ActorState& state)
+{
+    if (!definition.mesh || !definition.animations || definition.mesh->skinned_collision.empty() ||
+        !definition.animations->clips.contains(state.animation_identifier))
+    {
+        return std::nullopt;
+    }
+    const auto pose = sample_bone_pose(*definition.animations, state.animation_identifier, state.animation_time);
+    float nearest_distance = maximum_distance;
+    int nearest_bone = -1;
+    for (const auto& triangle : definition.mesh->skinned_collision)
+    {
+        std::array<Vector3, 3> world_positions;
+        for (std::size_t vertex_index = 0; vertex_index < triangle.vertices.size(); ++vertex_index)
+        {
+            const auto& vertex = triangle.vertices[vertex_index];
+            const Vector3 local_position = skin_vertex(vertex, pose);
+            world_positions[vertex_index] = actor_local_to_world(local_position, state.heading, state.position);
+        }
+        float distance = 0.0f;
+        if (!intersect_ray_triangle(origin,
+                                    direction,
+                                    world_positions[0],
+                                    world_positions[1],
+                                    world_positions[2],
+                                    nearest_distance,
+                                    distance))
+        {
+            continue;
+        }
+        nearest_distance = distance;
+        const auto first_bone = triangle.vertices[0].bone_index;
+        const auto second_bone = triangle.vertices[1].bone_index;
+        const auto third_bone = triangle.vertices[2].bone_index;
+        nearest_bone = second_bone != first_bone && second_bone == third_bone
+                           ? static_cast<int>(second_bone)
+                           : static_cast<int>(first_bone);
+    }
+    if (nearest_bone < 0)
+    {
+        return std::nullopt;
+    }
+
+    const Vector3 incoming = direction * -1.0f;
+    const Vector3 forward{-std::sin(state.heading), std::cos(state.heading), 0};
+    const float local_forward = incoming.x * forward.x + incoming.y * forward.y;
+    const float local_side = incoming.x * -forward.y + incoming.y * forward.x;
+    int zone_index = hit_zone_for_bone(static_cast<std::uint32_t>(nearest_bone));
+    if (zone_index == 12)
+    {
+        if (local_forward <= 0.0f && std::abs(local_forward) > std::abs(local_side))
+        {
+            zone_index = 14;
+        }
+        if (local_forward >= 0.0f && local_forward > std::abs(local_side))
+        {
+            zone_index = 13;
+        }
+    }
+    if (local_forward >= 0.0f && pose.size() > 4)
+    {
+        const glm::vec3 head_local{pose[4][3]};
+        const Vector3 head_position = actor_local_to_world(
+            {head_local.x, head_local.y, head_local.z}, state.heading, state.position);
+        const Vector3 ray_end = origin + direction * maximum_distance;
+        const Vector3 segment = ray_end - origin;
+        const float segment_squared_length = dot(segment, segment);
+        if (segment_squared_length > 0.0f)
+        {
+            const float projection = std::clamp(dot(head_position - origin, segment) / segment_squared_length,
+                                                0.0f,
+                                                1.0f);
+            if (length(head_position - (origin + segment * projection)) < 0.15f)
+            {
+                zone_index = 15;
+            }
+        }
+    }
+    return HumanMeshHit{nearest_distance, nearest_bone, zone_index};
+}
 
 float capsule_intersection(
     Vector3 origin, Vector3 direction, Vector3 feet, float height, float radius, float maximum_distance)
@@ -270,6 +426,8 @@ void GameSimulation::advance_projectiles()
         const auto world_hit = world_.raycast(projectile.position, projectile.direction, travel);
         float hit_distance = world_hit.hit ? world_hit.distance : travel;
         int target_actor = -1;
+        int target_zone = 12;
+        int target_bone = -1;
         bool target_player = false;
         if (projectile.owner == -1)
         {
@@ -279,16 +437,37 @@ void GameSimulation::advance_projectiles()
                 {
                     continue;
                 }
-                const auto distance = capsule_intersection(projectile.position,
-                                                           projectile.direction,
-                                                           actors_[actor_index].position,
-                                                           1.8f,
-                                                           0.32f,
-                                                           hit_distance);
+                const auto& actor_definition = scene_.actors[actor_index];
+                const auto& actor_state = actors_[actor_index];
+                const bool has_animated_mesh = actor_definition.mesh &&
+                                               !actor_definition.mesh->skinned_collision.empty() &&
+                                               actor_definition.animations &&
+                                               actor_definition.animations->clips.contains(
+                                                   actor_state.animation_identifier);
+                const auto mesh_hit = has_animated_mesh
+                                          ? trace_human_mesh(projectile.position,
+                                                             projectile.direction,
+                                                             hit_distance,
+                                                             actor_definition,
+                                                             actor_state)
+                                          : std::optional<HumanMeshHit>{};
+                const auto distance = has_animated_mesh
+                                          ? (mesh_hit ? mesh_hit->distance : hit_distance)
+                                          : capsule_intersection(projectile.position,
+                                                                 projectile.direction,
+                                                                 actor_state.position,
+                                                                 1.8f,
+                                                                 0.32f,
+                                                                 hit_distance);
                 if (distance < hit_distance)
                 {
                     hit_distance = distance;
                     target_actor = static_cast<int>(actor_index);
+                    if (mesh_hit.has_value())
+                    {
+                        target_zone = mesh_hit->zone_index;
+                        target_bone = mesh_hit->bone_index;
+                    }
                 }
             }
         }
@@ -308,12 +487,23 @@ void GameSimulation::advance_projectiles()
         if (target_actor >= 0)
         {
             auto& actor = actors_[static_cast<std::size_t>(target_actor)];
-            actor.health = std::max(0.0f, actor.health - projectile.damage);
+            const float damage_multiplier =
+                soldier_hit_zone_multipliers[static_cast<std::size_t>(target_zone)];
+            const float applied_damage = projectile.damage * damage_multiplier;
+            actor.health = std::max(0.0f, actor.health - applied_damage);
             actor.last_seen_position = player_position();
             actor.awareness_time = 8;
             actor.behavior = actor.health <= 0 ? ActorBehavior::dead : ActorBehavior::attacking;
             ++weapon_.hits;
             weapon_.hit_marker_remaining = 0.15f;
+            diagnostics::log(diagnostics::Severity::debug,
+                             "combat",
+                             "Soldier " +
+                                 std::to_string(scene_.actors[static_cast<std::size_t>(target_actor)].identifier) +
+                                 " hit zone=" + std::to_string(target_zone) + ", bone=" +
+                                 std::to_string(target_bone) + ", multiplier=" +
+                                 std::to_string(damage_multiplier) + ", damage=" +
+                                 std::to_string(applied_damage) + ", health=" + std::to_string(actor.health));
             if (actor.behavior == ActorBehavior::dead)
             {
                 ++weapon_.kills;
