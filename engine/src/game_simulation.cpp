@@ -109,6 +109,7 @@ void GameSimulation::restart()
     jump_was_pressed_ = false;
     tick_count_ = 0;
     weapon_ = {};
+    random_generator_ = RetailRandomGenerator{};
     weapon_.magazine = scene_.weapon_parameters.magazine_capacity;
     weapon_.reserve = scene_.initial_reserve_ammunition;
     inventory_.clear();

@@ -124,6 +124,13 @@ struct WeaponParameters final
     bool automatic = true;
     bool melee{};
     std::int32_t maximum_rounds_per_burst = 32;
+    std::int32_t projectiles_per_round = 1;
+    float minimum_spread_degrees{};
+    float maximum_spread_degrees{};
+    float fixed_recoil_pitch_degrees{};
+    float fixed_recoil_yaw_degrees{};
+    float random_recoil_pitch_degrees{};
+    float random_recoil_yaw_degrees{};
 };
 
 struct SceneWeapon final

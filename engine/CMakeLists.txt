@@ -55,6 +55,7 @@ add_library(igi_runtime STATIC
     src/collision_world.cpp
     src/game_simulation.cpp
     src/game_combat.cpp
+    src/weapon_accuracy.cpp
     src/game_inventory.cpp
     src/game_ai.cpp
     src/navigation.cpp
@@ -184,6 +185,10 @@ if(BUILD_TESTING)
     target_include_directories(retail_random_generator_test PRIVATE include)
     target_compile_features(retail_random_generator_test PRIVATE cxx_std_20)
     add_test(NAME retail_rng_captured_checkpoints COMMAND retail_random_generator_test)
+
+    add_executable(weapon_accuracy_test tests/weapon_accuracy_test.cpp)
+    target_link_libraries(weapon_accuracy_test PRIVATE igi_runtime)
+    add_test(NAME weapon_projectile_accuracy COMMAND weapon_accuracy_test)
 
     add_test(NAME retail_engine_bit_exact COMMAND "${CMAKE_COMMAND}"
         "-DPARITY_DIRECTORY=${IGI_RETAIL_PARITY_DIRECTORY}"

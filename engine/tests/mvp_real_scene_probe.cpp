@@ -53,12 +53,34 @@ int main(int argument_count, char** arguments)
         require(disabled_cinematic_actor, "Level 1's cinematic train actor must remain outside gameplay");
         for (const auto& weapon : scene.weapons)
         {
-            const float expected_range = weapon.identifier == "WEAPON_ID_AK47" ? 2000.0f
+            if (weapon.identifier == "WEAPON_ID_MP5SD")
+            {
+                require(weapon.parameters.projectiles_per_round == 1 &&
+                            weapon.parameters.minimum_spread_degrees == -2 &&
+                            weapon.parameters.maximum_spread_degrees == 2 &&
+                            weapon.parameters.fixed_recoil_pitch_degrees == 0.8f &&
+                            weapon.parameters.random_recoil_pitch_degrees == 0.8f,
+                        "MP5 count, spread and recoil must match the original decompiled weapon script");
+            }
+            else if (weapon.identifier == "WEAPON_ID_GLOCK")
+            {
+                require(weapon.parameters.projectiles_per_round == 1 &&
+                            weapon.parameters.minimum_spread_degrees == -1.5f &&
+                            weapon.parameters.maximum_spread_degrees == 1.5f &&
+                            weapon.parameters.fixed_recoil_pitch_degrees == 1.5f &&
+                            weapon.parameters.random_recoil_pitch_degrees == 0,
+                        "Glock count, spread and recoil must match the original decompiled weapon script");
+            }
+            const float expected_range =
+                weapon.identifier == "WEAPON_ID_AK47"                                              ? 2000.0f
                 : weapon.identifier == "WEAPON_ID_MP5SD" || weapon.identifier == "WEAPON_ID_GLOCK" ? 80.0f
-                : weapon.identifier == "WEAPON_ID_KNIFE" ? 1.0f : -1.0f;
-            const int expected_burst = weapon.identifier == "WEAPON_ID_AK47" ? 30
-                : weapon.identifier == "WEAPON_ID_MP5SD" ? 32
-                : weapon.identifier == "WEAPON_ID_GLOCK" || weapon.identifier == "WEAPON_ID_KNIFE" ? 1 : -1;
+                : weapon.identifier == "WEAPON_ID_KNIFE"                                           ? 1.0f
+                                                                                                   : -1.0f;
+            const int expected_burst =
+                weapon.identifier == "WEAPON_ID_AK47"                                              ? 30
+                : weapon.identifier == "WEAPON_ID_MP5SD"                                           ? 32
+                : weapon.identifier == "WEAPON_ID_GLOCK" || weapon.identifier == "WEAPON_ID_KNIFE" ? 1
+                                                                                                   : -1;
             if (expected_burst > 0)
             {
                 require(weapon.parameters.maximum_rounds_per_burst == expected_burst,

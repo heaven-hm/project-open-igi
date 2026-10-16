@@ -1,6 +1,7 @@
 #include "igi/diagnostics.hpp"
 #include "igi/game_simulation.hpp"
 #include "igi/skeletal_animation.hpp"
+#include "igi/weapon_accuracy.hpp"
 
 #include <algorithm>
 #include <limits>
@@ -55,6 +56,20 @@ float capsule_intersection(
 void GameSimulation::advance_weapon(const PlayerInput& input)
 {
     const auto& parameters = weapon_parameters();
+    for (const float scalar : {parameters.minimum_spread_degrees,
+                               parameters.maximum_spread_degrees,
+                               parameters.fixed_recoil_pitch_degrees,
+                               parameters.fixed_recoil_yaw_degrees,
+                               parameters.random_recoil_pitch_degrees,
+                               parameters.random_recoil_yaw_degrees})
+    {
+        if (!std::isfinite(scalar))
+        {
+            throw std::runtime_error("Original weapon spread or recoil parameter is not finite");
+        }
+    }
+    weapon_.sampled_recoil_pitch = 0;
+    weapon_.sampled_recoil_yaw = 0;
     if (!std::isfinite(parameters.shots_per_minute) || !std::isfinite(parameters.muzzle_velocity) ||
         !std::isfinite(parameters.reload_seconds) || !std::isfinite(parameters.damage) ||
         !std::isfinite(parameters.maximum_distance) || parameters.maximum_distance <= 0 ||
@@ -100,20 +115,39 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         {
             --weapon_.magazine;
         }
+        if (parameters.maximum_rounds_per_burst <= 1)
+        {
+            // Retail chooses a sound variant here even when audio output is deferred.
+            static_cast<void>(random_generator_.next_word());
+        }
+        const float cone = WeaponAccuracy::cone_angle(parameters, weapon_.rounds_in_current_burst);
+        const Vector3 forward = aim_direction();
+        const Vector3 right{std::cos(heading_), std::sin(heading_), 0};
+        const Vector3 up = cross(right, forward);
+        for (std::int32_t projectile_index = 0; projectile_index < parameters.projectiles_per_round;
+             ++projectile_index)
+        {
+            projectiles_.push_back(
+                {camera_position(),
+                 WeaponAccuracy::sample_direction(cone, forward, right, up, random_generator_),
+                 parameters.maximum_distance,
+                 parameters.melee ? 1000.0f : parameters.muzzle_velocity,
+                 parameters.damage,
+                 -1});
+        }
         ++weapon_.shots_fired;
         ++weapon_.rounds_in_current_burst;
         weapon_.cooldown = std::max(weapon_.cooldown, -tick_duration) + 60.0f / parameters.shots_per_minute;
         weapon_.muzzle_flash_remaining = 0.055f;
-        projectiles_.push_back({camera_position(),
-                                aim_direction(),
-                                parameters.maximum_distance,
-                                parameters.melee ? 1000.0f : parameters.muzzle_velocity,
-                                parameters.damage,
-                                -1});
+        const auto recoil = WeaponAccuracy::sample_recoil(parameters, random_generator_);
+        weapon_.sampled_recoil_pitch = recoil.pitch;
+        weapon_.sampled_recoil_yaw = recoil.yaw;
         diagnostics::log(diagnostics::Severity::debug,
                          "weapon",
                          "Projectile fired; magazine=" + std::to_string(weapon_.magazine) +
-                             ", burst round=" + std::to_string(weapon_.rounds_in_current_burst));
+                             ", burst round=" + std::to_string(weapon_.rounds_in_current_burst) +
+                             ", cone=" + std::to_string(cone) +
+                             ", projectiles=" + std::to_string(parameters.projectiles_per_round));
     }
     else if (!input.firing)
     {

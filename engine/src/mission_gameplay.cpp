@@ -350,6 +350,33 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 throw std::runtime_error("Invalid original burst limit for " + weapon.identifier);
             }
             weapon.parameters.maximum_rounds_per_burst = static_cast<std::int32_t>(maximum_rounds_per_burst);
+            const double projectiles_per_round = arguments[14].number;
+            if (!std::isfinite(projectiles_per_round) ||
+                projectiles_per_round != std::trunc(projectiles_per_round) ||
+                projectiles_per_round < std::numeric_limits<std::int32_t>::min() ||
+                projectiles_per_round > std::numeric_limits<std::int32_t>::max())
+            {
+                throw std::runtime_error("Invalid original projectile count for " + weapon.identifier);
+            }
+            weapon.parameters.projectiles_per_round = static_cast<std::int32_t>(projectiles_per_round);
+            weapon.parameters.minimum_spread_degrees = static_cast<float>(arguments[18].number);
+            weapon.parameters.maximum_spread_degrees = static_cast<float>(arguments[19].number);
+            weapon.parameters.fixed_recoil_pitch_degrees = static_cast<float>(arguments[20].number);
+            weapon.parameters.fixed_recoil_yaw_degrees = static_cast<float>(arguments[21].number);
+            weapon.parameters.random_recoil_pitch_degrees = static_cast<float>(arguments[22].number);
+            weapon.parameters.random_recoil_yaw_degrees = static_cast<float>(arguments[23].number);
+            for (const float scalar : {weapon.parameters.minimum_spread_degrees,
+                                       weapon.parameters.maximum_spread_degrees,
+                                       weapon.parameters.fixed_recoil_pitch_degrees,
+                                       weapon.parameters.fixed_recoil_yaw_degrees,
+                                       weapon.parameters.random_recoil_pitch_degrees,
+                                       weapon.parameters.random_recoil_yaw_degrees})
+            {
+                if (!std::isfinite(scalar))
+                {
+                    throw std::runtime_error("Invalid original spread/recoil for " + weapon.identifier);
+                }
+            }
             weapon.parameters.maximum_distance = static_cast<float>(arguments[25].number);
             if (!std::isfinite(weapon.parameters.maximum_distance) || weapon.parameters.maximum_distance <= 0)
             {

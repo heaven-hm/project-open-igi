@@ -364,7 +364,8 @@ int run(RuntimeOptions options, const char* executable)
             throw std::runtime_error("Cannot open state trace: " + options.trace.string());
         }
         trace << "tick,x,y,z,grounded,locomotion,health,magazine,reserve,shots,"
-                 "hits,kills\n";
+                 "hits,kills,projectiles,recoil_pitch,recoil_yaw,random_accumulator,"
+                 "random_feedback,random_shift\n";
         trace << std::setprecision(9);
     }
     std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window(nullptr, SDL_DestroyWindow);
@@ -540,10 +541,14 @@ int run(RuntimeOptions options, const char* executable)
             {
                 const auto position = simulation.player_position();
                 const auto& weapon = simulation.weapon();
+                const auto random_state = simulation.random_state();
                 trace << simulation.tick_count() << ',' << position.x << ',' << position.y << ','
                       << position.z << ',' << simulation.grounded() << ',' << simulation.locomotion_state()
                       << ',' << simulation.health() << ',' << weapon.magazine << ',' << weapon.reserve << ','
-                      << weapon.shots_fired << ',' << weapon.hits << ',' << weapon.kills << '\n';
+                      << weapon.shots_fired << ',' << weapon.hits << ',' << weapon.kills << ','
+                      << simulation.projectiles().size() << ',' << weapon.sampled_recoil_pitch << ','
+                      << weapon.sampled_recoil_yaw << ',' << random_state[0] << ',' << random_state[1] << ','
+                      << random_state[2] << '\n';
                 if (!trace)
                 {
                     throw std::runtime_error("Cannot write gameplay trace");

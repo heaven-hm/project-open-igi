@@ -2,6 +2,7 @@
 
 #include "igi/collision_world.hpp"
 #include "igi/human_movement_integrator.hpp"
+#include "igi/retail_random_generator.hpp"
 
 namespace igi::gameplay
 {
@@ -58,6 +59,8 @@ struct ActorState final
 
 struct WeaponState final
 {
+    float sampled_recoil_pitch{};
+    float sampled_recoil_yaw{};
     std::uint32_t magazine{};
     std::uint32_t reserve = 196;
     float cooldown{};
@@ -160,6 +163,16 @@ class GameSimulation final : private HumanMovementWorld
         return actors_;
     }
 
+    [[nodiscard]] const std::vector<Projectile>& projectiles() const noexcept
+    {
+        return projectiles_;
+    }
+
+    [[nodiscard]] std::array<std::uint32_t, 3> random_state() const noexcept
+    {
+        return random_generator_.state();
+    }
+
     [[nodiscard]] const CollisionWorld& world() const noexcept
     {
         return world_;
@@ -197,6 +210,7 @@ class GameSimulation final : private HumanMovementWorld
     HumanMovementState player_;
     HumanMovementIntegrator integrator_;
     WeaponState weapon_;
+    RetailRandomGenerator random_generator_;
     std::vector<ActorState> actors_;
     std::vector<Projectile> projectiles_;
     std::vector<InventoryWeapon> inventory_;
