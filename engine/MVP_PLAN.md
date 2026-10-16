@@ -40,7 +40,7 @@ Your goal is not a "behavioral approximation" or a "look-alike" project. The goa
  │                   PLATFORM-DEPENDENT LAYER (ABSTRACTED)                │
  │  Win32 Windowing, Message Loop, Direct3D 7 Device Init, DirectSound   │
  │                                   │                                    │
- │  Mapped to: SDL3/SDL2, OpenGL 3.3 Core / Vulkan, miniaudio.h, POSIX/VFS │
+ │  Mapped to: SDL2/platform renderer backends, miniaudio.h, POSIX/VFS     │
  └───────────────────────────────────┬────────────────────────────────────┘
                                      │ Inputs, Audio Buffers, Render Commands
                                      ▼
@@ -59,7 +59,7 @@ Your goal is not a "behavioral approximation" or a "look-alike" project. The goa
 
 #### What is Abstracted (Platform API Layer Only):
 1. **Win32 OS APIs**: `CreateWindowExA`, `PeekMessage`, `DispatchMessage`, `GetCursorPos`, and Windows Registry keys are cleanly replaced by **SDL3 / SDL2**.
-2. **Direct3D 7 / DirectDraw Hardware Init**: Enum devices, surface caps, and viewport setup are replaced by modern hardware rasterization via **OpenGL 3.3 Core / Vulkan**.
+2. **Direct3D 7 / DirectDraw**: Keep graphics APIs behind renderer backends. A future Windows vanilla backend may use D3D7/DirectDraw for retail fixed-function parity; macOS/Linux use platform-supported backends implementing the same scene and material behavior. No D3D7 backend is implemented or verified yet.
 3. **DirectSound / Miles Sound System Init**: Hardware driver initialization is replaced by **`miniaudio.h`** (which outputs through CoreAudio on macOS, WASAPI on Windows, and ALSA/PulseAudio on Linux).
 4. **Win32 File Handles**: `CreateFileA` / `ReadFile` are mapped through standard portable C++20 `std::filesystem` and memory-mapped archives.
 

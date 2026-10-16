@@ -4,8 +4,9 @@
 
 The current MVP targets macOS. Windows and Linux support are later deliverables,
 after a playable macOS gameplay slice exists. The application must reproduce
-the original game's behavior and appearance without using its Windows or DirectX
-implementation.
+the original game's behavior on every platform. The renderer may use the
+original Direct3D 7 pipeline on Windows for vanilla visual parity; that choice
+must stay inside the Windows rendering backend.
 
 ## Code boundary
 
@@ -21,6 +22,17 @@ the backend in the application/build configuration and keep platform-specific
 conditionals inside the backend or build setup. SDL2 provides the initial C++ window and input backend across target operating
 systems. Platform graphics and device implementations still require explicit
 verification on each operating system.
+
+## Renderer policy
+
+Keep scene data, material properties, render ordering, and gameplay independent
+of graphics APIs. A future Windows vanilla backend may use Direct3D 7 and
+DirectDraw to reproduce the retail fixed-function pipeline. macOS and Linux
+must use their own supported graphics backends behind the same renderer
+interface, with parity measured against the retail output. Do not require
+DirectX headers or types in shared engine code. Enhanced graphics remain an
+explicit option and must not change vanilla behavior. No Direct3D 7 backend is
+implemented or verified yet.
 
 ## Current state and acceptance
 
