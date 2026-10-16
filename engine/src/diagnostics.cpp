@@ -8,8 +8,12 @@ namespace igi::diagnostics
 
 void configure(bool verbose, const std::filesystem::path& log_file)
 {
-    (void) log_file;
-    logging::Logger::instance().set_min_level(verbose ? logging::LogLevel::Debug : logging::LogLevel::Info);
+    auto& logger = logging::Logger::instance();
+    logger.set_min_level(verbose ? logging::LogLevel::Debug : logging::LogLevel::Info);
+    if (!logger.set_log_file(log_file))
+    {
+        logger.log(logging::LogLevel::Warning, "logging", "Cannot open log file: " + log_file.string());
+    }
 }
 
 void log(Severity severity, std::string_view subsystem, std::string_view message)

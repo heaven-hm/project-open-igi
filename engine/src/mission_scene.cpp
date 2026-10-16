@@ -12,6 +12,8 @@
 #include <algorithm>
 #include <cmath>
 #include <functional>
+#include <iomanip>
+#include <sstream>
 #include <stdexcept>
 
 namespace igi::gameplay
@@ -37,6 +39,20 @@ std::pair<int, int> orient(int orientation, int horizontal, int vertical)
         return (orientation & 2) != 0 ? std::pair{vertical, -mirrored} : std::pair{-vertical, mirrored};
     }
     return (orientation & 2) != 0 ? std::pair{-mirrored, -vertical} : std::pair{mirrored, vertical};
+}
+
+std::string format_vector(Vector3 value)
+{
+    std::ostringstream text;
+    text << std::fixed << std::setprecision(6) << '(' << value.x << ", " << value.y << ", " << value.z << ')';
+    return text.str();
+}
+
+bool transform_matches(Vector3 authored, Vector3 runtime) noexcept
+{
+    constexpr float tolerance = 0.000001f;
+    return std::abs(authored.x - runtime.x) <= tolerance && std::abs(authored.y - runtime.y) <= tolerance &&
+           std::abs(authored.z - runtime.z) <= tolerance;
 }
 
 void append_terrain(MissionScene& scene,
@@ -631,6 +647,32 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     scene.ladders.push_back(ladder);
                 }
             }
+            const Vector3 runtime_position = candidate->position;
+            const Vector3 runtime_rotation = candidate->rotation;
+            const bool position_matches = transform_matches(candidate->position, runtime_position);
+            const bool orientation_matches = transform_matches(candidate->rotation, runtime_rotation);
+            scene.object_placement_audits.push_back(
+                {static_cast<std::size_t>(&call - initializer.calls().data()),
+                 candidate->model_id,
+                 candidate->type,
+                 candidate->name,
+                 candidate->position,
+                 runtime_position,
+                 candidate->rotation,
+                 runtime_rotation,
+                 position_matches,
+                 orientation_matches});
+            diagnostics::log(
+                position_matches && orientation_matches ? diagnostics::Severity::information : diagnostics::Severity::error,
+                "placement",
+                "objects.qvm placement: call=" +
+                    std::to_string(scene.object_placement_audits.back().source_call_index) + ", model=" +
+                    candidate->model_id + ", type=" + candidate->type + ", name=" + candidate->name +
+                    ", authored_position=" + format_vector(candidate->position) + ", runtime_position=" +
+                    format_vector(runtime_position) + ", authored_orientation=" + format_vector(candidate->rotation) +
+                    ", runtime_orientation=" + format_vector(runtime_rotation) + ", position_match=" +
+                    (position_matches ? "true" : "false") + ", orientation_match=" +
+                    (orientation_matches ? "true" : "false"));
             ++scene.loaded_object_count;
         }
         catch (const std::exception& exception)

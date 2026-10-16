@@ -1,6 +1,8 @@
 #pragma once
 
 #include <cstddef>
+#include <filesystem>
+#include <fstream>
 #include <mutex>
 #include <string>
 #include <string_view>
@@ -38,6 +40,7 @@ class Logger final
     Logger(const Logger&) = delete;
     Logger& operator=(const Logger&) = delete;
     void set_min_level(LogLevel level) noexcept;
+    [[nodiscard]] bool set_log_file(const std::filesystem::path& path) noexcept;
     [[nodiscard]] LogLevel min_level() const noexcept;
     void clear_history();
     void log(LogLevel level, std::string_view subsystem, std::string_view message);
@@ -48,6 +51,7 @@ class Logger final
     Logger() = default;
     mutable std::mutex mutex_;
     LogLevel min_level_{LogLevel::Info};
+    std::ofstream log_file_;
     std::vector<LogEntry> entries_;
 };
 

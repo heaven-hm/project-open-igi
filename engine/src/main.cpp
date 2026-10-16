@@ -264,7 +264,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                          "config.qvm.\n"
                          "Number-key categories use humanplayer.qvm; mouse wheel cycles "
                          "weapons.\n"
-                         "Enter restart; F11 fullscreen; Escape quit.\n";
+                         "Enter restarts; F10 toggles fullscreen; F9 or F11 toggles developer mode; Escape quits.\n";
             std::exit(0);
         }
         else
@@ -513,7 +513,8 @@ int run(RuntimeOptions options, const char* executable)
     log(Severity::information,
         "application",
         "Mission ready. Controls loaded from original config.qvm; Enter restarts, "
-        "F10 toggles fullscreen, F11 toggles dev mode (god/weapons/ammo), F12 toggles free camera, Escape quits");
+        "F10 toggles fullscreen, F9 or F11 toggles developer mode (god/weapons/ammo), F12 toggles free camera, "
+        "Escape quits");
     bool running = true;
     std::uint64_t frame_count = 0;
     auto previous_time = Clock::now();
@@ -596,7 +597,7 @@ int run(RuntimeOptions options, const char* executable)
                         log(Severity::warning, "display", SDL_GetError());
                     }
                 }
-                if (event.key.keysym.sym == SDLK_F11)
+                if (event.key.keysym.sym == SDLK_F9 || event.key.keysym.sym == SDLK_F11)
                 {
                     simulation.toggle_developer_mode();
                     log(Severity::information,

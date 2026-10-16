@@ -42,6 +42,16 @@ int main(int argument_count, char** arguments)
         require(scene.missing_object_count == 0 && scene.loaded_object_count > 300 &&
                     scene.actors.size() >= 20,
                 "Real mission must load its original models and soldiers");
+        require(scene.object_placement_audits.size() == scene.loaded_object_count,
+                "Every loaded original object must retain an objects.qvm placement audit");
+        for (const auto& audit : scene.object_placement_audits)
+        {
+            require(audit.position_matches && audit.orientation_matches,
+                    "Loaded original object position or orientation differs from objects.qvm");
+            require(finite(audit.authored_position) && finite(audit.runtime_position) &&
+                        finite(audit.authored_rotation) && finite(audit.runtime_rotation),
+                    "Loaded original object transform must remain finite");
+        }
         bool disabled_cinematic_actor = false;
         for (const auto& actor : scene.actors)
         {

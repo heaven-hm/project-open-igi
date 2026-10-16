@@ -217,6 +217,20 @@ struct RootMotionClip final
     std::vector<RootMotionKey> keys;
 };
 
+struct ObjectPlacementAudit final
+{
+    std::size_t source_call_index{};
+    std::string model_identifier;
+    std::string task_type;
+    std::string task_name;
+    Vector3 authored_position;
+    Vector3 runtime_position;
+    Vector3 authored_rotation;
+    Vector3 runtime_rotation;
+    bool position_matches{};
+    bool orientation_matches{};
+};
+
 struct MissionScene final
 {
     std::vector<SceneTexture> textures;
@@ -247,6 +261,7 @@ struct MissionScene final
     std::vector<SceneLadder> ladders;
     std::vector<SceneDoor> doors;
     std::vector<MissionObjective> objectives;
+    std::vector<ObjectPlacementAudit> object_placement_audits;
     std::size_t verified_object_count{};
     std::size_t mismatch_object_count{};
 };

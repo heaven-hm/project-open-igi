@@ -68,6 +68,29 @@ void Logger::set_min_level(LogLevel level) noexcept
     min_level_ = level;
 }
 
+bool Logger::set_log_file(const std::filesystem::path& path) noexcept
+{
+    std::lock_guard lock(mutex_);
+    log_file_.close();
+    if (path.empty())
+    {
+        return true;
+    }
+    try
+    {
+        if (path.has_parent_path())
+        {
+            std::filesystem::create_directories(path.parent_path());
+        }
+        log_file_.open(path, std::ios::out | std::ios::app);
+        return static_cast<bool>(log_file_);
+    }
+    catch (const std::filesystem::filesystem_error&)
+    {
+        return false;
+    }
+}
+
 LogLevel Logger::min_level() const noexcept
 {
     std::lock_guard lock(mutex_);
@@ -90,6 +113,11 @@ void Logger::log(LogLevel level, std::string_view subsystem, std::string_view me
     LogEntry entry{level, std::string(subsystem), std::string(message), timestamp_now()};
     std::cerr << entry.timestamp << ' ' << label(entry.level) << " [" << entry.subsystem << "] "
               << entry.message << '\n';
+    if (log_file_)
+    {
+        log_file_ << entry.timestamp << ' ' << label(entry.level) << " [" << entry.subsystem << "] "
+                  << entry.message << '\n';
+    }
     if (entries_.size() < kHistoryCapacity)
     {
         entries_.push_back(std::move(entry));
