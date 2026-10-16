@@ -1,4 +1,6 @@
+#include "igi/asset_io.hpp"
 #include "igi/mission_assets.hpp"
+#include "igi/qvm_initializer.hpp"
 
 #include "mef_native.h"
 #include "olm_parser.h"
@@ -196,6 +198,50 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
             "Mission asset adapter must emit the retail model triangles");
     require(scene_mesh->attachment_count > 0 && scene_mesh->maximum_attachment_depth > 0,
             "Retail Level 1 model must resolve MEF attachments through magicobj.qvm");
+    const auto magic_script_bytes = igi::assets::read_file(game_directory / "magicobj/magicobj.qvm");
+    const igi::assets::QvmInitializer magic_script{igi::assets::BinaryView(magic_script_bytes)};
+    const MefAttachment* attached_geometry = nullptr;
+    std::string attached_model_name;
+    for (const auto& attachment : geometry.mefAttachments)
+    {
+        const auto attachment_name_end =
+            std::find(std::begin(attachment.name), std::end(attachment.name), '\0');
+        const std::string attachment_name(std::begin(attachment.name), attachment_name_end);
+        for (const auto& call : magic_script.calls())
+        {
+            if (call.function == "DefineMagicObj" && call.arguments.size() >= 3 &&
+                call.arguments[0].text == attachment_name && call.arguments[2].text != "TASKTYPE_DEATHZONE" &&
+                mission_assets.has_model(call.arguments[1].text))
+            {
+                attached_geometry = &attachment;
+                attached_model_name = call.arguments[1].text;
+                break;
+            }
+        }
+        if (attached_geometry != nullptr)
+        {
+            break;
+        }
+    }
+    require(attached_geometry != nullptr && !attached_model_name.empty(),
+            "Retail MEF attachment must resolve to a drawable magic-object model");
+    const auto attached_mesh = mission_assets.model(attached_model_name);
+    require(scene_mesh->triangles.size() == geometry.triangles.size() + attached_mesh->triangles.size(),
+            "Flattened Level 1 MEF must include the mapped child model triangles exactly once");
+    const auto& child_position = attached_mesh->triangles.front().vertices.front().position;
+    const auto& flattened_position =
+        scene_mesh->triangles[geometry.triangles.size()].vertices.front().position;
+    const igi::gameplay::Vector3 expected_attached_position{
+        attached_geometry->r00 * child_position.x + attached_geometry->r03 * child_position.y +
+            attached_geometry->r06 * child_position.z + attached_geometry->px / 4096.0f,
+        attached_geometry->r01 * child_position.x + attached_geometry->r04 * child_position.y +
+            attached_geometry->r07 * child_position.z + attached_geometry->py / 4096.0f,
+        attached_geometry->r02 * child_position.x + attached_geometry->r05 * child_position.y +
+            attached_geometry->r08 * child_position.z + attached_geometry->pz / 4096.0f};
+    require(std::abs(flattened_position.x - expected_attached_position.x) < 0.00001f &&
+                std::abs(flattened_position.y - expected_attached_position.y) < 0.00001f &&
+                std::abs(flattened_position.z - expected_attached_position.z) < 0.00001f,
+            "Flattened MEF child position and orientation must match the retail ATTA transform");
     require(std::all_of(scene_mesh->triangles.begin(),
                         scene_mesh->triangles.end(),
                         [](const igi::gameplay::SceneTriangle& triangle)
