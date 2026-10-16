@@ -25,6 +25,13 @@ struct HudState {
     bool mission_failed{};
 };
 
+struct SoldierRenderData {
+    NavigationPosition position{};
+    float yaw{};
+    bool is_alive{true};
+    bool is_combat{false};
+};
+
 // Portable software rasterizer: writes ARGB8888 into an owned framebuffer.
 // No OS or graphics API dependencies; a platform backend only blits pixels().
 class SoftwareRenderer final {
@@ -39,6 +46,10 @@ public:
         const MissionWorld& world,
         const CameraView& camera,
         const std::vector<NavigationPosition>& soldier_positions);
+    void render_world(
+        const MissionWorld& world,
+        const CameraView& camera,
+        const std::vector<SoldierRenderData>& soldiers);
     void render_hud(const HudState& hud);
     void clear_with_sky(const CameraView& camera);
 

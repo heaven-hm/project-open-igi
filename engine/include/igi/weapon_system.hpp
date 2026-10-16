@@ -58,6 +58,8 @@ public:
     [[nodiscard]] const WeaponStats& current_stats() const noexcept;
     [[nodiscard]] int rounds_in_magazine() const noexcept;
     [[nodiscard]] int reserve_ammo() const noexcept;
+    void add_reserve_ammo(int count) noexcept;
+    void add_reserve_ammo(std::size_t slot, int count) noexcept;
     [[nodiscard]] float muzzle_flash() const noexcept { return muzzle_flash_; }
     [[nodiscard]] bool is_reloading() const noexcept { return reload_remaining_seconds_ > 0.0f; }
 

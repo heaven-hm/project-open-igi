@@ -203,6 +203,20 @@ void SoftwareRenderer::render_world(
     const MissionWorld& world,
     const CameraView& camera,
     const std::vector<NavigationPosition>& soldier_positions) {
+    std::vector<SoldierRenderData> soldiers;
+    soldiers.reserve(soldier_positions.size());
+    for (const auto& pos : soldier_positions) {
+        SoldierRenderData srd;
+        srd.position = pos;
+        soldiers.push_back(srd);
+    }
+    render_world(world, camera, soldiers);
+}
+
+void SoftwareRenderer::render_world(
+    const MissionWorld& world,
+    const CameraView& camera,
+    const std::vector<SoldierRenderData>& soldiers) {
     if (width_ == 0 || height_ == 0) {
         return;
     }
@@ -334,27 +348,45 @@ void SoftwareRenderer::render_world(
         }
     }
 
-    // Soldier placeholders until skinned soldier meshes are wired in.
-    static const TextureImage kSoldierTexture = [] {
+    // Render soldiers with state cues (patrol camo, combat alert, or fallen corpse)
+    static const TextureImage kCombatTexture = [] {
         TextureImage t;
-        t.name = "soldier_flat";
+        t.name = "soldier_combat";
         t.width = 1;
         t.height = 1;
-        t.argb_pixels = {0xFFB04030u};
+        t.argb_pixels = {0xFFD03020u};
         return t;
     }();
-    for (const NavigationPosition& s : soldier_positions) {
-        const float half_w = 1000.0f;
-        const float h = 7372.8f;
+    static const TextureImage kPatrolTexture = [] {
+        TextureImage t;
+        t.name = "soldier_patrol";
+        t.width = 1;
+        t.height = 1;
+        t.argb_pixels = {0xFF4A6838u};
+        return t;
+    }();
+    static const TextureImage kDeadTexture = [] {
+        TextureImage t;
+        t.name = "soldier_dead";
+        t.width = 1;
+        t.height = 1;
+        t.argb_pixels = {0xFF382824u};
+        return t;
+    }();
+
+    for (const SoldierRenderData& s : soldiers) {
+        const float half_w = s.is_alive ? 1000.0f : 1500.0f;
+        const float h = s.is_alive ? 7372.8f : 800.0f;
         const double rx = static_cast<double>(basis.right.x) * half_w;
         const double ry = static_cast<double>(basis.right.y) * half_w;
-        ClipVertex bl = world_to_clip(s.x - rx, s.y - ry, s.z, 0.0f, 1.0f);
-        ClipVertex br = world_to_clip(s.x + rx, s.y + ry, s.z, 1.0f, 1.0f);
-        ClipVertex tl = world_to_clip(s.x - rx, s.y - ry, s.z + h, 0.0f, 0.0f);
-        ClipVertex tr = world_to_clip(s.x + rx, s.y + ry, s.z + h, 1.0f, 0.0f);
+        ClipVertex bl = world_to_clip(s.position.x - rx, s.position.y - ry, s.position.z, 0.0f, 1.0f);
+        ClipVertex br = world_to_clip(s.position.x + rx, s.position.y + ry, s.position.z, 1.0f, 1.0f);
+        ClipVertex tl = world_to_clip(s.position.x - rx, s.position.y - ry, s.position.z + h, 0.0f, 0.0f);
+        ClipVertex tr = world_to_clip(s.position.x + rx, s.position.y + ry, s.position.z + h, 1.0f, 0.0f);
         bl.light = br.light = tl.light = tr.light = 1.0f;
-        draw_clipped_triangle(bl, br, tr, &kSoldierTexture, focal);
-        draw_clipped_triangle(bl, tr, tl, &kSoldierTexture, focal);
+        const TextureImage* tex = !s.is_alive ? &kDeadTexture : (s.is_combat ? &kCombatTexture : &kPatrolTexture);
+        draw_clipped_triangle(bl, br, tr, tex, focal);
+        draw_clipped_triangle(bl, tr, tl, tex, focal);
     }
 }
 

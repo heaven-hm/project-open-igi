@@ -88,6 +88,23 @@ bool GameSession::update(
             weapons_.request_reload();
         }
 
+        // Player interaction with world objects (doors, terminals, pickups)
+        if (input_snapshot.was_pressed(InputCode::KeyF) || input_snapshot.was_pressed(InputCode::KeyE)) {
+            const auto interact = world_->try_interact(player_.position, player_.yaw);
+            if (interact.interacted) {
+                if (!interact.script_variable.empty()) {
+                    expression_state_.set_boolean(interact.script_variable, true);
+                    expression_state_.set_number(interact.script_variable, 1.0);
+                }
+                if (interact.ammo_count > 0) {
+                    weapons_.add_reserve_ammo(interact.ammo_count);
+                }
+            }
+        }
+
+        // Advance dynamic world entities (doors)
+        world_->update_doors(dt);
+
         // Fire. The aim includes accumulated recoil, as the retail camera does.
         const WeaponFireResult fire = weapons_.update(
             dt,
@@ -107,6 +124,10 @@ bool GameSession::update(
             const float limit = wall.hit ? wall.fraction : 1.0f;
             if (ai_.apply_shot(fire.shot, limit).hit) {
                 hit_marker_seconds_ = 0.2f;
+            } else if (wall.hit && wall.object_index >= 0) {
+                if (world_->damage_object(wall.object_index, fire.shot.damage)) {
+                    hit_marker_seconds_ = 0.2f;
+                }
             }
         }
         hit_marker_seconds_ = std::max(0.0f, hit_marker_seconds_ - dt);
@@ -153,7 +174,18 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
     camera.eye = player_.eye_position();
     camera.yaw = player_.yaw + weapons_.yaw_recoil() + weapons_.view_sway_yaw() + weapons_.view_recoil_yaw();
     camera.pitch = player_.pitch + weapons_.pitch_recoil() + weapons_.view_sway_pitch() + weapons_.view_recoil_pitch();
-    renderer_.render_world(*world_, camera, ai_.alive_positions());
+
+    std::vector<SoldierRenderData> soldier_renders;
+    soldier_renders.reserve(ai_.agents().size());
+    for (const auto& a : ai_.agents()) {
+        SoldierRenderData srd;
+        srd.position = a.position;
+        srd.yaw = a.yaw;
+        srd.is_alive = a.alive();
+        srd.is_combat = (a.state == SoldierState::Combat);
+        soldier_renders.push_back(srd);
+    }
+    renderer_.render_world(*world_, camera, soldier_renders);
     HudState hud;
     hud.health_fraction = player_.health / 100.0f;
     const int magazine = weapons_.current_stats().magazine_capacity;

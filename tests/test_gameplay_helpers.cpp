@@ -1,4 +1,5 @@
 #include "test_framework.hpp"
+#include "igi/mission_world.hpp"
 #include "igi/player_fall_impact.hpp"
 #include "igi/player_ladder.hpp"
 #include "igi/weapon_view_recoil.hpp"
@@ -106,3 +107,63 @@ TEST_CASE(GameplayHelpers, LadderActivationAndClimbLine) {
     const igi::gameplay::Vector3 far_pos{0.0f, 10000.0f, 1000.0f};
     ASSERT_FALSE(ladder.can_activate(far_pos, facing_ladder));
 }
+
+TEST_CASE(GameplayHelpers, WorldObjectInteractionAndDestruction) {
+    igi::gameplay::MissionWorld world;
+    auto& objects = world.placed_objects_mutable();
+
+    // 1. Add interactive door
+    igi::gameplay::PlacedObject door;
+    door.class_name = "Door";
+    door.instance_name = "door_01";
+    door.kind = igi::gameplay::PlacedObjectKind::Door;
+    door.is_interactive = true;
+    door.position = {1000.0, 0.0, 0.0};
+    door.closed_position = door.position;
+    door.basis = igi::gameplay::MissionWorld::basis_from_euler(0.0f, 0.0f, 0.0f);
+    objects.push_back(door);
+
+    // 2. Add computer terminal
+    igi::gameplay::PlacedObject terminal;
+    terminal.class_name = "Terminal";
+    terminal.instance_name = "train_computer";
+    terminal.kind = igi::gameplay::PlacedObjectKind::Terminal;
+    terminal.is_interactive = true;
+    terminal.position = {0.0, 1000.0, 0.0};
+    objects.push_back(terminal);
+
+    // 3. Add destructible camera
+    igi::gameplay::PlacedObject camera;
+    camera.class_name = "SCamera";
+    camera.instance_name = "cam_yard";
+    camera.kind = igi::gameplay::PlacedObjectKind::SecurityCamera;
+    camera.is_destructible = true;
+    camera.health = 30.0f;
+    camera.position = {0.0, 0.0, 5000.0};
+    objects.push_back(camera);
+
+    // Player positioned in front of door looking at door (+X direction, yaw = 0)
+    const auto door_interact = world.try_interact({0.0, 0.0, 0.0}, 0.0f, 3000.0f);
+    ASSERT_TRUE(door_interact.interacted);
+    ASSERT_TRUE(door_interact.kind == igi::gameplay::PlacedObjectKind::Door);
+    ASSERT_TRUE(world.placed_objects()[0].is_open);
+
+    // Update doors advances door position
+    world.update_doors(0.25f);
+    ASSERT_NEAR(world.placed_objects()[0].open_progress, 0.5f, 1e-3f);
+    ASSERT_TRUE(world.placed_objects()[0].position.x > 1000.0);
+
+    // Player facing terminal (+Y direction, yaw = pi/2)
+    constexpr float kHalfPi = 1.5707963f;
+    const auto term_interact = world.try_interact({0.0, 0.0, 0.0}, kHalfPi, 3000.0f);
+    ASSERT_TRUE(term_interact.interacted);
+    ASSERT_TRUE(term_interact.kind == igi::gameplay::PlacedObjectKind::Terminal);
+    ASSERT_EQ(term_interact.script_variable, "DOWNLOAD_DONE");
+
+    // Camera takes damage
+    ASSERT_FALSE(world.damage_object(2, 20.0f)); // 30 - 20 = 10 (not destroyed yet)
+    ASSERT_FALSE(world.placed_objects()[2].is_destroyed);
+    ASSERT_TRUE(world.damage_object(2, 15.0f)); // 10 - 15 <= 0 (destroyed!)
+    ASSERT_TRUE(world.placed_objects()[2].is_destroyed);
+}
+

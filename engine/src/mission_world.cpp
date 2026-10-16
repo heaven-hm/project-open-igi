@@ -1496,4 +1496,132 @@ const TextureImage* MissionWorld::terrain_tile_texture(int tile_index) const noe
     return &terrain_tiles_[idx];
 }
 
+MissionWorld::InteractionResult MissionWorld::try_interact(
+    NavigationPosition player_pos,
+    float player_yaw,
+    float interaction_radius_units) noexcept {
+    InteractionResult result{};
+    const double radius_sq = static_cast<double>(interaction_radius_units) *
+                             static_cast<double>(interaction_radius_units);
+    const float look_x = std::cos(player_yaw);
+    const float look_y = std::sin(player_yaw);
+
+    int best_index = -1;
+    double best_dist_sq = radius_sq;
+
+    for (std::size_t i = 0; i < placed_objects_.size(); ++i) {
+        PlacedObject& obj = placed_objects_[i];
+        if (!obj.is_interactive || obj.is_picked_up) {
+            continue;
+        }
+
+        const double dx = obj.position.x - player_pos.x;
+        const double dy = obj.position.y - player_pos.y;
+        const double dz = std::fabs(obj.position.z - player_pos.z);
+        if (dz > 16384.0) {
+            continue;
+        }
+
+        const double dist_sq = dx * dx + dy * dy;
+        if (dist_sq > best_dist_sq) {
+            continue;
+        }
+
+        const double dist = std::sqrt(dist_sq);
+        if (dist > 1.0) {
+            const float facing = static_cast<float>((dx * look_x + dy * look_y) / dist);
+            if (facing < 0.1f) {
+                continue; // Not facing the object
+            }
+        }
+
+        best_dist_sq = dist_sq;
+        best_index = static_cast<int>(i);
+    }
+
+    if (best_index < 0) {
+        return result;
+    }
+
+    PlacedObject& target = placed_objects_[static_cast<std::size_t>(best_index)];
+    result.interacted = true;
+    result.kind = target.kind;
+    result.object_index = best_index;
+
+    switch (target.kind) {
+        case PlacedObjectKind::Door:
+            target.is_open = !target.is_open;
+            result.message = target.is_open ? "Door opened" : "Door closed";
+            IGI_LOG_INFO("Interaction", "Player toggled door: " << target.instance_name << " (now " << (target.is_open ? "open" : "closed") << ")");
+            break;
+        case PlacedObjectKind::Terminal:
+        case PlacedObjectKind::Switch:
+            target.is_open = true;
+            result.script_variable = "DOWNLOAD_DONE";
+            result.message = "Data download initiated";
+            IGI_LOG_INFO("Interaction", "Player accessed terminal: " << target.instance_name);
+            break;
+        case PlacedObjectKind::GunPickup:
+        case PlacedObjectKind::AmmoPickup:
+            target.is_picked_up = true;
+            result.weapon_id = target.pickup_weapon_id;
+            result.ammo_count = target.pickup_ammo_count > 0 ? target.pickup_ammo_count : 30;
+            result.message = "Ammo collected";
+            IGI_LOG_INFO("Interaction", "Player picked up item: " << target.instance_name << " (" << result.ammo_count << " rounds)");
+            break;
+        default:
+            result.message = "Interacted with " + target.class_name;
+            break;
+    }
+
+    return result;
+}
+
+void MissionWorld::update_doors(float delta_seconds) noexcept {
+    constexpr float kDoorSpeed = 2.0f; // Opens or closes in 0.5s
+    for (PlacedObject& obj : placed_objects_) {
+        if (obj.kind != PlacedObjectKind::Door) {
+            continue;
+        }
+
+        const float target = obj.is_open ? 1.0f : 0.0f;
+        if (std::fabs(obj.open_progress - target) <= 1.0e-4f) {
+            continue;
+        }
+
+        if (obj.open_progress < target) {
+            obj.open_progress = std::min(target, obj.open_progress + kDoorSpeed * delta_seconds);
+        } else {
+            obj.open_progress = std::max(target, obj.open_progress - kDoorSpeed * delta_seconds);
+        }
+
+        // Slide door along local X axis
+        const Vector3 slide_offset = transform_local_to_world_offset(
+            {obj.open_progress * 4000.0f, 0.0f, 0.0f},
+            obj.basis);
+        obj.position.x = obj.closed_position.x + static_cast<double>(slide_offset.x);
+        obj.position.y = obj.closed_position.y + static_cast<double>(slide_offset.y);
+        obj.position.z = obj.closed_position.z + static_cast<double>(slide_offset.z);
+    }
+}
+
+bool MissionWorld::damage_object(int object_index, float damage) noexcept {
+    if (object_index < 0 || static_cast<std::size_t>(object_index) >= placed_objects_.size()) {
+        return false;
+    }
+    PlacedObject& obj = placed_objects_[static_cast<std::size_t>(object_index)];
+    if (!obj.is_destructible || obj.is_destroyed) {
+        return false;
+    }
+
+    obj.health = std::max(0.0f, obj.health - damage);
+    if (obj.health <= 0.0f) {
+        obj.is_destroyed = true;
+        IGI_LOG_INFO("Destruction", "Object destroyed: " << obj.class_name << " " << obj.instance_name);
+        return true;
+    }
+    return false;
+}
+
 } // namespace igi::gameplay
+

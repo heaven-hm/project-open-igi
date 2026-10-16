@@ -160,9 +160,12 @@ void AiSystem::update_patrol(SoldierAgent& agent, const MissionWorld& world, flo
     if (agent.has_walk_target) {
         return; // movement handled by caller
     }
-    if (agent.patrol_cursor >= spawn.patrol_commands.size()) {
+    if (spawn.patrol_commands.empty()) {
         agent.state = SoldierState::Idle;
         return;
+    }
+    if (agent.patrol_cursor >= spawn.patrol_commands.size()) {
+        agent.patrol_cursor = 0;
     }
 
     const PatrolCommand& cmd = spawn.patrol_commands[agent.patrol_cursor++];

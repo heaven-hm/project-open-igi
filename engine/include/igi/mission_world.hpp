@@ -220,6 +220,28 @@ public:
         const ModelMesh& mesh,
         std::vector<Vector3>& out_bone_world_offsets) const noexcept;
 
+    struct InteractionResult {
+        bool interacted{};
+        PlacedObjectKind kind{};
+        int object_index{-1};
+        std::string message;
+        std::string weapon_id;
+        int ammo_count{};
+        std::string script_variable;
+    };
+
+    // Attempts to interact with the nearest interactive object within interaction_radius_units.
+    [[nodiscard]] InteractionResult try_interact(
+        NavigationPosition player_pos,
+        float player_yaw,
+        float interaction_radius_units = 6144.0f) noexcept;
+
+    // Advances animated doors (open/close movement).
+    void update_doors(float delta_seconds) noexcept;
+
+    // Applies damage to destructible placed objects (security cameras, explosive props)
+    [[nodiscard]] bool damage_object(int object_index, float damage) noexcept;
+
     [[nodiscard]] static Basis3x3 basis_from_euler(float alpha, float beta, float gamma) noexcept;
     [[nodiscard]] static Vector3 transform_local_to_world_offset(
         Vector3 local_point,

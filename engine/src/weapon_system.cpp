@@ -108,6 +108,17 @@ int WeaponSystem::reserve_ammo() const noexcept {
     return slots_[current_slot_].reserve;
 }
 
+void WeaponSystem::add_reserve_ammo(int count) noexcept {
+    add_reserve_ammo(current_slot_, count);
+}
+
+void WeaponSystem::add_reserve_ammo(std::size_t slot, int count) noexcept {
+    if (slot < slots_.size() && count > 0) {
+        slots_[slot].reserve += count;
+        IGI_LOG_DEBUG("Weapon", "Added " << count << " reserve rounds to " << slots_[slot].stats.name << " (now " << slots_[slot].reserve << ")");
+    }
+}
+
 void WeaponSystem::request_reload() noexcept {
     const Slot& slot = slots_[current_slot_];
     if (reload_remaining_seconds_ > 0.0f || slot.reserve <= 0 ||
