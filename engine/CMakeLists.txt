@@ -267,6 +267,9 @@ if(BUILD_TESTING)
             --game "${IGI_GAME_PATH}" --cache "${CMAKE_CURRENT_BINARY_DIR}/test-cache")
         add_test(NAME igi_reject_invalid_graphics COMMAND igi_game --graphics invalid --headless)
         set_tests_properties(igi_reject_invalid_graphics PROPERTIES WILL_FAIL TRUE)
+        add_test(NAME igi_reject_invalid_texture_anisotropy
+            COMMAND igi_game --texture-anisotropy 3 --headless)
+        set_tests_properties(igi_reject_invalid_texture_anisotropy PROPERTIES WILL_FAIL TRUE)
     endif()
 
     add_executable(human_movement_integrator_probe

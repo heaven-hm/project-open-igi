@@ -49,6 +49,7 @@ struct RuntimeOptions final
     igi::gameplay::TerrainDetail terrain_detail = igi::gameplay::TerrainDetail::enhanced;
     igi::gameplay::TextureFilterMode texture_filter_mode =
         igi::gameplay::TextureFilterMode::trilinear_mipmap;
+    std::optional<std::uint32_t> texture_anisotropy;
     std::optional<std::uint64_t> frames;
     std::filesystem::path game_directory;
     std::filesystem::path cache_directory;
@@ -256,6 +257,15 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                 throw std::runtime_error("Texture filter must be nearest or trilinear");
             }
         }
+        else if (argument == "--texture-anisotropy")
+        {
+            const auto anisotropy = parse_integer<std::uint32_t>(next_argument(), 1, 16);
+            if ((anisotropy & (anisotropy - 1)) != 0)
+            {
+                throw std::runtime_error("Texture anisotropy must be 1, 2, 4, 8, or 16");
+            }
+            options.texture_anisotropy = anisotropy;
+        }
         else if (argument == "--fps")
         {
             options.target_fps = parse_integer(next_argument(), 15, 360);
@@ -282,6 +292,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                          "[--benchmark]\n"
                          "    [--graphics low|medium|high|enhanced|ultra]\n"
                          "    [--texture-filter nearest|trilinear]\n"
+                         "    [--texture-anisotropy 1|2|4|8|16]\n"
                          "    [--profile name] (controls come from original config.qvm)\n"
                          "Movement, jump, crouch, fire, reload and weapon bindings use "
                          "config.qvm.\n"
@@ -483,6 +494,15 @@ int run(RuntimeOptions options, const char* executable)
             }
         }
     }
+    const std::uint32_t preset_anisotropy =
+        options.terrain_detail == igi::gameplay::TerrainDetail::ultra ? 16u
+        : options.terrain_detail == igi::gameplay::TerrainDetail::high ? 8u
+        : options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? 4u
+                                                                         : 1u;
+    const std::uint32_t selected_anisotropy =
+        options.texture_filter_mode == igi::gameplay::TextureFilterMode::nearest_mipmap
+            ? 1u
+            : options.texture_anisotropy.value_or(preset_anisotropy);
     log(Severity::information,
         "graphics",
         std::string("Texture filter=") +
@@ -491,7 +511,8 @@ int run(RuntimeOptions options, const char* executable)
                  : "trilinear mip filtering") +
             "; textures=" + std::to_string(scene.textures.size()) +
             "; authored mip levels=" + std::to_string(authored_mipmap_count) +
-            "; generated mip levels=" + std::to_string(generated_mipmap_count));
+            "; generated mip levels=" + std::to_string(generated_mipmap_count) +
+            "; anisotropy=" + std::to_string(selected_anisotropy) + "x");
     igi::gameplay::GameSimulation simulation(scene);
     simulation.set_difficulty(options.difficulty);
     log(Severity::information,
@@ -501,7 +522,8 @@ int run(RuntimeOptions options, const char* executable)
             "; target_fps=" + (options.target_fps > 0 ? std::to_string(options.target_fps) : "uncapped"));
     igi::gameplay::InputController controls(
         igi::gameplay::load_input_configuration(options.game_directory, options.profile));
-    igi::gameplay::SceneRenderer frame(options.width, options.height, 0, options.texture_filter_mode);
+    igi::gameplay::SceneRenderer frame(
+        options.width, options.height, 0, options.texture_filter_mode, selected_anisotropy);
     const auto replay = load_replay(options.replay);
     std::ofstream trace;
     if (!options.trace.empty())

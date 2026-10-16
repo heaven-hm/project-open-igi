@@ -44,7 +44,7 @@ Functional regressions passing does not establish matching original behavior.
 
 10. macOS developer-mode toggle: replace the F11 shortcut with `G`, while preserving F9 as an alternate, because macOS may consume F11 as a system media/display key before SDL receives it. Startup and HUD help now show the replacement. The developer-mode gameplay probe passes; the actual keyboard event still needs the owner's manual check in the app.
 
-11. Texture mip sampling: retain authored TEX v11 mip levels, generate additional levels for enhanced filtering, and expose `--texture-filter nearest|trilinear`. The Level 1 one-frame runtime loaded 426 textures and rendered both modes; the focused renderer probe verifies authored/generated selection and serial/parallel consistency. Retail `GR_MIPMAP_NEAREST_DITHER` is not yet reproduced, and this does not establish Vanilla or Enhanced image parity.
+11. Texture filtering: retain authored TEX v11 mip levels, generate additional levels for enhanced filtering, and expose `--texture-filter nearest|trilinear` plus `--texture-anisotropy 1|2|4|8|16`. Default ratios follow the C# presets; the focused renderer probe verifies authored/generated selection, anisotropic detail retention, and serial/parallel consistency. Level 1 runtime captures verify 1x and 16x produce different output. Retail `GR_MIPMAP_NEAREST_DITHER` is not yet reproduced, and this does not establish Vanilla or Enhanced image parity. The CPU 16x path is too expensive for high-resolution gameplay; a GPU renderer remains outstanding.
 
 ## Measured original Level 2
 

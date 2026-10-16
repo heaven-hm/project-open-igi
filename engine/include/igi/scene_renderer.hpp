@@ -29,7 +29,8 @@ class SceneRenderer final
     SceneRenderer(int width,
                   int height,
                   std::size_t worker_count = 0,
-                  TextureFilterMode texture_filter_mode = TextureFilterMode::nearest_mipmap);
+                  TextureFilterMode texture_filter_mode = TextureFilterMode::nearest_mipmap,
+                  std::uint32_t maximum_anisotropy = 1);
     void render(const MissionScene& scene,
                 const GameSimulation& simulation,
                 const FreeCamera* free_camera = nullptr);
@@ -80,6 +81,7 @@ class SceneRenderer final
     int last_scanline_{};
     std::vector<std::unique_ptr<SceneRenderer>> render_workers_;
     TextureFilterMode texture_filter_mode_;
+    std::uint32_t maximum_anisotropy_{};
 };
 
 } // namespace igi::gameplay

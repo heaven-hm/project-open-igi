@@ -101,22 +101,39 @@ adjacent levels. Generated mip colors are alpha-premultiplied to reduce dark
 fringes around transparent texels. These are sampling modes, not claims of a
 complete Vanilla or Enhanced preset implementation.
 
-The focused renderer CTest passes generated-level selection, authored-level
-selection, mode separation, and serial/parallel pixel equality. A one-frame
-Level 1 run loaded 426 textures (102 authored and 2,496 generated mip levels)
-and saved captures in both modes. The captures have different SHA-256 digests,
-confirming the mode reaches the real-asset render path. This is a C++ runtime
-check; no paired retail frame, C# frame comparison, anisotropic filtering, or
-Direct3D 7 backend comparison was made. Retail's default dithered-nearest mode
-is not reproduced by the current nearest-level sampler, so Vanilla pixel parity
-remains open.
+`--texture-anisotropy 1|2|4|8|16` selects the maximum anisotropic tap ratio for
+trilinear mode. Without an override, the C++ terrain preset selects 1x for low
+and medium, 4x for enhanced, 8x for high, and 16x for ultra. These numbers follow
+the local C# OpenIGI preset table; they are a rendering reference, not retail
+binary evidence. Long pixel footprints are filtered with multiple samples
+along the major texture-gradient axis and the mip level from the minor axis.
 
-For the recorded 320x240 single-frame captures, nearest rendered in `0.015162 s`
-and trilinear in `0.018817 s`; these one-run timings are diagnostic, not a
-repeatable benchmark. Capture SHA-256 values were `eaaf3830fd3b4d5b9bbc8f9a88052f6a808699571cecdf6937b077fcb11c1f0b`
-(nearest) and `913770f213831262a6c99b90825a08103b8273ede5dc200d9be7482514140838`
-(trilinear). Both executions initialized 413 objects, 28 soldiers, and one
+The focused renderer CTest passes generated-level selection, authored-level
+selection, anisotropic detail retention, mode separation, and serial/parallel
+pixel equality. A one-frame Level 1 run loaded 426 textures (102 authored and
+2,496 generated mip levels) and saved captures in each mode. The captures have
+different SHA-256 digests, confirming the mode reaches the real-asset render
+path. No paired retail frame or C# frame comparison was made. Retail's default
+dithered-nearest mode is not reproduced by the current nearest-level sampler,
+so Vanilla pixel parity remains open. There is no Direct3D 7 backend yet.
+
+The nearest and trilinear 320x240 captures have SHA-256 values
+`eaaf3830fd3b4d5b9bbc8f9a88052f6a808699571cecdf6937b077fcb11c1f0b` and
+`913770f213831262a6c99b90825a08103b8273ede5dc200d9be7482514140838`.
+Those initial runs rendered for screenshot capture after the loop and are not
+performance measurements. Both initialized 413 objects, 28 soldiers, and one
 Level 1 tick.
+
+On the same build and Level 1 asset cache, a separate 320x240 low-terrain
+`--benchmark` render took `0.020591 s` at 1x and `0.032188 s` at 16x. Capture SHA-256 values were
+`913770f213831262a6c99b90825a08103b8273ede5dc200d9be7482514140838` (1x) and
+`a56148f0b72bdc35db983f74895ee5882ab38558f10c6d14618efac54ef594c1` (16x).
+At 320x240 with enhanced terrain (2,087,084 triangles), the automatic 4x
+setting completed a benchmarked render in `0.175893 s`. These are single-frame
+diagnostic timings, not stable averages. The CPU 16x path is visibly more
+expensive and needs high-resolution profiling before it can be called playable.
+At 160x120, Ultra loaded 5,655,922 terrain triangles, selected 16x by default,
+and completed one benchmarked render in `0.295876 s`.
 
 ## Native application loop
 

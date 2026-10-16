@@ -10,6 +10,22 @@ int main()
 {
     try
     {
+        bool rejected_invalid_anisotropy = false;
+        try
+        {
+            SceneRenderer invalid_anisotropy_renderer(
+                640, 480, 1, TextureFilterMode::trilinear_mipmap, 3);
+            (void)invalid_anisotropy_renderer;
+        }
+        catch (const std::runtime_error&)
+        {
+            rejected_invalid_anisotropy = true;
+        }
+        if (!rejected_invalid_anisotropy)
+        {
+            throw std::runtime_error("Renderer must reject unsupported anisotropy levels");
+        }
+
         MissionScene scene;
         scene.collision_triangles = {{{Vector3{-10, -10, 0}, Vector3{10, -10, 0}, Vector3{10, 10, 0}}},
                                      {{Vector3{-10, -10, 0}, Vector3{10, 10, 0}, Vector3{-10, 10, 0}}}};
@@ -145,8 +161,36 @@ int main()
         {
             throw std::runtime_error("Nearest mip filtering must use authored TEX mip levels");
         }
+
+        MissionScene anisotropic_scene = mipmap_scene;
+        anisotropic_scene.textures[0].mipmaps[0].authored = false;
+        anisotropic_scene.textures[0].mipmaps[0].pixels.assign(16, 0xff00ff00u);
+        anisotropic_scene.textures[0].mipmaps.push_back(
+            {2, 2, std::vector<std::uint32_t>(4, 0xff0000ffu), false});
+        anisotropic_scene.textures[0].mipmaps.push_back(
+            {1, 1, std::vector<std::uint32_t>(1, 0xffff0000u), false});
+        anisotropic_scene.static_triangles[0].vertices[1].texture_u = 1024;
+        anisotropic_scene.static_triangles[0].vertices[2].texture_u = 512;
+        anisotropic_scene.static_triangles[0].vertices[2].texture_v = 2;
+        GameSimulation anisotropic_simulation(anisotropic_scene);
+        SceneRenderer isotropic_renderer(640, 480, 1, TextureFilterMode::trilinear_mipmap, 1);
+        SceneRenderer anisotropic_renderer(640, 480, 1, TextureFilterMode::trilinear_mipmap, 4);
+        SceneRenderer parallel_anisotropic_renderer(640, 480, 3, TextureFilterMode::trilinear_mipmap, 4);
+        isotropic_renderer.render(anisotropic_scene, anisotropic_simulation);
+        anisotropic_renderer.render(anisotropic_scene, anisotropic_simulation);
+        parallel_anisotropic_renderer.render(anisotropic_scene, anisotropic_simulation);
+        const auto isotropic_pixel = isotropic_renderer.pixels()[240 * 640 + 320];
+        const auto anisotropic_pixel = anisotropic_renderer.pixels()[240 * 640 + 320];
+        if (((isotropic_pixel >> 16) & 255u) <= ((anisotropic_pixel >> 16) & 255u) ||
+            !std::equal(anisotropic_renderer.pixels().begin(),
+                        anisotropic_renderer.pixels().end(),
+                        parallel_anisotropic_renderer.pixels().begin()))
+        {
+            throw std::runtime_error(
+                "Anisotropic filtering must retain detail along a stretched texture footprint and match parallel rendering");
+        }
         std::cout << "Renderer probe passed: perspective projection, nearest depth, near-plane clipping, "
-                     "invalid texture, nearest and trilinear mip filtering\n";
+                     "invalid texture, mip filtering and anisotropic filtering\n";
         return 0;
     }
     catch (const std::exception& exception)

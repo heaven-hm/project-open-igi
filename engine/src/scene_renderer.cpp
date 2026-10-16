@@ -88,7 +88,12 @@ std::uint32_t texture_sample(const SceneTexture& texture,
                              float vertical,
                              float mip_level,
                              TextureFilterMode filter_mode,
-                             std::size_t usable_mipmap_count)
+                             std::size_t usable_mipmap_count,
+                             float horizontal_u_derivative,
+                             float horizontal_v_derivative,
+                             float vertical_u_derivative,
+                             float vertical_v_derivative,
+                             std::uint32_t maximum_anisotropy)
 {
     if (usable_mipmap_count == 0 || !std::isfinite(mip_level) || mip_level <= 0.0f)
     {
@@ -103,6 +108,66 @@ std::uint32_t texture_sample(const SceneTexture& texture,
         return texture_sample_level(texture, nearest_index, horizontal, vertical);
     }
 
+    if (maximum_anisotropy > 1)
+    {
+        const float horizontal_texture_width = horizontal_u_derivative * static_cast<float>(texture.width);
+        const float horizontal_texture_height = horizontal_v_derivative * static_cast<float>(texture.height);
+        const float vertical_texture_width = vertical_u_derivative * static_cast<float>(texture.width);
+        const float vertical_texture_height = vertical_v_derivative * static_cast<float>(texture.height);
+        const float horizontal_footprint_squared = horizontal_texture_width * horizontal_texture_width +
+                                                   horizontal_texture_height * horizontal_texture_height;
+        const float vertical_footprint_squared = vertical_texture_width * vertical_texture_width +
+                                                 vertical_texture_height * vertical_texture_height;
+        const bool horizontal_is_major = horizontal_footprint_squared >= vertical_footprint_squared;
+        const float major_footprint = std::sqrt(std::max(horizontal_footprint_squared,
+                                                         vertical_footprint_squared));
+        const float minor_footprint = std::sqrt(std::max(0.000001f,
+                                                         std::min(horizontal_footprint_squared,
+                                                                  vertical_footprint_squared)));
+        const auto requested_tap_count = static_cast<std::uint32_t>(
+            std::clamp(std::ceil(major_footprint / minor_footprint), 1.0f, 16.0f));
+        const std::uint32_t tap_count = std::min(requested_tap_count, maximum_anisotropy);
+        if (tap_count > 1)
+        {
+            const float anisotropic_mip_level = minor_footprint > 1.0f ? std::log2(minor_footprint) : 0.0f;
+            const float bounded_anisotropic_mip_level =
+                std::clamp(anisotropic_mip_level, 0.0f, static_cast<float>(usable_mipmap_count));
+            const auto anisotropic_lower_index =
+                static_cast<std::size_t>(std::floor(bounded_anisotropic_mip_level));
+            const auto anisotropic_upper_index =
+                std::min(anisotropic_lower_index + 1, available_level_count - 1);
+            const float anisotropic_mip_blend =
+                bounded_anisotropic_mip_level - static_cast<float>(anisotropic_lower_index);
+            std::array<std::uint32_t, 16> anisotropic_samples{};
+            for (std::uint32_t tap_index = 0; tap_index < tap_count; ++tap_index)
+            {
+                const float tap_offset = (static_cast<float>(tap_index) + 0.5f) /
+                                             static_cast<float>(tap_count) -
+                                         0.5f;
+                const float sample_u = horizontal +
+                    (horizontal_is_major ? horizontal_u_derivative : vertical_u_derivative) * tap_offset;
+                const float sample_v = vertical +
+                    (horizontal_is_major ? horizontal_v_derivative : vertical_v_derivative) * tap_offset;
+                const auto lower_color =
+                    texture_sample_level(texture, anisotropic_lower_index, sample_u, sample_v);
+                const auto upper_color =
+                    texture_sample_level(texture, anisotropic_upper_index, sample_u, sample_v);
+                anisotropic_samples[tap_index] = mix_color(lower_color, upper_color, anisotropic_mip_blend);
+            }
+            std::uint32_t averaged_color = 0;
+            for (const std::uint32_t channel_shift : {0u, 8u, 16u, 24u})
+            {
+                std::uint32_t channel_total = 0;
+                for (std::uint32_t tap_index = 0; tap_index < tap_count; ++tap_index)
+                {
+                    channel_total += (anisotropic_samples[tap_index] >> channel_shift) & 255u;
+                }
+                averaged_color |= (channel_total / tap_count) << channel_shift;
+            }
+            return averaged_color;
+        }
+    }
+
     const auto upper_index = std::min(lower_index + 1, available_level_count - 1);
     const auto lower_color = texture_sample_level(texture, lower_index, horizontal, vertical);
     const auto upper_color = texture_sample_level(texture, upper_index, horizontal, vertical);
@@ -114,8 +179,12 @@ std::uint32_t texture_sample(const SceneTexture& texture,
 SceneRenderer::SceneRenderer(int width,
                              int height,
                              std::size_t worker_count,
-                             TextureFilterMode texture_filter_mode)
-    : width_(width), height_(height), texture_filter_mode_(texture_filter_mode)
+                             TextureFilterMode texture_filter_mode,
+                             std::uint32_t maximum_anisotropy)
+    : width_(width),
+      height_(height),
+      texture_filter_mode_(texture_filter_mode),
+      maximum_anisotropy_(maximum_anisotropy)
 {
     if (width < 160 || height < 120 || width > 3840 || height > 2160)
     {
@@ -132,12 +201,18 @@ SceneRenderer::SceneRenderer(int width,
     {
         throw std::runtime_error("Renderer worker count exceeds the supported limit");
     }
+    if (maximum_anisotropy_ == 0 || maximum_anisotropy_ > 16 ||
+        (maximum_anisotropy_ & (maximum_anisotropy_ - 1)) != 0)
+    {
+        throw std::runtime_error("Texture anisotropy must be one of 1, 2, 4, 8, or 16");
+    }
     if (worker_count > 1)
     {
         render_workers_.reserve(worker_count);
         for (std::size_t worker_index = 0; worker_index < worker_count; ++worker_index)
         {
-            auto worker = std::make_unique<SceneRenderer>(width_, height_, 1, texture_filter_mode_);
+            auto worker = std::make_unique<SceneRenderer>(
+                width_, height_, 1, texture_filter_mode_, maximum_anisotropy_);
             worker->first_scanline_ = static_cast<int>(worker_index * height_ / worker_count);
             worker->last_scanline_ = static_cast<int>((worker_index + 1) * height_ / worker_count);
             render_workers_.push_back(std::move(worker));
@@ -344,20 +419,20 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                                          third_weight * third.texture_v) *
                                         pixel_depth;
                 float mip_level = 0.0f;
+                float texture_u_horizontal_derivative = 0.0f;
+                float texture_u_vertical_derivative = 0.0f;
+                float texture_v_horizontal_derivative = 0.0f;
+                float texture_v_vertical_derivative = 0.0f;
                 if (usable_mipmap_count > 0)
                 {
-                    const float texture_u_horizontal_derivative =
-                        pixel_depth * (texture_u_horizontal_step -
-                                       texture_u * inverse_depth_horizontal_step);
-                    const float texture_u_vertical_derivative =
-                        pixel_depth * (texture_u_vertical_step -
-                                       texture_u * inverse_depth_vertical_step);
-                    const float texture_v_horizontal_derivative =
-                        pixel_depth * (texture_v_horizontal_step -
-                                       texture_v * inverse_depth_horizontal_step);
-                    const float texture_v_vertical_derivative =
-                        pixel_depth * (texture_v_vertical_step -
-                                       texture_v * inverse_depth_vertical_step);
+                    texture_u_horizontal_derivative =
+                        pixel_depth * (texture_u_horizontal_step - texture_u * inverse_depth_horizontal_step);
+                    texture_u_vertical_derivative =
+                        pixel_depth * (texture_u_vertical_step - texture_u * inverse_depth_vertical_step);
+                    texture_v_horizontal_derivative =
+                        pixel_depth * (texture_v_horizontal_step - texture_v * inverse_depth_horizontal_step);
+                    texture_v_vertical_derivative =
+                        pixel_depth * (texture_v_vertical_step - texture_v * inverse_depth_vertical_step);
                     const float horizontal_texture_width =
                         texture_u_horizontal_derivative * static_cast<float>(texture.width);
                     const float horizontal_texture_height =
@@ -379,8 +454,17 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                         mip_level = 0.5f * std::log2(maximum_footprint_squared);
                     }
                 }
-                const auto sampled = texture_sample(
-                    texture, texture_u, texture_v, mip_level, texture_filter_mode_, usable_mipmap_count);
+                const auto sampled = texture_sample(texture,
+                                                    texture_u,
+                                                    texture_v,
+                                                    mip_level,
+                                                    texture_filter_mode_,
+                                                    usable_mipmap_count,
+                                                    texture_u_horizontal_derivative,
+                                                    texture_v_horizontal_derivative,
+                                                    texture_u_vertical_derivative,
+                                                    texture_v_vertical_derivative,
+                                                    maximum_anisotropy_);
                 if (triangle.firing_only)
                 {
                     const std::uint32_t r = (sampled >> 16) & 255;
