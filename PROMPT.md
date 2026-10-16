@@ -34,6 +34,7 @@ The codebase must stay portable across major operating systems. macOS is the onl
 
 - Keep the game core OS-independent from the beginning. The MVP ships on macOS, including Apple Silicon where practical; Windows and Linux platform backends come later.
 - Prefer stable, well-supported language standards and toolchains. C++17 or C++20 and C11 are acceptable; Rust is optional. Choose the language per subsystem based on interoperability, fidelity, performance, debugging, and maintenance. Do not add multiple languages without a concrete benefit.
+- Implementation code must use only C, C++, or Rust. The macOS application layer is C++ with SDL2; do not add Swift or Objective-C++ sources.
 - Do not call operating-system APIs from gameplay, physics, AI, weapons, scripting, or file-format code. Keep the game core OS-independent and put windowing, graphics, input, filesystem, and audio behind narrow platform interfaces. Implement a macOS backend for the MVP. Windows and Linux backends come later. The Mac renderer must reproduce the retail image without using the original DirectX API.
 - The original executable is 32-bit x86 and uses DirectX 7. Treat its calling conventions and numeric behavior as reverse-engineering evidence. Do not copy its Windows platform layer into the macOS runtime.
 - Favor readable, explicit code and narrow interfaces between platform services and game logic. The core should compile without OS-specific headers; platform APIs belong only in the matching backend. Keep later Windows and Linux implementations behind the same interfaces, and do not claim support until each is built and verified.
@@ -117,7 +118,7 @@ Repository: `/Users/haseeb-mir/Documents/Code/project-open-igi` (branch `feature
 
 The application project is a native macOS C++20 codebase. The reverse-engineering catalog and C11 prototype live separately in `/Users/haseeb-mir/Documents/Code/project-igi-natives`; use their research as evidence and do not mistake their builds for the game application.
 
-Current C++ engine components include original-format parsers, a game-asset catalog, a native registry, locomotion-state graph data, and movement equations. A CMake build produces `igi_gameplay`, `igi_asset_probe`, and `igi_native_probe`. It does not yet produce an `igi.app` or a playable game.
+Current C++ engine components include original-format parsers, a game-asset catalog that retains mission graphs by ID, an REA-backed graph-coordinate transform, a native registry, locomotion-state graph data, and initial movement equations. A macOS CMake build produces `igi_gameplay`, diagnostic probes, and an `igi.app` application shell with a fixed-step loop and native window. It does not yet produce a playable game.
 
 The research repository's current collision notes state:
 
@@ -129,7 +130,7 @@ The research repository's current collision notes state:
 - The latest recorded CMake build produced an arm64 `libiginatives.dylib` and included the wall-sweep translation. Build acceptance does not establish correct native semantics.
 - Synthetic movement checks were reported for damping, position updates, callback ordering, query budget, and null-pointer logging. These are isolated mock tests, not a running game.
 - No runtime-verified native gameplay or retail-versus-port movement parity has been established. The prior CrossOver attempt was blocked by an unavailable Wine server before useful movement samples were collected.
-- The `project-open-igi` C++ application currently has no complete native game loop, level renderer, input integration, world collision provider, weapon loop, AI runtime, or macOS app bundle. Asset probes and a static native registry are not a runnable game.
+- The `project-open-igi` C++ application now has a shared fixed-step loop and a native macOS app shell. The SDL input path now feeds fixed-step snapshots into a central GameSession clock, but no player/world simulation, level renderer, collision provider, weapon loop, or AI runtime is integrated. The shell is not a playable game.
 - The current mission asset probe loads 11 graph files for mission 1, keyed by graph ID; it retains graph 4019 with 264 nodes and 876 edges. This proves parsing and cataloging only, not AI pathfinding parity.
 
 Movement research notes:
@@ -153,6 +154,14 @@ Continue in the C++20 `project-open-igi` application repository. Use `project-ig
 7. Keep the goal open until a native `igi.app` launches original assets into a mission and movement, weapons, and basic AI operate in a measured gameplay loop.
 
 Do not spend the initial milestone on menu animation, intro presentation, or complete sound implementation. Do not overclaim “100% identical”; use measured parity results and explicitly listed gaps.
+
+## Branch and release policy
+
+- `develop` is the experimental integration branch. Use prerelease tags such as `v0.1.0-alpha.1`, `v0.1.0-beta.1`, `v0.1.0-rc.1`, or `v0.1.0-experimental.1` only for commits reachable from `develop`.
+- `main` is the stable release branch. Use plain semantic version tags such as `v0.1.0` only for commits reachable from `main`. The repository currently has `main`; do not create or use `master` as a parallel stable branch.
+- Feature branches are not release sources. Never publish a stable release from `develop` or an experimental release from `main`.
+- Current GitHub releases are source snapshots only. A non-playable `igi.app` shell exists; do not claim a playable game until gameplay is implemented and verified.
+- Do not push, tag, publish, or merge unless the owner explicitly asks for that operation.
 
 ## 9. Coding and maintenance standards requested by the owner
 

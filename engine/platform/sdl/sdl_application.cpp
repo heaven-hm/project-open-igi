@@ -1,4 +1,5 @@
 #include "igi/game_loop.hpp"
+#include "igi/game_session.hpp"
 #include "igi/input_state.hpp"
 #include "igi/platform_application.hpp"
 
@@ -6,6 +7,7 @@
 
 #include <chrono>
 #include <cstdint>
+#include <filesystem>
 #include <iostream>
 #include <string>
 
@@ -95,8 +97,14 @@ namespace {
 void process_event(
     const SDL_Event& event,
     bool& application_is_running,
-    igi::gameplay::InputState& input_state) noexcept {
+    igi::gameplay::InputState& input_state,
+    igi::gameplay::GameSession& game_session) noexcept {
     switch (event.type) {
+        case SDL_MOUSEMOTION:
+            game_session.add_mouse_motion(
+                static_cast<float>(event.motion.xrel),
+                static_cast<float>(event.motion.yrel));
+            break;
         case SDL_QUIT:
             application_is_running = false;
             break;
@@ -132,8 +140,6 @@ void process_event(
 namespace igi::platform {
 
 int run_application(int argument_count, char** arguments) {
-    (void)argument_count;
-    (void)arguments;
 
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS) != 0) {
         std::cerr << "[ERROR] [Application] SDL initialization failed: "
@@ -156,19 +162,31 @@ int run_application(int argument_count, char** arguments) {
     }
 
     igi::gameplay::GameLoop game_loop;
+    igi::gameplay::GameSession game_session;
     igi::gameplay::InputState input_state;
-    igi::gameplay::InputSnapshot last_input_snapshot;
     bool application_is_running = true;
+    bool simulation_update_succeeded = true;
     auto previous_frame_time = std::chrono::steady_clock::now();
     auto previous_title_update_time = previous_frame_time;
     std::uint64_t rendered_frame_count = 0;
 
     std::cout << "[INFO] [Application] C++ SDL application loop started.\n";
 
+    const std::filesystem::path game_root =
+        argument_count > 1 ? std::filesystem::path(arguments[1])
+                           : std::filesystem::path("/Users/haseeb-mir/Downloads/IGI");
+    if (game_session.load_mission(game_root, 1)) {
+        std::cout << "[INFO] [Application] " << game_session.mission_status() << '\n';
+        (void)SDL_SetRelativeMouseMode(SDL_TRUE);
+    } else {
+        std::cerr << "[WARNING] [Application] Mission load failed from '"
+                  << game_root.string() << "'. Usage: igi <path-to-IGI-install>\n";
+    }
+
     while (application_is_running) {
         SDL_Event event{};
         while (SDL_PollEvent(&event) != 0) {
-            process_event(event, application_is_running, input_state);
+            process_event(event, application_is_running, input_state, game_session);
         }
 
         const auto current_frame_time = std::chrono::steady_clock::now();
@@ -178,9 +196,19 @@ int run_application(int argument_count, char** arguments) {
 
         const igi::gameplay::FrameAdvance frame_advance = game_loop.advance(
             elapsed_time.count(), [&](double fixed_delta_seconds) {
-                (void)fixed_delta_seconds;
-                last_input_snapshot = input_state.consume_tick();
-                // The central gameplay-session update will be called here next.
+                if (!simulation_update_succeeded) {
+                    return;
+                }
+
+                const igi::gameplay::InputSnapshot tick_input_snapshot =
+                    input_state.consume_tick();
+                simulation_update_succeeded = game_session.update(
+                    fixed_delta_seconds, tick_input_snapshot);
+                if (!simulation_update_succeeded) {
+                    std::cerr << "[ERROR] [Gameplay] Session update rejected "
+                                 "an invalid fixed simulation step.\n";
+                    application_is_running = false;
+                }
             });
         ++rendered_frame_count;
 
@@ -192,10 +220,31 @@ int run_application(int argument_count, char** arguments) {
             break;
         }
 
-        const Uint32 background_color = SDL_MapRGB(
-            window_surface->format, 9, 14, 11);
-        if (SDL_FillRect(window_surface, nullptr, background_color) != 0 ||
-            SDL_UpdateWindowSurface(application_window) != 0) {
+        constexpr std::uint32_t kRenderWidth = 480;
+        constexpr std::uint32_t kRenderHeight = 300;
+        game_session.render(kRenderWidth, kRenderHeight);
+
+        bool presented = false;
+        if (game_session.has_mission()) {
+            const auto& frame_pixels = game_session.renderer().pixels();
+            SDL_Surface* frame_surface = SDL_CreateRGBSurfaceWithFormatFrom(
+                const_cast<std::uint32_t*>(frame_pixels.data()),
+                static_cast<int>(kRenderWidth),
+                static_cast<int>(kRenderHeight),
+                32,
+                static_cast<int>(kRenderWidth * sizeof(std::uint32_t)),
+                SDL_PIXELFORMAT_ARGB8888);
+            if (frame_surface != nullptr) {
+                presented = SDL_BlitScaled(frame_surface, nullptr, window_surface, nullptr) == 0;
+                SDL_FreeSurface(frame_surface);
+            }
+        }
+        if (!presented) {
+            const Uint32 background_color = SDL_MapRGB(
+                window_surface->format, 9, 14, 11);
+            (void)SDL_FillRect(window_surface, nullptr, background_color);
+        }
+        if (SDL_UpdateWindowSurface(application_window) != 0) {
             std::cerr << "[ERROR] [Application] Window presentation failed: "
                       << SDL_GetError() << '\n';
             application_is_running = false;
@@ -209,11 +258,11 @@ int run_application(int argument_count, char** arguments) {
             const std::string window_title =
                 "Project Open I.G.I. | frame " +
                 std::to_string(rendered_frame_count) + " | tick " +
-                std::to_string(frame_advance.total_simulation_steps) +
+                std::to_string(game_session.simulation_tick_count()) +
                 " | held " + std::to_string(
                     input_state.current_snapshot().down_control_count()) +
                 " | pressed " + std::to_string(
-                    last_input_snapshot.pressed_control_count());
+                    game_session.current_input().pressed_control_count());
             SDL_SetWindowTitle(application_window, window_title.c_str());
         }
 

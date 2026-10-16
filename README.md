@@ -7,12 +7,11 @@ weapons, and enemy AI. Original game data is loaded from the retail game folder.
 
 ## Current state
 
-The repository currently contains a buildable gameplay library with a
-49-state human locomotion graph, initial movement equations, a converter-backed
-retail asset catalog probe (`igi_asset_probe`), and a C++20 native engine registry
-(`igi_native_probe`) cataloging 5,732 verified retail engine functions (100.00%
-Binary Ninja binary view coverage) across all 10 core engine subsystems. It is not
-yet a playable game and does not yet produce `igi.app`. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
+The repository builds a C++20 gameplay library, a fixed-step application loop,
+asset and native diagnostic probes, and a C++ SDL2 macOS application shell
+packaged as `igi.app`. The shell opens a window and runs a provisional 60 Hz loop;
+player control, level rendering, collision queries, weapons, and AI are not
+integrated yet, so it is not a playable game. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
 and [verification notes](engine/VERIFICATION.md). Runtime parity against the
 original game remains to be measured.
 
@@ -24,9 +23,22 @@ graphics, input, filesystem, and audio APIs belong behind platform interfaces.
 The current product MVP targets macOS. Windows and Linux backends are later work
 and are not supported or verified yet.
 
+## Branch and release policy
+
+`develop` is the integration branch for experimental work. Version tags such as
+`v0.1.0-alpha.1`, `v0.1.0-beta.1`, `v0.1.0-rc.1`, or
+`v0.1.0-experimental.1` create GitHub prereleases only when their commit is part
+of `develop`. Stable version tags such as `v0.1.0` create GitHub releases only
+when their commit is part of `main`. Feature branches are not release sources.
+
+The release workflow currently publishes source snapshots only. This repository
+does not yet build a playable game; its current `igi.app` is only a window and
+fixed-step-loop shell, so releases must not claim to contain a playable macOS port. See [release policy](docs/RELEASE_POLICY.md).
+
 ## Build
 
-Requirements: CMake 3.20+ and a C++20 compiler.
+Requirements: CMake 3.20+, a C++20 compiler, SDL2, and either an SDL2 CMake
+package or pkg-config metadata.
 
 ```sh
 cmake -S . -B build

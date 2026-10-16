@@ -16,7 +16,7 @@ class GameLoop final {
 public:
     using SimulationUpdate = std::function<void(double)>;
 
-    static constexpr double fixed_step_seconds = 1.0 / 60.0;
+    static constexpr double fixed_step_seconds = 1.0 / 30.0; // retail tick rate (recovered per-tick constants assume 30 Hz)
     static constexpr double maximum_frame_delta_seconds = 0.25;
     static constexpr std::uint32_t maximum_simulation_steps_per_frame = 8;
 

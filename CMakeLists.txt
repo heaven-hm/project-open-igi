@@ -3,3 +3,7 @@ project(project_open_igi LANGUAGES C CXX)
 
 add_subdirectory(engine)
 add_subdirectory(engine/formats)
+
+enable_testing()
+add_subdirectory(tests)
+

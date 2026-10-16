@@ -1,11 +1,18 @@
 add_library(igi_gameplay STATIC
     src/ai_navigation.cpp
     src/game_loop.cpp
+    src/game_session.cpp
     src/input_state.cpp
     src/game_assets.cpp
     src/human_motion.cpp
     src/human_locomotion_graph.cpp
     src/native_registry.cpp
+    src/mission_world.cpp
+    src/world_collision.cpp
+    src/software_renderer.cpp
+    src/weapon_system.cpp
+    src/ai_system.cpp
+    src/logger.cpp
 )
 target_include_directories(igi_gameplay PUBLIC include)
 target_compile_features(igi_gameplay PUBLIC cxx_std_20)
@@ -21,6 +28,11 @@ add_executable(igi_native_probe tools/native_probe.cpp)
 target_link_libraries(igi_native_probe PRIVATE igi_gameplay)
 target_compile_features(igi_native_probe PRIVATE cxx_std_20)
 set_target_properties(igi_native_probe PROPERTIES CXX_EXTENSIONS OFF)
+
+add_executable(igi_world_probe tools/world_probe.cpp)
+target_link_libraries(igi_world_probe PRIVATE igi_gameplay)
+target_compile_features(igi_world_probe PRIVATE cxx_std_20)
+set_target_properties(igi_world_probe PROPERTIES CXX_EXTENSIONS OFF)
 
 find_package(SDL2 CONFIG QUIET)
 if(TARGET SDL2::SDL2)

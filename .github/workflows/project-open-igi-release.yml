@@ -1,0 +1,74 @@
+name: Project Open IGI Source Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: write
+
+jobs:
+  publish-source-release:
+    if: ${{ !endsWith(github.ref_name, '-sdk-expansion') }}
+    name: Validate branch and publish source release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate tag and source branch
+        id: release-kind
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="${GITHUB_REF_NAME}"
+          target_commit="$(git rev-list -n 1 "${GITHUB_REF}")"
+          git fetch origin main develop --no-tags
+
+          if [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-(alpha|beta|rc|experimental)\.[0-9]+$ ]]; then
+            git merge-base --is-ancestor "$target_commit" origin/develop || {
+              echo "Prerelease tag $tag must point to a commit reachable from develop." >&2
+              exit 1
+            }
+            echo "prerelease=true" >> "$GITHUB_OUTPUT"
+            echo "release_channel=experimental" >> "$GITHUB_OUTPUT"
+          elif [[ "$tag" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            git merge-base --is-ancestor "$target_commit" origin/main || {
+              echo "Stable tag $tag must point to a commit reachable from main." >&2
+              exit 1
+            }
+            echo "prerelease=false" >> "$GITHUB_OUTPUT"
+            echo "release_channel=stable" >> "$GITHUB_OUTPUT"
+          else
+            echo "Unsupported release tag: $tag" >&2
+            echo "Use vX.Y.Z for stable or vX.Y.Z-alpha.N, -beta.N, -rc.N, or -experimental.N for prereleases." >&2
+            exit 1
+          fi
+
+      - name: Publish source-only GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_TAG: ${{ github.ref_name }}
+          RELEASE_CHANNEL: ${{ steps.release-kind.outputs.release_channel }}
+          IS_PRERELEASE: ${{ steps.release-kind.outputs.prerelease }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          notes_file="$(mktemp)"
+          cat > "$notes_file" <<EOF
+          ## Project Open IGI $RELEASE_TAG ($RELEASE_CHANNEL)
+
+          This release contains the source snapshot for the $RELEASE_CHANNEL channel.
+
+          **This is not a playable game release.** The repository currently builds only a non-playable macOS \`igi.app\` shell. No retail game assets are included.
+          EOF
+
+          release_arguments=("$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file "$notes_file")
+          if [[ "$IS_PRERELEASE" == "true" ]]; then
+            release_arguments+=(--prerelease)
+          fi
+          gh release create "${release_arguments[@]}" --repo "$GITHUB_REPOSITORY"

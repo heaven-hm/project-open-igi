@@ -13,8 +13,8 @@ original game files. Converter parsers are vendored under `formats/vendor`
 with their upstream license notices in `formats/vendor/notices`.
 
 This is still an engine prototype. The macOS `igi_game` bundle is a C++ SDL2
-application shell with a fixed-step loop; it does not yet implement grounded
-movement,
+application shell with a fixed-step loop and a central session clock. The
+session receives per-tick input but does not yet implement grounded movement,
 collision response, weapon state, AI routing/runtime, or level rendering. Those
 require matching native body semantics and runtime traces from the retail
 executable; do not infer them from a graph.

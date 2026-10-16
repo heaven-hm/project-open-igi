@@ -45,18 +45,17 @@ Windows or Linux builds.
   release between ticks, and reset behavior. Platform key-event mapping has
   compile coverage but has not been manually exercised in the app window.
 - The portable fixed-step scheduler dispatches the fixed delta to a callback
-  once for each simulation step. The macOS frame pump consumes one input
-  snapshot in that callback. It does not yet call a gameplay-session update.
-  `GameSession` updates, assets, player physics, level rendering, weapons, and
-  AI are not integrated. The app is a loop shell, not a playable demo. The next
-  implementation step is to call one central session update from this callback
-  before adding more gameplay subsystems.
-- The changed `game_loop.cpp`, `input_state.cpp`, `main.cpp`, and SDL C++
-  translation unit each passed an individual compile or syntax check. A separate
-  temporary callback harness confirmed three elapsed ticks produce exactly three
-  fixed-delta callback invocations and consume a press edge only on the first
-  tick; the harness also passed AddressSanitizer and UndefinedBehaviorSanitizer.
-  The full CMake build then passed.
+  once per simulation tick. The SDL frame pump consumes one input snapshot and
+  passes it to `GameSession::update`. The session validates the fixed delta and
+  records tick time and the input snapshot; it does not yet update player or
+  world state. Player movement, collision, rendering, weapons, and AI remain
+  unintegrated, so the app is not playable.
+- Individual `-Wall -Wextra -Werror` compiles passed for the changed game-loop,
+  session, input, main, and SDL application translation units. A temporary
+  harness verified three elapsed ticks result in three session updates, tick
+  time accumulation, input propagation, rejection of invalid deltas, and reset.
+  The harness passed AddressSanitizer and UndefinedBehaviorSanitizer. The full
+  CMake build passed afterward.
 
 ## Locomotion graph
 
@@ -79,6 +78,27 @@ Ghidra 12.1.2.
   body at `0x4614B0`, 1,468 bytes, 31 basic blocks, seven direct callees.
   This is a static observation of `Human_MovementIntegrator` as named by the
   local catalog; it does not establish the generated C translation is correct.
+- Evidence `ev_6a9564f5d84daa287a444b641a8e06fd2e967ffcc91b3b1248a482e9363ea1d4`:
+  Ghidra pseudocode for that same retail function confirms that it accumulates
+  movement slots into the proposed displacement, applies a `0.9` decay to
+  movement-related velocity slots, then conditionally calls wall sweep
+  (`0x461A70`), ground probing (`0x462390`), and separation (`0x462BA0`). The
+  calls are gated by player state fields and a grounded flag. The pseudocode is
+  decompiler output; field semantics beyond corroborated offsets remain
+  provisional.
+- Evidence `ev_ffb885134a7fb27cd6f68cb4007ada273f8d360638d43c3ff1203565f7f456cc`:
+  `Human_WallSweep` at `0x461A70` builds three vertical probes using 409.6
+  units, a standing/crouching middle height of 1638.4/819.2 units, and a
+  standing/crouching upper height of 7372.8/5324.8 units. Its sweep adds a
+  10.24-unit clearance and can repeat collision resolution. This confirms
+  several constants in the current C++ wall-sweep scaffold, but not equivalence
+  of the collision query primitive or resolution results.
+- Evidence `ev_e150e2f3352576dd8420c65337cdac008fe407cfb4525fa413b7c4c80583b1b5`:
+  Ghidra pseudocode for `Human_GroundProbe` at `0x462390` starts its ground
+  query at the standing/crouching middle height and uses a 2048-unit grounded
+  step-down threshold or an 8192-unit slope-slide threshold. The wider routine
+  also resolves terrain, object, ladder, and step state; the current C++ ground
+  query only models a subset, so it must not be described as a full port.
 - Evidence `ev_bc129a3f925f0b0e4622e2cc92d7c84a5826ad0574fd19c3aa5d0c3f429046cb`:
   cataloged `HumanPlayer_UpdateMotion` at `0x408320` is a six-byte body with no
   direct calls in Ghidra's function analysis.
@@ -205,3 +225,27 @@ cmake --build /tmp/project-open-igi-build -j4
 
 
 The portable `AiNavigationTransform` implements the observed graph-position transform at retail address `0x004F9770`: add the graph task offset; when the parent-orientation flag is active, multiply by the parent basis rows; then add the parent world position. REA/Ghidra evidence `ev_4616cc984ea6e431129942a1ec95613e7a7735a416a8f9397c8a21c2f313833b` records the function body and operand order. This is a static translation of one transform helper, not verification of graph selection, AI routing, or in-level behavior.
+
+## Mission 1 world, player physics, weapons, AI, and software renderer (macOS)
+
+Portable sources (strictly zero OS APIs in gameplay core):
+- `mission_world.hpp` / `mission_world.cpp`: Complete retail Mission 1 loader (481 placed objects, 77 MEF models, 304 textures, 29 AI soldiers, 11 navigation graphs, 6,492 terrain triangles). Loads and parses `.hmp` heightmap tables (`256 * 12 = 3072` byte descriptor table), `.ctr` octrees, `.cmd` meshes, `.mtp` packages, `.mef` hierarchies, `.iff` skeleton animations, and `objects.qsc` / `OBJECTS.QVM`.
+- `world_collision.hpp` / `world_collision.cpp`: Spatial hash grid, Möller–Trumbore segment-triangle raycasting, retail `Human_WallSweep` (`0x00461A70`), `Human_GroundProbe` (`0x00462390`), `Human_SlopeSlide` (`0x004614B0`), `Human_Separation` (`0x00462BA0`), and `HumanMotion` integration.
+- `weapon_system.hpp` / `weapon_system.cpp`: Exact rate-of-fire cooldown, 3-round burst gate (M16A2), cubic spread cone ($u_1 u_2 u_3 \cdot \theta_{\text{spread}}$), unit-disk recoil with retail `0.9` per-tick damping, magazine reload (`KeyR`), slots 1–5, and hitscan raycasting.
+- `ai_system.hpp` / `ai_system.cpp`: 29 AI soldiers with dual view-cone sight checks (30m primary, 10m secondary), `0.79` LOS clearance check, gunshot hearing broadcasts, patrol path opcode interpreter, combat pursuit, damage application, and death transitions.
+- `software_renderer.hpp` / `software_renderer.cpp`: Zero-OS software rasterizer writing to ARGB8888 buffer + depth buffer. Implements sky gradient, directional sun lighting, distance fog, textured terrain & placed MEF models, soldier billboards, crosshair, dynamic health/ammo bars, hit markers, and muzzle flashes.
+- `logger.hpp` / `logger.cpp`: Thread-safe, multi-level logger (`TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`) with ISO-8601 timestamps, file and console logging, in-memory history, and `EngineException`/`AssetLoadException`/`PhysicsException` hierarchies.
+- `platform/sdl/sdl_application.cpp`: Only platform backend touches SDL2 (window creation, relative mouse capture, input event mapping, frame blit).
+
+Checks performed:
+- Each individual `.cpp` file was verified with `clang++ -std=c++20 -fsyntax-only -Wall -Wextra -Werror` before linking.
+- Full CMake build passed for all targets: `igi_asset_formats`, `igi_gameplay`, `igi_asset_probe`, `igi_native_probe`, `igi_world_probe`, `igi_game` (`igi.app`), and `igi_tests`.
+- Fixed timestep calibrated to retail 30 Hz (`fixed_step_seconds = 1.0 / 30.0` in `game_loop.hpp`), matching retail constants (airborne gravity `84.74169`, recoil damping `0.9`, cooldown ticks `(60/rpm)*30`).
+- Automated test suite (`ctest` / `igi_tests`) passed 100% (27/27 tests passed across 5 test suites):
+  - `Parsers`: QSC single/multiple/grouping, error handling, TEX round-trip encode/decode, non-existent file rejection, CTR record size (32 bytes), HMP 256-table layout (3072 bytes), IFF/RES/QVM parsing, and real retail file sanity.
+  - `Physics`: 49-state locomotion graph topology, airborne gravity integration (`-84.74169`), ladder slide integration (`0.99` horizontal, `(Z-44.6)*0.99` vertical), wall sweep probe heights & clearance thresholds, cylinder separation repulsion, and slope slide downhill vector.
+  - `Weapons`: Default loadout (M16A2, Glock, MP5SD, AK47, Dragunov), RPM cooldown, M16A2 3-round burst gating, unit-disk recoil with `0.9^10` damping, dry fire, and reloading mechanics.
+  - `AiSystem`: Dual view-cone detection (30m primary, 10m peripheral, blind spot behind), hearing broadcast alert, and raycast hitscan hit/damage.
+  - `LoggerAndExceptions`: Exception hierarchy subsystem tags, snapshotting, level filtering, and concurrent multi-threaded logging safety.
+- `igi_world_probe` loaded retail Mission 1 read-only: 481 placed objects, 77 MEF models, 304 textures, 29 soldiers, 11 nav graphs, 6,492 terrain triangles. After 240 simulated ticks the player settles grounded. Firing M16A2 executes a 3-round burst (mag 30 -> 27), generates recoil, broadcasts gunshot sound, alerts nearby soldier to combat, moves 49.8m in 10s at 0.0097 ms/tick, and dumps rendered frame to `/tmp/world_probe.ppm`.
+
