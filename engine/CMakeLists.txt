@@ -44,6 +44,11 @@ target_link_libraries(igi_world_probe PRIVATE igi_gameplay)
 target_compile_features(igi_world_probe PRIVATE cxx_std_20)
 set_target_properties(igi_world_probe PROPERTIES CXX_EXTENSIONS OFF)
 
+add_executable(igi_capture_screenshots tools/capture_game_screenshots.cpp)
+target_link_libraries(igi_capture_screenshots PRIVATE igi_gameplay)
+target_compile_features(igi_capture_screenshots PRIVATE cxx_std_20)
+set_target_properties(igi_capture_screenshots PROPERTIES CXX_EXTENSIONS OFF)
+
 find_package(SDL2 CONFIG QUIET)
 if(TARGET SDL2::SDL2)
     set(IGI_SDL_TARGET SDL2::SDL2)

@@ -116,6 +116,14 @@ void process_event(
             }
             break;
         case SDL_KEYDOWN:
+            if (event.key.keysym.scancode == SDL_SCANCODE_F12) {
+                const std::string shot_name = "igi_screenshot_" +
+                    std::to_string(game_session.simulation_tick_count()) + ".bmp";
+                if (game_session.renderer().save_bmp(shot_name)) {
+                    std::cout << "[INFO] [Screenshot] Saved screenshot to " << shot_name << '\n';
+                }
+            }
+            [[fallthrough]];
         case SDL_KEYUP: {
             igi::gameplay::InputCode input_code =
                 igi::gameplay::InputCode::Unknown;
@@ -172,15 +180,20 @@ int run_application(int argument_count, char** arguments) {
 
     std::cout << "[INFO] [Application] C++ SDL application loop started.\n";
 
-    const std::filesystem::path game_root =
-        argument_count > 1 ? std::filesystem::path(arguments[1])
-                           : std::filesystem::path("/Users/haseeb-mir/Downloads/IGI");
-    if (game_session.load_mission(game_root, 1)) {
+    std::filesystem::path game_root = "/Users/haseeb-mir/Downloads/IGI";
+    if (argument_count > 1) {
+        game_root = arguments[1];
+    } else if (std::filesystem::exists("COMMON") || std::filesystem::exists("MISSIONS")) {
+        game_root = ".";
+    }
+    const int mission_number =
+        argument_count > 2 ? std::max(1, std::atoi(arguments[2])) : 1;
+    if (game_session.load_mission(game_root, mission_number)) {
         std::cout << "[INFO] [Application] " << game_session.mission_status() << '\n';
         (void)SDL_SetRelativeMouseMode(SDL_TRUE);
     } else {
         std::cerr << "[WARNING] [Application] Mission load failed from '"
-                  << game_root.string() << "'. Usage: igi <path-to-IGI-install>\n";
+                  << game_root.string() << "'. Usage: igi <path-to-IGI-install> [mission-number]\n";
     }
 
     while (application_is_running) {

@@ -3,6 +3,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <fstream>
 
 namespace igi::gameplay {
 
@@ -526,6 +527,71 @@ void SoftwareRenderer::render_hud(const HudState& hud) {
         fill_rect(prompt_x - 6, prompt_y - 3, prompt_x + prompt_w + 6, prompt_y + 11, 0xCC101824u);
         HudFont::draw_string(color_.data(), w, h, prompt_x, prompt_y, hud.interaction_prompt, 0xFFFFFFFFu, 1, true);
     }
+}
+
+bool SoftwareRenderer::save_bmp(const std::filesystem::path& path) const {
+    if (width_ == 0 || height_ == 0 || color_.empty()) {
+        return false;
+    }
+    std::ofstream out(path, std::ios::binary);
+    if (!out.is_open()) {
+        return false;
+    }
+
+    const std::uint32_t row_bytes = width_ * 3;
+    const std::uint32_t padding = (4 - (row_bytes % 4)) % 4;
+    const std::uint32_t padded_row = row_bytes + padding;
+    const std::uint32_t image_size = padded_row * height_;
+    const std::uint32_t file_size = 54 + image_size;
+
+    // 14-byte File Header
+    const std::uint8_t file_header[14] = {
+        'B', 'M',
+        static_cast<std::uint8_t>(file_size & 0xFF),
+        static_cast<std::uint8_t>((file_size >> 8) & 0xFF),
+        static_cast<std::uint8_t>((file_size >> 16) & 0xFF),
+        static_cast<std::uint8_t>((file_size >> 24) & 0xFF),
+        0, 0, 0, 0,
+        54, 0, 0, 0
+    };
+    out.write(reinterpret_cast<const char*>(file_header), 14);
+
+    // 40-byte DIB Header (BITMAPINFOHEADER)
+    const std::uint8_t dib_header[40] = {
+        40, 0, 0, 0,
+        static_cast<std::uint8_t>(width_ & 0xFF),
+        static_cast<std::uint8_t>((width_ >> 8) & 0xFF),
+        static_cast<std::uint8_t>((width_ >> 16) & 0xFF),
+        static_cast<std::uint8_t>((width_ >> 24) & 0xFF),
+        static_cast<std::uint8_t>(height_ & 0xFF),
+        static_cast<std::uint8_t>((height_ >> 8) & 0xFF),
+        static_cast<std::uint8_t>((height_ >> 16) & 0xFF),
+        static_cast<std::uint8_t>((height_ >> 24) & 0xFF),
+        1, 0,
+        24, 0,
+        0, 0, 0, 0,
+        static_cast<std::uint8_t>(image_size & 0xFF),
+        static_cast<std::uint8_t>((image_size >> 8) & 0xFF),
+        static_cast<std::uint8_t>((image_size >> 16) & 0xFF),
+        static_cast<std::uint8_t>((image_size >> 24) & 0xFF),
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0,
+        0, 0, 0, 0
+    };
+    out.write(reinterpret_cast<const char*>(dib_header), 40);
+
+    std::vector<std::uint8_t> row(padded_row, 0);
+    for (int y = static_cast<int>(height_) - 1; y >= 0; --y) {
+        for (std::uint32_t x = 0; x < width_; ++x) {
+            const std::uint32_t argb = color_[static_cast<std::size_t>(y) * width_ + x];
+            row[x * 3 + 0] = static_cast<std::uint8_t>(argb & 0xFF);         // Blue
+            row[x * 3 + 1] = static_cast<std::uint8_t>((argb >> 8) & 0xFF);  // Green
+            row[x * 3 + 2] = static_cast<std::uint8_t>((argb >> 16) & 0xFF); // Red
+        }
+        out.write(reinterpret_cast<const char*>(row.data()), padded_row);
+    }
+    return out.good();
 }
 
 } // namespace igi::gameplay

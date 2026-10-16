@@ -4,6 +4,7 @@
 #include "igi/mission_world.hpp"
 
 #include <cstdint>
+#include <filesystem>
 #include <vector>
 
 namespace igi::gameplay {
@@ -62,6 +63,9 @@ public:
         const std::vector<SoldierRenderData>& soldiers);
     void render_hud(const HudState& hud);
     void clear_with_sky(const CameraView& camera);
+
+    // Writes the current framebuffer as a standard 24-bit uncompressed Windows BMP file.
+    [[nodiscard]] bool save_bmp(const std::filesystem::path& path) const;
 
 private:
     struct ClipVertex {
