@@ -63,6 +63,26 @@ surrounding C++ AI still uses its existing simplified view cone, visibility
 range, event timing, hearing, and combat policy; those are not claimed as
 retail-equivalent by this change.
 
+## Terrain quality presets and renderer cost
+
+`--graphics ultra` now selects a separate terrain LOD curve. The real Level 2
+probe loaded all five settings and verified strictly increasing source terrain
+triangle counts: low `41,299`, medium `101,049`, high `351,509`, enhanced
+`2,596,305`, and ultra `6,181,579`. The same probe passed patrol movement,
+enemy firing, doorway traversal, animation, and rendering checks. The registered
+Level 1 `igi_ultra_graphics_preset` CTest also passed; a direct Level 1 run
+reported `5,655,922` original terrain triangles and exited cleanly after one
+headless frame.
+
+Single-run Level 1 headless measurements from the application's elapsed-time
+log were low `0.216 s` at `28,614` terrain triangles, medium `0.319 s` at
+`72,934`, high `0.345 s` at `261,144`, enhanced `1.047 s` at `2,087,084`, and
+ultra `2.453 s` at `5,655,922`. These one-frame readings are diagnostic only,
+not a stable benchmark. They show that the current CPU rasterizer cannot make
+the high-density settings playable; adding detail maps or lighting before an
+accelerated renderer would worsen that bottleneck. Ultra remains an explicit
+opt-in quality setting and is not evidence of enhanced-renderer parity.
+
 ## Native application loop
 
 - `igi_game` is a C++20 executable using SDL2 2.32.72 through SDL's C API. It

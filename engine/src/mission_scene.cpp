@@ -199,24 +199,30 @@ void append_terrain(MissionScene& scene,
         }
         const std::size_t node_offset = node_index * 32;
         const auto child_mask = tree.byte(node_offset + 24);
-        const int wanted_depth = detail == TerrainDetail::enhanced ? (distance < 120.0 * units_per_metre   ? 20
-                                                                      : distance < 300.0 * units_per_metre   ? 19
-                                                                      : distance < 700.0 * units_per_metre   ? 18
-                                                                      : distance < 1200.0 * units_per_metre  ? 16
-                                                                      : 14)
-                                 : detail == TerrainDetail::high ? (distance < 80.0 * units_per_metre    ? 19
-                                                                    : distance < 180.0 * units_per_metre ? 18
-                                                                    : distance < 500.0 * units_per_metre ? 16
-                                                                    : distance < 900.0 * units_per_metre ? 14
-                                                                    : 12)
-                                 : detail == TerrainDetail::medium ? (distance < 100.0 * units_per_metre   ? 18
-                                                                      : distance < 250.0 * units_per_metre ? 16
-                                                                      : distance < 600.0 * units_per_metre ? 14
-                                                                      : distance < 1000.0 * units_per_metre ? 12
-                                                                                                             : 11)
-                                                                 : (distance < 180.0 * units_per_metre   ? 16
-                                                                    : distance < 500.0 * units_per_metre ? 14
-                                                                    : 11);
+        const int wanted_depth =
+            detail == TerrainDetail::ultra      ? (distance < 200.0 * units_per_metre    ? 20
+                                                   : distance < 450.0 * units_per_metre  ? 19
+                                                   : distance < 900.0 * units_per_metre  ? 18
+                                                   : distance < 1400.0 * units_per_metre ? 17
+                                                                                         : 15)
+            : detail == TerrainDetail::enhanced ? (distance < 120.0 * units_per_metre    ? 20
+                                                   : distance < 300.0 * units_per_metre  ? 19
+                                                   : distance < 700.0 * units_per_metre  ? 18
+                                                   : distance < 1200.0 * units_per_metre ? 16
+                                                                                         : 14)
+            : detail == TerrainDetail::high     ? (distance < 80.0 * units_per_metre    ? 19
+                                                   : distance < 180.0 * units_per_metre ? 18
+                                                   : distance < 500.0 * units_per_metre ? 16
+                                                   : distance < 900.0 * units_per_metre ? 14
+                                                                                        : 12)
+            : detail == TerrainDetail::medium   ? (distance < 100.0 * units_per_metre    ? 18
+                                                   : distance < 250.0 * units_per_metre  ? 16
+                                                   : distance < 600.0 * units_per_metre  ? 14
+                                                   : distance < 1000.0 * units_per_metre ? 12
+                                                                                         : 11)
+                                                : (distance < 180.0 * units_per_metre   ? 16
+                                                   : distance < 500.0 * units_per_metre ? 14
+                                                                                        : 11);
         if (child_mask != 0 && depth < wanted_depth)
         {
             for (int octant = 0; octant < 8; ++octant)

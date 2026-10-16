@@ -18,7 +18,8 @@ enum class TerrainDetail
     low,
     medium,
     high,
-    enhanced
+    enhanced,
+    ultra
 };
 
 struct SceneLadder final

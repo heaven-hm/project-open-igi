@@ -38,6 +38,8 @@ Functional regressions passing does not establish matching original behavior.
 
 7. AI sight target height: use the retail human descriptor at `0x465820` to aim visibility at the target's feet plus `0.69 m` standing or `0.35 m` crouched. REA instruction immediates differ from the current vanilla C# reference's `0.7 m` and `0.319 m`; the port follows the retail bytes. Standing and crouched low-cover probes and the original Level 1 scene probe pass. This change does not establish parity for AI cones, scan cadence, hearing, or combat policy; see [verification evidence](VERIFICATION.md).
 
+8. Terrain quality controls: separate `--graphics ultra` from `enhanced`; Level 2 proves strictly increasing original terrain triangle counts for low, medium, high, enhanced, and ultra. Level 1 headless single-frame runs show the software renderer remains far too slow for dense presets: High 261,144 triangles / 0.345 s, Enhanced 2,087,084 / 1.047 s, Ultra 5,655,922 / 2.453 s. These are one-run application timings, not a stable benchmark. Ultra is opt-in; hardware rendering is still required for a playable high-detail mode.
+
 ## Measured original Level 2
 
 | Item | Measurement |

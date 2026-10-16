@@ -213,7 +213,11 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
         else if (argument == "--graphics" || argument == "--gfx")
         {
             const auto setting = next_argument();
-            if (setting == "enhanced" || setting == "ultra")
+            if (setting == "ultra")
+            {
+                options.terrain_detail = igi::gameplay::TerrainDetail::ultra;
+            }
+            else if (setting == "enhanced")
             {
                 options.terrain_detail = igi::gameplay::TerrainDetail::enhanced;
             }
@@ -258,7 +262,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                          "[--screenshot frame.bmp]\n"
                          "    [--cache directory] [--width 1280 --height 960] [--verbose] "
                          "[--benchmark]\n"
-                         "    [--graphics high|low]\n"
+                         "    [--graphics low|medium|high|enhanced|ultra]\n"
                          "    [--profile name] (controls come from original config.qvm)\n"
                          "Movement, jump, crouch, fire, reload and weapon bindings use "
                          "config.qvm.\n"
@@ -437,10 +441,11 @@ int run(RuntimeOptions options, const char* executable)
     log(Severity::information,
         "graphics",
         std::string("Terrain detail=") +
-            (options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
-             : options.terrain_detail == igi::gameplay::TerrainDetail::high  ? "high"
-             : options.terrain_detail == igi::gameplay::TerrainDetail::medium ? "medium"
-                                                                             : "low") +
+            (options.terrain_detail == igi::gameplay::TerrainDetail::ultra      ? "ultra"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::high     ? "high"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::medium   ? "medium"
+                                                                                : "low") +
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +
             "; viewport=" + std::to_string(options.width) + "x" + std::to_string(options.height));
     igi::gameplay::GameSimulation simulation(scene);

@@ -42,10 +42,20 @@ int main(int argument_count, char** arguments)
                 "High detail must retain additional original terrain geometry");
         const auto low_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::low);
         const auto medium_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::medium);
-        require(low_detail.terrain_triangle_count < medium_detail.terrain_triangle_count &&
-                    medium_detail.terrain_triangle_count < scene.terrain_triangle_count &&
-                    scene.actors.size() == low_detail.actors.size(),
-                "Terrain quality tiers must increase original terrain density without changing enemy declarations");
+        const auto enhanced_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::enhanced);
+        const auto ultra_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::ultra);
+        require(
+            low_detail.terrain_triangle_count < medium_detail.terrain_triangle_count &&
+                medium_detail.terrain_triangle_count < scene.terrain_triangle_count &&
+                scene.terrain_triangle_count < enhanced_detail.terrain_triangle_count &&
+                enhanced_detail.terrain_triangle_count < ultra_detail.terrain_triangle_count &&
+                scene.actors.size() == low_detail.actors.size(),
+            "Each terrain quality tier must add original terrain detail without changing enemy declarations");
+        std::cout << "Terrain triangles low=" << low_detail.terrain_triangle_count
+                  << ", medium=" << medium_detail.terrain_triangle_count
+                  << ", high=" << scene.terrain_triangle_count
+                  << ", enhanced=" << enhanced_detail.terrain_triangle_count
+                  << ", ultra=" << ultra_detail.terrain_triangle_count << '\n';
         GameSimulation simulation(scene);
         std::size_t portal_faces = 0;
         std::size_t grounded_crossings = 0;

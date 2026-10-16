@@ -14,6 +14,8 @@ open -n IGI/igi.app --args window level2 --graphics high
 
 All game arguments follow `--args`; otherwise macOS `open` interprets them. `--gfx high` is also accepted by current source builds. Replace `level2` with `level1` through `level14`; level availability is not a claim that every mission works. Most integration coverage is currently Levels 1 and 2. Use `fullscreen` instead of `window` if desired; native fullscreen is independent of CrossOver's DX7 fullscreen issues.
 
+The command-line terrain presets are `low`, `medium`, `high`, `enhanced`, and `ultra`. For example, `open -n IGI/igi.app --args window level1 --graphics ultra` selects the densest terrain LOD. Ultra currently changes terrain subdivision only; it does not enable the C# renderer's dynamic lighting or derived texture-detail maps.
+
 A newly signed local bundle may request macOS Downloads access again. A candidate LaunchServices test was observed waiting on that request; the direct-executable GUI test succeeded. An app bundle is a directory. To launch directly:
 
 ```sh
