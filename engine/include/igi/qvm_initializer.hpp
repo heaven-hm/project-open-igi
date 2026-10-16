@@ -4,23 +4,31 @@
 
 #include <limits>
 
-namespace igi::assets {
+namespace igi::assets
+{
 
-struct ScriptValue final {
+struct ScriptValue final
+{
     double number{};
     std::string text;
     std::size_t call_index = std::numeric_limits<std::size_t>::max();
 };
 
-struct ScriptCall final {
+struct ScriptCall final
+{
     std::string function;
     std::vector<ScriptValue> arguments;
 };
 
-class QvmInitializer final {
+class QvmInitializer final
+{
   public:
     explicit QvmInitializer(BinaryView file);
-    [[nodiscard]] const std::vector<ScriptCall>& calls() const noexcept { return calls_; }
+
+    [[nodiscard]] const std::vector<ScriptCall>& calls() const noexcept
+    {
+        return calls_;
+    }
 
   private:
     [[nodiscard]] ScriptValue evaluate(std::size_t address, std::size_t depth);

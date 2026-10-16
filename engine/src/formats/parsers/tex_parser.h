@@ -19,14 +19,16 @@
 #include <string>
 #include <vector>
 
-struct TEXImage {
-    uint32_t width  = 0;
+struct TEXImage
+{
+    uint32_t width = 0;
     uint32_t height = 0;
-    uint32_t mode   = 2;         // 2=RGB565, 3=ARGB8888, 67=ARGB8888
+    uint32_t mode = 2;           // 2=RGB565, 3=ARGB8888, 67=ARGB8888
     std::vector<uint8_t> pixels; // raw bytes from file (mode 2 = 2 B/px, mode 3/67 = 4 B/px)
 };
 
-struct TEXFile {
+struct TEXFile
+{
     uint32_t version = 0;
     std::vector<TEXImage> images; // 1 for v2, N for v7/v9, levels for v11
     bool valid = false;
@@ -56,6 +58,5 @@ bool TEX_WriteTGA(const std::string& path, const TEXImage& img);
 // This is the shared encoder used by the GUI ("Convert to TEX" / "Convert
 // to .spr" right-click entries) and the `tex to-spr` CLI subcommand, so
 // both paths produce bit-identical files from the same RGBA input.
-bool TEX_WriteLOOP(const std::string& path,
-                   const uint8_t* rgba, int width, int height,
-                   int mode = 2, int version = 11);
+bool TEX_WriteLOOP(
+    const std::string& path, const uint8_t* rgba, int width, int height, int mode = 2, int version = 11);

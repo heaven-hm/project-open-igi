@@ -1,15 +1,22 @@
 #include "igi/human_motion.hpp"
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
-Vector3 HumanMotion::integrate_airborne(
-    Vector3 velocity, bool axis_negative, bool axis_positive,
-    bool side_positive, bool side_negative,
-    const Basis3x3& basis, float air_control_per_tick) noexcept {
+Vector3 HumanMotion::integrate_airborne(Vector3 velocity,
+                                        bool axis_negative,
+                                        bool axis_positive,
+                                        bool side_positive,
+                                        bool side_negative,
+                                        const Basis3x3& basis,
+                                        float air_control_per_tick) noexcept
+{
     float first_axis = axis_negative ? -air_control_per_tick : 0.0f;
-    if (axis_positive) first_axis = air_control_per_tick + first_axis;
+    if (axis_positive)
+        first_axis = air_control_per_tick + first_axis;
     float second_axis = side_positive ? air_control_per_tick : 0.0f;
-    if (side_negative) second_axis -= air_control_per_tick;
+    if (side_negative)
+        second_axis -= air_control_per_tick;
 
     const float next_z = velocity.z - gravity_per_tick;
     velocity.x = first_axis * basis.m11 + second_axis * basis.m12 + velocity.x;
@@ -18,17 +25,21 @@ Vector3 HumanMotion::integrate_airborne(
     return velocity;
 }
 
-Vector3 HumanMotion::integrate_ladder_slide(Vector3 velocity) noexcept {
+Vector3 HumanMotion::integrate_ladder_slide(Vector3 velocity) noexcept
+{
     velocity.x *= ladder_drag_per_tick;
     velocity.y *= ladder_drag_per_tick;
     velocity.z = (velocity.z - ladder_gravity_per_tick) * ladder_drag_per_tick;
     return velocity;
 }
 
-Vector3 HumanMotion::apply_root_motion(
-    Vector3 delta, const Basis3x3& basis, float translation_scale,
-    bool suppress_scale) noexcept {
-    if (!suppress_scale) {
+Vector3 HumanMotion::apply_root_motion(Vector3 delta,
+                                       const Basis3x3& basis,
+                                       float translation_scale,
+                                       bool suppress_scale) noexcept
+{
+    if (!suppress_scale)
+    {
         delta.x *= translation_scale;
         delta.y *= translation_scale;
         delta.z *= translation_scale;

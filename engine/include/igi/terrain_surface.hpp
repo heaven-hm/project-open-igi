@@ -4,9 +4,11 @@
 
 #include <array>
 
-namespace igi::assets {
+namespace igi::assets
+{
 
-struct TerrainProjection final {
+struct TerrainProjection final
+{
     std::uint32_t tile{};
     double origin_u{};
     double origin_v{};
@@ -14,16 +16,24 @@ struct TerrainProjection final {
     double rate{};
 };
 
-class TerrainSurface final {
+class TerrainSurface final
+{
   public:
     TerrainSurface(const std::filesystem::path& mission_directory, const std::vector<ScriptCall>& tasks);
     [[nodiscard]] double height(double horizontal, double vertical) const;
     [[nodiscard]] int material(double horizontal, double vertical) const;
-    [[nodiscard]] TerrainProjection projection(int material, int depth, const std::array<double, 3>& centre) const;
+    [[nodiscard]] TerrainProjection
+    projection(int material, int depth, const std::array<double, 3>& centre) const;
 
   private:
-    struct Grid final { std::size_t size{}; FileBytes bytes; };
-    struct Binding final {
+    struct Grid final
+    {
+        std::size_t size{};
+        FileBytes bytes;
+    };
+
+    struct Binding final
+    {
         int level{};
         int material{};
         double minimum_x{};
@@ -31,7 +41,13 @@ class TerrainSurface final {
         double width{};
         std::size_t grid_index{};
     };
-    struct Band final { float scale{}; std::size_t tile_map{}; };
+
+    struct Band final
+    {
+        float scale{};
+        std::size_t tile_map{};
+    };
+
     [[nodiscard]] static std::array<Grid, 256> load_grids(const std::filesystem::path& path, bool heights);
     std::array<Grid, 256> masks_;
     std::array<Grid, 256> heights_;

@@ -1,13 +1,13 @@
 #pragma once
+// Compatibility shim: legacy format parsers call Logger::Get().Log().
+// Routes into the dedicated igi::logging system (no editor.log default).
+#include "igi/logger.hpp"
+
 #include <string>
 #include <vector>
-#include <mutex>
-#include <fstream>
-#include <chrono>
-#include <iomanip>
-#include <iostream>
 
-enum class LogLevel {
+enum class LogLevel
+{
     DEBUG,
     INFO,
     WARNING,
@@ -15,41 +15,62 @@ enum class LogLevel {
     FATAL
 };
 
-struct LogEntry {
+struct LogEntry
+{
     LogLevel level;
     std::string message;
     std::string timestamp;
 };
 
-class Logger {
-public:
-    static Logger& Get() {
+class Logger
+{
+  public:
+    static Logger& Get()
+    {
         static Logger instance;
         return instance;
     }
 
-    void Init(const std::string& logFile = "editor.log");
-    void Log(LogLevel level, const std::string& message);
+    void Init(const std::string& = {})
+    {
+    }
 
-    const std::vector<LogEntry>& GetEntries() const {
-        std::lock_guard<std::mutex> lock(mutex_);
+    void Log(LogLevel level, const std::string& message)
+    {
+        using LL = ::igi::logging::LogLevel;
+        LL mapped = LL::Info;
+        switch (level)
+        {
+        case LogLevel::DEBUG:
+            mapped = LL::Debug;
+            break;
+        case LogLevel::INFO:
+            mapped = LL::Info;
+            break;
+        case LogLevel::WARNING:
+            mapped = LL::Warning;
+            break;
+        case LogLevel::ERR:
+            mapped = LL::Error;
+            break;
+        case LogLevel::FATAL:
+            mapped = LL::Fatal;
+            break;
+        }
+        ::igi::logging::log(mapped, "formats", message);
+    }
+
+    const std::vector<LogEntry>& GetEntries() const
+    {
         return entries_;
     }
 
-    void Clear() {
-        std::lock_guard<std::mutex> lock(mutex_);
+    void Clear()
+    {
         entries_.clear();
     }
 
-private:
+  private:
     Logger() = default;
-    ~Logger() {
-        if (file_.is_open()) {
-            file_.close();
-        }
-    }
-
     std::vector<LogEntry> entries_;
-    std::ofstream file_;
-    mutable std::mutex mutex_;
 };

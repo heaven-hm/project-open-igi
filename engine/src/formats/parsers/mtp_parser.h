@@ -4,24 +4,27 @@
  *****************************************************************************/
 
 #pragma once
-#include <string>
-#include <vector>
-#include <cstdint>
 #include "dat_parser.h"
 
-struct MTPModelTexture {
+#include <cstdint>
+#include <string>
+#include <vector>
+
+struct MTPModelTexture
+{
     std::string modelName;
     std::vector<std::string> textureNames;
 };
 
-struct MTPFile {
-    std::vector<std::string> animations;    // BANM
-    std::vector<std::string> sounds;        // SNDS
-    std::vector<std::string> shadows;       // SVOL
-    std::vector<std::string> models;        // MODS
-    std::vector<std::string> vnam_models;   // VNAM (virtual models mapping to models)
-    std::vector<std::string> textures;      // TEXF
-    std::vector<MTPModelTexture> mappings;  // INST resolved
+struct MTPFile
+{
+    std::vector<std::string> animations;   // BANM
+    std::vector<std::string> sounds;       // SNDS
+    std::vector<std::string> shadows;      // SVOL
+    std::vector<std::string> models;       // MODS
+    std::vector<std::string> vnam_models;  // VNAM (virtual models mapping to models)
+    std::vector<std::string> textures;     // TEXF
+    std::vector<MTPModelTexture> mappings; // INST resolved
     bool valid = false;
     std::string error;
 };
@@ -33,8 +36,10 @@ MTPFile MTP_Parse(const std::string& filepath);
 // other chunks byte-for-byte. Idempotent: if modelName is already in MODS, returns true
 // without modifying the file. Writes the result to outPath (may equal the input path).
 // Returns false (with err set) on parse/IO failure. Does NOT create backups (caller does).
-bool MTP_AddModel(const std::string& mtpPath, const std::string& outPath,
-                  const std::string& modelName, const std::vector<std::string>& textureNames,
+bool MTP_AddModel(const std::string& mtpPath,
+                  const std::string& outPath,
+                  const std::string& modelName,
+                  const std::vector<std::string>& textureNames,
                   std::string& err);
 
 // Generate a new MTP file from scratch given a list of model-texture mappings.

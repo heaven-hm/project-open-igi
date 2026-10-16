@@ -1,0 +1,31 @@
+BasedOnStyle: LLVM
+IndentWidth: 4
+ColumnLimit: 110
+AllowShortFunctionsOnASingleLine: None
+AlwaysBreakAfterReturnType: None
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBraces: Allman
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+DerivePointerAlignment: false
+PointerAlignment: Left
+ReferenceAlignment: Left
+SortIncludes: CaseSensitive
+IncludeBlocks: Regroup
+IncludeCategories:
+  - Regex: '^"igi/.*"'
+    Priority: 2
+  - Regex: '^".*\.h"'
+    Priority: 3
+  - Regex: '^<.*'
+    Priority: 4
+SeparateDefinitionBlocks: Always
+SpaceAfterCStyleCast: true
+SpaceBeforeParens: ControlStatements
+SpacesInAngles: Never
+CompactNamespaces: false
+FixNamespaceComments: true
+ReflowComments: false

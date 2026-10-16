@@ -2,6 +2,8 @@ add_library(igi_gameplay STATIC
     src/human_motion.cpp
     src/human_locomotion_graph.cpp
     src/human_movement_integrator.cpp
+    src/logger.cpp
+    src/exceptions.cpp
 )
 target_include_directories(igi_gameplay PUBLIC include)
 target_compile_features(igi_gameplay PUBLIC cxx_std_20)
@@ -11,22 +13,23 @@ find_package(SDL2 REQUIRED CONFIG)
 set(IGI_GAME_PATH "$ENV{IGI_GAME_PATH}" CACHE PATH "Original game installation for integration tests")
 set(IGI_RETAIL_PARITY_DIRECTORY "" CACHE PATH "Original and port captures required for retail fidelity verification")
 
-set(CONVERTER_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/third_party/igi_converter/source")
+set(FORMAT_SOURCE "${CMAKE_CURRENT_SOURCE_DIR}/src/formats")
 add_library(igi_formats STATIC
-    "${CONVERTER_SOURCE}/parsers/mef_native.cpp"
-    "${CONVERTER_SOURCE}/parsers/tex_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/res_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/dat_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/mtp_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/iff_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/qvm_parser.cpp"
-    "${CONVERTER_SOURCE}/parsers/graph_parser.cpp"
-    src/converter_support.cpp
+    "${FORMAT_SOURCE}/parsers/mef_native.cpp"
+    "${FORMAT_SOURCE}/parsers/tex_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/res_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/dat_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/mtp_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/iff_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/qvm_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/graph_parser.cpp"
+    src/format_support.cpp
     src/diagnostics.cpp
 )
 target_compile_features(igi_formats PUBLIC cxx_std_20)
-target_include_directories(igi_formats PUBLIC "${CONVERTER_SOURCE}/parsers" PRIVATE "${CONVERTER_SOURCE}" include)
-target_include_directories(igi_formats SYSTEM PUBLIC third_party/igi_converter/third_party/glm-1.0.1)
+target_include_directories(igi_formats PUBLIC "${FORMAT_SOURCE}/parsers" PRIVATE "${FORMAT_SOURCE}" include)
+target_include_directories(igi_formats SYSTEM PUBLIC third_party/glm/glm-1.0.1)
+target_link_libraries(igi_formats PUBLIC igi_gameplay)
 
 add_library(igi_assets STATIC
     src/asset_io.cpp
@@ -113,15 +116,15 @@ if(APPLE)
         set(IGI_HAS_RECOVERED_NATIVES TRUE)
         install(TARGETS iginatives LIBRARY DESTINATION "igi.app/Contents/Frameworks")
     endif()
-    install(FILES third_party/igi_converter/LICENSE third_party/igi_converter/LICENSE_SCOPE.md
-        DESTINATION "igi.app/Contents/Resources/Licenses/igi-converter")
-    install(FILES third_party/igi_converter/third_party/glm-1.0.1/copying.txt
+    install(FILES third_party/licenses/igi-formats/LICENSE third_party/licenses/igi-formats/LICENSE_SCOPE.md
+        DESTINATION "igi.app/Contents/Resources/Licenses/igi-formats")
+    install(FILES third_party/glm/glm-1.0.1/copying.txt
         DESTINATION "igi.app/Contents/Resources/Licenses/glm")
-    install(FILES third_party/igi_editor/LICENSE third_party/igi_editor/LICENSE_SCOPE.md
-        third_party/igi_editor/LICENSE-PRIOR third_party/igi_editor/PROVENANCE.md
-        DESTINATION "igi.app/Contents/Resources/Licenses/igi-editor")
-    install(FILES third_party/open_igi/LICENSE
-        DESTINATION "igi.app/Contents/Resources/Licenses/open-igi")
+    install(FILES third_party/licenses/igi-editor-ref/LICENSE third_party/licenses/igi-editor-ref/LICENSE_SCOPE.md
+        third_party/licenses/igi-editor-ref/LICENSE-PRIOR third_party/licenses/igi-editor-ref/PROVENANCE.md
+        DESTINATION "igi.app/Contents/Resources/Licenses/igi-editor-ref")
+    install(FILES third_party/licenses/openigi-ref/LICENSE
+        DESTINATION "igi.app/Contents/Resources/Licenses/openigi-ref")
     if(TARGET SDL3::SDL3)
         get_target_property(IGI_SDL3_LOCATION SDL3::SDL3 IMPORTED_LOCATION_RELEASE)
         if(NOT IGI_SDL3_LOCATION)

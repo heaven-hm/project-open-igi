@@ -4,15 +4,18 @@
 
 #include <cstdint>
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
-struct WorldPosition3 final {
+struct WorldPosition3 final
+{
     double x{};
     double y{};
     double z{};
 };
 
-struct HumanMovementState final {
+struct HumanMovementState final
+{
     WorldPosition3 world_position{};
     Vector3 position_adjustment{};
     Vector3 base_movement{};
@@ -31,26 +34,34 @@ struct HumanMovementState final {
     float collision_radius{};
 };
 
-class HumanMovementWorld {
+class HumanMovementWorld
+{
   public:
     virtual ~HumanMovementWorld() = default;
 
-    virtual void sweep_walls(HumanMovementState& human, const WorldPosition3& starting_position,
-                             WorldPosition3& destination_position, Vector3& movement_delta) = 0;
+    virtual void sweep_walls(HumanMovementState& human,
+                             const WorldPosition3& starting_position,
+                             WorldPosition3& destination_position,
+                             Vector3& movement_delta) = 0;
 
-    virtual void query_ground(HumanMovementState& human, const WorldPosition3& starting_position,
-                              WorldPosition3& destination_position, Vector3& movement_delta,
+    virtual void query_ground(HumanMovementState& human,
+                              const WorldPosition3& starting_position,
+                              WorldPosition3& destination_position,
+                              Vector3& movement_delta,
                               float vertical_query_budget) = 0;
 
-    virtual void separate_humans(HumanMovementState& human, const WorldPosition3& starting_position,
-                                 WorldPosition3& destination_position, Vector3& movement_delta) = 0;
+    virtual void separate_humans(HumanMovementState& human,
+                                 const WorldPosition3& starting_position,
+                                 WorldPosition3& destination_position,
+                                 Vector3& movement_delta) = 0;
 
     virtual void commit_transform(HumanMovementState& human,
                                   const WorldPosition3& destination_position,
                                   float collision_radius) = 0;
 };
 
-class HumanMovementIntegrator final {
+class HumanMovementIntegrator final
+{
   public:
     static constexpr std::uint32_t grounded_flag = 0x04;
     static constexpr std::uint32_t roof_contact_flag = 0x10;
@@ -59,10 +70,12 @@ class HumanMovementIntegrator final {
 
   private:
     [[nodiscard]] static bool update_slope_slide(HumanMovementState& human) noexcept;
-    static void apply_collision_queries(HumanMovementState& human, HumanMovementWorld& world,
+    static void apply_collision_queries(HumanMovementState& human,
+                                        HumanMovementWorld& world,
                                         const WorldPosition3& starting_position,
                                         WorldPosition3& destination_position,
-                                        Vector3& movement_delta, bool is_sliding);
+                                        Vector3& movement_delta,
+                                        bool is_sliding);
 };
 
 } // namespace igi::gameplay

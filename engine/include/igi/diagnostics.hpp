@@ -1,11 +1,21 @@
 #pragma once
 
+#include "igi/logger.hpp"
+
 #include <filesystem>
 #include <string_view>
 
-namespace igi::diagnostics {
+namespace igi::diagnostics
+{
 
-enum class Severity { debug, information, warning, error };
+// Legacy alias kept for existing call sites; routes into igi::logging.
+enum class Severity
+{
+    debug,
+    information,
+    warning,
+    error,
+};
 
 void configure(bool verbose, const std::filesystem::path& log_file = {});
 void log(Severity severity, std::string_view subsystem, std::string_view message);

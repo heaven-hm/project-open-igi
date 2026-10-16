@@ -2,6 +2,7 @@
 
 #include <string>
 
-namespace Utils {
+namespace Utils
+{
 std::string Trim(const std::string& text);
 }

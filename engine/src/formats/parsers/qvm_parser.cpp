@@ -1,8 +1,9 @@
 #include "qvm_parser.h"
+
 #include <algorithm>
-#include <utility>
 #include <cstring>
 #include <fstream>
+#include <utility>
 
 // Operand sizes for each opcode (in bytes following the opcode byte).
 // -1 means special handling (CALL).
@@ -51,15 +52,14 @@ static int QVM_OperandSize(QVMOpType op)
     }
 }
 
-const char *QVM_OpName(QVMOpType op)
+const char* QVM_OpName(QVMOpType op)
 {
-    static const char *names[] = {
-        "BRK",     "NOP",     "PUSH",  "PUSHB",  "PUSHW",   "PUSHF",   "PUSHA",  "PUSHS", "PUSHSI",
-        "PUSHSIB", "PUSHSIW", "PUSHI", "PUSHII", "PUSHIIB", "PUSHIIW", "PUSH0",  "PUSH1", "PUSHM",
-        "POP",     "RET",     "BRA",   "BF",     "BT",      "JSR",     "CALL",   "ADD",   "SUB",
-        "MUL",     "DIV",     "SHL",   "SHR",    "AND",     "OR",      "XOR",    "LAND",  "LOR",
-        "EQ",      "NE",      "LT",    "LE",     "GT",      "GE",      "ASSIGN", "PLUS",  "MINUS",
-        "INV",     "NOT",     "BLK",   "ILLEGAL"};
+    static const char* names[] = {
+        "BRK",     "NOP",   "PUSH",   "PUSHB",   "PUSHW",   "PUSHF", "PUSHA", "PUSHS", "PUSHSI", "PUSHSIB",
+        "PUSHSIW", "PUSHI", "PUSHII", "PUSHIIB", "PUSHIIW", "PUSH0", "PUSH1", "PUSHM", "POP",    "RET",
+        "BRA",     "BF",    "BT",     "JSR",     "CALL",    "ADD",   "SUB",   "MUL",   "DIV",    "SHL",
+        "SHR",     "AND",   "OR",     "XOR",     "LAND",    "LOR",   "EQ",    "NE",    "LT",     "LE",
+        "GT",      "GE",    "ASSIGN", "PLUS",    "MINUS",   "INV",   "NOT",   "BLK",   "ILLEGAL"};
     int idx = static_cast<int>(op);
     if (idx >= 0 && idx < static_cast<int>(QVMOpType::OP_COUNT))
         return names[idx];
@@ -67,22 +67,22 @@ const char *QVM_OpName(QVMOpType op)
 }
 
 // Helper: read a little-endian uint32 from a byte buffer
-static uint32_t ReadU32(const uint8_t *p)
+static uint32_t ReadU32(const uint8_t* p)
 {
-    return (uint32_t)p[0] | ((uint32_t)p[1] << 8) | ((uint32_t)p[2] << 16) | ((uint32_t)p[3] << 24);
+    return (uint32_t) p[0] | ((uint32_t) p[1] << 8) | ((uint32_t) p[2] << 16) | ((uint32_t) p[3] << 24);
 }
 
 // Helper: read a little-endian uint16 from a byte buffer
-static uint16_t ReadU16(const uint8_t *p)
+static uint16_t ReadU16(const uint8_t* p)
 {
-    return (uint16_t)p[0] | ((uint16_t)p[1] << 8);
+    return (uint16_t) p[0] | ((uint16_t) p[1] << 8);
 }
 
 // Helper: split a buffer of null-terminated strings into a vector.
 // Preserves empty strings (adjacent null bytes) to keep index alignment with
 // the QVM itable/stable which reference strings by position, matching Python's
 // svalue.split(b'\x00')[:-1] behaviour.
-static std::vector<std::string> SplitNullTerminated(const uint8_t *data, uint32_t size)
+static std::vector<std::string> SplitNullTerminated(const uint8_t* data, uint32_t size)
 {
     std::vector<std::string> result;
     if (!data || size == 0)
@@ -93,19 +93,19 @@ static std::vector<std::string> SplitNullTerminated(const uint8_t *data, uint32_
     {
         if (data[i] == '\0')
         {
-            result.emplace_back(reinterpret_cast<const char *>(data + start), i - start);
+            result.emplace_back(reinterpret_cast<const char*>(data + start), i - start);
             start = i + 1;
         }
     }
     // Trailing content without null terminator (unusual but safe)
     if (start < size)
     {
-        result.emplace_back(reinterpret_cast<const char *>(data + start), size - start);
+        result.emplace_back(reinterpret_cast<const char*>(data + start), size - start);
     }
     return result;
 }
 
-QVMFile QVM_Parse(const std::string &filepath)
+QVMFile QVM_Parse(const std::string& filepath)
 {
     QVMFile qvm{};
     qvm.valid = false;
@@ -125,12 +125,12 @@ QVMFile QVM_Parse(const std::string &filepath)
         return qvm;
     }
 
-    std::vector<uint8_t> data((size_t)file_size);
+    std::vector<uint8_t> data((size_t) file_size);
     file.seekg(0);
-    file.read(reinterpret_cast<char *>(data.data()), file_size);
+    file.read(reinterpret_cast<char*>(data.data()), file_size);
     file.close();
 
-    const uint8_t *buf = data.data();
+    const uint8_t* buf = data.data();
     size_t buf_size = data.size();
 
     // Parse header
@@ -161,8 +161,7 @@ QVMFile QVM_Parse(const std::string &filepath)
     if (qvm.header.ver_major != 8 || (qvm.header.ver_minor < 5 || qvm.header.ver_minor > 7))
     {
         qvm.error = "Unsupported QVM version (expected version 8.5, 8.6 or 8.7, got " +
-                    std::to_string(qvm.header.ver_major) + "." +
-                    std::to_string(qvm.header.ver_minor) + ")";
+                    std::to_string(qvm.header.ver_major) + "." + std::to_string(qvm.header.ver_minor) + ")";
         return qvm;
     }
 
@@ -172,10 +171,10 @@ QVMFile QVM_Parse(const std::string &filepath)
     {
         uint64_t sectionEnd = 64;
         for (const auto range : {std::pair<uint32_t, uint32_t>{qvm.header.of_itable, qvm.header.sz_itable},
-                                {qvm.header.of_ivalue, qvm.header.sz_ivalue},
-                                {qvm.header.of_stable, qvm.header.sz_stable},
-                                {qvm.header.of_svalue, qvm.header.sz_svalue},
-                                {qvm.header.of_ctable, qvm.header.sz_ctable}})
+                                 {qvm.header.of_ivalue, qvm.header.sz_ivalue},
+                                 {qvm.header.of_stable, qvm.header.sz_stable},
+                                 {qvm.header.of_svalue, qvm.header.sz_svalue},
+                                 {qvm.header.of_ctable, qvm.header.sz_ctable}})
             sectionEnd = std::max(sectionEnd, uint64_t(range.first) + range.second);
         qvm.trailerOffset = ReadU32(buf + 0x3c);
         if (sectionEnd > buf_size || sectionEnd > UINT32_MAX ||
@@ -191,8 +190,7 @@ QVMFile QVM_Parse(const std::string &filepath)
     // Parse identifier values (ivalue)
     if (qvm.header.sz_ivalue > 0)
     {
-        if (qvm.header.of_ivalue > buf_size ||
-            qvm.header.sz_ivalue > buf_size - qvm.header.of_ivalue)
+        if (qvm.header.of_ivalue > buf_size || qvm.header.sz_ivalue > buf_size - qvm.header.of_ivalue)
         {
             qvm.error = "Identifier value section extends beyond file";
             return qvm;
@@ -203,8 +201,7 @@ QVMFile QVM_Parse(const std::string &filepath)
     // Parse string values (svalue)
     if (qvm.header.sz_svalue > 0)
     {
-        if (qvm.header.of_svalue > buf_size ||
-            qvm.header.sz_svalue > buf_size - qvm.header.of_svalue)
+        if (qvm.header.of_svalue > buf_size || qvm.header.sz_svalue > buf_size - qvm.header.of_svalue)
         {
             qvm.error = "String value section extends beyond file";
             return qvm;
@@ -215,14 +212,13 @@ QVMFile QVM_Parse(const std::string &filepath)
     // Parse bytecode (code table)
     if (qvm.header.sz_ctable > 0)
     {
-        if (qvm.header.of_ctable > buf_size ||
-            qvm.header.sz_ctable > buf_size - qvm.header.of_ctable)
+        if (qvm.header.of_ctable > buf_size || qvm.header.sz_ctable > buf_size - qvm.header.of_ctable)
         {
             qvm.error = "Code section extends beyond file";
             return qvm;
         }
 
-        const uint8_t *code = buf + qvm.header.of_ctable;
+        const uint8_t* code = buf + qvm.header.of_ctable;
         uint32_t code_size = qvm.header.sz_ctable;
         uint32_t pos = 0;
 
@@ -241,8 +237,8 @@ QVMFile QVM_Parse(const std::string &filepath)
                 opbyte = decode[opbyte];
             if (opbyte > static_cast<uint8_t>(QVMOpType::ILLEGAL))
             {
-                qvm.error = "Unknown opcode 0x" + std::to_string(opbyte) + " at offset " +
-                            std::to_string(pos);
+                qvm.error =
+                    "Unknown opcode 0x" + std::to_string(opbyte) + " at offset " + std::to_string(pos);
                 return qvm;
             }
 
@@ -279,10 +275,10 @@ QVMFile QVM_Parse(const std::string &filepath)
             }
             else if (op_size > 0)
             {
-                if (pos + (uint32_t)op_size > code_size)
+                if (pos + (uint32_t) op_size > code_size)
                 {
-                    qvm.error = "Unexpected end of code reading operand at offset " +
-                                std::to_string(instr.address);
+                    qvm.error =
+                        "Unexpected end of code reading operand at offset " + std::to_string(instr.address);
                     return qvm;
                 }
 
@@ -305,8 +301,8 @@ QVMFile QVM_Parse(const std::string &filepath)
                     instr.operand = code[pos];
                 }
 
-                pos += (uint32_t)op_size;
-                instr.size = 1 + (uint32_t)op_size;
+                pos += (uint32_t) op_size;
+                instr.size = 1 + (uint32_t) op_size;
             }
             else
             {

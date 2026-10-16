@@ -22,29 +22,32 @@
 #include <string>
 #include <vector>
 
-struct DATModelEntry {
+struct DATModelEntry
+{
     std::string modelName;
-    std::vector<std::string> textures;  // material/texture names in order
+    std::vector<std::string> textures; // material/texture names in order
 };
 
-struct DATVnamEntry {
+struct DATVnamEntry
+{
     std::string mainModelName;
     std::string virModelName;
     std::vector<std::string> textures;
 };
 
-struct DATFile {
-    std::vector<DATModelEntry> models;  // all model entries from model section
-    std::vector<std::string>   allTextures;  // texture manifest section
+struct DATFile
+{
+    std::vector<DATModelEntry> models;    // all model entries from model section
+    std::vector<std::string> allTextures; // texture manifest section
 
     // Extended DAT format sections
-    std::vector<DATVnamEntry>  vnam_models;
-    std::vector<std::string>   animations;
-    std::vector<std::string>   sounds;
-    std::vector<std::string>   shadows;
+    std::vector<DATVnamEntry> vnam_models;
+    std::vector<std::string> animations;
+    std::vector<std::string> sounds;
+    std::vector<std::string> shadows;
 
-    int  declaredModelCount   = 0;
-    int  declaredTextureCount = 0;
+    int declaredModelCount = 0;
+    int declaredTextureCount = 0;
     bool valid = false;
     std::string error;
 };
@@ -62,20 +65,20 @@ bool DAT_WriteNative(const DATFile& dat, const std::string& outPath, std::string
 // (before the trailing `waypoint` entry), adds any new textures to allTextures, and
 // updates declaredModelCount/declaredTextureCount. Idempotent: if modelName already
 // present, returns false-but-ok via the `alreadyPresent` out flag (no change).
-void DAT_AddModel(DATFile& dat, const std::string& modelName,
-                  const std::vector<std::string>& textureNames, bool& alreadyPresent);
+void DAT_AddModel(DATFile& dat,
+                  const std::string& modelName,
+                  const std::vector<std::string>& textureNames,
+                  bool& alreadyPresent);
 
 // Format the parsed DAT as a JSON string.
 // If modelFilter is non-empty, only entries whose modelName contains it are included.
 std::string DAT_FormatJSON(const DATFile& dat, const std::string& modelFilter = "");
 
 // Write the JSON report to a file. Returns true on success.
-bool DAT_WriteJSON(const DATFile& dat, const std::string& outPath,
-                   const std::string& modelFilter = "");
+bool DAT_WriteJSON(const DATFile& dat, const std::string& outPath, const std::string& modelFilter = "");
 
 // Format the parsed DAT as a human-readable report string.
 std::string DAT_FormatReport(const DATFile& dat, const std::string& modelFilter = "");
 
 // Write the plain-text report to a file. Returns true on success.
-bool DAT_WriteReport(const DATFile& dat, const std::string& outPath,
-                     const std::string& modelFilter = "");
+bool DAT_WriteReport(const DATFile& dat, const std::string& outPath, const std::string& modelFilter = "");

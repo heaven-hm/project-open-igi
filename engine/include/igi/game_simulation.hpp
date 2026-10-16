@@ -3,9 +3,11 @@
 #include "igi/collision_world.hpp"
 #include "igi/human_movement_integrator.hpp"
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
-struct PlayerInput final {
+struct PlayerInput final
+{
     float forward{};
     float sideways{};
     float heading_change{};
@@ -22,9 +24,16 @@ struct PlayerInput final {
     int weapon_category = -1;
 };
 
-enum class ActorBehavior { guarding, investigating, attacking, dead };
+enum class ActorBehavior
+{
+    guarding,
+    investigating,
+    attacking,
+    dead
+};
 
-struct ActorState final {
+struct ActorState final
+{
     Vector3 position;
     Vector3 last_seen_position;
     float heading{};
@@ -47,7 +56,8 @@ struct ActorState final {
     std::uint64_t shots_fired{};
 };
 
-struct WeaponState final {
+struct WeaponState final
+{
     std::uint32_t magazine{};
     std::uint32_t reserve = 196;
     float cooldown{};
@@ -61,7 +71,8 @@ struct WeaponState final {
     float animation_time{};
 };
 
-struct Projectile final {
+struct Projectile final
+{
     Vector3 position;
     Vector3 direction;
     float remaining_distance = 400.0f;
@@ -70,12 +81,14 @@ struct Projectile final {
     int owner = -1;
 };
 
-struct InventoryWeapon final {
+struct InventoryWeapon final
+{
     std::size_t definition_index{};
     WeaponState state;
 };
 
-class GameSimulation final : private HumanMovementWorld {
+class GameSimulation final : private HumanMovementWorld
+{
   public:
     explicit GameSimulation(const MissionScene& scene);
     void restart();
@@ -83,24 +96,83 @@ class GameSimulation final : private HumanMovementWorld {
     [[nodiscard]] Vector3 player_position() const noexcept;
     [[nodiscard]] Vector3 camera_position() const noexcept;
     [[nodiscard]] Vector3 aim_direction() const noexcept;
-    [[nodiscard]] float heading() const noexcept { return heading_; }
-    [[nodiscard]] float pitch() const noexcept { return pitch_; }
-    [[nodiscard]] float health() const noexcept { return health_; }
-    [[nodiscard]] int locomotion_state() const noexcept { return locomotion_state_; }
+
+    [[nodiscard]] float heading() const noexcept
+    {
+        return heading_;
+    }
+
+    [[nodiscard]] float pitch() const noexcept
+    {
+        return pitch_;
+    }
+
+    [[nodiscard]] float health() const noexcept
+    {
+        return health_;
+    }
+
+    [[nodiscard]] int locomotion_state() const noexcept
+    {
+        return locomotion_state_;
+    }
+
     [[nodiscard]] bool grounded() const noexcept;
-    [[nodiscard]] bool aiming() const noexcept { return aiming_; }
-    [[nodiscard]] bool crouching() const noexcept { return crouching_; }
-    [[nodiscard]] const WeaponState& weapon() const noexcept { return weapon_; }
+
+    [[nodiscard]] bool aiming() const noexcept
+    {
+        return aiming_;
+    }
+
+    [[nodiscard]] bool crouching() const noexcept
+    {
+        return crouching_;
+    }
+
+    [[nodiscard]] const WeaponState& weapon() const noexcept
+    {
+        return weapon_;
+    }
+
     [[nodiscard]] const WeaponParameters& weapon_parameters() const noexcept;
     [[nodiscard]] std::shared_ptr<SceneMesh> weapon_mesh() const noexcept;
-    [[nodiscard]] std::size_t inventory_size() const noexcept { return inventory_.size(); }
-    [[nodiscard]] std::size_t selected_weapon_slot() const noexcept { return selected_weapon_slot_; }
-    [[nodiscard]] float damage_flash_remaining() const noexcept { return damage_flash_remaining_; }
+
+    [[nodiscard]] std::size_t inventory_size() const noexcept
+    {
+        return inventory_.size();
+    }
+
+    [[nodiscard]] std::size_t selected_weapon_slot() const noexcept
+    {
+        return selected_weapon_slot_;
+    }
+
+    [[nodiscard]] float damage_flash_remaining() const noexcept
+    {
+        return damage_flash_remaining_;
+    }
+
     [[nodiscard]] const SceneWeapon* weapon_definition() const noexcept;
-    [[nodiscard]] const std::vector<ActorState>& actors() const noexcept { return actors_; }
-    [[nodiscard]] const CollisionWorld& world() const noexcept { return world_; }
-    [[nodiscard]] const CollisionWorld& movement_world() const noexcept { return movement_world_; }
-    [[nodiscard]] std::uint64_t tick_count() const noexcept { return tick_count_; }
+
+    [[nodiscard]] const std::vector<ActorState>& actors() const noexcept
+    {
+        return actors_;
+    }
+
+    [[nodiscard]] const CollisionWorld& world() const noexcept
+    {
+        return world_;
+    }
+
+    [[nodiscard]] const CollisionWorld& movement_world() const noexcept
+    {
+        return movement_world_;
+    }
+
+    [[nodiscard]] std::uint64_t tick_count() const noexcept
+    {
+        return tick_count_;
+    }
 
   private:
     void advance_player(const PlayerInput& input);

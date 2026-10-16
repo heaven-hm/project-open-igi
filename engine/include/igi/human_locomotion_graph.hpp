@@ -4,12 +4,14 @@
 #include <cstddef>
 #include <span>
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
 // Retail state IDs and ordered transition targets, extracted from the 49
 // HumanPlayer per-tick functions. Target order is priority order in retail.
-class HumanLocomotionGraph final {
-public:
+class HumanLocomotionGraph final
+{
+  public:
     static constexpr std::size_t state_count = 49;
     static constexpr int falling = 29;
     static constexpr int jump = 28;

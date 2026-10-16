@@ -2,8 +2,10 @@
 
 #include <cmath>
 
-namespace igi::gameplay {
-namespace {
+namespace igi::gameplay
+{
+namespace
+{
 
 constexpr float slope_slide_threshold_degrees = 45.0f;
 constexpr float medium_slope_slide_threshold_degrees = 50.0f;
@@ -18,24 +20,29 @@ constexpr float degrees_per_radian = 57.295776f;
 constexpr float grounded_query_budget = 2048.0f;
 constexpr float sliding_query_budget = 8192.0f;
 
-[[nodiscard]] float clamp_unit_interval(float value) noexcept {
-    if (value < -1.0f) {
+[[nodiscard]] float clamp_unit_interval(float value) noexcept
+{
+    if (value < -1.0f)
+    {
         return -1.0f;
     }
-    if (value > 1.0f) {
+    if (value > 1.0f)
+    {
         return 1.0f;
     }
     return value;
 }
 
-[[nodiscard]] float calculate_slope_angle_degrees(const Vector3& slope_normal) noexcept {
-    const long double arcsine =
-        std::asin(static_cast<long double>(clamp_unit_interval(slope_normal.z)));
+[[nodiscard]] float calculate_slope_angle_degrees(const Vector3& slope_normal) noexcept
+{
+    const long double arcsine = std::asin(static_cast<long double>(clamp_unit_interval(slope_normal.z)));
     return static_cast<float>(90.0L - arcsine * static_cast<long double>(degrees_per_radian));
 }
 
-[[nodiscard]] Vector3 normalized_slope_normal(Vector3 slope_normal) noexcept {
-    if (slope_normal.x == 0.0f && slope_normal.y == 0.0f && slope_normal.z == 0.0f) {
+[[nodiscard]] Vector3 normalized_slope_normal(Vector3 slope_normal) noexcept
+{
+    if (slope_normal.x == 0.0f && slope_normal.y == 0.0f && slope_normal.z == 0.0f)
+    {
         return slope_normal;
     }
 
@@ -49,15 +56,18 @@ constexpr float sliding_query_budget = 8192.0f;
     return slope_normal;
 }
 
-void damp_vector(Vector3& vector) noexcept {
+void damp_vector(Vector3& vector) noexcept
+{
     vector.x *= velocity_damping;
     vector.y *= velocity_damping;
     vector.z *= velocity_damping;
 }
 
-[[nodiscard]] Vector3 add_vectors(const Vector3& first_vector, const Vector3& second_vector,
+[[nodiscard]] Vector3 add_vectors(const Vector3& first_vector,
+                                  const Vector3& second_vector,
                                   const Vector3& third_vector,
-                                  const Vector3& fourth_vector) noexcept {
+                                  const Vector3& fourth_vector) noexcept
+{
     return {
         first_vector.x + second_vector.x + third_vector.x + fourth_vector.x,
         first_vector.y + second_vector.y + third_vector.y + fourth_vector.y,
@@ -67,9 +77,11 @@ void damp_vector(Vector3& vector) noexcept {
 
 } // namespace
 
-bool HumanMovementIntegrator::update_slope_slide(HumanMovementState& human) noexcept {
+bool HumanMovementIntegrator::update_slope_slide(HumanMovementState& human) noexcept
+{
     const bool is_grounded = (human.movement_flags & grounded_flag) != 0;
-    if (!human.slope_processing_enabled || !is_grounded) {
+    if (!human.slope_processing_enabled || !is_grounded)
+    {
         human.slide_acceleration = {};
         return false;
     }
@@ -77,7 +89,8 @@ bool HumanMovementIntegrator::update_slope_slide(HumanMovementState& human) noex
     const Vector3 slope_normal = normalized_slope_normal(human.slope_normal);
     const float slope_angle_degrees = calculate_slope_angle_degrees(slope_normal);
 
-    if (slope_angle_degrees > extreme_slope_slide_threshold_degrees) {
+    if (slope_angle_degrees > extreme_slope_slide_threshold_degrees)
+    {
         human.slide_acceleration = {
             slope_normal.x * extreme_slope_acceleration,
             slope_normal.y * extreme_slope_acceleration,
@@ -86,7 +99,8 @@ bool HumanMovementIntegrator::update_slope_slide(HumanMovementState& human) noex
         return true;
     }
 
-    if (slope_angle_degrees > steep_slope_slide_threshold_degrees) {
+    if (slope_angle_degrees > steep_slope_slide_threshold_degrees)
+    {
         human.slide_acceleration = {
             slope_normal.x * very_steep_slope_acceleration,
             slope_normal.y * very_steep_slope_acceleration,
@@ -95,13 +109,15 @@ bool HumanMovementIntegrator::update_slope_slide(HumanMovementState& human) noex
         return true;
     }
 
-    if (slope_angle_degrees > medium_slope_slide_threshold_degrees) {
+    if (slope_angle_degrees > medium_slope_slide_threshold_degrees)
+    {
         human.slide_acceleration.x += slope_normal.x * steep_slope_acceleration;
         human.slide_acceleration.y += slope_normal.y * steep_slope_acceleration;
         return true;
     }
 
-    if (slope_angle_degrees > slope_slide_threshold_degrees) {
+    if (slope_angle_degrees > slope_slide_threshold_degrees)
+    {
         human.slide_acceleration.x += slope_normal.x * medium_slope_acceleration;
         human.slide_acceleration.y += slope_normal.y * medium_slope_acceleration;
         return true;
@@ -115,42 +131,51 @@ void HumanMovementIntegrator::apply_collision_queries(HumanMovementState& human,
                                                       HumanMovementWorld& world,
                                                       const WorldPosition3& starting_position,
                                                       WorldPosition3& destination_position,
-                                                      Vector3& movement_delta, bool is_sliding) {
-    if (human.collision_disabled) {
+                                                      Vector3& movement_delta,
+                                                      bool is_sliding)
+{
+    if (human.collision_disabled)
+    {
         return;
     }
 
-    if (human.wall_sweep_enabled) {
+    if (human.wall_sweep_enabled)
+    {
         world.sweep_walls(human, starting_position, destination_position, movement_delta);
     }
 
-    if (human.ground_query_enabled) {
+    if (human.ground_query_enabled)
+    {
         float vertical_query_budget = 0.0f;
-        if ((human.movement_flags & grounded_flag) != 0) {
+        if ((human.movement_flags & grounded_flag) != 0)
+        {
             vertical_query_budget = grounded_query_budget;
         }
-        if (is_sliding) {
+        if (is_sliding)
+        {
             vertical_query_budget = sliding_query_budget;
         }
 
-        world.query_ground(human, starting_position, destination_position, movement_delta,
-                           vertical_query_budget);
+        world.query_ground(
+            human, starting_position, destination_position, movement_delta, vertical_query_budget);
     }
 
-    if (human.separation_enabled) {
+    if (human.separation_enabled)
+    {
         world.separate_humans(human, starting_position, destination_position, movement_delta);
     }
 }
 
-void HumanMovementIntegrator::update(HumanMovementState& human, HumanMovementWorld& world) const {
+void HumanMovementIntegrator::update(HumanMovementState& human, HumanMovementWorld& world) const
+{
     const bool is_sliding = update_slope_slide(human);
 
     damp_vector(human.slide_acceleration);
     damp_vector(human.velocity);
     human.movement_flags &= ~roof_contact_flag;
 
-    Vector3 movement_delta = add_vectors(human.base_movement, human.animation_movement,
-                                         human.velocity, human.slide_acceleration);
+    Vector3 movement_delta =
+        add_vectors(human.base_movement, human.animation_movement, human.velocity, human.slide_acceleration);
 
     WorldPosition3 starting_position{
         human.world_position.x + static_cast<double>(human.position_adjustment.x),
@@ -163,8 +188,8 @@ void HumanMovementIntegrator::update(HumanMovementState& human, HumanMovementWor
         starting_position.z + static_cast<double>(movement_delta.z),
     };
 
-    apply_collision_queries(human, world, starting_position, destination_position, movement_delta,
-                            is_sliding);
+    apply_collision_queries(
+        human, world, starting_position, destination_position, movement_delta, is_sliding);
 
     world.commit_transform(human, destination_position, human.collision_radius);
     human.committed_movement = {

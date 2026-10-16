@@ -4,17 +4,19 @@
  *****************************************************************************/
 
 #pragma once
-#include <string>
-#include <vector>
 #include <cstdint>
 #include <functional>
+#include <string>
+#include <vector>
 
-struct RESEntry {
-    std::string name;               // Resource name/path
-    std::vector<uint8_t> data;      // Raw binary data
+struct RESEntry
+{
+    std::string name;          // Resource name/path
+    std::vector<uint8_t> data; // Raw binary data
 };
 
-struct RESFile {
+struct RESFile
+{
     std::vector<RESEntry> entries;
     bool valid = false;
     std::string error;

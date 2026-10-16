@@ -24,14 +24,14 @@ jobs:
         run: |
           $outDir = Join-Path $env:GITHUB_WORKSPACE "artifacts\Debug\"
           New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-          msbuild .\IGI_Natives\IGI_Natives.vcxproj /m /p:Configuration=Debug /p:Platform=Win32 "/p:OutDir=$outDir"
+          msbuild .\ProjectOpenIGI\ProjectOpenIGI.vcxproj /m /p:Configuration=Debug /p:Platform=Win32 "/p:OutDir=$outDir"
 
       - name: Build Release DLL
         shell: pwsh
         run: |
           $outDir = Join-Path $env:GITHUB_WORKSPACE "artifacts\Release\"
           New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-          msbuild .\IGI_Natives\IGI_Natives.vcxproj /m /p:Configuration=Release /p:Platform=Win32 "/p:OutDir=$outDir"
+          msbuild .\ProjectOpenIGI\ProjectOpenIGI.vcxproj /m /p:Configuration=Release /p:Platform=Win32 "/p:OutDir=$outDir"
 
       - name: Verify release assets
         shell: pwsh

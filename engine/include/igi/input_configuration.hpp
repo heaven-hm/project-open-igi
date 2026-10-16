@@ -4,11 +4,17 @@
 
 #include <unordered_map>
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
-struct InputBinding final { std::string device; std::string control; };
+struct InputBinding final
+{
+    std::string device;
+    std::string control;
+};
 
-struct InputConfiguration final {
+struct InputConfiguration final
+{
     std::string profile_name;
     std::unordered_map<std::string, InputBinding> bindings;
     float mouse_sensitivity = 0.4f;
@@ -17,8 +23,8 @@ struct InputConfiguration final {
 };
 
 [[nodiscard]] InputConfiguration parse_input_configuration(const std::vector<assets::ScriptCall>& calls,
-                                                          std::string_view requested_profile = {});
+                                                           std::string_view requested_profile = {});
 [[nodiscard]] InputConfiguration load_input_configuration(const std::filesystem::path& game_directory,
-                                                         std::string_view requested_profile = {});
+                                                          std::string_view requested_profile = {});
 
-}
+} // namespace igi::gameplay

@@ -10,17 +10,24 @@
 #include <unordered_map>
 #include <vector>
 
-namespace igi::gameplay {
+namespace igi::gameplay
+{
 
-enum class TerrainDetail { low, high };
+enum class TerrainDetail
+{
+    low,
+    high
+};
 
-struct SceneTexture final {
+struct SceneTexture final
+{
     std::uint32_t width{};
     std::uint32_t height{};
     std::vector<std::uint32_t> pixels;
 };
 
-struct SceneVertex final {
+struct SceneVertex final
+{
     Vector3 position;
     float texture_u{};
     float texture_v{};
@@ -28,18 +35,21 @@ struct SceneVertex final {
     Vector3 bone_local_position{};
 };
 
-struct SceneTriangle final {
+struct SceneTriangle final
+{
     std::array<SceneVertex, 3> vertices;
     std::uint32_t texture_index{};
     bool firing_only{};
 };
 
-struct CollisionTriangle final {
+struct CollisionTriangle final
+{
     std::array<Vector3, 3> positions;
     bool non_solid_portal{};
 };
 
-struct SceneMesh final {
+struct SceneMesh final
+{
     std::vector<SceneTriangle> triangles;
     std::vector<CollisionTriangle> collision;
     std::vector<Vector3> bone_rest_positions;
@@ -50,7 +60,8 @@ struct SceneMesh final {
 
 struct SkeletalAnimationSet;
 
-struct SceneActor final {
+struct SceneActor final
+{
     Vector3 position;
     float heading{};
     int identifier{};
@@ -67,21 +78,33 @@ struct SceneActor final {
     float damage_scale = 1.0f;
 };
 
-struct NavigationNode final {
+struct NavigationNode final
+{
     int identifier{};
     Vector3 position;
     std::vector<std::size_t> neighbors;
 };
 
-struct NavigationGraph final {
+struct NavigationGraph final
+{
     int identifier{};
     std::vector<NavigationNode> nodes;
 };
 
-struct PatrolCommand final { int kind{}; int operand{}; };
-struct PatrolPath final { int identifier{}; std::vector<PatrolCommand> commands; };
+struct PatrolCommand final
+{
+    int kind{};
+    int operand{};
+};
 
-struct PlayerParameters final {
+struct PatrolPath final
+{
+    int identifier{};
+    std::vector<PatrolCommand> commands;
+};
+
+struct PlayerParameters final
+{
     float root_translation_scale = 1.75f;
     float jump_horizontal_per_tick = 17.5f / 3.6f / 30.0f;
     float jump_vertical_per_tick = 27.0f / 3.6f / 30.0f;
@@ -89,7 +112,8 @@ struct PlayerParameters final {
     float maximum_health = 3.0f;
 };
 
-struct WeaponParameters final {
+struct WeaponParameters final
+{
     std::string name = "MP5 SD3";
     std::uint32_t magazine_capacity = 32;
     float shots_per_minute = 700.0f;
@@ -101,7 +125,8 @@ struct WeaponParameters final {
     bool melee{};
 };
 
-struct SceneWeapon final {
+struct SceneWeapon final
+{
     std::string identifier;
     WeaponParameters parameters;
     std::shared_ptr<SceneMesh> mesh;
@@ -114,24 +139,28 @@ struct SceneWeapon final {
     int reload_animation = 21;
 };
 
-struct WeaponPickup final {
+struct WeaponPickup final
+{
     Vector3 position;
     std::string weapon_identifier;
 };
 
-struct RootMotionKey final {
+struct RootMotionKey final
+{
     float time{};
     Vector3 position;
     Vector3 incoming_tangent;
     Vector3 outgoing_tangent;
 };
 
-struct RootMotionClip final {
+struct RootMotionClip final
+{
     float duration{};
     std::vector<RootMotionKey> keys;
 };
 
-struct MissionScene final {
+struct MissionScene final
+{
     std::vector<SceneTexture> textures;
     std::vector<SceneTriangle> static_triangles;
     std::vector<CollisionTriangle> collision_triangles;
@@ -160,7 +189,8 @@ struct MissionScene final {
 };
 
 [[nodiscard]] MissionScene load_mission(const std::filesystem::path& game_directory,
-                                      const std::filesystem::path& cache_directory,
-                                      int mission_number = 1, TerrainDetail terrain_detail = TerrainDetail::high);
+                                        const std::filesystem::path& cache_directory,
+                                        int mission_number = 1,
+                                        TerrainDetail terrain_detail = TerrainDetail::high);
 
 } // namespace igi::gameplay

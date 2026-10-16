@@ -1,126 +1,207 @@
-#include "igi/game_simulation.hpp"
-
 #include "igi/diagnostics.hpp"
+#include "igi/game_simulation.hpp"
 #include "igi/skeletal_animation.hpp"
 
 #include <algorithm>
 #include <limits>
 #include <stdexcept>
 
-namespace igi::gameplay {
-namespace {
+namespace igi::gameplay
+{
+namespace
+{
 
 constexpr float tick_duration = 1.0f / 30.0f;
 
-float capsule_intersection(Vector3 origin, Vector3 direction, Vector3 feet, float height,
-                           float radius, float maximum_distance) {
+float capsule_intersection(
+    Vector3 origin, Vector3 direction, Vector3 feet, float height, float radius, float maximum_distance)
+{
     float nearest = maximum_distance;
     const Vector3 relative = origin - feet;
     const float quadratic = direction.x * direction.x + direction.y * direction.y;
     const float mixed = relative.x * direction.x + relative.y * direction.y;
     const float constant = relative.x * relative.x + relative.y * relative.y - radius * radius;
     const float determinant = mixed * mixed - quadratic * constant;
-    if (quadratic > 0.000001f && determinant >= 0) {
+    if (quadratic > 0.000001f && determinant >= 0)
+    {
         const float distance = (-mixed - std::sqrt(determinant)) / quadratic;
         const float vertical = relative.z + direction.z * distance;
-        if (distance >= 0 && distance < nearest && vertical >= radius && vertical <= height - radius) {
+        if (distance >= 0 && distance < nearest && vertical >= radius && vertical <= height - radius)
+        {
             nearest = distance;
         }
     }
-    for (const float sphere_height : {radius, height - radius}) {
+    for (const float sphere_height : {radius, height - radius})
+    {
         const Vector3 difference = origin - feet - Vector3{0, 0, sphere_height};
         const float projection = dot(difference, direction);
-        const float sphere_determinant = projection * projection - dot(difference, difference) + radius * radius;
-        if (sphere_determinant < 0) { continue; }
+        const float sphere_determinant =
+            projection * projection - dot(difference, difference) + radius * radius;
+        if (sphere_determinant < 0)
+        {
+            continue;
+        }
         const float distance = -projection - std::sqrt(sphere_determinant);
-        if (distance >= 0 && distance < nearest) { nearest = distance; }
+        if (distance >= 0 && distance < nearest)
+        {
+            nearest = distance;
+        }
     }
     return nearest;
 }
 
 } // namespace
 
-void GameSimulation::advance_weapon(const PlayerInput& input) {
+void GameSimulation::advance_weapon(const PlayerInput& input)
+{
     const auto& parameters = weapon_parameters();
     if (!std::isfinite(parameters.shots_per_minute) || !std::isfinite(parameters.muzzle_velocity) ||
         !std::isfinite(parameters.reload_seconds) || !std::isfinite(parameters.damage) ||
         parameters.shots_per_minute <= 0 || parameters.magazine_capacity == 0 ||
-        parameters.muzzle_velocity <= 0 || parameters.reload_seconds <= 0 || parameters.damage <= 0) {
+        parameters.muzzle_velocity <= 0 || parameters.reload_seconds <= 0 || parameters.damage <= 0)
+    {
         throw std::runtime_error("Original weapon parameters are invalid");
     }
     weapon_.cooldown -= tick_duration;
     weapon_.muzzle_flash_remaining = std::max(0.0f, weapon_.muzzle_flash_remaining - tick_duration);
     weapon_.hit_marker_remaining = std::max(0.0f, weapon_.hit_marker_remaining - tick_duration);
-    if (weapon_.reload_remaining > 0) {
+    if (weapon_.reload_remaining > 0)
+    {
         weapon_.reload_remaining = std::max(0.0f, weapon_.reload_remaining - tick_duration);
-        if (weapon_.reload_remaining == 0) {
+        if (weapon_.reload_remaining == 0)
+        {
             const auto rounds = std::min(parameters.magazine_capacity - weapon_.magazine, weapon_.reserve);
             weapon_.magazine += rounds;
             weapon_.reserve -= rounds;
-            diagnostics::log(diagnostics::Severity::information, "weapon", "Reload completed; magazine=" +
-                std::to_string(weapon_.magazine) + ", reserve=" + std::to_string(weapon_.reserve));
+            diagnostics::log(diagnostics::Severity::information,
+                             "weapon",
+                             "Reload completed; magazine=" + std::to_string(weapon_.magazine) +
+                                 ", reserve=" + std::to_string(weapon_.reserve));
         }
         return;
     }
-    if (!parameters.melee && input.reloading && weapon_.magazine < parameters.magazine_capacity && weapon_.reserve != 0) {
+    if (!parameters.melee && input.reloading && weapon_.magazine < parameters.magazine_capacity &&
+        weapon_.reserve != 0)
+    {
         weapon_.reload_remaining = parameters.reload_seconds;
         diagnostics::log(diagnostics::Severity::information, "weapon", "Reload started");
         return;
     }
-    if (input.firing && (parameters.automatic || !fire_was_pressed_) && weapon_.magazine != 0 && weapon_.cooldown <= 0) {
-        if (!parameters.melee) { --weapon_.magazine; }
+    if (input.firing && (parameters.automatic || !fire_was_pressed_) && weapon_.magazine != 0 &&
+        weapon_.cooldown <= 0)
+    {
+        if (!parameters.melee)
+        {
+            --weapon_.magazine;
+        }
         ++weapon_.shots_fired;
         weapon_.cooldown = std::max(weapon_.cooldown, -tick_duration) + 60.0f / parameters.shots_per_minute;
         weapon_.muzzle_flash_remaining = 0.055f;
-        projectiles_.push_back({camera_position(), aim_direction(), parameters.maximum_distance,
-                               parameters.melee ? 1000.0f : parameters.muzzle_velocity, parameters.damage, -1});
-        diagnostics::log(diagnostics::Severity::debug, "weapon", "Projectile fired; magazine=" + std::to_string(weapon_.magazine));
-    } else if (!input.firing) {
+        projectiles_.push_back({camera_position(),
+                                aim_direction(),
+                                parameters.maximum_distance,
+                                parameters.melee ? 1000.0f : parameters.muzzle_velocity,
+                                parameters.damage,
+                                -1});
+        diagnostics::log(diagnostics::Severity::debug,
+                         "weapon",
+                         "Projectile fired; magazine=" + std::to_string(weapon_.magazine));
+    }
+    else if (!input.firing)
+    {
         weapon_.cooldown = std::max(weapon_.cooldown, 0.0f);
     }
 }
 
-void GameSimulation::advance_view_animation(const PlayerInput& input) {
+void GameSimulation::advance_view_animation(const PlayerInput& input)
+{
     const auto* definition = weapon_definition();
-    if (definition == nullptr || !scene_.first_person_animations) { return; }
+    if (definition == nullptr || !scene_.first_person_animations)
+    {
+        return;
+    }
     const auto& clips = scene_.first_person_animations->clips;
     const bool firing = weapon_.muzzle_flash_remaining > 0.05f;
-    int animation = input.forward != 0 || input.sideways != 0 ? definition->move_animation : definition->stand_animation;
-    if (weapon_.reload_remaining > 0) { animation = definition->reload_animation; }
-    else if (firing) { animation = definition->fire_animation; }
-    else if (weapon_.animation_identifier == definition->fire_animation && clips.contains(weapon_.animation_identifier) &&
-             weapon_.animation_time + 160 < clips.at(weapon_.animation_identifier).duration) { animation = weapon_.animation_identifier; }
-    if (!clips.contains(animation)) { return; }
-    if (weapon_.animation_identifier != animation || firing) { weapon_.animation_identifier = animation; weapon_.animation_time = 0; }
-    else { weapon_.animation_time += 160; }
-    if (clips.at(animation).duration > 0) { weapon_.animation_time = std::fmod(weapon_.animation_time, clips.at(animation).duration); }
+    int animation =
+        input.forward != 0 || input.sideways != 0 ? definition->move_animation : definition->stand_animation;
+    if (weapon_.reload_remaining > 0)
+    {
+        animation = definition->reload_animation;
+    }
+    else if (firing)
+    {
+        animation = definition->fire_animation;
+    }
+    else if (weapon_.animation_identifier == definition->fire_animation &&
+             clips.contains(weapon_.animation_identifier) &&
+             weapon_.animation_time + 160 < clips.at(weapon_.animation_identifier).duration)
+    {
+        animation = weapon_.animation_identifier;
+    }
+    if (!clips.contains(animation))
+    {
+        return;
+    }
+    if (weapon_.animation_identifier != animation || firing)
+    {
+        weapon_.animation_identifier = animation;
+        weapon_.animation_time = 0;
+    }
+    else
+    {
+        weapon_.animation_time += 160;
+    }
+    if (clips.at(animation).duration > 0)
+    {
+        weapon_.animation_time = std::fmod(weapon_.animation_time, clips.at(animation).duration);
+    }
 }
 
-void GameSimulation::advance_projectiles() {
-    for (auto& projectile : projectiles_) {
+void GameSimulation::advance_projectiles()
+{
+    for (auto& projectile : projectiles_)
+    {
         const float travel = std::min(projectile.remaining_distance, projectile.speed * tick_duration);
         const auto world_hit = world_.raycast(projectile.position, projectile.direction, travel);
         float hit_distance = world_hit.hit ? world_hit.distance : travel;
         int target_actor = -1;
         bool target_player = false;
-        if (projectile.owner == -1) {
-            for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index) {
-                if (!actors_[actor_index].active || actors_[actor_index].behavior == ActorBehavior::dead) { continue; }
-                const auto distance = capsule_intersection(projectile.position, projectile.direction,
-                    actors_[actor_index].position, 1.8f, 0.32f, hit_distance);
-                if (distance < hit_distance) {
+        if (projectile.owner == -1)
+        {
+            for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)
+            {
+                if (!actors_[actor_index].active || actors_[actor_index].behavior == ActorBehavior::dead)
+                {
+                    continue;
+                }
+                const auto distance = capsule_intersection(projectile.position,
+                                                           projectile.direction,
+                                                           actors_[actor_index].position,
+                                                           1.8f,
+                                                           0.32f,
+                                                           hit_distance);
+                if (distance < hit_distance)
+                {
                     hit_distance = distance;
                     target_actor = static_cast<int>(actor_index);
                 }
             }
-        } else if (health_ > 0) {
-            const auto distance = capsule_intersection(projectile.position, projectile.direction,
-                player_position(), crouching_ ? 1.1f : 1.8f, 0.3f, hit_distance);
-            if (distance < hit_distance) {
+        }
+        else if (health_ > 0)
+        {
+            const auto distance = capsule_intersection(projectile.position,
+                                                       projectile.direction,
+                                                       player_position(),
+                                                       crouching_ ? 1.1f : 1.8f,
+                                                       0.3f,
+                                                       hit_distance);
+            if (distance < hit_distance)
+            {
                 target_player = true;
             }
         }
-        if (target_actor >= 0) {
+        if (target_actor >= 0)
+        {
             auto& actor = actors_[static_cast<std::size_t>(target_actor)];
             actor.health = std::max(0.0f, actor.health - projectile.damage);
             actor.last_seen_position = player_position();
@@ -128,30 +209,44 @@ void GameSimulation::advance_projectiles() {
             actor.behavior = actor.health <= 0 ? ActorBehavior::dead : ActorBehavior::attacking;
             ++weapon_.hits;
             weapon_.hit_marker_remaining = 0.15f;
-            if (actor.behavior == ActorBehavior::dead) {
+            if (actor.behavior == ActorBehavior::dead)
+            {
                 ++weapon_.kills;
-                diagnostics::log(diagnostics::Severity::information, "combat", "Soldier defeated: " +
-                    std::to_string(scene_.actors[static_cast<std::size_t>(target_actor)].identifier));
+                diagnostics::log(
+                    diagnostics::Severity::information,
+                    "combat",
+                    "Soldier defeated: " +
+                        std::to_string(scene_.actors[static_cast<std::size_t>(target_actor)].identifier));
             }
         }
-        if (target_player) {
+        if (target_player)
+        {
             health_ = std::max(0.0f, health_ - projectile.damage);
             damage_flash_remaining_ = 0.2f;
-            diagnostics::log(diagnostics::Severity::information, "combat", "Player hit by soldier " +
-                std::to_string(scene_.actors.at(static_cast<std::size_t>(projectile.owner)).identifier) +
-                "; damage=" + std::to_string(projectile.damage) + "; health=" + std::to_string(health_));
-            if (health_ <= 0) {
-                diagnostics::log(diagnostics::Severity::information, "combat", "Player died; press Enter to restart");
+            diagnostics::log(
+                diagnostics::Severity::information,
+                "combat",
+                "Player hit by soldier " +
+                    std::to_string(scene_.actors.at(static_cast<std::size_t>(projectile.owner)).identifier) +
+                    "; damage=" + std::to_string(projectile.damage) + "; health=" + std::to_string(health_));
+            if (health_ <= 0)
+            {
+                diagnostics::log(
+                    diagnostics::Severity::information, "combat", "Player died; press Enter to restart");
             }
         }
-        if (world_hit.hit || target_actor >= 0 || target_player) {
+        if (world_hit.hit || target_actor >= 0 || target_player)
+        {
             projectile.remaining_distance = 0;
-        } else {
+        }
+        else
+        {
             projectile.position = projectile.position + projectile.direction * travel;
             projectile.remaining_distance -= travel;
         }
     }
-    std::erase_if(projectiles_, [](const Projectile& projectile) { return projectile.remaining_distance <= 0; });
+    std::erase_if(projectiles_,
+                  [](const Projectile& projectile) { return projectile.remaining_distance <= 0; });
 }
 
 } // namespace igi::gameplay

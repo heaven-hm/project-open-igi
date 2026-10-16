@@ -33,7 +33,7 @@ jobs:
         run: |
           $outDir = Join-Path $env:GITHUB_WORKSPACE "artifacts\${{ matrix.configuration }}\"
           New-Item -ItemType Directory -Force -Path $outDir | Out-Null
-          msbuild .\IGI_Natives\IGI_Natives.vcxproj /m /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32 "/p:OutDir=$outDir"
+          msbuild .\ProjectOpenIGI\ProjectOpenIGI.vcxproj /m /p:Configuration=${{ matrix.configuration }} /p:Platform=Win32 "/p:OutDir=$outDir"
 
       - name: Verify DLL produced
         shell: pwsh

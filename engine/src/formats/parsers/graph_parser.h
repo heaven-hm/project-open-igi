@@ -7,60 +7,69 @@
  *****************************************************************************/
 
 #pragma once
+#include <cstdint>
 #include <string>
 #include <vector>
-#include <cstdint>
 
 // Node criteria flags (stored as string names in the file)
-inline constexpr int NODECRITERIA_DOOR  = 1;
-inline constexpr int NODECRITERIA_VIEW  = 2;
+inline constexpr int NODECRITERIA_DOOR = 1;
+inline constexpr int NODECRITERIA_VIEW = 2;
 inline constexpr int NODECRITERIA_STAIR = 4;
 
-struct GraphNode {
-    int    id       = -1;
-    double x        = 0.0;
-    double y        = 0.0;
-    double z        = 0.0;
-    float  gamma    = 0.f;
-    float  radius   = 0.f;
-    int    material = 0;         // 0-23
-    std::string criteria;        // e.g. "NODECRITERIA_VIEW"
-    int    link1    = -1;        // connected node ID (-1 = none)
-    int    link2    = -1;        // connected node ID (-1 = none)
+struct GraphNode
+{
+    int id = -1;
+    double x = 0.0;
+    double y = 0.0;
+    double z = 0.0;
+    float gamma = 0.f;
+    float radius = 0.f;
+    int material = 0;     // 0-23
+    std::string criteria; // e.g. "NODECRITERIA_VIEW"
+    int link1 = -1;       // connected node ID (-1 = none)
+    int link2 = -1;       // connected node ID (-1 = none)
     // Legacy (alternate tagged) format only — preserved verbatim on save.
-    float  f3       = 0.5f;      // 3rd float after radius (purpose unknown)
-    std::vector<int> legacy_link_targets;  // per-node link target IDs
-    std::vector<int> legacy_link_types;    // per-node link types
-    int    legacy_graph_link     = 0;      // 0 = no inter-graph link, 1 = has
-    int    legacy_graph_link_tgt = 0;
-    int    legacy_graph_link_typ = 0;
+    float f3 = 0.5f;                      // 3rd float after radius (purpose unknown)
+    std::vector<int> legacy_link_targets; // per-node link target IDs
+    std::vector<int> legacy_link_types;   // per-node link types
+    int legacy_graph_link = 0;            // 0 = no inter-graph link, 1 = has
+    int legacy_graph_link_tgt = 0;
+    int legacy_graph_link_typ = 0;
 };
 
-struct GraphEdge {
-    int node1     = -1;
-    int node2     = -1;
+struct GraphEdge
+{
+    int node1 = -1;
+    int node2 = -1;
     int link_type = 0;
 };
 
-struct GraphFile {
-    int                     max_nodes = 0;
-    std::vector<GraphNode>  nodes;
-    std::vector<GraphEdge>  edges;
-    bool                    valid = false;
-    std::string             error;
-    bool                    is_legacy = false;  // alternate tagged format (no magic)
+struct GraphFile
+{
+    int max_nodes = 0;
+    std::vector<GraphNode> nodes;
+    std::vector<GraphEdge> edges;
+    bool valid = false;
+    std::string error;
+    bool is_legacy = false; // alternate tagged format (no magic)
 };
 
 // Visual/semantic classification of a node, derived from its criteria string.
 // Precedence when multiple keywords are present: Door > Stair > View > Default.
-enum class GraphNodeKind { Default, Door, View, Stair };
+enum class GraphNodeKind
+{
+    Default,
+    Door,
+    View,
+    Stair
+};
 
 // Classify a node by its criteria text (case-sensitive substring match,
 // e.g. "NODECRITERIA_DOOR" -> Door). Empty/unknown criteria -> Default.
 GraphNodeKind GRAPH_NodeKind(const GraphNode& node);
 
 // Find a node by id. Returns nullptr if absent.
-GraphNode*       GRAPH_FindNode(GraphFile& graph, int id);
+GraphNode* GRAPH_FindNode(GraphFile& graph, int id);
 const GraphNode* GRAPH_FindNode(const GraphFile& graph, int id);
 
 // Parse a navigation graph .dat file.
