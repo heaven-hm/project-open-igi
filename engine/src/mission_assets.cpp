@@ -6,6 +6,7 @@
 
 #include "mef_native.h"
 #include "mtp_parser.h"
+#include "olm_parser.h"
 #include "res_parser.h"
 #include "tex_parser.h"
 
@@ -13,6 +14,8 @@
 #include <array>
 #include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
+#include <iomanip>
+#include <sstream>
 #include <stdexcept>
 #include <utility>
 
@@ -201,10 +204,131 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
             }
         }
     }
+    index_lightmap_archive(mission_directory / "lightmaps/lightmaps.res");
     diagnostics::log(diagnostics::Severity::information,
                      "assets",
                      "Indexed " + std::to_string(files_.size()) + " original resources and " +
-                         std::to_string(material_names_.size()) + " model material mappings");
+                         std::to_string(material_names_.size()) + " model material mappings and " +
+                         std::to_string(lightmap_entries_.size()) + " object lightmaps");
+}
+
+void MissionAssets::index_lightmap_archive(const std::filesystem::path& path)
+{
+    std::error_code filesystem_error;
+    if (!std::filesystem::is_regular_file(path, filesystem_error))
+    {
+        if (filesystem_error)
+        {
+            throw std::runtime_error("Cannot inspect object lightmap archive " + path.string() + ": " +
+                                     filesystem_error.message());
+        }
+        diagnostics::log(diagnostics::Severity::warning,
+                         "lightmap-assets",
+                         "Object lightmap archive is missing: " + path.string());
+        return;
+    }
+    if (std::filesystem::file_size(path) > 512 * 1024 * 1024)
+    {
+        throw std::runtime_error("Object lightmap archive exceeds size limit: " + path.string());
+    }
+
+    std::string error;
+    const bool valid = RES_ForEachEntry(
+        path.string(),
+        [&](const std::string& resource_name, const std::uint8_t*, std::size_t)
+        {
+            std::string_view set_name;
+            std::uint32_t model_index = 0;
+            if (!parse_object_lightmap_entry_name(resource_name, set_name, model_index))
+            {
+                return;
+            }
+            const std::string key = normalize_name(resource_name.substr(
+                resource_name.find_last_of("/\\:") == std::string::npos
+                    ? 0
+                    : resource_name.find_last_of("/\\:") + 1));
+            const auto [entry, inserted] =
+                lightmap_entries_.emplace(key, LightmapArchiveEntry{path, resource_name});
+            if (!inserted && entry->second.resource_name != resource_name)
+            {
+                throw std::runtime_error("Duplicate object lightmap resource name: " + resource_name);
+            }
+        },
+        error);
+    if (!valid)
+    {
+        throw std::runtime_error("Cannot index object lightmap archive " + path.string() + ": " + error);
+    }
+    diagnostics::log(diagnostics::Severity::information,
+                     "lightmap-assets",
+                     "Indexed " + std::to_string(lightmap_entries_.size()) + " object lightmap resources from " +
+                         path.string());
+}
+
+std::vector<std::uint32_t> MissionAssets::lightmap_textures(std::string_view set_name,
+                                                            std::uint32_t model_index)
+{
+    if (set_name.empty())
+    {
+        return {};
+    }
+
+    std::ostringstream entry_name_builder;
+    entry_name_builder << normalize_name(set_name) << '_' << std::setw(5) << std::setfill('0') << model_index
+                       << ".olm";
+    const std::string entry_key = entry_name_builder.str();
+    if (const auto cached = lightmap_texture_indices_.find(entry_key); cached != lightmap_texture_indices_.end())
+    {
+        return cached->second;
+    }
+
+    const auto resource = lightmap_entries_.find(entry_key);
+    if (resource == lightmap_entries_.end())
+    {
+        diagnostics::log(diagnostics::Severity::warning,
+                         "lightmap-assets",
+                         "No object lightmap resource found for " + entry_key);
+        return {};
+    }
+
+    const auto bytes = RES_Extract(resource->second.archive_path.string(), resource->second.resource_name);
+    if (bytes.empty())
+    {
+        throw std::runtime_error("Indexed object lightmap resource could not be extracted: " +
+                                 resource->second.resource_name);
+    }
+    const ObjectLightmap lightmap = parse_object_lightmap(bytes);
+    std::vector<std::uint32_t> texture_indices;
+    texture_indices.reserve(lightmap.images.size());
+    for (const auto& image : lightmap.images)
+    {
+        const std::size_t pixel_count = static_cast<std::size_t>(image.width) * image.height;
+        if (pixel_count == 0 || image.rgba_pixels.size() != pixel_count * 4)
+        {
+            throw std::runtime_error("Object lightmap image has inconsistent RGBA dimensions: " + entry_key);
+        }
+
+        gameplay::SceneTexture texture{image.width, image.height, {}, {}};
+        texture.pixels.reserve(pixel_count);
+        for (std::size_t pixel_index = 0; pixel_index < pixel_count; ++pixel_index)
+        {
+            const std::size_t byte_offset = pixel_index * 4;
+            const std::uint32_t red = image.rgba_pixels[byte_offset];
+            const std::uint32_t green = image.rgba_pixels[byte_offset + 1];
+            const std::uint32_t blue = image.rgba_pixels[byte_offset + 2];
+            const std::uint32_t alpha = image.rgba_pixels[byte_offset + 3];
+            texture.pixels.push_back((alpha << 24) | (red << 16) | (green << 8) | blue);
+        }
+        texture_indices.push_back(static_cast<std::uint32_t>(textures_.size()));
+        textures_.push_back(std::move(texture));
+    }
+
+    diagnostics::log(diagnostics::Severity::information,
+                     "lightmap-assets",
+                     "Loaded " + std::to_string(texture_indices.size()) + " RGBA page(s) for " + entry_key +
+                         " (version " + std::to_string(lightmap.version) + ")");
+    lightmap_texture_indices_.emplace(entry_key, texture_indices);
+    return texture_indices;
 }
 
 void MissionAssets::load_archive(const std::filesystem::path& path,

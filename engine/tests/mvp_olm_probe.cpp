@@ -207,6 +207,28 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
                                                });
                         }),
             "Mission asset adapter must preserve MEF lightmap pages and UV coordinates");
+    const auto lightmap_texture_indices = mission_assets.lightmap_textures("obj00014", 0);
+    require(lightmap_texture_indices.size() == sample_lightmap.images.size(),
+            "Mission asset adapter must load all pages from the indexed retail OLM resource");
+    const auto cached_lightmap_texture_indices = mission_assets.lightmap_textures("obj00014", 0);
+    require(cached_lightmap_texture_indices == lightmap_texture_indices,
+            "Repeated object lightmap requests must reuse cached texture indices");
+    auto loaded_textures = mission_assets.take_textures();
+    require(lightmap_texture_indices.front() < loaded_textures.size(),
+            "Loaded object lightmap texture index must refer to the mission texture collection");
+    const auto& loaded_lightmap_texture = loaded_textures[lightmap_texture_indices.front()];
+    require(loaded_lightmap_texture.width == sample_lightmap.images.front().width &&
+                loaded_lightmap_texture.height == sample_lightmap.images.front().height,
+            "Mission asset adapter must preserve retail OLM texture dimensions");
+    const auto& sample_pixel = sample_lightmap.images.front().rgba_pixels;
+    const std::uint32_t expected_pixel = (static_cast<std::uint32_t>(sample_pixel[3]) << 24) |
+                                         (static_cast<std::uint32_t>(sample_pixel[0]) << 16) |
+                                         (static_cast<std::uint32_t>(sample_pixel[1]) << 8) |
+                                         static_cast<std::uint32_t>(sample_pixel[2]);
+    require(!loaded_lightmap_texture.pixels.empty() && loaded_lightmap_texture.pixels.front() == expected_pixel,
+            "Mission asset adapter must preserve the first retail OLM RGBA pixel");
+    std::cout << "[PASS] Retail OLM pages load as mission textures with stable cache indices and exact pixel bytes\n";
+
     std::cout << "[PASS] Retail lightmapped model 435_01_1.mef: " << geometry.vertices.size() << " vertices, "
               << geometry.triangles.size() << " triangles, " << geometry.renderBlocks.size()
               << " draw blocks; UV2/page metadata reaches scene mesh\n";
