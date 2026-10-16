@@ -431,10 +431,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
             {
                 throw std::runtime_error("Original animation translation key is invalid");
             }
+            // Retail IFF files store outbound tangent negated in tangent_out.
+            // 0x4D4840 evaluates previous key's tangent_in as m0 (outgoing) and
+            // next key's (-tangent_out) as m1 (incoming) in the standard Hermite basis.
             clip.keys.push_back({key.time,
                                  {key.pos[0], key.pos[1], key.pos[2]},
-                                 {key.tangent_in[0], key.tangent_in[1], key.tangent_in[2]},
-                                 {key.tangent_out[0], key.tangent_out[1], key.tangent_out[2]}});
+                                 {-key.tangent_out[0], -key.tangent_out[1], -key.tangent_out[2]},
+                                 {key.tangent_in[0], key.tangent_in[1], key.tangent_in[2]}});
         }
         scene.root_motion_clips[original_clip.animation_id] = std::move(clip);
     }

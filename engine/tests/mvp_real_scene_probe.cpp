@@ -115,6 +115,37 @@ int main(int argument_count, char** arguments)
         }
         require(highest > start.z + 0.2f && movement.grounded(), "Original level jump must rise and land");
 
+        {
+            // Holding forward must never step backward, including at animation-loop starts, and a
+            // jump taken at any phase must launch the way the player was already moving.
+            for (int jump_tick = 8; jump_tick < 24; ++jump_tick)
+            {
+                GameSimulation forward(scene);
+                PlayerInput held;
+                held.forward = 1;
+                for (int tick_index = 0; tick_index < 6; ++tick_index)
+                {
+                    forward.tick(held);
+                }
+                const auto origin = forward.player_position();
+                Vector3 direction{};
+                for (int tick_index = 6; tick_index < 80; ++tick_index)
+                {
+                    const auto before = forward.player_position();
+                    held.jumping = tick_index == jump_tick;
+                    forward.tick(held);
+                    const auto after = forward.player_position();
+                    if (tick_index == 6)
+                    {
+                        direction = Vector3{after.x - origin.x, after.y - origin.y, 0};
+                        direction = direction * (1.0f / std::max(length(direction), 1e-6f));
+                    }
+                    const float progress = (after.x - before.x) * direction.x + (after.y - before.y) * direction.y;
+                    require(progress > -1e-4f, "Holding forward (with or without a jump) must never step backward");
+                }
+            }
+        }
+
         GameSimulation combat(scene);
         std::size_t target_index = scene.actors.size();
         float target_distance = std::numeric_limits<float>::max();

@@ -95,10 +95,11 @@ std::shared_ptr<SkeletalAnimationSet> load_skeletal_animations(const std::filesy
         clip.root_motion.duration = original.duration;
         for (const auto& key : original.root_translations)
         {
+            // Retail IFF files store outbound tangent negated in tangent_out.
             clip.root_motion.keys.push_back({key.time,
                                              {key.pos[0], key.pos[1], key.pos[2]},
-                                             {key.tangent_in[0], key.tangent_in[1], key.tangent_in[2]},
-                                             {key.tangent_out[0], key.tangent_out[1], key.tangent_out[2]}});
+                                             {-key.tangent_out[0], -key.tangent_out[1], -key.tangent_out[2]},
+                                             {key.tangent_in[0], key.tangent_in[1], key.tangent_in[2]}});
         }
         for (const auto& original_track : original.bone_rotations)
         {
