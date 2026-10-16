@@ -4,11 +4,14 @@
 
 An open-source native implementation of the Project I.G.I. game engine, built
 in C++20 for all major desktop operating systems — Windows, macOS, and Linux.
-This is not a from-scratch re-implementation in the style of the C#
-[OpenIGI](https://github.com/OpenIGI/OpenIGI) project: original game data is
-loaded from the retail game folder and the runtime reproduces the original game
-byte-for-byte. The first implementation milestone focuses on player
-locomotion, physics, weapons, and enemy AI.
+It was written from scratch in C++, reverse-engineered with Binary Ninja and
+Ghidra from the retail `igi.exe`, using the
+[project-igi-natives](https://github.com/heaven-hm/project-igi-natives)
+research — 4000+ cataloged native functions to start from — and took help from
+the C# [OpenIGI](https://github.com/OpenIGI/OpenIGI) reference. Original game
+data is loaded from the retail game folder and the runtime reproduces the
+original game byte-for-byte. The first implementation milestone focuses on
+player locomotion, physics, weapons, and enemy AI.
 
 ## Current state
 
@@ -51,18 +54,20 @@ Level spawn renders captured from the engine (1280x960):
 
 ![Level 3 spawn](screenshots/screenshot_03_level3_spawn.png)
 
-## Derived from
+## Credits and prior work
 
-This project builds on earlier open-source projects:
+Written from scratch in C++, but the following projects were a great help:
 
-- [project-igi-editor](https://github.com/heaven-hm/project-igi-editor) — 3D
-  level editor for Project I.G.I. 1 (renderer attachment transforms, format
-  and level knowledge).
+- [project-igi-natives](https://github.com/heaven-hm/project-igi-natives) —
+  native-function research via DLL injection; its catalog of 4000+ natives was
+  the starting point for the reverse engineering.
+- [project-igi-editor](https://github.com/heaven-hm/project-igi-editor) — file
+  formats and terrain were already created here in C++; a great help.
 - [project-igi-converter](https://github.com/heaven-hm/project-igi-converter) —
-  IGI1Conv/IGI2Conv asset converter (the runtime format parsers).
-- [OpenIGI](https://github.com/OpenIGI/OpenIGI) — C# reference implementation,
-  used as a cross-check reference only; this project is a native,
-  byte-for-byte game reproduction, not a re-implementation.
+  the C++ asset converter (IGI1Conv/IGI2Conv); its file-format parsers were a
+  great help.
+- [OpenIGI](https://github.com/OpenIGI/OpenIGI) — the C# reference
+  implementation we took help from as a cross-check.
 - [Project-IGI-Terrain](https://github.com/hjcminus/Project-IGI-Terrain) —
   the Terrain Editor by hjcminus that project-igi-editor is based on.
 
