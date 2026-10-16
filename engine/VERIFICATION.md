@@ -264,3 +264,14 @@ Validation on 2026-10-17:
 - Focused CTest: 5/5 passed (`mvp_renderer_depth_clipping`, `mvp_collision_world`, `mvp_movement_weapon_ai`, `mvp_navigation_inventory`, `mvp_original_level_gameplay`).
 - Clang static analyzer: `game_combat.cpp`, `mission_assets.cpp`, `mvp_real_scene_probe.cpp`, and `mvp_gameplay_probe.cpp` completed with no diagnostics.
 - No matched original/port memory snapshot, player damage-zone test, hit/death reaction parity, headshot test, or all-zone coverage was produced. The retail acceptance gate remains failed.
+
+
+### macOS developer-mode shortcut replacement
+
+The desktop event loop now toggles developer mode on `G` or `F9`; it no longer advertises or binds F11. `G` avoids macOS's function-key/media-key handling. Startup help and the runtime HUD instructions were updated together.
+
+Validation on 2026-10-17:
+
+- `igi_game` and `mvp_navigation_inventory_probe` built successfully with C++20.
+- `mvp_navigation_inventory` passed, including developer mode granting the mission weapons, reserve ammunition, and maximum health. This probe tests simulation behavior, not SDL key delivery.
+- Manual keyboard verification of `G` is pending; no live GUI key event was injected or claimed.

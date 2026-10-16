@@ -177,7 +177,7 @@ int main()
         require(!simulation.is_scoped(), "MP5SD iron sights must not engage sniper scope mode");
         require(simulation.zoom_factor() > 1.2f, "MP5SD aiming must provide iron-sight zoom");
 
-        // Verify Developer Mode (F11 toggle)
+        // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();
         require(simulation.developer_mode(), "Developer mode must be active after toggle");
         require(simulation.inventory_size() == scene.weapons.size(),

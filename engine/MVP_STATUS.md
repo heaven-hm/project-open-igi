@@ -42,6 +42,8 @@ Functional regressions passing does not establish matching original behavior.
 
 9. Soldier projectile damage zones: skinned collision triangles retain their MEF bone indices, and player projectiles trace the posed Level 1 soldier mesh before applying the original soldier zone multiplier. The retail mapping and damage tables were read from the executable; the real Level 1 probe hit gameplay guard 2017 on bone 14 / zone 5 and defeated it in seven registered hits. This does not yet implement per-body-part damage reactions, enemy damage zones against the player, or prove a retail-versus-port shot trace. See [the verification record](VERIFICATION.md).
 
+10. macOS developer-mode toggle: replace the F11 shortcut with `G`, while preserving F9 as an alternate, because macOS may consume F11 as a system media/display key before SDL receives it. Startup and HUD help now show the replacement. The developer-mode gameplay probe passes; the actual keyboard event still needs the owner's manual check in the app.
+
 ## Measured original Level 2
 
 | Item | Measurement |
