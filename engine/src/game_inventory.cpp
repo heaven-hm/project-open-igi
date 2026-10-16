@@ -48,7 +48,9 @@ void GameSimulation::select_weapon(std::size_t slot)
     weapon_.kills = previous.kills;
     weapon_.hit_marker_remaining = 0;
     weapon_.muzzle_flash_remaining = 0;
-    weapon_.animation_identifier = -1;
+    weapon_.is_striking = false;
+    weapon_.fire_variant = 0;
+    weapon_.animation_identifier = scene_.weapons[inventory_[slot].definition_index].stand_animation;
     weapon_.animation_time = 0;
     diagnostics::log(diagnostics::Severity::information,
                      "inventory",
@@ -121,7 +123,15 @@ void GameSimulation::collect_weapons()
     for (std::size_t pickup_index = 0; pickup_index < scene_.weapon_pickups.size(); ++pickup_index)
     {
         const auto& pickup = scene_.weapon_pickups[pickup_index];
-        if (!pickups_collected_[pickup_index] && length(pickup.position - player_position()) < 2.5f)
+        if (pickups_collected_[pickup_index])
+        {
+            continue;
+        }
+        const float dx = pickup.position.x - player_position().x;
+        const float dy = pickup.position.y - player_position().y;
+        const float dz = std::abs(pickup.position.z - player_position().z);
+        const float planar = std::sqrt(dx * dx + dy * dy);
+        if ((planar < 1.5f && dz < 2.0f) || length(pickup.position - player_position()) < 2.5f)
         {
             pickups_collected_[pickup_index] = acquire(pickup.weapon_identifier);
         }
@@ -129,10 +139,16 @@ void GameSimulation::collect_weapons()
     for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)
     {
         if (actors_[actor_index].active && !soldier_weapons_collected_[actor_index] &&
-            actors_[actor_index].behavior == ActorBehavior::dead &&
-            length(actors_[actor_index].position - player_position()) < 2.5f)
+            actors_[actor_index].behavior == ActorBehavior::dead)
         {
-            soldier_weapons_collected_[actor_index] = acquire(scene_.actors[actor_index].weapon_identifier);
+            const float dx = actors_[actor_index].position.x - player_position().x;
+            const float dy = actors_[actor_index].position.y - player_position().y;
+            const float dz = std::abs(actors_[actor_index].position.z - player_position().z);
+            const float planar = std::sqrt(dx * dx + dy * dy);
+            if ((planar < 1.5f && dz < 2.0f) || length(actors_[actor_index].position - player_position()) < 2.5f)
+            {
+                soldier_weapons_collected_[actor_index] = acquire(scene_.actors[actor_index].weapon_identifier);
+            }
         }
     }
 }

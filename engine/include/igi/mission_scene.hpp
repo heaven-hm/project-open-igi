@@ -144,6 +144,9 @@ struct SceneWeapon final
     int stand_animation = 18;
     int move_animation = 19;
     int fire_animation = 20;
+    int fire_animation_1 = 20;
+    int fire_animation_2 = -1;
+    int fire_animation_3 = -1;
     int reload_animation = 21;
 };
 

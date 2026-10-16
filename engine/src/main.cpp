@@ -40,6 +40,8 @@ struct RuntimeOptions final
     int width = 1280;
     int height = 960;
     int mission = 1;
+    int difficulty = 1;
+    int target_fps = 60;
     igi::gameplay::TerrainDetail terrain_detail = igi::gameplay::TerrainDetail::high;
     std::optional<std::uint64_t> frames;
     std::filesystem::path game_directory;
@@ -83,6 +85,78 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
         else if (argument == "fullscreen" || argument == "--fullscreen")
         {
             options.fullscreen = true;
+        }
+        else if (argument == "easy" || argument == "--easy")
+        {
+            options.difficulty = 0;
+        }
+        else if (argument == "medium" || argument == "--medium")
+        {
+            options.difficulty = 1;
+        }
+        else if (argument == "hard" || argument == "--hard")
+        {
+            options.difficulty = 2;
+        }
+        else if (argument == "--difficulty")
+        {
+            const auto diff = next_argument();
+            if (diff == "easy" || diff == "1" || diff == "GD_1")
+            {
+                options.difficulty = 0;
+            }
+            else if (diff == "medium" || diff == "2" || diff == "GD_2")
+            {
+                options.difficulty = 1;
+            }
+            else if (diff == "hard" || diff == "3" || diff == "GD_3")
+            {
+                options.difficulty = 2;
+            }
+            else
+            {
+                throw std::runtime_error("Difficulty must be easy, medium, or hard");
+            }
+        }
+        else if (argument == "--fps")
+        {
+            options.target_fps = parse_integer(next_argument(), 0, 1000);
+        }
+        else if (argument == "640x480")
+        {
+            options.width = 640;
+            options.height = 480;
+        }
+        else if (argument == "800x600")
+        {
+            options.width = 800;
+            options.height = 600;
+        }
+        else if (argument == "1024x768")
+        {
+            options.width = 1024;
+            options.height = 768;
+        }
+        else if (argument == "1280x960")
+        {
+            options.width = 1280;
+            options.height = 960;
+        }
+        else if (argument == "1920x1080")
+        {
+            options.width = 1920;
+            options.height = 1080;
+        }
+        else if (argument == "--res")
+        {
+            const auto res = next_argument();
+            const auto sep = res.find('x');
+            if (sep == std::string_view::npos)
+            {
+                throw std::runtime_error("Resolution format must be <width>x<height>");
+            }
+            options.width = parse_integer(res.substr(0, sep), 160, 3840);
+            options.height = parse_integer(res.substr(sep + 1), 120, 2160);
         }
         else if (argument.starts_with("level"))
         {
@@ -139,13 +213,17 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
             {
                 options.terrain_detail = igi::gameplay::TerrainDetail::high;
             }
+            else if (setting == "medium")
+            {
+                options.terrain_detail = igi::gameplay::TerrainDetail::high;
+            }
             else if (setting == "low")
             {
                 options.terrain_detail = igi::gameplay::TerrainDetail::low;
             }
             else
             {
-                throw std::runtime_error("Graphics setting must be high or low");
+                throw std::runtime_error("Graphics setting must be high, medium, or low");
             }
         }
         else if (argument == "--width")
@@ -351,6 +429,12 @@ int run(RuntimeOptions options, const char* executable)
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +
             "; viewport=" + std::to_string(options.width) + "x" + std::to_string(options.height));
     igi::gameplay::GameSimulation simulation(scene);
+    simulation.set_difficulty(options.difficulty);
+    log(Severity::information,
+        "gameplay",
+        std::string("Difficulty=") +
+            (options.difficulty == 0 ? "easy" : options.difficulty == 2 ? "hard" : "medium") +
+            "; target_fps=" + (options.target_fps > 0 ? std::to_string(options.target_fps) : "uncapped"));
     igi::gameplay::InputController controls(
         igi::gameplay::load_input_configuration(options.game_directory, options.profile));
     igi::gameplay::SceneRenderer frame(options.width, options.height);
@@ -571,6 +655,20 @@ int run(RuntimeOptions options, const char* executable)
                     throw std::runtime_error("Cannot present game frame: " + std::string(SDL_GetError()));
                 }
                 SDL_RenderPresent(display.get());
+            }
+            if (options.target_fps > 0 && !options.headless)
+            {
+                const double target_frame_time = 1.0 / static_cast<double>(options.target_fps);
+                const auto frame_now = Clock::now();
+                const double frame_time = std::chrono::duration<double>(frame_now - now).count();
+                if (frame_time < target_frame_time)
+                {
+                    const auto delay_ms = static_cast<Uint32>((target_frame_time - frame_time) * 1000.0);
+                    if (delay_ms > 0)
+                    {
+                        SDL_Delay(delay_ms);
+                    }
+                }
             }
         }
     }

@@ -396,6 +396,9 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 weapon.stand_animation = static_cast<int>(arguments[31].number);
                 weapon.move_animation = static_cast<int>(arguments[32].number);
                 weapon.fire_animation = static_cast<int>(arguments[33].number);
+                weapon.fire_animation_1 = static_cast<int>(arguments[33].number);
+                weapon.fire_animation_2 = arguments.size() > 34 ? static_cast<int>(arguments[34].number) : -1;
+                weapon.fire_animation_3 = arguments.size() > 35 ? static_cast<int>(arguments[35].number) : -1;
                 weapon.reload_animation = static_cast<int>(arguments[36].number);
             }
             scene.weapons.push_back(std::move(weapon));

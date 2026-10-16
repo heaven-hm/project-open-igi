@@ -241,7 +241,10 @@ void GameSimulation::advance_actors()
             continue;
         }
         actor.reaction_time += tick_duration;
-        if (actor.reaction_time < 0.6f || actor.cooldown > 0)
+        const float diff_reaction = difficulty_ == 0 ? 0.85f : difficulty_ == 2 ? 0.35f : 0.60f;
+        const float diff_damage_mult = difficulty_ == 0 ? 0.6f : difficulty_ == 2 ? 1.5f : 1.0f;
+        const float diff_aim_scale = difficulty_ == 0 ? 1.5f : difficulty_ == 2 ? 0.65f : 1.0f;
+        if (actor.reaction_time < diff_reaction || actor.cooldown > 0)
         {
             continue;
         }
@@ -260,15 +263,15 @@ void GameSimulation::advance_actors()
         const auto& parameters =
             definition == scene_.weapons.end() ? scene_.weapon_parameters : definition->parameters;
         const float phase = static_cast<float>((tick_count_ * 17 + actor_index * 37) % 101);
-        const Vector3 aim_error{std::sin(phase * 1.7f) * distance * 0.018f,
-                                std::cos(phase * 2.3f) * distance * 0.018f,
-                                std::sin(phase * 0.9f) * distance * 0.012f};
+        const Vector3 aim_error{std::sin(phase * 1.7f) * distance * 0.018f * diff_aim_scale,
+                                std::cos(phase * 2.3f) * distance * 0.018f * diff_aim_scale,
+                                std::sin(phase * 0.9f) * distance * 0.012f * diff_aim_scale};
         const auto muzzle = actor.position + Vector3{0, 0, 1.5f};
         projectiles_.push_back({muzzle,
                                 normalized(player_eye + aim_error - muzzle),
                                 parameters.maximum_distance,
                                 parameters.muzzle_velocity,
-                                parameters.damage * scene_.actors[actor_index].damage_scale,
+                                parameters.damage * scene_.actors[actor_index].damage_scale * diff_damage_mult,
                                 static_cast<int>(actor_index)});
     }
 }
@@ -285,9 +288,26 @@ void GameSimulation::advance_actor_animations()
         }
         const float displacement = length(actor.position - actor.animation_previous_position);
         actor.animation_previous_position = actor.position;
-        const int identifier = actor.behavior == ActorBehavior::attacking ? 56
-                               : displacement > 0.001f                    ? 34
-                                                                          : definition.stand_animation;
+        int identifier = definition.stand_animation;
+        if (actor.behavior == ActorBehavior::attacking)
+        {
+            identifier = 56;
+        }
+        else if (displacement > 0.001f)
+        {
+            if (actor.behavior == ActorBehavior::investigating && definition.animations->clips.contains(48))
+            {
+                identifier = 48;
+            }
+            else if (definition.animations->clips.contains(3))
+            {
+                identifier = 3;
+            }
+            else if (definition.animations->clips.contains(34))
+            {
+                identifier = 34;
+            }
+        }
         const auto found = definition.animations->clips.find(identifier);
         if (found == definition.animations->clips.end())
         {

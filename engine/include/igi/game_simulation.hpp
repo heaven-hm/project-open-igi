@@ -73,6 +73,8 @@ struct WeaponState final
     std::uint32_t rounds_in_current_burst{};
     int animation_identifier = -1;
     float animation_time{};
+    int fire_variant{};
+    bool is_striking{};
 };
 
 struct Projectile final
@@ -188,6 +190,16 @@ class GameSimulation final : private HumanMovementWorld
         return tick_count_;
     }
 
+    void set_difficulty(int difficulty) noexcept
+    {
+        difficulty_ = difficulty;
+    }
+
+    [[nodiscard]] int difficulty() const noexcept
+    {
+        return difficulty_;
+    }
+
   private:
     void advance_player(const PlayerInput& input);
     void advance_weapon(const PlayerInput& input);
@@ -228,6 +240,7 @@ class GameSimulation final : private HumanMovementWorld
     bool jump_was_pressed_{};
     bool crouching_{};
     bool aiming_{};
+    int difficulty_{1};
     std::uint64_t tick_count_{};
 };
 

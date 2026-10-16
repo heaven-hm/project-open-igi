@@ -114,9 +114,37 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         weapon_.cooldown_ticks_remaining == 0 &&
         weapon_.rounds_in_current_burst != static_cast<std::uint32_t>(parameters.maximum_rounds_per_burst))
     {
-        if (!parameters.melee)
+        if (parameters.melee)
+        {
+            int fire_clip = definition->fire_animation_1;
+            if (weapon_.fire_variant == 1 && definition->fire_animation_2 >= 0)
+            {
+                fire_clip = definition->fire_animation_2;
+            }
+            else if (weapon_.fire_variant == 2 && definition->fire_animation_3 >= 0)
+            {
+                fire_clip = definition->fire_animation_3;
+            }
+            weapon_.animation_identifier = fire_clip;
+            weapon_.animation_time = 0;
+            weapon_.is_striking = true;
+            weapon_.fire_variant = (weapon_.fire_variant + 1) % 3;
+            if (scene_.first_person_animations && scene_.first_person_animations->clips.contains(fire_clip))
+            {
+                const float dur = scene_.first_person_animations->clips.at(fire_clip).duration;
+                weapon_.cooldown_ticks_remaining = std::max(8, static_cast<int>(dur / 160.0f));
+            }
+            else
+            {
+                weapon_.cooldown_ticks_remaining = 14;
+            }
+        }
+        else
         {
             --weapon_.magazine;
+            weapon_.cooldown_ticks_remaining =
+                WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
+            weapon_.muzzle_flash_remaining = 0.055f;
         }
         if (parameters.maximum_rounds_per_burst <= 1)
         {
@@ -140,9 +168,6 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         ++weapon_.shots_fired;
         ++weapon_.rounds_in_current_burst;
-        weapon_.cooldown_ticks_remaining =
-            WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
-        weapon_.muzzle_flash_remaining = 0.055f;
         const auto recoil = WeaponAccuracy::sample_recoil(parameters, random_generator_);
         weapon_.sampled_recoil_pitch = recoil.pitch;
         weapon_.sampled_recoil_yaw = recoil.yaw;
@@ -152,6 +177,10 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
                              ", burst round=" + std::to_string(weapon_.rounds_in_current_burst) +
                              ", cone=" + std::to_string(cone) +
                              ", projectiles=" + std::to_string(parameters.projectiles_per_round));
+    }
+    else if (!input.firing && !weapon_.is_striking)
+    {
+        weapon_.fire_variant = 0;
     }
 }
 
@@ -170,11 +199,32 @@ void GameSimulation::advance_view_animation(const PlayerInput& input)
     {
         animation = definition->reload_animation;
     }
+    else if (weapon_.is_striking)
+    {
+        animation = weapon_.animation_identifier;
+        if (clips.contains(animation))
+        {
+            if (weapon_.animation_time + 160 < clips.at(animation).duration)
+            {
+                weapon_.animation_time += 160;
+                return;
+            }
+            else
+            {
+                weapon_.is_striking = false;
+                animation = input.forward != 0 || input.sideways != 0 ? definition->move_animation
+                                                                      : definition->stand_animation;
+            }
+        }
+    }
     else if (firing)
     {
         animation = definition->fire_animation;
     }
-    else if (weapon_.animation_identifier == definition->fire_animation &&
+    else if ((weapon_.animation_identifier == definition->fire_animation ||
+              weapon_.animation_identifier == definition->fire_animation_1 ||
+              weapon_.animation_identifier == definition->fire_animation_2 ||
+              weapon_.animation_identifier == definition->fire_animation_3) &&
              clips.contains(weapon_.animation_identifier) &&
              weapon_.animation_time + 160 < clips.at(weapon_.animation_identifier).duration)
     {
