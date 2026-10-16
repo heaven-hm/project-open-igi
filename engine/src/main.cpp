@@ -692,14 +692,20 @@ int run(RuntimeOptions options, const char* executable)
                     }
                     else
                     {
-                        simulation.teleport_player(free_camera.position, free_camera.heading, free_camera.pitch);
+                        simulation.teleport_player(
+                            free_camera.position,
+                            free_camera.heading - simulation.weapon().accumulated_recoil_yaw,
+                            free_camera.pitch - simulation.weapon().accumulated_recoil_pitch);
                         log(Severity::information, "camera", "Free camera disabled; player teleported to camera position");
                     }
                 }
                 if (event.key.keysym.sym == SDLK_t && free_camera.active)
                 {
                     free_camera.active = false;
-                    simulation.teleport_player(free_camera.position, free_camera.heading, free_camera.pitch);
+                        simulation.teleport_player(
+                            free_camera.position,
+                            free_camera.heading - simulation.weapon().accumulated_recoil_yaw,
+                            free_camera.pitch - simulation.weapon().accumulated_recoil_pitch);
                     log(Severity::information, "camera", "Player teleported to camera position and resumed gameplay");
                 }
                 if ((event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_PLUS ||
