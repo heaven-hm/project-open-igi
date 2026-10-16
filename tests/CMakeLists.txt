@@ -9,6 +9,7 @@ add_executable(igi_tests
     test_mission_flow.cpp
     test_graphics_quality.cpp
     test_retail_controls.cpp
+    test_ai_navigation.cpp
 )
 
 target_include_directories(igi_tests PRIVATE

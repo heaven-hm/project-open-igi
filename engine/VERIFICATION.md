@@ -322,3 +322,27 @@ Core input now follows the retail remap table, not FPS guesses:
   `-Wall -Wextra -Werror`; `igi_world_probe` mission 1 unchanged (grounded,
   burst 30->27, 49.8 m / 10 s walk).
 
+## AI graph-edge route following (2026-10-16)
+
+Patrol movement previously bee-lined to the target node, ignoring retail
+navigation edges (walls/buildings crossed). Now:
+
+- `AiSystem::find_graph_route` (new public static, portable, no OS APIs):
+  BFS shortest node-id path over per-node `link1`/`link2` plus the edge list,
+  treated as undirected. Empty when ids are unknown or unreachable.
+- `AiSystem::nearest_graph_node_id`: plan-distance (XY) nearest node.
+- `SoldierAgent::route_waypoints`: intermediate node positions; the Patrol
+  branch walks them leg by leg via the existing collision-aware `step_toward`
+  (wall sweep + ground query per leg) and only approaches `walk_target`
+  directly when no route resolved. `notify_gunshot` clears the route on
+  redirect. Investigate/Combat pursuit still bee-lines (next increment).
+- Also removed two dead provisional constants flagged by a strict
+  `-Wall -Wextra -Werror` TU compile (`kFireIntervalSeconds`,
+  `kSoldierShotDamage` were unused).
+- Tests: new `AiNavigation` suite (`tests/test_ai_navigation.cpp`, 6 cases:
+  chain route, reverse symmetry, edge-list traversal, unreachable/unknown
+  ids, nearest node, empty graph). Full suite 61/61 pass; `ai_system.cpp`
+  strict-compiles; `igi_world_probe` missions 1+2 still load, settle
+  grounded, and simulate (L1: patrol=28 combat=1; L2: patrol=23 combat=1
+  investigate=1).
+

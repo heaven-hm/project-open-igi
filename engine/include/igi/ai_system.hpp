@@ -30,6 +30,9 @@ struct SoldierAgent {
     bool has_walk_target{};
     bool walk_is_run{};
     NavigationPosition walk_target{};
+    // Edge-following route: intermediate retail graph node positions leading
+    // to walk_target. Empty means walk_target is approached directly.
+    std::vector<NavigationPosition> route_waypoints{};
 
     NavigationPosition last_known_player{};
     float perception_timer{};
@@ -87,7 +90,23 @@ public:
     [[nodiscard]] std::size_t alive_count() const noexcept;
     [[nodiscard]] std::vector<NavigationPosition> alive_positions() const;
 
+    // BFS shortest node-id route over retail graph links (per-node link1/link2
+    // plus the edge list), treated as undirected. Returns the node id sequence
+    // from origin to target inclusive; empty when either id is unknown or the
+    // target is unreachable.
+    [[nodiscard]] static std::vector<int> find_graph_route(
+        const igi::assets::NavigationGraph& graph, int from_node_id, int to_node_id);
+    [[nodiscard]] static int nearest_graph_node_id(
+        const igi::assets::NavigationGraph& graph,
+        NavigationPosition position) noexcept;
+
 private:
+    void assign_route_target(
+        SoldierAgent& agent,
+        const igi::assets::NavigationGraph& graph,
+        int target_node_id,
+        NavigationPosition target_position,
+        bool is_run) noexcept;
     void update_perception(
         SoldierAgent& agent,
         const MissionWorld& world,

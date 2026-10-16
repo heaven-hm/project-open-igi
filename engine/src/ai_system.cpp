@@ -3,6 +3,9 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
+#include <queue>
+#include <unordered_map>
 
 namespace igi::gameplay {
 
@@ -12,8 +15,6 @@ constexpr float kPi = 3.14159265358979323846f;
 constexpr float kRetailTickSeconds = 1.0f / 30.0f;
 constexpr float kWalkSpeedUnitsPerSecond = 3.0f * 4096.0f;   // provisional 3 m/s
 constexpr float kRunSpeedUnitsPerSecond = 6.0f * 4096.0f;    // provisional 6 m/s
-constexpr float kFireIntervalSeconds = 0.18f;                // provisional
-constexpr float kSoldierShotDamage = 7.0f;                   // provisional
 constexpr float kLoseSightSeconds = 4.0f;
 constexpr float kPerceptionIntervalSeconds = 4.0f * kRetailTickSeconds;
 constexpr float kEyeHeight = 6553.6f;                        // 1.6 m
@@ -33,6 +34,107 @@ float AiSystem::next_random() noexcept {
     rng_state_ ^= rng_state_ >> 17;
     rng_state_ ^= rng_state_ << 5;
     return static_cast<float>(rng_state_ & 0xFFFFFFu) / 16777216.0f;
+}
+
+std::vector<int> AiSystem::find_graph_route(
+    const igi::assets::NavigationGraph& graph, int from_node_id, int to_node_id) {
+    if (from_node_id == to_node_id) {
+        return {from_node_id};
+    }
+    std::unordered_map<int, std::size_t> index_by_id;
+    index_by_id.reserve(graph.nodes.size() * 2);
+    for (std::size_t i = 0; i < graph.nodes.size(); ++i) {
+        index_by_id[graph.nodes[i].id] = i;
+    }
+    if (!index_by_id.count(from_node_id) || !index_by_id.count(to_node_id)) {
+        return {};
+    }
+    std::unordered_map<int, std::vector<int>> adjacency;
+    adjacency.reserve(graph.nodes.size() * 2);
+    const auto link = [&](int a, int b) {
+        if (a != b && index_by_id.count(a) && index_by_id.count(b)) {
+            adjacency[a].push_back(b);
+            adjacency[b].push_back(a);
+        }
+    };
+    for (const auto& node : graph.nodes) {
+        if (node.link1 >= 0) {
+            link(node.id, node.link1);
+        }
+        if (node.link2 >= 0) {
+            link(node.id, node.link2);
+        }
+    }
+    for (const auto& edge : graph.edges) {
+        link(edge.source_node_id, edge.destination_node_id);
+    }
+    std::unordered_map<int, int> came_from;
+    came_from.reserve(graph.nodes.size() * 2);
+    std::queue<int> frontier;
+    frontier.push(from_node_id);
+    came_from[from_node_id] = from_node_id;
+    while (!frontier.empty()) {
+        const int current = frontier.front();
+        frontier.pop();
+        if (current == to_node_id) {
+            break;
+        }
+        for (int next : adjacency[current]) {
+            if (!came_from.count(next)) {
+                came_from[next] = current;
+                frontier.push(next);
+            }
+        }
+    }
+    if (!came_from.count(to_node_id)) {
+        return {};
+    }
+    std::vector<int> route{to_node_id};
+    while (route.back() != from_node_id) {
+        route.push_back(came_from[route.back()]);
+    }
+    std::reverse(route.begin(), route.end());
+    return route;
+}
+
+int AiSystem::nearest_graph_node_id(
+    const igi::assets::NavigationGraph& graph, NavigationPosition position) noexcept {
+    int best_id = -1;
+    double best_dist_sq = std::numeric_limits<double>::max();
+    for (const auto& node : graph.nodes) {
+        const double dx = node.x - position.x;
+        const double dy = node.y - position.y;
+        const double dist_sq = dx * dx + dy * dy;
+        if (dist_sq < best_dist_sq) {
+            best_dist_sq = dist_sq;
+            best_id = node.id;
+        }
+    }
+    return best_id;
+}
+
+void AiSystem::assign_route_target(
+    SoldierAgent& agent,
+    const igi::assets::NavigationGraph& graph,
+    int target_node_id,
+    NavigationPosition target_position,
+    bool is_run) noexcept {
+    agent.walk_target = target_position;
+    agent.has_walk_target = true;
+    agent.walk_is_run = is_run;
+    agent.route_waypoints.clear();
+    const int origin_id = nearest_graph_node_id(graph, agent.position);
+    const std::vector<int> route = find_graph_route(graph, origin_id, target_node_id);
+    // Skip the origin node; each following node becomes a route leg.
+    for (std::size_t i = 1; i < route.size(); ++i) {
+        for (const auto& node : graph.nodes) {
+            if (node.id == route[i]) {
+                agent.route_waypoints.push_back({node.x, node.y, node.z});
+                break;
+            }
+        }
+    }
+    // No graph route (or already there): walk_target is approached directly.
 }
 
 void AiSystem::initialize(const MissionWorld& world) {
@@ -181,9 +283,8 @@ void AiSystem::update_patrol(SoldierAgent& agent, const MissionWorld& world, flo
                 agent.patrol_cursor = 0;
             }
             const auto& node = graph_it->second.nodes[agent.patrol_cursor++];
-            agent.walk_target = {node.x, node.y, node.z};
-            agent.has_walk_target = true;
-            agent.walk_is_run = false;
+            assign_route_target(
+                agent, graph_it->second, node.id, {node.x, node.y, node.z}, false);
             agent.wait_seconds = 2.0f;
             return;
         }
@@ -216,10 +317,10 @@ void AiSystem::update_patrol(SoldierAgent& agent, const MissionWorld& world, flo
         case 2:
         case 3: { // walk / run to node
             NavigationPosition target{};
-            if (find_node(cmd.argument, target)) {
-                agent.walk_target = target;
-                agent.has_walk_target = true;
-                agent.walk_is_run = cmd.opcode == 3;
+            if (find_node(cmd.argument, target) &&
+                graph_it != world.world_navigation_graphs().end()) {
+                assign_route_target(
+                    agent, graph_it->second, cmd.argument, target, cmd.opcode == 3);
             }
             break;
         }
@@ -272,12 +373,22 @@ float AiSystem::update(
             case SoldierState::Patrol: {
                 update_patrol(agent, world, delta_seconds);
                 if (agent.has_walk_target) {
+                    // Follow retail graph edges leg by leg; direct approach
+                    // only when no route was resolved.
+                    const NavigationPosition leg_target = agent.route_waypoints.empty()
+                        ? agent.walk_target
+                        : agent.route_waypoints.front();
                     const bool arrived = step_toward(
-                        agent, collision, world, agent.walk_target,
+                        agent, collision, world, leg_target,
                         agent.walk_is_run ? kRunSpeedUnitsPerSecond : kWalkSpeedUnitsPerSecond,
                         delta_seconds);
                     if (arrived) {
-                        agent.has_walk_target = false;
+                        if (!agent.route_waypoints.empty()) {
+                            agent.route_waypoints.erase(agent.route_waypoints.begin());
+                        }
+                        if (agent.route_waypoints.empty()) {
+                            agent.has_walk_target = false;
+                        }
                     }
                 }
                 break;
@@ -383,6 +494,7 @@ void AiSystem::notify_gunshot(NavigationPosition origin, float audible_range_uni
         if (dx * dx + dy * dy + dz * dz <= range_sq) {
             agent.last_known_player = origin;
             agent.has_walk_target = false;
+            agent.route_waypoints.clear();
             agent.state = SoldierState::Investigate;
             IGI_LOG_DEBUG("AI", "Soldier " << agent.spawn_index << " alerted by gunshot.");
         }
