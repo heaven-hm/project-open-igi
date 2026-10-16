@@ -182,6 +182,8 @@ class GameSimulation final : private HumanMovementWorld
         return prompt_message_;
     }
 
+    void set_prompt_message(std::string message, float duration = 3.0f);
+
     void teleport_player(Vector3 position, float heading, float pitch);
 
     [[nodiscard]] const WeaponState& weapon() const noexcept
@@ -288,6 +290,7 @@ class GameSimulation final : private HumanMovementWorld
     CollisionWorld movement_world_;
     std::vector<SceneDoor> doors_;
     std::string prompt_message_;
+    float prompt_timer_{};
     bool interact_was_pressed_{};
     HumanMovementState player_;
     HumanMovementIntegrator integrator_;

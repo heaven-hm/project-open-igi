@@ -309,13 +309,15 @@ void GameSimulation::tick(const PlayerInput& input)
         advance_view_animation(input);
 
         // Interactive doors & prompt
-        prompt_message_.clear();
         for (auto& door : doors_)
         {
             const float dist = length(player_position() - door.position);
-            if (dist < 2.8f)
+            if (dist < 3.8f)
             {
-                prompt_message_ = door.open ? "PRESS Q TO CLOSE DOOR" : "PRESS Q TO OPEN DOOR";
+                if (prompt_timer_ <= 0.0f)
+                {
+                    prompt_message_ = door.open ? "PRESS Q TO CLOSE DOOR" : "PRESS Q TO OPEN DOOR";
+                }
                 if (input.interacting && !interact_was_pressed_)
                 {
                     door.open = !door.open;
@@ -329,8 +331,13 @@ void GameSimulation::tick(const PlayerInput& input)
                 break;
             }
         }
-        if (prompt_message_.empty())
+        if (prompt_timer_ > 0.0f)
         {
+            prompt_timer_ = std::max(0.0f, prompt_timer_ - 1.0f / 30.0f);
+        }
+        else if (prompt_message_.empty() || prompt_message_.find("LADDER") != std::string::npos)
+        {
+            prompt_message_.clear();
             for (const auto& ladder : scene_.ladders)
             {
                 const auto p = player_position();
@@ -413,6 +420,7 @@ Vector3 GameSimulation::animation_delta(int state)
 
 void GameSimulation::advance_player(const PlayerInput& input)
 {
+    bool just_mounted = false;
     if (!on_ladder_)
     {
         const auto p = player_position();
@@ -429,6 +437,7 @@ void GameSimulation::advance_player(const PlayerInput& input)
             if ((near_mount || near_rung) && (input.forward != 0 || input.interacting))
             {
                 on_ladder_ = true;
+                just_mounted = true;
                 active_ladder_index_ = idx;
                 player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
                 player_.movement_velocity = {};
@@ -441,7 +450,7 @@ void GameSimulation::advance_player(const PlayerInput& input)
     if (on_ladder_ && active_ladder_index_ < scene_.ladders.size())
     {
         const auto& ladder = scene_.ladders[active_ladder_index_];
-        if (input.jumping || (input.interacting && !interact_was_pressed_))
+        if (!just_mounted && (input.jumping || (input.interacting && !interact_was_pressed_)))
         {
             on_ladder_ = false;
             player_.movement_velocity = {-ladder.normal.x * 2.0f * units_per_metre / 30.0f,
@@ -465,7 +474,7 @@ void GameSimulation::advance_player(const PlayerInput& input)
             pos.x = ladder.bottom.x + ladder.normal.x * 0.4f;
             pos.y = ladder.bottom.y + ladder.normal.y * 0.4f;
 
-            if (pos.z >= ladder.top.z)
+            if (pos.z >= ladder.top.z && input.forward > 0)
             {
                 on_ladder_ = false;
                 pos = ladder.top_mount;
@@ -473,7 +482,7 @@ void GameSimulation::advance_player(const PlayerInput& input)
                 player_.movement_velocity = {};
                 diagnostics::log(diagnostics::Severity::debug, "player", "Reached top of ladder");
             }
-            else if (pos.z <= ladder.bottom.z)
+            else if (pos.z <= ladder.bottom.z && input.forward < 0)
             {
                 on_ladder_ = false;
                 pos = ladder.bottom_mount;
@@ -617,10 +626,10 @@ void GameSimulation::query_ground(HumanMovementState& human,
         if (!was_grounded)
         {
             const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
-            constexpr float threshold_speed = 8.5f;
+            constexpr float threshold_speed = 6.2f;
             if (!developer_mode_ && landing_speed > threshold_speed && health_ > 0.0f)
             {
-                const float damage_ratio = (landing_speed - threshold_speed) / 14.0f;
+                const float damage_ratio = (landing_speed - threshold_speed) / 10.0f;
                 const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
                 health_ = std::max(0.0f, health_ - damage);
                 damage_flash_remaining_ = 0.35f;
@@ -694,19 +703,38 @@ void GameSimulation::separate_humans(HumanMovementState&,
         const float cos_y = std::cos(-door.rotation.z);
         const float sin_y = std::sin(-door.rotation.z);
         const Vector3 local_pos{cos_y * rel.x - sin_y * rel.y, sin_y * rel.x + cos_y * rel.y, rel.z};
-        constexpr float radius = 0.35f;
-        if (local_pos.z + 1.8f >= door.min_bounds.z && local_pos.z <= door.max_bounds.z + 0.2f &&
-            local_pos.x >= door.min_bounds.x - radius && local_pos.x <= door.max_bounds.x + radius &&
-            local_pos.y >= door.min_bounds.y - radius && local_pos.y <= door.max_bounds.y + radius)
+        constexpr float radius = 0.40f;
+        Vector3 min_b = door.min_bounds;
+        Vector3 max_b = door.max_bounds;
+        if (min_b.x >= max_b.x || min_b.y >= max_b.y)
         {
-            const float mid_y = (door.min_bounds.y + door.max_bounds.y) * 0.5f;
-            const float resolved_local_y = (local_pos.y >= mid_y)
-                                               ? door.max_bounds.y + radius + 0.01f
-                                               : door.min_bounds.y - radius - 0.01f;
+            min_b = {-0.25f, -0.8f, 0.0f};
+            max_b = {0.25f, 0.8f, 2.4f};
+        }
+        if (local_pos.z + 1.8f >= min_b.z && local_pos.z <= max_b.z + 0.2f &&
+            local_pos.x >= min_b.x - radius && local_pos.x <= max_b.x + radius &&
+            local_pos.y >= min_b.y - radius && local_pos.y <= max_b.y + radius)
+        {
+            const float size_x = max_b.x - min_b.x;
+            const float size_y = max_b.y - min_b.y;
+            float resolved_x = local_pos.x;
+            float resolved_y = local_pos.y;
+            if (size_x < size_y)
+            {
+                // Door pane thickness is along X
+                const float mid_x = (min_b.x + max_b.x) * 0.5f;
+                resolved_x = (local_pos.x >= mid_x) ? max_b.x + radius + 0.02f : min_b.x - radius - 0.02f;
+            }
+            else
+            {
+                // Door pane thickness is along Y
+                const float mid_y = (min_b.y + max_b.y) * 0.5f;
+                resolved_y = (local_pos.y >= mid_y) ? max_b.y + radius + 0.02f : min_b.y - radius - 0.02f;
+            }
             const float cos_f = std::cos(door.rotation.z);
             const float sin_f = std::sin(door.rotation.z);
-            position.x = cos_f * local_pos.x - sin_f * resolved_local_y + door.position.x;
-            position.y = sin_f * local_pos.x + cos_f * resolved_local_y + door.position.y;
+            position.x = cos_f * resolved_x - sin_f * resolved_y + door.position.x;
+            position.y = sin_f * resolved_x + cos_f * resolved_y + door.position.y;
         }
     }
     destination = engine_position(position);
@@ -778,11 +806,19 @@ void GameSimulation::toggle_developer_mode()
         diagnostics::log(diagnostics::Severity::information,
                          "developer",
                          "Developer mode enabled: all weapons granted, unlimited ammo, god mode");
+        set_prompt_message("CHEAT MODE: GOD MODE + ALL WEAPONS + INF AMMO", 3.5f);
     }
     else
     {
         diagnostics::log(diagnostics::Severity::information, "developer", "Developer mode disabled");
+        set_prompt_message("CHEAT MODE: DISABLED", 2.0f);
     }
+}
+
+void GameSimulation::set_prompt_message(std::string message, float duration)
+{
+    prompt_message_ = std::move(message);
+    prompt_timer_ = duration;
 }
 
 } // namespace igi::gameplay

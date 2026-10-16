@@ -212,7 +212,10 @@ void GameSimulation::advance_actors()
         const float detection_distance = length(to_detection_mark);
         const Vector3 direction = normalized(to_detection_mark);
         const Vector3 facing{-std::sin(actor.heading), std::cos(actor.heading), 0};
-        const bool within_view = dot(facing, direction) > 0.35f || actor.behavior != ActorBehavior::guarding;
+        const float sight_dot = dot(facing, direction);
+        const bool within_view = (actor.behavior == ActorBehavior::guarding)
+                                     ? (sight_dot > 0.35f)
+                                     : (sight_dot > -0.2f || distance <= 6.0f);
         bool visible = false;
         if (within_view && detection_distance > 0.1f && detection_distance < 80.0f)
         {
@@ -460,11 +463,11 @@ void GameSimulation::advance_actor_animations()
         }
         else if (displacement > 0.001f)
         {
-            if (actor.behavior == ActorBehavior::guarding)
+            if (actor.behavior == ActorBehavior::guarding || actor.behavior == ActorBehavior::investigating)
             {
                 if (definition.animations->clips.contains(4))
                 {
-                    identifier = 4; // Authentic calm soldier patrol walk (duration 5280)
+                    identifier = 4; // Authentic calm soldier patrol / search walk (duration 5280)
                 }
                 else if (definition.animations->clips.contains(3))
                 {

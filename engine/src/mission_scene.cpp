@@ -587,6 +587,9 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
     MissionScene scene;
     scene.mission_number = mission_number;
     scene.game_directory = game_directory;
+    diagnostics::log(diagnostics::Severity::information,
+                     "LevelLoader",
+                     "LoadLevel() START for level " + std::to_string(mission_number));
     const auto mission_directory =
         assets::resolve_path(game_directory, "missions/location0/level" + std::to_string(mission_number));
     const auto object_bytes = assets::read_file(assets::resolve_path(mission_directory, "objects.qvm"));
@@ -662,6 +665,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         int task_id = -1;
         std::string type;
         std::string name;
+        double raw_px = 0.0;
+        double raw_py = 0.0;
+        double raw_pz = 0.0;
+        double raw_ox = 0.0;
+        double raw_oy = 0.0;
+        double raw_oz = 0.0;
+        bool has_ori = false;
     };
 
     std::size_t verified_task_count = 0;
@@ -702,6 +712,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     .task_id = static_cast<int>(arguments[0].number),
                     .type = task_type,
                     .name = arguments.size() > 2 ? arguments[2].text : "",
+                    .raw_px = arguments[3].number,
+                    .raw_py = arguments[4].number,
+                    .raw_pz = arguments[5].number,
+                    .raw_ox = 0.0,
+                    .raw_oy = 0.0,
+                    .raw_oz = arguments[6].number,
+                    .has_ori = true,
                 };
             }
         }
@@ -720,6 +737,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     .task_id = static_cast<int>(arguments[0].number),
                     .type = task_type,
                     .name = arguments.size() > 2 ? arguments[2].text : "",
+                    .raw_px = arguments[3].number,
+                    .raw_py = arguments[4].number,
+                    .raw_pz = arguments[5].number,
+                    .raw_ox = arguments[9].number,
+                    .raw_oy = arguments[10].number,
+                    .raw_oz = arguments[11].number,
+                    .has_ori = true,
                 };
             }
         }
@@ -738,6 +762,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     .task_id = static_cast<int>(arguments[0].number),
                     .type = task_type,
                     .name = arguments.size() > 2 ? arguments[2].text : "",
+                    .raw_px = arguments[3].number,
+                    .raw_py = arguments[4].number,
+                    .raw_pz = arguments[5].number,
+                    .raw_ox = arguments[6].number,
+                    .raw_oy = arguments[7].number,
+                    .raw_oz = arguments[8].number,
+                    .has_ori = true,
                 };
             }
         }
@@ -756,6 +787,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     .task_id = static_cast<int>(arguments[0].number),
                     .type = task_type,
                     .name = arguments.size() > 2 ? arguments[2].text : "",
+                    .raw_px = arguments[3].number,
+                    .raw_py = arguments[4].number,
+                    .raw_pz = arguments[5].number,
+                    .raw_ox = arguments[6].number,
+                    .raw_oy = arguments[7].number,
+                    .raw_oz = arguments[8].number,
+                    .has_ori = true,
                 };
             }
         }
@@ -763,17 +801,25 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         {
             if (arguments.size() >= 8 && !arguments[7].text.empty())
             {
+                const double ox = arguments.size() > 8 ? arguments[8].number : 0.0;
+                const double oy = arguments.size() > 9 ? arguments[9].number : 0.0;
+                const double oz = arguments[6].number;
                 candidate = ObjectCandidate{
                     .model_id = arguments[7].text,
                     .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
                                  static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
                                  static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
-                    .rotation = {arguments.size() > 8 ? static_cast<float>(arguments[8].number) : 0.0f,
-                                 arguments.size() > 9 ? static_cast<float>(arguments[9].number) : 0.0f,
-                                 static_cast<float>(arguments[6].number)},
+                    .rotation = {static_cast<float>(ox), static_cast<float>(oy), static_cast<float>(oz)},
                     .task_id = static_cast<int>(arguments[0].number),
                     .type = task_type,
                     .name = arguments.size() > 2 ? arguments[2].text : "",
+                    .raw_px = arguments[3].number,
+                    .raw_py = arguments[4].number,
+                    .raw_pz = arguments[5].number,
+                    .raw_ox = ox,
+                    .raw_oy = oy,
+                    .raw_oz = oz,
+                    .has_ori = true,
                 };
             }
         }
@@ -788,21 +834,36 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                 .task_id = static_cast<int>(arguments[0].number),
                 .type = task_type,
                 .name = arguments.size() > 2 ? arguments[2].text : "",
+                .raw_px = arguments[3].number,
+                .raw_py = arguments[4].number,
+                .raw_pz = arguments[5].number,
+                .raw_ox = 0.0,
+                .raw_oy = 0.0,
+                .raw_oz = 0.0,
+                .has_ori = false,
             };
         }
         else if (task_type == "SCamera" && arguments.size() >= 11 && !arguments[10].text.empty())
         {
+            const double ox = arguments.size() > 8 ? arguments[8].number : 0.0;
+            const double oy = arguments.size() > 9 ? arguments[9].number : 0.0;
+            const double oz = arguments[6].number;
             candidate = ObjectCandidate{
                 .model_id = arguments[10].text,
                 .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
                              static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
                              static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
-                .rotation = {arguments.size() > 8 ? static_cast<float>(arguments[8].number) : 0.0f,
-                             arguments.size() > 9 ? static_cast<float>(arguments[9].number) : 0.0f,
-                             static_cast<float>(arguments[6].number)},
+                .rotation = {static_cast<float>(ox), static_cast<float>(oy), static_cast<float>(oz)},
                 .task_id = static_cast<int>(arguments[0].number),
                 .type = task_type,
                 .name = arguments.size() > 2 ? arguments[2].text : "",
+                .raw_px = arguments[3].number,
+                .raw_py = arguments[4].number,
+                .raw_pz = arguments[5].number,
+                .raw_ox = ox,
+                .raw_oy = oy,
+                .raw_oz = oz,
+                .has_ori = true,
             };
         }
         else if (arguments.size() >= 10 && !arguments[9].text.empty())
@@ -818,6 +879,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                 .task_id = static_cast<int>(arguments[0].number),
                 .type = task_type,
                 .name = arguments.size() > 2 ? arguments[2].text : "",
+                .raw_px = arguments[3].number,
+                .raw_py = arguments[4].number,
+                .raw_pz = arguments[5].number,
+                .raw_ox = arguments[6].number,
+                .raw_oy = arguments[7].number,
+                .raw_oz = arguments[8].number,
+                .has_ori = true,
             };
         }
 
@@ -1000,6 +1068,40 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     ", verification_tolerance=" + std::to_string(verification_tolerance) +
                     ", emitted_geometry_verified=" + (emitted_geometry_verified ? "true" : "false"));
             ++scene.loaded_object_count;
+
+            VerifyObject vo;
+            vo.model_id = candidate->model_id;
+            vo.type = candidate->type;
+            vo.name = candidate->name;
+            vo.position = candidate->position;
+            vo.rotation = candidate->rotation;
+            vo.raw_px = candidate->raw_px;
+            vo.raw_py = candidate->raw_py;
+            vo.raw_pz = candidate->raw_pz;
+            vo.raw_ox = candidate->raw_ox;
+            vo.raw_oy = candidate->raw_oy;
+            vo.raw_oz = candidate->raw_oz;
+            vo.has_ori = candidate->has_ori;
+            vo.matched = true;
+            scene.verified_objects.push_back(vo);
+
+            std::string ori_str;
+            if (candidate->has_ori)
+            {
+                std::ostringstream ss;
+                ss << std::fixed << std::setprecision(6);
+                ss << ", Ori=(" << candidate->raw_ox << ", " << candidate->raw_oy << ", " << candidate->raw_oz << ")";
+                ori_str = ss.str();
+            }
+            std::ostringstream pss;
+            pss << "Object Loaded: ModelID=" << candidate->model_id
+                << ", Type=" << candidate->type
+                << ", Name=" << candidate->name
+                << ", Pos=(" << static_cast<long long>(std::llround(candidate->raw_px)) << ", "
+                             << static_cast<long long>(std::llround(candidate->raw_py)) << ", "
+                             << static_cast<long long>(std::llround(candidate->raw_pz)) << ")"
+                << ori_str;
+            diagnostics::log(diagnostics::Severity::information, "LevelLoader", pss.str());
         }
         catch (const std::exception& exception)
         {
@@ -1284,6 +1386,11 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         "attachments",
         "Loaded " + std::to_string(scene.attached_model_count) +
             " visual ATTA instances; maximum depth=" + std::to_string(scene.maximum_attachment_depth));
+    diagnostics::log(
+        diagnostics::Severity::information,
+        "LevelLoader",
+        "LoadLevel() END for level " + std::to_string(mission_number) +
+            "; verified objects=" + std::to_string(scene.verified_objects.size()));
     return scene;
 }
 

@@ -187,6 +187,14 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
             invisible_attachment_models_.insert(normalize_name(call.arguments[0].text));
         }
     }
+    const std::vector<std::string> standard_flames = {
+        "1000_01_1", "1005_01_1", "1007_01_1", "1008_01_1", "1010_01_1", "1015_01_1",
+        "flame", "flash", "gunflame", "muzzle", "103_flame"
+    };
+    for (const auto& sf : standard_flames)
+    {
+        muzzle_flash_models_.insert(normalize_name(sf));
+    }
     const auto common_directory = resolve_path(game_directory, "missions/location0/common");
     for (const auto& base_directory :
          {resolve_path(game_directory, "common"), common_directory, mission_directory})

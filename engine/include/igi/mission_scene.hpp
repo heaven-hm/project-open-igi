@@ -50,6 +50,13 @@ struct VerifyObject final
     std::string name;
     Vector3 position{};
     Vector3 rotation{};
+    double raw_px{};
+    double raw_py{};
+    double raw_pz{};
+    double raw_ox{};
+    double raw_oy{};
+    double raw_oz{};
+    bool has_ori = false;
     bool matched = false;
 };
 

@@ -566,6 +566,8 @@ int run(RuntimeOptions options, const char* executable)
         {
             throw std::runtime_error("Cannot enter fullscreen: " + std::string(SDL_GetError()));
         }
+        SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+        SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
         display.reset(
             SDL_CreateRenderer(window.get(), -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC));
         if (!display)

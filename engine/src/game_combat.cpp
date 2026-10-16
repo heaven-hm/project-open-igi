@@ -527,9 +527,11 @@ void GameSimulation::advance_projectiles()
         }
         if (target_player)
         {
+            const float difficulty_scale = difficulty_ == 0 ? 0.75f : difficulty_ == 2 ? 1.25f : 1.0f;
+            const float scaled_damage = projectile.damage * difficulty_scale;
             if (!developer_mode_)
             {
-                health_ = std::max(0.0f, health_ - projectile.damage);
+                health_ = std::max(0.0f, health_ - scaled_damage);
                 damage_flash_remaining_ = 0.2f;
             }
             diagnostics::log(
@@ -537,7 +539,7 @@ void GameSimulation::advance_projectiles()
                 "combat",
                 "Player hit by soldier " +
                     std::to_string(scene_.actors.at(static_cast<std::size_t>(projectile.owner)).identifier) +
-                    "; damage=" + std::to_string(projectile.damage) + "; health=" + std::to_string(health_));
+                    "; damage=" + std::to_string(scaled_damage) + "; health=" + std::to_string(health_));
             if (health_ <= 0)
             {
                 diagnostics::log(
