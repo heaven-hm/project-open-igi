@@ -52,6 +52,12 @@ int main(int argument_count, char** arguments)
                         finite(audit.authored_rotation) && finite(audit.runtime_rotation),
                     "Loaded original object transform must remain finite");
         }
+        const auto route_graph = std::find_if(scene.navigation_graphs.begin(),
+                                              scene.navigation_graphs.end(),
+                                              [](const NavigationGraph& graph) { return graph.identifier == 4019; });
+        require(route_graph != scene.navigation_graphs.end() && route_graph->route_table_width == 300 &&
+                    route_graph->route_table.size() == 90000,
+                "Level 1 graph4019 must retain its original 300-by-300 route table");
         bool disabled_cinematic_actor = false;
         for (const auto& actor : scene.actors)
         {

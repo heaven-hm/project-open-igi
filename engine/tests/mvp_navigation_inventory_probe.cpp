@@ -82,6 +82,15 @@ int main()
         require(rejected, "Invalid navigation edges must produce a controlled error");
         graph.nodes[0].neighbors.pop_back();
 
+        graph.route_table_width = 5;
+        graph.route_table.assign(25, {});
+        graph.route_table[1 + 4 * graph.route_table_width] = {2, 3.0f};
+        graph.route_table[2 + 4 * graph.route_table_width] = {3, 2.0f};
+        graph.route_table[3 + 4 * graph.route_table_width] = {4, 1.0f};
+        const auto retail_route = find_navigation_path(graph, {0, 6, -2}, {0, 12, -2});
+        require(retail_route.size() == 4 && retail_route[1].x == -5 && retail_route.back().x == 0,
+                "Retail route table must take precedence over reconstructed graph edges");
+
         auto scene = test_scene();
         GameSimulation simulation(scene);
         for (int tick_index = 0; tick_index < 600; ++tick_index)

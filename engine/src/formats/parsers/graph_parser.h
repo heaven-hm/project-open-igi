@@ -44,11 +44,18 @@ struct GraphEdge
     int link_type = 0;
 };
 
+struct GraphRouteEntry
+{
+    int next_node = -1;
+    float total_cost = -1.0f;
+};
+
 struct GraphFile
 {
     int max_nodes = 0;
     std::vector<GraphNode> nodes;
     std::vector<GraphEdge> edges;
+    std::vector<GraphRouteEntry> route_table;
     bool valid = false;
     std::string error;
     bool is_legacy = false; // alternate tagged format (no magic)

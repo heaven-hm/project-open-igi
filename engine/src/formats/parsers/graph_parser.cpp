@@ -1047,6 +1047,18 @@ GraphFile GRAPH_Parse(const std::string& filepath)
         return result;
     }
 
+    result.route_table.resize(static_cast<size_t>(maxNodes) * maxNodes);
+    for (int destination_node = 0; destination_node < maxNodes; ++destination_node)
+    {
+        for (int source_node = 0; source_node < maxNodes; ++source_node)
+        {
+            const std::size_t entry_index =
+                static_cast<std::size_t>(source_node) + static_cast<std::size_t>(destination_node) * maxNodes;
+            const std::size_t entry_offset = HEADER_SIZE + entry_index * 8;
+            result.route_table[entry_index] = {b.read<int32_t>(entry_offset), b.read<float>(entry_offset + 4)};
+        }
+    }
+
     Logger::Get().Log(LogLevel::INFO,
                       "[GRAPH] Parsing " + filepath + " | MaxNodes=" + std::to_string(maxNodes) +
                           " | AdjTable=" + std::to_string(adjTableBytes) + " bytes" + " | NodeData@" +

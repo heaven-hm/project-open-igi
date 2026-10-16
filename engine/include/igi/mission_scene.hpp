@@ -132,10 +132,18 @@ struct NavigationNode final
     std::vector<std::size_t> neighbors;
 };
 
+struct NavigationRouteEntry final
+{
+    int next_node_identifier = -1;
+    float total_cost = -1.0f;
+};
+
 struct NavigationGraph final
 {
     int identifier{};
     std::vector<NavigationNode> nodes;
+    int route_table_width{};
+    std::vector<NavigationRouteEntry> route_table;
 };
 
 struct PatrolCommand final

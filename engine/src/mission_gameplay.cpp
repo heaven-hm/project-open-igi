@@ -82,7 +82,16 @@ void load_graphs(gameplay::MissionScene& scene,
             throw std::runtime_error("Invalid original navigation graph " + std::to_string(identifier) +
                                      ": " + parsed.error);
         }
-        gameplay::NavigationGraph graph{identifier, {}};
+        gameplay::NavigationGraph graph{identifier, {}, parsed.max_nodes, {}};
+        graph.route_table.reserve(parsed.route_table.size());
+        for (const auto& entry : parsed.route_table)
+        {
+            if (!std::isfinite(entry.total_cost))
+            {
+                throw std::runtime_error("Original navigation route table contains a non-finite cost");
+            }
+            graph.route_table.push_back({entry.next_node, entry.total_cost});
+        }
         std::unordered_map<int, std::size_t> node_indices;
         for (const auto& node : parsed.nodes)
         {

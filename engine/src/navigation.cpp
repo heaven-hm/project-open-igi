@@ -39,6 +39,52 @@ std::vector<Vector3> find_navigation_path(const NavigationGraph& graph, Vector3 
     };
     const auto start_index = closest(start);
     const auto destination_index = closest(destination);
+    const auto find_node = [&graph](int identifier) -> const NavigationNode*
+    {
+        const auto found = std::find_if(graph.nodes.begin(),
+                                        graph.nodes.end(),
+                                        [identifier](const NavigationNode& node)
+                                        { return node.identifier == identifier; });
+        return found == graph.nodes.end() ? nullptr : &*found;
+    };
+    if (graph.route_table_width > 0 &&
+        graph.route_table.size() == static_cast<std::size_t>(graph.route_table_width) * graph.route_table_width)
+    {
+        const int destination_identifier = graph.nodes[destination_index].identifier;
+        int current_identifier = graph.nodes[start_index].identifier;
+        if (current_identifier < 0 || current_identifier >= graph.route_table_width || destination_identifier < 0 ||
+            destination_identifier >= graph.route_table_width)
+        {
+            throw std::runtime_error("Navigation route table node identifier is outside its declared range");
+        }
+        std::vector<Vector3> route{graph.nodes[start_index].position};
+        for (int step_count = 0; step_count <= graph.route_table_width; ++step_count)
+        {
+            if (current_identifier == destination_identifier)
+            {
+                return route;
+            }
+            const auto& entry = graph.route_table[static_cast<std::size_t>(current_identifier) +
+                                                  static_cast<std::size_t>(destination_identifier) *
+                                                      graph.route_table_width];
+            if (entry.next_node_identifier == -1)
+            {
+                return {};
+            }
+            if (entry.next_node_identifier < 0 || entry.next_node_identifier >= graph.route_table_width)
+            {
+                throw std::runtime_error("Navigation route table references an invalid node identifier");
+            }
+            const auto* next_node = find_node(entry.next_node_identifier);
+            if (next_node == nullptr)
+            {
+                throw std::runtime_error("Navigation route table references an unloaded node");
+            }
+            route.push_back(next_node->position);
+            current_identifier = entry.next_node_identifier;
+        }
+        throw std::runtime_error("Navigation route table did not reach its destination");
+    }
     using QueueEntry = std::pair<float, std::size_t>;
     std::priority_queue<QueueEntry, std::vector<QueueEntry>, std::greater<>> frontier;
     std::vector<float> costs(graph.nodes.size(), std::numeric_limits<float>::infinity());
