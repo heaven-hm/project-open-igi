@@ -191,6 +191,10 @@ if(BUILD_TESTING)
     target_link_libraries(mvp_assets_probe PRIVATE igi_assets)
     add_test(NAME mvp_asset_boundaries COMMAND mvp_assets_probe)
 
+    add_executable(qvm_integer_operands_probe tests/qvm_integer_operands_probe.cpp)
+    target_link_libraries(qvm_integer_operands_probe PRIVATE igi_assets)
+    add_test(NAME qvm_signed_integer_operands COMMAND qvm_integer_operands_probe)
+
     add_executable(mvp_renderer_probe tests/mvp_renderer_probe.cpp)
     target_link_libraries(mvp_renderer_probe PRIVATE igi_runtime)
     add_test(NAME mvp_renderer_depth_clipping COMMAND mvp_renderer_probe)

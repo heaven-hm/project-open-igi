@@ -30,11 +30,6 @@ static uint32_t ReadU32LE(const uint8_t* p)
     return (uint32_t) p[0] | ((uint32_t) p[1] << 8) | ((uint32_t) p[2] << 16) | ((uint32_t) p[3] << 24);
 }
 
-static uint16_t ReadU16LE(const uint8_t* p)
-{
-    return (uint16_t) p[0] | ((uint16_t) p[1] << 8);
-}
-
 static bool MatchFourCC(const uint8_t* p, const char* tag)
 {
     return p[0] == (uint8_t) tag[0] && p[1] == (uint8_t) tag[1] && p[2] == (uint8_t) tag[2] &&

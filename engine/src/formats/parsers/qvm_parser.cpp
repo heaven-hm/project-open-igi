@@ -170,11 +170,11 @@ QVMFile QVM_Parse(const std::string& filepath)
     if (qvm.header.ver_minor >= 6 && qvm.header.of_itable == 64 && buf_size >= 64)
     {
         uint64_t sectionEnd = 64;
-        for (const auto range : {std::pair<uint32_t, uint32_t>{qvm.header.of_itable, qvm.header.sz_itable},
-                                 {qvm.header.of_ivalue, qvm.header.sz_ivalue},
-                                 {qvm.header.of_stable, qvm.header.sz_stable},
-                                 {qvm.header.of_svalue, qvm.header.sz_svalue},
-                                 {qvm.header.of_ctable, qvm.header.sz_ctable}})
+        for (const auto& range : {std::pair<uint32_t, uint32_t>{qvm.header.of_itable, qvm.header.sz_itable},
+                                  {qvm.header.of_ivalue, qvm.header.sz_ivalue},
+                                  {qvm.header.of_stable, qvm.header.sz_stable},
+                                  {qvm.header.of_svalue, qvm.header.sz_svalue},
+                                  {qvm.header.of_ctable, qvm.header.sz_ctable}})
             sectionEnd = std::max(sectionEnd, uint64_t(range.first) + range.second);
         qvm.trailerOffset = ReadU32(buf + 0x3c);
         if (sectionEnd > buf_size || sectionEnd > UINT32_MAX ||

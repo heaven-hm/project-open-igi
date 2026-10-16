@@ -114,7 +114,9 @@ ScriptValue QvmInitializer::evaluate(std::size_t address, std::size_t depth)
             }
             else if (opcode == 2 || opcode == 3 || opcode == 4)
             {
-                value.number = operand;
+                value.number = opcode == 3 ? std::bit_cast<std::int8_t>(static_cast<std::uint8_t>(operand))
+                               : opcode == 4 ? std::bit_cast<std::int16_t>(static_cast<std::uint16_t>(operand))
+                                             : std::bit_cast<std::int32_t>(operand);
             }
             else
             {
