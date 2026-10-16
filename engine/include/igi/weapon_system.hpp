@@ -11,15 +11,18 @@
 
 namespace igi::gameplay {
 
-// Per-weapon tuning. Field meanings follow the Gun/GunType layout recovered in
-// WEAPON_FIRING_RESEARCH.md. Numeric values in default_loadout() are
-// PROVISIONAL: the retail numbers live in script data not yet extracted.
+// Per-weapon tuning. RPM, magazine, burst, reload time, and range below are
+// scripted retail values decoded from WEAPONS/weaponconfig.qvm (see
+// WeaponConfigRegistry and its tests). Damage, spread, and recoil remain
+// PROVISIONAL: DamageFactor/spread/recoil units in the script do not map to
+// engine HP/degree units without the retail damage formula (open).
 struct WeaponStats {
     std::string name;
     int rounds_per_minute{700};
     int magazine_capacity{30};
     int burst_count{1000}; // >= magazine capacity means full-auto
     float range_meters{150.0f};
+    float reload_seconds{2.0f};
     float base_damage{34.0f};
     float spread_initial_deg{0.4f};
     float spread_sustained_deg{1.6f};

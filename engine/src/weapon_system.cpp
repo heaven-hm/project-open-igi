@@ -10,7 +10,7 @@ namespace {
 
 constexpr float kPi = 3.14159265358979323846f;
 constexpr float kDegToRad = kPi / 180.0f;
-constexpr float kReloadSeconds = 2.2f;
+constexpr float kReloadSeconds = 2.2f; // fallback; slots use scripted reload_seconds
 // Retail ticks run at 30 Hz; the recoil damping factor applies per retail tick.
 constexpr float kRetailTickSeconds = 1.0f / 30.0f;
 
@@ -35,51 +35,66 @@ WeaponSystem::WeaponSystem() {
 }
 
 std::vector<WeaponStats> WeaponSystem::default_loadout() {
+    // Scripted values from WEAPONS/weaponconfig.qvm (see test_weapon_config):
+    // M16A2 500rpm/20/burst20/2.0s/300m; Glock 400/17/1/2.0s; MP5SD 700/32/32/1.8s;
+    // AK47 650/32/32/2.0s; Dragunov 50/10/1/2.0s/1000m.
     std::vector<WeaponStats> loadout;
     WeaponStats m16;
     m16.name = "M16A2";
-    m16.rounds_per_minute = 800;
-    m16.burst_count = 3;
+    m16.rounds_per_minute = 500;
+    m16.magazine_capacity = 20;
+    m16.burst_count = 20;
+    m16.range_meters = 300.0f;
+    m16.reload_seconds = 2.0f;
     loadout.push_back(m16);
 
     WeaponStats glock;
     glock.name = "Glock";
-    glock.rounds_per_minute = 360;
-    glock.magazine_capacity = 15;
+    glock.rounds_per_minute = 400;
+    glock.magazine_capacity = 17;
     glock.burst_count = 1;
     glock.range_meters = 60.0f;
     glock.base_damage = 28.0f;
     glock.spread_initial_deg = 0.6f;
     glock.spread_sustained_deg = 1.0f;
     glock.recoil_pitch_base_deg = 0.8f;
+    glock.reload_seconds = 2.0f;
     loadout.push_back(glock);
 
     WeaponStats mp5;
     mp5.name = "MP5SD";
-    mp5.rounds_per_minute = 800;
-    mp5.range_meters = 70.0f;
+    mp5.rounds_per_minute = 700;
+    mp5.magazine_capacity = 32;
+    mp5.burst_count = 32;
+    mp5.range_meters = 100.0f;
     mp5.base_damage = 24.0f;
     mp5.spread_sustained_deg = 2.0f;
     mp5.audible_range_units = 20480.0f;
+    mp5.reload_seconds = 1.8f;
     loadout.push_back(mp5);
 
     WeaponStats ak47;
     ak47.name = "AK47";
-    ak47.rounds_per_minute = 600;
+    ak47.rounds_per_minute = 650;
+    ak47.magazine_capacity = 32;
+    ak47.burst_count = 32;
+    ak47.range_meters = 300.0f;
     ak47.base_damage = 40.0f;
     ak47.recoil_pitch_base_deg = 0.55f;
+    ak47.reload_seconds = 2.0f;
     loadout.push_back(ak47);
 
     WeaponStats dragunov;
     dragunov.name = "Dragunov";
-    dragunov.rounds_per_minute = 90;
+    dragunov.rounds_per_minute = 50;
     dragunov.magazine_capacity = 10;
     dragunov.burst_count = 1;
-    dragunov.range_meters = 400.0f;
+    dragunov.range_meters = 1000.0f;
     dragunov.base_damage = 100.0f;
     dragunov.spread_initial_deg = 0.05f;
     dragunov.spread_sustained_deg = 0.1f;
     dragunov.recoil_pitch_base_deg = 1.6f;
+    dragunov.reload_seconds = 2.0f;
     loadout.push_back(dragunov);
     return loadout;
 }
@@ -137,7 +152,7 @@ void WeaponSystem::request_reload() noexcept {
         slot.rounds >= slot.stats.magazine_capacity) {
         return;
     }
-    reload_remaining_seconds_ = kReloadSeconds;
+    reload_remaining_seconds_ = slot.stats.reload_seconds;
     IGI_LOG_DEBUG("Weapon", "Reload started for " << slot.stats.name << " (" << slot.rounds << "/" << slot.stats.magazine_capacity << ")");
 }
 

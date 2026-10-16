@@ -20,6 +20,7 @@ add_library(igi_gameplay STATIC
     src/mission_expression.cpp
     src/level_flow.cpp
     src/magic_object_registry.cpp
+    src/weapon_config.cpp
     src/mission_objective_loader.cpp
     src/sight_zoom.cpp
     src/player_view_bob.cpp

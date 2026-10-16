@@ -440,3 +440,32 @@ composition of rest offsets; adapted to dependency-free portable types):
   as procedural quads. Skinning retail meshes with these poses is the next
   visual increment, not part of this change.
 
+## Weapon numbers verified from retail scripts (2026-10-16, branch feature/gameplay-prototype)
+
+open-igi holds the field table but no native verification; this wires it up
+with retail bytes as ground truth (open-igi's order = lead only):
+
+- New `WeaponConfigRegistry` (`engine/include/igi/weapon_config.hpp`,
+  `engine/src/weapon_config.cpp`): decodes all 24 `WeaponConfig` records from
+  `WEAPONS/weaponconfig.qvm` (nested inside the container call — spans are
+  extracted per `Task_New` occurrence). Variable float formatting and
+  multi-line records handled; knife (-1 clip) excluded as non-firearm.
+- Verified scripted values now in `default_loadout` (semantics-certain fields
+  only — RPM/cooldown, clip, burst gate, reload seconds, effective range):
+  M16A2 500rpm/20/burst20/2.0s/300m (full-auto: burst == clip),
+  Glock 400/17/1/2.0s/60m, MP5SD 700/32/32/1.8s/100m,
+  AK47 650/32/32/2.0s/300m, Dragunov 50/10/1/2.0s/1000m.
+  Previous defaults (800rpm/30mag/3-burst, 2.2s reload) were provisional
+  guesses and are removed.
+- Explicitly NOT wired (units unproven — recorded, open): DamageFactor
+  (0.2-1.0, needs the retail HP formula), Min/MaxSpread (M16 3.0/10.0 — unit
+  unknown, not degrees as previously assumed), recoil fields. Engine keeps
+  provisional damage/spread/recoil, now labeled as such in `WeaponStats`.
+- Tests: `WeaponConfig` suite (`tests/test_weapon_config.cpp`):
+  `RetailRosterDecodes` (>=23 records, per-weapon spot values incl. gun-model
+  `108_01_1` for M16A2) and `LoadoutMatchesScriptedValues` (loadout equals
+  script). Old `test_weapons` expectations rewritten to scripted behavior
+  (auto-fire shot counts, 500 RPM cooldown ticks, per-weapon reload times).
+  Full suite 78/78 pass; probe L1 fires scripted auto (mag 20 -> 12 per
+  second) with unchanged mission load.
+

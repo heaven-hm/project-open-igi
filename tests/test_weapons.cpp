@@ -5,23 +5,26 @@
 
 TEST_CASE(WeaponSystem, DefaultLoadoutAndSlotSelection) {
     igi::gameplay::WeaponSystem ws;
+    // Scripted retail values (weaponconfig.qvm): M16A2 20, Glock 17,
+    // MP5SD 32, AK47 32, Dragunov 10.
     ASSERT_EQ(ws.current_stats().name, "M16A2");
-    ASSERT_EQ(ws.rounds_in_magazine(), 30);
-    ASSERT_EQ(ws.reserve_ammo(), 120);
+    ASSERT_EQ(ws.rounds_in_magazine(), 20);
+    ASSERT_EQ(ws.reserve_ammo(), 80);
 
     // Slot 1: Glock
     ws.select_slot(1);
     ASSERT_EQ(ws.current_stats().name, "Glock");
-    ASSERT_EQ(ws.rounds_in_magazine(), 15);
+    ASSERT_EQ(ws.rounds_in_magazine(), 17);
 
     // Slot 2: MP5SD
     ws.select_slot(2);
     ASSERT_EQ(ws.current_stats().name, "MP5SD");
-    ASSERT_EQ(ws.rounds_in_magazine(), 30);
+    ASSERT_EQ(ws.rounds_in_magazine(), 32);
 
     // Slot 3: AK47
     ws.select_slot(3);
     ASSERT_EQ(ws.current_stats().name, "AK47");
+    ASSERT_EQ(ws.rounds_in_magazine(), 32);
 
     // Slot 4: Dragunov
     ws.select_slot(4);
@@ -35,36 +38,38 @@ TEST_CASE(WeaponSystem, DefaultLoadoutAndSlotSelection) {
 
 TEST_CASE(WeaponSystem, RateOfFireAndCooldown) {
     igi::gameplay::WeaponSystem ws;
-    ws.select_slot(0); // M16A2: 800 RPM -> cooldown = 60/800 = 0.075s (approx 2.25 retail ticks)
+    ws.select_slot(0); // M16A2: 500 RPM -> cooldown = 60/500 = 0.12s
 
     const igi::gameplay::NavigationPosition eye{0.0, 0.0, 6553.6};
     // First trigger press fires round 1
     auto res1 = ws.update(1.0f / 30.0f, true, true, eye, 0.0f, 0.0f);
     ASSERT_TRUE(res1.fired);
-    ASSERT_EQ(ws.rounds_in_magazine(), 29);
+    ASSERT_EQ(ws.rounds_in_magazine(), 19);
 
-    // Immediate next tick (0.0333s < 0.075s cooldown): should not fire
+    // Next three ticks (0.1s < 0.12s cooldown): should not fire
     auto res2 = ws.update(1.0f / 30.0f, true, false, eye, 0.0f, 0.0f);
     ASSERT_FALSE(res2.fired);
-    ASSERT_EQ(ws.rounds_in_magazine(), 29);
+    ASSERT_EQ(ws.rounds_in_magazine(), 19);
 
-    // Next tick (total 0.0666s < 0.075s): still on cooldown
+    // Next two ticks (0.0667s, 0.1s < 0.12s): still on cooldown
     auto res3 = ws.update(1.0f / 30.0f, true, false, eye, 0.0f, 0.0f);
     ASSERT_FALSE(res3.fired);
-
-    // Next tick (total elapsed > 0.075s): should fire round 2
     auto res4 = ws.update(1.0f / 30.0f, true, false, eye, 0.0f, 0.0f);
-    ASSERT_TRUE(res4.fired);
-    ASSERT_EQ(ws.rounds_in_magazine(), 28);
+    ASSERT_FALSE(res4.fired);
+
+    // Next tick (total elapsed 0.1333s > 0.12s): should fire round 2
+    auto res5 = ws.update(1.0f / 30.0f, true, false, eye, 0.0f, 0.0f);
+    ASSERT_TRUE(res5.fired);
+    ASSERT_EQ(ws.rounds_in_magazine(), 18);
 }
 
 TEST_CASE(WeaponSystem, BurstFireGating) {
     igi::gameplay::WeaponSystem ws;
-    ws.select_slot(0); // M16A2 has burst_count = 3
+    ws.select_slot(0); // M16A2 scripted burst 20 = full magazine: full-auto
     const igi::gameplay::NavigationPosition eye{0.0, 0.0, 6553.6};
 
     int shots_fired = 0;
-    // Simulate holding trigger for 1 second (30 ticks)
+    // Holding trigger for 1 second (30 ticks) at 500 RPM fires every 4th tick.
     for (int tick = 0; tick < 30; ++tick) {
         const bool pressed = (tick == 0);
         auto res = ws.update(1.0f / 30.0f, true, pressed, eye, 0.0f, 0.0f);
@@ -72,14 +77,12 @@ TEST_CASE(WeaponSystem, BurstFireGating) {
             ++shots_fired;
         }
     }
-    // Exactly 3 shots should have fired because burst limit is 3
-    ASSERT_EQ(shots_fired, 3);
-    ASSERT_EQ(ws.rounds_in_magazine(), 27);
+    // Shots at ticks 0,4,...,28: 8 shots, magazine 20 -> 12.
+    ASSERT_EQ(shots_fired, 8);
+    ASSERT_EQ(ws.rounds_in_magazine(), 12);
 
-    // Release trigger for 1 tick
+    // Release trigger for 1 tick, then hold again: another 8 shots (12 -> 4).
     (void)ws.update(1.0f / 30.0f, false, false, eye, 0.0f, 0.0f);
-
-    // Press trigger again: second burst of 3 should fire
     shots_fired = 0;
     for (int tick = 0; tick < 30; ++tick) {
         const bool pressed = (tick == 0);
@@ -88,8 +91,8 @@ TEST_CASE(WeaponSystem, BurstFireGating) {
             ++shots_fired;
         }
     }
-    ASSERT_EQ(shots_fired, 3);
-    ASSERT_EQ(ws.rounds_in_magazine(), 24);
+    ASSERT_EQ(shots_fired, 8);
+    ASSERT_EQ(ws.rounds_in_magazine(), 4);
 }
 
 TEST_CASE(WeaponSystem, RecoilDamping) {
@@ -125,8 +128,8 @@ TEST_CASE(WeaponSystem, ReloadingAndDryFire) {
         // Dragunov has burst_count = 1, so each shot requires a new press
         auto res = ws.update(1.0f / 30.0f, true, true, eye, 0.0f, 0.0f);
         ASSERT_TRUE(res.fired);
-        // Wait out the cooldown (60/90 = 0.667s ≈ 20 ticks)
-        for (int c = 0; c < 21; ++c) {
+        // Wait out the cooldown (60/50 = 1.2s = 36 ticks)
+        for (int c = 0; c < 37; ++c) {
             (void)ws.update(1.0f / 30.0f, false, false, eye, 0.0f, 0.0f);
         }
     }
@@ -137,7 +140,7 @@ TEST_CASE(WeaponSystem, ReloadingAndDryFire) {
     ASSERT_FALSE(dry_res.fired);
     ASSERT_TRUE(dry_res.dry_fire);
 
-    // During reload (2.2s ≈ 66 ticks), firing should return false
+    // During reload (Dragunov scripted 2.0s = 60 ticks), firing should return false
     for (int tick = 0; tick < 50; ++tick) {
         auto mid_res = ws.update(1.0f / 30.0f, true, true, eye, 0.0f, 0.0f);
         ASSERT_FALSE(mid_res.fired);
