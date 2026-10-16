@@ -146,20 +146,33 @@ void SoftwareRenderer::draw_triangle(
             const float u = (w0 * a.u * iz0 + w1 * b.u * iz1 + w2 * c.u * iz2) * z;
             const float v = (w0 * a.v * iz0 + w1 * b.v * iz1 + w2 * c.v * iz2) * z;
             const float light = w0 * a.light + w1 * b.light + w2 * c.light;
+            const float opacity = std::clamp(
+                w0 * a.opacity + w1 * b.opacity + w2 * c.opacity, 0.0f, 1.0f);
 
             std::uint32_t texel = 0xFF8C9088u;
+            float texel_alpha = 1.0f;
             if (texture != nullptr) {
                 texel = texture->sample_bilinear(u, v);
-                if (texture->has_alpha && (texel >> 24) < 128u) {
-                    continue;
+                if (texture->has_alpha) {
+                    texel_alpha = static_cast<float>(texel >> 24) / 255.0f;
                 }
+            }
+            const float effective_alpha = opacity * texel_alpha;
+            if (effective_alpha < 0.02f) {
+                continue; // effectively transparent: retail cutout
             }
             std::uint32_t shaded = modulate(texel, light);
             if (z > kFogStart) {
                 shaded = blend(shaded, kFogColor, (z - kFogStart) / (kFogEnd - kFogStart));
             }
-            depth_[index] = z;
-            color_[index] = shaded;
+            if (effective_alpha >= 0.985f) {
+                depth_[index] = z;
+                color_[index] = shaded;
+            } else {
+                // Retail translucency (glass, fences, flats): source-over the
+                // shaded texel without writing depth. Unsorted, noted limit.
+                color_[index] = blend(color_[index], shaded, effective_alpha);
+            }
         }
     }
 }
@@ -190,6 +203,7 @@ void SoftwareRenderer::draw_clipped_triangle(
             m.u = cur.u + (nxt.u - cur.u) * t;
             m.v = cur.v + (nxt.v - cur.v) * t;
             m.light = cur.light + (nxt.light - cur.light) * t;
+            m.opacity = cur.opacity + (nxt.opacity - cur.opacity) * t;
             out[out_count++] = m;
         }
     }
@@ -316,7 +330,8 @@ void SoftwareRenderer::render_world(
             }
         }
 
-        const auto draw_range = [&](std::size_t start, std::size_t count, const TextureImage* tex) {
+        const auto draw_range = [&](std::size_t start, std::size_t count, const TextureImage* tex,
+                                    float block_opacity) {
             const std::size_t end = std::min(start + count, mesh->triangles.size());
             for (std::size_t t = start; t < end; ++t) {
                 const auto& idx = mesh->triangles[t];
@@ -326,6 +341,7 @@ void SoftwareRenderer::render_world(
                 ClipVertex a = verts[idx[0]];
                 ClipVertex b = verts[idx[1]];
                 ClipVertex c = verts[idx[2]];
+                a.opacity = b.opacity = c.opacity = block_opacity;
                 if (a.z < kNearPlane && b.z < kNearPlane && c.z < kNearPlane) {
                     continue;
                 }
@@ -354,11 +370,12 @@ void SoftwareRenderer::render_world(
         };
 
         if (mesh->sub_blocks.empty()) {
-            draw_range(0, mesh->triangles.size(), texture_for_slot(0));
+            draw_range(0, mesh->triangles.size(), texture_for_slot(0), 1.0f);
         } else {
             for (const MeshSubBlock& block : mesh->sub_blocks) {
                 draw_range(block.triangle_start, block.triangle_count,
-                           texture_for_slot(block.material_slot));
+                           texture_for_slot(block.material_slot),
+                           std::clamp(block.opacity, 0.0f, 1.0f));
             }
         }
     }

@@ -403,6 +403,22 @@ decompiler (`igi_qvm_dump`, new `engine/tools/qvm_dump.cpp` probe):
   name/offset/bone) is filled during conversion. 83 L1-referenced models
   carry ATTA bytes; `RetailAttaMountsPreservedOnModels` proves mounts survive
   into the loaded store.
+- Fixed retail Door record decoding (survey: 26 doors / 14 missions):
+  the generic euler parse read slot 6 (stopX) as facing, giving every door a
+  bogus -1.0 rad yaw — doors now take euler gamma from slot 11 (verified:
+  1.5708/0/4.71239 across L1), open durations from the open-time field
+  (1.0 s, 0.5 s, 2.0 s gate doors), and slide start -> stop offsets
+  (mirrored +/-3.6 m gate panels confirm the offset reading). `maxAngle` is 0
+  everywhere: all retail doors slide. `update_doors` uses scripted durations
+  and offsets. PROVISIONAL (needs executable evidence before calling it
+  retail behavior): stop fields read as world-frame meter offsets; the 0.85
+  collision-skip threshold. Locked/open expressions are stored, not yet
+  evaluated (gates stay Q-openable for playability).
+- Renderer now honors retail sub-block opacity with source-over blending
+  (was: ignored, so translucent glass/fences drew opaque black). Translucent
+  pixels skip the depth write; sorting is unsorted (noted limit). Provenance:
+  L4 tower model 905_01_1 (dark olive texture, 62% transparent texels, 0.5
+  block opacity) previously drew solid black.
 - 14/14 retail missions load read-only (objects / models / textures /
   soldiers / graphs / terrain tris): L1 499/80/304/29/11/24784, L2
   229/46/237/25/14/15858, L3 549/93/336/56/18/24870, L4 125/42/228/50/13/20164,

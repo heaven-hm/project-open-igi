@@ -18,9 +18,68 @@ constexpr double kPi = 3.14159265358979323846;
 
 } // namespace
 
-// End-to-end building entry against retail Mission 1 data: a closed door must
-// block passage along some horizontal axis through its center, and opening it
-// via the retail Activate flow must clear that axis.
+// Retail door record semantics (26 doors surveyed across 14 missions):
+// euler gamma lives in record slot 11 (a generic parse read slot 6, the stop
+// field, yielding a bogus -1.0 facing); maxAngle is 0 everywhere (all slide);
+// openTime is 1.0 s or 0.5 s per door; stop fields are world-frame offsets.
+TEST_CASE(BuildingEntry, RetailDoorRecordsDecodeToScriptedMotion) {
+    const std::filesystem::path retail_root = "/Users/haseeb-mir/Downloads/IGI";
+    if (!std::filesystem::exists(retail_root)) {
+        return; // Skip if retail files are not installed
+    }
+    MissionWorld world;
+    ASSERT_TRUE(world.load_from_retail_install(retail_root, 1));
+    int doors = 0;
+    for (const auto& obj : world.placed_objects()) {
+        if (obj.kind != PlacedObjectKind::Door) {
+            continue;
+        }
+        ++doors;
+        // The old mis-parse produced exactly -1.0 (stopX) as facing.
+        ASSERT_TRUE(obj.gamma != -1.0f);
+        ASSERT_TRUE(
+            obj.open_duration_seconds == 1.0f || obj.open_duration_seconds == 0.5f ||
+            obj.open_duration_seconds == 2.0f); // scripted gate doors
+        ASSERT_TRUE(obj.open_offset.x != 0.0f || obj.open_offset.y != 0.0f);
+    }
+    ASSERT_TRUE(doors > 0);
+
+    // L4 holds 0.5 s doors and the non-default stop door (-0.825).
+    MissionWorld world4;
+    ASSERT_TRUE(world4.load_from_retail_install(retail_root, 4));
+    bool found_fast_slider = false;
+    bool found_fractional_stop = false;
+    for (const auto& obj : world4.placed_objects()) {
+        if (obj.kind != PlacedObjectKind::Door) {
+            continue;
+        }
+        if (obj.open_duration_seconds == 0.5f) {
+            found_fast_slider = true;
+        }
+        if (std::fabs(obj.open_offset.x - -0.825 * 4096.0) < 5.0) {
+            found_fractional_stop = true;
+        }
+    }
+    ASSERT_TRUE(found_fast_slider);
+    ASSERT_TRUE(found_fractional_stop);
+
+    // Scripted slide: toggling the first L1 door moves it from closed toward
+    // closed + stop offset over its scripted duration.
+    for (auto& obj : world.placed_objects_mutable()) {
+        if (obj.kind == PlacedObjectKind::Door) {
+            const double shut_x = obj.position.x;
+            const double shut_y = obj.position.y;
+            obj.is_open = true;
+            for (int tick = 0; tick < 40; ++tick) {
+                world.update_doors(1.0f / 30.0f);
+            }
+            ASSERT_TRUE(obj.open_progress > 0.99f);
+            ASSERT_NEAR(obj.position.x, shut_x + obj.open_offset.x, 1.0);
+            ASSERT_NEAR(obj.position.y, shut_y + obj.open_offset.y, 1.0);
+            break;
+        }
+    }
+}
 TEST_CASE(BuildingEntry, RetailDoorBlocksWhenClosedAndOpensForEntry) {
     const std::filesystem::path retail_root = "/Users/haseeb-mir/Downloads/IGI";
     if (!std::filesystem::exists(retail_root)) {

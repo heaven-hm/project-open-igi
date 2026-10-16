@@ -803,6 +803,30 @@ bool MissionWorld::parse_qsc_scene(const std::string& qsc_text) {
         if (class_name == "Door") {
             obj.kind = PlacedObjectKind::Door;
             obj.is_interactive = true;
+            // Retail Door record layout (scalar_args include task id + class):
+            // [3,4,5]=start [6]=stopX [7]=stopY [8]=slider [9,10,11]=euler
+            // [12]=model [13]=maxAngle [14]=openTime. The generic euler parse
+            // above reads args[6] (the stop field) as gamma; correct it here.
+            if (root_call.scalar_args.size() > 14) {
+                obj.alpha = static_cast<float>(parse_double_safe(root_call.scalar_args[9], 0.0));
+                obj.beta = static_cast<float>(parse_double_safe(root_call.scalar_args[10], 0.0));
+                obj.gamma = static_cast<float>(parse_double_safe(root_call.scalar_args[11], 0.0));
+                obj.basis = basis_from_euler(obj.alpha, obj.beta, obj.gamma);
+                const float open_time =
+                    static_cast<float>(parse_double_safe(root_call.scalar_args[14], 1.0));
+                obj.open_duration_seconds = open_time > 0.0f ? open_time : 1.0f;
+                const double stop_x = parse_double_safe(root_call.scalar_args[6], 0.0);
+                const double stop_y = parse_double_safe(root_call.scalar_args[7], 0.0);
+                obj.open_offset = {
+                    static_cast<float>(stop_x * 4096.0),
+                    static_cast<float>(stop_y * 4096.0),
+                    0.0f,
+                };
+                if (root_call.scalar_args.size() > 18) {
+                    obj.door_locked_expression = root_call.scalar_args[17];
+                    obj.door_open_expression = root_call.scalar_args[18];
+                }
+            }
         } else if (class_name == "Fence") {
             obj.kind = PlacedObjectKind::Fence;
         } else if (class_name == "Switch") {
@@ -1776,7 +1800,6 @@ MissionWorld::InteractionResult MissionWorld::try_interact(
 }
 
 void MissionWorld::update_doors(float delta_seconds) noexcept {
-    constexpr float kDoorSpeed = 2.0f; // Opens or closes in 0.5s
     for (PlacedObject& obj : placed_objects_) {
         if (obj.kind != PlacedObjectKind::Door) {
             continue;
@@ -1787,19 +1810,23 @@ void MissionWorld::update_doors(float delta_seconds) noexcept {
             continue;
         }
 
+        // Scripted open duration (seconds) from the Door record's open-time
+        // field; L1 uses 1.0 s, the L4 sliding door 0.5 s.
+        const float speed = obj.open_duration_seconds > 0.0f
+            ? 1.0f / obj.open_duration_seconds
+            : 2.0f;
         if (obj.open_progress < target) {
-            obj.open_progress = std::min(target, obj.open_progress + kDoorSpeed * delta_seconds);
+            obj.open_progress = std::min(target, obj.open_progress + speed * delta_seconds);
         } else {
-            obj.open_progress = std::max(target, obj.open_progress - kDoorSpeed * delta_seconds);
+            obj.open_progress = std::max(target, obj.open_progress - speed * delta_seconds);
         }
 
-        // Slide door along local X axis
-        const Vector3 slide_offset = transform_local_to_world_offset(
-            {obj.open_progress * 4000.0f, 0.0f, 0.0f},
-            obj.basis);
-        obj.position.x = obj.closed_position.x + static_cast<double>(slide_offset.x);
-        obj.position.y = obj.closed_position.y + static_cast<double>(slide_offset.y);
-        obj.position.z = obj.closed_position.z + static_cast<double>(slide_offset.z);
+        // Slide from the closed position toward the scripted stop offset.
+        obj.position.x = obj.closed_position.x +
+            static_cast<double>(obj.open_offset.x) * obj.open_progress;
+        obj.position.y = obj.closed_position.y +
+            static_cast<double>(obj.open_offset.y) * obj.open_progress;
+        obj.position.z = obj.closed_position.z;
     }
 }
 

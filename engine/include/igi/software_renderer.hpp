@@ -79,6 +79,7 @@ private:
         float x{}, y{}, z{}; // camera space: x right, y up, z forward
         float u{}, v{};
         float light{1.0f};
+        float opacity{1.0f}; // retail sub-block opacity; <1 blends, no depth write
     };
 
     void draw_triangle(

@@ -113,6 +113,18 @@ struct PlacedObject {
     bool is_interactive{};
     bool is_open{};
     float open_progress{};
+    // Retail sliding-door motion (see Door Task_DeclareParameters + survey of
+    // 26 doors / 14 levels): open position = closed + open_offset (world
+    // frame), reached over open_duration_seconds. PROVISIONAL reading: stop
+    // fields (-1.0, and -0.825 once) are interpreted as meter offsets;
+    // executable evidence still needed (see VERIFICATION).
+    Vector3 open_offset{};
+    float open_duration_seconds{1.0f};
+    // Retail script hooks (stored, not yet evaluated): locked/open/close
+    // expressions from the Door record. Gates currently still open on
+    // Activate for playability; full switch/cutscene wiring is open work.
+    std::string door_locked_expression;
+    std::string door_open_expression;
     bool is_destructible{};
     bool is_destroyed{};
     float health{100.0f};

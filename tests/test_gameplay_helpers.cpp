@@ -124,6 +124,8 @@ TEST_CASE(GameplayHelpers, WorldObjectInteractionAndDestruction) {
     door.position = {1000.0, 0.0, 0.0};
     door.closed_position = door.position;
     door.basis = igi::gameplay::MissionWorld::basis_from_euler(0.0f, 0.0f, 0.0f);
+    door.open_duration_seconds = 0.5f; // scripted open time
+    door.open_offset = {-4096.0f, 0.0f, 0.0f}; // scripted 1 m stop offset
     objects.push_back(door);
 
     // 2. Add computer terminal
@@ -151,10 +153,10 @@ TEST_CASE(GameplayHelpers, WorldObjectInteractionAndDestruction) {
     ASSERT_TRUE(door_interact.kind == igi::gameplay::PlacedObjectKind::Door);
     ASSERT_TRUE(world.placed_objects()[0].is_open);
 
-    // Update doors advances door position
+    // Update doors advances door position (0.25 s of a 0.5 s slide)
     world.update_doors(0.25f);
     ASSERT_NEAR(world.placed_objects()[0].open_progress, 0.5f, 1e-3f);
-    ASSERT_TRUE(world.placed_objects()[0].position.x > 1000.0);
+    ASSERT_NEAR(world.placed_objects()[0].position.x, 1000.0 - 2048.0, 1.0);
 
     // Player facing terminal (+Y direction, yaw = pi/2)
     constexpr float kHalfPi = 1.5707963f;
