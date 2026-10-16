@@ -416,3 +416,27 @@ decompiler (`igi_qvm_dump`, new `engine/tools/qvm_dump.cpp` probe):
   simulation itself is ~0.06 ms/tick. Fog-range terrain clamp is the planned
   exactness-preserving next step, not yet implemented.
 
+## Exact skeletal pose sampling (2026-10-16, branch feature/gameplay-prototype)
+
+`MissionWorld::evaluate_skeletal_pose` was a sine-wobble placeholder that
+used only each track's first key. Ported the exact evaluation math (read-only
+reference: the other engine's `skeletal_animation.cpp` — slerp with
+shortest-path flip, key-track sampling with cyclic wrap, hierarchical
+composition of rest offsets; adapted to dependency-free portable types):
+
+- New `engine/include/igi/skeletal_pose.hpp` (zero OS APIs):
+  `normalize/multiply/slerp_quaternions`, `rotate_vector`,
+  `sample_rotation_track`, cycle-safe `compose_bone_world_positions`
+  (invalid parents/cycles detach instead of recursing).
+- `evaluate_skeletal_pose` now slerps every bone's full IFF key track at the
+  wrapped clip time and composes world positions down the bank hierarchy.
+  Output semantics: model-space bone world positions (documented in header).
+- Tests: new `SkeletalPose` suite (`tests/test_skeletal_pose.cpp`, 8 cases:
+  slerp 45-degree midpoint, endpoint exactness, vector rotation, inter-key
+  sampling, cyclic negative-time wrap, empty-track identity, hierarchy
+  composition, parent-rotation propagation, invalid-parent safety). Full suite
+  76/76 pass; `mission_world.cpp` strict-compiles; L1+L2 probes unchanged.
+- Honest limit: this corrects pose math under the hood; soldiers still render
+  as procedural quads. Skinning retail meshes with these poses is the next
+  visual increment, not part of this change.
+

@@ -1,5 +1,6 @@
 #include "igi/logger.hpp"
 #include "igi/mission_world.hpp"
+#include "igi/skeletal_pose.hpp"
 
 #include "common.h"
 #include "iff_parser.h"
@@ -1627,28 +1628,47 @@ void MissionWorld::evaluate_skeletal_pose(
     }
 
     const float wrapped_time = std::fmod(std::max(0.0f, time_seconds), chosen_clip->duration);
-    const float phase = ( wrapped_time / chosen_clip->duration ) * 6.2831853f;
 
-    // Evaluate hierarchical bone displacements relative to rest pose
-    for (std::size_t bi = 0; bi < mesh.bones.size(); ++bi) {
-        Vector3 delta{};
-        if (bi < chosen_clip->bone_rotations.size() &&
-            !chosen_clip->bone_rotations[bi].empty()) {
-            const auto& keys = chosen_clip->bone_rotations[bi];
-            const SkeletalKeyRotation& k = keys.front();
-            // Apply subtle cyclic stride/breathing motion modulated by IFF key quaternion
-            const float swing = std::sin(phase + static_cast<float>(bi) * 0.45f);
-            delta.x = k.qx * 85.0f * swing;
-            delta.y = k.qy * 85.0f * swing;
-            delta.z = k.qz * 45.0f * std::cos(phase);
+    // Exact evaluation: slerp each bone's key track, then compose world
+    // positions down the bank hierarchy from rest offsets.
+    const std::size_t bone_count = mesh.bones.size();
+    std::vector<PoseQuaternion> local_rotations(bone_count, {0.0f, 0.0f, 0.0f, 1.0f});
+    for (std::size_t bi = 0; bi < bone_count; ++bi) {
+        if (bi >= chosen_clip->bone_rotations.size() ||
+            chosen_clip->bone_rotations[bi].empty()) {
+            continue;
         }
-        const int parent = mesh.bones[bi].parent;
-        if (parent >= 0 && static_cast<std::size_t>(parent) < bi) {
-            delta.x += out_bone_world_offsets[static_cast<std::size_t>(parent)].x * 0.35f;
-            delta.y += out_bone_world_offsets[static_cast<std::size_t>(parent)].y * 0.35f;
-            delta.z += out_bone_world_offsets[static_cast<std::size_t>(parent)].z * 0.35f;
+        const auto& track = chosen_clip->bone_rotations[bi];
+        std::vector<PoseKeyframe> keys;
+        keys.reserve(track.size());
+        for (const SkeletalKeyRotation& key : track) {
+            keys.push_back({key.time, {key.qx, key.qy, key.qz, key.qw}});
         }
-        out_bone_world_offsets[bi] = delta;
+        local_rotations[bi] = sample_rotation_track(keys, wrapped_time, chosen_clip->duration);
+    }
+
+    std::vector<int> parents(bone_count, -1);
+    std::vector<PoseVector> rest_offsets(bone_count, {0.0f, 0.0f, 0.0f});
+    for (std::size_t bi = 0; bi < bone_count; ++bi) {
+        parents[bi] = mesh.bones[bi].parent;
+        if (bi < bank.bone_translations.size()) {
+            rest_offsets[bi] = {
+                bank.bone_translations[bi].x,
+                bank.bone_translations[bi].y,
+                bank.bone_translations[bi].z,
+            };
+        }
+    }
+
+    std::vector<PoseVector> world_positions;
+    compose_bone_world_positions(parents, rest_offsets, local_rotations, world_positions);
+    out_bone_world_offsets.assign(bone_count, {0.0f, 0.0f, 0.0f});
+    for (std::size_t bi = 0; bi < bone_count && bi < world_positions.size(); ++bi) {
+        out_bone_world_offsets[bi] = {
+            world_positions[bi].x,
+            world_positions[bi].y,
+            world_positions[bi].z,
+        };
     }
 }
 

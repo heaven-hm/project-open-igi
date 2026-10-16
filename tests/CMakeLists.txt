@@ -13,6 +13,7 @@ add_executable(igi_tests
     test_building_entry.cpp
     test_magic_objects.cpp
     test_combat_integration.cpp
+    test_skeletal_pose.cpp
 )
 
 target_include_directories(igi_tests PRIVATE
