@@ -5,6 +5,8 @@ add_executable(igi_tests
     test_weapons.cpp
     test_ai.cpp
     test_logger_and_exceptions.cpp
+    test_gameplay_helpers.cpp
+    test_mission_flow.cpp
 )
 
 target_include_directories(igi_tests PRIVATE

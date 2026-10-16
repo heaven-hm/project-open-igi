@@ -403,6 +403,19 @@ void SoftwareRenderer::render_hud(const HudState& hud) {
         const int fl = static_cast<int>(static_cast<float>(h) * 0.08f * std::min(1.0f, hud.muzzle_flash));
         fill_rect(cx + w / 8 - fl, h - h / 4 - fl, cx + w / 8 + fl, h - h / 4 + fl, 0xFFFFE890u);
     }
+
+    // Top objective banner
+    if (hud.mission_failed) {
+        fill_rect(margin, margin, w - margin, margin + bar_h + 2, 0xFFB82020u);
+    } else if (hud.mission_success) {
+        fill_rect(margin, margin, w - margin, margin + bar_h + 2, 0xFF28B840u);
+    } else if (!hud.objective_text.empty()) {
+        const int banner_x0 = w / 4;
+        const int banner_x1 = 3 * w / 4;
+        fill_rect(banner_x0 - 2, margin - 2, banner_x1 + 2, margin + bar_h + 2, 0xFF101010u);
+        fill_rect(banner_x0, margin, banner_x1, margin + bar_h, 0xFF183038u);
+        fill_rect(banner_x0, margin, banner_x0 + 4, margin + bar_h, 0xFF30D0A0u);
+    }
 }
 
 } // namespace igi::gameplay

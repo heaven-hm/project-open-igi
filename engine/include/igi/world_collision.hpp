@@ -4,6 +4,8 @@
 #include "igi/human_motion.hpp"
 #include "igi/input_state.hpp"
 #include "igi/mission_world.hpp"
+#include "igi/player_fall_impact.hpp"
+#include "igi/player_ladder.hpp"
 
 #include <cstdint>
 #include <unordered_map>
@@ -53,6 +55,9 @@ struct PlayerPhysicsState {
     std::uint32_t locomotion_state{0};
     float bob_phase{0.0f};
     float health{100.0f};
+    float last_fall_impact_damage{0.0f};
+    float last_fall_hearing_alert{0.0f};
+    float last_fall_view_kick{0.0f};
 
     [[nodiscard]] NavigationPosition eye_position() const noexcept {
         return {

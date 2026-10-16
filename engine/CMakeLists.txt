@@ -13,6 +13,13 @@ add_library(igi_gameplay STATIC
     src/weapon_system.cpp
     src/ai_system.cpp
     src/logger.cpp
+    src/player_fall_impact.cpp
+    src/weapon_view_sway.cpp
+    src/weapon_view_recoil.cpp
+    src/player_ladder.cpp
+    src/mission_expression.cpp
+    src/level_flow.cpp
+    src/mission_objective_loader.cpp
 )
 target_include_directories(igi_gameplay PUBLIC include)
 target_compile_features(igi_gameplay PUBLIC cxx_std_20)

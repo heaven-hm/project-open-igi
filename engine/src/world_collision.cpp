@@ -576,16 +576,40 @@ void WorldCollision::step_player(
         input.is_down(InputCode::LeftShift) || input.is_down(InputCode::RightShift);
     io_player.is_running = !shift_held && !io_player.is_crouching;
 
-    // Check if near a ClimbLadder object
+    // Check if near a ClimbLadder object using verified LadderPlacement
     bool near_ladder = false;
     for (const PlacedObject& obj : world.placed_objects()) {
         if (obj.kind != PlacedObjectKind::ClimbLadder) {
             continue;
         }
-        const double dx = obj.position.x - io_player.position.x;
-        const double dy = obj.position.y - io_player.position.y;
-        const double dz = std::fabs(obj.position.z - io_player.position.z);
-        if (dx * dx + dy * dy <= (3500.0 * 3500.0) && dz <= 45000.0) {
+        const Vector3 player_pos{
+            static_cast<float>(io_player.position.x),
+            static_cast<float>(io_player.position.y),
+            static_cast<float>(io_player.position.z),
+        };
+        const Vector3 ladder_origin{
+            static_cast<float>(obj.position.x),
+            static_cast<float>(obj.position.y),
+            static_cast<float>(obj.position.z),
+        };
+        const Vector3 ladder_top{
+            ladder_origin.x,
+            ladder_origin.y,
+            ladder_origin.z + 40000.0f,
+        };
+        const Vector3 look_direction{
+            std::cos(io_player.yaw),
+            std::sin(io_player.yaw),
+            0.0f,
+        };
+        const LadderPlacement placement{
+            ladder_origin,
+            ladder_top,
+            ladder_origin,
+            ladder_top,
+            {0.0f, 1.0f, 0.0f},
+        };
+        if (placement.can_activate(player_pos, look_direction)) {
             near_ladder = true;
             break;
         }
@@ -694,6 +718,9 @@ void WorldCollision::step_player(
 
     // 6. Ground query & step-down snap (0x00462390)
     if (!io_player.is_climbing_ladder) {
+        const bool was_airborne = !io_player.is_grounded;
+        const float prior_vertical_velocity = io_player.velocity.z;
+
         const GroundQueryResult ground_res = query_ground(
             world,
             separated_pos,
@@ -705,6 +732,16 @@ void WorldCollision::step_player(
             io_player.velocity.z = 0.0f;
             io_player.is_grounded = true;
             io_player.ground_normal = ground_res.ground_normal;
+
+            if (was_airborne && prior_vertical_velocity < -50.0f) {
+                const PlayerFallImpact impact = calculate_vanilla_fall_impact(
+                    prior_vertical_velocity,
+                    100.0f);
+                io_player.health = std::max(0.0f, io_player.health - impact.damage);
+                io_player.last_fall_impact_damage = impact.damage;
+                io_player.last_fall_hearing_alert = impact.hearing_radius_units;
+                io_player.last_fall_view_kick = impact.view_kick_units;
+            }
         } else {
             io_player.is_grounded = false;
             io_player.ground_normal = {0.0f, 0.0f, 1.0f};

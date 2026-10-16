@@ -2,6 +2,8 @@
 
 #include "igi/ai_navigation.hpp"
 #include "igi/human_motion.hpp"
+#include "igi/weapon_view_recoil.hpp"
+#include "igi/weapon_view_sway.hpp"
 
 #include <cstdint>
 #include <string>
@@ -75,6 +77,13 @@ public:
     [[nodiscard]] float pitch_recoil() const noexcept { return pitch_recoil_; }
     [[nodiscard]] float yaw_recoil() const noexcept { return yaw_recoil_; }
 
+    [[nodiscard]] float view_sway_pitch() const noexcept { return sway_.pitch_radians(); }
+    [[nodiscard]] float view_sway_yaw() const noexcept { return sway_.yaw_radians(); }
+    [[nodiscard]] float view_recoil_pitch() const noexcept { return view_recoil_.pitch_radians(); }
+    [[nodiscard]] float view_recoil_yaw() const noexcept { return view_recoil_.yaw_radians(); }
+    [[nodiscard]] const WeaponViewSway& view_sway() const noexcept { return sway_; }
+    [[nodiscard]] const WeaponViewRecoil& view_recoil() const noexcept { return view_recoil_; }
+
 private:
     struct Slot {
         WeaponStats stats;
@@ -87,6 +96,8 @@ private:
 
     std::vector<Slot> slots_;
     std::size_t current_slot_{};
+    WeaponViewSway sway_{};
+    WeaponViewRecoil view_recoil_{};
     float cooldown_seconds_{};
     float reload_remaining_seconds_{};
     int burst_shots_fired_{};

@@ -25,6 +25,8 @@ bool GameSession::load_mission(const std::filesystem::path& game_root, int missi
         player_.yaw = world_->player_spawn_gamma();
         weapons_ = WeaponSystem{};
         ai_.initialize(*world_);
+        level_flow_.initialize_mission(static_cast<std::uint32_t>(mission_number));
+        expression_state_.clear();
         hit_marker_seconds_ = 0.0f;
         IGI_LOG_INFO("Session", "Mission " << mission_number << " loaded and initialized successfully.");
         return true;
@@ -109,8 +111,21 @@ bool GameSession::update(
         }
         hit_marker_seconds_ = std::max(0.0f, hit_marker_seconds_ - dt);
 
+        if (player_.last_fall_hearing_alert > 0.0f) {
+            ai_.notify_gunshot(player_.position, player_.last_fall_hearing_alert);
+            player_.last_fall_hearing_alert = 0.0f;
+        }
+
         const float damage = ai_.update(dt, *world_, collision_, player_);
         player_.health = std::max(0.0f, player_.health - damage);
+
+        level_flow_.update(
+            player_.health > 0.0f,
+            false,
+            [this](const std::string& expression) -> bool {
+                bool result = false;
+                return expression_state_.try_evaluate_boolean(expression, result) && result;
+            });
     }
     pending_mouse_x_ = 0.0f;
     pending_mouse_y_ = 0.0f;
@@ -136,8 +151,8 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
     }
     CameraView camera;
     camera.eye = player_.eye_position();
-    camera.yaw = player_.yaw + weapons_.yaw_recoil();
-    camera.pitch = player_.pitch + weapons_.pitch_recoil();
+    camera.yaw = player_.yaw + weapons_.yaw_recoil() + weapons_.view_sway_yaw() + weapons_.view_recoil_yaw();
+    camera.pitch = player_.pitch + weapons_.pitch_recoil() + weapons_.view_sway_pitch() + weapons_.view_recoil_pitch();
     renderer_.render_world(*world_, camera, ai_.alive_positions());
     HudState hud;
     hud.health_fraction = player_.health / 100.0f;
@@ -147,6 +162,9 @@ void GameSession::render(std::uint32_t width, std::uint32_t height) {
         : 0.0f;
     hud.hit_marker_active = hit_marker_seconds_ > 0.0f;
     hud.muzzle_flash = weapons_.muzzle_flash();
+    hud.objective_text = level_flow_.get_objective_display_text();
+    hud.mission_success = (level_flow_.status() == MissionStatus::Success);
+    hud.mission_failed = (level_flow_.status() == MissionStatus::Failed);
     renderer_.render_hud(hud);
 }
 

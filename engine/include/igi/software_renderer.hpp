@@ -20,6 +20,9 @@ struct HudState {
     float ammo_fraction{1.0f};
     bool hit_marker_active{};
     float muzzle_flash{};
+    std::string objective_text{};
+    bool mission_success{};
+    bool mission_failed{};
 };
 
 // Portable software rasterizer: writes ARGB8888 into an owned framebuffer.

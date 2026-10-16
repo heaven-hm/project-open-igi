@@ -2,9 +2,11 @@
 
 #include "igi/ai_system.hpp"
 #include "igi/input_state.hpp"
-#include "igi/weapon_system.hpp"
+#include "igi/level_flow.hpp"
+#include "igi/mission_expression.hpp"
 #include "igi/mission_world.hpp"
 #include "igi/software_renderer.hpp"
+#include "igi/weapon_system.hpp"
 #include "igi/world_collision.hpp"
 
 #include <cstdint>
@@ -38,6 +40,10 @@ public:
     [[nodiscard]] const PlayerPhysicsState& player() const noexcept;
     [[nodiscard]] const WeaponSystem& weapons() const noexcept { return weapons_; }
     [[nodiscard]] const AiSystem& ai() const noexcept { return ai_; }
+    [[nodiscard]] const LevelFlow& level_flow() const noexcept { return level_flow_; }
+    [[nodiscard]] LevelFlow& level_flow() noexcept { return level_flow_; }
+    [[nodiscard]] const MissionExpressionState& expression_state() const noexcept { return expression_state_; }
+    [[nodiscard]] MissionExpressionState& expression_state() noexcept { return expression_state_; }
 
     [[nodiscard]] std::uint64_t simulation_tick_count() const noexcept;
     [[nodiscard]] double simulation_time_seconds() const noexcept;
@@ -56,6 +62,8 @@ private:
     SoftwareRenderer renderer_;
     WeaponSystem weapons_;
     AiSystem ai_;
+    LevelFlow level_flow_;
+    MissionExpressionState expression_state_;
     float hit_marker_seconds_{};
     float pending_mouse_x_{};
     float pending_mouse_y_{};

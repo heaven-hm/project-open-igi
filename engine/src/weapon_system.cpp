@@ -90,6 +90,8 @@ void WeaponSystem::select_slot(std::size_t slot) noexcept {
         cooldown_seconds_ = 0.0f;
         reload_remaining_seconds_ = 0.0f;
         burst_shots_fired_ = 0;
+        sway_.lower();
+        sway_.raise();
         IGI_LOG_DEBUG("Weapon", "Selected weapon slot " << slot << ": " << slots_[slot].stats.name);
     }
 }
@@ -142,6 +144,8 @@ WeaponFireResult WeaponSystem::update(
     const float damp = std::pow(kRecoilDampingPerTick, delta_seconds / kRetailTickSeconds);
     pitch_recoil_ *= damp;
     yaw_recoil_ *= damp;
+    sway_.advance();
+    view_recoil_.advance();
     muzzle_flash_ = std::max(0.0f, muzzle_flash_ - delta_seconds * 12.0f);
     cooldown_seconds_ = std::max(0.0f, cooldown_seconds_ - delta_seconds);
 
@@ -215,6 +219,7 @@ WeaponFireResult WeaponSystem::update(
     } while (dx * dx + dy * dy > 1.0f);
     yaw_recoil_ += (stats.recoil_yaw_base_deg + dx * stats.recoil_yaw_spread_deg) * kDegToRad;
     pitch_recoil_ += (stats.recoil_pitch_base_deg + dy * stats.recoil_pitch_spread_deg) * kDegToRad;
+    view_recoil_.trigger_degrees(stats.recoil_pitch_base_deg, stats.recoil_yaw_base_deg);
     muzzle_flash_ = 1.0f;
 
     result.fired = true;
