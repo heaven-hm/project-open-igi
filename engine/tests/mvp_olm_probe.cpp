@@ -16,6 +16,9 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <limits>
+#include <unordered_map>
+#include <utility>
 #include <vector>
 
 namespace
@@ -120,6 +123,7 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
 {
     const auto archive_path = game_directory / "missions/location0/level1/lightmaps/lightmaps.res";
     std::size_t parsed_lightmap_count = 0;
+    std::unordered_map<std::string, std::vector<std::pair<std::uint32_t, std::uint32_t>>> lightmap_page_sizes;
     std::string archive_error;
     const bool archive_valid = RES_ForEachEntry(
         archive_path.string(),
@@ -137,6 +141,15 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
             require(std::abs(lightmap.version - 0.12F) < 0.0001F,
                     "Retail Level 1 OLM versions must match converter inspection");
             require(!lightmap.images.empty(), "Retail Level 1 OLM resource must contain image data");
+            std::vector<std::pair<std::uint32_t, std::uint32_t>> page_sizes;
+            page_sizes.reserve(lightmap.images.size());
+            for (const auto& image : lightmap.images)
+            {
+                page_sizes.emplace_back(image.width, image.height);
+            }
+            const std::string entry_key = std::string(set_name) + "_" + std::to_string(image_index);
+            require(lightmap_page_sizes.emplace(entry_key, std::move(page_sizes)).second,
+                    "Retail Level 1 OLM archive must not contain duplicate set/index entries");
             ++parsed_lightmap_count;
         },
         archive_error);
@@ -193,6 +206,88 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
 
     const auto mission_directory = game_directory / "missions/location0/level1";
     igi::assets::MissionAssets mission_assets(game_directory, mission_directory, model_directory / "cache");
+
+    const auto objects_script_bytes = igi::assets::read_file(mission_directory / "objects.qvm");
+    const igi::assets::QvmInitializer objects_script{igi::assets::BinaryView(objects_script_bytes)};
+    const auto& object_calls = objects_script.calls();
+    const std::size_t no_parent = std::numeric_limits<std::size_t>::max();
+    std::vector<std::size_t> parent_call_indices(object_calls.size(), no_parent);
+    for (std::size_t parent_index = 0; parent_index < object_calls.size(); ++parent_index)
+    {
+        for (const auto& argument : object_calls[parent_index].arguments)
+        {
+            if (argument.call_index == no_parent)
+            {
+                continue;
+            }
+            require(argument.call_index < object_calls.size(),
+                    "Nested QVM call reference must remain within the initializer call table");
+            const auto child_index = argument.call_index;
+            require(parent_call_indices[child_index] == no_parent ||
+                        parent_call_indices[child_index] == parent_index,
+                    "Nested QVM task must have one stable parent call");
+            parent_call_indices[child_index] = parent_index;
+        }
+    }
+
+    std::size_t verified_lightmap_owners = 0;
+    std::size_t verified_lightmap_models = 0;
+    for (std::size_t child_index = 0; child_index < object_calls.size(); ++child_index)
+    {
+        const auto& lightmap_call = object_calls[child_index];
+        if (lightmap_call.function != "Task_New" || lightmap_call.arguments.size() < 13 ||
+            lightmap_call.arguments[1].text != "LightmapInfo" ||
+            parent_call_indices[child_index] == no_parent)
+        {
+            continue;
+        }
+
+        const auto& owner_call = object_calls[parent_call_indices[child_index]];
+        if (owner_call.function != "Task_New" || owner_call.arguments.size() < 10 ||
+            owner_call.arguments[1].text != "Building")
+        {
+            continue;
+        }
+
+        const std::string lightmap_set = lightmap_call.arguments.back().text;
+        const std::string owner_model = owner_call.arguments[9].text;
+        require(!lightmap_set.empty() && !owner_model.empty(),
+                "Level 1 LightmapInfo owner must name a set and an authored model");
+        const auto owner_layout = mission_assets.model_lightmap_layout(owner_model);
+        std::size_t owner_model_count = 0;
+        for (const auto& model_entry : owner_layout)
+        {
+            if (!model_entry.lightmapped || model_entry.triangle_count == 0)
+            {
+                continue;
+            }
+
+            const std::string entry_key = lightmap_set + "_" + std::to_string(model_entry.lightmap_index);
+            const auto lightmap_pages = lightmap_page_sizes.find(entry_key);
+            require(lightmap_pages != lightmap_page_sizes.end(),
+                    "Every renderable lightmapped Level 1 model slot must resolve to an original OLM entry");
+            require(lightmap_pages->second.size() == model_entry.lightmap_page_count,
+                    "Every renderable Level 1 model slot must have the same number of MEF and OLM pages");
+            require(std::all_of(lightmap_pages->second.begin(),
+                                lightmap_pages->second.end(),
+                                [](const auto& page_size)
+                                { return page_size.first > 0 && page_size.second > 0; }),
+                    "Every indexed Level 1 OLM page must have non-zero dimensions");
+            ++owner_model_count;
+        }
+        require(owner_model_count > 0,
+                "Level 1 LightmapInfo owner must resolve a renderable MEF lightmap slot");
+        ++verified_lightmap_owners;
+        verified_lightmap_models += owner_model_count;
+        std::cout << "[PASS] Level 1 LightmapInfo owner task "
+                  << static_cast<std::int64_t>(owner_call.arguments[0].number) << ", set=" << lightmap_set
+                  << ", model=" << owner_model << ", renderable slots=" << owner_model_count << '\n';
+    }
+    require(verified_lightmap_owners == 22,
+            "Level 1 must bind all 22 authored LightmapInfo tasks to their building models");
+    std::cout << "[PASS] Level 1 object lightmaps: verified " << verified_lightmap_owners << " owners and "
+              << verified_lightmap_models << " renderable MEF/OLM slots\n";
+
     const auto scene_mesh = mission_assets.model("435_01_1");
     require(scene_mesh != nullptr && !scene_mesh->triangles.empty(),
             "Mission asset adapter must emit the retail model triangles");

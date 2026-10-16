@@ -11,6 +11,9 @@ Provider: Ghidra 12.1.2 through REA
 - Current-session REA evidence `ev_c9abc09233cfa58c7dba5ca902f428f09d991dfb9e5d4fe50f7fe03e86ab14a3` analyzes retail `0x004dfa50`. Its body walks attachment records, looks up each attachment name in the magic-object table, and requests the corresponding model.
 - Current-session REA evidence `ev_7eac61924e19862e83e4c6f283c368a4f1bbb02962e2a639b68a0bfeec80773c` analyzes `0x004cec10`: it tries the requested model and, when that lookup fails and the name is nonempty, retries the model named `missing`.
 - Current-session REA evidence `ev_9553fbe173ffe8c40da0d488f1562a730505e8805c8833f08b9bbedb66c7873c` analyzes `0x004ced50`. The recovered routine increments a model-name suffix and caps its loop at five entries. Its surrounding routine-specific context is retained; this observation alone does not establish that every model type uses this chain.
+- Current-session REA evidence `ev_cc94d6bd014d57d44f42d5b94c24f7b040958adcd2cbe135d62270aabcfee43f` analyzes `0x004dc050`; it emits one list entry per LOD only when the resolved model has MEF type 3, then recurses through the task's child list.
+- Current-session REA evidence `ev_9b45c7bf0fff795239af29a8e83147df24717b5ce4d4ea74e2f2565620fcc758` analyzes `0x004dc190`; it applies the type-3 gate, emits per-LOD entries, visits its engine-owned child list, and recurses into task children.
+- Radare2 independently recognizes `0x004dc050` as a 305-byte, 13-block function, `0x004dc190` as 352 bytes / 16 blocks, and attachment expansion `0x004dfa50` as 3,508 bytes / 68 blocks. These boundary and size checks do not constitute a CFG parity score or proof that the C++ layout is equivalent.
 - Vanilla C# `WorldObject` and `LodModelChain` provide the readable reference for depth-first ordering, ordinary attachments before sector attachments, and shared indexing across multiple roots.
 - Level 1 `objects.qvm` nests each `LightmapInfo` under a `Building` task. The set name is the final argument of that 13-argument task call; vanilla C# identifies it as `Filename`.
 - Level 1 `lightmaps/lightmaps.res` contains 1,308 OLM entries across 22 sets; each of the 22 QVM owners names a set present in that archive.
@@ -21,11 +24,14 @@ Provider: Ghidra 12.1.2 through REA
 
 `MissionAssets::model_lightmap_layout` now builds a depth-first layout for one or more root models. It follows up to five name-incremented LODs, resolves ATTA names through `DefineMagicObj`, substitutes the `missing` model when a mapped child model is absent, and visits non-sector children before children whose MEF has a nonempty `TROP` chunk. A list of roots shares one lightmap index sequence, matching the C# `BuildAll` call shape.
 
-The Level 1 asset probe checks `435_01_1` begins at index zero, verifies its available LOD names and consecutive indices, includes its QVM-resolved attachment, continues indices across repeated roots, and numerically verifies the attached triangle's ATTA position and orientation. The retail OLM page and QVM owner probes still validate all 1,308 archive entries and all 22 owner/set relationships. The focused lightmap CTests pass 4/4; the full non-retail CTest suite passes 27/27.
+The Level 1 asset probe checks `435_01_1` begins at index zero, verifies its available LOD names and consecutive indices, includes its QVM-resolved attachment, continues indices across repeated roots, and numerically verifies the attached triangle's ATTA position and orientation. It now reconstructs parent links from `QvmInitializer` call references, visits all 22 `LightmapInfo`-to-`Building` owners, and compares every renderable MEF/LOD slot with its OLM entry and page count. On the current retail assets, all 22 owners and 794 renderable MEF/OLM slots pass. The probe also validates all 1,308 archive entries.
+
+This is asset/index verification. The slots and OLM pages are still not bound to placed scene triangles or sampled by the C++ renderer, and no paired retail frame comparison has been made. The complete Level 1 gameplay MVP remains unverified.
 
 ```sh
-cmake --build /tmp/project-open-igi-fog-build --target mvp_lightmap_task_tree_probe mvp_olm_probe -j2
+cmake --build /tmp/project-open-igi-fog-build --target mvp_olm_probe -j4
+/tmp/project-open-igi-fog-build/engine/mvp_olm_probe /Users/haseeb-mir/Downloads/IGI
 ctest --test-dir /tmp/project-open-igi-fog-build --output-on-failure -R 'mvp_(lightmap_task_tree|original_lightmap_task_tree|object_lightmap_format|original_object_lightmap_format)'
 ```
 
-The per-model layout is not yet connected to each `LightmapInfo` owner's complete set of task placements. It also does not bind OLM pages to placed geometry or render `DrawLightmapMesh`. Full Level 1 model-index parity against every archived page and paired retail frame comparison remain outstanding.
+Complete placement binding, OLM sampling, `DrawLightmapMesh` rendering, and paired retail frame comparison remain outstanding.

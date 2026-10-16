@@ -288,6 +288,8 @@ MissionAssets::model_lightmap_layout(const std::vector<std::string>& model_names
     {
         std::string name;
         std::uint32_t model_type{};
+        std::uint32_t lightmap_page_count{};
+        std::size_t triangle_count{};
         bool is_sector{};
         std::vector<MefAttachment> attachments;
     };
@@ -310,6 +312,15 @@ MissionAssets::model_lightmap_layout(const std::vector<std::string>& model_names
         LayoutModel model;
         model.name = normalized;
         model.model_type = geometry.modelType;
+        model.triangle_count = geometry.triangles.size();
+        if (geometry.modelType == 3)
+        {
+            for (const auto& render_block : geometry.renderBlocks)
+            {
+                model.lightmap_page_count = std::max(
+                    model.lightmap_page_count, static_cast<std::uint32_t>(render_block.lightmapPage) + 1);
+            }
+        }
         model.is_sector = std::any_of(geometry.rawChunks.begin(),
                                       geometry.rawChunks.end(),
                                       [](const ParsedGeometry::RawChunk& chunk)
@@ -383,7 +394,9 @@ MissionAssets::model_lightmap_layout(const std::vector<std::string>& model_names
                 entries.push_back(
                     {lod_model.name,
                      lightmapped ? first_lightmap_index + static_cast<std::int32_t>(lod_index) : -1,
-                     lightmapped && lod_model.model_type == 3});
+                     lightmapped && lod_model.model_type == 3,
+                     lod_model.lightmap_page_count,
+                     lod_model.triangle_count});
             }
             if (lightmapped)
             {

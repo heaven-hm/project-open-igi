@@ -2,6 +2,7 @@
 
 #include "igi/mission_scene.hpp"
 
+#include <cstddef>
 #include <cstdint>
 #include <string_view>
 #include <unordered_map>
@@ -23,6 +24,8 @@ struct ModelLightmapEntry final
 
     /// <summary>Whether this LOD uses the lightmapped MEF format.</summary>
     bool lightmapped{};
+    std::uint32_t lightmap_page_count{};
+    std::size_t triangle_count{};
 };
 
 class MissionAssets final
