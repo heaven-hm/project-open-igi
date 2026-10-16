@@ -89,6 +89,16 @@ int main(int argument_count, char** arguments)
             replay_output << std::setprecision(9);
         }
         const auto scene = load_mission(arguments[1], arguments[2]);
+        require(std::abs(scene.terrain_fog.colour.x - 0.576923f) < 0.000001f &&
+                    std::abs(scene.terrain_fog.colour.y - 0.538462f) < 0.000001f &&
+                    std::abs(scene.terrain_fog.colour.z - 0.480769f) < 0.000001f &&
+                    std::abs(scene.terrain_fog.density_per_metre - 0.00387072f) < 0.0000001f,
+                "Level 1 terrain fog must match the lowest retail GlobalLightKeyframe");
+        require(std::abs(scene.object_fog.colour.x - 0.576923f) < 0.000001f &&
+                    std::abs(scene.object_fog.colour.y - 0.538462f) < 0.000001f &&
+                    std::abs(scene.object_fog.colour.z - 0.480769f) < 0.000001f &&
+                    std::abs(scene.object_fog.density_per_metre - 0.00387072f) < 0.0000001f,
+                "Level 1 object fog must match the lowest retail GlobalLightKeyframe");
         require(scene.missing_object_count == 0 && scene.loaded_object_count > 300 &&
                     scene.actors.size() >= 20,
                 "Real mission must load its original models and soldiers");

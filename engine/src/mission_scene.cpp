@@ -56,6 +56,65 @@ bool transform_matches(Vector3 authored, Vector3 runtime) noexcept
            std::abs(authored.z - runtime.z) <= tolerance;
 }
 
+SceneFogParameters global_light_fog(const std::vector<assets::ScriptCall>& calls,
+                                    std::size_t colour_offset,
+                                    std::size_t density_offset,
+                                    double& selected_time,
+                                    double& authored_density)
+{
+    constexpr std::size_t time_offset = 53;
+    constexpr double density_amount_scale = 0.0005;
+    constexpr double maximum_density = 16384.0;
+    constexpr double distance_scale = 0.001;
+
+    const assets::ScriptCall* selected_keyframe = nullptr;
+    selected_time = std::numeric_limits<double>::max();
+    for (const auto& call : calls)
+    {
+        if (call.function != "Task_New" || call.arguments.size() <= time_offset ||
+            call.arguments[1].text != "GlobalLightKeyframe")
+        {
+            continue;
+        }
+        const double time = call.arguments[time_offset].number;
+        if (std::isfinite(time) && time < selected_time)
+        {
+            selected_keyframe = &call;
+            selected_time = time;
+        }
+    }
+    if (selected_keyframe == nullptr)
+    {
+        selected_time = 0.0;
+        authored_density = 0.0;
+        return {};
+    }
+    if (selected_keyframe->arguments.size() <= density_offset ||
+        selected_keyframe->arguments.size() < colour_offset + 3)
+    {
+        throw std::runtime_error("GlobalLightKeyframe is missing required fog parameters");
+    }
+
+    const auto& arguments = selected_keyframe->arguments;
+    const double red = arguments[colour_offset].number;
+    const double green = arguments[colour_offset + 1].number;
+    const double blue = arguments[colour_offset + 2].number;
+    authored_density = arguments[density_offset].number;
+    if (!std::isfinite(red) || !std::isfinite(green) || !std::isfinite(blue) ||
+        !std::isfinite(authored_density))
+    {
+        throw std::runtime_error("GlobalLightKeyframe fog contains a non-finite value");
+    }
+
+    const double published_density =
+        std::clamp(authored_density * density_amount_scale, 0.0, maximum_density);
+    constexpr double game_units_per_metre = 4096.0;
+    return {{static_cast<float>(std::clamp(red, 0.0, 1.0)),
+             static_cast<float>(std::clamp(green, 0.0, 1.0)),
+             static_cast<float>(std::clamp(blue, 0.0, 1.0))},
+            static_cast<float>(published_density * distance_scale * game_units_per_metre)};
+}
+
 Vector3 transform_retail_orientation(Vector3 vertex, Vector3 rotation) noexcept
 {
     const float cosine_alpha = std::cos(rotation.x);
@@ -454,6 +513,23 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         assets::resolve_path(game_directory, "missions/location0/level" + std::to_string(mission_number));
     const auto object_bytes = assets::read_file(assets::resolve_path(mission_directory, "objects.qvm"));
     const assets::QvmInitializer initializer{assets::BinaryView(object_bytes)};
+    double global_light_time = 0.0;
+    double terrain_fog_amount = 0.0;
+    double object_fog_amount = 0.0;
+    scene.terrain_fog = global_light_fog(initializer.calls(), 7, 10, global_light_time, terrain_fog_amount);
+    double object_keyframe_time = 0.0;
+    scene.object_fog = global_light_fog(initializer.calls(), 15, 18, object_keyframe_time, object_fog_amount);
+    if (std::abs(global_light_time - object_keyframe_time) > 0.000001)
+    {
+        throw std::runtime_error("Terrain and object fog selected different GlobalLightKeyframes");
+    }
+    std::ostringstream fog_log;
+    fog_log << std::fixed << std::setprecision(6) << "GlobalLightKeyframe time=" << global_light_time
+            << ", terrain density=" << terrain_fog_amount << " -> " << scene.terrain_fog.density_per_metre
+            << " per metre, terrain colour=" << format_vector(scene.terrain_fog.colour)
+            << ", object density=" << object_fog_amount << " -> " << scene.object_fog.density_per_metre
+            << " per metre, object colour=" << format_vector(scene.object_fog.colour);
+    diagnostics::log(diagnostics::Severity::information, "scene-fog", fog_log.str());
     std::array<double, 3> origin{};
     bool found_player = false;
     for (const auto& call : initializer.calls())

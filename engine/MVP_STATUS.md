@@ -52,6 +52,8 @@ Functional regressions passing does not establish matching original behavior.
 
 14. AI weapon burst and cadence: read maximum rounds per sequence, clip fractions, single-shot delay, weapon category, magazine size, fixed burst size, rounds per minute and reload time from the original QVM definitions. REA/Ghidra and radare2 both resolve retail `0x48B9C0` to the same 521-byte body; REA also confirms startup selects x87 truncate mode before gameplay. Vanilla C# supplies the actor fire/cooldown/reload integration reference. C++ now tracks burst, magazine, weapon cooldown and reload state and logs each transition. Synthetic burst/cadence/reload/rounding assertions and the real Level 1 runtime probe pass; guard 2017 logged bursts of 13 and 11 rounds from its `GD_2` settings. Body animation trigger gating, continuous fire after sight loss and paired retail runtime parity remain unverified. See [AI burst and cadence evidence](../docs/fidelity/ai_weapon_bursts.md).
 
+15. Level fog: replace the invented linear gray fade with the Level 1 `GlobalLightKeyframe` exponential fog values, use separate terrain/object colors, and preserve the first-person weapon's unfogged draw. REA/Ghidra evidence verifies the retail `0x527520`, `0x50FD20`, and `0x512C30` calculation. The real Level 1 loader probe and synthetic per-band renderer checks pass. This slice does not implement keyframe animation/night-vision transitions or compare a retail Direct3D 7 capture. See [retail distance fog evidence](../docs/fidelity/retail_distance_fog.md).
+
 ## Measured original Level 2
 
 | Item | Measurement |

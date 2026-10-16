@@ -59,6 +59,26 @@ int main()
             throw std::runtime_error(
                 "Depth buffer must keep the nearer red triangle over the farther green triangle");
         }
+        scene.terrain_triangle_count = scene.static_triangles.size();
+        scene.terrain_fog = {{0.0f, 0.0f, 1.0f}, 0.5f};
+        renderer.render(scene, simulation);
+        verify_parallel_pixels();
+        const auto terrain_fog_pixel = renderer.pixels()[250 * 640 + 340];
+        if (((terrain_fog_pixel >> 16) & 255u) >= ((center_color >> 16) & 255u) ||
+            (terrain_fog_pixel & 255u) <= ((center_color & 255u) + 40u))
+        {
+            throw std::runtime_error("Terrain geometry must blend toward its authored per-vertex fog colour");
+        }
+        scene.terrain_triangle_count = 0;
+        scene.object_fog = {{0.0f, 1.0f, 0.0f}, 0.5f};
+        renderer.render(scene, simulation);
+        verify_parallel_pixels();
+        const auto object_fog_pixel = renderer.pixels()[250 * 640 + 340];
+        if (((object_fog_pixel >> 8) & 255u) <= ((center_color >> 8) & 255u) + 40u ||
+            ((object_fog_pixel >> 16) & 255u) >= ((center_color >> 16) & 255u))
+        {
+            throw std::runtime_error("Object geometry must use its separate authored fog band");
+        }
         scene.static_triangles[0].vertices[0].position.y = -1;
         renderer.render(scene, simulation);
         verify_parallel_pixels();

@@ -63,12 +63,14 @@ class SceneRenderer final
                   Vector3 up,
                   Vector3 forward,
                   float focal_length,
-                  bool weapon = false);
+                  bool weapon = false,
+                  SceneFogParameters fog = {});
     void rasterize(const SceneTriangle& triangle,
                    const SceneTexture& texture,
                    float focal_length,
                    float illumination,
-                   bool weapon);
+                   bool weapon,
+                   SceneFogParameters fog);
     void rectangle(int left, int top, int width, int height, std::uint32_t color);
     void text(int left, int top, std::string_view message, std::uint32_t color, int scale = 1);
     void render_scope_overlay(int center_x, int center_y, float zoom, bool hit_marker);

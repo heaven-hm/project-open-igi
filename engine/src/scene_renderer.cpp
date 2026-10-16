@@ -227,7 +227,8 @@ void SceneRenderer::triangle(const SceneTriangle& original,
                              Vector3 up,
                              Vector3 forward,
                              float focal_length,
-                             bool weapon)
+                             bool weapon,
+                             SceneFogParameters fog)
 {
     SceneTriangle transformed = original;
     for (auto& vertex : transformed.vertices)
@@ -277,7 +278,8 @@ void SceneRenderer::triangle(const SceneTriangle& original,
         SceneTriangle clipped_triangle{{clipped[0], clipped[corner], clipped[corner + 1]},
                                        original.texture_index};
         clipped_triangle.firing_only = original.firing_only;
-        rasterize(clipped_triangle, textures[original.texture_index], focal_length, illumination, weapon);
+        rasterize(
+            clipped_triangle, textures[original.texture_index], focal_length, illumination, weapon, fog);
     }
 }
 
@@ -285,7 +287,8 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                               const SceneTexture& texture,
                               float focal_length,
                               float illumination,
-                              bool weapon)
+                              bool weapon,
+                              SceneFogParameters fog)
 {
     struct Projected final
     {
@@ -294,6 +297,7 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
         float inverse_depth;
         float texture_u;
         float texture_v;
+        float fog_factor;
     };
 
     std::array<Projected, 3> projected;
@@ -301,11 +305,13 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
     {
         const auto& vertex = triangle.vertices[corner];
         const float inverse = 1.0f / vertex.position.z;
-        projected[corner] = {width_ * 0.5f + vertex.position.x * inverse * focal_length,
-                             height_ * 0.5f - vertex.position.y * inverse * focal_length,
-                             inverse,
-                             vertex.texture_u * inverse,
-                             vertex.texture_v * inverse};
+        projected[corner] = {
+            width_ * 0.5f + vertex.position.x * inverse * focal_length,
+            height_ * 0.5f - vertex.position.y * inverse * focal_length,
+            inverse,
+            vertex.texture_u * inverse,
+            vertex.texture_v * inverse,
+            fog.density_per_metre > 0.0f ? std::exp(-fog.density_per_metre * vertex.position.z) : 1.0f};
     }
     const auto& first = projected[0];
     const auto& second = projected[1];
@@ -494,8 +500,18 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                                                              illumination)
                                   << shift;
                     }
-                    const float fog = weapon ? 0.0f : std::clamp((pixel_depth - 140.0f) / 900.0f, 0.0f, 1.0f);
-                    pixels_[pixel_index] = mix_color(shaded, 0xffa6aaa2u, fog);
+                    const float fog_survival = first_weight * first.fog_factor +
+                                               second_weight * second.fog_factor +
+                                               third_weight * third.fog_factor;
+                    const float fog_opacity = weapon ? 0.0f : 1.0f - std::clamp(fog_survival, 0.0f, 1.0f);
+                    const auto red =
+                        static_cast<std::uint32_t>(std::clamp(fog.colour.x, 0.0f, 1.0f) * 255.0f);
+                    const auto green =
+                        static_cast<std::uint32_t>(std::clamp(fog.colour.y, 0.0f, 1.0f) * 255.0f);
+                    const auto blue =
+                        static_cast<std::uint32_t>(std::clamp(fog.colour.z, 0.0f, 1.0f) * 255.0f);
+                    const std::uint32_t fog_colour = 0xff000000u | (red << 16) | (green << 8) | blue;
+                    pixels_[pixel_index] = mix_color(shaded, fog_colour, fog_opacity);
                     depth_[pixel_index] = inverse_depth;
                 }
             }
@@ -717,13 +733,16 @@ void SceneRenderer::render(const MissionScene& scene,
     const Vector3 up = normalized(cross(right, forward));
     const float zoom_factor = is_free_camera ? 1.0f : simulation.zoom_factor();
     const float focal_length = static_cast<float>(width_) * 0.55f * zoom_factor;
-    for (const auto& surface : scene.static_triangles)
+    for (std::size_t triangle_index = 0; triangle_index < scene.static_triangles.size(); ++triangle_index)
     {
+        const auto& surface = scene.static_triangles[triangle_index];
         if (surface.firing_only)
         {
             continue;
         }
-        triangle(surface, scene.textures, camera, right, up, forward, focal_length);
+        const auto& fog =
+            triangle_index < scene.terrain_triangle_count ? scene.terrain_fog : scene.object_fog;
+        triangle(surface, scene.textures, camera, right, up, forward, focal_length, false, fog);
     }
     for (const auto& door : simulation.doors())
     {
@@ -751,7 +770,8 @@ void SceneRenderer::render(const MissionScene& scene,
             {
                 vertex.position = rotate_euler(vertex.position, door_rot) + door_pos;
             }
-            triangle(world_tri, scene.textures, camera, right, up, forward, focal_length);
+            triangle(
+                world_tri, scene.textures, camera, right, up, forward, focal_length, false, scene.object_fog);
         }
     }
     for (std::size_t actor_index = 0; actor_index < simulation.actors().size(); ++actor_index)
@@ -786,7 +806,8 @@ void SceneRenderer::render(const MissionScene& scene,
                                    position.x * sine + position.y * cosine + actor.position.y,
                                    position.z + actor.position.z};
             }
-            triangle(surface, scene.textures, camera, right, up, forward, focal_length);
+            triangle(
+                surface, scene.textures, camera, right, up, forward, focal_length, false, scene.object_fog);
         }
         if (actor.behavior != ActorBehavior::dead && pose.size() > 22)
         {
@@ -811,7 +832,15 @@ void SceneRenderer::render(const MissionScene& scene,
                                            local.x * sine + local.y * cosine + actor.position.y,
                                            local.z + actor.position.z};
                     }
-                    triangle(surface, scene.textures, camera, right, up, forward, focal_length);
+                    triangle(surface,
+                             scene.textures,
+                             camera,
+                             right,
+                             up,
+                             forward,
+                             focal_length,
+                             false,
+                             scene.object_fog);
                 }
             }
         }

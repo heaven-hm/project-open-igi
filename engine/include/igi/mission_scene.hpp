@@ -68,6 +68,12 @@ struct SceneTexture final
     std::vector<SceneTextureMip> mipmaps;
 };
 
+struct SceneFogParameters final
+{
+    Vector3 colour{0.0f, 0.0f, 0.0f};
+    float density_per_metre{};
+};
+
 struct SceneVertex final
 {
     Vector3 position;
@@ -315,6 +321,8 @@ struct MissionScene final
     std::vector<ObjectPlacementAudit> object_placement_audits;
     std::size_t verified_object_count{};
     std::size_t mismatch_object_count{};
+    SceneFogParameters terrain_fog;
+    SceneFogParameters object_fog;
 };
 
 [[nodiscard]] MissionScene load_mission(const std::filesystem::path& game_directory,
