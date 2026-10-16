@@ -180,6 +180,11 @@ if(APPLE)
 endif()
 
 if(BUILD_TESTING)
+    add_executable(retail_random_generator_test tests/retail_random_generator_test.cpp)
+    target_include_directories(retail_random_generator_test PRIVATE include)
+    target_compile_features(retail_random_generator_test PRIVATE cxx_std_20)
+    add_test(NAME retail_rng_captured_checkpoints COMMAND retail_random_generator_test)
+
     add_test(NAME retail_engine_bit_exact COMMAND "${CMAKE_COMMAND}"
         "-DPARITY_DIRECTORY=${IGI_RETAIL_PARITY_DIRECTORY}"
         -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/VerifyRetailParity.cmake")
