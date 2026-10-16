@@ -23,6 +23,7 @@ add_library(igi_formats STATIC
     "${FORMAT_SOURCE}/parsers/iff_parser.cpp"
     "${FORMAT_SOURCE}/parsers/qvm_parser.cpp"
     "${FORMAT_SOURCE}/parsers/graph_parser.cpp"
+    "${FORMAT_SOURCE}/parsers/olm_parser.cpp"
     src/format_support.cpp
     src/diagnostics.cpp
 )
@@ -227,6 +228,13 @@ if(BUILD_TESTING)
     add_executable(mvp_renderer_probe tests/mvp_renderer_probe.cpp)
     target_link_libraries(mvp_renderer_probe PRIVATE igi_runtime)
     add_test(NAME mvp_renderer_depth_clipping COMMAND mvp_renderer_probe)
+    add_executable(mvp_olm_probe tests/mvp_olm_probe.cpp)
+    target_link_libraries(mvp_olm_probe PRIVATE igi_formats)
+    add_test(NAME mvp_object_lightmap_format COMMAND mvp_olm_probe)
+    if(IGI_GAME_PATH)
+        add_test(NAME mvp_original_object_lightmap_format
+                 COMMAND mvp_olm_probe "${IGI_GAME_PATH}")
+    endif()
     add_executable(mvp_collision_probe tests/mvp_collision_probe.cpp)
     target_link_libraries(mvp_collision_probe PRIVATE igi_runtime)
     add_test(NAME mvp_collision_world COMMAND mvp_collision_probe)
