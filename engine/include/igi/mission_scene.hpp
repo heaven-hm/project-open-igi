@@ -81,6 +81,8 @@ struct SceneVertex final
     float texture_v{};
     std::uint32_t bone_index = static_cast<std::uint32_t>(-1);
     Vector3 bone_local_position{};
+    float lightmap_u{};
+    float lightmap_v{};
 };
 
 struct SceneTriangle final
@@ -88,6 +90,7 @@ struct SceneTriangle final
     std::array<SceneVertex, 3> vertices;
     std::uint32_t texture_index{};
     bool firing_only{};
+    std::int32_t lightmap_page_index = -1;
 };
 
 struct SceneSkinTriangle final

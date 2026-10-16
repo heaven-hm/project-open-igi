@@ -1,10 +1,15 @@
+#include "igi/mission_assets.hpp"
+
+#include "mef_native.h"
 #include "olm_parser.h"
 #include "res_parser.h"
 
+#include <algorithm>
 #include <bit>
 #include <cmath>
 #include <cstdint>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <span>
 #include <stdexcept>
@@ -149,6 +154,62 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
     std::cout << "[PASS] Retail Level 1 OLM: " << archive_path << ", parsed " << parsed_lightmap_count
               << " resources; sample image " << sample_lightmap.images.front().width << 'x'
               << sample_lightmap.images.front().height << " RGBA\n";
+
+    const auto model_archive = game_directory / "missions/location0/level1/MODELS/LEVEL1.RES";
+    const auto model_bytes = RES_Extract(model_archive.string(), "LOCAL:models/435_01_1.mef");
+    require(!model_bytes.empty(), "Level 1 model archive must contain lightmapped model 435_01_1.mef");
+    const auto model_directory = std::filesystem::temp_directory_path() / "project-open-igi-olm-probe";
+    std::filesystem::create_directories(model_directory);
+    const auto model_path = model_directory / "435_01_1.mef";
+    {
+        std::ofstream model_output(model_path, std::ios::binary);
+        require(model_output
+                    .write(reinterpret_cast<const char*>(model_bytes.data()),
+                           static_cast<std::streamsize>(model_bytes.size()))
+                    .good(),
+                "Could not write extracted Level 1 MEF fixture");
+    }
+    const auto geometry = ParseMefFile(model_path.string());
+    require(geometry.modelType == 3, "Retail 435_01_1.mef must use the lightmapped MEF model type");
+    require(geometry.vertices.size() == 701 && geometry.triangles.size() == 360 &&
+                geometry.renderBlocks.size() == 33,
+            "Retail 435_01_1.mef geometry must match converter inspection");
+    require(std::all_of(geometry.vertices.begin(),
+                        geometry.vertices.end(),
+                        [](const RenderVertex& vertex)
+                        { return std::isfinite(vertex.uv2.x) && std::isfinite(vertex.uv2.y); }),
+            "Retail 435_01_1.mef lightmap UV coordinates must be finite");
+    require(std::any_of(geometry.vertices.begin(),
+                        geometry.vertices.end(),
+                        [](const RenderVertex& vertex)
+                        { return vertex.uv2.x != 0.0f || vertex.uv2.y != 0.0f; }),
+            "Retail 435_01_1.mef must carry non-zero lightmap UV coordinates");
+    require(std::all_of(geometry.renderBlocks.begin(),
+                        geometry.renderBlocks.end(),
+                        [](const ParsedGeometry::RenderBlock& block) { return block.lightmapPage == 0; }),
+            "Retail 435_01_1.mef render blocks must select lightmap page zero");
+
+    const auto mission_directory = game_directory / "missions/location0/level1";
+    igi::assets::MissionAssets mission_assets(game_directory, mission_directory, model_directory / "cache");
+    const auto scene_mesh = mission_assets.model("435_01_1");
+    require(scene_mesh != nullptr && !scene_mesh->triangles.empty(),
+            "Mission asset adapter must emit the retail model triangles");
+    require(std::all_of(scene_mesh->triangles.begin(),
+                        scene_mesh->triangles.end(),
+                        [](const igi::gameplay::SceneTriangle& triangle)
+                        {
+                            return triangle.lightmap_page_index == 0 &&
+                                   std::all_of(triangle.vertices.begin(),
+                                               triangle.vertices.end(),
+                                               [](const igi::gameplay::SceneVertex& vertex) {
+                                                   return std::isfinite(vertex.lightmap_u) &&
+                                                          std::isfinite(vertex.lightmap_v);
+                                               });
+                        }),
+            "Mission asset adapter must preserve MEF lightmap pages and UV coordinates");
+    std::cout << "[PASS] Retail lightmapped model 435_01_1.mef: " << geometry.vertices.size() << " vertices, "
+              << geometry.triangles.size() << " triangles, " << geometry.renderBlocks.size()
+              << " draw blocks; UV2/page metadata reaches scene mesh\n";
 }
 
 } // namespace

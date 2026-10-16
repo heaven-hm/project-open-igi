@@ -229,7 +229,7 @@ if(BUILD_TESTING)
     target_link_libraries(mvp_renderer_probe PRIVATE igi_runtime)
     add_test(NAME mvp_renderer_depth_clipping COMMAND mvp_renderer_probe)
     add_executable(mvp_olm_probe tests/mvp_olm_probe.cpp)
-    target_link_libraries(mvp_olm_probe PRIVATE igi_formats)
+    target_link_libraries(mvp_olm_probe PRIVATE igi_assets)
     add_test(NAME mvp_object_lightmap_format COMMAND mvp_olm_probe)
     if(IGI_GAME_PATH)
         add_test(NAME mvp_original_object_lightmap_format

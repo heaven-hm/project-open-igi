@@ -120,6 +120,7 @@ struct ParsedGeometry
         size_t triangleCount = 0;
         int materialSlot = 0;
         float opacity = 1.0f;
+        uint16_t lightmapPage = 0;
     };
 
     std::vector<RenderVertex> vertices;

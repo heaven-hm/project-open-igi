@@ -335,6 +335,7 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
         }
     }
     std::vector<std::uint32_t> triangle_materials(geometry.triangles.size());
+    std::vector<std::int32_t> triangle_lightmap_pages(geometry.triangles.size(), -1);
     for (const auto& block : geometry.renderBlocks)
     {
         if (block.triangleStart > triangle_materials.size() ||
@@ -349,11 +350,18 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
         std::fill_n(triangle_materials.begin() + static_cast<std::ptrdiff_t>(block.triangleStart),
                     block.triangleCount,
                     material_index);
+        if (geometry.modelType == 3)
+        {
+            std::fill_n(triangle_lightmap_pages.begin() + static_cast<std::ptrdiff_t>(block.triangleStart),
+                        block.triangleCount,
+                        block.lightmapPage);
+        }
     }
     for (std::size_t triangle_index = 0; triangle_index < geometry.triangles.size(); ++triangle_index)
     {
         gameplay::SceneTriangle triangle;
         triangle.texture_index = triangle_materials[triangle_index];
+        triangle.lightmap_page_index = triangle_lightmap_pages[triangle_index];
         for (std::size_t corner_index = 0; corner_index < 3; ++corner_index)
         {
             const auto vertex_index = geometry.triangles[triangle_index][corner_index];
@@ -364,11 +372,14 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             const auto& vertex = geometry.vertices[vertex_index];
             const gameplay::Vector3 position{
                 vertex.pos.x * 0.01f, vertex.pos.y * 0.01f, vertex.pos.z * 0.01f};
-            if (!gameplay::finite(position) || !std::isfinite(vertex.uv.x) || !std::isfinite(vertex.uv.y))
+            if (!gameplay::finite(position) || !std::isfinite(vertex.uv.x) || !std::isfinite(vertex.uv.y) ||
+                !std::isfinite(vertex.uv2.x) || !std::isfinite(vertex.uv2.y))
             {
                 throw std::runtime_error("Decoded MEF vertex is not finite: " + name);
             }
             triangle.vertices[corner_index] = {position, vertex.uv.x, vertex.uv.y};
+            triangle.vertices[corner_index].lightmap_u = vertex.uv2.x;
+            triangle.vertices[corner_index].lightmap_v = vertex.uv2.y;
             if (vertex.boneIndex < mesh->bone_rest_positions.size())
             {
                 triangle.vertices[corner_index].bone_index = vertex.boneIndex;

@@ -350,6 +350,7 @@ ParsePackedRenderTriangles(const std::vector<uint8_t>& bytes,
         const uint16_t indexCount = ReadValue<uint16_t>(bytes, base + 12);
         const int16_t nextoffs = ReadValue<int16_t>(bytes, base + 14);
         const int16_t materialSlot = ReadValue<int16_t>(bytes, base + 16);
+        const uint16_t lightmapPage = modelType == 3 ? ReadValue<uint16_t>(bytes, base + 18) : 0;
         const uint16_t vertsOffset =
             (modelType == 3) ? ReadValue<uint16_t>(bytes, base + 20) : ReadValue<uint16_t>(bytes, base + 18);
         const uint16_t vertsCount =
@@ -387,7 +388,8 @@ ParsePackedRenderTriangles(const std::vector<uint8_t>& bytes,
         {
             // opacity < 1.0f signals alpha blending needed for this block
             const float blockOpacity = (rawOpacity != 0) ? 0.5f : 1.0f;
-            outBlocks.push_back({blockTriangleStart, blockTriangleCount, materialSlot, blockOpacity});
+            outBlocks.push_back(
+                {blockTriangleStart, blockTriangleCount, materialSlot, blockOpacity, lightmapPage});
         }
 
         ++blockCount;
