@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <array>
 #include <cctype>
+#include <future>
+#include <thread>
 #include <stdexcept>
 
 namespace igi::gameplay
@@ -66,7 +68,7 @@ std::uint32_t texture_sample(const SceneTexture& texture, float horizontal, floa
 
 } // namespace
 
-SceneRenderer::SceneRenderer(int width, int height) : width_(width), height_(height)
+SceneRenderer::SceneRenderer(int width, int height, std::size_t worker_count) : width_(width), height_(height)
 {
     if (width < 160 || height < 120 || width > 3840 || height > 2160)
     {
@@ -74,6 +76,26 @@ SceneRenderer::SceneRenderer(int width, int height) : width_(width), height_(hei
     }
     pixels_.resize(static_cast<std::size_t>(width) * height);
     depth_.resize(pixels_.size());
+    last_scanline_ = height_;
+    if (worker_count == 0)
+    {
+        worker_count = std::clamp(std::thread::hardware_concurrency(), 1u, 4u);
+    }
+    if (worker_count > 16)
+    {
+        throw std::runtime_error("Renderer worker count exceeds the supported limit");
+    }
+    if (worker_count > 1)
+    {
+        render_workers_.reserve(worker_count);
+        for (std::size_t worker_index = 0; worker_index < worker_count; ++worker_index)
+        {
+            auto worker = std::make_unique<SceneRenderer>(width_, height_, 1);
+            worker->first_scanline_ = static_cast<int>(worker_index * height_ / worker_count);
+            worker->last_scanline_ = static_cast<int>((worker_index + 1) * height_ / worker_count);
+            render_workers_.push_back(std::move(worker));
+        }
+    }
 }
 
 void SceneRenderer::triangle(const SceneTriangle& original,
@@ -180,8 +202,10 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
     }
     const int left = static_cast<int>(std::clamp(minimum_horizontal, 0.0f, static_cast<float>(width_ - 1)));
     const int right = static_cast<int>(std::clamp(maximum_horizontal, 0.0f, static_cast<float>(width_ - 1)));
-    const int top = static_cast<int>(std::clamp(minimum_vertical, 0.0f, static_cast<float>(height_ - 1)));
-    const int bottom = static_cast<int>(std::clamp(maximum_vertical, 0.0f, static_cast<float>(height_ - 1)));
+    const int top = std::max(first_scanline_,
+        static_cast<int>(std::clamp(minimum_vertical, 0.0f, static_cast<float>(height_ - 1))));
+    const int bottom = std::min(last_scanline_ - 1,
+        static_cast<int>(std::clamp(maximum_vertical, 0.0f, static_cast<float>(height_ - 1))));
     const float first_step = (second.vertical - third.vertical) / area;
     const float second_step = (third.vertical - first.vertical) / area;
     const float third_step = (first.vertical - second.vertical) / area;
@@ -326,9 +350,33 @@ void SceneRenderer::render(const MissionScene& scene, const GameSimulation& simu
     {
         throw std::runtime_error("Scene has no texture data");
     }
+    if (!render_workers_.empty())
+    {
+        std::vector<std::future<void>> pending_frames;
+        pending_frames.reserve(render_workers_.size());
+        for (const auto& worker : render_workers_)
+        {
+            pending_frames.push_back(std::async(std::launch::async,
+                [&scene, &simulation, renderer = worker.get()] { renderer->render(scene, simulation); }));
+        }
+        for (auto& pending_frame : pending_frames)
+        {
+            pending_frame.get();
+        }
+        for (const auto& worker : render_workers_)
+        {
+            const auto first_pixel = static_cast<std::ptrdiff_t>(worker->first_scanline_) * width_;
+            const auto last_pixel = static_cast<std::ptrdiff_t>(worker->last_scanline_) * width_;
+            std::copy(worker->pixels_.begin() + first_pixel, worker->pixels_.begin() + last_pixel,
+                      pixels_.begin() + first_pixel);
+        }
+        visible_triangles_ = render_workers_.front()->visible_triangles_;
+        return;
+    }
     visible_triangles_ = 0;
-    std::fill(depth_.begin(), depth_.end(), 0.0f);
-    for (int row = 0; row < height_; ++row)
+    std::fill(depth_.begin() + static_cast<std::ptrdiff_t>(first_scanline_) * width_,
+              depth_.begin() + static_cast<std::ptrdiff_t>(last_scanline_) * width_, 0.0f);
+    for (int row = first_scanline_; row < last_scanline_; ++row)
     {
         const auto sky = mix_color(0xff899dacu, 0xffc4c2afu, static_cast<float>(row) / height_);
         std::fill_n(pixels_.begin() + static_cast<std::ptrdiff_t>(row) * width_, width_, sky);

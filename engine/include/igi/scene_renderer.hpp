@@ -2,6 +2,8 @@
 
 #include "igi/game_simulation.hpp"
 
+#include <cstddef>
+#include <memory>
 #include <span>
 
 namespace igi::gameplay
@@ -10,7 +12,7 @@ namespace igi::gameplay
 class SceneRenderer final
 {
   public:
-    SceneRenderer(int width, int height);
+    SceneRenderer(int width, int height, std::size_t worker_count = 0);
     void render(const MissionScene& scene, const GameSimulation& simulation);
 
     [[nodiscard]] std::span<const std::uint32_t> pixels() const noexcept
@@ -54,6 +56,9 @@ class SceneRenderer final
     std::vector<std::uint32_t> pixels_;
     std::vector<float> depth_;
     std::uint64_t visible_triangles_{};
+    int first_scanline_{};
+    int last_scanline_{};
+    std::vector<std::unique_ptr<SceneRenderer>> render_workers_;
 };
 
 } // namespace igi::gameplay

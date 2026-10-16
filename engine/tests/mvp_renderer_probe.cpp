@@ -1,5 +1,6 @@
 #include "igi/scene_renderer.hpp"
 
+#include <algorithm>
 #include <iostream>
 #include <stdexcept>
 
@@ -20,8 +21,22 @@ int main()
             {{SceneVertex{{-8, 8, -1}, 0, 0}, SceneVertex{{8, 8, -1}, 1, 0}, SceneVertex{{0, 8, 8}, 0.5f, 1}},
              1});
         GameSimulation simulation(scene);
+        SceneRenderer serial_renderer(641, 481, 1);
+        SceneRenderer parallel_renderer(641, 481, 3);
+        const auto verify_parallel_pixels = [&]
+        {
+            serial_renderer.render(scene, simulation);
+            parallel_renderer.render(scene, simulation);
+            if (!std::equal(serial_renderer.pixels().begin(), serial_renderer.pixels().end(),
+                            parallel_renderer.pixels().begin()) ||
+                serial_renderer.visible_triangles() != parallel_renderer.visible_triangles())
+            {
+                throw std::runtime_error("Parallel raster bands changed pixels or visible triangle counts");
+            }
+        };
         SceneRenderer renderer(640, 480);
         renderer.render(scene, simulation);
+        verify_parallel_pixels();
         const auto center_color = renderer.pixels()[250 * 640 + 340];
         if (((center_color >> 16) & 255) < 40 || ((center_color >> 8) & 255) != 0)
         {
@@ -30,6 +45,7 @@ int main()
         }
         scene.static_triangles[0].vertices[0].position.y = -1;
         renderer.render(scene, simulation);
+        verify_parallel_pixels();
         if (renderer.visible_triangles() == 0)
         {
             throw std::runtime_error("Near-plane clipping discarded all visible geometry");
@@ -39,6 +55,7 @@ int main()
         try
         {
             renderer.render(scene, simulation);
+        verify_parallel_pixels();
         }
         catch (const std::runtime_error&)
         {
@@ -55,6 +72,7 @@ int main()
              0,
              true});
         renderer.render(scene, simulation);
+        verify_parallel_pixels();
         if (renderer.visible_triangles() != 0)
         {
             throw std::runtime_error("Gun-flame attachments must be hidden while idle");
@@ -63,6 +81,7 @@ int main()
         firing.firing = true;
         simulation.tick(firing);
         renderer.render(scene, simulation);
+        verify_parallel_pixels();
         if (renderer.visible_triangles() == 0)
         {
             throw std::runtime_error("A shot must expose its gun-flame attachment");
@@ -72,6 +91,7 @@ int main()
             simulation.tick({});
         }
         renderer.render(scene, simulation);
+        verify_parallel_pixels();
         if (renderer.visible_triangles() != 0)
         {
             throw std::runtime_error("Gun-flame attachments must disappear after the shot");
