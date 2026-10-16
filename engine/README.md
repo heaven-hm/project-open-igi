@@ -40,7 +40,9 @@ Controls come from the selected profile in the original `config.qvm`; `--profile
 | 1 through 9 | Original weapon categories |
 | Q | Activate; prototype currently supports nearby gun pickups |
 | Backspace | Alternate-fire binding; currently a provisional aim action |
-| Enter / F11 / Escape | Restart / fullscreen / quit |
+| Enter / F10 / Escape | Restart / fullscreen / quit |
+| G or F9 | Toggle developer mode (god mode, all weapons, and unlimited ammunition) |
+| F12 | Toggle free camera |
 
 Weapon cycle order and category subcycling still need retail corrections. Explosives, binoculars, and several other original actions are unfinished. Dynamic doors and full runtime QVM interaction are unfinished; non-solid building portal faces no longer act as walls.
 
