@@ -206,6 +206,8 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
 
     const auto mission_directory = game_directory / "missions/location0/level1";
     igi::assets::MissionAssets mission_assets(game_directory, mission_directory, model_directory / "cache");
+    require(mission_assets.lightmap_textures("obj00014", 246).empty(),
+            "Retail Level 1 OLM indices without archive entries must remain unlit instead of failing load");
 
     const auto objects_script_bytes = igi::assets::read_file(mission_directory / "objects.qvm");
     const igi::assets::QvmInitializer objects_script{igi::assets::BinaryView(objects_script_bytes)};
@@ -298,6 +300,33 @@ void verify_level_one_lightmap(const std::filesystem::path& game_directory)
                 model_lightmap_layout.front().lightmap_index == 0 &&
                 model_lightmap_layout.front().lightmapped,
             "Retail model lightmap layout must start with its lightmapped LOD at index zero");
+    require(!scene_mesh->model_parts.empty() && scene_mesh->model_parts.front().model_name == "435_01_1" &&
+                scene_mesh->model_parts.front().first_triangle == 0 &&
+                scene_mesh->model_parts.front().triangle_count == geometry.triangles.size() &&
+                scene_mesh->model_parts.front().lightmap_model_index == 0,
+            "Flattened MEF root triangles must retain their retail object-lightmap model index");
+    for (const auto& model_part : scene_mesh->model_parts)
+    {
+        require(model_part.first_triangle <= scene_mesh->triangles.size() &&
+                    model_part.triangle_count <= scene_mesh->triangles.size() - model_part.first_triangle,
+                "Flattened MEF lightmap model part must remain within its triangle array");
+        const auto model_layout_entry =
+            std::find_if(model_lightmap_layout.begin(),
+                         model_lightmap_layout.end(),
+                         [&](const igi::assets::ModelLightmapEntry& entry)
+                         {
+                             return entry.model_name == model_part.model_name &&
+                                    entry.lightmap_index == model_part.lightmap_model_index;
+                         });
+        require(model_layout_entry != model_lightmap_layout.end(),
+                "Flattened MEF part indices must match the retail depth-first lightmap layout");
+        for (std::size_t triangle_offset = 0; triangle_offset < model_part.triangle_count; ++triangle_offset)
+        {
+            require(scene_mesh->triangles[model_part.first_triangle + triangle_offset].lightmap_model_index ==
+                        model_part.lightmap_model_index,
+                    "Every flattened model triangle must retain the index for its own OLM resource");
+        }
+    }
     std::size_t expected_lod_count = 0;
     for (std::size_t lod_index = 0; lod_index < 5; ++lod_index)
     {

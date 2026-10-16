@@ -92,6 +92,7 @@ struct SceneTriangle final
     bool firing_only{};
     std::int32_t lightmap_page_index = -1;
     std::int32_t lightmap_texture_index = -1;
+    std::int32_t lightmap_model_index = -1;
 };
 
 struct SceneSkinTriangle final
@@ -107,18 +108,30 @@ struct CollisionTriangle final
 
 struct SceneMesh final
 {
+    struct ModelPart final
+    {
+        std::string model_name;
+        std::size_t first_triangle{};
+        std::size_t triangle_count{};
+        std::int32_t lightmap_model_index = -1;
+    };
+
     std::vector<SceneTriangle> triangles;
+    std::vector<ModelPart> model_parts;
     std::vector<SceneSkinTriangle> skinned_collision;
     std::vector<CollisionTriangle> collision;
     std::vector<Vector3> bone_rest_positions;
     std::size_t attachment_count{};
     std::size_t maximum_attachment_depth{};
+    std::uint32_t lightmap_model_index_count{};
+    bool is_sector{};
     std::vector<CollisionTriangle> movement_collision;
 };
 
 struct SceneDoor final
 {
     int task_id{};
+    std::size_t source_call_index = static_cast<std::size_t>(-1);
     std::string name;
     std::string model_id;
     Vector3 position{};
@@ -290,6 +303,8 @@ struct ObjectPlacementAudit final
     bool emitted_geometry_verified{};
     bool position_matches{};
     bool orientation_matches{};
+    std::size_t first_scene_triangle{};
+    std::size_t scene_triangle_count{};
 };
 
 struct MissionScene final

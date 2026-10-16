@@ -5,6 +5,7 @@
 #include "igi/mission_assets.hpp"
 #include "igi/mission_gameplay.hpp"
 #include "igi/qvm_initializer.hpp"
+#include "igi/qvm_task_tree.hpp"
 #include "igi/terrain_surface.hpp"
 
 #include "iff_parser.h"
@@ -783,6 +784,8 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         try
         {
             const auto mesh = library.model(candidate->model_id);
+            const std::size_t first_scene_triangle = scene.static_triangles.size();
+            std::size_t scene_triangle_count = 0;
             Vector3 runtime_position{};
             Vector3 runtime_rotation{};
             float position_error = 0.0f;
@@ -808,12 +811,13 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
             {
                 SceneDoor door;
                 door.task_id = candidate->task_id;
+                door.source_call_index = static_cast<std::size_t>(&call - initializer.calls().data());
                 door.name = candidate->name;
                 door.model_id = candidate->model_id;
                 door.position = candidate->position;
                 door.rotation = candidate->rotation;
                 door.open = false;
-                door.mesh = mesh;
+                door.mesh = std::make_shared<SceneMesh>(*mesh);
                 if (mesh)
                 {
                     Vector3 min_v{1e9f, 1e9f, 1e9f};
@@ -851,6 +855,7 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                      candidate->type == "ExplodeObject" || candidate->type == "Car");
                 const std::size_t first_scene_triangle = scene.static_triangles.size();
                 append_model(scene, *mesh, candidate->position, candidate->rotation, rigid_collision);
+                scene_triangle_count = scene.static_triangles.size() - first_scene_triangle;
                 const EmittedGeometryTransform geometry_verification = verify_emitted_geometry_transform(
                     *mesh, scene, first_scene_triangle, candidate->position, candidate->rotation);
                 runtime_position = geometry_verification.position;
@@ -896,7 +901,9 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                  verification_tolerance,
                  emitted_geometry_verified,
                  position_matches,
-                 orientation_matches});
+                 orientation_matches,
+                 first_scene_triangle,
+                 scene_triangle_count});
             diagnostics::log(
                 position_matches && orientation_matches ? diagnostics::Severity::information
                                                         : diagnostics::Severity::error,
@@ -938,6 +945,151 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         tower_ladder.facing_yaw = 3.14159f;
         scene.ladders.push_back(tower_ladder);
     }
+
+    const assets::QvmTaskTree task_tree(initializer.calls());
+    std::unordered_map<std::size_t, const ObjectPlacementAudit*> placement_audits_by_call;
+    placement_audits_by_call.reserve(scene.object_placement_audits.size());
+    for (const auto& audit : scene.object_placement_audits)
+    {
+        placement_audits_by_call.emplace(audit.source_call_index, &audit);
+    }
+
+    std::size_t lightmapped_triangle_count = 0;
+    const auto bind_lightmap_page = [&](SceneTriangle& triangle,
+                                        std::string_view set_name,
+                                        std::uint64_t first_lightmap_model_index,
+                                        auto& page_indices_by_model) -> bool
+    {
+        if (triangle.lightmap_model_index < 0 || triangle.lightmap_page_index < 0)
+        {
+            return false;
+        }
+        const std::uint64_t lightmap_model_index =
+            first_lightmap_model_index + static_cast<std::uint32_t>(triangle.lightmap_model_index);
+        if (lightmap_model_index > static_cast<std::uint64_t>(std::numeric_limits<std::int32_t>::max()))
+        {
+            throw std::runtime_error("Object lightmap model index exceeds the retail index range");
+        }
+        const auto normalized_lightmap_model_index = static_cast<std::uint32_t>(lightmap_model_index);
+        auto pages = page_indices_by_model.find(normalized_lightmap_model_index);
+        if (pages == page_indices_by_model.end())
+        {
+            pages = page_indices_by_model
+                        .emplace(normalized_lightmap_model_index,
+                                 library.lightmap_textures(set_name, normalized_lightmap_model_index))
+                        .first;
+        }
+        if (pages->second.empty())
+        {
+            return false;
+        }
+        const auto page_index = static_cast<std::size_t>(triangle.lightmap_page_index);
+        if (page_index >= pages->second.size())
+        {
+            throw std::runtime_error("MEF triangle lightmap page is absent from its retail OLM entry: " +
+                                     std::string(set_name) + "_" +
+                                     std::to_string(normalized_lightmap_model_index));
+        }
+        if (pages->second[page_index] > static_cast<std::uint32_t>(std::numeric_limits<std::int32_t>::max()))
+        {
+            throw std::runtime_error("Object lightmap texture index exceeds the scene's signed index range");
+        }
+        triangle.lightmap_texture_index = static_cast<std::int32_t>(pages->second[page_index]);
+        return true;
+    };
+    for (const auto& lightmap_owner : task_tree.lightmap_owners())
+    {
+        std::uint64_t next_lightmap_model_index = 0;
+        std::unordered_map<std::uint32_t, std::vector<std::uint32_t>> page_indices_by_model;
+        std::size_t owner_lightmapped_triangle_count = 0;
+        for (const std::size_t task_call_index : lightmap_owner.subtree_call_indices)
+        {
+            const auto placement = placement_audits_by_call.find(task_call_index);
+            if (placement == placement_audits_by_call.end())
+            {
+                continue;
+            }
+            const ObjectPlacementAudit& audit = *placement->second;
+            if (audit.task_type == "StationaryGun")
+            {
+                continue;
+            }
+
+            const auto model_layout = library.model_lightmap_layout(audit.model_identifier);
+            std::uint64_t model_lightmap_model_count = 0;
+            for (const auto& model_entry : model_layout)
+            {
+                if (model_entry.lightmap_index >= 0)
+                {
+                    model_lightmap_model_count =
+                        std::max(model_lightmap_model_count,
+                                 static_cast<std::uint64_t>(model_entry.lightmap_index) + 1);
+                }
+            }
+            const auto model_mesh = library.model(audit.model_identifier);
+            if (model_mesh->lightmap_model_index_count != model_lightmap_model_count)
+            {
+                throw std::runtime_error("Flattened MEF lightmap slot count differs from the retail model layout: " +
+                                         audit.model_identifier);
+            }
+            diagnostics::log(diagnostics::Severity::debug,
+                             "lightmap-layout",
+                             "set=" + lightmap_owner.set_name + ", call=" +
+                                 std::to_string(audit.source_call_index) + ", task=" + audit.task_type +
+                                 ", model=" + audit.model_identifier + ", first_index=" +
+                                 std::to_string(next_lightmap_model_index) + ", slots=" +
+                                 std::to_string(model_lightmap_model_count));
+            if (audit.scene_triangle_count > 0)
+            {
+                if (audit.first_scene_triangle > scene.static_triangles.size() ||
+                    audit.scene_triangle_count > scene.static_triangles.size() - audit.first_scene_triangle)
+                {
+                    throw std::runtime_error("Object lightmap binding exceeds the emitted scene triangle array");
+                }
+                for (std::size_t triangle_offset = 0; triangle_offset < audit.scene_triangle_count;
+                     ++triangle_offset)
+                {
+                    SceneTriangle& triangle =
+                        scene.static_triangles[audit.first_scene_triangle + triangle_offset];
+                    owner_lightmapped_triangle_count +=
+                        bind_lightmap_page(triangle,
+                                           lightmap_owner.set_name,
+                                           next_lightmap_model_index,
+                                           page_indices_by_model)
+                            ? 1U
+                            : 0U;
+                }
+            }
+
+            for (auto& door : scene.doors)
+            {
+                if (door.source_call_index != task_call_index || !door.mesh)
+                {
+                    continue;
+                }
+                for (auto& triangle : door.mesh->triangles)
+                {
+                    owner_lightmapped_triangle_count +=
+                        bind_lightmap_page(triangle,
+                                           lightmap_owner.set_name,
+                                           next_lightmap_model_index,
+                                           page_indices_by_model)
+                            ? 1U
+                            : 0U;
+                }
+            }
+            next_lightmap_model_index += model_lightmap_model_count;
+        }
+        lightmapped_triangle_count += owner_lightmapped_triangle_count;
+        diagnostics::log(diagnostics::Severity::information,
+                         "lightmap-bindings",
+                         "Bound " + std::to_string(owner_lightmapped_triangle_count) +
+                             " rendered triangles to retail OLM set " + lightmap_owner.set_name);
+    }
+    diagnostics::log(diagnostics::Severity::information,
+                     "lightmap-bindings",
+                     "Bound " + std::to_string(lightmapped_triangle_count) +
+                         " Level 1 rendered triangles to authored OLM pages");
 
     // Authored mission objectives for Level 1 (Steal the truck near the main entrance)
     if (mission_number == 1)

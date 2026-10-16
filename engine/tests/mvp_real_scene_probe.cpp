@@ -1,18 +1,24 @@
 #include "igi/diagnostics.hpp"
 #include "igi/game_simulation.hpp"
+#include "igi/mission_assets.hpp"
+#include "igi/qvm_initializer.hpp"
+#include "igi/qvm_task_tree.hpp"
 #include "igi/scene_renderer.hpp"
 #include "igi/skeletal_animation.hpp"
 
 #include <algorithm>
 #include <cmath>
+#include <cstdint>
 #include <exception>
 #include <fstream>
+#include <filesystem>
 #include <iomanip>
 #include <iostream>
 #include <limits>
 #include <numbers>
 #include <stdexcept>
 #include <string>
+#include <unordered_map>
 #include <unordered_set>
 
 using namespace igi::gameplay;
@@ -23,6 +29,165 @@ void require(bool condition, const char* message)
     {
         throw std::runtime_error(message);
     }
+}
+
+void verify_retail_lightmap_page_bindings(const MissionScene& scene,
+                                          const std::filesystem::path& game_directory)
+{
+    struct ExpectedPageBinding final
+    {
+        std::int32_t source_texture_index{-1};
+        std::string set_name;
+        std::uint64_t model_index{};
+        std::int32_t page_index{-1};
+    };
+
+    const std::filesystem::path mission_directory = game_directory / "missions/location0/level1";
+    const std::filesystem::path cache_directory =
+        std::filesystem::temp_directory_path() / "project-open-igi-lightmap-verifier";
+    igi::assets::MissionAssets reference_assets(game_directory, mission_directory, cache_directory);
+    const auto object_script_bytes = igi::assets::read_file(mission_directory / "objects.qvm");
+    const igi::assets::QvmInitializer object_script{igi::assets::BinaryView(object_script_bytes)};
+    const igi::assets::QvmTaskTree task_tree(object_script.calls());
+
+    std::unordered_map<std::size_t, const ObjectPlacementAudit*> placement_by_call;
+    placement_by_call.reserve(scene.object_placement_audits.size());
+    for (const auto& audit : scene.object_placement_audits)
+    {
+        placement_by_call.emplace(audit.source_call_index, &audit);
+    }
+
+    std::unordered_map<const SceneTriangle*, ExpectedPageBinding> expected_bindings;
+    std::unordered_set<const SceneTriangle*> door_triangle_pointers;
+    for (const auto& lightmap_owner : task_tree.lightmap_owners())
+    {
+        std::uint64_t next_model_index = 0;
+        std::unordered_map<std::uint32_t, std::vector<std::uint32_t>> pages_by_model_index;
+        for (const std::size_t task_call_index : lightmap_owner.subtree_call_indices)
+        {
+            const auto placement = placement_by_call.find(task_call_index);
+            if (placement == placement_by_call.end())
+            {
+                continue;
+            }
+
+            const ObjectPlacementAudit& audit = *placement->second;
+            if (audit.task_type == "StationaryGun")
+            {
+                continue;
+            }
+
+            const auto model_layout = reference_assets.model_lightmap_layout(audit.model_identifier);
+            std::uint64_t model_slot_count = 0;
+            for (const auto& model_entry : model_layout)
+            {
+                if (model_entry.lightmap_index >= 0)
+                {
+                    model_slot_count =
+                        std::max(model_slot_count, static_cast<std::uint64_t>(model_entry.lightmap_index) + 1);
+                }
+            }
+
+            require(audit.first_scene_triangle <= scene.static_triangles.size() &&
+                        audit.scene_triangle_count <= scene.static_triangles.size() - audit.first_scene_triangle,
+                    "Retail OLM verification placement must remain within the emitted triangle list");
+            const auto record_expected_binding = [&](const SceneTriangle& triangle)
+            {
+                ExpectedPageBinding expected_binding;
+                expected_binding.set_name = lightmap_owner.set_name;
+                if (triangle.lightmap_model_index >= 0)
+                {
+                    require(static_cast<std::uint64_t>(triangle.lightmap_model_index) < model_slot_count,
+                            "MEF triangle lightmap model index must fit its independently parsed model layout");
+                    expected_binding.model_index =
+                        next_model_index + static_cast<std::uint32_t>(triangle.lightmap_model_index);
+                    expected_binding.page_index = triangle.lightmap_page_index;
+                    const std::uint32_t model_index = static_cast<std::uint32_t>(expected_binding.model_index);
+                    auto pages = pages_by_model_index.find(model_index);
+                    if (pages == pages_by_model_index.end())
+                    {
+                        pages = pages_by_model_index
+                                    .emplace(model_index,
+                                             reference_assets.lightmap_textures(lightmap_owner.set_name, model_index))
+                                    .first;
+                    }
+                    if (!pages->second.empty())
+                    {
+                        require(triangle.lightmap_page_index >= 0 &&
+                                    static_cast<std::size_t>(triangle.lightmap_page_index) < pages->second.size(),
+                                "MEF triangle lightmap page must exist in its retail OLM resource");
+                        expected_binding.source_texture_index =
+                            static_cast<std::int32_t>(
+                                pages->second[static_cast<std::size_t>(triangle.lightmap_page_index)]);
+                    }
+                }
+                expected_bindings.insert_or_assign(&triangle, std::move(expected_binding));
+            };
+
+            for (std::size_t triangle_offset = 0; triangle_offset < audit.scene_triangle_count;
+                 ++triangle_offset)
+            {
+                const SceneTriangle& triangle = scene.static_triangles[audit.first_scene_triangle + triangle_offset];
+                record_expected_binding(triangle);
+            }
+            for (const auto& door : scene.doors)
+            {
+                if (door.source_call_index != task_call_index || !door.mesh)
+                {
+                    continue;
+                }
+                for (const SceneTriangle& triangle : door.mesh->triangles)
+                {
+                    door_triangle_pointers.insert(&triangle);
+                    record_expected_binding(triangle);
+                }
+            }
+            next_model_index += model_slot_count;
+        }
+    }
+
+    const auto reference_textures = reference_assets.take_textures();
+    std::size_t verified_page_bindings = 0;
+    std::size_t verified_unlit_triangles = 0;
+    std::size_t verified_door_page_bindings = 0;
+    for (const auto& [triangle_pointer, expected_binding] : expected_bindings)
+    {
+        const SceneTriangle& triangle = *triangle_pointer;
+        if (expected_binding.source_texture_index < 0)
+        {
+            require(triangle.lightmap_texture_index < 0,
+                    "Absent retail OLM resources must leave the corresponding object triangle unlit");
+            ++verified_unlit_triangles;
+            continue;
+        }
+
+        require(triangle.lightmap_texture_index >= 0 &&
+                    static_cast<std::size_t>(triangle.lightmap_texture_index) < scene.textures.size(),
+                "Every retail OLM-backed object triangle must reference a runtime texture");
+        require(static_cast<std::size_t>(expected_binding.source_texture_index) < reference_textures.size(),
+                "Independent retail OLM page lookup must reference its decoded source texture");
+        const SceneTexture& source_texture =
+            reference_textures[static_cast<std::size_t>(expected_binding.source_texture_index)];
+        const SceneTexture& runtime_texture =
+            scene.textures[static_cast<std::size_t>(triangle.lightmap_texture_index)];
+        require(source_texture.width == runtime_texture.width && source_texture.height == runtime_texture.height &&
+                    source_texture.pixels == runtime_texture.pixels,
+                "Runtime object triangle must bind the exact retail OLM set, model slot, page, and pixel data");
+        if (door_triangle_pointers.contains(triangle_pointer))
+        {
+            ++verified_door_page_bindings;
+        }
+        else
+        {
+            ++verified_page_bindings;
+        }
+    }
+
+    require(verified_page_bindings >= 20000 && verified_door_page_bindings > 0,
+            "Level 1 must bind the exact retail OLM pages to its rendered object triangles");
+    std::cout << "Level 1 retail OLM verification: exact_pages=" << verified_page_bindings
+              << ", door_pages=" << verified_door_page_bindings
+              << ", absent_pages_left_unlit=" << verified_unlit_triangles << '\n';
 }
 
 bool ray_intersects_triangle(Vector3 origin,
@@ -156,6 +321,35 @@ int main(int argument_count, char** arguments)
         }
         require(verified_rotated_geometry,
                 "Level 1 placement verification must exercise a rotated emitted model transform");
+        verify_retail_lightmap_page_bindings(scene, arguments[1]);
+        std::size_t retail_lightmapped_triangle_count = 0;
+        for (std::size_t triangle_index = 0; triangle_index < scene.static_triangles.size(); ++triangle_index)
+        {
+            const SceneTriangle& triangle = scene.static_triangles[triangle_index];
+            if (triangle_index < scene.terrain_triangle_count)
+            {
+                require(triangle.lightmap_texture_index == -1,
+                        "Terrain triangles must not inherit object OLM texture bindings");
+            }
+            if (triangle.lightmap_texture_index < 0)
+            {
+                continue;
+            }
+            require(triangle.lightmap_model_index >= 0 && triangle.lightmap_page_index >= 0,
+                    "Bound object OLM textures must retain their MEF model and page indices");
+            const std::size_t texture_index = static_cast<std::size_t>(triangle.lightmap_texture_index);
+            require(texture_index < scene.textures.size(),
+                    "Every bound retail OLM page must reference an available scene texture");
+            const SceneTexture& lightmap_texture = scene.textures[texture_index];
+            require(lightmap_texture.width > 0 && lightmap_texture.height > 0 &&
+                        lightmap_texture.pixels.size() >=
+                            static_cast<std::size_t>(lightmap_texture.width) * lightmap_texture.height,
+                    "Every bound retail OLM page must preserve valid image dimensions and pixels");
+            ++retail_lightmapped_triangle_count;
+        }
+        require(retail_lightmapped_triangle_count >= 20000,
+                "Level 1 object placements must bind the original OLM pages to rendered MEF triangles");
+        std::cout << "Level 1 retail OLM triangle bindings: " << retail_lightmapped_triangle_count << '\n';
         const auto route_graph =
             std::find_if(scene.navigation_graphs.begin(),
                          scene.navigation_graphs.end(),

@@ -472,9 +472,9 @@ std::vector<std::uint32_t> MissionAssets::lightmap_textures(std::string_view set
     const auto resource = lightmap_entries_.find(entry_key);
     if (resource == lightmap_entries_.end())
     {
-        diagnostics::log(diagnostics::Severity::warning,
+        diagnostics::log(diagnostics::Severity::debug,
                          "lightmap-assets",
-                         "No object lightmap resource found for " + entry_key);
+                         "No authored object lightmap resource for " + entry_key + "; drawing the MEF unlit");
         return {};
     }
 
@@ -631,6 +631,28 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
     }
     const auto geometry = ParseMefFile(resource->second.string());
     auto mesh = std::make_shared<gameplay::SceneMesh>();
+    mesh->is_sector = std::any_of(geometry.rawChunks.begin(),
+                                  geometry.rawChunks.end(),
+                                  [](const ParsedGeometry::RawChunk& chunk)
+                                  { return chunk.isTag("TROP") && !chunk.data.empty(); });
+    if (geometry.modelType == 3)
+    {
+        std::string lod_model_name = normalized;
+        for (std::size_t lod_index = 0; lod_index < 5; ++lod_index)
+        {
+            if (!files_.contains(lod_model_name + ".mef"))
+            {
+                break;
+            }
+            ++mesh->lightmap_model_index_count;
+            const auto final_character = static_cast<unsigned char>(lod_model_name.back());
+            if (final_character == std::numeric_limits<unsigned char>::max())
+            {
+                break;
+            }
+            lod_model_name.back() = static_cast<char>(final_character + 1u);
+        }
+    }
     const auto bone_positions = ComputeBoneWorldPositions(geometry.bones);
     for (const auto& position : bone_positions)
     {
@@ -673,6 +695,7 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
         gameplay::SceneTriangle triangle;
         triangle.texture_index = triangle_materials[triangle_index];
         triangle.lightmap_page_index = triangle_lightmap_pages[triangle_index];
+        triangle.lightmap_model_index = geometry.modelType == 3 ? 0 : -1;
         for (std::size_t corner_index = 0; corner_index < 3; ++corner_index)
         {
             const auto vertex_index = geometry.triangles[triangle_index][corner_index];
@@ -699,6 +722,11 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             }
         }
         mesh->triangles.push_back(triangle);
+    }
+    if (!mesh->triangles.empty())
+    {
+        mesh->model_parts.push_back(
+            {normalized, 0, mesh->triangles.size(), geometry.modelType == 3 ? 0 : -1});
     }
     const auto decode_collision = [&](const auto& faces,
                                       const auto& vertices,
@@ -757,27 +785,68 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
     loading_models_.insert(normalized);
     try
     {
+        struct ResolvedAttachment final
+        {
+            const MefAttachment* attachment{};
+            std::string attachment_name;
+            std::string model_name;
+            std::shared_ptr<gameplay::SceneMesh> mesh;
+            bool visible{};
+        };
+
+        std::vector<ResolvedAttachment> resolved_attachments;
+        resolved_attachments.reserve(geometry.mefAttachments.size());
         for (const auto& attachment : geometry.mefAttachments)
         {
             const auto name_end = std::find(std::begin(attachment.name), std::end(attachment.name), '\0');
             const std::string child_name(std::begin(attachment.name), name_end);
             const auto normalized_child = normalize_name(child_name);
             const auto magic_model = magic_attachment_models_.find(normalized_child);
-            if (child_name.empty() || magic_model == magic_attachment_models_.end() ||
-                invisible_attachment_models_.contains(normalized_child))
+            if (child_name.empty() || magic_model == magic_attachment_models_.end())
             {
                 continue;
             }
-            const auto& child_model_name = magic_model->second;
+            std::string child_model_name = magic_model->second;
             if (!files_.contains(child_model_name + ".mef"))
             {
-                diagnostics::log(diagnostics::Severity::debug,
-                                 "attachments",
-                                 "Magic-object attachment has no visual MEF model: " + child_name + " -> " +
-                                     child_model_name);
-                continue;
+                if (files_.contains("missing.mef"))
+                {
+                    child_model_name = "missing";
+                }
+                else
+                {
+                    diagnostics::log(diagnostics::Severity::debug,
+                                     "attachments",
+                                     "Magic-object attachment has no visual MEF model: " + child_name + " -> " +
+                                         child_model_name);
+                    continue;
+                }
             }
             const auto child = model(child_model_name);
+            resolved_attachments.push_back({&attachment,
+                                            normalized_child,
+                                            child_model_name,
+                                            child,
+                                            !invisible_attachment_models_.contains(normalized_child)});
+        }
+        std::stable_sort(resolved_attachments.begin(),
+                         resolved_attachments.end(),
+                         [](const ResolvedAttachment& first, const ResolvedAttachment& second)
+                         { return !first.mesh->is_sector && second.mesh->is_sector; });
+
+        for (const auto& resolved_attachment : resolved_attachments)
+        {
+            const MefAttachment& attachment = *resolved_attachment.attachment;
+            const std::string& child_name = resolved_attachment.attachment_name;
+            const std::string& child_model_name = resolved_attachment.model_name;
+            const auto& child = resolved_attachment.mesh;
+            const std::uint32_t child_lightmap_model_index = mesh->lightmap_model_index_count;
+            if (static_cast<std::uint64_t>(child_lightmap_model_index) + child->lightmap_model_index_count >
+                static_cast<std::uint64_t>(std::numeric_limits<std::int32_t>::max()))
+            {
+                throw std::runtime_error("MEF attachment lightmap index exceeds the retail signed index range: " +
+                                         normalized);
+            }
             const glm::mat4 rotation{attachment.r00,
                                      attachment.r01,
                                      attachment.r02,
@@ -806,51 +875,70 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
                 }
                 return result;
             };
-            for (auto triangle : child->triangles)
+            const std::size_t child_triangle_start = mesh->triangles.size();
+            if (resolved_attachment.visible)
             {
-                triangle.firing_only = triangle.firing_only ||
-                                       muzzle_flash_models_.contains(normalized_child) ||
-                                       muzzle_flash_models_.contains(child_model_name);
-                for (auto& vertex : triangle.vertices)
+                for (auto triangle : child->triangles)
                 {
-                    vertex.position = transform(vertex.position);
-                    vertex.bone_index = static_cast<std::uint32_t>(-1);
-                    if (attachment.boneId >= 0 &&
-                        static_cast<std::size_t>(attachment.boneId) < mesh->bone_rest_positions.size())
+                    if (triangle.lightmap_model_index >= 0)
                     {
-                        vertex.bone_index = static_cast<std::uint32_t>(attachment.boneId);
-                        vertex.bone_local_position =
-                            vertex.position - mesh->bone_rest_positions[vertex.bone_index];
+                        triangle.lightmap_model_index += static_cast<std::int32_t>(child_lightmap_model_index);
                     }
+                    triangle.firing_only = triangle.firing_only ||
+                                           muzzle_flash_models_.contains(child_name) ||
+                                           muzzle_flash_models_.contains(child_model_name);
+                    for (auto& vertex : triangle.vertices)
+                    {
+                        vertex.position = transform(vertex.position);
+                        vertex.bone_index = static_cast<std::uint32_t>(-1);
+                        if (attachment.boneId >= 0 &&
+                            static_cast<std::size_t>(attachment.boneId) < mesh->bone_rest_positions.size())
+                        {
+                            vertex.bone_index = static_cast<std::uint32_t>(attachment.boneId);
+                            vertex.bone_local_position =
+                                vertex.position - mesh->bone_rest_positions[vertex.bone_index];
+                        }
+                    }
+                    mesh->triangles.push_back(triangle);
                 }
-                mesh->triangles.push_back(triangle);
+                for (auto child_part : child->model_parts)
+                {
+                    child_part.first_triangle += child_triangle_start;
+                    if (child_part.lightmap_model_index >= 0)
+                    {
+                        child_part.lightmap_model_index +=
+                            static_cast<std::int32_t>(child_lightmap_model_index);
+                    }
+                    mesh->model_parts.push_back(std::move(child_part));
+                }
+                for (auto triangle : child->collision)
+                {
+                    if (muzzle_flash_models_.contains(child_name) ||
+                        muzzle_flash_models_.contains(child_model_name))
+                    {
+                        continue;
+                    }
+                    for (auto& position : triangle.positions)
+                    {
+                        position = transform(position);
+                    }
+                    mesh->collision.push_back(triangle);
+                }
+                for (auto triangle : child->movement_collision)
+                {
+                    if (muzzle_flash_models_.contains(child_name) ||
+                        muzzle_flash_models_.contains(child_model_name))
+                    {
+                        continue;
+                    }
+                    for (auto& position : triangle.positions)
+                    {
+                        position = transform(position);
+                    }
+                    mesh->movement_collision.push_back(triangle);
+                }
             }
-            for (auto triangle : child->collision)
-            {
-                if (muzzle_flash_models_.contains(normalized_child) ||
-                    muzzle_flash_models_.contains(child_model_name))
-                {
-                    continue;
-                }
-                for (auto& position : triangle.positions)
-                {
-                    position = transform(position);
-                }
-                mesh->collision.push_back(triangle);
-            }
-            for (auto triangle : child->movement_collision)
-            {
-                if (muzzle_flash_models_.contains(normalized_child) ||
-                    muzzle_flash_models_.contains(child_model_name))
-                {
-                    continue;
-                }
-                for (auto& position : triangle.positions)
-                {
-                    position = transform(position);
-                }
-                mesh->movement_collision.push_back(triangle);
-            }
+            mesh->lightmap_model_index_count += child->lightmap_model_index_count;
             mesh->attachment_count += 1 + child->attachment_count;
             mesh->maximum_attachment_depth =
                 std::max(mesh->maximum_attachment_depth, 1 + child->maximum_attachment_depth);
