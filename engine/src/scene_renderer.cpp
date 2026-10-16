@@ -122,7 +122,8 @@ void SceneRenderer::triangle(const SceneTriangle& original,
     const auto normal = normalized(cross(original.vertices[1].position - original.vertices[0].position,
                                          original.vertices[2].position - original.vertices[0].position));
     const float illumination =
-        weapon ? 0.95f : 0.58f + 0.36f * std::abs(dot(normal, normalized(Vector3{-0.3f, -0.5f, 1})));
+        weapon ? 0.95f
+               : 0.58f + 0.36f * std::clamp(dot(normal, normalized(Vector3{-0.3f, -0.5f, 1})), 0.0f, 1.0f);
     std::array<SceneVertex, 5> clipped;
     std::size_t vertex_count = 0;
     for (std::size_t corner = 0; corner < 3; ++corner)
@@ -577,11 +578,29 @@ void SceneRenderer::render(const MissionScene& scene,
          "WEAPON " + std::to_string(simulation.selected_weapon_slot() + 1) + " / " +
              std::to_string(simulation.inventory_size()) + "   CONTROLS FROM CONFIG",
          0xffe5e7cfu);
+    int obj_y = 56;
+    for (const auto& obj : simulation.objectives())
+    {
+        const std::string status = obj.completed ? "COMPLETED" : "PENDING";
+        const std::uint32_t col = obj.completed ? 0xff9cba81u : 0xffe5e7cfu;
+        text(18, obj_y, "OBJ " + std::to_string(obj.id) + " " + obj.text + " " + status, col);
+        obj_y += 14;
+    }
+    if (simulation.on_ladder())
+    {
+        text(center_x - 60, height_ - 75, "CLIMBING LADDER", 0xff66ccffu);
+    }
+    if (simulation.mission_completed())
+    {
+        rectangle(center_x - 180, center_y - 60, 360, 75, 0xff17211bu);
+        text(center_x - 130, center_y - 45, "MISSION COMPLETE", 0xff9cba81u, 3);
+        text(center_x - 120, center_y - 10, "OBJECTIVE COMPLETED", 0xffe5e7cfu, 2);
+    }
     if (is_free_camera)
     {
         rectangle(center_x - 200, 14, 400, 42, 0xff17211bu);
-        text(center_x - 185, 20, "FREE CAMERA ACTIVE [F12 TO EXIT]", 0xff66ccffu, 2);
-        text(center_x - 185, 38, "WASD: ROAM | SPACE: UP | SHIFT: DOWN", 0xffdce1d1u);
+        text(center_x - 185, 20, "FREE CAMERA ACTIVE F12 TO EXIT", 0xff66ccffu, 2);
+        text(center_x - 185, 38, "WASD ROAM   SPACE UP   SHIFT DOWN", 0xffdce1d1u);
     }
     if (simulation.damage_flash_remaining() > 0)
     {

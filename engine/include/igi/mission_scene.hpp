@@ -16,7 +16,38 @@ namespace igi::gameplay
 enum class TerrainDetail
 {
     low,
-    high
+    high,
+    enhanced
+};
+
+struct SceneLadder final
+{
+    Vector3 bottom{};
+    Vector3 top{};
+    Vector3 bottom_mount{};
+    Vector3 top_mount{};
+    Vector3 normal{0.0f, 1.0f, 0.0f};
+    float facing_yaw{};
+    float height{};
+};
+
+struct MissionObjective final
+{
+    int id = 1;
+    std::string text = "Steal the truck near the main entrance.";
+    Vector3 target_position{};
+    float trigger_radius = 16.0f;
+    bool completed = false;
+};
+
+struct VerifyObject final
+{
+    std::string model_id;
+    std::string type;
+    std::string name;
+    Vector3 position{};
+    Vector3 rotation{};
+    bool matched = false;
 };
 
 struct SceneTexture final
@@ -197,6 +228,10 @@ struct MissionScene final
     std::shared_ptr<SkeletalAnimationSet> first_person_animations{};
     std::size_t terrain_triangle_count{};
     std::vector<CollisionTriangle> movement_collision_triangles;
+    std::vector<SceneLadder> ladders;
+    std::vector<MissionObjective> objectives;
+    std::size_t verified_object_count{};
+    std::size_t mismatch_object_count{};
 };
 
 [[nodiscard]] MissionScene load_mission(const std::filesystem::path& game_directory,

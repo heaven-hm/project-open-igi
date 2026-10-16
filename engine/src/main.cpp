@@ -213,7 +213,11 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
         else if (argument == "--graphics" || argument == "--gfx")
         {
             const auto setting = next_argument();
-            if (setting == "high")
+            if (setting == "enhanced" || setting == "ultra")
+            {
+                options.terrain_detail = igi::gameplay::TerrainDetail::enhanced;
+            }
+            else if (setting == "high")
             {
                 options.terrain_detail = igi::gameplay::TerrainDetail::high;
             }
@@ -229,6 +233,10 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
             {
                 throw std::runtime_error("Graphics setting must be high, medium, or low");
             }
+        }
+        else if (argument == "--fps")
+        {
+            options.target_fps = parse_integer(next_argument(), 15, 360);
         }
         else if (argument == "--width")
         {
@@ -589,12 +597,19 @@ int run(RuntimeOptions options, const char* executable)
                         free_camera.pitch = simulation.pitch();
                         log(Severity::information,
                             "camera",
-                            "Free camera enabled (WASD: roam, Space: up, Shift: down, F12: toggle)");
+                            "Free camera enabled (WASD: roam, Space: up, Shift: down, F12/T: resume gameplay)");
                     }
                     else
                     {
-                        log(Severity::information, "camera", "Free camera disabled");
+                        simulation.teleport_player(free_camera.position, free_camera.heading, free_camera.pitch);
+                        log(Severity::information, "camera", "Free camera disabled; player teleported to camera position");
                     }
+                }
+                if (event.key.keysym.sym == SDLK_t && free_camera.active)
+                {
+                    free_camera.active = false;
+                    simulation.teleport_player(free_camera.position, free_camera.heading, free_camera.pitch);
+                    log(Severity::information, "camera", "Player teleported to camera position and resumed gameplay");
                 }
             }
             if (event.type == SDL_MOUSEMOTION)

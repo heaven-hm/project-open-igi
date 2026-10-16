@@ -36,6 +36,21 @@ Vector3 rotate(Vector3 position, float heading)
     return {cosine * position.x - sine * position.y, sine * position.x + cosine * position.y, position.z};
 }
 
+Vector3 rotate_euler(Vector3 v, Vector3 rot)
+{
+    if (std::abs(rot.x) < 0.0001f && std::abs(rot.y) < 0.0001f)
+    {
+        return rotate(v, rot.z);
+    }
+    const float cx = std::cos(rot.x), sx = std::sin(rot.x);
+    const float cy = std::cos(rot.y), sy = std::sin(rot.y);
+    const float cz = std::cos(rot.z), sz = std::sin(rot.z);
+
+    const Vector3 v1{v.x, cx * v.y - sx * v.z, sx * v.y + cx * v.z};
+    const Vector3 v2{cy * v1.x + sy * v1.z, v1.y, -sy * v1.x + cy * v1.z};
+    return {cz * v2.x - sz * v2.y, sz * v2.x + cz * v2.y, v2.z};
+}
+
 std::pair<int, int> orient(int orientation, int horizontal, int vertical)
 {
     const int mirrored = (orientation & 4) != 0 ? -horizontal : horizontal;
@@ -79,14 +94,19 @@ void append_terrain(MissionScene& scene,
         }
         const std::size_t node_offset = node_index * 32;
         const auto child_mask = tree.byte(node_offset + 24);
-        const int wanted_depth = detail == TerrainDetail::high ? (distance < 80.0 * units_per_metre    ? 19
-                                                                  : distance < 180.0 * units_per_metre ? 18
-                                                                  : distance < 500.0 * units_per_metre ? 16
-                                                                  : distance < 900.0 * units_per_metre ? 14
-                                                                                                       : 12)
-                                                               : (distance < 180.0 * units_per_metre   ? 16
-                                                                  : distance < 500.0 * units_per_metre ? 14
-                                                                                                       : 11);
+        const int wanted_depth = detail == TerrainDetail::enhanced ? (distance < 120.0 * units_per_metre   ? 20
+                                                                      : distance < 300.0 * units_per_metre   ? 19
+                                                                      : distance < 700.0 * units_per_metre   ? 18
+                                                                      : distance < 1200.0 * units_per_metre  ? 16
+                                                                      : 14)
+                                 : detail == TerrainDetail::high ? (distance < 80.0 * units_per_metre    ? 19
+                                                                    : distance < 180.0 * units_per_metre ? 18
+                                                                    : distance < 500.0 * units_per_metre ? 16
+                                                                    : distance < 900.0 * units_per_metre ? 14
+                                                                    : 12)
+                                                                 : (distance < 180.0 * units_per_metre   ? 16
+                                                                    : distance < 500.0 * units_per_metre ? 14
+                                                                    : 11);
         if (child_mask != 0 && depth < wanted_depth)
         {
             for (int octant = 0; octant < 8; ++octant)
@@ -206,7 +226,11 @@ void append_terrain(MissionScene& scene,
                          " original terrain triangles");
 }
 
-void append_model(MissionScene& scene, const SceneMesh& mesh, Vector3 position, float heading)
+void append_model(MissionScene& scene,
+                  const SceneMesh& mesh,
+                  Vector3 position,
+                  Vector3 rotation,
+                  bool include_collision = true)
 {
     scene.attached_model_count += mesh.attachment_count;
     scene.maximum_attachment_depth = std::max(scene.maximum_attachment_depth, mesh.maximum_attachment_depth);
@@ -214,9 +238,13 @@ void append_model(MissionScene& scene, const SceneMesh& mesh, Vector3 position, 
     {
         for (auto& vertex : triangle.vertices)
         {
-            vertex.position = rotate(vertex.position, heading) + position;
+            vertex.position = rotate_euler(vertex.position, rotation) + position;
         }
         scene.static_triangles.push_back(triangle);
+    }
+    if (!include_collision)
+    {
+        return;
     }
     if (mesh.collision.empty())
     {
@@ -226,7 +254,7 @@ void append_model(MissionScene& scene, const SceneMesh& mesh, Vector3 position, 
             for (std::size_t corner_index = 0; corner_index < 3; ++corner_index)
             {
                 collision.positions[corner_index] =
-                    rotate(triangle.vertices[corner_index].position, heading) + position;
+                    rotate_euler(triangle.vertices[corner_index].position, rotation) + position;
             }
             scene.collision_triangles.push_back(collision);
         }
@@ -237,7 +265,7 @@ void append_model(MissionScene& scene, const SceneMesh& mesh, Vector3 position, 
         {
             for (auto& vertex : triangle.positions)
             {
-                vertex = rotate(vertex, heading) + position;
+                vertex = rotate_euler(vertex, rotation) + position;
             }
             scene.collision_triangles.push_back(triangle);
         }
@@ -246,10 +274,50 @@ void append_model(MissionScene& scene, const SceneMesh& mesh, Vector3 position, 
     {
         for (auto& vertex : triangle.positions)
         {
-            vertex = rotate(vertex, heading) + position;
+            vertex = rotate_euler(vertex, rotation) + position;
         }
         scene.movement_collision_triangles.push_back(triangle);
     }
+}
+
+bool is_model_identifier(const std::string& s)
+{
+    const auto p1 = s.find('_');
+    if (p1 == 0 || p1 == std::string::npos)
+    {
+        return false;
+    }
+    const auto p2 = s.find('_', p1 + 1);
+    if (p2 == std::string::npos || p2 == p1 + 1)
+    {
+        return false;
+    }
+    if (s.size() <= p2 + 1)
+    {
+        return false;
+    }
+    for (std::size_t i = 0; i < p1; ++i)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(s[i])))
+        {
+            return false;
+        }
+    }
+    for (std::size_t i = p1 + 1; i < p2; ++i)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(s[i])))
+        {
+            return false;
+        }
+    }
+    for (std::size_t i = p2 + 1; i < s.size(); ++i)
+    {
+        if (!std::isdigit(static_cast<unsigned char>(s[i])))
+        {
+            return false;
+        }
+    }
+    return true;
 }
 
 } // namespace
@@ -295,6 +363,40 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
     scene.terrain_triangle_count = scene.static_triangles.size();
     scene.movement_collision_triangles = scene.collision_triangles;
     const auto enabled_tasks = assets::gameplay_task_mask(initializer.calls());
+    static const auto resolve_pickup_model = [](std::string_view enum_id) -> std::string
+    {
+        if (enum_id == "WEAPON_ID_COLT") return "317_01_1";
+        if (enum_id == "WEAPON_ID_GLOCK") return "300_01_1";
+        if (enum_id == "WEAPON_ID_DESERTEAGLE") return "316_01_1";
+        if (enum_id == "WEAPON_ID_UZI") return "322_01_1";
+        if (enum_id == "WEAPON_ID_MP5SD") return "324_01_1";
+        if (enum_id == "WEAPON_ID_AK47") return "325_01_1";
+        if (enum_id == "WEAPON_ID_M16") return "323_01_1";
+        if (enum_id == "WEAPON_ID_DRAGUNOV") return "335_01_1";
+        if (enum_id == "WEAPON_ID_SPAS12") return "344_01_1";
+        if (enum_id == "WEAPON_ID_JACKHAMMER") return "342_01_1";
+        if (enum_id == "WEAPON_ID_MINIMI") return "352_01_1";
+        if (enum_id == "WEAPON_ID_GRENADE") return "307_01_1";
+        if (enum_id == "WEAPON_ID_KNIFE") return "306_01_1";
+        if (enum_id.find("AMMO_ID_") == 0) return "310_01_1";
+        return std::string(enum_id);
+    };
+
+    struct ObjectCandidate
+    {
+        std::string model_id;
+        Vector3 position{};
+        Vector3 rotation{};
+        bool is_soldier = false;
+        int team = 1;
+        int task_id = -1;
+        std::string type;
+        std::string name;
+    };
+
+    std::size_t verified_task_count = 0;
+    std::size_t mismatch_count = 0;
+
     for (const auto& call : initializer.calls())
     {
         if (call.function == "Task_New" && call.arguments.size() >= 5 && call.arguments[1].text == "AddAmmo")
@@ -306,60 +408,262 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
             }
             scene.initial_reserve_ammunition = static_cast<std::uint32_t>(ammunition);
         }
-        if (call.function != "Task_New" || call.arguments.size() < 9)
+        if (call.function != "Task_New" || call.arguments.size() < 4)
         {
             continue;
         }
         const auto& arguments = call.arguments;
         const auto& task_type = arguments[1].text;
-        const bool soldier = task_type == "HumanSoldier";
-        const bool rigid =
-            task_type == "EditRigidObj" || task_type == "Building" || task_type == "ExplodeObject";
         const bool enabled = enabled_tasks[static_cast<std::size_t>(&call - initializer.calls().data())];
-        if (!enabled && !soldier)
+
+        std::optional<ObjectCandidate> candidate;
+        if (task_type == "HumanSoldier" || task_type == "HumanSoldierFemale" || task_type == "HumanSoldierRPG")
+        {
+            if (arguments.size() >= 8 && !arguments[7].text.empty())
+            {
+                candidate = ObjectCandidate{
+                    .model_id = arguments[7].text,
+                    .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                                 static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                                 static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                    .rotation = {0, 0, static_cast<float>(arguments[6].number)},
+                    .is_soldier = true,
+                    .team = arguments.size() > 8 ? static_cast<int>(arguments[8].number) : 1,
+                    .task_id = static_cast<int>(arguments[0].number),
+                    .type = task_type,
+                    .name = arguments.size() > 2 ? arguments[2].text : "",
+                };
+            }
+        }
+        else if (task_type == "Door")
+        {
+            if (arguments.size() >= 13 && !arguments[12].text.empty())
+            {
+                candidate = ObjectCandidate{
+                    .model_id = arguments[12].text,
+                    .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                                 static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                                 static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                    .rotation = {static_cast<float>(arguments[9].number),
+                                 static_cast<float>(arguments[10].number),
+                                 static_cast<float>(arguments[11].number)},
+                    .task_id = static_cast<int>(arguments[0].number),
+                    .type = task_type,
+                    .name = arguments.size() > 2 ? arguments[2].text : "",
+                };
+            }
+        }
+        else if (task_type == "Car" || task_type == "Heli")
+        {
+            if (arguments.size() >= 14 && !arguments[13].text.empty())
+            {
+                candidate = ObjectCandidate{
+                    .model_id = arguments[13].text,
+                    .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                                 static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                                 static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                    .rotation = {static_cast<float>(arguments[6].number),
+                                 static_cast<float>(arguments[7].number),
+                                 static_cast<float>(arguments[8].number)},
+                    .task_id = static_cast<int>(arguments[0].number),
+                    .type = task_type,
+                    .name = arguments.size() > 2 ? arguments[2].text : "",
+                };
+            }
+        }
+        else if (task_type == "Switch")
+        {
+            if (arguments.size() >= 12 && !arguments[11].text.empty())
+            {
+                candidate = ObjectCandidate{
+                    .model_id = arguments[11].text,
+                    .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                                 static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                                 static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                    .rotation = {static_cast<float>(arguments[6].number),
+                                 static_cast<float>(arguments[7].number),
+                                 static_cast<float>(arguments[8].number)},
+                    .task_id = static_cast<int>(arguments[0].number),
+                    .type = task_type,
+                    .name = arguments.size() > 2 ? arguments[2].text : "",
+                };
+            }
+        }
+        else if (task_type == "Fence")
+        {
+            if (arguments.size() >= 8 && !arguments[7].text.empty())
+            {
+                candidate = ObjectCandidate{
+                    .model_id = arguments[7].text,
+                    .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                                 static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                                 static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                    .rotation = {arguments.size() > 8 ? static_cast<float>(arguments[8].number) : 0.0f,
+                                 arguments.size() > 9 ? static_cast<float>(arguments[9].number) : 0.0f,
+                                 static_cast<float>(arguments[6].number)},
+                    .task_id = static_cast<int>(arguments[0].number),
+                    .type = task_type,
+                    .name = arguments.size() > 2 ? arguments[2].text : "",
+                };
+            }
+        }
+        else if (task_type == "Wire" && arguments.size() >= 10 && !arguments[9].text.empty())
+        {
+            candidate = ObjectCandidate{
+                .model_id = arguments[9].text,
+                .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                             static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                             static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                .rotation = {},
+                .task_id = static_cast<int>(arguments[0].number),
+                .type = task_type,
+                .name = arguments.size() > 2 ? arguments[2].text : "",
+            };
+        }
+        else if (task_type == "SCamera" && arguments.size() >= 11 && !arguments[10].text.empty())
+        {
+            candidate = ObjectCandidate{
+                .model_id = arguments[10].text,
+                .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                             static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                             static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                .rotation = {arguments.size() > 8 ? static_cast<float>(arguments[8].number) : 0.0f,
+                             arguments.size() > 9 ? static_cast<float>(arguments[9].number) : 0.0f,
+                             static_cast<float>(arguments[6].number)},
+                .task_id = static_cast<int>(arguments[0].number),
+                .type = task_type,
+                .name = arguments.size() > 2 ? arguments[2].text : "",
+            };
+        }
+        else if (arguments.size() >= 10 && !arguments[9].text.empty())
+        {
+            candidate = ObjectCandidate{
+                .model_id = arguments[9].text,
+                .position = {static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
+                             static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
+                             static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)},
+                .rotation = {static_cast<float>(arguments[6].number),
+                             static_cast<float>(arguments[7].number),
+                             static_cast<float>(arguments[8].number)},
+                .task_id = static_cast<int>(arguments[0].number),
+                .type = task_type,
+                .name = arguments.size() > 2 ? arguments[2].text : "",
+            };
+        }
+
+        if (!candidate.has_value())
         {
             continue;
         }
-        if (!soldier && !rigid)
+
+        if (!enabled && !candidate->is_soldier)
         {
             continue;
         }
-        const std::size_t model_argument = soldier ? 7 : 9;
-        if (arguments.size() <= model_argument || arguments[model_argument].text.empty())
+
+        candidate->model_id = resolve_pickup_model(candidate->model_id);
+        if (candidate->model_id.empty() || candidate->model_id == "waypoint" ||
+            !is_model_identifier(candidate->model_id))
         {
             continue;
         }
-        const Vector3 position{static_cast<float>((arguments[3].number - origin[0]) / units_per_metre),
-                               static_cast<float>((arguments[4].number - origin[1]) / units_per_metre),
-                               static_cast<float>((arguments[5].number - origin[2]) / units_per_metre)};
-        if (!finite(position) || length(position) > 1600.0f)
+
+        if (!finite(candidate->position) || length(candidate->position) > 2400.0f)
         {
             continue;
         }
-        const float heading = static_cast<float>(arguments[soldier ? 6 : 8].number);
+
+        if (!library.has_model(candidate->model_id))
+        {
+            if (candidate->type == "Building" || candidate->type == "EditRigidObj" ||
+                candidate->type == "ExplodeObject" || candidate->is_soldier)
+            {
+                ++scene.missing_object_count;
+                ++mismatch_count;
+                diagnostics::log(diagnostics::Severity::warning,
+                                 "scene",
+                                 "Required model missing: " + candidate->model_id);
+            }
+            continue;
+        }
+
+        ++verified_task_count;
         try
         {
-            const auto mesh = library.model(arguments[model_argument].text);
-            if (soldier)
+            const auto mesh = library.model(candidate->model_id);
+            if (candidate->is_soldier)
             {
-                const int team = arguments.size() > 8 ? static_cast<int>(arguments[8].number) : 1;
                 scene.actors.push_back(
-                    {position, heading, static_cast<int>(arguments[0].number), team, mesh});
+                    {candidate->position, candidate->rotation.z, candidate->task_id, candidate->team, mesh});
                 scene.actors.back().source_call_index =
                     static_cast<std::size_t>(&call - initializer.calls().data());
             }
             else
             {
-                append_model(scene, *mesh, position, heading);
+                const bool rigid_collision =
+                    (candidate->type == "Building" || candidate->type == "EditRigidObj" ||
+                     candidate->type == "ExplodeObject" || candidate->type == "Car");
+                append_model(scene, *mesh, candidate->position, candidate->rotation, rigid_collision);
+                if (candidate->model_id == "435_02_1" || candidate->model_id == "344_02_1" ||
+                    candidate->model_id == "417_02_1" || candidate->model_id == "202_01_1" ||
+                    candidate->model_id == "203_01_1" || candidate->model_id.find("ladder") != std::string::npos)
+                {
+                    SceneLadder ladder;
+                    ladder.bottom = candidate->position + Vector3{0.0f, 0.0f, 0.4f};
+                    ladder.top = candidate->position + Vector3{0.0f, 0.0f, 16.0f};
+                    ladder.normal = rotate_euler(Vector3{0.0f, 1.0f, 0.0f}, candidate->rotation);
+                    ladder.bottom_mount = ladder.bottom + ladder.normal * 0.8f;
+                    ladder.top_mount = ladder.top - ladder.normal * 0.6f + Vector3{0.0f, 0.0f, 0.5f};
+                    ladder.facing_yaw = candidate->rotation.z;
+                    ladder.height = ladder.top.z - ladder.bottom.z;
+                    scene.ladders.push_back(ladder);
+                }
             }
             ++scene.loaded_object_count;
         }
         catch (const std::exception& exception)
         {
             ++scene.missing_object_count;
+            ++mismatch_count;
             diagnostics::log(diagnostics::Severity::warning, "scene", exception.what());
         }
     }
+
+    // Default ladder fallback for Level 1 guard/water tower
+    if (scene.ladders.empty() && mission_number == 1)
+    {
+        SceneLadder tower_ladder;
+        tower_ladder.bottom = Vector3{-35.0f, 62.0f, 0.5f};
+        tower_ladder.top = Vector3{-35.0f, 62.0f, 12.0f};
+        tower_ladder.normal = Vector3{0.0f, 1.0f, 0.0f};
+        tower_ladder.bottom_mount = tower_ladder.bottom + Vector3{0.0f, 0.8f, 0.0f};
+        tower_ladder.top_mount = tower_ladder.top - Vector3{0.0f, 0.6f, -0.5f};
+        tower_ladder.height = 11.5f;
+        tower_ladder.facing_yaw = 3.14159f;
+        scene.ladders.push_back(tower_ladder);
+    }
+
+    // Authored mission objectives for Level 1 (Steal the truck near the main entrance)
+    if (mission_number == 1)
+    {
+        MissionObjective obj1;
+        obj1.id = 1;
+        obj1.text = "Steal the truck near the main entrance.";
+        obj1.target_position = {static_cast<float>((24956676.0 - origin[0]) / units_per_metre),
+                                static_cast<float>((-56086240.0 - origin[1]) / units_per_metre),
+                                static_cast<float>((174414608.0 - origin[2]) / units_per_metre)};
+        obj1.trigger_radius = 18.0f;
+        obj1.completed = false;
+        scene.objectives.push_back(obj1);
+    }
+
+    scene.verified_object_count = verified_task_count;
+    scene.mismatch_object_count = mismatch_count;
+    diagnostics::log(diagnostics::Severity::information,
+                     "verify",
+                     "Level verification: " + std::to_string(scene.loaded_object_count) +
+                         " objects loaded, " + std::to_string(verified_task_count) +
+                         " tasks verified, " + std::to_string(scene.missing_object_count) + " missing models");
     const auto parameter_bytes =
         assets::read_file(assets::resolve_path(game_directory, "humanplayer/humanplayer.qvm"));
     const assets::QvmInitializer parameters{assets::BinaryView(parameter_bytes)};

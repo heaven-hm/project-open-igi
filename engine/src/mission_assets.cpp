@@ -194,6 +194,12 @@ std::vector<std::uint32_t> MissionAssets::terrain_textures(const std::filesystem
     return indices;
 }
 
+bool MissionAssets::has_model(const std::string& name) const
+{
+    const auto normalized = normalize_name(name);
+    return meshes_.contains(normalized) || files_.contains(normalized + ".mef");
+}
+
 std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& name)
 {
     const auto normalized = normalize_name(name);

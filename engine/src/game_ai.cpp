@@ -38,10 +38,6 @@ void GameSimulation::move_actor(std::size_t actor_index, Vector3 destination, fl
             actor.route_destination = destination;
             actor.route_retry_time = 1.0f;
         }
-        if (actor.route.empty())
-        {
-            return;
-        }
         while (actor.route_index < actor.route.size() &&
                length(actor.route[actor.route_index] - actor.position) < 0.6f)
         {
@@ -61,7 +57,7 @@ void GameSimulation::move_actor(std::size_t actor_index, Vector3 destination, fl
     actor.heading = std::atan2(-horizontal.x, horizontal.y);
     auto next_position = movement_world_.move_capsule(
         actor.position, normalized(horizontal) * std::min(speed * tick_duration, remaining), 1.8f);
-    const auto floor = movement_world_.raycast(next_position + Vector3{0, 0, 0.4f}, {0, 0, -1}, 0.9f, true);
+    const auto floor = movement_world_.raycast(next_position + Vector3{0, 0, 1.5f}, {0, 0, -1}, 5.0f, true);
     if (floor.hit)
     {
         next_position.z = floor.position.z;
@@ -189,8 +185,18 @@ void GameSimulation::advance_actors()
             const auto obstruction = world_.raycast(eye, direction, distance);
             visible = !obstruction.hit || obstruction.distance > distance - 0.3f;
         }
-        const bool heard_shot =
-            weapon_.muzzle_flash_remaining > 0 && distance < 18.0f && !weapon_parameters().melee;
+        float hearing_radius = 45.0f;
+        const auto* cur_weapon = weapon_definition();
+        if (cur_weapon && (cur_weapon->identifier == "WEAPON_ID_MP5SD" ||
+                           cur_weapon->parameters.name.find("SD") != std::string::npos))
+        {
+            hearing_radius = 3.0f;
+        }
+        else if (weapon_parameters().melee)
+        {
+            hearing_radius = 2.0f;
+        }
+        const bool heard_shot = weapon_.muzzle_flash_remaining > 0 && distance < hearing_radius;
         if (visible || heard_shot)
         {
             actor.last_seen_position = player_position();
@@ -295,17 +301,17 @@ void GameSimulation::advance_actor_animations()
         }
         else if (displacement > 0.001f)
         {
-            if (actor.behavior == ActorBehavior::investigating && definition.animations->clips.contains(48))
-            {
-                identifier = 48;
-            }
-            else if (definition.animations->clips.contains(3))
+            if (definition.animations->clips.contains(3))
             {
                 identifier = 3;
             }
             else if (definition.animations->clips.contains(34))
             {
                 identifier = 34;
+            }
+            else if (definition.animations->clips.contains(48))
+            {
+                identifier = 48;
             }
         }
         const auto found = definition.animations->clips.find(identifier);

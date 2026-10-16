@@ -135,6 +135,23 @@ class GameSimulation final : private HumanMovementWorld
         return crouching_;
     }
 
+    [[nodiscard]] bool on_ladder() const noexcept
+    {
+        return on_ladder_;
+    }
+
+    [[nodiscard]] const std::vector<MissionObjective>& objectives() const noexcept
+    {
+        return objectives_;
+    }
+
+    [[nodiscard]] bool mission_completed() const noexcept
+    {
+        return mission_completed_;
+    }
+
+    void teleport_player(Vector3 position, float heading, float pitch);
+
     [[nodiscard]] const WeaponState& weapon() const noexcept
     {
         return weapon_;
@@ -240,6 +257,10 @@ class GameSimulation final : private HumanMovementWorld
     bool jump_was_pressed_{};
     bool crouching_{};
     bool aiming_{};
+    bool on_ladder_{};
+    std::size_t active_ladder_index_{};
+    std::vector<MissionObjective> objectives_;
+    bool mission_completed_{};
     int difficulty_{1};
     std::uint64_t tick_count_{};
 };

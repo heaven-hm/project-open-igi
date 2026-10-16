@@ -19,6 +19,7 @@ class MissionAssets final
                   const std::filesystem::path& mission_directory,
                   const std::filesystem::path& cache_directory);
     [[nodiscard]] std::shared_ptr<gameplay::SceneMesh> model(const std::string& name);
+    [[nodiscard]] bool has_model(const std::string& name) const;
     [[nodiscard]] std::vector<std::uint32_t> terrain_textures(const std::filesystem::path& path);
 
     [[nodiscard]] std::vector<gameplay::SceneTexture> take_textures()

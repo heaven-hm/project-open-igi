@@ -157,9 +157,42 @@ void GameSimulation::restart()
         actor.animation_identifier = original_actor.stand_animation;
         actors_.push_back(std::move(actor));
     }
+    on_ladder_ = false;
+    active_ladder_index_ = 0;
+    objectives_ = scene_.objectives;
+    mission_completed_ = false;
     diagnostics::log(diagnostics::Severity::information,
                      "gameplay",
                      "Mission initialized; player grounded on original collision geometry");
+}
+
+void GameSimulation::teleport_player(Vector3 position, float heading, float pitch)
+{
+    heading_ = std::remainder(heading, 2.0f * std::numbers::pi_v<float>);
+    pitch_ = std::clamp(pitch, -1.4f, 1.4f);
+    const auto ground = movement_world_.raycast(position + Vector3{0, 0, 0.5f}, {0, 0, -1}, 50.0f, true);
+    if (ground.hit)
+    {
+        position.z = ground.position.z;
+        player_.slope_normal = ground.normal;
+        player_.movement_flags |= HumanMovementIntegrator::grounded_flag;
+    }
+    else
+    {
+        player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
+    }
+    player_.world_position = engine_position(position);
+    player_.movement_velocity = {};
+    player_.position_adjustment = {};
+    player_.animation_movement = {};
+    on_ladder_ = false;
+    locomotion_state_ = 0;
+    animation_time_ = 0;
+    previous_animation_state_ = -1;
+    diagnostics::log(diagnostics::Severity::information,
+                     "player",
+                     "Player teleported to (" + std::to_string(position.x) + ", " +
+                         std::to_string(position.y) + ", " + std::to_string(position.z) + ")");
 }
 
 Vector3 GameSimulation::player_position() const noexcept
@@ -232,6 +265,22 @@ void GameSimulation::tick(const PlayerInput& input)
     advance_actors();
     advance_actor_animations();
     advance_projectiles();
+    const auto player_current_pos = player_position();
+    for (auto& obj : objectives_)
+    {
+        if (!obj.completed)
+        {
+            const float dist = length(player_current_pos - obj.target_position);
+            if (dist <= obj.trigger_radius)
+            {
+                obj.completed = true;
+                mission_completed_ = true;
+                diagnostics::log(diagnostics::Severity::information,
+                                 "mission",
+                                 "Objective completed: " + obj.text);
+            }
+        }
+    }
     fire_was_pressed_ = input.firing;
     ++tick_count_;
     if (!finite(player_position()) || std::abs(player_position().z) > 5000)
@@ -276,6 +325,77 @@ Vector3 GameSimulation::animation_delta(int state)
 
 void GameSimulation::advance_player(const PlayerInput& input)
 {
+    if (!on_ladder_)
+    {
+        const auto p = player_position();
+        for (std::size_t idx = 0; idx < scene_.ladders.size(); ++idx)
+        {
+            const auto& ladder = scene_.ladders[idx];
+            const float d_bottom = length(p - ladder.bottom_mount);
+            const float d_top = length(p - ladder.top_mount);
+            if ((d_bottom < 1.8f || d_top < 1.8f) && input.forward > 0)
+            {
+                on_ladder_ = true;
+                active_ladder_index_ = idx;
+                player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
+                player_.movement_velocity = {};
+                diagnostics::log(diagnostics::Severity::debug, "player", "Mounted ladder " + std::to_string(idx));
+                break;
+            }
+        }
+    }
+
+    if (on_ladder_ && active_ladder_index_ < scene_.ladders.size())
+    {
+        const auto& ladder = scene_.ladders[active_ladder_index_];
+        if (input.jumping)
+        {
+            on_ladder_ = false;
+            player_.movement_velocity = {-ladder.normal.x * 2.0f * units_per_metre / 30.0f,
+                                         -ladder.normal.y * 2.0f * units_per_metre / 30.0f,
+                                         3.0f * units_per_metre / 30.0f};
+            diagnostics::log(diagnostics::Severity::debug, "player", "Dismounted ladder via jump");
+        }
+        else
+        {
+            float climb_speed = 0.0f;
+            if (input.forward > 0)
+            {
+                climb_speed = 2.2f / 30.0f;
+            }
+            else if (input.forward < 0)
+            {
+                climb_speed = input.crouching ? -4.5f / 30.0f : -2.2f / 30.0f;
+            }
+            auto pos = player_position();
+            pos.z += climb_speed;
+            pos.x = ladder.bottom.x + ladder.normal.x * 0.4f;
+            pos.y = ladder.bottom.y + ladder.normal.y * 0.4f;
+
+            if (pos.z >= ladder.top.z)
+            {
+                on_ladder_ = false;
+                pos = ladder.top_mount;
+                player_.world_position = engine_position(pos);
+                player_.movement_velocity = {};
+                diagnostics::log(diagnostics::Severity::debug, "player", "Reached top of ladder");
+            }
+            else if (pos.z <= ladder.bottom.z)
+            {
+                on_ladder_ = false;
+                pos = ladder.bottom_mount;
+                player_.world_position = engine_position(pos);
+                player_.movement_velocity = {};
+                diagnostics::log(diagnostics::Severity::debug, "player", "Reached bottom of ladder");
+            }
+            else
+            {
+                player_.world_position = engine_position(pos);
+                return;
+            }
+        }
+    }
+
     if (input.crouching || !crouching_ ||
         !movement_world_.raycast(player_position() + Vector3{0, 0, 1.05f}, {0, 0, 1}, 0.76f).hit)
     {
@@ -403,6 +523,33 @@ void GameSimulation::query_ground(HumanMovementState& human,
         human.slope_normal = ground.normal;
         if (!was_grounded)
         {
+            const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
+            constexpr float threshold_speed = 14.0f;
+            if (landing_speed > threshold_speed && health_ > 0.0f)
+            {
+                const float damage_ratio = (landing_speed - threshold_speed) / 13.0f;
+                const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
+                health_ = std::max(0.0f, health_ - damage);
+                damage_flash_remaining_ = 0.35f;
+                diagnostics::log(diagnostics::Severity::information,
+                                 "player",
+                                 "Player suffered fall damage: " + std::to_string(damage) +
+                                     ", speed: " + std::to_string(landing_speed) + " m/s");
+                for (auto& actor : actors_)
+                {
+                    if (!actor.active || actor.behavior == ActorBehavior::dead)
+                    {
+                        continue;
+                    }
+                    const float dist = length(actor.position - target);
+                    if (dist < 10.0f && actor.behavior != ActorBehavior::attacking)
+                    {
+                        actor.behavior = ActorBehavior::investigating;
+                        actor.last_seen_position = target;
+                        actor.awareness_time = 5.0f;
+                    }
+                }
+            }
             human.movement_velocity = {};
             human.impact_velocity = {};
         }
