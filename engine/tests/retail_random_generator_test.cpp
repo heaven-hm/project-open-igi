@@ -5,6 +5,7 @@
 #include <exception>
 #include <iostream>
 #include <stdexcept>
+#include <string_view>
 
 extern "C"
 {
@@ -19,10 +20,18 @@ std::uint32_t igi_retail_random_draw(igi::gameplay::RetailRandomGenerator* gener
 }
 }
 
-int main()
+int main(int argument_count, char** arguments)
 {
     try
     {
+        if (argument_count == 2 && std::string_view(arguments[1]) == "--wait-for-instrumentation")
+        {
+            std::string synchronization;
+            if (!std::getline(std::cin, synchronization))
+            {
+                throw std::runtime_error("Instrumentation synchronization input is missing");
+            }
+        }
         constexpr std::array<std::uint32_t, 8> original_words{
             277206966u, 1246844079u, 2440000437u, 3394835923u,
             283362048u, 1236019352u, 2412125716u, 3382577080u};
