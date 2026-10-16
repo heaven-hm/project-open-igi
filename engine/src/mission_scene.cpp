@@ -242,6 +242,7 @@ void append_terrain(MissionScene& scene,
     {
         throw std::runtime_error("Invalid terrain record table or texture atlas");
     }
+    const std::size_t first_terrain_triangle = scene.static_triangles.size();
     std::size_t visits = 0;
     std::function<void(std::size_t, int, int, std::array<double, 3>)> descend;
     descend = [&](std::size_t node_index, int depth, int orientation, std::array<double, 3> centre)
@@ -349,6 +350,7 @@ void append_terrain(MissionScene& scene,
                                     units_per_metre)});
             texture_axes.push_back(static_cast<int>((packed >> 6) & 3));
         }
+        const std::size_t first_chunk_triangle = scene.static_triangles.size();
         for (std::size_t triangle_index = 0; triangle_index < triangle_count; ++triangle_index)
         {
             const auto packed = commands.unsigned_integer(command_offset + 8 + triangle_index * 4);
@@ -394,12 +396,100 @@ void append_terrain(MissionScene& scene,
                                                   triangle.vertices[1].position,
                                                   triangle.vertices[2].position}});
         }
+        if (triangle_count > 0)
+        {
+            Vector3 bounds_minimum = positions.front();
+            Vector3 bounds_maximum = positions.front();
+            for (const Vector3 vertex_position : positions)
+            {
+                bounds_minimum.x = std::min(bounds_minimum.x, vertex_position.x);
+                bounds_minimum.y = std::min(bounds_minimum.y, vertex_position.y);
+                bounds_minimum.z = std::min(bounds_minimum.z, vertex_position.z);
+                bounds_maximum.x = std::max(bounds_maximum.x, vertex_position.x);
+                bounds_maximum.y = std::max(bounds_maximum.y, vertex_position.y);
+                bounds_maximum.z = std::max(bounds_maximum.z, vertex_position.z);
+            }
+            const Vector3 bounds_center = (bounds_minimum + bounds_maximum) * 0.5f;
+            const Vector3 bounds_extents = bounds_maximum - bounds_center;
+            const float bounds_radius = length(bounds_extents);
+            if (!finite(bounds_center) || !std::isfinite(bounds_radius) || bounds_radius < 0.0f)
+            {
+                throw std::runtime_error("Terrain render chunk contains invalid bounds");
+            }
+            scene.terrain_render_chunks.push_back(
+                {first_chunk_triangle, triangle_count, bounds_center, bounds_radius});
+        }
     };
     descend(1, 0, 0, {});
+    std::size_t next_chunk_triangle = first_terrain_triangle;
+    for (const TerrainRenderChunk& terrain_chunk : scene.terrain_render_chunks)
+    {
+        if (terrain_chunk.triangle_count == 0 || terrain_chunk.first_triangle != next_chunk_triangle ||
+            terrain_chunk.triangle_count > scene.static_triangles.size() - next_chunk_triangle)
+        {
+            throw std::runtime_error("Terrain render chunks do not cover the emitted triangle sequence");
+        }
+        next_chunk_triangle += terrain_chunk.triangle_count;
+    }
+    if (next_chunk_triangle != scene.static_triangles.size())
+    {
+        throw std::runtime_error("Terrain render chunks omit emitted terrain triangles");
+    }
+    constexpr std::size_t terrain_leaf_chunks_per_render_chunk = 128;
+    std::vector<TerrainRenderChunk> grouped_render_chunks;
+    grouped_render_chunks.reserve(
+        (scene.terrain_render_chunks.size() + terrain_leaf_chunks_per_render_chunk - 1) /
+        terrain_leaf_chunks_per_render_chunk);
+    for (std::size_t first_leaf_chunk = 0; first_leaf_chunk < scene.terrain_render_chunks.size();
+         first_leaf_chunk += terrain_leaf_chunks_per_render_chunk)
+    {
+        const std::size_t leaf_chunk_end =
+            std::min(scene.terrain_render_chunks.size(), first_leaf_chunk + terrain_leaf_chunks_per_render_chunk);
+        const TerrainRenderChunk& first_leaf = scene.terrain_render_chunks[first_leaf_chunk];
+        Vector3 bounds_minimum = first_leaf.bounds_center -
+                                 Vector3{first_leaf.bounds_radius, first_leaf.bounds_radius, first_leaf.bounds_radius};
+        Vector3 bounds_maximum = first_leaf.bounds_center +
+                                 Vector3{first_leaf.bounds_radius, first_leaf.bounds_radius, first_leaf.bounds_radius};
+        std::size_t grouped_triangle_count = first_leaf.triangle_count;
+        for (std::size_t leaf_chunk_index = first_leaf_chunk + 1; leaf_chunk_index < leaf_chunk_end;
+             ++leaf_chunk_index)
+        {
+            const TerrainRenderChunk& leaf_chunk = scene.terrain_render_chunks[leaf_chunk_index];
+            const Vector3 leaf_bounds_minimum =
+                leaf_chunk.bounds_center - Vector3{leaf_chunk.bounds_radius,
+                                                   leaf_chunk.bounds_radius,
+                                                   leaf_chunk.bounds_radius};
+            const Vector3 leaf_bounds_maximum =
+                leaf_chunk.bounds_center + Vector3{leaf_chunk.bounds_radius,
+                                                   leaf_chunk.bounds_radius,
+                                                   leaf_chunk.bounds_radius};
+            bounds_minimum.x = std::min(bounds_minimum.x, leaf_bounds_minimum.x);
+            bounds_minimum.y = std::min(bounds_minimum.y, leaf_bounds_minimum.y);
+            bounds_minimum.z = std::min(bounds_minimum.z, leaf_bounds_minimum.z);
+            bounds_maximum.x = std::max(bounds_maximum.x, leaf_bounds_maximum.x);
+            bounds_maximum.y = std::max(bounds_maximum.y, leaf_bounds_maximum.y);
+            bounds_maximum.z = std::max(bounds_maximum.z, leaf_bounds_maximum.z);
+            if (leaf_chunk.triangle_count > std::numeric_limits<std::size_t>::max() - grouped_triangle_count)
+            {
+                throw std::runtime_error("Terrain render chunk triangle count overflow");
+            }
+            grouped_triangle_count += leaf_chunk.triangle_count;
+        }
+        const Vector3 bounds_center = (bounds_minimum + bounds_maximum) * 0.5f;
+        const float bounds_radius = length(bounds_maximum - bounds_center);
+        if (!finite(bounds_center) || !std::isfinite(bounds_radius))
+        {
+            throw std::runtime_error("Grouped terrain render chunk contains invalid bounds");
+        }
+        grouped_render_chunks.push_back(
+            {first_leaf.first_triangle, grouped_triangle_count, bounds_center, bounds_radius});
+    }
+    scene.terrain_render_chunks = std::move(grouped_render_chunks);
     diagnostics::log(diagnostics::Severity::information,
                      "terrain",
                      "Loaded " + std::to_string(scene.static_triangles.size()) +
-                         " original terrain triangles");
+                         " original terrain triangles across " +
+                         std::to_string(scene.terrain_render_chunks.size()) + " render chunks");
 }
 
 void append_model(MissionScene& scene,

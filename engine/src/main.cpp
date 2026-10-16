@@ -918,6 +918,19 @@ int run(RuntimeOptions options, const char* executable)
         }
     }
     const double elapsed = std::chrono::duration<double>(Clock::now() - start_time).count();
+    if (options.benchmark && frame_count > 0 && elapsed > 0.0)
+    {
+        log(Severity::information,
+            "benchmark",
+            "Average FPS=" + std::to_string(static_cast<double>(frame_count) / elapsed) +
+                ", average frame time=" +
+                std::to_string(elapsed * 1000.0 / static_cast<double>(frame_count)) +
+                " ms, terrain triangles submitted=" +
+                std::to_string(frame.terrain_triangles_submitted()) + "/" +
+                std::to_string(scene.terrain_triangle_count) + ", terrain chunks culled=" +
+                std::to_string(frame.terrain_chunks_culled()) + "/" +
+                std::to_string(scene.terrain_render_chunks.size()));
+    }
     log(Severity::information,
         "application",
         "Stopped cleanly; ticks=" + std::to_string(simulation.tick_count()) +

@@ -1,6 +1,7 @@
 #include "igi/scene_renderer.hpp"
 
 #include <algorithm>
+#include <cmath>
 #include <iostream>
 #include <stdexcept>
 
@@ -259,9 +260,53 @@ int main()
             throw std::runtime_error("Anisotropic filtering must retain detail along a stretched texture "
                                      "footprint and match parallel rendering");
         }
+
+        MissionScene terrain_culling_scene;
+        terrain_culling_scene.collision_triangles = scene.collision_triangles;
+        terrain_culling_scene.textures = {{1, 1, {0xffa0a0a0u}}};
+        GameSimulation terrain_culling_simulation(terrain_culling_scene);
+        const Vector3 terrain_camera = terrain_culling_simulation.camera_position();
+        const Vector3 terrain_forward = terrain_culling_simulation.aim_direction();
+        const float terrain_heading = terrain_culling_simulation.view_heading();
+        const Vector3 terrain_right{std::cos(terrain_heading), std::sin(terrain_heading), 0.0f};
+        const Vector3 terrain_up = normalized(cross(terrain_right, terrain_forward));
+        const auto make_terrain_triangle = [&](Vector3 center)
+        {
+            return SceneTriangle{{SceneVertex{center - terrain_right * 2.0f - terrain_up * 2.0f, 0, 0},
+                                  SceneVertex{center + terrain_right * 2.0f - terrain_up * 2.0f, 1, 0},
+                                  SceneVertex{center + terrain_up * 2.0f, 0.5f, 1}},
+                                 0};
+        };
+        const Vector3 visible_chunk_center = terrain_camera + terrain_forward * 12.0f;
+        const Vector3 offscreen_chunk_center = visible_chunk_center + terrain_right * 100.0f;
+        const Vector3 rear_chunk_center = terrain_camera - terrain_forward * 12.0f;
+        terrain_culling_scene.static_triangles = {make_terrain_triangle(visible_chunk_center),
+                                                   make_terrain_triangle(offscreen_chunk_center),
+                                                   make_terrain_triangle(rear_chunk_center)};
+        terrain_culling_scene.terrain_triangle_count = terrain_culling_scene.static_triangles.size();
+        terrain_culling_scene.terrain_render_chunks = {{0, 1, visible_chunk_center, 3.0f},
+                                                       {1, 1, offscreen_chunk_center, 3.0f},
+                                                       {2, 1, rear_chunk_center, 3.0f}};
+        MissionScene uncullled_terrain_scene = terrain_culling_scene;
+        uncullled_terrain_scene.terrain_render_chunks.clear();
+        GameSimulation uncullled_terrain_simulation(uncullled_terrain_scene);
+        SceneRenderer terrain_culling_renderer(320, 240, 1);
+        SceneRenderer uncullled_terrain_renderer(320, 240, 1);
+        terrain_culling_renderer.render(terrain_culling_scene, terrain_culling_simulation);
+        uncullled_terrain_renderer.render(uncullled_terrain_scene, uncullled_terrain_simulation);
+        if (!std::equal(terrain_culling_renderer.pixels().begin(),
+                        terrain_culling_renderer.pixels().end(),
+                        uncullled_terrain_renderer.pixels().begin()) ||
+            terrain_culling_renderer.visible_triangles() != uncullled_terrain_renderer.visible_triangles() ||
+            terrain_culling_renderer.terrain_chunks_culled() != 2 ||
+            terrain_culling_renderer.terrain_triangles_submitted() != 1 ||
+            uncullled_terrain_renderer.terrain_triangles_submitted() != 3)
+        {
+            throw std::runtime_error("Terrain chunk culling must preserve pixels while skipping offscreen chunks");
+        }
         std::cout << "Renderer probe passed: perspective projection, nearest depth, near-plane clipping, "
-                     "diffuse/lightmap modulation, invalid texture references, mip filtering and anisotropic "
-                     "filtering\n";
+                     "diffuse/lightmap modulation, invalid texture references, mip filtering, anisotropic "
+                     "filtering and pixel-identical terrain chunk culling\n";
         return 0;
     }
     catch (const std::exception& exception)

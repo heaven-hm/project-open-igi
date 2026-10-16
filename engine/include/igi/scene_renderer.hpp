@@ -55,6 +55,16 @@ class SceneRenderer final
         return visible_triangles_;
     }
 
+    [[nodiscard]] std::size_t terrain_chunks_culled() const noexcept
+    {
+        return terrain_chunks_culled_;
+    }
+
+    [[nodiscard]] std::size_t terrain_triangles_submitted() const noexcept
+    {
+        return terrain_triangles_submitted_;
+    }
+
   private:
     void triangle(const SceneTriangle& triangle,
                   const std::vector<SceneTexture>& textures,
@@ -80,6 +90,8 @@ class SceneRenderer final
     std::vector<std::uint32_t> pixels_;
     std::vector<float> depth_;
     std::uint64_t visible_triangles_{};
+    std::size_t terrain_chunks_culled_{};
+    std::size_t terrain_triangles_submitted_{};
     int first_scanline_{};
     int last_scanline_{};
     std::vector<std::unique_ptr<SceneRenderer>> render_workers_;

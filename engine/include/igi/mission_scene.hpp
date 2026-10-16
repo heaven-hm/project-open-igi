@@ -95,6 +95,14 @@ struct SceneTriangle final
     std::int32_t lightmap_model_index = -1;
 };
 
+struct TerrainRenderChunk final
+{
+    std::size_t first_triangle{};
+    std::size_t triangle_count{};
+    Vector3 bounds_center{};
+    float bounds_radius{};
+};
+
 struct SceneSkinTriangle final
 {
     std::array<SceneVertex, 3> vertices;
@@ -333,6 +341,7 @@ struct MissionScene final
     std::shared_ptr<SceneMesh> first_person_mesh{};
     std::shared_ptr<SkeletalAnimationSet> first_person_animations{};
     std::size_t terrain_triangle_count{};
+    std::vector<TerrainRenderChunk> terrain_render_chunks;
     std::vector<CollisionTriangle> movement_collision_triangles;
     std::vector<SceneLadder> ladders;
     std::vector<SceneDoor> doors;

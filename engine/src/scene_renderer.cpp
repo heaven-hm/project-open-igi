@@ -174,6 +174,34 @@ std::uint32_t texture_sample(const SceneTexture& texture,
     return mix_color(lower_color, upper_color, bounded_level - static_cast<float>(lower_index));
 }
 
+bool terrain_chunk_intersects_view(const TerrainRenderChunk& terrain_chunk,
+                                   Vector3 camera,
+                                   Vector3 right,
+                                   Vector3 up,
+                                   Vector3 forward,
+                                   float horizontal_half_view_ratio,
+                                   float vertical_half_view_ratio) noexcept
+{
+    const Vector3 camera_relative_center = terrain_chunk.bounds_center - camera;
+    const float horizontal_position = dot(camera_relative_center, right);
+    const float vertical_position = dot(camera_relative_center, up);
+    const float forward_position = dot(camera_relative_center, forward);
+    const float furthest_forward_position = forward_position + terrain_chunk.bounds_radius;
+    const float nearest_forward_position = forward_position - terrain_chunk.bounds_radius;
+
+    if (furthest_forward_position < 0.05f || nearest_forward_position > 1400.0f)
+    {
+        return false;
+    }
+
+    const float conservative_forward_extent = std::max(0.05f, furthest_forward_position);
+    const float horizontal_extent =
+        conservative_forward_extent * horizontal_half_view_ratio + terrain_chunk.bounds_radius;
+    const float vertical_extent =
+        conservative_forward_extent * vertical_half_view_ratio + terrain_chunk.bounds_radius;
+    return std::abs(horizontal_position) <= horizontal_extent && std::abs(vertical_position) <= vertical_extent;
+}
+
 } // namespace
 
 SceneRenderer::SceneRenderer(int width,
@@ -766,9 +794,17 @@ void SceneRenderer::render(const MissionScene& scene,
                       pixels_.begin() + first_pixel);
         }
         visible_triangles_ = render_workers_.front()->visible_triangles_;
+        terrain_chunks_culled_ = render_workers_.front()->terrain_chunks_culled_;
+        terrain_triangles_submitted_ = render_workers_.front()->terrain_triangles_submitted_;
         return;
     }
     visible_triangles_ = 0;
+    terrain_chunks_culled_ = 0;
+    terrain_triangles_submitted_ = 0;
+    if (scene.terrain_triangle_count > scene.static_triangles.size())
+    {
+        throw std::runtime_error("Terrain triangle count exceeds the static scene triangle array");
+    }
     std::fill(depth_.begin() + static_cast<std::ptrdiff_t>(first_scanline_) * width_,
               depth_.begin() + static_cast<std::ptrdiff_t>(last_scanline_) * width_, 0.0f);
     for (int row = first_scanline_; row < last_scanline_; ++row)
@@ -787,16 +823,71 @@ void SceneRenderer::render(const MissionScene& scene,
     const Vector3 up = normalized(cross(right, forward));
     const float zoom_factor = is_free_camera ? 1.0f : simulation.zoom_factor();
     const float focal_length = static_cast<float>(width_) * 0.55f * zoom_factor;
-    for (std::size_t triangle_index = 0; triangle_index < scene.static_triangles.size(); ++triangle_index)
+    const auto render_static_triangle = [&](std::size_t triangle_index)
     {
         const auto& surface = scene.static_triangles[triangle_index];
         if (surface.firing_only)
         {
-            continue;
+            return;
         }
         const auto& fog =
             triangle_index < scene.terrain_triangle_count ? scene.terrain_fog : scene.object_fog;
         triangle(surface, scene.textures, camera, right, up, forward, focal_length, false, fog);
+    };
+
+    if (scene.terrain_render_chunks.empty())
+    {
+        for (std::size_t triangle_index = 0; triangle_index < scene.static_triangles.size(); ++triangle_index)
+        {
+            if (triangle_index < scene.terrain_triangle_count)
+            {
+                ++terrain_triangles_submitted_;
+            }
+            render_static_triangle(triangle_index);
+        }
+    }
+    else
+    {
+        std::size_t next_chunk_triangle = 0;
+        for (const TerrainRenderChunk& terrain_chunk : scene.terrain_render_chunks)
+        {
+            if (terrain_chunk.triangle_count == 0 || terrain_chunk.first_triangle != next_chunk_triangle ||
+                terrain_chunk.triangle_count > scene.terrain_triangle_count - next_chunk_triangle ||
+                !finite(terrain_chunk.bounds_center) || !std::isfinite(terrain_chunk.bounds_radius) ||
+                terrain_chunk.bounds_radius < 0.0f)
+            {
+                throw std::runtime_error("Terrain render chunk metadata is invalid or incomplete");
+            }
+            next_chunk_triangle += terrain_chunk.triangle_count;
+            if (!terrain_chunk_intersects_view(terrain_chunk,
+                                               camera,
+                                               right,
+                                               up,
+                                               forward,
+                                               static_cast<float>(width_) / (2.0f * focal_length),
+                                               static_cast<float>(height_) / (2.0f * focal_length)))
+            {
+                ++terrain_chunks_culled_;
+                continue;
+            }
+            terrain_triangles_submitted_ += terrain_chunk.triangle_count;
+            const std::size_t chunk_end_triangle = terrain_chunk.first_triangle + terrain_chunk.triangle_count;
+            for (std::size_t triangle_index = terrain_chunk.first_triangle; triangle_index < chunk_end_triangle;
+                 ++triangle_index)
+            {
+                render_static_triangle(triangle_index);
+            }
+        }
+        if (next_chunk_triangle != scene.terrain_triangle_count)
+        {
+            throw std::runtime_error("Terrain render chunks do not cover every terrain triangle");
+        }
+        for (std::size_t triangle_index = scene.terrain_triangle_count;
+             triangle_index < scene.static_triangles.size();
+             ++triangle_index)
+        {
+            render_static_triangle(triangle_index);
+        }
     }
     for (const auto& door : simulation.doors())
     {
