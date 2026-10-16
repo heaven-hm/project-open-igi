@@ -164,6 +164,15 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
     const QvmInitializer magic_script{BinaryView(magic_bytes)};
     for (const auto& call : magic_script.calls())
     {
+        if (call.function == "DefineMagicObj" && call.arguments.size() >= 3)
+        {
+            const auto attachment_name = normalize_name(call.arguments[0].text);
+            const auto model_name = normalize_name(call.arguments[1].text);
+            if (!attachment_name.empty() && !model_name.empty())
+            {
+                magic_attachment_models_.try_emplace(attachment_name, model_name);
+            }
+        }
         if (call.function == "DefineMagicObj" && call.arguments.size() >= 3 &&
             call.arguments[2].text == "TASKTYPE_GUNFLAME")
         {
@@ -575,18 +584,22 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             const auto name_end = std::find(std::begin(attachment.name), std::end(attachment.name), '\0');
             const std::string child_name(std::begin(attachment.name), name_end);
             const auto normalized_child = normalize_name(child_name);
-            if (child_name.empty() || invisible_attachment_models_.contains(normalized_child))
+            const auto magic_model = magic_attachment_models_.find(normalized_child);
+            if (child_name.empty() || magic_model == magic_attachment_models_.end() ||
+                invisible_attachment_models_.contains(normalized_child))
             {
                 continue;
             }
-            if (!files_.contains(normalized_child + ".mef"))
+            const auto& child_model_name = magic_model->second;
+            if (!files_.contains(child_model_name + ".mef"))
             {
                 diagnostics::log(diagnostics::Severity::debug,
                                  "attachments",
-                                 "Non-visual or unavailable MEF attachment: " + child_name);
+                                 "Magic-object attachment has no visual MEF model: " + child_name + " -> " +
+                                     child_model_name);
                 continue;
             }
-            const auto child = model(child_name);
+            const auto child = model(child_model_name);
             const glm::mat4 rotation{attachment.r00,
                                      attachment.r01,
                                      attachment.r02,
@@ -617,8 +630,9 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             };
             for (auto triangle : child->triangles)
             {
-                triangle.firing_only =
-                    triangle.firing_only || muzzle_flash_models_.contains(normalized_child);
+                triangle.firing_only = triangle.firing_only ||
+                                       muzzle_flash_models_.contains(normalized_child) ||
+                                       muzzle_flash_models_.contains(child_model_name);
                 for (auto& vertex : triangle.vertices)
                 {
                     vertex.position = transform(vertex.position);
@@ -635,7 +649,8 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             }
             for (auto triangle : child->collision)
             {
-                if (muzzle_flash_models_.contains(normalized_child))
+                if (muzzle_flash_models_.contains(normalized_child) ||
+                    muzzle_flash_models_.contains(child_model_name))
                 {
                     continue;
                 }
@@ -647,7 +662,8 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
             }
             for (auto triangle : child->movement_collision)
             {
-                if (muzzle_flash_models_.contains(normalized_child))
+                if (muzzle_flash_models_.contains(normalized_child) ||
+                    muzzle_flash_models_.contains(child_model_name))
                 {
                     continue;
                 }

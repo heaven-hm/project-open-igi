@@ -49,6 +49,7 @@ class MissionAssets final
     std::unordered_map<std::string, std::vector<std::uint32_t>> lightmap_texture_indices_;
     std::unordered_map<std::string, std::shared_ptr<gameplay::SceneMesh>> meshes_;
     std::unordered_set<std::string> loading_models_;
+    std::unordered_map<std::string, std::string> magic_attachment_models_;
     std::unordered_set<std::string> invisible_attachment_models_;
     std::unordered_set<std::string> muzzle_flash_models_;
 };
