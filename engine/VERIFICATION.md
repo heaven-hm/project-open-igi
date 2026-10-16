@@ -233,19 +233,28 @@ Portable sources (strictly zero OS APIs in gameplay core):
 - `world_collision.hpp` / `world_collision.cpp`: Spatial hash grid, Möller–Trumbore segment-triangle raycasting, retail `Human_WallSweep` (`0x00461A70`), `Human_GroundProbe` (`0x00462390`), `Human_SlopeSlide` (`0x004614B0`), `Human_Separation` (`0x00462BA0`), and `HumanMotion` integration.
 - `weapon_system.hpp` / `weapon_system.cpp`: Exact rate-of-fire cooldown, 3-round burst gate (M16A2), cubic spread cone ($u_1 u_2 u_3 \cdot \theta_{\text{spread}}$), unit-disk recoil with retail `0.9` per-tick damping, magazine reload (`KeyR`), slots 1–5, and hitscan raycasting.
 - `ai_system.hpp` / `ai_system.cpp`: 29 AI soldiers with dual view-cone sight checks (30m primary, 10m secondary), `0.79` LOS clearance check, gunshot hearing broadcasts, patrol path opcode interpreter, combat pursuit, damage application, and death transitions.
-- `software_renderer.hpp` / `software_renderer.cpp`: Zero-OS software rasterizer writing to ARGB8888 buffer + depth buffer. Implements sky gradient, directional sun lighting, distance fog, textured terrain & placed MEF models, soldier billboards, crosshair, dynamic health/ammo bars, hit markers, and muzzle flashes.
+- `software_renderer.hpp` / `software_renderer.cpp`: Zero-OS software rasterizer writing to ARGB8888 buffer + depth buffer. Implements sky gradient, directional sun lighting, distance fog, textured terrain & placed MEF models, soldier billboards, crosshair, dynamic health/ammo bars, hit markers, muzzle flashes, and tactical objective HUD banners.
 - `logger.hpp` / `logger.cpp`: Thread-safe, multi-level logger (`TRACE`, `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL`) with ISO-8601 timestamps, file and console logging, in-memory history, and `EngineException`/`AssetLoadException`/`PhysicsException` hierarchies.
+- `player_fall_impact.hpp` / `player_fall_impact.cpp`: Speed-based landing impact calculation (14 m/s safe threshold, 13 m/s lethal span, 20,480 / 40,960 unit hearing alert broadcast).
+- `weapon_view_sway.hpp` / `weapon_view_sway.cpp`: Fixed-step 11-tick weapon lowering and raising animations for weapon switching.
+- `weapon_view_recoil.hpp` / `weapon_view_recoil.cpp`: 3-tick first-person view recoil presentation recovery.
+- `player_ladder.hpp` / `player_ladder.cpp`: Ladder climb line geometric steps (1,228.8 units) and activation bounds (8,192 unit radius, 0.7071 cosine check).
+- `mission_expression.hpp` / `mission_expression.cpp`: Complete QSC expression parser and evaluator (boolean, relational, arithmetic, unary, GAME_FREQUENCY constant, variables).
+- `level_flow.hpp` / `level_flow.cpp`: Mission objective state machine supporting all 14 missions, authored QSC objectives, completion/failure expressions, and extraction zone validation.
+- `mission_objective_loader.hpp` / `mission_objective_loader.cpp`: Parses authored QSC `DefineComputerObjective` task definitions.
 - `platform/sdl/sdl_application.cpp`: Only platform backend touches SDL2 (window creation, relative mouse capture, input event mapping, frame blit).
 
 Checks performed:
-- Each individual `.cpp` file was verified with `clang++ -std=c++20 -fsyntax-only -Wall -Wextra -Werror` before linking.
+- Each individual `.cpp` file was verified with `clang++ -std=c++20 -Wall -Wextra -Werror` before linking.
 - Full CMake build passed for all targets: `igi_asset_formats`, `igi_gameplay`, `igi_asset_probe`, `igi_native_probe`, `igi_world_probe`, `igi_game` (`igi.app`), and `igi_tests`.
 - Fixed timestep calibrated to retail 30 Hz (`fixed_step_seconds = 1.0 / 30.0` in `game_loop.hpp`), matching retail constants (airborne gravity `84.74169`, recoil damping `0.9`, cooldown ticks `(60/rpm)*30`).
-- Automated test suite (`ctest` / `igi_tests`) passed 100% (27/27 tests passed across 5 test suites):
+- Automated test suite (`ctest` / `igi_tests`) passed 100% (36/36 tests passed across 7 test suites):
   - `Parsers`: QSC single/multiple/grouping, error handling, TEX round-trip encode/decode, non-existent file rejection, CTR record size (32 bytes), HMP 256-table layout (3072 bytes), IFF/RES/QVM parsing, and real retail file sanity.
   - `Physics`: 49-state locomotion graph topology, airborne gravity integration (`-84.74169`), ladder slide integration (`0.99` horizontal, `(Z-44.6)*0.99` vertical), wall sweep probe heights & clearance thresholds, cylinder separation repulsion, and slope slide downhill vector.
   - `Weapons`: Default loadout (M16A2, Glock, MP5SD, AK47, Dragunov), RPM cooldown, M16A2 3-round burst gating, unit-disk recoil with `0.9^10` damping, dry fire, and reloading mechanics.
   - `AiSystem`: Dual view-cone detection (30m primary, 10m peripheral, blind spot behind), hearing broadcast alert, and raycast hitscan hit/damage.
   - `LoggerAndExceptions`: Exception hierarchy subsystem tags, snapshotting, level filtering, and concurrent multi-threaded logging safety.
-- `igi_world_probe` loaded retail Mission 1 read-only: 481 placed objects, 77 MEF models, 304 textures, 29 soldiers, 11 nav graphs, 6,492 terrain triangles. After 240 simulated ticks the player settles grounded. Firing M16A2 executes a 3-round burst (mag 30 -> 27), generates recoil, broadcasts gunshot sound, alerts nearby soldier to combat, moves 49.8m in 10s at 0.0097 ms/tick, and dumps rendered frame to `/tmp/world_probe.ppm`.
+  - `GameplayHelpers`: Fall impact safe & damaging landings, weapon view sway 11-tick transitions, weapon view recoil 3-tick decay, and ladder activation.
+  - `MissionFlow`: QSC arithmetic/relational/boolean expression parser, fallback objectives for all 14 missions, objective completion progression, and authored objective set loading.
+- `igi_world_probe` loaded retail Mission 1 read-only: 481 placed objects, 77 MEF models, 304 textures, 29 soldiers, 11 nav graphs, 6,492 terrain triangles. After 240 simulated ticks the player settles grounded. Firing M16A2 executes a 3-round burst (mag 30 -> 27), generates recoil, broadcasts gunshot sound, alerts nearby soldier to combat, moves 49.8m in 10s at 0.010 ms/tick, and dumps rendered frame to `/tmp/world_probe.ppm`.
 
