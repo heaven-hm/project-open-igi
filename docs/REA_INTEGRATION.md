@@ -1,120 +1,98 @@
-# Project Open IGI — REA (re-agent) Integration Guide
+# Project Open IGI — REA integration status
 
-This document describes the integration between **Project Open IGI** and the **re-agent (REA)** autonomous reverse-engineering engine located at `/Users/haseeb-mir/Documents/Code/rea` ([heaven-hm/re-agent](https://github.com/heaven-hm/re-agent.git)).
+Checked against the current source tree on 2026-10-16.
 
----
+## Source and reference locations
 
-## 1. Overview & Architecture
+| Role | Location |
+| --- | --- |
+| Native game project | `/Users/haseeb-mir/Documents/Code/project-open-igi` |
+| Local REA toolchain | `/Users/haseeb-mir/Documents/Code/rea` |
+| Retail executable | `/Users/haseeb-mir/Downloads/IGI/igi.exe` |
+| C# vanilla candidate reference | `/Users/haseeb-mir/Documents/Code/open-igi` |
+| Research catalog | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/IGINatives_VERIFIED.json` |
 
-REA (`re-agent`) provides an evidence-backed reverse engineering foundation combining:
-- **Ghidra Headless Analyzer** (v12.1.3 via `ReaGhidraBridge.java` and `ReaGhidraNoReturnFix.java`)
-- **Radare2 Engine** (CFG analysis, cyclomatic complexity, basic block gate scoring)
-- **Binary Ninja MCP Integration** (Type systems, AST decompilation, variable renaming)
-- **Frida & LLDB Tracers** (Runtime execution profiling, INT3 probes, instruction tracing)
+The retail executable SHA-256 is
+`dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`.
+Recheck it before reusing address evidence. REA upstream is
+[heaven-hm/re-agent](https://github.com/heaven-hm/re-agent).
 
-```
-   Retail IGI.EXE (PE32 x86, 1.38 MB)
-                 │
-                 ├──► REA Artifact Inspector (SHA-256, PE Header, Resource Table)
-                 │
-                 ├──► Ghidra 12.1.3 Headless + ReaGhidraBridge
-                 │
-                 ├──► Radare2 CFG Validation Gate (Threshold >= 0.85)
-                 │
-                 └──► Binary Ninja Decompiler + Type System
-                               │
-                               ▼
-               IGINatives_VERIFIED.json (5,732 Natives)
-                               │
-               ┌───────────────┴───────────────┐
-               ▼                               ▼
-       formats/ (CSV, MAP, IDC)      C++20 Native Registry
-                                  (engine/include/igi/native_registry.hpp)
-```
+## Catalog status
 
----
+The external research JSON contains 5,732 entries. Its recorded flags are:
 
-## 2. Using the REA Runner in Project Open IGI
+| Recorded status | Entries |
+| --- | ---: |
+| CFG PASS | 5,244 |
+| CFG FAIL | 487 |
+| Candidate | 1 |
+| L5 runtime flag true | 0 |
 
-A dedicated runner is available in `scripts/rea_runner.sh` that automatically sets `GHIDRA_INSTALL_DIR` and binds to the local REA installation:
+These are catalog metadata counts, not independently revalidated functions,
+implemented C++ gameplay routines, or proof of complete binary coverage.
+A name, address, signature, or CFG score does not establish equivalent behavior.
+Semantic names and prototypes must be checked against actual instructions,
+callers, memory layouts and runtime observations before translation.
 
-```sh
-# Inspect PE artifact, SHA-256, and header
-./scripts/rea_runner.sh inspect-igi
+## What the game currently builds
 
-# Inspect PE embedded resources (icons, dialogs, version)
-./scripts/rea_runner.sh resources-igi
+The root CMake project adds `engine/`. The shipped game targets include
+`igi_gameplay`, `igi_formats`, `igi_assets`, `igi_runtime`, `igi_input`, and
+`igi_game`. They do not consume the external 5,732-entry catalog automatically.
 
-# Run full Ghidra headless analysis against IGI.EXE
-./scripts/rea_runner.sh analyze-igi
+The current source has no `engine/include/igi/native_registry.hpp` or
+`engine/src/native_registry.cpp`, and defines no `igi_native_probe` target.
+`attic/legacy-tools/native_probe.cpp` is historical source referring to the
+missing registry; it is not a working current build command.
+The optional `if(TARGET iginatives)` clauses do not create such a target.
 
-# Run any arbitrary REA command
-./scripts/rea_runner.sh providers
-./scripts/rea_runner.sh --help
-```
+The scripting module has:
 
----
+- `engine/include/igi/scripting/native_function_registry.hpp`
+- `engine/include/igi/scripting/script_interpreter.hpp`
+- `engine/src/scripting/native_function_registry.cpp`
+- `engine/src/scripting/script_interpreter.cpp`
 
-## 3. Verified Native Coverage Summary
+Its `igi_scripting` target currently exists under `BUILD_TESTING`. This registry
+binds script names to C++ callbacks; it is different from a binary address catalog.
+Tests execute original Level 1 script branches with recording callbacks. They do
+not implement production alarm actions, task scheduling or complete mission logic.
+The game still uses static AI patrol extraction, which cannot replace event-driven
+script execution.
 
-The integration achieves **100.00% coverage of the Binary Ninja binary view** (5,732 / 5,732 functions) and **93.72% coverage of the radare2 binary view** (5,732 / 6,116 functions):
+## Analysis tools and verification
 
-| Engine Subsystem | Total Natives | CFG Gate PASS (>=0.85) | CFG Gate FAIL (Thunks/Null) |
-|---|---|---|---|
-| **System / Math** | 1,867 | 1,694 | 173 |
-| **Render / Display** | 946 | 833 | 113 |
-| **AI Engine** | 702 | 656 | 46 |
-| **Physics & Vehicles** | 434 | 397 | 37 |
-| **Script / QVM** | 370 | 338 | 32 |
-| **Weather & Environment** | 341 | 323 | 18 |
-| **UI & Menu Engine** | 325 | 308 | 17 |
-| **Weapon Engine** | 316 | 298 | 17 |
-| **Sound Engine** | 313 | 285 | 28 |
-| **Animation Engine** | 118 | 112 | 6 |
-| **Total** | **5,732** | **5,244** | **487** |
+Recent analysis used the local REA checkout with Ghidra **12.1.2**, independent
+radare2 disassembly, and the Binary Ninja MCP endpoint
+`http://127.0.0.1:24642/mcp` with authorization disabled. A past successful call
+does not establish that a provider or endpoint is connected now; check availability
+when starting a new capture. Frida/IGIProbe and CrossOver are runtime tools whose
+successful attachment and trace coverage must be established separately.
 
----
-
-## 4. Querying the Native Registry in C++20
-
-The C++20 engine includes a built-in diagnostic probe (`igi_native_probe`):
+The previously documented `scripts/rea_runner.sh` is absent from this checkout.
+Use the local toolchain directly, for example:
 
 ```sh
-# Display registry statistics and subsystem breakdown
-./build/engine/igi_native_probe --stats
-
-# Lookup function by memory address
-./build/engine/igi_native_probe 0x401000
-
-# Lookup function by semantic name
-./build/engine/igi_native_probe --name Config_SaveSoundOptions
-
-# Filter all natives in a subsystem
-./build/engine/igi_native_probe --subsystem Weapon
-./build/engine/igi_native_probe --subsystem Sound
-./build/engine/igi_native_probe --subsystem Physics
+node /Users/haseeb-mir/Documents/Code/rea/scripts/rea.mjs providers --format json
+GHIDRA_INSTALL_DIR=/opt/homebrew/opt/ghidra/libexec \
+  node /Users/haseeb-mir/Documents/Code/rea/scripts/rea.mjs \
+  function /Users/haseeb-mir/Downloads/IGI/igi.exe 0x4bd430 \
+  --provider ghidra --format json
 ```
 
----
+For absent Ghidra function definitions, record the failure. Verify entry boundaries
+and references before using an exact raw instruction window with an explicit load
+address. Raw-window evidence must retain its parent executable offset and hash;
+it must not be presented as full-image analysis or live runtime verification.
 
-## 5. Artifact Directory Layout
+## Evidence and acceptance
 
-```
-project-open-igi/
-├── assets/
-│   └── BinaryNinja/
-│       ├── IGINatives_VERIFIED.json      # Complete 5,732 verified native database
-│       ├── C11/                          # ANSI C11 headers and bodies
-│       ├── formats/                      # CSV, MAP, IDC, JSON symbol tables
-│       └── natives/                      # Per-native headers (.h), bodies (.c), and docs (.md)
-├── BinaryNinja/                          # Mirrored root catalog
-├── engine/
-│   ├── include/igi/native_registry.hpp   # C++20 Native Registry API
-│   ├── src/native_registry.cpp           # Streaming loader & fast binary search
-│   └── tools/native_probe.cpp            # Diagnostic CLI tool
-├── scripts/
-│   ├── rea_runner.sh                     # REA engine launcher
-│   └── discovery/                        # Analysis, verification, and export scripts
-└── docs/
-    └── REA_INTEGRATION.md                # This document
-```
+- [Signed operand verification](fidelity/qvm-integer-operands.md)
+- [Script runtime provenance and limits](fidelity/script_runtime_provenance.md)
+- [Integer arithmetic correction](fidelity/script_integer_arithmetic.md)
+- [Current gameplay status](../engine/MVP_STATUS.md)
+- [Level 1 acceptance scope](../engine/MVP_PLAN.md)
+
+Level 1 is incomplete. Catalog discovery, passing functional tests and CFG
+agreement do not satisfy the required original-versus-port gameplay comparisons.
+Sound and cutscenes remain deferred under the current milestone.
