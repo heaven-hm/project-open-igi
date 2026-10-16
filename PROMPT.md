@@ -58,6 +58,30 @@ Use these local projects as references when relevant. Inspect their current stat
 
 The repository also contains native catalogs, exports, and prior research under `assets/`. Treat catalog entries as leads or static evidence, not as implementations of whole engine subsystems. A large number of native functions does not mean the game engine has been ported.
 
+### Primary native implementation source — owner update 2026-10-16
+
+Use `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/`
+as a primary source of existing decompiled gameplay bodies. Inspect the relevant
+`.c`, `.h` and `.md` exports before inventing a replacement algorithm. Reuse those
+bodies and the existing `cproj/src/` translations wherever applicable; adapt them
+into readable portable C++ under the corresponding engine subsystem. Preserve
+source addresses and provenance in fidelity notes. The game project remains
+`/Users/haseeb-mir/Documents/Code/project-open-igi`.
+
+Some exports contain decompiler syntax, inferred pointer types, unresolved globals
+or misleading semantic names. Normalize those against original instructions and
+object layouts before compiling; do not treat compiler acceptance as fidelity.
+Reuse converter/editor parsers and the C# vanilla implementation where needed,
+then verify against retail rather than inheriting candidate behavior blindly.
+
+For each increment: add focused regressions, check invalid-input/error handling,
+keep timestamped diagnostics, compile and run, perform applicable static/runtime/
+memory comparisons, and save a small local commit. Report exactly what the owner
+can manually test in the delivered build and what remains unverified.
+
+Current acceptance target is Level 1. Keep sound, cutscenes/movies, subtitles,
+smoke and menu presentation deferred; gameplay animation remains required.
+
 ## 5. Reverse-engineering and evidence workflow
 
 Use static, runtime, memory, and verification analysis where available and safe for this owned game copy. Make evidence reproducible and record the target executable's identity (path, architecture, size, and SHA-256) with analysis results.

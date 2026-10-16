@@ -2,6 +2,7 @@
 
 #include <exception>
 #include <iostream>
+#include <limits>
 #include <numbers>
 #include <stdexcept>
 
@@ -39,6 +40,22 @@ int main()
 {
     try
     {
+        for (const float invalid_range : {0.0f, -1.0f, std::numeric_limits<float>::quiet_NaN()})
+        {
+            auto invalid_scene = make_scene(false, false);
+            invalid_scene.weapon_parameters.maximum_distance = invalid_range;
+            bool rejected = false;
+            try
+            {
+                GameSimulation invalid_simulation(invalid_scene);
+                invalid_simulation.tick({});
+            }
+            catch (const std::runtime_error&)
+            {
+                rejected = true;
+            }
+            require(rejected, "Invalid weapon range must raise a controlled runtime error");
+        }
         auto short_range_scene = make_scene(true, false);
         short_range_scene.weapon_parameters.maximum_distance = 1.0f;
         GameSimulation short_range_enemy(short_range_scene);
