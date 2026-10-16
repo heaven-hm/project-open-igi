@@ -52,11 +52,20 @@ struct VerifyObject final
     bool matched = false;
 };
 
+struct SceneTextureMip final
+{
+    std::uint32_t width{};
+    std::uint32_t height{};
+    std::vector<std::uint32_t> pixels;
+    bool authored{};
+};
+
 struct SceneTexture final
 {
     std::uint32_t width{};
     std::uint32_t height{};
     std::vector<std::uint32_t> pixels;
+    std::vector<SceneTextureMip> mipmaps;
 };
 
 struct SceneVertex final

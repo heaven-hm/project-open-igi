@@ -96,8 +96,57 @@ int main()
         {
             throw std::runtime_error("Gun-flame attachments must disappear after the shot");
         }
+
+        MissionScene mipmap_scene;
+        mipmap_scene.collision_triangles = {
+            {{Vector3{-10, -10, 0}, Vector3{10, -10, 0}, Vector3{10, 10, 0}}},
+            {{Vector3{-10, -10, 0}, Vector3{10, 10, 0}, Vector3{-10, 10, 0}}}};
+        SceneTexture mipmap_texture;
+        mipmap_texture.width = 8;
+        mipmap_texture.height = 8;
+        mipmap_texture.pixels.resize(64);
+        for (std::size_t pixel_index = 0; pixel_index < mipmap_texture.pixels.size(); ++pixel_index)
+        {
+            const auto row = pixel_index / mipmap_texture.width;
+            const auto column = pixel_index % mipmap_texture.width;
+            mipmap_texture.pixels[pixel_index] = ((row + column) & 1u) == 0 ? 0xff000000u : 0xffffffffu;
+        }
+        mipmap_texture.mipmaps.push_back(
+            {4, 4, std::vector<std::uint32_t>(16, 0xff00ff00u), false});
+        mipmap_scene.textures.push_back(std::move(mipmap_texture));
+        mipmap_scene.static_triangles.push_back(
+            {{SceneVertex{{-4, 10, -2.32f}, 0, 0},
+              SceneVertex{{4, 10, -2.32f}, 256, 0},
+              SceneVertex{{0, 10, 5.68f}, 128, 256}},
+             0});
+        GameSimulation mipmap_simulation(mipmap_scene);
+        SceneRenderer nearest_mipmap_renderer(640, 480, 1, TextureFilterMode::nearest_mipmap);
+        SceneRenderer trilinear_mipmap_renderer(640, 480, 1, TextureFilterMode::trilinear_mipmap);
+        SceneRenderer parallel_trilinear_mipmap_renderer(640, 480, 3, TextureFilterMode::trilinear_mipmap);
+        nearest_mipmap_renderer.render(mipmap_scene, mipmap_simulation);
+        trilinear_mipmap_renderer.render(mipmap_scene, mipmap_simulation);
+        parallel_trilinear_mipmap_renderer.render(mipmap_scene, mipmap_simulation);
+        const auto nearest_mipmap_pixel = nearest_mipmap_renderer.pixels()[240 * 640 + 320];
+        const auto trilinear_mipmap_pixel = trilinear_mipmap_renderer.pixels()[240 * 640 + 320];
+        if (nearest_mipmap_pixel == trilinear_mipmap_pixel ||
+            ((trilinear_mipmap_pixel >> 8) & 255u) <= ((trilinear_mipmap_pixel >> 16) & 255u) ||
+            !std::equal(trilinear_mipmap_renderer.pixels().begin(),
+                        trilinear_mipmap_renderer.pixels().end(),
+                        parallel_trilinear_mipmap_renderer.pixels().begin()))
+        {
+            throw std::runtime_error(
+                "Trilinear filtering must use generated mip levels and match serial raster output");
+        }
+        mipmap_scene.textures[0].mipmaps[0].authored = true;
+        nearest_mipmap_renderer.render(mipmap_scene, mipmap_simulation);
+        const auto authored_nearest_mipmap_pixel = nearest_mipmap_renderer.pixels()[240 * 640 + 320];
+        if (((authored_nearest_mipmap_pixel >> 8) & 255u) <=
+            ((authored_nearest_mipmap_pixel >> 16) & 255u))
+        {
+            throw std::runtime_error("Nearest mip filtering must use authored TEX mip levels");
+        }
         std::cout << "Renderer probe passed: perspective projection, nearest depth, near-plane clipping, "
-                     "invalid texture\n";
+                     "invalid texture, nearest and trilinear mip filtering\n";
         return 0;
     }
     catch (const std::exception& exception)

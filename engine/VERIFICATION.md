@@ -83,6 +83,41 @@ the high-density settings playable; adding detail maps or lighting before an
 accelerated renderer would worsen that bottleneck. Ultra remains an explicit
 opt-in quality setting and is not evidence of enhanced-renderer parity.
 
+## Texture mip chains and filtering
+
+REA/Ghidra evidence `ev_4a1cc36fa9597db8351b58d3d5317f9ac0e6d46c064f923aa848635799051503`
+for retail function `0x51ECB0` shows the `MipMapControl` setting registering
+`GR_MIPMAP_DISABLE`, `GR_MIPMAP_NEAREST`, and `GR_MIPMAP_NEAREST_DITHER`, then
+initializing the setting to value `2`. This establishes the option names and
+initialized default in the shipped binary; it does not establish the full
+driver sampling algorithm or prove the runtime value cannot be changed.
+
+The C++ asset loader now preserves authored mip levels from TEX v11 images and
+builds a generated chain for base textures that lack one. The software renderer
+derives texture-coordinate gradients from its perspective-correct interpolation
+and selects mip levels. `--texture-filter nearest` selects authored levels only;
+`--texture-filter trilinear` also uses generated levels and blends between
+adjacent levels. Generated mip colors are alpha-premultiplied to reduce dark
+fringes around transparent texels. These are sampling modes, not claims of a
+complete Vanilla or Enhanced preset implementation.
+
+The focused renderer CTest passes generated-level selection, authored-level
+selection, mode separation, and serial/parallel pixel equality. A one-frame
+Level 1 run loaded 426 textures (102 authored and 2,496 generated mip levels)
+and saved captures in both modes. The captures have different SHA-256 digests,
+confirming the mode reaches the real-asset render path. This is a C++ runtime
+check; no paired retail frame, C# frame comparison, anisotropic filtering, or
+Direct3D 7 backend comparison was made. Retail's default dithered-nearest mode
+is not reproduced by the current nearest-level sampler, so Vanilla pixel parity
+remains open.
+
+For the recorded 320x240 single-frame captures, nearest rendered in `0.015162 s`
+and trilinear in `0.018817 s`; these one-run timings are diagnostic, not a
+repeatable benchmark. Capture SHA-256 values were `eaaf3830fd3b4d5b9bbc8f9a88052f6a808699571cecdf6937b077fcb11c1f0b`
+(nearest) and `913770f213831262a6c99b90825a08103b8273ede5dc200d9be7482514140838`
+(trilinear). Both executions initialized 413 objects, 28 soldiers, and one
+Level 1 tick.
+
 ## Native application loop
 
 - `igi_game` is a C++20 executable using SDL2 2.32.72 through SDL's C API. It

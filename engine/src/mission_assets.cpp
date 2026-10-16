@@ -9,9 +9,12 @@
 #include "res_parser.h"
 #include "tex_parser.h"
 
+#include <algorithm>
+#include <array>
 #include <fstream>
 #include <glm/gtc/matrix_transform.hpp>
 #include <stdexcept>
+#include <utility>
 
 namespace igi::assets
 {
@@ -24,7 +27,7 @@ gameplay::SceneTexture decode_original_texture(const TEXImage& image)
     {
         throw std::runtime_error("Invalid decoded texture dimensions or pixel data");
     }
-    gameplay::SceneTexture texture{image.width, image.height, {}};
+    gameplay::SceneTexture texture{image.width, image.height, {}, {}};
     texture.pixels.reserve(pixel_count);
     const BinaryView pixels(image.pixels);
     for (std::size_t pixel_index = 0; pixel_index < pixel_count; ++pixel_index)
@@ -50,11 +53,110 @@ gameplay::SceneTexture decode_original_texture(const TEXImage& image)
     return texture;
 }
 
+namespace
+{
+
+void append_generated_mipmaps(gameplay::SceneTexture& texture)
+{
+    const std::vector<std::uint32_t>* source_pixels =
+        texture.mipmaps.empty() ? &texture.pixels : &texture.mipmaps.back().pixels;
+    std::uint32_t source_width = texture.mipmaps.empty() ? texture.width : texture.mipmaps.back().width;
+    std::uint32_t source_height = texture.mipmaps.empty() ? texture.height : texture.mipmaps.back().height;
+    while (source_width > 1 || source_height > 1)
+    {
+        const std::uint32_t destination_width = std::max(1u, source_width / 2);
+        const std::uint32_t destination_height = std::max(1u, source_height / 2);
+        gameplay::SceneTextureMip mipmap;
+        mipmap.width = destination_width;
+        mipmap.height = destination_height;
+        mipmap.pixels.resize(static_cast<std::size_t>(destination_width) * destination_height);
+        for (std::uint32_t row = 0; row < destination_height; ++row)
+        {
+            for (std::uint32_t column = 0; column < destination_width; ++column)
+            {
+                std::array<std::uint32_t, 4> samples{};
+                std::size_t sample_index = 0;
+                for (std::uint32_t vertical_offset = 0; vertical_offset < 2; ++vertical_offset)
+                {
+                    for (std::uint32_t horizontal_offset = 0; horizontal_offset < 2; ++horizontal_offset)
+                    {
+                        const auto source_column = std::min(source_width - 1, column * 2 + horizontal_offset);
+                        const auto source_row = std::min(source_height - 1, row * 2 + vertical_offset);
+                        samples[sample_index++] = (*source_pixels)[
+                            static_cast<std::size_t>(source_row) * source_width + source_column];
+                    }
+                }
+                std::uint32_t pixel = 0;
+                std::uint32_t alpha_total = 0;
+                for (const auto sample : samples)
+                {
+                    alpha_total += (sample >> 24) & 255u;
+                }
+                for (const std::uint32_t channel_shift : {0u, 8u, 16u})
+                {
+                    std::uint32_t premultiplied_channel_total = 0;
+                    for (const auto sample : samples)
+                    {
+                        const auto alpha = (sample >> 24) & 255u;
+                        const auto color = (sample >> channel_shift) & 255u;
+                        premultiplied_channel_total += color * alpha;
+                    }
+                    const std::uint32_t channel = alpha_total == 0
+                        ? 0
+                        : premultiplied_channel_total / alpha_total;
+                    pixel |= channel << channel_shift;
+                }
+                pixel |= (alpha_total / 4u) << 24;
+                mipmap.pixels[static_cast<std::size_t>(row) * destination_width + column] = pixel;
+            }
+        }
+        texture.mipmaps.push_back(std::move(mipmap));
+        source_width = destination_width;
+        source_height = destination_height;
+        source_pixels = &texture.mipmaps.back().pixels;
+    }
+}
+
+gameplay::SceneTexture decode_texture_with_mipmaps(const std::vector<TEXImage>& images,
+                                                    std::size_t base_image_index,
+                                                    bool images_are_mipmap_chain)
+{
+    if (base_image_index >= images.size())
+    {
+        throw std::runtime_error("Texture mipmap base image index is outside the parsed image list");
+    }
+    auto texture = decode_original_texture(images[base_image_index]);
+    if (images_are_mipmap_chain)
+    {
+        for (std::size_t mipmap_index = base_image_index + 1; mipmap_index < images.size(); ++mipmap_index)
+        {
+            auto decoded_mipmap = decode_original_texture(images[mipmap_index]);
+            if (decoded_mipmap.width != std::max(1u, texture.mipmaps.empty()
+                                                           ? texture.width / 2
+                                                           : texture.mipmaps.back().width / 2) ||
+                decoded_mipmap.height != std::max(1u, texture.mipmaps.empty()
+                                                            ? texture.height / 2
+                                                            : texture.mipmaps.back().height / 2))
+            {
+                throw std::runtime_error("Authored TEX mipmap dimensions do not follow the expected chain");
+            }
+            texture.mipmaps.push_back({decoded_mipmap.width,
+                                       decoded_mipmap.height,
+                                       std::move(decoded_mipmap.pixels),
+                                       true});
+        }
+    }
+    append_generated_mipmaps(texture);
+    return texture;
+}
+
+} // namespace
+
 MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
                              const std::filesystem::path& mission_directory,
                              const std::filesystem::path& cache_directory)
 {
-    textures_.push_back({2, 2, {0xffa5a59bu, 0xff919188u, 0xff919188u, 0xffa5a59bu}});
+    textures_.push_back({2, 2, {0xffa5a59bu, 0xff919188u, 0xff919188u, 0xffa5a59bu}, {}});
     const auto magic_bytes = read_file(resolve_path(game_directory, "magicobj/magicobj.qvm"));
     const QvmInitializer magic_script{BinaryView(magic_bytes)};
     for (const auto& call : magic_script.calls())
@@ -173,7 +275,7 @@ std::uint32_t MissionAssets::texture(const std::string& name)
         throw std::runtime_error("Cannot decode " + resource->second.string() + ": " + parsed.error);
     }
     const auto texture_index = static_cast<std::uint32_t>(textures_.size());
-    textures_.push_back(decode_original_texture(parsed.images.front()));
+    textures_.push_back(decode_texture_with_mipmaps(parsed.images, 0, parsed.version == 11));
     texture_indices_[normalized] = texture_index;
     return texture_index;
 }
@@ -186,10 +288,10 @@ std::vector<std::uint32_t> MissionAssets::terrain_textures(const std::filesystem
         throw std::runtime_error("Cannot decode terrain textures: " + parsed.error);
     }
     std::vector<std::uint32_t> indices;
-    for (const auto& image : parsed.images)
+    for (std::size_t image_index = 0; image_index < parsed.images.size(); ++image_index)
     {
         indices.push_back(static_cast<std::uint32_t>(textures_.size()));
-        textures_.push_back(decode_original_texture(image));
+        textures_.push_back(decode_texture_with_mipmaps(parsed.images, image_index, false));
     }
     return indices;
 }

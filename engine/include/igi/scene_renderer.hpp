@@ -9,6 +9,12 @@
 namespace igi::gameplay
 {
 
+enum class TextureFilterMode
+{
+    nearest_mipmap,
+    trilinear_mipmap
+};
+
 struct FreeCamera
 {
     Vector3 position{};
@@ -20,7 +26,10 @@ struct FreeCamera
 class SceneRenderer final
 {
   public:
-    SceneRenderer(int width, int height, std::size_t worker_count = 0);
+    SceneRenderer(int width,
+                  int height,
+                  std::size_t worker_count = 0,
+                  TextureFilterMode texture_filter_mode = TextureFilterMode::nearest_mipmap);
     void render(const MissionScene& scene,
                 const GameSimulation& simulation,
                 const FreeCamera* free_camera = nullptr);
@@ -70,6 +79,7 @@ class SceneRenderer final
     int first_scanline_{};
     int last_scanline_{};
     std::vector<std::unique_ptr<SceneRenderer>> render_workers_;
+    TextureFilterMode texture_filter_mode_;
 };
 
 } // namespace igi::gameplay

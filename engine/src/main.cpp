@@ -47,6 +47,8 @@ struct RuntimeOptions final
     int difficulty = 1;
     int target_fps = 60;
     igi::gameplay::TerrainDetail terrain_detail = igi::gameplay::TerrainDetail::enhanced;
+    igi::gameplay::TextureFilterMode texture_filter_mode =
+        igi::gameplay::TextureFilterMode::trilinear_mipmap;
     std::optional<std::uint64_t> frames;
     std::filesystem::path game_directory;
     std::filesystem::path cache_directory;
@@ -238,6 +240,22 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                 throw std::runtime_error("Graphics setting must be enhanced, ultra, high, medium, or low");
             }
         }
+        else if (argument == "--texture-filter")
+        {
+            const auto setting = next_argument();
+            if (setting == "nearest")
+            {
+                options.texture_filter_mode = igi::gameplay::TextureFilterMode::nearest_mipmap;
+            }
+            else if (setting == "trilinear")
+            {
+                options.texture_filter_mode = igi::gameplay::TextureFilterMode::trilinear_mipmap;
+            }
+            else
+            {
+                throw std::runtime_error("Texture filter must be nearest or trilinear");
+            }
+        }
         else if (argument == "--fps")
         {
             options.target_fps = parse_integer(next_argument(), 15, 360);
@@ -263,6 +281,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
                          "    [--cache directory] [--width 1280 --height 960] [--verbose] "
                          "[--benchmark]\n"
                          "    [--graphics low|medium|high|enhanced|ultra]\n"
+                         "    [--texture-filter nearest|trilinear]\n"
                          "    [--profile name] (controls come from original config.qvm)\n"
                          "Movement, jump, crouch, fire, reload and weapon bindings use "
                          "config.qvm.\n"
@@ -448,6 +467,31 @@ int run(RuntimeOptions options, const char* executable)
                                                                                 : "low") +
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +
             "; viewport=" + std::to_string(options.width) + "x" + std::to_string(options.height));
+    std::size_t authored_mipmap_count = 0;
+    std::size_t generated_mipmap_count = 0;
+    for (const auto& scene_texture : scene.textures)
+    {
+        for (const auto& mipmap : scene_texture.mipmaps)
+        {
+            if (mipmap.authored)
+            {
+                ++authored_mipmap_count;
+            }
+            else
+            {
+                ++generated_mipmap_count;
+            }
+        }
+    }
+    log(Severity::information,
+        "graphics",
+        std::string("Texture filter=") +
+            (options.texture_filter_mode == igi::gameplay::TextureFilterMode::nearest_mipmap
+                 ? "nearest mip level"
+                 : "trilinear mip filtering") +
+            "; textures=" + std::to_string(scene.textures.size()) +
+            "; authored mip levels=" + std::to_string(authored_mipmap_count) +
+            "; generated mip levels=" + std::to_string(generated_mipmap_count));
     igi::gameplay::GameSimulation simulation(scene);
     simulation.set_difficulty(options.difficulty);
     log(Severity::information,
@@ -457,7 +501,7 @@ int run(RuntimeOptions options, const char* executable)
             "; target_fps=" + (options.target_fps > 0 ? std::to_string(options.target_fps) : "uncapped"));
     igi::gameplay::InputController controls(
         igi::gameplay::load_input_configuration(options.game_directory, options.profile));
-    igi::gameplay::SceneRenderer frame(options.width, options.height);
+    igi::gameplay::SceneRenderer frame(options.width, options.height, 0, options.texture_filter_mode);
     const auto replay = load_replay(options.replay);
     std::ofstream trace;
     if (!options.trace.empty())

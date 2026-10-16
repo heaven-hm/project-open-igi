@@ -37,7 +37,11 @@ implemented or verified yet.
 ## Current state and acceptance
 
 The current repository builds OS-neutral C++20 gameplay and format libraries,
-a shared fixed-step game loop, and a C++ SDL2 application shell with a native macOS window. The shell does not yet render a level or run player gameplay. Windows and Linux builds are not yet verified.
+a shared fixed-step game loop, and an SDL2 application shell. The current
+macOS application loads original Level 1 data and renders it through a CPU
+software rasterizer. It can select nearest authored mip levels or trilinear
+filtering with generated mip levels. This is an interim renderer, not a
+Direct3D 7 equivalent; Windows and Linux builds are not yet verified.
 
 A future platform is supported only after its backend builds, launches the same
 mission data, and passes platform-specific runtime checks. A successful build of

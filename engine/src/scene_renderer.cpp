@@ -26,31 +26,48 @@ std::uint32_t mix_color(std::uint32_t first, std::uint32_t second, float weight)
     return result;
 }
 
-std::uint32_t texture_sample(const SceneTexture& texture, float horizontal, float vertical)
+std::uint32_t texture_sample_level(const SceneTexture& texture,
+                                  std::size_t mip_level,
+                                  float horizontal,
+                                  float vertical)
 {
     if (!std::isfinite(horizontal) || !std::isfinite(vertical))
     {
         return 0;
     }
-    horizontal = (horizontal - std::floor(horizontal)) * static_cast<float>(texture.width) - 0.5f;
-    vertical = (vertical - std::floor(vertical)) * static_cast<float>(texture.height) - 0.5f;
+    std::uint32_t width = texture.width;
+    std::uint32_t height = texture.height;
+    const std::vector<std::uint32_t>* pixels = &texture.pixels;
+    if (mip_level > 0 && mip_level <= texture.mipmaps.size())
+    {
+        const auto& mipmap = texture.mipmaps[mip_level - 1];
+        width = mipmap.width;
+        height = mipmap.height;
+        pixels = &mipmap.pixels;
+    }
+    if (width == 0 || height == 0 || pixels->size() < static_cast<std::size_t>(width) * height)
+    {
+        return 0;
+    }
+    horizontal = (horizontal - std::floor(horizontal)) * static_cast<float>(width) - 0.5f;
+    vertical = (vertical - std::floor(vertical)) * static_cast<float>(height) - 0.5f;
     const int left = static_cast<int>(std::floor(horizontal));
     const int top = static_cast<int>(std::floor(vertical));
     const auto horizontal_weight = static_cast<std::uint32_t>((horizontal - static_cast<float>(left)) * 256);
     const auto vertical_weight = static_cast<std::uint32_t>((vertical - static_cast<float>(top)) * 256);
-    const int w = static_cast<int>(texture.width);
-    const int h = static_cast<int>(texture.height);
+    const int w = static_cast<int>(width);
+    const int h = static_cast<int>(height);
     const auto sample = [&](int column, int row)
     {
         const auto wrapped_column =
-            (texture.width & (texture.width - 1)) == 0
-                ? static_cast<std::uint32_t>(column) & (texture.width - 1)
+            (width & (width - 1)) == 0
+                ? static_cast<std::uint32_t>(column) & (width - 1)
                 : static_cast<std::uint32_t>((column % w + w) % w);
         const auto wrapped_row =
-            (texture.height & (texture.height - 1)) == 0
-                ? static_cast<std::uint32_t>(row) & (texture.height - 1)
+            (height & (height - 1)) == 0
+                ? static_cast<std::uint32_t>(row) & (height - 1)
                 : static_cast<std::uint32_t>((row % h + h) % h);
-        return texture.pixels[static_cast<std::size_t>(wrapped_row) * texture.width + wrapped_column];
+        return (*pixels)[static_cast<std::size_t>(wrapped_row) * width + wrapped_column];
     };
     const std::array<std::uint32_t, 4> samples{
         sample(left, top), sample(left + 1, top), sample(left, top + 1), sample(left + 1, top + 1)};
@@ -66,9 +83,39 @@ std::uint32_t texture_sample(const SceneTexture& texture, float horizontal, floa
     return color;
 }
 
+std::uint32_t texture_sample(const SceneTexture& texture,
+                             float horizontal,
+                             float vertical,
+                             float mip_level,
+                             TextureFilterMode filter_mode,
+                             std::size_t usable_mipmap_count)
+{
+    if (usable_mipmap_count == 0 || !std::isfinite(mip_level) || mip_level <= 0.0f)
+    {
+        return texture_sample_level(texture, 0, horizontal, vertical);
+    }
+    const std::size_t available_level_count = usable_mipmap_count + 1;
+    const float bounded_level = std::clamp(mip_level, 0.0f, static_cast<float>(usable_mipmap_count));
+    const auto lower_index = static_cast<std::size_t>(std::floor(bounded_level));
+    if (filter_mode == TextureFilterMode::nearest_mipmap)
+    {
+        const auto nearest_index = static_cast<std::size_t>(std::floor(bounded_level + 0.5f));
+        return texture_sample_level(texture, nearest_index, horizontal, vertical);
+    }
+
+    const auto upper_index = std::min(lower_index + 1, available_level_count - 1);
+    const auto lower_color = texture_sample_level(texture, lower_index, horizontal, vertical);
+    const auto upper_color = texture_sample_level(texture, upper_index, horizontal, vertical);
+    return mix_color(lower_color, upper_color, bounded_level - static_cast<float>(lower_index));
+}
+
 } // namespace
 
-SceneRenderer::SceneRenderer(int width, int height, std::size_t worker_count) : width_(width), height_(height)
+SceneRenderer::SceneRenderer(int width,
+                             int height,
+                             std::size_t worker_count,
+                             TextureFilterMode texture_filter_mode)
+    : width_(width), height_(height), texture_filter_mode_(texture_filter_mode)
 {
     if (width < 160 || height < 120 || width > 3840 || height > 2160)
     {
@@ -90,7 +137,7 @@ SceneRenderer::SceneRenderer(int width, int height, std::size_t worker_count) : 
         render_workers_.reserve(worker_count);
         for (std::size_t worker_index = 0; worker_index < worker_count; ++worker_index)
         {
-            auto worker = std::make_unique<SceneRenderer>(width_, height_, 1);
+            auto worker = std::make_unique<SceneRenderer>(width_, height_, 1, texture_filter_mode_);
             worker->first_scanline_ = static_cast<int>(worker_index * height_ / worker_count);
             worker->last_scanline_ = static_cast<int>((worker_index + 1) * height_ / worker_count);
             render_workers_.push_back(std::move(worker));
@@ -212,6 +259,34 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
     const float first_step = (second.vertical - third.vertical) / area;
     const float second_step = (third.vertical - first.vertical) / area;
     const float third_step = (first.vertical - second.vertical) / area;
+    const float first_row_step = (third.horizontal - second.horizontal) / area;
+    const float second_row_step = (first.horizontal - third.horizontal) / area;
+    const float third_row_step = (second.horizontal - first.horizontal) / area;
+    const float inverse_depth_horizontal_step = first_step * first.inverse_depth +
+                                                second_step * second.inverse_depth +
+                                                third_step * third.inverse_depth;
+    const float inverse_depth_vertical_step = first_row_step * first.inverse_depth +
+                                              second_row_step * second.inverse_depth +
+                                              third_row_step * third.inverse_depth;
+    const float texture_u_horizontal_step = first_step * first.texture_u + second_step * second.texture_u +
+                                            third_step * third.texture_u;
+    const float texture_u_vertical_step = first_row_step * first.texture_u +
+                                          second_row_step * second.texture_u +
+                                          third_row_step * third.texture_u;
+    const float texture_v_horizontal_step = first_step * first.texture_v + second_step * second.texture_v +
+                                            third_step * third.texture_v;
+    const float texture_v_vertical_step = first_row_step * first.texture_v +
+                                          second_row_step * second.texture_v +
+                                          third_row_step * third.texture_v;
+    std::size_t usable_mipmap_count = 0;
+    for (const auto& mipmap : texture.mipmaps)
+    {
+        if (texture_filter_mode_ == TextureFilterMode::nearest_mipmap && !mipmap.authored)
+        {
+            break;
+        }
+        ++usable_mipmap_count;
+    }
     for (int row = top; row <= bottom; ++row)
     {
         const float horizontal = static_cast<float>(left) + 0.5f;
@@ -268,7 +343,44 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                 const float texture_v = (first_weight * first.texture_v + second_weight * second.texture_v +
                                          third_weight * third.texture_v) *
                                         pixel_depth;
-                const auto sampled = texture_sample(texture, texture_u, texture_v);
+                float mip_level = 0.0f;
+                if (usable_mipmap_count > 0)
+                {
+                    const float texture_u_horizontal_derivative =
+                        pixel_depth * (texture_u_horizontal_step -
+                                       texture_u * inverse_depth_horizontal_step);
+                    const float texture_u_vertical_derivative =
+                        pixel_depth * (texture_u_vertical_step -
+                                       texture_u * inverse_depth_vertical_step);
+                    const float texture_v_horizontal_derivative =
+                        pixel_depth * (texture_v_horizontal_step -
+                                       texture_v * inverse_depth_horizontal_step);
+                    const float texture_v_vertical_derivative =
+                        pixel_depth * (texture_v_vertical_step -
+                                       texture_v * inverse_depth_vertical_step);
+                    const float horizontal_texture_width =
+                        texture_u_horizontal_derivative * static_cast<float>(texture.width);
+                    const float horizontal_texture_height =
+                        texture_v_horizontal_derivative * static_cast<float>(texture.height);
+                    const float vertical_texture_width =
+                        texture_u_vertical_derivative * static_cast<float>(texture.width);
+                    const float vertical_texture_height =
+                        texture_v_vertical_derivative * static_cast<float>(texture.height);
+                    const float horizontal_footprint_squared =
+                        horizontal_texture_width * horizontal_texture_width +
+                        horizontal_texture_height * horizontal_texture_height;
+                    const float vertical_footprint_squared =
+                        vertical_texture_width * vertical_texture_width +
+                        vertical_texture_height * vertical_texture_height;
+                    const float maximum_footprint_squared =
+                        std::max(horizontal_footprint_squared, vertical_footprint_squared);
+                    if (maximum_footprint_squared > 1.0f)
+                    {
+                        mip_level = 0.5f * std::log2(maximum_footprint_squared);
+                    }
+                }
+                const auto sampled = texture_sample(
+                    texture, texture_u, texture_v, mip_level, texture_filter_mode_, usable_mipmap_count);
                 if (triangle.firing_only)
                 {
                     const std::uint32_t r = (sampled >> 16) & 255;
