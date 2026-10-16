@@ -1,4 +1,5 @@
 #include "igi/game_simulation.hpp"
+#include "igi/vector_math.hpp"
 
 #include <exception>
 #include <iostream>
@@ -40,6 +41,14 @@ int main()
 {
     try
     {
+        const Vector3 retail_orientation = rotate_euler({1.25f, -2.5f, 4.0f}, {0.31f, -0.47f, 1.12f});
+        require(std::abs(retail_orientation.x - 0.29084343f) < 0.00001f &&
+                    std::abs(retail_orientation.y + 0.78521296f) < 0.00001f &&
+                    std::abs(retail_orientation.z - 4.80742662f) < 0.00001f,
+                "Three-axis placement rotation must match the retail Z-Y-X row-matrix composition");
+        const Vector3 small_retail_rotation = rotate_euler({1.0f, 0.0f, 0.0f}, {0.0f, 0.00005f, 0.0f});
+        require(std::abs(small_retail_rotation.z - 0.00005f) < 0.000001f,
+                "Small authored angles must not be discarded by a placement rotation shortcut");
         for (const float invalid_range : {0.0f, -1.0f, std::numeric_limits<float>::quiet_NaN()})
         {
             auto invalid_scene = make_scene(false, false);

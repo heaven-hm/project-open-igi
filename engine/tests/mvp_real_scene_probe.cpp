@@ -8,6 +8,7 @@
 #include <iostream>
 #include <limits>
 #include <stdexcept>
+#include <unordered_set>
 
 using namespace igi::gameplay;
 
@@ -44,6 +45,10 @@ int main(int argument_count, char** arguments)
                 "Real mission must load its original models and soldiers");
         require(scene.object_placement_audits.size() == scene.loaded_object_count,
                 "Every loaded original object must retain an objects.qvm placement audit");
+        require(scene.verified_object_count == scene.loaded_object_count && scene.mismatch_object_count == 0,
+                "Every Level 1 object placement must verify against the emitted runtime scene");
+        std::unordered_set<std::size_t> audited_source_calls;
+        bool verified_rotated_geometry = false;
         for (const auto& audit : scene.object_placement_audits)
         {
             require(audit.position_matches && audit.orientation_matches,
@@ -51,10 +56,25 @@ int main(int argument_count, char** arguments)
             require(finite(audit.authored_position) && finite(audit.runtime_position) &&
                         finite(audit.authored_rotation) && finite(audit.runtime_rotation),
                     "Loaded original object transform must remain finite");
+            require(
+                std::isfinite(audit.position_error) && std::isfinite(audit.orientation_error) &&
+                    std::isfinite(audit.verification_tolerance) && audit.verification_tolerance > 0.0f &&
+                    audit.verification_tolerance <= 0.001f &&
+                    audit.position_error <= audit.verification_tolerance &&
+                    audit.orientation_error <= audit.verification_tolerance,
+                "Loaded original object transform error must remain within its float precision tolerance");
+            require(audited_source_calls.insert(audit.source_call_index).second,
+                    "Each loaded object must retain a unique objects.qvm source call");
+            verified_rotated_geometry =
+                verified_rotated_geometry ||
+                (audit.emitted_geometry_verified && length(audit.authored_rotation) > 0.001f);
         }
-        const auto route_graph = std::find_if(scene.navigation_graphs.begin(),
-                                              scene.navigation_graphs.end(),
-                                              [](const NavigationGraph& graph) { return graph.identifier == 4019; });
+        require(verified_rotated_geometry,
+                "Level 1 placement verification must exercise a rotated emitted model transform");
+        const auto route_graph =
+            std::find_if(scene.navigation_graphs.begin(),
+                         scene.navigation_graphs.end(),
+                         [](const NavigationGraph& graph) { return graph.identifier == 4019; });
         require(route_graph != scene.navigation_graphs.end() && route_graph->route_table_width == 300 &&
                     route_graph->route_table.size() == 90000,
                 "Level 1 graph4019 must retain its original 300-by-300 route table");
@@ -156,8 +176,10 @@ int main(int argument_count, char** arguments)
                         direction = Vector3{after.x - origin.x, after.y - origin.y, 0};
                         direction = direction * (1.0f / std::max(length(direction), 1e-6f));
                     }
-                    const float progress = (after.x - before.x) * direction.x + (after.y - before.y) * direction.y;
-                    require(progress > -1e-4f, "Holding forward (with or without a jump) must never step backward");
+                    const float progress =
+                        (after.x - before.x) * direction.x + (after.y - before.y) * direction.y;
+                    require(progress > -1e-4f,
+                            "Holding forward (with or without a jump) must never step backward");
                 }
             }
         }

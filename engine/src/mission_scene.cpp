@@ -13,6 +13,7 @@
 #include <cmath>
 #include <functional>
 #include <iomanip>
+#include <limits>
 #include <sstream>
 #include <stdexcept>
 
@@ -53,6 +54,116 @@ bool transform_matches(Vector3 authored, Vector3 runtime) noexcept
     constexpr float tolerance = 0.000001f;
     return std::abs(authored.x - runtime.x) <= tolerance && std::abs(authored.y - runtime.y) <= tolerance &&
            std::abs(authored.z - runtime.z) <= tolerance;
+}
+
+Vector3 transform_retail_orientation(Vector3 vertex, Vector3 rotation) noexcept
+{
+    const float cosine_alpha = std::cos(rotation.x);
+    const float sine_alpha = std::sin(rotation.x);
+    const float cosine_beta = std::cos(rotation.y);
+    const float sine_beta = std::sin(rotation.y);
+    const float cosine_gamma = std::cos(rotation.z);
+    const float sine_gamma = std::sin(rotation.z);
+
+    const float matrix_11 = cosine_gamma * cosine_beta;
+    const float matrix_12 = (cosine_gamma * sine_beta * sine_alpha) - (sine_gamma * cosine_alpha);
+    const float matrix_13 = (cosine_gamma * sine_beta * cosine_alpha) + (sine_gamma * sine_alpha);
+    const float matrix_21 = sine_gamma * cosine_beta;
+    const float matrix_22 = (sine_gamma * sine_beta * sine_alpha) + (cosine_gamma * cosine_alpha);
+    const float matrix_23 = (sine_gamma * sine_beta * cosine_alpha) - (cosine_gamma * sine_alpha);
+    const float matrix_31 = -sine_beta;
+    const float matrix_32 = cosine_beta * sine_alpha;
+    const float matrix_33 = cosine_beta * cosine_alpha;
+
+    return {vertex.x * matrix_11 + vertex.y * matrix_21 + vertex.z * matrix_31,
+            vertex.x * matrix_12 + vertex.y * matrix_22 + vertex.z * matrix_32,
+            vertex.x * matrix_13 + vertex.y * matrix_23 + vertex.z * matrix_33};
+}
+
+struct EmittedGeometryTransform final
+{
+    Vector3 position{};
+    float position_error{};
+    float orientation_error{};
+    float tolerance{};
+    bool has_geometry{};
+};
+
+EmittedGeometryTransform verify_emitted_geometry_transform(const SceneMesh& source_mesh,
+                                                           const MissionScene& scene,
+                                                           std::size_t first_scene_triangle,
+                                                           Vector3 authored_position,
+                                                           Vector3 authored_rotation)
+{
+    if (source_mesh.triangles.empty() || first_scene_triangle > scene.static_triangles.size() ||
+        source_mesh.triangles.size() > scene.static_triangles.size() - first_scene_triangle)
+    {
+        return {};
+    }
+
+    const SceneTriangle& source_anchor_triangle = source_mesh.triangles.front();
+    const SceneTriangle& runtime_anchor_triangle = scene.static_triangles[first_scene_triangle];
+    const Vector3 source_anchor = source_anchor_triangle.vertices.front().position;
+    const Vector3 expected_anchor_offset = transform_retail_orientation(source_anchor, authored_rotation);
+    const Vector3 runtime_anchor = runtime_anchor_triangle.vertices.front().position;
+
+    EmittedGeometryTransform verification;
+    verification.has_geometry = true;
+    verification.position = runtime_anchor - expected_anchor_offset;
+    verification.position_error = length(verification.position - authored_position);
+    float coordinate_scale = std::max({1.0f,
+                                       std::abs(authored_position.x),
+                                       std::abs(authored_position.y),
+                                       std::abs(authored_position.z),
+                                       std::abs(source_anchor.x),
+                                       std::abs(source_anchor.y),
+                                       std::abs(source_anchor.z),
+                                       std::abs(runtime_anchor.x),
+                                       std::abs(runtime_anchor.y),
+                                       std::abs(runtime_anchor.z)});
+
+    for (std::size_t triangle_index = 0; triangle_index < source_mesh.triangles.size(); ++triangle_index)
+    {
+        const SceneTriangle& source_triangle = source_mesh.triangles[triangle_index];
+        const SceneTriangle& runtime_triangle = scene.static_triangles[first_scene_triangle + triangle_index];
+
+        for (std::size_t vertex_index = 0; vertex_index < source_triangle.vertices.size(); ++vertex_index)
+        {
+            const Vector3 expected_offset = transform_retail_orientation(
+                source_triangle.vertices[vertex_index].position, authored_rotation);
+            const Vector3 runtime_vertex = runtime_triangle.vertices[vertex_index].position;
+            if (!finite(source_triangle.vertices[vertex_index].position) || !finite(expected_offset) ||
+                !finite(runtime_vertex))
+            {
+                verification.position_error = std::numeric_limits<float>::infinity();
+                verification.orientation_error = std::numeric_limits<float>::infinity();
+                return verification;
+            }
+            coordinate_scale = std::max({coordinate_scale,
+                                         std::abs(runtime_vertex.x),
+                                         std::abs(runtime_vertex.y),
+                                         std::abs(runtime_vertex.z),
+                                         std::abs(expected_offset.x),
+                                         std::abs(expected_offset.y),
+                                         std::abs(expected_offset.z)});
+            const Vector3 expected_relative = expected_offset - expected_anchor_offset;
+            const Vector3 runtime_relative = runtime_vertex - runtime_anchor;
+            verification.orientation_error =
+                std::max(verification.orientation_error, length(runtime_relative - expected_relative));
+        }
+    }
+
+    verification.tolerance =
+        std::max(0.000001f, coordinate_scale * std::numeric_limits<float>::epsilon() * 2.0f);
+    if (!finite(verification.position) || !std::isfinite(verification.position_error) ||
+        !std::isfinite(verification.orientation_error) || !std::isfinite(verification.tolerance) ||
+        verification.position_error > verification.tolerance ||
+        verification.orientation_error > verification.tolerance)
+    {
+        return verification;
+    }
+
+    return verification;
 }
 
 void append_terrain(MissionScene& scene,
@@ -590,12 +701,26 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         try
         {
             const auto mesh = library.model(candidate->model_id);
+            Vector3 runtime_position{};
+            Vector3 runtime_rotation{};
+            float position_error = 0.0f;
+            float orientation_error = 0.0f;
+            float verification_tolerance = 0.000001f;
+            bool emitted_geometry_verified = false;
+            bool position_matches = false;
+            bool orientation_matches = false;
             if (candidate->is_soldier)
             {
                 scene.actors.push_back(
                     {candidate->position, candidate->rotation.z, candidate->task_id, candidate->team, mesh});
                 scene.actors.back().source_call_index =
                     static_cast<std::size_t>(&call - initializer.calls().data());
+                runtime_position = scene.actors.back().position;
+                runtime_rotation = {0.0f, 0.0f, scene.actors.back().heading};
+                position_error = length(runtime_position - candidate->position);
+                orientation_error = length(runtime_rotation - candidate->rotation);
+                position_matches = transform_matches(candidate->position, runtime_position);
+                orientation_matches = transform_matches(candidate->rotation, runtime_rotation);
             }
             else if (candidate->type == "Door")
             {
@@ -630,16 +755,35 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     }
                 }
                 scene.doors.push_back(door);
+                runtime_position = scene.doors.back().position;
+                runtime_rotation = scene.doors.back().rotation;
+                position_error = length(runtime_position - candidate->position);
+                orientation_error = length(runtime_rotation - candidate->rotation);
+                position_matches = transform_matches(candidate->position, runtime_position);
+                orientation_matches = transform_matches(candidate->rotation, runtime_rotation);
             }
             else
             {
                 const bool rigid_collision =
                     (candidate->type == "Building" || candidate->type == "EditRigidObj" ||
                      candidate->type == "ExplodeObject" || candidate->type == "Car");
+                const std::size_t first_scene_triangle = scene.static_triangles.size();
                 append_model(scene, *mesh, candidate->position, candidate->rotation, rigid_collision);
+                const EmittedGeometryTransform geometry_verification = verify_emitted_geometry_transform(
+                    *mesh, scene, first_scene_triangle, candidate->position, candidate->rotation);
+                runtime_position = geometry_verification.position;
+                runtime_rotation = candidate->rotation;
+                position_error = geometry_verification.position_error;
+                orientation_error = geometry_verification.orientation_error;
+                verification_tolerance = geometry_verification.tolerance;
+                emitted_geometry_verified = geometry_verification.has_geometry;
+                position_matches = emitted_geometry_verified && position_error <= verification_tolerance;
+                orientation_matches =
+                    emitted_geometry_verified && orientation_error <= verification_tolerance;
                 if (candidate->model_id == "435_02_1" || candidate->model_id == "344_02_1" ||
                     candidate->model_id == "417_02_1" || candidate->model_id == "202_01_1" ||
-                    candidate->model_id == "203_01_1" || candidate->model_id.find("ladder") != std::string::npos)
+                    candidate->model_id == "203_01_1" ||
+                    candidate->model_id.find("ladder") != std::string::npos)
                 {
                     SceneLadder ladder;
                     ladder.bottom = candidate->position + Vector3{0.0f, 0.0f, 0.4f};
@@ -652,10 +796,10 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     scene.ladders.push_back(ladder);
                 }
             }
-            const Vector3 runtime_position = candidate->position;
-            const Vector3 runtime_rotation = candidate->rotation;
-            const bool position_matches = transform_matches(candidate->position, runtime_position);
-            const bool orientation_matches = transform_matches(candidate->rotation, runtime_rotation);
+            if (!position_matches || !orientation_matches)
+            {
+                ++mismatch_count;
+            }
             scene.object_placement_audits.push_back(
                 {static_cast<std::size_t>(&call - initializer.calls().data()),
                  candidate->model_id,
@@ -665,19 +809,30 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                  runtime_position,
                  candidate->rotation,
                  runtime_rotation,
+                 position_error,
+                 orientation_error,
+                 verification_tolerance,
+                 emitted_geometry_verified,
                  position_matches,
                  orientation_matches});
             diagnostics::log(
-                position_matches && orientation_matches ? diagnostics::Severity::information : diagnostics::Severity::error,
+                position_matches && orientation_matches ? diagnostics::Severity::information
+                                                        : diagnostics::Severity::error,
                 "placement",
                 "objects.qvm placement: call=" +
                     std::to_string(scene.object_placement_audits.back().source_call_index) + ", model=" +
                     candidate->model_id + ", type=" + candidate->type + ", name=" + candidate->name +
-                    ", authored_position=" + format_vector(candidate->position) + ", runtime_position=" +
-                    format_vector(runtime_position) + ", authored_orientation=" + format_vector(candidate->rotation) +
-                    ", runtime_orientation=" + format_vector(runtime_rotation) + ", position_match=" +
-                    (position_matches ? "true" : "false") + ", orientation_match=" +
-                    (orientation_matches ? "true" : "false"));
+                    ", authored_position=" + format_vector(candidate->position) +
+                    ", runtime_position=" + format_vector(runtime_position) + ", authored_orientation=" +
+                    format_vector(candidate->rotation) + ", runtime_orientation=" +
+                    (emitted_geometry_verified ? std::string("derived from emitted geometry")
+                                               : format_vector(runtime_rotation)) +
+                    ", position_match=" + (position_matches ? "true" : "false") +
+                    ", position_error=" + std::to_string(position_error) +
+                    ", orientation_match=" + (orientation_matches ? "true" : "false") +
+                    ", orientation_error=" + std::to_string(orientation_error) +
+                    ", verification_tolerance=" + std::to_string(verification_tolerance) +
+                    ", emitted_geometry_verified=" + (emitted_geometry_verified ? "true" : "false"));
             ++scene.loaded_object_count;
         }
         catch (const std::exception& exception)

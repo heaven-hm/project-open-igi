@@ -4,6 +4,38 @@
 
 The current application loads original Levels 1 and 2, including recursive attachments and skeletal hand/body rigs. Current results, bug corrections, known limits and the failed retail gate are in [MVP_STATUS.md](MVP_STATUS.md). The active scope and acceptance contract are [MVP_PLAN.md](MVP_PLAN.md) and [FIDELITY_REQUIREMENTS.md](FIDELITY_REQUIREMENTS.md). The sections below are historical component checks; statements that the app is only a shell or lacks world providers describe that earlier revision. They are not current status. No historical startup or synthetic check establishes original-versus-port parity.
 
+## Level 1 object placement and retail Euler matrix
+
+REA/Ghidra opened the retail PE32 x86 executable at SHA-256
+`dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`.
+Evidence `ev_9c8e04022868d6ffb013950ca6abd6d3ff76a927550ef6fbd6ff0bb169f3a6cc`
+records the routine at `0x4B38E0` as a 640-byte, one-basic-block function. Its
+calls to `0x4B3BE0`, `0x4B3BA0`, and `0x4B3B60` build Z, Y, and X axis rotations
+in that order; the routine right-multiplies the running orientation matrix.
+Their evidence IDs are `ev_9024950e1c7fe4a1b5525989963ff6e78dc9e49e26cececb00b97e4a32097b92`,
+`ev_1132773151d7254656bcd520f86c6b68523893ce0ecc61cfc6a26bb98c735eee`, and
+`ev_aba3c45ff6dc8e22559073e6d0513c0f2e436c49d28ad03af38b6ca81675ae40`.
+Radare2 6.2.0 independently reports the routine as 640 bytes and one basic
+block. This agrees with vanilla OpenIGI's `Matrix3f.FromEngineEulerAngles`
+implementation (`Z(gamma) * Y(beta) * X(alpha)`) and row-vector `Transform`.
+
+The C++ `rotate_euler` now uses that row-matrix convention. Level 1 placement
+verification independently calculates the expected transform from the closed-
+form matrix, then compares it with the positions of emitted mesh vertices. Its
+per-object numerical tolerance is `max(0.000001, 2 * float_epsilon * coordinate_scale)`;
+the real-scene probe rejects tolerances above `0.001` scene units, non-finite
+vertices, duplicate source calls, missing audits, or mismatches. Actors and
+doors are checked against the runtime transform state; they are not counted as
+emitted static geometry checks.
+
+The focused C++20 Debug build passed for the Level 1 scene probe, and 5/5
+focused CTests passed: Level 1 load/move/jump/fire/render, movement/weapon/AI,
+collision, renderer depth clipping, and navigation/inventory. Level 1 loaded
+413 object records and 28 soldiers. This validates the port's own loaded scene
+against the `objects.qvm` values and the retail matrix convention; no paired
+retail runtime transform capture or pixel comparison was made, so it does not
+prove full placement or graphics parity.
+
 ## Native application loop
 
 - `igi_game` is a C++20 executable using SDL2 2.32.72 through SDL's C API. It

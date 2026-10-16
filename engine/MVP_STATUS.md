@@ -1,7 +1,7 @@
 # Experimental gameplay status
 
-Updated 2026-10-16. Current game source: `/Users/haseeb-mir/Documents/Code/project-open-igi`,
-branch `feature/gameplay-prototype`. Earlier measurements and delivery paths below
+Updated 2026-10-17. Current game source: `/Users/haseeb-mir/Documents/Code/project-open-igi`,
+branch `feature/retail-gameplay-parity`. Earlier measurements and delivery paths below
 were imported from the native-MVP predecessor; they are historical evidence and
 do not establish acceptance of the current checkout.
 
@@ -34,6 +34,8 @@ Functional regressions passing does not establish matching original behavior.
 
 5. Weapon effective range: load the original DefineWeaponType argument 25 for player and enemy projectiles instead of fixed 400/100-metre ranges (knife was 1.8 metres). Original script values include MP5/Glock 80m, AK47 2000m and knife 1m. Two regressions failed before correction and passed afterward. All 19 functional tests pass; controlled CrossOver execution of the retail shot-slot routine verifies eight range conversions and complete shot-object writes. See [range evidence and limits](../docs/fidelity/weapon_effective_range.md). This does not verify spread/recoil or full combat parity.
 
+6. Object placement orientation: compare Level 1 emitted static mesh vertices against an independent matrix evaluation of the retail `Z(gamma) * Y(beta) * X(alpha)` row-vector transform at `0x4B38E0`. The 413-object Level 1 audit, rotated-mesh requirement, and per-object finite/tolerance checks pass. Actor and door transforms are checked from their runtime scene records, while static geometry is checked from emitted vertices. This is a port-side transform check, not a paired retail runtime capture; see [verification evidence](VERIFICATION.md).
+
 ## Measured original Level 2
 
 | Item | Measurement |
@@ -56,6 +58,7 @@ The count and health results describe this deterministic prototype scenario, not
 ## Current verification
 
 - Clean committed-source archive and working-tree Release functional suite: **16/16 passed** after portal, muzzle, firing-presentation and graphics-option changes.
+- Current orientation slice: Debug build of the affected C++ targets succeeded; **5/5 focused CTests passed**, including the Level 1 original-asset probe. This validates loaded scene geometry against authored `objects.qvm` transforms, not against a recorded retail scene.
 - AddressSanitizer + UndefinedBehaviorSanitizer: **10/10 MVP probes passed**, including original Levels 1 and 2. Leak detection disabled; this is not a leak audit.
 - Clang static analyzer: **13 authored translation units checked**, no diagnostics reported.
 - Focused doorway, idle/fire/flame expiry and clear-line guard tests failed before their fixes and passed afterward.

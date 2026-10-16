@@ -236,6 +236,10 @@ struct ObjectPlacementAudit final
     Vector3 runtime_position;
     Vector3 authored_rotation;
     Vector3 runtime_rotation;
+    float position_error{};
+    float orientation_error{};
+    float verification_tolerance{};
+    bool emitted_geometry_verified{};
     bool position_matches{};
     bool orientation_matches{};
 };

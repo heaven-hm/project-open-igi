@@ -52,20 +52,19 @@ inline bool finite(Vector3 vector) noexcept
 
 inline Vector3 rotate_euler(Vector3 v, Vector3 rot) noexcept
 {
-    if (std::abs(rot.x) < 0.0001f && std::abs(rot.y) < 0.0001f)
+    if (rot.x == 0.0f && rot.y == 0.0f)
     {
         const float cosine = std::cos(rot.z);
         const float sine = std::sin(rot.z);
-        return {cosine * v.x - sine * v.y, sine * v.x + cosine * v.y, v.z};
+        return {cosine * v.x + sine * v.y, -sine * v.x + cosine * v.y, v.z};
     }
     const float cx = std::cos(rot.x), sx = std::sin(rot.x);
     const float cy = std::cos(rot.y), sy = std::sin(rot.y);
     const float cz = std::cos(rot.z), sz = std::sin(rot.z);
 
-    const Vector3 v1{v.x, cx * v.y - sx * v.z, sx * v.y + cx * v.z};
-    const Vector3 v2{cy * v1.x + sy * v1.z, v1.y, -sy * v1.x + cy * v1.z};
-    return {cz * v2.x - sz * v2.y, sz * v2.x + cz * v2.y, v2.z};
+    const Vector3 after_z{cz * v.x + sz * v.y, -sz * v.x + cz * v.y, v.z};
+    const Vector3 after_y{cy * after_z.x - sy * after_z.z, after_z.y, sy * after_z.x + cy * after_z.z};
+    return {after_y.x, cx * after_y.y + sx * after_y.z, -sx * after_y.y + cx * after_y.z};
 }
 
 } // namespace igi::gameplay
-
