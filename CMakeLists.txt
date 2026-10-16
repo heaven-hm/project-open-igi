@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(project_open_igi LANGUAGES C CXX)
+project(project_open_igi VERSION 0.1.0 LANGUAGES C CXX)
 
 # Engine: native IGI port (retal-format MEF/TEX/QVM/GRAPH loading, skeletal
 # scene rendering, AI/navigation, collision, gameplay). The engine CMakeLists

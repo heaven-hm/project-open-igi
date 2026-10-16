@@ -1,5 +1,7 @@
 # Project Open I.G.I.
 
+**Version 0.1 ALPHA**
+
 A macOS-first native reimplementation of the Project I.G.I. game engine, built
 in C++20. The current MVP targets macOS; Windows and Linux support will follow a
 playable macOS gameplay slice. The first implementation milestone focuses on player locomotion, physics,
@@ -14,6 +16,16 @@ player control, level rendering, collision queries, weapons, and AI are not
 integrated yet, so it is not a playable game. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
 and [verification notes](engine/VERIFICATION.md). Runtime parity against the
 original game remains to be measured.
+
+## Screenshots
+
+Level spawn renders captured from the engine (1280x960):
+
+![Level 1 spawn](screenshots/screenshot_01_level1_spawn.png)
+
+![Level 2 spawn](screenshots/screenshot_02_level2_spawn.png)
+
+![Level 3 spawn](screenshots/screenshot_03_level3_spawn.png)
 
 ## Platform scope
 
