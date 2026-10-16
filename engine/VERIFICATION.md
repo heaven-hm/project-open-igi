@@ -326,4 +326,5 @@ Validation on 2026-10-17:
 
 - `igi_game` and `mvp_navigation_inventory_probe` built successfully with C++20.
 - `mvp_navigation_inventory` passed, including developer mode granting the mission weapons, reserve ammunition, and maximum health. This probe tests simulation behavior, not SDL key delivery.
+- The shared SDL event predicate now uses physical scancodes for `G` and `F9`; the input regression covers both keys, shifted/caps `G`, key release, key repeat, and rejects F11. This is a deterministic event-level test, not a manual macOS keyboard capture.
 - Manual keyboard verification of `G` is pending; no live GUI key event was injected or claimed.

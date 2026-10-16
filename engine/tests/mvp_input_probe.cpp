@@ -33,6 +33,33 @@ int main(int argument_count, char** arguments)
         {
             throw std::runtime_error(SDL_GetError());
         }
+        SDL_Event developer_mode_key_event{};
+        developer_mode_key_event.type = SDL_KEYDOWN;
+        developer_mode_key_event.key.repeat = 0;
+        developer_mode_key_event.key.keysym.scancode = SDL_SCANCODE_G;
+        developer_mode_key_event.key.keysym.sym = SDLK_g;
+        require(is_developer_mode_toggle_event(developer_mode_key_event),
+                "The G physical key must toggle developer mode");
+        developer_mode_key_event.key.keysym.sym = 'G';
+        require(is_developer_mode_toggle_event(developer_mode_key_event),
+                "Shift and Caps Lock must not disable the G physical key shortcut");
+        developer_mode_key_event.key.keysym.scancode = SDL_SCANCODE_F9;
+        developer_mode_key_event.key.keysym.sym = SDLK_F9;
+        require(is_developer_mode_toggle_event(developer_mode_key_event),
+                "F9 must remain an alternate developer mode shortcut");
+        developer_mode_key_event.key.keysym.scancode = SDL_SCANCODE_F11;
+        developer_mode_key_event.key.keysym.sym = SDLK_F11;
+        require(!is_developer_mode_toggle_event(developer_mode_key_event),
+                "F11 must not be advertised as the macOS developer mode shortcut");
+        developer_mode_key_event.key.keysym.scancode = SDL_SCANCODE_G;
+        developer_mode_key_event.key.repeat = 1;
+        require(!is_developer_mode_toggle_event(developer_mode_key_event),
+                "Held-key repeats must not toggle developer mode repeatedly");
+        developer_mode_key_event.key.repeat = 0;
+        developer_mode_key_event.type = SDL_KEYUP;
+        require(!is_developer_mode_toggle_event(developer_mode_key_event),
+                "Key release must not toggle developer mode");
+
         std::vector<ScriptCall> calls = {
             {"GOStart", {{1, {}}}},
             {"GOPlayer", {text_value("First")}},
@@ -105,7 +132,7 @@ int main(int argument_count, char** arguments)
         }
         SDL_Quit();
         std::cout << "Input probe passed: profiles, original remaps, mouse buttons, firing, action edges, "
-                     "cutscene object gating\n";
+                     "developer shortcut scancodes, cutscene object gating\n";
         return 0;
     }
     catch (const std::exception& exception)

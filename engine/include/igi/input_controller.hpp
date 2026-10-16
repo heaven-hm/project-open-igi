@@ -3,10 +3,13 @@
 #include "igi/game_simulation.hpp"
 #include "igi/input_configuration.hpp"
 
+#include <SDL.h>
 #include <span>
 
 namespace igi::gameplay
 {
+
+[[nodiscard]] bool is_developer_mode_toggle_event(const SDL_Event& event) noexcept;
 
 class InputController final
 {

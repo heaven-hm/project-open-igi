@@ -670,13 +670,14 @@ int run(RuntimeOptions options, const char* executable)
                         log(Severity::warning, "display", SDL_GetError());
                     }
                 }
-                if (event.key.keysym.sym == SDLK_F9 || event.key.keysym.sym == SDLK_g)
+                if (igi::gameplay::is_developer_mode_toggle_event(event))
                 {
                     simulation.toggle_developer_mode();
                     log(Severity::information,
                         "developer",
-                        std::string("Developer mode ") +
-                            (simulation.developer_mode() ? "ENABLED (God mode / All weapons / Inf ammo)" : "DISABLED"));
+                        std::string("Developer mode ") + (simulation.developer_mode()
+                                                              ? "ENABLED (God mode / All weapons / Inf ammo)"
+                                                              : "DISABLED"));
                 }
                 if (event.key.keysym.sym == SDLK_F12)
                 {

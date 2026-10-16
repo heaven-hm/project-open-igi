@@ -51,6 +51,12 @@ SDL_Scancode keyboard_scancode(std::string name)
 
 } // namespace
 
+bool is_developer_mode_toggle_event(const SDL_Event& event) noexcept
+{
+    return event.type == SDL_KEYDOWN && event.key.repeat == 0 &&
+           (event.key.keysym.scancode == SDL_SCANCODE_G || event.key.keysym.scancode == SDL_SCANCODE_F9);
+}
+
 InputController::InputController(InputConfiguration configuration) : configuration_(std::move(configuration))
 {
     for (const auto& [action, input] : configuration_.bindings)
