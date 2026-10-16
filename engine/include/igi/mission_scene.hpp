@@ -89,6 +89,22 @@ struct SceneMesh final
     std::vector<CollisionTriangle> movement_collision;
 };
 
+struct SceneDoor final
+{
+    int task_id{};
+    std::string name;
+    std::string model_id;
+    Vector3 position{};
+    Vector3 rotation{};
+    bool open = false;
+    float swing_angle = 1.5707963f;
+    Vector3 min_bounds{-0.2f, -0.2f, 0.0f};
+    Vector3 max_bounds{1.4f, 0.2f, 2.5f};
+    std::size_t collision_start{};
+    std::size_t collision_count{};
+    std::shared_ptr<SceneMesh> mesh;
+};
+
 struct SkeletalAnimationSet;
 
 struct SceneActor final
@@ -229,6 +245,7 @@ struct MissionScene final
     std::size_t terrain_triangle_count{};
     std::vector<CollisionTriangle> movement_collision_triangles;
     std::vector<SceneLadder> ladders;
+    std::vector<SceneDoor> doors;
     std::vector<MissionObjective> objectives;
     std::size_t verified_object_count{};
     std::size_t mismatch_object_count{};

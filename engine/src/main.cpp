@@ -46,7 +46,7 @@ struct RuntimeOptions final
     int mission = 1;
     int difficulty = 1;
     int target_fps = 60;
-    igi::gameplay::TerrainDetail terrain_detail = igi::gameplay::TerrainDetail::high;
+    igi::gameplay::TerrainDetail terrain_detail = igi::gameplay::TerrainDetail::enhanced;
     std::optional<std::uint64_t> frames;
     std::filesystem::path game_directory;
     std::filesystem::path cache_directory;
@@ -231,7 +231,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
             }
             else
             {
-                throw std::runtime_error("Graphics setting must be high, medium, or low");
+                throw std::runtime_error("Graphics setting must be enhanced, ultra, high, medium, or low");
             }
         }
         else if (argument == "--fps")
@@ -437,7 +437,9 @@ int run(RuntimeOptions options, const char* executable)
     log(Severity::information,
         "graphics",
         std::string("Terrain detail=") +
-            (options.terrain_detail == igi::gameplay::TerrainDetail::high ? "high" : "low") +
+            (options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::high  ? "high"
+                                                                             : "low") +
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +
             "; viewport=" + std::to_string(options.width) + "x" + std::to_string(options.height));
     igi::gameplay::GameSimulation simulation(scene);
@@ -750,6 +752,10 @@ int run(RuntimeOptions options, const char* executable)
                     const auto* keys = SDL_GetKeyboardState(&keyboard_size);
                     const auto buttons = SDL_GetMouseState(nullptr, nullptr);
                     input = controls.sample({keys, static_cast<std::size_t>(keyboard_size)}, buttons);
+                    if (keys && (keys[SDL_SCANCODE_Q] || keys[SDL_SCANCODE_E]))
+                    {
+                        input.interacting = true;
+                    }
                     input.weapon_slot = requested_weapon_slot;
                     if (requested_weapon_cycle != 0)
                     {

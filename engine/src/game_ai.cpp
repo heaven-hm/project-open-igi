@@ -301,17 +301,43 @@ void GameSimulation::advance_actor_animations()
         }
         else if (displacement > 0.001f)
         {
-            if (definition.animations->clips.contains(3))
+            if (actor.behavior == ActorBehavior::guarding)
             {
-                identifier = 3;
+                if (definition.animations->clips.contains(4))
+                {
+                    identifier = 4; // Authentic calm soldier patrol walk (duration 5280)
+                }
+                else if (definition.animations->clips.contains(3))
+                {
+                    identifier = 3;
+                }
+                else if (definition.animations->clips.contains(34))
+                {
+                    identifier = 34;
+                }
+                else if (definition.animations->clips.contains(48))
+                {
+                    identifier = 48;
+                }
             }
-            else if (definition.animations->clips.contains(34))
+            else
             {
-                identifier = 34;
-            }
-            else if (definition.animations->clips.contains(48))
-            {
-                identifier = 48;
+                if (definition.animations->clips.contains(3))
+                {
+                    identifier = 3; // Alerted sprint / run (duration 3360)
+                }
+                else if (definition.animations->clips.contains(4))
+                {
+                    identifier = 4;
+                }
+                else if (definition.animations->clips.contains(34))
+                {
+                    identifier = 34;
+                }
+                else if (definition.animations->clips.contains(48))
+                {
+                    identifier = 48;
+                }
             }
         }
         const auto found = definition.animations->clips.find(identifier);

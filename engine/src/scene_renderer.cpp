@@ -38,18 +38,18 @@ std::uint32_t texture_sample(const SceneTexture& texture, float horizontal, floa
     const int top = static_cast<int>(std::floor(vertical));
     const auto horizontal_weight = static_cast<std::uint32_t>((horizontal - static_cast<float>(left)) * 256);
     const auto vertical_weight = static_cast<std::uint32_t>((vertical - static_cast<float>(top)) * 256);
+    const int w = static_cast<int>(texture.width);
+    const int h = static_cast<int>(texture.height);
     const auto sample = [&](int column, int row)
     {
         const auto wrapped_column =
             (texture.width & (texture.width - 1)) == 0
                 ? static_cast<std::uint32_t>(column) & (texture.width - 1)
-                : static_cast<std::uint32_t>(column < 0 ? column + static_cast<int>(texture.width) : column) %
-                      texture.width;
+                : static_cast<std::uint32_t>((column % w + w) % w);
         const auto wrapped_row =
             (texture.height & (texture.height - 1)) == 0
                 ? static_cast<std::uint32_t>(row) & (texture.height - 1)
-                : static_cast<std::uint32_t>(row < 0 ? row + static_cast<int>(texture.height) : row) %
-                      texture.height;
+                : static_cast<std::uint32_t>((row % h + h) % h);
         return texture.pixels[static_cast<std::size_t>(wrapped_row) * texture.width + wrapped_column];
     };
     const std::array<std::uint32_t, 4> samples{
@@ -123,7 +123,8 @@ void SceneRenderer::triangle(const SceneTriangle& original,
                                          original.vertices[2].position - original.vertices[0].position));
     const float illumination =
         weapon ? 0.95f
-               : 0.58f + 0.36f * std::clamp(dot(normal, normalized(Vector3{-0.3f, -0.5f, 1})), 0.0f, 1.0f);
+               : 0.62f + 0.35f * std::clamp(dot(normal, normalized(Vector3{-0.35f, -0.45f, 0.82f})), 0.0f, 1.0f) +
+                 0.08f * std::clamp(normal.z, 0.0f, 1.0f);
     std::array<SceneVertex, 5> clipped;
     std::size_t vertex_count = 0;
     for (std::size_t corner = 0; corner < 3; ++corner)
@@ -153,6 +154,7 @@ void SceneRenderer::triangle(const SceneTriangle& original,
     {
         SceneTriangle clipped_triangle{{clipped[0], clipped[corner], clipped[corner + 1]},
                                        original.texture_index};
+        clipped_triangle.firing_only = original.firing_only;
         rasterize(clipped_triangle, textures[original.texture_index], focal_length, illumination, weapon);
     }
 }
@@ -267,6 +269,26 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                                          third_weight * third.texture_v) *
                                         pixel_depth;
                 const auto sampled = texture_sample(texture, texture_u, texture_v);
+                if (triangle.firing_only)
+                {
+                    const std::uint32_t r = (sampled >> 16) & 255;
+                    const std::uint32_t g = (sampled >> 8) & 255;
+                    const std::uint32_t b = sampled & 255;
+                    const std::uint32_t a = (sampled >> 24) & 255;
+                    if (r + g + b < 30 || a < 32)
+                    {
+                        continue;
+                    }
+                    const auto bg = pixels_[pixel_index];
+                    const std::uint32_t bg_r = (bg >> 16) & 255;
+                    const std::uint32_t bg_g = (bg >> 8) & 255;
+                    const std::uint32_t bg_b = bg & 255;
+                    const std::uint32_t out_r = std::min(255u, bg_r + r);
+                    const std::uint32_t out_g = std::min(255u, bg_g + g);
+                    const std::uint32_t out_b = std::min(255u, bg_b + b);
+                    pixels_[pixel_index] = 0xff000000u | (out_r << 16) | (out_g << 8) | out_b;
+                    continue;
+                }
                 if ((sampled >> 24) >= 96)
                 {
                     std::uint32_t shaded = 0xff000000u;
@@ -276,7 +298,7 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                                                              illumination)
                                   << shift;
                     }
-                    const float fog = weapon ? 0.0f : std::clamp((pixel_depth - 80.0f) / 700.0f, 0.0f, 1.0f);
+                    const float fog = weapon ? 0.0f : std::clamp((pixel_depth - 140.0f) / 900.0f, 0.0f, 1.0f);
                     pixels_[pixel_index] = mix_color(shaded, 0xffa6aaa2u, fog);
                     depth_[pixel_index] = inverse_depth;
                 }
@@ -507,6 +529,35 @@ void SceneRenderer::render(const MissionScene& scene,
         }
         triangle(surface, scene.textures, camera, right, up, forward, focal_length);
     }
+    for (const auto& door : simulation.doors())
+    {
+        if (!door.mesh || length(door.position - camera) > 350.0f)
+        {
+            continue;
+        }
+        Vector3 door_pos = door.position;
+        Vector3 door_rot = door.rotation;
+        if (door.open)
+        {
+            if (door.model_id.find("304") != std::string::npos)
+            {
+                door_pos = door_pos + rotate_euler(Vector3{3.6f, 0.0f, 0.0f}, door.rotation);
+            }
+            else
+            {
+                door_rot.z += 1.5707963f;
+            }
+        }
+        for (const auto& tri : door.mesh->triangles)
+        {
+            SceneTriangle world_tri = tri;
+            for (auto& vertex : world_tri.vertices)
+            {
+                vertex.position = rotate_euler(vertex.position, door_rot) + door_pos;
+            }
+            triangle(world_tri, scene.textures, camera, right, up, forward, focal_length);
+        }
+    }
     for (std::size_t actor_index = 0; actor_index < simulation.actors().size(); ++actor_index)
     {
         const auto& actor = simulation.actors()[actor_index];
@@ -695,7 +746,14 @@ void SceneRenderer::render(const MissionScene& scene,
         text(18, obj_y, "OBJ " + std::to_string(obj.id) + " " + obj.text + " " + status, col);
         obj_y += 14;
     }
-    if (simulation.on_ladder())
+    if (!simulation.prompt_message().empty())
+    {
+        const auto& prompt = simulation.prompt_message();
+        const int prompt_w = static_cast<int>(prompt.size() * 6 * 2) + 24;
+        rectangle(center_x - prompt_w / 2, height_ - 68, prompt_w, 24, 0xff17211bu);
+        text(center_x - prompt_w / 2 + 12, height_ - 62, prompt, 0xffffdd44u, 2);
+    }
+    else if (simulation.on_ladder())
     {
         text(center_x - 60, height_ - 75, "CLIMBING LADDER", 0xff66ccffu);
     }

@@ -68,9 +68,13 @@ Vector3 sample_translation(const RootMotionClip& clip, float time)
 } // namespace
 
 GameSimulation::GameSimulation(const MissionScene& scene)
-    : scene_(scene), world_(scene.collision_triangles),
-      movement_world_(scene.movement_collision_triangles.empty() ? scene.collision_triangles
-                                                                 : scene.movement_collision_triangles)
+    : scene_(scene),
+      collision_triangles_(scene.collision_triangles),
+      movement_collision_triangles_(scene.movement_collision_triangles.empty() ? scene.collision_triangles
+                                                                               : scene.movement_collision_triangles),
+      world_(collision_triangles_),
+      movement_world_(movement_collision_triangles_),
+      doors_(scene.doors)
 {
     if (!std::isfinite(scene.player_parameters.maximum_health) ||
         scene.player_parameters.maximum_health <= 0 ||
@@ -164,6 +168,9 @@ void GameSimulation::restart()
     active_ladder_index_ = 0;
     objectives_ = scene_.objectives;
     mission_completed_ = false;
+    doors_ = scene_.doors;
+    prompt_message_.clear();
+    interact_was_pressed_ = false;
     diagnostics::log(diagnostics::Severity::information,
                      "gameplay",
                      "Mission initialized; player grounded on original collision geometry");
@@ -280,6 +287,47 @@ void GameSimulation::tick(const PlayerInput& input)
         advance_player(input);
         advance_weapon(input);
         advance_view_animation(input);
+
+        // Interactive doors & prompt
+        prompt_message_.clear();
+        for (auto& door : doors_)
+        {
+            const float dist = length(player_position() - door.position);
+            if (dist < 2.8f)
+            {
+                prompt_message_ = door.open ? "PRESS Q TO CLOSE DOOR" : "PRESS Q TO OPEN DOOR";
+                if (input.interacting && !interact_was_pressed_)
+                {
+                    door.open = !door.open;
+                    diagnostics::log(diagnostics::Severity::information,
+                                     "gameplay",
+                                     std::string("Door ") + (door.open ? "opened" : "closed") + " at (" +
+                                         std::to_string(door.position.x) + ", " +
+                                         std::to_string(door.position.y) + ", " +
+                                         std::to_string(door.position.z) + ")");
+                }
+                break;
+            }
+        }
+        if (prompt_message_.empty())
+        {
+            for (const auto& ladder : scene_.ladders)
+            {
+                const auto p = player_position();
+                const float dx = p.x - ladder.bottom.x;
+                const float dy = p.y - ladder.bottom.y;
+                const float h_dist = std::sqrt(dx * dx + dy * dy);
+                const float d_bottom = length(p - ladder.bottom_mount);
+                const float d_top = length(p - ladder.top_mount);
+                if (d_bottom < 2.5f || d_top < 2.5f ||
+                    (h_dist < 2.2f && p.z >= ladder.bottom.z - 0.5f && p.z <= ladder.top.z + 1.2f))
+                {
+                    prompt_message_ = on_ladder_ ? "CLIMBING LADDER: W/S TO MOVE, JUMP/Q TO DISMOUNT"
+                                                 : "PRESS W OR Q TO CLIMB LADDER";
+                    break;
+                }
+            }
+        }
     }
     advance_actors();
     advance_actor_animations();
@@ -301,6 +349,7 @@ void GameSimulation::tick(const PlayerInput& input)
         }
     }
     fire_was_pressed_ = input.firing;
+    interact_was_pressed_ = input.interacting;
     ++tick_count_;
     if (!finite(player_position()) || std::abs(player_position().z) > 5000)
     {
@@ -350,9 +399,14 @@ void GameSimulation::advance_player(const PlayerInput& input)
         for (std::size_t idx = 0; idx < scene_.ladders.size(); ++idx)
         {
             const auto& ladder = scene_.ladders[idx];
+            const float dx = p.x - ladder.bottom.x;
+            const float dy = p.y - ladder.bottom.y;
+            const float h_dist = std::sqrt(dx * dx + dy * dy);
             const float d_bottom = length(p - ladder.bottom_mount);
             const float d_top = length(p - ladder.top_mount);
-            if ((d_bottom < 1.8f || d_top < 1.8f) && input.forward > 0)
+            const bool near_mount = (d_bottom < 2.5f || d_top < 2.5f);
+            const bool near_rung = (h_dist < 2.2f && p.z >= ladder.bottom.z - 0.5f && p.z <= ladder.top.z + 1.2f);
+            if ((near_mount || near_rung) && (input.forward != 0 || input.interacting))
             {
                 on_ladder_ = true;
                 active_ladder_index_ = idx;
@@ -367,24 +421,24 @@ void GameSimulation::advance_player(const PlayerInput& input)
     if (on_ladder_ && active_ladder_index_ < scene_.ladders.size())
     {
         const auto& ladder = scene_.ladders[active_ladder_index_];
-        if (input.jumping)
+        if (input.jumping || (input.interacting && !interact_was_pressed_))
         {
             on_ladder_ = false;
             player_.movement_velocity = {-ladder.normal.x * 2.0f * units_per_metre / 30.0f,
                                          -ladder.normal.y * 2.0f * units_per_metre / 30.0f,
                                          3.0f * units_per_metre / 30.0f};
-            diagnostics::log(diagnostics::Severity::debug, "player", "Dismounted ladder via jump");
+            diagnostics::log(diagnostics::Severity::debug, "player", "Dismounted ladder");
         }
         else
         {
             float climb_speed = 0.0f;
             if (input.forward > 0)
             {
-                climb_speed = 2.2f / 30.0f;
+                climb_speed = 2.4f / 30.0f;
             }
             else if (input.forward < 0)
             {
-                climb_speed = input.crouching ? -4.5f / 30.0f : -2.2f / 30.0f;
+                climb_speed = input.crouching ? -4.5f / 30.0f : -2.4f / 30.0f;
             }
             auto pos = player_position();
             pos.z += climb_speed;
@@ -543,10 +597,10 @@ void GameSimulation::query_ground(HumanMovementState& human,
         if (!was_grounded)
         {
             const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
-            constexpr float threshold_speed = 14.0f;
+            constexpr float threshold_speed = 8.5f;
             if (!developer_mode_ && landing_speed > threshold_speed && health_ > 0.0f)
             {
-                const float damage_ratio = (landing_speed - threshold_speed) / 13.0f;
+                const float damage_ratio = (landing_speed - threshold_speed) / 14.0f;
                 const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
                 health_ = std::max(0.0f, health_ - damage);
                 damage_flash_remaining_ = 0.35f;
@@ -604,6 +658,35 @@ void GameSimulation::separate_humans(HumanMovementState&,
         {
             position = movement_world_.move_capsule(
                 position, difference * ((0.62f - distance) / distance), crouching_ ? 1.1f : 1.8f);
+        }
+    }
+    for (const auto& door : doors_)
+    {
+        if (door.open)
+        {
+            continue;
+        }
+        const Vector3 rel = position - door.position;
+        if (length(rel) > 6.0f)
+        {
+            continue;
+        }
+        const float cos_y = std::cos(-door.rotation.z);
+        const float sin_y = std::sin(-door.rotation.z);
+        const Vector3 local_pos{cos_y * rel.x - sin_y * rel.y, sin_y * rel.x + cos_y * rel.y, rel.z};
+        constexpr float radius = 0.35f;
+        if (local_pos.z + 1.8f >= door.min_bounds.z && local_pos.z <= door.max_bounds.z + 0.2f &&
+            local_pos.x >= door.min_bounds.x - radius && local_pos.x <= door.max_bounds.x + radius &&
+            local_pos.y >= door.min_bounds.y - radius && local_pos.y <= door.max_bounds.y + radius)
+        {
+            const float mid_y = (door.min_bounds.y + door.max_bounds.y) * 0.5f;
+            const float resolved_local_y = (local_pos.y >= mid_y)
+                                               ? door.max_bounds.y + radius + 0.01f
+                                               : door.min_bounds.y - radius - 0.01f;
+            const float cos_f = std::cos(door.rotation.z);
+            const float sin_f = std::sin(door.rotation.z);
+            position.x = cos_f * local_pos.x - sin_f * resolved_local_y + door.position.x;
+            position.y = sin_f * local_pos.x + cos_f * resolved_local_y + door.position.y;
         }
     }
     destination = engine_position(position);

@@ -150,6 +150,16 @@ class GameSimulation final : private HumanMovementWorld
         return mission_completed_;
     }
 
+    [[nodiscard]] const std::vector<SceneDoor>& doors() const noexcept
+    {
+        return doors_;
+    }
+
+    [[nodiscard]] const std::string& prompt_message() const noexcept
+    {
+        return prompt_message_;
+    }
+
     void teleport_player(Vector3 position, float heading, float pitch);
 
     [[nodiscard]] const WeaponState& weapon() const noexcept
@@ -250,8 +260,13 @@ class GameSimulation final : private HumanMovementWorld
     void separate_humans(HumanMovementState&, const WorldPosition3&, WorldPosition3&, Vector3&) override;
     void commit_transform(HumanMovementState&, const WorldPosition3&, float) override;
     const MissionScene& scene_;
+    std::vector<CollisionTriangle> collision_triangles_;
+    std::vector<CollisionTriangle> movement_collision_triangles_;
     CollisionWorld world_;
     CollisionWorld movement_world_;
+    std::vector<SceneDoor> doors_;
+    std::string prompt_message_;
+    bool interact_was_pressed_{};
     HumanMovementState player_;
     HumanMovementIntegrator integrator_;
     WeaponState weapon_;

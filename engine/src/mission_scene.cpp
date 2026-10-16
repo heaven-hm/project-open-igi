@@ -29,28 +29,6 @@ constexpr std::array<std::array<int, 8>, 8> child_slots{{{{0, 1, 2, 3, 4, 5, 6, 
                                                          {{2, 3, 0, 1, 6, 7, 4, 5}},
                                                          {{0, 2, 1, 3, 4, 6, 5, 7}}}};
 
-Vector3 rotate(Vector3 position, float heading)
-{
-    const float cosine = std::cos(heading);
-    const float sine = std::sin(heading);
-    return {cosine * position.x - sine * position.y, sine * position.x + cosine * position.y, position.z};
-}
-
-Vector3 rotate_euler(Vector3 v, Vector3 rot)
-{
-    if (std::abs(rot.x) < 0.0001f && std::abs(rot.y) < 0.0001f)
-    {
-        return rotate(v, rot.z);
-    }
-    const float cx = std::cos(rot.x), sx = std::sin(rot.x);
-    const float cy = std::cos(rot.y), sy = std::sin(rot.y);
-    const float cz = std::cos(rot.z), sz = std::sin(rot.z);
-
-    const Vector3 v1{v.x, cx * v.y - sx * v.z, sx * v.y + cx * v.z};
-    const Vector3 v2{cy * v1.x + sy * v1.z, v1.y, -sy * v1.x + cy * v1.z};
-    return {cz * v2.x - sz * v2.y, sz * v2.x + cz * v2.y, v2.z};
-}
-
 std::pair<int, int> orient(int orientation, int horizontal, int vertical)
 {
     const int mirrored = (orientation & 4) != 0 ? -horizontal : horizontal;
@@ -597,6 +575,40 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                     {candidate->position, candidate->rotation.z, candidate->task_id, candidate->team, mesh});
                 scene.actors.back().source_call_index =
                     static_cast<std::size_t>(&call - initializer.calls().data());
+            }
+            else if (candidate->type == "Door")
+            {
+                SceneDoor door;
+                door.task_id = candidate->task_id;
+                door.name = candidate->name;
+                door.model_id = candidate->model_id;
+                door.position = candidate->position;
+                door.rotation = candidate->rotation;
+                door.open = false;
+                door.mesh = mesh;
+                if (mesh)
+                {
+                    Vector3 min_v{1e9f, 1e9f, 1e9f};
+                    Vector3 max_v{-1e9f, -1e9f, -1e9f};
+                    for (const auto& tri : mesh->triangles)
+                    {
+                        for (const auto& v : tri.vertices)
+                        {
+                            min_v.x = std::min(min_v.x, v.position.x);
+                            min_v.y = std::min(min_v.y, v.position.y);
+                            min_v.z = std::min(min_v.z, v.position.z);
+                            max_v.x = std::max(max_v.x, v.position.x);
+                            max_v.y = std::max(max_v.y, v.position.y);
+                            max_v.z = std::max(max_v.z, v.position.z);
+                        }
+                    }
+                    if (min_v.x < max_v.x)
+                    {
+                        door.min_bounds = min_v;
+                        door.max_bounds = max_v;
+                    }
+                }
+                scene.doors.push_back(door);
             }
             else
             {
