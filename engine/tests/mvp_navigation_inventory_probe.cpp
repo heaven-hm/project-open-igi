@@ -41,7 +41,14 @@ MissionScene test_scene()
     pickup.identifier = "WEAPON_ID_AK47";
     pickup.initially_owned = false;
     pickup.ammunition_identifier = "AMMO_ID_762";
-    scene.weapons = {pistol, rifle, knife, pickup};
+    SceneWeapon sniper = pistol;
+    sniper.identifier = "WEAPON_ID_DRAGUNOV";
+    sniper.parameters.name = "Dragunov SVD";
+    sniper.parameters.magazine_capacity = 10;
+    sniper.initial_reserve = 50;
+    sniper.initially_owned = false;
+    sniper.ammunition_identifier = "AMMO_ID_762x54";
+    scene.weapons = {pistol, rifle, knife, pickup, sniper};
     scene.weapon_categories = {{"WEAPON_ID_KNIFE"}, {"WEAPON_ID_GLOCK"}, {"WEAPON_ID_MP5SD"}};
     scene.weapon_pickups.push_back({{0, 1.2f, -2}, "WEAPON_ID_AK47"});
     return scene;
@@ -150,6 +157,57 @@ int main()
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
                     simulation.health() == 3,
                 "Restart must restore the original loadout and health");
+
+        // Verify weapon zoom differentiation: MP5 iron sights vs Dragunov scope
+        input = {};
+        input.aiming = true;
+        for (int i = 0; i < 15; ++i)
+        {
+            simulation.tick(input);
+        }
+        require(!simulation.is_scoped(), "MP5SD iron sights must not engage sniper scope mode");
+        require(simulation.zoom_factor() > 1.2f, "MP5SD aiming must provide iron-sight zoom");
+
+        // Verify Developer Mode (F11 toggle)
+        simulation.toggle_developer_mode();
+        require(simulation.developer_mode(), "Developer mode must be active after toggle");
+        require(simulation.inventory_size() == scene.weapons.size(),
+                "Developer mode must grant all weapons in mission scene");
+        require(simulation.weapon().reserve == 999, "Developer mode must grant 999 unlimited reserve ammo");
+        require(simulation.health() == scene.player_parameters.maximum_health,
+                "Developer mode must restore maximum health");
+
+        // Find and select Dragunov in inventory
+        int dragunov_slot = -1;
+        for (std::size_t slot = 0; slot < simulation.inventory_size(); ++slot)
+        {
+            input = {};
+            input.weapon_slot = static_cast<int>(slot);
+            simulation.tick(input);
+            const auto* def = simulation.weapon_definition();
+            if (def && def->identifier == "WEAPON_ID_DRAGUNOV")
+            {
+                dragunov_slot = static_cast<int>(slot);
+                break;
+            }
+        }
+        require(dragunov_slot >= 0, "Dragunov must be present in developer mode inventory");
+        input = {};
+        input.aiming = true;
+        for (int i = 0; i < 20; ++i)
+        {
+            simulation.tick(input);
+        }
+        require(simulation.is_scoped(), "Aiming with Dragunov must engage high-magnification sniper scope");
+        require(simulation.zoom_factor() >= 4.0f, "Dragunov scope must provide telescopic magnification >= 4x");
+        simulation.adjust_zoom(1);
+        require(simulation.is_scoped(), "Dragunov must remain scoped after adjust_zoom");
+
+        // Toggle developer mode off
+        simulation.toggle_developer_mode();
+        require(!simulation.developer_mode(), "Developer mode must toggle off cleanly");
+
+        simulation.restart();
 
         scene.navigation_graphs.push_back(graph);
         scene.patrol_paths.push_back({2400, {{2, 4}}});

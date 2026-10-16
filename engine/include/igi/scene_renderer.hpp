@@ -61,6 +61,7 @@ class SceneRenderer final
                    bool weapon);
     void rectangle(int left, int top, int width, int height, std::uint32_t color);
     void text(int left, int top, std::string_view message, std::uint32_t color, int scale = 1);
+    void render_scope_overlay(int center_x, int center_y, float zoom, bool hit_marker);
     int width_{};
     int height_{};
     std::vector<std::uint32_t> pixels_;

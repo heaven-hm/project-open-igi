@@ -108,6 +108,9 @@ void GameSimulation::restart()
     locomotion_state_ = 0;
     jump_was_pressed_ = false;
     tick_count_ = 0;
+    developer_mode_ = false;
+    current_zoom_ = 1.0f;
+    dragunov_zoom_level_ = 6.5f;
     weapon_ = {};
     random_generator_ = RetailRandomGenerator{};
     weapon_.magazine = scene_.weapon_parameters.magazine_capacity;
@@ -225,6 +228,22 @@ void GameSimulation::tick(const PlayerInput& input)
     heading_ = std::remainder(heading_ + input.heading_change, 2.0f * std::numbers::pi_v<float>);
     pitch_ = std::clamp(pitch_ + input.pitch_change, -1.4f, 1.4f);
     aiming_ = input.aiming;
+    const bool scoped = is_scoped();
+    const float target_zoom = aiming_ ? (scoped ? dragunov_zoom_level_ : 1.55f) : 1.0f;
+    current_zoom_ += (target_zoom - current_zoom_) * (scoped ? 0.35f : 0.45f);
+    if (std::abs(target_zoom - current_zoom_) < 0.01f)
+    {
+        current_zoom_ = target_zoom;
+    }
+    if (developer_mode_)
+    {
+        health_ = scene_.player_parameters.maximum_health;
+        weapon_.reserve = 999;
+        if (selected_weapon_slot_ < inventory_.size())
+        {
+            inventory_[selected_weapon_slot_].state.reserve = 999;
+        }
+    }
     damage_flash_remaining_ = std::max(0.0f, damage_flash_remaining_ - 1.0f / 30.0f);
     if (health_ > 0)
     {
@@ -525,7 +544,7 @@ void GameSimulation::query_ground(HumanMovementState& human,
         {
             const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
             constexpr float threshold_speed = 14.0f;
-            if (landing_speed > threshold_speed && health_ > 0.0f)
+            if (!developer_mode_ && landing_speed > threshold_speed && health_ > 0.0f)
             {
                 const float damage_ratio = (landing_speed - threshold_speed) / 13.0f;
                 const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
@@ -596,6 +615,71 @@ void GameSimulation::separate_humans(HumanMovementState&,
 void GameSimulation::commit_transform(HumanMovementState& human, const WorldPosition3& destination, float)
 {
     human.world_position = destination;
+}
+
+bool GameSimulation::is_scoped() const noexcept
+{
+    const auto* def = weapon_definition();
+    if (!aiming_ || def == nullptr)
+    {
+        return false;
+    }
+    return def->identifier == "WEAPON_ID_DRAGUNOV" ||
+           def->identifier.find("DRAGUNOV") != std::string::npos ||
+           def->identifier.find("Dragunov") != std::string::npos;
+}
+
+void GameSimulation::adjust_zoom(int direction) noexcept
+{
+    if (direction > 0)
+    {
+        dragunov_zoom_level_ = std::min(14.0f, dragunov_zoom_level_ + 1.0f);
+    }
+    else if (direction < 0)
+    {
+        dragunov_zoom_level_ = std::max(3.0f, dragunov_zoom_level_ - 1.0f);
+    }
+}
+
+void GameSimulation::toggle_developer_mode()
+{
+    developer_mode_ = !developer_mode_;
+    if (developer_mode_)
+    {
+        for (std::size_t def_idx = 0; def_idx < scene_.weapons.size(); ++def_idx)
+        {
+            const auto& def = scene_.weapons[def_idx];
+            auto it = std::find_if(inventory_.begin(),
+                                   inventory_.end(),
+                                   [&](const auto& item) { return item.definition_index == def_idx; });
+            if (it != inventory_.end())
+            {
+                it->state.magazine = def.parameters.magazine_capacity;
+                it->state.reserve = 999;
+            }
+            else
+            {
+                WeaponState ws{};
+                ws.magazine = def.parameters.magazine_capacity;
+                ws.reserve = 999;
+                inventory_.push_back({def_idx, ws});
+            }
+        }
+        weapon_.reserve = 999;
+        const auto* cur_def = weapon_definition();
+        if (cur_def)
+        {
+            weapon_.magazine = cur_def->parameters.magazine_capacity;
+        }
+        health_ = scene_.player_parameters.maximum_health;
+        diagnostics::log(diagnostics::Severity::information,
+                         "developer",
+                         "Developer mode enabled: all weapons granted, unlimited ammo, god mode");
+    }
+    else
+    {
+        diagnostics::log(diagnostics::Severity::information, "developer", "Developer mode disabled");
+    }
 }
 
 } // namespace igi::gameplay

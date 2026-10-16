@@ -345,6 +345,108 @@ void SceneRenderer::text(int left, int top, std::string_view message, std::uint3
     }
 }
 
+void SceneRenderer::render_scope_overlay(int center_x, int center_y, float zoom, bool hit_marker)
+{
+    const int radius = static_cast<int>(height_ * 0.44f);
+    const int radius_sq = radius * radius;
+    const std::uint32_t mask_color = 0xff080b08u;
+    const std::uint32_t ring_color = 0xff252c25u;
+    const std::uint32_t reticle_color = hit_marker ? 0xffff4433u : 0xff141a14u;
+    const std::uint32_t glow_color = hit_marker ? 0xffff7766u : 0xff3b4a3bu;
+
+    for (int y = 0; y < height_; ++y)
+    {
+        const int dy = y - center_y;
+        const int dy_sq = dy * dy;
+        if (dy_sq >= radius_sq)
+        {
+            std::fill_n(pixels_.begin() + static_cast<std::size_t>(y) * width_, width_, mask_color);
+        }
+        else
+        {
+            const int dx = static_cast<int>(std::sqrt(static_cast<float>(radius_sq - dy_sq)));
+            const int left_bound = std::max(0, center_x - dx);
+            const int right_bound = std::min(width_, center_x + dx);
+            if (left_bound > 0)
+            {
+                std::fill_n(pixels_.begin() + static_cast<std::size_t>(y) * width_, left_bound, mask_color);
+            }
+            if (right_bound < width_)
+            {
+                std::fill_n(pixels_.begin() + static_cast<std::size_t>(y) * width_ + right_bound, width_ - right_bound, mask_color);
+            }
+            if (left_bound < right_bound)
+            {
+                pixels_[static_cast<std::size_t>(y) * width_ + left_bound] = ring_color;
+                if (left_bound + 1 < right_bound)
+                {
+                    pixels_[static_cast<std::size_t>(y) * width_ + left_bound + 1] = ring_color;
+                }
+                pixels_[static_cast<std::size_t>(y) * width_ + right_bound - 1] = ring_color;
+                if (right_bound - 2 >= left_bound)
+                {
+                    pixels_[static_cast<std::size_t>(y) * width_ + right_bound - 2] = ring_color;
+                }
+            }
+        }
+    }
+
+    const int chevron_height = 10;
+    for (int i = 0; i <= chevron_height; ++i)
+    {
+        rectangle(center_x - i, center_y + i, 1, 2, reticle_color);
+        rectangle(center_x + i, center_y + i, 1, 2, reticle_color);
+    }
+    const std::array<int, 3> sub_chevrons = {28, 56, 84};
+    for (int offset_y : sub_chevrons)
+    {
+        const int cy = center_y + offset_y;
+        if (cy + 7 < center_y + radius - 20)
+        {
+            for (int i = 0; i <= 6; ++i)
+            {
+                rectangle(center_x - i, cy + i, 1, 1, glow_color);
+                rectangle(center_x + i, cy + i, 1, 1, glow_color);
+            }
+        }
+    }
+
+    const int inner_gap = 18;
+    const int outer_extent = radius - 25;
+    rectangle(center_x - outer_extent, center_y, outer_extent - inner_gap, 2, reticle_color);
+    rectangle(center_x + inner_gap, center_y, outer_extent - inner_gap, 2, reticle_color);
+    rectangle(center_x, center_y - outer_extent, 2, outer_extent - inner_gap, reticle_color);
+
+    for (int d = inner_gap + 12; d < outer_extent; d += 16)
+    {
+        const int tick_h = ((d - inner_gap) % 32 == 0) ? 10 : 6;
+        rectangle(center_x - d, center_y - tick_h / 2, 1, tick_h, glow_color);
+        rectangle(center_x + d, center_y - tick_h / 2, 1, tick_h, glow_color);
+    }
+
+    const int rf_base_y = center_y + static_cast<int>(radius * 0.45f);
+    const int rf_start_x = center_x - static_cast<int>(radius * 0.65f);
+    const int rf_width = static_cast<int>(radius * 0.45f);
+    rectangle(rf_start_x, rf_base_y, rf_width, 2, glow_color);
+    for (int rx = 0; rx < rf_width; ++rx)
+    {
+        const float t = static_cast<float>(rx) / static_cast<float>(rf_width);
+        const int cur_h = static_cast<int>(7.0f + 19.0f * (1.0f - t) * (1.0f - t));
+        rectangle(rf_start_x + rx, rf_base_y - cur_h, 1, 1, glow_color);
+    }
+    text(rf_start_x, rf_base_y + 4, "10", glow_color);
+    text(rf_start_x + rf_width / 4, rf_base_y + 4, "8", glow_color);
+    text(rf_start_x + rf_width / 2, rf_base_y + 4, "6", glow_color);
+    text(rf_start_x + 3 * rf_width / 4, rf_base_y + 4, "4", glow_color);
+    text(rf_start_x + rf_width - 8, rf_base_y + 4, "2", glow_color);
+    text(rf_start_x, rf_base_y - 34, "1.7M", glow_color);
+
+    const int zoom_int = static_cast<int>(zoom * 10.0f + 0.5f);
+    const std::string zoom_str = std::to_string(zoom_int / 10) + "." + std::to_string(zoom_int % 10) + "X";
+    rectangle(center_x - 70, center_y - radius + 15, 140, 20, 0xff17211bu);
+    text(center_x - 55, center_y - radius + 21, "SVD " + zoom_str, 0xff9cba81u);
+}
+
 void SceneRenderer::render(const MissionScene& scene,
                            const GameSimulation& simulation,
                            const FreeCamera* free_camera)
@@ -395,8 +497,8 @@ void SceneRenderer::render(const MissionScene& scene,
         : simulation.aim_direction();
     const Vector3 right{std::cos(heading), std::sin(heading), 0};
     const Vector3 up = normalized(cross(right, forward));
-    const float focal_length =
-        static_cast<float>(width_) * ((simulation.aiming() && !is_free_camera) ? 0.85f : 0.55f);
+    const float zoom_factor = is_free_camera ? 1.0f : simulation.zoom_factor();
+    const float focal_length = static_cast<float>(width_) * 0.55f * zoom_factor;
     for (const auto& surface : scene.static_triangles)
     {
         if (surface.firing_only)
@@ -468,7 +570,7 @@ void SceneRenderer::render(const MissionScene& scene,
         }
     }
     const auto equipped_mesh = simulation.weapon_mesh();
-    if (equipped_mesh && simulation.health() > 0 && !is_free_camera)
+    if (equipped_mesh && simulation.health() > 0 && !is_free_camera && !simulation.is_scoped())
     {
         std::fill(depth_.begin(), depth_.end(), 0.0f);
         if (scene.first_person_mesh && scene.first_person_animations &&
@@ -548,12 +650,19 @@ void SceneRenderer::render(const MissionScene& scene,
     const int center_y = height_ / 2;
     if (!is_free_camera)
     {
-        const auto crosshair_color =
-            simulation.weapon().hit_marker_remaining > 0 ? 0xffffb171u : 0xffdce1d1u;
-        rectangle(center_x - 9, center_y, 5, 1, crosshair_color);
-        rectangle(center_x + 5, center_y, 5, 1, crosshair_color);
-        rectangle(center_x, center_y - 9, 1, 5, crosshair_color);
-        rectangle(center_x, center_y + 5, 1, 5, crosshair_color);
+        if (simulation.is_scoped())
+        {
+            render_scope_overlay(center_x, center_y, simulation.zoom_factor(), simulation.weapon().hit_marker_remaining > 0);
+        }
+        else
+        {
+            const auto crosshair_color =
+                simulation.weapon().hit_marker_remaining > 0 ? 0xffffb171u : 0xffdce1d1u;
+            rectangle(center_x - 9, center_y, 5, 1, crosshair_color);
+            rectangle(center_x + 5, center_y, 5, 1, crosshair_color);
+            rectangle(center_x, center_y - 9, 1, 5, crosshair_color);
+            rectangle(center_x, center_y + 5, 1, 5, crosshair_color);
+        }
     }
     rectangle(14, height_ - 55, 195, 40, 0xff17211bu);
     text(24, height_ - 46, "HEALTH", 0xffa8bd99u);
@@ -601,6 +710,12 @@ void SceneRenderer::render(const MissionScene& scene,
         rectangle(center_x - 200, 14, 400, 42, 0xff17211bu);
         text(center_x - 185, 20, "FREE CAMERA ACTIVE F12 TO EXIT", 0xff66ccffu, 2);
         text(center_x - 185, 38, "WASD ROAM   SPACE UP   SHIFT DOWN", 0xffdce1d1u);
+    }
+    if (simulation.developer_mode())
+    {
+        const int dev_y = is_free_camera ? 60 : 14;
+        rectangle(center_x - 210, dev_y, 420, 22, 0xff17211bu);
+        text(center_x - 198, dev_y + 7, "DEV MODE: GOD MODE / ALL WEAPONS / INF AMMO", 0xff9cba81u);
     }
     if (simulation.damage_flash_remaining() > 0)
     {

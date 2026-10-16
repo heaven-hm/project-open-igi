@@ -52,6 +52,11 @@ void GameSimulation::select_weapon(std::size_t slot)
     weapon_.fire_variant = 0;
     weapon_.animation_identifier = scene_.weapons[inventory_[slot].definition_index].stand_animation;
     weapon_.animation_time = 0;
+    current_zoom_ = 1.0f;
+    if (developer_mode_)
+    {
+        weapon_.reserve = 999;
+    }
     diagnostics::log(diagnostics::Severity::information,
                      "inventory",
                      "Selected slot " + std::to_string(slot + 1) + ": " + weapon_parameters().name);

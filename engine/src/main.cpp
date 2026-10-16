@@ -510,8 +510,8 @@ int run(RuntimeOptions options, const char* executable)
     }
     log(Severity::information,
         "application",
-        "Mission ready. Controls loaded from original config.qvm; Enter "
-        "restarts, F11 toggles fullscreen, F12 toggles free camera, Escape quits");
+        "Mission ready. Controls loaded from original config.qvm; Enter restarts, "
+        "F10 toggles fullscreen, F11 toggles dev mode (god/weapons/ammo), F12 toggles free camera, Escape quits");
     bool running = true;
     std::uint64_t frame_count = 0;
     auto previous_time = Clock::now();
@@ -559,7 +559,14 @@ int run(RuntimeOptions options, const char* executable)
             {
                 const int wheel =
                     event.wheel.direction == SDL_MOUSEWHEEL_FLIPPED ? -event.wheel.y : event.wheel.y;
-                requested_weapon_cycle = wheel > 0 ? -1 : wheel < 0 ? 1 : 0;
+                if (simulation.is_scoped() && !free_camera.active)
+                {
+                    simulation.adjust_zoom(wheel);
+                }
+                else
+                {
+                    requested_weapon_cycle = wheel > 0 ? -1 : wheel < 0 ? 1 : 0;
+                }
             }
             if (event.type == SDL_KEYDOWN && event.key.repeat == 0)
             {
@@ -577,7 +584,7 @@ int run(RuntimeOptions options, const char* executable)
                         free_camera.pitch = simulation.pitch();
                     }
                 }
-                if (event.key.keysym.sym == SDLK_F11 && window)
+                if (event.key.keysym.sym == SDLK_F10 && window)
                 {
                     const bool fullscreen =
                         (SDL_GetWindowFlags(window.get()) & SDL_WINDOW_FULLSCREEN_DESKTOP) != 0;
@@ -586,6 +593,14 @@ int run(RuntimeOptions options, const char* executable)
                     {
                         log(Severity::warning, "display", SDL_GetError());
                     }
+                }
+                if (event.key.keysym.sym == SDLK_F11)
+                {
+                    simulation.toggle_developer_mode();
+                    log(Severity::information,
+                        "developer",
+                        std::string("Developer mode ") +
+                            (simulation.developer_mode() ? "ENABLED (God mode / All weapons / Inf ammo)" : "DISABLED"));
                 }
                 if (event.key.keysym.sym == SDLK_F12)
                 {
@@ -611,10 +626,20 @@ int run(RuntimeOptions options, const char* executable)
                     simulation.teleport_player(free_camera.position, free_camera.heading, free_camera.pitch);
                     log(Severity::information, "camera", "Player teleported to camera position and resumed gameplay");
                 }
+                if ((event.key.keysym.sym == SDLK_EQUALS || event.key.keysym.sym == SDLK_PLUS ||
+                     event.key.keysym.sym == SDLK_RIGHTBRACKET) && simulation.is_scoped())
+                {
+                    simulation.adjust_zoom(1);
+                }
+                if ((event.key.keysym.sym == SDLK_MINUS || event.key.keysym.sym == SDLK_UNDERSCORE ||
+                     event.key.keysym.sym == SDLK_LEFTBRACKET) && simulation.is_scoped())
+                {
+                    simulation.adjust_zoom(-1);
+                }
             }
             if (event.type == SDL_MOUSEMOTION)
             {
-                const float sensitivity = controls.mouse_sensitivity() * 0.00625f;
+                float sensitivity = controls.mouse_sensitivity() * 0.00625f;
                 if (free_camera.active)
                 {
                     free_camera.heading -= static_cast<float>(event.motion.xrel) * sensitivity;
@@ -624,6 +649,14 @@ int run(RuntimeOptions options, const char* executable)
                 }
                 else
                 {
+                    if (simulation.is_scoped())
+                    {
+                        sensitivity *= std::clamp(1.0f / simulation.zoom_factor(), 0.08f, 1.0f);
+                    }
+                    else if (simulation.aiming())
+                    {
+                        sensitivity *= 0.65f;
+                    }
                     heading_change -= static_cast<float>(event.motion.xrel) * sensitivity;
                     pitch_change +=
                         static_cast<float>(event.motion.yrel) * sensitivity * (controls.invert_mouse() ? 1 : -1);

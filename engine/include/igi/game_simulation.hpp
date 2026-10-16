@@ -217,6 +217,22 @@ class GameSimulation final : private HumanMovementWorld
         return difficulty_;
     }
 
+    void toggle_developer_mode();
+
+    [[nodiscard]] bool developer_mode() const noexcept
+    {
+        return developer_mode_;
+    }
+
+    [[nodiscard]] bool is_scoped() const noexcept;
+
+    [[nodiscard]] float zoom_factor() const noexcept
+    {
+        return current_zoom_;
+    }
+
+    void adjust_zoom(int direction) noexcept;
+
   private:
     void advance_player(const PlayerInput& input);
     void advance_weapon(const PlayerInput& input);
@@ -263,6 +279,9 @@ class GameSimulation final : private HumanMovementWorld
     bool mission_completed_{};
     int difficulty_{1};
     std::uint64_t tick_count_{};
+    bool developer_mode_{};
+    float current_zoom_{1.0f};
+    float dragunov_zoom_level_{6.5f};
 };
 
 } // namespace igi::gameplay

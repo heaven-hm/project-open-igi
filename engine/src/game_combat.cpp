@@ -170,8 +170,20 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         ++weapon_.shots_fired;
         ++weapon_.rounds_in_current_burst;
         const auto recoil = WeaponAccuracy::sample_recoil(parameters, random_generator_);
-        weapon_.sampled_recoil_pitch = recoil.pitch;
-        weapon_.sampled_recoil_yaw = recoil.yaw;
+        if (is_scoped())
+        {
+            weapon_.sampled_recoil_pitch = recoil.pitch * 0.05f;
+            weapon_.sampled_recoil_yaw = recoil.yaw * 0.05f;
+        }
+        else
+        {
+            weapon_.sampled_recoil_pitch = recoil.pitch;
+            weapon_.sampled_recoil_yaw = recoil.yaw;
+        }
+        if (developer_mode_)
+        {
+            weapon_.reserve = 999;
+        }
         diagnostics::log(diagnostics::Severity::debug,
                          "weapon",
                          "Projectile fired; magazine=" + std::to_string(weapon_.magazine) +
@@ -314,8 +326,11 @@ void GameSimulation::advance_projectiles()
         }
         if (target_player)
         {
-            health_ = std::max(0.0f, health_ - projectile.damage);
-            damage_flash_remaining_ = 0.2f;
+            if (!developer_mode_)
+            {
+                health_ = std::max(0.0f, health_ - projectile.damage);
+                damage_flash_remaining_ = 0.2f;
+            }
             diagnostics::log(
                 diagnostics::Severity::information,
                 "combat",
