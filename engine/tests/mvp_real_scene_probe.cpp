@@ -382,11 +382,28 @@ int main(int argument_count, char** arguments)
         }
         require(visible_guard_index < scene.actors.size(),
                 "Level 1 must provide a clear, in-cone gameplay guard for the AI firing check");
-        require(scene.actors[visible_guard_index].maximum_health == 0.5f &&
-                    scene.actors[visible_guard_index].hit_probability_at_minimum_range == 1.0f &&
-                    scene.actors[visible_guard_index].hit_probability_at_maximum_range < 1.0f &&
-                    scene.actors[visible_guard_index].aim_precision > 0.0f,
-                "Level 1 guard health and combat values must load from the original difficulty-specific AI row");
+        require(
+            scene.actors[visible_guard_index].maximum_health == 0.5f &&
+                scene.actors[visible_guard_index].hit_probability_at_minimum_range == 1.0f &&
+                scene.actors[visible_guard_index].hit_probability_at_maximum_range < 1.0f &&
+                scene.actors[visible_guard_index].aim_precision > 0.0f &&
+                scene.actors[visible_guard_index].maximum_rounds_per_sequence > 0 &&
+                scene.actors[visible_guard_index].minimum_clip_fraction >= 0.0f &&
+                scene.actors[visible_guard_index].minimum_clip_fraction <= 1.0f &&
+                scene.actors[visible_guard_index].random_clip_fraction >= 0.0f &&
+                scene.actors[visible_guard_index].random_clip_fraction <= 1.0f,
+            "Level 1 guard health and combat values must load from the original difficulty-specific AI row");
+        const auto guard_weapon =
+            std::find_if(scene.weapons.begin(),
+                         scene.weapons.end(),
+                         [&](const auto& weapon) {
+                             return weapon.identifier == scene.actors[visible_guard_index].weapon_identifier;
+                         });
+        require(guard_weapon != scene.weapons.end() && guard_weapon->parameters.magazine_capacity > 0 &&
+                    guard_weapon->parameters.shots_per_minute > 0.0f &&
+                    guard_weapon->parameters.reload_seconds > 0.0f &&
+                    guard_weapon->parameters.maximum_rounds_per_burst > 0,
+                "Level 1 guard weapon cadence, magazine, reload and burst fields must load from weapon.qvm");
         for (int tick_index = 0; tick_index < 90; ++tick_index)
         {
             ai_combat_simulation.tick({});
@@ -396,13 +413,26 @@ int main(int argument_count, char** arguments)
         const auto ai_combat_log_entries = igi::logging::Logger::instance().snapshot_recent_entries(4096);
         const std::string target_shot_message =
             "Soldier " + std::to_string(scene.actors[visible_guard_index].identifier) + " fired shot";
-        const bool verified_timestamped_ai_shot = std::any_of(
-            ai_combat_log_entries.begin(),
-            ai_combat_log_entries.end(),
-            [&](const igi::logging::LogEntry& entry)
-            { return entry.subsystem == "ai" && entry.message.find(target_shot_message) != std::string::npos; });
+        const bool verified_timestamped_ai_shot =
+            std::any_of(ai_combat_log_entries.begin(),
+                        ai_combat_log_entries.end(),
+                        [&](const igi::logging::LogEntry& entry) {
+                            return entry.subsystem == "ai" &&
+                                   entry.message.find(target_shot_message) != std::string::npos;
+                        });
         require(verified_timestamped_ai_shot,
                 "A real Level 1 AI projectile must be present in the timestamped gameplay log");
+        const std::string target_burst_message =
+            "Soldier " + std::to_string(scene.actors[visible_guard_index].identifier) + " started burst";
+        const bool verified_timestamped_ai_burst =
+            std::any_of(ai_combat_log_entries.begin(),
+                        ai_combat_log_entries.end(),
+                        [&](const igi::logging::LogEntry& entry) {
+                            return entry.subsystem == "ai" &&
+                                   entry.message.find(target_burst_message) != std::string::npos;
+                        });
+        require(verified_timestamped_ai_burst,
+                "A real Level 1 AI burst must be visible in the timestamped gameplay log");
         const auto& target_definition = scene.actors[target_index];
         const auto& target_state = combat.actors()[target_index];
         const auto target_pose = sample_bone_pose(

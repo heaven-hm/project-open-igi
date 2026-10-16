@@ -2,8 +2,11 @@
 #include "igi/game_simulation.hpp"
 #include "igi/navigation.hpp"
 #include "igi/skeletal_animation.hpp"
+#include "igi/weapon_accuracy.hpp"
 
 #include <algorithm>
+#include <limits>
+#include <stdexcept>
 
 namespace igi::gameplay
 {
@@ -176,7 +179,33 @@ void GameSimulation::advance_actors()
         {
             continue;
         }
-        actor.cooldown = std::max(0.0f, actor.cooldown - tick_duration);
+        if (actor.weapon_cooldown_ticks_remaining > 0)
+        {
+            --actor.weapon_cooldown_ticks_remaining;
+        }
+        bool reload_completed_this_tick = false;
+        if (actor.reload_remaining > 0)
+        {
+            actor.reload_remaining = std::max(0.0f, actor.reload_remaining - tick_duration);
+            if (actor.reload_remaining == 0)
+            {
+                const auto definition = std::find_if(
+                    scene_.weapons.begin(),
+                    scene_.weapons.end(),
+                    [&](const auto& candidate)
+                    { return candidate.identifier == scene_.actors[actor_index].weapon_identifier; });
+                const auto magazine_capacity = definition == scene_.weapons.end()
+                                                   ? scene_.weapon_parameters.magazine_capacity
+                                                   : definition->parameters.magazine_capacity;
+                actor.ammunition_in_clip = magazine_capacity;
+                diagnostics::log(
+                    diagnostics::Severity::information,
+                    "ai",
+                    "Soldier " + std::to_string(scene_.actors[actor_index].identifier) +
+                        " completed weapon reload; magazine=" + std::to_string(actor.ammunition_in_clip));
+                reload_completed_this_tick = true;
+            }
+        }
         actor.route_retry_time = std::max(0.0f, actor.route_retry_time - tick_duration);
         const Vector3 eye = actor.position + Vector3{0, 0, 1.5f};
         const Vector3 to_detection_mark = player_detection_mark - eye;
@@ -209,10 +238,11 @@ void GameSimulation::advance_actors()
             actor.awareness_time = 5.0f;
             if (actor.behavior == ActorBehavior::guarding)
             {
-                actor.reaction_time = 0;
                 actor.route.clear();
                 actor.has_tracked_aim_position = false;
                 actor.first_fire = true;
+                actor.burst_active = false;
+                actor.rounds_remaining_in_burst = 0;
                 diagnostics::log(diagnostics::Severity::debug,
                                  "ai",
                                  "Soldier " + std::to_string(scene_.actors[actor_index].identifier) +
@@ -222,7 +252,6 @@ void GameSimulation::advance_actors()
         }
         else
         {
-            actor.reaction_time = 0;
             actor.awareness_time = std::max(0.0f, actor.awareness_time - tick_duration);
             if (actor.awareness_time == 0)
             {
@@ -258,62 +287,157 @@ void GameSimulation::advance_actors()
             else
             {
                 const float aim_precision = std::clamp(scene_.actors[actor_index].aim_precision, 0.0f, 1.0f);
-                actor.tracked_aim_position = actor.tracked_aim_position +
-                                             (authored_aim_point - actor.tracked_aim_position) * aim_precision;
+                actor.tracked_aim_position =
+                    actor.tracked_aim_position +
+                    (authored_aim_point - actor.tracked_aim_position) * aim_precision;
             }
         }
         if (!visible)
         {
             continue;
         }
-        actor.reaction_time += tick_duration;
-        const float diff_reaction = difficulty_ == 0 ? 0.85f : difficulty_ == 2 ? 0.35f : 0.60f;
-        if (actor.reaction_time < diff_reaction || actor.cooldown > 0)
+        const auto& actor_definition = scene_.actors[actor_index];
+        if (reload_completed_this_tick)
         {
             continue;
         }
-        actor.cooldown = 0.45f;
-        actor.muzzle_flash_remaining = 0.055f;
-        ++actor.shots_fired;
-        const auto& actor_definition = scene_.actors[actor_index];
-        const float primary_view_length = std::max(actor_definition.primary_view_length, 0.01f);
-        const float distance_to_target = length(player_feet - actor.position);
-        const float clamped_target_distance = std::min(distance_to_target, primary_view_length);
-        const float hit_probability_range = actor_definition.hit_probability_at_maximum_range -
-                                            actor_definition.hit_probability_at_minimum_range;
-        actor.hit_probability = clamped_target_distance < 0.01f
-                                    ? actor_definition.hit_probability_at_minimum_range
-                                    : actor_definition.hit_probability_at_minimum_range +
-                                          hit_probability_range * (clamped_target_distance / primary_view_length);
-        if (actor.first_fire)
-        {
-            actor.hit_probability *= 0.5f;
-            actor.first_fire = false;
-        }
-        actor.hit_probability = std::clamp(actor.hit_probability, 0.0f, 1.0f);
-        diagnostics::log(diagnostics::Severity::debug,
-                         "ai",
-                         "Soldier " + std::to_string(scene_.actors[actor_index].identifier) + " fired shot " +
-                             std::to_string(actor.shots_fired) + "; hit probability=" +
-                             std::to_string(actor.hit_probability));
         const auto definition =
             std::find_if(scene_.weapons.begin(),
                          scene_.weapons.end(),
                          [&](const auto& candidate)
-                         { return candidate.identifier == scene_.actors[actor_index].weapon_identifier; });
+                         { return candidate.identifier == actor_definition.weapon_identifier; });
         const auto& parameters =
             definition == scene_.weapons.end() ? scene_.weapon_parameters : definition->parameters;
+        if (parameters.category != WeaponCategory::gun && parameters.category != WeaponCategory::pistol &&
+            parameters.category != WeaponCategory::shotgun)
+        {
+            continue;
+        }
+        if (actor.reload_remaining > 0)
+        {
+            continue;
+        }
+        if (actor.ammunition_in_clip == 0)
+        {
+            actor.burst_active = false;
+            actor.rounds_remaining_in_burst = 0;
+            if (!std::isfinite(parameters.reload_seconds) || parameters.reload_seconds <= 0)
+            {
+                throw std::runtime_error("Original AI weapon reload time is invalid for " +
+                                         actor_definition.weapon_identifier);
+            }
+            actor.reload_remaining = parameters.reload_seconds;
+            diagnostics::log(diagnostics::Severity::information,
+                             "ai",
+                             "Soldier " + std::to_string(actor_definition.identifier) +
+                                 " started weapon reload; duration=" +
+                                 std::to_string(actor.reload_remaining) + " seconds");
+            continue;
+        }
+        if (actor.burst_active && actor.rounds_remaining_in_burst == 0)
+        {
+            actor.burst_active = false;
+            continue;
+        }
+        if (!actor.burst_active)
+        {
+            const auto magazine_capacity = static_cast<std::int32_t>(parameters.magazine_capacity);
+            const auto weapon_burst_size = parameters.maximum_rounds_per_burst;
+            if (magazine_capacity <= 0 || weapon_burst_size < 0 ||
+                actor_definition.maximum_rounds_per_sequence <= 0)
+            {
+                throw std::runtime_error("Original AI weapon burst configuration is invalid for " +
+                                         actor_definition.weapon_identifier);
+            }
+            const float burst_clip_fraction =
+                actor_definition.minimum_clip_fraction +
+                random_generator_.next_single() * actor_definition.random_clip_fraction;
+            if (weapon_burst_size > 1 && weapon_burst_size != magazine_capacity)
+            {
+                actor.rounds_remaining_in_burst = weapon_burst_size;
+            }
+            else
+            {
+                // Retail sets x87 rounding to truncate and converts this product with FISTP.
+                const auto rounds_from_clip_fraction = static_cast<std::int32_t>(
+                    static_cast<double>(magazine_capacity) * static_cast<double>(burst_clip_fraction));
+                actor.rounds_remaining_in_burst =
+                    std::clamp(rounds_from_clip_fraction, 1, actor_definition.maximum_rounds_per_sequence);
+            }
+            actor.burst_active = true;
+            actor.rounds_fired_in_burst = 0;
+            const float primary_view_length = std::max(actor_definition.primary_view_length, 0.01f);
+            const float distance_to_target = length(actor.tracked_aim_position - actor.position);
+            const float clamped_target_distance = std::min(distance_to_target, primary_view_length);
+            const float hit_probability_range = actor_definition.hit_probability_at_maximum_range -
+                                                actor_definition.hit_probability_at_minimum_range;
+            actor.hit_probability = actor_definition.hit_probability_at_minimum_range +
+                                    hit_probability_range * (clamped_target_distance / primary_view_length);
+            if (actor.first_fire)
+            {
+                actor.hit_probability *= 0.5f;
+                actor.first_fire = false;
+            }
+            actor.hit_probability = std::clamp(actor.hit_probability, 0.0f, 1.0f);
+            diagnostics::log(diagnostics::Severity::debug,
+                             "ai",
+                             "Soldier " + std::to_string(actor_definition.identifier) +
+                                 " started burst; rounds=" + std::to_string(actor.rounds_remaining_in_burst) +
+                                 "; hit probability=" + std::to_string(actor.hit_probability));
+        }
+        if (actor.weapon_cooldown_ticks_remaining > 0 || actor.shot_delay_ticks_remaining > 0)
+        {
+            if (actor.shot_delay_ticks_remaining > 0)
+            {
+                --actor.shot_delay_ticks_remaining;
+            }
+            continue;
+        }
+        if (!std::isfinite(parameters.shots_per_minute) || parameters.shots_per_minute < 1 ||
+            parameters.shots_per_minute > static_cast<float>(std::numeric_limits<std::int32_t>::max()))
+        {
+            throw std::runtime_error("Original AI weapon firing rate is invalid for " +
+                                     actor_definition.weapon_identifier);
+        }
         const auto weapon_muzzle_position = actor.position + Vector3{0, 0, 1.5f};
         const auto target_aim_position = actor.has_tracked_aim_position
                                              ? actor.tracked_aim_position
                                              : player_feet + Vector3{0, 0, crouching_ ? 0.25f : 0.5f};
+        const Vector3 projectile_forward = normalized(target_aim_position - weapon_muzzle_position);
+        const Vector3 projectile_right{std::cos(actor.heading), std::sin(actor.heading), 0};
+        const Vector3 projectile_up = cross(projectile_right, projectile_forward);
+        const float projectile_spread =
+            WeaponAccuracy::cone_angle(parameters, static_cast<std::uint32_t>(actor.rounds_fired_in_burst));
+        const Vector3 projectile_direction = WeaponAccuracy::sample_direction(
+            projectile_spread, projectile_forward, projectile_right, projectile_up, random_generator_);
+        actor.muzzle_flash_remaining = 0.055f;
+        ++actor.shots_fired;
         projectiles_.push_back({weapon_muzzle_position,
-                                normalized(target_aim_position - weapon_muzzle_position),
+                                projectile_direction,
                                 parameters.maximum_distance,
                                 parameters.muzzle_velocity,
                                 parameters.damage,
                                 static_cast<int>(actor_index),
                                 actor.hit_probability});
+        --actor.ammunition_in_clip;
+        --actor.rounds_remaining_in_burst;
+        ++actor.rounds_fired_in_burst;
+        actor.weapon_cooldown_ticks_remaining =
+            WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
+        if (parameters.maximum_rounds_per_burst == 1)
+        {
+            const float shot_delay =
+                actor_definition.minimum_shot_delay_seconds +
+                random_generator_.next_single() * actor_definition.random_shot_delay_seconds;
+            actor.shot_delay_ticks_remaining = static_cast<std::int32_t>(shot_delay * 30.0f);
+        }
+        diagnostics::log(diagnostics::Severity::debug,
+                         "ai",
+                         "Soldier " + std::to_string(actor_definition.identifier) + " fired shot " +
+                             std::to_string(actor.shots_fired) +
+                             "; magazine=" + std::to_string(actor.ammunition_in_clip) +
+                             "; rounds left in burst=" + std::to_string(actor.rounds_remaining_in_burst) +
+                             "; hit probability=" + std::to_string(actor.hit_probability));
     }
 }
 

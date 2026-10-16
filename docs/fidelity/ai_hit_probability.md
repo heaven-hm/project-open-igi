@@ -20,14 +20,14 @@ resolves `GD_2` values `hit probability 1.0..0.3` and aim precision `0.8`.
 
 ## C++ changes
 
-Mission loading now resolves the selected difficulty's AI accuracy row and
-validates probabilities and aim precision as finite values in `[0, 1]`. AI
-projectiles aim at the authored standing/crouching target mark and update their
-retained aim with that row's aim-precision value. The hit chance is interpolated
-from the row using the current distance and a 26 m primary-view default. The
-first shot after acquiring the player has its probability halved. Projectile
-collision rolls that probability only after intersecting the player; a failed
-roll logs a miss and the projectile continues.
+Mission loading now resolves the selected difficulty's AI combat row and
+validates its probabilities and aim precision as finite values in `[0, 1]`.
+AI projectiles aim at the authored standing/crouching target mark and update
+their retained aim with that row's aim-precision value. The hit chance is
+interpolated from the row using the current distance and a 26 m primary-view
+default. The first burst after acquiring the player has its probability halved.
+Projectile collision rolls that probability only after intersecting the player;
+a failed roll logs a miss and the projectile continues.
 
 The same `HumanAIConfigItem`'s field named `Damage scale` initializes the
 soldier's maximum health. It does not multiply the damage of rounds the soldier
@@ -45,9 +45,11 @@ support in the retail routine or the vanilla C# implementation.
 - `mvp_original_level_gameplay` loads Level 1, checks the real guard's resolved
   settings, finds a clear in-cone guard/player placement, and verifies timestamped
   fire events.
-- A real Level 1 runtime capture recorded guard 2017's first shot at probability
-  `0.432692`, a probability miss, then subsequent shots at `0.865385`. Five hits
-  used the loaded AK damage of `0.3` and reduced player health from 3.0 to 1.5.
+- A real Level 1 runtime capture recorded guard 2017's first burst at probability
+  `0.432357` for 13 rounds and its next burst at `0.864714` for 11 rounds. The
+  captured trace includes both accepted hits and probability misses. A separate
+  player combat segment defeated the same guard in four `0.15` hit-zone damage
+  events against its configured `0.5` maximum health.
   The same run defeated guard 2017 in four `0.15` hits against its configured
   `0.5` maximum health.
 - Clang static analysis reported no diagnostics for the changed gameplay and
@@ -55,10 +57,9 @@ support in the retail routine or the vanilla C# implementation.
 
 ## Remaining differences
 
-This is not full AI combat parity. The C++ actor scheduler still uses a fixed
-cooldown instead of the retail burst, trigger, weapon cadence, and reload task
-state machine. The first-fire probability is therefore halved on the first shot
-rather than once per burst. The primary view length uses the constructor's 26 m
-default; the C++ mission path does not yet execute AI QVM view-length overrides.
-NPC-to-NPC hit-probability rolls are also not implemented. No paired retail
-runtime trace has established full behavioral equivalence.
+This is not full AI combat parity. The C++ mission path does not yet execute AI
+QVM view-length overrides, so it uses the constructor's 26 m default. NPC-to-NPC
+hit-probability rolls are not implemented. Body-state trigger gating, aim-turn
+tolerance, and continued firing after losing sight still differ from the
+vanilla C# combat state machine. No paired retail runtime trace has established
+full behavioral equivalence.

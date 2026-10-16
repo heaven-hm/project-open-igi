@@ -144,6 +144,11 @@ struct SceneActor final
     float hit_probability_at_maximum_range = 0.25f;
     float aim_precision = 0.2f;
     float primary_view_length = 26.0f;
+    std::int32_t maximum_rounds_per_sequence = 30;
+    float minimum_clip_fraction = 0.1f;
+    float random_clip_fraction = 0.2f;
+    float minimum_shot_delay_seconds = 0.1f;
+    float random_shot_delay_seconds{};
 };
 
 struct NavigationNode final
@@ -188,6 +193,18 @@ struct PlayerParameters final
     float maximum_health = 3.0f;
 };
 
+enum class WeaponCategory
+{
+    gun,
+    pistol,
+    shotgun,
+    knife,
+    grenade,
+    binocular,
+    medipack,
+    proximity_mine
+};
+
 struct WeaponParameters final
 {
     std::string name = "MP5 SD3";
@@ -199,6 +216,7 @@ struct WeaponParameters final
     float maximum_distance = 400.0f;
     bool automatic = true;
     bool melee{};
+    WeaponCategory category = WeaponCategory::gun;
     std::int32_t maximum_rounds_per_burst = 32;
     std::int32_t projectiles_per_round = 1;
     float minimum_spread_degrees{};

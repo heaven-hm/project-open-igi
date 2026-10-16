@@ -214,6 +214,70 @@ int main()
                 "An unopposed visible guard must damage the player before it is defeated");
         require(length(distant_combat.actors().front().position - guard_start) < 0.01f,
                 "A guard with a clear firing line must hold its firing position rather than chase-run");
+        auto burst_cadence_scene = make_scene(true, false);
+        burst_cadence_scene.actors.front().position.y = 12;
+        burst_cadence_scene.actors.front().maximum_rounds_per_sequence = 3;
+        burst_cadence_scene.actors.front().minimum_clip_fraction = 1.0f;
+        burst_cadence_scene.actors.front().random_clip_fraction = 0.0f;
+        burst_cadence_scene.weapon_parameters.shots_per_minute = 700.0f;
+        burst_cadence_scene.weapon_parameters.maximum_rounds_per_burst = 32;
+        GameSimulation burst_cadence_simulation(burst_cadence_scene);
+        burst_cadence_simulation.tick({});
+        require(burst_cadence_simulation.actors().front().shots_fired == 1,
+                "A newly visible guard must fire the first round immediately after its aim state begins");
+        burst_cadence_simulation.tick({});
+        require(burst_cadence_simulation.actors().front().shots_fired == 1,
+                "AI fire must wait for the retail weapon cooldown between rounds");
+        burst_cadence_simulation.tick({});
+        require(burst_cadence_simulation.actors().front().shots_fired == 2,
+                "The second AI round must follow the configured 700-round-per-minute tick cadence");
+        burst_cadence_simulation.tick({});
+        burst_cadence_simulation.tick({});
+        require(burst_cadence_simulation.actors().front().shots_fired == 3 &&
+                    burst_cadence_simulation.actors().front().rounds_remaining_in_burst == 0,
+                "The AI settings row must cap a magazine burst at its configured three rounds");
+        burst_cadence_simulation.tick({});
+        require(burst_cadence_simulation.actors().front().shots_fired == 3,
+                "The guard must return through its stand phase after finishing a burst");
+
+        auto retail_rounding_scene = make_scene(true, false);
+        retail_rounding_scene.actors.front().position.y = 12;
+        retail_rounding_scene.actors.front().minimum_clip_fraction = std::nextafter(0.125f, 0.0f);
+        retail_rounding_scene.actors.front().random_clip_fraction = 0.0f;
+        GameSimulation retail_rounding_simulation(retail_rounding_scene);
+        retail_rounding_simulation.tick({});
+        require(retail_rounding_simulation.actors().front().shots_fired == 1 &&
+                    retail_rounding_simulation.actors().front().rounds_remaining_in_burst == 2,
+                "Retail truncate-before-rounding must keep a clip fraction just below four rounds at three");
+
+        auto reload_scene = make_scene(true, false);
+        reload_scene.actors.front().position.y = 12;
+        reload_scene.actors.front().maximum_rounds_per_sequence = 2;
+        reload_scene.actors.front().minimum_clip_fraction = 1.0f;
+        reload_scene.actors.front().random_clip_fraction = 0.0f;
+        reload_scene.weapon_parameters.magazine_capacity = 2;
+        reload_scene.weapon_parameters.maximum_rounds_per_burst = 2;
+        reload_scene.weapon_parameters.reload_seconds = 2.0f;
+        GameSimulation reload_simulation(reload_scene);
+        for (int tick_index = 0; tick_index < 7; ++tick_index)
+        {
+            reload_simulation.tick({});
+        }
+        require(reload_simulation.actors().front().ammunition_in_clip == 0 &&
+                    reload_simulation.actors().front().reload_remaining > 0.0f &&
+                    reload_simulation.actors().front().reload_remaining <= 2.0f,
+                "An exhausted AI weapon must enter the weapon definition's two-second reload");
+        const auto shots_before_reload_completion = reload_simulation.actors().front().shots_fired;
+        for (int tick_index = 0;
+             tick_index < 60 && reload_simulation.actors().front().reload_remaining > 0.0f;
+             ++tick_index)
+        {
+            reload_simulation.tick({});
+        }
+        require(reload_simulation.actors().front().ammunition_in_clip == 2 &&
+                    reload_simulation.actors().front().reload_remaining == 0.0f &&
+                    reload_simulation.actors().front().shots_fired == shots_before_reload_completion,
+                "An AI reload must restore the configured magazine after sixty 30 Hz ticks");
         auto zero_accuracy_scene = make_scene(true, false);
         zero_accuracy_scene.actors.front().position.y = 12;
         zero_accuracy_scene.actors.front().hit_probability_at_minimum_range = 0.0f;

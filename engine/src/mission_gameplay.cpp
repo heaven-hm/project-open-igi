@@ -19,6 +19,19 @@ namespace igi::assets
 namespace
 {
 
+struct AiCombatSettings final
+{
+    float maximum_health{};
+    float hit_probability_at_minimum_range{};
+    float hit_probability_at_maximum_range{};
+    float aim_precision{};
+    std::int32_t maximum_rounds_per_sequence{};
+    float minimum_clip_fraction{};
+    float random_clip_fraction{};
+    float minimum_shot_delay_seconds{};
+    float random_shot_delay_seconds{};
+};
+
 const ScriptCall* child_call(const ScriptValue& value, const std::vector<ScriptCall>& calls)
 {
     return value.call_index < calls.size() ? &calls[value.call_index] : nullptr;
@@ -169,38 +182,58 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
     const auto configuration = gameplay::parse_input_configuration(configuration_script.calls());
     const auto settings_bytes = read_file(resolve_path(scene.game_directory, "common/ai/settings.qvm"));
     const QvmInitializer settings_script{BinaryView(settings_bytes)};
-    std::unordered_map<std::string, float> maximum_health_by_ai_type;
-    std::unordered_map<std::string, std::unordered_map<std::string, std::array<float, 3>>> hit_probabilities;
+    std::unordered_map<std::string, AiCombatSettings> combat_settings_by_ai_type;
     for (const auto& call : settings_script.calls())
     {
         if (call.function == "Task_New" && call.arguments.size() > 5 &&
             call.arguments[1].text == "HumanAIConfigItem" &&
             call.arguments[4].text == configuration.difficulty)
         {
-            const float scale = static_cast<float>(call.arguments[5].number);
-            if (!std::isfinite(scale) || scale < 0 || scale > 10)
+            if (call.arguments.size() <= 26)
             {
-                throw std::runtime_error("Original AI maximum-health setting is invalid");
+                throw std::runtime_error("Original AI combat setting row is incomplete for " +
+                                         call.arguments[3].text);
             }
-            maximum_health_by_ai_type[call.arguments[3].text] = scale;
-            if (call.arguments.size() > 18)
+            const double maximum_rounds = call.arguments[19].number;
+            AiCombatSettings combat_settings{static_cast<float>(call.arguments[5].number),
+                                             static_cast<float>(call.arguments[17].number),
+                                             static_cast<float>(call.arguments[18].number),
+                                             static_cast<float>(call.arguments[20].number),
+                                             0,
+                                             static_cast<float>(call.arguments[21].number),
+                                             static_cast<float>(call.arguments[22].number),
+                                             static_cast<float>(call.arguments[25].number),
+                                             static_cast<float>(call.arguments[26].number)};
+            if (!std::isfinite(combat_settings.maximum_health) || combat_settings.maximum_health < 0 ||
+                combat_settings.maximum_health > 10 || !std::isfinite(maximum_rounds) ||
+                maximum_rounds != std::trunc(maximum_rounds) || maximum_rounds < 1 || maximum_rounds > 1000)
             {
-                const float minimum_range_probability = static_cast<float>(call.arguments[17].number);
-                const float maximum_range_probability = static_cast<float>(call.arguments[18].number);
-                const float aim_precision = call.arguments.size() > 20
-                                                ? static_cast<float>(call.arguments[20].number)
-                                                : 0.2f;
-                if (!std::isfinite(minimum_range_probability) || minimum_range_probability < 0.0f ||
-                    minimum_range_probability > 1.0f || !std::isfinite(maximum_range_probability) ||
-                    maximum_range_probability < 0.0f || maximum_range_probability > 1.0f ||
-                    !std::isfinite(aim_precision) || aim_precision < 0.0f || aim_precision > 1.0f)
+                throw std::runtime_error("Original AI health or burst limit is invalid for " +
+                                         call.arguments[3].text);
+            }
+            combat_settings.maximum_rounds_per_sequence = static_cast<std::int32_t>(maximum_rounds);
+            for (const float probability : {combat_settings.hit_probability_at_minimum_range,
+                                            combat_settings.hit_probability_at_maximum_range,
+                                            combat_settings.aim_precision,
+                                            combat_settings.minimum_clip_fraction,
+                                            combat_settings.random_clip_fraction})
+            {
+                if (!std::isfinite(probability) || probability < 0 || probability > 1)
                 {
-                    throw std::runtime_error("Original AI hit-probability settings are invalid for " +
+                    throw std::runtime_error("Original AI probability or clip fraction is invalid for " +
                                              call.arguments[3].text);
                 }
-                hit_probabilities[call.arguments[3].text][call.arguments[4].text] = {
-                    minimum_range_probability, maximum_range_probability, aim_precision};
             }
+            for (const float delay :
+                 {combat_settings.minimum_shot_delay_seconds, combat_settings.random_shot_delay_seconds})
+            {
+                if (!std::isfinite(delay) || delay < 0 || delay > 3600)
+                {
+                    throw std::runtime_error("Original AI shot delay is invalid for " +
+                                             call.arguments[3].text);
+                }
+            }
+            combat_settings_by_ai_type[call.arguments[3].text] = combat_settings;
         }
     }
     std::unordered_set<std::string> owned_weapons;
@@ -303,34 +336,35 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 }
                 if (child->arguments[1].text == "HumanAI")
                 {
-                    const auto maximum_health = maximum_health_by_ai_type.find(child->arguments[3].text);
-                    if (maximum_health != maximum_health_by_ai_type.end())
+                    const auto combat_settings = combat_settings_by_ai_type.find(child->arguments[3].text);
+                    if (combat_settings != combat_settings_by_ai_type.end())
                     {
-                        actor->maximum_health = maximum_health->second;
-                    }
-                    const auto type_probabilities = hit_probabilities.find(child->arguments[3].text);
-                    if (type_probabilities != hit_probabilities.end())
-                    {
-                        const auto difficulty_probabilities =
-                            type_probabilities->second.find(configuration.difficulty);
-                        if (difficulty_probabilities != type_probabilities->second.end())
-                        {
-                            actor->hit_probability_at_minimum_range = difficulty_probabilities->second[0];
-                            actor->hit_probability_at_maximum_range = difficulty_probabilities->second[1];
-                            actor->aim_precision = difficulty_probabilities->second[2];
-                            diagnostics::log(
-                                diagnostics::Severity::debug,
-                                "ai",
-                                "Loaded retail AI combat accuracy for soldier " +
-                                    std::to_string(actor->identifier) + "; type=" + child->arguments[3].text +
-                                    "; difficulty=" + configuration.difficulty + "; maximum health=" +
-                                    std::to_string(actor->maximum_health) + "; hit probability=" +
-                                    std::to_string(actor->hit_probability_at_minimum_range) + ".." +
-                                    std::to_string(actor->hit_probability_at_maximum_range) +
-                                    "; aim precision=" + std::to_string(actor->aim_precision) +
-                                    "; primary view length=" +
-                                    std::to_string(actor->primary_view_length) + " m");
-                        }
+                        actor->maximum_health = combat_settings->second.maximum_health;
+                        actor->hit_probability_at_minimum_range =
+                            combat_settings->second.hit_probability_at_minimum_range;
+                        actor->hit_probability_at_maximum_range =
+                            combat_settings->second.hit_probability_at_maximum_range;
+                        actor->aim_precision = combat_settings->second.aim_precision;
+                        actor->maximum_rounds_per_sequence =
+                            combat_settings->second.maximum_rounds_per_sequence;
+                        actor->minimum_clip_fraction = combat_settings->second.minimum_clip_fraction;
+                        actor->random_clip_fraction = combat_settings->second.random_clip_fraction;
+                        actor->minimum_shot_delay_seconds =
+                            combat_settings->second.minimum_shot_delay_seconds;
+                        actor->random_shot_delay_seconds = combat_settings->second.random_shot_delay_seconds;
+                        diagnostics::log(
+                            diagnostics::Severity::debug,
+                            "ai",
+                            "Loaded retail AI combat row for soldier " + std::to_string(actor->identifier) +
+                                "; type=" + child->arguments[3].text +
+                                "; difficulty=" + configuration.difficulty +
+                                "; max health=" + std::to_string(actor->maximum_health) +
+                                "; hit chance=" + std::to_string(actor->hit_probability_at_minimum_range) +
+                                ".." + std::to_string(actor->hit_probability_at_maximum_range) +
+                                "; aim precision=" + std::to_string(actor->aim_precision) +
+                                "; burst cap=" + std::to_string(actor->maximum_rounds_per_sequence) +
+                                "; clip fraction=" + std::to_string(actor->minimum_clip_fraction) +
+                                "+random*" + std::to_string(actor->random_clip_fraction));
                     }
                     actor->navigation_graph_identifier = static_cast<int>(child->arguments[4].number);
                     actor->patrol_path_identifier =
@@ -374,7 +408,8 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
             }
             const auto& arguments = call.arguments;
             const bool melee = arguments[5].text == "WEAPONTYPE_KNIFE";
-            if (!melee && arguments[5].text != "WEAPONTYPE_GUN" && arguments[5].text != "WEAPONTYPE_PISTOL")
+            if (!melee && arguments[5].text != "WEAPONTYPE_GUN" && arguments[5].text != "WEAPONTYPE_PISTOL" &&
+                arguments[5].text != "WEAPONTYPE_SHOTGUN")
             {
                 continue;
             }
@@ -392,6 +427,18 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                                  static_cast<float>(arguments[13].number),
                                  static_cast<float>(arguments[12].number)};
             weapon.parameters.melee = melee;
+            if (arguments[5].text == "WEAPONTYPE_PISTOL")
+            {
+                weapon.parameters.category = gameplay::WeaponCategory::pistol;
+            }
+            else if (arguments[5].text == "WEAPONTYPE_SHOTGUN")
+            {
+                weapon.parameters.category = gameplay::WeaponCategory::shotgun;
+            }
+            else if (melee)
+            {
+                weapon.parameters.category = gameplay::WeaponCategory::knife;
+            }
             weapon.parameters.automatic = !melee && arguments[17].number > 1;
             const double maximum_rounds_per_burst = arguments[17].number;
             if (!std::isfinite(maximum_rounds_per_burst) ||

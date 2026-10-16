@@ -161,6 +161,12 @@ void GameSimulation::restart()
         actor.heading = original_actor.heading;
         actor.health = original_actor.maximum_health;
         actor.active = original_actor.gameplay_enabled;
+        const auto weapon = std::find_if(
+            scene_.weapons.begin(),
+            scene_.weapons.end(),
+            [&](const auto& candidate) { return candidate.identifier == original_actor.weapon_identifier; });
+        actor.ammunition_in_clip = weapon == scene_.weapons.end() ? scene_.weapon_parameters.magazine_capacity
+                                                                  : weapon->parameters.magazine_capacity;
         actor.animation_previous_position = position;
         actor.animation_identifier = original_actor.stand_animation;
         actors_.push_back(std::move(actor));
