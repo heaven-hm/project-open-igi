@@ -861,7 +861,7 @@ int run(RuntimeOptions options, const char* executable)
                     const auto* keys = SDL_GetKeyboardState(&keyboard_size);
                     const auto buttons = SDL_GetMouseState(nullptr, nullptr);
                     input = controls.sample({keys, static_cast<std::size_t>(keyboard_size)}, buttons);
-                    if (keys && (keys[SDL_SCANCODE_Q] || keys[SDL_SCANCODE_E]))
+                    if (keys && (keys[SDL_SCANCODE_Q] || keys[SDL_SCANCODE_E] || keys[SDL_SCANCODE_F]))
                     {
                         input.interacting = true;
                     }

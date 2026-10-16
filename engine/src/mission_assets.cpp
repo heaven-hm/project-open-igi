@@ -178,13 +178,22 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
         if (call.function == "DefineMagicObj" && call.arguments.size() >= 3 &&
             call.arguments[2].text == "TASKTYPE_GUNFLAME")
         {
-            muzzle_flash_models_.insert(normalize_name(call.arguments[0].text));
-            muzzle_flash_models_.insert(normalize_name(call.arguments[1].text));
-        }
-        if (call.function == "DefineMagicObj" && call.arguments.size() >= 3 &&
-            call.arguments[2].text == "TASKTYPE_DEATHZONE")
-        {
-            invisible_attachment_models_.insert(normalize_name(call.arguments[0].text));
+            const auto& task_kind = call.arguments[2].text;
+            if (task_kind == "TASKTYPE_GUNFLAME")
+            {
+                muzzle_flash_models_.insert(normalize_name(call.arguments[0].text));
+                muzzle_flash_models_.insert(normalize_name(call.arguments[1].text));
+            }
+            else if (task_kind == "TASKTYPE_DEATHZONE" ||
+                     task_kind == "TASKTYPE_HITZONE" ||
+                     task_kind == "TASKTYPE_SCAMERALENSVIEWCONE")
+            {
+                invisible_attachment_models_.insert(normalize_name(call.arguments[0].text));
+                if (call.arguments.size() >= 2 && !call.arguments[1].text.empty())
+                {
+                    invisible_attachment_models_.insert(normalize_name(call.arguments[1].text));
+                }
+            }
         }
     }
     const std::vector<std::string> standard_flames = {

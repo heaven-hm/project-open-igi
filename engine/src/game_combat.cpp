@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include <limits>
+#include <numbers>
 #include <stdexcept>
 
 namespace igi::gameplay
@@ -298,7 +299,10 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         else
         {
-            --weapon_.magazine;
+            if (!developer_mode_)
+            {
+                --weapon_.magazine;
+            }
             weapon_.cooldown_ticks_remaining =
                 WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
             weapon_.muzzle_flash_remaining = 0.055f;
@@ -518,11 +522,59 @@ void GameSimulation::advance_projectiles()
             if (actor.behavior == ActorBehavior::dead)
             {
                 ++weapon_.kills;
+                int death_anim = 28;
+                if (is_headshot)
+                {
+                    death_anim = 30; // Headshot backward snap & collapse
+                }
+                else if (hit_height > 1.30f)
+                {
+                    death_anim = 22; // Neck / upper torso crumple
+                }
+                else if (shot_from_front)
+                {
+                    death_anim = 28; // Thrown backwards onto back
+                }
+                else
+                {
+                    death_anim = 71; // Thrown forwards onto chest
+                }
+                const auto& def = scene_.actors[static_cast<std::size_t>(target_actor)];
+                if (def.animations && !def.animations->clips.contains(death_anim))
+                {
+                    if (def.animations->clips.contains(23)) death_anim = 23;
+                    else if (def.animations->clips.contains(28)) death_anim = 28;
+                    else if (def.animations->clips.contains(22)) death_anim = 22;
+                }
+                actor.animation_identifier = death_anim;
+                actor.animation_time = 0.0f;
+                if (length(projectile.direction) > 0.001f)
+                {
+                    const float bearing = std::atan2(-projectile.direction.x, projectile.direction.y);
+                    actor.heading = shot_from_front ? (bearing + std::numbers::pi_v<float>) : bearing;
+                }
                 diagnostics::log(
                     diagnostics::Severity::information,
                     "combat",
                     "Soldier defeated: " +
-                        std::to_string(scene_.actors[static_cast<std::size_t>(target_actor)].identifier));
+                        std::to_string(scene_.actors[static_cast<std::size_t>(target_actor)].identifier) +
+                        (is_headshot ? " [HEADSHOT]" : "") + " (death clip=" + std::to_string(death_anim) + ")");
+            }
+            else
+            {
+                int flinch_anim = shot_from_front ? 28 : 29;
+                if (hit_height < 0.85f)
+                {
+                    flinch_anim = 45; // Leg flinch
+                }
+                const auto& def = scene_.actors[static_cast<std::size_t>(target_actor)];
+                if (def.animations && def.animations->clips.contains(flinch_anim))
+                {
+                    actor.flinch_animation = flinch_anim;
+                    actor.flinch_time = 0.25f;
+                    actor.animation_identifier = flinch_anim;
+                    actor.animation_time = 0.0f;
+                }
             }
         }
         if (target_player)

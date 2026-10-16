@@ -66,6 +66,32 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
 {
     const auto acquire = [&](const std::string& identifier)
     {
+        if (identifier.starts_with("AMMO_ID_"))
+        {
+            const std::uint32_t amount = 32;
+            for (auto& item : inventory_)
+            {
+                if (scene_.weapons[item.definition_index].ammunition_identifier == identifier)
+                {
+                    item.state.reserve = std::min(10000u, item.state.reserve + amount);
+                }
+            }
+            if (!inventory_.empty() &&
+                scene_.weapons[inventory_[selected_weapon_slot_].definition_index].ammunition_identifier == identifier)
+            {
+                weapon_.reserve = std::min(10000u, weapon_.reserve + amount);
+            }
+            diagnostics::log(diagnostics::Severity::information, "inventory", "Picked up ammo: " + identifier);
+            set_prompt_message("PICKED UP AMMUNITION", 2.0f);
+            return true;
+        }
+        if (identifier == "WEAPON_ID_MEDIPACK" || identifier == "AMMO_ID_MEDIPACK")
+        {
+            health_ = std::min(scene_.player_parameters.maximum_health, health_ + 0.5f);
+            diagnostics::log(diagnostics::Severity::information, "inventory", "Used medipack; health restored");
+            set_prompt_message("USED MEDIPACK (+50% HEALTH)", 2.0f);
+            return true;
+        }
         const auto definition =
             std::find_if(scene_.weapons.begin(),
                          scene_.weapons.end(),
@@ -137,7 +163,7 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
         const float dz = std::abs(pickup.position.z - player_position().z);
         const float planar = std::sqrt(dx * dx + dy * dy);
         const bool auto_pickup = (planar < 0.70f && dz < 1.0f);
-        const bool interact_pickup = input.interacting && (length(pickup.position - player_position()) < 2.5f);
+        const bool interact_pickup = input.interacting && (length(pickup.position - player_position()) < 3.0f);
         if (auto_pickup || interact_pickup)
         {
             pickups_collected_[pickup_index] = acquire(pickup.weapon_identifier);
@@ -154,7 +180,7 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
             const float planar = std::sqrt(dx * dx + dy * dy);
             const bool auto_pickup = (planar < 0.70f && dz < 1.0f);
             const bool interact_pickup =
-                input.interacting && (length(actors_[actor_index].position - player_position()) < 2.5f);
+                input.interacting && (length(actors_[actor_index].position - player_position()) < 3.0f);
             if (auto_pickup || interact_pickup)
             {
                 soldier_weapons_collected_[actor_index] = acquire(scene_.actors[actor_index].weapon_identifier);

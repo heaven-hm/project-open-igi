@@ -213,6 +213,8 @@ void GameSimulation::advance_actors()
         const Vector3 direction = normalized(to_detection_mark);
         const Vector3 facing{-std::sin(actor.heading), std::cos(actor.heading), 0};
         const float sight_dot = dot(facing, direction);
+        const float distance_multiplier = crouching_ ? 0.65f : 1.0f;
+        const float max_range = (actor.behavior == ActorBehavior::guarding ? 75.0f : 80.0f) * distance_multiplier;
         const bool within_view = (actor.behavior == ActorBehavior::guarding)
                                      ? (sight_dot > 0.35f)
                                      : (sight_dot > -0.2f || detection_distance <= 6.0f);
@@ -450,14 +452,36 @@ void GameSimulation::advance_actor_animations()
     {
         auto& actor = actors_[actor_index];
         const auto& definition = scene_.actors[actor_index];
-        if (!actor.active || !definition.animations || actor.behavior == ActorBehavior::dead)
+        if (!actor.active || !definition.animations)
         {
+            continue;
+        }
+        if (actor.behavior == ActorBehavior::dead)
+        {
+            const auto found = definition.animations->clips.find(actor.animation_identifier);
+            if (found != definition.animations->clips.end())
+            {
+                const auto& clip = found->second;
+                if (clip.duration > 0)
+                {
+                    actor.animation_time =
+                        std::min(actor.animation_time + 160.0f, static_cast<float>(clip.duration));
+                }
+            }
             continue;
         }
         const float displacement = length(actor.position - actor.animation_previous_position);
         actor.animation_previous_position = actor.position;
         int identifier = definition.stand_animation;
-        if (actor.behavior == ActorBehavior::attacking)
+        if (actor.flinch_time > 0.0f)
+        {
+            actor.flinch_time = std::max(0.0f, actor.flinch_time - tick_duration);
+            if (actor.flinch_animation > 0 && definition.animations->clips.contains(actor.flinch_animation))
+            {
+                identifier = actor.flinch_animation;
+            }
+        }
+        else if (actor.behavior == ActorBehavior::attacking)
         {
             identifier = 56;
         }

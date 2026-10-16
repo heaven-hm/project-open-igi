@@ -376,7 +376,7 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 }
             }
         }
-        if (task_type == "GunPickup" && call.arguments.size() > 9 &&
+        if ((task_type == "GunPickup" || task_type == "AmmoPickup") && call.arguments.size() > 9 &&
             enabled_tasks[static_cast<std::size_t>(&call - calls.data())])
         {
             scene.weapon_pickups.push_back(

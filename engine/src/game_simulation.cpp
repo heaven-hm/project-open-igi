@@ -311,12 +311,16 @@ void GameSimulation::tick(const PlayerInput& input)
         // Interactive doors & prompt
         for (auto& door : doors_)
         {
-            const float dist = length(player_position() - door.position);
-            if (dist < 3.8f)
+            const float mid_x = (door.min_bounds.x + door.max_bounds.x) * 0.5f;
+            const float mid_y = (door.min_bounds.y + door.max_bounds.y) * 0.5f;
+            const Vector3 door_center = door.position + rotate_euler(Vector3{mid_x, mid_y, 1.0f}, door.rotation);
+            const float dist_hinge = length(player_position() - door.position);
+            const float dist_center = length(player_position() - door_center);
+            if (dist_hinge < 4.2f || dist_center < 4.2f)
             {
                 if (prompt_timer_ <= 0.0f)
                 {
-                    prompt_message_ = door.open ? "PRESS Q TO CLOSE DOOR" : "PRESS Q TO OPEN DOOR";
+                    prompt_message_ = door.open ? "PRESS Q OR F TO CLOSE DOOR" : "PRESS Q OR F TO OPEN DOOR";
                 }
                 if (input.interacting && !interact_was_pressed_)
                 {
@@ -626,10 +630,10 @@ void GameSimulation::query_ground(HumanMovementState& human,
         if (!was_grounded)
         {
             const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
-            constexpr float threshold_speed = 6.2f;
+            constexpr float threshold_speed = 4.2f;
             if (!developer_mode_ && landing_speed > threshold_speed && health_ > 0.0f)
             {
-                const float damage_ratio = (landing_speed - threshold_speed) / 10.0f;
+                const float damage_ratio = (landing_speed - threshold_speed) / 6.5f;
                 const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
                 health_ = std::max(0.0f, health_ - damage);
                 damage_flash_remaining_ = 0.35f;
@@ -703,6 +707,9 @@ void GameSimulation::separate_humans(HumanMovementState&,
         const float cos_y = std::cos(-door.rotation.z);
         const float sin_y = std::sin(-door.rotation.z);
         const Vector3 local_pos{cos_y * rel.x - sin_y * rel.y, sin_y * rel.x + cos_y * rel.y, rel.z};
+        const auto start_pos = metres(starting);
+        const Vector3 start_rel = start_pos - door.position;
+        const Vector3 start_local{cos_y * start_rel.x - sin_y * start_rel.y, sin_y * start_rel.x + cos_y * start_rel.y, start_rel.z};
         constexpr float radius = 0.40f;
         Vector3 min_b = door.min_bounds;
         Vector3 max_b = door.max_bounds;
@@ -723,13 +730,13 @@ void GameSimulation::separate_humans(HumanMovementState&,
             {
                 // Door pane thickness is along X
                 const float mid_x = (min_b.x + max_b.x) * 0.5f;
-                resolved_x = (local_pos.x >= mid_x) ? max_b.x + radius + 0.02f : min_b.x - radius - 0.02f;
+                resolved_x = (start_local.x >= mid_x) ? max_b.x + radius + 0.02f : min_b.x - radius - 0.02f;
             }
             else
             {
                 // Door pane thickness is along Y
                 const float mid_y = (min_b.y + max_b.y) * 0.5f;
-                resolved_y = (local_pos.y >= mid_y) ? max_b.y + radius + 0.02f : min_b.y - radius - 0.02f;
+                resolved_y = (start_local.y >= mid_y) ? max_b.y + radius + 0.02f : min_b.y - radius - 0.02f;
             }
             const float cos_f = std::cos(door.rotation.z);
             const float sin_f = std::sin(door.rotation.z);

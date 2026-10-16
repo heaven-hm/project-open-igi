@@ -64,6 +64,8 @@ struct ActorState final
     int animation_identifier = 2;
     float muzzle_flash_remaining{};
     std::uint64_t shots_fired{};
+    float flinch_time{};
+    int flinch_animation = -1;
 };
 
 struct WeaponState final

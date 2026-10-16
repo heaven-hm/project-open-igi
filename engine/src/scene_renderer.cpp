@@ -265,8 +265,11 @@ void SceneRenderer::triangle(const SceneTriangle& original,
         vertex.position = {dot(relative, right), dot(relative, up), dot(relative, forward)};
     }
     const auto& vertices = transformed.vertices;
+    const float max_depth = detail_ == TerrainDetail::ultra ? 2500.0f
+                          : detail_ == TerrainDetail::enhanced ? 1800.0f
+                          : 1400.0f;
     if (std::max({vertices[0].position.z, vertices[1].position.z, vertices[2].position.z}) < 0.05f ||
-        std::min({vertices[0].position.z, vertices[1].position.z, vertices[2].position.z}) > 1400.0f)
+        std::min({vertices[0].position.z, vertices[1].position.z, vertices[2].position.z}) > max_depth)
     {
         return;
     }
@@ -809,7 +812,11 @@ void SceneRenderer::render(const MissionScene& scene,
               depth_.begin() + static_cast<std::ptrdiff_t>(last_scanline_) * width_, 0.0f);
     for (int row = first_scanline_; row < last_scanline_; ++row)
     {
-        const auto sky = mix_color(0xff899dacu, 0xffc4c2afu, static_cast<float>(row) / height_);
+        const auto sky = detail_ == TerrainDetail::ultra
+            ? mix_color(0xff688faeu, 0xffb5bcbeu, static_cast<float>(row) / height_)
+            : (detail_ == TerrainDetail::enhanced
+                ? mix_color(0xff7896acu, 0xffbebfb7u, static_cast<float>(row) / height_)
+                : mix_color(0xff899dacu, 0xffc4c2afu, static_cast<float>(row) / height_));
         std::fill_n(pixels_.begin() + static_cast<std::ptrdiff_t>(row) * width_, width_, sky);
     }
     const bool is_free_camera = free_camera && free_camera->active;
@@ -889,9 +896,12 @@ void SceneRenderer::render(const MissionScene& scene,
             render_static_triangle(triangle_index);
         }
     }
+    const float max_door_dist = detail_ == TerrainDetail::ultra ? 850.0f
+                               : detail_ == TerrainDetail::enhanced ? 550.0f
+                               : 350.0f;
     for (const auto& door : simulation.doors())
     {
-        if (!door.mesh || length(door.position - camera) > 350.0f)
+        if (!door.mesh || length(door.position - camera) > max_door_dist)
         {
             continue;
         }
@@ -919,11 +929,14 @@ void SceneRenderer::render(const MissionScene& scene,
                 world_tri, scene.textures, camera, right, up, forward, focal_length, false, scene.object_fog);
         }
     }
+    const float max_actor_dist = detail_ == TerrainDetail::ultra ? 1200.0f
+                                : detail_ == TerrainDetail::enhanced ? 750.0f
+                                : 450.0f;
     for (std::size_t actor_index = 0; actor_index < simulation.actors().size(); ++actor_index)
     {
         const auto& actor = simulation.actors()[actor_index];
         const auto& mesh = scene.actors[actor_index].mesh;
-        if (!actor.active || !mesh || length(actor.position - camera) > 450)
+        if (!actor.active || !mesh || length(actor.position - camera) > max_actor_dist)
         {
             continue;
         }
@@ -931,7 +944,7 @@ void SceneRenderer::render(const MissionScene& scene,
         const float sine = std::sin(actor.heading);
         const auto& animations = scene.actors[actor_index].animations;
         const auto pose =
-            animations && actor.behavior != ActorBehavior::dead
+            animations
                 ? sample_bone_pose(*animations, actor.animation_identifier, actor.animation_time)
                 : std::vector<glm::mat4>{};
         for (auto surface : mesh->triangles)
@@ -943,7 +956,7 @@ void SceneRenderer::render(const MissionScene& scene,
             for (auto& vertex : surface.vertices)
             {
                 auto position = skin_vertex(vertex, pose);
-                if (actor.behavior == ActorBehavior::dead)
+                if (actor.behavior == ActorBehavior::dead && pose.empty())
                 {
                     position = {position.x, position.z, 0.1f - position.y};
                 }
