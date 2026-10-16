@@ -1,18 +1,28 @@
 # Project Open I.G.I.
 
-A native macOS reimplementation of the Project I.G.I. game engine, built in
-C++20. The first implementation milestone focuses on player locomotion,
-physics, weapons, and enemy AI. Original game data is loaded from the retail
-game folder.
+A macOS-first native reimplementation of the Project I.G.I. game engine, built
+in C++20. The current MVP targets macOS; Windows and Linux support will follow a
+playable macOS gameplay slice. The first implementation milestone focuses on player locomotion, physics,
+weapons, and enemy AI. Original game data is loaded from the retail game folder.
 
 ## Current state
 
 The repository currently contains a buildable gameplay library with a
-49-state human locomotion graph, initial movement equations, and a
-converter-backed retail asset catalog probe. It is not yet a playable game and
-does not yet produce `igi.app`. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
+49-state human locomotion graph, initial movement equations, a converter-backed
+retail asset catalog probe (`igi_asset_probe`), and a C++20 native engine registry
+(`igi_native_probe`) cataloging 5,732 verified retail engine functions (100.00%
+Binary Ninja binary view coverage) across all 10 core engine subsystems. It is not
+yet a playable game and does not yet produce `igi.app`. See [the first gameplay demo plan](GAMEPLAY_DEMO_PLAN.md)
 and [verification notes](engine/VERIFICATION.md). Runtime parity against the
 original game remains to be measured.
+
+## Platform scope
+
+The game core is designed to be OS-independent: gameplay, physics, AI, weapons,
+scripting, and file formats must not call operating-system APIs. Windowing,
+graphics, input, filesystem, and audio APIs belong behind platform interfaces.
+The current product MVP targets macOS. Windows and Linux backends are later work
+and are not supported or verified yet.
 
 ## Build
 

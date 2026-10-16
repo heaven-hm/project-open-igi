@@ -3,8 +3,11 @@
 ## Goal
 
 Build a small native macOS Level 1 gameplay slice around the original game
-data. The first demo is a playtest build, not the finished `igi.app`. Its scope
-is player movement and collision, a usable weapon, and one enemy using the
+data. The game core must remain OS-independent. The MVP is shipped on macOS;
+Windows and Linux support are planned after this playable slice and will require
+separate platform backends and verification. Keep OS APIs out of gameplay code.
+The first demo is a playtest build, not the finished `igi.app`. Its scope is
+player movement and collision, a usable weapon, and one enemy using the
 retail mission's navigation/behavior data. The DirectX 7 era image and update
 behavior are the reference. Do not add post-processing or redesign the look.
 
@@ -33,7 +36,9 @@ movement, but polish and sound are deferred.
 5. **Native render harness:** render the original geometry/textures with the
    game's resolution, camera, texture, depth, blending, lighting, and frame
    order. First capture the legacy output under CrossOver; then map observed
-   state to a macOS backend. No backend is accepted on API similarity alone.
+   state to the macOS MVP backend. Keep rendering rules in the OS-independent
+   core and graphics APIs in platform backends. Windows and Linux backends come
+   after the MVP. No backend is accepted on API similarity alone.
 6. **Parity gate:** feed identical tick-stamped inputs to the original and the
    prototype. Compare player transforms/velocities/state, weapon state and
    events, AI state/positions, and frame captures. Report exact matches,
@@ -41,15 +46,18 @@ movement, but polish and sound are deferred.
 
 ## Commit slices
 
-Keep each commit reviewable and push it to `feature/gameplay-prototype` after
-its checks pass:
+Keep each commit reviewable and local after its checks pass. Do not push unless
+the owner explicitly requests it:
 
 - converter-backed retail asset scan and provenance;
 - movement/collision behavior with its REA evidence;
 - weapon behavior with its REA evidence;
 - Level 1 AI behavior with its REA evidence;
 - fixed-function renderer mapping and comparison captures;
-- playable demo and macOS app packaging.
+- playable macOS demo and app packaging;
+
+- later Windows platform backend and build verification;
+- later Linux platform backend and build verification.
 
 Commit messages remain short and German as requested. Do not call the game
 "100% verified" until every claimed subsystem has runtime comparison coverage;

@@ -5,8 +5,11 @@
 #include "qvm_parser.h"
 
 #include <algorithm>
+#include <charconv>
 #include <cctype>
+#include <optional>
 #include <system_error>
+#include <utility>
 
 namespace igi::assets {
 namespace {
@@ -31,6 +34,21 @@ bool has_path_component(const std::filesystem::path& path, const std::string& ex
 bool is_within(const std::filesystem::path& child, const std::filesystem::path& parent) {
     const auto relative = child.lexically_relative(parent);
     return !relative.empty() && *relative.begin() != "..";
+}
+
+std::optional<int> navigation_graph_id(const std::filesystem::path& path) {
+    std::string stem = path.stem().string();
+    std::transform(stem.begin(), stem.end(), stem.begin(),
+        [](unsigned char ch) { return static_cast<char>(std::toupper(ch)); });
+    if (!stem.starts_with("GRAPH") || stem.size() == 5) return std::nullopt;
+
+    int graph_id = 0;
+    const char* first_digit = stem.data() + 5;
+    const char* last_digit = stem.data() + stem.size();
+    const auto result = std::from_chars(first_digit, last_digit, graph_id);
+    if (result.ec != std::errc{} || result.ptr != last_digit || graph_id < 0)
+        return std::nullopt;
+    return graph_id;
 }
 
 } // namespace
@@ -74,13 +92,37 @@ GameAssetSummary GameAssetCatalog::scan(const std::filesystem::path& root, int m
 
         if (extension == ".dat" && has_path_component(path, "GRAPHS") &&
             !summary.level_root.empty() && is_within(path, summary.level_root)) {
-            auto graph = GRAPH_Parse(path.string());
-            if (!graph.valid) continue;
+            const auto graph_id = navigation_graph_id(path);
+            if (!graph_id) continue;
+
+            auto parsed_graph = GRAPH_Parse(path.string());
+            if (!parsed_graph.valid) continue;
             ++summary.graph_files;
-            if (summary.navigation_nodes.empty()) {
-                summary.navigation_nodes.reserve(graph.nodes.size());
-                for (const auto& node : graph.nodes)
-                    summary.navigation_nodes.push_back({node.id, node.x, node.y, node.z, node.link1, node.link2});
+
+            NavigationGraph navigation_graph;
+            navigation_graph.id = *graph_id;
+            navigation_graph.source_file = path;
+            navigation_graph.nodes.reserve(parsed_graph.nodes.size());
+            navigation_graph.edges.reserve(parsed_graph.edges.size());
+            for (const auto& node : parsed_graph.nodes) {
+                navigation_graph.nodes.push_back({
+                    node.id, node.x, node.y, node.z, node.link1, node.link2,
+                    node.gamma, node.radius, node.material, node.criteria
+                });
+            }
+            for (const auto& edge : parsed_graph.edges) {
+                navigation_graph.edges.push_back({
+                    edge.node1, edge.node2, edge.link_type
+                });
+            }
+
+            const auto [graph_iterator, inserted] = summary.navigation_graphs.emplace(
+                navigation_graph.id, std::move(navigation_graph));
+            if (!inserted) {
+                summary.error = "Duplicate navigation graph ID " +
+                    std::to_string(graph_iterator->first) + " in mission folder: " +
+                    summary.level_root.string();
+                return summary;
             }
         }
 

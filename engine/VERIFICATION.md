@@ -1,5 +1,19 @@
 # Gameplay verification notes
 
+## Platform coverage
+
+The game core must remain OS-independent: no operating-system APIs or headers
+belong in gameplay, physics, AI, weapons, scripting, or original-format parsing.
+Only platform backends may call OS APIs. The current product MVP targets macOS;
+Windows and Linux backends are later milestones and are not currently supported
+or verified. Keep future support claims tied to builds and runtime evidence on
+each operating system.
+
+The current CMake source has no OS-specific includes in the non-vendored engine
+sources, and the core builds with the macOS toolchain. This source inspection and
+build establish a portable code boundary only; they do not establish successful
+Windows or Linux builds.
+
 ## Locomotion graph
 
 - CMake builds `igi_gameplay` with AppleClang in C++20 mode.
@@ -130,3 +144,20 @@ so it retained the temporary capture root and did not claim cleanup. A later
 read-only process check found no `igi.exe` or matching CrossOver PIDs. The
 partial run is not a verified level-load or gameplay capture; do not infer
 movement, weapon, AI, or rendering behavior from it.
+
+
+## Mission navigation graph catalog and world transform
+
+`GameAssetCatalog` now retains every valid `GRAPH<number>.DAT` file under the selected mission's `GRAPHS` directory, keyed by its retail graph ID. Each entry preserves node positions, node criteria, radius/material metadata, node links, and typed edges. The previous first-valid-graph behavior exposed only `GRAPH1.DAT` and silently dropped the graph selected by mission AI tasks.
+
+On the local mission 1 assets, the C++20 `igi_asset_probe` build loaded 11 graphs. It reports graph 4019 with 264 nodes and 876 edges, alongside the other ten graphs. This is evidence of parser/catalog integration only; it does not verify AI route selection or retail pathfinding behavior.
+
+Command used:
+
+```sh
+cmake --build /tmp/project-open-igi-build -j4
+/tmp/project-open-igi-build/engine/igi_asset_probe /Users/haseeb-mir/Downloads/IGI 1
+```
+
+
+The portable `AiNavigationTransform` implements the observed graph-position transform at retail address `0x004F9770`: add the graph task offset; when the parent-orientation flag is active, multiply by the parent basis rows; then add the parent world position. REA/Ghidra evidence `ev_4616cc984ea6e431129942a1ec95613e7a7735a416a8f9397c8a21c2f313833b` records the function body and operand order. This is a static translation of one transform helper, not verification of graph selection, AI routing, or in-level behavior.

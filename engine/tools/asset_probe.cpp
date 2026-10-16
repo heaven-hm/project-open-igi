@@ -36,7 +36,21 @@ int main(int argc, char** argv) {
               << "Graph files parsed: " << summary.graph_files << '\n'
               << "Standalone texture files: " << summary.texture_files << '\n'
               << "Model resources: " << summary.model_resources << '\n'
-              << "Navigation nodes (first valid graph): " << summary.navigation_nodes.size() << '\n';
+              << "Navigation graphs loaded: " << summary.navigation_graphs.size() << '\n';
+
+    std::vector<int> graph_ids;
+    graph_ids.reserve(summary.navigation_graphs.size());
+    for (const auto& [graph_id, graph] : summary.navigation_graphs) {
+        (void)graph;
+        graph_ids.push_back(graph_id);
+    }
+    std::sort(graph_ids.begin(), graph_ids.end());
+    for (const int graph_id : graph_ids) {
+        const auto& graph = summary.navigation_graphs.at(graph_id);
+        std::cout << "  Graph " << graph.id << ": " << graph.nodes.size()
+                  << " nodes, " << graph.edges.size() << " edges ("
+                  << graph.source_file.filename().string() << ")\n";
+    }
 
     std::vector<std::pair<std::string, std::size_t>> types(
         summary.resources_by_extension.begin(), summary.resources_by_extension.end());

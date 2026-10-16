@@ -12,6 +12,23 @@ struct NavigationNode {
     int id{};
     double x{}, y{}, z{};
     int link1{-1}, link2{-1};
+    float gamma{};
+    float radius{};
+    int material{};
+    std::string criteria;
+};
+
+struct NavigationEdge {
+    int source_node_id{-1};
+    int destination_node_id{-1};
+    int link_type{};
+};
+
+struct NavigationGraph {
+    int id{};
+    std::filesystem::path source_file;
+    std::vector<NavigationNode> nodes;
+    std::vector<NavigationEdge> edges;
 };
 
 struct GameAssetSummary {
@@ -24,7 +41,7 @@ struct GameAssetSummary {
     std::size_t texture_files{};
     std::size_t model_resources{};
     std::unordered_map<std::string, std::size_t> resources_by_extension;
-    std::vector<NavigationNode> navigation_nodes;
+    std::unordered_map<int, NavigationGraph> navigation_graphs;
     std::string error;
 };
 
