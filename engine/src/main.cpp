@@ -335,10 +335,29 @@ void resolve_runtime_paths(RuntimeOptions& options, const char* executable)
             std::filesystem::current_path(),
             binary_directory,
             binary_directory.parent_path().parent_path().parent_path()};
-        if (const auto* home_directory = std::getenv("HOME"))
+        const char* home_directory = std::getenv("HOME");
+#if defined(_WIN32)
+        if (home_directory == nullptr)
         {
-            candidates.emplace_back(std::filesystem::path(home_directory) / "Downloads/IGI");
+            home_directory = std::getenv("USERPROFILE");
         }
+#endif
+        if (home_directory != nullptr)
+        {
+            candidates.emplace_back(std::filesystem::path(home_directory) / "Downloads" / "IGI");
+            candidates.emplace_back(std::filesystem::path(home_directory) / "IGI");
+            candidates.emplace_back(std::filesystem::path(home_directory) / "Games" / "IGI");
+        }
+#if defined(_WIN32)
+        candidates.emplace_back("C:/IGI");
+        candidates.emplace_back("C:/Games/IGI");
+        candidates.emplace_back("C:/Program Files (x86)/Project IGI");
+        candidates.emplace_back("C:/Program Files/Project IGI");
+#elif defined(__linux__)
+        candidates.emplace_back("/opt/igi");
+        candidates.emplace_back("/usr/local/share/igi");
+        candidates.emplace_back("/usr/share/igi");
+#endif
         for (const auto& candidate : candidates)
         {
             if (std::filesystem::is_directory(candidate / "MISSIONS") ||

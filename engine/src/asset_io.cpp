@@ -23,7 +23,9 @@ std::string normalize_name(std::string_view name)
 std::filesystem::path resolve_path(const std::filesystem::path& root, std::string_view relative_name)
 {
     std::filesystem::path result = root;
-    const std::filesystem::path relative_path{std::string(relative_name)};
+    std::string sanitized(relative_name);
+    std::replace(sanitized.begin(), sanitized.end(), '\\', '/');
+    const std::filesystem::path relative_path{sanitized};
     if (relative_path.is_absolute())
     {
         throw std::runtime_error("Asset path must be relative: " + relative_path.string());
