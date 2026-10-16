@@ -39,6 +39,7 @@ add_library(igi_assets STATIC
     src/mission_scene.cpp
     src/mission_gameplay.cpp
     src/input_configuration.cpp
+    src/qvm_task_tree.cpp
     src/skeletal_animation.cpp
     src/terrain_surface.cpp
 )
@@ -231,9 +232,14 @@ if(BUILD_TESTING)
     add_executable(mvp_olm_probe tests/mvp_olm_probe.cpp)
     target_link_libraries(mvp_olm_probe PRIVATE igi_assets)
     add_test(NAME mvp_object_lightmap_format COMMAND mvp_olm_probe)
+    add_executable(mvp_lightmap_task_tree_probe tests/mvp_lightmap_task_tree_probe.cpp)
+    target_link_libraries(mvp_lightmap_task_tree_probe PRIVATE igi_assets)
+    add_test(NAME mvp_lightmap_task_tree COMMAND mvp_lightmap_task_tree_probe)
     if(IGI_GAME_PATH)
         add_test(NAME mvp_original_object_lightmap_format
                  COMMAND mvp_olm_probe "${IGI_GAME_PATH}")
+        add_test(NAME mvp_original_lightmap_task_tree
+                 COMMAND mvp_lightmap_task_tree_probe "${IGI_GAME_PATH}")
     endif()
     add_executable(mvp_collision_probe tests/mvp_collision_probe.cpp)
     target_link_libraries(mvp_collision_probe PRIVATE igi_runtime)
