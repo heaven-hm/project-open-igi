@@ -223,7 +223,7 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
             }
             else if (setting == "medium")
             {
-                options.terrain_detail = igi::gameplay::TerrainDetail::high;
+                options.terrain_detail = igi::gameplay::TerrainDetail::medium;
             }
             else if (setting == "low")
             {
@@ -439,6 +439,7 @@ int run(RuntimeOptions options, const char* executable)
         std::string("Terrain detail=") +
             (options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
              : options.terrain_detail == igi::gameplay::TerrainDetail::high  ? "high"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::medium ? "medium"
                                                                              : "low") +
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +
             "; viewport=" + std::to_string(options.width) + "x" + std::to_string(options.height));

@@ -98,6 +98,11 @@ void append_terrain(MissionScene& scene,
                                                                     : distance < 500.0 * units_per_metre ? 16
                                                                     : distance < 900.0 * units_per_metre ? 14
                                                                     : 12)
+                                 : detail == TerrainDetail::medium ? (distance < 100.0 * units_per_metre   ? 18
+                                                                      : distance < 250.0 * units_per_metre ? 16
+                                                                      : distance < 600.0 * units_per_metre ? 14
+                                                                      : distance < 1000.0 * units_per_metre ? 12
+                                                                                                             : 11)
                                                                  : (distance < 180.0 * units_per_metre   ? 16
                                                                     : distance < 500.0 * units_per_metre ? 14
                                                                     : 11);

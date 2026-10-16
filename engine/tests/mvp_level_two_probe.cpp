@@ -41,9 +41,11 @@ int main(int argument_count, char** arguments)
         require(scene.static_triangles.size() > 100000,
                 "High detail must retain additional original terrain geometry");
         const auto low_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::low);
-        require(scene.terrain_triangle_count > low_detail.terrain_triangle_count * 2 &&
+        const auto medium_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::medium);
+        require(low_detail.terrain_triangle_count < medium_detail.terrain_triangle_count &&
+                    medium_detail.terrain_triangle_count < scene.terrain_triangle_count &&
                     scene.actors.size() == low_detail.actors.size(),
-                "High detail must select denser original terrain without changing enemy declarations");
+                "Terrain quality tiers must increase original terrain density without changing enemy declarations");
         GameSimulation simulation(scene);
         std::size_t portal_faces = 0;
         std::size_t grounded_crossings = 0;

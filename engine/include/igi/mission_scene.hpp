@@ -16,6 +16,7 @@ namespace igi::gameplay
 enum class TerrainDetail
 {
     low,
+    medium,
     high,
     enhanced
 };
