@@ -175,8 +175,7 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
                 magic_attachment_models_.try_emplace(attachment_name, model_name);
             }
         }
-        if (call.function == "DefineMagicObj" && call.arguments.size() >= 3 &&
-            call.arguments[2].text == "TASKTYPE_GUNFLAME")
+        if (call.function == "DefineMagicObj" && call.arguments.size() >= 3)
         {
             const auto& task_kind = call.arguments[2].text;
             if (task_kind == "TASKTYPE_GUNFLAME")
@@ -192,6 +191,14 @@ MissionAssets::MissionAssets(const std::filesystem::path& game_directory,
                 if (call.arguments.size() >= 2 && !call.arguments[1].text.empty())
                 {
                     invisible_attachment_models_.insert(normalize_name(call.arguments[1].text));
+                }
+            }
+            else if (task_kind == "TASKTYPE_LADDER")
+            {
+                ladder_models_.insert(normalize_name(call.arguments[0].text));
+                if (!call.arguments[1].text.empty())
+                {
+                    ladder_models_.insert(normalize_name(call.arguments[1].text));
                 }
             }
         }
@@ -628,6 +635,16 @@ bool MissionAssets::has_model(const std::string& name) const
 {
     const auto normalized = normalize_name(name);
     return meshes_.contains(normalized) || files_.contains(normalized + ".mef");
+}
+
+bool MissionAssets::is_invisible_attachment(const std::string& name) const
+{
+    return invisible_attachment_models_.contains(normalize_name(name));
+}
+
+bool MissionAssets::is_ladder_model(const std::string& name) const
+{
+    return ladder_models_.contains(normalize_name(name));
 }
 
 std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& name)

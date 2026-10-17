@@ -1,4 +1,5 @@
 #include "igi/diagnostics.hpp"
+#include "igi/asset_io.hpp"
 #include "igi/game_simulation.hpp"
 #include "igi/mission_assets.hpp"
 #include "igi/qvm_initializer.hpp"
@@ -254,6 +255,46 @@ int main(int argument_count, char** arguments)
             replay_output << std::setprecision(9);
         }
         const auto scene = load_mission(arguments[1], arguments[2]);
+        const std::filesystem::path game_directory = arguments[1];
+        const std::filesystem::path mission_directory = game_directory / "missions/location0/level1";
+        const auto magic_script_bytes = igi::assets::read_file(game_directory / "magicobj/magicobj.qvm");
+        const igi::assets::QvmInitializer magic_script{igi::assets::BinaryView(magic_script_bytes)};
+        igi::assets::MissionAssets magic_assets(
+            game_directory,
+            mission_directory,
+            std::filesystem::temp_directory_path() / "project-open-igi-magic-object-probe");
+        std::size_t checked_invisible_magic_objects = 0;
+        std::size_t checked_ladder_magic_objects = 0;
+        for (const auto& call : magic_script.calls())
+        {
+            if (call.function != "DefineMagicObj" || call.arguments.size() < 3)
+            {
+                continue;
+            }
+            const auto& task_kind = call.arguments[2].text;
+            if (task_kind == "TASKTYPE_DEATHZONE" || task_kind == "TASKTYPE_HITZONE" ||
+                task_kind == "TASKTYPE_SCAMERALENSVIEWCONE")
+            {
+                require(magic_assets.is_invisible_attachment(call.arguments[0].text),
+                        "Retail invisible magic-object attachments must be excluded from visible geometry");
+                if (!call.arguments[1].text.empty())
+                {
+                    require(magic_assets.is_invisible_attachment(call.arguments[1].text),
+                            "Retail invisible magic-object models must be excluded from visible geometry");
+                }
+                ++checked_invisible_magic_objects;
+            }
+            else if (task_kind == "TASKTYPE_LADDER")
+            {
+                require(magic_assets.is_ladder_model(call.arguments[0].text),
+                        "Retail ladder task models must be selected by magic-object task metadata");
+                ++checked_ladder_magic_objects;
+            }
+        }
+        require(checked_invisible_magic_objects > 0,
+                "Level 1 verification must cover retail invisible magic-object definitions");
+        require(checked_ladder_magic_objects > 0,
+                "Level 1 verification must cover retail ladder magic-object definitions");
         require(std::abs(scene.terrain_fog.colour.x - 0.576923f) < 0.000001f &&
                     std::abs(scene.terrain_fog.colour.y - 0.538462f) < 0.000001f &&
                     std::abs(scene.terrain_fog.colour.z - 0.480769f) < 0.000001f &&

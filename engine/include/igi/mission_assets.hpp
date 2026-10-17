@@ -36,6 +36,8 @@ class MissionAssets final
                   const std::filesystem::path& cache_directory);
     [[nodiscard]] std::shared_ptr<gameplay::SceneMesh> model(const std::string& name);
     [[nodiscard]] bool has_model(const std::string& name) const;
+    [[nodiscard]] bool is_invisible_attachment(const std::string& name) const;
+    [[nodiscard]] bool is_ladder_model(const std::string& name) const;
     [[nodiscard]] std::vector<std::uint32_t> terrain_textures(const std::filesystem::path& path);
     [[nodiscard]] std::vector<std::uint32_t> lightmap_textures(std::string_view set_name,
                                                                std::uint32_t model_index);
@@ -73,6 +75,7 @@ class MissionAssets final
     std::unordered_map<std::string, std::string> magic_attachment_models_;
     std::unordered_set<std::string> invisible_attachment_models_;
     std::unordered_set<std::string> muzzle_flash_models_;
+    std::unordered_set<std::string> ladder_models_;
 };
 
 } // namespace igi::assets
