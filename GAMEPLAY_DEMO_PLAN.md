@@ -1,5 +1,12 @@
-# Gameplay demo plan
+# Level 1 playable demo plan
 
-The current authoritative Level 1 MVP scope is [MVP.md](MVP.md), with the ordered implementation and verification tasks in [plan.md](plan.md).
+The full scope and mandatory order are defined in MVP.md and plan.md.
 
-This replaces the earlier macOS-first scope in this file. The target is Windows x86 with DirectDraw 7 / Direct3D 7. CrossOver on macOS is only the local Windows runtime test environment. The first visible milestone is the Level 1 scene loaded from retail `OBJECTS.QVM`, with original models, textures, terrain, and verified object placement.
+1. Build and verify the Windows x86 DirectDraw 7 baseline.
+2. Render Level 1 3D models at transforms produced by the retail OBJECTS.QVM path.
+3. Render Level 1 terrain with its original textures.
+4. Verify every object's placement/material/texture, capture screenshots, and wait for owner review.
+5. Implement the QVM/task loop, player, physics and world interaction, AI/navigation, health/damage, weapons, gameplay animations/effects, and sound in the order in plan.md.
+6. Build, run focused tests, capture a game-window screenshot for each visible increment, create small local commits, and provide each checkpoint for manual testing.
+
+The target is Windows x86 with DirectDraw 7 / Direct3D 7. CrossOver on macOS is only the local Windows runtime test environment. The repository does not yet have a playable Level 1 scene; see the current-state audit in plan.md.

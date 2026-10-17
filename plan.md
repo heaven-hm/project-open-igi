@@ -1,147 +1,104 @@
 # Level 1 Playable Demo Plan
 
-This plan implements the scope in [MVP.md](MVP.md) as sequential, reviewable slices. Each task stays small enough to build and verify before the next begins. The first deliverable is a scene visibly populated from retail `OBJECTS.QVM`; later slices make that scene playable.
+This is the execution sequence for MVP.md. Keep the order: establish the build, show the 3D models at retail object transforms, add textured terrain, verify the complete visual scene, and only then build the playable systems. Sound is included in the full Level 1 MVP and comes after the gameplay path is integrated.
 
-## Working loop for every task
+## Repeatable work loop
 
-1. Inspect the current C++ implementation and the exact Level 1 asset/script path.
-2. Use REA on the retail `igi.exe` to establish native boundaries, call flow, fields, and behavior. Use Binary Ninja/Radare2 as independent static checks and RE-Agent for bounded reconstruction/parity where useful. Use CrossOver plus `igi-probe`/Frida for runtime observations when the scenario can be reproduced.
-3. Consult C# `open-igi` only for candidate logic. Keep the candidate identified and record what retail evidence confirms or contradicts it.
-4. Implement one narrow vertical slice in C++20. Add focused unit/integration tests, failure handling, and timestamped subsystem logs.
-5. Build the Windows x86 target and run its focused tests. Run the matching retail and port scenario through CrossOver.
-6. For visible changes, capture a screenshot of the port and the matching retail view, record the scenario/build identifiers, and save the captures under `screenshots/level1/`.
-7. Review the diff and make one small local commit only after its required checks pass. Never claim a runtime check or screenshot that was not actually captured.
+Each task is one small, reviewable increment:
 
-## Ordered tasks
+1. Inspect the current source, assets, and dirty Git state. Do not overwrite unrelated user changes.
+2. Establish native behavior from retail igi.exe with REA/Ghidra. Cross-check boundaries or control flow with Binary Ninja/Radare2 as needed. Use RE-Agent for bounded reconstruction/parity work.
+3. Use C# open-igi only to find candidate logic. Validate candidates against the retail binary before using them.
+4. Implement one narrow C++20 slice with readable retail-native names/addresses, structured timestamped logs, and explicit errors for unsupported or unresolved cases.
+5. Add focused tests for that slice, build the Windows x86 executable, and run the relevant scenario under CrossOver.
+6. For each visible milestone, capture the actual game window and retain its run/build identity and logs.
+7. Make a small local commit after verification. Do not push unless explicitly asked.
+8. At each visual checkpoint, provide the screenshot and test record for owner manual review before advancing.
 
-### Task 0 — Establish the reproducible Level 1 test case
+## Task 0 — Build the Windows x86 baseline
 
-**Deliverable:** A repeatable way to launch retail and port Level 1 with the same assets and record build identity, logs, and screenshots.
+**Deliverable:** A reproducible CMake build of open-igi.exe and a verified DirectDraw 7 window startup under CrossOver.
 
-**Acceptance:** The documented CrossOver invocation launches the retail game and the current Windows x86 prototype; the binary hashes, arguments, bottle, output logs, and screenshot paths are recorded. This task establishes a baseline; it does not claim the current diagnostic window is a playable game.
+**Checks:** Build and CTest; confirm file/PE headers identify x86; record executable hash, invocation, CrossOver bottle/version, stdout/stderr, and application log. Confirm the captured screenshot is from the game window. This is only the build baseline, not a playable scene.
 
-**Verification:** Confirm each process/window and its logs. Save one retail reference capture and one prototype baseline capture. If CrossOver or screen capture is unavailable, record the exact failure and leave the runtime gate open.
+## Task 1 — Render Level 1 models from OBJECTS.QVM
 
-**Dependencies:** None.
+**Deliverable:** The first in-game 3D demo. Execute the verified QVM/task/object-creation path for Level 1 and render the actual model instances at their retail positions, orientations, and rotations with their resolved original materials/textures.
 
-### Task 1 — Verify the retail object-script startup path
+**Checks:** REA evidence for the QVM/task/native call path and model/render data; independent boundary checks for selected natives; tests against Level 1 scripts and model assets; logs for every instantiated object (task/native identity, model/resource ID, source transform, resulting world transform, material/texture resolution); CrossOver run and game-window screenshot. Do not hard-code scene coordinates or substitute a metadata-only window for rendered geometry.
 
-**Deliverable:** A retail-evidence map from loading `OBJECTS.QVM` through its QVM/task/native registration path to renderable object creation.
+**Exit gate:** The demo visibly contains Level 1 3D models placed from the original script path. Submit the screenshot, logs, test/build results, and known gaps for manual review.
 
-**Acceptance:** Every native selected for the path has a real retail entry/body, its callers/callees and relevant data fields are recorded, and provisional catalog labels are marked as such. The script's object count and task types can be compared with retail runtime observations.
+## Task 2 — Load and render Level 1 terrain with textures
 
-**Verification:** REA/Ghidra evidence plus independent Radare2/Binary Ninja boundary checks; runtime trace of the original under CrossOver/`igi-probe` where observable. Do not use handwritten coordinate lists as a substitute for script execution.
+**Deliverable:** Actual Level 1 terrain rendered with original texture/material bindings and verified lighting inputs.
 
-**Dependencies:** Task 0.
+**Checks:** Derive layouts and transforms from retail native behavior; test the Level 1 terrain/texture corpus; log source files, dimensions, tile/material identifiers, and texture resolution; run under CrossOver; capture the actual game window.
 
-### Task 2 — Execute the Level 1 object-creation closure
+**Exit gate:** Terrain and its textures are visible with Task 1 models still placed correctly. Submit this build and screenshot for manual review.
 
-**Deliverable:** The minimum verified QVM/task/native runtime needed to instantiate the renderable objects in `OBJECTS.QVM`.
+## Task 3 — Verify all Level 1 visual assets and transforms
 
-**Acceptance:** The C++ runtime loads the original script path and creates the same renderable task set as retail. Structured logs identify each task/native and report model ID, raw position/orientation inputs, and transformed world values. Unknown opcodes or natives fail with explicit diagnostics instead of being silently skipped.
+**Deliverable:** A reconciliation report for every object emitted by the Level 1 object/task path, including model identity, position, orientation, rotation, material, and texture.
 
-**Verification:** Unit tests for the verified opcode/task cases, a corpus run over Level 1 `OBJECTS.QVM`, and runtime count/field comparison with retail. Commit this slice separately.
+**Checks:** Compare the port's structured log and runtime state against retail igi.exe/igi-probe observations and source script execution. Check missing, duplicate, or unresolved objects and texture/material bindings. Capture representative scene views and retain the complete per-object log. Record unknowns rather than inferring a pass.
 
-**Dependencies:** Task 1.
+**Exit gate:** Every expected renderable object is accounted for and visual differences are listed. Owner reviews the build before gameplay-system work begins.
 
-### Task 3 — Resolve model packages and render textured Level 1 objects
+## Task 4 — QVM/task runtime and simulation tick
 
-**Deliverable:** Original RES/MTP/MEF/TEX resources resolved for the instantiated Level 1 object tasks and drawn in the Direct3D 7 window.
+**Deliverable:** The verified Level 1 script/task execution closure and retail tick order needed to drive the mission.
 
-**Acceptance:** The model/material identifiers resolve through the retail resource path; mesh and texture decoding follows layouts established from the retail binary. Objects appear at the positions and orientations produced by Task 2. Transparent materials retain their observed blend/depth behavior.
+**Checks:** Opcode/task unit tests, Level 1 script corpus run, task-count/state logs, native call-flow evidence, and matched retail runtime observations. Unknown opcodes or unresolved native calls must fail visibly rather than being skipped.
 
-**Verification:** Focused parser and asset-corpus tests; assert resolved asset names and counts; compare native field/stream observations; run under CrossOver and capture a scene screenshot against the retail reference. Do not implement an XTRV/DNER stride or topology from an unverified document claim.
+## Task 5 — Player creation, input, camera, and movement
 
-**Dependencies:** Tasks 0–2.
+**Deliverable:** The retail player instance and Level 1 input/camera/movement state path.
 
-### Task 4 — Load and draw Level 1 terrain with original textures
+**Checks:** Verify native boundaries and configuration-driven controls; deterministic input/tick tests; per-tick player position, velocity, stance, and camera logs; matched movement/jump scenarios in CrossOver. Keep animation state synchronized with the proven movement state.
 
-**Deliverable:** Level 1 terrain, its texture/lightmap inputs, and the verified camera-visible terrain region rendered through Direct3D 7.
+## Task 6 — Physics, collision, and world interactions
 
-**Acceptance:** Height, tile/region boundaries, texture lookup, lighting inputs, and world scale come from confirmed file/native behavior. The terrain is not a placeholder plane.
+**Deliverable:** Grounding, slopes, edges, walls, buildings, stairs/ladders, doors, and relevant interactive world objects used by Level 1.
 
-**Verification:** Tests over the actual Level 1 terrain corpus; logs include source file, dimensions/counts, and loaded texture references; CrossOver screenshot comparison from a matched retail camera view.
+**Checks:** Retail-derived collision query tests and matched runtime traces for walking, jumping, landing, entering a building, stairs/ladders, and door interaction. Report position/state deltas and health effects. No generic FPS constants or guessed collision geometry.
 
-**Dependencies:** Task 3.
+## Task 7 — AI and Level 1 graph navigation
 
-### Checkpoint A — Visible Level 1 scene
+**Deliverable:** Level 1 guard task creation, graph selection by original graph ID, path following, perception, and combat-state transitions.
 
-- [ ] Level 1 QVM/task instances are loaded.
-- [ ] Textured 3D models and terrain are visible in the game window.
-- [ ] Position/orientation/model/texture logs reconcile with retail observations.
-- [ ] Focused tests and Windows x86 build pass.
-- [ ] Retail and port screenshots are saved with provenance.
+**Checks:** Graph node/link integrity and AI state tests; source/runtime position reconciliation; CrossOver scenarios for patrol, detection, attack, and target loss. Verify guards move on graph paths rather than sliding or orbiting.
 
-### Task 5 — Add the Level 1 player and input path
+## Task 8 — Health, damage, and death
 
-**Deliverable:** Retail player creation, input dispatch, camera state, and movement state updates.
+**Deliverable:** Retail health initialization and player/enemy damage, hit regions, fall damage, difficulty, and death-state handling.
 
-**Acceptance:** The player can move, turn, crouch, and jump using the original Level 1 controls and state transitions. Control mappings and fixed-tick behavior come from the retail config/script and binary.
+**Checks:** Boundary and fatal/nonfatal tests; before/after health and state logs; verify player-only debug effects do not modify enemy state; compare corresponding retail observations.
 
-**Verification:** Native boundary/call-flow evidence, input replay tests, per-tick position/velocity/state logs, and matched CrossOver movement traces/screenshots. Test a short jump and ordinary movement before broad scenarios.
+## Task 9 — Weapon selection, firing, and reloading
 
-**Dependencies:** Checkpoint A.
+**Deliverable:** Level 1 weapon switching, aiming, fire cadence, spread/recoil, hit/projectile resolution, ammunition, reload, and damage dispatch.
 
-### Task 6 — Match player physics and world collision
+**Checks:** Deterministic input/shot tests and CrossOver shot sequences. Compare tick, ammo, direction/spread, recoil, target hit, damage, and death transition with retail traces. Capture the visible weapon/target result.
 
-**Deliverable:** Ground contact, slopes, edges/building entry, ladders where used in Level 1, jump arcs, landing, and damage-producing falls.
+## Task 10 — Gameplay animations and magic-object effects
 
-**Acceptance:** Collision queries use the actual Level 1 world geometry. Player motion, landing transitions, and health effects are driven by the verified retail path; no generic FPS constants are introduced.
+**Deliverable:** Player locomotion, enemy attack/hit/death, weapon equip/fire/reload, and gameplay-critical magic-object effects.
 
-**Verification:** Focused deterministic cases plus matched retail/port input traces for movement, jump, slope, doorway, and fall scenarios. Report per-tick state and position deltas.
+**Checks:** Verify animation state IDs, transition conditions, completion behavior, and object attachment/update routines against retail. Run repeated movement/combat sequences and capture representative frames. Main-menu and cutscene animation are excluded.
 
-**Dependencies:** Task 5 and Checkpoint A.
+## Task 11 — Sound engine
 
-### Task 7 — Load Level 1 navigation and bring up enemy AI
+**Deliverable:** Level 1 audio resource loading, sound definitions, event dispatch, voices/mixing, attenuation, and the original Windows audio API boundary.
 
-**Deliverable:** Level 1 graph data and the verified AI/task chain required for guards to patrol, detect, move, and attack.
+**Checks:** Unit tests for decoded formats and mixer/event behavior; runtime event traces for footsteps, weapon fire/reload, impacts, alarms, and AI cues; compare retail timing/parameters and audible output under CrossOver. Sound is required for the full MVP, but it is not part of the initial graphics demo.
 
-**Acceptance:** Enemy start positions and graph/task identities match Level 1 source/runtime values. Guards follow connected paths, respond to the player as retail does, and do not slide, panic-loop, or remain inert without a corresponding retail state.
+## Task 12 — Integrated playable Level 1 run
 
-**Verification:** Graph-link integrity tests, AI state transition tests, and matched runtime observations for patrol, detection, attack, and loss of target. Capture visible enemy positions at the same scenario ticks.
+**Deliverable:** A repeatable run from executable launch into the Level 1 mission exercising the integrated world, player, physics, AI/navigation, health/damage, weapons, interactions, animations/effects, scripts, and sound.
 
-**Dependencies:** Tasks 1, 2, and 6.
+**Checks:** Clean Windows x86 rebuild, full automated test suite, CrossOver end-to-end run, retained logs and screenshots, and a subsystem-by-subsystem retail parity report. Owner manually reviews the result. Any unobserved branch or unresolved difference remains open.
 
-### Task 8 — Add health and damage for player and enemies
+## Current verified limits
 
-**Deliverable:** Retail health initialization, hit/fall damage, death transitions, and difficulty-dependent behavior used by Level 1.
-
-**Acceptance:** Health changes are limited to the intended entity; fatal state remains fatal; body-region and fall behavior follow verified retail branches.
-
-**Verification:** Boundary tests from retail-derived inputs, tests for normal and fatal damage, and runtime comparisons of before/after health and entity state. Verify that player-only debug/cheat behavior cannot affect enemy health.
-
-**Dependencies:** Tasks 6–7.
-
-### Task 9 — Add weapon selection, firing, reloading, and hit resolution
-
-**Deliverable:** Level 1 player weapon state, switching, ammo, fire cadence, spread/recoil, projectile or hit resolution, and damage dispatch.
-
-**Acceptance:** The player can select available Level 1 weapons, fire at enemies, reload, and see ammo/damage/death state update. Any visible weapon animation uses original animation/state data where required for the playable path.
-
-**Verification:** Focused weapon tests plus matched shot sequences under CrossOver; compare tick of shot, ammo, direction/spread, recoil, target hit, damage, and death transition. Capture an in-game screenshot of the weapon and target result.
-
-**Dependencies:** Tasks 5, 7, and 8.
-
-### Task 10 — Integrate the Level 1 mission script and playable loop
-
-**Deliverable:** The required Level 1 QVM/task flow connects world loading, player, AI, weapons, health, and mission progress into one continuous run.
-
-**Acceptance:** Launch directly into the playable mission path, interact with required world objects, engage guards, and complete the Level 1 demo scenario without menus/cutscenes/vehicles.
-
-**Verification:** End-to-end CrossOver run from process launch to the chosen Level 1 endpoint; retain logs, test output, binary/build identity, and before/after screenshots. Repeat after a clean build.
-
-**Dependencies:** Tasks 2–9.
-
-### Checkpoint B — Playable Level 1 demo
-
-- [ ] Object placement, terrain, player, physics, AI/navigation, health/damage, weapon/shooting, and required QVM flow work together.
-- [ ] Every visible implementation increment has a screenshot comparison.
-- [ ] Unit, integration, and end-to-end tests pass on the Windows x86 build.
-- [ ] Remaining differences and unverified branches are listed explicitly.
-
-## Current evidence and known limits
-
-- The `game-engine-impl` target currently has a DirectDraw 7 diagnostic window and parsers for RES, MTP, MEF container metadata, and TEX headers/data. It is not yet a playable Level 1 renderer or game loop.
-- The current MEF code exposes D3DR/DNER/VRTX chunks but does not decode their verified vertex/draw layouts or render them. The Level 1 object QVM/task execution path is not connected.
-- Some native catalog labels are not confirmed by REA. A catalog match, parser test, or visually similar result alone is not proof of retail parity.
-- Current screenshot/runtime capture limitations must be reported against the affected task; do not substitute a terminal screenshot for a game-window capture.
+The current Windows bootstrap is a DirectDraw 7 diagnostic window that loads an explicitly supplied RES archive and reports resource/MEF metadata. The source has RES, MTP, MEF-container, and LOOP texture parsing tests. It does not yet execute the Level 1 object QVM, render MEF geometry or terrain, instantiate script objects, or provide a playable game loop. A successful parser test or window startup is not proof of a loaded 3D scene or retail parity.

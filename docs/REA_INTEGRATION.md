@@ -90,9 +90,10 @@ it must not be presented as full-image analysis or live runtime verification.
 - [Signed operand verification](fidelity/qvm-integer-operands.md)
 - [Script runtime provenance and limits](fidelity/script_runtime_provenance.md)
 - [Integer arithmetic correction](fidelity/script_integer_arithmetic.md)
-- [Current gameplay status](../engine/MVP_STATUS.md)
-- [Level 1 acceptance scope](../engine/MVP_PLAN.md)
+- [Current gameplay status](../README.md#current-status)
+- [Level 1 acceptance scope](../MVP.md)
+- [Ordered implementation plan](../plan.md)
 
 Level 1 is incomplete. Catalog discovery, passing functional tests and CFG
 agreement do not satisfy the required original-versus-port gameplay comparisons.
-Sound and cutscenes remain deferred under the current milestone.
+Sound is required by the Level 1 playable MVP. Movies/cutscenes remain outside its current scope; see the canonical [MVP](../MVP.md) and [implementation plan](../plan.md).

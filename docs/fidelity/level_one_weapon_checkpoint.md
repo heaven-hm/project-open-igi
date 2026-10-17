@@ -1,8 +1,12 @@
 # Level 1 weapon checkpoint: manual checks
 
-This is an experimental checkpoint, not completed Level 1 MVP acceptance.
-Sound and cutscenes remain deferred. The existing default `Downloads/IGI/igi.app`
-was preserved so this delivery does not replace another agent's app.
+> Historical record for a prior macOS gameplay-prototype branch. Its build paths,
+> controls, and results do not describe the current Windows x86 game-engine-impl
+> branch or the current MVP. The authoritative current scope is [MVP.md](../../MVP.md)
+> and its sequence is [plan.md](../../plan.md). The historical test record below is
+> retained as provenance only; it is not current acceptance evidence.
+
+This was an experimental checkpoint, not completed Level 1 MVP acceptance.
 
 ## Build delivered
 
