@@ -1,3 +1,10 @@
+> **2026-10-17 terrain correction:** The old 512x512/int16 HMP description below is superseded.
+> Retail 0x004C6240 walks 256 12-byte records and optional `(dimension + 1)^2` byte HMP blocks.
+> 0x00510010 reads signed-byte heights and applies bias 64 / scale 256. CTR relocation uses 32-byte
+> records and +0x1C CMD offsets; that does not validate the previously guessed quadtree struct.
+> 0x00512040 is a vertex/interpolant clipping path, not an established HMP sampler.
+> See [current evidence and all-level audit](docs/RETAIL_TERRAIN_ATTACHMENT_STATUS.md).
+
 # Project I.G.I. (2000) Game Natives Reference & File Formats Architecture Guide
 
 > **Primary Code Location**: `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/`  
@@ -134,7 +141,7 @@ Section 5 has been rewritten with the real `HumanAI_*` / `AI_*` / `CombatState_*
 ## 2. Level Terrain & TerraForm Quadtree (.hmp, .ctr, .lmp, .bit, .tex, .qsc)
 
 ### Formats & Binary Specifications
-- **`.hmp` (Heightmap Grid)**: Continuous raster grid storing 16-bit elevation values. Grid spacing corresponds to terrain world units.
+- **`.hmp` (Heightmap Grid)**: Optional table of byte-sample grids; loader record/size behavior is verified at 0x004C6240, and signed sample consumption at 0x00510010. Bindings determine origin/scale.
 - **`.ctr` (Contour Mesh Index)**: Hierarchical quadtree contour representation defining terrain LOD transitions and patch edges.
 - **`.lmp` (Lightmap Surface)**: Pre-baked static sunlight angles, ambient occlusion, and building ground contact shadows.
 - **`.bit` (Occlusion Bitmask)**: Horizon and ridge visibility bitmask used for early CPU/GPU triangle occlusion culling.
@@ -1003,10 +1010,10 @@ Section 5 has been rewritten with the real `HumanAI_*` / `AI_*` / `CombatState_*
 
 ### Formats & Binary Specifications
 - **`.hmp` (Heightmap Elevation Grid)**:
-  - Continuous 2D elevation grid (Level 1: 512x512 elevation sample points).
-  - 16-bit signed integer values (`int16_t`).
-  - Height Conversion: `WorldHeight = RawValue * ElevationScaleFactor + BaseAltitude`.
-  - Grid Spacing: 8.0 world units between adjacent grid vertices.
+  - Optional file containing 256 12-byte records, followed by byte grids.
+  - Each occupied record stores `dimension` at +0x08; its block contains `(dimension + 1)^2` bytes.
+  - Consumer 0x00510010 sign-extends samples, interpolates, subtracts 64 and scales by 256.
+  - Grid-to-world bindings must be recovered from task/runtime data; no universal 512x512 or 8-unit assumption.
 - **`.ctr` (Contour Mesh Index)** — **`UNVERIFIED`**: the file is referenced by `DynObj_Createterrainmateria` (mapped into the terrain context at `+0x0C`), but **no decompiled function decodes a node structure for it**.
   - An earlier revision described a 32-byte quadtree node (`MinBound`/`MaxBound` float3, `uint16_t[4]` child offsets, LOD metric). **That layout is not supported by any function in the binary and has been removed as fact.**
   - **To settle it:** decompile the consumer of the `+0x0C` handle and record the strides/offsets actually used, or diff a real `terrain.ctr` against its parsed runtime state.

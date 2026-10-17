@@ -133,7 +133,7 @@ int main(int argument_count, char **arguments)
         if (argument_count > 1)
         {
             igi::retail::resource::ResourceCache cache;
-            const auto script = igi::retail::script::Qvm_Load(cache, arguments[1]);
+            const auto script = igi::retail::script::Host_LoadQvmScript(cache, arguments[1]);
             const auto calls = igi::retail::script::Qvm_ReadObjectCalls(script.program());
             require(!calls.empty(), "retail OBJECTS.QVM contains object calls");
             std::cout << "QVM object calls=" << calls.size() << '\n';

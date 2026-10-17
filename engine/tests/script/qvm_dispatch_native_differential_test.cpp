@@ -8,14 +8,23 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <stdexcept>
-#include <vector>
+#if defined(_WIN32)
 #include <windows.h>
+#endif
+
+#if !defined(_WIN32)
+int main()
+{
+    std::cout << "qvm_dispatch_native_differential_test requires Windows x86 runtime; skipped on non-Windows host.\n";
+    return 0;
+}
+#else
 
 namespace
 {
 
 std::uint32_t observed_callback_count = 0U;
+
 std::array<std::uint32_t, 2U> observed_opcodes{};
 bool observed_callback_arguments_valid = true;
 
@@ -246,3 +255,5 @@ int main(int argument_count, char** arguments)
         return 1;
     }
 }
+#endif
+

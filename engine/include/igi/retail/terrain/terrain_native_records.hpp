@@ -62,6 +62,7 @@ struct TerrainRenderChunkRecord
     std::byte* cache_record = nullptr;
 };
 
+#if defined(_M_IX86) || defined(__i386__) || (defined(__SIZEOF_POINTER__) && __SIZEOF_POINTER__ == 4)
 static_assert(sizeof(void*) == 4, "Retail terrain layouts require the Windows x86 ABI.");
 static_assert(sizeof(TerrainGridRecord) == 12);
 static_assert(offsetof(TerrainGridRecord, runtime_state) == 4);
@@ -73,5 +74,7 @@ static_assert(sizeof(TerrainRenderChunkRecord) == 48);
 static_assert(offsetof(TerrainRenderChunkRecord, commands) == 0x20);
 static_assert(offsetof(TerrainRenderChunkRecord, packed_binding_identifiers) == 0x24);
 static_assert(offsetof(TerrainRenderChunkRecord, cache_record) == 0x2C);
+#endif
 
 } // namespace igi::retail::terrain
+

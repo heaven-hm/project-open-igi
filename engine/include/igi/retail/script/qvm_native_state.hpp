@@ -30,6 +30,10 @@ struct QvmNativeStatePrefix
 };
 
 static_assert(std::is_standard_layout_v<QvmNativeStatePrefix>);
+
+// The recovered layout is the retail 32-bit ABI. On a 64-bit host the pointers are wider, so the
+// byte offsets cannot hold; the offsets are only checked on the i386 target.
+#if defined(_M_IX86) || defined(__i386__)
 static_assert(offsetof(QvmNativeStatePrefix, instruction_offset) == 0x14U);
 static_assert(offsetof(QvmNativeStatePrefix, value_stack_index) == 0x18U);
 static_assert(offsetof(QvmNativeStatePrefix, type_stack_index) == 0x1CU);
@@ -37,5 +41,6 @@ static_assert(offsetof(QvmNativeStatePrefix, value_stack) == 0x24U);
 static_assert(offsetof(QvmNativeStatePrefix, type_stack) == 0x28U);
 static_assert(offsetof(QvmNativeStatePrefix, stop_flag) == 0x2CU);
 static_assert(sizeof(QvmNativeStatePrefix) == 0x30U);
+#endif
 
 } // namespace igi::retail::script

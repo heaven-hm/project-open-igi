@@ -92,7 +92,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
                           std::string_view requested_resource_name)
 {
     const igi::retail::resource::ResourceArchive archive =
-        igi::retail::resource::Resource_Load(resource_path);
+        igi::retail::resource::Host_LoadResourceArchive(resource_path);
 
     const igi::retail::resource::ResourceEntry* selected_entry = nullptr;
     if (!requested_resource_name.empty())
@@ -121,7 +121,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
     const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
 
     std::ostringstream resource_log;
-    resource_log << "Resource_Load completed; entries=" << archive.entries.size()
+    resource_log << "Host_LoadResourceArchive completed; entries=" << archive.entries.size()
                  << "; selected=" << selected_entry->name << "; bytes=" << selected_entry->body.size();
     log_message(resource_log.str(), igi::retail::diagnostics::LogLevel::info, "resource");
 

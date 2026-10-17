@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/diagnostics/log_record.hpp"
+#include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
 #include "igi/retail/render/trans_context.hpp"
@@ -12,6 +13,7 @@
 #include "igi/retail/script/qvm_loader.hpp"
 #include "igi/retail/script/qvm_object_calls.hpp"
 #include "igi/retail/texture/model_texture_pixels.hpp"
+
 
 #include <algorithm>
 #include <array>
@@ -310,7 +312,12 @@ struct Scene
 
     void load(const std::filesystem::path& root, unsigned int level_number)
     {
+        if (mem::g_9422fc == 0U)
+        {
+            mem::Sys_CloseFileStream_2();
+        }
         resource::ResourceCache cache;
+
         const auto location = root / "missions" / "location0";
         const std::string level_name = "level" + std::to_string(level_number);
         const auto level = location / level_name;
@@ -319,18 +326,18 @@ struct Scene
         {
             auto package = std::make_unique<Package>();
             const auto bytes =
-                resource::Resource_Load(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::DynObj_LoadModelTexturePackage(bytes->bytes);
+                resource::Host_LoadResourceFile(cache, descriptor.first / (descriptor.second + ".mtp"));
+            package->metadata = model::MtpPackage::Host_ParseModelTexturePackage(bytes->bytes);
             package->meshes =
-                resource::Resource_Load(descriptor.first / "models" / (descriptor.second + ".res"));
+                resource::Host_LoadResourceArchive(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
-                resource::Resource_Load(descriptor.first / "textures" / (descriptor.second + ".res"));
+                resource::Host_LoadResourceArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
             write_log("MTP/RES loaded: " + descriptor.second +
                       " models=" + std::to_string(package->meshes.entries.size()) +
                       " texture_names=" + std::to_string(package->metadata.texture_names.size()));
             packages.push_back(std::move(package));
         }
-        const auto script = script::Qvm_Load(cache, level / "objects.qsc");
+        const auto script = script::Host_LoadQvmScript(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
         for (const auto& call : calls)
         {
@@ -733,9 +740,10 @@ struct Scene
                     {
                         return 0U;
                     }
-                    const unsigned int shift = std::countr_zero(static_cast<std::uint32_t>(mask));
+                    const int shift = std::countr_zero(static_cast<std::uint32_t>(mask));
                     const std::uint32_t maximum = mask >> shift;
                     return ((value & mask) >> shift) * 255U / maximum;
+
                 };
                 pixels[row * description.dwWidth + column] =
                     0xFF000000U | (expand(description.ddpfPixelFormat.dwRBitMask) << 16U) |

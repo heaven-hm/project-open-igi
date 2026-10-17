@@ -14,7 +14,7 @@ Build a Windows x86 `open-igi.exe` that loads the original Level 1 assets and be
 
 ## Native scope and verification
 
-The demo uses a fixed, verified method set across the Level 1 gameplay and sound subsystems. Native counts and name-verification status must be maintained in the current verification catalog; sound, siren, music, and radio methods are included, while cutscene/movie and non-gameplay smoke/particle/FX methods remain out of scope.
+The demo targets the runtime-reachable Level 1 gameplay methods. Catalog membership and name agreement are inventory facts, not behavioral verification. Sound, sirens, music, radio, cutscenes/movies and decorative smoke remain deferred.
 
 - Per-native verification (address, name, gate status, BN check, CLEAN path): `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md`.
 - Each native was checked with `bn_function_info` against `igi.exe`: **3,035 name-verified, 15 name conflicts, 0 lookup errors.** Conflicting entries are used by **address only**, never by the catalog label.
@@ -37,7 +37,7 @@ The demo uses a fixed, verified method set across the Level 1 gameplay and sound
 13. **Level scripting and mission flow.** Connect the required QVM execution and task transitions so these systems operate together in the Level 1 mission.
 14. **Playable Level 1 acceptance.** Run the integrated mission scenario and record measured parity and unresolved differences across every included subsystem.
 
-Main menu presentation, movies/cutscenes, vehicles, and non-gameplay smoke effects are outside this playable-demo scope unless a Level 1 dependency is proven. The Level 1 sound engine is in scope, including sound loading, definitions, event dispatch, mixing, and audible gameplay playback.
+Main menu presentation, movies/cutscenes, vehicles, and non-gameplay smoke effects are outside this playable-demo scope unless a Level 1 dependency is proven. The sound engine remains deferred.
 
 ## Build, test, screenshot, and review gate
 
@@ -47,9 +47,9 @@ For every numbered implementation slice:
 2. Run the relevant retail and port scenarios under CrossOver; preserve logs, binary identity, arguments, and environment details.
 3. Capture a screenshot of each visible build milestone from the actual game window. Keep screenshots with their run/build records; a terminal capture does not count.
 4. Compare retail and port object/model/texture data where relevant. Record exact matches, measured deltas, and unknowns.
-5. Make one small local commit only after its stated gates pass. Do not push unless explicitly requested.
+5. Make one small English local commit only after its exact staged snapshot builds and passes focused tests. Owner manual review gates visual/release acceptance. Do not push unless explicitly requested.
 6. Present the build, test result, screenshot, and remaining gaps for the owner's manual review before moving past a visual checkpoint.
 
 ## Acceptance
 
-The MVP is complete only when Level 1 loads the original world and all included systems operate together: object placement, models and textures, terrain, player movement, physics and interaction, AI and navigation, health and damage, weapons and combat, gameplay animations/effects, mission scripting, and sound. Focused tests and compilation alone are insufficient. Runtime evidence and the owner's manual review are required; no subsystem is marked verified without evidence appropriate to its claim.
+The MVP is complete only when Level 1 loads the original world and all included systems operate together: object placement, models and textures, terrain, player movement, physics and interaction, AI and navigation, health and damage, weapons and combat, gameplay animations/effects, and mission scripting. Focused tests and compilation alone are insufficient. Runtime evidence and the owner's manual review are required; no subsystem is marked verified without evidence appropriate to its claim.

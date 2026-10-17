@@ -36,15 +36,17 @@ struct LoopTerrainTextureFile
     std::vector<std::byte> palette_bytes;
     std::vector<LoopTerrainTextureRecord> records;
 
-    // Terrain_TextureFileNotOfRequ - 0x005175A0 - Native static evidence: CFG 1.000 (PASS), RE-Agent 5/6; port runtime parity unverified.
+    // Host adapter: parses a LOOP terrain texture container into a C++ LoopTerrainTextureFile struct.
+    // The literal retail Terrain_TextureFileNotOfRequ (VA 0x005175A0) is in texture_loaders.hpp.
     // Tools: Ghidra/REA and Radare2; runtime parity is not verified.
     // Evidence: REA ev_949b22183952b274cb5402e31a7491f1ff8052c92b2457e7ec630aea93dc69ca;
     // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x005175A0, CFG 1.000, 5/6).
-    // The catalog name is provisional: REA labels this procedure retail routine 0x005175A0.
-    // The native builds dispatch records for 0x004B23B0; pixel upload is performed
-    // by registered renderer operations and is not part of this parser result.
+    // CFG: radare2 13 blocks/20 edges; Binary Ninja 13 blocks; 92.6% structural agreement.
+    // Confidence: partial host parser adapter; literal native dispatch is in texture_loaders.cpp.
+    // Signature: std::span<const std::byte> -> LoopTerrainTextureFile differs from retail void*(int32_t, int32_t, const char*).
+    // Usage/tests: Used by host LOOP texture inspection tests.
     [[nodiscard]] static LoopTerrainTextureFile
-    Terrain_TextureFileNotOfRequ(std::span<const std::byte> file_bytes);
+    Host_ParseTerrainTextureFile(std::span<const std::byte> file_bytes);
 };
 
 struct LoopModelTextureFile
@@ -55,11 +57,15 @@ struct LoopModelTextureFile
     std::array<std::uint32_t, 6U> operation_arguments{};
     std::size_t pixel_data_offset = 0U;
 
-    // Texture_LoadModelFile - 0x004B24C0 - Static analysis only; symbol and CFG parity are not verified.
+    // Host adapter: parses a LOOP model texture container into a C++ LoopModelTextureFile struct.
+    // The literal retail Sys_SIsNotAValidTextureF (VA 0x004B24C0) is in texture_loaders.hpp.
     // Tools: Ghidra/REA and Binary Ninja; runtime behavior is not verified.
     // Evidence: REA ev_133bd2573eab1beb3490cc8b39abb71ad6028c93b45eb5dc9b80cef6273f5214.
-    // This semantic name is descriptive, not a confirmed retail symbol.
-    [[nodiscard]] static LoopModelTextureFile Texture_LoadModelFile(std::span<const std::byte> file_bytes);
+    // CFG: radare2 12 blocks/18 edges; Binary Ninja 12 blocks; 100% structural agreement.
+    // Confidence: partial host parser adapter; literal native dispatch is in texture_loaders.cpp.
+    // Signature: std::span<const std::byte> -> LoopModelTextureFile differs from retail int32_t(int32_t, int32_t, const char*).
+    // Usage/tests: Used by host LOOP texture pixel decoder and inspection tests.
+    [[nodiscard]] static LoopModelTextureFile Host_ParseModelTextureFile(std::span<const std::byte> file_bytes);
 };
 
 } // namespace igi::retail::texture

@@ -1,0 +1,5 @@
+CompileFlags:
+  CompilationDatabase: build
+  Add:
+    - -std=c++20
+    - -I/Users/haseeb-mir/Documents/Code/project-open-igi/engine/include

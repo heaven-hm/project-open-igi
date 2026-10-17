@@ -6,7 +6,7 @@ This repository is the game-engine implementation. It is not an editor, converte
 
 ## Current status
 
-The active Level 1 MVP is documented in MVP.md, with its required implementation sequence in plan.md: build the Windows x86 baseline; render models at transforms from OBJECTS.QVM; render terrain and textures; verify all visual assets and placements; then implement the playable simulation, player, physics/interactions, AI/navigation, health/damage, weapons, gameplay animation/effects, QVM flow, and sound.
+The active Level 1 MVP is documented in MVP.md, with its required implementation sequence in plan.md: build the Windows x86 baseline; render models at transforms from OBJECTS.QVM; render terrain and textures; verify all visual assets and placements; then implement the playable simulation, player, physics/interactions, AI/navigation, health/damage, weapons, gameplay animation/effects, QVM flow, with audio deferred.
 
 ### Task 1: early 3D model loading from QVM
 
@@ -33,8 +33,8 @@ address/name table](docs/TASK1_MODEL_LOADING.md) for coverage and limits.
 | ![Level 11 textured models](docs/screenshots/task1/level11-models.png) | ![Level 14 textured models](docs/screenshots/task1/level14-models.png) |
 
 Primary native anchors: `Qvm_Load` (`0x004B80B0`), `Resource_Load` (`0x004B5F00`),
-`DynObj_InsertHashItem_14` (`0x004CF080`), `DynObj_LocalModelsSMef` (`0x004CF390`) and
-`DisplayRender_Processmodelsnotconvert` (`0x0049DF60`). Names and addresses identify the research sources;
+`DynObj_LoadModelTexturePackage` (`0x004CF080`), `DynObj_LoadModelMesh` (`0x004CF390`) and
+`DisplayRender_DrawModel` (`0x0049DF60`). Names and addresses identify the research sources;
 complete retail behavioral parity is not established by compilation or these screenshots.
 
 Movies/cutscenes, vehicles, smoke effects, and the main menu are outside this playable-demo scope unless a Level 1 dependency is proven.
@@ -73,3 +73,19 @@ Per-routine evidence and implementation limits stay attached to native source an
 ## Windows runtime
 
 The retail executable and this project target 32-bit Windows x86 and DirectX 7 / DirectDraw. The game is intended to run as a normal Windows game with its original assets. Keep Windows APIs in the Windows platform layer; shared engine routines retain retail behavior established from igi.exe.
+
+## Developer inspection controls
+
+Run `open-igi.exe window devmode level1`. F12 toggles the diagnostic free camera; F10 loads
+the next level (Level 14 wraps to Level 1). F9 toggles **player-only cheat requests** for god mode,
+unlimited ammunition and clips. This model scene has no playable health/inventory integration yet,
+so F9 logs that limitation and does not grant functional gameplay cheats. All three shortcuts are
+inactive without `devmode`; key auto-repeat is ignored. These are host tools, not retail-native claims.
+
+The four-frame model grid above records the existing visual milestone. Terrain will get its own
+four-frame grid after rendering and verification, not before. See Agents.md for the evidence/review rules.
+
+Current development checkpoint: `task1-devcontrols-2026-10-17` (not a stable gameplay release).
+[Windows test record](docs/DEVELOPER_CONTROLS_TEST.md) · [Terrain/ATTA evidence](docs/RETAIL_TERRAIN_ATTACHMENT_STATUS.md) · [Retail byte identities](docs/native-source-identity.json).
+
+Evidence-backed names and historical aliases: [native naming record](docs/RETAIL_NATIVE_NAMING.md).

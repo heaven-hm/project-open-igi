@@ -60,15 +60,15 @@ std::size_t ResourceCache::size() const noexcept
     return loaded_resources_.size();
 }
 
-// Native: Is_ResourceLoaded() - VA 0x004B5B90 - partial adapter, not a complete literal port.
-// Behavior: Resolves aliases/separators, searches the native registry and optionally outputs its entry.
+// Host adapter: probes the host ResourceCache map by normalized path.
+// The literal retail Is_ResourceLoaded (VA 0x004B5B90) is in is_resource_loaded.cpp.
 // Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
 // Evidence: ev_d58a0427b58e2d3d638c5f4bd2c1332506b572ba79e84fd3fa46f4f3b1d5118f.
 // CFG: r2 blocks=24, edges=35; BN blocks=24; source agreement=100.0%.
-// Confidence: partial cache adapter; native alias search/hash/list semantics are not fully transcribed.
+// Confidence: partial cache adapter for host diagnostic harness.
 // Signature: Retail flag/out-entry interface is adapted to a C++ ResourceHandle lookup.
-// Usage/tests: Used by resource cache tests/API; cache fixtures passed; native call-by-call replay pending.
-ResourceHandle Is_ResourceLoaded(
+// Usage/tests: Used by resource cache tests/API; cache fixtures passed.
+ResourceHandle Host_FindCachedResource(
     const ResourceCache& resource_cache,
     const std::filesystem::path& resource_path)
 {
@@ -87,7 +87,7 @@ ResourceHandle Is_ResourceLoaded(
 // Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete.
 // Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
 // Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
-ResourceHandle Resource_Load(
+ResourceHandle Host_LoadResourceFile(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,
     std::uint32_t* out_byte_count)
@@ -114,7 +114,7 @@ ResourceHandle Resource_Load(
     return resource_handle;
 }
 
-// Native: Resource_Unload() - VA 0x004B6380 - partial adapter, not a complete literal port.
+// Host adapter: drops a path from the port cache; see the header note.
 // Behavior: Finds a resource, conditionally releases supported entry types, and errors if absent.
 // Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
 // Evidence: ev_61eb49f6f63a80b807875b80fe9cebc7ec3cf1637b5215987b4858715812e9bd.
@@ -122,9 +122,7 @@ ResourceHandle Resource_Load(
 // Confidence: partial adapter; host false-on-missing differs from the native fatal-error path.
 // Signature: Retail void/path API is adapted to bool/cache/path; native ABI is not preserved yet.
 // Usage/tests: Used by resource lifecycle fixtures; handle lifetime passed; retail unload replay pending.
-bool Resource_Unload(
-    ResourceCache& resource_cache,
-    const std::filesystem::path& resource_path)
+bool Host_UnloadResourceFile(ResourceCache& resource_cache, const std::filesystem::path& resource_path)
 {
     const std::string normalized_path = normalize_resource_path(resource_path);
     return resource_cache.loaded_resources_.erase(normalized_path) != 0U;

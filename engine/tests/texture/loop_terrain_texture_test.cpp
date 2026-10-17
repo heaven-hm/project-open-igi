@@ -90,7 +90,7 @@ void test_version_seven_dispatch_metadata()
 {
     const std::vector<std::byte> file_bytes = make_loop_texture(7U);
     const LoopTerrainTextureFile texture_file =
-        LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes);
+        LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes);
 
     require(texture_file.version == 7U, "LOOP version 7 is retained");
     require(texture_file.texture_count == 1U && texture_file.records.size() == 1U,
@@ -107,7 +107,7 @@ void test_version_nine_dispatch_metadata()
 {
     const std::vector<std::byte> file_bytes = make_loop_texture(9U);
     const LoopTerrainTextureFile texture_file =
-        LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes);
+        LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes);
 
     require(texture_file.version == 9U, "LOOP version 9 is retained");
     require(texture_file.records.size() == 1U, "LOOP version 9 record is read");
@@ -129,7 +129,7 @@ void test_palette_payload_matches_native_offsets()
     file_bytes[palette_offset + 0x13U] = std::byte{0x40};
 
     const LoopTerrainTextureFile texture_file =
-        LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes);
+        LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes);
     require(texture_file.palette_size == palette_size, "palette byte count uses native field +0x0C");
     require(texture_file.palette_operation_value == palette_size,
         "palette operation receives the native palette byte count");
@@ -143,7 +143,7 @@ void test_rejects_unsupported_version_and_truncation()
     bool rejected_version = false;
     try {
         const std::vector<std::byte> file_bytes = make_loop_texture(8U);
-        static_cast<void>(LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes));
+        static_cast<void>(LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes));
     } catch (const LoopTextureFormatError&) {
         rejected_version = true;
     }
@@ -152,7 +152,7 @@ void test_rejects_unsupported_version_and_truncation()
     bool rejected_truncation = false;
     try {
         const std::vector<std::byte> file_bytes(0x34U);
-        static_cast<void>(LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes));
+        static_cast<void>(LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes));
     } catch (const LoopTextureFormatError&) {
         rejected_truncation = true;
     }
@@ -170,7 +170,7 @@ void test_model_texture_versions_two_and_eleven()
     write_u16(version_two_bytes, 0x14U, 0x3333U);
     write_u16(version_two_bytes, 0x16U, 0x4444U);
     const LoopModelTextureFile version_two =
-        LoopModelTextureFile::Texture_LoadModelFile(version_two_bytes);
+        LoopModelTextureFile::Host_ParseModelTextureFile(version_two_bytes);
     require(version_two.operation_arguments[0U] == 0x1111U
             && version_two.operation_arguments[4U] == 256U
             && version_two.pixel_data_offset == 0x18U,
@@ -187,7 +187,7 @@ void test_model_texture_versions_two_and_eleven()
     write_u16(version_eleven_bytes, 0x1AU, 64U);
     write_u16(version_eleven_bytes, 0x1EU, 32U);
     const LoopModelTextureFile version_eleven =
-        LoopModelTextureFile::Texture_LoadModelFile(version_eleven_bytes);
+        LoopModelTextureFile::Host_ParseModelTextureFile(version_eleven_bytes);
     require(version_eleven.operation_arguments[0U] == 2048U
             && version_eleven.operation_arguments[3U] == 0x55667788U
             && version_eleven.operation_arguments[5U] == 0x11223344U
@@ -198,14 +198,14 @@ void test_model_texture_versions_two_and_eleven()
 void test_level_one_model_texture_archive(const std::filesystem::path& archive_path)
 {
     const igi::retail::resource::ResourceArchive archive =
-        igi::retail::resource::Resource_Load(archive_path);
+        igi::retail::resource::Host_LoadResourceArchive(archive_path);
     std::size_t texture_count = 0U;
     for (const igi::retail::resource::ResourceEntry& entry : archive.entries) {
         if (!entry.name.ends_with(".tex")) {
             continue;
         }
 
-        static_cast<void>(LoopModelTextureFile::Texture_LoadModelFile(entry.body));
+        static_cast<void>(LoopModelTextureFile::Host_ParseModelTextureFile(entry.body));
         ++texture_count;
     }
     require(texture_count > 0U, "Level 1 model texture archive contains supported TEX resources");
@@ -218,7 +218,7 @@ void test_level_one_terrain_texture(const std::filesystem::path& texture_path)
 {
     const std::vector<std::byte> file_bytes = read_file(texture_path);
     const LoopTerrainTextureFile texture_file =
-        LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(file_bytes);
+        LoopTerrainTextureFile::Host_ParseTerrainTextureFile(file_bytes);
     std::cout << "Level 1 Terrain_TextureFileNotOfRequ verified: file="
               << texture_path << "; bytes=" << file_bytes.size()
               << "; LOOP version=" << texture_file.version
@@ -235,6 +235,8 @@ int main(int argument_count, char** arguments)
         test_version_nine_dispatch_metadata();
         test_palette_payload_matches_native_offsets();
         test_rejects_unsupported_version_and_truncation();
+        test_model_texture_versions_two_and_eleven();
+
 
         if (argument_count == 2) {
             test_level_one_terrain_texture(arguments[1]);

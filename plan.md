@@ -12,7 +12,7 @@ This is the execution sequence for MVP.md, in the agreed build order:
 
 Only after the whole thing works do we treat it as the playable demo. Nothing is skipped ahead.
 
-> **Scope update:** Level 1 sound is part of the playable demo. Implement and verify its file loading, sound definitions, event dispatch, mixer, and audible gameplay output after the core gameplay path is integrated. Main-menu audio, movies/cutscenes, vehicles, and non-gameplay smoke/particle effects remain deferred.
+> **Scope update (2026-10-17):** Audio, menus, movies/cutscenes, vehicles and decorative smoke remain deferred. Work on terrain and original textures after the model checkpoint; then the playable gameplay systems. Reference projects identify candidates only; retail binary evidence governs every engine routine.
 
 ## Repeatable work loop
 
@@ -24,7 +24,7 @@ Each task is one small, reviewable increment:
 4. Implement one narrow C++20 slice with readable retail-native names/addresses, structured timestamped logs, and explicit errors for unsupported or unresolved cases.
 5. Add focused tests for that slice, build the Windows x86 executable, and run the relevant scenario under CrossOver.
 6. For each visible milestone, capture the actual game window and retain its run/build identity and logs.
-7. Make a small local commit after verification. Do not push unless explicitly asked.
+7. Make a small English local commit after its exact staged snapshot builds and passes focused tests; manual review gates visual/release acceptance. Do not push unless explicitly asked.
 8. At each visual checkpoint, provide the screenshot and test record for owner manual review before advancing.
 
 ## Native verification rule (every task)
@@ -135,11 +135,9 @@ A native counts as verified only when `bn_function_info <address>` (Binary Ninja
 
 **Checks:** Verify animation state IDs, transition conditions, completion behavior, and object attachment/update routines against retail. Run repeated movement/combat sequences and capture representative frames. Main-menu and cutscene animation are excluded.
 
-## Task 13 — Level 1 sound engine
+## Task 13 — Audio deferred
 
-**Deliverable:** Retail-derived Level 1 sound resources, sound definitions, event triggers, voice mixing, and audible Windows playback integrated with gameplay.
-
-**Checks:** REA evidence for the retail loader, definition, event, and mixer paths; parser/decoder/mixer tests against Level 1 resources; timestamped logs for loaded sounds, trigger source, voice allocation, and playback failures; CrossOver scenarios for representative footsteps, weapon, impact, and AI sounds; compare trigger timing and decoded output with retail observations. File parsing and decoder tests alone do not establish audible runtime parity.
+No sound implementation is scheduled for this demo checkpoint.
 
 ## Task 14 — Integrated playable Level 1 run
 
@@ -170,8 +168,13 @@ Per-native addresses, gate status, BN verification result and CLEAN path: `asset
 
 ## Deferred from this demo
 
-Main menus, movies and cutscenes, subtitles, vehicles, and non-gameplay smoke/particle effects. Level 1 sound, including gameplay event sounds and its mixer/playback path, remains in scope. Music, sirens, and radio are included only where Level 1 execution reaches them.
+Main menus, movies and cutscenes, subtitles, vehicles, and non-gameplay smoke/particle effects. Audio, music, sirens and radio remain deferred.
 
 ## Current verified limits
 
-The current Windows bootstrap is a DirectDraw 7 diagnostic window that loads an explicitly supplied RES archive and reports resource/MEF metadata. The source has RES, MTP, MEF-container, and LOOP texture parsing tests. It does not yet execute the Level 1 object QVM, render MEF geometry or terrain, instantiate script objects, or provide a playable game loop. A successful parser test or window startup is not proof of a loaded 3-D scene or retail parity.
+The current Windows x86 diagnostic scene renders textured static MEF models using Direct3D 7,
+with initial transforms read from OBJECTS.QVM. Earlier all-level captures are recorded in
+`docs/TASK1_MODEL_LOADING.md`; they are not proof of complete task execution or gameplay parity.
+Terrain rendering, recursive child-task integration, skinned actors, retail human camera/input,
+and playable simulation remain incomplete. ATTA accessor tests establish only their measured layouts
+and leaf operations. Highest retail graphics selection still needs its consumer chain verified.

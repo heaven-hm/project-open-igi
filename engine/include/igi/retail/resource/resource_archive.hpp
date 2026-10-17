@@ -34,15 +34,15 @@ public:
     [[nodiscard]] const ResourceEntry* find(std::string_view resource_name) const noexcept;
 };
 
-// Native: Sys_Resource() - VA 0x004B5F80 - partial adapter, not a complete literal port.
-// Behavior: Recognizes ILFF/IRES, legacy RESOURCE entries, and the native raw-resource fallback.
+// Host adapter: parses ILFF/IRES or legacy RESOURCE bytes into a host ResourceArchive container.
+// The literal retail Sys_Resource (VA 0x004B5F80) is in sys_resource.hpp.
 // Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
 // Evidence: ev_756c70344e9eb0cff58f5a134a0308a81a96d2483abaf4a70ae305f706b05829.
 // CFG: r2 blocks=11, edges=14; BN blocks=11; source agreement=100.0%.
-// Confidence: partial archive adapter; raw fallback and intrusive registry insertion remain unported.
+// Confidence: partial archive adapter for host diagnostics/scene harness.
 // Signature: C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.
-// Usage/tests: Used to mount model/texture RES archives; archive fixtures passed; full parity pending.
-[[nodiscard]] ResourceArchive Sys_Resource(
+// Usage/tests: Used to mount model/texture RES archives in host diagnostic tools; archive fixtures passed.
+[[nodiscard]] ResourceArchive Host_ParseResourceArchive(
     std::span<const std::byte> resource_bytes,
     std::string_view source_name);
 
@@ -54,6 +54,8 @@ public:
 // Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete.
 // Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
 // Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
-[[nodiscard]] ResourceArchive Resource_Load(const std::filesystem::path& resource_path);
+// Host adapter: reads a file from disk and parses it with Sys_Resource.
+// The retail Resource_Load (VA 0x004B5F00) is a 2-argument cache probe and is NOT this.
+[[nodiscard]] ResourceArchive Host_LoadResourceArchive(const std::filesystem::path& resource_path);
 
 } // namespace igi::retail::resource

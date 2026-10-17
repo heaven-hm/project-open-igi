@@ -138,7 +138,7 @@ std::vector<std::byte> make_fixture_mtp()
 void test_native_mtp_instance_and_gtt_decoding()
 {
     const std::vector<std::byte> file_bytes = make_fixture_mtp();
-    const MtpPackage package = MtpPackage::DynObj_LoadModelTexturePackage(file_bytes);
+    const MtpPackage package = MtpPackage::Host_ParseModelTexturePackage(file_bytes);
     require(package.root_tag == 0x494C4646U, "MTP root tag is retained without interpreting it");
     require(package.model_names.size() == 1U && package.model_names[0U] == "model_a.mef",
             "MODS model names are loaded");
@@ -159,7 +159,7 @@ void test_rejects_truncated_mtp_chunks()
     bool rejected = false;
     try
     {
-        static_cast<void>(MtpPackage::DynObj_LoadModelTexturePackage(file_bytes));
+        static_cast<void>(MtpPackage::Host_ParseModelTexturePackage(file_bytes));
     }
     catch (const MtpFormatError&)
     {
@@ -171,12 +171,12 @@ void test_rejects_truncated_mtp_chunks()
 void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
 {
     const std::vector<std::byte> file_bytes = read_file(mtp_path);
-    const MtpPackage package = MtpPackage::DynObj_LoadModelTexturePackage(file_bytes);
+    const MtpPackage package = MtpPackage::Host_ParseModelTexturePackage(file_bytes);
     const std::filesystem::path level_path = mtp_path.parent_path();
     const igi::retail::resource::ResourceArchive model_archive =
-        igi::retail::resource::Resource_Load(level_path / "MODELS" / "LEVEL1.RES");
+        igi::retail::resource::Host_LoadResourceArchive(level_path / "MODELS" / "LEVEL1.RES");
     const igi::retail::resource::ResourceArchive texture_archive =
-        igi::retail::resource::Resource_Load(level_path / "TEXTURES" / "LEVEL1.RES");
+        igi::retail::resource::Host_LoadResourceArchive(level_path / "TEXTURES" / "LEVEL1.RES");
 
     std::size_t model_texture_count = 0U;
     std::size_t parsed_model_texture_count = 0U;
@@ -186,7 +186,7 @@ void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
         {
             ++model_texture_count;
             const igi::retail::texture::LoopModelTextureFile texture_file =
-                igi::retail::texture::LoopModelTextureFile::Texture_LoadModelFile(entry.body);
+                igi::retail::texture::LoopModelTextureFile::Host_ParseModelTextureFile(entry.body);
             require(texture_file.pixel_data_offset < entry.body.size(),
                     "each Level 1 model TEX resource has pixel data after its retail header");
             ++parsed_model_texture_count;

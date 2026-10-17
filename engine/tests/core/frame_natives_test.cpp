@@ -41,8 +41,8 @@ void test_frame_getter_and_setter_match_observed_global_access()
     igi::retail::core::FrameDispatchRecordView record{};
     DAT_00567C8C = &record;
 
-    require(Game_GetFrameDispatchRecord() == &record, "0x00402880 returns the global record pointer");
-    Game_SetFrameDispatchRecordValue(0xA1B2C3D4U);
+    require(Game_GetContext() == &record, "0x00402880 returns the global record pointer");
+    Flow_SetState(0xA1B2C3D4U);
     require(record.unknown_0x2C == 0xA1B2C3D4U, "0x004028A0 writes a dword at offset 0x2c");
 }
 
@@ -55,7 +55,7 @@ void test_frame_native_dispatches_by_record_word_at_offset_0x1c()
     DAT_005C8DE8 = 1U;
     reset_dispatch_observation();
 
-    Game_DispatchCurrentFrameCallback();
+    QTask_OpenEvent();
 
     require(callback_count == 1, "frame dispatcher invokes one selected callback");
     require(callback_record == &record, "frame dispatcher passes the record returned by the getter");
@@ -70,7 +70,7 @@ void test_frame_abort_path_clears_the_retail_status_byte()
     DAT_00A970E0[3] = abort_dispatch;
     DAT_005C8DE8 = 1U;
 
-    Game_DispatchCurrentFrameCallback();
+    QTask_OpenEvent();
 
     require(DAT_005C8DE8 == 0U, "nonlocal frame abort stores zero through 0x0048F480");
 }

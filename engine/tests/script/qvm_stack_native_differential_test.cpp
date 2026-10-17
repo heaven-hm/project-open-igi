@@ -8,14 +8,23 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
-#include <stdexcept>
-#include <vector>
+#if defined(_WIN32)
 #include <windows.h>
+#endif
+
+#if !defined(_WIN32)
+int main()
+{
+    std::cout << "qvm_stack_native_differential_test requires Windows x86 runtime; skipped on non-Windows host.\n";
+    return 0;
+}
+#else
 
 namespace
 {
 
 class OriginalQvmPushInteger
+
 {
   public:
     explicit OriginalQvmPushInteger(const std::vector<unsigned char>& executable_bytes)
@@ -173,3 +182,5 @@ int main(int argument_count, char** arguments)
         return 1;
     }
 }
+#endif
+

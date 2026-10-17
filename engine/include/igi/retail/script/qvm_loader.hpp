@@ -26,7 +26,7 @@ public:
     [[nodiscard]] std::span<const std::byte> file_bytes() const noexcept;
 
 private:
-    friend QvmLoadedScript Qvm_Load(
+    friend QvmLoadedScript Host_LoadQvmScript(
         resource::ResourceCache& resource_cache,
         const std::filesystem::path& qvm_path);
 
@@ -36,12 +36,15 @@ private:
     QvmCompiledProgram program_;
 };
 
-// Qvm_Load - original IGI.EXE native at VA 0x004B80B0.
-// Verification: retail Level 1 runtime confirms objects.qsc selects objects.qvm.
-// This slice selects the compiled sibling, gets bytes through Resource_Load and validates the compiled
-// QVM path through Qvm_LoadCompiledProgram. Retail VFS aliases and QSC source fallback remain
-// unimplemented. REA evidence: ev_7c38680fe595188ac5d682a3e51c35966527da65dc4388db2afed21f725b1e48.
-[[nodiscard]] QvmLoadedScript Qvm_Load(
+// Host adapter: loads a QVM file from the host ResourceCache and parses its header.
+// The literal retail Qvm_Load (VA 0x004B80B0) is in qvm_native_loader.hpp.
+// Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
+// Evidence: ev_7c38680fe595188ac5d682a3e51c35966527da65dc4388db2afed21f725b1e48.
+// CFG: r2 blocks=33, edges=50; BN blocks=33; source agreement=91.4%.
+// Confidence: partial host adapter for scene/test harness.
+// Signature: C++ ResourceCache/path -> QvmLoadedScript differs from retail void*(const char*).
+// Usage/tests: Used by host QVM inspection tests and diagnostic scene harness.
+[[nodiscard]] QvmLoadedScript Host_LoadQvmScript(
     resource::ResourceCache& resource_cache,
     const std::filesystem::path& qvm_path);
 

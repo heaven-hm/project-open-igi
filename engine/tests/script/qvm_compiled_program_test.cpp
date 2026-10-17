@@ -17,12 +17,12 @@
 namespace {
 
 using igi::retail::script::QvmFormatError;
-using igi::retail::script::Qvm_Load;
+using igi::retail::script::Host_LoadQvmScript;
 using igi::retail::script::Qvm_LoadCompiledProgram;
-using igi::retail::resource::Is_ResourceLoaded;
+using igi::retail::resource::Host_FindCachedResource;
 using igi::retail::resource::ResourceCache;
-using igi::retail::resource::Resource_Load;
-using igi::retail::resource::Resource_Unload;
+using igi::retail::resource::Host_LoadResourceFile;
+using igi::retail::resource::Host_UnloadResourceFile;
 
 void require(bool condition, std::string_view message)
 {
@@ -193,28 +193,28 @@ void test_resource_load_returns_stable_resource_memory_address()
 
         ResourceCache resource_cache{};
         std::uint32_t resource_byte_count = 0U;
-        const auto loaded_resource = Resource_Load(resource_cache, resource_path, &resource_byte_count);
+        const auto loaded_resource = Host_LoadResourceFile(resource_cache, resource_path, &resource_byte_count);
         const std::byte* resource_data = loaded_resource->data();
         require(resource_byte_count == file_bytes.size(),
             "Resource_Load optional output is the retail byte count");
         require(loaded_resource->size() == file_bytes.size(),
             "Resource_Load reports the complete QVM resource size");
-        require(Is_ResourceLoaded(resource_cache, resource_path).get() == loaded_resource.get(),
-            "Is_ResourceLoaded returns the cached resource entry");
+        require(Host_FindCachedResource(resource_cache, resource_path).get() == loaded_resource.get(),
+            "Host_FindCachedResource returns the cached resource entry");
 
         std::uint32_t cached_byte_count = 0U;
-        const auto cached_resource = Resource_Load(resource_cache, resource_path, &cached_byte_count);
+        const auto cached_resource = Host_LoadResourceFile(resource_cache, resource_path, &cached_byte_count);
         require(cached_resource.get() == loaded_resource.get()
                 && cached_resource->data() == resource_data && cached_byte_count == resource_byte_count
                 && resource_cache.size() == 1U,
             "Resource_Load reuses the same cached entry and memory address");
         auto source_path = resource_path;
         source_path.replace_extension(".qsc");
-        const auto source_script = Qvm_Load(resource_cache, source_path);
+        const auto source_script = Host_LoadQvmScript(resource_cache, source_path);
         require(source_script.file_bytes().data() == resource_data,
-            "Qvm_Load selects the compiled sibling without requiring source text");
-        require(Resource_Unload(resource_cache, resource_path),
-            "Resource_Unload removes the cached entry");
+            "Host_LoadQvmScript selects the compiled sibling without requiring source text");
+        require(Host_UnloadResourceFile(resource_cache, resource_path),
+            "Host_UnloadResourceFile removes the cached entry");
         require(resource_cache.size() == 0U && loaded_resource->data() == resource_data,
             "an active resource handle keeps its loaded memory valid after registry unload");
     } catch (...) {
@@ -232,7 +232,7 @@ void test_level_one_qvm_corpus(const std::filesystem::path& level_directory)
     std::size_t qvm_file_count = 0U;
     ResourceCache resource_cache{};
     const auto verify_file = [&qvm_file_count, &resource_cache](const std::filesystem::path& file_path) {
-        const auto loaded_script = Qvm_Load(resource_cache, file_path);
+        const auto loaded_script = Host_LoadQvmScript(resource_cache, file_path);
         const auto& program = loaded_script.program();
         const std::span<const std::byte> file_bytes = loaded_script.file_bytes();
         require(!program.code.empty(), "Level 1 QVM has a nonempty retail code region");

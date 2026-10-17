@@ -3,6 +3,7 @@
 namespace igi::retail::model
 {
 
+#if defined(_M_IX86) || defined(__i386__) || (defined(__SIZEOF_POINTER__) && __SIZEOF_POINTER__ == 4)
 static_assert(sizeof(void*) == 4, "Retail model record accessors require the Windows x86 ABI.");
 static_assert(sizeof(MefNativeAttachmentRecord) == 0x44);
 static_assert(offsetof(MefNativeModelRecord, resource_record) == 0x0C);
@@ -10,6 +11,8 @@ static_assert(offsetof(MefNativeResourceRecord, mesh_header) == 0x0C);
 static_assert(offsetof(MefNativeMeshHeader, attachment_count) == 0x7E);
 static_assert(offsetof(MefNativeMeshHeader, attachments) == 0x8C);
 static_assert(sizeof(MefNativeMeshHeader) == 0x9C);
+#endif
+
 
 // Model_GetAttachment() - 0x004D0CF0 - REA/Ghidra + BN + radare2; source CFG 1.000.
 // Branchless native pointer chain and 0x44 stride; no guessed attachment recursion.

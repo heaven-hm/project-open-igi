@@ -29,11 +29,12 @@ int main()
         MefNativeModelRecord model_record{};
         model_record.resource_record = &resource_record;
         require(Model_GetAttachmentCount(&model_record) == 3, "Attachment count differs.");
-        for (std::int32_t record_index = 0; record_index < 3; ++record_index)
+        for (std::size_t record_index = 0; record_index < records.size(); ++record_index)
         {
-            require(Model_GetAttachment(&model_record, record_index) == &records[record_index],
+            require(Model_GetAttachment(&model_record, static_cast<std::int32_t>(record_index)) == &records[record_index],
                     "ATTA pointer chain or 68-byte stride differs.");
         }
+
         mesh_header.attachment_count = -1;
         require(Model_GetAttachmentCount(&model_record) == -1, "Signed count must preserve MOVSX.");
         mesh_header.attachment_count = 0;

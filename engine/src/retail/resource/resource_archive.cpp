@@ -172,15 +172,15 @@ const ResourceEntry* ResourceArchive::find(std::string_view resource_name) const
     return entry_iterator == entries.end() ? nullptr : &*entry_iterator;
 }
 
-// Native: Sys_Resource() - VA 0x004B5F80 - partial adapter, not a complete literal port.
-// Behavior: Recognizes ILFF/IRES, legacy RESOURCE entries, and the native raw-resource fallback.
+// Host adapter: parses ILFF/IRES or legacy RESOURCE bytes into a host ResourceArchive container.
+// The literal retail Sys_Resource (VA 0x004B5F80) is in sys_resource.cpp.
 // Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
 // Evidence: ev_756c70344e9eb0cff58f5a134a0308a81a96d2483abaf4a70ae305f706b05829.
 // CFG: r2 blocks=11, edges=14; BN blocks=11; source agreement=100.0%.
-// Confidence: partial archive adapter; raw fallback and intrusive registry insertion remain unported.
+// Confidence: partial archive adapter for host diagnostics/scene harness.
 // Signature: C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.
-// Usage/tests: Used to mount model/texture RES archives; archive fixtures passed; full parity pending.
-ResourceArchive Sys_Resource(
+// Usage/tests: Used to mount model/texture RES archives in host diagnostic tools; archive fixtures passed.
+ResourceArchive Host_ParseResourceArchive(
     std::span<const std::byte> resource_bytes,
     std::string_view source_name)
 {
@@ -214,7 +214,7 @@ ResourceArchive Sys_Resource(
 // Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete.
 // Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
 // Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
-ResourceArchive Resource_Load(const std::filesystem::path& resource_path)
+ResourceArchive Host_LoadResourceArchive(const std::filesystem::path& resource_path)
 {
     std::ifstream resource_stream(resource_path, std::ios::binary | std::ios::ate);
     if (!resource_stream) {
@@ -242,7 +242,7 @@ ResourceArchive Resource_Load(const std::filesystem::path& resource_path)
             return static_cast<std::byte>(static_cast<unsigned char>(value));
         });
 
-    return Sys_Resource(resource_bytes, resource_path.string());
+    return Host_ParseResourceArchive(resource_bytes, resource_path.string());
 }
 
 } // namespace igi::retail::resource

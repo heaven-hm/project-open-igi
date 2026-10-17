@@ -16,10 +16,10 @@
 namespace
 {
 
-using igi::retail::resource::Resource_Load;
+using igi::retail::resource::Host_LoadResourceArchive;
+using igi::retail::resource::Host_ParseResourceArchive;
 using igi::retail::resource::ResourceArchive;
 using igi::retail::resource::ResourceFormatError;
-using igi::retail::resource::Sys_Resource;
 
 void write_u32(std::vector<std::byte>& bytes, std::size_t offset, std::uint32_t value)
 {
@@ -109,7 +109,7 @@ void require(bool condition, std::string_view message)
 void test_sys_resource_reads_ires_name_body_pairs()
 {
     const std::vector<std::byte> input_bytes = make_ires_archive();
-    const ResourceArchive archive = Sys_Resource(input_bytes, "fixture.res");
+    const ResourceArchive archive = Host_ParseResourceArchive(input_bytes, "fixture.res");
     const auto* entry = archive.find("LOCAL:models/test.mef");
     require(archive.form_type == ResourceArchive::ires_form, "IRES form type is retained");
     require(archive.entries.size() == 1U, "one NAME/BODY pair is exposed");
@@ -120,7 +120,7 @@ void test_sys_resource_reads_ires_name_body_pairs()
 void test_sys_resource_reads_legacy_resource_records()
 {
     const std::vector<std::byte> input_bytes = make_legacy_resource_archive();
-    const ResourceArchive archive = Sys_Resource(input_bytes, "legacy.res");
+    const ResourceArchive archive = Host_ParseResourceArchive(input_bytes, "legacy.res");
     const auto* entry = archive.find("test");
     require(archive.entries.size() == 1U, "legacy resource count is read");
     require(entry != nullptr && entry->body.size() == 3U, "legacy resource payload is extracted");
@@ -138,7 +138,7 @@ void test_sys_resource_rejects_unpaired_name_chunks()
     bool rejected = false;
     try
     {
-        static_cast<void>(Sys_Resource(input_bytes, "bad.res"));
+        static_cast<void>(Host_ParseResourceArchive(input_bytes, "bad.res"));
     }
     catch (const ResourceFormatError&)
     {
@@ -149,7 +149,7 @@ void test_sys_resource_rejects_unpaired_name_chunks()
 
 void test_level_one_resource_archive(const std::filesystem::path& resource_path)
 {
-    const ResourceArchive archive = Resource_Load(resource_path);
+    const ResourceArchive archive = Host_LoadResourceArchive(resource_path);
     require(archive.form_type == ResourceArchive::ires_form, "Level 1 archive has IRES form");
     require(archive.entries.size() == 415U, "Level 1 model archive exposes all 415 resource pairs");
 

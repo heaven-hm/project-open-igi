@@ -12,18 +12,36 @@ add_library(igi_retail_engine STATIC
     src/retail/core/app_context.cpp
     src/retail/core/debug_command_line.cpp
     src/retail/diagnostics/log_record.cpp
+    src/retail/error/error_show.cpp
     src/retail/model/mef_render_data.cpp
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
     src/retail/render/trans_context.cpp
+    src/retail/render/camera_transform.cpp
+    src/retail/render/backend.cpp
+    src/retail/sys/ilff_navigation.cpp
+    src/retail/sys/resource_lookup.cpp
+    src/retail/dynobj/hash_lookup.cpp
+    src/retail/dynobj/local_models_mef.cpp
+    src/retail/dynobj/mtp_package_loader.cpp
+    src/retail/qfile/alias_resolve.cpp
+    src/retail/resource/is_resource_loaded.cpp
+    src/retail/resource/resource_lifecycle.cpp
+    src/retail/resource/resource_unpack.cpp
+    src/retail/resource/sys_resource.cpp
+    src/retail/resource/device_dispatch.cpp
+    src/retail/mem/heap_list.cpp
+    src/retail/mem/mem_alloc.cpp
     src/retail/resource/resource_archive.cpp
     src/retail/resource/resource_cache.cpp
     src/retail/script/qvm_compiled_program.cpp
     src/retail/script/qvm_loader.cpp
+    src/retail/script/qvm_native_loader.cpp
     src/retail/script/qvm_object_calls.cpp
     src/retail/script/qvm_stack_natives.cpp
     src/retail/texture/model_texture_pixels.cpp
     src/retail/texture/loop_terrain_texture.cpp
+    src/retail/texture/texture_loaders.cpp
 )
 
 target_include_directories(igi_retail_engine
@@ -109,6 +127,126 @@ if(BUILD_TESTING)
     target_compile_features(igi_retail_debug_command_line_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_debug_command_line_tests COMMAND igi_retail_debug_command_line_tests)
 
+    add_executable(igi_retail_error_show_tests
+        tests/error/error_show_test.cpp
+    )
+
+    target_link_libraries(igi_retail_error_show_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_error_show_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_error_show_tests COMMAND igi_retail_error_show_tests)
+
+    add_executable(igi_retail_heap_list_tests
+        tests/mem/heap_list_test.cpp
+    )
+
+    target_link_libraries(igi_retail_heap_list_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_heap_list_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_heap_list_tests COMMAND igi_retail_heap_list_tests)
+
+    add_executable(igi_retail_mem_alloc_tests
+        tests/mem/mem_alloc_test.cpp
+    )
+
+    target_link_libraries(igi_retail_mem_alloc_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_mem_alloc_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_mem_alloc_tests COMMAND igi_retail_mem_alloc_tests)
+
+    add_executable(igi_retail_device_dispatch_tests
+        tests/resource/device_dispatch_test.cpp
+    )
+
+    target_link_libraries(igi_retail_device_dispatch_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_device_dispatch_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_device_dispatch_tests COMMAND igi_retail_device_dispatch_tests)
+
+    add_executable(igi_retail_resource_unpack_tests
+        tests/resource/resource_unpack_test.cpp
+    )
+
+    target_link_libraries(igi_retail_resource_unpack_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_resource_unpack_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_resource_unpack_tests COMMAND igi_retail_resource_unpack_tests)
+
+    add_executable(igi_retail_is_resource_loaded_tests
+        tests/resource/is_resource_loaded_test.cpp
+    )
+
+    target_link_libraries(igi_retail_is_resource_loaded_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_is_resource_loaded_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_is_resource_loaded_tests COMMAND igi_retail_is_resource_loaded_tests)
+
+    add_executable(igi_retail_resource_lifecycle_tests
+        tests/resource/resource_lifecycle_test.cpp
+    )
+
+    target_link_libraries(igi_retail_resource_lifecycle_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_resource_lifecycle_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_resource_lifecycle_tests COMMAND igi_retail_resource_lifecycle_tests)
+
+    add_executable(igi_retail_sys_resource_tests
+        tests/resource/sys_resource_test.cpp
+    )
+
+    target_link_libraries(igi_retail_sys_resource_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_sys_resource_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_sys_resource_tests COMMAND igi_retail_sys_resource_tests)
+
+    add_executable(igi_retail_alias_resolve_tests
+        tests/qfile/alias_resolve_test.cpp
+    )
+
+    target_link_libraries(igi_retail_alias_resolve_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_alias_resolve_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_alias_resolve_tests COMMAND igi_retail_alias_resolve_tests)
+
+    add_executable(igi_retail_hash_lookup_tests
+        tests/dynobj/hash_lookup_test.cpp
+    )
+
+    target_link_libraries(igi_retail_hash_lookup_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_hash_lookup_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_hash_lookup_tests COMMAND igi_retail_hash_lookup_tests)
+
+    add_executable(igi_retail_local_models_mef_tests
+        tests/dynobj/local_models_mef_test.cpp
+    )
+
+    target_link_libraries(igi_retail_local_models_mef_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_local_models_mef_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_local_models_mef_tests COMMAND igi_retail_local_models_mef_tests)
+
+    add_executable(igi_retail_mtp_package_loader_tests
+        tests/dynobj/mtp_package_loader_test.cpp
+    )
+
+    target_link_libraries(igi_retail_mtp_package_loader_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_mtp_package_loader_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_mtp_package_loader_tests COMMAND igi_retail_mtp_package_loader_tests)
+
+    add_executable(igi_retail_resource_lookup_tests
+        tests/sys/resource_lookup_test.cpp
+    )
+
+    target_link_libraries(igi_retail_resource_lookup_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_resource_lookup_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_resource_lookup_tests COMMAND igi_retail_resource_lookup_tests)
+
+    add_executable(igi_retail_ilff_navigation_tests
+        tests/sys/ilff_navigation_test.cpp
+    )
+
+    target_link_libraries(igi_retail_ilff_navigation_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_ilff_navigation_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_ilff_navigation_tests COMMAND igi_retail_ilff_navigation_tests)
+
+    add_executable(igi_retail_camera_transform_tests
+        tests/render/camera_transform_test.cpp
+    )
+
+    target_link_libraries(igi_retail_camera_transform_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_camera_transform_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_camera_transform_tests COMMAND igi_retail_camera_transform_tests)
+
     add_executable(igi_retail_trans_context_tests
         tests/render/trans_context_test.cpp
     )
@@ -154,6 +292,13 @@ if(BUILD_TESTING)
     target_compile_features(igi_retail_qvm_dispatch_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_qvm_dispatch_tests COMMAND igi_retail_qvm_dispatch_tests)
 
+    add_executable(igi_retail_qvm_native_loader_tests
+        tests/script/qvm_native_loader_test.cpp
+    )
+    target_link_libraries(igi_retail_qvm_native_loader_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_qvm_native_loader_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_qvm_native_loader_tests COMMAND igi_retail_qvm_native_loader_tests)
+
     add_executable(igi_retail_resource_tests
         tests/resource/resource_archive_test.cpp
     )
@@ -169,6 +314,14 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_texture_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_texture_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_texture_tests COMMAND igi_retail_texture_tests)
+
+    add_executable(igi_retail_texture_loaders_tests
+        tests/texture/texture_loaders_test.cpp
+    )
+
+    target_link_libraries(igi_retail_texture_loaders_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_texture_loaders_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_texture_loaders_tests COMMAND igi_retail_texture_loaders_tests)
 endif()
 
 if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
