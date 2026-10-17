@@ -42,6 +42,8 @@ add_library(igi_audio STATIC
     src/audio/audio_mixer.cpp
     src/audio/sdl_audio_output.cpp
     src/audio/sound_definition_registry.cpp
+    src/audio/sound_bank.cpp
+    src/audio/sound_system.cpp
 )
 target_include_directories(igi_audio PUBLIC include)
 target_compile_features(igi_audio PUBLIC cxx_std_20)
@@ -213,6 +215,20 @@ if(BUILD_TESTING)
     if(IGI_GAME_PATH)
         add_test(NAME retail_level_one_sound_definitions
             COMMAND sound_definition_registry_test "${IGI_GAME_PATH}")
+    endif()
+
+    add_executable(sound_bank_test tests/audio/sound_bank_test.cpp)
+    target_link_libraries(sound_bank_test PRIVATE igi_audio)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_sound_bank
+            COMMAND sound_bank_test "${IGI_GAME_PATH}")
+    endif()
+
+    add_executable(sound_system_test tests/audio/sound_system_test.cpp)
+    target_link_libraries(sound_system_test PRIVATE igi_audio)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_sound_playback
+            COMMAND sound_system_test "${IGI_GAME_PATH}")
     endif()
 
     add_executable(sdl_audio_output_test tests/audio/sdl_audio_output_test.cpp)
