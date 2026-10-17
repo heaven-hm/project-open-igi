@@ -159,6 +159,11 @@ MtpPackage MtpPackage::DynObj_InsertHashItem_14(std::span<const std::byte> file_
 {
     MtpPackage package{};
     const std::vector<NativeChunkView> chunks = read_native_chunks(file_bytes, package.root_tag);
+    for (const auto& chunk : chunks) {
+        if (chunk.tag == 0x54455846U) {
+            package.texture_names = read_string_table(chunk.payload, false);
+        }
+    }
     package.model_names = read_string_table(require_chunk(chunks, mods_tag).payload, false);
     package.instance_names = read_string_table(require_chunk(chunks, vnam_tag).payload, true);
 

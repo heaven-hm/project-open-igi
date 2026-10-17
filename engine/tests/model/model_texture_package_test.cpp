@@ -179,7 +179,7 @@ void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
         if (entry.name.ends_with(".tex")) {
             ++model_texture_count;
             const igi::retail::texture::LoopModelTextureFile texture_file =
-                igi::retail::texture::LoopModelTextureFile::Texture_LoadModelFile_004B24C0(entry.body);
+                igi::retail::texture::LoopModelTextureFile::Texture_LoadModelFile(entry.body);
             require(texture_file.pixel_data_offset < entry.body.size(),
                 "each Level 1 model TEX resource has pixel data after its retail header");
             ++parsed_model_texture_count;

@@ -9,12 +9,15 @@ add_library(igi_retail_engine STATIC
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
     src/retail/diagnostics/log_record.cpp
+    src/retail/model/mef_render_data.cpp
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
     src/retail/resource/resource_archive.cpp
     src/retail/resource/resource_cache.cpp
     src/retail/script/qvm_compiled_program.cpp
     src/retail/script/qvm_loader.cpp
+    src/retail/script/qvm_object_calls.cpp
+    src/retail/texture/model_texture_pixels.cpp
     src/retail/texture/loop_terrain_texture.cpp
 )
 
@@ -34,6 +37,10 @@ endif()
 include(CTest)
 
 if(BUILD_TESTING)
+    add_executable(igi_retail_render_data_tests tests/model/mef_render_data_test.cpp)
+    target_link_libraries(igi_retail_render_data_tests PRIVATE igi_retail_engine)
+    add_test(NAME igi_retail_render_data_tests COMMAND igi_retail_render_data_tests)
+
     add_executable(igi_retail_engine_tests
         tests/audio/sound_key_functions_test.cpp
     )

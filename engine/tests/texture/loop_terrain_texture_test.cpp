@@ -170,7 +170,7 @@ void test_model_texture_versions_two_and_eleven()
     write_u16(version_two_bytes, 0x14U, 0x3333U);
     write_u16(version_two_bytes, 0x16U, 0x4444U);
     const LoopModelTextureFile version_two =
-        LoopModelTextureFile::Texture_LoadModelFile_004B24C0(version_two_bytes);
+        LoopModelTextureFile::Texture_LoadModelFile(version_two_bytes);
     require(version_two.operation_arguments[0U] == 0x1111U
             && version_two.operation_arguments[4U] == 256U
             && version_two.pixel_data_offset == 0x18U,
@@ -187,7 +187,7 @@ void test_model_texture_versions_two_and_eleven()
     write_u16(version_eleven_bytes, 0x1AU, 64U);
     write_u16(version_eleven_bytes, 0x1EU, 32U);
     const LoopModelTextureFile version_eleven =
-        LoopModelTextureFile::Texture_LoadModelFile_004B24C0(version_eleven_bytes);
+        LoopModelTextureFile::Texture_LoadModelFile(version_eleven_bytes);
     require(version_eleven.operation_arguments[0U] == 2048U
             && version_eleven.operation_arguments[3U] == 0x55667788U
             && version_eleven.operation_arguments[5U] == 0x11223344U
@@ -205,7 +205,7 @@ void test_level_one_model_texture_archive(const std::filesystem::path& archive_p
             continue;
         }
 
-        static_cast<void>(LoopModelTextureFile::Texture_LoadModelFile_004B24C0(entry.body));
+        static_cast<void>(LoopModelTextureFile::Texture_LoadModelFile(entry.body));
         ++texture_count;
     }
     require(texture_count > 0U, "Level 1 model texture archive contains supported TEX resources");

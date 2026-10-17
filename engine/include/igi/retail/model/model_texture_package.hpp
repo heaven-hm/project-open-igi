@@ -28,6 +28,7 @@ struct MtpInstance {
 struct MtpPackage {
     std::uint32_t root_tag = 0U;
     std::vector<std::string> model_names;
+    std::vector<std::string> texture_names;
     std::vector<std::string> instance_names;
     std::vector<MtpInstance> instances;
     std::vector<MtpMaterialReference> material_references;

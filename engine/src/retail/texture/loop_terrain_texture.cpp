@@ -117,7 +117,7 @@ LoopTerrainTextureFile LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(
     return texture_file;
 }
 
-LoopModelTextureFile LoopModelTextureFile::Texture_LoadModelFile_004B24C0(
+LoopModelTextureFile LoopModelTextureFile::Texture_LoadModelFile(
     std::span<const std::byte> file_bytes)
 {
     if (file_bytes.size() < 0x18U) {
