@@ -59,7 +59,17 @@ int main()
                 "A completed retail death clip must hold its fallen pose instead of looping back to standing");
         SkeletalAnimationClip looping_death_clip = non_looping_death_clip;
         looping_death_clip.flags = 0x80000000u;
+        const Vector3 root_tangent{0.0f, 0.0f, -4096.0f / 320.0f};
+        looping_death_clip.root_motion = {
+            320.0f,
+            {{0.0f, {}, root_tangent, root_tangent},
+             {320.0f, {0.0f, 0.0f, -4096.0f}, root_tangent, root_tangent}}};
         death_animation.clips[28] = looping_death_clip;
+        const auto cyclic_death_root = sample_animation_root(death_animation, 28, 320.0f);
+        const auto one_shot_death_root = sample_animation_root(death_animation, 28, 320.0f, true);
+        require(std::abs(cyclic_death_root.z) < 0.00001f &&
+                    std::abs(one_shot_death_root.z + 1.0f) < 0.00001f,
+                "A dead soldier must sample the final root-motion key instead of wrapping a cyclic death clip");
         const auto one_shot_death_pose_at_start = sample_bone_pose(death_animation, 28, 0, false, true);
         const auto one_shot_death_pose_at_end = sample_bone_pose(death_animation, 28, 320, false, true);
         require(std::abs(one_shot_death_pose_at_start[0][0][0] - one_shot_death_pose_at_end[0][0][0]) > 0.5F,

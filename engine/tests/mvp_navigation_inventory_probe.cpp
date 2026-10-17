@@ -207,7 +207,9 @@ int main()
                     player_only_cheat.actors().front().ammunition_in_clip <= enemy_magazine_capacity &&
                     player_only_cheat.actors().front().ammunition_in_clip != 999 &&
                     player_only_cheat.health() == cheat_scope_scene.player_parameters.maximum_health,
-                "Player-only cheats must leave enemy health and finite weapon magazines under normal AI control");
+                "Player-only cheats must leave enemies vulnerable and their ammunition finite");
+        require(player_only_cheat.actors().front().shots_fired > 0,
+                "An enemy must continue firing with normal combat behavior while player cheats are active");
 
         // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();

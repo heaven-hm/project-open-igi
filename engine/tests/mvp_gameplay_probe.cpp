@@ -243,7 +243,10 @@ int main()
             combat.tick({});
         }
         require(combat.actors().front().behavior == ActorBehavior::dead,
-                "A defeated enemy must remain down after its non-looping death animation completes");
+                "A defeated enemy must remain down after its one-shot death animation completes");
+        require(combat.actors().front().animation_identifier == 22 ||
+                    combat.actors().front().animation_identifier == 23,
+                "An ordinary MP5 kill must select a retail crumple clip, not a shotgun throw or recovery clip");
         auto distant_scene = make_scene(true, false);
         distant_scene.actors.front().position.y = 12;
         GameSimulation distant_combat(distant_scene);

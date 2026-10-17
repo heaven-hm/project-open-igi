@@ -466,8 +466,29 @@ void GameSimulation::advance_actor_animations()
                 const auto& clip = found->second;
                 if (clip.duration > 0)
                 {
-                    actor.animation_time =
-                        std::min(actor.animation_time + 160.0f, static_cast<float>(clip.duration));
+                    const float previous_time = actor.animation_time;
+                    const float next_time =
+                        std::min(previous_time + 160.0f, static_cast<float>(clip.duration));
+                    const Vector3 previous_root =
+                        sample_animation_root(*definition.animations, actor.animation_identifier, previous_time, true);
+                    const Vector3 next_root =
+                        sample_animation_root(*definition.animations, actor.animation_identifier, next_time, true);
+                    const Vector3 local_delta = next_root - previous_root;
+                    const float cosine = std::cos(actor.heading);
+                    const float sine = std::sin(actor.heading);
+                    Vector3 next_position = actor.position;
+                    next_position.x += local_delta.x * cosine - local_delta.y * sine;
+                    next_position.y += local_delta.x * sine + local_delta.y * cosine;
+                    next_position.z += local_delta.z;
+
+                    const auto ground = movement_world_.raycast(
+                        next_position + Vector3{0, 0, 1.5f}, {0, 0, -1}, 5.0f, true);
+                    if (ground.hit)
+                    {
+                        next_position.z = ground.position.z;
+                    }
+                    actor.position = next_position;
+                    actor.animation_time = next_time;
                 }
             }
             continue;

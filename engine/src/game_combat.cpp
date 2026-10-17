@@ -529,22 +529,24 @@ void GameSimulation::advance_projectiles()
             if (actor.behavior == ActorBehavior::dead)
             {
                 ++weapon_.kills;
-                int death_anim = 28;
-                if (is_headshot)
+                int death_anim = 23;
+                const auto* killing_weapon = weapon_definition();
+                if (killing_weapon && killing_weapon->parameters.category == WeaponCategory::shotgun)
                 {
-                    death_anim = 30; // Headshot backward snap & collapse
+                    death_anim = shot_from_front ? 28 : 71;
                 }
-                else if (hit_height > 1.30f)
+                else if (target_zone == 15)
                 {
-                    death_anim = 22; // Neck / upper torso crumple
+                    death_anim = 30;
                 }
-                else if (shot_from_front)
+                else if (target_zone == 16)
                 {
-                    death_anim = 28; // Thrown backwards onto back
+                    death_anim = 22;
                 }
                 else
                 {
-                    death_anim = 71; // Thrown forwards onto chest
+                    // Retail 0x45C440 selects one of the two ordinary crumple clips with rand(2).
+                    death_anim = (random_generator_.next_word() & 1u) == 0 ? 23 : 22;
                 }
                 const auto& def = scene_.actors[static_cast<std::size_t>(target_actor)];
                 if (def.animations && !def.animations->clips.contains(death_anim))

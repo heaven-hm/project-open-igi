@@ -196,7 +196,10 @@ sample_bone_rotation(const std::vector<BoneRotationKey>& keys, float time, float
     return interpolate_rotation(rotation, tangent, 1 - weight);
 }
 
-Vector3 sample_animation_root(const SkeletalAnimationSet& animations, int animation_identifier, float time)
+Vector3 sample_animation_root(const SkeletalAnimationSet& animations,
+                              int animation_identifier,
+                              float time,
+                              bool force_non_cyclic)
 {
     const auto found = animations.clips.find(animation_identifier);
     if (found == animations.clips.end())
@@ -204,7 +207,7 @@ Vector3 sample_animation_root(const SkeletalAnimationSet& animations, int animat
         return {};
     }
     const auto& clip = found->second;
-    const bool cyclic = (clip.flags & 0x80000000u) != 0;
+    const bool cyclic = !force_non_cyclic && (clip.flags & 0x80000000u) != 0;
     const float local_time = clip.duration > 0
                                  ? (cyclic ? std::fmod(time, clip.duration) : std::min(time, clip.duration))
                                  : 0;
