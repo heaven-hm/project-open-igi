@@ -1,5 +1,6 @@
 #include "igi/retail/model/model_texture_package.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
+#include "igi/retail/texture/loop_terrain_texture.hpp"
 
 #include <algorithm>
 #include <array>
@@ -173,12 +174,20 @@ void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
         igi::retail::resource::Resource_Load(level_path / "TEXTURES" / "LEVEL1.RES");
 
     std::size_t model_texture_count = 0U;
+    std::size_t parsed_model_texture_count = 0U;
     for (const auto& entry : texture_archive.entries) {
         if (entry.name.ends_with(".tex")) {
             ++model_texture_count;
+            const igi::retail::texture::LoopModelTextureFile texture_file =
+                igi::retail::texture::LoopModelTextureFile::Texture_LoadModelFile_004B24C0(entry.body);
+            require(texture_file.pixel_data_offset < entry.body.size(),
+                "each Level 1 model TEX resource has pixel data after its retail header");
+            ++parsed_model_texture_count;
         }
     }
     require(model_texture_count > 0U, "Level 1 texture RES contains model TEX assets");
+    require(parsed_model_texture_count == model_texture_count,
+        "every Level 1 model TEX resource passes the retail model-texture header parser");
 
     std::size_t matched_model_count = 0U;
     for (const std::string& model_name : package.model_names) {
@@ -217,7 +226,7 @@ void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
     std::cout << "Level 1 DynObj_InsertHashItem_14 package verified: file=" << mtp_path
               << "; model names=" << package.model_names.size()
               << "; matched MEFs=" << matched_model_count
-              << "; model TEX files=" << model_texture_count
+              << "; parsed model TEX files=" << parsed_model_texture_count
               << "; instances=" << package.instances.size()
               << "; GTT pairs=" << package.material_references.size()
               << "; instance material links=" << mapped_material_count << '\n';
