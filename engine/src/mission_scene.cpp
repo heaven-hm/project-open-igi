@@ -1083,6 +1083,14 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         {
             continue;
         }
+        if (!enabled && candidate->is_soldier)
+        {
+            diagnostics::log(diagnostics::Severity::information,
+                             "cinematic-actors",
+                             "Original QVM staged actor retained in the mission roster but inactive: task=" +
+                                 candidate->type + ", name=" + candidate->name + ", task_id=" +
+                                 std::to_string(candidate->task_id));
+        }
 
         candidate->model_id = resolve_pickup_model(candidate->model_id);
         if (candidate->model_id.empty() || candidate->model_id == "waypoint" ||

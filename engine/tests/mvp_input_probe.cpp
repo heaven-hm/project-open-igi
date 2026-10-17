@@ -123,6 +123,21 @@ int main(int argument_count, char** arguments)
         const auto enabled = igi::assets::gameplay_task_mask(task_calls);
         require(!enabled[0] && !enabled[1] && enabled[2],
                 "Cinematic containers must suppress their children while leaving gameplay soldiers active");
+
+        ScriptValue cutscene_actor;
+        cutscene_actor.call_index = 0;
+        ScriptValue vehicle_actor;
+        vehicle_actor.call_index = 3;
+        const std::vector<ScriptCall> staged_task_calls = {
+            {"Task_New", {{700, {}}, text_value("HumanSoldier"), {}}},
+            {"Task_New", {{701, {}}, text_value("CutScene"), {}, cutscene_actor}},
+            {"Task_New", {{702, {}}, text_value("HumanSoldier"), {}}},
+            {"Task_New", {{703, {}}, text_value("HumanSoldier"), {}}},
+            {"Task_New", {{704, {}}, text_value("Heli"), {}, vehicle_actor}}};
+        const auto staged_enabled = igi::assets::gameplay_task_mask(staged_task_calls);
+        require(!staged_enabled[0] && !staged_enabled[1] && staged_enabled[2] && !staged_enabled[3] &&
+                    !staged_enabled[4],
+                "Cutscene and vehicle-staged actors must be excluded from direct gameplay startup");
         if (argument_count == 2)
         {
             const auto original = load_input_configuration(arguments[1]);

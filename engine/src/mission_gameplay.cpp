@@ -8,6 +8,7 @@
 #include "qvm_parser.h"
 
 #include <algorithm>
+#include <cctype>
 #include <cmath>
 #include <limits>
 #include <stdexcept>
@@ -143,26 +144,95 @@ void load_graphs(gameplay::MissionScene& scene,
 std::vector<bool> gameplay_task_mask(const std::vector<ScriptCall>& calls)
 {
     std::vector<bool> enabled(calls.size(), true);
-    for (std::size_t remaining = calls.size(); remaining > 0; --remaining)
+    const std::size_t no_parent = std::numeric_limits<std::size_t>::max();
+    std::vector<std::size_t> parent_call_indices(calls.size(), no_parent);
+    for (std::size_t parent_call_index = 0; parent_call_index < calls.size(); ++parent_call_index)
     {
-        const auto call_index = remaining - 1;
-        const auto& call = calls[call_index];
-        if (call.function == "Task_New" && call.arguments.size() > 3 &&
-            call.arguments[1].text == "ConditionalContainer" &&
-            call.arguments[3].text.find("CutScene_") != std::string::npos)
-        {
-            enabled[call_index] = false;
-        }
-        if (enabled[call_index])
+        const ScriptCall& parent_call = calls[parent_call_index];
+        if (parent_call.function != "Task_New")
         {
             continue;
         }
-        for (const auto& argument : call.arguments)
+
+        for (const ScriptValue& argument : parent_call.arguments)
         {
-            if (argument.call_index < calls.size())
+            const std::size_t child_call_index = argument.call_index;
+            if (child_call_index >= calls.size() || calls[child_call_index].function != "Task_New")
             {
-                enabled[argument.call_index] = false;
+                continue;
             }
+            if (child_call_index >= parent_call_index || parent_call_indices[child_call_index] != no_parent)
+            {
+                throw std::runtime_error("Original QVM task hierarchy has an invalid or shared child");
+            }
+            parent_call_indices[child_call_index] = parent_call_index;
+        }
+    }
+
+    const auto is_vehicle_task = [](std::string_view task_type)
+    {
+        return task_type == "Train" || task_type == "Heli" || task_type == "Plane" || task_type == "Car";
+    };
+    const auto contains_cutscene_marker = [](std::string_view value)
+    {
+        std::string lowercase_value(value);
+        std::transform(lowercase_value.begin(), lowercase_value.end(), lowercase_value.begin(),
+                       [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
+        return lowercase_value.find("cutscene") != std::string::npos ||
+               lowercase_value.find("cut scene") != std::string::npos ||
+               lowercase_value.find("cut-scene") != std::string::npos ||
+               lowercase_value.find("friendly forces") != std::string::npos ||
+               lowercase_value.find("guys running for heli") != std::string::npos ||
+               lowercase_value.find("harrison & men in heli") != std::string::npos;
+    };
+
+    for (std::size_t call_index = 0; call_index < calls.size(); ++call_index)
+    {
+        if (calls[call_index].function != "Task_New")
+        {
+            continue;
+        }
+
+        const ScriptCall& task_call = calls[call_index];
+        const std::string_view task_type = task_call.arguments.size() > 1
+                                               ? task_call.arguments[1].text
+                                               : std::string_view{};
+        const std::string_view task_label = task_call.arguments.size() > 2
+                                                ? task_call.arguments[2].text
+                                                : std::string_view{};
+        const std::string_view task_condition = task_call.arguments.size() > 3
+                                                    ? task_call.arguments[3].text
+                                                    : std::string_view{};
+        const bool cutscene_container = task_type == "ConditionalContainer" &&
+                                        (contains_cutscene_marker(task_label) ||
+                                         task_condition.find("CutScene_") != std::string_view::npos);
+        if (task_type == "CutScene" || is_vehicle_task(task_type) || cutscene_container)
+        {
+            enabled[call_index] = false;
+        }
+
+        std::size_t ancestor_call_index = parent_call_indices[call_index];
+        while (ancestor_call_index != no_parent)
+        {
+            const ScriptCall& ancestor_call = calls[ancestor_call_index];
+            const std::string_view ancestor_type = ancestor_call.arguments.size() > 1
+                                                       ? ancestor_call.arguments[1].text
+                                                       : std::string_view{};
+            const std::string_view ancestor_label = ancestor_call.arguments.size() > 2
+                                                        ? ancestor_call.arguments[2].text
+                                                        : std::string_view{};
+            const std::string_view ancestor_condition = ancestor_call.arguments.size() > 3
+                                                            ? ancestor_call.arguments[3].text
+                                                            : std::string_view{};
+            const bool cutscene_container = ancestor_type == "ConditionalContainer" &&
+                                            (contains_cutscene_marker(ancestor_label) ||
+                                             ancestor_condition.find("CutScene_") != std::string_view::npos);
+            if (ancestor_type == "CutScene" || is_vehicle_task(ancestor_type) || cutscene_container)
+            {
+                enabled[call_index] = false;
+                break;
+            }
+            ancestor_call_index = parent_call_indices[ancestor_call_index];
         }
     }
     return enabled;

@@ -398,15 +398,11 @@ int main(int argument_count, char** arguments)
         require(route_graph != scene.navigation_graphs.end() && route_graph->route_table_width == 300 &&
                     route_graph->route_table.size() == 90000,
                 "Level 1 graph4019 must retain its original 300-by-300 route table");
-        bool disabled_cinematic_actor = false;
-        for (const auto& actor : scene.actors)
-        {
-            if (actor.identifier == 3031)
-            {
-                disabled_cinematic_actor = !actor.gameplay_enabled;
-            }
-        }
-        require(disabled_cinematic_actor, "Level 1's cinematic train actor must remain outside gameplay");
+        const auto cinematic_train_actor =
+            std::find_if(scene.actors.begin(), scene.actors.end(),
+                         [](const SceneActor& actor) { return actor.identifier == 3031; });
+        require(cinematic_train_actor != scene.actors.end() && !cinematic_train_actor->gameplay_enabled,
+                "Level 1's staged cinematic train actor must remain inactive in direct gameplay");
         for (const auto& weapon : scene.weapons)
         {
             if (weapon.identifier == "WEAPON_ID_MP5SD")
