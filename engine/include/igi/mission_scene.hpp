@@ -310,6 +310,10 @@ struct WeaponPickup final
 {
     Vector3 position;
     std::string weapon_identifier;
+    // IGI.EXE GunPickup_LoadParameters at 0x0046CD20 initializes +0x98/+0x9C/+0xA0 to 1.0.
+    std::array<float, 3> retail_axis_dimensions{1.0F, 1.0F, 1.0F};
+    // IGI.EXE helper 0x004D0950 returns 1.0 when its parent-transform chain is null.
+    float retail_parent_scale = 1.0F;
 };
 
 struct RootMotionKey final

@@ -51,7 +51,7 @@ MissionScene test_scene()
     sniper.ammunition_identifier = "AMMO_ID_762x54";
     scene.weapons = {pistol, rifle, knife, pickup, sniper};
     scene.weapon_categories = {{"WEAPON_ID_KNIFE"}, {"WEAPON_ID_GLOCK"}, {"WEAPON_ID_MP5SD"}};
-    scene.weapon_pickups.push_back({{0, 1.2f, -2}, "WEAPON_ID_AK47"});
+    scene.weapon_pickups.push_back({{10, 0, -2}, "WEAPON_ID_AK47"});
     return scene;
 }
 
@@ -157,12 +157,12 @@ int main()
         input.firing = true;
         simulation.tick(input);
         require(simulation.weapon().magazine == 1, "Knife must not consume ammunition");
+        simulation.teleport_player({10, 0, -2}, 0, 0);
         input = {};
-        input.interacting = true;
         simulation.tick(input);
-        require(simulation.inventory_size() == 4, "Nearby original weapon pickup must enter inventory");
+        require(simulation.inventory_size() == 4, "Retail automatic pickup must add the nearby weapon");
         simulation.tick(input);
-        require(simulation.inventory_size() == 4, "A pickup must not be collected twice");
+        require(simulation.inventory_size() == 4, "A retail pickup must not be collected twice");
         simulation.restart();
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
                     simulation.health() == scene.player_parameters.maximum_health,

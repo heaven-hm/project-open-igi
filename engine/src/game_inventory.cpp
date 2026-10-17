@@ -1,5 +1,6 @@
 #include "igi/diagnostics.hpp"
 #include "igi/game_simulation.hpp"
+#include "igi/retail_natives/gun_pickup.hpp"
 
 #include <algorithm>
 
@@ -158,15 +159,16 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
         {
             continue;
         }
-        const float dx = pickup.position.x - player_position().x;
-        const float dy = pickup.position.y - player_position().y;
-        const float dz = std::abs(pickup.position.z - player_position().z);
-        const float planar = std::sqrt(dx * dx + dy * dy);
-        const bool auto_pickup = (planar < 0.70f && dz < 1.0f);
-        const bool interact_pickup = input.interacting && (length(pickup.position - player_position()) < 3.0f);
-        if (auto_pickup || interact_pickup)
+        if (retail_natives::GunPickup::GunPickup_Action(pickup.position,
+                                                        player_position(),
+                                                        pickup.retail_axis_dimensions,
+                                                        pickup.retail_parent_scale))
         {
-            pickups_collected_[pickup_index] = acquire(pickup.weapon_identifier);
+            static_cast<void>(acquire(pickup.weapon_identifier));
+            pickups_collected_[pickup_index] = true;
+            diagnostics::log(diagnostics::Severity::information,
+                             "GunPickup_Action",
+                             "IGI.EXE 0x0046D230 consumed pickup " + pickup.weapon_identifier);
         }
     }
     for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)

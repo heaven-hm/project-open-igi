@@ -77,6 +77,7 @@ target_link_libraries(igi_inspect_scene PRIVATE igi_assets)
 
 add_library(igi_runtime STATIC
     src/collision_world.cpp
+    src/retail_natives/gun_pickup.cpp
     src/game_simulation.cpp
     src/game_combat.cpp
     src/weapon_accuracy.cpp
@@ -358,6 +359,9 @@ if(BUILD_TESTING)
     add_executable(mvp_navigation_inventory_probe tests/mvp_navigation_inventory_probe.cpp)
     target_link_libraries(mvp_navigation_inventory_probe PRIVATE igi_runtime)
     add_test(NAME mvp_navigation_inventory COMMAND mvp_navigation_inventory_probe)
+    add_executable(gun_pickup_action_test tests/retail_natives/gun_pickup_action_test.cpp)
+    target_link_libraries(gun_pickup_action_test PRIVATE igi_runtime)
+    add_test(NAME retail_gun_pickup_action COMMAND gun_pickup_action_test)
     add_executable(mvp_input_probe tests/mvp_input_probe.cpp)
     target_link_libraries(mvp_input_probe PRIVATE igi_input)
     add_test(NAME mvp_config_input COMMAND mvp_input_probe)
