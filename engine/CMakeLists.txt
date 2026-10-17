@@ -32,6 +32,13 @@ target_include_directories(igi_formats PUBLIC "${FORMAT_SOURCE}/parsers" PRIVATE
 target_include_directories(igi_formats SYSTEM PUBLIC third_party/glm/glm-1.0.1)
 target_link_libraries(igi_formats PUBLIC igi_gameplay)
 
+add_library(igi_audio STATIC
+    src/audio/sound_volume_curve.cpp
+)
+target_include_directories(igi_audio PUBLIC include)
+target_compile_features(igi_audio PUBLIC cxx_std_20)
+set_target_properties(igi_audio PROPERTIES CXX_EXTENSIONS OFF)
+
 add_library(igi_assets STATIC
     src/asset_io.cpp
     src/qvm_initializer.cpp
@@ -64,7 +71,7 @@ add_library(igi_runtime STATIC
     src/scene_renderer.cpp
 )
 target_compile_features(igi_runtime PUBLIC cxx_std_20)
-target_link_libraries(igi_runtime PUBLIC igi_assets igi_gameplay)
+target_link_libraries(igi_runtime PUBLIC igi_assets igi_audio igi_gameplay)
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(igi_assets PRIVATE -Wall -Wextra -Wpedantic -Werror)
     target_compile_options(igi_runtime PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -88,7 +95,7 @@ target_compile_definitions(igi_game PRIVATE SDL_MAIN_HANDLED)
 set_target_properties(igi_game PROPERTIES CXX_EXTENSIONS OFF)
 set_target_properties(igi_game PROPERTIES OUTPUT_NAME "igi")
 
-foreach(IGI_NUMERIC_TARGET IN ITEMS igi_gameplay igi_formats igi_assets igi_runtime igi_input)
+foreach(IGI_NUMERIC_TARGET IN ITEMS igi_gameplay igi_formats igi_assets igi_audio igi_runtime igi_input)
     set_target_properties(${IGI_NUMERIC_TARGET} PROPERTIES CXX_EXTENSIONS OFF)
     if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
         target_compile_options(${IGI_NUMERIC_TARGET} PRIVATE -fno-fast-math -ffp-contract=off)
@@ -183,6 +190,10 @@ if(APPLE)
 endif()
 
 if(BUILD_TESTING)
+    add_executable(sound_volume_curve_test tests/audio/sound_volume_curve_test.cpp)
+    target_link_libraries(sound_volume_curve_test PRIVATE igi_audio)
+    add_test(NAME retail_sound_volume_curve COMMAND sound_volume_curve_test)
+
     add_executable(retail_random_generator_test tests/retail_random_generator_test.cpp)
     target_include_directories(retail_random_generator_test PRIVATE include)
     target_compile_features(retail_random_generator_test PRIVATE cxx_std_20)
