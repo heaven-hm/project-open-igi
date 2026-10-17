@@ -54,6 +54,14 @@ enum class MefRenderFormat : std::uint32_t {
     lightmapped = 3U,
 };
 
+struct MefRenderHeader {
+    std::uint32_t vertex_count = 0U;
+    std::uint32_t submesh_count = 0U;
+    std::uint32_t lightmap_page_count = 0U;
+    std::uint32_t extra_influence_count = 0U;
+    std::uint32_t base_vertex_count = 0U;
+};
+
 // Original IGI.EXE entry FUN_0049b700 at VA 0x0049B700 (semantic label unresolved).
 // REA/Ghidra evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446:
 // 40-byte records; position/normal/UV floats at +0x00..+0x1C, influence weight at +0x20,
@@ -99,6 +107,7 @@ public:
     std::vector<std::byte> mesh_header;
     float version = 0.0F;
     MefRenderFormat render_format = MefRenderFormat::diffuse;
+    std::optional<MefRenderHeader> render_header;
     std::optional<IlffChunk> attachments;
     std::optional<IlffChunk> legacy_vertices;
     std::optional<IlffChunk> portals;
@@ -114,6 +123,13 @@ public:
 // Radare2 decoded body 842 bytes / 16 basic blocks, including the original "Mesh format not supported" path.
 // The native identity is statically established; this C++ port has not been compared in a live render replay.
 [[nodiscard]] MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_header);
+
+// FUN_0049FB10 - 0x0049FB10 - reads D3DR renderer data according to MESH+0x20.
+// Field offsets follow the native format branches; the skinned count interpretation is cross-referenced
+// with FUN_0049B700 (REA evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446).
+[[nodiscard]] MefRenderHeader MefRenderHeader_ReadRetail(
+    std::span<const std::byte> render_header_bytes,
+    MefRenderFormat render_format);
 
 // Reads only the 40-byte record consumed by FUN_0049b700. This does not identify
 // which MEF chunk or mesh format supplies the record; that association remains unverified.

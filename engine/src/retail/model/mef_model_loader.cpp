@@ -232,6 +232,50 @@ MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_
     }
 }
 
+MefRenderHeader MefRenderHeader_ReadRetail(
+    std::span<const std::byte> render_header_bytes,
+    MefRenderFormat render_format) {
+    MefRenderHeader render_header{};
+    std::size_t vertex_count_offset = 0U;
+    std::size_t submesh_count_offset = 0U;
+    std::size_t required_header_size = 0U;
+
+    switch (render_format) {
+    case MefRenderFormat::diffuse:
+        vertex_count_offset = 12U;
+        submesh_count_offset = 8U;
+        required_header_size = 48U;
+        break;
+    case MefRenderFormat::skinned:
+        vertex_count_offset = 20U;
+        submesh_count_offset = 8U;
+        required_header_size = 56U;
+        break;
+    case MefRenderFormat::lightmapped:
+        vertex_count_offset = 16U;
+        submesh_count_offset = 12U;
+        required_header_size = 56U;
+        break;
+    default:
+        throw MefFormatError("Mesh format not supported");
+    }
+
+    if (render_header_bytes.size() < required_header_size) {
+        throw MefFormatError("D3DR renderer header is shorter than the native format requires.");
+    }
+
+    if (render_format == MefRenderFormat::skinned) {
+        render_header.extra_influence_count = Ilff_ReadLittleEndian32(render_header_bytes, 12U);
+        render_header.base_vertex_count = Ilff_ReadLittleEndian32(render_header_bytes, 16U);
+    } else if (render_format == MefRenderFormat::lightmapped) {
+        render_header.lightmap_page_count = Ilff_ReadLittleEndian32(render_header_bytes, 4U);
+    }
+
+    render_header.vertex_count = Ilff_ReadLittleEndian32(render_header_bytes, vertex_count_offset);
+    render_header.submesh_count = Ilff_ReadLittleEndian32(render_header_bytes, submesh_count_offset);
+    return render_header;
+}
+
 IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes) {
     return read_container(bytes, 0U);
 }
@@ -262,6 +306,13 @@ MefModel MefModel::DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes)
         throw MefFormatError(error_message.str());
     }
     model.render_format = MefModel_ReadRetailRenderFormat(model.mesh_header);
+
+    const IlffChunk* render_header_chunk = model.container.find_first(mef_tag::d3d_render_header);
+    if (render_header_chunk != nullptr) {
+        model.render_header = MefRenderHeader_ReadRetail(
+            render_header_chunk->payload,
+            model.render_format);
+    }
 
     const auto copy_nonempty_chunk = [&model](std::uint32_t tag) -> std::optional<IlffChunk> {
         const IlffChunk* chunk = model.container.find_first(tag);

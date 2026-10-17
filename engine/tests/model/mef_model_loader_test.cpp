@@ -77,7 +77,7 @@ std::vector<std::byte> make_render_model_bytes() {
     write_u32(mesh_header, 0U, MefModel::supported_version_bits);
     append_chunk(file_bytes, igi::retail::model::mef_tag::mesh, mesh_header, 4U, false);
 
-    const std::array<std::byte, 8> render_header_payload{};
+    const std::array<std::byte, 48> render_header_payload{};
     append_chunk(file_bytes, igi::retail::model::mef_tag::d3d_render_header, render_header_payload, 4U, false);
 
     const std::array<std::byte, 12> draw_record_payload{};
@@ -144,6 +144,66 @@ void testRetailMefLoaderAcceptsOnlyRetailRenderFormats() {
     }
 }
 
+void testRetailD3drHeaderReadsFormatSpecificCounts() {
+    using igi::retail::model::MefRenderFormat;
+    using igi::retail::model::MefRenderHeader_ReadRetail;
+
+    std::vector<std::byte> diffuse_header(48U);
+    write_u32(diffuse_header, 8U, 5U);
+    write_u32(diffuse_header, 12U, 120U);
+    const auto diffuse = MefRenderHeader_ReadRetail(diffuse_header, MefRenderFormat::diffuse);
+    if (diffuse.submesh_count != 5U || diffuse.vertex_count != 120U) {
+        throw std::runtime_error("FUN_0049FB10 read the format-0 D3DR counters from incorrect offsets.");
+    }
+
+    std::vector<std::byte> skinned_header(56U);
+    write_u32(skinned_header, 8U, 3U);
+    write_u32(skinned_header, 12U, 7U);
+    write_u32(skinned_header, 16U, 33U);
+    write_u32(skinned_header, 20U, 40U);
+    const auto skinned = MefRenderHeader_ReadRetail(skinned_header, MefRenderFormat::skinned);
+    if (skinned.submesh_count != 3U || skinned.extra_influence_count != 7U
+        || skinned.base_vertex_count != 33U || skinned.vertex_count != 40U) {
+        throw std::runtime_error("Retail skinned D3DR counters were read from incorrect offsets.");
+    }
+
+    std::vector<std::byte> lightmapped_header(56U);
+    write_u32(lightmapped_header, 4U, 2U);
+    write_u32(lightmapped_header, 12U, 9U);
+    write_u32(lightmapped_header, 16U, 256U);
+    const auto lightmapped = MefRenderHeader_ReadRetail(lightmapped_header, MefRenderFormat::lightmapped);
+    if (lightmapped.lightmap_page_count != 2U || lightmapped.submesh_count != 9U
+        || lightmapped.vertex_count != 256U) {
+        throw std::runtime_error("Retail lightmapped D3DR counters were read from incorrect offsets.");
+    }
+
+    bool rejected_short_header = false;
+    try {
+        static_cast<void>(MefRenderHeader_ReadRetail(
+            std::span<const std::byte>(diffuse_header).first(47U),
+            MefRenderFormat::diffuse));
+    } catch (const MefFormatError&) {
+        rejected_short_header = true;
+    }
+    if (!rejected_short_header) {
+        throw std::runtime_error("D3DR reader accepted a header shorter than the native format size.");
+    }
+
+    const auto rejects_short_header = [](MefRenderFormat render_format, std::size_t byte_count) {
+        std::vector<std::byte> short_header(byte_count);
+        try {
+            static_cast<void>(MefRenderHeader_ReadRetail(short_header, render_format));
+        } catch (const MefFormatError&) {
+            return true;
+        }
+        return false;
+    };
+    if (!rejects_short_header(MefRenderFormat::skinned, 55U)
+        || !rejects_short_header(MefRenderFormat::lightmapped, 55U)) {
+        throw std::runtime_error("D3DR reader accessed a short skinned or lightmapped header.");
+    }
+}
+
 void testRetailMefLoaderExposesRetailRenderChunks() {
     const std::vector<std::byte> file_bytes = make_render_model_bytes();
     const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
@@ -152,7 +212,7 @@ void testRetailMefLoaderExposesRetailRenderChunks() {
     if (render_chunks.d3d_render_header == nullptr
         || render_chunks.draw_records == nullptr
         || render_chunks.vertex_stream == nullptr
-        || render_chunks.d3d_render_header->payload.size() != 8U
+        || render_chunks.d3d_render_header->payload.size() != 48U
         || render_chunks.draw_records->payload.size() != 12U
         || render_chunks.vertex_stream->payload.size() != 40U) {
         throw std::runtime_error("Retail MEF render chunks were not exposed from their original ILFF records.");
@@ -317,6 +377,7 @@ int main(int argument_count, char** arguments) {
         testRetailIlffChunkAlignmentAndTagSearch();
         testRetailMefLoaderBindsMeshAndKnownChunks();
         testRetailMefLoaderAcceptsOnlyRetailRenderFormats();
+        testRetailD3drHeaderReadsFormatSpecificCounts();
         testRetailMefLoaderExposesRetailRenderChunks();
         testRetailMefLoaderRejectsUnsupportedVersion();
         testRetailMefLoaderRejectsTruncation();
