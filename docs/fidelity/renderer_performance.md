@@ -53,3 +53,47 @@ belong to the preceding gameplay checkpoint, not this implementation.
 
 The current backend is still a CPU renderer. This improves its measured speed;
 it does not provide hardware rendering or establish complete retail visual parity.
+
+## Retail-derived terrain LOD correction
+
+2026-10-17. The C++ Ultra preset previously selected terrain octree depth 20 with
+hand-written distance bands. The C# terrain traversal reference sets a maximum
+exponent of 16 and chooses refinement with a camera-relative integer distance
+metric. Its presets separate the retail settings (Low 96, Medium 129, Vanilla
+163) from the C# Enhanced, High, and Ultra values (220, 320, 450). C# Vanilla
+derives its distance from field of view; this C++ Vanilla value uses the retail
+4:3 base and is not yet field-of-view scaled. Terrain node bounds are retained
+individually for per-frame view culling. Initial terrain selection still uses the
+player spawn; it is not yet re-traversed as the player moves.
+
+### Evidence and limits
+
+- REA/Ghidra 12.1.2 analyzed the retail `igi.exe` with SHA-256
+  `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`.
+- `0x004D14E0` (`FUN_004d14e0`) is the retail terrain traversal, body
+  `0x004D14E0–0x004D2534`; REA evidence `ev_ef3464c485f0f03db0ae5d1e6fd2053f23d41c1c38dc821578c4daa1d1bb7394`
+  and pseudocode `ev_cb0e338a7f00cdbf3f554a26db3af0089569a279c7f9d2fa0a4f9dfdf6fb0b1d`.
+- `0x004D2540` initializes the traversal from camera state and the view-distance
+  setting; evidence `ev_599770868c131906fe3957702683ec5f8f0f15198ff8b404bfec8680a2c1ce10`.
+- `0x00512C30` is the retail terrain render path that consumes visible terrain
+  chunks; evidence `ev_3cdab5ee9745c912b8c6b7a4a708b85b51acacdb788bcbbfed9568ce4e95a370`.
+- The reference implementation is
+  `open-igi/src/OpenIGI.Game/World/TerrainTraversal.cs`; the player ground query
+  uses exponent 16 in `TerrainLeafQuery.cs`. These C# files support the porting
+  details; REA observations independently establish the retail binary functions.
+
+### Level 1 Ultra measurement
+
+Same Release binary configuration, original Level 1 assets, warm cache, 1280x960,
+three headless benchmark frames, and Ultra's default anisotropy:
+
+| Revision | Terrain triangles loaded | Terrain triangles submitted | Chunks culled | Mean FPS |
+| --- | ---: | ---: | ---: | ---: |
+| Depth-20 distance bands | 5,655,922 | 1,501,893 | 3,981 / 5,420 | 3.01 |
+| Depth-16 retail-derived metric | 33,780 | 8,698 | 3,036 / 4,100 | 7.29 |
+
+The benchmark improved 2.42 times. This is not a comparison against retail FPS
+or a proof of pixel parity. The full CTest suite had 27 functional tests pass;
+`retail_engine_bit_exact` remains unverified because the required retail and port
+capture files are not configured. The renderer pixel-equality probe passes for
+the culling-on/off synthetic scene.

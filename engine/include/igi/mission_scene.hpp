@@ -17,8 +17,9 @@ enum class TerrainDetail
 {
     low,
     medium,
-    high,
+    vanilla,
     enhanced,
+    high,
     ultra
 };
 
@@ -356,6 +357,6 @@ struct MissionScene final
 [[nodiscard]] MissionScene load_mission(const std::filesystem::path& game_directory,
                                         const std::filesystem::path& cache_directory,
                                         int mission_number = 1,
-                                        TerrainDetail terrain_detail = TerrainDetail::high);
+                                        TerrainDetail terrain_detail = TerrainDetail::vanilla);
 
 } // namespace igi::gameplay

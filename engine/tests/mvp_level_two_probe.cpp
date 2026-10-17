@@ -38,23 +38,24 @@ int main(int argument_count, char** arguments)
         require(node_count == 465, "Level 2 graph nodes must match the original files");
         require(scene.attached_model_count > 0 && scene.maximum_attachment_depth >= 2,
                 "Level 2 must include recursively nested original ATTA parts");
-        require(scene.static_triangles.size() > 100000,
-                "High detail must retain additional original terrain geometry");
         const auto low_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::low);
         const auto medium_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::medium);
         const auto enhanced_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::enhanced);
+        const auto high_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::high);
         const auto ultra_detail = load_mission(arguments[1], arguments[2], 2, TerrainDetail::ultra);
-        require(
-            low_detail.terrain_triangle_count < medium_detail.terrain_triangle_count &&
-                medium_detail.terrain_triangle_count < scene.terrain_triangle_count &&
-                scene.terrain_triangle_count < enhanced_detail.terrain_triangle_count &&
-                enhanced_detail.terrain_triangle_count < ultra_detail.terrain_triangle_count &&
-                scene.actors.size() == low_detail.actors.size(),
-            "Each terrain quality tier must add original terrain detail without changing enemy declarations");
+        require(low_detail.terrain_triangle_count < medium_detail.terrain_triangle_count &&
+                    medium_detail.terrain_triangle_count < scene.terrain_triangle_count &&
+                    scene.terrain_triangle_count < enhanced_detail.terrain_triangle_count &&
+                    enhanced_detail.terrain_triangle_count < high_detail.terrain_triangle_count &&
+                    high_detail.terrain_triangle_count < ultra_detail.terrain_triangle_count &&
+                    scene.actors.size() == low_detail.actors.size(),
+                "Retail, Enhanced, High, and Ultra terrain tiers must resolve monotonically without changing "
+                "enemy declarations");
         std::cout << "Terrain triangles low=" << low_detail.terrain_triangle_count
                   << ", medium=" << medium_detail.terrain_triangle_count
-                  << ", high=" << scene.terrain_triangle_count
+                  << ", vanilla=" << scene.terrain_triangle_count
                   << ", enhanced=" << enhanced_detail.terrain_triangle_count
+                  << ", high=" << high_detail.terrain_triangle_count
                   << ", ultra=" << ultra_detail.terrain_triangle_count << '\n';
         GameSimulation simulation(scene);
         std::size_t portal_faces = 0;

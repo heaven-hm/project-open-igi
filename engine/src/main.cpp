@@ -216,7 +216,11 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
         else if (argument == "--graphics" || argument == "--gfx")
         {
             const auto setting = next_argument();
-            if (setting == "ultra")
+            if (setting == "vanilla")
+            {
+                options.terrain_detail = igi::gameplay::TerrainDetail::vanilla;
+            }
+            else if (setting == "ultra")
             {
                 options.terrain_detail = igi::gameplay::TerrainDetail::ultra;
             }
@@ -238,7 +242,8 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
             }
             else
             {
-                throw std::runtime_error("Graphics setting must be enhanced, ultra, high, medium, or low");
+                throw std::runtime_error(
+                    "Graphics setting must be vanilla, low, medium, enhanced, high, or ultra");
             }
         }
         else if (argument == "--texture-filter")
@@ -284,21 +289,22 @@ RuntimeOptions parse_arguments(int argument_count, char** arguments)
         }
         else if (argument == "--help")
         {
-            std::cout << "igi [window|fullscreen] [level1..level14] [--game directory]\n"
-                         "    [--mission 1] [--headless --frames count]\n"
-                         "    [--demo] [--replay inputs.csv] [--trace state.csv] "
-                         "[--screenshot frame.bmp]\n"
-                         "    [--cache directory] [--width 1280 --height 960] [--verbose] "
-                         "[--benchmark]\n"
-                         "    [--graphics low|medium|high|enhanced|ultra]\n"
-                         "    [--texture-filter nearest|trilinear]\n"
-                         "    [--texture-anisotropy 1|2|4|8|16]\n"
-                         "    [--profile name] (controls come from original config.qvm)\n"
-                         "Movement, jump, crouch, fire, reload and weapon bindings use "
-                         "config.qvm.\n"
-                         "Number-key categories use humanplayer.qvm; mouse wheel cycles "
-                         "weapons.\n"
-                         "Enter restarts; F10 toggles fullscreen; F9 or G toggles developer mode; Escape quits.\n";
+            std::cout
+                << "igi [window|fullscreen] [level1..level14] [--game directory]\n"
+                   "    [--mission 1] [--headless --frames count]\n"
+                   "    [--demo] [--replay inputs.csv] [--trace state.csv] "
+                   "[--screenshot frame.bmp]\n"
+                   "    [--cache directory] [--width 1280 --height 960] [--verbose] "
+                   "[--benchmark]\n"
+                   "    [--graphics vanilla|low|medium|enhanced|high|ultra]\n"
+                   "    [--texture-filter nearest|trilinear]\n"
+                   "    [--texture-anisotropy 1|2|4|8|16]\n"
+                   "    [--profile name] (controls come from original config.qvm)\n"
+                   "Movement, jump, crouch, fire, reload and weapon bindings use "
+                   "config.qvm.\n"
+                   "Number-key categories use humanplayer.qvm; mouse wheel cycles "
+                   "weapons.\n"
+                   "Enter restarts; F10 toggles fullscreen; F9 or G toggles developer mode; Escape quits.\n";
             std::exit(0);
         }
         else
@@ -472,8 +478,9 @@ int run(RuntimeOptions options, const char* executable)
         "graphics",
         std::string("Terrain detail=") +
             (options.terrain_detail == igi::gameplay::TerrainDetail::ultra      ? "ultra"
-             : options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
              : options.terrain_detail == igi::gameplay::TerrainDetail::high     ? "high"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::enhanced ? "enhanced"
+             : options.terrain_detail == igi::gameplay::TerrainDetail::vanilla  ? "vanilla"
              : options.terrain_detail == igi::gameplay::TerrainDetail::medium   ? "medium"
                                                                                 : "low") +
             "; original terrain triangles=" + std::to_string(scene.terrain_triangle_count) +

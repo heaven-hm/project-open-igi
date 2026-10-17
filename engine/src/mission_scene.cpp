@@ -242,83 +242,40 @@ void append_terrain(MissionScene& scene,
     {
         throw std::runtime_error("Invalid terrain record table or texture atlas");
     }
+    constexpr int minimum_terrain_exponent = 7;
+    constexpr int maximum_terrain_exponent = 16;
+    constexpr std::int64_t terrain_root_extent = 1073741824;
+    const int terrain_view_distance = detail == TerrainDetail::low        ? 96
+                                      : detail == TerrainDetail::medium   ? 129
+                                      : detail == TerrainDetail::vanilla  ? 163
+                                      : detail == TerrainDetail::enhanced ? 220
+                                      : detail == TerrainDetail::high     ? 320
+                                                                          : 450;
+    std::array<std::int64_t, 3> camera_position{};
+    for (std::size_t axis_index = 0; axis_index < camera_position.size(); ++axis_index)
+    {
+        if (!std::isfinite(origin[axis_index]) ||
+            origin[axis_index] < static_cast<double>(std::numeric_limits<std::int32_t>::min()) ||
+            origin[axis_index] > static_cast<double>(std::numeric_limits<std::int32_t>::max()))
+        {
+            throw std::runtime_error(
+                "Terrain camera position is outside the retail integer coordinate range");
+        }
+        camera_position[axis_index] = static_cast<std::int64_t>(std::trunc(origin[axis_index]));
+    }
     const std::size_t first_terrain_triangle = scene.static_triangles.size();
     std::size_t visits = 0;
-    std::function<void(std::size_t, int, int, std::array<double, 3>)> descend;
-    descend = [&](std::size_t node_index, int depth, int orientation, std::array<double, 3> centre)
+    const auto emit_terrain_chunk = [&](std::size_t node_index,
+                                        int depth,
+                                        int orientation,
+                                        const std::array<double, 3>& centre,
+                                        double extent)
     {
-        if (++visits > 2000000 || depth > 20 || node_index >= tree.size() / 32)
-        {
-            throw std::runtime_error("Terrain tree exceeds bounds or traversal budget");
-        }
-        const double extent = std::ldexp(1073741824.0, -depth);
-        const double distance = std::max(std::abs(centre[0] - origin[0]), std::abs(centre[1] - origin[1]));
-        if (distance - extent > 1400.0 * units_per_metre ||
-            std::abs(centre[2] - origin[2]) - extent > 800.0 * units_per_metre)
+        if (depth < minimum_terrain_exponent)
         {
             return;
         }
         const std::size_t node_offset = node_index * 32;
-        const auto child_mask = tree.byte(node_offset + 24);
-        const int wanted_depth =
-            detail == TerrainDetail::ultra      ? (distance < 200.0 * units_per_metre    ? 20
-                                                   : distance < 450.0 * units_per_metre  ? 19
-                                                   : distance < 900.0 * units_per_metre  ? 18
-                                                   : distance < 1400.0 * units_per_metre ? 17
-                                                                                         : 15)
-            : detail == TerrainDetail::enhanced ? (distance < 120.0 * units_per_metre    ? 20
-                                                   : distance < 300.0 * units_per_metre  ? 19
-                                                   : distance < 700.0 * units_per_metre  ? 18
-                                                   : distance < 1200.0 * units_per_metre ? 16
-                                                                                         : 14)
-            : detail == TerrainDetail::high     ? (distance < 80.0 * units_per_metre    ? 19
-                                                   : distance < 180.0 * units_per_metre ? 18
-                                                   : distance < 500.0 * units_per_metre ? 16
-                                                   : distance < 900.0 * units_per_metre ? 14
-                                                                                        : 12)
-            : detail == TerrainDetail::medium   ? (distance < 100.0 * units_per_metre    ? 18
-                                                   : distance < 250.0 * units_per_metre  ? 16
-                                                   : distance < 600.0 * units_per_metre  ? 14
-                                                   : distance < 1000.0 * units_per_metre ? 12
-                                                                                         : 11)
-                                                : (distance < 180.0 * units_per_metre   ? 16
-                                                   : distance < 500.0 * units_per_metre ? 14
-                                                                                        : 11);
-        if (child_mask != 0 && depth < wanted_depth)
-        {
-            for (int octant = 0; octant < 8; ++octant)
-            {
-                const int child_slot = child_slots[orientation][octant];
-                if ((child_mask & (1 << child_slot)) == 0)
-                {
-                    continue;
-                }
-                const int child_orientation = tree.byte(node_offset + 16 + child_slot);
-                if (child_orientation > 7)
-                {
-                    throw std::runtime_error("Terrain child orientation is invalid");
-                }
-                const int combined_orientation =
-                    (orientation & 4) == 0
-                        ? (child_orientation & 4) | ((orientation + child_orientation) & 3)
-                        : ((child_orientation & 4) ^ 4) | ((orientation - child_orientation) & 3);
-                auto child_centre = centre;
-                for (int axis_index = 0; axis_index < 3; ++axis_index)
-                {
-                    child_centre[axis_index] +=
-                        (octant & (1 << axis_index)) != 0 ? extent * 0.5 : -extent * 0.5;
-                }
-                descend(tree.unsigned_short(node_offset + child_slot * 2),
-                        depth + 1,
-                        combined_orientation,
-                        child_centre);
-            }
-            return;
-        }
-        if (depth < 7)
-        {
-            return;
-        }
         const auto command_offset = tree.unsigned_integer(node_offset + 28);
         const std::size_t triangle_count = commands.unsigned_short(command_offset);
         const std::size_t triangle_bytes = commands.unsigned_short(command_offset + 2);
@@ -332,6 +289,8 @@ void append_terrain(MissionScene& scene,
         std::vector<Vector3> positions;
         std::vector<int> texture_axes;
         const double vertex_scale = extent / 24.0;
+        positions.reserve(vertex_count);
+        texture_axes.reserve(vertex_count);
         for (std::size_t vertex_index = 0; vertex_index < vertex_count; ++vertex_index)
         {
             const auto packed =
@@ -410,14 +369,92 @@ void append_terrain(MissionScene& scene,
                 bounds_maximum.z = std::max(bounds_maximum.z, vertex_position.z);
             }
             const Vector3 bounds_center = (bounds_minimum + bounds_maximum) * 0.5f;
-            const Vector3 bounds_extents = bounds_maximum - bounds_center;
-            const float bounds_radius = length(bounds_extents);
+            const float bounds_radius = length(bounds_maximum - bounds_center);
             if (!finite(bounds_center) || !std::isfinite(bounds_radius) || bounds_radius < 0.0f)
             {
                 throw std::runtime_error("Terrain render chunk contains invalid bounds");
             }
             scene.terrain_render_chunks.push_back(
                 {first_chunk_triangle, triangle_count, bounds_center, bounds_radius});
+        }
+    };
+    std::function<void(std::size_t, int, int, std::array<double, 3>)> descend;
+    descend = [&](std::size_t node_index, int depth, int orientation, std::array<double, 3> centre)
+    {
+        if (++visits > 2000000 || depth > maximum_terrain_exponent || node_index >= tree.size() / 32)
+        {
+            throw std::runtime_error("Terrain tree exceeds bounds or traversal budget");
+        }
+        const double extent = std::ldexp(1073741824.0, -depth);
+        const double distance = std::max(std::abs(centre[0] - origin[0]), std::abs(centre[1] - origin[1]));
+        if (distance - extent > 1400.0 * units_per_metre ||
+            std::abs(centre[2] - origin[2]) - extent > 800.0 * units_per_metre)
+        {
+            return;
+        }
+        const std::size_t node_offset = node_index * 32;
+        const auto child_mask = tree.byte(node_offset + 24);
+        if (child_mask == 0 || depth == maximum_terrain_exponent)
+        {
+            emit_terrain_chunk(node_index, depth, orientation, centre, extent);
+            return;
+        }
+        for (int octant = 0; octant < 8; ++octant)
+        {
+            const int child_slot = child_slots[orientation][octant];
+            if ((child_mask & (1 << child_slot)) == 0)
+            {
+                continue;
+            }
+            const int child_orientation = tree.byte(node_offset + 16 + child_slot);
+            if (child_orientation > 7)
+            {
+                throw std::runtime_error("Terrain child orientation is invalid");
+            }
+            const int combined_orientation =
+                (orientation & 4) == 0
+                    ? (child_orientation & 4) | ((orientation + child_orientation) & 3)
+                    : ((child_orientation & 4) ^ 4) | ((orientation - child_orientation) & 3);
+            auto child_centre = centre;
+            for (int axis_index = 0; axis_index < 3; ++axis_index)
+            {
+                child_centre[axis_index] += (octant & (1 << axis_index)) != 0 ? extent * 0.5 : -extent * 0.5;
+            }
+            const std::size_t child_node_index = tree.unsigned_short(node_offset + child_slot * 2);
+            if (++visits > 2000000 || child_node_index >= tree.size() / 32)
+            {
+                throw std::runtime_error("Terrain tree exceeds bounds or traversal budget");
+            }
+            const double child_extent = extent * 0.5;
+            const double child_distance =
+                std::max(std::abs(child_centre[0] - origin[0]), std::abs(child_centre[1] - origin[1]));
+            if (child_distance - child_extent > 1400.0 * units_per_metre ||
+                std::abs(child_centre[2] - origin[2]) - child_extent > 800.0 * units_per_metre)
+            {
+                continue;
+            }
+            const std::array<std::int64_t, 3> child_world{
+                static_cast<std::int64_t>(child_centre[0]) - camera_position[0],
+                static_cast<std::int64_t>(child_centre[1]) - camera_position[1],
+                static_cast<std::int64_t>(child_centre[2]) - camera_position[2]};
+            const std::int64_t reach =
+                std::max({std::abs(child_world[0]), std::abs(child_world[1]), std::abs(child_world[2])});
+            const auto child_depth = depth + 1;
+            const auto child_extent_integer = terrain_root_extent >> child_depth;
+            const std::int64_t detail_metric = (reach - child_extent_integer) >> (25 - child_depth);
+            const std::size_t child_node_offset = child_node_index * 32;
+            const bool should_refine = tree.byte(child_node_offset + 24) != 0 &&
+                                       child_depth < maximum_terrain_exponent &&
+                                       detail_metric < terrain_view_distance;
+            if (should_refine)
+            {
+                descend(child_node_index, child_depth, combined_orientation, child_centre);
+            }
+            else
+            {
+                emit_terrain_chunk(
+                    child_node_index, child_depth, combined_orientation, child_centre, child_extent);
+            }
         }
     };
     descend(1, 0, 0, {});
@@ -435,56 +472,6 @@ void append_terrain(MissionScene& scene,
     {
         throw std::runtime_error("Terrain render chunks omit emitted terrain triangles");
     }
-    constexpr std::size_t terrain_leaf_chunks_per_render_chunk = 128;
-    std::vector<TerrainRenderChunk> grouped_render_chunks;
-    grouped_render_chunks.reserve(
-        (scene.terrain_render_chunks.size() + terrain_leaf_chunks_per_render_chunk - 1) /
-        terrain_leaf_chunks_per_render_chunk);
-    for (std::size_t first_leaf_chunk = 0; first_leaf_chunk < scene.terrain_render_chunks.size();
-         first_leaf_chunk += terrain_leaf_chunks_per_render_chunk)
-    {
-        const std::size_t leaf_chunk_end =
-            std::min(scene.terrain_render_chunks.size(), first_leaf_chunk + terrain_leaf_chunks_per_render_chunk);
-        const TerrainRenderChunk& first_leaf = scene.terrain_render_chunks[first_leaf_chunk];
-        Vector3 bounds_minimum = first_leaf.bounds_center -
-                                 Vector3{first_leaf.bounds_radius, first_leaf.bounds_radius, first_leaf.bounds_radius};
-        Vector3 bounds_maximum = first_leaf.bounds_center +
-                                 Vector3{first_leaf.bounds_radius, first_leaf.bounds_radius, first_leaf.bounds_radius};
-        std::size_t grouped_triangle_count = first_leaf.triangle_count;
-        for (std::size_t leaf_chunk_index = first_leaf_chunk + 1; leaf_chunk_index < leaf_chunk_end;
-             ++leaf_chunk_index)
-        {
-            const TerrainRenderChunk& leaf_chunk = scene.terrain_render_chunks[leaf_chunk_index];
-            const Vector3 leaf_bounds_minimum =
-                leaf_chunk.bounds_center - Vector3{leaf_chunk.bounds_radius,
-                                                   leaf_chunk.bounds_radius,
-                                                   leaf_chunk.bounds_radius};
-            const Vector3 leaf_bounds_maximum =
-                leaf_chunk.bounds_center + Vector3{leaf_chunk.bounds_radius,
-                                                   leaf_chunk.bounds_radius,
-                                                   leaf_chunk.bounds_radius};
-            bounds_minimum.x = std::min(bounds_minimum.x, leaf_bounds_minimum.x);
-            bounds_minimum.y = std::min(bounds_minimum.y, leaf_bounds_minimum.y);
-            bounds_minimum.z = std::min(bounds_minimum.z, leaf_bounds_minimum.z);
-            bounds_maximum.x = std::max(bounds_maximum.x, leaf_bounds_maximum.x);
-            bounds_maximum.y = std::max(bounds_maximum.y, leaf_bounds_maximum.y);
-            bounds_maximum.z = std::max(bounds_maximum.z, leaf_bounds_maximum.z);
-            if (leaf_chunk.triangle_count > std::numeric_limits<std::size_t>::max() - grouped_triangle_count)
-            {
-                throw std::runtime_error("Terrain render chunk triangle count overflow");
-            }
-            grouped_triangle_count += leaf_chunk.triangle_count;
-        }
-        const Vector3 bounds_center = (bounds_minimum + bounds_maximum) * 0.5f;
-        const float bounds_radius = length(bounds_maximum - bounds_center);
-        if (!finite(bounds_center) || !std::isfinite(bounds_radius))
-        {
-            throw std::runtime_error("Grouped terrain render chunk contains invalid bounds");
-        }
-        grouped_render_chunks.push_back(
-            {first_leaf.first_triangle, grouped_triangle_count, bounds_center, bounds_radius});
-    }
-    scene.terrain_render_chunks = std::move(grouped_render_chunks);
     diagnostics::log(diagnostics::Severity::information,
                      "terrain",
                      "Loaded " + std::to_string(scene.static_triangles.size()) +

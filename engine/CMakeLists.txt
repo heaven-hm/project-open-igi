@@ -277,6 +277,8 @@ if(BUILD_TESTING)
         set_tests_properties(igi_reject_invalid_level PROPERTIES WILL_FAIL TRUE)
         add_test(NAME igi_graphics_alias COMMAND igi_game window level2 --gfx high --headless --frames 1
             --game "${IGI_GAME_PATH}" --cache "${CMAKE_CURRENT_BINARY_DIR}/test-cache")
+        add_test(NAME igi_vanilla_graphics_preset COMMAND igi_game window level1 --graphics vanilla --headless --frames 1
+            --game "${IGI_GAME_PATH}" --cache "${CMAKE_CURRENT_BINARY_DIR}/test-cache")
         add_test(NAME igi_ultra_graphics_preset COMMAND igi_game window level1 --graphics ultra --headless --frames 1
             --game "${IGI_GAME_PATH}" --cache "${CMAKE_CURRENT_BINARY_DIR}/test-cache")
         add_test(NAME igi_reject_invalid_graphics COMMAND igi_game --graphics invalid --headless)
