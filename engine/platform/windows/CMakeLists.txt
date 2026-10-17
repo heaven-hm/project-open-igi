@@ -1,5 +1,6 @@
 add_executable(open-igi WIN32
     main.cpp
+    retail_model_scene.cpp
 )
 
 target_compile_features(open-igi PRIVATE cxx_std_20)

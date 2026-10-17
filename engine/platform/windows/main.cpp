@@ -2,6 +2,7 @@
 #define UNICODE
 #define _UNICODE
 #include "igi/retail/model/mef_model_loader.hpp"
+#include "retail_model_scene.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
 
@@ -345,6 +346,36 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
         log_message("CommandLineToArgvW failed.");
         return 1;
     }
+    std::filesystem::path capture_path;
+    bool model_scene_requested = false;
+    unsigned int level_number = 1U;
+    for (int argument_index = 1; argument_index < argument_count; ++argument_index) {
+        const std::wstring argument(arguments[argument_index]);
+        if (argument == L"--capture-frame" && argument_index + 1 < argument_count) {
+            capture_path = arguments[++argument_index];
+            continue;
+        }
+        if (argument == L"window") { model_scene_requested = true; }
+        if (argument.starts_with(L"level")) {
+            wchar_t* end = nullptr;
+            const unsigned long parsed_level = std::wcstoul(argument.c_str() + 5, &end, 10);
+            if (end == argument.c_str() + 5 || *end != L'\0' || parsed_level < 1UL || parsed_level > 14UL) {
+                LocalFree(arguments);
+                MessageBoxW(nullptr, L"Expected level1 through level14.", L"IGI", MB_OK | MB_ICONERROR);
+                return 1;
+            }
+            level_number = static_cast<unsigned int>(parsed_level);
+            model_scene_requested = true;
+        }
+    }
+    if (model_scene_requested) {
+        LocalFree(arguments);
+        wchar_t executable_path[32768]{};
+        const DWORD path_length = GetModuleFileNameW(nullptr, executable_path, 32768U);
+        if (path_length == 0U || path_length >= 32768U) { return 1; }
+        const auto game_directory = std::filesystem::path(executable_path).parent_path();
+        return RunRetailModelScene(instance_handle, show_command, game_directory, level_number, capture_path);
+    }
     initialize_demo_lines(argument_count, arguments);
     LocalFree(arguments);
 
@@ -391,7 +422,7 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     {
         release_graphics();
         MessageBoxW(window_handle,
-                    L"DirectDraw 7 initialization failed. See the CrossOver log.",
+                    L"DirectDraw 7 initialization failed. See open-igi.log.",
                     window_title,
                     MB_OK | MB_ICONERROR);
         DestroyWindow(window_handle);
