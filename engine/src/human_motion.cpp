@@ -1,9 +1,32 @@
 #include "igi/human_motion.hpp"
 
+#include <algorithm>
 #include <cmath>
+#include <stdexcept>
 
 namespace igi::gameplay
 {
+
+HumanFallImpact HumanFallDamage_Calculate(float vertical_velocity_units_per_tick, float maximum_health)
+{
+    if (!std::isfinite(vertical_velocity_units_per_tick) || !std::isfinite(maximum_health) ||
+        maximum_health <= 0.0F)
+    {
+        throw std::invalid_argument("Fall damage requires finite velocity and positive maximum health");
+    }
+
+    constexpr float engine_units_per_metre = 4096.0F;
+    constexpr float safe_impact_speed_metres_per_second = 14.0F;
+    constexpr float lethal_speed_range_metres_per_second = 13.0F;
+    constexpr float maximum_view_kick_units = 1024.0F;
+    const float speed_metres_per_second =
+        std::abs(vertical_velocity_units_per_tick) * (1.0F / engine_units_per_metre) * 30.0F;
+    const float damage = std::max(0.0F, speed_metres_per_second - safe_impact_speed_metres_per_second) *
+                         (1.0F / lethal_speed_range_metres_per_second) * maximum_health;
+    const float view_kick_units =
+        -std::clamp(speed_metres_per_second * 0.125F, 0.0F, 1.0F) * maximum_view_kick_units;
+    return {speed_metres_per_second, damage, view_kick_units};
+}
 
 Vector3 HumanMotion::launch_velocity(Vector3 previous_animation_movement,
                                      Vector3 inherited_velocity,

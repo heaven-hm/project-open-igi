@@ -97,6 +97,14 @@ int main()
         require(burst_fire.weapon().shots_fired == 6,
                 "A fresh trigger pull must allow another complete burst");
         const auto movement_scene = make_scene(false, false);
+        const auto ordinary_jump_impact = HumanFallDamage_Calculate(
+            5.0F * 4096.0F / 30.0F,
+            movement_scene.player_parameters.maximum_health);
+        require(ordinary_jump_impact.damage == 0.0F,
+                "Retail landing logic must not damage the player after an ordinary short jump");
+        require(std::abs(HumanFallDamage_Calculate(14.5F * 4096.0F / 30.0F, 100.0F).damage -
+                         100.0F / 26.0F) < 0.0001F,
+                "Retail fall damage must scale from the 14 m/s safe threshold across a 13 m/s lethal range");
         GameSimulation jump_timing(movement_scene);
         const float jump_floor = jump_timing.player_position().z;
         PlayerInput jump_input;
@@ -130,6 +138,8 @@ int main()
             running_jump.tick({});
         }
         require(running_jump.grounded(), "Corrected running jump must land on the original floor");
+        require(running_jump.health() == movement_scene.player_parameters.maximum_health,
+                "A normal player jump and landing must leave retail health unchanged");
         const auto landing_position = running_jump.player_position();
         for (int tick_index = 0; tick_index < 10; ++tick_index)
         {
@@ -200,6 +210,12 @@ int main()
         require(combat.weapon().kills == 1 && combat.weapon().hits >= 6 &&
                     combat.actors().front().behavior == ActorBehavior::dead,
                 "Projectiles must accumulate original body-zone damage and defeat the target");
+        for (int tick_index = 0; tick_index < 180; ++tick_index)
+        {
+            combat.tick({});
+        }
+        require(combat.actors().front().behavior == ActorBehavior::dead,
+                "A defeated enemy must remain down after its non-looping death animation completes");
         auto distant_scene = make_scene(true, false);
         distant_scene.actors.front().position.y = 12;
         GameSimulation distant_combat(distant_scene);

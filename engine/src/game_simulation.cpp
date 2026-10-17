@@ -688,18 +688,20 @@ void GameSimulation::query_ground(HumanMovementState& human,
         human.slope_normal = ground.normal;
         if (!was_grounded)
         {
-            const float landing_speed = std::abs(human.movement_velocity.z) / units_per_metre * 30.0f;
-            constexpr float threshold_speed = 4.2f;
-            if (!developer_mode_ && landing_speed > threshold_speed && health_ > 0.0f)
+            // Original IGI.EXE 0x00408460 applies gravity before this landing-speed check.
+            const HumanFallImpact fall_impact = HumanFallDamage_Calculate(
+                human.movement_velocity.z,
+                scene_.player_parameters.maximum_health);
+            if (!developer_mode_ && fall_impact.damage > 0.0F && health_ > 0.0F)
             {
-                const float damage_ratio = (landing_speed - threshold_speed) / 6.5f;
-                const float damage = std::clamp(damage_ratio, 0.0f, 1.0f) * scene_.player_parameters.maximum_health;
-                health_ = std::max(0.0f, health_ - damage);
+                health_ = std::max(0.0f, health_ - fall_impact.damage);
                 damage_flash_remaining_ = 0.35f;
                 diagnostics::log(diagnostics::Severity::information,
                                  "player",
-                                 "Player suffered fall damage: " + std::to_string(damage) +
-                                     ", speed: " + std::to_string(landing_speed) + " m/s");
+                                 "Original IGI.EXE HumanPlayer fall-impact native 0x00408460: damage=" +
+                                     std::to_string(fall_impact.damage) + ", speed=" +
+                                     std::to_string(fall_impact.speed_metres_per_second) + " m/s, health=" +
+                                     std::to_string(health_));
                 for (auto& actor : actors_)
                 {
                     if (!actor.active || actor.behavior == ActorBehavior::dead)

@@ -50,4 +50,15 @@ class HumanMotion final
                                                    bool suppress_scale = false) noexcept;
 };
 
+struct HumanFallImpact final
+{
+    float speed_metres_per_second{};
+    float damage{};
+    float view_kick_units{};
+};
+
+// Original IGI.EXE HumanPlayer_ProcessMovement applies the landing formula in native 0x00408460.
+[[nodiscard]] HumanFallImpact HumanFallDamage_Calculate(float vertical_velocity_units_per_tick,
+                                                        float maximum_health);
+
 } // namespace igi::gameplay
