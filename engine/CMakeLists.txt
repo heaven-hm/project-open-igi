@@ -54,6 +54,7 @@ set_target_properties(igi_audio PROPERTIES CXX_EXTENSIONS OFF)
 add_library(igi_assets STATIC
     src/asset_io.cpp
     src/qvm_initializer.cpp
+    src/game_material_registry.cpp
     src/mission_assets.cpp
     src/mission_scene.cpp
     src/mission_gameplay.cpp
@@ -229,6 +230,14 @@ if(BUILD_TESTING)
     if(IGI_GAME_PATH)
         add_test(NAME retail_level_one_animation_trigger_registry
             COMMAND animation_trigger_registry_test "${IGI_GAME_PATH}")
+    endif()
+
+    add_executable(game_material_registry_test tests/audio/game_material_registry_test.cpp)
+    target_link_libraries(game_material_registry_test PRIVATE igi_assets)
+    add_test(NAME game_material_registry_validation COMMAND game_material_registry_test)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_game_material_registry
+            COMMAND game_material_registry_test "${IGI_GAME_PATH}")
     endif()
 
     add_executable(sound_bank_test tests/audio/sound_bank_test.cpp)
