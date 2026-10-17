@@ -21,6 +21,7 @@ struct AudioBufferFormat final
 struct RetailVoiceParameters final
 {
     float linear_gain = 1.0F;
+    // Stereo source position: -1 hard left, 0 centred, +1 hard right.
     float pan = 0.0F;
     float playback_rate = 1.0F;
     bool looping = false;

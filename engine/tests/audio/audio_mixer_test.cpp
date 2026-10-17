@@ -32,18 +32,18 @@ void SoundSystem_TestRetailMixAndPan()
 
     mixer.StopVoice(voice_handle);
     const std::uint32_t right_panned_voice = mixer.Play(
-        buffer_handle, {.linear_gain = 1.0F, .pan = -1.0F, .looping = true});
+        buffer_handle, {.linear_gain = 1.0F, .pan = 1.0F, .looping = true});
     std::array<std::int16_t, 2> panned_output{};
     mixer.MixFrames(panned_output);
     SoundSystem_Require(panned_output[0] == 0 && panned_output[1] == 12000,
-                        "Retail positive DirectSound pan must attenuate the left channel");
+                        "Positive source pan must send the retail sound to the right channel");
 
     mixer.StopVoice(right_panned_voice);
     const std::uint32_t left_panned_voice = mixer.Play(
-        buffer_handle, {.linear_gain = 1.0F, .pan = 1.0F, .looping = true});
+        buffer_handle, {.linear_gain = 1.0F, .pan = -1.0F, .looping = true});
     mixer.MixFrames(panned_output);
     SoundSystem_Require(panned_output[0] == 12000 && panned_output[1] == 0,
-                        "Retail negative DirectSound pan must attenuate the right channel");
+                        "Negative source pan must send the retail sound to the left channel");
 }
 
 void SoundSystem_TestVolumeAndPlaybackRate()

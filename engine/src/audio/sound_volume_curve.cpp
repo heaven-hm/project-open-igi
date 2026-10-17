@@ -97,4 +97,62 @@ float SoundSystem_ClampRetailPlaybackRate(float playback_rate)
     return playback_rate;
 }
 
+// Original IGI.EXE voice update at VA 0x00496E60 linearly attenuates distance and hand-computes stereo pan.
+RetailSpatialGainAndPan SoundSystem_SpatialiseRetailVoice(
+    float linear_gain,
+    RetailAudioPosition source_position_metres,
+    RetailAudioPosition listener_position_metres,
+    double listener_heading_radians,
+    float minimum_distance_metres,
+    float maximum_distance_metres)
+{
+    if (!std::isfinite(linear_gain) || !std::isfinite(source_position_metres.x) ||
+        !std::isfinite(source_position_metres.y) || !std::isfinite(source_position_metres.z) ||
+        !std::isfinite(listener_position_metres.x) || !std::isfinite(listener_position_metres.y) ||
+        !std::isfinite(listener_position_metres.z) || !std::isfinite(listener_heading_radians) ||
+        !std::isfinite(minimum_distance_metres) || !std::isfinite(maximum_distance_metres))
+    {
+        throw std::invalid_argument("Retail positional audio inputs must be finite");
+    }
+
+    const double delta_x = source_position_metres.x - listener_position_metres.x;
+    const double delta_y = source_position_metres.y - listener_position_metres.y;
+    const double delta_z = source_position_metres.z - listener_position_metres.z;
+    const double distance = std::sqrt(delta_x * delta_x + delta_y * delta_y + delta_z * delta_z);
+
+    float attenuated_gain = linear_gain;
+    if (distance > static_cast<double>(maximum_distance_metres))
+    {
+        attenuated_gain = 0.0F;
+    }
+    else if (distance >= static_cast<double>(minimum_distance_metres))
+    {
+        const double distance_span =
+            static_cast<double>(maximum_distance_metres) - static_cast<double>(minimum_distance_metres);
+        if (distance_span <= 0.0)
+        {
+            attenuated_gain = 0.0F;
+        }
+        else
+        {
+            const double remaining_gain =
+                1.0 - (distance - static_cast<double>(minimum_distance_metres)) / distance_span;
+            attenuated_gain = static_cast<float>(remaining_gain * static_cast<double>(linear_gain));
+            attenuated_gain = std::clamp(attenuated_gain, 0.0F, 1.0F);
+        }
+    }
+
+    const float distance_scale = minimum_distance_metres + maximum_distance_metres;
+    float pan = 0.0F;
+    if (distance > 0.0 && distance_scale > 0.0F)
+    {
+        const double local_lateral_position =
+            delta_x * std::cos(listener_heading_radians) + delta_y * std::sin(listener_heading_radians);
+        pan = static_cast<float>(local_lateral_position / static_cast<double>(distance_scale));
+        pan = std::clamp(pan, -1.0F, 1.0F);
+    }
+
+    return {attenuated_gain, pan};
+}
+
 } // namespace igi::audio

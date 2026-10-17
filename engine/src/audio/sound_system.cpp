@@ -74,6 +74,31 @@ bool SoundSystem::SoundSystem_IsPlaying(std::uint32_t voice_handle) const
     return mixer_.IsPlaying(voice_handle);
 }
 
+void SoundSystem::SoundSystem_SetVoiceParameters(
+    std::uint32_t voice_handle,
+    RetailVoiceParameters parameters)
+{
+    // Portable voice-update helper for original IGI.EXE audio native 0x00496E60.
+    parameters.playback_rate = SoundSystem_ClampRetailPlaybackRate(parameters.playback_rate);
+    mixer_.SetVoiceParameters(voice_handle, parameters);
+}
+
+void SoundSystem::SoundSystem_SetDefinitionVoiceParameters(
+    std::string_view definition_name,
+    std::uint32_t voice_handle,
+    RetailVoiceParameters parameters)
+{
+    // Port helper for native 0x00496E60: preserve the selected definition's authored gain and loop flag.
+    const SoundDefinition* definition = nullptr;
+    if (definitions_.SoundSystem_TryResolve(definition_name, definition) && definition != nullptr &&
+        definition->SoundSystem_IsPlayable())
+    {
+        parameters.linear_gain *= definition->volume;
+        parameters.looping = parameters.looping || definition->looping;
+    }
+    SoundSystem_SetVoiceParameters(voice_handle, parameters);
+}
+
 void SoundSystem::SoundSystem_Stop(std::uint32_t voice_handle)
 {
     mixer_.StopVoice(voice_handle);

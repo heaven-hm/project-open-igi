@@ -27,6 +27,11 @@ class SoundSystem final
         std::string_view bank_key,
         RetailVoiceParameters parameters = {});
     [[nodiscard]] bool SoundSystem_IsPlaying(std::uint32_t voice_handle) const;
+    void SoundSystem_SetVoiceParameters(std::uint32_t voice_handle, RetailVoiceParameters parameters);
+    void SoundSystem_SetDefinitionVoiceParameters(
+        std::string_view definition_name,
+        std::uint32_t voice_handle,
+        RetailVoiceParameters parameters);
     void SoundSystem_Stop(std::uint32_t voice_handle);
     void SoundSystem_StopAll();
 

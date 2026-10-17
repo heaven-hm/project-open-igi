@@ -207,6 +207,10 @@ if(BUILD_TESTING)
     target_link_libraries(sound_volume_curve_test PRIVATE igi_audio)
     add_test(NAME retail_sound_volume_curve COMMAND sound_volume_curve_test)
 
+    add_executable(retail_spatialiser_test tests/audio/retail_spatialiser_test.cpp)
+    target_link_libraries(retail_spatialiser_test PRIVATE igi_audio)
+    add_test(NAME retail_sound_spatialisation COMMAND retail_spatialiser_test)
+
     add_executable(audio_mixer_test tests/audio/audio_mixer_test.cpp)
     target_link_libraries(audio_mixer_test PRIVATE igi_audio)
     add_test(NAME retail_audio_mixer COMMAND audio_mixer_test)

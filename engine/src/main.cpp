@@ -4,6 +4,7 @@
 #include "igi/audio/sound_bank.hpp"
 #include "igi/audio/sound_definition_registry.hpp"
 #include "igi/audio/sound_system.hpp"
+#include "igi/audio/sound_volume_curve.hpp"
 #include "igi/diagnostics.hpp"
 #include "igi/exceptions.hpp"
 #include "igi/game_simulation.hpp"
@@ -29,6 +30,7 @@
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace
 {
@@ -610,6 +612,27 @@ int run(RuntimeOptions options, const char* executable)
     }
 
     igi::gameplay::GameSimulation simulation(scene);
+    std::vector<const igi::gameplay::SceneWeapon*> actor_sound_weapons;
+    std::vector<std::unique_ptr<igi::gameplay::WeaponSoundPlayer>> actor_weapon_sound_players;
+    std::vector<std::uint64_t> actor_shot_counts_before_tick(simulation.actors().size());
+    actor_sound_weapons.reserve(scene.actors.size());
+    actor_weapon_sound_players.reserve(scene.actors.size());
+    for (const auto& actor_definition : scene.actors)
+    {
+        const auto weapon_definition = std::find_if(
+            scene.weapons.begin(),
+            scene.weapons.end(),
+            [&actor_definition](const auto& candidate)
+            { return candidate.identifier == actor_definition.weapon_identifier; });
+        actor_sound_weapons.push_back(
+            weapon_definition == scene.weapons.end() ? nullptr : &*weapon_definition);
+        actor_weapon_sound_players.push_back(
+            std::make_unique<igi::gameplay::WeaponSoundPlayer>(sound_system));
+    }
+    if (simulation.actors().size() != scene.actors.size())
+    {
+        throw std::runtime_error("Mission actor audio mapping does not match the simulation actor count");
+    }
     simulation.set_difficulty(options.difficulty);
     log(Severity::information,
         "gameplay",
@@ -951,11 +974,64 @@ int run(RuntimeOptions options, const char* executable)
             requested_weapon_slot = -1;
             requested_weapon_cycle = 0;
             const std::uint64_t shots_before_tick = simulation.weapon().shots_fired;
+            if (audio_output && audio_output->IsAvailable())
+            {
+                for (std::size_t actor_index = 0; actor_index < simulation.actors().size(); ++actor_index)
+                {
+                    actor_shot_counts_before_tick[actor_index] = simulation.actors()[actor_index].shots_fired;
+                }
+            }
             simulation.tick(input);
             if (audio_output && audio_output->IsAvailable())
             {
                 const bool fired_this_tick = simulation.weapon().shots_fired > shots_before_tick;
                 weapon_sound_player.WeaponSoundPlayer_Tick(fired_this_tick, simulation.weapon_definition());
+
+                const Vector3 listener_position = simulation.camera_position();
+                for (std::size_t actor_index = 0; actor_index < simulation.actors().size(); ++actor_index)
+                {
+                    const auto& actor_state = simulation.actors()[actor_index];
+                    const auto* actor_weapon = actor_sound_weapons[actor_index];
+                    igi::audio::RetailVoiceParameters actor_sound_parameters;
+                    if (actor_weapon != nullptr && !actor_weapon->fire_sound_name.empty())
+                    {
+                        Vector3 emitter_position = actor_state.position + Vector3{0.0F, 0.0F, 1.5F};
+                        float minimum_distance_metres = 1.0F;
+                        float maximum_distance_metres = 50.0F;
+                        const igi::audio::SoundDefinition* sound_definition = nullptr;
+                        if (sound_definitions.SoundSystem_TryResolve(
+                                actor_weapon->fire_sound_name, sound_definition) &&
+                            sound_definition != nullptr && sound_definition->SoundSystem_IsPlayable())
+                        {
+                            constexpr double engine_units_per_metre = 4096.0;
+                            emitter_position.x +=
+                                static_cast<float>(sound_definition->offset_x / engine_units_per_metre);
+                            emitter_position.y +=
+                                static_cast<float>(sound_definition->offset_y / engine_units_per_metre);
+                            emitter_position.z +=
+                                static_cast<float>(sound_definition->offset_z / engine_units_per_metre);
+                            minimum_distance_metres = sound_definition->minimum_distance_metres;
+                            maximum_distance_metres = sound_definition->maximum_distance_metres;
+                        }
+
+                        const auto spatial_gain_and_pan = igi::audio::SoundSystem_SpatialiseRetailVoice(
+                            1.0F,
+                            {emitter_position.x, emitter_position.y, emitter_position.z},
+                            {listener_position.x, listener_position.y, listener_position.z},
+                            static_cast<double>(simulation.view_heading()),
+                            minimum_distance_metres,
+                            maximum_distance_metres);
+                        actor_sound_parameters.linear_gain = spatial_gain_and_pan.linear_gain;
+                        actor_sound_parameters.pan = spatial_gain_and_pan.pan;
+                    }
+
+                    const bool actor_fired_this_tick =
+                        actor_state.shots_fired > actor_shot_counts_before_tick[actor_index];
+                    actor_weapon_sound_players[actor_index]->WeaponSoundPlayer_Tick(
+                        actor_fired_this_tick,
+                        actor_weapon,
+                        actor_sound_parameters);
+                }
             }
             if (trace.is_open())
             {

@@ -7,10 +7,13 @@
 #include "igi/weapon_sound_player.hpp"
 
 #include <filesystem>
+#include <cstdint>
+#include <cstdlib>
 #include <iostream>
 #include <stdexcept>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace
 {
@@ -21,6 +24,17 @@ void require(bool condition, std::string_view message)
     {
         throw std::runtime_error(std::string(message));
     }
+}
+
+std::uint64_t sum_channel_magnitude(const std::vector<std::int16_t>& interleaved_samples, std::size_t channel_index)
+{
+    std::uint64_t total_magnitude = 0;
+    for (std::size_t sample_index = channel_index; sample_index < interleaved_samples.size(); sample_index += 2)
+    {
+        total_magnitude += static_cast<std::uint64_t>(
+            std::abs(static_cast<std::int32_t>(interleaved_samples[sample_index])));
+    }
+    return total_magnitude;
 }
 
 } // namespace
@@ -52,6 +66,11 @@ int main(int argument_count, char** arguments)
 
         igi::audio::SoundSystem sound_system(audio_mixer, sound_bank, sound_definitions);
         igi::gameplay::WeaponSoundPlayer weapon_sound_player(sound_system);
+        const igi::audio::SoundEntry* ak47_loop_sample = nullptr;
+        require(sound_bank.SoundSystem_TryGet("ak47_loop", ak47_loop_sample) && ak47_loop_sample != nullptr,
+                "The original AK-47 loop sample is missing from the retail sound bank");
+        require(ak47_loop_sample->header.channel_count == 1,
+                "The retail AK-47 loop should be mono for the exact DirectSound pan test");
 
         igi::gameplay::SceneWeapon automatic_weapon;
         automatic_weapon.identifier = "WEAPON_ID_AK47";
@@ -60,9 +79,30 @@ int main(int argument_count, char** arguments)
         automatic_weapon.fire_sound_name = "ak47_loop";
         automatic_weapon.fire_loop_end_sound_name = "ak47_loop_e";
 
-        weapon_sound_player.WeaponSoundPlayer_Tick(true, &automatic_weapon);
+        igi::audio::RetailVoiceParameters right_side_parameters;
+        right_side_parameters.linear_gain = 0.7F;
+        right_side_parameters.pan = 0.8F;
+        weapon_sound_player.WeaponSoundPlayer_Tick(true, &automatic_weapon, right_side_parameters);
         require(audio_mixer.ActiveVoiceCount() == 1,
                 "The retail AK-47 automatic-fire loop did not start");
+
+        std::vector<std::int16_t> mixed_samples(8192);
+        audio_mixer.MixFrames(mixed_samples);
+        const std::uint64_t right_position_left_channel = sum_channel_magnitude(mixed_samples, 0);
+        const std::uint64_t right_position_right_channel = sum_channel_magnitude(mixed_samples, 1);
+        require(right_position_right_channel > right_position_left_channel,
+                "An AI weapon sound to the right must be louder in the right channel");
+
+        igi::audio::RetailVoiceParameters left_side_parameters;
+        left_side_parameters.linear_gain = 0.7F;
+        left_side_parameters.pan = -0.8F;
+        weapon_sound_player.WeaponSoundPlayer_Tick(true, &automatic_weapon, left_side_parameters);
+        audio_mixer.MixFrames(mixed_samples);
+        const std::uint64_t left_position_left_channel = sum_channel_magnitude(mixed_samples, 0);
+        const std::uint64_t left_position_right_channel = sum_channel_magnitude(mixed_samples, 1);
+        require(left_position_left_channel > left_position_right_channel,
+                "A moving AI weapon sound must update its loop pan in the left channel");
+
         weapon_sound_player.WeaponSoundPlayer_Tick(false, &automatic_weapon);
         weapon_sound_player.WeaponSoundPlayer_Tick(false, &automatic_weapon);
         require(audio_mixer.ActiveVoiceCount() == 1,

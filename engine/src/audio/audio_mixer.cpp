@@ -297,12 +297,14 @@ void AudioMixer::SoundSystem_UpdateVoiceGains(Voice& voice)
     voice.parameters.playback_rate = SoundSystem_ClampRetailPlaybackRate(voice.parameters.playback_rate);
     const float bounded_gain = std::clamp(voice.parameters.linear_gain, 0.0F, 1.0F);
     const std::int32_t volume_millibels = SoundSystem_GetRetailVolumeMillibels(bounded_gain);
+    // The retail pan helper returns DirectSound's signed attenuation; its sign is opposite the
+    // portable source-position convention used by the C# vanilla spatializer and this mixer API.
     const std::int32_t pan_millibels = SoundSystem_GetRetailPanMillibels(
-        voice.parameters.pan, voice.parameters.reverse_stereo);
+        -voice.parameters.pan, voice.parameters.reverse_stereo);
 
     voice.volume_amplitude = MillibelsToAmplitude(volume_millibels);
     const double pan_amplitude = MillibelsToAmplitude(-std::abs(pan_millibels));
-    // DirectSound positive pan attenuates left; negative pan attenuates right.
+    // Positive DirectSound pan attenuates left; negative pan attenuates right.
     if (pan_millibels > 0)
     {
         voice.left_pan_amplitude = pan_amplitude;

@@ -23,8 +23,12 @@ WeaponSoundPlayer::WeaponSoundPlayer(audio::SoundSystem& sound_system) noexcept
 {
 }
 
-void WeaponSoundPlayer::WeaponSoundPlayer_Tick(bool fired_this_tick, const SceneWeapon* selected_weapon)
+void WeaponSoundPlayer::WeaponSoundPlayer_Tick(
+    bool fired_this_tick,
+    const SceneWeapon* selected_weapon,
+    audio::RetailVoiceParameters spatial_parameters)
 {
+    spatial_parameters_ = spatial_parameters;
     if (looping_weapon_ != nullptr && looping_weapon_ != selected_weapon)
     {
         WeaponSoundPlayer_EndLoop();
@@ -39,7 +43,7 @@ void WeaponSoundPlayer::WeaponSoundPlayer_Tick(bool fired_this_tick, const Scene
     {
         if (fired_this_tick)
         {
-            static_cast<void>(WeaponSoundPlayer_Play(selected_weapon->fire_sound_name, false));
+            static_cast<void>(WeaponSoundPlayer_Play(selected_weapon->fire_sound_name, false, spatial_parameters_));
         }
         return;
     }
@@ -49,11 +53,19 @@ void WeaponSoundPlayer::WeaponSoundPlayer_Tick(bool fired_this_tick, const Scene
         quiet_tick_count_ = 0;
         if (looping_weapon_ == nullptr)
         {
-            looping_voice_handle_ = WeaponSoundPlayer_Play(selected_weapon->fire_sound_name, true);
+            looping_voice_handle_ = WeaponSoundPlayer_Play(selected_weapon->fire_sound_name, true, spatial_parameters_);
             if (looping_voice_handle_ != 0)
             {
                 looping_weapon_ = selected_weapon;
             }
+        }
+        else if (looping_voice_handle_ != 0)
+        {
+            spatial_parameters_.looping = true;
+            sound_system_.SoundSystem_SetDefinitionVoiceParameters(
+                selected_weapon->fire_sound_name,
+                looping_voice_handle_,
+                spatial_parameters_);
         }
         return;
     }
@@ -102,7 +114,10 @@ void WeaponSoundPlayer::WeaponSoundPlayer_Reset() noexcept
     quiet_tick_count_ = 0;
 }
 
-std::uint32_t WeaponSoundPlayer::WeaponSoundPlayer_Play(std::string_view sound_name, bool looping)
+std::uint32_t WeaponSoundPlayer::WeaponSoundPlayer_Play(
+    std::string_view sound_name,
+    bool looping,
+    audio::RetailVoiceParameters spatial_parameters)
 {
     if (sound_name.empty())
     {
@@ -111,18 +126,17 @@ std::uint32_t WeaponSoundPlayer::WeaponSoundPlayer_Play(std::string_view sound_n
 
     try
     {
-        audio::RetailVoiceParameters parameters;
-        parameters.looping = looping;
+        spatial_parameters.looping = looping;
         const std::uint32_t definition_voice = sound_system_.SoundSystem_PlayDefinition(
             sound_name,
-            parameters,
+            spatial_parameters,
             looping ? std::optional<bool>(true) : std::nullopt);
         if (definition_voice != 0)
         {
             return definition_voice;
         }
 
-        return sound_system_.SoundSystem_PlayBankSound(sound_name, parameters);
+        return sound_system_.SoundSystem_PlayBankSound(sound_name, spatial_parameters);
     }
     catch (const std::exception& exception)
     {
@@ -148,7 +162,11 @@ void WeaponSoundPlayer::WeaponSoundPlayer_EndLoop()
 
     if (ended_weapon != nullptr)
     {
-        static_cast<void>(WeaponSoundPlayer_Play(ended_weapon->fire_loop_end_sound_name, false));
+        spatial_parameters_.looping = false;
+        static_cast<void>(WeaponSoundPlayer_Play(
+            ended_weapon->fire_loop_end_sound_name,
+            false,
+            spatial_parameters_));
     }
 }
 
