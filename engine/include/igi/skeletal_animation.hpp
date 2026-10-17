@@ -39,7 +39,8 @@ sample_bone_rotation(const std::vector<BoneRotationKey>& keys, float time, float
 [[nodiscard]] std::vector<glm::mat4> sample_bone_pose(const SkeletalAnimationSet& animations,
                                                       int animation_identifier,
                                                       float time,
-                                                      bool zero_root = false);
+                                                      bool zero_root = false,
+                                                      bool force_non_cyclic = false);
 [[nodiscard]] Vector3
 sample_animation_root(const SkeletalAnimationSet& animations, int animation_identifier, float time);
 [[nodiscard]] Vector3 skin_vertex(const SceneVertex& vertex, const std::vector<glm::mat4>& pose);

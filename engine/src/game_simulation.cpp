@@ -873,7 +873,7 @@ void GameSimulation::toggle_developer_mode()
         health_ = scene_.player_parameters.maximum_health;
         diagnostics::log(diagnostics::Severity::information,
                          "developer",
-                         "Developer mode enabled: all weapons granted, unlimited ammo, god mode");
+                         "Player-only cheat mode enabled: all player weapons granted, unlimited player ammo, player god mode");
         set_prompt_message("CHEAT MODE: GOD MODE + ALL WEAPONS + INF AMMO", 3.5f);
     }
     else

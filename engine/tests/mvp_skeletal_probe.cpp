@@ -57,9 +57,14 @@ int main()
         const auto death_pose_at_end = sample_bone_pose(death_animation, 28, 320);
         require(std::abs(death_pose_at_start[0][0][0] - death_pose_at_end[0][0][0]) > 0.5F,
                 "A completed retail death clip must hold its fallen pose instead of looping back to standing");
-        SkeletalAnimationClip looping_locomotion_clip = non_looping_death_clip;
-        looping_locomotion_clip.flags = 0x80000000u;
-        death_animation.clips[4] = looping_locomotion_clip;
+        SkeletalAnimationClip looping_death_clip = non_looping_death_clip;
+        looping_death_clip.flags = 0x80000000u;
+        death_animation.clips[28] = looping_death_clip;
+        const auto one_shot_death_pose_at_start = sample_bone_pose(death_animation, 28, 0, false, true);
+        const auto one_shot_death_pose_at_end = sample_bone_pose(death_animation, 28, 320, false, true);
+        require(std::abs(one_shot_death_pose_at_start[0][0][0] - one_shot_death_pose_at_end[0][0][0]) > 0.5F,
+                "A death state must override a cyclic asset flag and hold the final fallen pose");
+        death_animation.clips[4] = looping_death_clip;
         const auto looping_pose_at_end = sample_bone_pose(death_animation, 4, 320);
         require(std::abs(death_pose_at_start[0][0][0] - looping_pose_at_end[0][0][0]) < 0.00001F,
                 "A retail looping locomotion clip must wrap to its first pose");

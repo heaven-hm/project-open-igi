@@ -212,7 +212,11 @@ Vector3 sample_animation_root(const SkeletalAnimationSet& animations, int animat
 }
 
 std::vector<glm::mat4>
-sample_bone_pose(const SkeletalAnimationSet& animations, int animation_identifier, float time, bool zero_root)
+sample_bone_pose(const SkeletalAnimationSet& animations,
+                 int animation_identifier,
+                 float time,
+                 bool zero_root,
+                 bool force_non_cyclic)
 {
     if (!std::isfinite(time) || time < 0 || animations.parents.size() != animations.rest_offsets.size())
     {
@@ -225,7 +229,8 @@ sample_bone_pose(const SkeletalAnimationSet& animations, int animation_identifie
                                  std::to_string(animation_identifier));
     }
     const auto& clip = found->second;
-    const bool cyclic = (clip.flags & 0x80000000u) != 0;
+    // A death state can play a cyclic asset clip once and hold its final fallen pose.
+    const bool cyclic = !force_non_cyclic && (clip.flags & 0x80000000u) != 0;
     if (clip.duration > 0)
     {
         time = cyclic ? std::fmod(time, clip.duration) : std::min(time, clip.duration);
@@ -257,7 +262,7 @@ sample_bone_pose(const SkeletalAnimationSet& animations, int animation_identifie
         const auto rotation =
             bone_index < clip.bone_rotations.size()
                 ? sample_bone_rotation(
-                      clip.bone_rotations[bone_index], time, clip.duration, (clip.flags & 0x80000000u) != 0)
+                      clip.bone_rotations[bone_index], time, clip.duration, cyclic)
                 : glm::quat{1, 0, 0, 0};
         pose[bone_index] = glm::translate(glm::mat4(1), glm::vec3(position.x, position.y, position.z)) *
                            glm::mat4_cast(rotation);

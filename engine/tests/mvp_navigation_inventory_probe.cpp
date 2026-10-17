@@ -195,9 +195,19 @@ int main()
         {
             player_only_cheat.tick(player_only_fire);
         }
+        const auto enemy_weapon = std::find_if(
+            cheat_scope_scene.weapons.begin(),
+            cheat_scope_scene.weapons.end(),
+            [&](const auto& weapon) { return weapon.identifier == cheat_scope_scene.actors.front().weapon_identifier; });
+        const std::uint32_t enemy_magazine_capacity =
+            enemy_weapon == cheat_scope_scene.weapons.end()
+                ? cheat_scope_scene.weapon_parameters.magazine_capacity
+                : enemy_weapon->parameters.magazine_capacity;
         require(player_only_cheat.actors().front().health < enemy_health_before_cheat &&
+                    player_only_cheat.actors().front().ammunition_in_clip <= enemy_magazine_capacity &&
+                    player_only_cheat.actors().front().ammunition_in_clip != 999 &&
                     player_only_cheat.health() == cheat_scope_scene.player_parameters.maximum_health,
-                "Developer protection must apply only to the player while enemies remain damageable");
+                "Player-only cheats must leave enemy health and finite weapon magazines under normal AI control");
 
         // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();

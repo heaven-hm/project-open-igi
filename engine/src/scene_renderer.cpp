@@ -956,7 +956,11 @@ void SceneRenderer::render(const MissionScene& scene,
         const auto& animations = scene.actors[actor_index].animations;
         const auto pose =
             animations
-                ? sample_bone_pose(*animations, actor.animation_identifier, actor.animation_time)
+                ? sample_bone_pose(*animations,
+                                   actor.animation_identifier,
+                                   actor.animation_time,
+                                   false,
+                                   actor.behavior == ActorBehavior::dead)
                 : std::vector<glm::mat4>{};
         for (auto surface : mesh->triangles)
         {
