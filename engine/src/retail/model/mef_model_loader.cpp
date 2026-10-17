@@ -9,9 +9,12 @@
 namespace igi::retail::model {
 namespace {
 
-// Source: CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.cpp.
-// Original IGI.EXE native: DynObj_LocalModelsSMef - VA 0x004CF390.
-// Retail evidence: ev_0058f0bca939b5f1425ff13a7b66ab40a13e5437023203f4895513bf504c3e7c.
+// DynObj_LocalModelsSMef - 0x004CF390 - Native static evidence: CFG 0.991 (PASS), RE-Agent 5/6; port runtime parity unverified.
+// Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
+// Evidence: ev_0058f0bca939b5f1425ff13a7b66ab40a13e5437023203f4895513bf504c3e7c;
+// RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF390, CFG 0.991, 5/6).
+// The catalog name is provisional: REA labels this procedure FUN_004cf390.
+// Source export: assets/BinaryNinja/natives/CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.cpp.
 constexpr std::size_t container_header_size = 20U;
 // Original IGI.EXE chunk-navigation helpers: 0x004B7490, 0x004B74D0,
 // 0x004B7590 and 0x004B7470. Their decompilation evidence IDs are recorded below.

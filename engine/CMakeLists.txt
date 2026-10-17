@@ -10,6 +10,7 @@ add_library(igi_retail_engine STATIC
     src/retail/core/frame_natives.cpp
     src/retail/diagnostics/log_record.cpp
     src/retail/model/mef_model_loader.cpp
+    src/retail/model/model_texture_package.cpp
     src/retail/resource/resource_archive.cpp
     src/retail/texture/loop_terrain_texture.cpp
 )
@@ -82,6 +83,14 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_mef_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_mef_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_mef_tests COMMAND igi_retail_mef_tests)
+
+    add_executable(igi_retail_mtp_tests
+        tests/model/model_texture_package_test.cpp
+    )
+
+    target_link_libraries(igi_retail_mtp_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_mtp_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_mtp_tests COMMAND igi_retail_mtp_tests)
 
     add_executable(igi_retail_resource_tests
         tests/resource/resource_archive_test.cpp

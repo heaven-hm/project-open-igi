@@ -32,7 +32,11 @@ struct LoopTerrainTextureFile {
     std::vector<std::byte> palette_bytes;
     std::vector<LoopTerrainTextureRecord> records;
 
-    // Original IGI.EXE native: Terrain_TextureFileNotOfRequ at VA 0x005175A0.
+    // Terrain_TextureFileNotOfRequ - 0x005175A0 - Native static evidence: CFG 1.000 (PASS), RE-Agent 5/6; port runtime parity unverified.
+    // Tools: Ghidra/REA and Radare2; runtime parity is not verified.
+    // Evidence: REA ev_949b22183952b274cb5402e31a7491f1ff8052c92b2457e7ec630aea93dc69ca;
+    // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x005175A0, CFG 1.000, 5/6).
+    // The catalog name is provisional: REA labels this procedure FUN_005175a0.
     // The native builds dispatch records for 0x004B23B0; pixel upload is performed
     // by registered renderer operations and is not part of this parser result.
     [[nodiscard]] static LoopTerrainTextureFile Terrain_TextureFileNotOfRequ(
@@ -46,9 +50,10 @@ struct LoopModelTextureFile {
     std::array<std::uint32_t, 6U> operation_arguments{};
     std::size_t pixel_data_offset = 0U;
 
-    // Original IGI.EXE address 0x004B24C0. The address has no confirmed native
-    // symbol in the current REA database, so this local name describes its observed
-    // role and does not claim to be an original retail symbol.
+    // Texture_LoadModelFile_004B24C0 - 0x004B24C0 - Static analysis only; symbol and CFG parity are not verified.
+    // Tools: Ghidra/REA and Binary Ninja; runtime behavior is not verified.
+    // Evidence: REA ev_133bd2573eab1beb3490cc8b39abb71ad6028c93b45eb5dc9b80cef6273f5214.
+    // This address-qualified local name is descriptive, not a confirmed retail symbol.
     [[nodiscard]] static LoopModelTextureFile Texture_LoadModelFile_004B24C0(
         std::span<const std::byte> file_bytes);
 };
