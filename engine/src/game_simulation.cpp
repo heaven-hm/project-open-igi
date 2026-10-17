@@ -33,8 +33,9 @@ WorldPosition3 engine_position(Vector3 position)
             static_cast<double>(position.z) * units_per_metre};
 }
 
-// Retail IGI.EXE native Ladder_Update at VA 0x004404C0 (static CFG score: 1.000).
-// This named C++ predicate is a port candidate; runtime parity is not yet verified.
+// Original IGI.EXE game native: Ladder_Update at VA 0x004404C0 (static CFG score: 1.000).
+// This C++ helper ports only the ladder activation-eligibility check, not the full native routine.
+// Runtime parity for this helper has not yet been verified.
 bool HumanPlayer_CanActivateLadder(const SceneLadder& ladder,
                                    Vector3 player_position_metres,
                                    float player_yaw,
@@ -490,8 +491,8 @@ void GameSimulation::advance_player(const PlayerInput& input)
                 active_ladder_index_ = idx;
                 smallest_angular_error = angular_error;
                 just_mounted = true;
-                // Retail IGI.EXE native Ladder_Mount at VA 0x004113E0 (static CFG score: 0.9885).
-                // This C++ mount path is a port candidate; runtime parity is not yet verified.
+                // Original IGI.EXE game native: Ladder_Mount at VA 0x004113E0 (static CFG score: 0.9885).
+                // This C++ path ports the player placement and heading effects; runtime parity is unverified.
                 const Vector3 mount_position = activate_from_top ? ladder.top_mount : ladder.bottom_mount;
                 player_.world_position = engine_position(mount_position);
                 heading_ = std::remainder(ladder.player_yaw, 2.0f * std::numbers::pi_v<float>);
