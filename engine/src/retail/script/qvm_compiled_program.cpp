@@ -32,6 +32,36 @@ constexpr std::size_t field_38_offset = 0x38U;
     return {begin_offset, end_offset, file_bytes.subspan(begin, length)};
 }
 
+[[nodiscard]] std::optional<QvmIndexedStringTable> read_indexed_string_table(
+    std::span<const std::byte> file_bytes,
+    std::uint32_t table_begin_offset,
+    std::uint32_t table_end_offset,
+    std::uint32_t table_size_bytes,
+    std::uint32_t string_pool_size)
+{
+    if (table_size_bytes == 0U) {
+        return std::nullopt;
+    }
+
+    if (table_end_offset < table_begin_offset
+        || table_end_offset - table_begin_offset != table_size_bytes) {
+        throw QvmFormatError("QVM indexed string table boundaries do not match the retail byte size.");
+    }
+
+    const std::uint64_t string_pool_end =
+        static_cast<std::uint64_t>(table_end_offset) + string_pool_size;
+    if (string_pool_end > file_bytes.size()) {
+        throw QvmFormatError("QVM indexed string pool extends beyond the available file bytes.");
+    }
+
+    const std::uint32_t pool_end_offset = static_cast<std::uint32_t>(string_pool_end);
+    return QvmIndexedStringTable{
+        .offset_table = read_file_region(file_bytes, table_begin_offset, table_end_offset),
+        .string_pool = read_file_region(file_bytes, table_end_offset, pool_end_offset),
+        .index_limit_bytes = table_size_bytes,
+    };
+}
+
 [[nodiscard]] std::uint32_t read_little_endian_uint32(
     std::span<const std::byte> file_bytes,
     std::size_t field_offset)
@@ -49,6 +79,35 @@ constexpr std::size_t field_38_offset = 0x38U;
 }
 
 } // namespace
+
+std::optional<std::string_view> QvmIndexedStringTable::try_get(std::uint32_t entry_index) const noexcept
+{
+    if (entry_index >= index_limit_bytes) {
+        return std::nullopt;
+    }
+
+    const std::size_t entry_offset = static_cast<std::size_t>(entry_index) * sizeof(std::uint32_t);
+    if (entry_offset > offset_table.bytes.size()
+        || sizeof(std::uint32_t) > offset_table.bytes.size() - entry_offset) {
+        return std::nullopt;
+    }
+
+    std::uint32_t string_offset = 0U;
+    for (std::size_t byte_index = 0U; byte_index < sizeof(string_offset); ++byte_index) {
+        string_offset |= std::to_integer<std::uint32_t>(offset_table.bytes[entry_offset + byte_index])
+            << static_cast<unsigned int>(byte_index * 8U);
+    }
+    if (string_offset >= string_pool.bytes.size()) {
+        return std::nullopt;
+    }
+
+    const std::size_t string_begin = static_cast<std::size_t>(string_offset);
+    const char* string_data = reinterpret_cast<const char*>(string_pool.bytes.data() + string_begin);
+    const char* string_pool_end = reinterpret_cast<const char*>(
+        string_pool.bytes.data() + string_pool.bytes.size());
+    const char* string_end = std::find(string_data, string_pool_end, '\0');
+    return std::string_view(string_data, static_cast<std::size_t>(string_end - string_data));
+}
 
 QvmCompiledProgram Qvm_LoadCompiledProgram(std::span<const std::byte> file_bytes)
 {
@@ -77,16 +136,20 @@ QvmCompiledProgram Qvm_LoadCompiledProgram(std::span<const std::byte> file_bytes
     }
 
     if (program.fields_0c_through_28[2U] != 0U) {
-        program.first_header_referenced_region = read_file_region(
+        program.symbol_names = read_indexed_string_table(
             file_bytes,
             program.fields_0c_through_28[0U],
-            program.fields_0c_through_28[1U]);
+            program.fields_0c_through_28[1U],
+            program.fields_0c_through_28[2U],
+            program.fields_0c_through_28[3U]);
     }
     if (program.fields_0c_through_28[6U] != 0U) {
-        program.second_header_referenced_region = read_file_region(
+        program.string_constants = read_indexed_string_table(
             file_bytes,
             program.fields_0c_through_28[4U],
-            program.fields_0c_through_28[5U]);
+            program.fields_0c_through_28[5U],
+            program.fields_0c_through_28[6U],
+            program.fields_0c_through_28[7U]);
     }
 
     const std::uint32_t code_offset = read_little_endian_uint32(file_bytes, code_offset_field_offset);

@@ -12,7 +12,9 @@ add_library(igi_retail_engine STATIC
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
     src/retail/resource/resource_archive.cpp
+    src/retail/resource/resource_cache.cpp
     src/retail/script/qvm_compiled_program.cpp
+    src/retail/script/qvm_loader.cpp
     src/retail/texture/loop_terrain_texture.cpp
 )
 
