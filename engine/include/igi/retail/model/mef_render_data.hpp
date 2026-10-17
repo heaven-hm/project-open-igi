@@ -30,7 +30,7 @@ struct MefRenderData
     std::vector<MefRenderBatch> batches;
 };
 
-// DisplayRender_Processmodelsnotconvert - 0x0049DF60 - static translation slice; runtime parity unverified.
+// DisplayRender_DrawModel - 0x0049DF60 - static translation slice; runtime parity unverified.
 // Source: IGI.EXE SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Binary Ninja export and radare2 assembly establish 28/32-byte batch headers and linked index lists.
 // Vertex upload at 0x0049B4B0 copies 32-byte format-0 and 40-byte format-3 records.

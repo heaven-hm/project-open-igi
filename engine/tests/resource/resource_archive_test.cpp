@@ -155,7 +155,7 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
         }
 
         const igi::retail::model::MefModel model =
-            igi::retail::model::MefModel::DynObj_LocalModelsSMef(entry.body);
+            igi::retail::model::MefModel::DynObj_LoadModelMesh(entry.body);
         const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
         ++model_resource_count;
         switch (model.render_format) {
@@ -174,8 +174,8 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
             && render_chunks.vertex_stream != nullptr) {
             ++model_with_render_chunks_count;
 
-            // FUN_0049B4B0 copies format-0 records with stride 0x20 and format-3
-            // records with stride 0x28. FUN_0049B700 reads format-1 source records
+            // retail routine 0x0049B4B0 copies format-0 records with stride 0x20 and format-3
+            // records with stride 0x28. retail routine 0x0049B700 reads format-1 source records
             // with stride 0x28. Static evidence IDs:
             // ev_9b668df201c621c75f6217a02978f1ca7db796fba2784227a7ddbe490e0ef2e5
             // and ev_e831fe78437d49cf51225556ea082e70d37f8bfbbcfc05e4ba18ba1e0a5ff8bc.
@@ -201,7 +201,7 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     }
     require(model_resource_count > 0U, "Level 1 model RES contains embedded MEF resources");
     require(diffuse_model_count + skinned_model_count + lightmapped_model_count == model_resource_count,
-        "every Level 1 MEF uses a renderer format accepted by FUN_0049FB10");
+        "every Level 1 MEF uses a renderer format accepted by retail routine 0x0049FB10");
     require(model_with_render_chunks_count == model_resource_count,
         "every Level 1 MEF has D3DR, REND, and VRTX chunks for the retail render path");
     require(empty_format_three_model_count == 4U,
@@ -210,7 +210,7 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     const auto* model_entry = archive.find("LOCAL:models/210_01_1.mef");
     require(model_entry != nullptr, "Level 1 archive resolves the first model resource");
 
-    const auto model = igi::retail::model::MefModel::DynObj_LocalModelsSMef(model_entry->body);
+    const auto model = igi::retail::model::MefModel::DynObj_LoadModelMesh(model_entry->body);
     require(model.version == 0.1F, "embedded MEF version is accepted by the retail MEF routine");
     std::cout << "Level 1 Resource_Load/Sys_Resource test passed: "
               << archive.entries.size() << " entries; "

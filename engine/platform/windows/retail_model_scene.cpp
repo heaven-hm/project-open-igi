@@ -269,7 +269,7 @@ struct Scene
             auto package = std::make_unique<Package>();
             const auto bytes =
                 resource::Resource_Load(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::DynObj_InsertHashItem(bytes->bytes);
+            package->metadata = model::MtpPackage::DynObj_LoadModelTexturePackage(bytes->bytes);
             package->meshes =
                 resource::Resource_Load(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
@@ -389,7 +389,7 @@ struct Scene
                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
                 }
                 geometry = std::make_shared<model::MefRenderData>(model::Display_DecodeMeshRenderData(
-                    model::MefModel::DynObj_LocalModelsSMef(entry->body)));
+                    model::MefModel::DynObj_LoadModelMesh(entry->body)));
             }
             object.geometry = geometry;
             std::ostringstream record;

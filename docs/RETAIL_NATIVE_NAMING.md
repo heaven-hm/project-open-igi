@@ -21,3 +21,23 @@ Keep QVM symbol strings exactly as shipped in the retail scripts because they ar
 - `HumanPlayer_CanActivateLadder()` ports the activation-eligibility check associated with original `Ladder_Update` at `0x004404C0`; it is not the complete native routine.
 - The ladder mount path ports selected placement and heading effects associated with original `Ladder_Mount` at `0x004113E0`; runtime parity remains unverified.
 - Retail-derived sound parsing, definition, bank, and mixing routines use the `SoundSystem_` prefix; comments identify the corresponding retail routine or callback and available evidence. Portable SDL and file-system adapters are not retail Windows natives.
+
+## Evidence-backed names — 2026-10-18
+
+A stripped executable does not disclose original C++ symbol spellings. The following are descriptive
+names supported by observed bodies, not claims that original source symbols were recovered.
+Addresses and old aliases remain in evidence records. QVM/export strings are not renamed.
+
+| Retail address | Descriptive C++ name | Previous misleading alias | Verified role |
+| --- | --- | --- | --- |
+| 0x004B80B0 | Qvm_Load | unchanged | Script resource load/compiled selection path |
+| 0x004B5F00 | Resource_Load | unchanged | Resource lookup/load |
+| 0x004CF080 | DynObj_LoadModelTexturePackage | DynObj_InsertHashItem | Model/texture package resource and metadata path |
+| 0x004CF390 | DynObj_LoadModelMesh | DynObj_LocalModelsSMef | Mesh resource and metadata initialization |
+| 0x0049DF60 | DisplayRender_DrawModel | DisplayRender_Processmodelsnotconvert | Model render path with LOD/context/device dispatch; full port pending |
+| 0x004D0CF0 | Model_GetAttachment | Render_DrawBoneMesh_2 | Return attachment record through model/resource/mesh pointers |
+| 0x004D0D10 | Model_GetAttachmentCount | Render_DrawSplineMesh_2 | Return signed MESH attachment count |
+
+The two attachment names have exhaustive original-instruction differential results. Other rows retain
+their existing per-method verification limits; naming agreement is not a behavioral parity score.
+Unresolved identities remain explicitly unresolved rather than receiving an invented action name.

@@ -108,13 +108,13 @@ void testRetailIlffChunkAlignmentAndTagSearch() {
 
 void testRetailMefLoaderBindsMeshAndKnownChunks() {
     const std::vector<std::byte> file_bytes = make_model_bytes();
-    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+    const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
 
     if (model.version != 0.1F || model.mesh_header.size() != MefModel::mesh_header_size
         || !model.attachments.has_value() || model.attachments->payload.size() != 4U
         || model.legacy_vertices.has_value() || model.portals.has_value()
         || model.portal_faces.has_value() || model.portal_vertices.has_value()) {
-        throw std::runtime_error("DynObj_LocalModelsSMef did not bind the retail model resource fields.");
+        throw std::runtime_error("DynObj_LoadModelMesh did not bind the retail model resource fields.");
     }
 }
 
@@ -126,16 +126,16 @@ void testRetailMefLoaderAcceptsOnlyRetailRenderFormats() {
     }};
     for (const auto& [raw_format, expected_format] : supported_formats) {
         const std::vector<std::byte> file_bytes = make_model_bytes(raw_format);
-        const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+        const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
         if (model.render_format != expected_format) {
-            throw std::runtime_error("FUN_0049FB10 render format was not retained from MESH+0x20.");
+            throw std::runtime_error("retail routine 0x0049FB10 render format was not retained from MESH+0x20.");
         }
     }
 
     bool rejected_unsupported_format = false;
     try {
         const std::vector<std::byte> file_bytes = make_model_bytes(2U);
-        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+        static_cast<void>(MefModel::DynObj_LoadModelMesh(file_bytes));
     } catch (const MefFormatError& exception) {
         rejected_unsupported_format = std::string(exception.what()) == "Mesh format not supported";
     }
@@ -153,7 +153,7 @@ void testRetailD3drHeaderReadsFormatSpecificCounts() {
     write_u32(diffuse_header, 12U, 120U);
     const auto diffuse = MefRenderHeader_ReadRetail(diffuse_header, MefRenderFormat::diffuse);
     if (diffuse.submesh_count != 5U || diffuse.vertex_count != 120U) {
-        throw std::runtime_error("FUN_0049FB10 read the format-0 D3DR counters from incorrect offsets.");
+        throw std::runtime_error("retail routine 0x0049FB10 read the format-0 D3DR counters from incorrect offsets.");
     }
 
     std::vector<std::byte> skinned_header(56U);
@@ -206,7 +206,7 @@ void testRetailD3drHeaderReadsFormatSpecificCounts() {
 
 void testRetailMefLoaderExposesRetailRenderChunks() {
     const std::vector<std::byte> file_bytes = make_render_model_bytes();
-    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+    const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
     const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
 
     if (render_chunks.d3d_render_header == nullptr
@@ -226,7 +226,7 @@ void testRetailMefLoaderRejectsUnsupportedVersion() {
 
     bool rejected_version = false;
     try {
-        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+        static_cast<void>(MefModel::DynObj_LoadModelMesh(file_bytes));
     } catch (const MefFormatError&) {
         rejected_version = true;
     }
@@ -242,7 +242,7 @@ void testRetailMefLoaderRejectsTruncation() {
 
     bool rejected_file = false;
     try {
-        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+        static_cast<void>(MefModel::DynObj_LoadModelMesh(file_bytes));
     } catch (const MefFormatError&) {
         rejected_file = true;
     }
@@ -277,7 +277,7 @@ void testRetailSkinnedVertexUsesNativeRecordOffsets() {
         || vertex.normal_z != 1.0F || vertex.diffuse_u != 0.25F || vertex.diffuse_v != 0.75F
         || vertex.influence_weight != 0.5F || vertex.target_vertex_index != 0x1234U
         || vertex.bone_index != 0x5678U) {
-        throw std::runtime_error("FUN_0049b700 skinned vertex fields were read at incorrect record offsets.");
+        throw std::runtime_error("retail routine 0x0049B700 skinned vertex fields were read at incorrect record offsets.");
     }
 
     bool rejected_wrong_record_size = false;
@@ -306,7 +306,7 @@ MefModel loadMefAsset(const std::filesystem::path& model_path) {
         file_bytes[byte_index] = static_cast<std::byte>(static_cast<unsigned char>(file_characters[byte_index]));
     }
 
-    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+    const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
     if (model.mesh_header.size() != MefModel::mesh_header_size) {
         throw std::runtime_error("MESH header length differs from the retail loader's accessed layout.");
     }

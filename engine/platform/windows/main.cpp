@@ -117,7 +117,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
     }
 
     const igi::retail::model::MefModel model =
-        igi::retail::model::MefModel::DynObj_LocalModelsSMef(selected_entry->body);
+        igi::retail::model::MefModel::DynObj_LoadModelMesh(selected_entry->body);
     const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
 
     std::ostringstream resource_log;
@@ -127,7 +127,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
     log_message(resource_log.str(), igi::retail::diagnostics::LogLevel::info, "resource");
 
     std::ostringstream model_log;
-    model_log << "DynObj_LocalModelsSMef completed; version=" << model.version
+    model_log << "DynObj_LoadModelMesh completed; version=" << model.version
               << "; header_bytes=" << model.mesh_header.size()
               << "; chunks=" << model.container.chunks.size()
               << "; D3DR_bytes="
@@ -149,7 +149,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
         debug_overlay_lines = {
             L"Resource_Load - VA 0x004B5F00.",
             L"Sys_Resource - VA 0x004B5F80.",
-            L"DynObj_LocalModelsSMef - VA 0x004CF390.",
+            L"DynObj_LoadModelMesh - VA 0x004CF390.",
             L"Resource entries loaded: " + std::to_wstring(archive.entries.size()),
             L"Selected resource: " + widen_ascii(selected_entry->name),
             L"Embedded resource bytes: " + std::to_wstring(selected_entry->body.size()),

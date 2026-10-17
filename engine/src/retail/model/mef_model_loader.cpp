@@ -9,11 +9,11 @@
 namespace igi::retail::model {
 namespace {
 
-// DynObj_LocalModelsSMef - 0x004CF390 - Native static evidence: CFG 0.991 (PASS), RE-Agent 5/6; port runtime parity unverified.
+// DynObj_LoadModelMesh - 0x004CF390 - Native static evidence: CFG 0.991 (PASS), RE-Agent 5/6; port runtime parity unverified.
 // Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
 // Evidence: ev_0058f0bca939b5f1425ff13a7b66ab40a13e5437023203f4895513bf504c3e7c;
 // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF390, CFG 0.991, 5/6).
-// The catalog name is provisional: REA labels this procedure FUN_004cf390.
+// The catalog name is provisional: REA labels this procedure retail routine 0x004CF390.
 // Source export: assets/BinaryNinja/natives/CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.cpp.
 constexpr std::size_t container_header_size = 20U;
 // Original IGI.EXE chunk-navigation helpers: 0x004B7490, 0x004B74D0,
@@ -183,7 +183,7 @@ std::uint32_t Ilff_ReadLittleEndian32(std::span<const std::byte> bytes, std::siz
 MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> record_bytes) {
     constexpr std::size_t record_size = 40U;
     if (record_bytes.size() != record_size) {
-        throw MefFormatError("FUN_0049b700 consumes a 40-byte skinned vertex record.");
+        throw MefFormatError("retail routine 0x0049B700 consumes a 40-byte skinned vertex record.");
     }
 
     const auto read_float = [record_bytes](std::size_t offset) {
@@ -280,17 +280,19 @@ IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes) {
     return read_container(bytes, 0U);
 }
 
-MefModel MefModel::DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes) {
+// DynObj_LoadModelMesh() - 0x004CF390 - REA/Ghidra + Binary Ninja; source CFG 0.991.
+// Former catalog alias: DynObj_LocalModelsSMef. Full loader runtime parity pending.
+MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes) {
     MefModel model{};
     model.container = Ilff_ReadContainer(file_bytes);
 
     if (model.container.form_type != form_ocem) {
-        throw MefFormatError("Retail DynObj_LocalModelsSMef expects an OCEM model container.");
+        throw MefFormatError("Retail DynObj_LoadModelMesh expects an OCEM model container.");
     }
 
     const IlffChunk* mesh_chunk = model.container.find_first(mef_tag::mesh);
     if (mesh_chunk == nullptr) {
-        throw MefFormatError("Retail DynObj_LocalModelsSMef could not find its MESH chunk.");
+        throw MefFormatError("Retail DynObj_LoadModelMesh could not find its MESH chunk.");
     }
 
     if (mesh_chunk->payload.size() < minimum_mesh_header_size) {

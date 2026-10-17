@@ -135,7 +135,7 @@ std::vector<std::byte> make_fixture_mtp()
 void test_native_mtp_instance_and_gtt_decoding()
 {
     const std::vector<std::byte> file_bytes = make_fixture_mtp();
-    const MtpPackage package = MtpPackage::DynObj_InsertHashItem(file_bytes);
+    const MtpPackage package = MtpPackage::DynObj_LoadModelTexturePackage(file_bytes);
     require(package.root_tag == 0x494C4646U, "MTP root tag is retained without interpreting it");
     require(package.model_names.size() == 1U && package.model_names[0U] == "model_a.mef",
         "MODS model names are loaded");
@@ -156,7 +156,7 @@ void test_rejects_truncated_mtp_chunks()
     file_bytes.resize(24U);
     bool rejected = false;
     try {
-        static_cast<void>(MtpPackage::DynObj_InsertHashItem(file_bytes));
+        static_cast<void>(MtpPackage::DynObj_LoadModelTexturePackage(file_bytes));
     } catch (const MtpFormatError&) {
         rejected = true;
     }
@@ -166,7 +166,7 @@ void test_rejects_truncated_mtp_chunks()
 void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
 {
     const std::vector<std::byte> file_bytes = read_file(mtp_path);
-    const MtpPackage package = MtpPackage::DynObj_InsertHashItem(file_bytes);
+    const MtpPackage package = MtpPackage::DynObj_LoadModelTexturePackage(file_bytes);
     const std::filesystem::path level_path = mtp_path.parent_path();
     const igi::retail::resource::ResourceArchive model_archive =
         igi::retail::resource::Resource_Load(level_path / "MODELS" / "LEVEL1.RES");
@@ -223,7 +223,7 @@ void test_level_one_mtp_file(const std::filesystem::path& mtp_path)
         mapped_material_count += instance.material_reference_indices.size();
     }
 
-    std::cout << "Level 1 DynObj_InsertHashItem package verified: file=" << mtp_path
+    std::cout << "Level 1 DynObj_LoadModelTexturePackage package verified: file=" << mtp_path
               << "; model names=" << package.model_names.size()
               << "; matched MEFs=" << matched_model_count
               << "; parsed model TEX files=" << parsed_model_texture_count

@@ -150,12 +150,14 @@ struct NativeChunkView {
 
 } // namespace
 
-// DynObj_InsertHashItem - 0x004CF080 - Native static evidence: CFG 1.000 (PASS), RE-Agent 5/6; port runtime parity unverified.
+// DynObj_LoadModelTexturePackage - 0x004CF080 - Native static evidence: CFG 1.000 (PASS), RE-Agent 5/6; port runtime parity unverified.
 // Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
 // Evidence: REA ev_b115c5dcf8484fa999611be81df70c28a1e3299552c8cf4c96817bd6883cc409;
 // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF080, CFG 1.000, 5/6).
-// The catalog name is provisional: REA labels this procedure FUN_004cf080.
-MtpPackage MtpPackage::DynObj_InsertHashItem(std::span<const std::byte> file_bytes)
+// The catalog name is provisional: REA labels this procedure retail routine 0x004CF080.
+// DynObj_LoadModelTexturePackage() - 0x004CF080 - REA/Ghidra + Binary Ninja; source CFG 1.000.
+// Former catalog alias: DynObj_InsertHashItem. Package parsing slice; full loader parity pending.
+MtpPackage MtpPackage::DynObj_LoadModelTexturePackage(std::span<const std::byte> file_bytes)
 {
     MtpPackage package{};
     const std::vector<NativeChunkView> chunks = read_native_chunks(file_bytes, package.root_tag);
