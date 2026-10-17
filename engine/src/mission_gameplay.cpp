@@ -402,7 +402,7 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
         const QvmInitializer script{BinaryView(bytes)};
         for (const auto& call : script.calls())
         {
-            if (call.function != "DefineWeaponType" || call.arguments.size() < 46)
+            if (call.function != "DefineWeaponType" || call.arguments.size() < 30)
             {
                 continue;
             }
@@ -458,8 +458,11 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 throw std::runtime_error("Invalid original projectile count for " + weapon.identifier);
             }
             weapon.parameters.projectiles_per_round = static_cast<std::int32_t>(projectiles_per_round);
-            weapon.fire_sound_name = arguments[44].text;
-            weapon.fire_loop_end_sound_name = arguments[45].text;
+            if (arguments.size() >= 46)
+            {
+                weapon.fire_sound_name = arguments[44].text;
+                weapon.fire_loop_end_sound_name = arguments[45].text;
+            }
             weapon.parameters.minimum_spread_degrees = static_cast<float>(arguments[18].number);
             weapon.parameters.maximum_spread_degrees = static_cast<float>(arguments[19].number);
             weapon.parameters.fixed_recoil_pitch_degrees = static_cast<float>(arguments[20].number);
