@@ -133,6 +133,21 @@ in the asset was not consumed, matching the frame-count-driven decode.
 Static REA and Radare2 parity and the C# asset cross-check are recorded above. This slice has not yet been
 compared against a live retail process under CrossOver, and it is not connected to the Windows bootstrap or a Level 1 mixer.
 
+### Bounded Level 1 ILSF frame reader
+
+`SoundIlsfStreamReader` now consumes the loader's 20-byte ILSF header and returns channel-interleaved 16-bit
+frames in bounded reads. The four format values are accepted as the two PCM and two ADPCM branches visible in
+`FUN_00495f70`; the source is not expanded into one large sample allocation. Its ADPCM chunk boundary replays the
+last partially consumed encoded byte before calling `Sound_DecodeAdpcmFrames_00496280`, preserving the retail
+decoder contract rather than the C# reader's different forward-only nibble carry.
+
+Tests cover odd mono ADPCM chunk boundaries against one-call retail decoding, stereo PCM endianness, unsigned
+8-bit PCM conversion, restart/reset behavior, nonseekable input, truncated input, and all loose Level 1 sound
+files. The Level 1 corpus run read 28 files and 10,993,598 frames (26 streamed ADPCM, 2 streamed PCM). This is
+sample decoding only: no sound definitions, event dispatch, mixer, DirectSound playback, or live retail audio
+comparison is wired into the game executable yet.
+
+
 ### Retail compiled QVM header and bytecode boundary
 
 `Qvm_Load` at `0x004B80B0` is listed in the manually tested native catalog at
@@ -142,12 +157,16 @@ file length greater than `0x3B`. It obtains the compiled bytecode span from `bas
 dword `[0x30]` (REA/Ghidra evidence `ev_bd052fcbe23ffdb47535d836372b20f7c7e07a937dfd95604e67a7ccf6b29747`, retail
 `igi.exe` SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`).
 
-`Qvm_LoadCompiledProgram` (retail address `0x004BD220`) implements that header gate and code-span selection with bounds checks. Other
-header dwords remain named by offset because their semantics are not established by this native. Unit tests cover
-signature/revision/code-range rejection and a corpus run against Level 1 `OBJECTS.QVM`, `MISSION.QVM`, and every
-`AI/*.QVM` file. The corpus run accepted 39 compiled QVM files. This proves that the header and code ranges are
-readable; it does **not** execute bytecode or prove the `Task_New` object transforms. The Level 1 fixed placement
-records still need to be followed through the retail QVM interpreter and task constructors.
+`Qvm_Load` (`0x004B80B0`) now obtains loose Level 1 script bytes through the `Resource_Load` cache slice
+(`0x004B5F00`) and passes those retained bytes to `Qvm_LoadCompiledProgram` (`0x004BD220`). `Resource_Load`
+returns a stable resource handle and exposes the actual byte-buffer address; cache hits return the same address,
+and `Resource_Unload` (`0x004B6380`) drops the registry reference while an active handle keeps the bytes alive.
+The host path adapter does not yet reproduce retail virtual-file aliases, archive unpacking, or QSC source fallback.
+Unit tests cover signature/revision/code-range rejection, resource address/cache behavior, and a corpus run against
+Level 1 `OBJECTS.QVM`, `MISSION.QVM`, and every `AI/*.QVM` file. The corpus run accepted 39 compiled QVM files
+and logged each resource address and byte count. This proves that the files are loaded and their compiled header
+and code ranges are readable; it does **not** execute bytecode or prove the `Task_New` object transforms. The Level
+1 fixed placement records still need to be followed through the retail QVM interpreter and task constructors.
 
 The same manual catalog identifies `QvmCompile` (`0x004B85B0`), `QscCompile` (`0x004B8410`), `QtaskUpdate`
 (`0x004F0E90`), `TasktypeSet` (`0x004B8810`), `QTaskHashTableSet` (`0x004BAAC0`), and `GraphOpen`

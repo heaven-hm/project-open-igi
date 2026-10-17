@@ -5,6 +5,7 @@ project(igi_clean_room_engine LANGUAGES CXX)
 add_library(igi_retail_engine STATIC
     src/retail/audio/sound_key_functions.cpp
     src/retail/audio/sound_ilsf_header.cpp
+    src/retail/audio/sound_ilsf_stream_reader.cpp
     src/retail/audio/sound_adpcm_decoder.cpp
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
@@ -55,6 +56,13 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_sound_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_sound_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_sound_tests COMMAND igi_retail_sound_tests)
+
+    add_executable(igi_retail_ilsf_stream_tests
+        tests/audio/sound_ilsf_stream_reader_test.cpp
+    )
+    target_link_libraries(igi_retail_ilsf_stream_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_ilsf_stream_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_ilsf_stream_tests COMMAND igi_retail_ilsf_stream_tests)
 
     add_executable(igi_retail_adpcm_tests
         tests/audio/sound_adpcm_decoder_test.cpp

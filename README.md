@@ -8,7 +8,34 @@ This repository is the game-engine implementation. It is not an editor, converte
 
 The active Level 1 MVP is documented in MVP.md, with its required implementation sequence in plan.md: build the Windows x86 baseline; render models at transforms from OBJECTS.QVM; render terrain and textures; verify all visual assets and placements; then implement the playable simulation, player, physics/interactions, AI/navigation, health/damage, weapons, gameplay animation/effects, QVM flow, and sound.
 
-The current executable is still a DirectDraw 7 diagnostic window with resource/MEF metadata loading. The project has tests for several resource formats, but it does not yet render a Level 1 scene or provide a playable mission. Audio code is not yet integrated into the executable. Do not describe the game as playable until the Level 1 end-to-end gate passes.
+### Task 1: early 3D model loading from QVM
+
+The Windows executable now renders textured MEF models at declared `OBJECTS.QVM` positions using Direct3D 7.
+MTP packages connect the models and materials to their original RES archives. All 14 levels produced a saved
+rendered frame in the current scene test. Level 1 draws 441 initial model poses with 190 textures.
+
+```console
+open-igi.exe window level1
+open-igi.exe window level5
+```
+
+Place the executable in the original game directory. These are model-loading scenes, not playable missions.
+The camera and lighting are diagnostic; terrain, skinned actors, recursive attachments and other task types remain
+incomplete. Some source model references remain unresolved. See the [test results, all 14 captures and native
+address/name table](docs/TASK1_MODEL_LOADING.md) for coverage and limits.
+
+| Level 1 | Level 3 |
+|---|---|
+| ![Level 1 textured models](docs/screenshots/task1/level1-models.png) | ![Level 3 textured models](docs/screenshots/task1/level3-models.png) |
+
+| Level 11 | Level 14 |
+|---|---|
+| ![Level 11 textured models](docs/screenshots/task1/level11-models.png) | ![Level 14 textured models](docs/screenshots/task1/level14-models.png) |
+
+Primary native anchors: `Qvm_Load` (`0x004B80B0`), `Resource_Load` (`0x004B5F00`),
+`DynObj_InsertHashItem_14` (`0x004CF080`), `DynObj_LocalModelsSMef` (`0x004CF390`) and
+`DisplayRender_Processmodelsnotconvert` (`0x0049DF60`). Names and addresses identify the research sources;
+complete retail behavioral parity is not established by compilation or these screenshots.
 
 Movies/cutscenes, vehicles, smoke effects, and the main menu are outside this playable-demo scope unless a Level 1 dependency is proven.
 
