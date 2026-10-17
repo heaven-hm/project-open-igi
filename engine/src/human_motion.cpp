@@ -25,7 +25,23 @@ HumanFallImpact HumanFallDamage_Calculate(float vertical_velocity_units_per_tick
                          (1.0F / lethal_speed_range_metres_per_second) * maximum_health;
     const float view_kick_units =
         -std::clamp(speed_metres_per_second * 0.125F, 0.0F, 1.0F) * maximum_view_kick_units;
-    return {speed_metres_per_second, damage, view_kick_units};
+    std::string_view sound_definition_name;
+    if (damage > 0.0F)
+    {
+        if (damage < maximum_health * 0.1F)
+        {
+            sound_definition_name = "player_fall_1";
+        }
+        else if (damage < maximum_health * 0.2F)
+        {
+            sound_definition_name = "player_fall_2";
+        }
+        else
+        {
+            sound_definition_name = "player_fall_3";
+        }
+    }
+    return {speed_metres_per_second, damage, view_kick_units, sound_definition_name};
 }
 
 Vector3 HumanMotion::launch_velocity(Vector3 previous_animation_movement,

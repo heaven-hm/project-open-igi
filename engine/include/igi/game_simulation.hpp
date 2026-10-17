@@ -4,6 +4,8 @@
 #include "igi/human_movement_integrator.hpp"
 #include "igi/retail_random_generator.hpp"
 
+#include <string_view>
+
 namespace igi::gameplay
 {
 
@@ -113,6 +115,12 @@ class GameSimulation final : private HumanMovementWorld
     explicit GameSimulation(const MissionScene& scene);
     void restart();
     void tick(const PlayerInput& input);
+    [[nodiscard]] std::string_view take_player_fall_sound() noexcept
+    {
+        const std::string_view sound_definition_name = pending_player_fall_sound_;
+        pending_player_fall_sound_ = {};
+        return sound_definition_name;
+    }
     [[nodiscard]] Vector3 player_position() const noexcept;
     [[nodiscard]] Vector3 camera_position() const noexcept;
     [[nodiscard]] Vector3 aim_direction() const noexcept;
@@ -322,6 +330,7 @@ class GameSimulation final : private HumanMovementWorld
     int difficulty_{1};
     std::uint64_t tick_count_{};
     bool developer_mode_{};
+    std::string_view pending_player_fall_sound_;
     float current_zoom_{1.0f};
     float dragunov_zoom_level_{6.5f};
 };

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string_view>
+
 namespace igi::gameplay
 {
 
@@ -55,6 +57,7 @@ struct HumanFallImpact final
     float speed_metres_per_second{};
     float damage{};
     float view_kick_units{};
+    std::string_view sound_definition_name;
 };
 
 // Original IGI.EXE HumanPlayer_ProcessMovement applies the landing formula in native 0x00408460.

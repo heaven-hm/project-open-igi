@@ -4,7 +4,7 @@
 
 The C++ engine now has a bounded 32-voice mixer and an SDL2 callback device requesting 22050 Hz, stereo, signed 16-bit output. Resident PCM is mixed with linear interpolation, gain and pan are converted through the retail attenuation table, and playback rate is clamped to the retail range. The SDL callback catches failures and emits silence rather than allowing an exception to cross the audio thread.
 
-This device is not yet connected to the game loop's sound bank or QVM sound definitions. The app therefore does not yet play Level 1 sounds. The interpolation/resampling and SDL device timing have not been compared directly with DirectSound; this work is a tested audio foundation, not a claim of end-to-end parity.
+The game loop now mounts Level 1 sound definitions and banks, starts the mission music, and dispatches player/AI weapon fire plus the retail player fall-damage cues. These integrations prove named asset resolution and mixer voice creation; they do not establish full event coverage or audible parity. Player footsteps, jump/landing material sounds, animation triggers, object sounds, and broader QVM-driven audio remain incomplete. SDL timing, interpolation/resampling, and output have not been compared directly with a live DirectSound capture.
 
 ## Retail evidence
 
@@ -35,7 +35,6 @@ Observed result: 6/6 passed after correcting pan attenuation. The dummy output t
 
 ## Remaining audio work
 
-1. Connect Level 1 sound-file loading, streamed reads, and resident ILSF decoding to mixer buffers.
-2. Port the sound bank and `sounds.qvm` definition registry used by original script names.
-3. Add event-triggered sound playback for player movement, weapons, impacts, AI, and mission objects.
-4. Compare sample positions, voice updates, pan/gain, and event timing against retail runtime captures.
+1. Complete per-event playback for player movement/material impacts, animation triggers, and mission objects.
+2. Verify all Level 1 QVM sound-definition routes, including conditional, grouped, and looping sounds.
+3. Compare sample positions, voice updates, pan/gain, and event timing against controlled retail runtime captures.

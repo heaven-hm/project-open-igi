@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-This C++ slice ports the retail attenuation lookup curve, stereo-pan attenuation, playback-rate clamp, a fixed 32-voice PCM mixer, and an SDL2 output device requested at the retail 22050 Hz stereo format. ILSF decoding and streaming reads are implemented separately. The mixer/device are not yet connected to a Level 1 sound bank, QVM sound definitions, or gameplay sound-event timing, so the game still does not emit retail mission audio. End-to-end sound parity remains `UNKNOWN`.
+This C++ slice ports the retail attenuation lookup curve, stereo-pan attenuation, playback-rate clamp, a fixed 32-voice PCM mixer, and an SDL2 output device requested at the retail 22050 Hz stereo format. The Level 1 sound bank and QVM definitions are connected to mission music, player/AI weapon fire, and player fall-damage cues. Other gameplay event routes and direct comparison to retail audio output remain incomplete; end-to-end sound parity remains `UNKNOWN`.
 
 ## Reference binary
 

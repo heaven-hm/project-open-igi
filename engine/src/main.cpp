@@ -982,6 +982,24 @@ int run(RuntimeOptions options, const char* executable)
                 }
             }
             simulation.tick(input);
+            const std::string_view player_fall_sound = simulation.take_player_fall_sound();
+            if (!player_fall_sound.empty() && audio_output && audio_output->IsAvailable())
+            {
+                const std::uint32_t fall_sound_voice = sound_system.SoundSystem_PlayDefinition(player_fall_sound);
+                if (fall_sound_voice == 0)
+                {
+                    log(Severity::warning,
+                        "audio",
+                        "Could not play player landing sound definition: " + std::string(player_fall_sound));
+                }
+                else
+                {
+                    log(Severity::debug,
+                        "audio",
+                        "Played retail player landing sound '" + std::string(player_fall_sound) + "'; voice=" +
+                            std::to_string(fall_sound_voice));
+                }
+            }
             if (audio_output && audio_output->IsAvailable())
             {
                 const bool fired_this_tick = simulation.weapon().shots_fired > shots_before_tick;

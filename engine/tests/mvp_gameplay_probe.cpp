@@ -6,6 +6,7 @@
 #include <limits>
 #include <numbers>
 #include <stdexcept>
+#include <string_view>
 
 using namespace igi::gameplay;
 
@@ -100,11 +101,34 @@ int main()
         const auto ordinary_jump_impact = HumanFallDamage_Calculate(
             5.0F * 4096.0F / 30.0F,
             movement_scene.player_parameters.maximum_health);
-        require(ordinary_jump_impact.damage == 0.0F,
-                "Retail landing logic must not damage the player after an ordinary short jump");
-        require(std::abs(HumanFallDamage_Calculate(14.5F * 4096.0F / 30.0F, 100.0F).damage -
-                         100.0F / 26.0F) < 0.0001F,
-                "Retail fall damage must scale from the 14 m/s safe threshold across a 13 m/s lethal range");
+        require(ordinary_jump_impact.damage == 0.0F && ordinary_jump_impact.sound_definition_name.empty(),
+                "Retail landing logic must not damage or play a fall-damage cue after an ordinary short jump");
+        const auto light_fall_impact = HumanFallDamage_Calculate(14.5F * 4096.0F / 30.0F, 100.0F);
+        const auto medium_fall_impact = HumanFallDamage_Calculate(15.5F * 4096.0F / 30.0F, 100.0F);
+        const auto heavy_fall_impact = HumanFallDamage_Calculate(17.0F * 4096.0F / 30.0F, 100.0F);
+        require(std::abs(light_fall_impact.damage - 100.0F / 26.0F) < 0.0001F &&
+                    light_fall_impact.sound_definition_name == "player_fall_1" &&
+                    medium_fall_impact.sound_definition_name == "player_fall_2" &&
+                    heavy_fall_impact.sound_definition_name == "player_fall_3",
+                "Retail fall damage must select the three sound definitions at the original health fractions");
+        auto sound_landing_scene = movement_scene;
+        sound_landing_scene.player_parameters.jump_vertical_per_tick = 0.8F;
+        GameSimulation sound_landing(sound_landing_scene);
+        PlayerInput high_jump_input;
+        high_jump_input.jumping = true;
+        std::string_view observed_fall_sound;
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            sound_landing.tick(high_jump_input);
+            high_jump_input.jumping = false;
+            const std::string_view sound = sound_landing.take_player_fall_sound();
+            if (!sound.empty())
+            {
+                observed_fall_sound = sound;
+            }
+        }
+        require(observed_fall_sound == "player_fall_3" && sound_landing.take_player_fall_sound().empty(),
+                "A damaging landing must emit its retail fall cue once and consume it exactly once");
         GameSimulation jump_timing(movement_scene);
         const float jump_floor = jump_timing.player_position().z;
         PlayerInput jump_input;

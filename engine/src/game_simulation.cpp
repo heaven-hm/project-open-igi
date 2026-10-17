@@ -166,6 +166,7 @@ void GameSimulation::restart()
     jump_was_pressed_ = false;
     tick_count_ = 0;
     developer_mode_ = false;
+    pending_player_fall_sound_ = {};
     current_zoom_ = 1.0f;
     dragunov_zoom_level_ = 6.5f;
     weapon_ = {};
@@ -291,6 +292,7 @@ bool GameSimulation::grounded() const noexcept
 
 void GameSimulation::tick(const PlayerInput& input)
 {
+    pending_player_fall_sound_ = {};
     if (!std::isfinite(input.forward) || !std::isfinite(input.sideways) ||
         !std::isfinite(input.heading_change) || !std::isfinite(input.pitch_change))
     {
@@ -692,6 +694,7 @@ void GameSimulation::query_ground(HumanMovementState& human,
             const HumanFallImpact fall_impact = HumanFallDamage_Calculate(
                 human.movement_velocity.z,
                 scene_.player_parameters.maximum_health);
+            pending_player_fall_sound_ = fall_impact.sound_definition_name;
             if (!developer_mode_ && fall_impact.damage > 0.0F && health_ > 0.0F)
             {
                 health_ = std::max(0.0f, health_ - fall_impact.damage);
