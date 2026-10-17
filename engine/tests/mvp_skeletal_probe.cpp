@@ -1,6 +1,7 @@
 #include "igi/skeletal_animation.hpp"
 
 #include <exception>
+#include <filesystem>
 #include <iostream>
 #include <numbers>
 #include <stdexcept>
@@ -15,10 +16,60 @@ void require(bool condition, const char* message)
     }
 }
 
-int main()
+void verify_original_animation_events(const std::filesystem::path& game_directory)
+{
+    const auto player_animations = load_skeletal_animations(game_directory / "common/ANIMS/000.IFF");
+    const auto weapon_animations = load_skeletal_animations(game_directory / "common/ANIMS/005.IFF");
+    const auto count_events = [](const SkeletalAnimationSet& animations)
+    {
+        std::size_t event_count = 0;
+        for (const auto& [animation_identifier, clip] : animations.clips)
+        {
+            static_cast<void>(animation_identifier);
+            event_count += clip.events.size();
+        }
+        return event_count;
+    };
+
+    require(player_animations->clips.size() == 122, "Retail player animation clip count changed");
+    require(count_events(*player_animations) == 73, "Retail player animation events were dropped or duplicated");
+    require(weapon_animations->clips.size() == 78, "Retail first-person animation clip count changed");
+    require(count_events(*weapon_animations) == 52, "Retail weapon animation events were dropped or duplicated");
+
+    const auto reload_clip = weapon_animations->clips.find(17);
+    require(reload_clip != weapon_animations->clips.end(), "Retail Glock reload clip 17 is missing");
+    require(reload_clip->second.events.size() == 3, "Retail Glock reload event count changed");
+    require(reload_clip->second.events[0].event_identifier == 1000 &&
+                reload_clip->second.events[1].event_identifier == 1001 &&
+                reload_clip->second.events[2].event_identifier == 1002,
+            "Retail Glock reload event identifiers changed");
+    require(reload_clip->second.events[0].time == 2577.0F &&
+                reload_clip->second.events[0].bone_identifier == 0 &&
+                std::abs(reload_clip->second.events[0].position_components[0] - (-3.47418F)) < 0.0001F &&
+                std::abs(reload_clip->second.events[0].position_components[1] - 51.8962F) < 0.0001F &&
+                std::abs(reload_clip->second.events[0].position_components[2] - (-6.63869F)) < 0.0001F,
+            "Retail Glock reload event time, bone, or position components were not preserved");
+
+    const auto fence_walk_clip = player_animations->clips.find(171);
+    require(fence_walk_clip != player_animations->clips.end(), "Retail fence-walk animation clip is missing");
+    require(fence_walk_clip->second.events.size() == 10,
+            "Retail fence-walk animation event count changed");
+    require(fence_walk_clip->second.events.front().event_identifier == 1025 &&
+                fence_walk_clip->second.events.back().event_identifier == 1026,
+            "Retail fence-walk event ordering was not preserved");
+
+    std::cout << "Retail animation event payloads passed: " << count_events(*player_animations)
+              << " player events and " << count_events(*weapon_animations) << " first-person events\n";
+}
+
+int main(int argument_count, char** arguments)
 {
     try
     {
+        if (argument_count > 2)
+        {
+            throw std::runtime_error("Usage: mvp_skeletal_probe [original-game-directory]");
+        }
         const glm::quat identity{1, 0, 0, 0};
         const auto quarter_turn = glm::angleAxis(std::numbers::pi_v<float> * 0.5f, glm::vec3{0, 0, 1});
         const auto midpoint = interpolate_rotation(identity, quarter_turn, 0.5f);
@@ -95,6 +146,10 @@ int main()
             rejected = true;
         }
         require(rejected, "Cyclic skeletons must fail through controlled error handling");
+        if (argument_count == 2)
+        {
+            verify_original_animation_events(arguments[1]);
+        }
         std::cout << "Skeletal probe passed: angular interpolation, antipodal signs, cyclic tracks, parent "
                      "transforms, skinning, cycle rejection\n";
         return 0;

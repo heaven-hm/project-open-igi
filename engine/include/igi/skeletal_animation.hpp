@@ -5,6 +5,9 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include <array>
+#include <cstdint>
+
 namespace igi::gameplay
 {
 
@@ -16,12 +19,22 @@ struct BoneRotationKey final
     glm::quat outgoing_tangent{1, 0, 0, 0};
 };
 
+struct SkeletalAnimationEvent final
+{
+    // Retail IFF BOED payload, retained verbatim until runtime dispatch semantics are confirmed.
+    std::uint32_t event_identifier{};
+    std::int32_t bone_identifier{};
+    float time{};
+    std::array<float, 3> position_components{};
+};
+
 struct SkeletalAnimationClip final
 {
     float duration{};
     std::uint32_t flags{};
     RootMotionClip root_motion;
     std::vector<std::vector<BoneRotationKey>> bone_rotations;
+    std::vector<SkeletalAnimationEvent> events;
 };
 
 struct SkeletalAnimationSet final

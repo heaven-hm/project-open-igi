@@ -332,6 +332,7 @@ if(BUILD_TESTING)
     add_test(NAME mvp_skeletal_animation COMMAND mvp_skeletal_probe)
 
     if(IGI_GAME_PATH)
+        add_test(NAME mvp_original_animation_event_records COMMAND mvp_skeletal_probe "${IGI_GAME_PATH}")
         add_test(NAME mvp_original_config_input COMMAND mvp_input_probe "${IGI_GAME_PATH}")
         add_executable(mvp_real_scene_probe tests/mvp_real_scene_probe.cpp)
         target_link_libraries(mvp_real_scene_probe PRIVATE igi_runtime)

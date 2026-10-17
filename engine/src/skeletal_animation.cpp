@@ -118,13 +118,36 @@ std::shared_ptr<SkeletalAnimationSet> load_skeletal_animations(const std::filesy
             }
             clip.bone_rotations.push_back(std::move(track));
         }
+        for (const auto& original_event : original.events)
+        {
+            bool has_non_finite_position = false;
+            for (const float component : original_event.pos)
+            {
+                has_non_finite_position = has_non_finite_position || !std::isfinite(component);
+            }
+            if (!std::isfinite(original_event.time) || has_non_finite_position)
+            {
+                throw std::runtime_error("Original skeletal animation event contains non-finite values");
+            }
+            clip.events.push_back({original_event.event_id,
+                                   original_event.bone_id,
+                                   original_event.time,
+                                   {original_event.pos[0], original_event.pos[1], original_event.pos[2]}});
+        }
         animations->clips.emplace(static_cast<int>(original.animation_id), std::move(clip));
+    }
+    std::size_t event_count = 0;
+    for (const auto& [animation_identifier, clip] : animations->clips)
+    {
+        static_cast<void>(animation_identifier);
+        event_count += clip.events.size();
     }
     diagnostics::log(diagnostics::Severity::information,
                      "animation",
                      "Loaded " + path.filename().string() + ": " +
                          std::to_string(animations->parents.size()) + " bones, " +
-                         std::to_string(animations->clips.size()) + " clips");
+                         std::to_string(animations->clips.size()) + " clips, " +
+                         std::to_string(event_count) + " raw animation events");
     return animations;
 }
 
