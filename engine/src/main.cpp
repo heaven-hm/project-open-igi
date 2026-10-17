@@ -987,6 +987,9 @@ int run(RuntimeOptions options, const char* executable)
             pitch_change = 0;
             requested_weapon_slot = -1;
             requested_weapon_cycle = 0;
+            const int locomotion_state_before_tick = simulation.locomotion_state();
+            const int locomotion_animation_before_tick = simulation.player_locomotion_animation_identifier();
+            const float locomotion_time_before_tick = simulation.player_animation_time();
             const int player_animation_identifier_before_tick = simulation.weapon().animation_identifier;
             const float player_animation_time_before_tick = simulation.weapon().animation_time;
             const std::uint64_t shots_before_tick = simulation.weapon().shots_fired;
@@ -1022,7 +1025,7 @@ int run(RuntimeOptions options, const char* executable)
                             player_animation_time_before_tick + 160.0F >= animation_clip.duration;
                         const auto crossed_animation_sounds =
                             igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-                                animation_clip,
+                                animation_clip.events,
                                 player_animation_time_before_tick,
                                 weapon_state.animation_time,
                                 animation_time_wrapped,
@@ -1048,6 +1051,59 @@ int run(RuntimeOptions options, const char* executable)
                                     "Animation event " +
                                         std::to_string(animation_sound_event.animation_event->event_identifier) +
                                         " in clip " + std::to_string(weapon_state.animation_identifier) +
+                                        " triggered sound '" + sound_definition_name + "' at time " +
+                                        std::to_string(animation_sound_event.animation_event->time) +
+                                        "; voice=" + std::to_string(sound_voice));
+                            }
+                        }
+                    }
+                }
+
+                const int locomotion_animation_after_tick =
+                    simulation.player_locomotion_animation_identifier();
+                if (simulation.locomotion_state() == locomotion_state_before_tick &&
+                    locomotion_animation_after_tick == locomotion_animation_before_tick &&
+                    locomotion_animation_after_tick >= 0)
+                {
+                    const auto locomotion_clip_iterator =
+                        scene.root_motion_clips.find(
+                            static_cast<std::uint32_t>(locomotion_animation_after_tick));
+                    if (locomotion_clip_iterator != scene.root_motion_clips.end())
+                    {
+                        const auto& locomotion_clip = locomotion_clip_iterator->second;
+                        const float locomotion_time_after_tick = simulation.player_animation_time();
+                        const bool locomotion_time_wrapped =
+                            locomotion_clip.duration > 0.0F &&
+                            locomotion_time_after_tick < locomotion_time_before_tick &&
+                            locomotion_time_before_tick + 160.0F >= locomotion_clip.duration;
+                        const auto crossed_locomotion_sounds =
+                            igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+                                locomotion_clip.events,
+                                locomotion_time_before_tick,
+                                locomotion_time_after_tick,
+                                locomotion_time_wrapped,
+                                animation_trigger_registry);
+                        for (const auto& animation_sound_event : crossed_locomotion_sounds)
+                        {
+                            const std::string& sound_definition_name =
+                                animation_sound_event.trigger_definition->sound_definition_name;
+                            const std::uint32_t sound_voice =
+                                sound_system.SoundSystem_PlayDefinition(sound_definition_name);
+                            if (sound_voice == 0)
+                            {
+                                log(Severity::warning,
+                                    "animation-audio",
+                                    "Could not play locomotion event " +
+                                        std::to_string(animation_sound_event.animation_event->event_identifier) +
+                                        " sound '" + sound_definition_name + "'");
+                            }
+                            else
+                            {
+                                log(Severity::debug,
+                                    "animation-audio",
+                                    "Locomotion event " +
+                                        std::to_string(animation_sound_event.animation_event->event_identifier) +
+                                        " in clip " + std::to_string(locomotion_animation_after_tick) +
                                         " triggered sound '" + sound_definition_name + "' at time " +
                                         std::to_string(animation_sound_event.animation_event->time) +
                                         "; voice=" + std::to_string(sound_voice));

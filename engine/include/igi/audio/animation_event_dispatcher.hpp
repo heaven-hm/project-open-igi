@@ -17,7 +17,7 @@ struct AnimationSoundEvent final
 // The open-igi C# candidate uses open-old/closed-new event intervals and splits loop wraps.
 // This schedule is derived until a matching retail runtime trace confirms its exact timing.
 [[nodiscard]] std::vector<AnimationSoundEvent> AnimationEventDispatcher_CollectCrossedSounds(
-    const gameplay::SkeletalAnimationClip& animation_clip,
+    const std::vector<gameplay::AnimationEventRecord>& animation_events,
     float previous_time,
     float current_time,
     bool wrapped,

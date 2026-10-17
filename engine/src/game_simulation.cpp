@@ -139,6 +139,15 @@ GameSimulation::GameSimulation(const MissionScene& scene)
     restart();
 }
 
+int GameSimulation::player_locomotion_animation_identifier() const noexcept
+{
+    if (locomotion_state_ < 0 || static_cast<std::size_t>(locomotion_state_) >= animation_identifiers.size())
+    {
+        return -1;
+    }
+    return static_cast<int>(animation_identifiers[static_cast<std::size_t>(locomotion_state_)]);
+}
+
 void GameSimulation::restart()
 {
     player_ = {};

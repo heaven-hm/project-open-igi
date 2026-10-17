@@ -320,10 +320,20 @@ struct RootMotionKey final
     Vector3 outgoing_tangent;
 };
 
+struct AnimationEventRecord final
+{
+    // Retail IFF BOED payload, retained verbatim until runtime dispatch semantics are confirmed.
+    std::uint32_t event_identifier{};
+    std::int32_t bone_identifier{};
+    float time{};
+    std::array<float, 3> position_components{};
+};
+
 struct RootMotionClip final
 {
     float duration{};
     std::vector<RootMotionKey> keys;
+    std::vector<AnimationEventRecord> events;
 };
 
 struct ObjectPlacementAudit final

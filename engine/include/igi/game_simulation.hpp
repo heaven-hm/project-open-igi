@@ -161,6 +161,13 @@ class GameSimulation final : private HumanMovementWorld
         return locomotion_state_;
     }
 
+    [[nodiscard]] int player_locomotion_animation_identifier() const noexcept;
+
+    [[nodiscard]] float player_animation_time() const noexcept
+    {
+        return animation_time_;
+    }
+
     [[nodiscard]] bool grounded() const noexcept;
 
     [[nodiscard]] bool aiming() const noexcept

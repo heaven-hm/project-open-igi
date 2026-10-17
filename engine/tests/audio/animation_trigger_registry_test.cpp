@@ -72,14 +72,14 @@ int main(int argument_count, char** arguments)
                 "Retail Glock reload clip 17 is missing");
 
         const auto crossed_reload_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-            reload_clip_iterator->second, 2560.0F, 2577.0F, false, animation_trigger_registry);
+            reload_clip_iterator->second.events, 2560.0F, 2577.0F, false, animation_trigger_registry);
         require(crossed_reload_sounds.size() == 1 &&
                     crossed_reload_sounds.front().animation_event->event_identifier == 1000 &&
                     crossed_reload_sounds.front().trigger_definition->sound_definition_name == "glock_reload_1",
                 "Retail Glock reload event did not resolve at its authored animation time");
 
         const auto repeated_reload_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-            reload_clip_iterator->second, 2577.0F, 2720.0F, false, animation_trigger_registry);
+            reload_clip_iterator->second.events, 2577.0F, 2720.0F, false, animation_trigger_registry);
         require(repeated_reload_sounds.empty(),
                 "An animation event at the open interval boundary was dispatched twice");
 
@@ -89,12 +89,12 @@ int main(int argument_count, char** arguments)
             {1000, 0, 5.0F, {0.0F, 0.0F, 0.0F}},
         };
         const auto crossed_loop_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-            loop_probe_clip, 480.0F, 20.0F, true, animation_trigger_registry);
+            loop_probe_clip.events, 480.0F, 20.0F, true, animation_trigger_registry);
         require(crossed_loop_sounds.size() == 2,
                 "Animation sound events were lost at a wrapped clip boundary");
 
         const auto animation_restart_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-            loop_probe_clip, 480.0F, 20.0F, false, animation_trigger_registry);
+            loop_probe_clip.events, 480.0F, 20.0F, false, animation_trigger_registry);
         require(animation_restart_sounds.empty(),
                 "A same-clip animation restart was mistaken for a natural duration wrap");
 
@@ -102,7 +102,7 @@ int main(int argument_count, char** arguments)
         try
         {
             static_cast<void>(igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
-                loop_probe_clip,
+                loop_probe_clip.events,
                 std::numeric_limits<float>::quiet_NaN(),
                 0.0F,
                 false,

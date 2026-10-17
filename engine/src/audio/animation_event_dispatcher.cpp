@@ -7,7 +7,7 @@ namespace igi::audio
 {
 
 std::vector<AnimationSoundEvent> AnimationEventDispatcher_CollectCrossedSounds(
-    const gameplay::SkeletalAnimationClip& animation_clip,
+    const std::vector<gameplay::AnimationEventRecord>& animation_events,
     float previous_time,
     float current_time,
     bool wrapped,
@@ -32,8 +32,8 @@ std::vector<AnimationSoundEvent> AnimationEventDispatcher_CollectCrossedSounds(
         return crossed_sounds;
     }
 
-    crossed_sounds.reserve(animation_clip.events.size());
-    for (const gameplay::SkeletalAnimationEvent& animation_event : animation_clip.events)
+    crossed_sounds.reserve(animation_events.size());
+    for (const gameplay::AnimationEventRecord& animation_event : animation_events)
     {
         const bool crossed = wrapped
                                  ? animation_event.time > previous_time || animation_event.time <= current_time

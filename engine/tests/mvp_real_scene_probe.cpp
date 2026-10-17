@@ -255,6 +255,14 @@ int main(int argument_count, char** arguments)
             replay_output << std::setprecision(9);
         }
         const auto scene = load_mission(arguments[1], arguments[2]);
+        std::size_t locomotion_event_count = 0;
+        for (const auto& [animation_identifier, animation_clip] : scene.root_motion_clips)
+        {
+            static_cast<void>(animation_identifier);
+            locomotion_event_count += animation_clip.events.size();
+        }
+        require(locomotion_event_count == 73,
+                "Level 1 locomotion clips must retain all 73 authored player animation events");
         require(scene.player_parameters.maximum_health == 3.0F,
                 "Level 1 player health must come from the original humanplayer.qvm definition");
 

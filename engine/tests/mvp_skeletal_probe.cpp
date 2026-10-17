@@ -114,7 +114,8 @@ int main(int argument_count, char** arguments)
         looping_death_clip.root_motion = {
             320.0f,
             {{0.0f, {}, root_tangent, root_tangent},
-             {320.0f, {0.0f, 0.0f, -4096.0f}, root_tangent, root_tangent}}};
+             {320.0f, {0.0f, 0.0f, -4096.0f}, root_tangent, root_tangent}},
+            {}};
         death_animation.clips[28] = looping_death_clip;
         const auto cyclic_death_root = sample_animation_root(death_animation, 28, 320.0f);
         const auto one_shot_death_root = sample_animation_root(death_animation, 28, 320.0f, true);

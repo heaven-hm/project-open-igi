@@ -19,14 +19,7 @@ struct BoneRotationKey final
     glm::quat outgoing_tangent{1, 0, 0, 0};
 };
 
-struct SkeletalAnimationEvent final
-{
-    // Retail IFF BOED payload, retained verbatim until runtime dispatch semantics are confirmed.
-    std::uint32_t event_identifier{};
-    std::int32_t bone_identifier{};
-    float time{};
-    std::array<float, 3> position_components{};
-};
+using SkeletalAnimationEvent = AnimationEventRecord;
 
 struct SkeletalAnimationClip final
 {

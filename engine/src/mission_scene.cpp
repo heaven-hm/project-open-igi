@@ -1518,7 +1518,7 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
         {
             throw std::runtime_error("Original animation duration is invalid");
         }
-        RootMotionClip clip{original_clip.duration, {}};
+        RootMotionClip clip{original_clip.duration, {}, {}};
         for (const auto& key : original_clip.root_translations)
         {
             if (!std::isfinite(key.time) || !finite(Vector3{key.pos[0], key.pos[1], key.pos[2]}))
@@ -1532,6 +1532,22 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                                  {key.pos[0], key.pos[1], key.pos[2]},
                                  {-key.tangent_out[0], -key.tangent_out[1], -key.tangent_out[2]},
                                  {key.tangent_in[0], key.tangent_in[1], key.tangent_in[2]}});
+        }
+        for (const auto& original_event : original_clip.events)
+        {
+            bool has_non_finite_position = false;
+            for (const float component : original_event.pos)
+            {
+                has_non_finite_position = has_non_finite_position || !std::isfinite(component);
+            }
+            if (!std::isfinite(original_event.time) || has_non_finite_position)
+            {
+                throw std::runtime_error("Original locomotion event contains non-finite values");
+            }
+            clip.events.push_back({original_event.event_id,
+                                   original_event.bone_id,
+                                   original_event.time,
+                                   {original_event.pos[0], original_event.pos[1], original_event.pos[2]}});
         }
         scene.root_motion_clips[original_clip.animation_id] = std::move(clip);
     }
