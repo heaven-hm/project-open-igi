@@ -357,6 +357,7 @@ struct MissionScene final
     std::vector<ObjectPlacementAudit> object_placement_audits;
     std::size_t verified_object_count{};
     std::size_t mismatch_object_count{};
+    std::vector<VerifyObject> verified_objects;
     SceneFogParameters terrain_fog;
     SceneFogParameters object_fog;
 };
