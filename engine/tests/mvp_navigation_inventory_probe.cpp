@@ -168,6 +168,19 @@ int main()
         require(simulation.inventory_size() == 4, "A retail pickup must not be collected twice");
         require(simulation.take_player_weapon_pickup_sound_count() == 0,
                 "A collected pickup must not emit a second weaponpickup_1 sound event");
+
+        auto ammunition_pickup_scene = test_scene();
+        ammunition_pickup_scene.weapon_pickups.clear();
+        ammunition_pickup_scene.weapon_pickups.push_back(
+            {{10.0f, 0.0f, -2.0f}, "AMMO_ID_919", {1.0f, 1.0f, 1.0f}, 1.0f, 16});
+        GameSimulation ammunition_pickup_simulation(ammunition_pickup_scene);
+        ammunition_pickup_simulation.teleport_player({10.0f, 0.0f, -2.0f}, 0.0f, 0.0f);
+        ammunition_pickup_simulation.tick({});
+        require(ammunition_pickup_simulation.weapon().reserve == 65,
+                "AmmoPickup must apply the Int16 count from the retail QVM task parameters");
+        require(ammunition_pickup_simulation.take_player_weapon_pickup_sound_count() == 0,
+                "AmmoPickup must not emit the Weapon_GunPickup weaponpickup_1 sound");
+
         simulation.restart();
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
                     simulation.health() == scene.player_parameters.maximum_health,

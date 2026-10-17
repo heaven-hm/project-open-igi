@@ -65,24 +65,36 @@ void GameSimulation::select_weapon(std::size_t slot)
 
 void GameSimulation::collect_weapons(const PlayerInput& input)
 {
-    const auto acquire = [&](const std::string& identifier)
+    const auto acquire = [&](const std::string& identifier, std::int32_t ammunition_count)
     {
         if (identifier.starts_with("AMMO_ID_"))
         {
-            const std::uint32_t amount = 32;
+            // Retail AmmoPickup supplies its Int16 count to Weapon_AddAmmo at 0x0047CE00.
+            const auto add_ammunition = [ammunition_count](std::uint32_t reserve)
+            {
+                const std::int64_t updated_reserve = static_cast<std::int64_t>(reserve) + ammunition_count;
+                if (updated_reserve <= 0)
+                {
+                    return std::uint32_t{0};
+                }
+                return static_cast<std::uint32_t>(std::min<std::int64_t>(10000, updated_reserve));
+            };
             for (auto& item : inventory_)
             {
                 if (scene_.weapons[item.definition_index].ammunition_identifier == identifier)
                 {
-                    item.state.reserve = std::min(10000u, item.state.reserve + amount);
+                    item.state.reserve = add_ammunition(item.state.reserve);
                 }
             }
             if (!inventory_.empty() &&
                 scene_.weapons[inventory_[selected_weapon_slot_].definition_index].ammunition_identifier == identifier)
             {
-                weapon_.reserve = std::min(10000u, weapon_.reserve + amount);
+                weapon_.reserve = add_ammunition(weapon_.reserve);
             }
-            diagnostics::log(diagnostics::Severity::information, "inventory", "Picked up ammo: " + identifier);
+            diagnostics::log(diagnostics::Severity::information,
+                             "AmmoPickup",
+                             "IGI.EXE AmmoPickup Int16 payload: " + identifier + " count=" +
+                                 std::to_string(ammunition_count));
             set_prompt_message("PICKED UP AMMUNITION", 2.0f);
             return true;
         }
@@ -159,15 +171,19 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
                                                         pickup.retail_axis_dimensions,
                                                         pickup.retail_parent_scale))
         {
-            static_cast<void>(acquire(pickup.weapon_identifier));
+            const bool is_ammo_pickup = pickup.weapon_identifier.starts_with("AMMO_ID_");
+            static_cast<void>(acquire(pickup.weapon_identifier, pickup.ammunition_count));
             pickups_collected_[pickup_index] = true;
             diagnostics::log(diagnostics::Severity::information,
                              "GunPickup_Action",
                              "IGI.EXE 0x0046D230 consumed pickup " + pickup.weapon_identifier);
-            ++pending_player_weapon_pickup_sound_count_;
-            diagnostics::log(diagnostics::Severity::debug,
-                             "Weapon_GunPickup",
-                             "IGI.EXE 0x0045FFC0 queued weaponpickup_1 sound event");
+            if (!is_ammo_pickup)
+            {
+                ++pending_player_weapon_pickup_sound_count_;
+                diagnostics::log(diagnostics::Severity::debug,
+                                 "Weapon_GunPickup",
+                                 "IGI.EXE 0x0045FFC0 queued weaponpickup_1 sound event");
+            }
         }
     }
     for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)
@@ -184,7 +200,8 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
                 input.interacting && (length(actors_[actor_index].position - player_position()) < 3.0f);
             if (auto_pickup || interact_pickup)
             {
-                soldier_weapons_collected_[actor_index] = acquire(scene_.actors[actor_index].weapon_identifier);
+                soldier_weapons_collected_[actor_index] =
+                    acquire(scene_.actors[actor_index].weapon_identifier, 0);
             }
         }
     }

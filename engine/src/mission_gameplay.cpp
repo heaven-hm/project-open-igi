@@ -446,14 +446,46 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                 }
             }
         }
-        if ((task_type == "GunPickup" || task_type == "AmmoPickup") && call.arguments.size() > 9 &&
+        const bool is_ammo_pickup = task_type == "AmmoPickup";
+        const bool is_weapon_pickup = task_type == "GunPickup";
+        const std::size_t required_argument_count = is_ammo_pickup ? 11 : 10;
+        if ((is_weapon_pickup || is_ammo_pickup) &&
             enabled_tasks[static_cast<std::size_t>(&call - calls.data())])
         {
-            scene.weapon_pickups.push_back(
-                {{static_cast<float>((call.arguments[3].number - origin[0]) / 4096.0),
-                  static_cast<float>((call.arguments[4].number - origin[1]) / 4096.0),
-                  static_cast<float>((call.arguments[5].number - origin[2]) / 4096.0)},
-                 call.arguments[9].text});
+            if (call.arguments.size() < required_argument_count)
+            {
+                throw std::runtime_error("Level QVM pickup is missing a required retail parameter: " + task_type);
+            }
+
+            std::int16_t ammunition_count = 0;
+            if (is_ammo_pickup)
+            {
+                const double raw_ammunition_count = call.arguments[10].number;
+                if (!std::isfinite(raw_ammunition_count) ||
+                    raw_ammunition_count != std::trunc(raw_ammunition_count) ||
+                    raw_ammunition_count < std::numeric_limits<std::int16_t>::min() ||
+                    raw_ammunition_count > std::numeric_limits<std::int16_t>::max() ||
+                    !call.arguments[9].text.starts_with("AMMO_ID_"))
+                {
+                    throw std::runtime_error("Level QVM AmmoPickup has an invalid retail ammo ID or Int16 count");
+                }
+                ammunition_count = static_cast<std::int16_t>(raw_ammunition_count);
+            }
+
+            gameplay::WeaponPickup pickup;
+            pickup.position = {static_cast<float>((call.arguments[3].number - origin[0]) / 4096.0),
+                               static_cast<float>((call.arguments[4].number - origin[1]) / 4096.0),
+                               static_cast<float>((call.arguments[5].number - origin[2]) / 4096.0)};
+            pickup.weapon_identifier = call.arguments[9].text;
+            pickup.ammunition_count = ammunition_count;
+            scene.weapon_pickups.push_back(std::move(pickup));
+            if (is_ammo_pickup)
+            {
+                diagnostics::log(diagnostics::Severity::information,
+                                 "AmmoPickup_LoadParameters",
+                                 "IGI.EXE 0x0046D5F0 loaded " + call.arguments[9].text + " with Int16 count=" +
+                                     std::to_string(ammunition_count));
+            }
         }
     }
     const auto weapon_directory = resolve_path(scene.game_directory, "weapons");

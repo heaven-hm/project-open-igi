@@ -314,6 +314,8 @@ struct WeaponPickup final
     std::array<float, 3> retail_axis_dimensions{1.0F, 1.0F, 1.0F};
     // IGI.EXE helper 0x004D0950 returns 1.0 when its parent-transform chain is null.
     float retail_parent_scale = 1.0F;
+    // AmmoPickup's QVM Ammo parameter is a signed Int16 payload consumed by retail Weapon_AddAmmo.
+    std::int16_t ammunition_count{};
 };
 
 struct RootMotionKey final
