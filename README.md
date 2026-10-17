@@ -35,7 +35,7 @@ Tools used for analysis and verification:
 - [RE-Agent](https://github.com/heaven-hm/re-agent) — orchestration of reverse-engineering analysis against the retail executable.
 - [CrossOver](https://www.codeweavers.com/crossover) — runs the Windows x86 retail game and the Windows build on macOS for comparison.
 
-The project records per-routine evidence and implementation limits in [`engine/REVERSE_ENGINEERING.md`](engine/REVERSE_ENGINEERING.md). Tool output is evidence; it is not substituted for the native engine implementation.
+Per-routine evidence and implementation limits stay attached to the native source and its analysis records. Tool output is evidence; it is not substituted for the native engine implementation.
 
 ## Source layout
 
