@@ -685,6 +685,7 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
         }
     }
     std::vector<std::uint32_t> triangle_materials(geometry.triangles.size());
+    std::vector<float> triangle_opacities(geometry.triangles.size(), 1.0f);
     std::vector<std::int32_t> triangle_lightmap_pages(geometry.triangles.size(), -1);
     for (const auto& block : geometry.renderBlocks)
     {
@@ -700,6 +701,9 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
         std::fill_n(triangle_materials.begin() + static_cast<std::ptrdiff_t>(block.triangleStart),
                     block.triangleCount,
                     material_index);
+        std::fill_n(triangle_opacities.begin() + static_cast<std::ptrdiff_t>(block.triangleStart),
+                    block.triangleCount,
+                    std::clamp(block.opacity, 0.0f, 1.0f));
         if (geometry.modelType == 3)
         {
             std::fill_n(triangle_lightmap_pages.begin() + static_cast<std::ptrdiff_t>(block.triangleStart),
@@ -711,6 +715,7 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
     {
         gameplay::SceneTriangle triangle;
         triangle.texture_index = triangle_materials[triangle_index];
+        triangle.opacity = triangle_opacities[triangle_index];
         triangle.lightmap_page_index = triangle_lightmap_pages[triangle_index];
         triangle.lightmap_model_index = geometry.modelType == 3 ? 0 : -1;
         for (std::size_t corner_index = 0; corner_index < 3; ++corner_index)

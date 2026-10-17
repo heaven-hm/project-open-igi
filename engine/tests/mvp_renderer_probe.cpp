@@ -61,6 +61,32 @@ int main()
                 "Depth buffer must keep the nearer red triangle over the farther green triangle");
         }
 
+        MissionScene opacity_scene;
+        opacity_scene.collision_triangles = scene.collision_triangles;
+        opacity_scene.textures = {{1, 1, {0xffff0000u}}};
+        SceneRenderer opacity_renderer(640, 480);
+        opacity_renderer.render(opacity_scene, simulation);
+        const std::uint32_t background_pixel = opacity_renderer.pixels()[250 * 640 + 340];
+        opacity_scene.static_triangles.push_back(
+            {{SceneVertex{{-4, 4, -1}, 0, 0}, SceneVertex{{4, 4, -1}, 1, 0}, SceneVertex{{0, 4, 5}, 0.5f, 1}},
+             0});
+        opacity_renderer.render(opacity_scene, simulation);
+        const std::uint32_t opaque_pixel = opacity_renderer.pixels()[250 * 640 + 340];
+        opacity_scene.static_triangles.front().opacity = 0.5f;
+        opacity_renderer.render(opacity_scene, simulation);
+        const std::uint32_t translucent_pixel = opacity_renderer.pixels()[250 * 640 + 340];
+        for (const int channel_shift : {0, 8, 16})
+        {
+            const std::uint32_t background_channel = (background_pixel >> channel_shift) & 255u;
+            const std::uint32_t opaque_channel = (opaque_pixel >> channel_shift) & 255u;
+            const std::uint32_t expected_channel = (background_channel + opaque_channel + 1u) / 2u;
+            const std::uint32_t actual_channel = (translucent_pixel >> channel_shift) & 255u;
+            if (actual_channel > expected_channel + 1u || expected_channel > actual_channel + 1u)
+            {
+                throw std::runtime_error("MEF translucent block did not blend at its authored opacity");
+            }
+        }
+
         MissionScene object_lightmap_scene;
         object_lightmap_scene.collision_triangles = scene.collision_triangles;
         object_lightmap_scene.textures = {{1, 1, {0xfffafafaU}}, {1, 1, {0xff804020U}}};

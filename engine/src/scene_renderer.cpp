@@ -328,6 +328,7 @@ void SceneRenderer::triangle(const SceneTriangle& original,
         SceneTriangle clipped_triangle{{clipped[0], clipped[corner], clipped[corner + 1]},
                                        original.texture_index};
         clipped_triangle.firing_only = original.firing_only;
+        clipped_triangle.opacity = original.opacity;
         clipped_triangle.lightmap_page_index = original.lightmap_page_index;
         clipped_triangle.lightmap_texture_index = original.lightmap_texture_index;
         rasterize(
@@ -596,7 +597,17 @@ void SceneRenderer::rasterize(const SceneTriangle& triangle,
                     const auto blue =
                         static_cast<std::uint32_t>(std::clamp(fog.colour.z, 0.0f, 1.0f) * 255.0f);
                     const std::uint32_t fog_colour = 0xff000000u | (red << 16) | (green << 8) | blue;
-                    pixels_[pixel_index] = mix_color(shaded, fog_colour, fog_opacity);
+                    const std::uint32_t fogged_surface = mix_color(shaded, fog_colour, fog_opacity);
+                    if (triangle.opacity < 1.0f)
+                    {
+                        pixels_[pixel_index] = mix_color(pixels_[pixel_index],
+                                                         fogged_surface,
+                                                         std::clamp(triangle.opacity, 0.0f, 1.0f));
+                    }
+                    else
+                    {
+                        pixels_[pixel_index] = fogged_surface;
+                    }
                     depth_[pixel_index] = inverse_depth;
                 }
             }

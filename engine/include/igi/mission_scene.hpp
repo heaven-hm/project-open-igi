@@ -98,6 +98,7 @@ struct SceneTriangle final
     std::array<SceneVertex, 3> vertices;
     std::uint32_t texture_index{};
     bool firing_only{};
+    float opacity = 1.0f;
     std::int32_t lightmap_page_index = -1;
     std::int32_t lightmap_texture_index = -1;
     std::int32_t lightmap_model_index = -1;
