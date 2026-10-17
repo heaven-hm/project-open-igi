@@ -100,6 +100,49 @@
       "binary_ninja_basic_blocks": 1,
       "cfg_agreement": 1.0,
       "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
+    },
+    {
+      "catalog_name": "Camera_UpdateTransform_2",
+      "address": "0x004A26C0",
+      "byte_count": 86,
+      "file_offset": 665280,
+      "source_bytes_sha256": "f7a98c1e60c3d681dd99aabe724a45e4633a27e832b6cc7226ad1526e4111b0e",
+      "rea_evidence_id": "ev_camera_updatetransform_2_4a26c0",
+      "binary_ninja_label": "Camera_UpdateTransform_2",
+      "implementation": "C++ translation of the observed RGB color packing and palette fill",
+      "runtime_retail_comparison": "Unit tests verify RGB packing arithmetic and 256-dword palette population at 0x00935C10",
+      "cpp_name": "Camera_UpdateTransform_2",
+      "radare2": {
+        "basic_blocks": 1,
+        "edges": 0,
+        "instruction_count": 25,
+        "calling_convention": "cdecl"
+      },
+      "binary_ninja_basic_blocks": 1,
+      "cfg_agreement": 1.0,
+      "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
+    },
+    {
+      "catalog_name": "Camera_ResetMatrix",
+      "address": "0x004A2600",
+      "byte_count": 188,
+      "file_offset": 665088,
+      "source_bytes_sha256": "53d921653980d1425da75ba9b611a3a143e0c4681bba96cc5b7d40852704d66b",
+      "rea_evidence_id": "ev_camera_resetmatrix_4a2600",
+      "binary_ninja_label": "Camera_ResetMatrix",
+      "implementation": "C++ translation of the observed half/full intensity color packing and 4-band palette write loop",
+      "runtime_retail_comparison": "Unit tests verify 4 alternating 32-dword bands of half- and full-intensity color and return value",
+      "cpp_name": "Camera_ResetMatrix",
+      "radare2": {
+        "basic_blocks": 3,
+        "edges": 3,
+        "instruction_count": 58,
+        "calling_convention": "cdecl"
+      },
+      "binary_ninja_basic_blocks": 3,
+      "cfg_agreement": 1.0,
+      "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
     }
   ]
 }
+
