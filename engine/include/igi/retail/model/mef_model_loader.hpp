@@ -45,6 +45,15 @@ struct MefRenderChunks {
     const IlffChunk* vertex_stream = nullptr;
 };
 
+// Original IGI.EXE backend routine at VA 0x0049FB10 accepts MESH+0x20 values 0, 1, and 3.
+// The stripped retail binary does not provide a symbol name; the enum names describe the
+// observed renderer paths and remain working labels.
+enum class MefRenderFormat : std::uint32_t {
+    diffuse = 0U,
+    skinned = 1U,
+    lightmapped = 3U,
+};
+
 // Original IGI.EXE entry FUN_0049b700 at VA 0x0049B700 (semantic label unresolved).
 // REA/Ghidra evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446:
 // 40-byte records; position/normal/UV floats at +0x00..+0x1C, influence weight at +0x20,
@@ -89,6 +98,7 @@ public:
     IlffContainer container;
     std::vector<std::byte> mesh_header;
     float version = 0.0F;
+    MefRenderFormat render_format = MefRenderFormat::diffuse;
     std::optional<IlffChunk> attachments;
     std::optional<IlffChunk> legacy_vertices;
     std::optional<IlffChunk> portals;
@@ -98,6 +108,12 @@ public:
     [[nodiscard]] static MefModel DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes);
     [[nodiscard]] MefRenderChunks render_chunks() const noexcept;
 };
+
+// FUN_0049FB10 - 0x0049FB10 - accepts only MESH+0x20 values 0, 1, and 3.
+// Evidence: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01;
+// Radare2 decoded body 842 bytes / 16 basic blocks, including the original "Mesh format not supported" path.
+// The native identity is statically established; this C++ port has not been compared in a live render replay.
+[[nodiscard]] MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_header);
 
 // Reads only the 40-byte record consumed by FUN_0049b700. This does not identify
 // which MEF chunk or mesh format supplies the record; that association remains unverified.

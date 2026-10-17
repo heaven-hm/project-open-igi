@@ -213,6 +213,25 @@ MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> re
     };
 }
 
+MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_header) {
+    constexpr std::size_t format_offset = 0x20U;
+    if (mesh_header.size() < format_offset + sizeof(std::uint32_t)) {
+        throw MefFormatError("MESH header is too short to read the renderer format at offset 0x20.");
+    }
+
+    const std::uint32_t raw_format = Ilff_ReadLittleEndian32(mesh_header, format_offset);
+    switch (raw_format) {
+    case static_cast<std::uint32_t>(MefRenderFormat::diffuse):
+        return MefRenderFormat::diffuse;
+    case static_cast<std::uint32_t>(MefRenderFormat::skinned):
+        return MefRenderFormat::skinned;
+    case static_cast<std::uint32_t>(MefRenderFormat::lightmapped):
+        return MefRenderFormat::lightmapped;
+    default:
+        throw MefFormatError("Mesh format not supported");
+    }
+}
+
 IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes) {
     return read_container(bytes, 0U);
 }
@@ -242,6 +261,7 @@ MefModel MefModel::DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes)
         error_message << "Retail MESH version mismatch: got " << model.version << ", expected 0.1.";
         throw MefFormatError(error_message.str());
     }
+    model.render_format = MefModel_ReadRetailRenderFormat(model.mesh_header);
 
     const auto copy_nonempty_chunk = [&model](std::uint32_t tag) -> std::optional<IlffChunk> {
         const IlffChunk* chunk = model.container.find_first(tag);

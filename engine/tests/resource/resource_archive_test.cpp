@@ -145,6 +145,9 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
 
     std::size_t model_resource_count = 0U;
     std::size_t model_with_render_chunks_count = 0U;
+    std::size_t diffuse_model_count = 0U;
+    std::size_t skinned_model_count = 0U;
+    std::size_t lightmapped_model_count = 0U;
     for (const igi::retail::resource::ResourceEntry& entry : archive.entries) {
         if (!entry.name.ends_with(".mef")) {
             continue;
@@ -154,6 +157,17 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
             igi::retail::model::MefModel::DynObj_LocalModelsSMef(entry.body);
         const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
         ++model_resource_count;
+        switch (model.render_format) {
+        case igi::retail::model::MefRenderFormat::diffuse:
+            ++diffuse_model_count;
+            break;
+        case igi::retail::model::MefRenderFormat::skinned:
+            ++skinned_model_count;
+            break;
+        case igi::retail::model::MefRenderFormat::lightmapped:
+            ++lightmapped_model_count;
+            break;
+        }
         if (render_chunks.d3d_render_header != nullptr
             && render_chunks.draw_records != nullptr
             && render_chunks.vertex_stream != nullptr) {
@@ -164,6 +178,8 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
         }
     }
     require(model_resource_count > 0U, "Level 1 model RES contains embedded MEF resources");
+    require(diffuse_model_count + skinned_model_count + lightmapped_model_count == model_resource_count,
+        "every Level 1 MEF uses a renderer format accepted by FUN_0049FB10");
     require(model_with_render_chunks_count == model_resource_count,
         "every Level 1 MEF has D3DR, REND, and VRTX chunks for the retail render path");
 
@@ -175,6 +191,8 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     std::cout << "Level 1 Resource_Load/Sys_Resource test passed: "
               << archive.entries.size() << " entries; "
               << model_resource_count << " MEFs with D3DR/REND/VRTX chunks; "
+              << "formats 0/1/3=" << diffuse_model_count << "/" << skinned_model_count
+              << "/" << lightmapped_model_count << "; "
               << model_entry->name << "; "
               << model_entry->body.size() << " bytes; "
               << model.container.chunks.size() << " MEF chunks.\n";

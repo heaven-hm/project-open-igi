@@ -10,6 +10,7 @@
 #include <iterator>
 #include <stdexcept>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace {
@@ -48,7 +49,7 @@ void append_chunk(
     write_u32(destination, chunk_offset + 12U, last_chunk ? 0U : static_cast<std::uint32_t>(next_offset));
 }
 
-std::vector<std::byte> make_model_bytes() {
+std::vector<std::byte> make_model_bytes(std::uint32_t render_format = 0U) {
     std::vector<std::byte> file_bytes(20U);
     write_u32(file_bytes, 0U, igi::retail::model::mef_tag::ilff);
     write_u32(file_bytes, 8U, 4U);
@@ -56,6 +57,7 @@ std::vector<std::byte> make_model_bytes() {
 
     std::vector<std::byte> mesh_header(MefModel::mesh_header_size);
     write_u32(mesh_header, 0U, MefModel::supported_version_bits);
+    write_u32(mesh_header, 0x20U, render_format);
 
     append_chunk(file_bytes, igi::retail::model::mef_tag::mesh, mesh_header, 4U, false);
     const std::array<std::byte, 4> attachment_payload{
@@ -113,6 +115,32 @@ void testRetailMefLoaderBindsMeshAndKnownChunks() {
         || model.legacy_vertices.has_value() || model.portals.has_value()
         || model.portal_faces.has_value() || model.portal_vertices.has_value()) {
         throw std::runtime_error("DynObj_LocalModelsSMef did not bind the retail model resource fields.");
+    }
+}
+
+void testRetailMefLoaderAcceptsOnlyRetailRenderFormats() {
+    const std::array<std::pair<std::uint32_t, igi::retail::model::MefRenderFormat>, 3> supported_formats{{
+        {0U, igi::retail::model::MefRenderFormat::diffuse},
+        {1U, igi::retail::model::MefRenderFormat::skinned},
+        {3U, igi::retail::model::MefRenderFormat::lightmapped},
+    }};
+    for (const auto& [raw_format, expected_format] : supported_formats) {
+        const std::vector<std::byte> file_bytes = make_model_bytes(raw_format);
+        const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+        if (model.render_format != expected_format) {
+            throw std::runtime_error("FUN_0049FB10 render format was not retained from MESH+0x20.");
+        }
+    }
+
+    bool rejected_unsupported_format = false;
+    try {
+        const std::vector<std::byte> file_bytes = make_model_bytes(2U);
+        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+    } catch (const MefFormatError& exception) {
+        rejected_unsupported_format = std::string(exception.what()) == "Mesh format not supported";
+    }
+    if (!rejected_unsupported_format) {
+        throw std::runtime_error("MefModel did not preserve the retail unsupported-format failure.");
     }
 }
 
@@ -288,6 +316,7 @@ int main(int argument_count, char** arguments) {
     try {
         testRetailIlffChunkAlignmentAndTagSearch();
         testRetailMefLoaderBindsMeshAndKnownChunks();
+        testRetailMefLoaderAcceptsOnlyRetailRenderFormats();
         testRetailMefLoaderExposesRetailRenderChunks();
         testRetailMefLoaderRejectsUnsupportedVersion();
         testRetailMefLoaderRejectsTruncation();
