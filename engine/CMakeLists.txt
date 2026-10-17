@@ -80,6 +80,7 @@ add_library(igi_runtime STATIC
     src/game_ai.cpp
     src/navigation.cpp
     src/scene_renderer.cpp
+    src/weapon_sound_player.cpp
 )
 target_compile_features(igi_runtime PUBLIC cxx_std_20)
 target_link_libraries(igi_audio PUBLIC igi_formats PRIVATE SDL2::SDL2)
@@ -229,6 +230,13 @@ if(BUILD_TESTING)
     if(IGI_GAME_PATH)
         add_test(NAME retail_level_one_sound_playback
             COMMAND sound_system_test "${IGI_GAME_PATH}")
+    endif()
+
+    add_executable(weapon_sound_player_test tests/audio/weapon_sound_player_test.cpp)
+    target_link_libraries(weapon_sound_player_test PRIVATE igi_runtime)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_weapon_sound
+            COMMAND weapon_sound_player_test "${IGI_GAME_PATH}")
     endif()
 
     add_executable(sdl_audio_output_test tests/audio/sdl_audio_output_test.cpp)

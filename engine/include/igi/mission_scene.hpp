@@ -300,6 +300,9 @@ struct SceneWeapon final
     int fire_animation_2 = -1;
     int fire_animation_3 = -1;
     int reload_animation = 21;
+    // Original IGI.EXE DefineWeaponType fields at QVM argument indexes 44 and 45.
+    std::string fire_sound_name;
+    std::string fire_loop_end_sound_name;
 };
 
 struct WeaponPickup final

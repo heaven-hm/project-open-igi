@@ -1,7 +1,13 @@
 #include "igi/asset_io.hpp"
+#include "igi/audio/audio_mixer.hpp"
+#include "igi/audio/sdl_audio_output.hpp"
+#include "igi/audio/sound_bank.hpp"
+#include "igi/audio/sound_definition_registry.hpp"
+#include "igi/audio/sound_system.hpp"
 #include "igi/diagnostics.hpp"
 #include "igi/exceptions.hpp"
 #include "igi/game_simulation.hpp"
+#include "igi/weapon_sound_player.hpp"
 #include "igi/input_controller.hpp"
 #include "igi/log_macros.hpp"
 #include "igi/logger.hpp"
@@ -18,6 +24,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <memory>
 #include <optional>
 #include <stdexcept>
 #include <string>
@@ -539,6 +546,69 @@ int run(RuntimeOptions options, const char* executable)
             "; authored mip levels=" + std::to_string(authored_mipmap_count) +
             "; generated mip levels=" + std::to_string(generated_mipmap_count) +
             "; anisotropy=" + std::to_string(selected_anisotropy) + "x");
+    igi::audio::AudioMixer audio_mixer;
+    igi::audio::SoundBank sound_bank(audio_mixer);
+    igi::audio::SoundDefinitionRegistry sound_definitions;
+    igi::audio::SoundSystem sound_system(audio_mixer, sound_bank, sound_definitions);
+    igi::gameplay::WeaponSoundPlayer weapon_sound_player(sound_system);
+    std::unique_ptr<igi::audio::SdlAudioOutput> audio_output;
+    if (!options.headless)
+    {
+        try
+        {
+            const std::size_t definition_count =
+                sound_definitions.SoundSystem_LoadForMission(options.game_directory, scene.mission_number);
+            const std::filesystem::path common_sound_directory =
+                options.game_directory / "common" / "sounds";
+            const std::filesystem::path mission_sound_directory =
+                options.game_directory / "missions" / "location0" /
+                ("level" + std::to_string(scene.mission_number)) / "sounds";
+            const std::size_t common_sound_count = sound_bank.SoundSystem_MountDirectory(common_sound_directory);
+            const std::size_t mission_sound_count =
+                sound_bank.SoundSystem_MountDirectory(mission_sound_directory);
+            log(Severity::information,
+                "audio",
+                "Loaded " + std::to_string(definition_count) + " sound definitions and mounted " +
+                    std::to_string(common_sound_count) + " common plus " +
+                    std::to_string(mission_sound_count) + " mission sound assets");
+
+            audio_output = std::make_unique<igi::audio::SdlAudioOutput>(audio_mixer);
+            if (!audio_output->IsAvailable())
+            {
+                log(Severity::warning, "audio", std::string(audio_output->FailureReason()));
+            }
+            else
+            {
+                // The port starts directly in gameplay without the retail intro cutscene transition.
+                // The C# vanilla MusicPlayer plays this mission's game_music bank track as a loop.
+                igi::audio::RetailVoiceParameters mission_music_parameters;
+                mission_music_parameters.looping = true;
+                const std::uint32_t music_voice =
+                    sound_system.SoundSystem_PlayBankSound("game_music", mission_music_parameters);
+                if (music_voice == 0)
+                {
+                    log(Severity::warning, "audio", "Level mission music could not start");
+                }
+                else
+                {
+                    log(Severity::information,
+                        "audio",
+                        "Started looping Level " + std::to_string(scene.mission_number) + " music; voice=" +
+                            std::to_string(music_voice));
+                }
+            }
+        }
+        catch (const std::exception& exception)
+        {
+            log(Severity::warning, "audio", "Audio startup failed; gameplay continues silently: " +
+                                                   std::string(exception.what()));
+        }
+    }
+    else
+    {
+        log(Severity::information, "audio", "Audio output is disabled for this headless run");
+    }
+
     igi::gameplay::GameSimulation simulation(scene);
     simulation.set_difficulty(options.difficulty);
     log(Severity::information,
@@ -681,6 +751,7 @@ int run(RuntimeOptions options, const char* executable)
                 }
                 if (event.key.keysym.sym == SDLK_RETURN)
                 {
+                    weapon_sound_player.WeaponSoundPlayer_Reset();
                     simulation.restart();
                     if (free_camera.active)
                     {
@@ -879,7 +950,13 @@ int run(RuntimeOptions options, const char* executable)
             pitch_change = 0;
             requested_weapon_slot = -1;
             requested_weapon_cycle = 0;
+            const std::uint64_t shots_before_tick = simulation.weapon().shots_fired;
             simulation.tick(input);
+            if (audio_output && audio_output->IsAvailable())
+            {
+                const bool fired_this_tick = simulation.weapon().shots_fired > shots_before_tick;
+                weapon_sound_player.WeaponSoundPlayer_Tick(fired_this_tick, simulation.weapon_definition());
+            }
             if (trace.is_open())
             {
                 const auto position = simulation.player_position();
@@ -959,6 +1036,17 @@ int run(RuntimeOptions options, const char* executable)
                 std::to_string(scene.terrain_triangle_count) + ", terrain chunks culled=" +
                 std::to_string(frame.terrain_chunks_culled()) + "/" +
                 std::to_string(scene.terrain_render_chunks.size()));
+    }
+    if (audio_output)
+    {
+        weapon_sound_player.WeaponSoundPlayer_Reset();
+        if (audio_output->ConsumeCallbackFailure())
+        {
+            log(Severity::error, "audio", "SDL audio callback reported a mixer failure");
+        }
+        log(Severity::information,
+            "audio",
+            "SDL audio callback count=" + std::to_string(audio_output->CallbackCount()));
     }
     log(Severity::information,
         "application",

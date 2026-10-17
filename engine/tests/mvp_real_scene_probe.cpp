@@ -417,6 +417,9 @@ int main(int argument_count, char** arguments)
                             weapon.parameters.fixed_recoil_pitch_degrees == 0.8f &&
                             weapon.parameters.random_recoil_pitch_degrees == 0.8f,
                         "MP5 count, spread and recoil must match the original decompiled weapon script");
+                require(weapon.fire_sound_name == "mp5sd_loop" &&
+                            weapon.fire_loop_end_sound_name == "mp5sd_loop_e",
+                        "MP5 automatic fire sounds must match DefineWeaponType QVM fields 44 and 45");
             }
             else if (weapon.identifier == "WEAPON_ID_GLOCK")
             {
@@ -426,6 +429,9 @@ int main(int argument_count, char** arguments)
                             weapon.parameters.fixed_recoil_pitch_degrees == 1.5f &&
                             weapon.parameters.random_recoil_pitch_degrees == 0,
                         "Glock count, spread and recoil must match the original decompiled weapon script");
+                require(weapon.fire_sound_name == "glock_shot_1" &&
+                            weapon.fire_loop_end_sound_name == "glock_shot_2",
+                        "Glock fire sounds must match DefineWeaponType QVM fields 44 and 45");
             }
             const float expected_range =
                 weapon.identifier == "WEAPON_ID_AK47"                                              ? 2000.0f
