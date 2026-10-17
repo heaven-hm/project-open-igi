@@ -19,3 +19,11 @@ The Level 1 pickup path now queues one `weaponpickup_1` event for each pickup th
 ## Remaining fidelity work
 
 This change ports only the sound side effect. The native's `+0xCF5` suppression field is not yet mapped to a C++ player-state field. The inventory helper calls (`0x0047CE00` and `0x00477C50`) also need their ammo record bounds/caps and weapon-task initialization mapped before the inventory branch can be considered a complete `Weapon_GunPickup` port. The test verifies definition lookup and PCM voice creation; audible SDL device playback during an actual pickup remains unverified.
+
+## Verification performed
+
+- `mvp_navigation_inventory`: passed; accepted pickup queued exactly one sound event and a second tick did not queue it again.
+- `retail_level_one_sound_playback`: passed; Level 1 `weaponpickup_1` resolved to an active mixer voice from retail resources.
+- `sdl_audio_output_test` with `SDL_AUDIODRIVER=dummy`: passed; SDL output callback ran 11 times without callback failure.
+- Headless Level 1 runtime with original assets: loaded 425 objects and 28 soldiers; all 425 `objects.qvm` placement records matched position and orientation, with no warning or error log entries. Headless mode disables audio, so this does not establish audible in-game playback.
+- Windowed five-frame runtime attempt: aborted with exit status 134 before the application logger initialized. This failure remains unresolved; it is not counted as a passing runtime check.
