@@ -255,6 +255,30 @@ int main(int argument_count, char** arguments)
             replay_output << std::setprecision(9);
         }
         const auto scene = load_mission(arguments[1], arguments[2]);
+        require(scene.player_parameters.maximum_health == 3.0F,
+                "Level 1 player health must come from the original humanplayer.qvm definition");
+
+        auto jump_only_scene = scene;
+        jump_only_scene.actors.clear();
+        GameSimulation jump_only_simulation(jump_only_scene);
+        const float initial_player_health = jump_only_simulation.health();
+        const Vector3 initial_player_position = jump_only_simulation.player_position();
+        float maximum_jump_height = initial_player_position.z;
+        for (std::uint64_t tick_index = 0; tick_index < 80; ++tick_index)
+        {
+            PlayerInput input;
+            input.forward = tick_index < 50 ? 1.0F : 0.0F;
+            input.walking = tick_index < 25;
+            input.jumping = tick_index == 35;
+            jump_only_simulation.tick(input);
+            maximum_jump_height = std::max(maximum_jump_height, jump_only_simulation.player_position().z);
+        }
+        require(maximum_jump_height > initial_player_position.z + 1.0F,
+                "The real Level 1 input replay must perform a normal jump on original collision geometry");
+        require(jump_only_simulation.grounded(), "The real Level 1 jump replay must land on original geometry");
+        require(jump_only_simulation.health() == initial_player_health,
+                "An ordinary Level 1 jump and landing must not reduce player health");
+
         const std::filesystem::path game_directory = arguments[1];
         const std::filesystem::path mission_directory = game_directory / "missions/location0/level1";
         const auto magic_script_bytes = igi::assets::read_file(game_directory / "magicobj/magicobj.qvm");
