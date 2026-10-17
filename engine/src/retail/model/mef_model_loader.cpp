@@ -224,4 +224,12 @@ MefModel MefModel::DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes)
     return model;
 }
 
+MefRenderChunks MefModel::render_chunks() const noexcept {
+    return {
+        container.find_first(mef_tag::d3d_render_header),
+        container.find_first(mef_tag::draw_records),
+        container.find_first(mef_tag::vertices),
+    };
+}
+
 } // namespace igi::retail::model

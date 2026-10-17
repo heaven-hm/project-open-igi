@@ -39,6 +39,12 @@ struct IlffContainer {
     [[nodiscard]] const IlffChunk* find_first(std::uint32_t requested_tag) const noexcept;
 };
 
+struct MefRenderChunks {
+    const IlffChunk* d3d_render_header = nullptr;
+    const IlffChunk* draw_records = nullptr;
+    const IlffChunk* vertex_stream = nullptr;
+};
+
 // FourCC integers are the values compared by the retail x86 code. The bytes on disk are
 // little-endian, so a native constant such as 'MESH' is stored as the byte sequence "HSEM".
 namespace mef_tag {
@@ -51,8 +57,8 @@ inline constexpr std::uint32_t portal_faces = 0x50544643U;
 inline constexpr std::uint32_t portal_vertices = 0x50545658U;
 inline constexpr std::uint32_t texture_animation = 0x4E415854U;
 inline constexpr std::uint32_t d3d_render_header = 0x52443344U;
-inline constexpr std::uint32_t draw_records = 0x444E4552U;
-inline constexpr std::uint32_t vertices = 0x58545256U;
+inline constexpr std::uint32_t draw_records = 0x52454E44U;
+inline constexpr std::uint32_t vertices = 0x56525458U;
 } // namespace mef_tag
 
 class MefModel {
@@ -71,6 +77,7 @@ public:
     std::optional<IlffChunk> portal_vertices;
 
     [[nodiscard]] static MefModel DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes);
+    [[nodiscard]] MefRenderChunks render_chunks() const noexcept;
 };
 
 // Original IGI.EXE ILFF helpers used by DynObj_LocalModelsSMef:

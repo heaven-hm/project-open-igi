@@ -64,6 +64,28 @@ std::vector<std::byte> make_model_bytes() {
     return file_bytes;
 }
 
+std::vector<std::byte> make_render_model_bytes() {
+    std::vector<std::byte> file_bytes(20U);
+    write_u32(file_bytes, 0U, igi::retail::model::mef_tag::ilff);
+    write_u32(file_bytes, 8U, 4U);
+    write_u32(file_bytes, 16U, MefModel::form_ocem);
+
+    std::vector<std::byte> mesh_header(MefModel::mesh_header_size);
+    write_u32(mesh_header, 0U, MefModel::supported_version_bits);
+    append_chunk(file_bytes, igi::retail::model::mef_tag::mesh, mesh_header, 4U, false);
+
+    const std::array<std::byte, 8> render_header_payload{};
+    append_chunk(file_bytes, igi::retail::model::mef_tag::d3d_render_header, render_header_payload, 4U, false);
+
+    const std::array<std::byte, 12> draw_record_payload{};
+    append_chunk(file_bytes, igi::retail::model::mef_tag::draw_records, draw_record_payload, 4U, false);
+
+    const std::array<std::byte, 40> vertex_payload{};
+    append_chunk(file_bytes, igi::retail::model::mef_tag::vertices, vertex_payload, 4U, true);
+    write_u32(file_bytes, 4U, static_cast<std::uint32_t>(file_bytes.size()));
+    return file_bytes;
+}
+
 void testRetailIlffChunkAlignmentAndTagSearch() {
     const std::vector<std::byte> file_bytes = make_model_bytes();
     const auto container = Ilff_ReadContainer(file_bytes);
@@ -90,6 +112,21 @@ void testRetailMefLoaderBindsMeshAndKnownChunks() {
         || model.legacy_vertices.has_value() || model.portals.has_value()
         || model.portal_faces.has_value() || model.portal_vertices.has_value()) {
         throw std::runtime_error("DynObj_LocalModelsSMef did not bind the retail model resource fields.");
+    }
+}
+
+void testRetailMefLoaderExposesRetailRenderChunks() {
+    const std::vector<std::byte> file_bytes = make_render_model_bytes();
+    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+    const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
+
+    if (render_chunks.d3d_render_header == nullptr
+        || render_chunks.draw_records == nullptr
+        || render_chunks.vertex_stream == nullptr
+        || render_chunks.d3d_render_header->payload.size() != 8U
+        || render_chunks.draw_records->payload.size() != 12U
+        || render_chunks.vertex_stream->payload.size() != 40U) {
+        throw std::runtime_error("Retail MEF render chunks were not exposed from their original ILFF records.");
     }
 }
 
@@ -144,6 +181,12 @@ MefModel loadMefAsset(const std::filesystem::path& model_path) {
     if (model.mesh_header.size() != MefModel::mesh_header_size) {
         throw std::runtime_error("MESH header length differs from the retail loader's accessed layout.");
     }
+    const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
+    if (render_chunks.d3d_render_header == nullptr
+        || render_chunks.draw_records == nullptr
+        || render_chunks.vertex_stream == nullptr) {
+        throw std::runtime_error("MEF asset is missing an observed D3DR, DNER, or XTRV chunk.");
+    }
     return model;
 }
 
@@ -151,15 +194,19 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path) {
     std::error_code filesystem_error;
     if (!std::filesystem::is_directory(requested_path, filesystem_error)) {
         const MefModel model = loadMefAsset(requested_path);
+        const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
         std::cout << "Loaded retail MEF resource: " << requested_path
                   << " (MESH version " << model.version
-                  << "; header " << model.mesh_header.size()
-                  << " bytes; chunks " << model.container.chunks.size() << ")\n";
+                  << "; D3DR " << render_chunks.d3d_render_header->payload.size()
+                  << " bytes; DNER " << render_chunks.draw_records->payload.size()
+                  << " bytes; XTRV " << render_chunks.vertex_stream->payload.size()
+                  << " bytes)\n";
         return;
     }
 
     std::size_t tested_asset_count = 0U;
     std::size_t failed_asset_count = 0U;
+    std::size_t render_vertex_bytes = 0U;
     for (std::filesystem::recursive_directory_iterator iterator(requested_path, filesystem_error), end;
          !filesystem_error && iterator != end;
          iterator.increment(filesystem_error)) {
@@ -169,7 +216,8 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path) {
         }
 
         try {
-            static_cast<void>(loadMefAsset(iterator->path()));
+            const MefModel model = loadMefAsset(iterator->path());
+            render_vertex_bytes += model.render_chunks().vertex_stream->payload.size();
             ++tested_asset_count;
         } catch (const std::exception& exception) {
             ++failed_asset_count;
@@ -185,6 +233,8 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path) {
     }
 
     std::cout << "Level MEF assets tested: " << tested_asset_count << '\n'
+              << "Models with D3DR, DNER, and XTRV chunks: " << tested_asset_count << '\n'
+              << "XTRV vertex-stream bytes inspected: " << render_vertex_bytes << '\n'
               << "Failed MEF assets: " << failed_asset_count << '\n';
     if (tested_asset_count == 0U || failed_asset_count != 0U) {
         throw std::runtime_error("Level MEF asset verification did not pass.");
@@ -197,6 +247,7 @@ int main(int argument_count, char** arguments) {
     try {
         testRetailIlffChunkAlignmentAndTagSearch();
         testRetailMefLoaderBindsMeshAndKnownChunks();
+        testRetailMefLoaderExposesRetailRenderChunks();
         testRetailMefLoaderRejectsUnsupportedVersion();
         testRetailMefLoaderRejectsTruncation();
 

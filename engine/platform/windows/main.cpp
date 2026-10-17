@@ -89,6 +89,7 @@ void load_retail_resource_demo(const std::filesystem::path& resource_path,
 
     const igi::retail::model::MefModel model =
         igi::retail::model::MefModel::DynObj_LocalModelsSMef(selected_entry->body);
+    const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
 
     std::ostringstream resource_log;
     resource_log << "Resource_Load completed; entries=" << archive.entries.size()
@@ -99,7 +100,15 @@ void load_retail_resource_demo(const std::filesystem::path& resource_path,
     std::ostringstream model_log;
     model_log << "DynObj_LocalModelsSMef completed; version=" << model.version
               << "; header_bytes=" << model.mesh_header.size()
-              << "; chunks=" << model.container.chunks.size();
+              << "; chunks=" << model.container.chunks.size()
+              << "; D3DR_bytes="
+              << (render_chunks.d3d_render_header == nullptr
+                      ? 0U
+                      : render_chunks.d3d_render_header->payload.size())
+              << "; DNER_bytes="
+              << (render_chunks.draw_records == nullptr ? 0U : render_chunks.draw_records->payload.size())
+              << "; XTRV_bytes="
+              << (render_chunks.vertex_stream == nullptr ? 0U : render_chunks.vertex_stream->payload.size());
     log_message(model_log.str(), igi::retail::diagnostics::LogLevel::info, "model");
 
     std::wostringstream version_line;
@@ -118,6 +127,18 @@ void load_retail_resource_demo(const std::filesystem::path& resource_path,
         version_line.str(),
         L"MESH header bytes: " + std::to_wstring(model.mesh_header.size()),
         L"MEF chunks: " + std::to_wstring(model.container.chunks.size()),
+        L"D3DR / DNER / XTRV bytes: "
+            + std::to_wstring(render_chunks.d3d_render_header == nullptr
+                                  ? 0U
+                                  : render_chunks.d3d_render_header->payload.size())
+            + L" / "
+            + std::to_wstring(render_chunks.draw_records == nullptr
+                                  ? 0U
+                                  : render_chunks.draw_records->payload.size())
+            + L" / "
+            + std::to_wstring(render_chunks.vertex_stream == nullptr
+                                  ? 0U
+                                  : render_chunks.vertex_stream->payload.size()),
         L"",
         L"RES entries:",
     };
