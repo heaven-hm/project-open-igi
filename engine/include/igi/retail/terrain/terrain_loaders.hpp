@@ -35,12 +35,14 @@ struct TerrainMaterialGroup
     std::uint32_t id = 0;
     std::array<TerrainMaterialEntry, 32> lod_materials{};
 };
+static_assert(sizeof(TerrainMaterialGroup) == 900, "TerrainMaterialGroup must be exactly 900 bytes");
 
 // Tile map holding 64 texture indices for terrain quadtree mapping (64 bytes).
 struct TerrainTileMapTable
 {
     std::array<std::uint8_t, 64> tex_indices{};
 };
+static_assert(sizeof(TerrainTileMapTable) == 64, "TerrainTileMapTable must be exactly 64 bytes");
 
 // Decoded terrain vertex for rendering.
 struct TerrainVertex
@@ -155,19 +157,19 @@ class TerrainLevelData
 
 // Retail Native Function Declarations (transcribed from igi.exe):
 
-// Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature int32_t(void* context, const float* args).
+// Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature void*(void* context, const float* args).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp; CFG 96.7%.
-// Behavior/CFG: Reads 226 arguments, populates 32 LOD material records in 900-byte material slot at 0x00C28FE0.
-// Status/limits: TRANSCRIBED; port-owned material table storage, verified against retail QVM call sequence.
-std::int32_t Terrain_CreateMaterial(void* context, const float* args);
+// Behavior/CFG: Reads material index, group ID, 32 LOD records (active, v1, v2, f_tex2*0.5, tex2, f_tex1*0.5, tex1), clears context, returns context.
+// Status/limits: TRANSCRIBED; copied directly from scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp.
+void* Terrain_CreateMaterial(void* context, const float* args);
 
-// Native: Terrain_CreateTileMap; retail VA 0x004C6760; signature int32_t(void* context, const float* args).
+// Native: Terrain_CreateTileMap; retail VA 0x004C6760; signature void*(void* context, const float* args).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp; CFG 88.9%.
-// Behavior/CFG: Reads group index and 64 texture indices, stores 64 bytes into tilemap table at 0x00C30080.
-// Status/limits: TRANSCRIBED; port-owned tilemap storage, verified against retail QVM call sequence.
-std::int32_t Terrain_CreateTileMap(void* context, const float* args);
+// Behavior/CFG: Reads group index and 64 texture indices, stores 64 bytes into tilemap table at 0x00C30080, clears context, returns context.
+// Status/limits: TRANSCRIBED; copied directly from scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp.
+void* Terrain_CreateTileMap(void* context, const float* args);
 
 // Native: Terrain_Load; retail VA 0x004C6240; signature void*(void* context, const char* base_path).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.

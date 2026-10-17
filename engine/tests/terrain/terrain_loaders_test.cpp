@@ -33,8 +33,14 @@ void test_create_material_native()
     args[7] = 512.0f; // f_tex1
     args[8] = 3.0f; // tex1 group
 
-    const auto result = Terrain_CreateMaterial(nullptr, args.data());
-    require(result == 1, "Terrain_CreateMaterial returns success");
+    std::array<std::uint8_t, 0x18> dummy_ctx{};
+    dummy_ctx.fill(0xFF);
+    const auto result = Terrain_CreateMaterial(dummy_ctx.data(), args.data());
+    require(result == dummy_ctx.data(), "Terrain_CreateMaterial returns context");
+    for (const auto b : dummy_ctx)
+    {
+        require(b == 0, "Terrain_CreateMaterial zeroes 0x18 context bytes");
+    }
 }
 
 void test_create_tilemap_native()
@@ -47,8 +53,14 @@ void test_create_tilemap_native()
         args[i] = static_cast<float>(i % 18);
     }
 
-    const auto result = Terrain_CreateTileMap(nullptr, args.data());
-    require(result == 1, "Terrain_CreateTileMap returns success");
+    std::array<std::uint8_t, 0x18> dummy_ctx{};
+    dummy_ctx.fill(0xFF);
+    const auto result = Terrain_CreateTileMap(dummy_ctx.data(), args.data());
+    require(result == dummy_ctx.data(), "Terrain_CreateTileMap returns context");
+    for (const auto b : dummy_ctx)
+    {
+        require(b == 0, "Terrain_CreateTileMap zeroes 0x18 context bytes");
+    }
 }
 
 void test_modifier_and_heightmap_stack_natives()

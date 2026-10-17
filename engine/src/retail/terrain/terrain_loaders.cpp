@@ -130,73 +130,91 @@ double CalcHMPDeltaZ(const TerrainHeightMapTask& height_map, double vert_x, doub
     return (y_dir_interpolated - 64.0) * 256.0;
 }
 
-} // namespace
-
-// Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature int32_t(void* context, const float* args).
-// Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp; CFG 96.7%.
-// Behavior/CFG: Reads 226 arguments, populates 32 LOD material records in 900-byte material slot at 0x00C28FE0.
-// Status/limits: TRANSCRIBED; port-owned material table storage, verified against retail QVM call sequence.
-std::int32_t Terrain_CreateMaterial(void* context, const float* args)
+// Retail argument helpers matching Script_GetArg and Script_GetArgFloat
+inline int Script_GetArg(const float* args, int index)
 {
-    if (args == nullptr)
-    {
-        return 0;
-    }
-    const auto group_idx = static_cast<std::size_t>(args[0]);
-    if (group_idx >= g_c28fe0.size())
-    {
-        return 0;
-    }
-    auto& group = g_c28fe0[group_idx];
-    group.id = static_cast<std::uint32_t>(args[1]);
-
-    std::size_t arg_index = 2U;
-    for (std::size_t lod = 0U; lod < 32U; ++lod)
-    {
-        auto& lod_entry = group.lod_materials[lod];
-        lod_entry.active = static_cast<std::uint32_t>(args[arg_index]);
-        lod_entry.v1 = args[arg_index + 1U];
-        lod_entry.v2 = args[arg_index + 2U];
-        lod_entry.f_tex2 = args[arg_index + 3U] * 0.00390625f; // 1/256
-        lod_entry.tex2_tile_map_group_idx = static_cast<std::int32_t>(args[arg_index + 4U]);
-        lod_entry.f_tex1 = args[arg_index + 5U] * 0.00390625f; // 1/256
-        lod_entry.tex1_tile_map_group_idx = static_cast<std::int32_t>(args[arg_index + 6U]);
-        arg_index += 7U;
-    }
-    if (context != nullptr)
-    {
-        std::memset(context, 0, 0x18);
-    }
-    return 1;
+    return args != nullptr ? static_cast<int>(args[index]) : 0;
 }
 
-// Native: Terrain_CreateTileMap; retail VA 0x004C6760; signature int32_t(void* context, const float* args).
+inline float Script_GetArgFloat(const float* args, int index)
+{
+    return args != nullptr ? args[index] : 0.0f;
+}
+
+} // namespace
+
+// Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature void*(void* context, const float* args).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp; CFG 88.9%.
-// Behavior/CFG: Reads group index and 64 texture indices, stores 64 bytes into tilemap table at 0x00C30080.
-// Status/limits: TRANSCRIBED; port-owned tilemap storage, verified against retail QVM call sequence.
-std::int32_t Terrain_CreateTileMap(void* context, const float* args)
+// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp; CFG 96.7%.
+// Behavior/CFG: Reads material index, group ID, 32 LOD records (active, v1, v2, f_tex2*0.5, tex2, f_tex1*0.5, tex1), clears context, returns context.
+// Status/limits: TRANSCRIBED; copied directly from scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp.
+void* Terrain_CreateMaterial(void* context, const float* args)
 {
     if (args == nullptr)
     {
-        return 0;
+        return context;
     }
-    const auto group_idx = static_cast<std::size_t>(args[0]);
-    if (group_idx >= g_c30080.size())
+    const int material_id = Script_GetArg(args, 0);
+    const std::size_t safe_mat_idx = (material_id >= 0 && static_cast<std::size_t>(material_id) < g_c28fe0.size())
+                                         ? static_cast<std::size_t>(material_id)
+                                         : 0U;
+    char* dest_1 = reinterpret_cast<char*>(&g_c28fe0[safe_mat_idx]);
+    *reinterpret_cast<int*>(dest_1) = Script_GetArg(args, 1);
+    int i = 3;
+    char* dest_2 = dest_1;
+
+    do
     {
-        return 0;
-    }
-    auto& tilemap = g_c30080[group_idx];
-    for (std::size_t i = 0U; i < 64U; ++i)
-    {
-        tilemap.tex_indices[i] = static_cast<std::uint8_t>(args[i + 1U]);
-    }
+        *reinterpret_cast<int*>(dest_2 + 4) = Script_GetArg(args, i - 1);
+        *reinterpret_cast<float*>(dest_2 + 8) = Script_GetArgFloat(args, i);
+        *reinterpret_cast<float*>(dest_2 + 12) = Script_GetArgFloat(args, i + 1);
+        *reinterpret_cast<float*>(dest_2 + 16) = Script_GetArgFloat(args, i + 2) * 0.5f;
+        *reinterpret_cast<int*>(dest_2 + 20) = Script_GetArg(args, i + 3);
+        *reinterpret_cast<float*>(dest_2 + 24) = Script_GetArgFloat(args, i + 4) * 0.5f;
+        *reinterpret_cast<int*>(dest_2 + 28) = Script_GetArg(args, i + 5);
+        i += 7;
+        dest_2 += 0x1c;
+    } while (i < 0xe3);
+
     if (context != nullptr)
     {
         std::memset(context, 0, 0x18);
     }
-    return 1;
+    return context;
+}
+
+// Native: Terrain_CreateTileMap; retail VA 0x004C6760; signature void*(void* context, const float* args).
+// Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp; CFG 88.9%.
+// Behavior/CFG: Reads group index and 64 texture indices, stores 64 bytes into tilemap table at 0x00C30080, clears context, returns context.
+// Status/limits: TRANSCRIBED; copied directly from scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp.
+void* Terrain_CreateTileMap(void* context, const float* args)
+{
+    if (args == nullptr)
+    {
+        return context;
+    }
+    const int item_2c = 0;
+    const float* item_30 = args;
+    int i = 0;
+    const int group_idx = Script_GetArg(item_30, item_2c);
+    const std::size_t safe_group_idx = (group_idx >= 0 && static_cast<std::size_t>(group_idx) < g_c30080.size())
+                                           ? static_cast<std::size_t>(group_idx)
+                                           : 0U;
+    char* flagP = reinterpret_cast<char*>(&g_c30080[safe_group_idx]);
+
+    do
+    {
+        item_30 = args;
+        *(flagP + i) = static_cast<char>(Script_GetArg(item_30, i + 1));
+        i += 1;
+    } while (i < 0x40);
+
+    if (context != nullptr)
+    {
+        std::memset(context, 0, 0x18);
+    }
+    return context;
 }
 
 // Native: TextureModifier_Push; retail VA 0x00505E40; signature void*(void* self).
