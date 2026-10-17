@@ -1,0 +1,148 @@
+{
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "scope": "Measured source CFG plus explicit adapter/ABI/runtime limits; not engine parity percentages.",
+  "methods": [
+    {
+      "name": "Resource_Load",
+      "address": "0x004B5F00",
+      "classification": "partial_host_adapter",
+      "evidence_id": "ev_87092f5147addf2b19ea080dbc70a44d1218ec706e022f019e4ba19bad366057",
+      "tools": [
+        "REA/Ghidra",
+        "Binary Ninja MCP",
+        "radare2"
+      ],
+      "cfg": {
+        "address": "0x004B5F00",
+        "r2_blocks": 10,
+        "r2_edges": 12,
+        "r2_instruction_count": 48,
+        "r2_byte_count": 125,
+        "bn_blocks": 10,
+        "cfg_agreement": 1.0,
+        "code_prefix_verified": true,
+        "code_prefix_length": 16,
+        "code_prefix_sha256": "0e313a7db60c60fa33a4d61583c58d7f07c039850c9858f0f76dc6b6baab04e6",
+        "tools": [
+          "radare2",
+          "Binary Ninja MCP"
+        ],
+        "scope": "retail-source CFG agreement; not C++ behavioral accuracy"
+      },
+      "confidence": "partial host adapter; retail allocator/VFS/registry behavior is incomplete",
+      "signature_status": "C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.",
+      "usage": "Used by model/QVM loading; resource fixtures and model-scene runtime passed.",
+      "locations": [
+        "engine/include/igi/retail/resource/resource_archive.hpp",
+        "engine/src/retail/resource/resource_archive.cpp",
+        "engine/include/igi/retail/resource/resource_cache.hpp",
+        "engine/src/retail/resource/resource_cache.cpp"
+      ]
+    },
+    {
+      "name": "Sys_Resource",
+      "address": "0x004B5F80",
+      "classification": "partial_host_adapter",
+      "evidence_id": "ev_756c70344e9eb0cff58f5a134a0308a81a96d2483abaf4a70ae305f706b05829",
+      "tools": [
+        "REA/Ghidra",
+        "Binary Ninja MCP",
+        "radare2"
+      ],
+      "cfg": {
+        "address": "0x004B5F80",
+        "r2_blocks": 11,
+        "r2_edges": 14,
+        "r2_instruction_count": 132,
+        "r2_byte_count": 353,
+        "bn_blocks": 11,
+        "cfg_agreement": 1.0,
+        "code_prefix_verified": true,
+        "code_prefix_length": 16,
+        "code_prefix_sha256": "62c26f5ac4772a82e868656b8f3680012fe3c1c2371d715d0973377d0a6f77b7",
+        "tools": [
+          "radare2",
+          "Binary Ninja MCP"
+        ],
+        "scope": "retail-source CFG agreement; not C++ behavioral accuracy"
+      },
+      "confidence": "partial archive adapter; raw fallback and intrusive registry insertion remain unported",
+      "signature_status": "C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.",
+      "usage": "Used to mount model/texture RES archives; archive fixtures passed; full parity pending.",
+      "locations": [
+        "engine/include/igi/retail/resource/resource_archive.hpp",
+        "engine/src/retail/resource/resource_archive.cpp"
+      ]
+    },
+    {
+      "name": "Is_ResourceLoaded",
+      "address": "0x004B5B90",
+      "classification": "partial_host_adapter",
+      "evidence_id": "ev_d58a0427b58e2d3d638c5f4bd2c1332506b572ba79e84fd3fa46f4f3b1d5118f",
+      "tools": [
+        "REA/Ghidra",
+        "Binary Ninja MCP",
+        "radare2"
+      ],
+      "cfg": {
+        "address": "0x004B5B90",
+        "r2_blocks": 24,
+        "r2_edges": 35,
+        "r2_instruction_count": 92,
+        "r2_byte_count": 245,
+        "bn_blocks": 24,
+        "cfg_agreement": 1.0,
+        "code_prefix_verified": true,
+        "code_prefix_length": 16,
+        "code_prefix_sha256": "c2ba1135e9dc50f0deccc1ab3c0b80f4a758aa4d07edbf40b6a87bc773a7c825",
+        "tools": [
+          "radare2",
+          "Binary Ninja MCP"
+        ],
+        "scope": "retail-source CFG agreement; not C++ behavioral accuracy"
+      },
+      "confidence": "partial cache adapter; native alias search/hash/list semantics are not fully transcribed",
+      "signature_status": "Retail flag/out-entry interface is adapted to a C++ ResourceHandle lookup.",
+      "usage": "Used by resource cache tests/API; cache fixtures passed; native call-by-call replay pending.",
+      "locations": [
+        "engine/include/igi/retail/resource/resource_cache.hpp",
+        "engine/src/retail/resource/resource_cache.cpp"
+      ]
+    },
+    {
+      "name": "Resource_Unload",
+      "address": "0x004B6380",
+      "classification": "partial_host_adapter",
+      "evidence_id": "ev_61eb49f6f63a80b807875b80fe9cebc7ec3cf1637b5215987b4858715812e9bd",
+      "tools": [
+        "REA/Ghidra",
+        "Binary Ninja MCP",
+        "radare2"
+      ],
+      "cfg": {
+        "address": "0x004B6380",
+        "r2_blocks": 7,
+        "r2_edges": 9,
+        "r2_instruction_count": 25,
+        "r2_byte_count": 67,
+        "bn_blocks": 7,
+        "cfg_agreement": 1.0,
+        "code_prefix_verified": true,
+        "code_prefix_length": 16,
+        "code_prefix_sha256": "f4b2885b007b7f17489a3a0ac75226cd9b25184d2db7f079fd1d30285a5f2c15",
+        "tools": [
+          "radare2",
+          "Binary Ninja MCP"
+        ],
+        "scope": "retail-source CFG agreement; not C++ behavioral accuracy"
+      },
+      "confidence": "partial adapter; host false-on-missing differs from the native fatal-error path",
+      "signature_status": "Retail void/path API is adapted to bool/cache/path; native ABI is not preserved yet.",
+      "usage": "Used by resource lifecycle fixtures; handle lifetime passed; retail unload replay pending.",
+      "locations": [
+        "engine/include/igi/retail/resource/resource_cache.hpp",
+        "engine/src/retail/resource/resource_cache.cpp"
+      ]
+    }
+  ]
+}

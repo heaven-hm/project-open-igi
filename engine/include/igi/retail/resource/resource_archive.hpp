@@ -34,17 +34,26 @@ public:
     [[nodiscard]] const ResourceEntry* find(std::string_view resource_name) const noexcept;
 };
 
-// Original IGI.EXE Sys_Resource at VA 0x004B5F80.
-// REA/Ghidra evidence ev_6f2afb3388ef8a6717637dc103d353963648cc8aedba9d6a88ab27b65fd34c1e:
-// validates ILFF/IRES, then walks NAME/BODY resources in sibling order.
-// This host-side adapter retains the archive entries; it does not reproduce the retail cache globals.
+// Native: Sys_Resource() - VA 0x004B5F80 - partial adapter, not a complete literal port.
+// Behavior: Recognizes ILFF/IRES, legacy RESOURCE entries, and the native raw-resource fallback.
+// Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
+// Evidence: ev_756c70344e9eb0cff58f5a134a0308a81a96d2483abaf4a70ae305f706b05829.
+// CFG: r2 blocks=11, edges=14; BN blocks=11; source agreement=100.0%.
+// Confidence: partial archive adapter; raw fallback and intrusive registry insertion remain unported.
+// Signature: C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.
+// Usage/tests: Used to mount model/texture RES archives; archive fixtures passed; full parity pending.
 [[nodiscard]] ResourceArchive Sys_Resource(
     std::span<const std::byte> resource_bytes,
     std::string_view source_name);
 
-// Original IGI.EXE Resource_Load at VA 0x004B5F00.
-// This path adapter reads a host file and feeds its bytes through Sys_Resource. Retail cache,
-// compression and allocation behavior remain separate engine work.
+// Native: Resource_Load() - VA 0x004B5F00 - partial adapter, not a complete literal port.
+// Behavior: Loads cached/unpacked bytes and optionally writes their uint32 byte count.
+// Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
+// Evidence: ev_87092f5147addf2b19ea080dbc70a44d1218ec706e022f019e4ba19bad366057.
+// CFG: r2 blocks=10, edges=12; BN blocks=10; source agreement=100.0%.
+// Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete.
+// Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
+// Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
 [[nodiscard]] ResourceArchive Resource_Load(const std::filesystem::path& resource_path);
 
 } // namespace igi::retail::resource
