@@ -41,6 +41,7 @@ add_library(igi_audio STATIC
     src/audio/ilsf_stream_reader.cpp
     src/audio/audio_mixer.cpp
     src/audio/sdl_audio_output.cpp
+    src/audio/sound_definition_registry.cpp
 )
 target_include_directories(igi_audio PUBLIC include)
 target_compile_features(igi_audio PUBLIC cxx_std_20)
@@ -60,6 +61,7 @@ add_library(igi_assets STATIC
 target_compile_features(igi_assets PUBLIC cxx_std_20)
 target_include_directories(igi_assets PUBLIC include)
 target_link_libraries(igi_assets PUBLIC igi_formats)
+target_link_libraries(igi_audio PUBLIC igi_assets)
 
 add_executable(igi_inspect_mission tools/inspect_mission.cpp)
 target_link_libraries(igi_inspect_mission PRIVATE igi_assets)
@@ -205,6 +207,13 @@ if(BUILD_TESTING)
     add_executable(audio_mixer_test tests/audio/audio_mixer_test.cpp)
     target_link_libraries(audio_mixer_test PRIVATE igi_audio)
     add_test(NAME retail_audio_mixer COMMAND audio_mixer_test)
+
+    add_executable(sound_definition_registry_test tests/audio/sound_definition_registry_test.cpp)
+    target_link_libraries(sound_definition_registry_test PRIVATE igi_audio)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_sound_definitions
+            COMMAND sound_definition_registry_test "${IGI_GAME_PATH}")
+    endif()
 
     add_executable(sdl_audio_output_test tests/audio/sdl_audio_output_test.cpp)
     target_link_libraries(sdl_audio_output_test PRIVATE igi_audio)
