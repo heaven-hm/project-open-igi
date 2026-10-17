@@ -7,25 +7,30 @@
 #include <string>
 #include <vector>
 
-namespace igi::retail::model {
+namespace igi::retail::model
+{
 
-class MtpFormatError final : public std::runtime_error {
-public:
+class MtpFormatError final : public std::runtime_error
+{
+  public:
     using std::runtime_error::runtime_error;
 };
 
-struct MtpMaterialReference {
+struct MtpMaterialReference
+{
     std::uint32_t first_native_index = 0U;
     std::uint32_t second_native_index = 0U;
 };
 
-struct MtpInstance {
+struct MtpInstance
+{
     std::uint32_t model_index = 0U;
     std::string instance_name;
     std::vector<std::uint32_t> material_reference_indices;
 };
 
-struct MtpPackage {
+struct MtpPackage
+{
     std::uint32_t root_tag = 0U;
     std::vector<std::string> model_names;
     std::vector<std::string> texture_names;

@@ -8,16 +8,19 @@
 #include <string>
 #include <vector>
 
-namespace igi::retail::model {
+namespace igi::retail::model
+{
 
 // Original IGI.EXE: DynObj_LoadModelMesh at VA 0x004CF390.
 // This object owns the ILFF byte stream and the parsed chunk tree it exposes.
-class MefFormatError final : public std::runtime_error {
-public:
+class MefFormatError final : public std::runtime_error
+{
+  public:
     using std::runtime_error::runtime_error;
 };
 
-struct IlffChunk {
+struct IlffChunk
+{
     std::uint32_t tag = 0;
     std::uint32_t declared_size = 0;
     std::uint32_t alignment = 0;
@@ -29,7 +32,8 @@ struct IlffChunk {
     [[nodiscard]] const IlffChunk* find_first(std::uint32_t requested_tag) const noexcept;
 };
 
-struct IlffContainer {
+struct IlffContainer
+{
     std::uint32_t form_type = 0;
     std::uint32_t declared_size = 0;
     std::uint32_t alignment = 0;
@@ -39,7 +43,8 @@ struct IlffContainer {
     [[nodiscard]] const IlffChunk* find_first(std::uint32_t requested_tag) const noexcept;
 };
 
-struct MefRenderChunks {
+struct MefRenderChunks
+{
     const IlffChunk* d3d_render_header = nullptr;
     const IlffChunk* draw_records = nullptr;
     const IlffChunk* vertex_stream = nullptr;
@@ -48,13 +53,15 @@ struct MefRenderChunks {
 // Original IGI.EXE backend routine at VA 0x0049FB10 accepts MESH+0x20 values 0, 1, and 3.
 // The stripped retail binary does not provide a symbol name; the enum names describe the
 // observed renderer paths and remain working labels.
-enum class MefRenderFormat : std::uint32_t {
+enum class MefRenderFormat : std::uint32_t
+{
     diffuse = 0U,
     skinned = 1U,
     lightmapped = 3U,
 };
 
-struct MefRenderHeader {
+struct MefRenderHeader
+{
     std::uint32_t vertex_count = 0U;
     std::uint32_t submesh_count = 0U;
     std::uint32_t lightmap_page_count = 0U;
@@ -67,7 +74,8 @@ struct MefRenderHeader {
 // 40-byte records; position/normal/UV floats at +0x00..+0x1C, influence weight at +0x20,
 // accumulated target vertex at +0x24, and transform/bone index at +0x26. This identifies
 // the record consumed by the native, not its association with a specific MEF chunk.
-struct MefSkinnedVertex {
+struct MefSkinnedVertex
+{
     float position_x = 0.0F;
     float position_y = 0.0F;
     float position_z = 0.0F;
@@ -83,7 +91,8 @@ struct MefSkinnedVertex {
 
 // FourCC integers are the values compared by the retail x86 code. The bytes on disk are
 // little-endian, so a native constant such as 'MESH' is stored as the byte sequence "HSEM".
-namespace mef_tag {
+namespace mef_tag
+{
 inline constexpr std::uint32_t ilff = 0x46464C49U;
 inline constexpr std::uint32_t mesh = 0x4D455348U;
 inline constexpr std::uint32_t attachments = 0x41545441U;
@@ -97,8 +106,9 @@ inline constexpr std::uint32_t draw_records = 0x52454E44U;
 inline constexpr std::uint32_t vertices = 0x56525458U;
 } // namespace mef_tag
 
-class MefModel {
-public:
+class MefModel
+{
+  public:
     static constexpr std::uint32_t form_ocem = 0x4D45434FU;
     static constexpr std::uint32_t mesh_header_size = 0x9CU;
     static constexpr std::uint32_t supported_version_bits = 0x3DCCCCCDU;
@@ -127,14 +137,12 @@ public:
 // retail routine 0x0049FB10 - 0x0049FB10 - reads D3DR renderer data according to MESH+0x20.
 // Field offsets follow the native format branches; the skinned count interpretation is cross-referenced
 // with retail routine 0x0049B700 (REA evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446).
-[[nodiscard]] MefRenderHeader MefRenderHeader_ReadRetail(
-    std::span<const std::byte> render_header_bytes,
-    MefRenderFormat render_format);
+[[nodiscard]] MefRenderHeader MefRenderHeader_ReadRetail(std::span<const std::byte> render_header_bytes,
+                                                         MefRenderFormat render_format);
 
 // Reads only the 40-byte record consumed by retail routine 0x0049B700. This does not identify
 // which MEF chunk or mesh format supplies the record; that association remains unverified.
-[[nodiscard]] MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(
-    std::span<const std::byte> record_bytes);
+[[nodiscard]] MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> record_bytes);
 
 // Original IGI.EXE ILFF helpers used by DynObj_LoadModelMesh:
 // 0x004B7490 computes the first aligned child position; 0x004B74D0 resolves a child

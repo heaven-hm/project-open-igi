@@ -1,6 +1,7 @@
 #pragma once
 
 #include "igi/retail/model/mef_model_loader.hpp"
+
 #include <array>
 
 namespace igi::retail::model
@@ -35,6 +36,6 @@ struct MefRenderData
 // Binary Ninja export and radare2 assembly establish 28/32-byte batch headers and linked index lists.
 // Vertex upload at 0x0049B4B0 copies 32-byte format-0 and 40-byte format-3 records.
 // This helper decodes those fields; it is not a separate original game entry point.
-[[nodiscard]] MefRenderData Display_DecodeMeshRenderData(const MefModel &model);
+[[nodiscard]] MefRenderData Display_DecodeMeshRenderData(const MefModel& model);
 
 } // namespace igi::retail::model

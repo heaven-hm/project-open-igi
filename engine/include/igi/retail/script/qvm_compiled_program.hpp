@@ -8,29 +8,34 @@
 #include <stdexcept>
 #include <string_view>
 
-namespace igi::retail::script {
+namespace igi::retail::script
+{
 
-struct QvmFileRegion {
+struct QvmFileRegion
+{
     std::uint32_t begin_offset = 0U;
     std::uint32_t end_offset = 0U;
     std::span<const std::byte> bytes;
 };
 
-struct QvmIndexedStringTable {
+struct QvmIndexedStringTable
+{
     QvmFileRegion offset_table;
     QvmFileRegion string_pool;
     std::uint32_t index_limit_bytes = 0U;
 
-    // Port helper for retail FUN_004BEC40 at VA 0x004BEC40.
+    // Port helper for retail retail routine 0x004BEC40 at VA 0x004BEC40.
     [[nodiscard]] std::optional<std::string_view> try_get(std::uint32_t entry_index) const noexcept;
 };
 
-class QvmFormatError final : public std::runtime_error {
-public:
+class QvmFormatError final : public std::runtime_error
+{
+  public:
     using std::runtime_error::runtime_error;
 };
 
-struct QvmCompiledProgram {
+struct QvmCompiledProgram
+{
     std::uint32_t format_revision = 0U;
     std::uint32_t field_08 = 0U;
     std::array<std::uint32_t, 8U> fields_0c_through_28{};
@@ -46,7 +51,6 @@ struct QvmCompiledProgram {
 // accepts a LOOP file, revision 8, field +0x08 > 4, and file length > 0x3B;
 // code begins at base + dword[0x2C] and has dword[0x30] bytes.
 // Static retail behavior is established; C++ runtime parity is not yet verified.
-[[nodiscard]] QvmCompiledProgram Qvm_LoadCompiledProgram(
-    std::span<const std::byte> file_bytes);
+[[nodiscard]] QvmCompiledProgram Qvm_LoadCompiledProgram(std::span<const std::byte> file_bytes);
 
 } // namespace igi::retail::script

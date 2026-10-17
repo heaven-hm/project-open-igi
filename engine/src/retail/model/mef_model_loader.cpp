@@ -6,8 +6,10 @@
 #include <sstream>
 #include <utility>
 
-namespace igi::retail::model {
-namespace {
+namespace igi::retail::model
+{
+namespace
+{
 
 // DynObj_LoadModelMesh - 0x004CF390 - Native static evidence: CFG 0.991 (PASS), RE-Agent 5/6; port runtime parity unverified.
 // Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
@@ -22,44 +24,56 @@ constexpr std::size_t chunk_header_size = 16U;
 constexpr std::size_t mesh_version_offset = 0U;
 constexpr std::size_t minimum_mesh_header_size = 0x9CU;
 
-[[nodiscard]] bool is_power_of_two(std::uint32_t value) noexcept {
+[[nodiscard]] bool is_power_of_two(std::uint32_t value) noexcept
+{
     return value != 0U && (value & (value - 1U)) == 0U;
 }
 
-[[nodiscard]] std::size_t align_up(std::size_t value, std::uint32_t alignment) {
+[[nodiscard]] std::size_t align_up(std::size_t value, std::uint32_t alignment)
+{
     const std::size_t alignment_size = static_cast<std::size_t>(alignment);
-    if (value > std::numeric_limits<std::size_t>::max() - (alignment_size - 1U)) {
+    if (value > std::numeric_limits<std::size_t>::max() - (alignment_size - 1U))
+    {
         throw MefFormatError("ILFF alignment overflows the host address range.");
     }
 
     return (value + alignment_size - 1U) & ~(alignment_size - 1U);
 }
 
-void require_range(std::size_t offset, std::size_t length, std::size_t limit, const char* description) {
-    if (offset > limit || length > limit - offset) {
+void require_range(std::size_t offset, std::size_t length, std::size_t limit, const char* description)
+{
+    if (offset > limit || length > limit - offset)
+    {
         throw MefFormatError(std::string(description) + " extends past its ILFF parent container.");
     }
 }
 
-void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uint32_t value) {
-    if (destination.size() < offset + sizeof(value)) {
+void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uint32_t value)
+{
+    if (destination.size() < offset + sizeof(value))
+    {
         destination.resize(offset + sizeof(value));
     }
-    for (std::size_t byte_index = 0U; byte_index < sizeof(value); ++byte_index) {
+    for (std::size_t byte_index = 0U; byte_index < sizeof(value); ++byte_index)
+    {
         destination[offset + byte_index] = static_cast<std::byte>((value >> (byte_index * 8U)) & 0xFFU);
     }
 }
 
-[[nodiscard]] IlffContainer read_container(std::span<const std::byte> bytes, std::size_t depth) {
-    if (depth > 16U) {
+[[nodiscard]] IlffContainer read_container(std::span<const std::byte> bytes, std::size_t depth)
+{
+    if (depth > 16U)
+    {
         throw MefFormatError("ILFF nested-container depth exceeds 16.");
     }
 
-    if (bytes.size() < container_header_size) {
+    if (bytes.size() < container_header_size)
+    {
         throw MefFormatError("ILFF container is shorter than its 20-byte header.");
     }
 
-    if (Ilff_ReadLittleEndian32(bytes, 0U) != mef_tag::ilff) {
+    if (Ilff_ReadLittleEndian32(bytes, 0U) != mef_tag::ilff)
+    {
         throw MefFormatError("Expected the retail ILFF container signature.");
     }
 
@@ -69,18 +83,21 @@ void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uin
     container.next_sibling_offset = Ilff_ReadLittleEndian32(bytes, 12U);
     container.form_type = Ilff_ReadLittleEndian32(bytes, 16U);
 
-    if (!is_power_of_two(container.alignment)) {
+    if (!is_power_of_two(container.alignment))
+    {
         throw MefFormatError("ILFF container alignment is not a nonzero power of two.");
     }
 
-    if (container.declared_size < container_header_size || container.declared_size > bytes.size()) {
+    if (container.declared_size < container_header_size || container.declared_size > bytes.size())
+    {
         throw MefFormatError("ILFF container size is outside the available file range.");
     }
 
     const std::size_t container_size = static_cast<std::size_t>(container.declared_size);
     std::size_t chunk_offset = align_up(container_header_size, container.alignment);
 
-    while (chunk_offset <= container_size && chunk_header_size <= container_size - chunk_offset) {
+    while (chunk_offset <= container_size && chunk_header_size <= container_size - chunk_offset)
+    {
         const auto chunk_header = bytes.subspan(chunk_offset, chunk_header_size);
         IlffChunk chunk{};
         chunk.tag = Ilff_ReadLittleEndian32(chunk_header, 0U);
@@ -89,28 +106,35 @@ void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uin
         chunk.next_sibling_offset = Ilff_ReadLittleEndian32(chunk_header, 12U);
         chunk.header_offset = chunk_offset;
 
-        if (!is_power_of_two(chunk.alignment) || chunk.alignment > container.alignment) {
+        if (!is_power_of_two(chunk.alignment) || chunk.alignment > container.alignment)
+        {
             throw MefFormatError("ILFF chunk alignment is invalid for its parent container.");
         }
 
         std::size_t payload_offset = 0U;
         std::size_t payload_size = static_cast<std::size_t>(chunk.declared_size);
-        if (chunk.tag == mef_tag::ilff) {
-            if (payload_size < container_header_size) {
+        if (chunk.tag == mef_tag::ilff)
+        {
+            if (payload_size < container_header_size)
+            {
                 throw MefFormatError("Nested ILFF chunk is shorter than its container header.");
             }
             payload_offset = chunk_offset + chunk_header_size;
             payload_size -= chunk_header_size;
-        } else {
+        }
+        else
+        {
             payload_offset = align_up(chunk_offset + chunk_header_size, chunk.alignment);
         }
 
         require_range(payload_offset, payload_size, container_size, "ILFF chunk payload");
         chunk.payload.assign(bytes.begin() + static_cast<std::ptrdiff_t>(payload_offset),
-            bytes.begin() + static_cast<std::ptrdiff_t>(payload_offset + payload_size));
+                             bytes.begin() + static_cast<std::ptrdiff_t>(payload_offset + payload_size));
 
-        if (chunk.tag == mef_tag::ilff) {
-            if (chunk.payload.size() < sizeof(std::uint32_t)) {
+        if (chunk.tag == mef_tag::ilff)
+        {
+            if (chunk.payload.size() < sizeof(std::uint32_t))
+            {
                 throw MefFormatError("Nested ILFF chunk does not contain a form type.");
             }
 
@@ -120,25 +144,26 @@ void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uin
             write_u32(nested_container_bytes, 8U, chunk.alignment);
             write_u32(nested_container_bytes, 12U, chunk.next_sibling_offset);
             nested_container_bytes.insert(
-                nested_container_bytes.end(),
-                chunk.payload.begin(),
-                chunk.payload.end());
+                nested_container_bytes.end(), chunk.payload.begin(), chunk.payload.end());
             chunk.children = read_container(nested_container_bytes, depth + 1U).chunks;
         }
 
         const std::uint32_t sibling_distance = chunk.next_sibling_offset;
         container.chunks.push_back(std::move(chunk));
 
-        if (sibling_distance == 0U) {
+        if (sibling_distance == 0U)
+        {
             break;
         }
 
-        if (sibling_distance < chunk_header_size) {
+        if (sibling_distance < chunk_header_size)
+        {
             throw MefFormatError("ILFF sibling distance cannot contain a chunk header.");
         }
 
         const std::size_t distance = static_cast<std::size_t>(sibling_distance);
-        if (distance > container_size - chunk_offset) {
+        if (distance > container_size - chunk_offset)
+        {
             throw MefFormatError("ILFF sibling offset points past the parent container.");
         }
         chunk_offset += distance;
@@ -149,9 +174,12 @@ void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uin
 
 } // namespace
 
-const IlffChunk* IlffChunk::find_first(std::uint32_t requested_tag) const noexcept {
-    for (const IlffChunk& child : children) {
-        if (child.tag == requested_tag) {
+const IlffChunk* IlffChunk::find_first(std::uint32_t requested_tag) const noexcept
+{
+    for (const IlffChunk& child : children)
+    {
+        if (child.tag == requested_tag)
+        {
             return &child;
         }
     }
@@ -159,9 +187,12 @@ const IlffChunk* IlffChunk::find_first(std::uint32_t requested_tag) const noexce
     return nullptr;
 }
 
-const IlffChunk* IlffContainer::find_first(std::uint32_t requested_tag) const noexcept {
-    for (const IlffChunk& chunk : chunks) {
-        if (chunk.tag == requested_tag) {
+const IlffChunk* IlffContainer::find_first(std::uint32_t requested_tag) const noexcept
+{
+    for (const IlffChunk& chunk : chunks)
+    {
+        if (chunk.tag == requested_tag)
+        {
             return &chunk;
         }
     }
@@ -169,33 +200,37 @@ const IlffChunk* IlffContainer::find_first(std::uint32_t requested_tag) const no
     return nullptr;
 }
 
-std::uint32_t Ilff_ReadLittleEndian32(std::span<const std::byte> bytes, std::size_t offset) {
-    if (offset > bytes.size() || sizeof(std::uint32_t) > bytes.size() - offset) {
+std::uint32_t Ilff_ReadLittleEndian32(std::span<const std::byte> bytes, std::size_t offset)
+{
+    if (offset > bytes.size() || sizeof(std::uint32_t) > bytes.size() - offset)
+    {
         throw MefFormatError("Attempted to read a 32-bit ILFF field past the available bytes.");
     }
 
-    return std::to_integer<std::uint32_t>(bytes[offset])
-        | (std::to_integer<std::uint32_t>(bytes[offset + 1U]) << 8U)
-        | (std::to_integer<std::uint32_t>(bytes[offset + 2U]) << 16U)
-        | (std::to_integer<std::uint32_t>(bytes[offset + 3U]) << 24U);
+    return std::to_integer<std::uint32_t>(bytes[offset]) |
+           (std::to_integer<std::uint32_t>(bytes[offset + 1U]) << 8U) |
+           (std::to_integer<std::uint32_t>(bytes[offset + 2U]) << 16U) |
+           (std::to_integer<std::uint32_t>(bytes[offset + 3U]) << 24U);
 }
 
-MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> record_bytes) {
+MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> record_bytes)
+{
     constexpr std::size_t record_size = 40U;
-    if (record_bytes.size() != record_size) {
+    if (record_bytes.size() != record_size)
+    {
         throw MefFormatError("retail routine 0x0049B700 consumes a 40-byte skinned vertex record.");
     }
 
-    const auto read_float = [record_bytes](std::size_t offset) {
-        return std::bit_cast<float>(Ilff_ReadLittleEndian32(record_bytes, offset));
-    };
-    const auto read_u16 = [record_bytes](std::size_t offset) {
-        if (offset > record_bytes.size() || sizeof(std::uint16_t) > record_bytes.size() - offset) {
+    const auto read_float = [record_bytes](std::size_t offset)
+    { return std::bit_cast<float>(Ilff_ReadLittleEndian32(record_bytes, offset)); };
+    const auto read_u16 = [record_bytes](std::size_t offset)
+    {
+        if (offset > record_bytes.size() || sizeof(std::uint16_t) > record_bytes.size() - offset)
+        {
             throw MefFormatError("Skinned vertex index extends past its 40-byte record.");
         }
-        return static_cast<std::uint16_t>(
-            std::to_integer<std::uint16_t>(record_bytes[offset])
-            | (std::to_integer<std::uint16_t>(record_bytes[offset + 1U]) << 8U));
+        return static_cast<std::uint16_t>(std::to_integer<std::uint16_t>(record_bytes[offset]) |
+                                          (std::to_integer<std::uint16_t>(record_bytes[offset + 1U]) << 8U));
     };
 
     return {
@@ -213,14 +248,17 @@ MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> re
     };
 }
 
-MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_header) {
+MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_header)
+{
     constexpr std::size_t format_offset = 0x20U;
-    if (mesh_header.size() < format_offset + sizeof(std::uint32_t)) {
+    if (mesh_header.size() < format_offset + sizeof(std::uint32_t))
+    {
         throw MefFormatError("MESH header is too short to read the renderer format at offset 0x20.");
     }
 
     const std::uint32_t raw_format = Ilff_ReadLittleEndian32(mesh_header, format_offset);
-    switch (raw_format) {
+    switch (raw_format)
+    {
     case static_cast<std::uint32_t>(MefRenderFormat::diffuse):
         return MefRenderFormat::diffuse;
     case static_cast<std::uint32_t>(MefRenderFormat::skinned):
@@ -232,15 +270,16 @@ MefRenderFormat MefModel_ReadRetailRenderFormat(std::span<const std::byte> mesh_
     }
 }
 
-MefRenderHeader MefRenderHeader_ReadRetail(
-    std::span<const std::byte> render_header_bytes,
-    MefRenderFormat render_format) {
+MefRenderHeader MefRenderHeader_ReadRetail(std::span<const std::byte> render_header_bytes,
+                                           MefRenderFormat render_format)
+{
     MefRenderHeader render_header{};
     std::size_t vertex_count_offset = 0U;
     std::size_t submesh_count_offset = 0U;
     std::size_t required_header_size = 0U;
 
-    switch (render_format) {
+    switch (render_format)
+    {
     case MefRenderFormat::diffuse:
         vertex_count_offset = 12U;
         submesh_count_offset = 8U;
@@ -260,14 +299,18 @@ MefRenderHeader MefRenderHeader_ReadRetail(
         throw MefFormatError("Mesh format not supported");
     }
 
-    if (render_header_bytes.size() < required_header_size) {
+    if (render_header_bytes.size() < required_header_size)
+    {
         throw MefFormatError("D3DR renderer header is shorter than the native format requires.");
     }
 
-    if (render_format == MefRenderFormat::skinned) {
+    if (render_format == MefRenderFormat::skinned)
+    {
         render_header.extra_influence_count = Ilff_ReadLittleEndian32(render_header_bytes, 12U);
         render_header.base_vertex_count = Ilff_ReadLittleEndian32(render_header_bytes, 16U);
-    } else if (render_format == MefRenderFormat::lightmapped) {
+    }
+    else if (render_format == MefRenderFormat::lightmapped)
+    {
         render_header.lightmap_page_count = Ilff_ReadLittleEndian32(render_header_bytes, 4U);
     }
 
@@ -276,33 +319,39 @@ MefRenderHeader MefRenderHeader_ReadRetail(
     return render_header;
 }
 
-IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes) {
+IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes)
+{
     return read_container(bytes, 0U);
 }
 
 // DynObj_LoadModelMesh() - 0x004CF390 - REA/Ghidra + Binary Ninja; source CFG 0.991.
-// Former catalog alias: DynObj_LocalModelsSMef. Full loader runtime parity pending.
-MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes) {
+// Former catalog alias: DynObj_LocalModelsSMef. Semantic role verified; full runtime parity pending.
+MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes)
+{
     MefModel model{};
     model.container = Ilff_ReadContainer(file_bytes);
 
-    if (model.container.form_type != form_ocem) {
+    if (model.container.form_type != form_ocem)
+    {
         throw MefFormatError("Retail DynObj_LoadModelMesh expects an OCEM model container.");
     }
 
     const IlffChunk* mesh_chunk = model.container.find_first(mef_tag::mesh);
-    if (mesh_chunk == nullptr) {
+    if (mesh_chunk == nullptr)
+    {
         throw MefFormatError("Retail DynObj_LoadModelMesh could not find its MESH chunk.");
     }
 
-    if (mesh_chunk->payload.size() < minimum_mesh_header_size) {
+    if (mesh_chunk->payload.size() < minimum_mesh_header_size)
+    {
         throw MefFormatError("MESH payload does not contain the fields accessed by the retail loader.");
     }
 
     model.mesh_header = mesh_chunk->payload;
     const std::uint32_t version_bits = Ilff_ReadLittleEndian32(model.mesh_header, mesh_version_offset);
     model.version = std::bit_cast<float>(version_bits);
-    if (version_bits != supported_version_bits) {
+    if (version_bits != supported_version_bits)
+    {
         std::ostringstream error_message;
         error_message << "Retail MESH version mismatch: got " << model.version << ", expected 0.1.";
         throw MefFormatError(error_message.str());
@@ -310,15 +359,16 @@ MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes) {
     model.render_format = MefModel_ReadRetailRenderFormat(model.mesh_header);
 
     const IlffChunk* render_header_chunk = model.container.find_first(mef_tag::d3d_render_header);
-    if (render_header_chunk != nullptr) {
-        model.render_header = MefRenderHeader_ReadRetail(
-            render_header_chunk->payload,
-            model.render_format);
+    if (render_header_chunk != nullptr)
+    {
+        model.render_header = MefRenderHeader_ReadRetail(render_header_chunk->payload, model.render_format);
     }
 
-    const auto copy_nonempty_chunk = [&model](std::uint32_t tag) -> std::optional<IlffChunk> {
+    const auto copy_nonempty_chunk = [&model](std::uint32_t tag) -> std::optional<IlffChunk>
+    {
         const IlffChunk* chunk = model.container.find_first(tag);
-        if (chunk == nullptr || chunk->payload.empty()) {
+        if (chunk == nullptr || chunk->payload.empty())
+        {
             return std::nullopt;
         }
         return *chunk;
@@ -333,7 +383,8 @@ MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes) {
     return model;
 }
 
-MefRenderChunks MefModel::render_chunks() const noexcept {
+MefRenderChunks MefModel::render_chunks() const noexcept
+{
     return {
         container.find_first(mef_tag::d3d_render_header),
         container.find_first(mef_tag::draw_records),
