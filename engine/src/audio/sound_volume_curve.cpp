@@ -18,6 +18,7 @@ constexpr long double retail_volume_floor = -10000.0L;
 
 using RetailVolumeTable = std::array<std::int32_t, retail_volume_table_entry_count>;
 
+// Original IGI.EXE sound-table native at VA 0x004952F0 builds the attenuation lookup table.
 RetailVolumeTable SoundSystem_BuildRetailVolumeTable()
 {
     RetailVolumeTable volume_table{};
@@ -59,12 +60,14 @@ std::size_t SoundSystem_GetRetailVolumeTableIndex(float normalized_gain)
 
 } // namespace
 
+// Original IGI.EXE sound-voice native at VA 0x00496E60 quantizes gain before table lookup.
 std::int32_t SoundSystem_GetRetailVolumeMillibels(float linear_gain)
 {
     const std::size_t table_index = SoundSystem_GetRetailVolumeTableIndex(linear_gain);
     return SoundSystem_GetRetailVolumeTable()[table_index];
 }
 
+// Original IGI.EXE sound-voice native at VA 0x00496E60 derives signed stereo pan attenuation.
 std::int32_t SoundSystem_GetRetailPanMillibels(float pan, bool reverse_stereo)
 {
     if (!std::isfinite(pan))
@@ -80,6 +83,7 @@ std::int32_t SoundSystem_GetRetailPanMillibels(float pan, bool reverse_stereo)
     return pan_direction * stereo_direction * channel_attenuation;
 }
 
+// Original IGI.EXE sound-voice native at VA 0x00496E60 clamps playback rate to [0.5, 2.0].
 float SoundSystem_ClampRetailPlaybackRate(float playback_rate)
 {
     if (!(playback_rate >= 0.5f))
