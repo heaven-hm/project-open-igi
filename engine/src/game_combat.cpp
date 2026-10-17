@@ -502,6 +502,11 @@ void GameSimulation::advance_projectiles()
         if (target_actor >= 0)
         {
             auto& actor = actors_[static_cast<std::size_t>(target_actor)];
+            const auto hit_point = projectile.position + projectile.direction * hit_distance;
+            const float hit_height = hit_point.z - actor.position.z;
+            const Vector3 facing{-std::sin(actor.heading), std::cos(actor.heading), 0.0f};
+            const bool shot_from_front = dot(facing, projectile.direction) <= 0.0f;
+            const bool is_headshot = hit_height > 1.50f;
             const float damage_multiplier =
                 soldier_hit_zone_multipliers[static_cast<std::size_t>(target_zone)];
             const float applied_damage = projectile.damage * damage_multiplier;

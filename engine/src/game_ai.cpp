@@ -219,7 +219,7 @@ void GameSimulation::advance_actors()
                                      ? (sight_dot > 0.35f)
                                      : (sight_dot > -0.2f || detection_distance <= 6.0f);
         bool visible = false;
-        if (within_view && detection_distance > 0.1f && detection_distance < 80.0f)
+        if (within_view && detection_distance > 0.1f && detection_distance < max_range)
         {
             const auto obstruction = world_.raycast(eye, direction, detection_distance);
             visible = !obstruction.hit || obstruction.distance > detection_distance - 0.3f;
