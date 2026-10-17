@@ -78,6 +78,7 @@ TerrainSurface::TerrainSurface(const std::filesystem::path& mission_directory,
             {
                 throw std::runtime_error("Terrain material identifier is invalid");
             }
+            terrain_material_argument_one_[static_cast<std::size_t>(identifier)] = call.arguments[1];
             for (std::size_t band_index = 0; band_index < 32; ++band_index)
             {
                 const auto offset = 2 + band_index * 7;
@@ -149,6 +150,19 @@ int TerrainSurface::material(double horizontal, double vertical) const
         }
     }
     return material;
+}
+
+const ScriptValue* TerrainSurface::TerrainSurface_CreateTerrainMaterialArgumentOne(
+    int terrain_material_index) const noexcept
+{
+    if (terrain_material_index < 0 ||
+        static_cast<std::size_t>(terrain_material_index) >= terrain_material_argument_one_.size())
+    {
+        return nullptr;
+    }
+
+    const auto& source_argument = terrain_material_argument_one_[static_cast<std::size_t>(terrain_material_index)];
+    return source_argument ? &*source_argument : nullptr;
 }
 
 double TerrainSurface::height(double horizontal, double vertical) const

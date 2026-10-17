@@ -3,6 +3,7 @@
 #include "igi/qvm_initializer.hpp"
 
 #include <array>
+#include <optional>
 
 namespace igi::assets
 {
@@ -22,6 +23,8 @@ class TerrainSurface final
     TerrainSurface(const std::filesystem::path& mission_directory, const std::vector<ScriptCall>& tasks);
     [[nodiscard]] double height(double horizontal, double vertical) const;
     [[nodiscard]] int material(double horizontal, double vertical) const;
+    [[nodiscard]] const ScriptValue* TerrainSurface_CreateTerrainMaterialArgumentOne(
+        int terrain_material_index) const noexcept;
     [[nodiscard]] TerrainProjection
     projection(int material, int depth, const std::array<double, 3>& centre) const;
 
@@ -54,6 +57,7 @@ class TerrainSurface final
     std::vector<Binding> material_bindings_;
     std::vector<Binding> height_bindings_;
     std::array<std::array<Band, 32>, 8> materials_{};
+    std::array<std::optional<ScriptValue>, 8> terrain_material_argument_one_{};
     std::array<std::array<std::uint32_t, 64>, 8> tile_maps_{};
 };
 

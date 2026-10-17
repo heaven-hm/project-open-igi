@@ -240,6 +240,13 @@ if(BUILD_TESTING)
             COMMAND game_material_registry_test "${IGI_GAME_PATH}")
     endif()
 
+    add_executable(terrain_surface_test tests/terrain_surface_test.cpp)
+    target_link_libraries(terrain_surface_test PRIVATE igi_assets)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_terrain_source_material_arguments
+            COMMAND terrain_surface_test "${IGI_GAME_PATH}")
+    endif()
+
     add_executable(sound_bank_test tests/audio/sound_bank_test.cpp)
     target_link_libraries(sound_bank_test PRIVATE igi_audio)
     if(IGI_GAME_PATH)
