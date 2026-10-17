@@ -148,6 +148,7 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     std::size_t diffuse_model_count = 0U;
     std::size_t skinned_model_count = 0U;
     std::size_t lightmapped_model_count = 0U;
+    std::size_t empty_format_three_model_count = 0U;
     for (const igi::retail::resource::ResourceEntry& entry : archive.entries) {
         if (!entry.name.ends_with(".mef")) {
             continue;
@@ -172,6 +173,27 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
             && render_chunks.draw_records != nullptr
             && render_chunks.vertex_stream != nullptr) {
             ++model_with_render_chunks_count;
+
+            // FUN_0049B4B0 copies format-0 records with stride 0x20 and format-3
+            // records with stride 0x28. FUN_0049B700 reads format-1 source records
+            // with stride 0x28. Static evidence IDs:
+            // ev_9b668df201c621c75f6217a02978f1ca7db796fba2784227a7ddbe490e0ef2e5
+            // and ev_e831fe78437d49cf51225556ea082e70d37f8bfbbcfc05e4ba18ba1e0a5ff8bc.
+            const std::size_t expected_vertex_stride =
+                model.render_format == igi::retail::model::MefRenderFormat::diffuse ? 32U : 40U;
+            if (model.render_header->vertex_count == 0U) {
+                require(render_chunks.vertex_stream->payload.empty()
+                        && model.render_format == igi::retail::model::MefRenderFormat::lightmapped,
+                    "only zero-count format-3 Level 1 models may have empty vertex streams");
+                ++empty_format_three_model_count;
+            } else {
+                require(render_chunks.vertex_stream->payload.size()
+                            % model.render_header->vertex_count == 0U,
+                    "each Level 1 MEF vertex stream divides evenly by its retail vertex count");
+                require(render_chunks.vertex_stream->payload.size()
+                            / model.render_header->vertex_count == expected_vertex_stride,
+                    "each Level 1 MEF uses the vertex stride selected by the retail renderer path");
+            }
         } else {
             std::cerr << "Level 1 MEF lacks a complete observed render chunk set: "
                       << entry.name << '\n';
@@ -182,6 +204,8 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
         "every Level 1 MEF uses a renderer format accepted by FUN_0049FB10");
     require(model_with_render_chunks_count == model_resource_count,
         "every Level 1 MEF has D3DR, REND, and VRTX chunks for the retail render path");
+    require(empty_format_three_model_count == 4U,
+        "Level 1 retains the four observed empty format-3 model resources");
 
     const auto* model_entry = archive.find("LOCAL:models/210_01_1.mef");
     require(model_entry != nullptr, "Level 1 archive resolves the first model resource");
@@ -192,7 +216,9 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
               << archive.entries.size() << " entries; "
               << model_resource_count << " MEFs with D3DR/REND/VRTX chunks; "
               << "formats 0/1/3=" << diffuse_model_count << "/" << skinned_model_count
-              << "/" << lightmapped_model_count << "; "
+              << "/" << lightmapped_model_count
+              << "; XTRV strides 0/1/3=32/40/40; empty format-3="
+              << empty_format_three_model_count << "; "
               << model_entry->name << "; "
               << model_entry->body.size() << " bytes; "
               << model.container.chunks.size() << " MEF chunks.\n";
