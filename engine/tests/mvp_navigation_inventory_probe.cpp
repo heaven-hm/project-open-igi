@@ -1,6 +1,7 @@
 #include "igi/game_simulation.hpp"
 #include "igi/navigation.hpp"
 
+#include <cmath>
 #include <exception>
 #include <iostream>
 #include <numbers>
@@ -214,6 +215,51 @@ int main()
                 "Player-only cheats must leave enemies vulnerable and their ammunition finite");
         require(player_only_cheat.actors().front().shots_fired > 0,
                 "An enemy must continue firing with normal combat behavior while player cheats are active");
+
+        auto medipack_scene = test_scene();
+        medipack_scene.weapon_pickups.clear();
+        SceneWeapon medipack_weapon;
+        medipack_weapon.identifier = "WEAPON_ID_MEDIPACK";
+        medipack_weapon.parameters.name = "Medipack";
+        medipack_weapon.parameters.category = WeaponCategory::medipack;
+        medipack_weapon.parameters.magazine_capacity = 50;
+        medipack_weapon.ammunition_identifier = "AMMO_ID_MEDIPACK";
+        medipack_scene.weapons.push_back(medipack_weapon);
+        medipack_scene.collision_triangles.push_back(
+            {{Vector3{-2.0f, -2.0f, 14.0f}, Vector3{2.0f, -2.0f, 14.0f}, Vector3{2.0f, 2.0f, 14.0f}}});
+        medipack_scene.collision_triangles.push_back(
+            {{Vector3{-2.0f, -2.0f, 14.0f}, Vector3{2.0f, 2.0f, 14.0f}, Vector3{-2.0f, 2.0f, 14.0f}}});
+        const Vector3 medipack_test_root_motion_derivative{0.0f, 12288.0f / 4800.0f, 0.0f};
+        medipack_scene.root_motion_clips[4] = {
+            4800,
+            {{0, {}, medipack_test_root_motion_derivative, medipack_test_root_motion_derivative},
+             {4800,
+              {0, 12288, 0},
+              medipack_test_root_motion_derivative,
+              medipack_test_root_motion_derivative}}};
+        medipack_scene.weapon_pickups.push_back({{40.0f, 0.0f, -2.0f}, medipack_weapon.identifier});
+        GameSimulation medipack_pickup_simulation(medipack_scene);
+        medipack_pickup_simulation.teleport_player({0.0f, 0.0f, 14.0f}, 0.0f, 0.0f);
+        PlayerInput walk_off_fall_test_platform;
+        walk_off_fall_test_platform.forward = 1.0f;
+        for (int walk_tick_index = 0; walk_tick_index < 60; ++walk_tick_index)
+        {
+            medipack_pickup_simulation.tick(walk_off_fall_test_platform);
+        }
+        for (int fall_tick_index = 0; fall_tick_index < 180; ++fall_tick_index)
+        {
+            medipack_pickup_simulation.tick({});
+        }
+        const float health_before_medipack_pickup = medipack_pickup_simulation.health();
+        require(health_before_medipack_pickup > 0.0f &&
+                    health_before_medipack_pickup < medipack_scene.player_parameters.maximum_health,
+                "The setup fall must leave the player alive with verifiable fall damage");
+        medipack_pickup_simulation.teleport_player({40.0f, 0.0f, -2.0f}, 0.0f, 0.0f);
+        medipack_pickup_simulation.tick({});
+        require(medipack_pickup_simulation.inventory_size() == 4,
+                "Retail Weapon_GunPickup must add the medipack weapon task to the human inventory");
+        require(std::abs(medipack_pickup_simulation.health() - health_before_medipack_pickup) < 0.0001f,
+                "Retail Weapon_GunPickup must not heal the human while adding a medipack");
 
         // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();

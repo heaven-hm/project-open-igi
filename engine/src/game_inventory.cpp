@@ -86,13 +86,8 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
             set_prompt_message("PICKED UP AMMUNITION", 2.0f);
             return true;
         }
-        if (identifier == "WEAPON_ID_MEDIPACK" || identifier == "AMMO_ID_MEDIPACK")
-        {
-            health_ = std::min(scene_.player_parameters.maximum_health, health_ + 0.5f);
-            diagnostics::log(diagnostics::Severity::information, "inventory", "Used medipack; health restored");
-            set_prompt_message("USED MEDIPACK (+50% HEALTH)", 2.0f);
-            return true;
-        }
+        // Original IGI.EXE Weapon_GunPickup at 0x0045FFC0 calls weapon/ammunition helpers and
+        // Sound_EventTrigger; its body does not update human health.
         const auto definition =
             std::find_if(scene_.weapons.begin(),
                          scene_.weapons.end(),
