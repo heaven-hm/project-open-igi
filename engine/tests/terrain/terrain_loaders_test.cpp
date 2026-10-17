@@ -1,14 +1,30 @@
 #include "igi/retail/terrain/terrain_loaders.hpp"
+#include "igi/retail/resource/resource_cache.hpp"
+#include "igi/retail/script/qvm_loader.hpp"
 
 #include <array>
 #include <cassert>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 
 namespace
 {
+
+std::vector<std::byte> read_binary_file(const std::filesystem::path& path)
+{
+    std::ifstream stream(path, std::ios::binary);
+    if (!stream)
+    {
+        return {};
+    }
+    const auto u8_bytes = std::vector<std::uint8_t>(std::istreambuf_iterator<char>(stream), {});
+    std::vector<std::byte> result(u8_bytes.size());
+    std::memcpy(result.data(), u8_bytes.data(), u8_bytes.size());
+    return result;
+}
 
 void require(bool condition, const char* message)
 {
@@ -91,8 +107,10 @@ void test_level1_terrain_loading_if_present()
     if (std::filesystem::exists(level1_dir))
     {
         TerrainLevelData level_data{};
-        std::vector<std::shared_ptr<igi::retail::script::QvmObjectCall>> empty_calls;
-        const bool loaded = level_data.Host_LoadLevelTerrain(level1_dir, empty_calls);
+        igi::retail::resource::ResourceCache cache;
+        const auto script = igi::retail::script::Host_LoadQvmScript(cache, level1_dir.parent_path() / "objects.qsc");
+        const auto calls = igi::retail::script::Qvm_ReadObjectCalls(script.program());
+        const bool loaded = level_data.Host_LoadLevelTerrain(level1_dir, calls);
         require(loaded, "Level 1 terrain loads successfully from retail directory");
         require(level_data.contour_nodes.size() > 1000, "Level 1 CTR contains contour nodes");
         require(level_data.texture_layers.size() == 18, "Level 1 TERRAIN.TEX has 18 texture layers");
@@ -107,8 +125,16 @@ void test_level1_terrain_loading_if_present()
                                                          1.0f, 1.333f, 500.0f);
         require(!mesh.vertices.empty(), "Mesh has decoded vertices");
         require(!mesh.batches.empty(), "Mesh has render batches");
+        require(mesh.batches.size() > 1, "Level 1 terrain has multiple texture batches from TERRAIN.QVM");
+        require(level_data.tile_maps[1].tex_indices[0] > 0,
+                "Tile map 1 has valid non-zero texture indices from TERRAIN.QVM");
         std::cout << "Level 1 terrain mesh generated: " << mesh.vertices.size() << " vertices, "
                   << mesh.batches.size() << " batches.\n";
+        for (std::size_t b = 0; b < mesh.batches.size(); ++b)
+        {
+            std::cout << "  Batch " << b << ": texture_index=" << mesh.batches[b].texture_index
+                      << " indices=" << mesh.batches[b].indices.size() << "\n";
+        }
     }
     else
     {

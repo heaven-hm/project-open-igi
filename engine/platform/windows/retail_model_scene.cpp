@@ -365,6 +365,10 @@ struct Scene
             write_log("Level terrain loaded=" + std::string(terrain_loaded ? "true" : "false") +
                       " nodes=" + std::to_string(terrain_data.contour_nodes.size()) +
                       " layers=" + std::to_string(terrain_data.texture_layers.size()));
+            if (direct_draw.pointer != nullptr)
+            {
+                upload_terrain_textures();
+            }
         }
         std::map<std::string, std::shared_ptr<model::MefRenderData>> geometry_cache;
         std::size_t missing = 0;
@@ -901,8 +905,16 @@ struct Scene
                                  "Terrain Z enable");
                     check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ZWRITEENABLE, TRUE),
                                  "Terrain Z write");
+                    check_result(device.pointer->SetTextureStageState(0, D3DTSS_COLOROP, D3DTOP_SELECTARG1),
+                                 "Terrain COLOROP");
+                    check_result(device.pointer->SetTextureStageState(0, D3DTSS_COLORARG1, D3DTA_TEXTURE),
+                                 "Terrain COLORARG1");
                     check_result(device.pointer->SetTextureStageState(0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP),
                                  "Terrain texture wrap");
+                    check_result(device.pointer->SetTextureStageState(0, D3DTSS_ADDRESSU, D3DTADDRESS_WRAP),
+                                 "Terrain texture wrap U");
+                    check_result(device.pointer->SetTextureStageState(0, D3DTSS_ADDRESSV, D3DTADDRESS_WRAP),
+                                 "Terrain texture wrap V");
 
                     struct TerrainD3DVertex
                     {

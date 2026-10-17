@@ -157,9 +157,9 @@ class ObjectCallReader
             {
                 const QvmObjectValue function = pop();
                 const auto *name = std::get_if<std::string>(&function);
-                if (name == nullptr || (*name != "Task_New" && *name != "Task_DeclareParameters"))
+                if (name == nullptr || name->empty())
                 {
-                    throw QvmFormatError("QVM object reader encountered an unsupported native call.");
+                    throw QvmFormatError("QVM object reader encountered an invalid native call name.");
                 }
                 const std::size_t argument_count = read_integer(offset, 4U);
                 if (argument_count > (program.code.size() - offset) / 4U)
