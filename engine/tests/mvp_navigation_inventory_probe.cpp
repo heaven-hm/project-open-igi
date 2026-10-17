@@ -235,7 +235,7 @@ int main()
         medipack_weapon.identifier = "WEAPON_ID_MEDIPACK";
         medipack_weapon.parameters.name = "Medipack";
         medipack_weapon.parameters.category = WeaponCategory::medipack;
-        medipack_weapon.parameters.magazine_capacity = 50;
+        medipack_weapon.parameters.magazine_capacity = 1;
         medipack_weapon.ammunition_identifier = "AMMO_ID_MEDIPACK";
         medipack_scene.weapons.push_back(medipack_weapon);
         medipack_scene.collision_triangles.push_back(
@@ -251,6 +251,8 @@ int main()
               medipack_test_root_motion_derivative,
               medipack_test_root_motion_derivative}}};
         medipack_scene.weapon_pickups.push_back({{40.0f, 0.0f, -2.0f}, medipack_weapon.identifier});
+        medipack_scene.weapon_pickups.push_back(
+            {{40.0f, 0.0f, -2.0f}, "AMMO_ID_MEDIPACK", {1.0f, 1.0f, 1.0f}, 1.0f, 50});
         GameSimulation medipack_pickup_simulation(medipack_scene);
         medipack_pickup_simulation.teleport_player({0.0f, 0.0f, 14.0f}, 0.0f, 0.0f);
         PlayerInput walk_off_fall_test_platform;
@@ -273,6 +275,14 @@ int main()
                 "Retail Weapon_GunPickup must add the medipack weapon task to the human inventory");
         require(std::abs(medipack_pickup_simulation.health() - health_before_medipack_pickup) < 0.0001f,
                 "Retail Weapon_GunPickup must not heal the human while adding a medipack");
+        PlayerInput select_medipack;
+        select_medipack.weapon_slot = 3;
+        medipack_pickup_simulation.tick(select_medipack);
+        require(medipack_pickup_simulation.weapon().magazine == 1 &&
+                    medipack_pickup_simulation.weapon().reserve == 50,
+                "Retail AmmoPickup must place its 50-round payload in the medipack ammo pool");
+        require(std::abs(medipack_pickup_simulation.health() - health_before_medipack_pickup) < 0.0001f,
+                "Picking up medipack charges must not heal before the medipack use state");
 
         // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();

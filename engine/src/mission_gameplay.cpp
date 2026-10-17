@@ -306,6 +306,82 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
             combat_settings_by_ai_type[call.arguments[3].text] = combat_settings;
         }
     }
+
+    struct AmmoTypeDefinition final
+    {
+        std::int32_t ammunition_id{};
+        std::int32_t calibre_id{};
+        std::string script_identifier;
+    };
+
+    std::unordered_map<std::int32_t, AmmoTypeDefinition> ammunition_types_by_calibre;
+    std::unordered_map<std::string, AmmoTypeDefinition> ammunition_types_by_script_identifier;
+    const auto ammunition_directory = resolve_path(scene.game_directory, "ammo");
+    std::vector<std::filesystem::path> ammunition_type_directories;
+    for (const auto& entry : std::filesystem::directory_iterator(ammunition_directory))
+    {
+        if (entry.is_directory())
+        {
+            ammunition_type_directories.push_back(entry.path());
+        }
+    }
+    std::sort(ammunition_type_directories.begin(), ammunition_type_directories.end());
+    for (const auto& directory : ammunition_type_directories)
+    {
+        const auto bytes = read_file(resolve_path(directory, "ammo.qvm"));
+        const QvmInitializer ammo_script{BinaryView(bytes)};
+        for (const auto& call : ammo_script.calls())
+        {
+            if (call.function != "DefineAmmoType")
+            {
+                continue;
+            }
+            if (call.arguments.size() < 15)
+            {
+                throw std::runtime_error("Retail DefineAmmoType call is missing one or more arguments");
+            }
+
+            const double raw_ammunition_id = call.arguments[0].number;
+            const double raw_calibre_id = call.arguments[4].number;
+            if (!std::isfinite(raw_ammunition_id) || raw_ammunition_id != std::trunc(raw_ammunition_id) ||
+                raw_ammunition_id < std::numeric_limits<std::int32_t>::min() ||
+                raw_ammunition_id > std::numeric_limits<std::int32_t>::max() ||
+                !std::isfinite(raw_calibre_id) || raw_calibre_id != std::trunc(raw_calibre_id) ||
+                raw_calibre_id < std::numeric_limits<std::int32_t>::min() ||
+                raw_calibre_id > std::numeric_limits<std::int32_t>::max() ||
+                !call.arguments[1].text.starts_with("AMMO_ID_"))
+            {
+                throw std::runtime_error("Retail DefineAmmoType contains an invalid ID, calibre, or script symbol");
+            }
+
+            AmmoTypeDefinition ammunition_type{static_cast<std::int32_t>(raw_ammunition_id),
+                                               static_cast<std::int32_t>(raw_calibre_id),
+                                               call.arguments[1].text};
+            ammunition_types_by_calibre.try_emplace(ammunition_type.calibre_id, ammunition_type);
+            ammunition_types_by_script_identifier.try_emplace(ammunition_type.script_identifier,
+                                                              ammunition_type);
+        }
+    }
+    if (ammunition_types_by_calibre.empty())
+    {
+        throw std::runtime_error("Retail ammo.qvm files contained no DefineAmmoType records");
+    }
+
+    std::vector<std::pair<std::int32_t, std::string>> calibre_mappings;
+    calibre_mappings.reserve(ammunition_types_by_calibre.size());
+    for (const auto& [calibre_id, ammunition_type] : ammunition_types_by_calibre)
+    {
+        calibre_mappings.emplace_back(calibre_id, ammunition_type.script_identifier);
+    }
+    std::sort(calibre_mappings.begin(), calibre_mappings.end());
+    std::string calibre_mapping_log = "Retail ammo table loaded " +
+                                      std::to_string(ammunition_types_by_calibre.size()) + " calibre mapping(s):";
+    for (const auto& [calibre_id, script_identifier] : calibre_mappings)
+    {
+        calibre_mapping_log += " " + std::to_string(calibre_id) + "=" + script_identifier;
+    }
+    diagnostics::log(diagnostics::Severity::information, "AmmoType table", calibre_mapping_log);
+
     std::unordered_set<std::string> owned_weapons;
     std::unordered_map<std::string, std::uint32_t> ammunition;
     for (const auto& call : calls)
@@ -465,7 +541,7 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                     raw_ammunition_count != std::trunc(raw_ammunition_count) ||
                     raw_ammunition_count < std::numeric_limits<std::int16_t>::min() ||
                     raw_ammunition_count > std::numeric_limits<std::int16_t>::max() ||
-                    !call.arguments[9].text.starts_with("AMMO_ID_"))
+                    !ammunition_types_by_script_identifier.contains(call.arguments[9].text))
                 {
                     throw std::runtime_error("Level QVM AmmoPickup has an invalid retail ammo ID or Int16 count");
                 }
@@ -510,8 +586,9 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
             }
             const auto& arguments = call.arguments;
             const bool melee = arguments[5].text == "WEAPONTYPE_KNIFE";
-            if (!melee && arguments[5].text != "WEAPONTYPE_GUN" && arguments[5].text != "WEAPONTYPE_PISTOL" &&
-                arguments[5].text != "WEAPONTYPE_SHOTGUN")
+            const bool medipack = arguments[5].text == "WEAPONTYPE_MEDIPACK";
+            if (!melee && !medipack && arguments[5].text != "WEAPONTYPE_GUN" &&
+                arguments[5].text != "WEAPONTYPE_PISTOL" && arguments[5].text != "WEAPONTYPE_SHOTGUN")
             {
                 continue;
             }
@@ -540,6 +617,10 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
             else if (melee)
             {
                 weapon.parameters.category = gameplay::WeaponCategory::knife;
+            }
+            else if (medipack)
+            {
+                weapon.parameters.category = gameplay::WeaponCategory::medipack;
             }
             weapon.parameters.automatic = !melee && arguments[17].number > 1;
             const double maximum_rounds_per_burst = arguments[17].number;
@@ -593,8 +674,34 @@ void load_mission_gameplay(gameplay::MissionScene& scene,
                              weapon.identifier + " effective range=" +
                                  std::to_string(weapon.parameters.maximum_distance) + " metres");
             weapon.initially_owned = owned_weapons.contains(weapon.identifier);
-            const auto ammunition_key = "AMMO_ID_" + std::to_string(static_cast<int>(arguments[9].number));
-            weapon.ammunition_identifier = ammunition_key;
+            const double raw_calibre_id = arguments[9].number;
+            if (!std::isfinite(raw_calibre_id) || raw_calibre_id != std::trunc(raw_calibre_id) ||
+                raw_calibre_id < std::numeric_limits<std::int32_t>::min() ||
+                raw_calibre_id > std::numeric_limits<std::int32_t>::max())
+            {
+                throw std::runtime_error("Original weapon has an invalid retail calibre: " + weapon.identifier);
+            }
+            const auto calibre_id = static_cast<std::int32_t>(raw_calibre_id);
+            if (calibre_id >= 0)
+            {
+                const auto ammunition_type = ammunition_types_by_calibre.find(calibre_id);
+                if (ammunition_type == ammunition_types_by_calibre.end())
+                {
+                    throw std::runtime_error("No retail AmmoType exists for weapon calibre " +
+                                             std::to_string(calibre_id) + ": " + weapon.identifier);
+                }
+                weapon.ammunition_identifier = ammunition_type->second.script_identifier;
+                if (medipack)
+                {
+                    diagnostics::log(diagnostics::Severity::information,
+                                     "weapon-data",
+                                     "Loaded retail WEAPON_ID_MEDIPACK with ammo slot=" +
+                                         std::to_string(ammunition_type->second.ammunition_id) +
+                                         ", calibre=" + std::to_string(calibre_id) + ", script ID=" +
+                                         weapon.ammunition_identifier);
+                }
+            }
+            const auto& ammunition_key = weapon.ammunition_identifier;
             weapon.initial_reserve = ammunition.contains(ammunition_key) ? ammunition.at(ammunition_key) : 0;
             weapon.mesh = library.model(arguments[29].text);
             if (arguments.size() > 36)
