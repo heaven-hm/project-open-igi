@@ -65,6 +65,23 @@ class SceneRenderer final
         return terrain_triangles_submitted_;
     }
 
+    void set_detail(TerrainDetail detail) noexcept
+    {
+        detail_ = detail;
+        for (auto& worker : render_workers_)
+        {
+            if (worker)
+            {
+                worker->set_detail(detail);
+            }
+        }
+    }
+
+    [[nodiscard]] TerrainDetail detail() const noexcept
+    {
+        return detail_;
+    }
+
   private:
     void triangle(const SceneTriangle& triangle,
                   const std::vector<SceneTexture>& textures,
@@ -97,6 +114,7 @@ class SceneRenderer final
     std::vector<std::unique_ptr<SceneRenderer>> render_workers_;
     TextureFilterMode texture_filter_mode_;
     std::uint32_t maximum_anisotropy_{};
+    TerrainDetail detail_{TerrainDetail::high};
 };
 
 } // namespace igi::gameplay

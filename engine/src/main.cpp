@@ -550,6 +550,7 @@ int run(RuntimeOptions options, const char* executable)
         igi::gameplay::load_input_configuration(options.game_directory, options.profile));
     igi::gameplay::SceneRenderer frame(
         options.width, options.height, 0, options.texture_filter_mode, selected_anisotropy);
+    frame.set_detail(options.terrain_detail);
     const auto replay = load_replay(options.replay);
     std::ofstream trace;
     if (!options.trace.empty())
