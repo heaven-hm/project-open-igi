@@ -21,6 +21,7 @@ add_library(igi_retail_engine STATIC
     src/retail/script/qvm_compiled_program.cpp
     src/retail/script/qvm_loader.cpp
     src/retail/script/qvm_object_calls.cpp
+    src/retail/script/qvm_stack_natives.cpp
     src/retail/texture/model_texture_pixels.cpp
     src/retail/texture/loop_terrain_texture.cpp
 )
@@ -139,6 +140,13 @@ if(BUILD_TESTING)
     target_compile_features(igi_retail_qvm_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_qvm_tests COMMAND igi_retail_qvm_tests)
 
+    add_executable(igi_retail_qvm_stack_tests
+        tests/script/qvm_stack_natives_test.cpp
+    )
+    target_link_libraries(igi_retail_qvm_stack_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_qvm_stack_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_qvm_stack_tests COMMAND igi_retail_qvm_stack_tests)
+
     add_executable(igi_retail_resource_tests
         tests/resource/resource_archive_test.cpp
     )
@@ -164,6 +172,8 @@ if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
         add_test(NAME igi_retail_terrain_record_tests COMMAND igi_retail_terrain_record_tests)
         add_executable(igi_retail_native_differential_tests tests/model/mef_native_differential_test.cpp)
         target_link_libraries(igi_retail_native_differential_tests PRIVATE igi_retail_engine)
+        add_executable(igi_retail_qvm_differential_tests tests/script/qvm_stack_native_differential_test.cpp)
+        target_link_libraries(igi_retail_qvm_differential_tests PRIVATE igi_retail_engine)
         set(IGI_RETAIL_EXECUTABLE "" CACHE FILEPATH "Retail IGI.exe for original-instruction differential tests")
         if(IGI_RETAIL_EXECUTABLE)
             file(SHA256 "${IGI_RETAIL_EXECUTABLE}" IGI_RETAIL_SHA256)
@@ -172,6 +182,8 @@ if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
             endif()
             add_test(NAME igi_retail_native_differential_tests
                 COMMAND igi_retail_native_differential_tests "${IGI_RETAIL_EXECUTABLE}")
+            add_test(NAME igi_retail_qvm_differential_tests
+                COMMAND igi_retail_qvm_differential_tests "${IGI_RETAIL_EXECUTABLE}")
         endif()
         add_executable(igi_retail_native_attachment_tests tests/model/mef_native_attachments_test.cpp)
         target_link_libraries(igi_retail_native_attachment_tests PRIVATE igi_retail_engine)

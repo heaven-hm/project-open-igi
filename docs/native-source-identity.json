@@ -37,6 +37,27 @@
       "rea_evidence_id": "ev_84a279844258af41f55848d87719fc5845164a3660c0620c2dc309565b7707f3",
       "implementation": "research only, not ported",
       "runtime_retail_comparison": "pending"
+    },
+    {
+      "catalog_name": "Sys_PushStack_29",
+      "address": "0x004BDA00",
+      "byte_count": 42,
+      "file_offset": 776704,
+      "source_bytes_sha256": "30ac64c7330f76d5b39edf17ea38ac76435bf20d9a0fe9772fec91135ced5624",
+      "rea_evidence_id": "ev_fc8c4a96e5363fb9ba98aad334c2607004b6ee4cd58f1894cf78e5d43a93a525",
+      "binary_ninja_label": "Sys_PushStack_29",
+      "implementation": "C++ translation of the observed cdecl leaf routine",
+      "runtime_retail_comparison": "49 stack-state fixtures matched by executing extracted retail x86 instructions through CrossOver; full QVM interpreter and terrain call chain pending",
+      "cpp_name": "Qvm_PushInteger",
+      "radare2": {
+        "basic_blocks": 1,
+        "edges": 0,
+        "instruction_count": 14,
+        "calling_convention": "cdecl"
+      },
+      "binary_ninja_basic_blocks": 1,
+      "cfg_agreement": 1.0,
+      "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
     }
   ]
 }
