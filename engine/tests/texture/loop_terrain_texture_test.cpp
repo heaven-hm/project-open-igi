@@ -1,4 +1,5 @@
 #include "igi/retail/texture/loop_terrain_texture.hpp"
+#include "igi/retail/resource/resource_archive.hpp"
 
 #include <cstddef>
 #include <cstdint>
@@ -9,12 +10,14 @@
 #include <span>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace {
 
 using igi::retail::texture::LoopTerrainTextureFile;
 using igi::retail::texture::LoopTextureFormatError;
+using igi::retail::texture::LoopModelTextureFile;
 
 void write_u16(std::vector<std::byte>& bytes, std::size_t offset, std::uint16_t value)
 {
@@ -156,6 +159,61 @@ void test_rejects_unsupported_version_and_truncation()
     require(rejected_truncation, "truncated LOOP tables are rejected");
 }
 
+void test_model_texture_versions_two_and_eleven()
+{
+    std::vector<std::byte> version_two_bytes(0x20U);
+    write_u32(version_two_bytes, 0U, LoopModelTextureFile::loop_signature);
+    write_u32(version_two_bytes, 4U, 2U);
+    write_u16(version_two_bytes, 8U, 256U);
+    write_u16(version_two_bytes, 0x10U, 0x1111U);
+    write_u16(version_two_bytes, 0x12U, 0x2222U);
+    write_u16(version_two_bytes, 0x14U, 0x3333U);
+    write_u16(version_two_bytes, 0x16U, 0x4444U);
+    const LoopModelTextureFile version_two =
+        LoopModelTextureFile::Texture_LoadModelFile_004B24C0(version_two_bytes);
+    require(version_two.operation_arguments[0U] == 0x1111U
+            && version_two.operation_arguments[4U] == 256U
+            && version_two.pixel_data_offset == 0x18U,
+        "LOOP version 2 arguments match the retail call to 0x004B23B0");
+
+    std::vector<std::byte> version_eleven_bytes(0x24U);
+    write_u32(version_eleven_bytes, 0U, LoopModelTextureFile::loop_signature);
+    write_u32(version_eleven_bytes, 4U, 11U);
+    write_u32(version_eleven_bytes, 8U, 0x55667788U);
+    write_u32(version_eleven_bytes, 0x0CU, 0x11223344U);
+    write_u16(version_eleven_bytes, 0x14U, 0x1234U);
+    write_u16(version_eleven_bytes, 0x16U, 0x2345U);
+    write_u16(version_eleven_bytes, 0x18U, 0x3456U);
+    write_u16(version_eleven_bytes, 0x1AU, 64U);
+    write_u16(version_eleven_bytes, 0x1EU, 32U);
+    const LoopModelTextureFile version_eleven =
+        LoopModelTextureFile::Texture_LoadModelFile_004B24C0(version_eleven_bytes);
+    require(version_eleven.operation_arguments[0U] == 2048U
+            && version_eleven.operation_arguments[3U] == 0x55667788U
+            && version_eleven.operation_arguments[5U] == 0x11223344U
+            && version_eleven.pixel_data_offset == 0x20U,
+        "LOOP version 11 arguments match the retail call to 0x004B23B0");
+}
+
+void test_level_one_model_texture_archive(const std::filesystem::path& archive_path)
+{
+    const igi::retail::resource::ResourceArchive archive =
+        igi::retail::resource::Resource_Load(archive_path);
+    std::size_t texture_count = 0U;
+    for (const igi::retail::resource::ResourceEntry& entry : archive.entries) {
+        if (!entry.name.ends_with(".tex")) {
+            continue;
+        }
+
+        static_cast<void>(LoopModelTextureFile::Texture_LoadModelFile_004B24C0(entry.body));
+        ++texture_count;
+    }
+    require(texture_count > 0U, "Level 1 model texture archive contains supported TEX resources");
+    std::cout << "Level 1 model texture archive verified: file=" << archive_path
+              << "; archive entries=" << archive.entries.size()
+              << "; native model TEX records=" << texture_count << '\n';
+}
+
 void test_level_one_terrain_texture(const std::filesystem::path& texture_path)
 {
     const std::vector<std::byte> file_bytes = read_file(texture_path);
@@ -180,8 +238,13 @@ int main(int argument_count, char** arguments)
 
         if (argument_count == 2) {
             test_level_one_terrain_texture(arguments[1]);
+        } else if (argument_count == 3 && std::string_view(arguments[1]) == "--terrain") {
+            test_level_one_terrain_texture(arguments[2]);
+        } else if (argument_count == 3 && std::string_view(arguments[1]) == "--model-archive") {
+            test_level_one_model_texture_archive(arguments[2]);
         } else if (argument_count != 1) {
-            throw std::runtime_error("Expected zero arguments or one Level 1 TERRAIN.TEX path.");
+            throw std::runtime_error(
+                "Expected no arguments, a TERRAIN.TEX path, --terrain <path>, or --model-archive <RES path>.");
         }
 
         std::cout << "All retail terrain texture metadata tests passed.\n";

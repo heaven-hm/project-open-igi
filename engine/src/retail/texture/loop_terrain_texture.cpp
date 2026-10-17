@@ -117,4 +117,49 @@ LoopTerrainTextureFile LoopTerrainTextureFile::Terrain_TextureFileNotOfRequ(
     return texture_file;
 }
 
+LoopModelTextureFile LoopModelTextureFile::Texture_LoadModelFile_004B24C0(
+    std::span<const std::byte> file_bytes)
+{
+    if (file_bytes.size() < 0x18U) {
+        throw LoopTextureFormatError("LOOP model texture is shorter than native 0x004B24C0 reads.");
+    }
+    if (read_little_endian_u32(file_bytes, 0U) != loop_signature) {
+        throw LoopTextureFormatError("Retail model texture native expected the LOOP signature.");
+    }
+
+    LoopModelTextureFile texture_file{};
+    texture_file.version = read_little_endian_u32(file_bytes, 4U);
+    if (texture_file.version == 2U) {
+        texture_file.operation_arguments = {
+            read_little_endian_u16(file_bytes, 0x10U),
+            read_little_endian_u16(file_bytes, 0x12U),
+            read_little_endian_u16(file_bytes, 0x14U),
+            read_little_endian_u16(file_bytes, 0x16U),
+            read_little_endian_u16(file_bytes, 0x08U),
+            0U,
+        };
+        texture_file.pixel_data_offset = 0x18U;
+    } else if (texture_file.version == 11U) {
+        const std::uint32_t width = read_little_endian_u16(file_bytes, 0x1AU);
+        const std::uint32_t height = read_little_endian_u16(file_bytes, 0x1EU);
+        texture_file.operation_arguments = {
+            width * height,
+            read_little_endian_u16(file_bytes, 0x16U),
+            read_little_endian_u16(file_bytes, 0x18U),
+            read_little_endian_u32(file_bytes, 0x08U),
+            read_little_endian_u16(file_bytes, 0x14U),
+            read_little_endian_u32(file_bytes, 0x0CU),
+        };
+        texture_file.pixel_data_offset = 0x20U;
+    } else {
+        throw LoopTextureFormatError(
+            "Retail model texture native 0x004B24C0 only accepts LOOP versions 2 and 11.");
+    }
+
+    if (texture_file.pixel_data_offset > file_bytes.size()) {
+        throw LoopTextureFormatError("LOOP model texture pixel data begins past the file end.");
+    }
+    return texture_file;
+}
+
 } // namespace igi::retail::texture

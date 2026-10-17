@@ -143,6 +143,30 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     require(archive.form_type == ResourceArchive::ires_form, "Level 1 archive has IRES form");
     require(archive.entries.size() == 415U, "Level 1 model archive exposes all 415 resource pairs");
 
+    std::size_t model_resource_count = 0U;
+    std::size_t model_with_render_chunks_count = 0U;
+    for (const igi::retail::resource::ResourceEntry& entry : archive.entries) {
+        if (!entry.name.ends_with(".mef")) {
+            continue;
+        }
+
+        const igi::retail::model::MefModel model =
+            igi::retail::model::MefModel::DynObj_LocalModelsSMef(entry.body);
+        const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
+        ++model_resource_count;
+        if (render_chunks.d3d_render_header != nullptr
+            && render_chunks.draw_records != nullptr
+            && render_chunks.vertex_stream != nullptr) {
+            ++model_with_render_chunks_count;
+        } else {
+            std::cerr << "Level 1 MEF lacks a complete observed render chunk set: "
+                      << entry.name << '\n';
+        }
+    }
+    require(model_resource_count > 0U, "Level 1 model RES contains embedded MEF resources");
+    require(model_with_render_chunks_count == model_resource_count,
+        "every Level 1 MEF has D3DR, REND, and VRTX chunks for the retail render path");
+
     const auto* model_entry = archive.find("LOCAL:models/210_01_1.mef");
     require(model_entry != nullptr, "Level 1 archive resolves the first model resource");
 
@@ -150,6 +174,7 @@ void test_level_one_resource_archive(const std::filesystem::path& resource_path)
     require(model.version == 0.1F, "embedded MEF version is accepted by the retail MEF routine");
     std::cout << "Level 1 Resource_Load/Sys_Resource test passed: "
               << archive.entries.size() << " entries; "
+              << model_resource_count << " MEFs with D3DR/REND/VRTX chunks; "
               << model_entry->name << "; "
               << model_entry->body.size() << " bytes; "
               << model.container.chunks.size() << " MEF chunks.\n";

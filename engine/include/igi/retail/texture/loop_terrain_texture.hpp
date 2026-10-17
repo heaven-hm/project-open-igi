@@ -39,4 +39,18 @@ struct LoopTerrainTextureFile {
         std::span<const std::byte> file_bytes);
 };
 
+struct LoopModelTextureFile {
+    static constexpr std::uint32_t loop_signature = 0x504F4F4CU;
+
+    std::uint32_t version = 0U;
+    std::array<std::uint32_t, 6U> operation_arguments{};
+    std::size_t pixel_data_offset = 0U;
+
+    // Original IGI.EXE address 0x004B24C0. The address has no confirmed native
+    // symbol in the current REA database, so this local name describes its observed
+    // role and does not claim to be an original retail symbol.
+    [[nodiscard]] static LoopModelTextureFile Texture_LoadModelFile_004B24C0(
+        std::span<const std::byte> file_bytes);
+};
+
 } // namespace igi::retail::texture
