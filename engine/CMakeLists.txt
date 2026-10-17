@@ -24,11 +24,15 @@ add_library(igi_formats STATIC
     "${FORMAT_SOURCE}/parsers/qvm_parser.cpp"
     "${FORMAT_SOURCE}/parsers/graph_parser.cpp"
     "${FORMAT_SOURCE}/parsers/olm_parser.cpp"
+    src/formats/ilsf_sound.cpp
     src/format_support.cpp
     src/diagnostics.cpp
 )
 target_compile_features(igi_formats PUBLIC cxx_std_20)
-target_include_directories(igi_formats PUBLIC "${FORMAT_SOURCE}/parsers" PRIVATE "${FORMAT_SOURCE}" include)
+target_include_directories(igi_formats
+    PUBLIC "${FORMAT_SOURCE}/parsers" "${CMAKE_CURRENT_SOURCE_DIR}/include"
+    PRIVATE "${FORMAT_SOURCE}"
+)
 target_include_directories(igi_formats SYSTEM PUBLIC third_party/glm/glm-1.0.1)
 target_link_libraries(igi_formats PUBLIC igi_gameplay)
 
@@ -193,6 +197,13 @@ if(BUILD_TESTING)
     add_executable(sound_volume_curve_test tests/audio/sound_volume_curve_test.cpp)
     target_link_libraries(sound_volume_curve_test PRIVATE igi_audio)
     add_test(NAME retail_sound_volume_curve COMMAND sound_volume_curve_test)
+
+    add_executable(ilsf_sound_test tests/audio/ilsf_sound_test.cpp)
+    target_link_libraries(ilsf_sound_test PRIVATE igi_formats)
+    add_test(NAME retail_ilsf_sound_parser COMMAND ilsf_sound_test)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_ilsf_samples COMMAND ilsf_sound_test "${IGI_GAME_PATH}")
+    endif()
 
     add_executable(retail_random_generator_test tests/retail_random_generator_test.cpp)
     target_include_directories(retail_random_generator_test PRIVATE include)
