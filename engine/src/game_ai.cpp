@@ -412,8 +412,9 @@ void GameSimulation::advance_actors()
         const Vector3 projectile_right{std::cos(actor.heading), std::sin(actor.heading), 0};
         const Vector3 projectile_up = cross(projectile_right, projectile_forward);
         const float projectile_spread =
-            WeaponAccuracy::cone_angle(parameters, static_cast<std::uint32_t>(actor.rounds_fired_in_burst));
-        const Vector3 projectile_direction = WeaponAccuracy::sample_direction(
+            WeaponAccuracy::Weapon_ComputeAccuracyCone(
+                parameters, static_cast<std::uint32_t>(actor.rounds_fired_in_burst));
+        const Vector3 projectile_direction = WeaponAccuracy::Weapon_SampleShotDirection(
             projectile_spread, projectile_forward, projectile_right, projectile_up, random_generator_);
         actor.muzzle_flash_remaining = 0.055f;
         ++actor.shots_fired;
@@ -428,7 +429,8 @@ void GameSimulation::advance_actors()
         --actor.rounds_remaining_in_burst;
         ++actor.rounds_fired_in_burst;
         actor.weapon_cooldown_ticks_remaining =
-            WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
+            WeaponAccuracy::Weapon_ComputeCooldownTicks(
+                static_cast<std::int32_t>(parameters.shots_per_minute));
         if (parameters.maximum_rounds_per_burst == 1)
         {
             const float shot_delay =

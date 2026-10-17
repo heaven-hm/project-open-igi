@@ -36,24 +36,25 @@ int main()
         auto parameters = make_scene().weapon_parameters;
         parameters.minimum_spread_degrees = -2;
         parameters.maximum_spread_degrees = 6;
-        require(igi::gameplay::WeaponAccuracy::cone_angle(parameters, 3) ==
+        require(igi::gameplay::WeaponAccuracy::Weapon_ComputeAccuracyCone(parameters, 3) ==
                         2 * igi::gameplay::WeaponAccuracy::degrees_to_radians &&
-                    igi::gameplay::WeaponAccuracy::cone_angle(parameters, 4) ==
+                    igi::gameplay::WeaponAccuracy::Weapon_ComputeAccuracyCone(parameters, 4) ==
                         6 * igi::gameplay::WeaponAccuracy::degrees_to_radians,
                 "Retail spread changes after four shots and takes the absolute signed half-angle");
-        const auto cone = igi::gameplay::WeaponAccuracy::sample_cone(2, {0.5f, 0.25f, 0.75f, 0.5f});
+        const auto cone = igi::gameplay::WeaponAccuracy::Weapon_SampleAccuracyCone(
+            2, {0.5f, 0.25f, 0.75f, 0.5f});
         require(cone.radius == 0.1875f &&
                     cone.bearing == 0.5f * igi::gameplay::WeaponAccuracy::full_turn_radians,
                 "Cone radius must multiply three samples; the fourth selects bearing");
         igi::gameplay::RetailRandomGenerator zero_cone_random;
         const auto zero_cone_state = zero_cone_random.state();
-        static_cast<void>(igi::gameplay::WeaponAccuracy::sample_direction(
+        static_cast<void>(igi::gameplay::WeaponAccuracy::Weapon_SampleShotDirection(
             0, {0, 1, 0}, {1, 0, 0}, {0, 0, 1}, zero_cone_random));
         require(zero_cone_random.state() == zero_cone_state, "A zero cone must consume no direction samples");
         parameters.fixed_recoil_pitch_degrees = 2;
         parameters.fixed_recoil_yaw_degrees = -3;
         igi::gameplay::RetailRandomGenerator recoil_random;
-        const auto recoil = igi::gameplay::WeaponAccuracy::sample_recoil(parameters, recoil_random);
+        const auto recoil = igi::gameplay::WeaponAccuracy::Weapon_SampleRecoil(parameters, recoil_random);
         require(recoil.pitch == 2 * igi::gameplay::WeaponAccuracy::degrees_to_radians &&
                     recoil.yaw == -3 * igi::gameplay::WeaponAccuracy::degrees_to_radians,
                 "Fixed recoil must use original signed degree-to-radian terms");
@@ -173,7 +174,7 @@ int main()
             {750, 2}, {900, 1}, {1800, 0}};
         for (const auto& [rate, ticks] : retail_cooldowns)
         {
-            require(igi::gameplay::WeaponAccuracy::cooldown_ticks(rate) == ticks,
+            require(igi::gameplay::WeaponAccuracy::Weapon_ComputeCooldownTicks(rate) == ticks,
                     "Cooldown ticks must match the original rounding-toward-zero calculation");
         }
         std::cout << "Weapon projectile count, spread, normalization and restart checks passed\n";

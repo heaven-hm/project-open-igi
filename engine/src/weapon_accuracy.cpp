@@ -7,7 +7,8 @@
 namespace igi::gameplay
 {
 
-std::int32_t WeaponAccuracy::cooldown_ticks(std::int32_t rounds_per_minute)
+// Port support helper for retail 30 Hz firing cadence; its exact native address remains unverified.
+std::int32_t WeaponAccuracy::Weapon_ComputeCooldownTicks(std::int32_t rounds_per_minute)
 {
     if (rounds_per_minute <= 0)
     {
@@ -30,7 +31,9 @@ std::int32_t WeaponAccuracy::cooldown_ticks(std::int32_t rounds_per_minute)
     return result;
 }
 
-float WeaponAccuracy::cone_angle(const WeaponParameters& parameters, std::uint32_t rounds_this_burst) noexcept
+// Original IGI.EXE Gun_Fire at VA 0x00478BA0 applies the pre-shot burst spread gate.
+float WeaponAccuracy::Weapon_ComputeAccuracyCone(
+    const WeaponParameters& parameters, std::uint32_t rounds_this_burst) noexcept
 {
     const float degrees =
         rounds_this_burst > 3 ? parameters.maximum_spread_degrees : parameters.minimum_spread_degrees;
@@ -38,8 +41,9 @@ float WeaponAccuracy::cone_angle(const WeaponParameters& parameters, std::uint32
     return radians < 0 ? -radians : radians;
 }
 
-WeaponConeSample WeaponAccuracy::sample_cone(float cone_angle,
-                                             const std::array<float, 4>& uniform_samples) noexcept
+// Original IGI.EXE Gun_Fire at VA 0x00478BA0 multiplies three samples for cone radius.
+WeaponConeSample WeaponAccuracy::Weapon_SampleAccuracyCone(
+    float cone_angle, const std::array<float, 4>& uniform_samples) noexcept
 {
     float radius = 1;
     for (std::size_t sample_index = 0; sample_index < 3; ++sample_index)
@@ -49,7 +53,8 @@ WeaponConeSample WeaponAccuracy::sample_cone(float cone_angle,
     return {radius * cone_angle, uniform_samples[3] * full_turn_radians};
 }
 
-Vector3 WeaponAccuracy::sample_direction(
+// Original IGI.EXE Gun_Fire at VA 0x00478BA0 applies the sampled cone to the shot basis.
+Vector3 WeaponAccuracy::Weapon_SampleShotDirection(
     float cone_angle, Vector3 forward, Vector3 right, Vector3 up, RetailRandomGenerator& random) noexcept
 {
     if (cone_angle == 0)
@@ -58,14 +63,15 @@ Vector3 WeaponAccuracy::sample_direction(
     }
     const std::array<float, 4> samples{
         random.next_single(), random.next_single(), random.next_single(), random.next_single()};
-    const auto cone = sample_cone(cone_angle, samples);
+    const auto cone = Weapon_SampleAccuracyCone(cone_angle, samples);
     const float sine = std::sin(cone.radius);
     const Vector3 lateral = right * (std::cos(cone.bearing) * sine) + up * (std::sin(cone.bearing) * sine);
     return normalized(forward * std::cos(cone.radius) + lateral);
 }
 
-WeaponRecoilSample WeaponAccuracy::sample_recoil(const WeaponParameters& parameters,
-                                                 RetailRandomGenerator& random) noexcept
+// Original IGI.EXE Gun_FireMessage at VA 0x00479780 samples the recoil impulse.
+WeaponRecoilSample WeaponAccuracy::Weapon_SampleRecoil(
+    const WeaponParameters& parameters, RetailRandomGenerator& random) noexcept
 {
     long double pitch_sample;
     long double yaw_sample;

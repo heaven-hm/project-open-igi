@@ -304,7 +304,8 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
                 --weapon_.magazine;
             }
             weapon_.cooldown_ticks_remaining =
-                WeaponAccuracy::cooldown_ticks(static_cast<std::int32_t>(parameters.shots_per_minute));
+                WeaponAccuracy::Weapon_ComputeCooldownTicks(
+                static_cast<std::int32_t>(parameters.shots_per_minute));
             weapon_.muzzle_flash_remaining = 0.055f;
         }
         if (parameters.maximum_rounds_per_burst <= 1)
@@ -312,7 +313,8 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
             // Retail chooses a sound variant here even when audio output is deferred.
             static_cast<void>(random_generator_.next_word());
         }
-        const float cone = WeaponAccuracy::cone_angle(parameters, weapon_.rounds_in_current_burst);
+        const float cone = WeaponAccuracy::Weapon_ComputeAccuracyCone(
+            parameters, weapon_.rounds_in_current_burst);
         const Vector3 forward = aim_direction();
         const float current_view_heading = view_heading();
         const Vector3 right{std::cos(current_view_heading), std::sin(current_view_heading), 0};
@@ -322,7 +324,7 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         {
             projectiles_.push_back(
                 {camera_position(),
-                 WeaponAccuracy::sample_direction(cone, forward, right, up, random_generator_),
+                 WeaponAccuracy::Weapon_SampleShotDirection(cone, forward, right, up, random_generator_),
                  parameters.maximum_distance,
                  parameters.melee ? 1000.0f : parameters.muzzle_velocity,
                  parameters.damage,
@@ -330,7 +332,7 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         ++weapon_.shots_fired;
         ++weapon_.rounds_in_current_burst;
-        const auto recoil = WeaponAccuracy::sample_recoil(parameters, random_generator_);
+        const auto recoil = WeaponAccuracy::Weapon_SampleRecoil(parameters, random_generator_);
         if (is_scoped())
         {
             weapon_.sampled_recoil_pitch = recoil.pitch * 0.05f;
