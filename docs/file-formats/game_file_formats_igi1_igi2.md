@@ -48,27 +48,26 @@ module** (e.g. `core/formats/*`) with game‑specific behaviour selected by:
 
 ---
 
-## 2. IGI 1–only formats
+## 2. IGI 1–only formats (TerraForm Terrain Engine)
 
-These formats are documented only for IGI 1 and do not have a direct IGI 2
-counterpart in igipy’s IGI 2 docs.
+These formats are documented only for IGI 1 and belong to Innerloop's proprietary **TerraForm** terrain engine subsystem inside LoopEngine:
 
 | Extension | Game  | Role / Notes                                  |
 |----------|-------|-----------------------------------------------|
 | `.bit`   | IGI 1 | Small BIT format used only in IGI 1 content/tools. |
 | `.cmd`   | IGI 1 | Command/config format specific to IGI 1.      |
-| `.ctr`   | IGI 1 | Control/terrain‑related data for IGI 1.       |
-| `.hmp`   | IGI 1 | Heightmap format for IGI 1 terrain.           |
-| `.lmp`   | IGI 1 | Lightmap format for IGI 1 terrain.            |
+| `.ctr`   | IGI 1 | Control / cube terrain hierarchy for TerraForm octree. |
+| `.hmp`   | IGI 1 | Heightmap format for TerraForm terrain.       |
+| `.lmp`   | IGI 1 | Lightmap format for TerraForm terrain.        |
 
 In IGI 2, terrain/level metadata moves to a different format set (`.thm`,
 `.tlm`, `.tmm`) plus new per‑level DAT variants.
 
 **Implementation note**
 
-These are good to group into a **legacy IGI1 terrain & engine module**:
+These are good to group into a **legacy IGI1 TerraForm terrain module**:
 
-- IGI 1 terrain converter: `.hmp` + `.lmp` + `.ctr` + related DATs.
+- IGI 1 TerraForm terrain converter: `.hmp` + `.lmp` + `.ctr` + related DATs.
 - IGI 1 tools that will never be used in IGI 2 pipelines.
 
 ---

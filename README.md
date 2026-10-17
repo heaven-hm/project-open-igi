@@ -12,7 +12,7 @@ The current MVP excludes audio, movies and cutscenes, vehicles, smoke effects, a
 
 ## Build
 
-The target is a 32-bit Windows executable using the original DirectDraw 7 platform API. CrossOver on macOS is used only to run and inspect this Windows build; it is not a macOS game port.
+The game target is a 32-bit Windows executable using the original DirectX 7 / DirectDraw platform APIs.
 
 Requirements: CMake 3.20+, a C++20 compiler, and the Windows SDK or MinGW toolchain with DirectDraw 7 headers and libraries.
 
@@ -33,7 +33,6 @@ Tools used for analysis and verification:
 - [radare2](https://radare2.com/) — independent disassembly, control-flow, and binary inspection.
 - [Frida](https://frida.re/) — runtime hooks, call tracing, and memory inspection.
 - [RE-Agent](https://github.com/heaven-hm/re-agent) — orchestration of reverse-engineering analysis against the retail executable.
-- [CrossOver](https://www.codeweavers.com/crossover) — runs the Windows x86 retail game and the Windows build on macOS for comparison.
 
 Per-routine evidence and implementation limits stay attached to the native source and its analysis records. Tool output is evidence; it is not substituted for the native engine implementation.
 
@@ -44,6 +43,6 @@ Per-routine evidence and implementation limits stay attached to the native sourc
 - `engine/tests/` — focused tests for individual implementation slices.
 - `engine/REVERSE_ENGINEERING.md` — provenance, evidence, and unresolved behavior.
 
-## Windows x86 testing
+## Windows runtime
 
-The retail executable is 32-bit x86 and targets DirectX 7 / DirectDraw. On macOS, launch it through the configured CrossOver bottle. Keep Windows APIs in the Windows platform layer; shared engine routines retain the retail behavior established from `igi.exe`.
+The retail executable and this project target 32-bit Windows x86 and DirectX 7 / DirectDraw. The game is intended to run as a normal Windows game with its original assets. Keep Windows APIs in the Windows platform layer; shared engine routines retain the retail behavior established from `igi.exe`.

@@ -1,0 +1,213 @@
+#include "igi/retail/model/mef_model_loader.hpp"
+
+#include <array>
+#include <bit>
+#include <cstddef>
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
+#include <iostream>
+#include <iterator>
+#include <stdexcept>
+#include <string>
+#include <vector>
+
+namespace {
+
+using igi::retail::model::Ilff_ReadLittleEndian32;
+using igi::retail::model::Ilff_ReadContainer;
+using igi::retail::model::MefFormatError;
+using igi::retail::model::MefModel;
+
+void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uint32_t value) {
+    if (destination.size() < offset + sizeof(value)) {
+        destination.resize(offset + sizeof(value));
+    }
+    for (std::size_t byte_index = 0U; byte_index < sizeof(value); ++byte_index) {
+        destination[offset + byte_index] = static_cast<std::byte>((value >> (byte_index * 8U)) & 0xFFU);
+    }
+}
+
+void append_chunk(
+    std::vector<std::byte>& destination,
+    std::uint32_t tag,
+    std::span<const std::byte> payload,
+    std::uint32_t alignment,
+    bool last_chunk) {
+    const std::size_t chunk_offset = destination.size();
+    destination.resize(chunk_offset + 16U);
+    write_u32(destination, chunk_offset, tag);
+    write_u32(destination, chunk_offset + 4U, static_cast<std::uint32_t>(payload.size()));
+    write_u32(destination, chunk_offset + 8U, alignment);
+
+    const std::size_t payload_offset = (chunk_offset + 16U + alignment - 1U) & ~(static_cast<std::size_t>(alignment) - 1U);
+    destination.resize(payload_offset);
+    destination.insert(destination.end(), payload.begin(), payload.end());
+    const std::size_t next_offset = destination.size() - chunk_offset;
+    write_u32(destination, chunk_offset + 12U, last_chunk ? 0U : static_cast<std::uint32_t>(next_offset));
+}
+
+std::vector<std::byte> make_model_bytes() {
+    std::vector<std::byte> file_bytes(20U);
+    write_u32(file_bytes, 0U, igi::retail::model::mef_tag::ilff);
+    write_u32(file_bytes, 8U, 4U);
+    write_u32(file_bytes, 16U, MefModel::form_ocem);
+
+    std::vector<std::byte> mesh_header(MefModel::mesh_header_size);
+    write_u32(mesh_header, 0U, MefModel::supported_version_bits);
+
+    append_chunk(file_bytes, igi::retail::model::mef_tag::mesh, mesh_header, 4U, false);
+    const std::array<std::byte, 4> attachment_payload{
+        std::byte{0x11}, std::byte{0x22}, std::byte{0x33}, std::byte{0x44}};
+    append_chunk(file_bytes, igi::retail::model::mef_tag::attachments, attachment_payload, 4U, true);
+    write_u32(file_bytes, 4U, static_cast<std::uint32_t>(file_bytes.size()));
+    return file_bytes;
+}
+
+void testRetailIlffChunkAlignmentAndTagSearch() {
+    const std::vector<std::byte> file_bytes = make_model_bytes();
+    const auto container = Ilff_ReadContainer(file_bytes);
+    const auto* mesh_chunk = container.find_first(igi::retail::model::mef_tag::mesh);
+    const auto* attachment_chunk = container.find_first(igi::retail::model::mef_tag::attachments);
+
+    if (container.form_type != MefModel::form_ocem || container.chunks.size() != 2U
+        || mesh_chunk == nullptr || mesh_chunk->payload.size() != MefModel::mesh_header_size
+        || attachment_chunk == nullptr || attachment_chunk->payload.size() != 4U) {
+        throw std::runtime_error("Retail ILFF tag lookup or parent-relative chunk alignment failed.");
+    }
+
+    if (igi::retail::model::Ilff_ReadLittleEndian32(mesh_chunk->payload, 0U) != MefModel::supported_version_bits) {
+        throw std::runtime_error("MESH version field did not retain its retail little-endian value.");
+    }
+}
+
+void testRetailMefLoaderBindsMeshAndKnownChunks() {
+    const std::vector<std::byte> file_bytes = make_model_bytes();
+    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+
+    if (model.version != 0.1F || model.mesh_header.size() != MefModel::mesh_header_size
+        || !model.attachments.has_value() || model.attachments->payload.size() != 4U
+        || model.legacy_vertices.has_value() || model.portals.has_value()
+        || model.portal_faces.has_value() || model.portal_vertices.has_value()) {
+        throw std::runtime_error("DynObj_LocalModelsSMef did not bind the retail model resource fields.");
+    }
+}
+
+void testRetailMefLoaderRejectsUnsupportedVersion() {
+    std::vector<std::byte> file_bytes = make_model_bytes();
+    constexpr std::size_t mesh_payload_offset = 36U;
+    write_u32(file_bytes, mesh_payload_offset, std::bit_cast<std::uint32_t>(0.2F));
+
+    bool rejected_version = false;
+    try {
+        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+    } catch (const MefFormatError&) {
+        rejected_version = true;
+    }
+
+    if (!rejected_version) {
+        throw std::runtime_error("MefModel loader accepted a version that retail rejects.");
+    }
+}
+
+void testRetailMefLoaderRejectsTruncation() {
+    std::vector<std::byte> file_bytes = make_model_bytes();
+    file_bytes.resize(32U);
+
+    bool rejected_file = false;
+    try {
+        static_cast<void>(MefModel::DynObj_LocalModelsSMef(file_bytes));
+    } catch (const MefFormatError&) {
+        rejected_file = true;
+    }
+
+    if (!rejected_file) {
+        throw std::runtime_error("MefModel loader accepted a truncated ILFF resource.");
+    }
+}
+
+MefModel loadMefAsset(const std::filesystem::path& model_path) {
+    std::ifstream model_stream(model_path, std::ios::binary);
+    if (!model_stream) {
+        throw std::runtime_error("Could not open MEF asset: " + model_path.string());
+    }
+
+    std::vector<char> file_characters(
+        (std::istreambuf_iterator<char>(model_stream)),
+        std::istreambuf_iterator<char>());
+    std::vector<std::byte> file_bytes(file_characters.size());
+    for (std::size_t byte_index = 0U; byte_index < file_characters.size(); ++byte_index) {
+        file_bytes[byte_index] = static_cast<std::byte>(static_cast<unsigned char>(file_characters[byte_index]));
+    }
+
+    const MefModel model = MefModel::DynObj_LocalModelsSMef(file_bytes);
+    if (model.mesh_header.size() != MefModel::mesh_header_size) {
+        throw std::runtime_error("MESH header length differs from the retail loader's accessed layout.");
+    }
+    return model;
+}
+
+void testMefAssetsAtPath(const std::filesystem::path& requested_path) {
+    std::error_code filesystem_error;
+    if (!std::filesystem::is_directory(requested_path, filesystem_error)) {
+        const MefModel model = loadMefAsset(requested_path);
+        std::cout << "Loaded retail MEF resource: " << requested_path
+                  << " (MESH version " << model.version
+                  << "; header " << model.mesh_header.size()
+                  << " bytes; chunks " << model.container.chunks.size() << ")\n";
+        return;
+    }
+
+    std::size_t tested_asset_count = 0U;
+    std::size_t failed_asset_count = 0U;
+    for (std::filesystem::recursive_directory_iterator iterator(requested_path, filesystem_error), end;
+         !filesystem_error && iterator != end;
+         iterator.increment(filesystem_error)) {
+        if (!iterator->is_regular_file(filesystem_error) || filesystem_error
+            || iterator->path().extension().string() != ".mef") {
+            continue;
+        }
+
+        try {
+            static_cast<void>(loadMefAsset(iterator->path()));
+            ++tested_asset_count;
+        } catch (const std::exception& exception) {
+            ++failed_asset_count;
+            std::cerr << "MEF asset failure: " << iterator->path() << ": "
+                      << exception.what() << '\n';
+        }
+    }
+
+    if (filesystem_error) {
+        throw std::runtime_error(
+            "Could not enumerate MEF assets beneath " + requested_path.string()
+            + ": " + filesystem_error.message());
+    }
+
+    std::cout << "Level MEF assets tested: " << tested_asset_count << '\n'
+              << "Failed MEF assets: " << failed_asset_count << '\n';
+    if (tested_asset_count == 0U || failed_asset_count != 0U) {
+        throw std::runtime_error("Level MEF asset verification did not pass.");
+    }
+}
+
+} // namespace
+
+int main(int argument_count, char** arguments) {
+    try {
+        testRetailIlffChunkAlignmentAndTagSearch();
+        testRetailMefLoaderBindsMeshAndKnownChunks();
+        testRetailMefLoaderRejectsUnsupportedVersion();
+        testRetailMefLoaderRejectsTruncation();
+
+        if (argument_count > 1) {
+            testMefAssetsAtPath(arguments[1]);
+        }
+
+        std::cout << "MEF loader checks passed.\n";
+        return 0;
+    } catch (const std::exception& exception) {
+        std::cerr << "MEF loader test failure: " << exception.what() << '\n';
+        return 1;
+    }
+}

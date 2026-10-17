@@ -1,6 +1,7 @@
 # IGI File Format Reference
 
 > Technical documentation of the binary file formats used by *Project I.G.I.: I'm Going In* (2000) and *IGI 2: Covert Strike* (2003), both by Innerloop Studios.
+> Innerloop's proprietary engine was **LoopEngine**, with its continuous-LOD hierarchical terrain engine officially named **TerraForm** (governing `.ctr`, `.hmp`, and `.lmp`).
 > Derived from the parser implementations in [project-igi-editor](https://github.com/Jones-HM/project-igi-editor).
 
 ---

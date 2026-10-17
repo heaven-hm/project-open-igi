@@ -42,8 +42,8 @@ each scenario. Passing functional tests does not satisfy the full retail gate.
 ## Evidence and implementation order
 
 1. **Application loop:** build the macOS `igi.app` shell with `main.cpp`, a
-   C++ SDL2 window/event loop, and a portable fixed-step update clock. Keep the
-   game loop independent of SDL2. Feed physical
+   C++ SDL3 window/event loop, and a portable fixed-step update clock. Keep the
+   game loop independent of SDL3. Feed physical
    input events into the portable input state and consume transitions per tick.
    Verify the bundle, tick scheduling, and input edges before extending gameplay
    systems. The current prototype has level rendering and playable state;
