@@ -185,6 +185,15 @@ void GameSimulation::restart()
     weapon_.magazine = scene_.weapon_parameters.magazine_capacity;
     weapon_.reserve = scene_.initial_reserve_ammunition;
     inventory_.clear();
+    ammunition_pool_.clear();
+    for (const auto& definition : scene_.weapons)
+    {
+        if (definition.ammunition_identifier.starts_with("AMMO_ID_") &&
+            definition.ammunition_identifier != "AMMO_ID_NONE")
+        {
+            ammunition_pool_.try_emplace(definition.ammunition_identifier, definition.initial_reserve);
+        }
+    }
     selected_weapon_slot_ = 0;
     fire_was_pressed_ = false;
     damage_flash_remaining_ = 0;
@@ -197,7 +206,7 @@ void GameSimulation::restart()
         }
         WeaponState state;
         state.magazine = definition.parameters.magazine_capacity;
-        state.reserve = definition.initial_reserve;
+        state.reserve = reserve_for_ammunition(definition.ammunition_identifier, definition.initial_reserve);
         inventory_.push_back({definition_index, state});
         if (definition.identifier == "WEAPON_ID_MP5SD")
         {
@@ -324,10 +333,10 @@ void GameSimulation::tick(const PlayerInput& input)
     if (developer_mode_)
     {
         health_ = scene_.player_parameters.maximum_health;
-        weapon_.reserve = 999;
-        if (selected_weapon_slot_ < inventory_.size())
+        const SceneWeapon* selected_definition = weapon_definition();
+        if (selected_definition != nullptr)
         {
-            inventory_[selected_weapon_slot_].state.reserve = 999;
+            set_reserve_for_ammunition(selected_definition->ammunition_identifier, 999);
         }
     }
     damage_flash_remaining_ = std::max(0.0f, damage_flash_remaining_ - 1.0f / 30.0f);
@@ -871,7 +880,7 @@ void GameSimulation::toggle_developer_mode()
             if (it != inventory_.end())
             {
                 it->state.magazine = def.parameters.magazine_capacity;
-                it->state.reserve = 999;
+                set_reserve_for_ammunition(def.ammunition_identifier, 999);
             }
             else
             {
@@ -879,13 +888,14 @@ void GameSimulation::toggle_developer_mode()
                 ws.magazine = def.parameters.magazine_capacity;
                 ws.reserve = 999;
                 inventory_.push_back({def_idx, ws});
+                set_reserve_for_ammunition(def.ammunition_identifier, 999);
             }
         }
-        weapon_.reserve = 999;
         const auto* cur_def = weapon_definition();
         if (cur_def)
         {
             weapon_.magazine = cur_def->parameters.magazine_capacity;
+            set_reserve_for_ammunition(cur_def->ammunition_identifier, 999);
         }
         health_ = scene_.player_parameters.maximum_health;
         diagnostics::log(diagnostics::Severity::information,

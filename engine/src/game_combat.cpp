@@ -254,6 +254,11 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
             const auto rounds = std::min(parameters.magazine_capacity - weapon_.magazine, weapon_.reserve);
             weapon_.magazine += rounds;
             weapon_.reserve -= rounds;
+            const SceneWeapon* selected_definition = weapon_definition();
+            if (selected_definition != nullptr)
+            {
+                set_reserve_for_ammunition(selected_definition->ammunition_identifier, weapon_.reserve);
+            }
             diagnostics::log(diagnostics::Severity::information,
                              "weapon",
                              "Reload completed; magazine=" + std::to_string(weapon_.magazine) +
@@ -345,7 +350,11 @@ void GameSimulation::advance_weapon(const PlayerInput& input)
         }
         if (developer_mode_)
         {
-            weapon_.reserve = 999;
+            const SceneWeapon* selected_definition = weapon_definition();
+            if (selected_definition != nullptr)
+            {
+                set_reserve_for_ammunition(selected_definition->ammunition_identifier, 999);
+            }
         }
         diagnostics::log(diagnostics::Severity::debug,
                          "weapon",

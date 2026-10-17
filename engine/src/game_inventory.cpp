@@ -3,6 +3,7 @@
 #include "igi/retail_natives/gun_pickup.hpp"
 
 #include <algorithm>
+#include <limits>
 
 namespace igi::gameplay
 {
@@ -24,26 +25,54 @@ std::shared_ptr<SceneMesh> GameSimulation::weapon_mesh() const noexcept
                               : scene_.weapons[inventory_[selected_weapon_slot_].definition_index].mesh;
 }
 
+std::uint32_t GameSimulation::reserve_for_ammunition(const std::string& ammunition_identifier,
+                                                     std::uint32_t fallback_reserve) const noexcept
+{
+    const auto ammunition = ammunition_pool_.find(ammunition_identifier);
+    return ammunition == ammunition_pool_.end() ? fallback_reserve : ammunition->second;
+}
+
+void GameSimulation::set_reserve_for_ammunition(const std::string& ammunition_identifier,
+                                                std::uint32_t reserve)
+{
+    if (!ammunition_identifier.starts_with("AMMO_ID_") || ammunition_identifier == "AMMO_ID_NONE")
+    {
+        return;
+    }
+
+    ammunition_pool_[ammunition_identifier] = reserve;
+    for (auto& item : inventory_)
+    {
+        if (scene_.weapons[item.definition_index].ammunition_identifier == ammunition_identifier)
+        {
+            item.state.reserve = reserve;
+        }
+    }
+
+    const SceneWeapon* selected_definition = weapon_definition();
+    if (selected_definition != nullptr && selected_definition->ammunition_identifier == ammunition_identifier)
+    {
+        weapon_.reserve = reserve;
+    }
+}
+
 void GameSimulation::select_weapon(std::size_t slot)
 {
     if (slot >= inventory_.size() || slot == selected_weapon_slot_)
     {
         return;
     }
-    const auto& ammunition_identifier =
+    const auto& current_ammunition_identifier =
         scene_.weapons[inventory_[selected_weapon_slot_].definition_index].ammunition_identifier;
-    for (auto& item : inventory_)
-    {
-        if (scene_.weapons[item.definition_index].ammunition_identifier == ammunition_identifier)
-        {
-            item.state.reserve = weapon_.reserve;
-        }
-    }
+    set_reserve_for_ammunition(current_ammunition_identifier, weapon_.reserve);
     weapon_.reload_remaining = 0;
     inventory_[selected_weapon_slot_].state = weapon_;
     const auto previous = weapon_;
     selected_weapon_slot_ = slot;
     weapon_ = inventory_[slot].state;
+    const auto& selected_ammunition_identifier =
+        scene_.weapons[inventory_[slot].definition_index].ammunition_identifier;
+    weapon_.reserve = reserve_for_ammunition(selected_ammunition_identifier, weapon_.reserve);
     weapon_.shots_fired = previous.shots_fired;
     weapon_.hits = previous.hits;
     weapon_.kills = previous.kills;
@@ -56,7 +85,7 @@ void GameSimulation::select_weapon(std::size_t slot)
     current_zoom_ = 1.0f;
     if (developer_mode_)
     {
-        weapon_.reserve = 999;
+        set_reserve_for_ammunition(selected_ammunition_identifier, 999);
     }
     diagnostics::log(diagnostics::Severity::information,
                      "inventory",
@@ -69,28 +98,16 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
     {
         if (identifier.starts_with("AMMO_ID_"))
         {
-            // Retail AmmoPickup supplies its Int16 count to Weapon_AddAmmo at 0x0047CE00.
-            const auto add_ammunition = [ammunition_count](std::uint32_t reserve)
-            {
-                const std::int64_t updated_reserve = static_cast<std::int64_t>(reserve) + ammunition_count;
-                if (updated_reserve <= 0)
-                {
-                    return std::uint32_t{0};
-                }
-                return static_cast<std::uint32_t>(std::min<std::int64_t>(10000, updated_reserve));
-            };
-            for (auto& item : inventory_)
-            {
-                if (scene_.weapons[item.definition_index].ammunition_identifier == identifier)
-                {
-                    item.state.reserve = add_ammunition(item.state.reserve);
-                }
-            }
-            if (!inventory_.empty() &&
-                scene_.weapons[inventory_[selected_weapon_slot_].definition_index].ammunition_identifier == identifier)
-            {
-                weapon_.reserve = add_ammunition(weapon_.reserve);
-            }
+            // Retail AddAmmo_LoadParameters 0x0046DC40 adds its signed Int16 payload to
+            // the human's ammo table through Weapon_AddAmmo 0x0047CE00, keyed by Ammo ID.
+            const std::uint32_t reserve = reserve_for_ammunition(identifier, 0);
+            const std::int64_t updated_reserve = static_cast<std::int64_t>(reserve) + ammunition_count;
+            const std::uint32_t new_reserve = updated_reserve <= 0
+                                                  ? 0
+                                                  : static_cast<std::uint32_t>(std::min<std::int64_t>(
+                                                        std::numeric_limits<std::uint32_t>::max(),
+                                                        updated_reserve));
+            set_reserve_for_ammunition(identifier, new_reserve);
             diagnostics::log(diagnostics::Severity::information,
                              "AmmoPickup",
                              "IGI.EXE AmmoPickup Int16 payload: " + identifier + " count=" +
@@ -117,43 +134,23 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
         {
             WeaponState state;
             state.magazine = definition->parameters.magazine_capacity;
-            state.reserve = 0;
-            for (std::size_t slot = 0; slot < inventory_.size(); ++slot)
-            {
-                if (scene_.weapons[inventory_[slot].definition_index].ammunition_identifier ==
-                    definition->ammunition_identifier)
-                {
-                    state.reserve =
-                        slot == selected_weapon_slot_ ? weapon_.reserve : inventory_[slot].state.reserve;
-                    break;
-                }
-            }
+            state.reserve = reserve_for_ammunition(definition->ammunition_identifier,
+                                                   definition->initial_reserve);
             inventory_.push_back({definition_index, state});
         }
         else
         {
-            std::uint32_t reserve =
+            const std::uint32_t current_reserve =
                 owned == inventory_.begin() + static_cast<std::ptrdiff_t>(selected_weapon_slot_)
                     ? weapon_.reserve
                     : owned->state.reserve;
-            const auto& equipped = scene_.weapons[inventory_[selected_weapon_slot_].definition_index];
-            if (equipped.ammunition_identifier == definition->ammunition_identifier)
-            {
-                reserve = weapon_.reserve;
-            }
-            reserve = std::min(std::uint32_t{10000}, reserve + definition->parameters.magazine_capacity);
-            for (auto& item : inventory_)
-            {
-                if (scene_.weapons[item.definition_index].ammunition_identifier ==
-                    definition->ammunition_identifier)
-                {
-                    item.state.reserve = reserve;
-                }
-            }
-            if (equipped.ammunition_identifier == definition->ammunition_identifier)
-            {
-                weapon_.reserve = reserve;
-            }
+            const std::uint64_t updated_reserve =
+                static_cast<std::uint64_t>(reserve_for_ammunition(definition->ammunition_identifier,
+                                                                  current_reserve)) +
+                definition->parameters.magazine_capacity;
+            const auto reserve = static_cast<std::uint32_t>(std::min<std::uint64_t>(
+                std::numeric_limits<std::uint32_t>::max(), updated_reserve));
+            set_reserve_for_ammunition(definition->ammunition_identifier, reserve);
         }
         diagnostics::log(
             diagnostics::Severity::information, "inventory", "Picked up " + definition->parameters.name);

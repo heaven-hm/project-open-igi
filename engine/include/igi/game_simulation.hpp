@@ -5,6 +5,7 @@
 #include "igi/retail_random_generator.hpp"
 
 #include <string_view>
+#include <unordered_map>
 
 namespace igi::gameplay
 {
@@ -305,6 +306,9 @@ class GameSimulation final : private HumanMovementWorld
     void advance_view_animation(const PlayerInput& input);
     void select_weapon(std::size_t slot);
     void collect_weapons(const PlayerInput& input);
+    [[nodiscard]] std::uint32_t reserve_for_ammunition(const std::string& ammunition_identifier,
+                                                       std::uint32_t fallback_reserve) const noexcept;
+    void set_reserve_for_ammunition(const std::string& ammunition_identifier, std::uint32_t reserve);
     void advance_patrol(std::size_t actor_index);
     void move_actor(std::size_t actor_index, Vector3 destination, float speed);
     [[nodiscard]] Vector3 animation_delta(int state);
@@ -328,6 +332,7 @@ class GameSimulation final : private HumanMovementWorld
     std::vector<ActorState> actors_;
     std::vector<Projectile> projectiles_;
     std::vector<InventoryWeapon> inventory_;
+    std::unordered_map<std::string, std::uint32_t> ammunition_pool_;
     std::vector<bool> pickups_collected_;
     std::vector<bool> soldier_weapons_collected_;
     std::size_t selected_weapon_slot_{};

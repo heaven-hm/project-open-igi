@@ -41,6 +41,8 @@ MissionScene test_scene()
     knife.ammunition_identifier = "AMMO_ID_NONE";
     SceneWeapon pickup = pistol;
     pickup.identifier = "WEAPON_ID_AK47";
+    pickup.parameters.name = "AK47";
+    pickup.initial_reserve = 0;
     pickup.initially_owned = false;
     pickup.ammunition_identifier = "AMMO_ID_762";
     SceneWeapon sniper = pistol;
@@ -180,6 +182,22 @@ int main()
                 "AmmoPickup must apply the Int16 count from the retail QVM task parameters");
         require(ammunition_pickup_simulation.take_player_weapon_pickup_sound_count() == 0,
                 "AmmoPickup must not emit the Weapon_GunPickup weaponpickup_1 sound");
+
+        auto unowned_ammunition_scene = test_scene();
+        unowned_ammunition_scene.weapon_pickups.clear();
+        unowned_ammunition_scene.weapon_pickups.push_back(
+            {{10.0f, 0.0f, -2.0f}, "AMMO_ID_762", {1.0f, 1.0f, 1.0f}, 1.0f, 16});
+        unowned_ammunition_scene.weapon_pickups.push_back({{10.0f, 0.0f, -2.0f}, "WEAPON_ID_AK47"});
+        GameSimulation unowned_ammunition_simulation(unowned_ammunition_scene);
+        unowned_ammunition_simulation.teleport_player({10.0f, 0.0f, -2.0f}, 0.0f, 0.0f);
+        unowned_ammunition_simulation.tick({});
+        require(unowned_ammunition_simulation.inventory_size() == 4,
+                "A later GunPickup must add the AK47 after the player collects loose 7.62 ammunition");
+        PlayerInput select_ak47;
+        select_ak47.weapon_slot = 3;
+        unowned_ammunition_simulation.tick(select_ak47);
+        require(unowned_ammunition_simulation.weapon().reserve == 16,
+                "AmmoPickup must remain in the player ammo table before its weapon is acquired");
 
         simulation.restart();
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
