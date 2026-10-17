@@ -177,6 +177,7 @@ void GameSimulation::restart()
     developer_mode_ = false;
     pending_player_fall_sound_ = {};
     pending_player_jump_sound_ = {};
+    pending_player_weapon_pickup_sound_count_ = 0;
     current_zoom_ = 1.0f;
     dragunov_zoom_level_ = 6.5f;
     weapon_ = {};
@@ -304,6 +305,7 @@ void GameSimulation::tick(const PlayerInput& input)
 {
     pending_player_fall_sound_ = {};
     pending_player_jump_sound_ = {};
+    pending_player_weapon_pickup_sound_count_ = 0;
     if (!std::isfinite(input.forward) || !std::isfinite(input.sideways) ||
         !std::isfinite(input.heading_change) || !std::isfinite(input.pitch_change))
     {

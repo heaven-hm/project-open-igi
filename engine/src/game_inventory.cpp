@@ -169,6 +169,10 @@ void GameSimulation::collect_weapons(const PlayerInput& input)
             diagnostics::log(diagnostics::Severity::information,
                              "GunPickup_Action",
                              "IGI.EXE 0x0046D230 consumed pickup " + pickup.weapon_identifier);
+            ++pending_player_weapon_pickup_sound_count_;
+            diagnostics::log(diagnostics::Severity::debug,
+                             "Weapon_GunPickup",
+                             "IGI.EXE 0x0045FFC0 queued weaponpickup_1 sound event");
         }
     }
     for (std::size_t actor_index = 0; actor_index < actors_.size(); ++actor_index)

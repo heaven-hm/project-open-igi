@@ -1135,6 +1135,30 @@ int run(RuntimeOptions options, const char* executable)
                             std::to_string(player_sound_voice));
                 }
             }
+            const std::uint32_t weapon_pickup_sound_count =
+                simulation.take_player_weapon_pickup_sound_count();
+            for (std::uint32_t sound_index = 0; sound_index < weapon_pickup_sound_count; ++sound_index)
+            {
+                if (!audio_output || !audio_output->IsAvailable())
+                {
+                    break;
+                }
+                constexpr std::string_view weapon_pickup_sound_definition = "weaponpickup_1";
+                const std::uint32_t sound_voice =
+                    sound_system.SoundSystem_PlayDefinition(weapon_pickup_sound_definition);
+                if (sound_voice == 0)
+                {
+                    log(Severity::warning,
+                        "audio",
+                        "Retail Weapon_GunPickup event could not play sound definition 'weaponpickup_1'");
+                }
+                else
+                {
+                    log(Severity::debug,
+                        "audio",
+                        "Retail Weapon_GunPickup played 'weaponpickup_1'; voice=" + std::to_string(sound_voice));
+                }
+            }
             if (audio_output && audio_output->IsAvailable())
             {
                 const bool fired_this_tick = simulation.weapon().shots_fired > shots_before_tick;

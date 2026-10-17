@@ -161,8 +161,12 @@ int main()
         input = {};
         simulation.tick(input);
         require(simulation.inventory_size() == 4, "Retail automatic pickup must add the nearby weapon");
+        require(simulation.take_player_weapon_pickup_sound_count() == 1,
+                "Retail Weapon_GunPickup must queue one weaponpickup_1 sound event");
         simulation.tick(input);
         require(simulation.inventory_size() == 4, "A retail pickup must not be collected twice");
+        require(simulation.take_player_weapon_pickup_sound_count() == 0,
+                "A collected pickup must not emit a second weaponpickup_1 sound event");
         simulation.restart();
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
                     simulation.health() == scene.player_parameters.maximum_health,

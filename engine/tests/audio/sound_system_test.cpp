@@ -72,6 +72,9 @@ int main(int argument_count, char** arguments)
             require(fall_sound_voice != 0 && sounds.SoundSystem_IsPlaying(fall_sound_voice),
                     "A retail player fall sound must resolve to an active Level 1 bank voice");
         }
+        const std::uint32_t weapon_pickup_voice = sounds.SoundSystem_PlayDefinition("weaponpickup_1");
+        require(weapon_pickup_voice != 0 && sounds.SoundSystem_IsPlaying(weapon_pickup_voice),
+                "Retail Weapon_GunPickup sound must resolve to an active Level 1 bank voice");
 
         std::array<std::int16_t, 512> mixed_samples{};
         mixer.MixFrames(mixed_samples);
@@ -85,7 +88,7 @@ int main(int argument_count, char** arguments)
         require(!sounds.SoundSystem_IsPlaying(rifle_voice), "Stopping the retail voice did not release it");
 
         std::cout << "Level 1 retail definition playback passed: direct sound lookup, non-sound rejection, "
-                     "PCM mix, looping, and stop lifecycle\n";
+                     "weapon-pickup sound, PCM mix, looping, and stop lifecycle\n";
         return 0;
     }
     catch (const std::exception& exception)

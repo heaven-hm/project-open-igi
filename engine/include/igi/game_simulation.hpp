@@ -127,6 +127,12 @@ class GameSimulation final : private HumanMovementWorld
         pending_player_jump_sound_ = {};
         return sound_definition_name;
     }
+    [[nodiscard]] std::uint32_t take_player_weapon_pickup_sound_count() noexcept
+    {
+        const std::uint32_t sound_count = pending_player_weapon_pickup_sound_count_;
+        pending_player_weapon_pickup_sound_count_ = 0;
+        return sound_count;
+    }
     [[nodiscard]] Vector3 player_position() const noexcept;
     [[nodiscard]] Vector3 camera_position() const noexcept;
     [[nodiscard]] Vector3 aim_direction() const noexcept;
@@ -345,6 +351,7 @@ class GameSimulation final : private HumanMovementWorld
     bool developer_mode_{};
     std::string_view pending_player_fall_sound_;
     std::string_view pending_player_jump_sound_;
+    std::uint32_t pending_player_weapon_pickup_sound_count_{};
     float current_zoom_{1.0f};
     float dragunov_zoom_level_{6.5f};
 };
