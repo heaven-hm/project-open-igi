@@ -3,6 +3,7 @@
 
 #include <exception>
 #include <iostream>
+#include <numbers>
 #include <stdexcept>
 
 using namespace igi::gameplay;
@@ -176,6 +177,27 @@ int main()
         }
         require(!simulation.is_scoped(), "MP5SD iron sights must not engage sniper scope mode");
         require(simulation.zoom_factor() > 1.2f, "MP5SD aiming must provide iron-sight zoom");
+
+        // The original player-only developer shortcut must not refill or heal an AI soldier.
+        auto cheat_scope_scene = test_scene();
+        cheat_scope_scene.actors.push_back({{0, 6, -2}, std::numbers::pi_v<float>, 2201, 1, {}});
+        GameSimulation player_only_cheat(cheat_scope_scene);
+        const float enemy_health_before_cheat = player_only_cheat.actors().front().health;
+        const std::uint32_t enemy_ammunition_before_cheat =
+            player_only_cheat.actors().front().ammunition_in_clip;
+        player_only_cheat.toggle_developer_mode();
+        require(player_only_cheat.actors().front().health == enemy_health_before_cheat &&
+                    player_only_cheat.actors().front().ammunition_in_clip == enemy_ammunition_before_cheat,
+                "Player unlimited-health/ammo mode must not change an enemy's health or ammunition");
+        PlayerInput player_only_fire;
+        player_only_fire.firing = true;
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            player_only_cheat.tick(player_only_fire);
+        }
+        require(player_only_cheat.actors().front().health < enemy_health_before_cheat &&
+                    player_only_cheat.health() == cheat_scope_scene.player_parameters.maximum_health,
+                "Developer protection must apply only to the player while enemies remain damageable");
 
         // Verify developer-mode gameplay behavior
         simulation.toggle_developer_mode();
