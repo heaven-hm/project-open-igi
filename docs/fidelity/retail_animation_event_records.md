@@ -17,6 +17,16 @@ Target: `/Users/haseeb-mir/Downloads/IGI/igi.exe`, SHA-256 `dea34892d417715873ea
 
 The C# implementation is not used as evidence for the stored field layout or dispatch behavior. Retail binary callback behavior and matched runtime traces remain the authority.
 
+## Trigger table port
+
+`AnimationTriggerRegistry` now reads the original trigger QVM into a source-value table. It preserves the event ID, task-type symbol, sound-definition name, and the final argument's text and numeric value. It does not allocate a guessed numeric `TASKTYPE_ANIMSOUND` constant and does not interpret the final argument. The test confirms all 50 entries map to playable Level 1 sound definitions, including Glock reload event 1000 and fence-walk event 1025; ID 1010 remains absent.
+
+This table is not yet connected to per-tick animation dispatch. Passing this test proves QVM parsing and asset-name linkage only, not that the retail callback plays a sound at a particular event time or position.
+
+REA/Ghidra evidence `ev_2d7b47a46b932c80c0620b200ed3e400c3eaa76f39a706b6d6f489db6e77e037` confirms native registration at `0x004ebe70` and callback pointer `0x004ebeb0`. REA could not classify the callback as a Ghidra function entry. Radare2 independently identified its 264-byte extent, but callback effects still need a controlled runtime trace before implementing dispatch semantics.
+
+CTest: `retail_level_one_animation_trigger_registry`.
+
 ## Port files and regression
 
 - `engine/src/formats/parsers/iff_parser.cpp` decodes the source `BOED` fields.

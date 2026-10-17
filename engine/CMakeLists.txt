@@ -41,6 +41,7 @@ add_library(igi_audio STATIC
     src/audio/ilsf_stream_reader.cpp
     src/audio/audio_mixer.cpp
     src/audio/sdl_audio_output.cpp
+    src/audio/animation_trigger_registry.cpp
     src/audio/sound_definition_registry.cpp
     src/audio/sound_bank.cpp
     src/audio/sound_system.cpp
@@ -220,6 +221,13 @@ if(BUILD_TESTING)
     if(IGI_GAME_PATH)
         add_test(NAME retail_level_one_sound_definitions
             COMMAND sound_definition_registry_test "${IGI_GAME_PATH}")
+    endif()
+
+    add_executable(animation_trigger_registry_test tests/audio/animation_trigger_registry_test.cpp)
+    target_link_libraries(animation_trigger_registry_test PRIVATE igi_audio)
+    if(IGI_GAME_PATH)
+        add_test(NAME retail_level_one_animation_trigger_registry
+            COMMAND animation_trigger_registry_test "${IGI_GAME_PATH}")
     endif()
 
     add_executable(sound_bank_test tests/audio/sound_bank_test.cpp)
