@@ -12,6 +12,7 @@
 #include "igi/retail/resource/resource_cache.hpp"
 #include "igi/retail/script/qvm_loader.hpp"
 #include "igi/retail/script/qvm_object_calls.hpp"
+#include "igi/retail/terrain/terrain_loaders.hpp"
 #include "igi/retail/texture/model_texture_pixels.hpp"
 
 
@@ -192,6 +193,9 @@ struct Scene
     std::map<std::string, IDirectDrawSurface7*> uploaded_textures;
     std::vector<std::unique_ptr<Package>> packages;
     std::vector<PlacedModel> objects;
+    terrain::TerrainLevelData terrain_data;
+    std::vector<std::unique_ptr<ComOwner<IDirectDrawSurface7>>> terrain_texture_surfaces;
+    std::vector<IDirectDrawSurface7*> terrain_textures;
     std::array<double, 3> origin{};
     Vector3 camera_position{0, -100, 50};
     Vector3 camera_target{0, 0, 0};
@@ -350,6 +354,17 @@ struct Scene
                 }
                 break;
             }
+        }
+        // Load retail level terrain if available (TERRAIN directory)
+        const auto terrain_dir_lower = level / "terrain";
+        const auto terrain_dir_upper = level / "TERRAIN";
+        const auto terrain_dir = std::filesystem::exists(terrain_dir_lower) ? terrain_dir_lower : terrain_dir_upper;
+        if (std::filesystem::exists(terrain_dir))
+        {
+            const bool terrain_loaded = terrain_data.Host_LoadLevelTerrain(terrain_dir, calls);
+            write_log("Level terrain loaded=" + std::string(terrain_loaded ? "true" : "false") +
+                      " nodes=" + std::to_string(terrain_data.contour_nodes.size()) +
+                      " layers=" + std::to_string(terrain_data.texture_layers.size()));
         }
         std::map<std::string, std::shared_ptr<model::MefRenderData>> geometry_cache;
         std::size_t missing = 0;
@@ -650,7 +665,61 @@ struct Scene
             initial_height = static_cast<std::uint32_t>(GetSystemMetrics(SM_CYSCREEN));
         }
         create_render_target(initial_width, initial_height, true);
+        upload_terrain_textures();
         write_log("Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
+    }
+
+    // HOST HELPER: upload terrain texture layers to DirectDraw surfaces.
+    // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+    // Tools/evidence: scripts/GameNatives/terrain/004C5F00-DynObj_ParseConfigFile_7.cpp.
+    // Behavior/CFG: Creates 32-bit ARGB DirectDraw texture surfaces in system memory for each TERRAIN.TEX layer.
+    // Status/limits: Host DirectDraw texture surface creator for Level terrain layers.
+    void upload_terrain_textures()
+    {
+        terrain_texture_surfaces.clear();
+        terrain_textures.clear();
+        for (const auto& layer : terrain_data.texture_layers)
+        {
+            if (layer.width == 0U || layer.height == 0U || layer.argb_pixels.empty())
+            {
+                terrain_textures.push_back(nullptr);
+                continue;
+            }
+            auto surface = std::make_unique<ComOwner<IDirectDrawSurface7>>();
+            DDSURFACEDESC2 description{};
+            description.dwSize = sizeof(description);
+            description.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
+            description.dwWidth = layer.width;
+            description.dwHeight = layer.height;
+            description.ddsCaps.dwCaps = DDSCAPS_TEXTURE | DDSCAPS_SYSTEMMEMORY;
+            description.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
+            description.ddpfPixelFormat.dwFlags = DDPF_RGB | DDPF_ALPHAPIXELS;
+            description.ddpfPixelFormat.dwRGBBitCount = 32;
+            description.ddpfPixelFormat.dwRBitMask = 0x00FF0000U;
+            description.ddpfPixelFormat.dwGBitMask = 0x0000FF00U;
+            description.ddpfPixelFormat.dwBBitMask = 0x000000FFU;
+            description.ddpfPixelFormat.dwRGBAlphaBitMask = 0xFF000000U;
+            check_result(direct_draw.pointer->CreateSurface(&description, &surface->pointer, nullptr),
+                         "Create terrain texture");
+            DDSURFACEDESC2 locked{};
+            locked.dwSize = sizeof(locked);
+            check_result(surface->pointer->Lock(nullptr, &locked, DDLOCK_WAIT | DDLOCK_WRITEONLY, nullptr),
+                         "Lock terrain texture");
+            for (std::size_t row = 0; row < layer.height; ++row)
+            {
+                std::memcpy(static_cast<std::byte*>(locked.lpSurface) +
+                                row * static_cast<std::size_t>(locked.lPitch),
+                            layer.argb_pixels.data() + row * layer.width,
+                            layer.width * 4U);
+            }
+            check_result(surface->pointer->Unlock(nullptr), "Unlock terrain texture");
+            terrain_textures.push_back(surface->pointer);
+            terrain_texture_surfaces.push_back(std::move(surface));
+        }
+        if (!terrain_textures.empty())
+        {
+            write_log("Direct3D7 terrain textures uploaded: count=" + std::to_string(terrain_textures.size()));
+        }
     }
 
     IDirectDrawSurface7* texture_for(const PlacedModel& object, std::uint16_t material)
@@ -807,9 +876,118 @@ struct Scene
         check_result(device.pointer->Clear(0, nullptr, D3DCLEAR_TARGET | D3DCLEAR_ZBUFFER, 0xFF607080U, 1, 0),
                      "Clear frame");
         check_result(device.pointer->BeginScene(), "BeginScene");
+        std::size_t terrain_batches_drawn = 0;
         std::size_t drawn = 0;
         try
         {
+            if (terrain_data.loaded && !terrain_textures.empty())
+            {
+                const float cam_p[3] = {camera_position.x, camera_position.y, camera_position.z};
+                const float cam_t[3] = {camera_target.x, camera_target.y, camera_target.z};
+                const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
+                    origin, world_scale, cam_p, cam_t, 1.0f, 1.333f, 4000.0f);
+
+                if (!terrain_mesh.vertices.empty())
+                {
+                    D3DMATRIX terrain_world = identity();
+                    check_result(device.pointer->SetTransform(D3DTRANSFORMSTATE_WORLD, &terrain_world),
+                                 "Set terrain world transform");
+
+                    check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE, FALSE),
+                                 "Disable alpha blend for terrain");
+                    check_result(device.pointer->SetRenderState(D3DRENDERSTATE_CULLMODE, D3DCULL_NONE),
+                                 "Terrain cull mode");
+                    check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ZENABLE, TRUE),
+                                 "Terrain Z enable");
+                    check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ZWRITEENABLE, TRUE),
+                                 "Terrain Z write");
+                    check_result(device.pointer->SetTextureStageState(0, D3DTSS_ADDRESS, D3DTADDRESS_WRAP),
+                                 "Terrain texture wrap");
+
+                    struct TerrainD3DVertex
+                    {
+                        float position[3];
+                        DWORD color;
+                        float coordinates[2];
+                    };
+
+                    for (const auto& batch : terrain_mesh.batches)
+                    {
+                        if (batch.indices.empty())
+                        {
+                            continue;
+                        }
+                        IDirectDrawSurface7* texture = nullptr;
+                        if (batch.texture_index < terrain_textures.size())
+                        {
+                            texture = terrain_textures[batch.texture_index];
+                        }
+                        check_result(device.pointer->SetTexture(0, texture), "Set terrain texture");
+
+                        std::vector<TerrainD3DVertex> batch_vertices;
+                        std::vector<WORD> batch_indices;
+                        std::map<std::uint32_t, WORD> index_map;
+                        batch_vertices.reserve(std::min<std::size_t>(batch.indices.size(), 4096U));
+                        batch_indices.reserve(batch.indices.size());
+
+                        for (std::uint32_t global_idx : batch.indices)
+                        {
+                            if (global_idx >= terrain_mesh.vertices.size())
+                            {
+                                continue;
+                            }
+                            auto it = index_map.find(global_idx);
+                            if (it == index_map.end())
+                            {
+                                if (batch_vertices.size() >= 65530U)
+                                {
+                                    check_result(
+                                        device.pointer->DrawIndexedPrimitive(
+                                            D3DPT_TRIANGLELIST,
+                                            D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+                                            batch_vertices.data(),
+                                            static_cast<DWORD>(batch_vertices.size()),
+                                            batch_indices.data(),
+                                            static_cast<DWORD>(batch_indices.size()),
+                                            0),
+                                        "Draw terrain sub-batch");
+                                    batch_vertices.clear();
+                                    batch_indices.clear();
+                                    index_map.clear();
+                                    ++terrain_batches_drawn;
+                                }
+                                const WORD local_idx = static_cast<WORD>(batch_vertices.size());
+                                index_map[global_idx] = local_idx;
+                                const auto& v = terrain_mesh.vertices[global_idx];
+                                const auto a = static_cast<std::uint8_t>(std::clamp(v.alpha * 255.0f, 0.0f, 255.0f));
+                                const DWORD color = (static_cast<DWORD>(a) << 24U) | 0x00FFFFFFU;
+                                batch_vertices.push_back({{v.x, v.y, v.z}, color, {v.u, v.v}});
+                                batch_indices.push_back(local_idx);
+                            }
+                            else
+                            {
+                                batch_indices.push_back(it->second);
+                            }
+                        }
+
+                        if (!batch_indices.empty())
+                        {
+                            check_result(
+                                device.pointer->DrawIndexedPrimitive(
+                                    D3DPT_TRIANGLELIST,
+                                    D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+                                    batch_vertices.data(),
+                                    static_cast<DWORD>(batch_vertices.size()),
+                                    batch_indices.data(),
+                                    static_cast<DWORD>(batch_indices.size()),
+                                    0),
+                                "Draw terrain batch");
+                            ++terrain_batches_drawn;
+                        }
+                    }
+                }
+            }
+
             for (const auto& object : objects)
             {
                 D3DMATRIX world = identity();
@@ -882,9 +1060,10 @@ struct Scene
                      "Present frame");
         if (first_frame)
         {
-            write_log("First 3D frame presented: objects=" + std::to_string(objects.size()) +
-                      " draw_batches=" + std::to_string(drawn) +
-                      " uploaded_textures=" + std::to_string(uploaded_textures.size()));
+            write_log("First 3D frame presented: terrain_batches=" + std::to_string(terrain_batches_drawn) +
+                      " objects=" + std::to_string(objects.size()) +
+                      " model_draw_batches=" + std::to_string(drawn) +
+                      " uploaded_textures=" + std::to_string(uploaded_textures.size() + terrain_textures.size()));
             first_frame = false;
         }
     }

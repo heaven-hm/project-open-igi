@@ -42,6 +42,7 @@ add_library(igi_retail_engine STATIC
     src/retail/texture/model_texture_pixels.cpp
     src/retail/texture/loop_terrain_texture.cpp
     src/retail/texture/texture_loaders.cpp
+    src/retail/terrain/terrain_loaders.cpp
 )
 
 target_include_directories(igi_retail_engine
@@ -322,6 +323,14 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_texture_loaders_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_texture_loaders_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_texture_loaders_tests COMMAND igi_retail_texture_loaders_tests)
+
+    add_executable(igi_retail_terrain_loaders_tests
+        tests/terrain/terrain_loaders_test.cpp
+    )
+
+    target_link_libraries(igi_retail_terrain_loaders_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_terrain_loaders_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_terrain_loaders_tests COMMAND igi_retail_terrain_loaders_tests)
 endif()
 
 if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)

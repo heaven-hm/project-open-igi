@@ -14,9 +14,10 @@ namespace igi::retail::terrain
 union TerrainGridDataReference
 {
     std::uint32_t file_value = 0;
-    const std::byte* runtime_pointer;
+    std::uint32_t runtime_pointer;
 };
 
+#pragma pack(push, 1)
 struct TerrainGridRecord
 {
     TerrainGridDataReference data;
@@ -24,6 +25,8 @@ struct TerrainGridRecord
     std::array<std::byte, 3> unknown_after_state{};
     std::uint32_t dimension = 0;
 };
+#pragma pack(pop)
+static_assert(sizeof(TerrainGridRecord) == 12, "TerrainGridRecord must be exactly 12 bytes");
 
 // 0x00510010 - REA/Ghidra vertex consumer; whole-routine CFG/runtime parity pending.
 // Evidence: ev_ba370d099419afc676d7082c9828a35e206e9a7de421482b56f8582b67ffb169.
@@ -35,18 +38,25 @@ struct TerrainCommandHeader
     std::int16_t base_vertex_count = 0;
     std::int16_t extra_vertex_count = 0;
 };
+static_assert(sizeof(TerrainCommandHeader) == 8, "TerrainCommandHeader must be exactly 8 bytes");
 
 union TerrainCommandReference
 {
     std::uint32_t file_offset = 0;
-    const TerrainCommandHeader* runtime_pointer;
+    std::uint32_t runtime_pointer;
 };
 
+#pragma pack(push, 1)
 struct TerrainContourRecord
 {
-    std::array<std::byte, 0x1C> unverified_tree_fields{};
+    std::array<std::int16_t, 8> children{};
+    std::array<std::int8_t, 8> cmd_transform{};
+    std::uint8_t children_mask = 0;
+    std::array<std::byte, 3> reserved{};
     TerrainCommandReference commands;
 };
+#pragma pack(pop)
+static_assert(sizeof(TerrainContourRecord) == 32, "TerrainContourRecord must be exactly 32 bytes");
 
 // 0x004D14E0 emits descriptors consumed at 0x00510010; both complete routines remain unported.
 // Evidence: ev_0fdafcedeef167b35b39c1e3cd5193f4985378063ea6ddaa60d0993dc15ee8d1.
