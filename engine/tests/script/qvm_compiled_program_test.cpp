@@ -15,7 +15,7 @@
 namespace {
 
 using igi::retail::script::QvmFormatError;
-using igi::retail::script::Qvm_LoadCompiledProgram_004BD220;
+using igi::retail::script::Qvm_LoadCompiledProgram;
 
 void require(bool condition, std::string_view message)
 {
@@ -60,7 +60,7 @@ void write_uint32(std::vector<std::byte>& file_bytes, std::size_t field_offset, 
 void test_reads_retail_qvm_header_and_code_span()
 {
     const std::vector<std::byte> file_bytes = make_valid_qvm();
-    const auto program = Qvm_LoadCompiledProgram_004BD220(file_bytes);
+    const auto program = Qvm_LoadCompiledProgram(file_bytes);
     require(program.format_revision == 8U, "retail QVM revision is preserved");
     require(program.field_08 == 5U, "retail loader's field at +0x08 is preserved");
     require(program.code.size() == 8U, "retail code byte count is read from +0x30");
@@ -84,7 +84,7 @@ void test_rejects_invalid_signature_revision_and_code_range()
     invalid_file[0U] = std::byte{'X'};
     bool rejected_signature = false;
     try {
-        static_cast<void>(Qvm_LoadCompiledProgram_004BD220(invalid_file));
+        static_cast<void>(Qvm_LoadCompiledProgram(invalid_file));
     } catch (const QvmFormatError&) {
         rejected_signature = true;
     }
@@ -94,7 +94,7 @@ void test_rejects_invalid_signature_revision_and_code_range()
     write_uint32(invalid_file, 0x04U, 7U);
     bool rejected_revision = false;
     try {
-        static_cast<void>(Qvm_LoadCompiledProgram_004BD220(invalid_file));
+        static_cast<void>(Qvm_LoadCompiledProgram(invalid_file));
     } catch (const QvmFormatError&) {
         rejected_revision = true;
     }
@@ -104,7 +104,7 @@ void test_rejects_invalid_signature_revision_and_code_range()
     write_uint32(invalid_file, 0x2CU, 0xFFFFFFF0U);
     bool rejected_range = false;
     try {
-        static_cast<void>(Qvm_LoadCompiledProgram_004BD220(invalid_file));
+        static_cast<void>(Qvm_LoadCompiledProgram(invalid_file));
     } catch (const QvmFormatError&) {
         rejected_range = true;
     }
@@ -114,7 +114,7 @@ void test_rejects_invalid_signature_revision_and_code_range()
     write_uint32(invalid_file, 0x10U, 0xFFFFFFF0U);
     bool rejected_table_range = false;
     try {
-        static_cast<void>(Qvm_LoadCompiledProgram_004BD220(invalid_file));
+        static_cast<void>(Qvm_LoadCompiledProgram(invalid_file));
     } catch (const QvmFormatError&) {
         rejected_table_range = true;
     }
@@ -135,7 +135,7 @@ void test_level_one_qvm_corpus(const std::filesystem::path& level_directory)
         };
         const auto* byte_data = reinterpret_cast<const std::byte*>(raw_bytes.data());
         const std::span<const std::byte> file_bytes(byte_data, raw_bytes.size());
-        const auto program = Qvm_LoadCompiledProgram_004BD220(file_bytes);
+        const auto program = Qvm_LoadCompiledProgram(file_bytes);
         require(!program.code.empty(), "Level 1 QVM has a nonempty retail code region");
         if (program.first_header_referenced_region.has_value()) {
             require(program.first_header_referenced_region->bytes.size()

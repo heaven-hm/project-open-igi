@@ -15,7 +15,7 @@ constexpr std::size_t code_size_field_offset = 0x30U;
 constexpr std::size_t field_34_offset = 0x34U;
 constexpr std::size_t field_38_offset = 0x38U;
 
-// Qvm_LoadCompiledProgram_004BD220 at 0x004BD220 installs base + fields +0x0C/+0x10
+// Qvm_LoadCompiledProgram at 0x004BD220 installs base + fields +0x0C/+0x10
 // when the gate at +0x14 is nonzero, and base + fields +0x1C/+0x20 when +0x24 is
 // nonzero. REA/Ghidra evidence: ev_93c3331eb57f910f0727ac4a0e85af7b06148864571701268d2c22b709f7763d.
 [[nodiscard]] QvmFileRegion read_file_region(
@@ -50,7 +50,7 @@ constexpr std::size_t field_38_offset = 0x38U;
 
 } // namespace
 
-QvmCompiledProgram Qvm_LoadCompiledProgram_004BD220(std::span<const std::byte> file_bytes)
+QvmCompiledProgram Qvm_LoadCompiledProgram(std::span<const std::byte> file_bytes)
 {
     if (file_bytes.size() < retail_qvm_header_minimum_size) {
         throw QvmFormatError("QVM file is shorter than the retail loader's minimum header size.");

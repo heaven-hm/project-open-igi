@@ -142,7 +142,7 @@ file length greater than `0x3B`. It obtains the compiled bytecode span from `bas
 dword `[0x30]` (REA/Ghidra evidence `ev_bd052fcbe23ffdb47535d836372b20f7c7e07a937dfd95604e67a7ccf6b29747`, retail
 `igi.exe` SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`).
 
-`Qvm_LoadCompiledProgram_004BD220` implements that header gate and code-span selection with bounds checks. Other
+`Qvm_LoadCompiledProgram` (retail address `0x004BD220`) implements that header gate and code-span selection with bounds checks. Other
 header dwords remain named by offset because their semantics are not established by this native. Unit tests cover
 signature/revision/code-range rejection and a corpus run against Level 1 `OBJECTS.QVM`, `MISSION.QVM`, and every
 `AI/*.QVM` file. The corpus run accepted 39 compiled QVM files. This proves that the header and code ranges are
