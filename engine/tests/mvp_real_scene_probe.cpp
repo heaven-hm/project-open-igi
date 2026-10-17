@@ -798,6 +798,51 @@ int main(int argument_count, char** arguments)
         }
         require(combat.weapon().hits > 0 && combat.weapon().kills == 1,
                 "Player projectiles must defeat an original scene soldier");
+        const auto& defeated_soldier = combat.actors()[target_index];
+        require(defeated_soldier.behavior == ActorBehavior::dead,
+                "A Level 1 soldier must enter the dead state when its retail health is depleted");
+        const int death_animation_identifier = defeated_soldier.animation_identifier;
+        const auto& defeated_soldier_definition = scene.actors[target_index];
+        require(defeated_soldier_definition.animations &&
+                    defeated_soldier_definition.animations->clips.contains(death_animation_identifier),
+                "A Level 1 corpse must retain its selected retail death clip");
+        const auto& death_animation_clip =
+            defeated_soldier_definition.animations->clips.at(death_animation_identifier);
+        require(death_animation_clip.duration > 0,
+                "A Level 1 death clip must have a positive duration");
+        for (int tick_index = 0; tick_index < 120; ++tick_index)
+        {
+            combat.tick({});
+        }
+        const auto& settled_corpse = combat.actors()[target_index];
+        require(settled_corpse.behavior == ActorBehavior::dead &&
+                    settled_corpse.animation_identifier == death_animation_identifier &&
+                    settled_corpse.animation_time >= death_animation_clip.duration,
+                "A Level 1 corpse must hold its completed death animation instead of returning to a standing clip");
+        const auto corpse_pose = sample_bone_pose(*defeated_soldier_definition.animations,
+                                                  death_animation_identifier,
+                                                  settled_corpse.animation_time,
+                                                  false,
+                                                  true);
+        const auto standing_pose = sample_bone_pose(*defeated_soldier_definition.animations,
+                                                    defeated_soldier_definition.stand_animation,
+                                                    0.0f);
+        float maximum_pose_difference = 0.0f;
+        for (std::size_t bone_index = 0; bone_index < corpse_pose.size(); ++bone_index)
+        {
+            for (int row_index = 0; row_index < 4; ++row_index)
+            {
+                for (int column_index = 0; column_index < 4; ++column_index)
+                {
+                    maximum_pose_difference = std::max(
+                        maximum_pose_difference,
+                        std::abs(corpse_pose[bone_index][column_index][row_index] -
+                                 standing_pose[bone_index][column_index][row_index]));
+                }
+            }
+        }
+        require(maximum_pose_difference > 0.05f,
+                "The settled Level 1 corpse pose must remain distinct from the soldier's standing pose");
         const auto combat_log_entries = igi::logging::Logger::instance().snapshot_recent_entries(4096);
         const bool verified_mesh_hit = std::any_of(
             combat_log_entries.begin(),
