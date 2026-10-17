@@ -6,12 +6,11 @@
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/model/mef_model_loader.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
-#include "retail_model_scene.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cstddef>
 #include <cstdint>
-#include <chrono>
 #include <cstdio>
 #include <ddraw.h>
 #include <filesystem>
@@ -26,6 +25,8 @@
 #include <vector>
 #include <windows.h>
 
+#include "retail_model_scene.hpp"
+
 namespace
 {
 
@@ -36,12 +37,12 @@ constexpr wchar_t window_class_name[] = L"Innerloop";
 constexpr wchar_t window_title[] = L"Innerloop";
 
 // Retail IGI.EXE startup strings.
-constexpr wchar_t already_running_message[] = L"IGI is already running."; // VA 0x00541DBC
-constexpr char igi_mutex_name[] = "IGIMUTEX";                             // VA 0x00541ECC
+constexpr wchar_t already_running_message[] = L"IGI is already running.";          // VA 0x00541DBC
+constexpr char igi_mutex_name[] = "IGIMUTEX";                                      // VA 0x00541ECC
 constexpr char register_winproc_failed[] = "Failed to register WinProc callback."; // VA 0x00541D70
-constexpr char create_device_failed[] = "Failed to create device.";               // VA 0x0054E97C
-constexpr char obtain_interface_failed[] = "Failed to obtain interface.";         // VA 0x0054E998
-constexpr char load_resource_failed_format[] = "Failed to load resource: '%s'";   // VA 0x005470D0
+constexpr char create_device_failed[] = "Failed to create device.";                // VA 0x0054E97C
+constexpr char obtain_interface_failed[] = "Failed to obtain interface.";          // VA 0x0054E998
+constexpr char load_resource_failed_format[] = "Failed to load resource: '%s'";    // VA 0x005470D0
 
 // On-screen diagnostic text. This overlay is the port's own tooling and is shown only when the
 // retail debug-text switch is active (App_ContextSetDebugtextState / global 0x005C8BF4); the
@@ -51,10 +52,9 @@ std::vector<std::wstring> debug_overlay_lines;
 IDirectDraw7* direct_draw_device = nullptr;
 IDirectDrawSurface7* primary_surface = nullptr;
 
-void log_message(
-    std::string_view message,
-    igi::retail::diagnostics::LogLevel log_level = igi::retail::diagnostics::LogLevel::info,
-    std::string_view subsystem = "platform");
+void log_message(std::string_view message,
+                 igi::retail::diagnostics::LogLevel log_level = igi::retail::diagnostics::LogLevel::info,
+                 std::string_view subsystem = "platform");
 
 std::wstring widen_ascii(const std::string& text)
 {
@@ -122,14 +122,12 @@ void load_retail_resource(const std::filesystem::path& resource_path,
 
     std::ostringstream resource_log;
     resource_log << "Resource_Load completed; entries=" << archive.entries.size()
-                 << "; selected=" << selected_entry->name
-                 << "; bytes=" << selected_entry->body.size();
+                 << "; selected=" << selected_entry->name << "; bytes=" << selected_entry->body.size();
     log_message(resource_log.str(), igi::retail::diagnostics::LogLevel::info, "resource");
 
     std::ostringstream model_log;
     model_log << "DynObj_LoadModelMesh completed; version=" << model.version
-              << "; header_bytes=" << model.mesh_header.size()
-              << "; chunks=" << model.container.chunks.size()
+              << "; header_bytes=" << model.mesh_header.size() << "; chunks=" << model.container.chunks.size()
               << "; D3DR_bytes="
               << (render_chunks.d3d_render_header == nullptr
                       ? 0U
@@ -203,7 +201,7 @@ bool apply_command_line(int argument_count, wchar_t** arguments)
         debug_switches.push_back(stored);
     }
 
-    igi::retail::core::debug_command_line::ApplyDebugFeatureCommandLine(debug_switches);
+    static_cast<void>(igi::retail::core::debug_command_line::ApplyDebugFeatureCommandLine(debug_switches));
 
     if (!resource_path.empty())
     {
@@ -212,36 +210,27 @@ bool apply_command_line(int argument_count, wchar_t** arguments)
     return true;
 }
 
-void log_message(
-    std::string_view message,
-    igi::retail::diagnostics::LogLevel log_level,
-    std::string_view subsystem)
+void log_message(std::string_view message,
+                 igi::retail::diagnostics::LogLevel log_level,
+                 std::string_view subsystem)
 {
     const std::string formatted_record = igi::retail::diagnostics::Log_FormatTimestampedRecord(
-        log_level,
-        std::chrono::system_clock::now(),
-        subsystem,
-        message);
+        log_level, std::chrono::system_clock::now(), subsystem, message);
     OutputDebugStringA(formatted_record.c_str());
 
-    HANDLE log_file = CreateFileW(
-        L"open-igi.log",
-        FILE_APPEND_DATA,
-        FILE_SHARE_READ | FILE_SHARE_WRITE,
-        nullptr,
-        OPEN_ALWAYS,
-        FILE_ATTRIBUTE_NORMAL,
-        nullptr);
+    HANDLE log_file = CreateFileW(L"open-igi.log",
+                                  FILE_APPEND_DATA,
+                                  FILE_SHARE_READ | FILE_SHARE_WRITE,
+                                  nullptr,
+                                  OPEN_ALWAYS,
+                                  FILE_ATTRIBUTE_NORMAL,
+                                  nullptr);
     if (log_file != INVALID_HANDLE_VALUE)
     {
         DWORD bytes_written = 0U;
         const DWORD record_size = static_cast<DWORD>(formatted_record.size());
-        const BOOL write_succeeded = WriteFile(
-            log_file,
-            formatted_record.data(),
-            record_size,
-            &bytes_written,
-            nullptr);
+        const BOOL write_succeeded =
+            WriteFile(log_file, formatted_record.data(), record_size, &bytes_written, nullptr);
         CloseHandle(log_file);
         if (write_succeeded == FALSE || bytes_written != record_size)
         {
@@ -374,21 +363,36 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     // Fullscreen by default, like the retail executable; "window" selects windowed mode.
     bool windowed = false;
     unsigned int level_number = 1U;
-    for (int argument_index = 1; argument_index < argument_count; ++argument_index) {
+    for (int argument_index = 1; argument_index < argument_count; ++argument_index)
+    {
         const std::wstring argument(arguments[argument_index]);
-        if (argument == L"--capture-frame" && argument_index + 1 < argument_count) {
+        if (argument == L"--capture-frame" && argument_index + 1 < argument_count)
+        {
             capture_path = arguments[++argument_index];
             continue;
         }
-        if (argument == L"window") { model_scene_requested = true; windowed = true; }
-        if (argument == L"devmode") { dev_mode = true; model_scene_requested = true; }
-        if (argument.starts_with(L"level")) {
+        if (argument == L"window")
+        {
+            model_scene_requested = true;
+            windowed = true;
+        }
+        if (argument == L"devmode")
+        {
+            dev_mode = true;
+            model_scene_requested = true;
+        }
+        if (argument.starts_with(L"level"))
+        {
             wchar_t* end = nullptr;
             const unsigned long parsed_level = std::wcstoul(argument.c_str() + 5, &end, 10);
-            if (end == argument.c_str() + 5 || *end != L'\0' || parsed_level < 1UL || parsed_level > 14UL) {
+            if (end == argument.c_str() + 5 || *end != L'\0' || parsed_level < 1UL || parsed_level > 14UL)
+            {
                 LocalFree(arguments);
                 MessageBoxW(nullptr, L"Expected level1 through level14.", window_title, MB_OK | MB_ICONERROR);
-                if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+                if (single_instance_mutex != nullptr)
+                {
+                    CloseHandle(single_instance_mutex);
+                }
                 return 1;
             }
             level_number = static_cast<unsigned int>(parsed_level);
@@ -399,19 +403,26 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     // effect for the scene run, not only for the resource-window mode.
     apply_command_line(argument_count, arguments);
 
-    if (model_scene_requested) {
+    if (model_scene_requested)
+    {
         LocalFree(arguments);
         wchar_t executable_path[32768]{};
         const DWORD path_length = GetModuleFileNameW(nullptr, executable_path, 32768U);
-        if (path_length == 0U || path_length >= 32768U) {
-            if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+        if (path_length == 0U || path_length >= 32768U)
+        {
+            if (single_instance_mutex != nullptr)
+            {
+                CloseHandle(single_instance_mutex);
+            }
             return 1;
         }
         const auto game_directory = std::filesystem::path(executable_path).parent_path();
-        const int scene_result =
-            RunRetailModelScene(instance_handle, show_command, game_directory, level_number, capture_path,
-                                dev_mode, windowed);
-        if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+        const int scene_result = RunRetailModelScene(
+            instance_handle, show_command, game_directory, level_number, capture_path, dev_mode, windowed);
+        if (single_instance_mutex != nullptr)
+        {
+            CloseHandle(single_instance_mutex);
+        }
         return scene_result;
     }
 
@@ -428,7 +439,10 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     if (RegisterClassExW(&window_class) == 0)
     {
         log_message(register_winproc_failed);
-        if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+        if (single_instance_mutex != nullptr)
+        {
+            CloseHandle(single_instance_mutex);
+        }
         return 1;
     }
 
@@ -450,7 +464,10 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     if (window_handle == nullptr)
     {
         log_message(register_winproc_failed);
-        if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+        if (single_instance_mutex != nullptr)
+        {
+            CloseHandle(single_instance_mutex);
+        }
         return 1;
     }
 
@@ -458,7 +475,10 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     {
         release_graphics();
         DestroyWindow(window_handle);
-        if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+        if (single_instance_mutex != nullptr)
+        {
+            CloseHandle(single_instance_mutex);
+        }
         return 1;
     }
 
@@ -473,6 +493,9 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     }
 
     release_graphics();
-    if (single_instance_mutex != nullptr) { CloseHandle(single_instance_mutex); }
+    if (single_instance_mutex != nullptr)
+    {
+        CloseHandle(single_instance_mutex);
+    }
     return static_cast<int>(message.wParam);
 }

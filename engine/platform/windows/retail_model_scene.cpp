@@ -2,24 +2,25 @@
 #define UNICODE
 #define _UNICODE
 #include "retail_model_scene.hpp"
-#include "developer_controls.hpp"
+
+#include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
+#include "igi/retail/render/trans_context.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
 #include "igi/retail/resource/resource_cache.hpp"
 #include "igi/retail/script/qvm_loader.hpp"
 #include "igi/retail/script/qvm_object_calls.hpp"
-#include "igi/retail/render/trans_context.hpp"
 #include "igi/retail/texture/model_texture_pixels.hpp"
-#include "igi/retail/diagnostics/log_record.hpp"
-#include <ddraw.h>
-#include <d3d.h>
+
 #include <algorithm>
 #include <array>
 #include <bit>
 #include <chrono>
-#include <cstring>
 #include <cmath>
+#include <cstring>
+#include <d3d.h>
+#include <ddraw.h>
 #include <fstream>
 #include <iomanip>
 #include <map>
@@ -28,12 +29,16 @@
 #include <stdexcept>
 #include <string>
 
+#include "developer_controls.hpp"
+
 namespace
 {
 using namespace igi::retail;
+
 template <class Interface> struct ComOwner
 {
-    Interface *pointer = nullptr;
+    Interface* pointer = nullptr;
+
     ~ComOwner()
     {
         if (pointer != nullptr)
@@ -41,11 +46,13 @@ template <class Interface> struct ComOwner
             pointer->Release();
         }
     }
+
     ComOwner() = default;
-    ComOwner(const ComOwner &) = delete;
-    ComOwner &operator=(const ComOwner &) = delete;
+    ComOwner(const ComOwner&) = delete;
+    ComOwner& operator=(const ComOwner&) = delete;
 };
-void check_result(HRESULT result, const char *operation)
+
+void check_result(HRESULT result, const char* operation)
 {
     if (FAILED(result))
     {
@@ -54,33 +61,40 @@ void check_result(HRESULT result, const char *operation)
         throw std::runtime_error(message.str());
     }
 }
+
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
 {
-    const auto record = diagnostics::Log_FormatTimestampedRecord(level, std::chrono::system_clock::now(),
-                                                                 "model-scene", message);
+    const auto record = diagnostics::Log_FormatTimestampedRecord(
+        level, std::chrono::system_clock::now(), "model-scene", message);
     std::ofstream output("open-igi-model-scene.log", std::ios::app);
     output << record;
     OutputDebugStringA(record.c_str());
 }
+
 struct Vector3
 {
     float x = 0;
     float y = 0;
     float z = 0;
 };
+
 Vector3 subtract(Vector3 left, Vector3 right)
 {
     return {left.x - right.x, left.y - right.y, left.z - right.z};
 }
+
 float dot(Vector3 left, Vector3 right)
 {
     return left.x * right.x + left.y * right.y + left.z * right.z;
 }
+
 Vector3 cross(Vector3 left, Vector3 right)
 {
-    return {left.y * right.z - left.z * right.y, left.z * right.x - left.x * right.z,
+    return {left.y * right.z - left.z * right.y,
+            left.z * right.x - left.x * right.z,
             left.x * right.y - left.y * right.x};
 }
+
 Vector3 normalize(Vector3 value)
 {
     const float length = std::sqrt(dot(value, value));
@@ -90,32 +104,36 @@ Vector3 normalize(Vector3 value)
     }
     return {value.x / length, value.y / length, value.z / length};
 }
+
 D3DMATRIX identity()
 {
     D3DMATRIX result{};
     result._11 = result._22 = result._33 = result._44 = 1;
     return result;
 }
-float number(const script::QvmObjectValue &value)
+
+float number(const script::QvmObjectValue& value)
 {
-    if (const auto *real = std::get_if<float>(&value))
+    if (const auto* real = std::get_if<float>(&value))
     {
         return *real;
     }
-    if (const auto *integer = std::get_if<std::int32_t>(&value))
+    if (const auto* integer = std::get_if<std::int32_t>(&value))
     {
         return static_cast<float>(*integer);
     }
     throw std::runtime_error("Object parameter is not numeric.");
 }
-std::string text(const script::QvmObjectValue &value)
+
+std::string text(const script::QvmObjectValue& value)
 {
-    if (const auto *result = std::get_if<std::string>(&value))
+    if (const auto* result = std::get_if<std::string>(&value))
     {
         return *result;
     }
     throw std::runtime_error("Object parameter is not text.");
 }
+
 // Real32x9 parameter conversion: 0x004EFBA0 -> 0x004B38E0.
 // Rotation constructors at 0x004B3BE0/0x004B3BA0/0x004B3B60, statically translated.
 // Matrix layout conversion at 0x004950F0 transposes the retail 3x3 into D3D row-vector layout.
@@ -127,9 +145,9 @@ std::array<float, 9> orientation(float alpha, float beta, float gamma)
     const float sine_gamma = std::sin(gamma), cosine_gamma = std::cos(gamma);
     std::array<float, 9> current{cosine_gamma, -sine_gamma, 0, sine_gamma, cosine_gamma, 0, 0, 0, 1};
     const std::array<float, 9> rotate_beta{cosine_beta, 0, sine_beta, 0, 1, 0, -sine_beta, 0, cosine_beta};
-    const std::array<float, 9> rotate_alpha{1,           0, 0,          0,           cosine_alpha,
-                                            -sine_alpha, 0, sine_alpha, cosine_alpha};
-    for (const auto &right : {rotate_beta, rotate_alpha})
+    const std::array<float, 9> rotate_alpha{
+        1, 0, 0, 0, cosine_alpha, -sine_alpha, 0, sine_alpha, cosine_alpha};
+    for (const auto& right : {rotate_beta, rotate_alpha})
     {
         auto left = current;
         for (std::size_t row = 0; row < 3U; ++row)
@@ -142,20 +160,23 @@ std::array<float, 9> orientation(float alpha, float beta, float gamma)
     }
     return current;
 }
+
 struct Package
 {
     model::MtpPackage metadata;
     resource::ResourceArchive meshes;
     resource::ResourceArchive textures;
 };
+
 struct PlacedModel
 {
     std::array<double, 3> position{};
     std::array<float, 9> rotation{};
-    const model::MtpInstance *instance = nullptr;
-    Package *package = nullptr;
+    const model::MtpInstance* instance = nullptr;
+    Package* package = nullptr;
     std::shared_ptr<model::MefRenderData> geometry;
 };
+
 struct Scene
 {
     ComOwner<IDirectDraw7> direct_draw;
@@ -166,7 +187,7 @@ struct Scene
     ComOwner<IDirect3D7> direct_3d;
     ComOwner<IDirect3DDevice7> device;
     std::vector<std::unique_ptr<ComOwner<IDirectDrawSurface7>>> texture_surfaces;
-    std::map<std::string, IDirectDrawSurface7 *> uploaded_textures;
+    std::map<std::string, IDirectDrawSurface7*> uploaded_textures;
     std::vector<std::unique_ptr<Package>> packages;
     std::vector<PlacedModel> objects;
     std::array<double, 3> origin{};
@@ -181,8 +202,8 @@ struct Scene
     bool exclusive = false;
     bool dev_mode = false;
     igi::developer::DeveloperControls developer_controls;
-    float dev_yaw = 0.0F;    // radians, around Z
-    float dev_pitch = 0.0F;  // radians, up/down
+    float dev_yaw = 0.0F;   // radians, around Z
+    float dev_pitch = 0.0F; // radians, up/down
     float dev_speed = 400.0F;
     bool dev_look_initialised = false;
     POINT dev_last_mouse{};
@@ -198,7 +219,8 @@ struct Scene
 
     void update_dev_camera(float delta_seconds)
     {
-        const POINT cursor = [this] {
+        const POINT cursor = [this]
+        {
             POINT position{};
             GetCursorPos(&position);
             return position;
@@ -221,8 +243,8 @@ struct Scene
         // forward = (sin yaw, cos yaw, 0) and right = forward x up = (cos yaw, -sin yaw, 0).
         // The previous -cos / +sin pair made W drive backwards and turned the view the wrong way.
         const float cosine_pitch = std::cos(dev_pitch);
-        const Vector3 forward{std::sin(dev_yaw) * cosine_pitch, std::cos(dev_yaw) * cosine_pitch,
-                              std::sin(dev_pitch)};
+        const Vector3 forward{
+            std::sin(dev_yaw) * cosine_pitch, std::cos(dev_yaw) * cosine_pitch, std::sin(dev_pitch)};
         const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
 
         Vector3 move{0, 0, 0};
@@ -233,12 +255,38 @@ struct Scene
         const bool key_up = (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
         const bool key_down = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
 
-        if (key_w) { move.x += forward.x; move.y += forward.y; move.z += forward.z; }
-        if (key_s) { move.x -= forward.x; move.y -= forward.y; move.z -= forward.z; }
-        if (key_a) { move.x -= right.x; move.y -= right.y; move.z -= right.z; }
-        if (key_d) { move.x += right.x; move.y += right.y; move.z += right.z; }
-        if (key_up) { move.z += 1.0F; }
-        if (key_down) { move.z -= 1.0F; }
+        if (key_w)
+        {
+            move.x += forward.x;
+            move.y += forward.y;
+            move.z += forward.z;
+        }
+        if (key_s)
+        {
+            move.x -= forward.x;
+            move.y -= forward.y;
+            move.z -= forward.z;
+        }
+        if (key_a)
+        {
+            move.x -= right.x;
+            move.y -= right.y;
+            move.z -= right.z;
+        }
+        if (key_d)
+        {
+            move.x += right.x;
+            move.y += right.y;
+            move.z += right.z;
+        }
+        if (key_up)
+        {
+            move.z += 1.0F;
+        }
+        if (key_down)
+        {
+            move.z -= 1.0F;
+        }
 
         const float speed = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0 ? dev_speed * 4.0F : dev_speed;
         camera_position.x += move.x * speed * delta_seconds;
@@ -252,20 +300,21 @@ struct Scene
         render::Transcontext_SetCameraPosition(camera_position.x, camera_position.y, camera_position.z);
         render::Transcontext_SetActiveTransContext(render::Transcontext_GetActiveTransContext());
         const std::array<double, 3> installed = render::Transcontext_GetCameraPosition();
-        camera_position = {static_cast<float>(installed[0]), static_cast<float>(installed[1]),
+        camera_position = {static_cast<float>(installed[0]),
+                           static_cast<float>(installed[1]),
                            static_cast<float>(installed[2])};
 
-        camera_target = {camera_position.x + forward.x, camera_position.y + forward.y,
-                         camera_position.z + forward.z};
+        camera_target = {
+            camera_position.x + forward.x, camera_position.y + forward.y, camera_position.z + forward.z};
     }
 
-    void load(const std::filesystem::path &root, unsigned int level_number)
+    void load(const std::filesystem::path& root, unsigned int level_number)
     {
         resource::ResourceCache cache;
         const auto location = root / "missions" / "location0";
         const std::string level_name = "level" + std::to_string(level_number);
         const auto level = location / level_name;
-        for (const auto &descriptor :
+        for (const auto& descriptor :
              {std::pair(location / "common", std::string("location0")), std::pair(level, level_name)})
         {
             auto package = std::make_unique<Package>();
@@ -283,7 +332,7 @@ struct Scene
         }
         const auto script = script::Qvm_Load(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
-        for (const auto &call : calls)
+        for (const auto& call : calls)
         {
             if (call->function_name == "Task_New" && call->arguments.size() > 8U &&
                 text(call->arguments[1]) == "HumanPlayer")
@@ -297,9 +346,9 @@ struct Scene
         }
         std::map<std::string, std::shared_ptr<model::MefRenderData>> geometry_cache;
         std::size_t missing = 0;
-        for (const auto &call : calls)
+        for (const auto& call : calls)
         {
-            const auto &arguments = call->arguments;
+            const auto& arguments = call->arguments;
             if (call->function_name != "Task_New" || arguments.size() < 10U)
             {
                 continue;
@@ -333,7 +382,7 @@ struct Scene
             for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
                  ++package_iterator)
             {
-                for (const auto &instance : (*package_iterator)->metadata.instances)
+                for (const auto& instance : (*package_iterator)->metadata.instances)
                 {
                     if (instance.instance_name == model_name)
                     {
@@ -356,7 +405,7 @@ struct Scene
                     for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
                          ++package_iterator)
                     {
-                        for (const auto &instance : (*package_iterator)->metadata.instances)
+                        for (const auto& instance : (*package_iterator)->metadata.instances)
                         {
                             if (instance.instance_name == "missing")
                             {
@@ -379,19 +428,19 @@ struct Scene
                     continue;
                 }
             }
-            const auto &mesh_name = object.package->metadata.model_names.at(object.instance->model_index);
+            const auto& mesh_name = object.package->metadata.model_names.at(object.instance->model_index);
             const auto key =
                 std::to_string(reinterpret_cast<std::uintptr_t>(object.package)) + ":" + mesh_name;
-            auto &geometry = geometry_cache[key];
+            auto& geometry = geometry_cache[key];
             if (!geometry)
             {
-                const auto *entry = object.package->meshes.find("LOCAL:models/" + mesh_name + ".mef");
+                const auto* entry = object.package->meshes.find("LOCAL:models/" + mesh_name + ".mef");
                 if (entry == nullptr)
                 {
                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
                 }
-                geometry = std::make_shared<model::MefRenderData>(model::Display_DecodeMeshRenderData(
-                    model::MefModel::DynObj_LoadModelMesh(entry->body)));
+                geometry = std::make_shared<model::MefRenderData>(
+                    model::Display_DecodeMeshRenderData(model::MefModel::DynObj_LoadModelMesh(entry->body)));
             }
             object.geometry = geometry;
             std::ostringstream record;
@@ -414,15 +463,28 @@ struct Scene
                   "; unresolved_source_models=" + std::to_string(missing) +
                   "; skinned models and remaining task types not yet rendered.");
     }
+
     std::uint32_t render_width = 1024U;
     std::uint32_t render_height = 768U;
 
     void release_render_target()
     {
         // The device holds a reference to the render target, so release it first.
-        if (device.pointer != nullptr) { device.pointer->Release(); device.pointer = nullptr; }
-        if (depth_buffer.pointer != nullptr) { depth_buffer.pointer->Release(); depth_buffer.pointer = nullptr; }
-        if (back_buffer.pointer != nullptr) { back_buffer.pointer->Release(); back_buffer.pointer = nullptr; }
+        if (device.pointer != nullptr)
+        {
+            device.pointer->Release();
+            device.pointer = nullptr;
+        }
+        if (depth_buffer.pointer != nullptr)
+        {
+            depth_buffer.pointer->Release();
+            depth_buffer.pointer = nullptr;
+        }
+        if (back_buffer.pointer != nullptr)
+        {
+            back_buffer.pointer->Release();
+            back_buffer.pointer = nullptr;
+        }
     }
 
     void apply_device_state()
@@ -467,8 +529,8 @@ struct Scene
 
         if (direct_3d.pointer == nullptr)
         {
-            check_result(direct_draw.pointer->QueryInterface(
-                             IID_IDirect3D7, reinterpret_cast<void **>(&direct_3d.pointer)),
+            check_result(direct_draw.pointer->QueryInterface(IID_IDirect3D7,
+                                                             reinterpret_cast<void**>(&direct_3d.pointer)),
                          "Query Direct3D7");
         }
 
@@ -497,7 +559,8 @@ struct Scene
 
         if (log_ready)
         {
-            write_log("Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
+            write_log(
+                "Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
         }
     }
 
@@ -524,12 +587,13 @@ struct Scene
     {
         window = window_handle;
         windowed = windowed_mode;
-        check_result(DirectDrawCreateEx(nullptr, reinterpret_cast<void **>(&direct_draw.pointer),
-                                        IID_IDirectDraw7, nullptr),
+        check_result(DirectDrawCreateEx(
+                         nullptr, reinterpret_cast<void**>(&direct_draw.pointer), IID_IDirectDraw7, nullptr),
                      "DirectDrawCreateEx");
         if (windowed)
         {
-            check_result(direct_draw.pointer->SetCooperativeLevel(window, DDSCL_NORMAL), "SetCooperativeLevel");
+            check_result(direct_draw.pointer->SetCooperativeLevel(window, DDSCL_NORMAL),
+                         "SetCooperativeLevel");
             write_log("Display mode: windowed (DDSCL_NORMAL).");
         }
         else
@@ -538,10 +602,10 @@ struct Scene
             // Taking DDSCL_EXCLUSIVE while SetDisplayMode fails presents a black screen under
             // Wine/CrossOver, so that combination is rejected and we fall back to a borderless
             // WS_POPUP window at desktop size with DDSCL_NORMAL.
-            const HRESULT exclusive_result = direct_draw.pointer->SetCooperativeLevel(
-                window, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN);
-            if (SUCCEEDED(exclusive_result)
-                && SUCCEEDED(direct_draw.pointer->SetDisplayMode(1024, 768, 32, 0, 0)))
+            const HRESULT exclusive_result =
+                direct_draw.pointer->SetCooperativeLevel(window, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN);
+            if (SUCCEEDED(exclusive_result) &&
+                SUCCEEDED(direct_draw.pointer->SetDisplayMode(1024, 768, 32, 0, 0)))
             {
                 exclusive = true;
                 write_log("Display mode: exclusive fullscreen 1024x768x32.");
@@ -581,7 +645,8 @@ struct Scene
         create_render_target(initial_width, initial_height, true);
         write_log("Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
     }
-    IDirectDrawSurface7 *texture_for(const PlacedModel &object, std::uint16_t material)
+
+    IDirectDrawSurface7* texture_for(const PlacedModel& object, std::uint16_t material)
     {
         if (material == 0xFFFFU)
         {
@@ -590,7 +655,7 @@ struct Scene
         const auto reference = object.instance->material_reference_indices.at(material);
         const auto texture_index =
             object.package->metadata.material_references.at(reference).first_native_index;
-        Package *owner = object.package;
+        Package* owner = object.package;
         std::uint32_t index = texture_index;
         if (index >= 0x2000U)
         {
@@ -603,7 +668,7 @@ struct Scene
         {
             return existing->second;
         }
-        const auto *resource = owner->textures.find("LOCAL:textures/" + name + ".tex");
+        const auto* resource = owner->textures.find("LOCAL:textures/" + name + ".tex");
         if (resource == nullptr)
         {
             throw std::runtime_error("Texture resource missing: " + name);
@@ -631,19 +696,21 @@ struct Scene
                      "Lock texture");
         for (std::size_t row = 0; row < pixels.height; ++row)
         {
-            std::memcpy(static_cast<std::byte *>(locked.lpSurface) +
+            std::memcpy(static_cast<std::byte*>(locked.lpSurface) +
                             row * static_cast<std::size_t>(locked.lPitch),
-                        pixels.argb_pixels.data() + row * pixels.width, pixels.width * 4U);
+                        pixels.argb_pixels.data() + row * pixels.width,
+                        pixels.width * 4U);
         }
         check_result(surface->pointer->Unlock(nullptr), "Unlock texture");
-        auto *pointer = surface->pointer;
+        auto* pointer = surface->pointer;
         uploaded_textures.emplace(key, pointer);
         texture_surfaces.push_back(std::move(surface));
         write_log("Texture uploaded: " + name + " size=" + std::to_string(pixels.width) + "x" +
                   std::to_string(pixels.height));
         return pointer;
     }
-    void capture(const std::filesystem::path &output_path)
+
+    void capture(const std::filesystem::path& output_path)
     {
         DDSURFACEDESC2 description{};
         description.dwSize = sizeof(description);
@@ -653,7 +720,7 @@ struct Scene
         std::vector<std::uint32_t> pixels(pixel_count);
         for (std::size_t row = 0; row < description.dwHeight; ++row)
         {
-            const auto *source = static_cast<const std::byte *>(description.lpSurface) +
+            const auto* source = static_cast<const std::byte*>(description.lpSurface) +
                                  row * static_cast<std::size_t>(description.lPitch);
             for (std::size_t column = 0; column < description.dwWidth; ++column)
             {
@@ -688,9 +755,9 @@ struct Scene
         image_header.biPlanes = 1;
         image_header.biBitCount = 32;
         std::ofstream output(output_path, std::ios::binary);
-        output.write(reinterpret_cast<const char *>(&file_header), sizeof(file_header));
-        output.write(reinterpret_cast<const char *>(&image_header), sizeof(image_header));
-        output.write(reinterpret_cast<const char *>(pixels.data()),
+        output.write(reinterpret_cast<const char*>(&file_header), sizeof(file_header));
+        output.write(reinterpret_cast<const char*>(&image_header), sizeof(image_header));
+        output.write(reinterpret_cast<const char*>(pixels.data()),
                      static_cast<std::streamsize>(pixels.size() * 4U));
         if (!output)
         {
@@ -698,6 +765,7 @@ struct Scene
         }
         write_log("Direct3D frame saved: " + output_path.string());
     }
+
     void draw()
     {
         const Vector3 forward = normalize(subtract(camera_target, camera_position));
@@ -734,10 +802,10 @@ struct Scene
         std::size_t drawn = 0;
         try
         {
-            for (const auto &object : objects)
+            for (const auto& object : objects)
             {
                 D3DMATRIX world = identity();
-                auto *values = reinterpret_cast<float *>(&world);
+                auto* values = reinterpret_cast<float*>(&world);
                 for (std::size_t row = 0; row < 3U; ++row)
                     for (std::size_t column = 0; column < 3U; ++column)
                     {
@@ -748,23 +816,25 @@ struct Scene
                 world._43 = static_cast<float>(object.position[2] - origin[2]) * world_scale;
                 check_result(device.pointer->SetTransform(D3DTRANSFORMSTATE_WORLD, &world),
                              "Set object transform");
+
                 struct Vertex
                 {
                     float position[3];
                     float normal[3];
                     float coordinates[2];
                 };
+
                 std::vector<Vertex> vertices;
                 vertices.reserve(object.geometry->vertices.size());
-                for (const auto &source : object.geometry->vertices)
+                for (const auto& source : object.geometry->vertices)
                 {
                     vertices.push_back({{source.position[0], source.position[1], source.position[2]},
                                         {source.normal[0], source.normal[1], source.normal[2]},
                                         {source.texture_coordinates[0], source.texture_coordinates[1]}});
                 }
-                for (const auto &batch : object.geometry->batches)
+                for (const auto& batch : object.geometry->batches)
                 {
-                    auto *texture = texture_for(object, batch.material_index);
+                    auto* texture = texture_for(object, batch.material_index);
                     check_result(device.pointer->SetTexture(0, texture), "Set object texture");
                     check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ALPHABLENDENABLE,
                                                                 batch.translucent ? TRUE : FALSE),
@@ -777,9 +847,11 @@ struct Scene
                     check_result(device.pointer->DrawIndexedPrimitive(
                                      static_cast<D3DPRIMITIVETYPE>(object.geometry->primitive_type),
                                      D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_TEX1,
-                                     vertices.data() + batch.first_vertex, batch.vertex_count,
-                                     const_cast<WORD *>(batch.indices.data()),
-                                     static_cast<DWORD>(batch.indices.size()), 0),
+                                     vertices.data() + batch.first_vertex,
+                                     batch.vertex_count,
+                                     const_cast<WORD*>(batch.indices.data()),
+                                     static_cast<DWORD>(batch.indices.size()),
+                                     0),
                                  "Draw model batch");
                     ++drawn;
                 }
@@ -809,6 +881,7 @@ struct Scene
         }
     }
 };
+
 LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
 {
     if (message == WM_DESTROY)
@@ -823,9 +896,14 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
     return DefWindowProcW(window, message, parameter, detail);
 }
 } // namespace
-int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesystem::path &game_directory,
-                        unsigned int level_number, const std::filesystem::path &capture_path,
-                        bool dev_mode, bool windowed)
+
+int RunRetailModelScene(HINSTANCE instance,
+                        int show_command,
+                        const std::filesystem::path& game_directory,
+                        unsigned int level_number,
+                        const std::filesystem::path& capture_path,
+                        bool dev_mode,
+                        bool windowed)
 {
     try
     {
@@ -871,8 +949,17 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
             window_width = GetSystemMetrics(SM_CXSCREEN);
             window_height = GetSystemMetrics(SM_CYSCREEN);
         }
-        HWND window = CreateWindowExW(0, window_class.lpszClassName, L"IGI", window_style, window_x,
-                                      window_y, window_width, window_height, nullptr, nullptr, instance,
+        HWND window = CreateWindowExW(0,
+                                      window_class.lpszClassName,
+                                      L"IGI",
+                                      window_style,
+                                      window_x,
+                                      window_y,
+                                      window_width,
+                                      window_height,
+                                      nullptr,
+                                      nullptr,
+                                      instance,
                                       nullptr);
         if (window == nullptr)
         {
@@ -902,15 +989,19 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
                     if (action == igi::developer::DeveloperAction::toggle_free_camera)
                     {
                         scene.dev_look_initialised = false;
-                        if (scene.developer_controls.free_camera_enabled) { scene.dev_camera_reset(); }
+                        if (scene.developer_controls.free_camera_enabled)
+                        {
+                            scene.dev_camera_reset();
+                        }
                         write_log(std::string("Developer free camera: ") +
                                   (scene.developer_controls.free_camera_enabled ? "enabled" : "disabled"));
                     }
                     else if (action == igi::developer::DeveloperAction::toggle_player_cheats)
                     {
-                        write_log(std::string("Developer player-only god/ammo/clips request: ") +
-                                  (scene.developer_controls.player_god_mode_requested ? "enabled" : "disabled") +
-                                  "; gameplay health/ammunition integration unavailable in model scene.");
+                        write_log(
+                            std::string("Developer player-only god/ammo/clips request: ") +
+                            (scene.developer_controls.player_god_mode_requested ? "enabled" : "disabled") +
+                            "; gameplay health/ammunition integration unavailable in model scene.");
                     }
                     else if (action == igi::developer::DeveloperAction::next_level)
                     {
@@ -928,7 +1019,10 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
                         scene.dev_look_initialised = false;
                         scene.dev_camera_reset();
                     }
-                    if (action != igi::developer::DeveloperAction::none) { continue; }
+                    if (action != igi::developer::DeveloperAction::none)
+                    {
+                        continue;
+                    }
                 }
                 TranslateMessage(&message);
                 DispatchMessageW(&message);
@@ -954,7 +1048,7 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
         }
         return 0;
     }
-    catch (const std::exception &exception)
+    catch (const std::exception& exception)
     {
         write_log(exception.what(), diagnostics::LogLevel::error);
         if (capture_path.empty())
