@@ -1,148 +1,113 @@
-# Agents.md — Ground Rules for Project Open IGI
+## 10. AI-Agent Native Transcription and Verification Protocol
 
-This file is binding for every human and AI contributor. Read it before writing any code.
+The goal is to reconstruct native functions from the original retail Project IGI binary (`igi.exe`) as faithfully as possible. The executable is the source of truth. AI-generated code is only a reconstruction until supported by static analysis, structural verification, and runtime evidence.
 
----
+### 10.1. Required Tools and Responsibilities
 
-## 1. The one rule
+| Tool                                                   | Responsibility                                                                                                                                                                                                  |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Binary Ninja MCP**                                   | Analyze disassembly, decompiled pseudocode, function boundaries, cross-references, arguments, and data types.                                                                                                   |
+| **Ghidra MCP**                                         | Independently analyze the same function, validate decompilation, inspect references, and identify disagreements with Binary Ninja.                                                                              |
+| **Radare2 CFG MCP**                                    | Analyze control-flow graphs, basic blocks, branches, loops, calls, and function structure.                                                                                                                      |
+| **IGI-Probe**                                          | Provide Frida-like runtime instrumentation for observing native behavior, function calls, memory values, and execution paths where supported. Do not assume IGI-Probe is Frida or supports every Frida feature. |
+| **[RE-Agent](https://github.com/heaven-hm/re-agent/)** | Act as the project-specific AI-agent layer for evidence-guided reconstruction, tool orchestration, review, and verification workflows, according to its actual implemented capabilities.                        |
+| **[REA](https://github.com/morluto/rea)**              | A separate upstream reverse-engineering project that may provide reusable analysis tools, integrations, or capabilities. Evaluate its actual functionality and license before integrating it into the workflow. |
 
-**This project is not a reimplementation. It is a transcription of `igi.exe`.**
+**Important distinction:** RE-Agent and REA are two separate projects. RE-Agent is your project at `heaven-hm/re-agent`; REA is the upstream project at `morluto/rea`. Do not treat them as the same repository, claim they are already integrated, or attribute one project's features to the other.
 
-We do not design behaviour. We do not write "equivalent" logic. We find the retail method, copy it, and
-call it properly. If a method exists in `igi.exe`, the port must contain that method — same name, same
-address, same body — and the rest of the code must call it.
+### 10.2. Native Reconstruction Workflow
 
-> If it is not in `igi.exe`, it does not go in the engine.
+1. **Identify the target function**
 
----
+   - Locate the native function in the retail `igi.exe`.
+   - Record its address, calling convention, arguments, return value, callers, callees, and relevant memory references where evidence permits.
 
-## 2. What "copy the method" means
+2. **Analyze independently with Binary Ninja and Ghidra**
 
-A method is considered ported only when **all** of these are true:
+   - Use both tools to inspect the function and its surrounding code.
+   - Compare pseudocode, control flow, types, function boundaries, and cross-references.
+   - Investigate disagreements rather than choosing one decompiler automatically.
 
-1. **Same name** as the retail method (e.g. `Camera_UpdateTransform`, `DynObj_LocalModelsSMef`).
-2. **Same address** recorded in the comment (`VA 0x004A0110`) and confirmed with
-   `bn_function_info` / Radare2.
-3. **Same control flow** — the same branches, loops, early returns.
-4. **Same constants and struct offsets** — `0x28`, `0x14`, `0x3DCCCCCD`, FourCC dwords, etc.
-5. **Same call order** to the same callees (which must themselves be ported).
-6. **No invented helper** standing in for a retail method.
+3. **Verify the control-flow structure with Radare2 CFG MCP**
 
-Renaming a method to something descriptive is allowed. Replacing its body with different logic is not.
+   - Check basic blocks, conditional branches, loops, jump targets, call sites, and return paths.
+   - Ensure the proposed reconstruction preserves the original control-flow behavior.
 
----
+4. **Collect runtime evidence with IGI-Probe**
 
-## 3. When a retail method is not self-contained
+   - When feasible, instrument the original game and observe actual calls, arguments, return values, memory changes, and execution paths.
+   - Record the game version, test conditions, and limitations.
+   - Static evidence must remain available when runtime testing is not possible.
 
-Retail methods are not standalone. They read engine globals, call helpers, and operate on runtime
-state. That is **not** a licence to write your own version.
+5. **Use RE-Agent to coordinate evidence and reconstruction**
 
-**Correct procedure:**
+   - Feed the available analysis results and runtime observations into your RE-Agent workflow.
+   - Generate or refine the native implementation, preserve evidence references, identify conflicting observations, and request independent critique.
+   - RE-Agent should distinguish observed facts from hypotheses and generated code.
 
-1. Decompile the method.
-2. List every callee and every global it touches.
-3. Port those first, in dependency order, under their own retail names.
-4. Then paste the method body and call it.
+6. **Evaluate REA separately for integration**
 
-**Worked example — the camera:**
+   - Inspect `morluto/rea` for relevant capabilities and supported interfaces.
+   - Integrate specific components only when they demonstrably improve the workflow and their licensing and dependencies permit the intended use.
+   - Do not assume REA is a dependency of RE-Agent.
 
-`Camera_UpdateTransform` (`VA 0x004A0110`) decompiles to eight calls:
+7. **Build, test, and review**
+   - Compile the reconstruction for the correct architecture and calling convention.
+   - Compare it with the original using test cases, runtime traces, and relevant state changes.
+   - Resolve discrepancies or document them explicitly before assigning a verification status.
 
-```
-Sys_PushStack_19(g_bcad7c, g_7205b8);
-Sys_PushStack_19(g_bcadac, g_723508);
-Sys_PushStack_19(g_bcadac, g_7205bc);
-Sys_PushStack_19(g_bcade8, g_723504);
-Sys_PushStack_19(g_bcadac, g_7addd4);
-Sys_PushStack_19(g_bcade8, g_7205b0);
-Sys_PushStack_19(g_bcad7c, g_7ac09c);
-Sys_PushStack_19(g_bcadac, g_7234b8);
-```
+### 10.3. Evidence Requirements
 
-`Sys_PushStack_19` is at `VA 0x004B7450`. The eight globals are matrix slots. So the order is:
+Every reconstructed native should have an evidence record containing, where applicable:
 
-1. Port `Sys_PushStack_19` (0x004B7450) and the matrix state it manipulates.
-2. Port the camera context fields (`TransContext`, `+0x28` camera position = `0x00BCAB08/10/18`).
-3. Port `Transcontext_SetActiveTransContext` (0x00497E70) — already done.
-4. Then paste `Camera_UpdateTransform` unchanged and call it from the render loop.
+- Original executable identity, version, and function address.
+- Disassembly and decompiler references from Binary Ninja and Ghidra.
+- CFG findings from Radare2.
+- Function signatures, calling conventions, argument meanings, return values, and side effects.
+- Runtime observations collected through IGI-Probe, including test conditions.
+- Differences between the original behavior and the reconstructed implementation.
+- Unresolved assumptions, limitations, and reviewer comments.
+- Build results and reproducible test results.
 
-**Never** replace that chain with a hand-written `lookAt()`.
+Do not invent function signatures, native names, argument meanings, or runtime behavior when the available evidence does not establish them.
 
----
+### 10.4. Transcription Rules
 
-## 4. Why this rule exists
+1. **Preserve behavior, not just appearance.** Match the original branches, loops, calls, return paths, state changes, and side effects.
+2. **Preserve the original interface.** Do not change the calling convention, parameter layout, return type, or memory assumptions without evidence.
+3. **Separate facts from hypotheses.** Label inferred types, guessed names, and uncertain semantics.
+4. **Use independent analysis.** Compare Binary Ninja and Ghidra results, then use CFG and runtime evidence to resolve disagreements.
+5. **Do not blindly trust generated pseudocode.** Decompilers and AI agents can produce plausible but incorrect interpretations.
+6. **Avoid unsupported simplification.** Do not remove unusual branches, error handling, or apparently redundant instructions until their behavior is understood.
+7. **Review every meaningful change.** Require an independent critic/reviewer pass where available, address findings, and retain unresolved issues in the evidence record.
+8. **Keep original and reconstructed code distinguishable.** Never present a generated implementation as a verbatim transcription of the binary.
 
-The hand-written camera basis in `retail_model_scene.cpp` produced:
+### 10.5. Verification Statuses
 
-- a **mirrored scene** — `right = up × forward` gave `(-1, 0, 0)` for a north-facing camera;
-- an **inverted free camera** — forward and strafe axes did not match the world convention.
+Assign statuses based on evidence actually collected, not on an agent's confidence.
 
-Neither bug can exist in a method transcribed from `igi.exe`, because retail fixed those conventions once.
-Every line we invent is a line that can be wrong. Every line we copy is a line that is already right.
+| Status                           | Meaning                                                                                                                           |
+| -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| `ANALYZED`                       | Static analysis has been performed and recorded.                                                                                  |
+| `TRANSCRIBED`                    | A candidate implementation has been written from the available evidence.                                                          |
+| `STRUCTURALLY_VERIFIED`          | Function structure and control flow have been checked against the binary.                                                         |
+| `BUILD_VERIFIED`                 | The candidate compiles successfully for the intended target.                                                                      |
+| `RUNTIME_TESTED`                 | The candidate has been exercised under documented runtime test conditions.                                                        |
+| `VERIFIED`                       | The relevant behavior has been checked against sufficient original-binary evidence and reproducible tests for the declared scope. |
+| `VERIFIED_WITH_DOCUMENTED_SCOPE` | Verification passed for a clearly stated subset of behavior, with limitations explicitly recorded.                                |
 
----
+A successful build does not prove behavioral equivalence. A runtime test does not prove every execution path. If evidence is incomplete or conflicting, keep the status provisional.
 
-## 5. Forbidden
+### 10.6. Final Acceptance Criteria
 
-- Hand-rolled matrices, projections, look-at bases, Euler order, quaternion code.
-- Guessed constants, offsets, units, or scales.
-- "Close enough", "reasonable", "standard FPS values".
-- Placeholders, stubs, or TODO bodies presented as implemented.
-- Inventing a new method to do what a retail method already does.
-- Re-implementing retail behaviour under a new name.
+A native reconstruction is ready for acceptance when:
 
-If the retail method is unknown: **stop and reverse-engineer it**. Do not guess.
+- Its implementation is traceable to the original `igi.exe`.
+- Static-analysis findings and control-flow structure have been checked.
+- Runtime comparisons have been performed where feasible, or their absence is explicitly documented.
+- Important arguments, return values, side effects, and edge cases are supported by evidence.
+- Review findings are resolved or recorded as outstanding.
+- The verification status accurately describes what was tested.
+- RE-Agent and REA are identified separately, and any claimed integration is supported by the actual repository implementation.
 
----
-
-## 6. Verification before a method counts as ported
-
-1. `bn_function_info <address>` returns the expected name (or the mismatch is documented).
-2. The ported body matches the decompilation branch for branch, constant for constant.
-3. A focused test exists for it.
-4. The caller uses it — a ported method that nothing calls is not integrated.
-5. Runtime comparison against retail where observable (`igi-probe`, CrossOver).
-
-Catalog names are working labels, not symbols: `igi.pdb` does not exist. The **address** is the fact.
-
----
-
-## 7. Current state (honest)
-
-Only two modules are literal transcriptions:
-
-| Module | Retail source |
-|---|---|
-| `retail/core/app_context.cpp` | `App_ContextSetDebugged` 0x48F1A0, `…DebugtextState` 0x48F1E0, `…LightmapsUsed` 0x48F240, `…TerrainLightmapsUsed` 0x48F260 + getters |
-| `retail/render/trans_context.cpp` | `Transcontext_SetActiveTransContext` 0x00497E70 |
-
-Everything else in the render path is still hand-written scaffolding and must be replaced:
-
-| To port | Address |
-|---|---|
-| `Camera_UpdateTransform` | `0x004A0110` |
-| `Camera_SetFieldOfView` | `0x004A0340` |
-| `Camera_UpdateTransform_2` | `0x004A26C0` |
-| `Camera_ApplyWideScreen` | `0x004A23E0` |
-| `Camera_UpdateViewCone` | `0x004A2490` |
-| `Camera_ResetMatrix` | `0x004A2600` |
-| `Sys_PushStack_19` (matrix stack) | `0x004B7450` |
-| `DisplayRender_ProcessTransContextPrim` | `0x00497970` |
-| `Direct3DRender_DrawRigidMesh` | `0x0049E006` region |
-| `DisplayRender_Processmodelsnotconvert` | `0x0049DF60` |
-| `Mesh_SkinBones` | `0x0049F700` |
-| Terrain loaders (`.HMP/.CTR/.BIT/.LMP`) | `0x004C5F00`, `0x004C6240`, `0x004C6760`, `0x004D14E0` |
-
-`retail_model_scene.cpp` is a diagnostic harness, not a port. It exists to prove data loads; it is not
-the deliverable and must not grow new hand-written logic.
-
----
-
-## 8. Checklist for every change
-
-- [ ] The method exists in `igi.exe`; address recorded and verified.
-- [ ] Body copied from the decompilation — no invented logic.
-- [ ] Every callee is ported or explicitly listed as missing.
-- [ ] No hand-written replacement anywhere in the path.
-- [ ] Test added; build green; nothing claimed that was not run.
-- [ ] Nothing committed or pushed without manual verification.
+**Core principle:** Binary Ninja, Ghidra, Radare2 CFG MCP, and IGI-Probe provide complementary evidence. RE-Agent coordinates the project-specific reconstruction and review process; REA is a separate upstream project whose capabilities may be evaluated for integration. The original executable and reproducible observations—not AI confidence—determine whether a native is verified.
