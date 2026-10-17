@@ -21,7 +21,15 @@ The C# implementation is not used as evidence for the stored field layout or dis
 
 `AnimationTriggerRegistry` now reads the original trigger QVM into a source-value table. It preserves the event ID, task-type symbol, sound-definition name, and the final argument's text and numeric value. It does not allocate a guessed numeric `TASKTYPE_ANIMSOUND` constant and does not interpret the final argument. The test confirms all 50 entries map to playable Level 1 sound definitions, including Glock reload event 1000 and fence-walk event 1025; ID 1010 remains absent.
 
-This table is not yet connected to per-tick animation dispatch. Passing this test proves QVM parsing and asset-name linkage only, not that the retail callback plays a sound at a particular event time or position.
+The initial table-only implementation did not connect events to playback. The next subsection records the current first-person dispatch slice and its verification limits.
+
+## Port playback slice: first-person weapon animation events
+
+The Level 1 runtime now compares consecutive first-person weapon animation times, collects mapped BOED events crossed by that interval, and resolves each event through the retail `DefineAnimTrigger` source table and `SoundSystem_PlayDefinition`. An event on the old interval boundary is excluded; an event on the new boundary is included. When a clip wraps, the interval is split at the duration boundary. Events without a `DefineAnimTrigger` entry are not assigned an invented sound; this includes event 1010.
+
+This schedule is explicitly **C#-derived / not retail-runtime verified**. The C# `BoneClip.CrossedEvent` uses an open-old/closed-new interval and handles wraparound as two ranges. REA/Ghidra evidence `ev_372d81b9077615fe3d7fdf6a2480e59ffe4ce1c7e1397426f407b39a94fe65ff` confirms retail `0x004d65b0` writes an animation-time value to a clip record at offset `+0x2c`; evidence `ev_e4d0847e485a7159b606774a303e0fbf12e37d88823ee971a2d9096ecbdbe670` shows a retail caller computes and stores a scaled clip time. REA evidence `ev_f442484e179522795381640837f926566ff75ebb3e6bcafee4b7f5465729ca85` reads the callback bytes at `0x004ebeb0`; the callback routes a task type through two indirect handler tables. These observations support the animation clock and task-registration path but **do not verify the interval inequalities, sound start tick, spatialization, or fourth QVM argument semantics**.
+
+The focused Level 1 test uses the original `005.IFF` Glock reload clip 17: crossing timestamp 2577 dispatches event 1000 to `glock_reload_1`, creates an active voice from the original sound bank, produces non-zero mixed PCM, does not duplicate an open-boundary event, preserves both sides of a synthetic wrap interval, and rejects non-finite times. This verifies the port's scheduler, asset linkage, and mixer path, not matching retail output. A paired CrossOver/igi-probe trace is still required before marking timing or sound placement as retail parity.
 
 REA/Ghidra evidence `ev_2d7b47a46b932c80c0620b200ed3e400c3eaa76f39a706b6d6f489db6e77e037` confirms native registration at `0x004ebe70` and callback pointer `0x004ebeb0`. REA could not classify the callback as a Ghidra function entry. Radare2 independently identified its 264-byte extent, but callback effects still need a controlled runtime trace before implementing dispatch semantics.
 
@@ -38,4 +46,4 @@ Focused Release verification on 2026-10-17: `mvp_skeletal_animation` and `mvp_or
 
 ## Next required work
 
-Establish the `DefineAnimTrigger` callback argument contract using retail disassembly and a controlled Level 1 runtime capture. Then load the QVM trigger map, dispatch events at the retail animation timeline, resolve the associated sound through the existing sound registry, and compare event timing and sound parameters with the retail trace. Do not mark animation sounds as complete until those steps pass.
+Establish the `DefineAnimTrigger` callback argument contract and event interval using retail disassembly and a controlled Level 1 runtime capture. Then compare the port's first-person event timing and sound parameters with the retail trace. Extend the same verified dispatcher to player-body and AI animation clips only after their task and coordinate contracts are established. Do not mark animation sounds as complete until those steps pass.

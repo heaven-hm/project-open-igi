@@ -10,8 +10,9 @@ do not establish acceptance of the current checkout.
 Original gameplay equivalence is **NOT VERIFIED**. The first acceptance milestone
 is Level 1 only. Movement/building entry, weapons/health, AI/navigation, mission
 logic, original graphics/assets and gameplay animations remain required.
-Sound, movies/movie animation, cutscenes, subtitles, smoke, optional effects and
-menu presentation are deferred. After Level 1 verification, hand off the build
+The C++ sound engine is partial and remains in scope; movies/movie animation,
+cutscenes, subtitles, smoke, optional effects and menu presentation are deferred.
+After Level 1 verification, hand off the build
 and wait for the owner's manual test before expanding to other levels.
 Functional regressions passing does not establish matching original behavior.
 
@@ -23,6 +24,7 @@ Functional regressions passing does not establish matching original behavior.
 - Original navigation graphs and authored patrol commands; basic perception and combat. AI scheduling and combat policy remain provisional.
 - Recursive visual MEF ATTA transforms, a 32-level/cycle guard, invisible death-zone suppression, and firing-only GUNFLAME classification from original magicobj.qvm.
 - Original body and first-person hand rigs, hierarchical skinning and quaternion/tangent sampling, script-selected idle/move/fire/reload view clips, bone attachments. Exact animation transitions, aiming, hit/death sequences and weapon-part motion remain incomplete.
+- Partial retail audio path: ILSF decoding, sound-definition and bank loading, a bounded PCM mixer, SDL output, mission music, player jump/fall, weapon fire, and mapped first-person animation-event sounds. Animation-event timing and spatial placement remain C#-derived/unverified; player-body/AI animation sounds, material footsteps and broader QVM audio routes remain incomplete.
 - Cinematic branches are suppressed during gameplay-only startup. Level 2 Jones actor 333 is inactive. This suppression is not a complete original conditional interpreter or intro/outro lifecycle.
 
 ## Latest bug corrections

@@ -1,5 +1,7 @@
 #include "igi/asset_io.hpp"
 #include "igi/audio/audio_mixer.hpp"
+#include "igi/audio/animation_event_dispatcher.hpp"
+#include "igi/audio/animation_trigger_registry.hpp"
 #include "igi/audio/sdl_audio_output.hpp"
 #include "igi/audio/sound_bank.hpp"
 #include "igi/audio/sound_definition_registry.hpp"
@@ -551,6 +553,7 @@ int run(RuntimeOptions options, const char* executable)
     igi::audio::AudioMixer audio_mixer;
     igi::audio::SoundBank sound_bank(audio_mixer);
     igi::audio::SoundDefinitionRegistry sound_definitions;
+    igi::audio::AnimationTriggerRegistry animation_trigger_registry;
     igi::audio::SoundSystem sound_system(audio_mixer, sound_bank, sound_definitions);
     igi::gameplay::WeaponSoundPlayer weapon_sound_player(sound_system);
     std::unique_ptr<igi::audio::SdlAudioOutput> audio_output;
@@ -560,6 +563,17 @@ int run(RuntimeOptions options, const char* executable)
         {
             const std::size_t definition_count =
                 sound_definitions.SoundSystem_LoadForMission(options.game_directory, scene.mission_number);
+            try
+            {
+                static_cast<void>(animation_trigger_registry.AnimationTriggerRegistry_LoadForGame(
+                    options.game_directory));
+            }
+            catch (const std::exception& exception)
+            {
+                log(Severity::warning,
+                    "animation-audio",
+                    "Retail animation sound triggers could not be loaded: " + std::string(exception.what()));
+            }
             const std::filesystem::path common_sound_directory =
                 options.game_directory / "common" / "sounds";
             const std::filesystem::path mission_sound_directory =
@@ -973,6 +987,8 @@ int run(RuntimeOptions options, const char* executable)
             pitch_change = 0;
             requested_weapon_slot = -1;
             requested_weapon_cycle = 0;
+            const int player_animation_identifier_before_tick = simulation.weapon().animation_identifier;
+            const float player_animation_time_before_tick = simulation.weapon().animation_time;
             const std::uint64_t shots_before_tick = simulation.weapon().shots_fired;
             if (audio_output && audio_output->IsAvailable())
             {
@@ -982,6 +998,64 @@ int run(RuntimeOptions options, const char* executable)
                 }
             }
             simulation.tick(input);
+            // REA/Ghidra confirms the retail DefineAnimTrigger registration at 0x004ebe70 and
+            // task-handler dispatch in its callback at 0x004ebeb0. The open-old/closed-new
+            // interval sweep remains C#-derived until a paired retail runtime trace confirms it.
+            if (audio_output && audio_output->IsAvailable() &&
+                animation_trigger_registry.AnimationTriggerRegistry_Count() > 0 &&
+                scene.first_person_animations)
+            {
+                const auto& weapon_state = simulation.weapon();
+                if (weapon_state.animation_identifier == player_animation_identifier_before_tick)
+                {
+                    const auto animation_clip_iterator =
+                        scene.first_person_animations->clips.find(weapon_state.animation_identifier);
+                    if (animation_clip_iterator != scene.first_person_animations->clips.end())
+                    {
+                        const auto& animation_clip = animation_clip_iterator->second;
+                        const bool player_fired_this_tick =
+                            weapon_state.shots_fired > shots_before_tick;
+                        const bool animation_time_wrapped =
+                            !player_fired_this_tick &&
+                            animation_clip.duration > 0.0F &&
+                            weapon_state.animation_time < player_animation_time_before_tick &&
+                            player_animation_time_before_tick + 160.0F >= animation_clip.duration;
+                        const auto crossed_animation_sounds =
+                            igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+                                animation_clip,
+                                player_animation_time_before_tick,
+                                weapon_state.animation_time,
+                                animation_time_wrapped,
+                                animation_trigger_registry);
+                        for (const auto& animation_sound_event : crossed_animation_sounds)
+                        {
+                            const std::string& sound_definition_name =
+                                animation_sound_event.trigger_definition->sound_definition_name;
+                            const std::uint32_t sound_voice =
+                                sound_system.SoundSystem_PlayDefinition(sound_definition_name);
+                            if (sound_voice == 0)
+                            {
+                                log(Severity::warning,
+                                    "animation-audio",
+                                    "Could not play animation event " +
+                                        std::to_string(animation_sound_event.animation_event->event_identifier) +
+                                        " sound '" + sound_definition_name + "'");
+                            }
+                            else
+                            {
+                                log(Severity::debug,
+                                    "animation-audio",
+                                    "Animation event " +
+                                        std::to_string(animation_sound_event.animation_event->event_identifier) +
+                                        " in clip " + std::to_string(weapon_state.animation_identifier) +
+                                        " triggered sound '" + sound_definition_name + "' at time " +
+                                        std::to_string(animation_sound_event.animation_event->time) +
+                                        "; voice=" + std::to_string(sound_voice));
+                            }
+                        }
+                    }
+                }
+            }
             const std::string_view player_fall_sound = simulation.take_player_fall_sound();
             const std::string_view player_jump_sound = simulation.take_player_jump_sound();
             for (const std::string_view player_sound_name : {player_fall_sound, player_jump_sound})

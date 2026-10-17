@@ -1,7 +1,18 @@
+#include "igi/asset_io.hpp"
+#include "igi/audio/animation_event_dispatcher.hpp"
+#include "igi/audio/audio_mixer.hpp"
 #include "igi/audio/animation_trigger_registry.hpp"
+#include "igi/audio/sound_bank.hpp"
 #include "igi/audio/sound_definition_registry.hpp"
+#include "igi/audio/sound_system.hpp"
+#include "igi/skeletal_animation.hpp"
 
+#include <algorithm>
+#include <array>
+#include <cstdint>
+#include <filesystem>
 #include <iostream>
+#include <limits>
 #include <stdexcept>
 #include <string_view>
 
@@ -53,6 +64,57 @@ int main(int argument_count, char** arguments)
                 "The absent event 1010 must not be fabricated into the retail trigger table");
         require(missing_footstep == nullptr, "A failed trigger lookup must clear its output pointer");
 
+        const std::filesystem::path game_directory(arguments[1]);
+        const auto weapon_animations = igi::gameplay::load_skeletal_animations(
+            game_directory / "common" / "ANIMS" / "005.IFF");
+        const auto reload_clip_iterator = weapon_animations->clips.find(17);
+        require(reload_clip_iterator != weapon_animations->clips.end(),
+                "Retail Glock reload clip 17 is missing");
+
+        const auto crossed_reload_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+            reload_clip_iterator->second, 2560.0F, 2577.0F, false, animation_trigger_registry);
+        require(crossed_reload_sounds.size() == 1 &&
+                    crossed_reload_sounds.front().animation_event->event_identifier == 1000 &&
+                    crossed_reload_sounds.front().trigger_definition->sound_definition_name == "glock_reload_1",
+                "Retail Glock reload event did not resolve at its authored animation time");
+
+        const auto repeated_reload_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+            reload_clip_iterator->second, 2577.0F, 2720.0F, false, animation_trigger_registry);
+        require(repeated_reload_sounds.empty(),
+                "An animation event at the open interval boundary was dispatched twice");
+
+        igi::gameplay::SkeletalAnimationClip loop_probe_clip;
+        loop_probe_clip.events = {
+            {1025, 0, 495.0F, {0.0F, 0.0F, 0.0F}},
+            {1000, 0, 5.0F, {0.0F, 0.0F, 0.0F}},
+        };
+        const auto crossed_loop_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+            loop_probe_clip, 480.0F, 20.0F, true, animation_trigger_registry);
+        require(crossed_loop_sounds.size() == 2,
+                "Animation sound events were lost at a wrapped clip boundary");
+
+        const auto animation_restart_sounds = igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+            loop_probe_clip, 480.0F, 20.0F, false, animation_trigger_registry);
+        require(animation_restart_sounds.empty(),
+                "A same-clip animation restart was mistaken for a natural duration wrap");
+
+        bool invalid_animation_time_rejected = false;
+        try
+        {
+            static_cast<void>(igi::audio::AnimationEventDispatcher_CollectCrossedSounds(
+                loop_probe_clip,
+                std::numeric_limits<float>::quiet_NaN(),
+                0.0F,
+                false,
+                animation_trigger_registry));
+        }
+        catch (const std::invalid_argument&)
+        {
+            invalid_animation_time_rejected = true;
+        }
+        require(invalid_animation_time_rejected,
+                "Animation sound dispatch accepted a non-finite animation time");
+
         igi::audio::SoundDefinitionRegistry sound_definition_registry;
         static_cast<void>(sound_definition_registry.SoundSystem_LoadForMission(arguments[1], 1));
         for (const auto& trigger : animation_trigger_registry.AnimationTriggerRegistry_Definitions())
@@ -65,9 +127,26 @@ int main(int argument_count, char** arguments)
                     "A retail animation trigger resolves to a non-playable sound node");
         }
 
+        igi::audio::AudioMixer audio_mixer;
+        igi::audio::SoundBank sound_bank(audio_mixer);
+        const auto common_sound_directory = igi::assets::resolve_path(game_directory, "common/sounds");
+        require(sound_bank.SoundSystem_MountDirectory(common_sound_directory) > 300,
+                "The common Level 1 sound assets did not mount");
+        igi::audio::SoundSystem sound_system(audio_mixer, sound_bank, sound_definition_registry);
+        const std::uint32_t reload_voice = sound_system.SoundSystem_PlayDefinition(
+            crossed_reload_sounds.front().trigger_definition->sound_definition_name);
+        require(reload_voice != 0 && sound_system.SoundSystem_IsPlaying(reload_voice),
+                "The crossed retail reload event did not create an active sound voice");
+        std::array<std::int16_t, 512> mixed_samples{};
+        audio_mixer.MixFrames(mixed_samples);
+        require(std::any_of(mixed_samples.begin(), mixed_samples.end(), [](std::int16_t sample)
+        {
+            return sample != 0;
+        }), "The crossed retail reload event produced no PCM samples");
+
         std::cout << "Retail animation trigger registry passed: "
                   << animation_trigger_registry.AnimationTriggerRegistry_Count()
-                  << " entries resolve to Level 1 sound definitions\n";
+                  << " entries resolve to Level 1 sound definitions; authored Glock reload event dispatch passed\n";
         return 0;
     }
     catch (const std::exception& exception)

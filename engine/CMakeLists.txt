@@ -42,6 +42,7 @@ add_library(igi_audio STATIC
     src/audio/audio_mixer.cpp
     src/audio/sdl_audio_output.cpp
     src/audio/animation_trigger_registry.cpp
+    src/audio/animation_event_dispatcher.cpp
     src/audio/sound_definition_registry.cpp
     src/audio/sound_bank.cpp
     src/audio/sound_system.cpp
