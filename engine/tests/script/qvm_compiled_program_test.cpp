@@ -34,17 +34,25 @@ void write_uint32(std::vector<std::byte>& file_bytes, std::size_t field_offset, 
 
 [[nodiscard]] std::vector<std::byte> make_valid_qvm()
 {
-    std::vector<std::byte> file_bytes(0x48U);
+    std::vector<std::byte> file_bytes(0x68U);
     file_bytes[0U] = std::byte{'L'};
     file_bytes[1U] = std::byte{'O'};
     file_bytes[2U] = std::byte{'O'};
     file_bytes[3U] = std::byte{'P'};
     write_uint32(file_bytes, 0x04U, 8U);
     write_uint32(file_bytes, 0x08U, 5U);
-    write_uint32(file_bytes, 0x2CU, 0x40U);
+    write_uint32(file_bytes, 0x0CU, 0x3CU);
+    write_uint32(file_bytes, 0x10U, 0x40U);
+    write_uint32(file_bytes, 0x14U, 4U);
+    write_uint32(file_bytes, 0x18U, 1U);
+    write_uint32(file_bytes, 0x1CU, 0x40U);
+    write_uint32(file_bytes, 0x20U, 0x48U);
+    write_uint32(file_bytes, 0x24U, 8U);
+    write_uint32(file_bytes, 0x28U, 2U);
+    write_uint32(file_bytes, 0x2CU, 0x60U);
     write_uint32(file_bytes, 0x30U, 8U);
     for (std::size_t code_index = 0U; code_index < 8U; ++code_index) {
-        file_bytes[0x40U + code_index] = static_cast<std::byte>(code_index + 1U);
+        file_bytes[0x60U + code_index] = static_cast<std::byte>(code_index + 1U);
     }
     return file_bytes;
 }
@@ -58,6 +66,16 @@ void test_reads_retail_qvm_header_and_code_span()
     require(program.code.size() == 8U, "retail code byte count is read from +0x30");
     require(program.code.front() == std::byte{1U} && program.code.back() == std::byte{8U},
         "code span begins at the dword offset stored at +0x2C");
+    require(program.first_header_referenced_region.has_value()
+            && program.first_header_referenced_region->begin_offset == 0x3CU
+            && program.first_header_referenced_region->end_offset == 0x40U
+            && program.first_header_referenced_region->bytes.size() == 4U,
+        "retail QVM table boundaries at +0x0C/+0x10 expose a bounded file region");
+    require(program.second_header_referenced_region.has_value()
+            && program.second_header_referenced_region->begin_offset == 0x40U
+            && program.second_header_referenced_region->end_offset == 0x48U
+            && program.second_header_referenced_region->bytes.size() == 8U,
+        "retail QVM table boundaries at +0x1C/+0x20 expose a bounded file region");
 }
 
 void test_rejects_invalid_signature_revision_and_code_range()
@@ -91,6 +109,16 @@ void test_rejects_invalid_signature_revision_and_code_range()
         rejected_range = true;
     }
     require(rejected_range, "out-of-file bytecode range is rejected");
+
+    invalid_file = make_valid_qvm();
+    write_uint32(invalid_file, 0x10U, 0xFFFFFFF0U);
+    bool rejected_table_range = false;
+    try {
+        static_cast<void>(Qvm_LoadCompiledProgram_004BD220(invalid_file));
+    } catch (const QvmFormatError&) {
+        rejected_table_range = true;
+    }
+    require(rejected_table_range, "out-of-file QVM table range is rejected");
 }
 
 void test_level_one_qvm_corpus(const std::filesystem::path& level_directory)
@@ -109,8 +137,28 @@ void test_level_one_qvm_corpus(const std::filesystem::path& level_directory)
         const std::span<const std::byte> file_bytes(byte_data, raw_bytes.size());
         const auto program = Qvm_LoadCompiledProgram_004BD220(file_bytes);
         require(!program.code.empty(), "Level 1 QVM has a nonempty retail code region");
+        if (program.first_header_referenced_region.has_value()) {
+            require(program.first_header_referenced_region->bytes.size()
+                        == program.first_header_referenced_region->end_offset
+                            - program.first_header_referenced_region->begin_offset,
+                "Level 1 first QVM table range remains within its declared bounds");
+        }
+        if (program.second_header_referenced_region.has_value()) {
+            require(program.second_header_referenced_region->bytes.size()
+                        == program.second_header_referenced_region->end_offset
+                            - program.second_header_referenced_region->begin_offset,
+                "Level 1 second QVM table range remains within its declared bounds");
+        }
         std::cout << "Accepted " << file_path.filename().string()
                   << ": revision=" << program.format_revision
+                  << ", table_0c_10_bytes="
+                  << (program.first_header_referenced_region.has_value()
+                          ? program.first_header_referenced_region->bytes.size()
+                          : 0U)
+                  << ", table_1c_20_bytes="
+                  << (program.second_header_referenced_region.has_value()
+                          ? program.second_header_referenced_region->bytes.size()
+                          : 0U)
                   << ", code_bytes=" << program.code.size() << '\n';
         ++qvm_file_count;
     };

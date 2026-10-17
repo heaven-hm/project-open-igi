@@ -15,6 +15,23 @@ constexpr std::size_t code_size_field_offset = 0x30U;
 constexpr std::size_t field_34_offset = 0x34U;
 constexpr std::size_t field_38_offset = 0x38U;
 
+// Qvm_LoadCompiledProgram_004BD220 at 0x004BD220 installs base + fields +0x0C/+0x10
+// when the gate at +0x14 is nonzero, and base + fields +0x1C/+0x20 when +0x24 is
+// nonzero. REA/Ghidra evidence: ev_93c3331eb57f910f0727ac4a0e85af7b06148864571701268d2c22b709f7763d.
+[[nodiscard]] QvmFileRegion read_file_region(
+    std::span<const std::byte> file_bytes,
+    std::uint32_t begin_offset,
+    std::uint32_t end_offset)
+{
+    if (end_offset < begin_offset || static_cast<std::size_t>(end_offset) > file_bytes.size()) {
+        throw QvmFormatError("QVM table region has an invalid or out-of-file boundary.");
+    }
+
+    const std::size_t begin = static_cast<std::size_t>(begin_offset);
+    const std::size_t length = static_cast<std::size_t>(end_offset - begin_offset);
+    return {begin_offset, end_offset, file_bytes.subspan(begin, length)};
+}
+
 [[nodiscard]] std::uint32_t read_little_endian_uint32(
     std::span<const std::byte> file_bytes,
     std::size_t field_offset)
@@ -57,6 +74,19 @@ QvmCompiledProgram Qvm_LoadCompiledProgram_004BD220(std::span<const std::byte> f
         program.fields_0c_through_28[field_index] = read_little_endian_uint32(
             file_bytes,
             field_table_offset + field_index * sizeof(std::uint32_t));
+    }
+
+    if (program.fields_0c_through_28[2U] != 0U) {
+        program.first_header_referenced_region = read_file_region(
+            file_bytes,
+            program.fields_0c_through_28[0U],
+            program.fields_0c_through_28[1U]);
+    }
+    if (program.fields_0c_through_28[6U] != 0U) {
+        program.second_header_referenced_region = read_file_region(
+            file_bytes,
+            program.fields_0c_through_28[4U],
+            program.fields_0c_through_28[5U]);
     }
 
     const std::uint32_t code_offset = read_little_endian_uint32(file_bytes, code_offset_field_offset);
