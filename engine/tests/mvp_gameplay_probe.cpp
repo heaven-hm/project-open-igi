@@ -98,6 +98,8 @@ int main()
         require(burst_fire.weapon().shots_fired == 6,
                 "A fresh trigger pull must allow another complete burst");
         const auto movement_scene = make_scene(false, false);
+        require(movement_scene.player_parameters.maximum_health == 1.0f,
+                "Retail human health must use a one-point damage accumulator");
         const auto ordinary_jump_impact = HumanFallDamage_Calculate(
             5.0F * 4096.0F / 30.0F,
             movement_scene.player_parameters.maximum_health);
@@ -400,7 +402,8 @@ int main()
         }
         require(blocked.weapon().hits == 0 && blocked.actors().front().health == 1,
                 "World geometry must occlude projectiles and protect the soldier");
-        require(blocked.health() == 3, "Occluded guard must not damage the player through a wall");
+        require(blocked.health() == blocked_scene.player_parameters.maximum_health,
+                "Occluded guard must not damage the player through a wall");
         require(blocked.actors().front().behavior == ActorBehavior::investigating,
                 "An occluded guard hearing a shot must investigate rather than shoot through the wall");
         GameSimulation replay_first(movement_scene);

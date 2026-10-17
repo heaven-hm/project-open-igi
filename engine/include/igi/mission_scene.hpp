@@ -248,7 +248,7 @@ struct PlayerParameters final
     float jump_horizontal_per_tick = 17.5f / 3.6f / 30.0f;
     float jump_vertical_per_tick = 27.0f / 3.6f / 30.0f;
     float airborne_control_per_tick = 0.5f / 3.6f / 30.0f;
-    float maximum_health = 3.0f;
+    float maximum_health = 1.0f;
 };
 
 enum class WeaponCategory

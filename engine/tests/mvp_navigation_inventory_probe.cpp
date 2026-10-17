@@ -165,7 +165,7 @@ int main()
         require(simulation.inventory_size() == 4, "A pickup must not be collected twice");
         simulation.restart();
         require(simulation.inventory_size() == 3 && simulation.weapon().magazine == 32 &&
-                    simulation.health() == 3,
+                    simulation.health() == scene.player_parameters.maximum_health,
                 "Restart must restore the original loadout and health");
 
         // Verify weapon zoom differentiation: MP5 iron sights vs Dragunov scope
