@@ -121,6 +121,12 @@ class GameSimulation final : private HumanMovementWorld
         pending_player_fall_sound_ = {};
         return sound_definition_name;
     }
+    [[nodiscard]] std::string_view take_player_jump_sound() noexcept
+    {
+        const std::string_view sound_definition_name = pending_player_jump_sound_;
+        pending_player_jump_sound_ = {};
+        return sound_definition_name;
+    }
     [[nodiscard]] Vector3 player_position() const noexcept;
     [[nodiscard]] Vector3 camera_position() const noexcept;
     [[nodiscard]] Vector3 aim_direction() const noexcept;
@@ -331,6 +337,7 @@ class GameSimulation final : private HumanMovementWorld
     std::uint64_t tick_count_{};
     bool developer_mode_{};
     std::string_view pending_player_fall_sound_;
+    std::string_view pending_player_jump_sound_;
     float current_zoom_{1.0f};
     float dragunov_zoom_level_{6.5f};
 };

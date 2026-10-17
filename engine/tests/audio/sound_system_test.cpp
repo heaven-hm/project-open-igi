@@ -65,7 +65,8 @@ int main(int argument_count, char** arguments)
             looping_parameters);
         require(rifle_voice != 0, "The retail AK-47 definition did not create a mixer voice");
         require(sounds.SoundSystem_IsPlaying(rifle_voice), "The retail AK-47 voice is not active");
-        for (const std::string_view fall_sound_name : {"player_fall_1", "player_fall_2", "player_fall_3"})
+        for (const std::string_view fall_sound_name :
+             {"player_fall_1", "player_fall_2", "player_fall_3", "jump_1"})
         {
             const std::uint32_t fall_sound_voice = sounds.SoundSystem_PlayDefinition(fall_sound_name);
             require(fall_sound_voice != 0 && sounds.SoundSystem_IsPlaying(fall_sound_voice),

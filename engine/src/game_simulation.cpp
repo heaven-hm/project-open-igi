@@ -167,6 +167,7 @@ void GameSimulation::restart()
     tick_count_ = 0;
     developer_mode_ = false;
     pending_player_fall_sound_ = {};
+    pending_player_jump_sound_ = {};
     current_zoom_ = 1.0f;
     dragunov_zoom_level_ = 6.5f;
     weapon_ = {};
@@ -293,6 +294,7 @@ bool GameSimulation::grounded() const noexcept
 void GameSimulation::tick(const PlayerInput& input)
 {
     pending_player_fall_sound_ = {};
+    pending_player_jump_sound_ = {};
     if (!std::isfinite(input.forward) || !std::isfinite(input.sideways) ||
         !std::isfinite(input.heading_change) || !std::isfinite(input.pitch_change))
     {
@@ -597,6 +599,7 @@ void GameSimulation::advance_player(const PlayerInput& input)
                                          scene_.player_parameters.jump_vertical_per_tick * units_per_metre);
         player_.position_adjustment = {};
         took_off_this_tick = true;
+        pending_player_jump_sound_ = "jump_1";
         player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
         diagnostics::log(
             diagnostics::Severity::debug, "player", "Jump impulse applied from original player parameters");

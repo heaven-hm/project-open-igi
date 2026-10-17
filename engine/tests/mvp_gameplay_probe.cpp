@@ -134,10 +134,14 @@ int main()
         PlayerInput jump_input;
         jump_input.jumping = true;
         jump_timing.tick(jump_input);
+        require(jump_timing.take_player_jump_sound() == "jump_1",
+                "Retail jump audio must fire on the take-off edge");
         const float launch_distance = movement_scene.player_parameters.jump_vertical_per_tick;
         require(std::abs(jump_timing.player_position().z - jump_floor - launch_distance) < 0.000001f,
                 "Retail jump launch must apply its full velocity without gravity or impulse damping");
         jump_timing.tick({});
+        require(jump_timing.take_player_jump_sound().empty(),
+                "A jump sound must not repeat after the take-off tick");
         const float second_jump_distance = launch_distance - HumanMotion::gravity_per_tick / 4096.0f;
         require(std::abs(jump_timing.player_position().z - jump_floor - launch_distance -
                          second_jump_distance) < 0.000001f,

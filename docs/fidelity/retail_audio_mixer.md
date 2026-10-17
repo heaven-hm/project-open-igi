@@ -4,7 +4,7 @@
 
 The C++ engine now has a bounded 32-voice mixer and an SDL2 callback device requesting 22050 Hz, stereo, signed 16-bit output. Resident PCM is mixed with linear interpolation, gain and pan are converted through the retail attenuation table, and playback rate is clamped to the retail range. The SDL callback catches failures and emits silence rather than allowing an exception to cross the audio thread.
 
-The game loop now mounts Level 1 sound definitions and banks, starts the mission music, and dispatches player/AI weapon fire plus the retail player fall-damage cues. These integrations prove named asset resolution and mixer voice creation; they do not establish full event coverage or audible parity. Player footsteps, jump/landing material sounds, animation triggers, object sounds, and broader QVM-driven audio remain incomplete. SDL timing, interpolation/resampling, and output have not been compared directly with a live DirectSound capture.
+The game loop now mounts Level 1 sound definitions and banks, starts the mission music, and dispatches player jump/fall cues plus player/AI weapon fire. These integrations prove named asset resolution and mixer voice creation; they do not establish full event coverage or audible parity. Player footsteps, jump/landing material sounds, animation triggers, object sounds, and broader QVM-driven audio remain incomplete. SDL timing, interpolation/resampling, and output have not been compared directly with a live DirectSound capture.
 
 ## Retail evidence
 

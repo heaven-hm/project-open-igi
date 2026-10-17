@@ -21,4 +21,4 @@ The C++ port preserves the strict threshold comparisons and queues one cue for t
 - Landing event: `engine/src/game_simulation.cpp`, consumed by `engine/src/main.cpp`.
 - Tests: `mvp_movement_weapon_ai` checks safe, light, medium, and heavy impacts plus one-shot delivery; `retail_level_one_sound_playback` resolves and starts all three named sounds from the actual Level 1 sound bank.
 
-These tests verify formula selection, event lifecycle, resource resolution, and mixer voice creation. They do not prove audible output or timing parity with DirectSound on the retail executable.
+These tests verify formula selection, event lifecycle, resource resolution, and mixer voice creation. The same sound test checks the Level 1 `jump_1` resource. Jump playback is separately documented in `retail_player_jump_sound.md`. They do not prove audible output or timing parity with DirectSound on the retail executable.
