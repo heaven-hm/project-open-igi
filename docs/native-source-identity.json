@@ -58,6 +58,48 @@
       "binary_ninja_basic_blocks": 1,
       "cfg_agreement": 1.0,
       "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
+    },
+    {
+      "catalog_name": "Sys_ExecuteBytecode_28",
+      "address": "0x004BCFD0",
+      "byte_count": 59,
+      "file_offset": 774096,
+      "source_bytes_sha256": "44a69ad8c4b488406c75c973d31a28871c3f52abc6518ebb0e9c60f5608d4253",
+      "rea_evidence_id": "ev_7b5b04f8089dae45a2e6a5b52cdcec6c771948bcf7b02c21d635a76164439de4",
+      "binary_ninja_label": "Sys_ExecuteBytecode_28",
+      "implementation": "C++ translation of the observed dispatch loop; relocated callback-table storage",
+      "runtime_retail_comparison": "Two controlled CrossOver cases matched extracted retail x86 instructions: sequential opcode dispatch and nonzero-status exit; full QVM execution remains pending",
+      "cpp_name": "Qvm_ExecuteInstructions",
+      "radare2": {
+        "basic_blocks": 4,
+        "edges": 5,
+        "instruction_count": 23,
+        "calling_convention": "cdecl"
+      },
+      "binary_ninja_basic_blocks": 4,
+      "cfg_agreement": 1.0,
+      "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
+    },
+    {
+      "catalog_name": "Sys_AllocateMemory_29",
+      "address": "0x004BD3D0",
+      "byte_count": 26,
+      "file_offset": 775120,
+      "source_bytes_sha256": "d951218175c9f6df313b68809961a890d7dedfaaefe9b2f9541c1c6fe53bea52",
+      "rea_evidence_id": "ev_5cda7406ec531b3d34c1241bac86c40d46966b0ae4b27c81dfbd92c510cb8dcf",
+      "binary_ninja_label": "Sys_AllocateMemory_29",
+      "implementation": "C++ translation of the observed handler-slot address calculation and store",
+      "runtime_retail_comparison": "Focused test checks opcode and variant indexing; direct execution comparison is pending",
+      "cpp_name": "Qvm_SetOpcodeHandler",
+      "radare2": {
+        "basic_blocks": 1,
+        "edges": 0,
+        "instruction_count": 7,
+        "calling_convention": "cdecl"
+      },
+      "binary_ninja_basic_blocks": 1,
+      "cfg_agreement": 1.0,
+      "cfg_scope": "Retail source structure across Radare2 and Binary Ninja; not C++ behavioral accuracy"
     }
   ]
 }

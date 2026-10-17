@@ -8,7 +8,14 @@
 namespace igi::retail::script
 {
 
-// Native context prefix: recovered fields only; this is not the complete retail QVM object.
+// Layout: partial 32-bit QVM state prefix observed in retail QVM dispatch and stack helpers.
+// Evidence: REA/Ghidra ev_7b5b04f8089dae45a2e6a5b52cdcec6c771948bcf7b02c21d635a76164439de4 and
+// ev_fc8c4a96e5363fb9ba98aad334c2607004b6ee4cd58f1894cf78e5d43a93a525; REA ranges 0x004BCFD0 and 0x004BDA00.
+// Fields: instruction offset +0x00; code pointer +0x14; value/type indexes +0x18/+0x1C;
+// status +0x20; value/type stack pointers +0x24/+0x28; stop flag +0x2C.
+// ABI: recovered from x86 dword offsets; static assertions apply to the Windows x86 build.
+// Confidence: high for these accessed fields and offsets; total object size and intervening field meanings are unknown.
+// Tests: QVM stack and dispatcher tests validate accessed offsets; full compiled-script execution remains pending.
 struct QvmNativeStatePrefix
 {
     const std::byte* code_base;                       // +0x00
