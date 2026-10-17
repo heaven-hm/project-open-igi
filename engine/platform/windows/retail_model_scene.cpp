@@ -2,6 +2,7 @@
 #define UNICODE
 #define _UNICODE
 #include "retail_model_scene.hpp"
+#include "developer_controls.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
@@ -179,6 +180,7 @@ struct Scene
     bool windowed = true;
     bool exclusive = false;
     bool dev_mode = false;
+    igi::developer::DeveloperControls developer_controls;
     float dev_yaw = 0.0F;    // radians, around Z
     float dev_pitch = 0.0F;  // radians, up/down
     float dev_speed = 400.0F;
@@ -830,11 +832,13 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
         Scene scene;
         scene.load(game_directory, level_number);
         scene.dev_mode = dev_mode;
+        scene.developer_controls.enabled = dev_mode;
+        scene.developer_controls.free_camera_enabled = dev_mode;
         if (dev_mode)
         {
             scene.dev_camera_reset();
             write_log("Free camera enabled (devmode): W/A/S/D move, Space up, Shift down, mouse looks, "
-                      "Ctrl boosts.");
+                      "Ctrl boosts. F9 player cheat requests, F10 next level, F12 free-camera toggle.");
         }
         WNDCLASSEXW window_class{};
         window_class.cbSize = sizeof(window_class);
@@ -889,13 +893,50 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
                     running = false;
                     break;
                 }
+                if (message.hwnd == window &&
+                    (message.message == WM_KEYDOWN || message.message == WM_SYSKEYDOWN))
+                {
+                    const auto action = scene.developer_controls.handle_key(
+                        static_cast<unsigned int>(message.wParam),
+                        (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) != 0U);
+                    if (action == igi::developer::DeveloperAction::toggle_free_camera)
+                    {
+                        scene.dev_look_initialised = false;
+                        if (scene.developer_controls.free_camera_enabled) { scene.dev_camera_reset(); }
+                        write_log(std::string("Developer free camera: ") +
+                                  (scene.developer_controls.free_camera_enabled ? "enabled" : "disabled"));
+                    }
+                    else if (action == igi::developer::DeveloperAction::toggle_player_cheats)
+                    {
+                        write_log(std::string("Developer player-only god/ammo/clips request: ") +
+                                  (scene.developer_controls.player_god_mode_requested ? "enabled" : "disabled") +
+                                  "; gameplay health/ammunition integration unavailable in model scene.");
+                    }
+                    else if (action == igi::developer::DeveloperAction::next_level)
+                    {
+                        level_number = level_number == 14U ? 1U : level_number + 1U;
+                        write_log("Developer loading next model scene: level" + std::to_string(level_number));
+                        scene.objects.clear();
+                        scene.packages.clear();
+                        scene.uploaded_textures.clear();
+                        scene.texture_surfaces.clear();
+                        scene.origin = {};
+                        scene.camera_position = {0, -100, 50};
+                        scene.camera_target = {0, 0, 0};
+                        scene.load(game_directory, level_number);
+                        scene.first_frame = true;
+                        scene.dev_look_initialised = false;
+                        scene.dev_camera_reset();
+                    }
+                    if (action != igi::developer::DeveloperAction::none) { continue; }
+                }
                 TranslateMessage(&message);
                 DispatchMessageW(&message);
             }
             if (running && !IsIconic(window))
             {
                 const auto frame_start = std::chrono::steady_clock::now();
-                if (scene.dev_mode)
+                if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
                 {
                     scene.update_dev_camera(dev_frame_seconds);
                 }
