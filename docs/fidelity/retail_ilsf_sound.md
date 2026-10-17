@@ -2,7 +2,7 @@
 
 ## Scope
 
-The C++ port in `engine/src/formats/ilsf_sound.cpp` recognizes the original ILSF container, validates its 20-byte header, and decodes PCM or ADPCM to signed 16-bit samples. `engine/src/audio/ilsf_stream_reader.cpp` adds bounded frame-at-a-time reads and seek-based restart with reset ADPCM state, following the C# `IlsfStreamReader`. These pieces can decode Level 1 streamed music and ambience, but the game does not yet schedule or play them: voice allocation/update, the mixer, the platform audio backend, and sound-trigger runtime remain incomplete.
+The C++ port in `engine/src/formats/ilsf_sound.cpp` recognizes the original ILSF container, validates its 20-byte header, and decodes PCM or ADPCM to signed 16-bit samples. `engine/src/audio/ilsf_stream_reader.cpp` adds bounded frame-at-a-time reads and seek-based restart with reset ADPCM state, following the C# `IlsfStreamReader`. These pieces can decode Level 1 streamed music and ambience. A separate 32-voice mixer and SDL2 device callback now exist, but they are not connected to the game sound bank, QVM sound definitions, or gameplay sound-trigger runtime.
 
 C++ port entrypoints use descriptive native-style names. `SoundSystem_*` is a port naming convention, not a symbol name recovered from the executable. The retail routines currently have Ghidra-generated names `FUN_00495F70`, `FUN_00496280`, and `FUN_00496420`.
 
@@ -27,4 +27,4 @@ The retail `MISSIONS/location0/LEVEL1/SOUNDS` directory contains 28 `.wav` files
 
 ## Remaining sound-engine work
 
-This result does not establish sound-engine parity. Next work must port and verify the ILSF streaming reader, retail sound resource registration and resident/streamed load paths, voice allocation/update, the 32-voice mixer, sound positioning/attenuation, and gameplay sound triggers. Runtime comparison against `igi.exe` is still required before any sound behavior is called retail-verified.
+This result does not establish sound-engine parity. Next work must connect retail sound resource registration and resident/streamed load paths to the mixer, implement the `sounds.qvm` definition layer and gameplay sound triggers, and compare actual Level 1 sound events and samples against `igi.exe`. Runtime comparison remains required before sound behavior is called retail-verified.

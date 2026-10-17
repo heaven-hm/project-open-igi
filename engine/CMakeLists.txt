@@ -39,6 +39,8 @@ target_link_libraries(igi_formats PUBLIC igi_gameplay)
 add_library(igi_audio STATIC
     src/audio/sound_volume_curve.cpp
     src/audio/ilsf_stream_reader.cpp
+    src/audio/audio_mixer.cpp
+    src/audio/sdl_audio_output.cpp
 )
 target_include_directories(igi_audio PUBLIC include)
 target_compile_features(igi_audio PUBLIC cxx_std_20)
@@ -76,7 +78,7 @@ add_library(igi_runtime STATIC
     src/scene_renderer.cpp
 )
 target_compile_features(igi_runtime PUBLIC cxx_std_20)
-target_link_libraries(igi_audio PUBLIC igi_formats)
+target_link_libraries(igi_audio PUBLIC igi_formats PRIVATE SDL2::SDL2)
 target_link_libraries(igi_runtime PUBLIC igi_assets igi_audio igi_gameplay)
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(igi_assets PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -199,6 +201,15 @@ if(BUILD_TESTING)
     add_executable(sound_volume_curve_test tests/audio/sound_volume_curve_test.cpp)
     target_link_libraries(sound_volume_curve_test PRIVATE igi_audio)
     add_test(NAME retail_sound_volume_curve COMMAND sound_volume_curve_test)
+
+    add_executable(audio_mixer_test tests/audio/audio_mixer_test.cpp)
+    target_link_libraries(audio_mixer_test PRIVATE igi_audio)
+    add_test(NAME retail_audio_mixer COMMAND audio_mixer_test)
+
+    add_executable(sdl_audio_output_test tests/audio/sdl_audio_output_test.cpp)
+    target_link_libraries(sdl_audio_output_test PRIVATE igi_audio)
+    add_test(NAME sdl_audio_output_callback COMMAND sdl_audio_output_test)
+    set_tests_properties(sdl_audio_output_callback PROPERTIES ENVIRONMENT "SDL_AUDIODRIVER=dummy")
 
     add_executable(ilsf_sound_test tests/audio/ilsf_sound_test.cpp)
     target_link_libraries(ilsf_sound_test PRIVATE igi_audio)
