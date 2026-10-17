@@ -180,6 +180,39 @@ std::uint32_t Ilff_ReadLittleEndian32(std::span<const std::byte> bytes, std::siz
         | (std::to_integer<std::uint32_t>(bytes[offset + 3U]) << 24U);
 }
 
+MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(std::span<const std::byte> record_bytes) {
+    constexpr std::size_t record_size = 40U;
+    if (record_bytes.size() != record_size) {
+        throw MefFormatError("FUN_0049b700 consumes a 40-byte skinned vertex record.");
+    }
+
+    const auto read_float = [record_bytes](std::size_t offset) {
+        return std::bit_cast<float>(Ilff_ReadLittleEndian32(record_bytes, offset));
+    };
+    const auto read_u16 = [record_bytes](std::size_t offset) {
+        if (offset > record_bytes.size() || sizeof(std::uint16_t) > record_bytes.size() - offset) {
+            throw MefFormatError("Skinned vertex index extends past its 40-byte record.");
+        }
+        return static_cast<std::uint16_t>(
+            std::to_integer<std::uint16_t>(record_bytes[offset])
+            | (std::to_integer<std::uint16_t>(record_bytes[offset + 1U]) << 8U));
+    };
+
+    return {
+        read_float(0U),
+        read_float(4U),
+        read_float(8U),
+        read_float(12U),
+        read_float(16U),
+        read_float(20U),
+        read_float(24U),
+        read_float(28U),
+        read_float(32U),
+        read_u16(36U),
+        read_u16(38U),
+    };
+}
+
 IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes) {
     return read_container(bytes, 0U);
 }

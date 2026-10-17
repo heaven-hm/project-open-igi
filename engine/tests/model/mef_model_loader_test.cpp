@@ -18,6 +18,7 @@ using igi::retail::model::Ilff_ReadLittleEndian32;
 using igi::retail::model::Ilff_ReadContainer;
 using igi::retail::model::MefFormatError;
 using igi::retail::model::MefModel;
+using igi::retail::model::MefSkinnedVertex_ReadRetailRecord;
 
 void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uint32_t value) {
     if (destination.size() < offset + sizeof(value)) {
@@ -163,6 +164,46 @@ void testRetailMefLoaderRejectsTruncation() {
     }
 }
 
+void testRetailSkinnedVertexUsesNativeRecordOffsets() {
+    std::vector<std::byte> record_bytes(40U);
+    const std::array<float, 9> float_fields{
+        1.0F, 2.0F, 3.0F,
+        0.0F, 0.0F, 1.0F,
+        0.25F, 0.75F,
+        0.5F,
+    };
+    for (std::size_t field_index = 0U; field_index < float_fields.size(); ++field_index) {
+        write_u32(
+            record_bytes,
+            field_index * sizeof(float),
+            std::bit_cast<std::uint32_t>(float_fields[field_index]));
+    }
+    record_bytes[36U] = std::byte{0x34};
+    record_bytes[37U] = std::byte{0x12};
+    record_bytes[38U] = std::byte{0x78};
+    record_bytes[39U] = std::byte{0x56};
+
+    const igi::retail::model::MefSkinnedVertex vertex =
+        MefSkinnedVertex_ReadRetailRecord(record_bytes);
+    if (vertex.position_x != 1.0F || vertex.position_y != 2.0F || vertex.position_z != 3.0F
+        || vertex.normal_z != 1.0F || vertex.diffuse_u != 0.25F || vertex.diffuse_v != 0.75F
+        || vertex.influence_weight != 0.5F || vertex.target_vertex_index != 0x1234U
+        || vertex.bone_index != 0x5678U) {
+        throw std::runtime_error("FUN_0049b700 skinned vertex fields were read at incorrect record offsets.");
+    }
+
+    bool rejected_wrong_record_size = false;
+    try {
+        static_cast<void>(MefSkinnedVertex_ReadRetailRecord(
+            std::span<const std::byte>(record_bytes).first(39U)));
+    } catch (const MefFormatError&) {
+        rejected_wrong_record_size = true;
+    }
+    if (!rejected_wrong_record_size) {
+        throw std::runtime_error("Retail skinned vertex reader accepted a record with the wrong stride.");
+    }
+}
+
 MefModel loadMefAsset(const std::filesystem::path& model_path) {
     std::ifstream model_stream(model_path, std::ios::binary);
     if (!model_stream) {
@@ -250,6 +291,7 @@ int main(int argument_count, char** arguments) {
         testRetailMefLoaderExposesRetailRenderChunks();
         testRetailMefLoaderRejectsUnsupportedVersion();
         testRetailMefLoaderRejectsTruncation();
+        testRetailSkinnedVertexUsesNativeRecordOffsets();
 
         if (argument_count > 1) {
             testMefAssetsAtPath(arguments[1]);

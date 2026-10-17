@@ -45,6 +45,25 @@ struct MefRenderChunks {
     const IlffChunk* vertex_stream = nullptr;
 };
 
+// Original IGI.EXE entry FUN_0049b700 at VA 0x0049B700 (semantic label unresolved).
+// REA/Ghidra evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446:
+// 40-byte records; position/normal/UV floats at +0x00..+0x1C, influence weight at +0x20,
+// accumulated target vertex at +0x24, and transform/bone index at +0x26. This identifies
+// the record consumed by the native, not its association with a specific MEF chunk.
+struct MefSkinnedVertex {
+    float position_x = 0.0F;
+    float position_y = 0.0F;
+    float position_z = 0.0F;
+    float normal_x = 0.0F;
+    float normal_y = 0.0F;
+    float normal_z = 0.0F;
+    float diffuse_u = 0.0F;
+    float diffuse_v = 0.0F;
+    float influence_weight = 0.0F;
+    std::uint16_t target_vertex_index = 0;
+    std::uint16_t bone_index = 0;
+};
+
 // FourCC integers are the values compared by the retail x86 code. The bytes on disk are
 // little-endian, so a native constant such as 'MESH' is stored as the byte sequence "HSEM".
 namespace mef_tag {
@@ -79,6 +98,11 @@ public:
     [[nodiscard]] static MefModel DynObj_LocalModelsSMef(std::span<const std::byte> file_bytes);
     [[nodiscard]] MefRenderChunks render_chunks() const noexcept;
 };
+
+// Reads only the 40-byte record consumed by FUN_0049b700. This does not identify
+// which MEF chunk or mesh format supplies the record; that association remains unverified.
+[[nodiscard]] MefSkinnedVertex MefSkinnedVertex_ReadRetailRecord(
+    std::span<const std::byte> record_bytes);
 
 // Original IGI.EXE ILFF helpers used by DynObj_LocalModelsSMef:
 // 0x004B7490 computes the first aligned child position; 0x004B74D0 resolves a child
