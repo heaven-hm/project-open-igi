@@ -25,7 +25,7 @@ namespace {
 
     const std::streamoff resource_file_size = resource_stream.tellg();
     if (resource_file_size <= 0
-        || static_cast<std::uintmax_t>(resource_file_size) > std::numeric_limits<std::size_t>::max()
+        || static_cast<std::uintmax_t>(resource_file_size) > std::numeric_limits<std::uint32_t>::max()
         || static_cast<std::uintmax_t>(resource_file_size)
             > static_cast<std::uintmax_t>(std::numeric_limits<std::streamsize>::max())) {
         throw ResourceLoadError("Resource has an invalid or unsupported size: '"
@@ -74,13 +74,13 @@ ResourceHandle Is_ResourceLoaded(
 ResourceHandle Resource_Load(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,
-    const std::byte** out_data)
+    std::uint32_t* out_byte_count)
 {
     const std::string normalized_path = normalize_resource_path(resource_path);
     const auto cached_resource_iterator = resource_cache.loaded_resources_.find(normalized_path);
     if (cached_resource_iterator != resource_cache.loaded_resources_.end()) {
-        if (out_data != nullptr) {
-            *out_data = cached_resource_iterator->second->data();
+        if (out_byte_count != nullptr) {
+            *out_byte_count = static_cast<std::uint32_t>(cached_resource_iterator->second->size());
         }
         return cached_resource_iterator->second;
     }
@@ -89,11 +89,11 @@ ResourceHandle Resource_Load(
     loaded_resource->resource_path = normalized_path;
     loaded_resource->bytes = read_resource_file(resource_path);
 
-    const std::byte* loaded_data = loaded_resource->data();
+    const auto loaded_byte_count = static_cast<std::uint32_t>(loaded_resource->size());
     ResourceHandle resource_handle = std::move(loaded_resource);
     resource_cache.loaded_resources_.emplace(normalized_path, resource_handle);
-    if (out_data != nullptr) {
-        *out_data = loaded_data;
+    if (out_byte_count != nullptr) {
+        *out_byte_count = loaded_byte_count;
     }
     return resource_handle;
 }

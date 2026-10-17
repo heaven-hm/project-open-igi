@@ -37,7 +37,8 @@ private:
 };
 
 // Qvm_Load - original IGI.EXE native at VA 0x004B80B0.
-// This port slice gets the resource bytes through Resource_Load and validates the compiled
+// Verification: retail Level 1 runtime confirms objects.qsc selects objects.qvm.
+// This slice selects the compiled sibling, gets bytes through Resource_Load and validates the compiled
 // QVM path through Qvm_LoadCompiledProgram. Retail VFS aliases and QSC source fallback remain
 // unimplemented. REA evidence: ev_7c38680fe595188ac5d682a3e51c35966527da65dc4388db2afed21f725b1e48.
 [[nodiscard]] QvmLoadedScript Qvm_Load(

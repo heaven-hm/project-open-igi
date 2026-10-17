@@ -34,7 +34,7 @@ private:
     friend ResourceHandle Resource_Load(
         ResourceCache& resource_cache,
         const std::filesystem::path& resource_path,
-        const std::byte** out_data);
+        std::uint32_t* out_byte_count);
     friend ResourceHandle Is_ResourceLoaded(
         const ResourceCache& resource_cache,
         const std::filesystem::path& resource_path);
@@ -53,13 +53,14 @@ private:
     const std::filesystem::path& resource_path);
 
 // Resource_Load - original IGI.EXE native at VA 0x004B5F00.
-// This host-filesystem slice returns the stable resource record and exposes its byte address
-// through out_data. Retail archive unpacking, aliases, and allocator globals remain separate.
+// Verification: retail runtime + REA/Ghidra confirm the optional output is a 32-bit byte count.
+// Retail returns the byte pointer; this host adapter retains ownership in ResourceHandle::data().
+// Archive unpacking, aliases, and allocator globals remain unported; full parity is unverified.
 // REA evidence: ev_6f2afb3388ef8a6717637dc103d353963648cc8aedba9d6a88ab27b65fd34c1e.
 [[nodiscard]] ResourceHandle Resource_Load(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,
-    const std::byte** out_data = nullptr);
+    std::uint32_t* out_byte_count = nullptr);
 
 // Resource_Unload - original IGI.EXE native at VA 0x004B6380.
 // Removes the registry's reference; active handles keep their data address valid.

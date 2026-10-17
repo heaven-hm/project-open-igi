@@ -24,7 +24,11 @@ QvmLoadedScript Qvm_Load(
     resource::ResourceCache& resource_cache,
     const std::filesystem::path& qvm_path)
 {
-    const resource::ResourceHandle resource_handle = resource::Resource_Load(resource_cache, qvm_path);
+    std::filesystem::path compiled_path = qvm_path;
+    if (compiled_path.extension() == ".qsc" || compiled_path.extension() == ".QSC") {
+        compiled_path.replace_extension(compiled_path.extension() == ".QSC" ? ".QVM" : ".qvm");
+    }
+    const resource::ResourceHandle resource_handle = resource::Resource_Load(resource_cache, compiled_path);
     try {
         QvmCompiledProgram compiled_program = Qvm_LoadCompiledProgram(resource_handle->bytes);
         return QvmLoadedScript(resource_handle, std::move(compiled_program));

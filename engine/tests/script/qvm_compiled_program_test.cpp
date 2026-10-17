@@ -192,21 +192,27 @@ void test_resource_load_returns_stable_resource_memory_address()
         output_stream.close();
 
         ResourceCache resource_cache{};
-        const std::byte* resource_data = nullptr;
-        const auto loaded_resource = Resource_Load(resource_cache, resource_path, &resource_data);
-        require(resource_data == loaded_resource->data(),
-            "Resource_Load out pointer is the loaded resource byte address");
+        std::uint32_t resource_byte_count = 0U;
+        const auto loaded_resource = Resource_Load(resource_cache, resource_path, &resource_byte_count);
+        const std::byte* resource_data = loaded_resource->data();
+        require(resource_byte_count == file_bytes.size(),
+            "Resource_Load optional output is the retail byte count");
         require(loaded_resource->size() == file_bytes.size(),
             "Resource_Load reports the complete QVM resource size");
         require(Is_ResourceLoaded(resource_cache, resource_path).get() == loaded_resource.get(),
             "Is_ResourceLoaded returns the cached resource entry");
 
-        const std::byte* cached_resource_data = nullptr;
-        const auto cached_resource = Resource_Load(resource_cache, resource_path, &cached_resource_data);
+        std::uint32_t cached_byte_count = 0U;
+        const auto cached_resource = Resource_Load(resource_cache, resource_path, &cached_byte_count);
         require(cached_resource.get() == loaded_resource.get()
-                && cached_resource_data == resource_data
+                && cached_resource->data() == resource_data && cached_byte_count == resource_byte_count
                 && resource_cache.size() == 1U,
             "Resource_Load reuses the same cached entry and memory address");
+        auto source_path = resource_path;
+        source_path.replace_extension(".qsc");
+        const auto source_script = Qvm_Load(resource_cache, source_path);
+        require(source_script.file_bytes().data() == resource_data,
+            "Qvm_Load selects the compiled sibling without requiring source text");
         require(Resource_Unload(resource_cache, resource_path),
             "Resource_Unload removes the cached entry");
         require(resource_cache.size() == 0U && loaded_resource->data() == resource_data,
