@@ -2,7 +2,7 @@
 
 ## Scope
 
-The C++ port in `engine/src/formats/ilsf_sound.cpp` recognizes the original ILSF container, validates its 20-byte header, and decodes PCM or ADPCM to signed 16-bit samples. This is a format and decoder slice; it does not yet provide the retail streamed-file reader, voice scheduler, mixer, DirectSound replacement, or sound-trigger runtime. Level 1 streamed music and ambience are therefore validated and decoded here, but are not yet played by the game.
+The C++ port in `engine/src/formats/ilsf_sound.cpp` recognizes the original ILSF container, validates its 20-byte header, and decodes PCM or ADPCM to signed 16-bit samples. `engine/src/audio/ilsf_stream_reader.cpp` adds bounded frame-at-a-time reads and seek-based restart with reset ADPCM state, following the C# `IlsfStreamReader`. These pieces can decode Level 1 streamed music and ambience, but the game does not yet schedule or play them: voice allocation/update, the mixer, the platform audio backend, and sound-trigger runtime remain incomplete.
 
 C++ port entrypoints use descriptive native-style names. `SoundSystem_*` is a port naming convention, not a symbol name recovered from the executable. The retail routines currently have Ghidra-generated names `FUN_00495F70`, `FUN_00496280`, and `FUN_00496420`.
 
@@ -23,7 +23,7 @@ C# cross-reference reviewed in `/Users/haseeb-mir/Documents/Code/open-igi/src/Op
 
 The retail `MISSIONS/location0/LEVEL1/SOUNDS` directory contains 28 `.wav` files. They are ILSF containers, not RIFF/WAVE. The observed inventory is 26 ADPCM and 2 PCM files. `game_music.wav` is streamed stereo ADPCM at 22050 Hz; `m1_ambience.wav` is streamed stereo PCM at 11025 Hz. Some files have up to one trailing byte beyond the header-declared payload; the parser deliberately ignores those bytes, matching the C# reader and the retail frame-count-driven reads.
 
-`retail_ilsf_sound_parser` checks all storage codes, PCM 8/16 conversion, mono/stereo ADPCM sample checkpoints, malformed headers, unsupported metadata, and truncated payload errors. `retail_level_one_ilsf_samples` parses and decodes all 28 installed Level 1 sounds and checks the two streamed assets' metadata. Both passed in `/tmp/project-open-igi-manual-build`.
+`retail_ilsf_sound_parser` checks all storage codes, PCM 8/16 conversion, mono/stereo ADPCM sample checkpoints, nibble carry across chunk boundaries, too-small destinations, truncated streams, non-seekable restart, malformed headers, unsupported metadata, and truncated payload errors. `retail_level_one_ilsf_samples` parses all 28 installed Level 1 sounds, compares chunked reads with full-buffer decoding for every file, checks restart output/state, and validates the two streamed assets' metadata. Both passed in `/tmp/project-open-igi-manual-build`; the game build, Level 1 gameplay probe, and headless game-loop test also passed after integrating the format library.
 
 ## Remaining sound-engine work
 

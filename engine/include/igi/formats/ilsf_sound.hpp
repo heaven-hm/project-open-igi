@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+#include <cstddef>
 #include <cstdint>
 #include <span>
 #include <vector>
@@ -33,8 +35,28 @@ struct IlsfSoundData
 // Original IGI.EXE sound-loader native at VA 0x00495F70 recognizes the ILSF signature.
 [[nodiscard]] bool SoundSystem_IsIlsfFile(std::span<const std::uint8_t> data) noexcept;
 
-// Original IGI.EXE sound-loader native at VA 0x00495F70 parses the 20-byte ILSF header and payload.
+// Original IGI.EXE sound-loader native at VA 0x00495F70 parses the 20-byte ILSF header.
+[[nodiscard]] IlsfSoundData SoundSystem_ParseIlsfHeader(std::span<const std::uint8_t> data);
+
+// Original IGI.EXE sound-loader native at VA 0x00495F70 validates the declared payload length.
 [[nodiscard]] IlsfSoundData SoundSystem_ParseIlsfFile(std::span<const std::uint8_t> data);
+
+struct IlsfAdpcmDecoderState
+{
+    std::uint16_t channel_count = 0;
+    std::array<std::int32_t, 2> predictors{};
+    std::array<std::int32_t, 2> step_indices{};
+    bool has_pending_nibble = false;
+    std::uint8_t pending_nibble = 0;
+};
+
+// Original IGI.EXE state initializer and ADPCM decoder at VAs 0x00496420 and 0x00496280.
+[[nodiscard]] IlsfAdpcmDecoderState SoundSystem_InitializeIlsfAdpcmDecoder(std::uint16_t channel_count);
+[[nodiscard]] std::size_t SoundSystem_DecodeIlsfAdpcmFrames(
+    IlsfAdpcmDecoderState& decoder_state,
+    std::span<const std::uint8_t> encoded_bytes,
+    std::span<std::int16_t> decoded_samples,
+    std::size_t frame_count);
 
 // Original IGI.EXE sound-loader/ADPCM natives at VAs 0x00495F70, 0x00496420, and 0x00496280.
 [[nodiscard]] std::vector<std::int16_t> SoundSystem_DecodeIlsfFileToPcm16(const IlsfSoundData& sound);

@@ -1,3 +1,4 @@
+#include "igi/audio/ilsf_stream_reader.hpp"
 #include "igi/exceptions.hpp"
 #include "igi/formats/ilsf_sound.hpp"
 
@@ -9,6 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <iterator>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -16,10 +18,14 @@
 namespace
 {
 
+using igi::audio::IlsfStreamReader;
+using igi::formats::sound::IlsfAdpcmDecoderState;
 using igi::formats::sound::IlsfSoundData;
 using igi::formats::sound::IlsfStorageFormat;
 using igi::formats::sound::SoundSystem_DecodeIlsfFileToPcm16;
 using igi::formats::sound::SoundSystem_IsIlsfFile;
+using igi::formats::sound::SoundSystem_DecodeIlsfAdpcmFrames;
+using igi::formats::sound::SoundSystem_InitializeIlsfAdpcmDecoder;
 using igi::formats::sound::SoundSystem_ParseIlsfFile;
 
 void require(bool condition, const std::string& message)
@@ -146,6 +152,76 @@ void test_adpcm_decoding()
         SoundSystem_DecodeIlsfFileToPcm16(SoundSystem_ParseIlsfFile(stereo_bytes));
     require(stereo_samples == std::vector<std::int16_t>{11, -11},
             "Retail stereo ADPCM must decode interleaved channels with independent predictors");
+
+    IlsfAdpcmDecoderState streaming_state = SoundSystem_InitializeIlsfAdpcmDecoder(1);
+    std::array<std::int16_t, 1> first_mono_sample{};
+    const std::array<std::uint8_t, 1> packed_nibbles = {0x7fU};
+    const std::size_t first_bytes_consumed = SoundSystem_DecodeIlsfAdpcmFrames(
+        streaming_state, packed_nibbles, first_mono_sample, 1);
+    require(first_bytes_consumed == 1 && first_mono_sample[0] == 11 && streaming_state.has_pending_nibble,
+            "A one-frame mono ADPCM chunk must retain its low nibble as streaming state");
+
+    std::array<std::int16_t, 1> second_mono_sample{};
+    const std::size_t second_bytes_consumed = SoundSystem_DecodeIlsfAdpcmFrames(
+        streaming_state, std::span<const std::uint8_t>{}, second_mono_sample, 1);
+    require(second_bytes_consumed == 0 && second_mono_sample[0] == -19 && !streaming_state.has_pending_nibble,
+            "The next mono ADPCM chunk must consume the retained low nibble without rereading its byte");
+    require(SoundSystem_DecodeIlsfAdpcmFrames(
+                streaming_state, std::span<const std::uint8_t>{}, std::span<std::int16_t>{}, 0) == 0,
+            "A zero-frame ADPCM read must preserve decoder state without consuming bytes");
+}
+
+class NonSeekableStringBuffer : public std::stringbuf
+{
+  public:
+    explicit NonSeekableStringBuffer(std::string content)
+        : std::stringbuf(std::move(content), std::ios::in)
+    {
+    }
+
+  protected:
+    pos_type seekoff(off_type, std::ios_base::seekdir, std::ios_base::openmode) override
+    {
+        return pos_type(off_type(-1));
+    }
+
+    pos_type seekpos(pos_type, std::ios_base::openmode) override
+    {
+        return pos_type(off_type(-1));
+    }
+};
+
+void test_stream_reader_failures()
+{
+    const std::vector<std::uint8_t> stereo_bytes = make_ilsf(
+        IlsfStorageFormat::streamed_pcm, 16, 2, 22050, 1, {0x01U, 0x00U, 0x02U, 0x00U});
+    const std::string stereo_content(
+        reinterpret_cast<const char*>(stereo_bytes.data()), stereo_bytes.size());
+    std::istringstream stereo_stream(stereo_content, std::ios::binary);
+    IlsfStreamReader stereo_reader = IlsfStreamReader::Open(stereo_stream);
+    std::array<std::int16_t, 1> too_small_stereo_destination{};
+    require_audio_exception(
+        [&] { static_cast<void>(stereo_reader.ReadFrames(too_small_stereo_destination)); },
+        "A stereo reader must reject destinations that cannot hold one complete frame");
+
+    const std::vector<std::uint8_t> truncated_bytes = make_ilsf(
+        IlsfStorageFormat::streamed_pcm, 16, 1, 22050, 2, {0x01U, 0x00U});
+    const std::string truncated_content(
+        reinterpret_cast<const char*>(truncated_bytes.data()), truncated_bytes.size());
+    std::istringstream truncated_stream(truncated_content, std::ios::binary);
+    IlsfStreamReader truncated_reader = IlsfStreamReader::Open(truncated_stream);
+    std::array<std::int16_t, 2> truncated_output{};
+    require_audio_exception(
+        [&] { static_cast<void>(truncated_reader.ReadFrames(truncated_output)); },
+        "A streamed sound ending before its declared frame count must fail clearly");
+
+    NonSeekableStringBuffer non_seekable_buffer(stereo_content);
+    std::istream non_seekable_stream(&non_seekable_buffer);
+    IlsfStreamReader non_seekable_reader = IlsfStreamReader::Open(non_seekable_stream);
+    require(!non_seekable_reader.CanRestart(), "Non-seekable sound streams must disable restart");
+    require_audio_exception(
+        [&] { non_seekable_reader.Restart(); },
+        "Restarting a non-seekable sound stream must fail with AudioException");
 }
 
 void test_invalid_inputs()
@@ -208,6 +284,38 @@ void verify_retail_level_one_sounds(const std::filesystem::path& game_root)
                 "Retail Level 1 sound decoded to an unexpected sample count: " +
                     entry.path().filename().string());
 
+        const std::string stream_bytes(reinterpret_cast<const char*>(bytes.data()), bytes.size());
+        std::istringstream source_stream(stream_bytes, std::ios::binary);
+        IlsfStreamReader stream_reader = IlsfStreamReader::Open(source_stream);
+        require(stream_reader.CanRestart(), "Retail sound test input must be seekable");
+        std::vector<std::int16_t> streamed_samples;
+        std::array<std::int16_t, 509> frame_buffer{};
+        while (true)
+        {
+            const std::size_t frames_read = stream_reader.ReadFrames(frame_buffer);
+            if (frames_read == 0)
+            {
+                break;
+            }
+            const std::size_t samples_read = frames_read * sound.channel_count;
+            streamed_samples.insert(
+                streamed_samples.end(), frame_buffer.begin(), frame_buffer.begin() +
+                    static_cast<std::ptrdiff_t>(samples_read));
+        }
+        require(stream_reader.EndOfSound() && streamed_samples == decoded_samples,
+                "Chunked Level 1 decoding differs from full-buffer decoding: " +
+                    entry.path().filename().string());
+
+        stream_reader.Restart();
+        const std::size_t restarted_frame_count = stream_reader.ReadFrames(frame_buffer);
+        const std::size_t restarted_sample_count = restarted_frame_count * sound.channel_count;
+        require(stream_reader.FramesRead() == restarted_frame_count && restarted_frame_count > 0 &&
+                    std::equal(frame_buffer.begin(),
+                               frame_buffer.begin() + static_cast<std::ptrdiff_t>(restarted_sample_count),
+                               decoded_samples.begin()),
+                "Restarting a Level 1 sound did not reset its frame and ADPCM decoder state: " +
+                    entry.path().filename().string());
+
         if (entry.path().filename() == "game_music.wav")
         {
             saw_streamed_music = sound.storage_format == IlsfStorageFormat::streamed_adpcm &&
@@ -238,6 +346,7 @@ int main(int argc, char** argv)
         test_all_storage_formats();
         test_pcm_decoding();
         test_adpcm_decoding();
+        test_stream_reader_failures();
         test_invalid_inputs();
         if (argc > 1)
         {

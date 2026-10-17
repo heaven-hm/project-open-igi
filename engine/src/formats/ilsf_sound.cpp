@@ -59,62 +59,43 @@ std::uint64_t SoundSystem_GetEncodedPayloadByteCount(const IlsfSoundData& sound)
     return (interleaved_sample_count * sound.bits_per_sample) / 8U;
 }
 
-std::vector<std::int16_t> SoundSystem_DecodeIlsfAdpcm(
-    const IlsfSoundData& sound,
-    std::size_t sample_count)
+std::int16_t SoundSystem_DecodeIlsfAdpcmSample(
+    IlsfAdpcmDecoderState& decoder_state,
+    std::uint16_t channel_index,
+    std::uint8_t encoded_nibble)
 {
-    // Retail FUN_00496420 initializes one predictor and step index per channel before FUN_00496280.
-    std::array<std::int32_t, maximum_ilsf_channels> predictors{};
-    std::array<std::int32_t, maximum_ilsf_channels> step_indices{};
-    std::vector<std::int16_t> decoded_samples(sample_count);
-    std::size_t interleaved_sample_index = 0;
+    const std::int32_t previous_step_index = decoder_state.step_indices[channel_index];
+    const std::int32_t current_step_size =
+        adpcm_step_sizes[static_cast<std::size_t>(previous_step_index)];
 
-    for (std::uint32_t frame_index = 0; frame_index < sound.frame_count; ++frame_index)
+    // Retail FUN_00496280 updates the index before computing the sample, but uses the cached old step.
+    decoder_state.step_indices[channel_index] = std::clamp(
+        previous_step_index + adpcm_step_index_adjustments[encoded_nibble], 0, 88);
+
+    std::int32_t difference = current_step_size >> 3;
+    if ((encoded_nibble & 0x04U) != 0U)
     {
-        for (std::uint16_t channel_index = 0; channel_index < sound.channel_count; ++channel_index)
-        {
-            const std::size_t byte_index = interleaved_sample_index / 2U;
-            const bool take_high_nibble = interleaved_sample_index % 2U == 0U;
-            const std::uint8_t encoded_byte = sound.encoded_payload[byte_index];
-            const std::uint8_t encoded_nibble = take_high_nibble
-                ? static_cast<std::uint8_t>(encoded_byte >> 4U)
-                : static_cast<std::uint8_t>(encoded_byte & 0x0fU);
-            const std::int32_t previous_step_index = step_indices[channel_index];
-            const std::int32_t current_step_size = adpcm_step_sizes[static_cast<std::size_t>(previous_step_index)];
-
-            // Retail FUN_00496280 updates the index but computes this sample with the previous step size.
-            step_indices[channel_index] = std::clamp(
-                previous_step_index + adpcm_step_index_adjustments[encoded_nibble], 0, 88);
-
-            std::int32_t difference = current_step_size >> 3;
-            if ((encoded_nibble & 0x04U) != 0U)
-            {
-                difference += current_step_size;
-            }
-            if ((encoded_nibble & 0x02U) != 0U)
-            {
-                difference += current_step_size >> 1;
-            }
-            if ((encoded_nibble & 0x01U) != 0U)
-            {
-                difference += current_step_size >> 2;
-            }
-            if ((encoded_nibble & 0x08U) != 0U)
-            {
-                difference = -difference;
-            }
-
-            predictors[channel_index] = std::clamp(
-                predictors[channel_index] + difference,
-                static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::min()),
-                static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()));
-            decoded_samples[interleaved_sample_index] =
-                static_cast<std::int16_t>(predictors[channel_index]);
-            ++interleaved_sample_index;
-        }
+        difference += current_step_size;
+    }
+    if ((encoded_nibble & 0x02U) != 0U)
+    {
+        difference += current_step_size >> 1;
+    }
+    if ((encoded_nibble & 0x01U) != 0U)
+    {
+        difference += current_step_size >> 2;
+    }
+    if ((encoded_nibble & 0x08U) != 0U)
+    {
+        difference = -difference;
     }
 
-    return decoded_samples;
+    const std::int32_t predictor = std::clamp(
+        decoder_state.predictors[channel_index] + difference,
+        static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::min()),
+        static_cast<std::int32_t>(std::numeric_limits<std::int16_t>::max()));
+    decoder_state.predictors[channel_index] = predictor;
+    return static_cast<std::int16_t>(predictor);
 }
 
 } // namespace
@@ -136,6 +117,75 @@ std::uint64_t IlsfSoundData::DecodedSampleCount() const noexcept
     return static_cast<std::uint64_t>(frame_count) * channel_count;
 }
 
+IlsfAdpcmDecoderState SoundSystem_InitializeIlsfAdpcmDecoder(std::uint16_t channel_count)
+{
+    if (channel_count == 0 || channel_count > maximum_ilsf_channels)
+    {
+        throw logging::AudioException("ILSF ADPCM channel count must be one or two");
+    }
+
+    IlsfAdpcmDecoderState decoder_state;
+    decoder_state.channel_count = channel_count;
+    return decoder_state;
+}
+
+std::size_t SoundSystem_DecodeIlsfAdpcmFrames(
+    IlsfAdpcmDecoderState& decoder_state,
+    std::span<const std::uint8_t> encoded_bytes,
+    std::span<std::int16_t> decoded_samples,
+    std::size_t frame_count)
+{
+    if (decoder_state.channel_count == 0 || decoder_state.channel_count > maximum_ilsf_channels)
+    {
+        throw logging::AudioException("ILSF ADPCM decoder state has an invalid channel count");
+    }
+    if (frame_count > std::numeric_limits<std::size_t>::max() / decoder_state.channel_count)
+    {
+        throw logging::AudioException("ILSF ADPCM frame count exceeds the addressable sample range");
+    }
+
+    const std::size_t sample_count = frame_count * decoder_state.channel_count;
+    if (decoded_samples.size() < sample_count)
+    {
+        throw logging::AudioException("ILSF ADPCM destination cannot hold the requested frames");
+    }
+    if (sample_count == 0)
+    {
+        return 0;
+    }
+
+    const std::size_t encoded_nibble_count = sample_count - (decoder_state.has_pending_nibble ? 1U : 0U);
+    const std::size_t required_encoded_byte_count = (encoded_nibble_count + 1U) / 2U;
+    if (encoded_bytes.size() < required_encoded_byte_count)
+    {
+        throw logging::AudioException("ILSF ADPCM source cannot hold the requested frames");
+    }
+
+    std::size_t encoded_byte_index = 0;
+    for (std::size_t sample_index = 0; sample_index < sample_count; ++sample_index)
+    {
+        std::uint8_t encoded_nibble = 0;
+        if (decoder_state.has_pending_nibble)
+        {
+            encoded_nibble = decoder_state.pending_nibble;
+            decoder_state.has_pending_nibble = false;
+        }
+        else
+        {
+            const std::uint8_t encoded_byte = encoded_bytes[encoded_byte_index++];
+            encoded_nibble = static_cast<std::uint8_t>(encoded_byte >> 4U);
+            decoder_state.pending_nibble = static_cast<std::uint8_t>(encoded_byte & 0x0fU);
+            decoder_state.has_pending_nibble = true;
+        }
+
+        const std::uint16_t channel_index = static_cast<std::uint16_t>(sample_index % decoder_state.channel_count);
+        decoded_samples[sample_index] =
+            SoundSystem_DecodeIlsfAdpcmSample(decoder_state, channel_index, encoded_nibble);
+    }
+
+    return encoded_byte_index;
+}
+
 // Original IGI.EXE sound loader native at VA 0x00495F70 recognizes the ILSF file signature.
 bool SoundSystem_IsIlsfFile(std::span<const std::uint8_t> data) noexcept
 {
@@ -143,8 +193,8 @@ bool SoundSystem_IsIlsfFile(std::span<const std::uint8_t> data) noexcept
            data[0] == 'I' && data[1] == 'L' && data[2] == 'S' && data[3] == 'F';
 }
 
-// Original IGI.EXE sound loader native at VA 0x00495F70 validates and dispatches ILSF formats.
-IlsfSoundData SoundSystem_ParseIlsfFile(std::span<const std::uint8_t> data)
+// Original IGI.EXE sound loader native at VA 0x00495F70 validates the 20-byte ILSF header.
+IlsfSoundData SoundSystem_ParseIlsfHeader(std::span<const std::uint8_t> data)
 {
     if (data.size() < ilsf_header_size)
     {
@@ -191,6 +241,13 @@ IlsfSoundData SoundSystem_ParseIlsfFile(std::span<const std::uint8_t> data)
         throw logging::AudioException("ILSF ADPCM data must declare 16-bit decoded samples");
     }
 
+    return sound;
+}
+
+// Original IGI.EXE sound loader native at VA 0x00495F70 validates and dispatches ILSF payload data.
+IlsfSoundData SoundSystem_ParseIlsfFile(std::span<const std::uint8_t> data)
+{
+    IlsfSoundData sound = SoundSystem_ParseIlsfHeader(data);
     const std::uint64_t encoded_payload_byte_count = SoundSystem_GetEncodedPayloadByteCount(sound);
     const std::uint64_t available_payload_byte_count = data.size() - ilsf_header_size;
     if (encoded_payload_byte_count > available_payload_byte_count)
@@ -219,6 +276,7 @@ std::vector<std::int16_t> SoundSystem_DecodeIlsfFileToPcm16(const IlsfSoundData&
     }
 
     const std::size_t sample_count = static_cast<std::size_t>(sample_count_as_u64);
+    std::vector<std::int16_t> decoded_samples(sample_count);
     if (sound.IsAdpcm())
     {
         if (sound.bits_per_sample != ilsf_adpcm_bits_per_sample ||
@@ -226,11 +284,17 @@ std::vector<std::int16_t> SoundSystem_DecodeIlsfFileToPcm16(const IlsfSoundData&
         {
             throw logging::AudioException("ILSF ADPCM metadata is invalid for the retail decoder");
         }
-        if (SoundSystem_GetEncodedPayloadByteCount(sound) > sound.encoded_payload.size())
+        IlsfAdpcmDecoderState decoder_state = SoundSystem_InitializeIlsfAdpcmDecoder(sound.channel_count);
+        const std::size_t bytes_consumed = SoundSystem_DecodeIlsfAdpcmFrames(
+            decoder_state,
+            sound.encoded_payload,
+            decoded_samples,
+            sound.frame_count);
+        if (bytes_consumed != SoundSystem_GetEncodedPayloadByteCount(sound))
         {
-            throw logging::AudioException("ILSF ADPCM payload is truncated");
+            throw logging::AudioException("ILSF ADPCM payload length does not match its declared frames");
         }
-        return SoundSystem_DecodeIlsfAdpcm(sound, sample_count);
+        return decoded_samples;
     }
 
     if (sound.channel_count == 0 || sound.channel_count > maximum_ilsf_channels ||
@@ -243,7 +307,6 @@ std::vector<std::int16_t> SoundSystem_DecodeIlsfFileToPcm16(const IlsfSoundData&
         throw logging::AudioException("ILSF PCM payload is truncated");
     }
 
-    std::vector<std::int16_t> decoded_samples(sample_count);
     if (sound.bits_per_sample == 8)
     {
         for (std::size_t sample_index = 0; sample_index < sample_count; ++sample_index)

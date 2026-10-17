@@ -38,6 +38,7 @@ target_link_libraries(igi_formats PUBLIC igi_gameplay)
 
 add_library(igi_audio STATIC
     src/audio/sound_volume_curve.cpp
+    src/audio/ilsf_stream_reader.cpp
 )
 target_include_directories(igi_audio PUBLIC include)
 target_compile_features(igi_audio PUBLIC cxx_std_20)
@@ -75,6 +76,7 @@ add_library(igi_runtime STATIC
     src/scene_renderer.cpp
 )
 target_compile_features(igi_runtime PUBLIC cxx_std_20)
+target_link_libraries(igi_audio PUBLIC igi_formats)
 target_link_libraries(igi_runtime PUBLIC igi_assets igi_audio igi_gameplay)
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang|GNU")
     target_compile_options(igi_assets PRIVATE -Wall -Wextra -Wpedantic -Werror)
@@ -199,7 +201,7 @@ if(BUILD_TESTING)
     add_test(NAME retail_sound_volume_curve COMMAND sound_volume_curve_test)
 
     add_executable(ilsf_sound_test tests/audio/ilsf_sound_test.cpp)
-    target_link_libraries(ilsf_sound_test PRIVATE igi_formats)
+    target_link_libraries(ilsf_sound_test PRIVATE igi_audio)
     add_test(NAME retail_ilsf_sound_parser COMMAND ilsf_sound_test)
     if(IGI_GAME_PATH)
         add_test(NAME retail_level_one_ilsf_samples COMMAND ilsf_sound_test "${IGI_GAME_PATH}")
