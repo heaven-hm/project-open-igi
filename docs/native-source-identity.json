@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "image_base": "0x00400000",
+  "meaning": "Digests identify original source instruction bytes; they do not establish port machine-code equality or behavioral parity.",
+  "natives": [
+    {
+      "catalog_name": "Render_DrawBoneMesh_2",
+      "address": "0x004D0CF0",
+      "byte_count": 31,
+      "file_offset": 855280,
+      "source_bytes_sha256": "421dcbca4791edc180aae1c54d87453f8bd1d06c26c64c0ce964b67854d16f4d",
+      "rea_evidence_id": "ev_e8a6d947c3dfb54d48f4d68b285b8650bdf8e407b2a517b012e08a16efa792fd",
+      "implementation": "leaf accessor, integration pending",
+      "runtime_retail_comparison": "pending",
+      "cpp_name": "Model_GetAttachment",
+      "instruction_differential": "16384 valid pointer cases and 65536 signed count cases passed collectively; live factory integration pending"
+    },
+    {
+      "catalog_name": "Render_DrawSplineMesh_2",
+      "address": "0x004D0D10",
+      "byte_count": 15,
+      "file_offset": 855312,
+      "source_bytes_sha256": "cc83b59bbdbde234cbe0a037bb460068c19ab7c3687bc36683e5fadc14c21db4",
+      "rea_evidence_id": "ev_e22c9c9465b14b72a7b37179adbb24d23e80de9f0ad4a44fdbb689de3a634460",
+      "implementation": "leaf accessor, integration pending",
+      "runtime_retail_comparison": "pending",
+      "cpp_name": "Model_GetAttachmentCount",
+      "instruction_differential": "16384 valid pointer cases and 65536 signed count cases passed collectively; live factory integration pending"
+    },
+    {
+      "catalog_name": "DynObj_Createterrainmateria",
+      "address": "0x004C6240",
+      "byte_count": 1069,
+      "file_offset": 811584,
+      "source_bytes_sha256": "de14942d5f786addfb1efeee7401d67bcf01630ef8a78e2655805b03fb902532",
+      "rea_evidence_id": "ev_84a279844258af41f55848d87719fc5845164a3660c0620c2dc309565b7707f3",
+      "implementation": "research only, not ported",
+      "runtime_retail_comparison": "pending"
+    }
+  ]
+}
