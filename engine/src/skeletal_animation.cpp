@@ -204,7 +204,10 @@ Vector3 sample_animation_root(const SkeletalAnimationSet& animations, int animat
         return {};
     }
     const auto& clip = found->second;
-    const float local_time = clip.duration > 0 ? std::fmod(time, clip.duration) : 0;
+    const bool cyclic = (clip.flags & 0x80000000u) != 0;
+    const float local_time = clip.duration > 0
+                                 ? (cyclic ? std::fmod(time, clip.duration) : std::min(time, clip.duration))
+                                 : 0;
     return root_translation(clip.root_motion, local_time) * (1.0f / 4096.0f);
 }
 
@@ -222,9 +225,10 @@ sample_bone_pose(const SkeletalAnimationSet& animations, int animation_identifie
                                  std::to_string(animation_identifier));
     }
     const auto& clip = found->second;
+    const bool cyclic = (clip.flags & 0x80000000u) != 0;
     if (clip.duration > 0)
     {
-        time = std::fmod(time, clip.duration);
+        time = cyclic ? std::fmod(time, clip.duration) : std::min(time, clip.duration);
     }
     std::vector<glm::mat4> pose(animations.parents.size(), glm::mat4(1));
     std::vector<int> states(pose.size());
