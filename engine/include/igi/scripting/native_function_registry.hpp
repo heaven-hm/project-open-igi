@@ -9,6 +9,10 @@
 
 namespace igi {
 
+// Preserve native names registered from retail QVM scripts exactly: they are part of the script ABI.
+// C++ implementations porting retail functions use <Subsystem>_<Action> names such as Game_SetThing
+// or Level_LoadParams, and document the IGI.EXE symbol, address, and verification status beside the port.
+
 enum class QvmValueType {
     Null = 0,
     Int = 1,

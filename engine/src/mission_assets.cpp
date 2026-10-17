@@ -793,6 +793,27 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
     decode_collision(geometry.ecfcFaces, geometry.xtvcVerts, geometry.tamcRecords, mesh->collision);
     decode_collision(
         geometry.ecfcFaces1, geometry.xtvcVerts1, geometry.tamcRecords1, mesh->movement_collision);
+    if (ladder_models_.contains(normalized) && geometry.xtvmVerts.size() >= 4)
+    {
+        const auto read_magic_vertex = [&](std::size_t index)
+        {
+            const auto& source = geometry.xtvmVerts[index];
+            const gameplay::Vector3 position{source.px / 4096.0f,
+                                             source.py / 4096.0f,
+                                             source.pz / 4096.0f};
+            if (!gameplay::finite(position))
+            {
+                throw std::runtime_error("Ladder MEF contains a non-finite magic vertex: " + normalized);
+            }
+            return position;
+        };
+
+        gameplay::LadderAnchor anchor;
+        anchor.activation_top = read_magic_vertex(1);
+        anchor.foot = read_magic_vertex(2);
+        anchor.head = read_magic_vertex(3);
+        mesh->ladder_anchors.push_back(anchor);
+    }
     for (const auto& face : geometry.ecfcFaces)
     {
         const std::array<std::uint16_t, 3> vertex_indices{face.a, face.b, face.c};
@@ -914,6 +935,32 @@ std::shared_ptr<gameplay::SceneMesh> MissionAssets::model(const std::string& nam
                 }
                 return result;
             };
+            const std::array<float, 9> attachment_orientation{
+                attachment.r00, attachment.r01, attachment.r02,
+                attachment.r03, attachment.r04, attachment.r05,
+                attachment.r06, attachment.r07, attachment.r08};
+            for (const auto& child_anchor : child->ladder_anchors)
+            {
+                gameplay::LadderAnchor placed_anchor;
+                placed_anchor.origin = transform({});
+                placed_anchor.activation_top = transform(child_anchor.activation_top);
+                placed_anchor.foot = transform(child_anchor.foot);
+                placed_anchor.head = transform(child_anchor.head);
+                for (std::size_t row = 0; row < 3; ++row)
+                {
+                    for (std::size_t column = 0; column < 3; ++column)
+                    {
+                        float value = 0.0f;
+                        for (std::size_t inner = 0; inner < 3; ++inner)
+                        {
+                            value += attachment_orientation[inner * 3 + row] *
+                                     child_anchor.task_orientation[inner * 3 + column];
+                        }
+                        placed_anchor.task_orientation[row * 3 + column] = value;
+                    }
+                }
+                mesh->ladder_anchors.push_back(std::move(placed_anchor));
+            }
             const std::size_t child_triangle_start = mesh->triangles.size();
             if (resolved_attachment.visible)
             {

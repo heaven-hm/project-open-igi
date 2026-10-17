@@ -15,6 +15,7 @@
 #include <functional>
 #include <iomanip>
 #include <limits>
+#include <numbers>
 #include <sstream>
 #include <stdexcept>
 
@@ -138,6 +139,33 @@ Vector3 transform_retail_orientation(Vector3 vertex, Vector3 rotation) noexcept
     return {vertex.x * matrix_11 + vertex.y * matrix_21 + vertex.z * matrix_31,
             vertex.x * matrix_12 + vertex.y * matrix_22 + vertex.z * matrix_32,
             vertex.x * matrix_13 + vertex.y * matrix_23 + vertex.z * matrix_33};
+}
+
+std::array<float, 9> retail_orientation_matrix(Vector3 rotation) noexcept
+{
+    const Vector3 first_row = transform_retail_orientation({1.0f, 0.0f, 0.0f}, rotation);
+    const Vector3 second_row = transform_retail_orientation({0.0f, 1.0f, 0.0f}, rotation);
+    const Vector3 third_row = transform_retail_orientation({0.0f, 0.0f, 1.0f}, rotation);
+    return {first_row.x, first_row.y, first_row.z,
+            second_row.x, second_row.y, second_row.z,
+            third_row.x, third_row.y, third_row.z};
+}
+
+std::array<float, 9> multiply_orientations(const std::array<float, 9>& first,
+                                          const std::array<float, 9>& second) noexcept
+{
+    std::array<float, 9> result{};
+    for (std::size_t row = 0; row < 3; ++row)
+    {
+        for (std::size_t column = 0; column < 3; ++column)
+        {
+            for (std::size_t inner = 0; inner < 3; ++inner)
+            {
+                result[row * 3 + column] += first[row * 3 + inner] * second[inner * 3 + column];
+            }
+        }
+    }
+    return result;
 }
 
 struct EmittedGeometryTransform final
@@ -490,6 +518,49 @@ void append_model(MissionScene& scene,
 {
     scene.attached_model_count += mesh.attachment_count;
     scene.maximum_attachment_depth = std::max(scene.maximum_attachment_depth, mesh.maximum_attachment_depth);
+    for (const LadderAnchor& anchor : mesh.ladder_anchors)
+    {
+        const Vector3 ladder_origin = rotate_euler(anchor.origin, rotation) + position;
+        const Vector3 activation_top = rotate_euler(anchor.activation_top, rotation) + position;
+        const Vector3 foot = rotate_euler(anchor.foot, rotation) + position;
+        const Vector3 head = rotate_euler(anchor.head, rotation) + position;
+        const auto ladder_orientation =
+            multiply_orientations(retail_orientation_matrix(rotation), anchor.task_orientation);
+        SceneLadder ladder;
+        ladder.origin = ladder_origin;
+        ladder.activation_top = activation_top;
+        ladder.bottom = foot;
+        ladder.top = head;
+        ladder.orientation_column_one =
+            {ladder_orientation[0], ladder_orientation[3], ladder_orientation[6]};
+        ladder.orientation_column_two =
+            {ladder_orientation[1], ladder_orientation[4], ladder_orientation[7]};
+        ladder.orientation_column_three =
+            {ladder_orientation[2], ladder_orientation[5], ladder_orientation[8]};
+        ladder.bottom_mount = foot + ladder.orientation_column_two * (1515.52f / 4096.0f) +
+                             ladder.orientation_column_three * (3915.776f / 4096.0f);
+        ladder.top_mount = head + ladder.orientation_column_three * (3481.6f / 4096.0f) -
+                           ladder.orientation_column_two * (1638.4f / 4096.0f);
+        ladder.facing_yaw = std::atan2(ladder_orientation[3], ladder_orientation[0]) +
+                            std::numbers::pi_v<float>;
+        ladder.player_yaw = -ladder.facing_yaw;
+        ladder.normal = ladder.orientation_column_two;
+        ladder.height = std::abs(head.z - foot.z);
+        if (!finite(ladder.origin) || !finite(ladder.activation_top) || !finite(ladder.bottom) ||
+            !finite(ladder.top) || !finite(ladder.bottom_mount) || !finite(ladder.top_mount) ||
+            ladder.height < 0.01f)
+        {
+            throw std::runtime_error("Retail ladder magic vertices produced invalid world placement");
+        }
+        scene.ladders.push_back(ladder);
+        diagnostics::log(diagnostics::Severity::information,
+                         "ladder-placement",
+                         "IGI.EXE TASKTYPE_LADDER: origin=" + format_vector(ladder.origin) +
+                             ", activation_top=" + format_vector(ladder.activation_top) +
+                             ", foot=" + format_vector(ladder.bottom) + ", head=" + format_vector(ladder.top) +
+                             ", bottom_mount=" + format_vector(ladder.bottom_mount) +
+                             ", top_mount=" + format_vector(ladder.top_mount));
+    }
     for (auto triangle : mesh.triangles)
     {
         for (auto& vertex : triangle.vertices)
@@ -1126,33 +1197,6 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
                 position_matches = emitted_geometry_verified && position_error <= verification_tolerance;
                 orientation_matches =
                     emitted_geometry_verified && orientation_error <= verification_tolerance;
-                if (candidate->model_id == "435_02_1" || candidate->model_id == "344_02_1" ||
-                    candidate->model_id == "417_02_1" || candidate->model_id == "202_01_1" ||
-                    candidate->model_id == "203_01_1" ||
-                    candidate->model_id.find("ladder") != std::string::npos)
-                {
-                    float min_z = 1e9f, max_z = -1e9f;
-                    for (const auto& tri : mesh->triangles)
-                    {
-                        for (const auto& v : tri.vertices)
-                        {
-                            min_z = std::min(min_z, v.position.z);
-                            max_z = std::max(max_z, v.position.z);
-                        }
-                    }
-                    if (max_z > min_z + 1.5f)
-                    {
-                        SceneLadder ladder;
-                        ladder.bottom = candidate->position + Vector3{0.0f, 0.0f, min_z + 0.35f};
-                        ladder.top = candidate->position + Vector3{0.0f, 0.0f, max_z - 0.2f};
-                        ladder.normal = rotate_euler(Vector3{0.0f, 1.0f, 0.0f}, candidate->rotation);
-                        ladder.bottom_mount = ladder.bottom + ladder.normal * 0.85f;
-                        ladder.top_mount = ladder.top - ladder.normal * 0.65f + Vector3{0.0f, 0.0f, 0.5f};
-                        ladder.facing_yaw = candidate->rotation.z;
-                        ladder.height = ladder.top.z - ladder.bottom.z;
-                        scene.ladders.push_back(ladder);
-                    }
-                }
             }
             if (!position_matches || !orientation_matches)
             {
@@ -1233,20 +1277,6 @@ MissionScene load_mission(const std::filesystem::path& game_directory,
             ++mismatch_count;
             diagnostics::log(diagnostics::Severity::warning, "scene", exception.what());
         }
-    }
-
-    // Default ladder fallback for Level 1 guard/water tower
-    if (scene.ladders.empty() && mission_number == 1)
-    {
-        SceneLadder tower_ladder;
-        tower_ladder.bottom = Vector3{-35.0f, 62.0f, 0.5f};
-        tower_ladder.top = Vector3{-35.0f, 62.0f, 12.0f};
-        tower_ladder.normal = Vector3{0.0f, 1.0f, 0.0f};
-        tower_ladder.bottom_mount = tower_ladder.bottom + Vector3{0.0f, 0.8f, 0.0f};
-        tower_ladder.top_mount = tower_ladder.top - Vector3{0.0f, 0.6f, -0.5f};
-        tower_ladder.height = 11.5f;
-        tower_ladder.facing_yaw = 3.14159f;
-        scene.ladders.push_back(tower_ladder);
     }
 
     const assets::QvmTaskTree task_tree(initializer.calls());

@@ -4,6 +4,8 @@
 
 #include <algorithm>
 #include <array>
+#include <cmath>
+#include <limits>
 #include <numbers>
 #include <stdexcept>
 
@@ -29,6 +31,56 @@ WorldPosition3 engine_position(Vector3 position)
     return {static_cast<double>(position.x) * units_per_metre,
             static_cast<double>(position.y) * units_per_metre,
             static_cast<double>(position.z) * units_per_metre};
+}
+
+// Retail IGI.EXE native Ladder_Update at VA 0x004404C0 (static CFG score: 1.000).
+// This named C++ predicate is a port candidate; runtime parity is not yet verified.
+bool HumanPlayer_CanActivateLadder(const SceneLadder& ladder,
+                                   Vector3 player_position_metres,
+                                   float player_yaw,
+                                   bool& activate_from_top,
+                                   float& angular_error) noexcept
+{
+    activate_from_top = false;
+    angular_error = std::numeric_limits<float>::max();
+    const Vector3 player_position_units = player_position_metres * units_per_metre;
+    const Vector3 ladder_origin_units = ladder.origin * units_per_metre;
+    const Vector3 activation_top_units = ladder.activation_top * units_per_metre;
+    const Vector3 from_origin = player_position_units - ladder_origin_units;
+    const float across = dot(from_origin, ladder.orientation_column_one);
+    const float normal_distance = dot(from_origin, ladder.orientation_column_two);
+    const float forward_x = std::sin(player_yaw);
+    const float forward_y = std::cos(player_yaw);
+    const float side_sign = normal_distance > 0.0f ? -1.0f : 1.0f;
+    const Vector3 target_direction = ladder.orientation_column_two * side_sign;
+    const float target_length = std::sqrt(target_direction.x * target_direction.x +
+                                          target_direction.y * target_direction.y);
+    const float facing_dot = target_length > 0.0f
+        ? (forward_x * target_direction.x + forward_y * target_direction.y) / target_length
+        : -1.0f;
+    const bool bottom_candidate = std::abs(normal_distance) < 8192.0f &&
+                                  across > -2867.2f && across < 2867.2f &&
+                                  facing_dot > 0.70710678f &&
+                                  player_position_units.z > ladder_origin_units.z &&
+                                  player_position_units.z < activation_top_units.z;
+    if (bottom_candidate)
+    {
+        angular_error = std::acos(std::clamp(facing_dot, -1.0f, 1.0f));
+    }
+
+    const Vector3 from_activation_top = player_position_units - activation_top_units;
+    const Vector3 to_activation_top = activation_top_units - player_position_units;
+    const float top_distance = length(to_activation_top);
+    const float top_forward = forward_x * to_activation_top.x + forward_y * to_activation_top.y;
+    const bool top_candidate = dot(from_activation_top, ladder.orientation_column_two) < 0.0f &&
+                               top_distance < 8192.0f && top_forward > 0.0f;
+    if (top_candidate)
+    {
+        activate_from_top = true;
+        angular_error = std::acos(std::clamp(top_forward / top_distance, -1.0f, 1.0f));
+        return true;
+    }
+    return bottom_candidate;
 }
 
 Vector3 sample_translation(const RootMotionClip& clip, float time)
@@ -344,15 +396,12 @@ void GameSimulation::tick(const PlayerInput& input)
             prompt_message_.clear();
             for (const auto& ladder : scene_.ladders)
             {
-                const auto p = player_position();
-                const float dx = p.x - ladder.bottom.x;
-                const float dy = p.y - ladder.bottom.y;
-                const float h_dist = std::sqrt(dx * dx + dy * dy);
-                const float d_bottom = length(p - ladder.bottom_mount);
-                const float d_top = length(p - ladder.top_mount);
-                if (d_bottom < 2.5f || d_top < 2.5f ||
-                    (h_dist < 2.2f && p.z >= ladder.bottom.z - 0.5f && p.z <= ladder.top.z + 1.2f))
+                bool activate_from_top = false;
+                float angular_error = std::numeric_limits<float>::max();
+                if (HumanPlayer_CanActivateLadder(
+                        ladder, player_position(), heading_, activate_from_top, angular_error))
                 {
+                    static_cast<void>(activate_from_top);
                     prompt_message_ = on_ladder_ ? "CLIMBING LADDER: W/S TO MOVE, JUMP/Q TO DISMOUNT"
                                                  : "PRESS W OR Q TO CLIMB LADDER";
                     break;
@@ -428,26 +477,35 @@ void GameSimulation::advance_player(const PlayerInput& input)
     if (!on_ladder_)
     {
         const auto p = player_position();
+        float smallest_angular_error = std::numeric_limits<float>::max();
         for (std::size_t idx = 0; idx < scene_.ladders.size(); ++idx)
         {
             const auto& ladder = scene_.ladders[idx];
-            const float dx = p.x - ladder.bottom.x;
-            const float dy = p.y - ladder.bottom.y;
-            const float h_dist = std::sqrt(dx * dx + dy * dy);
-            const float d_bottom = length(p - ladder.bottom_mount);
-            const float d_top = length(p - ladder.top_mount);
-            const bool near_mount = (d_bottom < 2.5f || d_top < 2.5f);
-            const bool near_rung = (h_dist < 2.2f && p.z >= ladder.bottom.z - 0.5f && p.z <= ladder.top.z + 1.2f);
-            if ((near_mount || near_rung) && (input.forward != 0 || input.interacting))
+            bool activate_from_top = false;
+            float angular_error = std::numeric_limits<float>::max();
+            if ((input.forward != 0 || input.interacting) &&
+                HumanPlayer_CanActivateLadder(ladder, p, heading_, activate_from_top, angular_error) &&
+                angular_error < smallest_angular_error)
             {
-                on_ladder_ = true;
-                just_mounted = true;
                 active_ladder_index_ = idx;
-                player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
-                player_.movement_velocity = {};
-                diagnostics::log(diagnostics::Severity::debug, "player", "Mounted ladder " + std::to_string(idx));
-                break;
+                smallest_angular_error = angular_error;
+                just_mounted = true;
+                // Retail IGI.EXE native Ladder_Mount at VA 0x004113E0 (static CFG score: 0.9885).
+                // This C++ mount path is a port candidate; runtime parity is not yet verified.
+                const Vector3 mount_position = activate_from_top ? ladder.top_mount : ladder.bottom_mount;
+                player_.world_position = engine_position(mount_position);
+                heading_ = std::remainder(ladder.player_yaw, 2.0f * std::numbers::pi_v<float>);
+                diagnostics::log(diagnostics::Severity::information,
+                                 "player",
+                                 "IGI.EXE Ladder_Mount native reference (VA 0x004113E0): ladder=" +
+                                     std::to_string(idx) + (activate_from_top ? ", approach=top" : ", approach=foot"));
             }
+        }
+        on_ladder_ = just_mounted;
+        if (on_ladder_)
+        {
+            player_.movement_flags &= ~HumanMovementIntegrator::grounded_flag;
+            player_.movement_velocity = {};
         }
     }
 

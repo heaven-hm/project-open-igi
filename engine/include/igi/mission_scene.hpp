@@ -25,12 +25,18 @@ enum class TerrainDetail
 
 struct SceneLadder final
 {
+    Vector3 origin{};
+    Vector3 activation_top{};
     Vector3 bottom{};
     Vector3 top{};
     Vector3 bottom_mount{};
     Vector3 top_mount{};
+    Vector3 orientation_column_one{1.0f, 0.0f, 0.0f};
+    Vector3 orientation_column_two{0.0f, 1.0f, 0.0f};
+    Vector3 orientation_column_three{0.0f, 0.0f, 1.0f};
     Vector3 normal{0.0f, 1.0f, 0.0f};
     float facing_yaw{};
+    float player_yaw{};
     float height{};
 };
 
@@ -123,6 +129,17 @@ struct CollisionTriangle final
     bool non_solid_portal{};
 };
 
+struct LadderAnchor final
+{
+    Vector3 origin{};
+    Vector3 activation_top{};
+    Vector3 foot{};
+    Vector3 head{};
+    std::array<float, 9> task_orientation{1.0f, 0.0f, 0.0f,
+                                          0.0f, 1.0f, 0.0f,
+                                          0.0f, 0.0f, 1.0f};
+};
+
 struct SceneMesh final
 {
     struct ModelPart final
@@ -138,6 +155,7 @@ struct SceneMesh final
     std::vector<SceneSkinTriangle> skinned_collision;
     std::vector<CollisionTriangle> collision;
     std::vector<Vector3> bone_rest_positions;
+    std::vector<LadderAnchor> ladder_anchors;
     std::size_t attachment_count{};
     std::size_t maximum_attachment_depth{};
     std::uint32_t lightmap_model_index_count{};
