@@ -110,9 +110,9 @@ void test_streamed_mono_adpcm_preserves_native_replayed_byte_behavior()
     SoundIlsfStreamReader reader(input_stream);
 
     SoundAdpcmState contiguous_state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(contiguous_state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(contiguous_state, 1);
     std::array<std::int16_t, 9U> contiguous_samples{};
-    const auto decode_result = igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+    const auto decode_result = igi::retail::audio::Sound_DecodeAdpcmFrames(
         encoded_payload,
         contiguous_samples,
         9U,

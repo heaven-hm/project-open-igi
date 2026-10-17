@@ -1,8 +1,8 @@
-# Project Open I.G.I.
+# Project Open IGI.
 
-Project Open I.G.I. is a native integration of the original Project I.G.I. game engine. Engine routines are ported from reverse-engineering evidence taken directly from the retail igi.exe, with retail names, virtual addresses, calling conventions, and evidence references retained where known.
+Project Open IGI is a native implementation of the original game engine. Engine routines are ported from reverse-engineering evidence taken directly from the retail `igi.exe`, with `retail names`, `virtual addresses`, `calling conventions`, and `evidence references` retained where known.
 
-This repository is the game-engine implementation. It is not an editor, converter, helper library, or gameplay rewrite based on another project. The retail executable is the behavior authority. C# open-igi may identify candidate implementations, but REA/static/runtime evidence from retail igi.exe must verify behavior used here. Unknown behavior remains explicitly unresolved rather than guessed.
+This repository is the game-engine implementation. It is not an editor, converter, helper library, or gameplay rewrite based on another project. The retail executable is the behavior authority. open-igi may identify candidate implementations, but REA/static/runtime evidence from retail igi.exe must verify behavior used here. Unknown behavior remains explicitly unresolved rather than guessed.
 
 ## Current status
 
@@ -24,12 +24,12 @@ The camera and lighting are diagnostic; terrain, skinned actors, recursive attac
 incomplete. Some source model references remain unresolved. See the [test results, all 14 captures and native
 address/name table](docs/TASK1_MODEL_LOADING.md) for coverage and limits.
 
-| Level 1 | Level 3 |
-|---|---|
+| Level 1                                                              | Level 3                                                              |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------- |
 | ![Level 1 textured models](docs/screenshots/task1/level1-models.png) | ![Level 3 textured models](docs/screenshots/task1/level3-models.png) |
 
-| Level 11 | Level 14 |
-|---|---|
+| Level 11                                                               | Level 14                                                               |
+| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
 | ![Level 11 textured models](docs/screenshots/task1/level11-models.png) | ![Level 14 textured models](docs/screenshots/task1/level14-models.png) |
 
 Primary native anchors: `Qvm_Load` (`0x004B80B0`), `Resource_Load` (`0x004B5F00`),
@@ -51,15 +51,15 @@ Requirements: CMake 3.20+, a C++20 compiler, and the Windows SDK or MinGW toolch
 
 ## Reverse-engineering workflow
 
-All behavioral implementation claims must trace back to igi.exe. Static analysis identifies candidate routines and data layouts; runtime tracing and memory inspection confirm behavior where possible; focused tests record verified conditions and known limits. A catalog entry or clean decompilation alone is not runtime proof.
+All behavioral implementation claims must trace back to `igi.exe`. `Static analysis`, `dynamic analysis` and `memory inspection` confirm behavior where possible; focused tests record verified conditions and known limits. A catalog entry or clean decompilation alone is not runtime proof.
 
 Tools used for analysis and verification:
 
-- Ghidra — disassembly, decompilation, and data-structure analysis.
-- Binary Ninja — independent disassembly, decompilation, and control-flow analysis.
-- radare2 — independent disassembly, control-flow, and binary inspection.
-- Frida — runtime hooks, call tracing, and memory inspection.
-- RE-Agent — orchestration of reverse-engineering analysis against the retail executable.
+- `Ghidra` — disassembly, decompilation, and data-structure analysis.
+- `Binary Ninja` — independent disassembly, decompilation, and control-flow analysis.
+- `radare2` — independent disassembly, control-flow, and binary inspection.
+- `Frida` — runtime hooks, call tracing, and memory inspection.
+- `RE-Agent` — orchestration of reverse-engineering analysis against the retail executable.
 
 Per-routine evidence and implementation limits stay attached to native source and its analysis records. Tool output is evidence; it is not a substitute for the native engine implementation.
 

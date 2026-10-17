@@ -9,10 +9,13 @@ add_library(igi_retail_engine STATIC
     src/retail/audio/sound_adpcm_decoder.cpp
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
+    src/retail/core/app_context.cpp
+    src/retail/core/debug_command_line.cpp
     src/retail/diagnostics/log_record.cpp
     src/retail/model/mef_render_data.cpp
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
+    src/retail/render/trans_context.cpp
     src/retail/resource/resource_archive.cpp
     src/retail/resource/resource_cache.cpp
     src/retail/script/qvm_compiled_program.cpp
@@ -93,6 +96,22 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_log_record_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_log_record_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_log_record_tests COMMAND igi_retail_log_record_tests)
+
+    add_executable(igi_retail_debug_command_line_tests
+        tests/core/debug_command_line_test.cpp
+    )
+
+    target_link_libraries(igi_retail_debug_command_line_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_debug_command_line_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_debug_command_line_tests COMMAND igi_retail_debug_command_line_tests)
+
+    add_executable(igi_retail_trans_context_tests
+        tests/render/trans_context_test.cpp
+    )
+
+    target_link_libraries(igi_retail_trans_context_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_trans_context_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_trans_context_tests COMMAND igi_retail_trans_context_tests)
 
     add_executable(igi_retail_mef_tests
         tests/model/mef_model_loader_test.cpp

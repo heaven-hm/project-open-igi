@@ -9,5 +9,5 @@ target_link_libraries(open-igi PRIVATE igi_retail_engine ddraw dxguid gdi32 shel
 set_target_properties(open-igi PROPERTIES OUTPUT_NAME "open-igi")
 
 if(MINGW)
-    target_link_options(open-igi PRIVATE -municode)
+    target_link_options(open-igi PRIVATE -municode -static -static-libgcc -static-libstdc++)
 endif()

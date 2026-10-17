@@ -8,6 +8,7 @@
 #include "igi/retail/resource/resource_cache.hpp"
 #include "igi/retail/script/qvm_loader.hpp"
 #include "igi/retail/script/qvm_object_calls.hpp"
+#include "igi/retail/render/trans_context.hpp"
 #include "igi/retail/texture/model_texture_pixels.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include <ddraw.h>
@@ -174,6 +175,88 @@ struct Scene
     bool first_frame = true;
     static constexpr float world_scale = 1.0F / 4096.0F;
 
+    // Host free camera (enabled by the "devmode" command-line argument).
+    bool windowed = true;
+    bool exclusive = false;
+    bool dev_mode = false;
+    float dev_yaw = 0.0F;    // radians, around Z
+    float dev_pitch = 0.0F;  // radians, up/down
+    float dev_speed = 400.0F;
+    bool dev_look_initialised = false;
+    POINT dev_last_mouse{};
+
+    void dev_camera_reset()
+    {
+        // World is X east, Y north, Z up. Yaw is measured from +Y towards +X, so
+        // forward = (sin yaw, cos yaw, 0) and yaw = atan2(forward.x, forward.y).
+        const Vector3 forward = normalize(subtract(camera_target, camera_position));
+        dev_yaw = std::atan2(forward.x, forward.y);
+        dev_pitch = std::asin(std::clamp(forward.z, -1.0F, 1.0F));
+    }
+
+    void update_dev_camera(float delta_seconds)
+    {
+        const POINT cursor = [this] {
+            POINT position{};
+            GetCursorPos(&position);
+            return position;
+        }();
+
+        if (!dev_look_initialised)
+        {
+            dev_last_mouse = cursor;
+            dev_look_initialised = true;
+        }
+        const float delta_x = static_cast<float>(cursor.x - dev_last_mouse.x);
+        const float delta_y = static_cast<float>(cursor.y - dev_last_mouse.y);
+        dev_last_mouse = cursor;
+
+        constexpr float look_sensitivity = 0.0035F;
+        dev_yaw += delta_x * look_sensitivity;
+        dev_pitch = std::clamp(dev_pitch - delta_y * look_sensitivity, -1.5533F, 1.5533F);
+
+        // Must match dev_camera_reset(): yaw is measured from +Y towards +X, so
+        // forward = (sin yaw, cos yaw, 0) and right = forward x up = (cos yaw, -sin yaw, 0).
+        // The previous -cos / +sin pair made W drive backwards and turned the view the wrong way.
+        const float cosine_pitch = std::cos(dev_pitch);
+        const Vector3 forward{std::sin(dev_yaw) * cosine_pitch, std::cos(dev_yaw) * cosine_pitch,
+                              std::sin(dev_pitch)};
+        const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
+
+        Vector3 move{0, 0, 0};
+        const bool key_w = (GetAsyncKeyState('W') & 0x8000) != 0;
+        const bool key_s = (GetAsyncKeyState('S') & 0x8000) != 0;
+        const bool key_a = (GetAsyncKeyState('A') & 0x8000) != 0;
+        const bool key_d = (GetAsyncKeyState('D') & 0x8000) != 0;
+        const bool key_up = (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
+        const bool key_down = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+
+        if (key_w) { move.x += forward.x; move.y += forward.y; move.z += forward.z; }
+        if (key_s) { move.x -= forward.x; move.y -= forward.y; move.z -= forward.z; }
+        if (key_a) { move.x -= right.x; move.y -= right.y; move.z -= right.z; }
+        if (key_d) { move.x += right.x; move.y += right.y; move.z += right.z; }
+        if (key_up) { move.z += 1.0F; }
+        if (key_down) { move.z -= 1.0F; }
+
+        const float speed = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0 ? dev_speed * 4.0F : dev_speed;
+        camera_position.x += move.x * speed * delta_seconds;
+        camera_position.y += move.y * speed * delta_seconds;
+        camera_position.z += move.z * speed * delta_seconds;
+
+        // Install the new eye position through the retail transform context
+        // (Transcontext_SetActiveTransContext, VA 0x00497E70; camera position is +0x28,
+        // globals 0x00BCAB08/10/18). The renderer then reads the position back from the
+        // active context, so the retail global stays authoritative.
+        render::Transcontext_SetCameraPosition(camera_position.x, camera_position.y, camera_position.z);
+        render::Transcontext_SetActiveTransContext(render::Transcontext_GetActiveTransContext());
+        const std::array<double, 3> installed = render::Transcontext_GetCameraPosition();
+        camera_position = {static_cast<float>(installed[0]), static_cast<float>(installed[1]),
+                           static_cast<float>(installed[2])};
+
+        camera_target = {camera_position.x + forward.x, camera_position.y + forward.y,
+                         camera_position.z + forward.z};
+    }
+
     void load(const std::filesystem::path &root, unsigned int level_number)
     {
         resource::ResourceCache cache;
@@ -186,7 +269,7 @@ struct Scene
             auto package = std::make_unique<Package>();
             const auto bytes =
                 resource::Resource_Load(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::DynObj_InsertHashItem_14(bytes->bytes);
+            package->metadata = model::MtpPackage::DynObj_InsertHashItem(bytes->bytes);
             package->meshes =
                 resource::Resource_Load(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
@@ -329,50 +412,19 @@ struct Scene
                   "; unresolved_source_models=" + std::to_string(missing) +
                   "; skinned models and remaining task types not yet rendered.");
     }
-    void initialize(HWND window_handle)
+    std::uint32_t render_width = 1024U;
+    std::uint32_t render_height = 768U;
+
+    void release_render_target()
     {
-        window = window_handle;
-        check_result(DirectDrawCreateEx(nullptr, reinterpret_cast<void **>(&direct_draw.pointer),
-                                        IID_IDirectDraw7, nullptr),
-                     "DirectDrawCreateEx");
-        check_result(direct_draw.pointer->SetCooperativeLevel(window, DDSCL_NORMAL), "SetCooperativeLevel");
-        DDSURFACEDESC2 description{};
-        description.dwSize = sizeof(description);
-        description.dwFlags = DDSD_CAPS;
-        description.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
-        check_result(direct_draw.pointer->CreateSurface(&description, &primary.pointer, nullptr),
-                     "Create primary");
-        check_result(direct_draw.pointer->CreateClipper(0, &clipper.pointer, nullptr), "CreateClipper");
-        check_result(clipper.pointer->SetHWnd(0, window), "Clipper SetHWnd");
-        check_result(primary.pointer->SetClipper(clipper.pointer), "SetClipper");
-        description = {};
-        description.dwSize = sizeof(description);
-        description.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT;
-        description.dwWidth = 1024;
-        description.dwHeight = 768;
-        description.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
-        check_result(direct_draw.pointer->CreateSurface(&description, &back_buffer.pointer, nullptr),
-                     "Create render target");
-        check_result(direct_draw.pointer->QueryInterface(IID_IDirect3D7,
-                                                         reinterpret_cast<void **>(&direct_3d.pointer)),
-                     "Query Direct3D7");
-        description = {};
-        description.dwSize = sizeof(description);
-        description.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
-        description.dwWidth = 1024;
-        description.dwHeight = 768;
-        description.ddsCaps.dwCaps = DDSCAPS_ZBUFFER;
-        description.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
-        description.ddpfPixelFormat.dwFlags = DDPF_ZBUFFER;
-        description.ddpfPixelFormat.dwZBufferBitDepth = 16;
-        check_result(direct_draw.pointer->CreateSurface(&description, &depth_buffer.pointer, nullptr),
-                     "Create Z buffer");
-        check_result(back_buffer.pointer->AddAttachedSurface(depth_buffer.pointer), "Attach Z buffer");
-        check_result(
-            direct_3d.pointer->CreateDevice(IID_IDirect3DHALDevice, back_buffer.pointer, &device.pointer),
-            "Create Direct3D7 HAL");
-        D3DVIEWPORT7 viewport{0, 0, 1024, 768, 0, 1};
-        check_result(device.pointer->SetViewport(&viewport), "SetViewport");
+        // The device holds a reference to the render target, so release it first.
+        if (device.pointer != nullptr) { device.pointer->Release(); device.pointer = nullptr; }
+        if (depth_buffer.pointer != nullptr) { depth_buffer.pointer->Release(); depth_buffer.pointer = nullptr; }
+        if (back_buffer.pointer != nullptr) { back_buffer.pointer->Release(); back_buffer.pointer = nullptr; }
+    }
+
+    void apply_device_state()
+    {
         check_result(device.pointer->SetRenderState(D3DRENDERSTATE_ZENABLE, TRUE), "Enable depth");
         check_result(device.pointer->SetRenderState(D3DRENDERSTATE_LIGHTING, FALSE),
                      "Disable fixed-function lighting for diagnostic scene");
@@ -395,6 +447,136 @@ struct Scene
                      "Texture min filter");
         check_result(device.pointer->SetTextureStageState(0, D3DTSS_MAGFILTER, D3DTFG_LINEAR),
                      "Texture mag filter");
+    }
+
+    // Creates the render target, Z-buffer and Direct3D device at the requested client size.
+    // The back buffer must match the blit destination, otherwise a maximized/fullscreen window
+    // presents black; the retail game likewise recreates these on a mode change.
+    void create_render_target(std::uint32_t width, std::uint32_t height, bool log_ready)
+    {
+        DDSURFACEDESC2 description{};
+        description.dwSize = sizeof(description);
+        description.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT;
+        description.dwWidth = width;
+        description.dwHeight = height;
+        description.ddsCaps.dwCaps = DDSCAPS_OFFSCREENPLAIN | DDSCAPS_3DDEVICE;
+        check_result(direct_draw.pointer->CreateSurface(&description, &back_buffer.pointer, nullptr),
+                     "Create render target");
+
+        if (direct_3d.pointer == nullptr)
+        {
+            check_result(direct_draw.pointer->QueryInterface(
+                             IID_IDirect3D7, reinterpret_cast<void **>(&direct_3d.pointer)),
+                         "Query Direct3D7");
+        }
+
+        description = {};
+        description.dwSize = sizeof(description);
+        description.dwFlags = DDSD_CAPS | DDSD_WIDTH | DDSD_HEIGHT | DDSD_PIXELFORMAT;
+        description.dwWidth = width;
+        description.dwHeight = height;
+        description.ddsCaps.dwCaps = DDSCAPS_ZBUFFER;
+        description.ddpfPixelFormat.dwSize = sizeof(DDPIXELFORMAT);
+        description.ddpfPixelFormat.dwFlags = DDPF_ZBUFFER;
+        description.ddpfPixelFormat.dwZBufferBitDepth = 16;
+        check_result(direct_draw.pointer->CreateSurface(&description, &depth_buffer.pointer, nullptr),
+                     "Create Z buffer");
+        check_result(back_buffer.pointer->AddAttachedSurface(depth_buffer.pointer), "Attach Z buffer");
+        check_result(
+            direct_3d.pointer->CreateDevice(IID_IDirect3DHALDevice, back_buffer.pointer, &device.pointer),
+            "Create Direct3D7 HAL");
+
+        D3DVIEWPORT7 viewport{0, 0, width, height, 0, 1};
+        check_result(device.pointer->SetViewport(&viewport), "SetViewport");
+        apply_device_state();
+
+        render_width = width;
+        render_height = height;
+
+        if (log_ready)
+        {
+            write_log("Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
+        }
+    }
+
+    // Recreates the render target when the client area changes (maximize, fullscreen, resize).
+    void resize(std::uint32_t width, std::uint32_t height)
+    {
+        if (width == 0U || height == 0U || direct_draw.pointer == nullptr)
+        {
+            return;
+        }
+        if (device.pointer != nullptr && width == render_width && height == render_height)
+        {
+            return;
+        }
+
+        release_render_target();
+        create_render_target(width, height, false);
+        first_frame = true;
+        write_log("Render target resized: " + std::to_string(width) + "x" + std::to_string(height));
+        write_log("Present target: client=" + std::to_string(width) + "x" + std::to_string(height));
+    }
+
+    void initialize(HWND window_handle, bool windowed_mode)
+    {
+        window = window_handle;
+        windowed = windowed_mode;
+        check_result(DirectDrawCreateEx(nullptr, reinterpret_cast<void **>(&direct_draw.pointer),
+                                        IID_IDirectDraw7, nullptr),
+                     "DirectDrawCreateEx");
+        if (windowed)
+        {
+            check_result(direct_draw.pointer->SetCooperativeLevel(window, DDSCL_NORMAL), "SetCooperativeLevel");
+            write_log("Display mode: windowed (DDSCL_NORMAL).");
+        }
+        else
+        {
+            // Exclusive fullscreen is only valid together with a successful display-mode change.
+            // Taking DDSCL_EXCLUSIVE while SetDisplayMode fails presents a black screen under
+            // Wine/CrossOver, so that combination is rejected and we fall back to a borderless
+            // WS_POPUP window at desktop size with DDSCL_NORMAL.
+            const HRESULT exclusive_result = direct_draw.pointer->SetCooperativeLevel(
+                window, DDSCL_EXCLUSIVE | DDSCL_FULLSCREEN);
+            if (SUCCEEDED(exclusive_result)
+                && SUCCEEDED(direct_draw.pointer->SetDisplayMode(1024, 768, 32, 0, 0)))
+            {
+                exclusive = true;
+                write_log("Display mode: exclusive fullscreen 1024x768x32.");
+            }
+            else
+            {
+                if (SUCCEEDED(exclusive_result))
+                {
+                    direct_draw.pointer->SetCooperativeLevel(window, DDSCL_NORMAL);
+                }
+                exclusive = false;
+                write_log("Display mode: borderless fullscreen (exclusive unavailable).",
+                          diagnostics::LogLevel::warning);
+            }
+        }
+        DDSURFACEDESC2 description{};
+        description.dwSize = sizeof(description);
+        description.dwFlags = DDSD_CAPS;
+        description.ddsCaps.dwCaps = DDSCAPS_PRIMARYSURFACE;
+        check_result(direct_draw.pointer->CreateSurface(&description, &primary.pointer, nullptr),
+                     "Create primary");
+        if (!exclusive)
+        {
+            check_result(direct_draw.pointer->CreateClipper(0, &clipper.pointer, nullptr), "CreateClipper");
+            check_result(clipper.pointer->SetHWnd(0, window), "Clipper SetHWnd");
+            check_result(primary.pointer->SetClipper(clipper.pointer), "SetClipper");
+        }
+        RECT client_rect{};
+        GetClientRect(window, &client_rect);
+        std::uint32_t initial_width = static_cast<std::uint32_t>(client_rect.right - client_rect.left);
+        std::uint32_t initial_height = static_cast<std::uint32_t>(client_rect.bottom - client_rect.top);
+        if (initial_width == 0U || initial_height == 0U)
+        {
+            initial_width = static_cast<std::uint32_t>(GetSystemMetrics(SM_CXSCREEN));
+            initial_height = static_cast<std::uint32_t>(GetSystemMetrics(SM_CYSCREEN));
+        }
+        create_render_target(initial_width, initial_height, true);
         write_log("Direct3D7 HAL device ready; diagnostic presentation, retail lighting/lightmaps pending.");
     }
     IDirectDrawSurface7 *texture_for(const PlacedModel &object, std::uint16_t material)
@@ -517,8 +699,11 @@ struct Scene
     void draw()
     {
         const Vector3 forward = normalize(subtract(camera_target, camera_position));
-        const Vector3 right = normalize(cross({0, 0, 1}, forward));
-        const Vector3 up = cross(forward, right);
+        // Right-handed world (X east, Y north, Z up). The view basis must be right = forward x up,
+        // up = right x forward; the previous right = up x forward produced (-1,0,0) for a camera
+        // looking north, which mirrored the whole scene left-to-right.
+        const Vector3 right = normalize(cross(forward, {0, 0, 1}));
+        const Vector3 up = cross(right, forward);
         D3DMATRIX view = identity();
         view._11 = right.x;
         view._21 = right.y;
@@ -637,12 +822,20 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
 }
 } // namespace
 int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesystem::path &game_directory,
-                        unsigned int level_number, const std::filesystem::path &capture_path)
+                        unsigned int level_number, const std::filesystem::path &capture_path,
+                        bool dev_mode, bool windowed)
 {
     try
     {
         Scene scene;
         scene.load(game_directory, level_number);
+        scene.dev_mode = dev_mode;
+        if (dev_mode)
+        {
+            scene.dev_camera_reset();
+            write_log("Free camera enabled (devmode): W/A/S/D move, Space up, Shift down, mouse looks, "
+                      "Ctrl boosts.");
+        }
         WNDCLASSEXW window_class{};
         window_class.cbSize = sizeof(window_class);
         window_class.lpfnWndProc = scene_window;
@@ -654,20 +847,39 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
             throw std::runtime_error("Register model-scene class failed.");
         }
         RECT dimensions{0, 0, 1024, 768};
-        AdjustWindowRect(&dimensions, WS_OVERLAPPEDWINDOW, FALSE);
-        HWND window =
-            CreateWindowExW(0, window_class.lpszClassName, L"IGI", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT,
-                            CW_USEDEFAULT, dimensions.right - dimensions.left,
-                            dimensions.bottom - dimensions.top, nullptr, nullptr, instance, nullptr);
+        DWORD window_style = WS_OVERLAPPEDWINDOW;
+        int window_x = CW_USEDEFAULT;
+        int window_y = CW_USEDEFAULT;
+        int window_width = 0;
+        int window_height = 0;
+        if (windowed)
+        {
+            AdjustWindowRect(&dimensions, window_style, FALSE);
+            window_width = dimensions.right - dimensions.left;
+            window_height = dimensions.bottom - dimensions.top;
+        }
+        else
+        {
+            // Fullscreen is the default, matching the retail executable.
+            window_style = WS_POPUP | WS_VISIBLE;
+            window_x = 0;
+            window_y = 0;
+            window_width = GetSystemMetrics(SM_CXSCREEN);
+            window_height = GetSystemMetrics(SM_CYSCREEN);
+        }
+        HWND window = CreateWindowExW(0, window_class.lpszClassName, L"IGI", window_style, window_x,
+                                      window_y, window_width, window_height, nullptr, nullptr, instance,
+                                      nullptr);
         if (window == nullptr)
         {
             throw std::runtime_error("Create model-scene window failed.");
         }
-        scene.initialize(window);
+        scene.initialize(window, windowed);
         ShowWindow(window, show_command);
         UpdateWindow(window);
         MSG message{};
         bool running = true;
+        float dev_frame_seconds = 1.0F / 60.0F;
         while (running)
         {
             while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
@@ -682,6 +894,11 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
             }
             if (running && !IsIconic(window))
             {
+                const auto frame_start = std::chrono::steady_clock::now();
+                if (scene.dev_mode)
+                {
+                    scene.update_dev_camera(dev_frame_seconds);
+                }
                 scene.draw();
                 if (!capture_path.empty())
                 {
@@ -689,6 +906,8 @@ int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesys
                     DestroyWindow(window);
                     running = false;
                 }
+                const auto frame_end = std::chrono::steady_clock::now();
+                dev_frame_seconds = std::chrono::duration<float>(frame_end - frame_start).count();
             }
             Sleep(16);
         }

@@ -879,97 +879,14 @@ Section 5 has been rewritten with the real `HumanAI_*` / `AI_*` / `CombatState_*
 
 ---
 
-## 22. Missing Pipeline Stages: Asset Decode, Texture Bind, Sprite Draw, Container IO
-
-These are the stages the engine needs **before anything can be drawn**: the container reader, the MEF/texture decoders, the terrain tile pipeline, the sprite path, and the mipmap upload. Every address below was verified with `bn_function_info` against `igi.exe`.
-
-### 17.1 Container / File IO (open the archives)
-
-- **`Sys_Resource` (`0x004B5F80`)** — `int32_t* Sys_Resource(char* virtualPath, int32_t* mode, void* outHandle);` — resolves a virtual path (`LOCAL:`, `LANGUAGE:`, …) to a device and opens the stream.
-- **`QFile_AliasResolve` (`0x004B1020`)** — `int32_t QFile_AliasResolve(char* alias, void* out, int32_t flags);` — expands the alias/device prefix (`LOCAL:models/...`).
-- **`QFile_DeviceIndex` (`0x004B11A0`)** — `int32_t QFile_DeviceIndex(void* device);` / **`QFile_DeviceHandlerLookup` (`0x004B1620`)** — device-table lookup used by the resource layer.
-- **`QFile_ReadWrite` (`0x004B1510`)** — `int32_t* QFile_ReadWrite(void* handle, char* mode);` — the read/write primitive every loader funnels through.
-- **`File_Open` (`0x004A5350`)** — `int32_t* File_Open(PSTR path, char* mode);` — Win32 layer entry.
-- **`Resource_Unpack` (`0x004B16D0`)** — `int32_t Resource_Unpack(int32_t* archive, int32_t index, int32_t flags);` — extracts one entry from the `ILFF`/`IRES` container.
-- **`Resource_PackUnpack` (`0x004B18B0`)** — `void* Resource_PackUnpack(void* entry, int32_t* outSize);` — resolves an entry to its byte range.
-- **`Resource_Unload` (`0x004B6380`)** — `int32_t Resource_Unload(int32_t* archive);`
-- **`Resource_Load` (`0x004B5F00`)** — see §1; the high-level mount.
-
-**Order:** `File_Open`/`QFile_AliasResolve` → `Sys_Resource` → `Resource_Unpack` → per-format decoder.
-
-### 17.2 MEF Decode (vertex / index / material)
-
-- **`DynObj_LocalModelsSMef` (`0x004CF390`)** — `int32_t* DynObj_LocalModelsSMef(int32_t dynObjHandle);` — loads `LOCAL:models/%s.mef`, reads the `HSEM` chunk (`0x4D455348`) and checks version `0x3DCCCCCD`; reads `ATTA`/`MVTX`/`PORT`/`PTFC`/`PTVX` into `+0x88/+0x8C/+0x90/+0x94/+0x98`; walks the `TXAN` (`0x4E415854`) list into a `count * 0x14` record array. **No vertex/index (XTRV/DNER) decoding happens here** — do not implement the vertex layout from this function (§17 note).
-- **`DynObj_InsertHashItem_14` (`0x004CF080`)** — mounts `models/%s.res` + `textures/%s.res` and builds the hash node the decoder fills.
-- **`DynObj_LocalTexturesSTex` (`0x004CF790`)** — `int32_t* DynObj_LocalTexturesSTex(void* dynObjHandle);` — decodes the paired `.TEX` stream.
-
-### 17.3 Texture Decode, Mipmaps & Binding
-
-- **`Terrain_BuildMipMaps` (`0x005125A0`)** — `int32_t Terrain_BuildMipMaps(void);` — the mip-chain builder (companions `_2` … `_11` cover the per-format variants).
-- **`Render_BindTexture` (`0x004D09E0`)** — `void** Render_BindTexture(void** surface, void* palette, int32_t stage, char* name);` — uploads the decoded surface to the texture stage. This is the Direct3D 7 binding point; in the SDL3 + OpenGL port it becomes the GL texture upload.
-- **`Render_DrawLightmapMesh` (`0x004D06C0`)** — `int32_t Render_DrawLightmapMesh(float scale, int32_t mesh);` — lightmap-mapped draw (the `.LMP` consumer).
-
-### 17.4 Terrain Data Pipeline (`.HMP` / `.CTR` / `.BIT` / `.LMP`)
-
-- **`DynObj_ParseConfigFile_7` (`0x004C5F00`)** — reads `<base>.tex` + `<base>.lmp`.
-- **`DynObj_Createterrainmateria` (`0x004C6240`)** — `void* DynObj_Createterrainmateria(void* terrainContext, int32_t basePath);` — appends `.bit` / `.hmp` / `.cmd` / `.ctr`, then loads and runs the terrain `.qvm`.
-- **`CreateTerrainMaterial` (`0x004C6670`)** — `int32_t CreateTerrainMaterial(int32_t materialId, float scale);` — the QVM-callable that materialises a terrain material.
-- **`CreateTerrainTileMap` (`0x004C6760`)** — `int32_t CreateTerrainTileMap(int32_t tileMapId, float scale);` — builds the terrain tile map.
-- **`Terrain_GenerateOctree` (`0x004D14E0`)** — `int32_t Terrain_GenerateOctree(void* terrainContext);` — builds the collision/LOD octree.
-- **`Terrain_SampleHeightmap` (`0x00512040`)** / **`Terrain_CalculateNormals` (`0x005122B0`)** — `.HMP` sampler and normal generator.
-- **`Terrain_RenderQuadtree` (`0x00510010`)** / **`Terrain_RenderWaterSurface` (`0x005116B0`)** — the draw pass.
-
-**Order:** `DynObj_ParseConfigFile_7` → `DynObj_Createterrainmateria` → `CreateTerrainMaterial` + `CreateTerrainTileMap` → `Terrain_GenerateOctree` → `Terrain_RenderQuadtree`.
-
-### 17.5 Sprite Decode & Draw (`.SPR` / `QSprite` / `Sprite3D`)
-
-- **`Qsprite_Register4Az` (`0x004B53B0`)** — `int32_t Qsprite_Register4Az(int32_t* sprite, int32_t frameCount, int32_t format, ...);` — registers a sprite sheet from the resource archive.
-- **`Sprite3D_LoadParameters` (`0x00531E10`)** — `int32_t Sprite3D_LoadParameters(float scale);`
-- **`Sprite3D_Init` (`0x00531EF0`)** — `int32_t Sprite3D_Init(void);`
-- **`Sprite3D_Update` (`0x00531F40`)** — `uint32_t Sprite3D_Update(void);` — billboard quad billboard/screen placement.
-- **`Particle_Render3DSprites` (`0x00530470`)** — the transparent-pass draw (see §7).
-
-### 17.6 What is still **not** covered here
-
-The Windows host currently paints diagnostics via GDI; there is **no** render device loop yet. A native-only build cannot render until: (a) the container reader above is ported, (b) `DynObj_LocalModelsSMef` + `Terrain_BuildMipMaps`/`Render_BindTexture` produce client-side vertex/pixel data, (c) a SDL3 + OpenGL 3.3 device replaces `Render_BindTexture`'s D3D7 binding, and (d) `Render_DrawLightmapMesh` / `Terrain_RenderQuadtree` / `Sprite3D_Update` issue the draw calls. Audio is intentionally out of scope for this document.
-| **Render** | `Display_InitDirectDraw` | `0x004924D0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/004924D0-Display_InitDirectDraw.cpp` |
-| **Render** | `Display_OpenDevice` | `0x00490190` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490190-Display_OpenDevice.cpp` |
-| **Render** | `DisplayRender_InvokeOpenDevice` | `0x00490120` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00490120-DisplayRender_InvokeOpenDevice.cpp` |
-| **Render** | `DisplayRender_ProcessCouldntsetrender` | `0x00493A60` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00493A60-DisplayRender_ProcessCouldntsetrender.cpp` |
-| **Render** | `DisplayRender_ProcessCouldntgetdevice` | `0x004927B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/004927B0-DisplayRender_ProcessCouldntgetdevice.cpp` |
-| **Render** | `DisplayRender_ProcessCouldntwaitforvb` | `0x00492400` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00492400-DisplayRender_ProcessCouldntwaitforvb.cpp` |
-| **Render** | `Display_ClearSurfaces` | `0x00490360` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490360-Display_ClearSurfaces.cpp` |
-| **Render** | `DisplayRender_InvokeRestoreDevice` | `0x00490530` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00490530-DisplayRender_InvokeRestoreDevice.cpp` |
-| **Timer** | `Timer_Now` | `0x00490370` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490370-Display_RestoreDevice.cpp` *(file name is stale; contents are `Timer_Now`)* |
-| **Models** | `Display_MeshFormatNotSupport` | `0x0049B4B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/0049B4B0-Display_MeshFormatNotSupport.cpp` |
-| **Models** | `DisplayRender_Processmodelsnotconvert` | `0x0049DF60` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/0049DF60-DisplayRender_Processmodelsnotconvert.cpp` |
-| **Models** | `Physics_QvertexDrawstrip` | `0x00509930` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/physics/00509930-Physics_QvertexDrawstrip.cpp` |
-| **Textures** | `Terrain_TextureFileNotOfRequ` | `0x005175A0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terrain/005175A0-Terrain_TextureFileNotOfRequ.cpp` |
-| **Textures** | `DisplayRender_ProcessCouldntevicttext` | `0x00494700` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00494700-DisplayRender_ProcessCouldntevicttext.cpp` |
-| **Textures** | `DisplayRender_Invoke2` | `0x00497920` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00497920-DisplayRender_Invoke2.cpp` |
-| **Textures** | `Display_CreateSurface` | `0x004903B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/004903B0-Display_CreateSurface.cpp` |
-| **Terrain** | `CreateTerrainTileMap` | `0x004C6760` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/create/004C6760-Create_TerrainTileMap.cpp` |
-| **Terrain** | `Terrain_Draw` | `0x00512C30` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terrain/00512C30-Terrain_Draw.cpp` |
-| **Terrain** | `TerraDrawTask_Init` | `0x004E82C0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terradrawtask/004E82C0-TerraDrawTask_Init.cpp` |
-| **Terrain** | `TerraDrawTask_Update` | `0x004E8350` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terradrawtask/004E8350-TerraDrawTask_Update.cpp` |
-| **Sprites** | `Level_LocalCommonSprites` | `0x004161D0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/004161D0-Level_LocalCommonSprites.cpp` |
-| **Sprites** | `Level_InitSprites_2` | `0x00416800` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/00416800-Level_InitSprites_2.cpp` |
-| **Sprites** | `Level_InitSprites_3` | `0x00416870` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/00416870-Level_InitSprites_3.cpp` |
-| **Sprites** | `AnimSpline_InvokeOffscreenbuffersprit` | `0x0050EDA0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/animspline/0050EDA0-AnimSpline_InvokeOffscreenbuffersprit.cpp` |
-| **Sprites** | `DisplayRender_ProcessTransContextPrim` | `0x00497970` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00497970-DisplayRender_ProcessTransContextPrim.cpp` |
-
-
-
----
-
 ## 17. MEF Mesh Geometry, Vertex Stream & Index Buffer Decoding (XTRV, DNER)
 
 ### Formats & Binary Specifications
 - **ILFF Container Hierarchy**: MEF files are Interchange File Format (IFF / ILFF) packages where each sub-chunk begins with a 4-byte FourCC identifier followed by a 32-bit big-endian chunk length. The root chunk is `HSEM` (`0x4D455348`, little-endian `"MESH"`), which validates engine version float `0x3DCCCCCD` (`0.1f`).
-- **`XTRV` (Vertex Stream Buffer)** — `UNVERIFIED`: FourCC `0x58545256`. **The stride is not established.** An earlier revision of this document claimed a fixed 32-byte FVF stride; that is wrong twice over: the field list it gave sums to **36 bytes** (0x24), and the only stride actually observed in the decompiled `DynObj_LocalModelsSMef` is **`0x14` (20 bytes)** — `Mem_Alloc(i_2 * 0x14, 4)` with `add ebx, 0x14` in the loop — which indexes a **4-dword record array** (fields at `+0x00`, `+0x04`, `+0x08`, `+0x10`), *not* a vertex stream.
-  - **Hypothesis only (do not implement against it):** a `D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1` layout would be 36 bytes, and a `XYZ | DIFFUSE | TEX1` layout would be 24. Neither is confirmed by the binary.
-  - **To settle it:** read the FVF argument passed to `CreateVertexBuffer`/`SetVertexShader` at the call sites, or measure the `XTRV` chunk length ÷ vertex count from a real `.mef`.
-  - **Do not derive vertex layout from `DynObj_LocalModelsSMef` alone** — the function named "…LocalModelsSMef" reads FourCC `0x4E415854` and builds 20-byte records; it does not unpack `XTRV`.
+- **`XTRV` (Vertex Stream Buffer)** — FourCC `0x58545256`. **Stride: supported as 32 (format 0) / 40 (format 3); loop not yet fully traced.** Evidence: `0x0049FB10` (format selector / vertex upload path) contains `add edi, 0x20` in the format-0 loop, and the other branch stores `0x28` (40) into a descriptor field; the port's `mef_render_data.cpp` decodes exactly those records (position +0, normal +0x0C, UV +0x18, lightmap UV +0x20).
+  - **Correction of the earlier revision:** it claimed a fixed 32-byte FVF stride while listing fields summing to **36 bytes** (0x24) — inconsistent. The only stride seen inside the decompiled `DynObj_LocalModelsSMef` is **`0x14` (20 bytes)** (`Mem_Alloc(i_2 * 0x14, 4)`, `add ebx, 0x14`), which indexes a **4-dword `TXAN` record array** — a *different structure*, not the vertex stream. Do not use 20 as the vertex stride.
+  - **Still to confirm:** full trace of the format-3 loop increment (the `0x28` value is stored into a descriptor, so confirm it is then used as the per-vertex advance).
+
 - **`DNER` (Primitive Index & Draw Group List)**: FourCC `0x444E4552` (`"REND"` reversed). Organizes vertices into renderable primitive batches:
   - Header: 32-bit integer count of primitive render batches.
   - Each batch entry:
@@ -1280,6 +1197,91 @@ The Windows host currently paints diagnostics via GDI; there is **no** render de
 8. **End 3D Scene**: Invoke `IDirect3DDevice7::EndScene()`.
 9. **Present / Flip Surface**: In fullscreen mode, call `IDirectDrawSurface7::Flip`. In windowed mode, call `IDirectDrawSurface7::Blt` copying the back buffer to the primary surface.
 
+
+---
+
+## 22. Missing Pipeline Stages: Asset Decode, Texture Bind, Sprite Draw, Container IO
+
+These are the stages the engine needs **before anything can be drawn**: the container reader, the MEF/texture decoders, the terrain tile pipeline, the sprite path, and the mipmap upload. Every address below was verified with `bn_function_info` against `igi.exe`.
+
+### 17.1 Container / File IO (open the archives)
+
+- **`Sys_Resource` (`0x004B5F80`)** — `int32_t* Sys_Resource(char* virtualPath, int32_t* mode, void* outHandle);` — resolves a virtual path (`LOCAL:`, `LANGUAGE:`, …) to a device and opens the stream.
+- **`QFile_AliasResolve` (`0x004B1020`)** — `int32_t QFile_AliasResolve(char* alias, void* out, int32_t flags);` — expands the alias/device prefix (`LOCAL:models/...`).
+- **`QFile_DeviceIndex` (`0x004B11A0`)** — `int32_t QFile_DeviceIndex(void* device);` / **`QFile_DeviceHandlerLookup` (`0x004B1620`)** — device-table lookup used by the resource layer.
+- **`QFile_ReadWrite` (`0x004B1510`)** — `int32_t* QFile_ReadWrite(void* handle, char* mode);` — the read/write primitive every loader funnels through.
+- **`File_Open` (`0x004A5350`)** — `int32_t* File_Open(PSTR path, char* mode);` — Win32 layer entry.
+- **`Resource_Unpack` (`0x004B16D0`)** — `int32_t Resource_Unpack(int32_t* archive, int32_t index, int32_t flags);` — extracts one entry from the `ILFF`/`IRES` container.
+- **`Resource_PackUnpack` (`0x004B18B0`)** — `void* Resource_PackUnpack(void* entry, int32_t* outSize);` — resolves an entry to its byte range.
+- **`Resource_Unload` (`0x004B6380`)** — `int32_t Resource_Unload(int32_t* archive);`
+- **`Resource_Load` (`0x004B5F00`)** — see §1; the high-level mount.
+
+**Order:** `File_Open`/`QFile_AliasResolve` → `Sys_Resource` → `Resource_Unpack` → per-format decoder.
+
+### 17.2 MEF Decode (vertex / index / material)
+
+- **`DynObj_LocalModelsSMef` (`0x004CF390`)** — `int32_t* DynObj_LocalModelsSMef(int32_t dynObjHandle);` — loads `LOCAL:models/%s.mef`, reads the `HSEM` chunk (`0x4D455348`) and checks version `0x3DCCCCCD`; reads `ATTA`/`MVTX`/`PORT`/`PTFC`/`PTVX` into `+0x88/+0x8C/+0x90/+0x94/+0x98`; walks the `TXAN` (`0x4E415854`) list into a `count * 0x14` record array. **No vertex/index (XTRV/DNER) decoding happens here** — do not implement the vertex layout from this function (§17 note).
+- **`DynObj_InsertHashItem_14` (`0x004CF080`)** — mounts `models/%s.res` + `textures/%s.res` and builds the hash node the decoder fills.
+- **`DynObj_LocalTexturesSTex` (`0x004CF790`)** — `int32_t* DynObj_LocalTexturesSTex(void* dynObjHandle);` — decodes the paired `.TEX` stream.
+
+### 17.3 Texture Decode, Mipmaps & Binding
+
+- **`Terrain_BuildMipMaps` (`0x005125A0`)** — `int32_t Terrain_BuildMipMaps(void);` — the mip-chain builder (companions `_2` … `_11` cover the per-format variants).
+- **`Render_BindTexture` (`0x004D09E0`)** — `void** Render_BindTexture(void** surface, void* palette, int32_t stage, char* name);` — uploads the decoded surface to the texture stage. This is the Direct3D 7 binding point; in the SDL3 + OpenGL port it becomes the GL texture upload.
+- **`Render_DrawLightmapMesh` (`0x004D06C0`)** — `int32_t Render_DrawLightmapMesh(float scale, int32_t mesh);` — lightmap-mapped draw (the `.LMP` consumer).
+
+### 17.4 Terrain Data Pipeline (`.HMP` / `.CTR` / `.BIT` / `.LMP`)
+
+- **`DynObj_ParseConfigFile_7` (`0x004C5F00`)** — reads `<base>.tex` + `<base>.lmp`.
+- **`DynObj_Createterrainmateria` (`0x004C6240`)** — `void* DynObj_Createterrainmateria(void* terrainContext, int32_t basePath);` — appends `.bit` / `.hmp` / `.cmd` / `.ctr`, then loads and runs the terrain `.qvm`.
+- **`CreateTerrainMaterial` (`0x004C6670`)** — `int32_t CreateTerrainMaterial(int32_t materialId, float scale);` — the QVM-callable that materialises a terrain material.
+- **`CreateTerrainTileMap` (`0x004C6760`)** — `int32_t CreateTerrainTileMap(int32_t tileMapId, float scale);` — builds the terrain tile map.
+- **`Terrain_GenerateOctree` (`0x004D14E0`)** — `int32_t Terrain_GenerateOctree(void* terrainContext);` — builds the collision/LOD octree.
+- **`Terrain_SampleHeightmap` (`0x00512040`)** / **`Terrain_CalculateNormals` (`0x005122B0`)** — `.HMP` sampler and normal generator.
+- **`Terrain_RenderQuadtree` (`0x00510010`)** / **`Terrain_RenderWaterSurface` (`0x005116B0`)** — the draw pass.
+
+**Order:** `DynObj_ParseConfigFile_7` → `DynObj_Createterrainmateria` → `CreateTerrainMaterial` + `CreateTerrainTileMap` → `Terrain_GenerateOctree` → `Terrain_RenderQuadtree`.
+
+### 17.5 Sprite Decode & Draw (`.SPR` / `QSprite` / `Sprite3D`)
+
+- **`Qsprite_Register4Az` (`0x004B53B0`)** — `int32_t Qsprite_Register4Az(int32_t* sprite, int32_t frameCount, int32_t format, ...);` — registers a sprite sheet from the resource archive.
+- **`Sprite3D_LoadParameters` (`0x00531E10`)** — `int32_t Sprite3D_LoadParameters(float scale);`
+- **`Sprite3D_Init` (`0x00531EF0`)** — `int32_t Sprite3D_Init(void);`
+- **`Sprite3D_Update` (`0x00531F40`)** — `uint32_t Sprite3D_Update(void);` — billboard quad billboard/screen placement.
+- **`Particle_Render3DSprites` (`0x00530470`)** — the transparent-pass draw (see §7).
+
+### 17.6 What is still **not** covered here
+
+The Windows host currently paints diagnostics via GDI; there is **no** render device loop yet. A native-only build cannot render until: (a) the container reader above is ported, (b) `DynObj_LocalModelsSMef` + `Terrain_BuildMipMaps`/`Render_BindTexture` produce client-side vertex/pixel data, (c) a SDL3 + OpenGL 3.3 device replaces `Render_BindTexture`'s D3D7 binding, and (d) `Render_DrawLightmapMesh` / `Terrain_RenderQuadtree` / `Sprite3D_Update` issue the draw calls. Audio is intentionally out of scope for this document.
+| **Render** | `Display_InitDirectDraw` | `0x004924D0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/004924D0-Display_InitDirectDraw.cpp` |
+| **Render** | `Display_OpenDevice` | `0x00490190` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490190-Display_OpenDevice.cpp` |
+| **Render** | `DisplayRender_InvokeOpenDevice` | `0x00490120` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00490120-DisplayRender_InvokeOpenDevice.cpp` |
+| **Render** | `DisplayRender_ProcessCouldntsetrender` | `0x00493A60` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00493A60-DisplayRender_ProcessCouldntsetrender.cpp` |
+| **Render** | `DisplayRender_ProcessCouldntgetdevice` | `0x004927B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/004927B0-DisplayRender_ProcessCouldntgetdevice.cpp` |
+| **Render** | `DisplayRender_ProcessCouldntwaitforvb` | `0x00492400` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00492400-DisplayRender_ProcessCouldntwaitforvb.cpp` |
+| **Render** | `Display_ClearSurfaces` | `0x00490360` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490360-Display_ClearSurfaces.cpp` |
+| **Render** | `DisplayRender_InvokeRestoreDevice` | `0x00490530` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00490530-DisplayRender_InvokeRestoreDevice.cpp` |
+| **Timer** | `Timer_Now` | `0x00490370` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/00490370-Display_RestoreDevice.cpp` *(file name is stale; contents are `Timer_Now`)* |
+| **Models** | `Display_MeshFormatNotSupport` | `0x0049B4B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/0049B4B0-Display_MeshFormatNotSupport.cpp` |
+| **Models** | `DisplayRender_Processmodelsnotconvert` | `0x0049DF60` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/0049DF60-DisplayRender_Processmodelsnotconvert.cpp` |
+| **Models** | `Physics_QvertexDrawstrip` | `0x00509930` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/physics/00509930-Physics_QvertexDrawstrip.cpp` |
+| **Textures** | `Terrain_TextureFileNotOfRequ` | `0x005175A0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terrain/005175A0-Terrain_TextureFileNotOfRequ.cpp` |
+| **Textures** | `DisplayRender_ProcessCouldntevicttext` | `0x00494700` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00494700-DisplayRender_ProcessCouldntevicttext.cpp` |
+| **Textures** | `DisplayRender_Invoke2` | `0x00497920` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00497920-DisplayRender_Invoke2.cpp` |
+| **Textures** | `Display_CreateSurface` | `0x004903B0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/display/004903B0-Display_CreateSurface.cpp` |
+| **Terrain** | `CreateTerrainTileMap` | `0x004C6760` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/create/004C6760-Create_TerrainTileMap.cpp` |
+| **Terrain** | `Terrain_Draw` | `0x00512C30` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terrain/00512C30-Terrain_Draw.cpp` |
+| **Terrain** | `TerraDrawTask_Init` | `0x004E82C0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terradrawtask/004E82C0-TerraDrawTask_Init.cpp` |
+| **Terrain** | `TerraDrawTask_Update` | `0x004E8350` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/terradrawtask/004E8350-TerraDrawTask_Update.cpp` |
+| **Sprites** | `Level_LocalCommonSprites` | `0x004161D0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/004161D0-Level_LocalCommonSprites.cpp` |
+| **Sprites** | `Level_InitSprites_2` | `0x00416800` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/00416800-Level_InitSprites_2.cpp` |
+| **Sprites** | `Level_InitSprites_3` | `0x00416870` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/level/00416870-Level_InitSprites_3.cpp` |
+| **Sprites** | `AnimSpline_InvokeOffscreenbuffersprit` | `0x0050EDA0` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/animspline/0050EDA0-AnimSpline_InvokeOffscreenbuffersprit.cpp` |
+| **Sprites** | `DisplayRender_ProcessTransContextPrim` | `0x00497970` | `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/BinaryNinja/natives/CLEAN/displayrender/00497970-DisplayRender_ProcessTransContextPrim.cpp` |
+
+
+
+---
 
 ---
 

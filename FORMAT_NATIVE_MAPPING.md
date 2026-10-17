@@ -258,17 +258,7 @@ Method: read the retail native's disassembly (`bn_function_disassembly`), decode
 **Practical use:** treat the converter as the **best available format specification** (what the bytes mean) and
 `open-igi` as the **best available method index** (which retail address does the work). Neither replaces `igi.exe`.
 
-## 11. Caveats
-
-- **Names in `igi.exe` are not symbols** (`igi.pdb` does not exist). Every name here is an inferred label; the
-  **address** is the only hard fact. Where the label is uncertain it is marked.
-- Some cited names are BN/decompiler auto-names with numeric suffixes (e.g. `Sys_FreeMemory_8`) whose bodies do
-  something else entirely — confirm the body before implementing.
-- This matching is a **map**, not proof. A format reader is only "ported 1:1" when the ported method's body is
-  reproduced from `igi.exe`, not when this table is followed.
-
-
-## 10. Independent renderer/placement checks — 2026-10-17
+## 11. Independent renderer/placement checks — 2026-10-17
 
 The listed-address audit examined the 296 distinct addresses actually written in this document, not the
 977-address source-citation census. Live Binary Ninja reported 5,732 analyzed function starts. Of these 296
@@ -301,3 +291,67 @@ Raw audit, assembly, memory results and screenshots are retained locally under
 `/Users/haseeb-mir/Documents/Code/project-igi-natives/scratch/open-igi-render-stage/`.
 The demo is still incomplete: remaining task models, skinning, recursive attachments and retail
 lighting/lightmap presentation must be verified separately before full visual parity can be claimed.
+
+## 12. Engine loader inventory (`project-open-igi/engine/`)
+
+Read-only audit of the C++ port's own loaders (17 `.cpp`, ~3,365 lines). This is where the *format* work for the
+port actually lives — it is not a copy of either reference project.
+
+| Loader | File | Retail native | Loads correctly? |
+|---|---|---|---|
+| RES / IRES archive | `resource/resource_archive.cpp` | `Sys_Resource 0x4B5F80`, `Resource_Load 0x4B5F00` | **Yes** — ILFF→IRES form check, NAME/BODY sibling walk, plus legacy `"RESOURCE"` branch; bounds-checked |
+| Resource cache / VFS | `resource/resource_cache.cpp` | — | Present (host-side handle cache) |
+| MEF container + chunks | `model/mef_model_loader.cpp` | `DynObj_LocalModelsSMef 0x4CF390` | **Yes** — 20-byte container header, chunk alignment, sibling offsets, nested ILFF, `OCEM` form, MESH version `0x3DCCCCCD` (0.1) |
+| MEF → draw data | `model/mef_render_data.cpp` | `DisplayRender_Processmodelsnotconvert 0x49DF60`, upload `0x49B4B0` | **Yes** — 32/40-byte vertices, 28/32-byte batch headers, linked index lists |
+| MTP metadata | `model/model_texture_package.cpp` | `DynObj_InsertHashItem_14 0x4CF080` | **Yes** — MODS / VNAM / INST / GTT + TEXF |
+| Model `.tex` pixels | `texture/model_texture_pixels.cpp` | `Texture_LoadModelFile 0x4B24C0` | Present; RGBA into D3D surfaces |
+| Terrain LOOP `.tex` | `texture/loop_terrain_texture.cpp` | `Terrain_TextureFileNotOfRequ 0x5175A0` | **Yes** — LOOP signature, versions 7 and 9 only, palette + record strides |
+| QVM | `script/qvm_loader.cpp`, `qvm_compiled_program.cpp`, `qvm_object_calls.cpp` | `Qvm_Load 0x4B80B0` | **Partial** — validates the compiled program and reads `Task_New` object calls; does **not** execute the VM |
+| Audio (5 files) | `audio/*` | ILSF / ADPCM / attenuation | Present, but **out of MVP scope** |
+
+**Wired into the app:** `platform/windows/retail_model_scene.cpp` loads
+`location0/common/level1.{mtp,models/models.res,textures/textures.res}` + `objects.qsc`, resolves each `Task_New`
+(`EditRigidObj`, `Building`, `ExplodeObject`, `Terminal`, `SCameraControl`, `AlarmControl`, `Door`), applies
+position + Euler orientation (world scale `1/4096`), and draws through the Direct3D 7 HAL path.
+**Models, textures and object placement do load and draw.**
+
+### 12.1 Not present at all
+
+| Missing | Consequence for the build order |
+|---|---|
+| **Terrain geometry** — `.HMP` / `.CTR` / `.BIT` / `.LMP` | Only the LOOP `.tex` decoder exists; there is **no terrain loader, mesh or draw** → step 3 (terrain) has nothing to build on yet |
+| AI graph (`.dat`) | step 9 blocked |
+| DAT index | — |
+| FNT fonts | — |
+| IFF / BEF animation clips | only a bone-record struct; skinned models are explicitly "not yet rendered" → step 12 blocked |
+| SPR sprites | — |
+| Physics / player / AI / weapons / health / interaction | steps 7–12 blocked |
+
+### 12.2 Test-coverage caveat
+
+All 13 test targets are **synthetic** — 0 reference real retail assets (`IGI_GAME_PATH` / `missions/location` → 0
+hits; they construct bytes in memory). "Tests pass" therefore proves the *parser logic*, **not** that a retail
+Level 1 file loads. Every loader header also carries **"runtime parity unverified"**; none has been diffed against
+a live `igi.exe` frame.
+
+## 13. Vertex-stride correction (closes the §17 open item)
+
+The engine's `mef_render_data.cpp` uses **32-byte format-0** and **40-byte format-3** vertex records
+(position +0, normal +0x0C, UV +0x18, lightmap UV +0x20). Checked against the binary:
+
+- `0x0049FB10` contains `add edi, 0x20` in the format-0 loop → **32-byte stride supported**.
+- The other branch stores `0x28` (40) into a descriptor field → **40-byte stride supported**.
+
+So the earlier note in `NATIVES_CALL_INFO.md` §17 ("the only observed stride is `0x14`/20; stride unverified") was
+**too pessimistic for the vertex stream**: the `0x14` (20) record belongs to the `TXAN` record array inside
+`0x004CF390`, which is a different structure. Status is upgraded to **"supported: 32 / 40, loop not yet fully
+traced"**. `NATIVES_CALL_INFO.md` §17 has been updated to match.
+
+## 14. Caveats
+
+- **Names in `igi.exe` are not symbols** (`igi.pdb` does not exist). Every name here is an inferred label; the
+  **address** is the only hard fact. Where the label is uncertain it is marked.
+- Some cited names are BN/decompiler auto-names with numeric suffixes (e.g. `Sys_FreeMemory_8`) whose bodies do
+  something else entirely — confirm the body before implementing.
+- This matching is a **map**, not proof. A format reader is only "ported 1:1" when the ported method's body is
+  reproduced from `igi.exe`, not when this table is followed.

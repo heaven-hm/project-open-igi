@@ -35,7 +35,7 @@ void test_initializer_matches_retail_state_offsets()
         .reserved_state_byte = 0xA5U,
     };
 
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(state, 2);
+    igi::retail::audio::Sound_InitializeAdpcmState(state, 2);
 
     require(state.channel_count == 2, "initializer stores the channel count at offset 0x00");
     require(state.predictor_channel_zero == 0, "initializer clears predictor offset 0x02");
@@ -49,12 +49,12 @@ void test_initializer_matches_retail_state_offsets()
 void test_mono_decoder_reads_high_nibble_before_low_nibble()
 {
     SoundAdpcmState state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(state, 1);
     constexpr std::array<std::uint8_t, 1U> encoded_input = { 0x71U };
     std::array<std::int16_t, 2U> decoded_output{};
 
     const SoundAdpcmDecodeResult result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             encoded_input, decoded_output, 2U, state);
 
     require(result.succeeded(), "two mono samples decode from one byte");
@@ -70,12 +70,12 @@ void test_mono_decoder_reads_high_nibble_before_low_nibble()
 void test_stereo_decoder_interleaves_channels_per_sample()
 {
     SoundAdpcmState state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(state, 2);
+    igi::retail::audio::Sound_InitializeAdpcmState(state, 2);
     constexpr std::array<std::uint8_t, 1U> encoded_input = { 0x79U };
     std::array<std::int16_t, 2U> decoded_output{};
 
     const SoundAdpcmDecodeResult result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             encoded_input, decoded_output, 1U, state);
 
     require(result.succeeded(), "one stereo frame decodes from one byte");
@@ -88,12 +88,12 @@ void test_stereo_decoder_interleaves_channels_per_sample()
 void test_streaming_replays_the_partially_consumed_byte()
 {
     SoundAdpcmState streamed_state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(streamed_state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(streamed_state, 1);
     constexpr std::array<std::uint8_t, 1U> encoded_input = { 0x71U };
     std::array<std::int16_t, 1U> first_output{};
 
     const SoundAdpcmDecodeResult first_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             encoded_input, first_output, 1U, streamed_state);
 
     require(first_result.succeeded(), "first streaming chunk decodes");
@@ -102,7 +102,7 @@ void test_streaming_replays_the_partially_consumed_byte()
 
     std::array<std::int16_t, 1U> second_output{};
     const SoundAdpcmDecodeResult second_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             encoded_input, second_output, 1U, streamed_state);
 
     require(second_result.succeeded(), "second streaming chunk decodes");
@@ -111,10 +111,10 @@ void test_streaming_replays_the_partially_consumed_byte()
     require(streamed_state.pending_low_nibble == 0U, "second chunk clears the pending-nibble flag");
 
     SoundAdpcmState contiguous_state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(contiguous_state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(contiguous_state, 1);
     std::array<std::int16_t, 2U> contiguous_output{};
     const SoundAdpcmDecodeResult contiguous_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             encoded_input, contiguous_output, 2U, contiguous_state);
 
     require(contiguous_result.succeeded(), "contiguous decode succeeds");
@@ -126,14 +126,14 @@ void test_streaming_replays_the_partially_consumed_byte()
 void test_predictor_and_step_index_clamp_to_retail_limits()
 {
     SoundAdpcmState positive_state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(positive_state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(positive_state, 1);
     positive_state.predictor_channel_zero = 32760;
     positive_state.step_index_channel_zero = 88;
     constexpr std::array<std::uint8_t, 1U> positive_input = { 0x70U };
     std::array<std::int16_t, 1U> positive_output{};
 
     const SoundAdpcmDecodeResult positive_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             positive_input, positive_output, 1U, positive_state);
 
     require(positive_result.succeeded(), "positive saturation case decodes");
@@ -141,14 +141,14 @@ void test_predictor_and_step_index_clamp_to_retail_limits()
     require(positive_state.step_index_channel_zero == 88, "step index saturates at 88");
 
     SoundAdpcmState negative_state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(negative_state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(negative_state, 1);
     negative_state.predictor_channel_zero = -32760;
     negative_state.step_index_channel_zero = 88;
     constexpr std::array<std::uint8_t, 1U> negative_input = { 0xF0U };
     std::array<std::int16_t, 1U> negative_output{};
 
     const SoundAdpcmDecodeResult negative_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             negative_input, negative_output, 1U, negative_state);
 
     require(negative_result.succeeded(), "negative saturation case decodes");
@@ -158,13 +158,13 @@ void test_predictor_and_step_index_clamp_to_retail_limits()
 void test_invalid_bounds_return_before_state_or_output_changes()
 {
     SoundAdpcmState state{};
-    igi::retail::audio::Sound_InitializeAdpcmState_00496420(state, 1);
+    igi::retail::audio::Sound_InitializeAdpcmState(state, 1);
     const SoundAdpcmState original_state = state;
     constexpr std::array<std::uint8_t, 1U> short_input = { 0x71U };
     std::array<std::int16_t, 3U> output_samples = { 123, 123, 123 };
 
     const SoundAdpcmDecodeResult short_input_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             short_input, output_samples, 3U, state);
 
     require(short_input_result.error == SoundAdpcmDecodeError::encoded_input_too_short,
@@ -173,7 +173,7 @@ void test_invalid_bounds_return_before_state_or_output_changes()
     require(output_samples[0U] == 123, "short input does not partially write output");
 
     const SoundAdpcmDecodeResult short_output_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             short_input, std::span<std::int16_t>(output_samples.data(), 2U), 3U, state);
 
     require(short_output_result.error == SoundAdpcmDecodeError::decoded_output_too_short,
@@ -183,7 +183,7 @@ void test_invalid_bounds_return_before_state_or_output_changes()
     SoundAdpcmState invalid_channel_state = original_state;
     invalid_channel_state.channel_count = 3;
     const SoundAdpcmDecodeResult invalid_channel_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             short_input, output_samples, 1U, invalid_channel_state);
     require(invalid_channel_result.error == SoundAdpcmDecodeError::invalid_channel_count,
         "channel count above the native state capacity is rejected");
@@ -191,7 +191,7 @@ void test_invalid_bounds_return_before_state_or_output_changes()
     SoundAdpcmState invalid_step_state = original_state;
     invalid_step_state.step_index_channel_zero = 89;
     const SoundAdpcmDecodeResult invalid_step_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             short_input, output_samples, 1U, invalid_step_state);
     require(invalid_step_result.error == SoundAdpcmDecodeError::invalid_step_index,
         "step index outside the observed table is rejected");
@@ -199,7 +199,7 @@ void test_invalid_bounds_return_before_state_or_output_changes()
     SoundAdpcmState overflow_state = original_state;
     overflow_state.channel_count = 2;
     const SoundAdpcmDecodeResult overflow_result =
-        igi::retail::audio::Sound_DecodeAdpcmFrames_00496280(
+        igi::retail::audio::Sound_DecodeAdpcmFrames(
             short_input,
             output_samples,
             std::numeric_limits<std::size_t>::max(),

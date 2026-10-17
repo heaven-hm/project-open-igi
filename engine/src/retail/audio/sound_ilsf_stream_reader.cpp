@@ -80,7 +80,7 @@ SoundIlsfStreamReader::SoundIlsfStreamReader(std::istream& input_stream)
         std::ios_base::in);
     can_restart_ = payload_start_ != std::streampos(-1);
     if (is_adpcm_format(header_.storage_format)) {
-        Sound_InitializeAdpcmState_00496420(
+        Sound_InitializeAdpcmState(
             adpcm_state_,
             static_cast<std::int16_t>(header_.channel_count));
     }
@@ -138,7 +138,7 @@ std::size_t SoundIlsfStreamReader::Sound_ReadIlsfFrames(std::span<std::int16_t> 
         }
         read_exact(std::span<std::uint8_t>(encoded_bytes).subspan(has_pending_nibble ? 1U : 0U));
 
-        const SoundAdpcmDecodeResult decode_result = Sound_DecodeAdpcmFrames_00496280(
+        const SoundAdpcmDecodeResult decode_result = Sound_DecodeAdpcmFrames(
             encoded_bytes,
             frame_output,
             frames_to_read,
@@ -192,7 +192,7 @@ void SoundIlsfStreamReader::Sound_RestartIlsfStream()
     frames_read_ = 0U;
     replayed_adpcm_byte_ = 0U;
     if (is_adpcm_format(header_.storage_format)) {
-        Sound_InitializeAdpcmState_00496420(
+        Sound_InitializeAdpcmState(
             adpcm_state_,
             static_cast<std::int16_t>(header_.channel_count));
     }

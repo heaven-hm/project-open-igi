@@ -47,15 +47,15 @@ struct SoundAdpcmDecodeResult {
 };
 
 // Port identifier for the unresolved retail decoder at VA 0x00496280.
-// The generated native catalog calls this address Display_SwapBuffers_10, but its
+// The generated native catalog calls this address Display_SwapBuffers, but its
 // verified body and sound-loader call sites perform ADPCM decoding.
-void Sound_InitializeAdpcmState_00496420(
+void Sound_InitializeAdpcmState(
     SoundAdpcmState& state,
     std::int16_t channel_count) noexcept;
 
 // Bounded helper for retail IGI.EXE decoder VA 0x00496280. A pending low nibble
 // requires the caller to re-present the partially consumed byte at input[0].
-[[nodiscard]] SoundAdpcmDecodeResult Sound_DecodeAdpcmFrames_00496280(
+[[nodiscard]] SoundAdpcmDecodeResult Sound_DecodeAdpcmFrames(
     std::span<const std::uint8_t> encoded_input,
     std::span<std::int16_t> decoded_output,
     std::size_t frame_count,

@@ -107,7 +107,7 @@ std::int32_t decode_adpcm_nibble(
 
 } // namespace
 
-void Sound_InitializeAdpcmState_00496420(
+void Sound_InitializeAdpcmState(
     SoundAdpcmState& state,
     std::int16_t channel_count) noexcept
 {
@@ -120,7 +120,7 @@ void Sound_InitializeAdpcmState_00496420(
     state.pending_low_nibble = 0U;
 }
 
-SoundAdpcmDecodeResult Sound_DecodeAdpcmFrames_00496280(
+SoundAdpcmDecodeResult Sound_DecodeAdpcmFrames(
     std::span<const std::uint8_t> encoded_input,
     std::span<std::int16_t> decoded_output,
     std::size_t frame_count,
