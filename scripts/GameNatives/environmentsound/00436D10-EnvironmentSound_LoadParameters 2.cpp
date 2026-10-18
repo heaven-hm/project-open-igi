@@ -1,0 +1,61 @@
+// IGI native provenance: EnvironmentSound_LoadParameters - 0x00436D10 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00436D10-EnvironmentSound_LoadParameters.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "EnvironmentSound_LoadParameters.h"
+int EnvironmentSound_LoadParameters(void* context)
+
+{
+    int result;
+    result = *(context + 0x21);
+
+    if (result)
+    {
+        Vehicle_AmbientRain(context);
+        result = Vehicle_InitHeli_6(context);
+    }
+
+    result = *(context + 0x20);
+
+    if (result)
+        result = Vehicle_LeftEcco2F2F2F2F(context);
+
+    int* i = *(context + 8);
+
+    if (*i && i)
+    {
+        int temp_1 = g_afa7e0;
+
+        do
+        {
+            int* source_1 = *i;
+            void* data_3;
+
+            if (!source_1)
+                data_3 = nullptr;
+            else
+            {
+                int data_val = *source_1;
+                int data_1 = -(data_val);
+                data_3 = (data_1 - data_1) & source_1;
+            }
+
+            *((temp_1 << 2) + &g_afa6e0) = data_3;
+            int temp_2 = temp_1 + 1;
+            int data_4 = 0;
+            g_afa7e0 = temp_2;
+            data_4 = i[7];
+            result = *((data_4 << 2) + &g_a970e0);
+
+            if (result)
+            {
+                result = result(i);
+                temp_2 = g_afa7e0;
+            }
+
+            i = *((temp_2 << 2) + &g_afa6dc);
+            temp_1 = temp_2 - 1;
+            g_afa7e0 = temp_1;
+        } while (i);
+    }
+
+    return result;
+}

@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 00402070 QTask_ProcessLOCALconfigqsc | gate PASS | openigi True */
+int QTask_ProcessLOCALconfigqsc(struct frames_ctx* self);

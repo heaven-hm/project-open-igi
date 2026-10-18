@@ -1,0 +1,9 @@
+// IGI native provenance: MathSys_Invoke17_4A9AF8 - 0x004A9AF8 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004A9AF8-MathSys_Invoke17_4A9AF8.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004A9AF8-MathSys_Invoke17_4A9AF8.hpp"
+long double MathSys_Invoke17_4A9AF8()
+
+{
+    /* tailcall */
+    return MathSys_DefaultHandler_4A8BDB();
+}

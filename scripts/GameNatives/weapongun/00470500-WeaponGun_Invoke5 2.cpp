@@ -1,0 +1,10 @@
+// IGI native provenance: WeaponGun_Invoke5 - 0x00470500 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00470500-WeaponGun_Invoke5.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "WeaponGun_Invoke5.h"
+
+int WeaponGun_Invoke5(void* arg1, int arg2)
+
+{
+    (*((Weapon_ComputeAccuracy_5() << 2) + &g_a96ae0))(arg1, arg2);
+    return Game_DataSymbolLoad(arg1 + 0x104, "WEAPON_ID_MEDIPACK");
+}

@@ -1,0 +1,27 @@
+// IGI native provenance: AI_EventBroadcast - 0x00450CE0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00450CE0-AI_EventBroadcast.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "AI_EventBroadcast.hpp"
+int* AI_EventBroadcast(int context)
+
+{
+    int i = 0;
+    int* result = AI_CombatTarget_18();
+
+    if (*result > 0)
+    {
+        int source_1 = 8;
+
+        do
+        {
+            int entity_1 = 0;
+            entity_1 = *(*(AI_CombatTarget_18() + source_1) + 0x1c);
+            unsigned int data_3 = AI_CheckHearing();
+            (*(((entity_1 + data_3 * 0x180) << 2) + &g_a96ae0))(*(AI_CombatTarget_18() + source_1), context);
+            i += 1;
+            source_1 += 4;
+            result = AI_CombatTarget_18();
+        } while (i < *result);
+    }
+
+    return result;
+}

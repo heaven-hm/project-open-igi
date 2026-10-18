@@ -1,0 +1,9 @@
+// IGI native provenance: PickupTrigger_Invoke29_46AE20 - 0x0046AE20 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0046AE20-PickupTrigger_Invoke29_46AE20.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "PickupTrigger_Invoke29_46AE20.hpp"
+
+int PickupTrigger_Invoke29_46AE20()
+
+{
+    g_5be2b0 = 0;
+}

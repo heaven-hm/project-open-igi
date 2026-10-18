@@ -1,0 +1,54 @@
+// IGI native provenance: TransparencyList_Setup - 0x00532030 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00532030-TransparencyList_Setup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "TransparencyList_Setup.h"
+int* TransparencyList_Setup(int* context)
+
+{
+    void* data_1 = context[3];
+    int* __saved_count_2 = *(data_1 + 0x6c);
+    void** dest_val = *(data_1 + 0x78);
+    int data_2 = Particle_FadeParticles_5(dest_val, __saved_count_2, 8, sub_5320d0);
+
+    if (__saved_count_2 <= 0)
+    {
+        g_a84620 = 0;
+        return data_2;
+    }
+
+    int* dest_1 = &dest_val[1];
+    context = dest_1;
+    int* saved_ctx = __saved_count_2;
+    int* __saved_count_1;
+    bool flag_0_1;
+
+    do
+    {
+        void* data_3 = *dest_1;
+        int i_1 = *(data_3 + 4);
+        int flagP1 = *(data_3 + 0x18);
+        int dest_2 = *(data_3 + 0x1c);
+        void* source_val = data_3 + 0x20;
+
+        if (i_1 > 0)
+        {
+            int i;
+
+            do
+            {
+                int* data_4 = g_5ca114;
+                (*(*data_4 + 0x64))(data_4, 4, dest_2, source_val, 3, 0);
+                source_val += flagP1 * 3;
+                i = i_1;
+                i_1 -= 1;
+            } while (i != 1);
+        }
+
+        dest_1 = &context[2];
+        __saved_count_1 = saved_ctx - 1;
+        flag_0_1 = saved_ctx != 1;
+        context = dest_1;
+        saved_ctx = __saved_count_1;
+    } while (flag_0_1);
+    g_a84620 = 0;
+    return __saved_count_1;
+}

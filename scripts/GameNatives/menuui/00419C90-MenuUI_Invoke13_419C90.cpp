@@ -1,0 +1,8 @@
+// IGI native provenance: MenuUI_Invoke13_419C90 - 0x00419C90 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00419C90-MenuUI_Invoke13_419C90.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00419C90-MenuUI_Invoke13_419C90.hpp"
+int MenuUI_Invoke13_419C90(int arg1)
+
+{
+    return (*((Menu_PlayMusic_13() << 2) + &g_a970e0))(arg1);
+}

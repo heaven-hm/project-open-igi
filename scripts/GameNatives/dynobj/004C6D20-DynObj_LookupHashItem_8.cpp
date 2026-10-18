@@ -1,0 +1,58 @@
+// IGI native provenance: DynObj_LookupHashItem_8 - 0x004C6D20 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004C6D20-DynObj_LookupHashItem_8.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004C6D20-DynObj_LookupHashItem_8.hpp"
+void* DynObj_LookupHashItem_8(void* context, int* arg2, void* arg3, int arg4, int arg5, int arg6, void* arg7)
+
+{
+    int* source_val = arg2;
+    int entity_val = 0x8000;
+    void* i = source_val[0xb];
+    unsigned int flagP = *source_val;
+
+    while (i)
+    {
+        void* temp_val;
+        temp_val = *(i + 0x5c);
+        i = *(i + 0x58);
+        entity_val |= temp_val;
+    }
+
+    int data_val = source_val[0xd];
+    source_val[0xe] = entity_val;
+    *(context + (data_val << 2) + 0xe8) = 0;
+
+    while (flagP != arg4)
+    {
+        int dest_1 = 0;
+        *(source_val + 0x3a) |= *(arg3 + 0x5c);
+
+        if (arg5 & flagP)
+            dest_1 = 1;
+
+        if (arg6 & flagP)
+            dest_1 |= 2;
+
+        if (arg7 & flagP)
+            dest_1 |= 4;
+
+        flagP u>>= 1;
+        source_val[0xc] |= 1 << (dest_1 & 0x1f);
+
+        if (!source_val[dest_1 + 3])
+        {
+            int entity_5 = *(context + 0xd08);
+            int* data_7 = *(*(context + 0xd04) + (entity_5 << 2)) * *(context + 0xd10) + *(context + 0xd00);
+            *(*(context + 0xd14) + data_7) = entity_5;
+            *(context + 0xd08) += 1;
+            source_val[dest_1 + 3] = data_7;
+            void* item_24_1 = context;
+            DynObj_LookupHashItem_7(data_7, dest_1, flagP, source_val[0xd]);
+            *(source_val[dest_1 + 3] + 8) = source_val;
+        }
+
+        source_val = source_val[dest_1 + 3];
+    }
+
+    source_val[0xe] |= *(arg3 + 0x5c);
+    return DynObj_ParseConfigFile_8(source_val, arg3);
+}

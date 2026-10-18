@@ -1,0 +1,10 @@
+// IGI native provenance: WeatherWaterSky_GetContext_51BE00 - 0x0051BE00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0051BE00-WeatherWaterSky_GetContext_51BE00.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "WeatherWaterSky_GetContext_51BE00.h"
+
+int* WeatherWaterSky_GetContext_51BE00(int* arg1)
+
+{
+    *arg1 = g_a83778;
+    return arg1;
+}

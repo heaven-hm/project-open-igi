@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 00505D50 WeatherLightmap_GetContext_505D50 | gate PASS | openigi True */
+int WeatherLightmap_GetContext_505D50(void* arg1);

@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 0043C2A0 ExplosionObj_GetContext_43C2A0 | gate PASS | openigi True */
+int* ExplosionObj_GetContext_43C2A0(int* arg1);

@@ -1,0 +1,11 @@
+// IGI native provenance: AIConfig_RegisterConfig_2 - 0x00407CD0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00407CD0-AIConfig_RegisterConfig_2.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00407CD0-AIConfig_RegisterConfig_2.hpp"
+int AIConfig_RegisterConfig_2(int context)
+
+{
+    if (context >= 0 && context < 0x180)
+        return *(context * 0x30 + &g_af5f05);
+
+    return 0;
+}

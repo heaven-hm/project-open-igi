@@ -1,0 +1,8 @@
+// IGI native provenance: Sys_FreeMemory_23 - 0x004B8870 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004B8870-Sys_FreeMemory_23.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "Sys_FreeMemory_23.h"
+void* Sys_FreeMemory_23(int* context, int arg2)
+
+{
+    return Q_TaskHashTableSet(context, Sys_DispatchOpcode_22, arg2, 8, 0, 2, 0);
+}

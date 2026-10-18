@@ -1,0 +1,8 @@
+// IGI native provenance: WeaponGun_InvokeGetList - 0x004776A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004776A0-WeaponGun_InvokeGetList.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004776A0-WeaponGun_InvokeGetList.hpp"
+int WeaponGun_InvokeGetList(int arg1)
+
+{
+    return DynObj_TryingToRemoveUnrigi(Qtask_GetList(), arg1);
+}

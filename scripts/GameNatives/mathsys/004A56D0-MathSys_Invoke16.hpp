@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 004A56D0 MathSys_Invoke16 | gate PASS | openigi True */
+int MathSys_Invoke16();

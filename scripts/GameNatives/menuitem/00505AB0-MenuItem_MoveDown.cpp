@@ -1,0 +1,11 @@
+// IGI native provenance: MenuItem_MoveDown - 0x00505AB0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00505AB0-MenuItem_MoveDown.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00505AB0-MenuItem_MoveDown.hpp"
+void* MenuItem_MoveDown(int self, void* args)
+
+{
+    if (!*(args + 4))
+        *(args + 4) = self;
+
+    return args;
+}

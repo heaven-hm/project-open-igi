@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 0045EEA0 HumanAI_InvokeFindType | gate PASS | openigi True */
+char* HumanAI_InvokeFindType(int* arg1);

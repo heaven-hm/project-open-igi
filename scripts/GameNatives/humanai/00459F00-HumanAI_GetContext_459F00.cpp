@@ -1,0 +1,10 @@
+// IGI native provenance: HumanAI_GetContext_459F00 - 0x00459F00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00459F00-HumanAI_GetContext_459F00.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "HumanAI_GetContext_459F00.hpp"
+
+int* HumanAI_GetContext_459F00(int* arg1)
+
+{
+    *arg1 = g_5bdaa4;
+    return arg1;
+}

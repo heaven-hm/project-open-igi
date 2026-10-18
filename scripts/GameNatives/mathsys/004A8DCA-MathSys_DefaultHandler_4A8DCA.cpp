@@ -1,0 +1,8 @@
+// IGI native provenance: MathSys_DefaultHandler_4A8DCA - 0x004A8DCA - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004A8DCA-MathSys_DefaultHandler_4A8DCA.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004A8DCA-MathSys_DefaultHandler_4A8DCA.hpp"
+void MathSys_DefaultHandler_4A8DCA() __noreturn
+
+{
+    trap(6);
+}

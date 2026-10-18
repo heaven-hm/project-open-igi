@@ -1,0 +1,16 @@
+// IGI native provenance: Weapon_EjectMagazine_9 - 0x0047F1B0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0047F1B0-Weapon_EjectMagazine_9.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "0047F1B0-Weapon_EjectMagazine_9.hpp"
+struct status_msg* Weapon_EjectMagazine_9(int context, unsigned int arg2, unsigned int arg3)
+
+{
+    int kind;
+    kind = g_5c115c;
+    struct status_msg* result = QTask_HandleInput(Script_FormatString(), kind, 0);
+    memcpy(&result->head[0xa], context, 0x18);
+    result->head[8] = arg3;
+    result->head[9] = arg3;
+    result->head[0x11] = 0;
+    result->head[0x10] = arg2;
+    return result;
+}

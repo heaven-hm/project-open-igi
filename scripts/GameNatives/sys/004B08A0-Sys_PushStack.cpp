@@ -1,0 +1,11 @@
+// IGI native provenance: Sys_PushStack - 0x004B08A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004B08A0-Sys_PushStack.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004B08A0-Sys_PushStack.hpp"
+int Sys_PushStack(int* context, int* arg2, char* arg3, int arg4, int arg5)
+
+{
+    if (!Camera_UpdateViewCone_33(0x93aae0, 0x936280, arg3))
+        return 0;
+
+    return Sys_AllocateMemory(context, arg2, arg4, 0x93aae0, 0x936280, arg5);
+}

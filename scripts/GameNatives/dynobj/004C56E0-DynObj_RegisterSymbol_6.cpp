@@ -1,0 +1,10 @@
+// IGI native provenance: DynObj_RegisterSymbol_6 - 0x004C56E0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004C56E0-DynObj_RegisterSymbol_6.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004C56E0-DynObj_RegisterSymbol_6.hpp"
+int DynObj_RegisterSymbol_6()
+
+{
+    int result;
+    result = g_547f3d;
+    return result;
+}

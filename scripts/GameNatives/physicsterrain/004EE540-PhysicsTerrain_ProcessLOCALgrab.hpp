@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 004EE540 PhysicsTerrain_ProcessLOCALgrab | gate PASS | openigi True */
+int PhysicsTerrain_ProcessLOCALgrab();

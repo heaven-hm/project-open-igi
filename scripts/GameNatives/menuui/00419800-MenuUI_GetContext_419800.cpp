@@ -1,0 +1,9 @@
+// IGI native provenance: MenuUI_GetContext_419800 - 0x00419800 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00419800-MenuUI_GetContext_419800.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00419800-MenuUI_GetContext_419800.hpp"
+void* MenuUI_GetContext_419800(void* arg1)
+
+{
+    *(arg1 + 0x20) = *(arg1 + 0x20) + 1f;
+    return arg1;
+}

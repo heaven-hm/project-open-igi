@@ -1,0 +1,9 @@
+// IGI native provenance: Camera_UpdateViewCone_32 - 0x004AF8A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004AF8A0-Camera_UpdateViewCone_32.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004AF8A0-Camera_UpdateViewCone_32.hpp"
+int Camera_UpdateViewCone_32(int context)
+
+{
+    g_93626c = context;
+    return context;
+}

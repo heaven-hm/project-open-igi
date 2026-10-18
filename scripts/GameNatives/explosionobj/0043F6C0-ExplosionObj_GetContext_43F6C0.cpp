@@ -1,0 +1,9 @@
+// IGI native provenance: ExplosionObj_GetContext_43F6C0 - 0x0043F6C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0043F6C0-ExplosionObj_GetContext_43F6C0.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "0043F6C0-ExplosionObj_GetContext_43F6C0.hpp"
+int* ExplosionObj_GetContext_43F6C0(int* arg1)
+
+{
+    *arg1 = 9;
+    return arg1;
+}

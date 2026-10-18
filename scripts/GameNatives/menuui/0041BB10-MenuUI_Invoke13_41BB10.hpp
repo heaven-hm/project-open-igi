@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 0041BB10 MenuUI_Invoke13_41BB10 | gate PASS | openigi True */
+struct status_msg* MenuUI_Invoke13_41BB10(void* arg1, int arg2);

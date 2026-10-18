@@ -1,0 +1,53 @@
+// IGI native provenance: WeatherWaterSky_ProcessMoveRigidObj - 0x0051F4B0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0051F4B0-WeatherWaterSky_ProcessMoveRigidObj.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "WeatherWaterSky_ProcessMoveRigidObj.h"
+
+int WeatherWaterSky_ProcessMoveRigidObj(void* arg1, char* arg2)
+
+{
+    if (!arg2 || !*arg2)
+    {
+        int* i = *(arg1 + 8);
+
+        if (*i && i)
+        {
+            int afa7e0_1 = g_afa7e0;
+
+            do
+            {
+                int* edx_1 = *i;
+                void* eax_3;
+
+                if (!edx_1)
+                    eax_3 = nullptr;
+                else
+                {
+                    int result_val = *edx_1;
+                    int eax_1 = -(result_val);
+                    eax_3 = (eax_1 - eax_1) & edx_1;
+                }
+
+                *((afa7e0_1 << 2) + &g_afa6e0) = eax_3;
+                g_afa7e0 = afa7e0_1 + 1;
+                unsigned int eax_5 = Script_ParseEnumReal32_8();
+                int ecx_2 = 0;
+                ecx_2 = i[7];
+                int eax_9 = *(((eax_5 * 0x180 + ecx_2) << 2) + &g_a96ae0);
+
+                if (eax_9)
+                    eax_9(i, 0);
+
+                afa7e0_1 = g_afa7e0 - 1;
+                g_afa7e0 = afa7e0_1;
+                i = *((afa7e0_1 << 2) + &g_afa6e0);
+            } while (i);
+        }
+    }
+
+    Script_Isexists(arg1 + 0xa8, arg1);
+    int result = *(arg1 + 0x78);
+    int ecx_4 = *(arg1 + 0x7c);
+    *(arg1 + 0x68) = result;
+    *(arg1 + 0x6c) = ecx_4;
+    return result;
+}

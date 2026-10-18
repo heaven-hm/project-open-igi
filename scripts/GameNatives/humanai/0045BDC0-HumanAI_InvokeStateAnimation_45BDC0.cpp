@@ -1,0 +1,59 @@
+// IGI native provenance: HumanAI_InvokeStateAnimation_45BDC0 - 0x0045BDC0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0045BDC0-HumanAI_InvokeStateAnimation_45BDC0.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "HumanAI_InvokeStateAnimation_45BDC0.hpp"
+
+void* HumanAI_InvokeStateAnimation_45BDC0(void* arg1, int arg2)
+
+{
+    int context_val = *(arg1 + 8);
+
+    if (!(context_val & 4))
+    {
+        void* edx_1 = *(arg1 + 4);
+        *(arg1 + 0xc) = *(arg1 + 0x10);
+        *(arg1 + 0x10) = 0x1d;
+        int ecx_2 = *(edx_1 + 0x74);
+        *(arg1 + 0x14) = ecx_2;
+        return ecx_2(arg1, arg2);
+    }
+
+    if (context_val & 0x10000)
+    {
+        void* edx_3 = *(arg1 + 4);
+        *(arg1 + 0xc) = *(arg1 + 0x10);
+        *(arg1 + 0x10) = 0x1e;
+        int ecx_4 = *(edx_3 + 0x78);
+        *(arg1 + 0x14) = ecx_4;
+        return ecx_4(arg1, arg2);
+    }
+
+    if (context_val & 0x20000)
+    {
+        void* edx_5 = *(arg1 + 4);
+        *(arg1 + 0xc) = *(arg1 + 0x10);
+        *(arg1 + 0x10) = 0x21;
+        int ecx_6 = *(edx_5 + 0x84);
+        *(arg1 + 0x14) = ecx_6;
+        return ecx_6(arg1, arg2);
+    }
+
+    if (!(context_val & 0x2000000))
+    {
+        void* edx_7 = *(arg1 + 4);
+        *(arg1 + 0xc) = *(arg1 + 0x10);
+        *(arg1 + 0x10) = 0x13;
+        int ecx_8 = *(edx_7 + 0x4c);
+        *(arg1 + 0x14) = ecx_8;
+        return ecx_8(arg1, arg2);
+    }
+
+    if (!(context_val & 1) || !(*(&context_val + 1) & 2))
+        return arg1;
+
+    void* edx_9 = *(arg1 + 4);
+    *(arg1 + 0xc) = *(arg1 + 0x10);
+    *(arg1 + 0x10) = 0x16;
+    int ecx_10 = *(edx_9 + 0x58);
+    *(arg1 + 0x14) = ecx_10;
+    return ecx_10(arg1, arg2);
+}

@@ -1,0 +1,8 @@
+// IGI native provenance: MathSys_Invoke16_4A914D - 0x004A914D - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004A914D-MathSys_Invoke16_4A914D.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004A914D-MathSys_Invoke16_4A914D.hpp"
+void MathSys_Invoke16_4A914D() __noreturn
+
+{
+    trap(6);
+}

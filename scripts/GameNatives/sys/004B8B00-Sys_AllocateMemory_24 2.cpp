@@ -1,0 +1,10 @@
+// IGI native provenance: Sys_AllocateMemory_24 - 0x004B8B00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004B8B00-Sys_AllocateMemory_24.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "Sys_AllocateMemory_24.h"
+int Sys_AllocateMemory_24(int* context, int arg2)
+
+{
+    int result = 0;
+    result = arg2 < *context;
+    return result;
+}

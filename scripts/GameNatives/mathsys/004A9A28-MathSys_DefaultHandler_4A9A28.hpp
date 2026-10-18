@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 004A9A28 MathSys_DefaultHandler_4A9A28 | gate PASS | openigi True */
+int MathSys_DefaultHandler_4A9A28(long double arg1);

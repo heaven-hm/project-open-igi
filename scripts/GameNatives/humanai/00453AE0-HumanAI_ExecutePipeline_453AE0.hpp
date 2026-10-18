@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 00453AE0 HumanAI_ExecutePipeline_453AE0 | gate PASS | openigi True */
+void* HumanAI_ExecutePipeline_453AE0(void* arg1, int arg2);

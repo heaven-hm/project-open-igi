@@ -1,0 +1,60 @@
+// IGI native provenance: Sector_Cleanup_5 - 0x004DE8A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004DE8A0-Sector_Cleanup_5.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004DE8A0-Sector_Cleanup_5.hpp"
+void Sector_Cleanup_5(int* context, int arg2)
+
+{
+    int* i_1 = context;
+    int* i = i_1;
+
+    if (!i_1)
+        return;
+
+    do
+    {
+        (*(((Render_DrawSplineMesh_4() * 0x180 + DynObj_LookupHashItem_5()) << 2) + &g_a96ae0))(i, arg2);
+        int j = 0;
+
+        if (i[0x4e] > 0)
+        {
+            do
+            {
+                void* dest_val = *(*(i[0x4d] + (j << 2)) * i[0x50] + i[0x4c]);
+                unsigned int data_8 = Render_DrawSplineMesh_4();
+                int entity_3 = 0;
+                entity_3 = *(dest_val + 0x1c);
+                int data_12 = *(((data_8 * 0x180 + entity_3) << 2) + &g_a96ae0);
+
+                if (data_12)
+                    data_12(dest_val, arg2);
+
+                j += 1;
+            } while (j < i[0x4e]);
+
+            i_1 = context;
+        }
+
+        if (i != i_1)
+        {
+            i = *i;
+
+            if (!i)
+                break;
+
+            if (!*i)
+                break;
+        }
+        else
+        {
+            void* source_val = i[0x52];
+
+            if (!source_val)
+                break;
+
+            i = *(source_val + 8);
+
+            if (!*i)
+                break;
+        }
+    } while (i);
+}

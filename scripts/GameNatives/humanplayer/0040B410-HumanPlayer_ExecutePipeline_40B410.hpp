@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 0040B410 HumanPlayer_ExecutePipeline_40B410 | gate PASS | openigi True */
+void* HumanPlayer_ExecutePipeline_40B410(void* arg1, int arg2);

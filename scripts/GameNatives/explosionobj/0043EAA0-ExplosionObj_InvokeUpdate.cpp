@@ -1,0 +1,8 @@
+// IGI native provenance: ExplosionObj_InvokeUpdate - 0x0043EAA0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0043EAA0-ExplosionObj_InvokeUpdate.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "0043EAA0-ExplosionObj_InvokeUpdate.hpp"
+void* ExplosionObj_InvokeUpdate(float arg1)
+
+{
+    return GenericPhysicsObj_Update(arg1);
+}

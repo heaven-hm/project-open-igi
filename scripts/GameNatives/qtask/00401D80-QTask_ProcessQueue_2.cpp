@@ -1,0 +1,53 @@
+// IGI native provenance: QTask_ProcessQueue_2 - 0x00401D80 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00401D80-QTask_ProcessQueue_2.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "00401D80-QTask_ProcessQueue_2.hpp"
+int QTask_ProcessQueue_2(void* context, int arg2, int arg3)
+
+{
+    int data_4 = g_afa7e0;
+    *((data_4 << 2) + &g_afa6e0) = context;
+    int data_val = data_4 + 1;
+    int temp_val = 0;
+    g_afa7e0 = data_val;
+    temp_val = *(context + 0x1c);
+    int entity_5 = *(((arg2 * 0x180 + temp_val) << 2) + &g_a96ae0);
+
+    if (entity_5)
+    {
+        entity_5(context, arg3);
+        data_val = g_afa7e0;
+    }
+
+    if (context == *((data_val << 2) + &g_afa6dc))
+    {
+        int* i = *(context + 8);
+
+        if (*i && i)
+        {
+            do
+            {
+                int* source_1 = *i;
+                void* temp_4;
+
+                if (!source_1)
+                    temp_4 = nullptr;
+                else
+                {
+                    int temp_1 = *source_1;
+                    int temp_2 = -(temp_1);
+                    temp_4 = (temp_2 - temp_2) & source_1;
+                }
+
+                *((data_val << 2) + &g_afa6e0) = temp_4;
+                g_afa7e0 = data_val + 1;
+                QTask_ProcessQueue_2(i, arg2, arg3);
+                data_val = g_afa7e0 - 1;
+                g_afa7e0 = data_val;
+                i = *((data_val << 2) + &g_afa6e0);
+            } while (i);
+        }
+    }
+
+    g_afa7e0 = data_val - 1;
+    return data_val - 1;
+}

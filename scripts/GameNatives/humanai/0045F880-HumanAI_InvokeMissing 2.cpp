@@ -1,0 +1,10 @@
+// IGI native provenance: HumanAI_InvokeMissing - 0x0045F880 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0045F880-HumanAI_InvokeMissing.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "HumanAI_InvokeMissing.h"
+
+int* HumanAI_InvokeMissing(int* arg1)
+
+{
+    *arg1 = g_5bdc18;
+    return arg1;
+}

@@ -1,0 +1,9 @@
+// IGI native provenance: ExplosionObj_Invoke4_43BE50 - 0x0043BE50 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 0043BE50-ExplosionObj_Invoke4_43BE50.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "0043BE50-ExplosionObj_Invoke4_43BE50.hpp"
+int* ExplosionObj_Invoke4_43BE50(int* arg1)
+
+{
+    *arg1 = g_57bf60;
+    return arg1;
+}

@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 00448880 DoorCabinet_Invoke15 | gate PASS | openigi True */
+int* DoorCabinet_Invoke15(int* arg1);

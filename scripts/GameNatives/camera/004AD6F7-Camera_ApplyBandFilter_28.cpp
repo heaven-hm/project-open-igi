@@ -1,0 +1,27 @@
+// IGI native provenance: Camera_ApplyBandFilter_28 - 0x004AD6F7 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004AD6F7-Camera_ApplyBandFilter_28.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004AD6F7-Camera_ApplyBandFilter_28.hpp"
+void* Camera_ApplyBandFilter_28(char* context, int arg2)
+
+{
+    char* data_val = context;
+    int entity_val = arg2 - 1;
+
+    if (arg2)
+    {
+        while (*data_val)
+        {
+            data_val = &data_val[1];
+            int source_1 = entity_val;
+            entity_val -= 1;
+
+            if (!source_1)
+                break;
+        }
+    }
+
+    if (*data_val)
+        return arg2;
+
+    return data_val - context;
+}

@@ -1,0 +1,55 @@
+// IGI native provenance: FX_ErrorInHumancameraHu_3 - 0x004829A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004829A0-FX_ErrorInHumancameraHu_3.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004829A0-FX_ErrorInHumancameraHu_3.hpp"
+void* FX_ErrorInHumancameraHu_3(void* context)
+
+{
+    int entity_1 = *(context + 0x118) - 1;
+    int source_val = 0;
+    *(context + 0x118) = entity_1;
+    int data_val = entity_1;
+    int dest_val = entity_1 + 0x80;
+    int temp_val = entity_1 << 3;
+    int entity_2;
+    int context_1;
+
+    while (true)
+    {
+        context_1 = data_val;
+        entity_2 = temp_val;
+
+        if (data_val < 0)
+        {
+            context_1 = dest_val;
+            entity_2 += 0x400;
+        }
+
+        if (*(entity_2 + &g_5c118d))
+            break;
+
+        source_val += 1;
+        temp_val -= 8;
+        data_val -= 1;
+        dest_val -= 1;
+
+        if (source_val >= 0x80)
+        {
+            *(context + 0x118) = entity_1 + 1;
+            return context;
+        }
+    }
+
+    int* entity_3 = *(entity_2 + &g_5c1188);
+
+    if (*entity_3)
+    {
+        *(context + 0x118) = context_1;
+        *(context + 0x68) = entity_3;
+        return context;
+    }
+
+    Error_Show("ERROR IN HUMANCAMERA HUMANLIST");
+
+    while (true)
+        /* nop */
+}

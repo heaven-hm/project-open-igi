@@ -1,0 +1,6 @@
+// IGI native provenance: Config_ValidatePassword - 0x004062B0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004062B0-Config_ValidatePassword.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004062B0-Config_ValidatePassword.hpp"
+int Config_ValidatePassword() {
+    return 0x1b;
+}

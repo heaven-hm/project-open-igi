@@ -1,0 +1,6 @@
+#pragma once
+#include <stdint.h>
+#include <stdbool.h>
+
+/* 00424C10 MenuUI_GetContext_424C10 | gate PASS | openigi True */
+void* MenuUI_GetContext_424C10(void* arg1, int arg2);

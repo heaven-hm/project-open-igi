@@ -1,0 +1,28 @@
+// IGI native provenance: AI_CombatTarget - 0x004500C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004500C0-AI_CombatTarget.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004500C0-AI_CombatTarget.hpp"
+int* AI_CombatTarget(void* context)
+
+{
+    int i_1 = 0x18;
+    int* context_val = context + 0x6f0;
+    int* result;
+    int i;
+
+    do
+    {
+        result = *context_val;
+
+        for (int* j = *result; j; j = *j)
+        {
+            Env_TriggerAlarm_13(context, result);
+            result = j;
+        }
+
+        context_val = &context_val[3];
+        i = i_1;
+        i_1 -= 1;
+    } while (i != 1);
+    *(context + 0x8e0) = 0;
+    return result;
+}
