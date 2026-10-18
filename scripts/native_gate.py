@@ -231,13 +231,17 @@ def changed_paths(
     """Return existing source files to inspect and deleted native source paths."""
     if mode == "tree":
         base = (root / scan_root).resolve() if scan_root and not scan_root.is_absolute() else (scan_root or root).resolve()
+        if not base.exists():
+            raise GateError(f"Native scan path does not exist: {base}")
         found: set[pathlib.Path] = set()
         for native_root in NATIVE_ROOTS:
             candidate_root = (root / native_root).resolve()
             if not is_under(candidate_root, base) and not is_under(base, candidate_root):
                 continue
             scan = base if is_under(base, candidate_root) else candidate_root
-            if scan.is_dir():
+            if scan.is_file() and scan.suffix.lower() in NATIVE_SOURCE_SUFFIXES:
+                found.add(scan.resolve())
+            elif scan.is_dir():
                 found.update(
                     path.resolve() for path in scan.rglob("*")
                     if path.is_file() and path.suffix.lower() in NATIVE_SOURCE_SUFFIXES
