@@ -307,6 +307,21 @@ def implementation_natives(path: pathlib.Path, relative: str) -> list[dict[str, 
     return natives
 
 
+def natives_with_manifest(
+    path: pathlib.Path, relative: str, records: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Missing comments cannot hide an address already bound to this source."""
+    natives = implementation_natives(path, relative)
+    found = {native["address"] for native in natives}
+    for address, record in records.items():
+        implementation = record.get("implementation", {})
+        if (isinstance(implementation, dict) and implementation.get("path") == relative
+                and address not in found):
+            natives.append({"name": record.get("name", ""), "address": address,
+                            "line": 0, "comment_lines": [], "is_canonical_source": False})
+    return natives
+
+
 def source_addresses_from_text(text: str) -> set[str]:
     addresses: set[str] = set()
     for line in text.splitlines():
@@ -1156,7 +1171,8 @@ def verify_record(
     warnings: list[str],
 ) -> tuple[list[str], dict[str, Any]]:
     address = native["address"]
-    errors = check_provenance_comment(native, relative)
+    warnings.extend(check_provenance_comment(native, relative))
+    errors: list[str] = []
     record = manifest_records.get(address)
     details: dict[str, Any] = {"path": relative, "address": address, "errors": errors, "cfg_similarity": None}
     if record is None:
@@ -1165,7 +1181,7 @@ def verify_record(
 
     parsed_name = re.split(r"[;,]|\s+-\s+", native["name"], maxsplit=1)[0].strip()
     if record.get("name") != parsed_name:
-        errors.append(f"{address}: native name does not match its verification record (source={parsed_name!r})")
+        warnings.append(f"{address}: native comment name does not match its verification record (source={parsed_name!r})")
 
     implementation_record = record.get("implementation", {})
     if not isinstance(implementation_record, dict):
@@ -1241,7 +1257,7 @@ def verify_record(
     if not status_meets_threshold(status, minimum_status):
         errors.append(f"{address}: status {status} is below required {minimum_status}")
     if not native.get("is_canonical_source") and native.get("comment_status") != status:
-        errors.append(f"{address}: five-line comment status does not match manifest status {status}")
+        warnings.append(f"{address}: five-line comment status does not match manifest status {status}")
 
     signatures: dict[str, str] = {}
     tool_artifacts: dict[str, dict[str, Any] | None] = {}
@@ -1382,6 +1398,10 @@ def main() -> int:
     parser.add_argument("--root", type=pathlib.Path, default=pathlib.Path("."))
     parser.add_argument("--staged", action="store_true", help="Check staged native files only (pre-commit).")
     parser.add_argument("--changed", action="store_true", help="Check staged, unstaged, and untracked native files.")
+    parser.add_argument("--file", type=pathlib.Path,
+                        help="Check a single native source file (alias for --tree FILE).")
+    parser.add_argument("--address", action="append", type=normalize_address,
+                        help="Check only this exact retail method within --file/--tree; repeatable.")
     parser.add_argument(
         "--tree", nargs="?", const=pathlib.Path("."), type=pathlib.Path,
         help="Check native C++ source/header files under both native roots, optionally limited to a path.",
@@ -1407,6 +1427,15 @@ def main() -> int:
     parser.add_argument("--report", type=pathlib.Path,
                         help="Write a machine-readable JSON report (relative to --root unless absolute).")
     args = parser.parse_args()
+    if args.file is not None:
+        if args.tree is not None:
+            parser.error("choose --file or --tree")
+        if not (args.file if args.file.is_absolute() else args.root / args.file).is_file():
+            parser.error("--file must identify an existing source file")
+        args.tree = args.file
+    requested = set(args.address or [])
+    if requested and (args.tree is None or args.production_tree or args.staged or args.changed):
+        parser.error("--address requires --file/--tree and cannot restrict release or staged checks")
 
     if not math.isfinite(args.cfg_threshold) or not 0.0 <= args.cfg_threshold <= 1.0:
         parser.error("--cfg-threshold must be a finite number between 0.0 and 1.0")
@@ -1445,12 +1474,27 @@ def main() -> int:
         "deleted_files": [],
         "failures": [],
         "warnings": [],
+        "requested_addresses": sorted(requested),
     }
     try:
         files, deleted = changed_paths(root, mode, scan_root)
+        if mode in ("tree", "production-tree") and not files:
+            raise GateError("Selected path contains no supported native source files; nothing was verified")
         manifest_path = args.manifest if args.manifest.is_absolute() else root / args.manifest
         manifest = load_manifest(manifest_path)
         manifest_records = index_manifest(manifest)
+        if requested:
+            matching_files = []
+            found_addresses: set[str] = set()
+            for path in files:
+                native_addresses = {n["address"] for n in natives_with_manifest(
+                    path, path.relative_to(root).as_posix(), manifest_records)}
+                if native_addresses & requested:
+                    matching_files.append(path)
+                    found_addresses.update(native_addresses & requested)
+            if requested - found_addresses:
+                raise GateError(f"Requested methods are not bound to the selected source: {sorted(requested - found_addresses)}")
+            files = matching_files
         binary_path = args.binary if args.binary.is_absolute() else root / args.binary
         if files and not binary_path.is_file():
             raise GateError(f"Retail executable is missing: {binary_path}; native evidence cannot be verified")
@@ -1482,8 +1526,9 @@ def main() -> int:
     addresses: set[str] = set()
     for path in files:
         try:
-            addresses.update(native["address"] for native in implementation_natives(
-                path, path.relative_to(root).as_posix()))
+            addresses.update(native["address"] for native in natives_with_manifest(
+                path, path.relative_to(root).as_posix(), manifest_records)
+                if not requested or native["address"] in requested)
         except (GateError, OSError, ValueError):
             # The normal per-file pass below reports the precise source error.
             continue
@@ -1526,18 +1571,24 @@ def main() -> int:
                 failures.append(str(error))
         for address in sorted(removed_native_addresses(root, implementation, relative)):
             if not retired_native_is_reviewed(manifest, address, relative):
-                failures.append(f"{relative}: removing Native provenance for {address} requires a reviewed retired_natives entry")
+                warnings.append(f"{relative}: Native comment for {address} was removed; manifest identity still applies")
 
         try:
-            natives = implementation_natives(implementation, relative)
+            natives = natives_with_manifest(implementation, relative, manifest_records)
+            if requested:
+                natives = [native for native in natives if native["address"] in requested]
         except GateError as error:
             failures.append(str(error))
             continue
         has_host_helpers, helper_errors = check_host_helper_comments(implementation, relative)
-        failures.extend(helper_errors)
+        warnings.extend(helper_errors)
         if not natives:
-            if any(relative.startswith(prefix) for prefix in NATIVE_ROOTS) and not has_host_helpers:
-                failures.append(f"{relative}: changed native source/header has no Native or HOST HELPER provenance")
+            if any(relative.startswith(prefix) for prefix in NATIVE_ROOTS):
+                if not has_host_helpers:
+                    warnings.append(f"{relative}: source/header has no Native or HOST HELPER provenance")
+                if relative not in {"engine/src/retail/diagnostics/log_record.cpp",
+                                    "engine/src/retail/core/debug_command_line.cpp"}:
+                    failures.append(f"{relative}: no address-bound native identity is available to verify this source's logic")
             continue
         for native in natives:
             checked += 1

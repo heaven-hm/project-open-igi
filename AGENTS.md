@@ -9,6 +9,7 @@ The goal is to reconstruct native functions from the original retail Project IGI
 | **Binary Ninja MCP**                                   | Analyze disassembly, decompiled pseudocode, function boundaries, cross-references, arguments, and data types.                                                                                                   |
 | **Ghidra MCP**                                         | Independently analyze the same function, validate decompilation, inspect references, and identify disagreements with Binary Ninja.                                                                              |
 | **Radare2 CFG MCP**                                    | Analyze control-flow graphs, basic blocks, branches, loops, calls, and function structure.                                                                                                                      |
+| **angr** | Independently recover exact retail function entries and CFGs with CFGFast; record image identity, assumptions and unresolved flow. Approximate CFG evidence does not prove behavior. |
 | **IGI-Probe**                                          | Provide Frida-like runtime instrumentation for observing native behavior, function calls, memory values, and execution paths where supported. Do not assume IGI-Probe is Frida or supports every Frida feature. |
 | **[RE-Agent](https://github.com/heaven-hm/re-agent/)** | Act as the project-specific AI-agent layer for evidence-guided reconstruction, tool orchestration, review, and verification workflows, according to its actual implemented capabilities.                        |
 | **[REA](https://github.com/morluto/rea)**              | A separate upstream reverse-engineering project that may provide reusable analysis tools, integrations, or capabilities. Evaluate its actual functionality and license before integrating it into the workflow. |
@@ -22,9 +23,9 @@ The goal is to reconstruct native functions from the original retail Project IGI
    - Locate the native function in the retail `igi.exe`.
    - Record its address, calling convention, arguments, return value, callers, callees, and relevant memory references where evidence permits.
 
-2. **Analyze independently with Binary Ninja and Ghidra**
+2. **Analyze independently with Binary Ninja, Ghidra, and angr**
 
-   - Use both tools to inspect the function and its surrounding code.
+   - Compare the decompilers with angr CFGFast recovery of the same exact entry and image base.
    - Compare pseudocode, control flow, types, function boundaries, and cross-references.
    - Investigate disagreements rather than choosing one decompiler automatically.
 
@@ -110,4 +111,15 @@ A native reconstruction is ready for acceptance when:
 - The verification status accurately describes what was tested.
 - RE-Agent and REA are identified separately, and any claimed integration is supported by the actual repository implementation.
 
-**Core principle:** Binary Ninja, Ghidra, Radare2 CFG MCP, and IGI-Probe provide complementary evidence. RE-Agent coordinates the project-specific reconstruction and review process; REA is a separate upstream project whose capabilities may be evaluated for integration. The original executable and reproducible observations—not AI confidence—determine whether a native is verified.
+**Core principle:** Binary Ninja, Ghidra, angr, Radare2 CFG MCP, and IGI-Probe provide complementary evidence. RE-Agent coordinates the project-specific reconstruction and review process; REA is a separate upstream project whose capabilities may be evaluated for integration. The original executable and reproducible observations—not AI confidence—determine whether a native is verified.
+
+### 10.7. Gate modes and candidate reuse
+
+- `build.sh` calls `scripts/native_gate.py`; binary-analysis logic belongs in Python helpers. `scripts/angr_analyze.py` owns angr imports, PE loading and CFGFast execution.
+- Build and launch acceptance requires the full production tree at `VERIFIED` with a CFG threshold of at least `0.85`. A single-method or changed-file pass does not qualify an entire release.
+- A helper timeout, missing angr, wrong binary/hash/base, unrecovered entry, unresolved required control flow, semantic failure or behavioral mismatch must block verification. Keep semantic and behavioral checks enabled.
+- Use `IGI_ANGR_PYTHON` to select an isolated interpreter containing angr. The default is `$RE_AGENT_ROOT/.venv/bin/python`.
+- Provenance comment format, comment names, and comment/status disagreements are warnings. Missing comments must not hide methods: use manifest addresses to discover them and retain blocking logic/evidence checks.
+- Prefer small native fixes and small commits. Check the changed method, then repeat `./build.sh` as fixes accumulate. Keep current evidence with the code.
+- Candidate methods may come from `scripts/GameNatives`, C# OpenIGI, `project-igi-editor`, or `hjcminus/Project-IGI-Terrain`. Retain source revision and applicable license notices. Copied/adapted code remains a candidate until checked against retail `igi.exe`.
+- External source shape or a CFG score alone cannot prove equivalent calculations, return values or memory effects. Record separate CFG, angr, semantic and behavioral results; incomplete comparisons stay inconclusive.
