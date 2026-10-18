@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "reviewed": true,
+  "reviewed_by": "Codex manual Radare2 instruction and x86 candidate review, 2026-10-19",
+  "address": "0x004CF300",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "72a7d7202418fa8391d19bc3730d8fc7a4b0648f43892eaf78c4c41b4fa23bd8",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Manually inspected retail 0x004CF300..0x004CF323 with Radare2. Existing independent BN/r2 CFG evidence remains bound to this entry."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "cdecl context at esp+4; index at esp+8 (esp+0xc after push esi). Explicit angr cdecl prototype is void*(void**,int)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "edx starts at zero, increments by one for each successor; signed input is compared by bitwise equality. Compared INT_MIN, -1, zero, positive positions and INT_MAX."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Loads *context, then node[0] as next. Non-empty list and a trailing node with next=0 are preconditions. Fixture compares full 1024-byte arena in both executions."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No calls and no writes in retail instructions. Returns current node only while successor is non-null. Final node deliberately excluded, confirmed by all boundary fixtures."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "je at 0x004CF30D and fallthrough after successor test return zero; match branch returns current eax. Null heads and cyclic/invalid lists are outside the tested scope."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "No floating-point operations."
+    }
+  ],
+  "limitations": [
+    "Valid finite non-empty lists only; invalid pointers, cycles and concurrent writes excluded.",
+    "Concrete emulation is not an original-game process or universal equivalence proof.",
+    "No independent second reviewer in this pass; status remains STRUCTURALLY_VERIFIED."
+  ]
+}

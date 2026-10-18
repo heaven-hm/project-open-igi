@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "reviewed": true,
+  "reviewed_by": "Codex manual GameNatives/Radare2 versus x86 candidate review, 2026-10-19",
+  "address": "0x004B0C60",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "5272fd285f110a9d834f95ec250e424cc497f581c783d4d94f76db29ca346520",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Reviewed retail entry 0x004B0C60 and Windows x86 branch in mem_alloc.cpp with the GameNatives export and current Radare2 disassembly."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "numBytes and alignment are stack cdecl signed 32-bit inputs; allocation request LEA uses their raw bits plus 0x1c. Removed x86 negative-size early return and alignment clamp unsupported by retail instructions."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Retail 0x004B0C71 LEA computes wrapped request; 0x004B0CBE uses raw+alignment+0x1b, then decrement/invert mask. Windows x86 sum now uses unsigned 32-bit addition and raw alignment. All 23 modeled success cases agree including alignment=-1 and positive non-powers of two."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Reviewed five four-byte header slots and aligned back pointer. Live fixture compares payload/backpointer relations, allocation count, list header state and allocation requests. Host 64-bit layout is excluded."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Retail Mem_AllocChunk, lazy Mem_InitHeapState and HeapList_Insert are executed with deterministic allocator boundary. This does not verify the real CRT heap or pool modes."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Success return matches in all 23 cases. Failure branch retains summing walk, Error_Show and infinite loop; failure execution, negative sizes and overflow inputs remain untested and are explicitly outside this reviewed scope."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "No floating-point operations."
+    }
+  ],
+  "limitations": [
+    "Only non-negative byte counts with allocation success were exercised; allocation-failure behavior was not compared.",
+    "The game process and CRT heap are not running; allocation APIs are deterministic angr boundary procedures.",
+    "Scope: modeled allocation success only; failure, negative sizes, integer-overflow inputs and host 64-bit branch remain unverified.",
+    "No independent second reviewer; status stays STRUCTURALLY_VERIFIED."
+  ]
+}

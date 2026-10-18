@@ -1,3 +1,17 @@
+if(NOT WIN32 OR NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
+    message(FATAL_ERROR "open-igi.exe requires a Windows 32-bit x86 toolchain.")
+endif()
+include(CheckCXXSourceCompiles)
+check_cxx_source_compiles("
+#if !defined(_M_IX86) && !defined(__i386__)
+#error Windows x86 compiler required
+#endif
+int main() { return 0; }
+" IGI_WINDOWS_X86_COMPILER)
+if(NOT IGI_WINDOWS_X86_COMPILER)
+    message(FATAL_ERROR "open-igi.exe requires an Intel x86 compiler, not ARM32.")
+endif()
+
 add_executable(open-igi WIN32
     main.cpp
     retail_model_scene.cpp

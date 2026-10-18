@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "reviewed": true,
+  "reviewed_by": "Codex manual Radare2 versus candidate x86-source review, 2026-10-19",
+  "address": "0x004CEAA0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "72a7d7202418fa8391d19bc3730d8fc7a4b0648f43892eaf78c4c41b4fa23bd8",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Reviewed retail disassembly at 0x004CEAA0 through sibling traversal and out-size handling at 0x004CEB61. Retained BN/r2 structural records, without adopting their stale claimed byte length as a boundary proof."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Retail context at esp+4, tag esp+8, size pointer esp+12; three pushed callee-saved registers shift those offsets. Test uses explicit x86 cdecl pointer,int,pointer prototype."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Reviewed byte-swap shifts/masks, initial +12 offset, limit base+8+big-endian size, successor step 8+((size+3)&~3). Tested seven payload lengths covering each alignment residue."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Fixture compares complete 1024-byte arena including out-size sentinel. Sibling sizes and tags stored big-endian, payload returned at chunk+8."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No calls; only optional out-size is written. Tested first, middle, last and absent tags with both null and non-null size output."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Match returns payload; unsigned successor >= limit returns null. Candidate shares these tested paths; malformed FORM data and arithmetic wraparound are outside this review scope."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "No floating-point operations."
+    }
+  ],
+  "limitations": [
+    "Valid bounded big-endian FORM sibling chunks only; malformed sizes, wraparound and invalid pointers excluded.",
+    "Concrete angr execution, not a live game run or universal equivalence proof.",
+    "No independent second reviewer; status stays STRUCTURALLY_VERIFIED."
+  ]
+}
