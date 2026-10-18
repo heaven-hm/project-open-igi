@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "natives": [
+    {
+      "address": "0x004D0CF0",
+      "name": "Model_GetAttachment",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/model/mef_native_attachments.cpp",
+        "sha256": "fa70e6f017ad2d9013d7c240232ea23e4afa180687f9c3ba0a348a49f969177e",
+        "signature": "MefNativeAttachmentRecord* __cdecl Model_GetAttachment(MefNativeModelRecord*, int32_t)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/render/004D0CF0-Model_GetAttachment.cpp",
+        "sha256": "3a97b815b318868fec3463052804e1af95f23c32af3d87779a444a534d7acab9",
+        "signature": "int __cdecl Model_GetAttachment(void*, int)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "ghidra": {
+          "evidence_id": "ev_e6afef5e2623b1aabfd234e70891511594e02b468fc8d5c7c93d83d2b64d824b",
+          "signature": "int __cdecl FUN_004d0cf0(int32_t, int32_t)",
+          "evidence_path": "docs/fidelity/evidence/model-get-attachment-accessors.json",
+          "evidence_sha256": "15fad29793d331f5e052a20282562479a4a5b4ca6a9541abc16bece1cfcd373d",
+          "blocks": 1,
+          "branches": 0,
+          "calls": 0
+        },
+        "radare2": {
+          "evidence_id": "docs/fidelity/evidence/model-get-attachment-accessors.json#radare2:0x004D0CF0",
+          "signature": "cdecl(int32_t, int32_t) -> int32_t",
+          "evidence_path": "docs/fidelity/evidence/model-get-attachment-accessors.json",
+          "evidence_sha256": "15fad29793d331f5e052a20282562479a4a5b4ca6a9541abc16bece1cfcd373d",
+          "blocks": 1,
+          "branches": 0,
+          "calls": 0
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Retail pseudocode and Radare2 establish cdecl with two 32-bit stack arguments and a 32-bit address result. The typed x86 record pointer is ABI-equivalent to the GameNatives int result; the implementation preserves the 0x44 stride and pointer chain. Binary Ninja was unavailable; the GameNatives label remains provisional."
+        },
+        "cfg_similarity": 1.0,
+        "runtime_limit": "No IGI-Probe trace or live retail factory replay was collected."
+      }
+    },
+    {
+      "address": "0x004D0D10",
+      "name": "Model_GetAttachmentCount",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/model/mef_native_attachments.cpp",
+        "sha256": "fa70e6f017ad2d9013d7c240232ea23e4afa180687f9c3ba0a348a49f969177e",
+        "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/render/004D0D10-Model_GetAttachmentCount.cpp",
+        "sha256": "9b9041c8519f2523792d86e2b7a7d915e1abede1fecab0a861e32e3c64f7591f",
+        "signature": "int __cdecl Model_GetAttachmentCount(void*)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "ghidra": {
+          "evidence_id": "ev_ffe8a040d8dfa38e12fcf4676ec964cd8225c98ff62464f6854f51084a42a989",
+          "signature": "int __cdecl FUN_004d0d10(int32_t)",
+          "evidence_path": "docs/fidelity/evidence/model-get-attachment-accessors.json",
+          "evidence_sha256": "15fad29793d331f5e052a20282562479a4a5b4ca6a9541abc16bece1cfcd373d",
+          "blocks": 1,
+          "branches": 0,
+          "calls": 0
+        },
+        "radare2": {
+          "evidence_id": "docs/fidelity/evidence/model-get-attachment-accessors.json#radare2:0x004D0D10",
+          "signature": "cdecl(int32_t) -> int32_t",
+          "evidence_path": "docs/fidelity/evidence/model-get-attachment-accessors.json",
+          "evidence_sha256": "15fad29793d331f5e052a20282562479a4a5b4ca6a9541abc16bece1cfcd373d",
+          "blocks": 1,
+          "branches": 0,
+          "calls": 0
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Retail pseudocode and Radare2 establish cdecl with one 32-bit stack argument and a signed 32-bit result. The typed x86 model-record pointer is ABI-equivalent to the GameNatives void pointer; the implementation preserves the signed 16-bit load at MESH+0x7E. Binary Ninja was unavailable; the GameNatives label remains provisional."
+        },
+        "cfg_similarity": 1.0,
+        "runtime_limit": "No IGI-Probe trace or live retail factory replay was collected."
+      }
+    }
+  ]
+}

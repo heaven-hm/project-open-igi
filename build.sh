@@ -4,6 +4,14 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 cd "$ROOT_DIR"
 
+echo "==> [0/4] Verifying changed native transcriptions against retail igi.exe..."
+python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --changed \
+    --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85 || {
+  echo "!! Build BLOCKED: changed native code lacks matching binary-bound evidence."
+  echo "!! A five-line comment alone cannot authorize compilation or deployment."
+  exit 1
+}
+
 echo "==> [1/4] Configuring and building host engine & test suite (build/)..."
 cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
