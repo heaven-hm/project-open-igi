@@ -248,7 +248,7 @@ def changed_paths(
                 )
         return sorted(found), []
 
-    if mode == "production-tree":
+    if mode in ("production-tree", "runtime-trace"):
         native_root = root / "engine/src/retail"
         files = native_root.rglob("*") if native_root.exists() else []
         return sorted(
@@ -274,6 +274,37 @@ def changed_paths(
 
     deleted = sorted(_deleted_native_paths(root, include_unstaged=(mode == "changed")))
     return sorted(found), deleted
+
+
+def load_runtime_trace(path: pathlib.Path, binary_digest: str) -> set[str]:
+    """Load an IGI-Probe load-phase trace and return observed native VAs.
+
+    A source call-graph cannot establish that a native ran during startup:
+    retail dispatch tables and QVM calls are indirect.  Runtime mode therefore
+    accepts only an explicit, complete trace bound to the exact retail image.
+    """
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as error:
+        raise GateError(f"runtime trace cannot be read: {path}: {error}") from error
+    if not isinstance(value, dict) or value.get("schema_version") != 1:
+        raise GateError("runtime trace must be a schema_version=1 JSON object")
+    if value.get("kind") != "igi-native-runtime-trace":
+        raise GateError("runtime trace kind must be 'igi-native-runtime-trace'")
+    if value.get("phase") != "load" or value.get("capture_complete") is not True:
+        raise GateError("runtime trace must be a complete phase='load' capture")
+    if value.get("binary_sha256", "").lower() != binary_digest.lower():
+        raise GateError("runtime trace binary SHA-256 does not match the selected retail executable")
+    raw_addresses = value.get("addresses")
+    if not isinstance(raw_addresses, list) or not raw_addresses:
+        raise GateError("runtime trace must contain a non-empty addresses array")
+    addresses: set[str] = set()
+    for raw in raw_addresses:
+        try:
+            addresses.add(normalize_address(raw))
+        except (TypeError, ValueError) as error:
+            raise GateError(f"runtime trace contains an invalid native address: {raw!r}") from error
+    return addresses
 
 
 def implementation_natives(path: pathlib.Path, relative: str) -> list[dict[str, Any]]:
@@ -1072,6 +1103,18 @@ def run_live_behavioral_runner(
         return None
     if process.returncode != 0:
         stderr = process.stderr.strip()[-2000:]
+        # Differential runners return nonzero when an observed output differs.
+        # Preserve those case IDs so the build identifies the concrete mismatch.
+        try:
+            failed_report = json.loads(process.stdout)
+        except (json.JSONDecodeError, TypeError):
+            failed_report = None
+        if isinstance(failed_report, dict) and isinstance(failed_report.get("cases"), list):
+            failed_cases = [case.get("id", "<unnamed>") for case in failed_report["cases"]
+                            if isinstance(case, dict)
+                            and case.get("reference_output") != case.get("candidate_output")]
+            if failed_cases:
+                errors.append(f"{native_address}: behavioral output differs in cases {failed_cases[:20]}")
         errors.append(
             f"{native_address}: behavioral runner exited with code {process.returncode}; stderr={stderr!r}"
         )
@@ -1117,9 +1160,7 @@ def run_angr_analysis(
         return {"functions": {}}
     if not helper.is_file():
         return {"error": "scripts/angr_analyze.py is missing", "functions": {}}
-    re_agent = pathlib.Path(os.environ.get(
-        "RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/auto-re-agent"))
-    interpreter = os.environ.get("IGI_ANGR_PYTHON", str(re_agent / ".venv/bin/python"))
+    interpreter = os.environ.get("IGI_ANGR_PYTHON", str(root / ".venv-angr/bin/python"))
     command = [interpreter, str(helper), "--binary", str(binary.resolve())]
     for address in addresses:
         command.extend(["--address", address])
@@ -1408,6 +1449,8 @@ def main() -> int:
     )
     parser.add_argument("--production-tree", action="store_true",
                         help="Check every production C++ source/header under engine/src/retail, regardless of Git status.")
+    parser.add_argument("--runtime-trace", type=pathlib.Path,
+                        help="Check only natives observed during a complete load-phase IGI-Probe trace; development-only.")
     parser.add_argument("--binary", type=pathlib.Path, default=DEFAULT_BINARY)
     parser.add_argument("--manifest", type=pathlib.Path, default=DEFAULT_MANIFEST)
     parser.add_argument("--threshold", choices=STATUS_RANK, default="STRUCTURALLY_VERIFIED")
@@ -1439,9 +1482,11 @@ def main() -> int:
 
     if not math.isfinite(args.cfg_threshold) or not 0.0 <= args.cfg_threshold <= 1.0:
         parser.error("--cfg-threshold must be a finite number between 0.0 and 1.0")
-    selected_modes = sum((args.staged, args.changed, args.tree is not None, args.production_tree))
+    selected_modes = sum((args.staged, args.changed, args.tree is not None, args.production_tree, args.runtime_trace is not None))
     if selected_modes > 1:
-        parser.error("choose only one of --staged, --changed, --tree, or --production-tree")
+        parser.error("choose only one of --staged, --changed, --tree, --production-tree, or --runtime-trace")
+    if args.runtime_trace is not None and args.threshold == "VERIFIED":
+        parser.error("--runtime-trace is development-only; use --threshold STRUCTURALLY_VERIFIED or a lower threshold")
 
     root = args.root.resolve()
     if args.tree is not None:
@@ -1449,6 +1494,9 @@ def main() -> int:
         scan_root = args.tree
     elif args.production_tree:
         mode = "production-tree"
+        scan_root = None
+    elif args.runtime_trace is not None:
+        mode = "runtime-trace"
         scan_root = None
     elif args.changed:
         mode = "changed"
@@ -1507,6 +1555,28 @@ def main() -> int:
                 f"Manifest target SHA-256 does not match {binary_path}; expected {expected_digest or '<missing>'}, "
                 f"observed {binary_digest}"
             )
+        runtime_addresses: set[str] = set()
+        if mode == "runtime-trace":
+            trace_path = args.runtime_trace if args.runtime_trace.is_absolute() else root / args.runtime_trace
+            runtime_addresses = load_runtime_trace(trace_path.resolve(), binary_digest)
+            selected_files: list[pathlib.Path] = []
+            for path in files:
+                relative = path.relative_to(root).as_posix()
+                bound = {native["address"] for native in natives_with_manifest(path, relative, manifest_records)}
+                if bound & runtime_addresses:
+                    selected_files.append(path)
+            if not selected_files:
+                raise GateError("runtime trace addresses do not bind to production native sources")
+            try:
+                trace_report_path = str(trace_path.resolve().relative_to(root))
+            except ValueError:
+                trace_report_path = str(trace_path.resolve())
+            files = selected_files
+            report["runtime_trace"] = {
+                "path": trace_report_path,
+                "sha256": sha256(trace_path.resolve()),
+                "addresses": sorted(runtime_addresses),
+            }
     except (GateError, OSError) as error:
         message = str(error)
         print(f"native_gate: BLOCKED: {message}", file=sys.stderr)
@@ -1528,7 +1598,8 @@ def main() -> int:
         try:
             addresses.update(native["address"] for native in natives_with_manifest(
                 path, path.relative_to(root).as_posix(), manifest_records)
-                if not requested or native["address"] in requested)
+                if (not requested or native["address"] in requested)
+                and (mode != "runtime-trace" or native["address"] in runtime_addresses))
         except (GateError, OSError, ValueError):
             # The normal per-file pass below reports the precise source error.
             continue
@@ -1577,6 +1648,8 @@ def main() -> int:
             natives = natives_with_manifest(implementation, relative, manifest_records)
             if requested:
                 natives = [native for native in natives if native["address"] in requested]
+            if mode == "runtime-trace":
+                natives = [native for native in natives if native["address"] in runtime_addresses]
         except GateError as error:
             failures.append(str(error))
             continue

@@ -1,0 +1,45 @@
+name: Native verification gate (integrity)
+
+# Authoritative, agent-proof check: runs where a coding agent's local edits
+# cannot reach. It (1) verifies the gate/build/run scripts match the committed
+# trust anchor, and (2) fails if those scripts changed without the anchor being
+# updated in the same change.
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate-integrity:
+    name: Verify native gate + build script integrity
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source (full history for base diff)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify pinned gate/build/run hashes
+        run: bash scripts/check_gate_integrity.sh
+
+      - name: Reject unreviewed gate/build/run changes
+        run: |
+          set -euo pipefail
+          base="${{ github.event.pull_request.base.sha || github.event.before }}"
+          head="${{ github.sha }}"
+          if [ -z "$base" ] || [ "$base" = "0000000000000000000000000000000000000000" ]; then
+            echo "No base commit to diff (first push); integrity check above is authoritative."
+            exit 0
+          fi
+          changed="$(git diff --name-only "$base" "$head" || true)"
+          echo "$changed"
+          if echo "$changed" | grep -Eq '^(scripts/native_gate\.py|build\.sh|run\.sh)$'; then
+            if ! echo "$changed" | grep -q '^docs/fidelity/gate-integrity.sha256$'; then
+              echo "::error::scripts/native_gate.py / build.sh / run.sh changed without updating docs/fidelity/gate-integrity.sha256"
+              exit 1
+            fi
+          fi

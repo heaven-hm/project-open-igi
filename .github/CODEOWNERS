@@ -1,0 +1,11 @@
+# Human review required for the native verification gate and its trust anchor.
+# Replace @heaven-hm with your GitHub user/team handle.
+# With branch protection ("Require review from Code Owners"), an agent's edit to
+# these files cannot merge without an owner's approval.
+
+/scripts/native_gate.py                  @heaven-hm
+/scripts/check_gate_integrity.sh         @heaven-hm
+/build.sh                                @heaven-hm
+/run.sh                                  @heaven-hm
+/docs/fidelity/gate-integrity.sha256     @heaven-hm
+/docs/fidelity/native-verification.json  @heaven-hm

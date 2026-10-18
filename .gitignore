@@ -20,6 +20,7 @@ dist
 .cursor
 .codex
 .gemini
+.opencode
 
 # Mono auto generated files
 mono_crash.*
@@ -63,6 +64,11 @@ nunit-*.xml
 [Dd]ebugPS/
 [Rr]eleasePS/
 dlldata.c
+.opencode
+.code
+.gemini
+.claude
+.codex
 
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
@@ -255,7 +261,7 @@ orleans.codegen.cs
 
 # Since there are multiple workflows, uncomment next line to ignore bower_components
 # (https://github.com/github/gitignore/pull/1529#issuecomment-104372622)
-#bower_components/
+bower_components/
 
 # RIA/Silverlight projects
 Generated_Code/
@@ -396,13 +402,19 @@ BinaryNinja
 assets
 build
 IGI_Natives
-scripts
 scratch
 .opncode
 .code
+docs
 
 # Release binaries belong on GitHub Releases, not in source control.
 /IGI-Natives-Retail-Logging-*.zip
 scripts
+!scripts/
+scripts/*
+!scripts/qvm_load_diff_runner.py
+!scripts/mtp_package_diff_runner.py
 compile_commands.json
 .clangd/
+# Isolated native-verification Python environment.
+/.venv-angr/

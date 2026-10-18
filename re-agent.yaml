@@ -1,0 +1,59 @@
+# re-agent configuration using the schema in heaven-hm/auto-re-agent.
+# Re-Agent is a CLI backed by ghidra-ai-bridge; it is not the REA MCP server.
+# The current Codex session exposes REA MCP tools, but no Re-Agent MCP or
+# ghidra-bridge executable. Install/configure that backend before invoking
+# `re-agent reverse`; do not claim Re-Agent evidence from an unrun CLI.
+
+project_profile:
+  name: generic-cpp
+  language_standard: C++20
+  source_root: .
+  source_extensions: [.cpp, .h, .hpp]
+  hooks_csv: null
+  hook_patterns: []
+  stub_patterns: ["TODO|NOT_IMPLEMENTED"]
+  stub_markers: [NOT_IMPLEMENTED]
+  stub_call_prefix: __re_agent_no_stub_prefix__
+  class_macro: ""
+  prompt_rules:
+    - "The retail x86 igi.exe is the source of truth; preserve its ABI and control flow."
+    - "Inspect scripts/GameNatives candidates and copy a native body only after its signature and behavior are independently verified."
+    - "Do not generate or simplify a native implementation when the GameNatives candidate is unverified or conflicts with binary evidence."
+    - "Keep host diagnostics explicitly labeled HOST HELPER and outside native parity claims."
+
+llm:
+  provider: codex
+
+backend:
+  type: ghidra-bridge
+  cli_path: ghidra-bridge
+  timeout_s: 45
+
+parity:
+  enabled: true
+
+orchestrator:
+  max_review_rounds: 3
+  max_functions_per_class: 5
+  max_attempts_per_function: 1
+  selection_strategy: dependency-order
+  investigation_enabled: true
+  max_investigations: 8
+
+validation:
+  enabled: true
+  copy_project: true
+  project_root: .
+  build_commands:
+    - python3 scripts/native_gate.py --root . --production-tree --threshold VERIFIED --cfg-threshold 0.85
+    - cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    - cmake --build build
+  test_commands:
+    - ctest --test-dir build --output-on-failure
+  require_build: true
+  require_tests: true
+  require_verified: true
+  trust_configured_commands: true
+  parity_fail_on_red: true
+  parity_fail_on_yellow: true
+  keep_project_copy: false

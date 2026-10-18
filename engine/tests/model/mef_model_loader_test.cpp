@@ -66,8 +66,19 @@ std::vector<std::byte> make_model_bytes(std::uint32_t render_format = 0U)
     write_u32(mesh_header, 0x20U, render_format);
 
     append_chunk(file_bytes, igi::retail::model::mef_tag::mesh, mesh_header, 4U, false);
-    const std::array<std::byte, 4> attachment_payload{
-        std::byte{0x11}, std::byte{0x22}, std::byte{0x33}, std::byte{0x44}};
+    std::vector<std::byte> attachment_payload(0x44U, std::byte{0});
+    constexpr char attachment_name[] = "CRATE_CHILD";
+    for (std::size_t index = 0U; index < sizeof(attachment_name) - 1U; ++index)
+    {
+        attachment_payload[index] = static_cast<std::byte>(attachment_name[index]);
+    }
+    write_u32(attachment_payload, 16U, std::bit_cast<std::uint32_t>(1.25F));
+    write_u32(attachment_payload, 20U, std::bit_cast<std::uint32_t>(-2.5F));
+    write_u32(attachment_payload, 24U, std::bit_cast<std::uint32_t>(3.75F));
+    write_u32(attachment_payload, 28U, std::bit_cast<std::uint32_t>(1.0F));
+    write_u32(attachment_payload, 44U, std::bit_cast<std::uint32_t>(1.0F));
+    write_u32(attachment_payload, 60U, std::bit_cast<std::uint32_t>(1.0F));
+    write_u32(attachment_payload, 64U, 0x12345678U);
     append_chunk(file_bytes, igi::retail::model::mef_tag::attachments, attachment_payload, 4U, true);
     write_u32(file_bytes, 4U, static_cast<std::uint32_t>(file_bytes.size()));
     return file_bytes;
@@ -106,7 +117,7 @@ void testRetailIlffChunkAlignmentAndTagSearch()
 
     if (container.form_type != MefModel::form_ocem || container.chunks.size() != 2U ||
         mesh_chunk == nullptr || mesh_chunk->payload.size() != MefModel::mesh_header_size ||
-        attachment_chunk == nullptr || attachment_chunk->payload.size() != 4U)
+        attachment_chunk == nullptr || attachment_chunk->payload.size() != 0x44U)
     {
         throw std::runtime_error("Retail ILFF tag lookup or parent-relative chunk alignment failed.");
     }
@@ -124,11 +135,57 @@ void testRetailMefLoaderBindsMeshAndKnownChunks()
     const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
 
     if (model.version != 0.1F || model.mesh_header.size() != MefModel::mesh_header_size ||
-        !model.attachments.has_value() || model.attachments->payload.size() != 4U ||
+        !model.attachments.has_value() || model.attachments->payload.size() != 0x44U ||
+        model.attachment_records.size() != 1U || model.attachment_records[0].name != "CRATE_CHILD" ||
+        model.attachment_records[0].position != std::array<float, 3>{1.25F, -2.5F, 3.75F} ||
+        model.attachment_records[0].orientation !=
+            std::array<float, 9>{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F} ||
+        model.attachment_records[0].value != 0x12345678 ||
         model.legacy_vertices.has_value() || model.portals.has_value() || model.portal_faces.has_value() ||
         model.portal_vertices.has_value())
     {
         throw std::runtime_error("DynObj_LoadModelMesh did not bind the retail model resource fields.");
+    }
+}
+
+void testRetailMefLoaderDecodesAttachmentRecords()
+{
+    const std::vector<std::byte> file_bytes = make_model_bytes();
+    const MefModel model = MefModel::DynObj_LoadModelMesh(file_bytes);
+    if (model.attachment_records.size() != 1U)
+    {
+        throw std::runtime_error("ATTA record count differs from its 68-byte payload.");
+    }
+    const auto& attachment = model.attachment_records.front();
+    if (attachment.name != "CRATE_CHILD" ||
+        attachment.position != std::array<float, 3>{1.25F, -2.5F, 3.75F} ||
+        attachment.orientation !=
+            std::array<float, 9>{1.0F, 0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 0.0F, 0.0F, 1.0F} ||
+        attachment.value != 0x12345678)
+    {
+        throw std::runtime_error("ATTA name, transform, or trailing value decoded incorrectly.");
+    }
+
+    auto malformed = file_bytes;
+    const auto container = Ilff_ReadContainer(malformed);
+    const auto* atta = container.find_first(igi::retail::model::mef_tag::attachments);
+    if (atta == nullptr)
+    {
+        throw std::runtime_error("ATTA fixture chunk was not found.");
+    }
+    write_u32(malformed, atta->header_offset + 4U, 4U);
+    bool rejected = false;
+    try
+    {
+        static_cast<void>(MefModel::DynObj_LoadModelMesh(malformed));
+    }
+    catch (const MefFormatError&)
+    {
+        rejected = true;
+    }
+    if (!rejected)
+    {
+        throw std::runtime_error("ATTA parser accepted a partial record.");
     }
 }
 
@@ -397,6 +454,8 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path)
     std::size_t tested_asset_count = 0U;
     std::size_t failed_asset_count = 0U;
     std::size_t render_vertex_bytes = 0U;
+    std::size_t models_with_attachments = 0U;
+    std::size_t attachment_record_count = 0U;
     for (std::filesystem::recursive_directory_iterator iterator(requested_path, filesystem_error), end;
          !filesystem_error && iterator != end;
          iterator.increment(filesystem_error))
@@ -411,6 +470,8 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path)
         {
             const MefModel model = loadMefAsset(iterator->path());
             render_vertex_bytes += model.render_chunks().vertex_stream->payload.size();
+            models_with_attachments += model.attachment_records.empty() ? 0U : 1U;
+            attachment_record_count += model.attachment_records.size();
             ++tested_asset_count;
         }
         catch (const std::exception& exception)
@@ -428,6 +489,8 @@ void testMefAssetsAtPath(const std::filesystem::path& requested_path)
 
     std::cout << "Level MEF assets tested: " << tested_asset_count << '\n'
               << "Models with D3DR, DNER, and XTRV chunks: " << tested_asset_count << '\n'
+              << "Models with ATTA records: " << models_with_attachments << '\n'
+              << "ATTA records decoded: " << attachment_record_count << '\n'
               << "XTRV vertex-stream bytes inspected: " << render_vertex_bytes << '\n'
               << "Failed MEF assets: " << failed_asset_count << '\n';
     if (tested_asset_count == 0U || failed_asset_count != 0U)
@@ -444,6 +507,7 @@ int main(int argument_count, char** arguments)
     {
         testRetailIlffChunkAlignmentAndTagSearch();
         testRetailMefLoaderBindsMeshAndKnownChunks();
+        testRetailMefLoaderDecodesAttachmentRecords();
         testRetailMefLoaderAcceptsOnlyRetailRenderFormats();
         testRetailD3drHeaderReadsFormatSpecificCounts();
         testRetailMefLoaderExposesRetailRenderChunks();

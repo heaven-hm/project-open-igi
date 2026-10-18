@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <array>
 #include <optional>
 #include <span>
 #include <stdexcept>
@@ -48,6 +49,18 @@ struct MefRenderChunks
     const IlffChunk* d3d_render_header = nullptr;
     const IlffChunk* draw_records = nullptr;
     const IlffChunk* vertex_stream = nullptr;
+};
+
+// ATTA layout candidate cross-checked against OpenIGI's MefAttachment.cs and
+// MefModel.ReadAttachments at revision dade2b1a9c2c446462adf7d13a225926eabc96f0
+// (GPL-3.0; source repository LICENSE). Retail accessor evidence independently
+// establishes the 0x44 record stride; field semantics remain provisional.
+struct MefAttachmentRecord
+{
+    std::string name;
+    std::array<float, 3> position{};
+    std::array<float, 9> orientation{};
+    std::int32_t value = 0;
 };
 
 // Original IGI.EXE backend routine at VA 0x0049FB10 accepts MESH+0x20 values 0, 1, and 3.
@@ -119,6 +132,7 @@ class MefModel
     MefRenderFormat render_format = MefRenderFormat::diffuse;
     std::optional<MefRenderHeader> render_header;
     std::optional<IlffChunk> attachments;
+    std::vector<MefAttachmentRecord> attachment_records;
     std::optional<IlffChunk> legacy_vertices;
     std::optional<IlffChunk> portals;
     std::optional<IlffChunk> portal_faces;

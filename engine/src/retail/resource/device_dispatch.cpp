@@ -32,7 +32,11 @@ void store_operation(std::uint8_t* table, std::int32_t device, Function operatio
 
 } // namespace
 
-// Native: Device_GetStreamPosition() - VA 0x004B1780 - complete port.
+// Native: Device_GetStreamPosition; retail VA 0x004B1780; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
+// Behavior/CFG: not restated here.
+// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
 // Previous catalog alias: Sys_PushStack_4.
 std::int32_t Device_GetStreamPosition(std::int32_t* context)
 {
@@ -41,7 +45,11 @@ std::int32_t Device_GetStreamPosition(std::int32_t* context)
     return operation(device, context);
 }
 
-// Native: Device_SeekStream() - VA 0x004B17F0 - complete port.
+// Native: Device_SeekStream; retail VA 0x004B17F0; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
+// Behavior/CFG: not restated here.
+// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
 // Previous catalog alias: Sys_CheckHeap_4.
 std::int32_t Device_SeekStream(std::int32_t* context, std::int32_t argument)
 {
@@ -50,7 +58,11 @@ std::int32_t Device_SeekStream(std::int32_t* context, std::int32_t argument)
     return operation(device, context, argument);
 }
 
-// Native: Device_CloseStream() - VA 0x004B1690 - complete port.
+// Native: Device_CloseStream; retail VA 0x004B1690; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
+// Behavior/CFG: not restated here.
+// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
 // Previous catalog alias: Sys_ReadFileBlock_4.
 void Device_CloseStream(std::int32_t* context)
 {

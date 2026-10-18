@@ -65,9 +65,9 @@ igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext();
 //                 digest fe8cd535469ff604fe50034d4a1f8f6cd5cb3ae5b15c571c28c4c375d43e860d.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact instruction behavior.
-// Signature: x86 cdecl void(uint32_t value); ported as void Flow_SetState(std::uint32_t value).
+// Interface: retail writes the argument and leaves its bits in EAX; uint32_t preserves that observed result. The original source type is unknown.
 // Usage/tests: stores pending flow state in game context; exercised by frame_natives_test.cpp.
-void IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
+std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
 
 // Native: Loop_SetStatusByte() - VA 0x0048F480 - complete port.
 // Previous catalog alias: FX_SmokeEmit_27.

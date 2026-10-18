@@ -58,8 +58,8 @@ void* g_backend_container = nullptr;
 void* g_backend_mesh = nullptr;
 void fake_backend_init(void** pair)
 {
-    g_backend_container = pair[0];
-    g_backend_mesh = pair[1];
+    g_backend_mesh = pair[0];
+    g_backend_container = pair[1];
 }
 
 struct alignas(void*) TestNodeBuffer {
@@ -79,6 +79,7 @@ void test_dynobj_local_models_smef()
     write_u32(mesh_payload, 0U, 0x3DCCCCCDU); // version 0.1f
     append_ilff_chunk(container, 0x4D455348U, mesh_payload, false);
 
+    const std::size_t atta_chunk_offset = container.size();
     std::vector<std::uint8_t> atta_payload(8U, 0xAAU);
     append_ilff_chunk(container, 0x41545441U, atta_payload, false);
 
@@ -118,6 +119,13 @@ void test_dynobj_local_models_smef()
             "DynObj_LocalModelsSMef formats LOCAL:models/%s.mef into 0x00A4EC6C");
     require(result[2] == container.data(), "result[2] holds container pointer from Resource_Load");
     require(result[3] != nullptr, "result[3] holds MESH payload pointer");
+    std::uint32_t native_atta_payload = 0U;
+    std::memcpy(&native_atta_payload, static_cast<const std::uint8_t*>(result[3]) + 0x8CU,
+                sizeof(native_atta_payload));
+    const auto expected_atta_payload = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(
+        container.data() + atta_chunk_offset + 16U));
+    require(native_atta_payload == expected_atta_payload,
+            "DynObj_LocalModelsSMef links the ATTA chunk payload at MESH+0x8C");
     require(reinterpret_cast<std::intptr_t>(result[4]) == 1, "result[4] records 1 NAXT chunk");
     require(result[5] != nullptr, "result[5] holds allocated NAXT array");
 

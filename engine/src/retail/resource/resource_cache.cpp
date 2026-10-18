@@ -79,14 +79,7 @@ ResourceHandle Host_FindCachedResource(
         : resource_iterator->second;
 }
 
-// Native: Resource_Load() - VA 0x004B5F00 - partial adapter, not a complete literal port.
-// Behavior: Loads cached/unpacked bytes and optionally writes their uint32 byte count.
-// Tools: REA/Ghidra, Binary Ninja MCP, radare2; byte prefixes match the retail image.
-// Evidence: ev_87092f5147addf2b19ea080dbc70a44d1218ec706e022f019e4ba19bad366057.
-// CFG: r2 blocks=10, edges=12; BN blocks=10; source agreement=100.0%.
-// Confidence: partial host adapter; retail allocator/VFS/registry behavior is incomplete.
-// Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
-// Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
+// HOST HELPER: Host_LoadResourceFile. Host filesystem/cache adapter; retail VFS and allocation behavior are not transcribed here.
 ResourceHandle Host_LoadResourceFile(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,

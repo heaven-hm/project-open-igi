@@ -45,6 +45,39 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
     project = angr.Project(str(binary), auto_load_libs=False)
     cfg = project.analyses.CFGFast(normalize=True, data_references=True)
     auto_functions = {address: cfg.kb.functions.get(address) for address in addresses}
+    baseline_unresolved = {
+        address: bool(function.has_unresolved_jumps) if function is not None else None
+        for address, function in auto_functions.items()
+    }
+    initialized_cfg = None
+    initialization_model = None
+    if 0x004AF7B0 in addresses and baseline_unresolved.get(0x004AF7B0):
+        # Retail installs its exit callback in Error subsystem initialization.
+        # Validate the initializer, setter and tail-dispatch bytes before using
+        # that concrete state. This is a scoped analysis assumption, not a claim
+        # that every possible caller-provided callback has been recovered.
+        initializer = project.loader.memory.load(0x00498900, 10)
+        setter = project.loader.memory.load(0x004AF8A0, 10)
+        dispatch = project.loader.memory.load(0x004AF7FD, 12)
+        if (initializer[:1] == b"\x68" and initializer[5:6] == b"\xe8"
+                and setter == bytes.fromhex("8b442404a36c629300c3")
+                and dispatch == bytes.fromhex("a16c62930085c07402ffe0c3")):
+            target = int.from_bytes(initializer[1:5], "little")
+            callee = 0x0049890A + int.from_bytes(initializer[6:10], "little", signed=True)
+            if callee == 0x004AF8A0 and cfg.kb.functions.get(target) is not None:
+                initialization_model = {
+                    "scope": "Retail error subsystem after initializer 0x00498900",
+                    "global": "0x0093626C", "target": f"0x{target:08X}",
+                    "initializer": "0x00498900", "setter": "0x004AF8A0",
+                    "initializer_bytes": initializer.hex(), "setter_bytes": setter.hex(),
+                    "dispatch_bytes": dispatch.hex(),
+                    "limitation": "Arbitrary replacement callbacks and uninitialized state remain outside this CFG model",
+                }
+                # A new project keeps the baseline unresolved-jump knowledge
+                # from contaminating this independently initialized analysis.
+                initialized_project = angr.Project(str(binary), auto_load_libs=False)
+                initialized_project.loader.memory.store(0x0093626C, target.to_bytes(4, "little"))
+                initialized_cfg = initialized_project.analyses.CFGFast(normalize=True, data_references=True)
     seed_addresses = [
         address for address, function in auto_functions.items()
         if function is None or function.addr != address
@@ -62,6 +95,9 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         key = f"0x{address:08X}"
         function = auto_functions.get(address)
         recovery_mode = "automatic"
+        if address == 0x004AF7B0 and initialized_cfg is not None:
+            function = initialized_cfg.kb.functions.get(address)
+            recovery_mode = "retail_initializer_callback_model"
         if (function is None or function.addr != address) and seeded_cfg is not None:
             function = seeded_cfg.kb.functions.get(address)
             recovery_mode = "seeded_from_native_address"
@@ -91,6 +127,8 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
             "edges": sorted(edges, key=lambda edge: (edge["source"], edge["target"], edge["kind"])),
             "returning": bool(function.returning),
             "has_unresolved_jumps": unresolved,
+            "baseline_has_unresolved_jumps": baseline_unresolved.get(address),
+            "initialization_model": initialization_model if address == 0x004AF7B0 else None,
         }
 
     results = [item.get("result") for item in functions.values()]

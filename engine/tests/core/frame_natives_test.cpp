@@ -42,7 +42,8 @@ void test_frame_getter_and_setter_match_observed_global_access()
     DAT_00567C8C = &record;
 
     require(Game_GetContext() == &record, "0x00402880 returns the global record pointer");
-    Flow_SetState(0xA1B2C3D4U);
+    require(Flow_SetState(0xA1B2C3D4U) == 0xA1B2C3D4U,
+            "0x004028A0 leaves the stored value in EAX");
     require(record.unknown_0x2C == 0xA1B2C3D4U, "0x004028A0 writes a dword at offset 0x2c");
 }
 

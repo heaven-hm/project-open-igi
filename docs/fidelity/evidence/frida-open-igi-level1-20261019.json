@@ -1,0 +1,1984 @@
+{
+  "exe": "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\open-igi.exe",
+  "capture": "Z:\\private\\tmp\\igi-frida-level1.bmp",
+  "candidate_sha256": "75e06d7bf7274baadb91a6af9b4ae29f78917c8cff0cbaf5677205dd080c5e2a",
+  "elapsed_seconds": 2.61,
+  "events": [
+    {
+      "event": "hook-installed",
+      "name": "RunRetailModelScene",
+      "address": "0x40dfe1"
+    },
+    {
+      "event": "hook-installed",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "hook-installed",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "hook-installed",
+      "name": "Qvm_LoadCompiledProgram",
+      "address": "0x426730"
+    },
+    {
+      "event": "hook-installed",
+      "name": "Host_LoadResourceArchive",
+      "address": "0x41b56f"
+    },
+    {
+      "event": "enter",
+      "name": "RunRetailModelScene",
+      "address": "0x40dfe1"
+    },
+    {
+      "event": "enter",
+      "name": "Host_LoadResourceArchive",
+      "address": "0x41b56f"
+    },
+    {
+      "event": "leave",
+      "name": "Host_LoadResourceArchive"
+    },
+    {
+      "event": "enter",
+      "name": "Host_LoadResourceArchive",
+      "address": "0x41b56f"
+    },
+    {
+      "event": "leave",
+      "name": "Host_LoadResourceArchive"
+    },
+    {
+      "event": "enter",
+      "name": "Host_LoadResourceArchive",
+      "address": "0x41b56f"
+    },
+    {
+      "event": "leave",
+      "name": "Host_LoadResourceArchive"
+    },
+    {
+      "event": "enter",
+      "name": "Host_LoadResourceArchive",
+      "address": "0x41b56f"
+    },
+    {
+      "event": "leave",
+      "name": "Host_LoadResourceArchive"
+    },
+    {
+      "event": "enter",
+      "name": "Qvm_LoadCompiledProgram",
+      "address": "0x426730"
+    },
+    {
+      "event": "leave",
+      "name": "Qvm_LoadCompiledProgram"
+    },
+    {
+      "event": "enter",
+      "name": "Qvm_LoadCompiledProgram",
+      "address": "0x426730"
+    },
+    {
+      "event": "leave",
+      "name": "Qvm_LoadCompiledProgram"
+    },
+    {
+      "event": "enter",
+      "name": "Qvm_LoadCompiledProgram",
+      "address": "0x426730"
+    },
+    {
+      "event": "leave",
+      "name": "Qvm_LoadCompiledProgram"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "enter",
+      "name": "MefModel::DynObj_LoadModelMesh",
+      "address": "0x41610c"
+    },
+    {
+      "event": "leave",
+      "name": "MefModel::DynObj_LoadModelMesh"
+    },
+    {
+      "event": "enter",
+      "name": "Display_DecodeMeshRenderData",
+      "address": "0x4134bd"
+    },
+    {
+      "event": "leave",
+      "name": "Display_DecodeMeshRenderData"
+    },
+    {
+      "event": "leave",
+      "name": "RunRetailModelScene",
+      "returnValue": 0
+    }
+  ],
+  "call_counts": {
+    "RunRetailModelScene": 1,
+    "Host_LoadResourceArchive": 4,
+    "Qvm_LoadCompiledProgram": 3,
+    "MefModel::DynObj_LoadModelMesh": 102,
+    "Display_DecodeMeshRenderData": 102
+  },
+  "schema_version": 1,
+  "kind": "candidate-runtime-observation",
+  "frida_version": "17.24.0",
+  "run_date": "2026-10-19",
+  "conditions": {
+    "runtime": "Frida remote server in CrossOver/Wine at 127.0.0.1:27042",
+    "arguments": [
+      "window",
+      "level1",
+      "--capture-frame",
+      "Z:\\private\\tmp\\igi-frida-level1.bmp"
+    ],
+    "image_base": "0x00400000",
+    "hook_offsets_from_current_PE_symbols": {
+      "RunRetailModelScene": "0x0040DFE1",
+      "MefModel::DynObj_LoadModelMesh": "0x0041610C",
+      "Display_DecodeMeshRenderData": "0x004134BD",
+      "Qvm_LoadCompiledProgram": "0x00426730",
+      "Host_LoadResourceArchive": "0x0041B56F"
+    },
+    "capture_dimensions": "1024x768 BMP",
+    "capture_file": "frida-open-igi-level1-20261019.bmp",
+    "limitations": [
+      "Hooks observe the candidate implementation, not retail igi.exe.",
+      "This is Level 1 coverage only and does not establish behavioral equivalence for any native.",
+      "Attachment record counts and transform correctness were not inspected by Frida in this run."
+    ]
+  },
+  "game_executable_restoration": {
+    "restored": true,
+    "sha256": "0e33470a1e0a172e1981b61e65d62896fb4dd38d338f4f2ef50ed80adfe0b7c1"
+  },
+  "capture_sha256": "ee6247c9e25c697825d2fd92c04496b1a7a55d148db936be0615adbe54d296bc",
+  "capture_preview_file": "frida-open-igi-level1-20261019.png",
+  "capture_preview_sha256": "4020bf3f233c4d2ca02260a61e3b70327beb2b860522826f74a7e9dfbe511c53"
+}

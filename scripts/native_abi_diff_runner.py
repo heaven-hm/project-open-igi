@@ -148,7 +148,7 @@ def main() -> int:
         angr_python = pathlib.Path(os.environ.get("IGI_ANGR_PYTHON", "")).expanduser()
         if not angr_python.is_file():
             re_agent = pathlib.Path(os.environ.get(
-                "RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/auto-re-agent"))
+                "RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/re-agent"))
             angr_python = re_agent / ".venv/bin/python"
         if not angr_python.is_file():
             raise RuntimeError("set IGI_ANGR_PYTHON to a Python environment with angr installed")

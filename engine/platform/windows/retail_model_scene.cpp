@@ -20,6 +20,7 @@
 #include <array>
 #include <bit>
 #include <chrono>
+#include <cctype>
 #include <cmath>
 #include <cstring>
 #include <d3d.h>
@@ -137,6 +138,43 @@ std::string text(const script::QvmObjectValue& value)
     throw std::runtime_error("Object parameter is not text.");
 }
 
+float safe_number(const script::QvmObjectValue& value, float fallback = 0.0f)
+{
+    if (const auto* real = std::get_if<float>(&value))
+    {
+        return *real;
+    }
+    if (const auto* integer = std::get_if<std::int32_t>(&value))
+    {
+        return static_cast<float>(*integer);
+    }
+    return fallback;
+}
+
+std::string safe_text(const script::QvmObjectValue& value)
+{
+    if (const auto* result = std::get_if<std::string>(&value))
+    {
+        return *result;
+    }
+    return {};
+}
+
+bool is_model_identifier(std::string_view s)
+{
+    const auto p1 = s.find('_');
+    if (p1 == 0 || p1 == std::string_view::npos)
+    {
+        return false;
+    }
+    const auto p2 = s.find('_', p1 + 1);
+    if (p2 == std::string_view::npos || p2 == p1 + 1)
+    {
+        return false;
+    }
+    return true;
+}
+
 // Real32x9 parameter conversion: 0x004EFBA0 -> 0x004B38E0.
 // Rotation constructors at 0x004B3BE0/0x004B3BA0/0x004B3B60, statically translated.
 // Matrix layout conversion at 0x004950F0 transposes the retail 3x3 into D3D row-vector layout.
@@ -164,6 +202,38 @@ std::array<float, 9> orientation(float alpha, float beta, float gamma)
     return current;
 }
 
+std::array<float, 9> transpose(const std::array<float, 9>& matrix)
+{
+    std::array<float, 9> result{};
+    for (std::size_t row = 0U; row < 3U; ++row)
+        for (std::size_t column = 0U; column < 3U; ++column)
+        {
+            result[row * 3U + column] = matrix[column * 3U + row];
+        }
+    return result;
+}
+
+std::array<float, 9> multiply(const std::array<float, 9>& left, const std::array<float, 9>& right)
+{
+    std::array<float, 9> result{};
+    for (std::size_t row = 0U; row < 3U; ++row)
+        for (std::size_t column = 0U; column < 3U; ++column)
+        {
+            for (std::size_t inner = 0U; inner < 3U; ++inner)
+            {
+                result[row * 3U + column] += left[row * 3U + inner] * right[inner * 3U + column];
+            }
+        }
+    return result;
+}
+
+std::string fold_ascii(std::string value)
+{
+    std::transform(value.begin(), value.end(), value.begin(),
+                   [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
+    return value;
+}
+
 struct Package
 {
     model::MtpPackage metadata;
@@ -178,6 +248,8 @@ struct PlacedModel
     const model::MtpInstance* instance = nullptr;
     Package* package = nullptr;
     std::shared_ptr<model::MefRenderData> geometry;
+    std::shared_ptr<model::MefModel> mef;
+    std::vector<std::string> attachment_ancestry;
 };
 
 struct Scene
@@ -343,6 +415,16 @@ struct Scene
         }
         const auto script = script::Host_LoadQvmScript(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
+        const auto magic_script = script::Host_LoadQvmScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
+        std::map<std::string, std::string> magic_object_models;
+        for (const auto& call : script::Qvm_ReadObjectCalls(magic_script.program()))
+        {
+            if (call->function_name == "DefineMagicObj" && call->arguments.size() >= 2U)
+            {
+                magic_object_models[fold_ascii(text(call->arguments[0]))] = text(call->arguments[1]);
+            }
+        }
+        write_log("Loaded MAGICOBJ.QVM definitions=" + std::to_string(magic_object_models.size()));
         for (const auto& call : calls)
         {
             if (call->function_name == "Task_New" && call->arguments.size() > 8U &&
@@ -371,46 +453,164 @@ struct Scene
             }
         }
         std::map<std::string, std::shared_ptr<model::MefRenderData>> geometry_cache;
+        std::map<std::string, std::shared_ptr<model::MefModel>> mef_cache;
         std::size_t missing = 0;
         for (const auto& call : calls)
         {
             const auto& arguments = call->arguments;
-            if (call->function_name != "Task_New" || arguments.size() < 10U)
+            if (call->function_name != "Task_New" || arguments.size() < 8U)
             {
                 continue;
             }
-            const auto type = text(arguments[1]);
-            const bool static_model_task = type == "EditRigidObj" || type == "Building";
-            const bool initial_model_task = type == "ExplodeObject" || type == "Terminal" ||
-                                            type == "SCameraControl" || type == "AlarmControl";
-            const bool door_task = type == "Door";
-            if (!static_model_task && !initial_model_task && !door_task)
+            const auto type = safe_text(arguments[1]);
+            if (type.empty())
             {
                 continue;
             }
-            // These parameter locations are declared in OBJECTS.QVM itself. This loads the initial
-            // mesh pose only; task behavior, destruction and door interaction remain unported.
-            const std::size_t model_parameter = door_task ? 12U : 9U;
-            const std::size_t orientation_parameter = door_task ? 9U : 6U;
-            if (arguments.size() <= model_parameter)
+
+            const bool fence_task = (type == "Fence" || type == "Cabinet");
+            const bool wire_task = (type == "Wire");
+            const bool door_task = (type == "Door");
+            const bool switch_task = (type == "Switch");
+            const bool scamera_task = (type == "SCamera");
+            const bool vehicle_task = (type == "Car" || type == "Heli");
+            const bool static_model_task = (type == "EditRigidObj" || type == "Building");
+            const bool initial_model_task = (type == "ExplodeObject" || type == "Terminal" ||
+                                             type == "SCameraControl" || type == "AlarmControl" ||
+                                             type == "AIStationaryGunHolder" || type == "AlarmLight" ||
+                                             type == "Elevator" || type == "Generator" ||
+                                             type == "GenericPickup" || type == "GenericTBA" ||
+                                             type == "Plane" || type == "Radio" ||
+                                             type == "RotatingObject" || type == "Siren" ||
+                                             type == "StationaryGun" || type == "GunPickup" ||
+                                             type == "AmmoPickup");
+
+            if (!fence_task && !wire_task && !door_task && !switch_task &&
+                !scamera_task && !vehicle_task && !static_model_task && !initial_model_task)
             {
-                throw std::runtime_error("Truncated model task parameters.");
+                continue;
             }
-            const std::string model_name = text(arguments[model_parameter]);
+
             PlacedModel object;
-            for (std::size_t axis = 0; axis < 3U; ++axis)
+            std::string model_name;
+
+            if (fence_task) // Fence / Cabinet: pos@3..5, heading@6, model@7
             {
-                object.position[axis] = number(arguments[3U + axis]);
+                if (arguments.size() < 8U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                const float heading = safe_number(arguments[6]);
+                object.rotation = orientation(0.0f, 0.0f, heading);
+                model_name = safe_text(arguments[7]);
             }
-            object.rotation = orientation(number(arguments[orientation_parameter]),
-                                          number(arguments[orientation_parameter + 1U]),
-                                          number(arguments[orientation_parameter + 2U]));
+            else if (wire_task) // Wire: start pos@3..5, stop pos@6..8, model@9
+            {
+                if (arguments.size() < 10U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                const float dx = safe_number(arguments[6]) - safe_number(arguments[3]);
+                const float dy = safe_number(arguments[7]) - safe_number(arguments[4]);
+                const float yaw = std::atan2(dy, dx);
+                object.rotation = orientation(0.0f, 0.0f, yaw);
+                model_name = safe_text(arguments[9]);
+            }
+            else if (door_task) // Door: pos@3..5, ori@9..11, model@12
+            {
+                if (arguments.size() < 13U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                object.rotation = orientation(safe_number(arguments[9]),
+                                              safe_number(arguments[10]),
+                                              safe_number(arguments[11]));
+                model_name = safe_text(arguments[12]);
+            }
+            else if (switch_task) // Switch: pos@3..5, ori@6..8, model@11
+            {
+                if (arguments.size() < 12U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                object.rotation = orientation(safe_number(arguments[6]),
+                                              safe_number(arguments[7]),
+                                              safe_number(arguments[8]));
+                model_name = safe_text(arguments[11]);
+            }
+            else if (scamera_task) // SCamera: pos@3..5, ori@6..8, model@10
+            {
+                if (arguments.size() < 11U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                object.rotation = orientation(safe_number(arguments[6]),
+                                              safe_number(arguments[7]),
+                                              safe_number(arguments[8]));
+                model_name = safe_text(arguments[10]);
+            }
+            else if (vehicle_task) // Car / Heli: pos@3..5, heading@8, model@13
+            {
+                if (arguments.size() < 14U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                const float heading = safe_number(arguments[8]);
+                object.rotation = orientation(0.0f, 0.0f, heading);
+                model_name = safe_text(arguments[13]);
+            }
+            else // Standard positioned objects: pos@3..5, ori@6..8, model@9
+            {
+                if (arguments.size() < 10U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                object.rotation = orientation(safe_number(arguments[6]),
+                                              safe_number(arguments[7]),
+                                              safe_number(arguments[8]));
+                model_name = safe_text(arguments[9]);
+            }
+
+            // Fallback model identifier search across arguments if empty or non-matching
+            if (model_name.empty() || !is_model_identifier(model_name))
+            {
+                for (std::size_t ai = 6U; ai < arguments.size(); ++ai)
+                {
+                    const auto candidate = safe_text(arguments[ai]);
+                    if (is_model_identifier(candidate))
+                    {
+                        model_name = candidate;
+                        break;
+                    }
+                }
+            }
+
+            if (model_name.empty())
+            {
+                continue;
+            }
+
+            const std::string folded_target = fold_ascii(model_name);
             for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
                  ++package_iterator)
             {
                 for (const auto& instance : (*package_iterator)->metadata.instances)
                 {
-                    if (instance.instance_name == model_name)
+                    if (fold_ascii(instance.instance_name) == folded_target)
+                    {
+                        object.instance = &instance;
+                        object.package = package_iterator->get();
+                        break;
+                    }
+                    if (instance.model_index < (*package_iterator)->metadata.model_names.size() &&
+                        fold_ascii((*package_iterator)->metadata.model_names[instance.model_index]) == folded_target)
                     {
                         object.instance = &instance;
                         object.package = package_iterator->get();
@@ -426,24 +626,21 @@ struct Scene
             {
                 // DynObj_Missing - 0x004CEC10: empty names return null; unknown nonempty names try "missing".
                 // radare2 and CLEAN agree on this branch; full fallback-registry runtime parity is pending.
-                if (!model_name.empty())
+                for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
+                     ++package_iterator)
                 {
-                    for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
-                         ++package_iterator)
+                    for (const auto& instance : (*package_iterator)->metadata.instances)
                     {
-                        for (const auto& instance : (*package_iterator)->metadata.instances)
+                        if (instance.instance_name == "missing")
                         {
-                            if (instance.instance_name == "missing")
-                            {
-                                object.instance = &instance;
-                                object.package = package_iterator->get();
-                                break;
-                            }
-                        }
-                        if (object.instance != nullptr)
-                        {
+                            object.instance = &instance;
+                            object.package = package_iterator->get();
                             break;
                         }
+                    }
+                    if (object.instance != nullptr)
+                    {
+                        break;
                     }
                 }
                 if (object.instance == nullptr)
@@ -458,6 +655,7 @@ struct Scene
             const auto key =
                 std::to_string(reinterpret_cast<std::uintptr_t>(object.package)) + ":" + mesh_name;
             auto& geometry = geometry_cache[key];
+            auto& parsed_mef = mef_cache[key];
             if (!geometry)
             {
                 const auto* entry = object.package->meshes.find("LOCAL:models/" + mesh_name + ".mef");
@@ -465,10 +663,16 @@ struct Scene
                 {
                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
                 }
+                parsed_mef = std::make_shared<model::MefModel>(
+                    model::MefModel::DynObj_LoadModelMesh(entry->body));
+                write_log("Loaded MEF model=" + mesh_name +
+                          " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
                 geometry = std::make_shared<model::MefRenderData>(
-                    model::Display_DecodeMeshRenderData(model::MefModel::DynObj_LoadModelMesh(entry->body)));
+                    model::Display_DecodeMeshRenderData(*parsed_mef));
             }
             object.geometry = geometry;
+            object.mef = parsed_mef;
+            object.attachment_ancestry.push_back(fold_ascii(mesh_name));
             std::ostringstream record;
             record << std::setprecision(17)
                    << "placement source=OBJECTS.QVM code_offset=" << call->instruction_offset
@@ -485,7 +689,116 @@ struct Scene
         {
             throw std::runtime_error("Object scene is empty.");
         }
+
+        // Layout and transform conventions are cross-checked against OpenIGI's
+        // MefAttachment/WorldScene at revision dade2b1a9c2c446462adf7d13a225926eabc96f0
+        // (GPL-3.0; see that repository's LICENSE). Retail accessor evidence independently
+        // establishes the 0x44-byte ATTA record stride.
+        std::size_t attached_models = 0U;
+        constexpr std::size_t max_scene_models = 8192U;
+        constexpr std::size_t max_attachment_depth = 32U;
+        for (std::size_t parent_index = 0U;
+             parent_index < objects.size() && objects.size() < max_scene_models;
+             ++parent_index)
+        {
+            const PlacedModel parent = objects[parent_index];
+            if (parent.mef == nullptr || parent.attachment_ancestry.size() >= max_attachment_depth)
+            {
+                continue;
+            }
+
+            for (const model::MefAttachmentRecord& attachment : parent.mef->attachment_records)
+            {
+                const auto definition = magic_object_models.find(fold_ascii(attachment.name));
+                if (definition == magic_object_models.end())
+                {
+                    continue;
+                }
+                const std::string child_name = definition->second;
+                const std::string folded_child_name = fold_ascii(child_name);
+                if (std::find(parent.attachment_ancestry.begin(), parent.attachment_ancestry.end(),
+                              folded_child_name) != parent.attachment_ancestry.end())
+                {
+                    continue;
+                }
+
+                Package* child_package = nullptr;
+                const model::MtpInstance* child_instance = nullptr;
+                for (auto package_iterator = packages.rbegin(); package_iterator != packages.rend();
+                     ++package_iterator)
+                {
+                    for (const model::MtpInstance& candidate : (*package_iterator)->metadata.instances)
+                    {
+                        if (candidate.model_index < (*package_iterator)->metadata.model_names.size() &&
+                            fold_ascii((*package_iterator)->metadata.model_names[candidate.model_index]) ==
+                                folded_child_name)
+                        {
+                            child_package = package_iterator->get();
+                            child_instance = &candidate;
+                            break;
+                        }
+                    }
+                    if (child_instance != nullptr)
+                    {
+                        break;
+                    }
+                }
+                if (child_package == nullptr || child_instance == nullptr)
+                {
+                    continue;
+                }
+
+                const auto* child_entry = child_package->meshes.find("LOCAL:models/" + child_name + ".mef");
+                if (child_entry == nullptr)
+                {
+                    continue;
+                }
+                const auto child_key =
+                    std::to_string(reinterpret_cast<std::uintptr_t>(child_package)) + ":" + child_name;
+                auto& child_geometry = geometry_cache[child_key];
+                auto& child_mef = mef_cache[child_key];
+                if (!child_geometry)
+                {
+                    try
+                    {
+                        child_mef = std::make_shared<model::MefModel>(
+                            model::MefModel::DynObj_LoadModelMesh(child_entry->body));
+                        child_geometry = std::make_shared<model::MefRenderData>(
+                            model::Display_DecodeMeshRenderData(*child_mef));
+                    }
+                    catch (const std::exception& exception)
+                    {
+                        write_log("Skipping ATTA model=" + child_name + " reason=" + exception.what(),
+                                  diagnostics::LogLevel::warning);
+                        continue;
+                    }
+                }
+
+                PlacedModel child{};
+                child.instance = child_instance;
+                child.package = child_package;
+                child.geometry = child_geometry;
+                child.mef = child_mef;
+                child.rotation = multiply(parent.rotation, transpose(attachment.orientation));
+                for (std::size_t row = 0U; row < 3U; ++row)
+                {
+                    const float offset = parent.rotation[row * 3U] * attachment.position[0] +
+                                         parent.rotation[row * 3U + 1U] * attachment.position[1] +
+                                         parent.rotation[row * 3U + 2U] * attachment.position[2];
+                    child.position[row] = parent.position[row] + offset;
+                }
+                child.attachment_ancestry = parent.attachment_ancestry;
+                child.attachment_ancestry.push_back(folded_child_name);
+                objects.push_back(std::move(child));
+                ++attached_models;
+                if (objects.size() >= max_scene_models)
+                {
+                    break;
+                }
+            }
+        }
         write_log("Loaded placed model poses=" + std::to_string(objects.size()) +
+                  "; attached_models=" + std::to_string(attached_models) +
                   "; unresolved_source_models=" + std::to_string(missing) +
                   "; skinned models and remaining task types not yet rendered.");
     }

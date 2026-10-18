@@ -9,10 +9,12 @@ CameraMatrixState camera_matrix_state{};
 
 } // namespace
 
-// Native: Matrix_InvalidateSlot() - VA 0x004B7450 - complete port.
+// Native: Matrix_InvalidateSlot; retail VA 0x004B7450; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
+// Behavior/CFG: Clears the 32-bit slot at matrix + slot_index * 4 + 0x14 and returns slot_index. Named "PushStack" by the catalog, but the body is a slot invalidation, not a stack push.
+// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
 // Previous catalog alias: Sys_PushStack_19.
-// Clears the 32-bit slot at matrix + slot_index * 4 + 0x14 and returns slot_index.
-// Named "PushStack" by the catalog, but the body is a slot invalidation, not a stack push.
 std::int32_t Matrix_InvalidateSlot(std::int32_t* matrix, std::int32_t slot_index)
 {
     auto* const slot = reinterpret_cast<std::int32_t*>(
@@ -38,16 +40,12 @@ void Camera_UpdateTransform()
     Matrix_InvalidateSlot(state.slab_bcadac.data(), state.slot_7234b8);
 }
 
-// Native: Camera_UpdateFogPalette() - VA 0x004A26C0 - complete port.
+// Native: Camera_UpdateFogPalette; retail VA 0x004A26C0; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004A26C0-0x004A2716, 86 bytes, digest f7a98c1e60c3d681dd99aabe724a45e4633a27e832b6cc7226ad1526e4111b0e.
+// Behavior/CFG: scales float RGB by -255.0f (R, G) and 255.0f (B), computes packed color, fills 256-dword palette buffer at 0x00935C10 with stosd, returns packed color DWORD. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
+// Status/limits: STRUCTURALLY_VERIFIED; high for exact arithmetic and palette store; full render loop integration pending.
 // Previous catalog alias: Camera_UpdateTransform_2.
-// Behavior: scales float RGB by -255.0f (R, G) and 255.0f (B), computes packed color,
-//           fills 256-dword palette buffer at 0x00935C10 with stosd, returns packed color DWORD.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);
-//                 VA 0x004A26C0-0x004A2716, 86 bytes, digest f7a98c1e60c3d681dd99aabe724a45e4633a27e832b6cc7226ad1526e4111b0e.
-// CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
-// Confidence: high for exact arithmetic and palette store; full render loop integration pending.
-// Signature: x86 cdecl int32_t(void* arg1); ported as std::int32_t Camera_UpdateFogPalette(const CameraColorContext* context).
-// Usage/tests: initializes fog/lighting palette; test covers color component scaling, packing, and 256-dword write.
 std::int32_t Camera_UpdateFogPalette(const CameraColorContext* context)
 {
     if (context == nullptr) {
@@ -71,16 +69,11 @@ std::int32_t Camera_UpdateFogPalette(const CameraColorContext* context)
     return result;
 }
 
-// Native: Camera_ResetMatrix() - VA 0x004A2600 - complete port.
-// Behavior: calculates half-intensity (scale 128.0f) and full-intensity (scale 255.0f) colors,
-//           loops 4 times writing 32 dwords of half-intensity then 32 dwords of full-intensity
-//           into 0x00935C10 palette buffer, returns full-intensity color DWORD.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004A2600-0x004A26BC, 188 bytes,
-//                 digest 53d921653980d1425da75ba9b611a3a143e0c4681bba96cc5b7d40852704d66b.
-// CFG: radare2 3 blocks/3 edges; Binary Ninja 3 blocks; 100% structural agreement.
-// Confidence: high for exact loop logic and memory writes; retail camera reset chain pending.
-// Signature: x86 cdecl int32_t(void* arg1); ported as std::int32_t Camera_ResetMatrix(const CameraColorContext* context).
-// Usage/tests: sets alternating 32-dword banded palette; test verifies 4-band alternating structure and return value.
+// Native: Camera_ResetMatrix; retail VA 0x004A2600; signature/calling convention unknown.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004A2600-0x004A26BC, 188 bytes, digest 53d921653980d1425da75ba9b611a3a143e0c4681bba96cc5b7d40852704d66b.
+// Behavior/CFG: calculates half-intensity (scale 128.0f) and full-intensity (scale 255.0f) colors, loops 4 times writing 32 dwords of half-intensity then 32 dwords of full-intensity into 0x00935C10 palette buffer, returns full-intensity color DWORD. radare2 3 blocks/3 edges; Binary Ninja 3 blocks; 100% structural agreement.
+// Status/limits: STRUCTURALLY_VERIFIED; high for exact loop logic and memory writes; retail camera reset chain pending.
 std::int32_t Camera_ResetMatrix(const CameraColorContext* context)
 {
     if (context == nullptr) {

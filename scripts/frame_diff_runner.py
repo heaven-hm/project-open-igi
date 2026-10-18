@@ -136,7 +136,7 @@ def main():
         raise RuntimeError("binary or implementation hash changed")
     runner_hash = digest(pathlib.Path(__file__).resolve())
     analysis_python = os.environ.get("IGI_ANGR_PYTHON") or str(pathlib.Path(
-        os.environ.get("RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/auto-re-agent")) / ".venv/bin/python")
+        os.environ.get("RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/re-agent")) / ".venv/bin/python")
     with tempfile.TemporaryDirectory(prefix="igi-frame-diff-") as temp:
         stub, candidate = pathlib.Path(temp) / "unused_dispatch_table.cpp", pathlib.Path(temp) / "candidate.dll"
         stub.write_text('#include "igi/retail/core/frame_natives.hpp"\nextern "C" { igi::retail::core::FrameDispatchCallback DAT_00A970E0[1] = {}; }\n')

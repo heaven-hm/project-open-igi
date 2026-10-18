@@ -53,9 +53,12 @@ void test_create_material_native()
     dummy_ctx.fill(0xFF);
     const auto result = Terrain_CreateMaterial(dummy_ctx.data(), args.data());
     require(result == dummy_ctx.data(), "Terrain_CreateMaterial returns context");
-    for (const auto b : dummy_ctx)
+    for (const std::size_t offset : {0U, 8U, 12U, 16U})
     {
-        require(b == 0, "Terrain_CreateMaterial zeroes 0x18 context bytes");
+        std::uint32_t word = 0;
+        std::memcpy(&word, dummy_ctx.data() + offset, sizeof(word));
+        require(word == (offset == 16U ? 0x00567C74U : 0U),
+                "Terrain_CreateMaterial returns retail zero value and descriptor");
     }
 }
 
@@ -73,9 +76,12 @@ void test_create_tilemap_native()
     dummy_ctx.fill(0xFF);
     const auto result = Terrain_CreateTileMap(dummy_ctx.data(), args.data());
     require(result == dummy_ctx.data(), "Terrain_CreateTileMap returns context");
-    for (const auto b : dummy_ctx)
+    for (const std::size_t offset : {0U, 8U, 12U, 16U})
     {
-        require(b == 0, "Terrain_CreateTileMap zeroes 0x18 context bytes");
+        std::uint32_t word = 0;
+        std::memcpy(&word, dummy_ctx.data() + offset, sizeof(word));
+        require(word == (offset == 16U ? 0x00567C74U : 0U),
+                "Terrain_CreateTileMap returns retail zero value and descriptor");
     }
 }
 

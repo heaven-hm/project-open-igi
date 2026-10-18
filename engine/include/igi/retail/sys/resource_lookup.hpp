@@ -14,7 +14,8 @@ inline std::uint32_t Camera_ApplyWideScreen_28(std::uint32_t character) { return
 // Native: Resource_CanonicalizePath() - VA 0x004B5AF0 - complete port.
 // Previous catalog alias: Sys_ResolveSymbol_15.
 // Copies `source` into `destination` applying the upper-case conversion, then writes the
-// terminating NUL. Returns that NUL (0).
+// terminating NUL. AL is zero on return; the upper EAX bytes retain the final
+// uppercase-helper result (nonzero for a final high-bit byte in the C locale).
 std::int32_t Resource_CanonicalizePath(char* destination, char* source);
 inline std::int32_t Sys_ResolveSymbol_15(char* destination, char* source)
 {
