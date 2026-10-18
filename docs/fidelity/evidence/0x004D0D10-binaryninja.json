@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004D0D10",
+  "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004D0D10"
+      }
+    ],
+    "edges": []
+  },
+  "disassembly_capture": {
+    "path": "docs/fidelity/evidence/0x004D0D10-binaryninja-disassembly.txt",
+    "sha256": "2fa1982aa2b1f0939c2daf52b408410ae61b92b472ef04e802d9a51a20732c99"
+  }
+}

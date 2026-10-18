@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004D0D10",
+  "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004D0D10"
+      }
+    ],
+    "edges": []
+  },
+  "instructions": [
+    {
+      "address": "0x4d0d10",
+      "bytes": "8b442404",
+      "opcode": "mov eax, dword [esp + 4]",
+      "type": "mov"
+    },
+    {
+      "address": "0x4d0d14",
+      "bytes": "8b480c",
+      "opcode": "mov ecx, dword [eax + 0xc]",
+      "type": "mov"
+    },
+    {
+      "address": "0x4d0d17",
+      "bytes": "8b510c",
+      "opcode": "mov edx, dword [ecx + 0xc]",
+      "type": "mov"
+    },
+    {
+      "address": "0x4d0d1a",
+      "bytes": "0fbf427e",
+      "opcode": "movsx eax, word [edx + 0x7e]",
+      "type": "mov"
+    },
+    {
+      "address": "0x4d0d1e",
+      "bytes": "c3",
+      "opcode": "ret",
+      "type": "ret"
+    }
+  ]
+}

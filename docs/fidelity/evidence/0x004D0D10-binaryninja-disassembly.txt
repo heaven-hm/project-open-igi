@@ -1,0 +1,23 @@
+---
+tool: "bn_function_disassembly"
+function: "0x4d0d10"
+arch: "x86"
+name: "Render_DrawSplineMesh_2"
+platform: "windows-x86"
+offset: 0
+limit: 1000
+count: 9
+total: 9
+nextOffset: null
+truncated: false
+---
+
+````asm
+  int32_t Render_DrawSplineMesh_2(void* arg1)
+
+0x4d0d10  mov     eax, dword [esp+0x4]
+0x4d0d14  mov     ecx, dword [eax+0xc]
+0x4d0d17  mov     edx, dword [ecx+0xc]
+0x4d0d1a  movsx   eax, word [edx+0x7e]
+0x4d0d1e  retn
+````
