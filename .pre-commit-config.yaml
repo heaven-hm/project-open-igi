@@ -1,0 +1,21 @@
+# Shared verification gate for ALL coding agents (codex, claude, re-agent, etc.).
+# AGENTS.md 10.5/10.6 + verification-before-completion: a native transcription
+# must carry the 5-line provenance comment with a Status >= VERIFIED
+# at commit time. Build and launch paths scan the entire production native tree.
+# Install: pip install pre-commit && pre-commit install
+repos:
+  - repo: local
+    hooks:
+      - id: igi-native-verification-gate
+        name: "IGI native verification gate (>= VERIFIED)"
+        entry: python3 scripts/native_gate.py --root . --staged --threshold VERIFIED
+        language: system
+        files: '^(engine/src/retail|scripts/GameNatives)/.*\.cpp$'
+        stages: [pre-commit]
+      - id: igi-native-gate-integrity
+        name: "IGI native gate integrity (pinned hashes)"
+        entry: bash scripts/check_gate_integrity.sh
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit, pre-push]

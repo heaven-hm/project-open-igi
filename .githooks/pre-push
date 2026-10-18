@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Pre-push guard: refuse to push if the native gate/build/run scripts have been
+# modified away from the committed trust anchor.
+# Enable once with: git config core.hooksPath .githooks
+set -euo pipefail
+
+root="$(git rev-parse --show-toplevel)"
+exec "$root/scripts/check_gate_integrity.sh"

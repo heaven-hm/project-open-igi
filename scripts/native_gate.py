@@ -46,6 +46,7 @@ import argparse
 import hashlib
 import json
 import math
+import os
 import pathlib
 import re
 import subprocess
@@ -58,6 +59,7 @@ from typing import Any
 STATUS_RANK = {
     "ANALYZED": 0,
     "TRANSCRIBED": 1,
+    "INCONCLUSIVE": 1,
     "STRUCTURALLY_VERIFIED": 2,
     "BUILD_VERIFIED": 3,
     "RUNTIME_TESTED": 4,
@@ -1087,6 +1089,52 @@ def run_live_behavioral_runner(
     return artifact
 
 
+def run_angr_analysis(
+    root: pathlib.Path, binary: pathlib.Path, binary_digest: str, addresses: list[str],
+) -> dict[str, Any]:
+    """Run the isolated CFG helper once; failures remain explicit gate errors."""
+    helper = root / "scripts/angr_analyze.py"
+    if not addresses:
+        return {"functions": {}}
+    if not helper.is_file():
+        return {"error": "scripts/angr_analyze.py is missing", "functions": {}}
+    re_agent = pathlib.Path(os.environ.get(
+        "RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/auto-re-agent"))
+    interpreter = os.environ.get("IGI_ANGR_PYTHON", str(re_agent / ".venv/bin/python"))
+    command = [interpreter, str(helper), "--binary", str(binary.resolve())]
+    for address in addresses:
+        command.extend(["--address", address])
+    try:
+        helper_digest = sha256(helper)
+        process = subprocess.run(command, cwd=root, text=True, capture_output=True,
+                                 check=False, timeout=180)
+        if sha256(helper) != helper_digest:
+            raise ValueError("angr helper changed during analysis")
+        artifact = json.loads(process.stdout)
+        if not isinstance(artifact, dict):
+            raise ValueError("helper output is not an object")
+        if process.returncode not in (0, 2):
+            raise ValueError(artifact.get("reason") or process.stderr[-1000:] or
+                             f"helper exited {process.returncode}")
+        if (artifact.get("schema_version") != 1 or artifact.get("kind") != "angr-analysis"
+                or artifact.get("tool") != "angr" or not artifact.get("angr_version")):
+            raise ValueError("helper did not identify a supported angr evidence report")
+        if artifact.get("binary_sha256") != binary_digest:
+            raise ValueError("helper binary digest differs from selected retail executable")
+        if pathlib.Path(artifact.get("binary_path", "")).resolve() != binary.resolve():
+            raise ValueError("helper loaded a different binary path")
+        if artifact.get("bits") != 32 or int(artifact.get("mapped_base", "0"), 0) != 0x400000:
+            raise ValueError("helper did not load the retail x86 image at 0x00400000")
+        if not isinstance(artifact.get("functions"), dict):
+            raise ValueError("helper function results are missing")
+        artifact["helper_sha256"] = helper_digest
+        artifact["command"] = command
+        artifact["stderr"] = process.stderr[-1000:]
+        return artifact
+    except (OSError, subprocess.TimeoutExpired, ValueError, TypeError) as error:
+        return {"error": str(error), "functions": {}}
+
+
 def verify_record(
     root: pathlib.Path,
     binary_path: pathlib.Path,
@@ -1100,6 +1148,7 @@ def verify_record(
     require_semantic: bool,
     require_behavioral: bool,
     require_mutation: bool,
+    angr_analysis: dict[str, Any],
     warnings: list[str],
 ) -> tuple[list[str], dict[str, Any]]:
     address = native["address"]
@@ -1120,6 +1169,22 @@ def verify_record(
     if implementation_record.get("path") != relative:
         errors.append(f"{address}: implementation path does not match {relative}")
     implementation_digest = sha256(implementation)
+    angr_function = angr_analysis.get("functions", {}).get(address, {})
+    if angr_analysis.get("error"):
+        errors.append(f"{address}: angr analysis failed: {angr_analysis['error']}")
+    elif (not isinstance(angr_function, dict) or angr_function.get("result") != "pass"
+          or angr_function.get("function_entry") != address or not angr_function.get("nodes")
+          or angr_function.get("has_unresolved_jumps") is not False):
+        reason = angr_function.get("reason", "no exact recovered function CFG") if isinstance(angr_function, dict) else "invalid function result"
+        errors.append(f"{address}: angr CFGFast result is inconclusive or failed: {reason}")
+    details["angr"] = {
+        **(angr_function if isinstance(angr_function, dict) else {}),
+        "helper_sha256": angr_analysis.get("helper_sha256"),
+        "implementation_sha256": implementation_digest,
+        "binary_sha256": binary_digest,
+        "version": angr_analysis.get("angr_version"),
+        "limitations": angr_analysis.get("limitations", []),
+    }
     if not isinstance(implementation_record.get("sha256"), str) or implementation_record["sha256"].lower() != implementation_digest:
         errors.append(f"{address}: implementation changed since its evidence record was reviewed")
 
@@ -1154,6 +1219,21 @@ def verify_record(
         errors.append(f"{address}: unknown or missing verification status {status!r}")
         return errors, details
     details["status"] = status
+    if status == "INCONCLUSIVE":
+        limitation = verification.get("inconclusive", {})
+        reason = limitation.get("reason") if isinstance(limitation, dict) else None
+        errors.append(f"{address}: INCONCLUSIVE — {reason or 'missing explanation of unverified behavior'}")
+        # This status always blocks; a fresh comparison can gather evidence but
+        # cannot silently promote it or waive the release threshold.
+        if isinstance(verification.get("behavioral_runner"), dict):
+            live = run_live_behavioral_runner(
+                root, verification["behavioral_runner"], address, binary_path,
+                binary_digest, implementation, implementation_digest, errors)
+            if live is not None:
+                details["behavioral_tests"] = {
+                    key: live.get(key) for key in
+                    ("result", "tests_total", "tests_passed", "tests_failed")}
+        return errors, details
     if not status_meets_threshold(status, minimum_status):
         errors.append(f"{address}: status {status} is below required {minimum_status}")
     if not native.get("is_canonical_source") and native.get("comment_status") != status:
@@ -1395,6 +1475,21 @@ def main() -> int:
     report["deleted_files"] = deleted
     failures: list[str] = []
     warnings: list[str] = []
+    addresses: set[str] = set()
+    for path in files:
+        try:
+            addresses.update(native["address"] for native in implementation_natives(
+                path, path.relative_to(root).as_posix()))
+        except (GateError, OSError, ValueError):
+            # The normal per-file pass below reports the precise source error.
+            continue
+    angr_analysis = run_angr_analysis(root, binary_path, binary_digest, sorted(addresses))
+    report["angr_analysis"] = angr_analysis
+    report["supplemental_analysis_tools"] = ["angr"]
+    if addresses:
+        recovered = sum(item.get("result") == "pass" for item in
+                        angr_analysis.get("functions", {}).values() if isinstance(item, dict))
+        print(f"native_gate: angr CFGFast {recovered}/{len(addresses)} exact entries recovered (structural evidence only)")
 
     for deleted_path in deleted:
         original = _run_git(root, ["git", "show", f"HEAD:{deleted_path}"])
@@ -1455,6 +1550,7 @@ def main() -> int:
                 args.require_semantic_evidence,
                 args.require_behavioral_tests,
                 args.require_mutation_tests,
+                angr_analysis,
                 warnings,
             )
             failures.extend(native_errors)

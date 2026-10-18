@@ -15,11 +15,12 @@ export GHIDRA_INSTALL_DIR="${GHIDRA_INSTALL_DIR:-/opt/homebrew/opt/ghidra/libexe
 export GHIDRA_MCP_URL="${GHIDRA_MCP_URL:-http://127.0.0.1:8771}"
 export RADARE2_BIN="${RADARE2_BIN:-$(command -v r2 || true)}"
 export RE_AGENT_ROOT="${RE_AGENT_ROOT:-/Users/haseeb-mir/Documents/Code/auto-re-agent}"
+export IGI_ANGR_PYTHON="${IGI_ANGR_PYTHON:-$RE_AGENT_ROOT/.venv/bin/python}"
 export REA_MCP_SERVER="${REA_MCP_SERVER:-rea}"
 export IGI_PROBE_BIN="${IGI_PROBE_BIN:-}"
 
 toolchain_path_error=0
-for required_path in "$IGI_RETAIL_EXE" "$IGI_GAME_NATIVES_DIR" "$BINARY_NINJA_APP" "$GHIDRA_INSTALL_DIR" "$RE_AGENT_ROOT"; do
+for required_path in "$IGI_RETAIL_EXE" "$IGI_GAME_NATIVES_DIR" "$BINARY_NINJA_APP" "$GHIDRA_INSTALL_DIR" "$RE_AGENT_ROOT" "$IGI_ANGR_PYTHON"; do
     if [[ ! -e "$required_path" ]]; then
         echo "!! Missing required native-analysis path: $required_path" >&2
         toolchain_path_error=1
@@ -42,12 +43,13 @@ echo "    Ghidra:         $GHIDRA_INSTALL_DIR"
 echo "    Ghidra MCP:     $GHIDRA_MCP_URL"
 echo "    Radare2:        $RADARE2_BIN"
 echo "    RE-Agent:       $RE_AGENT_ROOT"
+echo "    angr Python:    $IGI_ANGR_PYTHON"
 echo "    REA MCP:        $REA_MCP_SERVER"
 echo "    IGI-Probe:      ${IGI_PROBE_BIN:-not configured}"
 
 echo "==> [0/4] Verifying all production native transcriptions against retail igi.exe..."
 python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --production-tree \
-    --threshold VERIFIED --cfg-threshold 0.85 || {
+    --threshold VERIFIED --cfg-threshold 0.85 --report build/native-verification.json || {
   echo "!! Build BLOCKED: production native code lacks matching binary-bound evidence."
   echo "!! A five-line comment alone cannot authorize compilation or deployment."
   exit 1
