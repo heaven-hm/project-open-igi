@@ -8,29 +8,33 @@ This repository is the game-engine implementation. It is not an editor, converte
 
 The active Level 1 MVP is documented in MVP.md, with its required implementation sequence in plan.md: build the Windows x86 baseline; render models at transforms from OBJECTS.QVM; render terrain and textures; verify all visual assets and placements; then implement the playable simulation, player, physics/interactions, AI/navigation, health/damage, weapons, gameplay animation/effects, QVM flow, with audio deferred.
 
-### Task 1: early 3D model loading from QVM
+### Current milestone: level loading, 3D models and terrain
 
-The Windows executable now renders textured MEF models at declared `OBJECTS.QVM` positions using Direct3D 7.
-MTP packages connect the models and materials to their original RES archives. All 14 levels produced a saved
-rendered frame in the current scene test. Level 1 draws 441 initial model poses with 190 textures.
+The Windows 32-bit executable loads level scenes with textured 3D models and terrain
+through DirectDraw 7 / Direct3D 7. These are diagnostic loading scenes. Playable
+missions, combat, AI, collision and complete player simulation are not implemented.
+Retail camera, placement, material and texture parity remain under verification.
 
 ```console
 open-igi.exe window level1
-open-igi.exe window level5
+open-igi.exe window devmode level1
 ```
 
-Place the executable in the original game directory. These are model-loading scenes, not playable missions.
-The camera and lighting are diagnostic; terrain, skinned actors, recursive attachments and other task types remain
-incomplete. Some source model references remain unresolved. See the [test results, all 14 captures and native
-address/name table](docs/TASK1_MODEL_LOADING.md) for coverage and limits.
+Place the executable in your original game directory. The screenshots below are
+existing scene captures, not evidence of playable gameplay or complete retail parity.
+Visible vegetation, placement and terrain/material artifacts still need correction.
 
-| Level 1                                                              | Level 3                                                              |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| ![Level 1 textured models](docs/screenshots/task1/level1-models.png) | ![Level 3 textured models](docs/screenshots/task1/level3-models.png) |
+#### Level 1: models and terrain from four inspection views
 
-| Level 11                                                               | Level 14                                                               |
-| ---------------------------------------------------------------------- | ---------------------------------------------------------------------- |
-| ![Level 11 textured models](docs/screenshots/task1/level11-models.png) | ![Level 14 textured models](docs/screenshots/task1/level14-models.png) |
+![Level 1 diagnostic scene with textured 3D models and terrain, four camera views](screenshots/level1_terrain_4grid.png)
+
+#### Additional level-loading views
+
+![Diagnostic model and terrain loading captures from several levels](screenshots/terrain_4grid.png)
+
+The earlier model-only loading record remains available in
+[Task 1 evidence](docs/TASK1_MODEL_LOADING.md). These newer terrain views show the
+current visual milestone; they do not mark Tasks 1–2 as behaviorally verified.
 
 Primary native anchors: `Qvm_Load` (`0x004B80B0`), `Resource_Load` (`0x004B5F00`),
 `DynObj_LoadModelTexturePackage` (`0x004CF080`), `DynObj_LoadModelMesh` (`0x004CF390`) and
@@ -42,6 +46,12 @@ Movies/cutscenes, vehicles, smoke effects, and the main menu are outside this pl
 ## Build
 
 The target is a 32-bit Windows executable using the original DirectX 7 / DirectDraw platform APIs.
+The game target rejects non-Windows and 64-bit toolchains. `./run.sh` launches
+`open-igi.exe` after the production verification gate; `./run.sh --status` only
+reports paths. Wine/CrossOver may run the Windows executable for local testing;
+there is no macOS application target or `.app` deployment.
+Launch also checks the executable hash against its verified build receipt and
+recorded sources/compiler configuration. Missing or stale receipts block launch.
 
 Requirements: CMake 3.20+, a C++20 compiler, and the Windows SDK or MinGW toolchain with DirectDraw 7 headers and libraries.
 
@@ -102,10 +112,17 @@ unlimited ammunition and clips. This model scene has no playable health/inventor
 so F9 logs that limitation and does not grant functional gameplay cheats. All three shortcuts are
 inactive without `devmode`; key auto-repeat is ignored. These are host tools, not retail-native claims.
 
-The four-frame model grid above records the existing visual milestone. Terrain will get its own
-four-frame grid after rendering and verification, not before. See [AGENTS.md](AGENTS.md) for the evidence/review rules.
+The model-and-terrain grids above record the current loading milestone.
+Gameplay screenshots from the retired SDL/OpenGL prototypes are not used here. See [AGENTS.md](AGENTS.md) for the evidence/review rules.
 
-Current development checkpoint: `task1-devcontrols-2026-10-17` (not a stable gameplay release).
+Current development checkpoint: Windows x86 model-and-terrain loading (not a playable or stable gameplay release).
 [Windows test record](docs/DEVELOPER_CONTROLS_TEST.md) · [Terrain/ATTA evidence](docs/RETAIL_TERRAIN_ATTACHMENT_STATUS.md) · [Retail byte identities](docs/native-source-identity.json).
 
 Evidence-backed names and historical aliases: [native naming record](docs/RETAIL_NATIVE_NAMING.md).
+
+## License
+
+Project-authored source is distributed under the [MIT license](LICENSE), copyright
+2026 Heaven HM. Existing third-party notices remain applicable. The retail game,
+its executable and its assets are not licensed by this repository. See
+[license scope](LICENSE_SCOPE.md), including the status of screenshots.
