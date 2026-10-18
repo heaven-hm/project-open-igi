@@ -1,0 +1,93 @@
+{
+  "kind": "verification-harness-mutation-check",
+  "result": "expected-defect-rejected",
+  "address": "0x004AA6AE",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "mutant_implementation_sha256": "76c92d4a319431f7d9b21ff8ff7ef7da7d6ed933a2d6d44c42f70776069d1e34",
+  "mutation": {
+    "source": "engine/src/retail/mem/mem_alloc.cpp",
+    "original": "return std::malloc(static_cast<std::size_t>(num_bytes));",
+    "replacement": "void* block = std::malloc(static_cast<std::size_t>(num_bytes)); return block ? static_cast<char*>(block) + 1 : nullptr;",
+    "applied_to": "temporary candidate copy only"
+  },
+  "runner": {
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/auto-re-agent/.venv/bin/python",
+      "scripts/native_abi_diff_runner.py",
+      "--address",
+      "0x004AA6AE",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-mutant-k8opd4in/mem_alloc.cpp",
+      "--implementation-sha256",
+      "76c92d4a319431f7d9b21ff8ff7ef7da7d6ed933a2d6d44c42f70776069d1e34",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi"
+    ],
+    "path": "scripts/native_abi_diff_runner.py",
+    "sha256": "1038f157c3b2e04139ad17c414c596b57ed7ec25cba3385edccd02351ab9453d"
+  },
+  "retail_execution": {
+    "analysis": "retail x86 and x86 candidate execution with deterministic heap-boundary procedures",
+    "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_build_command": [
+      "/opt/homebrew/bin/i686-w64-mingw32-g++",
+      "-std=c++20",
+      "-O0",
+      "-ffunction-sections",
+      "-fdata-sections",
+      "-I/Users/haseeb-mir/Documents/Code/project-open-igi/engine/include",
+      "-shared",
+      "-Wl,--gc-sections",
+      "-o",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-1rw02n7c/allocator_candidate.dll",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-1rw02n7c/allocator_entry.cpp",
+      "/private/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-mutant-k8opd4in/mem_alloc.cpp",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/mem/heap_list.cpp",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/error/error_show.cpp"
+    ],
+    "candidate_sha256": "bdee40047f13530708bc76517046613514ea2e40737c34c93852a4c1e65a399b",
+    "candidate_target": "PE32 x86 Windows DLL",
+    "engine": "VEX",
+    "function_entry": "0x004AA6AE",
+    "helper_path": "scripts/angr_abi_execute.py",
+    "helper_sha256": "d8d825e3533bdfcc396341daab08d2f10d86dd9635fa8edb514c435e8d5163fc",
+    "tool": "angr",
+    "version": "10.0.4.post1"
+  },
+  "tests_total": 29,
+  "mismatches": 24,
+  "example_mismatch": {
+    "candidate_output": {
+      "requested_allocation_sizes": [
+        16
+      ],
+      "return_class": "allocated",
+      "return_value": 1610612737
+    },
+    "categories": [
+      "boundary"
+    ],
+    "id": "raw-default-0",
+    "input": {
+      "allocation_succeeds": true,
+      "bucket_bound": 0,
+      "id": "raw-default-0",
+      "mode": 0,
+      "pool_threshold": 0,
+      "size": 0
+    },
+    "reference_output": {
+      "requested_allocation_sizes": [
+        16
+      ],
+      "return_class": "allocated",
+      "return_value": 1610612736
+    }
+  },
+  "limits": "Confirms detection of this pointer-offset defect under synthetic heap conditions; does not establish complete native equivalence."
+}
