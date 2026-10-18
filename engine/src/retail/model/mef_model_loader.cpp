@@ -21,6 +21,7 @@ constexpr std::size_t container_header_size = 20U;
 // Original IGI.EXE chunk-navigation helpers: 0x004B7490, 0x004B74D0,
 // 0x004B7590 and 0x004B7470. Their decompilation evidence IDs are recorded below.
 constexpr std::size_t chunk_header_size = 16U;
+constexpr std::size_t attachment_record_size = 0x44U;
 constexpr std::size_t mesh_version_offset = 0U;
 constexpr std::size_t minimum_mesh_header_size = 0x9CU;
 
@@ -58,6 +59,49 @@ void write_u32(std::vector<std::byte>& destination, std::size_t offset, std::uin
     {
         destination[offset + byte_index] = static_cast<std::byte>((value >> (byte_index * 8U)) & 0xFFU);
     }
+}
+
+[[nodiscard]] std::vector<MefAttachmentRecord> read_attachment_records(const IlffChunk* chunk)
+{
+    if (chunk == nullptr || chunk->payload.empty())
+    {
+        return {};
+    }
+    if (chunk->payload.size() % attachment_record_size != 0U)
+    {
+        throw MefFormatError("ATTA payload is not a whole number of 68-byte records.");
+    }
+
+    const std::span<const std::byte> bytes(chunk->payload);
+    std::vector<MefAttachmentRecord> records;
+    records.reserve(bytes.size() / attachment_record_size);
+    for (std::size_t offset = 0U; offset < bytes.size(); offset += attachment_record_size)
+    {
+        const auto record = bytes.subspan(offset, attachment_record_size);
+        MefAttachmentRecord attachment{};
+        for (std::size_t name_index = 0U; name_index < 16U; ++name_index)
+        {
+            const auto value = std::to_integer<unsigned char>(record[name_index]);
+            if (value == 0U)
+            {
+                break;
+            }
+            attachment.name.push_back(static_cast<char>(value));
+        }
+        for (std::size_t component = 0U; component < attachment.position.size(); ++component)
+        {
+            attachment.position[component] = std::bit_cast<float>(
+                Ilff_ReadLittleEndian32(record, 16U + component * sizeof(std::uint32_t)));
+        }
+        for (std::size_t component = 0U; component < attachment.orientation.size(); ++component)
+        {
+            attachment.orientation[component] = std::bit_cast<float>(
+                Ilff_ReadLittleEndian32(record, 28U + component * sizeof(std::uint32_t)));
+        }
+        attachment.value = std::bit_cast<std::int32_t>(Ilff_ReadLittleEndian32(record, 64U));
+        records.push_back(std::move(attachment));
+    }
+    return records;
 }
 
 [[nodiscard]] IlffContainer read_container(std::span<const std::byte> bytes, std::size_t depth)
@@ -375,6 +419,8 @@ MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes)
     };
 
     model.attachments = copy_nonempty_chunk(mef_tag::attachments);
+    model.attachment_records = read_attachment_records(
+        model.attachments.has_value() ? &*model.attachments : nullptr);
     model.legacy_vertices = copy_nonempty_chunk(mef_tag::legacy_vertices);
     model.portals = copy_nonempty_chunk(mef_tag::portals);
     model.portal_faces = copy_nonempty_chunk(mef_tag::portal_faces);
