@@ -64,6 +64,7 @@ def worker(binary, candidate, address):
         state.memory.store(status_global, b"\xA5")
         canaries = bytes((i * 17 + 3) & 255 for i in range(64))
         state.memory.store(CONTEXT, canaries)
+        state.regs.eax = 0xA5A50000
         stack = state.solver.eval(state.regs.esp)
         effects = []
 
@@ -93,8 +94,9 @@ def worker(binary, candidate, address):
         before = int.from_bytes(canaries, "big")
         after = final.solver.eval(final.memory.load(CONTEXT, 64))
         return {
-            # EAX is not an observable result of the two void setters.
-            "return_value": final.solver.eval(final.regs.eax) if address == "0x00402880" else 0,
+            # Compare the register bits written by retail instructions without
+            # assuming that the candidate's void declaration establishes ABI.
+            "return_value": final.solver.eval(final.regs.al if address == "0x0048F480" else final.regs.eax),
             "state_delta": {
                 "context_before": before.to_bytes(64, "big").hex(),
                 "context_after": after.to_bytes(64, "big").hex(),
@@ -172,7 +174,7 @@ def main():
                              "candidate_build_command": command},
         "limitations": ["Concrete emulator fixtures, not a running retail process or a proof of all inputs.",
                         "Stack writes are excluded; original and candidate stack frame layouts can differ.",
-                        "Void setter EAX values are intentionally ignored.",
+                        "Flow/getter EAX and byte-status AL are compared; status EAX upper bits and retail caller return-type expectations remain unresolved.",
                         "QTask_OpenEvent and its dispatch table are not executed."],
     }
     print(json.dumps(report))

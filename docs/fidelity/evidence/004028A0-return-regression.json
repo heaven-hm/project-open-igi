@@ -1,0 +1,62 @@
+{
+  "kind": "native-return-regression-check",
+  "address": "0x004028A0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "result": "mismatch-corrected",
+  "before": {
+    "implementation_sha256": "9b52812c0c8c3a4743b3a104b73de01e700a01ecdb48defbeec0f3175982b640",
+    "tests_total": 8,
+    "tests_failed": 7,
+    "example": {
+      "id": "value-00000000",
+      "input": {
+        "value": 0
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccdde0000000033445566778899aabbccddeeff102132",
+          "context_pointer": 1610620928,
+          "loop_status": 165
+        },
+        "side_effects": [
+          {
+            "location": "context+0x2C",
+            "bytes": "00000000"
+          }
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1610620928,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccdde0000000033445566778899aabbccddeeff102132",
+          "context_pointer": 1610620928,
+          "loop_status": 165
+        },
+        "side_effects": [
+          {
+            "location": "context+0x2C",
+            "bytes": "00000000"
+          }
+        ]
+      }
+    }
+  },
+  "after": {
+    "implementation_sha256": "cedfdf84867c1b1d02408f74bfd6f08c36f4a1f05aa67ffccb0b717d1efdb4d9",
+    "tests_total": 8,
+    "tests_failed": 0
+  },
+  "correction": "Return the stored DWORD value to preserve the EAX bit pattern observed in retail. Original source-level signedness is unknown.",
+  "limitations": [
+    "Concrete emulator fixtures, not a running retail process or a proof of all inputs.",
+    "Stack writes are excluded; original and candidate stack frame layouts can differ.",
+    "Flow/getter EAX and byte-status AL are compared; status EAX upper bits and retail caller return-type expectations remain unresolved.",
+    "QTask_OpenEvent and its dispatch table are not executed."
+  ]
+}
