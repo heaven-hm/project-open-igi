@@ -45,6 +45,25 @@ The target is a 32-bit Windows executable using the original DirectX 7 / DirectD
 
 Requirements: CMake 3.20+, a C++20 compiler, and the Windows SDK or MinGW toolchain with DirectDraw 7 headers and libraries.
 
+Use `./build.sh` for the enforced build. It checks every production native at
+`VERIFIED`, requires CFG similarity of at least `0.85`, runs fresh angr analysis
+and configured behavioral comparisons, then builds and tests. A blocked gate
+does not authorize deployment, even if a separate host build passes.
+
+For one method during development:
+
+```sh
+python3 scripts/native_gate.py --root "$PWD" \
+  --file engine/src/retail/model/mef_native_attachments.cpp \
+  --address 0x004D0D10 --threshold VERIFIED --cfg-threshold 0.85 \
+  --report build/native-method-004D0D10.json
+```
+
+Comment formatting produces warnings; missing or stale binary-bound evidence,
+logic disagreements and behavioral mismatches block verification. A method pass
+does not qualify the whole application for release. The following commands run
+host compilation and unit tests only:
+
     cmake -S . -B build
     cmake --build build
     ctest --test-dir build --output-on-failure
@@ -58,7 +77,8 @@ Tools used for analysis and verification:
 - `Ghidra` — disassembly, decompilation, and data-structure analysis.
 - `Binary Ninja` — independent disassembly, decompilation, and control-flow analysis.
 - `radare2` — independent disassembly, control-flow, and binary inspection.
-- `Frida` — runtime hooks, call tracing, and memory inspection.
+- `angr` — independent CFG recovery and bounded symbolic analysis; supplementary evidence.
+- `IGI-Probe` — runtime instrumentation where supported; availability and coverage must be recorded.
 - `RE-Agent` — orchestration of reverse-engineering analysis against the retail executable.
 
 Per-routine evidence and implementation limits stay attached to native source and its analysis records. Tool output is evidence; it is not a substitute for the native engine implementation.
@@ -83,7 +103,7 @@ so F9 logs that limitation and does not grant functional gameplay cheats. All th
 inactive without `devmode`; key auto-repeat is ignored. These are host tools, not retail-native claims.
 
 The four-frame model grid above records the existing visual milestone. Terrain will get its own
-four-frame grid after rendering and verification, not before. See Agents.md for the evidence/review rules.
+four-frame grid after rendering and verification, not before. See [AGENTS.md](AGENTS.md) for the evidence/review rules.
 
 Current development checkpoint: `task1-devcontrols-2026-10-17` (not a stable gameplay release).
 [Windows test record](docs/DEVELOPER_CONTROLS_TEST.md) · [Terrain/ATTA evidence](docs/RETAIL_TERRAIN_ATTACHMENT_STATUS.md) · [Retail byte identities](docs/native-source-identity.json).
