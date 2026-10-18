@@ -64,7 +64,7 @@ jobs:
 
           This release contains the source snapshot for the $RELEASE_CHANNEL channel.
 
-          **This is not a playable game release.** The repository currently builds only a non-playable macOS \`igi.app\` shell. No retail game assets are included.
+          **This is not a playable game release.** The game target is Windows 32-bit x86 with DirectDraw 7 / Direct3D 7 (open-igi.exe). Full retail behavioral parity remains unverified. No retail game assets are included.
           EOF
 
           release_arguments=("$RELEASE_TAG" --title "$RELEASE_TAG" --notes-file "$notes_file")

@@ -48,6 +48,8 @@ echo "    REA MCP:        $REA_MCP_SERVER"
 echo "    IGI-Probe:      ${IGI_PROBE_BIN:-not configured}"
 
 echo "==> [0/4] Verifying all production native transcriptions against retail igi.exe..."
+python3 "$ROOT_DIR/scripts/build_attestation.py" capture --root "$ROOT_DIR" \
+    --output "$ROOT_DIR/build/native-verification-inputs.json"
 python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --production-tree \
     --threshold VERIFIED --cfg-threshold 0.85 --report build/native-verification.json || {
   echo "!! Build BLOCKED: production native code lacks matching binary-bound evidence."
@@ -56,6 +58,10 @@ python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --production-tree 
 }
 
 echo "==> [1/4] Configuring and building host engine & test suite (build/)..."
+python3 "$ROOT_DIR/scripts/build_attestation.py" snapshot --root "$ROOT_DIR" \
+    --input-snapshot "$ROOT_DIR/build/native-verification-inputs.json" \
+    --gate-report "$ROOT_DIR/build/native-verification.json" \
+    --output "$ROOT_DIR/build/native-build-snapshot.json"
 cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 
@@ -72,12 +78,21 @@ if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
         -DCMAKE_SYSTEM_NAME=Windows \
         -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ \
         -DBUILD_TESTING=OFF
+    python3 "$ROOT_DIR/scripts/build_attestation.py" configure --root "$ROOT_DIR" \
+        --snapshot "$ROOT_DIR/build/native-build-snapshot.json" \
+        --output "$ROOT_DIR/build/native-build-snapshot.json"
     cmake --build build-win32 -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+    python3 "$ROOT_DIR/scripts/build_attestation.py" seal --root "$ROOT_DIR" \
+        --snapshot "$ROOT_DIR/build/native-build-snapshot.json" \
+        --binary "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe" \
+        --output "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe.native-verification.json"
 
     IGI_DEST_DIR="${IGI_DIR:-/Users/haseeb-mir/Downloads/IGI}"
     if [[ -d "$IGI_DEST_DIR" ]]; then
         echo "==> [4/4] Copying open-igi.exe to $IGI_DEST_DIR/open-igi.exe..."
         cp -f build-win32/engine/platform/windows/open-igi.exe "$IGI_DEST_DIR/open-igi.exe"
+        cp -f build-win32/engine/platform/windows/open-igi.exe.native-verification.json \
+            "$IGI_DEST_DIR/open-igi.exe.native-verification.json"
         ls -lh "$IGI_DEST_DIR/open-igi.exe"
     else
         echo "==> [4/4] Skipping copy: $IGI_DEST_DIR does not exist."
