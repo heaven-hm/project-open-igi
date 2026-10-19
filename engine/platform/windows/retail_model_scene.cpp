@@ -2,7 +2,6 @@
 #define UNICODE
 #define _UNICODE
 #include "retail_model_scene.hpp"
-#include "player_controller.hpp"
 
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/config/config_graphic_options.hpp"
@@ -10,6 +9,8 @@
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
 #include "igi/retail/render/trans_context.hpp"
+#include "igi/retail/render/view_block.hpp"
+#include "igi/retail/human/human_view.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
 #include "igi/retail/resource/resource_cache.hpp"
 #include "igi/retail/script/qvm_loader.hpp"
@@ -35,6 +36,7 @@
 #include <sstream>
 #include <stdexcept>
 #include <string>
+#include <thread>
 
 #include "developer_controls.hpp"
 
@@ -288,65 +290,9 @@ struct Scene
     igi::developer::DeveloperControls developer_controls;
     float dev_yaw = 0.0F;   // radians, around Z
     float dev_pitch = 0.0F; // radians, up/down
-    float dev_speed = 400.0F;
+    float dev_speed = 50.0F;
     bool dev_look_initialised = false;
     POINT dev_last_mouse{};
-
-    // Player simulation is host integration over the retail HumanPlayer and
-    // Human_CameraEyePosition transcriptions.  It intentionally excludes weapons,
-    // sound, and AI; this scene owns only movement and terrain collision.
-    igi::host::PlayerController player;
-    igi::host::TerrainCollisionGrid player_ground;
-    bool player_active = false;
-    bool player_look_initialised = false;
-    POINT player_last_mouse{};
-
-    // Escape toggles the pause state. Retail opens the in-game menu on Escape, which
-    // freezes the gameplay simulation while the last frame stays visible; the menu UI
-    // itself is outside the playable-demo scope (MVP step 13), so the port reproduces
-    // the observable world-freeze and the window title marks the state.
-    bool paused = false;
-
-    void update_player_camera(float delta_seconds)
-    {
-        if (!player_active)
-        {
-            return;
-        }
-        POINT cursor{};
-        GetCursorPos(&cursor);
-        if (!player_look_initialised)
-        {
-            player_last_mouse = cursor;
-            player_look_initialised = true;
-        }
-        igi::host::PlayerInputFrame input{};
-        input.move_forward = (GetAsyncKeyState('W') & 0x8000) != 0;
-        input.move_backward = (GetAsyncKeyState('S') & 0x8000) != 0;
-        input.strafe_left = (GetAsyncKeyState('A') & 0x8000) != 0;
-        input.strafe_right = (GetAsyncKeyState('D') & 0x8000) != 0;
-        input.jump = (GetAsyncKeyState('E') & 0x8000) != 0;
-        input.crouch = (GetAsyncKeyState('C') & 0x8000) != 0;
-        input.walk_toggle = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
-        input.look_delta_x = static_cast<float>(cursor.x - player_last_mouse.x);
-        input.look_delta_y = static_cast<float>(cursor.y - player_last_mouse.y);
-        player_last_mouse = cursor;
-        player.update(input, delta_seconds, player_ground);
-
-        const auto eye = player.eye_position();
-        camera_position = {
-            static_cast<float>((eye[0] - origin[0]) * world_scale),
-            static_cast<float>((eye[1] - origin[1]) * world_scale),
-            static_cast<float>((eye[2] - origin[2]) * world_scale)};
-        const float cosine_pitch = static_cast<float>(std::cos(player.pitch()));
-        const Vector3 forward{
-            static_cast<float>(std::sin(player.yaw())) * cosine_pitch,
-            static_cast<float>(std::cos(player.yaw())) * cosine_pitch,
-            static_cast<float>(std::sin(player.pitch()))};
-        camera_target = {camera_position.x + forward.x,
-                         camera_position.y + forward.y,
-                         camera_position.z + forward.z};
-    }
 
     void dev_camera_reset()
     {
@@ -729,18 +675,28 @@ struct Scene
                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
                 if (parsed_mef->render_format == model::MefRenderFormat::skinned)
                 {
-                    // The MVP renderer cannot yet evaluate a retail bone palette.  Do not call
-                    // Display_DecodeMeshRenderData for this format: its explicit failure is
-                    // correct for an unimplemented renderer path, but must not abort the static
-                    // Level 1 scene.  Retain the model identity in the log for reconciliation.
-                    ++missing;
-                    write_log("MVP omission: Skinned MEF model=" + mesh_name +
-                                  " requires retail palette evaluation; not rendered.",
-                              diagnostics::LogLevel::warning);
-                    continue;
+                    // Retail 0x0049B700 palette evaluation is ported (mef_skinner.cpp); the
+                    // identity palette renders the authored bind pose until the animation
+                    // slice supplies live bone palettes.
+                    try
+                    {
+                        geometry = std::make_shared<model::MefRenderData>(
+                            model::Display_DecodeMeshRenderData(*parsed_mef));
+                    }
+                    catch (const std::exception& exception)
+                    {
+                        ++missing;
+                        write_log("Skinned MEF model=" + mesh_name + " not rendered: " +
+                                      exception.what(),
+                                  diagnostics::LogLevel::warning);
+                        continue;
+                    }
                 }
-                geometry = std::make_shared<model::MefRenderData>(
-                    model::Display_DecodeMeshRenderData(*parsed_mef));
+                else
+                {
+                    geometry = std::make_shared<model::MefRenderData>(
+                        model::Display_DecodeMeshRenderData(*parsed_mef));
+                }
             }
             object.geometry = geometry;
             object.mef = parsed_mef;
@@ -835,15 +791,18 @@ struct Scene
                     {
                         child_mef = std::make_shared<model::MefModel>(
                             model::MefModel::DynObj_LoadModelMesh(child_entry->body));
-                        if (child_mef->render_format == model::MefRenderFormat::skinned)
+                        try
                         {
-                            write_log("MVP omission: Skinned ATTA MEF model=" + child_name +
-                                          " requires retail palette evaluation; not rendered.",
+                            child_geometry = std::make_shared<model::MefRenderData>(
+                                model::Display_DecodeMeshRenderData(*child_mef));
+                        }
+                        catch (const std::exception& exception)
+                        {
+                            write_log("Skinned ATTA MEF model=" + child_name + " not rendered: " +
+                                          exception.what(),
                                       diagnostics::LogLevel::warning);
                             continue;
                         }
-                        child_geometry = std::make_shared<model::MefRenderData>(
-                            model::Display_DecodeMeshRenderData(*child_mef));
                     }
                     catch (const std::exception& exception)
                     {
@@ -880,11 +839,7 @@ struct Scene
                   "; attached_models=" + std::to_string(attached_models) +
                   "; unresolved_source_models=" + std::to_string(missing) +
                   "; skinned models and remaining task types not yet rendered.");
-        player.reset(origin, 0.0, 0.0, origin, world_scale);
-        player_active = true;
-        player_look_initialised = false;
-        update_player_camera(0.0F);
-        write_log("HumanPlayer movement enabled: W/A/S/D, E jump, C crouch, Shift walk/run.");
+        write_log("HumanPlayer input is unavailable until the retail GOInRemap and InputPort native chain is transcribed and verified.");
     }
 
     std::uint32_t render_width = 1024U;
@@ -1265,9 +1220,38 @@ struct Scene
         view._41 = -dot(right, camera_position);
         view._42 = -dot(up, camera_position);
         view._43 = -dot(forward, camera_position);
+
+        // Build the active transform context through the retail default-view path instead of
+        // using a fixed 4:3 projection.  Human_TaskViewReset supplies the normal player's
+        // half-FOV tangent; Transcontext_BuildViewBlock derives the matching vertical tangent
+        // from the actual render dimensions and screen block.
+        std::array<std::uint8_t, 0x1F0> human_view_state{};
+        human::Human_TaskViewReset(human_view_state.data());
+        float default_fov_x = 0.0F;
+        std::memcpy(&default_fov_x,
+                    human_view_state.data() + human::human_view_tangent_x_offset,
+                    sizeof(default_fov_x));
+        render::Display_HostSetDimensions(static_cast<std::int32_t>(render_width),
+                                          static_cast<std::int32_t>(render_height));
+        render::ScreenBlock_HostInstallRect(0.0F, 0.0F,
+                                            static_cast<float>(render_width),
+                                            static_cast<float>(render_height));
+        render::TransContext context{};
+        const std::array<double, 3> camera_context_position{
+            static_cast<double>(camera_position.x),
+            static_cast<double>(camera_position.y),
+            static_cast<double>(camera_position.z)};
+        render::Transcontext_BuildViewBlock(context.bytes.data(), &view,
+                                             camera_context_position.data(), default_fov_x);
+        render::Transcontext_SetActiveTransContext(context);
+        const auto fov_tangents = render::Transcontext_GetFovTangents();
+        if (!(fov_tangents[0] > 0.0F) || !(fov_tangents[1] > 0.0F))
+        {
+            throw std::runtime_error("Retail transform context produced an invalid FOV tangent.");
+        }
         D3DMATRIX projection{};
-        projection._11 = 1.0F;
-        projection._22 = 1.3333333F;
+        projection._11 = 1.0F / fov_tangents[0];
+        projection._22 = 1.0F / fov_tangents[1];
         projection._33 = 10000.0F / 9999.8F;
         projection._34 = 1;
         projection._43 = -0.2F * projection._33;
@@ -1286,12 +1270,7 @@ struct Scene
                 const float cam_p[3] = {camera_position.x, camera_position.y, camera_position.z};
                 const float cam_t[3] = {camera_target.x, camera_target.y, camera_target.z};
                 const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
-                    origin, world_scale, cam_p, cam_t, 1.0f, 1.333f, 4000.0f);
-
-                // The player queries precisely the mesh produced for this frame.  Rebuilding
-                // after terrain decode gives the next 30 Hz player tick the same surface the
-                // renderer presented, including height-map changes.
-                player_ground.rebuild(terrain_mesh, camera_position.x, camera_position.y);
+                    origin, world_scale, cam_p, cam_t, fov_tangents[0], fov_tangents[1], 4000.0f);
 
                 if (!terrain_mesh.vertices.empty())
                 {
@@ -1599,7 +1578,15 @@ int RunRetailModelScene(HINSTANCE instance,
 
         MSG message{};
         bool running = true;
-        float dev_frame_seconds = 1.0F / 60.0F;
+        // Retail's player simulation is 30 Hz. Pace the host presentation at that same
+        // cadence instead of adding a fixed Sleep(16) after variable render work.
+        constexpr auto frame_period = std::chrono::nanoseconds(1'000'000'000 / 30);
+        auto next_frame_deadline = std::chrono::steady_clock::now();
+        auto previous_frame_start = next_frame_deadline;
+        auto fps_window_start = next_frame_deadline;
+        unsigned int fps_window_frames = 0;
+        unsigned int fps_window_overruns = 0;
+        float dev_frame_seconds = std::chrono::duration<float>(frame_period).count();
         while (running)
         {
             while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
@@ -1612,18 +1599,6 @@ int RunRetailModelScene(HINSTANCE instance,
                 if (message.hwnd == window &&
                     (message.message == WM_KEYDOWN || message.message == WM_SYSKEYDOWN))
                 {
-                    // Escape toggles the pause state before the developer controls see the key.
-                    if (message.wParam == VK_ESCAPE &&
-                        (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) == 0U)
-                    {
-                        scene.paused = !scene.paused;
-                        SetWindowTextW(window, scene.paused ? L"IGI \u2014 PAUSED (Esc resumes)" : L"IGI");
-                        write_log(scene.paused ? std::string("Escape pressed: gameplay simulation paused "
-                                               "(retail freezes the world behind the in-game menu; "
-                                               "menu UI is a later MVP slice).")
-                                               : std::string("Escape pressed: gameplay simulation resumed."));
-                        continue;
-                    }
                     const auto action = scene.developer_controls.handle_key(
                         static_cast<unsigned int>(message.wParam),
                         (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) != 0U);
@@ -1670,20 +1645,17 @@ int RunRetailModelScene(HINSTANCE instance,
             }
             if (running && !IsIconic(window))
             {
+                std::this_thread::sleep_until(next_frame_deadline);
                 const auto frame_start = std::chrono::steady_clock::now();
-                if (scene.paused)
-                {
-                    // Frozen world: retail halts the gameplay simulation while the in-game menu
-                    // is open. Keep presenting the last frame at the same cadence.
-                    scene.draw();
-                }
-                else if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
+                dev_frame_seconds = std::chrono::duration<float>(frame_start - previous_frame_start).count();
+                previous_frame_start = frame_start;
+                if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
                 {
                     scene.update_dev_camera(dev_frame_seconds);
+                    scene.draw();
                 }
                 else
                 {
-                    scene.update_player_camera(dev_frame_seconds);
                     scene.draw();
                 }
                 if (!capture_path.empty())
@@ -1693,9 +1665,29 @@ int RunRetailModelScene(HINSTANCE instance,
                     running = false;
                 }
                 const auto frame_end = std::chrono::steady_clock::now();
-                dev_frame_seconds = std::chrono::duration<float>(frame_end - frame_start).count();
+                next_frame_deadline = frame_start + frame_period;
+                if (frame_end > next_frame_deadline)
+                {
+                    ++fps_window_overruns;
+                    next_frame_deadline = frame_end;
+                }
+                ++fps_window_frames;
+                const auto fps_window_duration = frame_end - fps_window_start;
+                if (fps_window_duration >= std::chrono::seconds(2))
+                {
+                    const double observed_fps = static_cast<double>(fps_window_frames) /
+                                                std::chrono::duration<double>(fps_window_duration).count();
+                    std::ostringstream timing;
+                    timing << "Frame pacing: " << std::fixed << std::setprecision(2) << observed_fps
+                           << " FPS over " << std::chrono::duration<double>(fps_window_duration).count()
+                           << " s; render overruns=" << fps_window_overruns << '/' << fps_window_frames
+                           << " (30 FPS target).";
+                    write_log(timing.str());
+                    fps_window_start = frame_end;
+                    fps_window_frames = 0;
+                    fps_window_overruns = 0;
+                }
             }
-            Sleep(16);
         }
         return 0;
     }
