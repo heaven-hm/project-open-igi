@@ -87,6 +87,20 @@ def candidate_wrapper() -> str:
 #include "igi/retail/mem/mem_alloc.hpp"
 
 extern "C" __declspec(dllexport)
+std::uint32_t* NativeGlobalAddress(std::uint32_t index) {
+    using namespace igi::retail::mem;
+    switch (index) {
+    case 0: return &g_936250;
+    case 1: return reinterpret_cast<std::uint32_t*>(&g_936254);
+    case 2: return &g_c3242c;
+    case 3: return reinterpret_cast<std::uint32_t*>(&g_c32428);
+    case 4: return &g_c321fc;
+    case 5: return &g_5466d4;
+    default: return nullptr;
+    }
+}
+
+extern "C" __declspec(dllexport)
 void* NativeEntry(std::uint32_t address, std::uint32_t size, std::uint32_t sentinel,
                   std::uint32_t mode, std::uint32_t pool_threshold,
                   std::uint32_t bucket_bound) {
@@ -175,8 +189,8 @@ def main() -> int:
         "address": address,
         "binary_sha256": args.binary_sha256,
         "implementation_sha256": args.implementation_sha256,
-        "method": "Both the retail PE32 function and a freshly compiled x86 candidate DLL were executed with angr VEX. HeapAlloc and malloc were replaced with deterministic boundary procedures that record requested byte counts and return the same synthetic address (or null). Modes that enter unimplemented custom-pool behavior are excluded from this documented default-heap scope.",
-        "observable_fields": ["return_value", "return_class", "requested_allocation_sizes"],
+        "method": "Both the retail PE32 function and a freshly compiled x86 candidate DLL were executed with angr VEX. HeapAlloc and malloc were replaced with deterministic boundary procedures that record requested byte counts and return the same synthetic address (or null). Six mapped globals are read after execution; their before-values are configured fixture inputs installed by the adapter. A 64-byte synthetic allocation guard is compared before/after. Modes that enter unimplemented custom-pool behavior are excluded from this documented default-heap scope.",
+        "observable_fields": ["return_value", "return_class", "requested_allocation_sizes", "state_delta", "side_effects"],
         "float_tolerance": {"absolute": 0, "relative": 0},
         "tests_total": len(observations),
         "tests_passed": len(observations) - failed,
@@ -203,7 +217,7 @@ def main() -> int:
         },
         "limitations": [
             "Return values are compared exactly under the shared synthetic allocator address; this checks pointer offsets but does not establish real heap address parity.",
-            "Allocator metadata, global state changes, and complete memory side effects are not measured; this supplemental report does not satisfy the release gate's behavioral schema.",
+            "Six mapped allocator globals and a 64-byte synthetic allocation guard are observed. Other globals, complete heap metadata, and memory beyond that guard are not covered.",
             "Mem_AllocateRawBlock cases avoid custom-pool allocations in modes 2 and 3; mode 3 cases use sizes above the configured pool threshold and mode 2 uses a zero pool bound.",
             "Mem_AllocWithRetry cases use the retail default null new-handler; retry-after-successful-new-handler behavior is not covered.",
             "The game process and host graphics backend are not running; angr provides instruction-level execution with modeled allocation boundaries.",

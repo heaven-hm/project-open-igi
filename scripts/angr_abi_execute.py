@@ -2,8 +2,9 @@
 """Execute retail and x86 candidate allocator natives with angr/VEX.
 
 The heap APIs are replaced with deterministic boundary procedures. The helper
-compares request sizes and null/non-null results while intentionally normalizing
-process-specific allocation addresses.
+compares returns, request sizes, six mapped globals, and a 64-byte synthetic
+allocation guard under shared deterministic allocation addresses. Fixture inputs
+provide the before-state; final global and guard values are read from execution.
 """
 
 from __future__ import annotations
@@ -22,6 +23,9 @@ RETAIL_ENTRIES = {
 }
 STOP = 0x13370000
 ALLOCATED_POINTER = 0x60000000
+GLOBAL_ADDRESSES = (0x00936250, 0x00936254, 0x00C3242C,
+                    0x00C32428, 0x00C321FC, 0x005466D4)
+GUARD_BYTES = bytes(range(64))
 
 
 def _procedure(angr: Any, kind: str, allocation_succeeds: bool):
@@ -70,7 +74,9 @@ def _hook_allocator(project: Any, kind: str, allocation_succeeds: bool) -> None:
 
 
 def _run(project: Any, entry: int, args: list[int], kind: str,
-         allocation_succeeds: bool, retail_state: dict[str, int] | None = None) -> dict[str, Any]:
+         allocation_succeeds: bool, retail_state: dict[str, int] | None = None,
+         observed_addresses: dict[str, int] | None = None,
+         initial_globals: dict[str, int] | None = None) -> dict[str, Any]:
     import angr
 
     _hook_allocator(project, kind, allocation_succeeds)
@@ -86,6 +92,7 @@ def _run(project: Any, entry: int, args: list[int], kind: str,
     if retail_state:
         for address, value in retail_state.items():
             state.memory.store(int(address, 16), value.to_bytes(4, "little"))
+    state.memory.store(ALLOCATED_POINTER, GUARD_BYTES)
     manager = project.factory.simgr(state)
     manager.explore(find=STOP, num_find=1, n=100000)
     if not manager.found:
@@ -100,6 +107,17 @@ def _run(project: Any, entry: int, args: list[int], kind: str,
         "return_value": result,
         "return_class": "null" if result == 0 else "allocated",
         "requested_allocation_sizes": list(final.globals.get("allocation_calls", [])),
+        "state_delta": {
+            key: {"before": initial_globals[key],
+                  "after": final.solver.eval(final.memory.load(location, 4, endness=project.arch.memory_endness))}
+            for key, location in (observed_addresses or {}).items()
+        },
+        "side_effects": {
+            "allocation_requests": list(final.globals.get("allocation_calls", [])),
+            "allocation_guard_before": GUARD_BYTES.hex(),
+            "allocation_guard_after": final.solver.eval(
+                final.memory.load(ALLOCATED_POINTER, len(GUARD_BYTES)), cast_to=bytes).hex(),
+        },
     }
 
 
@@ -120,6 +138,24 @@ def execute(binary: pathlib.Path, candidate: pathlib.Path, address: str,
     candidate_symbol = candidate_project.loader.find_symbol("NativeEntry")
     if candidate_symbol is None:
         raise RuntimeError("candidate PE does not export NativeEntry")
+
+    getter = candidate_project.loader.find_symbol("NativeGlobalAddress")
+    if getter is None:
+        raise RuntimeError("candidate PE does not export NativeGlobalAddress")
+    candidate_globals = {}
+    for index, retail_address in enumerate(GLOBAL_ADDRESSES):
+        state = candidate_project.factory.call_state(
+            getter.rebased_addr, index, ret_addr=STOP,
+            add_options={angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,
+                         angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS})
+        manager = candidate_project.factory.simgr(state)
+        manager.explore(find=STOP, num_find=1, n=1000)
+        if not manager.found:
+            raise RuntimeError("candidate global-address adapter did not return")
+        location = manager.found[0].solver.eval(manager.found[0].regs.eax)
+        if not location or not candidate_project.loader.main_object.contains_addr(location):
+            raise RuntimeError("candidate global-address adapter returned invalid storage")
+        candidate_globals[f"0x{retail_address:08X}"] = location
 
     observations = []
     for case in cases:
@@ -150,6 +186,8 @@ def execute(binary: pathlib.Path, candidate: pathlib.Path, address: str,
             "HeapAlloc",
             succeeds,
             globals_state,
+            {key: int(key, 16) for key in globals_state},
+            globals_state,
         )
         candidate_output = _run(
             candidate_project,
@@ -157,6 +195,8 @@ def execute(binary: pathlib.Path, candidate: pathlib.Path, address: str,
             [int(key, 16), size, sentinel, mode, threshold, pool_bound],
             "malloc",
             succeeds,
+            observed_addresses=candidate_globals,
+            initial_globals=globals_state,
         )
         observations.append({
             "id": str(case["id"]),
