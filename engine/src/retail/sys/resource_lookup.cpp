@@ -5,8 +5,11 @@ namespace igi::retail::sys {
 // Native: String_ToUpperChar; retail VA 0x004AD73D; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
-// Behavior/CFG: not restated here.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Behavior/CFG: reproduces only the g_9361e4 == 0 branch: lowercase ASCII maps to
+// uppercase; every other uint32 value is preserved, including sign-extended bytes.
+// Status/limits: STRUCTURALLY_VERIFIED for the C-locale branch only (locale id 0; all
+// uint32 inputs verified by scripts/native_leaves_runner.py). The locale table, multibyte
+// and locale mapping branches are not implemented; see scopes/0x004AD73D.md.
 // Previous catalog alias: Camera_ApplyWideScreen_28.
 std::uint32_t String_ToUpperChar(std::uint32_t character)
 {

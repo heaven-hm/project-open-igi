@@ -31,6 +31,13 @@ SysDispatchOpcode7Fn g_sys_dispatch_opcode_7 = nullptr;
 SysPushStack16Fn g_sys_push_stack_16 = nullptr;
 SysPopStack16Fn g_sys_pop_stack_16 = nullptr;
 SysResolveSymbol28Fn g_sys_resolve_symbol_28 = nullptr;
+
+// Injectable host boundaries for the two Qvm_Cleanup release callees that are not
+// yet transcribed (retail `0x004BD380` standalone release and `0x004B0D10` block
+// release). They default to a 0-returning absence until their allocator-free
+// chains are ported.
+SysQvmStandaloneReleaseFn g_sys_qvm_standalone_release = nullptr;
+SysQvmBlockReleaseFn g_sys_qvm_block_release = nullptr;
 QScriptCleanupFn g_qscript_cleanup = nullptr;
 QScriptParseAndAssembleFn g_qscript_parse_and_assemble = nullptr;
 QScriptAssembleFn g_qscript_assemble = nullptr;
@@ -174,17 +181,23 @@ std::int32_t Qvm_ReportError(const char* format, ...)
 // Native: Qvm_Cleanup; retail VA 0x004B83D0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B83D0-0x004B8407, 55 bytes, digest 15262421fde0740b2926521a46297cc4d7e66731665240f9736b56887a3f71ff.
-// Behavior/CFG: inspects `qvm[0x23]` (`qvm + 0x8C`); if null, calls `Resource_Unload((const char*)qvm)` (0x004B6380); otherwise releases the standalone block. radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
-// Status/limits: STRUCTURALLY_VERIFIED; high for exact +0x8C branch and Resource_Unload call.
+// Behavior/CFG: inspects `qvm[0x23]` (`qvm + 0x8C`); if null, calls `Resource_Unload((const char*)qvm)` (0x004B6380), otherwise calls the standalone release `Sys_CheckHeap_28(standalone)` (0x004BD380); both paths then call the block release `Sys_UnloadBlock(qvm)` (0x004B0D10) and return its value (disassembly 0x004B83DF-0x004B8402). radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
+// Status/limits: STRUCTURALLY_VERIFIED; high for the exact +0x8C branch, call order, and argument re-throws. The two release callees (0x004BD380 and 0x004B0D10) are not yet transcribed; they are invoked through injectable host boundaries (Host_SetQvmStandaloneRelease / Host_SetQvmBlockRelease) that return 0 until their allocator-free chains are ported, so the retail return value of that inner chain is not reproduced by the default boundaries.
 std::int32_t Qvm_Cleanup(void* qvm)
 {
     auto* const bytes = static_cast<std::uint8_t*>(qvm);
-    void* const standalone = *reinterpret_cast<void**>(bytes + 0x8C);
-    if (standalone == nullptr)
+    // retail stores and loads the standalone pointer as a 32-bit dword at qvm+0x8C.
+    const std::uint32_t standalone_value = *reinterpret_cast<std::uint32_t*>(bytes + 0x8C);
+    if (standalone_value == 0)
     {
-        return resource::Resource_Unload(reinterpret_cast<const char*>(bytes));
+        resource::Resource_Unload(reinterpret_cast<const char*>(bytes));
     }
-    return 0;
+    else if (g_sys_qvm_standalone_release != nullptr)
+    {
+        g_sys_qvm_standalone_release(
+            reinterpret_cast<void*>(static_cast<std::uintptr_t>(standalone_value)));
+    }
+    return g_sys_qvm_block_release != nullptr ? g_sys_qvm_block_release(qvm) : 0;
 }
 
 // Native: Qvm_Load; retail VA 0x004B80B0; signature/calling convention unknown.
@@ -405,6 +418,16 @@ void Host_SetSysDispatchOpcode7(SysDispatchOpcode7Fn fn) noexcept
 void Host_SetSysResolveSymbol28(SysResolveSymbol28Fn fn) noexcept
 {
     g_sys_resolve_symbol_28 = fn;
+}
+
+void Host_SetQvmStandaloneRelease(SysQvmStandaloneReleaseFn fn) noexcept
+{
+    g_sys_qvm_standalone_release = fn;
+}
+
+void Host_SetQvmBlockRelease(SysQvmBlockReleaseFn fn) noexcept
+{
+    g_sys_qvm_block_release = fn;
 }
 
 std::int32_t Qvm_GetLastPopStack23Value() noexcept

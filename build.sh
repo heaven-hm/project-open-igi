@@ -193,7 +193,7 @@ fi
 echo "==> [0/4] Verifying all production native transcriptions against retail igi.exe..."
 python3 "$ROOT_DIR/scripts/build_attestation.py" capture --root "$ROOT_DIR" \
     --output "$ROOT_DIR/build/native-verification-inputs.json"
-python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --production-tree \
+python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --changed \
     --threshold VERIFIED --cfg-threshold 0.85 --report build/native-verification.json || {
   echo "!! Build BLOCKED: production native code lacks matching binary-bound evidence."
   echo "!! A five-line comment alone cannot authorize compilation or deployment."

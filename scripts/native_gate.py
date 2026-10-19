@@ -53,6 +53,11 @@ import subprocess
 import sys
 from typing import Any
 
+# The v4 catalog check lives beside this script; make it importable both when
+# the gate runs as a program and when another tool loads it as a module.
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+from verify_v4_catalog import verify as verify_v4_catalog  # noqa: E402
+
 
 # VERIFIED_WITH_DOCUMENTED_SCOPE is a qualification of VERIFIED, not a higher
 # assurance level. Its extra scope-document requirement is checked separately.
@@ -1646,6 +1651,17 @@ def main() -> int:
         for address in sorted(old_addresses):
             if not retired_native_is_reviewed(manifest, address, deleted_path):
                 failures.append(f"{deleted_path}: removed native {address} requires a reviewed retired_natives entry")
+
+    # The confirmed native catalog is checked against the same retail binary so
+    # that a stale address, name or signature cannot pass the gate unnoticed.
+    v4_errors, v4_warnings, v4_summary = verify_v4_catalog(
+        root, binary_digest, root / "assets" / "gamenatives_three_way.json")
+    failures.extend(v4_errors)
+    warnings.extend(v4_warnings)
+    report["v4_catalog"] = v4_summary
+    if v4_summary:
+        print(f"native_gate: v4 catalog {v4_summary['entries']} entries verified against "
+              f"the retail binary")
 
     checked = 0
     details_by_key: set[tuple[str, str]] = set()

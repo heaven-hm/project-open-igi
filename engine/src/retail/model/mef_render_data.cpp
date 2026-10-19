@@ -1,5 +1,12 @@
+// HOST HELPER: MEF render-data builder — no retail VA (host-side support logic).
+// Artifact: not transcribed from retail igi.exe; complements native MEF loaders bound in the manifest.
+// Tools/evidence: MEF chunk-format parsing cross-checked with the project-igi-converter reference parsers.
+// Behavior/CFG: host-only chunk decode/layout assembly; no retail control flow is transcribed here.
+// Status/limits: outside the native verification scope; correctness is covered by host unit tests.
 #include "igi/retail/model/mef_render_data.hpp"
+#include "igi/retail/model/mef_skinner.hpp"
 
+#include <algorithm>
 #include <bit>
 #include <cmath>
 
@@ -36,10 +43,6 @@ MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
     {
         throw MefFormatError("MEF has no renderer header.");
     }
-    if (model.render_format == MefRenderFormat::skinned)
-    {
-        throw MefFormatError("Skinned MEF palette evaluation is not ported.");
-    }
     const MefRenderChunks chunks = model.render_chunks();
     if (chunks.vertex_stream == nullptr || chunks.draw_records == nullptr ||
         chunks.d3d_render_header == nullptr)
@@ -47,10 +50,13 @@ MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
         throw MefFormatError("MEF is missing its native renderer chunks.");
     }
     const bool lightmapped = model.render_format == MefRenderFormat::lightmapped;
-    const std::size_t vertex_stride = lightmapped ? 40U : 32U;
+    const bool skinned = model.render_format == MefRenderFormat::skinned;
+    // Skinned streams hold 40-byte influence records; diffuse/lightmapped hold 32/40-byte
+    // plain vertices. The posed output is always the 32-byte render vertex.
+    const std::size_t source_stride = skinned ? 40U : (lightmapped ? 40U : 32U);
     const std::span<const std::byte> vertex_bytes = chunks.vertex_stream->payload;
     const std::size_t vertex_count = model.render_header->vertex_count;
-    if (vertex_count > vertex_bytes.size() / vertex_stride)
+    if (vertex_count > vertex_bytes.size() / source_stride)
     {
         throw MefFormatError("MEF vertex count exceeds its native vertex stream.");
     }
@@ -61,9 +67,21 @@ MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
         throw MefFormatError("MEF primitive type is outside the Direct3D 7 enum.");
     }
     render_data.vertices.reserve(vertex_count);
+    if (skinned)
+    {
+        // Retail 0x0049B700: pose the base vertices through the bone palette. Without an
+        // animated palette the identity palette reproduces the authored bind pose.
+        const int highest_bone = MefSkinPalette_HighestBone(model);
+        const MefSkinPalette palette =
+            MefSkinPalette_Identity(highest_bone < 0 ? 1U : static_cast<std::size_t>(highest_bone) + 1U);
+        render_data.vertices.resize(vertex_count);
+        Display_EvaluateSkinnedPalette(model, palette, render_data.vertices);
+    }
+    else
+    {
     for (std::size_t vertex_index = 0; vertex_index < vertex_count; ++vertex_index)
     {
-        const std::size_t offset = vertex_index * vertex_stride;
+        const std::size_t offset = vertex_index * source_stride;
         MefRenderVertex vertex;
         for (std::size_t component_index = 0; component_index < 3U; ++component_index)
         {
@@ -81,6 +99,7 @@ MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
             }
         }
         render_data.vertices.push_back(vertex);
+    }
     }
     const std::span<const std::byte> draw_bytes = chunks.draw_records->payload;
     const std::size_t header_size = lightmapped ? 32U : 28U;
