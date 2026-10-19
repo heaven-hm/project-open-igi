@@ -2,8 +2,10 @@
 #define UNICODE
 #define _UNICODE
 #include "retail_model_scene.hpp"
+#include "player_controller.hpp"
 
 #include "igi/retail/diagnostics/log_record.hpp"
+#include "igi/retail/config/config_graphic_options.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
@@ -22,6 +24,7 @@
 #include <chrono>
 #include <cctype>
 #include <cmath>
+#include <cstdio>
 #include <cstring>
 #include <d3d.h>
 #include <ddraw.h>
@@ -269,8 +272,11 @@ struct Scene
     std::vector<std::unique_ptr<ComOwner<IDirectDrawSurface7>>> terrain_texture_surfaces;
     std::vector<IDirectDrawSurface7*> terrain_textures;
     std::array<double, 3> origin{};
-    Vector3 camera_position{0, -100, 50};
-    Vector3 camera_target{0, 0, 0};
+    // The level origin is the HumanPlayer task's feet position.  These values are replaced
+    // by load() once that task has been decoded; keeping the fallback at a standing eye avoids
+    // the old elevated diagnostic camera if a malformed level has no player task.
+    Vector3 camera_position{0, 0, 0.69F};
+    Vector3 camera_target{0, 1, 0.69F};
     HWND window = nullptr;
     bool first_frame = true;
     static constexpr float world_scale = 1.0F / 4096.0F;
@@ -285,6 +291,62 @@ struct Scene
     float dev_speed = 400.0F;
     bool dev_look_initialised = false;
     POINT dev_last_mouse{};
+
+    // Player simulation is host integration over the retail HumanPlayer and
+    // Human_CameraEyePosition transcriptions.  It intentionally excludes weapons,
+    // sound, and AI; this scene owns only movement and terrain collision.
+    igi::host::PlayerController player;
+    igi::host::TerrainCollisionGrid player_ground;
+    bool player_active = false;
+    bool player_look_initialised = false;
+    POINT player_last_mouse{};
+
+    // Escape toggles the pause state. Retail opens the in-game menu on Escape, which
+    // freezes the gameplay simulation while the last frame stays visible; the menu UI
+    // itself is outside the playable-demo scope (MVP step 13), so the port reproduces
+    // the observable world-freeze and the window title marks the state.
+    bool paused = false;
+
+    void update_player_camera(float delta_seconds)
+    {
+        if (!player_active)
+        {
+            return;
+        }
+        POINT cursor{};
+        GetCursorPos(&cursor);
+        if (!player_look_initialised)
+        {
+            player_last_mouse = cursor;
+            player_look_initialised = true;
+        }
+        igi::host::PlayerInputFrame input{};
+        input.move_forward = (GetAsyncKeyState('W') & 0x8000) != 0;
+        input.move_backward = (GetAsyncKeyState('S') & 0x8000) != 0;
+        input.strafe_left = (GetAsyncKeyState('A') & 0x8000) != 0;
+        input.strafe_right = (GetAsyncKeyState('D') & 0x8000) != 0;
+        input.jump = (GetAsyncKeyState('E') & 0x8000) != 0;
+        input.crouch = (GetAsyncKeyState('C') & 0x8000) != 0;
+        input.walk_toggle = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+        input.look_delta_x = static_cast<float>(cursor.x - player_last_mouse.x);
+        input.look_delta_y = static_cast<float>(cursor.y - player_last_mouse.y);
+        player_last_mouse = cursor;
+        player.update(input, delta_seconds, player_ground);
+
+        const auto eye = player.eye_position();
+        camera_position = {
+            static_cast<float>((eye[0] - origin[0]) * world_scale),
+            static_cast<float>((eye[1] - origin[1]) * world_scale),
+            static_cast<float>((eye[2] - origin[2]) * world_scale)};
+        const float cosine_pitch = static_cast<float>(std::cos(player.pitch()));
+        const Vector3 forward{
+            static_cast<float>(std::sin(player.yaw())) * cosine_pitch,
+            static_cast<float>(std::cos(player.yaw())) * cosine_pitch,
+            static_cast<float>(std::sin(player.pitch()))};
+        camera_target = {camera_position.x + forward.x,
+                         camera_position.y + forward.y,
+                         camera_position.z + forward.z};
+    }
 
     void dev_camera_reset()
     {
@@ -425,6 +487,7 @@ struct Scene
             }
         }
         write_log("Loaded MAGICOBJ.QVM definitions=" + std::to_string(magic_object_models.size()));
+        bool player_origin_found = false;
         for (const auto& call : calls)
         {
             if (call->function_name == "Task_New" && call->arguments.size() > 8U &&
@@ -434,9 +497,17 @@ struct Scene
                 {
                     origin[axis] = number(call->arguments[3U + axis]);
                 }
+                // Human_CameraEyePosition uses the standing 0.69 m eye offset.  The host
+                // renderer uses metres, and the level origin is now the local player feet.
+                constexpr float standing_eye_metres = 0.69F;
+                camera_position = {0.0F, 0.0F, standing_eye_metres};
+                camera_target = {0.0F, 1.0F, standing_eye_metres};
+                player_origin_found = true;
                 break;
             }
         }
+        write_log(std::string("HumanPlayer spawn camera=") +
+                  (player_origin_found ? "installed" : "fallback"));
         // Load retail level terrain if available (TERRAIN directory)
         const auto terrain_dir_lower = level / "terrain";
         const auto terrain_dir_upper = level / "TERRAIN";
@@ -474,22 +545,11 @@ struct Scene
             const bool switch_task = (type == "Switch");
             const bool scamera_task = (type == "SCamera");
             const bool vehicle_task = (type == "Car" || type == "Heli");
-            const bool static_model_task = (type == "EditRigidObj" || type == "Building");
-            const bool initial_model_task = (type == "ExplodeObject" || type == "Terminal" ||
-                                             type == "SCameraControl" || type == "AlarmControl" ||
-                                             type == "AIStationaryGunHolder" || type == "AlarmLight" ||
-                                             type == "Elevator" || type == "Generator" ||
-                                             type == "GenericPickup" || type == "GenericTBA" ||
-                                             type == "Plane" || type == "Radio" ||
-                                             type == "RotatingObject" || type == "Siren" ||
-                                             type == "StationaryGun" || type == "GunPickup" ||
-                                             type == "AmmoPickup");
-
-            if (!fence_task && !wire_task && !door_task && !switch_task &&
-                !scamera_task && !vehicle_task && !static_model_task && !initial_model_task)
-            {
-                continue;
-            }
+            // Every positioned Task_New participates in the generic model resolver.  The
+            // specialised branches below preserve retail argument layouts where known;
+            // unknown task types use the standard layout and then scan their arguments for a
+            // real MTP/MEF identifier.  This keeps objects visible without inventing AI or
+            // interaction behaviour for task types whose runtime semantics remain unverified.
 
             PlacedModel object;
             std::string model_name;
@@ -667,6 +727,18 @@ struct Scene
                     model::MefModel::DynObj_LoadModelMesh(entry->body));
                 write_log("Loaded MEF model=" + mesh_name +
                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
+                if (parsed_mef->render_format == model::MefRenderFormat::skinned)
+                {
+                    // The MVP renderer cannot yet evaluate a retail bone palette.  Do not call
+                    // Display_DecodeMeshRenderData for this format: its explicit failure is
+                    // correct for an unimplemented renderer path, but must not abort the static
+                    // Level 1 scene.  Retain the model identity in the log for reconciliation.
+                    ++missing;
+                    write_log("MVP omission: Skinned MEF model=" + mesh_name +
+                                  " requires retail palette evaluation; not rendered.",
+                              diagnostics::LogLevel::warning);
+                    continue;
+                }
                 geometry = std::make_shared<model::MefRenderData>(
                     model::Display_DecodeMeshRenderData(*parsed_mef));
             }
@@ -763,6 +835,13 @@ struct Scene
                     {
                         child_mef = std::make_shared<model::MefModel>(
                             model::MefModel::DynObj_LoadModelMesh(child_entry->body));
+                        if (child_mef->render_format == model::MefRenderFormat::skinned)
+                        {
+                            write_log("MVP omission: Skinned ATTA MEF model=" + child_name +
+                                          " requires retail palette evaluation; not rendered.",
+                                      diagnostics::LogLevel::warning);
+                            continue;
+                        }
                         child_geometry = std::make_shared<model::MefRenderData>(
                             model::Display_DecodeMeshRenderData(*child_mef));
                     }
@@ -801,6 +880,11 @@ struct Scene
                   "; attached_models=" + std::to_string(attached_models) +
                   "; unresolved_source_models=" + std::to_string(missing) +
                   "; skinned models and remaining task types not yet rendered.");
+        player.reset(origin, 0.0, 0.0, origin, world_scale);
+        player_active = true;
+        player_look_initialised = false;
+        update_player_camera(0.0F);
+        write_log("HumanPlayer movement enabled: W/A/S/D, E jump, C crouch, Shift walk/run.");
     }
 
     std::uint32_t render_width = 1024U;
@@ -1204,6 +1288,11 @@ struct Scene
                 const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
                     origin, world_scale, cam_p, cam_t, 1.0f, 1.333f, 4000.0f);
 
+                // The player queries precisely the mesh produced for this frame.  Rebuilding
+                // after terrain decode gives the next 30 Hz player tick the same surface the
+                // renderer presented, including height-map changes.
+                player_ground.rebuild(terrain_mesh, camera_position.x, camera_position.y);
+
                 if (!terrain_mesh.vertices.empty())
                 {
                     D3DMATRIX terrain_world = identity();
@@ -1480,6 +1569,34 @@ int RunRetailModelScene(HINSTANCE instance,
         scene.initialize(window, windowed);
         ShowWindow(window, show_command);
         UpdateWindow(window);
+
+        // Apply the highest retail graphics mode. Retail keeps seven performance levels in the
+        // dword table at 0x00537B74 (verified by unicorn execution of 0x004055C0); level 6, the
+        // last of the seven that Config_GraphicOptionsNumPerfLevels (0x00405620) reports, carries
+        // flags 0x00000000 — no feature masks set, i.e. the highest quality the retail executable
+        // offers. The ported config natives apply it through the same record the retail menu
+        // writes, so every run starts at the highest available retail graphics mode.
+        {
+            igi::retail::config::ScriptValueBlock flags_block{};
+            igi::retail::config::ScriptValueBlock return_block{};
+            igi::retail::config::Config_GraphicOptionsGetPerfFlagsFromLevel(
+                &flags_block, static_cast<std::int32_t>(
+                                  igi::retail::config::performance_level_count - 1U));
+            // Both config natives write the 24-byte script value block to their context
+            // argument (rep movsd x6 in retail), so a real scratch buffer is required.
+            igi::retail::config::Config_GraphicOptionsSetPerformanceFlags(&return_block, flags_block.integer);
+            char graphics_log[128]{};
+            std::snprintf(graphics_log, sizeof(graphics_log),
+                          "Retail graphics mode: level %u of %u (highest), performance flags 0x%08X, "
+                          "render %ux%u.",
+                          static_cast<unsigned>(igi::retail::config::performance_level_count - 1U),
+                          static_cast<unsigned>(igi::retail::config::performance_level_count),
+                          static_cast<unsigned>(flags_block.integer),
+                          static_cast<unsigned>(window_width > 0 ? window_width : 640),
+                          static_cast<unsigned>(window_height > 0 ? window_height : 480));
+            write_log(graphics_log);
+        }
+
         MSG message{};
         bool running = true;
         float dev_frame_seconds = 1.0F / 60.0F;
@@ -1495,6 +1612,18 @@ int RunRetailModelScene(HINSTANCE instance,
                 if (message.hwnd == window &&
                     (message.message == WM_KEYDOWN || message.message == WM_SYSKEYDOWN))
                 {
+                    // Escape toggles the pause state before the developer controls see the key.
+                    if (message.wParam == VK_ESCAPE &&
+                        (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) == 0U)
+                    {
+                        scene.paused = !scene.paused;
+                        SetWindowTextW(window, scene.paused ? L"IGI \u2014 PAUSED (Esc resumes)" : L"IGI");
+                        write_log(scene.paused ? std::string("Escape pressed: gameplay simulation paused "
+                                               "(retail freezes the world behind the in-game menu; "
+                                               "menu UI is a later MVP slice).")
+                                               : std::string("Escape pressed: gameplay simulation resumed."));
+                        continue;
+                    }
                     const auto action = scene.developer_controls.handle_key(
                         static_cast<unsigned int>(message.wParam),
                         (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) != 0U);
@@ -1524,8 +1653,8 @@ int RunRetailModelScene(HINSTANCE instance,
                         scene.uploaded_textures.clear();
                         scene.texture_surfaces.clear();
                         scene.origin = {};
-                        scene.camera_position = {0, -100, 50};
-                        scene.camera_target = {0, 0, 0};
+                        scene.camera_position = {0, 0, 0.69F};
+                        scene.camera_target = {0, 1, 0.69F};
                         scene.load(game_directory, level_number);
                         scene.first_frame = true;
                         scene.dev_look_initialised = false;
@@ -1542,11 +1671,21 @@ int RunRetailModelScene(HINSTANCE instance,
             if (running && !IsIconic(window))
             {
                 const auto frame_start = std::chrono::steady_clock::now();
-                if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
+                if (scene.paused)
+                {
+                    // Frozen world: retail halts the gameplay simulation while the in-game menu
+                    // is open. Keep presenting the last frame at the same cadence.
+                    scene.draw();
+                }
+                else if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
                 {
                     scene.update_dev_camera(dev_frame_seconds);
                 }
-                scene.draw();
+                else
+                {
+                    scene.update_player_camera(dev_frame_seconds);
+                    scene.draw();
+                }
                 if (!capture_path.empty())
                 {
                     scene.capture(capture_path);

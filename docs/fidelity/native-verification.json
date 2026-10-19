@@ -468,7 +468,29 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 1.0
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00465820-semantic-review.json",
+          "evidence_sha256": "bef7adc26bf25e8f22f3f15c888bae88803a50c461d7e860f21f3d17f91743e7"
+        },
+        "behavioral_runner": {
+          "path": "scripts/native_unicorn_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 300
+        }
       }
     },
     {
@@ -1024,7 +1046,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/resource/sys_resource.cpp",
-        "sha256": "a6ca0e33102631026e86a6a50004ce0cd672b63ae9ce5993435cb7381cd2493d",
+        "sha256": "17ef77adc935321cbab0c33edb74abd014fdbe3202df50e230a801e448b9258b",
         "signature": "unknown"
       },
       "game_natives": {
@@ -1796,7 +1818,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/resource/sys_resource.cpp",
-        "sha256": "a6ca0e33102631026e86a6a50004ce0cd672b63ae9ce5993435cb7381cd2493d",
+        "sha256": "17ef77adc935321cbab0c33edb74abd014fdbe3202df50e230a801e448b9258b",
         "signature": "unknown"
       },
       "game_natives": {
@@ -2000,7 +2022,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/resource/sys_resource.cpp",
-        "sha256": "a6ca0e33102631026e86a6a50004ce0cd672b63ae9ce5993435cb7381cd2493d",
+        "sha256": "17ef77adc935321cbab0c33edb74abd014fdbe3202df50e230a801e448b9258b",
         "signature": "unknown"
       },
       "game_natives": {
@@ -2048,7 +2070,7 @@
         },
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-semantic-review.json",
-          "evidence_sha256": "840ad2aededaab406fd9b2cd20996349117bda72d2a82767a0c427d412bc17f7"
+          "evidence_sha256": "6b8c0fedbd26492624a3a8dc921616a62a6a6d05b6b66afa5227c605e0118340"
         }
       }
     },
@@ -2124,7 +2146,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/resource/sys_resource.cpp",
-        "sha256": "a6ca0e33102631026e86a6a50004ce0cd672b63ae9ce5993435cb7381cd2493d",
+        "sha256": "17ef77adc935321cbab0c33edb74abd014fdbe3202df50e230a801e448b9258b",
         "signature": "unknown"
       },
       "game_natives": {
@@ -2154,7 +2176,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-semantic-review.json",
-          "evidence_sha256": "4d141d9257bd93cd0289fc310e109264db135fb0e206c9b42cbb2a0baf5bf439"
+          "evidence_sha256": "bf596c71b042545fb9806f7dd9207ec49315c779fc0723d6c04f3778a59a6578"
         },
         "behavioral_runner": {
           "path": "scripts/resource_register_buffer_diff_runner.py",

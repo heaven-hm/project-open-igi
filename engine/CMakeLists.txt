@@ -13,9 +13,12 @@ add_library(igi_retail_engine STATIC
     src/retail/core/debug_command_line.cpp
     src/retail/diagnostics/log_record.cpp
     src/retail/error/error_show.cpp
+    src/retail/human/human_camera_eye.cpp
+    src/retail/human/human_view.cpp
     src/retail/model/mef_render_data.cpp
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
+    src/retail/config/config_graphic_options.cpp
     src/retail/render/trans_context.cpp
     src/retail/render/camera_transform.cpp
     src/retail/render/backend.cpp
@@ -331,6 +334,17 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_terrain_loaders_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_terrain_loaders_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_terrain_loaders_tests COMMAND igi_retail_terrain_loaders_tests)
+
+    # This host-side integration test is deliberately part of CTest: angr/Radare2 establish
+    # retail-native control flow, while this catches regressions in the Windows scene adapter
+    # that connects the verified Human camera native to input and rendered terrain.
+    add_executable(igi_player_controller_tests
+        platform/windows/player_controller.cpp
+        tests/platform/player_controller_test.cpp
+    )
+    target_link_libraries(igi_player_controller_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_player_controller_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_player_controller_tests COMMAND igi_player_controller_tests)
 endif()
 
 if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)

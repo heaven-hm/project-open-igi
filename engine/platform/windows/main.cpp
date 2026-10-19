@@ -363,29 +363,61 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     // Fullscreen by default, like the retail executable; "window" selects windowed mode.
     bool windowed = false;
     unsigned int level_number = 1U;
+    std::wstring ignored_retail_tokens;
+
+    // Retail command-line dispatch, transcribed from igi.exe VA 0x0048F360: the raw command
+    // line is split on space/tab, each registered word is matched against every token as a
+    // case-insensitive PREFIX (the token length must be at least the word length; the retail
+    // loop compares both sides with the 'a'..'z' fold at 0x0048F401), and the handler receives
+    // the token remainder. Retail main registers "Window" (0x0048F350 -> SetWindowMode(0),
+    // a decorated 640x480 window), "WinInput", "Germany", "USA", and "HardcoreGerman";
+    // the level selection travels through the filesys.cfg script probe. Dev-only options used
+    // by this reconstruction (--capture-frame, devmode) are dispatched first and are not part
+    // of the retail vocabulary.
+    auto token_equals = [](const std::wstring& token, const wchar_t* word) {
+        const std::size_t word_length = std::wcslen(word);
+        if (token.size() < word_length)
+        {
+            return false;
+        }
+        for (std::size_t index = 0; index < word_length; ++index)
+        {
+            const auto fold = [](wchar_t character) {
+                return character >= L'a' && character <= L'z' ? static_cast<wchar_t>(character - L'a' + L'A')
+                                                              : character;
+            };
+            if (fold(token[index]) != fold(word[index]))
+            {
+                return false;
+            }
+        }
+        return true;
+    };
     for (int argument_index = 1; argument_index < argument_count; ++argument_index)
     {
-        const std::wstring argument(arguments[argument_index]);
-        if (argument == L"--capture-frame" && argument_index + 1 < argument_count)
+        const std::wstring token(arguments[argument_index]);
+        if (token == L"--capture-frame" && argument_index + 1 < argument_count)
         {
+            // Port development extension: capture one frame and exit.
             capture_path = arguments[++argument_index];
+            model_scene_requested = true;
             continue;
         }
-        if (argument == L"window")
+        if (token_equals(token, L"window"))
         {
+            // Retail 0x0048F350: SetWindowMode(0) -> decorated window, 640x480 client.
             model_scene_requested = true;
             windowed = true;
+            continue;
         }
-        if (argument == L"devmode")
+        if (token_equals(token, L"level"))
         {
-            dev_mode = true;
-            model_scene_requested = true;
-        }
-        if (argument.starts_with(L"level"))
-        {
+            // Retail filesys.cfg probes the level word; the port parses the remainder like
+            // the retail script does (level1 .. level14).
+            const std::wstring remainder = token.substr(5);
             wchar_t* end = nullptr;
-            const unsigned long parsed_level = std::wcstoul(argument.c_str() + 5, &end, 10);
-            if (end == argument.c_str() + 5 || *end != L'\0' || parsed_level < 1UL || parsed_level > 14UL)
+            const unsigned long parsed_level = std::wcstoul(remainder.c_str(), &end, 10);
+            if (remainder.empty() || end == remainder.c_str() || *end != L'\0' || parsed_level < 1UL || parsed_level > 14UL)
             {
                 LocalFree(arguments);
                 MessageBoxW(nullptr, L"Expected level1 through level14.", window_title, MB_OK | MB_ICONERROR);
@@ -397,7 +429,30 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
             }
             level_number = static_cast<unsigned int>(parsed_level);
             model_scene_requested = true;
+            continue;
         }
+        if (token_equals(token, L"devmode"))
+        {
+            // Port development extension (free camera, developer keys).
+            dev_mode = true;
+            model_scene_requested = true;
+            continue;
+        }
+        // Recognised retail vocabulary this reconstruction does not model yet; keep them
+        // observable instead of silently unknown (retail: WinInput 0x0048F920, Germany
+        // 0x0048F930, USA 0x0048F950, HardcoreGerman 0x0048F7B4).
+        if (token_equals(token, L"wininput") || token_equals(token, L"germany") ||
+            token_equals(token, L"usa") || token_equals(token, L"hardcoregerman"))
+        {
+            ignored_retail_tokens += token + L" ";
+            continue;
+        }
+    }
+    if (!ignored_retail_tokens.empty())
+    {
+        std::wstring message = L"Retail-only command-line options ignored by this build: " + ignored_retail_tokens;
+        std::string narrow(message.begin(), message.end());
+        log_message(narrow);
     }
     // The debug switches must be applied before the scene branch: "level1 DebugKeys" has to take
     // effect for the scene run, not only for the resource-window mode.
