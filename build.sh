@@ -9,7 +9,6 @@ cd "$ROOT_DIR"
 # environment variable without changing the checked-in build procedure.
 export IGI_RETAIL_EXE="${IGI_RETAIL_EXE:-/Users/haseeb-mir/Downloads/IGI/igi.exe}"
 export IGI_GAME_NATIVES_DIR="${IGI_GAME_NATIVES_DIR:-$ROOT_DIR/scripts/GameNatives}"
-export BINARY_NINJA_APP="${BINARY_NINJA_APP:-/Applications/Binary Ninja.app}"
 export BINARY_NINJA_MCP_URL="${BINARY_NINJA_MCP_URL:-http://127.0.0.1:24642/mcp}"
 export GHIDRA_INSTALL_DIR="${GHIDRA_INSTALL_DIR:-/opt/homebrew/opt/ghidra/libexec}"
 export GHIDRA_MCP_URL="${GHIDRA_MCP_URL:-http://127.0.0.1:8771}"
@@ -22,15 +21,18 @@ export FRIDA_BIN="${FRIDA_BIN:-$(command -v frida || echo "$HOME/.local/bin/frid
 export FRIDA_HOST="${FRIDA_HOST:-127.0.0.1:27042}"
 export FRIDA_TARGET="${FRIDA_TARGET:-open-igi.exe}"
 
-REFERENCED_ONLY=1
-FULL_PRODUCTION=0
+REFERENCED_ONLY=0
 RUN_FRIDA=0
 CHECK_FRIDA=0
+RUNTIME_TRACE=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --full-production)
-            FULL_PRODUCTION=1
             REFERENCED_ONLY=0
+            shift
+            ;;
+        --development)
+            REFERENCED_ONLY=1
             shift
             ;;
         --frida)
@@ -41,21 +43,44 @@ while [[ $# -gt 0 ]]; do
             CHECK_FRIDA=1
             shift
             ;;
+        --runtime-trace)
+            if [[ $# -lt 2 ]]; then
+                echo "!! --runtime-trace requires a complete IGI-Probe JSON trace path." >&2
+                exit 2
+            fi
+            RUNTIME_TRACE="$2"
+            REFERENCED_ONLY=1
+            shift 2
+            ;;
         *)
             echo "!! Unknown build option: $1" >&2
-            echo "Usage: $0 [--full-production] [--frida] [--frida-check]" >&2
+            echo "Usage: $0 [--development] [--runtime-trace TRACE.json] [--full-production] [--frida] [--frida-check]" >&2
             exit 2
             ;;
     esac
 done
 
+if [[ -n "$RUNTIME_TRACE" && "$REFERENCED_ONLY" -ne 1 ]]; then
+    echo "!! --runtime-trace cannot be combined with --full-production." >&2
+    exit 2
+fi
+
+BN_MCP_AVAILABLE=0
+if python3 -c 'from urllib.parse import urlparse; import socket,sys; u=urlparse(sys.argv[1]); s=socket.create_connection((u.hostname, u.port or (443 if u.scheme == "https" else 80)), timeout=1); s.close()' "$BINARY_NINJA_MCP_URL" >/dev/null 2>&1; then
+    BN_MCP_AVAILABLE=1
+fi
+
 toolchain_path_error=0
-for required_path in "$IGI_RETAIL_EXE" "$IGI_GAME_NATIVES_DIR" "$BINARY_NINJA_APP" "$GHIDRA_INSTALL_DIR" "$RE_AGENT_ROOT" "$IGI_ANGR_PYTHON"; do
+for required_path in "$IGI_RETAIL_EXE" "$IGI_GAME_NATIVES_DIR" "$RE_AGENT_ROOT" "$IGI_ANGR_PYTHON"; do
     if [[ ! -e "$required_path" ]]; then
         echo "!! Missing required native-analysis path: $required_path" >&2
         toolchain_path_error=1
     fi
 done
+if [[ "$BN_MCP_AVAILABLE" -eq 0 && ! -e "$GHIDRA_INSTALL_DIR" ]]; then
+    echo "!! Binary Ninja MCP is unavailable and Ghidra fallback is missing: $GHIDRA_INSTALL_DIR" >&2
+    toolchain_path_error=1
+fi
 if [[ -z "$RADARE2_BIN" || ! -x "$RADARE2_BIN" ]]; then
     echo "!! Radare2 executable is unavailable: ${RADARE2_BIN:-not found}" >&2
     toolchain_path_error=1
@@ -67,10 +92,13 @@ fi
 echo "==> Native analysis toolchain"
 echo "    retail igi.exe: $IGI_RETAIL_EXE"
 echo "    GameNatives:    $IGI_GAME_NATIVES_DIR"
-echo "    Binary Ninja:   $BINARY_NINJA_APP"
-echo "    Binary Ninja MCP: $BINARY_NINJA_MCP_URL"
-echo "    Ghidra:         $GHIDRA_INSTALL_DIR"
-echo "    Ghidra MCP:     $GHIDRA_MCP_URL"
+echo "    Decompiler policy: Binary Ninja evidence preferred per native; Ghidra fallback only when unavailable"
+if [[ "$BN_MCP_AVAILABLE" -eq 1 ]]; then
+    echo "    Binary Ninja MCP: reachable from build shell ($BINARY_NINJA_MCP_URL)"
+else
+    echo "    Binary Ninja MCP: not reachable from build shell ($BINARY_NINJA_MCP_URL)"
+fi
+echo "    Ghidra fallback: $GHIDRA_MCP_URL ($GHIDRA_INSTALL_DIR)"
 echo "    Radare2:        $RADARE2_BIN"
 echo "    RE-Agent:       $RE_AGENT_ROOT"
 echo "    angr Python:    $IGI_ANGR_PYTHON"
@@ -108,44 +136,57 @@ if [[ "$CHECK_FRIDA" -eq 1 ]]; then
     exit 0
 fi
 if [[ "$REFERENCED_ONLY" -eq 1 ]]; then
-    echo "==> [0/4] Discovering and verifying statically referenced runtime-path native candidates..."
-    REFERENCED_OUTPUT="$(python3 "$ROOT_DIR/scripts/discover_referenced_natives.py" --root "$ROOT_DIR")"
-    REFERENCED_ADDRESSES=()
-    while IFS= read -r address; do
-        [[ -z "$address" ]] || REFERENCED_ADDRESSES+=("$address")
-    done <<< "$REFERENCED_OUTPUT"
-    if [[ "${#REFERENCED_ADDRESSES[@]}" -eq 0 ]]; then
-        echo "!! No runtime-path native candidates were discovered; refusing to build." >&2
-        exit 1
-    fi
-    REFERENCED_GATE_ARGS=(--root "$ROOT_DIR" --tree engine/src/retail
+    REFERENCED_GATE_ARGS=(--root "$ROOT_DIR"
         --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85
         --report build/native-referenced-verification.json)
-    for address in "${REFERENCED_ADDRESSES[@]}"; do
-        REFERENCED_GATE_ARGS+=(--address "$address")
-    done
-    echo "    discovered ${#REFERENCED_ADDRESSES[@]} statically referenced native candidate(s)"
+    if [[ -n "$RUNTIME_TRACE" ]]; then
+        echo "==> [0/4] Verifying complete IGI-Probe observed runtime native candidates..."
+        REFERENCED_GATE_ARGS+=(--runtime-trace "$RUNTIME_TRACE")
+    else
+        echo "==> [0/4] Discovering and verifying statically referenced runtime-path native candidates..."
+        REFERENCED_OUTPUT="$(python3 "$ROOT_DIR/scripts/discover_referenced_natives.py" --root "$ROOT_DIR")"
+        REFERENCED_ADDRESSES=()
+        while IFS= read -r address; do
+            [[ -z "$address" ]] || REFERENCED_ADDRESSES+=("$address")
+        done <<< "$REFERENCED_OUTPUT"
+        if [[ "${#REFERENCED_ADDRESSES[@]}" -eq 0 ]]; then
+            echo "!! No runtime-path native candidates were discovered; refusing to build." >&2
+            exit 1
+        fi
+        REFERENCED_GATE_ARGS+=(--tree engine/src/retail)
+        for address in "${REFERENCED_ADDRESSES[@]}"; do
+            REFERENCED_GATE_ARGS+=(--address "$address")
+        done
+        echo "    discovered ${#REFERENCED_ADDRESSES[@]} statically referenced native candidate(s)"
+        python3 "$ROOT_DIR/scripts/generate_frida_level_probe.py" --root "$ROOT_DIR" \
+            --output "$ROOT_DIR/build/frida_level_probe.generated.js"
+    fi
     python3 "$ROOT_DIR/scripts/native_gate.py" "${REFERENCED_GATE_ARGS[@]}"
+    mkdir -p "$ROOT_DIR/build" "$ROOT_DIR/build-win32"
+    touch "$ROOT_DIR/build/igi_native_verification.stamp" "$ROOT_DIR/build-win32/igi_native_verification.stamp"
     echo "==> [1/4] Configuring and building host engine & test suite (build/)..."
-    cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     cmake --build build -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
-    echo "==> [2/4] Running CTest suite..."
+    echo "==> [2/4] Running CTest suite, including terrain-mask and player-motion regressions..."
     ctest --test-dir build --output-on-failure
     if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
         echo "==> [3/4] Configuring and building the Windows x86 development executable..."
-        cmake -S . -B build-win32 -DCMAKE_SYSTEM_NAME=Windows \
+        cmake -S . -B build-win32 -DCMAKE_BUILD_TYPE=Release -DCMAKE_SYSTEM_NAME=Windows \
             -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ -DBUILD_TESTING=OFF
         cmake --build build-win32 -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
         echo "==> Development executable built; release attestation/deployment remains disabled."
-        IGI_DEST_DIR="${IGI_DIR:-/Users/haseeb-mir/Downloads/IGI}"
-        if [[ -d "$IGI_DEST_DIR" && -f build-win32/engine/platform/windows/open-igi.exe ]]; then
-            echo "==> [Dev Sync] Copying open-igi.exe to $IGI_DEST_DIR/open-igi.exe..."
-            cp -f build-win32/engine/platform/windows/open-igi.exe "$IGI_DEST_DIR/open-igi.exe"
-        fi
+        echo "    Development builds are not copied to the game directory; use the full-production gate for release deployment."
     fi
     if [[ "$RUN_FRIDA" -eq 1 ]]; then
-        echo "==> Attaching Frida: $FRIDA_BIN -H $FRIDA_HOST -n $FRIDA_TARGET..."
-        "$FRIDA_BIN" -H "$FRIDA_HOST" -n "$FRIDA_TARGET"
+        if [[ "$FRIDA_TARGET" == "igi.exe" ]]; then
+            FRIDA_PROBE="$ROOT_DIR/build/frida_level_probe.generated.js"
+            python3 "$ROOT_DIR/scripts/generate_frida_level_probe.py" --root "$ROOT_DIR" --output "$FRIDA_PROBE"
+            echo "==> Attaching retail Frida probe: $FRIDA_BIN -H $FRIDA_HOST -n $FRIDA_TARGET -l $FRIDA_PROBE..."
+            "$FRIDA_BIN" -H "$FRIDA_HOST" -n "$FRIDA_TARGET" -l "$FRIDA_PROBE"
+        else
+            echo "==> Attaching Frida to $FRIDA_TARGET. Retail-VA entry hooks are not applied to OpenIGI."
+            "$FRIDA_BIN" -H "$FRIDA_HOST" -n "$FRIDA_TARGET"
+        fi
     fi
     exit 0
 fi
@@ -158,25 +199,28 @@ python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --production-tree 
   echo "!! A five-line comment alone cannot authorize compilation or deployment."
   exit 1
 }
+mkdir -p "$ROOT_DIR/build" "$ROOT_DIR/build-win32"
+touch "$ROOT_DIR/build/igi_native_verification.stamp" "$ROOT_DIR/build-win32/igi_native_verification.stamp"
 
 echo "==> [1/4] Configuring and building host engine & test suite (build/)..."
 python3 "$ROOT_DIR/scripts/build_attestation.py" snapshot --root "$ROOT_DIR" \
     --input-snapshot "$ROOT_DIR/build/native-verification-inputs.json" \
     --gate-report "$ROOT_DIR/build/native-verification.json" \
     --output "$ROOT_DIR/build/native-build-snapshot.json"
-cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 
 if [[ -f build/compile_commands.json ]]; then
     cp -f build/compile_commands.json ./compile_commands.json
 fi
 
-echo "==> [2/4] Running CTest suite..."
+echo "==> [2/4] Running CTest suite, including terrain-mask and player-motion regressions..."
 ctest --test-dir build --output-on-failure
 
 if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
     echo "==> [3/4] Configuring and building 32-bit Windows executable (build-win32/)..."
     cmake -S . -B build-win32 \
+        -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_SYSTEM_NAME=Windows \
         -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ \
         -DBUILD_TESTING=OFF

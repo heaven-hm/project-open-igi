@@ -3,9 +3,9 @@
 
 Evidence contract
 -----------------
-Binary Ninja + Radare2 are the required primary analysis tools. Ghidra is an
-optional backup/corroboration tool and cannot replace either primary artifact.
-Each primary disassembly artifact is normalized JSON::
+One selected decompiler (Ghidra or a previously selected Binary Ninja target)
+and Radare2 are required independent analysis tools. A second decompiler cannot
+rescue missing or invalid selected evidence. Disassembly artifacts are normalized JSON::
 
     {
       "schema_version": 1,
@@ -81,8 +81,24 @@ DEFAULT_BINARY = pathlib.Path("/Users/haseeb-mir/Downloads/IGI/igi.exe")
 DEFAULT_MANIFEST = pathlib.Path("docs/fidelity/native-verification.json")
 
 ACCEPTED_SIGNATURE_RESULTS = {"exact", "name-insensitive", "abi-adapted"}
-PRIMARY_ANALYSIS_TOOLS = ("binary_ninja", "radare2")
-BACKUP_ANALYSIS_TOOLS = ("ghidra",)
+PRIMARY_ANALYSIS_TOOLS = ("selected_decompiler", "radare2")
+BACKUP_ANALYSIS_TOOLS: tuple[str, ...] = ()
+
+def selected_analysis_tools(verification: dict[str, Any]) -> tuple[str, str]:
+    """Honor target selection; retain legacy BN targets without re-decompiling.
+
+    New/unbound records require explicit selection. Explicit selections never
+    fall back to another decompiler when their evidence is absent or invalid.
+    """
+    selected = verification.get("selected_decompiler")
+    if "selected_decompiler" not in verification:
+        legacy = verification.get("binary_ninja")
+        if not (isinstance(legacy, dict) and legacy.get("evidence_path")):
+            raise GateError("new records require explicit selected_decompiler")
+        selected = "binary_ninja"
+    if not isinstance(selected, str) or selected not in {"ghidra", "binary_ninja"}:
+        raise GateError("selected_decompiler must be ghidra or binary_ninja")
+    return selected, "radare2"
 MINIMUM_BEHAVIORAL_CASES = 8
 REQUIRED_BEHAVIORAL_COVERAGE = {"nominal", "boundary"}
 # Prevent a report from making incorrect outputs pass with an absurd tolerance.
@@ -499,6 +515,43 @@ def cfg_score(ghidra_graph: dict[str, set[Any]], radare2_graph: dict[str, set[An
     edge_score = jaccard(ghidra_graph["edges"], radare2_graph["edges"])
     # Edges carry more control-flow information than block counts.
     return 0.35 * node_score + 0.65 * edge_score
+
+
+def cfg_topology_score(
+    left: dict[str, set[Any]], right: dict[str, set[Any]], entry: str,
+    *, right_implicit_repeat_nodes: set[str] | None = None,
+) -> float:
+    """Diagnostic comparison independent of linear block splitting.
+
+    Branch targets and real loops remain address-bound. Only explicitly identified
+    instruction-level repeat self-edges may be omitted. The production gate keeps
+    using cfg_score; this diagnostic does not upgrade its stricter comparison.
+    """
+    def contract(graph: dict[str, set[Any]], repeat_nodes: set[str]) -> dict[str, set[Any]]:
+        nodes = set(graph["nodes"])
+        edges = {(source, target) for source, target, _ in graph["edges"]
+                 if not (source == target and source in repeat_nodes)}
+        while True:
+            merged = False
+            for source, target in sorted(edges):
+                if source == target or target == entry:
+                    continue
+                incoming = {a for a, b in edges if b == target}
+                outgoing = {b for a, b in edges if a == target}
+                source_outgoing = {b for a, b in edges if a == source}
+                if incoming != {source} or len(outgoing) > 1 or source_outgoing != {target}:
+                    continue
+                edges.remove((source, target))
+                for successor in outgoing:
+                    edges.remove((target, successor))
+                    edges.add((source, successor))
+                nodes.remove(target)
+                merged = True
+                break
+            if not merged:
+                return {"nodes": nodes, "edges": {(a, b, "topology") for a, b in edges}}
+
+    return cfg_score(contract(left, set()), contract(right, right_implicit_repeat_nodes or set()))
 
 
 def load_manifest(path: pathlib.Path) -> dict[str, Any]:
@@ -1303,21 +1356,15 @@ def verify_record(
     signatures: dict[str, str] = {}
     tool_artifacts: dict[str, dict[str, Any] | None] = {}
     tool_graphs: dict[str, dict[str, set[Any]] | None] = {}
-    # Binary Ninja + Radare2 are the primary independent analyses. Ghidra is
-    # optional backup evidence; its presence never substitutes for either.
-    tools_to_check = list(PRIMARY_ANALYSIS_TOOLS)
-    ghidra_config = verification.get("ghidra")
-    # Ghidra is optional backup evidence. Only inspect it when the manifest
-    # actually configures at least one evidence field; any backup problems are
-    # reported as warnings and do not block the required Binary Ninja + r2 pair.
-    ghidra_configured = isinstance(ghidra_config, dict) and any(
-        isinstance(ghidra_config.get(key), str) and ghidra_config[key].strip()
-        for key in ("evidence_id", "evidence_path", "evidence_sha256", "signature")
-    )
-    if ghidra_configured:
-        tools_to_check.extend(BACKUP_ANALYSIS_TOOLS)
+    try:
+        tools_to_check = selected_analysis_tools(verification)
+    except GateError as error:
+        errors.append(f"{address}: {error}")
+        return errors, details
+    decompiler = tools_to_check[0]
+    details["selected_decompiler"] = decompiler
     for tool_name in tools_to_check:
-        evidence_errors = warnings if tool_name in BACKUP_ANALYSIS_TOOLS else errors
+        evidence_errors = errors
         evidence = verification.get(tool_name, {})
         if not isinstance(evidence, dict):
             evidence = {}
@@ -1357,47 +1404,24 @@ def verify_record(
     elif result != "exact":
         if not isinstance(signature_comparison.get("rationale"), str) or not signature_comparison["rationale"].strip():
             errors.append(f"{address}: adapted signature comparison requires a written rationale")
-    if len(signatures) >= 2 and "binary_ninja" in signatures and "radare2" in signatures and normalized_signature(signatures["binary_ninja"]) != normalized_signature(signatures["radare2"]):
+    if decompiler in signatures and "radare2" in signatures and normalized_signature(signatures[decompiler]) != normalized_signature(signatures["radare2"]):
         if result not in {"name-insensitive", "abi-adapted"}:
-            errors.append(f"{address}: Binary Ninja/Radare2 signatures disagree without a reviewed adaptation")
+            errors.append(f"{address}: {decompiler}/Radare2 signatures disagree without a reviewed adaptation")
         if not isinstance(signature_comparison.get("rationale"), str) or not signature_comparison["rationale"].strip():
-            errors.append(f"{address}: Binary Ninja/Radare2 signature disagreement requires a written rationale")
-    if "ghidra" in signatures:
-        primary_signature = signatures.get("binary_ninja")
-        if primary_signature and normalized_signature(primary_signature) != normalized_signature(signatures["ghidra"]):
-            backup = verification.get("ghidra", {})
-            if backup.get("comparison_reviewed") is not True or not isinstance(backup.get("comparison_rationale"), str) or not backup["comparison_rationale"].strip():
-                warnings.append(f"{address}: Ghidra backup signature disagreement requires a reviewed rationale")
+            errors.append(f"{address}: {decompiler}/Radare2 signature disagreement requires a written rationale")
 
-    # Only an actual CFG graph comparison from the primary pair satisfies structural verification.
+    # Only the selected decompiler plus independent r2 graph can satisfy this check.
     if STATUS_RANK[status] >= STATUS_RANK["STRUCTURALLY_VERIFIED"]:
-        if tool_graphs.get("binary_ninja") is not None and tool_graphs.get("radare2") is not None:
-            score = cfg_score(tool_graphs["binary_ninja"], tool_graphs["radare2"])
+        if tool_graphs.get(decompiler) is not None and tool_graphs.get("radare2") is not None:
+            score = cfg_score(tool_graphs[decompiler], tool_graphs["radare2"])
             details["cfg_similarity"] = score
             recorded_score = verification.get("cfg_similarity")
             if not isinstance(recorded_score, (int, float)) or isinstance(recorded_score, bool) or not math.isfinite(float(recorded_score)) or abs(float(recorded_score) - score) > 1e-9:
                 errors.append(f"{address}: recorded CFG score does not match recomputed graph score {score:.3f}")
             if score < minimum_cfg:
-                errors.append(f"{address}: Binary Ninja/Radare2 CFG graph similarity {score:.3f} is below required {minimum_cfg:.2f}")
-            if tool_graphs.get("ghidra") is not None:
-                backup_score_bn = cfg_score(tool_graphs["binary_ninja"], tool_graphs["ghidra"])
-                backup_score_r2 = cfg_score(tool_graphs["radare2"], tool_graphs["ghidra"])
-                details["ghidra_backup_cfg_similarity"] = {
-                    "binary_ninja": backup_score_bn,
-                    "radare2": backup_score_r2,
-                }
-                # Ghidra is diagnostic backup evidence. It flags an unexpected
-                # disagreement, but cannot upgrade a failed primary comparison.
-                if min(backup_score_bn, backup_score_r2) < minimum_cfg:
-                    backup = verification.get("ghidra", {})
-                    if not (isinstance(backup, dict) and backup.get("comparison_reviewed") is True
-                            and isinstance(backup.get("comparison_rationale"), str)
-                            and backup["comparison_rationale"].strip()):
-                        warnings.append(
-                            f"{address}: Ghidra backup CFG disagrees with a primary tool; reviewed rationale required"
-                        )
+                errors.append(f"{address}: {decompiler}/Radare2 CFG graph similarity {score:.3f} is below required {minimum_cfg:.2f}")
         else:
-            errors.append(f"{address}: structural status requires valid CFG graph artifacts from Binary Ninja and Radare2")
+            errors.append(f"{address}: structural status requires valid CFG graph artifacts from {decompiler} and Radare2")
 
     validate_status_evidence(
         root, record, address, binary_digest, implementation_digest, status,
@@ -1434,7 +1458,7 @@ def write_report(path_arg: pathlib.Path, root: pathlib.Path, report: dict[str, A
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Gate IGI native code using Binary Ninja + Radare2, with optional Ghidra backup and retail differential tests."
+        description="Gate IGI natives using one selected decompiler, Radare2, angr and retail differential tests."
     )
     parser.add_argument("--root", type=pathlib.Path, default=pathlib.Path("."))
     parser.add_argument("--staged", action="store_true", help="Check staged native files only (pre-commit).")
