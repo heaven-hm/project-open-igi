@@ -1,0 +1,9 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x505e40\"\narch: \"x86\"\nname: \"TextureModifier_Push\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 100\ncount: 32\ntotal: 32\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  void* TextureModifier_Push(void* pThis)\n\n{\n    int32_t ecx = *(pThis + 0xbc);\n\n    if (ecx >= 0 && *(*(*(pThis + 0x68) + 0xdcc) + ecx * 0xc))\n    {\n        if (g_b97df8 < 0x14)\n        {\n            int32_t edx_3 = *(pThis + 0xe4);\n            *(pThis + 0xdc) = 1;\n            int32_t b97df8_1 = g_b97df8;\n            *((b97df8_1 << 2) + &g_b97da0) = edx_3;\n            int32_t edx_5 = g_ba5060 << 8;\n            g_ba5060 = edx_5;\n            int32_t eax_1 = *(pThis + 0xe4) + 1;\n            g_ba5060 = edx_5 | eax_1;\n            g_b97df8 = b97df8_1 + 1;\n            return eax_1;\n        }\n\n        Debug_Error(\"Too many items in texture modifier stack!\");\n\n        while (true)\n            /* nop */\n    }\n\n    *(pThis + 0xdc) = 0;\n    return pThis;\n}\n````\n"
+    }
+  ],
+  "isError": false
+}
