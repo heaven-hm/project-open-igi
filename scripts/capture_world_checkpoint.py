@@ -109,11 +109,7 @@ rpc.exports.cwd = function() {
             for _ in range(args.seconds):
                 time.sleep(1)
                 snapshot = script.exports_sync.snapshot()
-                keyboard_ready = (not config.get('escapeObservation') or
-                                  (snapshot['counts'].get('Keyboard_Update', 0) > 0 and
-                                   (snapshot['counts'].get('LevelFlow_GetBreakCutSceneKey', 0) > 0 or
-                                    snapshot['counts'].get('Terrain_Draw', 0) > 0)))
-                if not escape_delivered and keyboard_ready:
+                if not escape_delivered:
                     attempt = script.exports_sync.skip_cutscene()
                     report.setdefault('escape_attempts', []).append(attempt)
                     escape_delivered = attempt['delivered']

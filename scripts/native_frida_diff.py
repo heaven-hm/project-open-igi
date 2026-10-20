@@ -236,9 +236,23 @@ def main() -> None:
             pid = max(frida_list().get(process_name, [0]))
             if not pid:
                 raise RuntimeError(f"Frida did not see {process_name} after launch")
-            return run_observation(pid, addresses, a.observe, probe_source)
+            observations = run_observation(pid, addresses, a.observe, probe_source)
+            if not observations:
+                raise RuntimeError(
+                    f"Frida observation for {process_name} is empty or incomplete; "
+                    "refusing to write a differential report"
+                )
+            return observations
         finally:
             vnb.stop_game(process)
+            # CrossOver may keep the Windows game alive after terminating the
+            # host-side wine wrapper. Stop only the process name this runner
+            # launched, and verify it is gone before starting the other game.
+            remaining = frida_list().get(process_name, [])
+            for pid in remaining:
+                subprocess.run([str(Path.home() / ".local" / "bin" / "frida-kill"),
+                                "-H", os.environ.get("FRIDA_HOST", "127.0.0.1:27042"),
+                                str(pid)], capture_output=True, text=True, timeout=30)
             if frida_list().get(process_name):
                 raise RuntimeError(f"{process_name} remains alive; refusing to launch the next game")
 
