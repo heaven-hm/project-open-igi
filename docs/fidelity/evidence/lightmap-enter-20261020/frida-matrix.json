@@ -1,0 +1,56 @@
+[
+  {
+    "level": 1,
+    "capture": "build/runtime-traces/world-level1-20261020T061904Z",
+    "result": {
+      "result": "passed",
+      "cases": 24,
+      "scope": "Explicit valid-context fixtures; globals restored before game resume; natural terrain integration unverified"
+    },
+    "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "7a06e85374b0b23dcb41537daac83cf8a3d1727db34e30ab28832af122ecba95",
+    "probe_sha256": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955",
+    "artifact_sha256": {
+      "retail.json": "1bbf192fdcfbede4f00f08259de2b5b2daabb8ef64bbb1163b3850a67c20ecbc",
+      "candidate.json": "278e69a0a65f3469d2f875b0ade8dd9a107886d7875632e68e59e0715ba14576",
+      "comparison.json": "ab04549c440844b734b0275d9d1d918b31fe218c90f9a14c6331800eadb6139e",
+      "probe.js": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955"
+    }
+  },
+  {
+    "level": 4,
+    "capture": "build/runtime-traces/world-level4-20261020T061933Z",
+    "result": {
+      "result": "passed",
+      "cases": 24,
+      "scope": "Explicit valid-context fixtures; globals restored before game resume; natural terrain integration unverified"
+    },
+    "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "7a06e85374b0b23dcb41537daac83cf8a3d1727db34e30ab28832af122ecba95",
+    "probe_sha256": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955",
+    "artifact_sha256": {
+      "retail.json": "d4193c52702feabd08eab72f572e160455586256dbe8fd1ddcfe61bde8b51a28",
+      "candidate.json": "1d5aafeb59a701689b8bb0b5ce54fb4a9d23bb2d132da56a12a0cc2280db1600",
+      "comparison.json": "67f003bb0570e90058edee410293071596e881b60aa079ced4a8b3827262c93f",
+      "probe.js": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955"
+    }
+  },
+  {
+    "level": 7,
+    "capture": "build/runtime-traces/world-level7-20261020T062003Z",
+    "result": {
+      "result": "passed",
+      "cases": 24,
+      "scope": "Explicit valid-context fixtures; globals restored before game resume; natural terrain integration unverified"
+    },
+    "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "7a06e85374b0b23dcb41537daac83cf8a3d1727db34e30ab28832af122ecba95",
+    "probe_sha256": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955",
+    "artifact_sha256": {
+      "retail.json": "3b9b0ff9ea118b0dcd76934fa728f10944656f4f21c31e570d87e52a34512afe",
+      "candidate.json": "0c4aa16e45670a7ece5f02ab7aa5197bf0e9578dbb779a7cb3063ca26d982d06",
+      "comparison.json": "886b7977702134ed883044b217d1e649ffa564f42a5f06a08f5b326c829816ec",
+      "probe.js": "1983e663bfef21124c57d3a3cbe2f0ec10c1ad6f9a50983c8b03bca56951f955"
+    }
+  }
+]

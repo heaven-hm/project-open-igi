@@ -25,6 +25,55 @@ function bytesHex(address, length) {
 }
 
 rpc.exports = {
+  runLightmapCases(target) {
+    if (!configured) throw new Error('Configure the executable first');
+    const checked = (address, size) => {
+      const value = ptr(address);
+      if (value.compare(executableImage.base) < 0 ||
+          value.add(size).compare(executableImage.base.add(executableImage.size)) > 0)
+        throw new Error('Lightmap fixture address is outside the executable');
+      return value;
+    };
+    const entry = checked(target.entry, 1), modeEntry = checked(target.modeEntry, 1);
+    const count = checked(target.count, 4), stack = checked(target.stack, 80);
+    const bd = checked(target.bd, 1), be = checked(target.be, 1);
+    const regions = [[count, 4], [stack, 80], [bd, 1], [be, 1]];
+    const saved = regions.map(([address, size]) => address.readByteArray(size));
+    const invoke = new NativeFunction(entry, 'pointer', ['pointer'], 'mscdecl');
+    const mode = new NativeFunction(modeEntry, 'uint32', [], 'mscdecl');
+    const context = Memory.alloc(384);
+    const cases = [];
+    try {
+      for (const fixture of target.fixtures) {
+        if (![0, 19].includes(fixture.count) || ![0, 1, -1].includes(fixture.enabled) ||
+            !Number.isInteger(fixture.bd) || fixture.bd < 0 || fixture.bd > 255 ||
+            !Number.isInteger(fixture.be) || fixture.be < 0 || fixture.be > 255)
+          throw new Error('Lightmap fixture is outside the reviewed scope');
+        context.writeByteArray(new Uint8Array(384).fill(0xa5));
+        context.add(0x108).writeS32(fixture.enabled);
+        context.add(0xd8).writeU32(fixture.value);
+        stack.writeByteArray(new Uint8Array(80).fill(0x5a));
+        count.writeU32(fixture.count);
+        bd.writeU8(fixture.bd); be.writeU8(fixture.be);
+        const modeResult = mode();
+        const result = invoke(context);
+        cases.push({input: fixture, output: {
+          mode_result: modeResult,
+          return_value: {kind: result.equals(context) ? 'context' : 'integer',
+                         value: result.equals(context) ? 0 : result.toUInt32()},
+          context_hex: bytesHex(context, 384), count: count.readU32(),
+          stack_hex: bytesHex(stack, 80), bd: bd.readU8(), be: be.readU8()}});
+      }
+    } finally {
+      regions.forEach(([address], index) => address.writeByteArray(saved[index]));
+    }
+    const restored = regions.every(([address, size], index) =>
+      bytesHex(address, size) === Array.from(new Uint8Array(saved[index]))
+        .map(value => value.toString(16).padStart(2, '0')).join(''));
+    if (!restored) throw new Error('Lightmap fixture global cleanup failed');
+    return {cases, globals_restored: restored,
+      scope: 'Explicit fixtures before main-thread resume; natural terrain calls and stack overflow are unverified'};
+  },
   runPureScalarCases(targets) {
     if (!configured) throw new Error('Configure the executable identity first');
     // Only the two reviewed, side-effect-free x87 flag conversion ABIs.

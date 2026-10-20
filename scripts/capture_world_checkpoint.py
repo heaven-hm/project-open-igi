@@ -39,6 +39,8 @@ def main():
     parser.add_argument('--host', default=os.environ.get('FRIDA_HOST', '127.0.0.1:27042'))
     parser.add_argument('--pure-fpu-cases', action='store_true',
                         help='Also explicitly invoke the two reviewed pure scalar conversion natives.')
+    parser.add_argument('--lightmap-cases', action='store_true',
+                        help='Run reviewed lightmap fixtures before resume, restoring native globals afterwards.')
     parser.add_argument('--candidate', type=Path, default=ROOT/'build-win32/engine/platform/windows/open-igi.exe')
     args = parser.parse_args()
     if not 1 <= args.level <= 14 or not 1 <= args.seconds <= 60:
@@ -100,6 +102,8 @@ rpc.exports.cwd = function() {
             report['hooks_before_resume'] = script.exports_sync.start(dict(config,module=binary.name))
             if config.get('pureScalarCases'):
                 report['pure_scalar_cases'] = script.exports_sync.run_pure_scalar_cases(config['pureScalarCases'])
+            if config.get('lightmapCases'):
+                report['lightmap_cases'] = script.exports_sync.run_lightmap_cases(config['lightmapCases'])
             device.resume(pid)
             escape_delivered = False
             for _ in range(args.seconds):
@@ -176,6 +180,12 @@ rpc.exports.cwd = function() {
                                      inputs=[case['input']['arguments'][0] for case in evidence['cases']],
                                      symbol='igi::retail::core::'+symbol))
         retail_config['pureScalarCases'] = pure_targets
+    if args.lightmap_cases:
+        replay = json.loads((ROOT/'docs/fidelity/evidence/lightmap-enter-20261020/after.json').read_text())
+        retail_config['lightmapCases'] = dict(
+            entry='0x004F82B0', modeEntry='0x004F1160', count='0x00B97D24',
+            stack='0x00B97B20', bd='0x00A758BD', be='0x00A758BE',
+            fixtures=[case['input'] for case in replay['cases']])
     if digest(GAME/'igi.exe') != 'dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01':
         raise ValueError('Retail image differs from the statically analyzed image')
     capture('retail',GAME/'igi.exe',retail_config)
@@ -186,6 +196,14 @@ rpc.exports.cwd = function() {
     if pure_targets:
         candidate_config['pureScalarCases'] = [dict(target, entry=names[target['symbol']])
                                                for target in pure_targets]
+    if args.lightmap_cases:
+        candidate_config['lightmapCases'] = dict(
+            entry=names['igi::retail::terrain::TerrainLightMap_Init_2(void*)'],
+            modeEntry=names['igi::retail::script::Script_ParseEnumReal32_5()'],
+            count=names['igi::retail::terrain::g_b97d24'],
+            stack=names['igi::retail::terrain::g_data_b97b20'],
+            bd=names['igi::retail::script::g_a758bd'], be=names['igi::retail::script::g_a758be'],
+            fixtures=retail_config['lightmapCases']['fixtures'])
     if 'igi::retail::core::Display_ClearSurfaces_16()' in names:
         candidate_config['fpuInitialization'] = dict(
             entry=names['igi::retail::core::Display_ClearSurfaces_16()'],
@@ -196,6 +214,18 @@ rpc.exports.cwd = function() {
     with stage_candidate(args.candidate.resolve(),GAME) as staged:
         capture('candidate',staged,candidate_config)
     scalar_mismatch = False
+    lightmap_mismatch = False
+    if args.lightmap_cases:
+        sides = [json.loads((folder/(side+'.json')).read_text()) for side in ('retail', 'candidate')]
+        sequences = [side.get('lightmap_cases', {}) for side in sides]
+        expected_inputs = retail_config['lightmapCases']['fixtures']
+        lightmap_mismatch = (not expected_inputs or sequences[0] != sequences[1] or
+                             any(not sequence.get('globals_restored') or
+                                 [case.get('input') for case in sequence.get('cases', [])] != expected_inputs
+                                 for sequence in sequences))
+        summary['lightmap_comparison'] = dict(
+            result='failed' if lightmap_mismatch else 'passed', cases=len(expected_inputs),
+            scope='Explicit valid-context fixtures; globals restored before game resume; natural terrain integration unverified')
     if pure_targets:
         sides = [json.loads((folder/(side+'.json')).read_text()) for side in ('retail', 'candidate')]
         sequences = [side.get('pure_scalar_cases', []) for side in sides]
@@ -217,7 +247,7 @@ rpc.exports.cwd = function() {
             scope='Two explicit pure scalar native calls on Frida agent threads; no whole-game parity claim')
     (folder/'comparison.json').write_text(json.dumps(summary,indent=2))
     print('Saved',folder,flush=True)
-    return int(scalar_mismatch or any(side['result'] == 'failed' for side in summary['sides'].values()))
+    return int(scalar_mismatch or lightmap_mismatch or any(side['result'] == 'failed' for side in summary['sides'].values()))
 
 
 if __name__ == '__main__':
