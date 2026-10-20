@@ -1,0 +1,23 @@
+{
+  "kind": "scoped-frida-pure-scalar-comparison",
+  "capture": "build/runtime-traces/world-level1-20261020T053701Z",
+  "result": {
+    "result": "passed",
+    "cases": 32,
+    "scope": "Two explicit pure scalar native calls on Frida agent threads; no whole-game parity claim"
+  },
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_sha256": "e0faef4c781b85e96b4aa76d77641fcb5756f06c9af59005d761917903a72c63",
+  "probe_sha256": "672b09eef7a2a48b6ba706c9a575e3d0ac018e2a38fcf40e91062063e0f6e2df",
+  "artifacts": {
+    "retail.json": "0dba8463a1e9548b7ed4dcf9d76065207112035a452cd8842eaf2bbc200b5281",
+    "candidate.json": "1555f3c4f0924ec5ff69f9ddc143ad460c3f243725f68a94fd5a4d9392e11b4f",
+    "comparison.json": "47208a516a6afacc99d9b8ea7cbd6598ac49ba0f3c76612d2331f9537e4ef925",
+    "probe.js": "672b09eef7a2a48b6ba706c9a575e3d0ac018e2a38fcf40e91062063e0f6e2df"
+  },
+  "limitations": [
+    "Explicit agent-thread calls of two reviewed pure scalar natives, not natural game invocation or ordering.",
+    "No FPU environment, memory side effects, other natives, materials, textures, player or whole-game equivalence claim.",
+    "Earlier capture world-level1-20261020T053636Z failed because the probe used invalid ABI spelling; it is not passing evidence."
+  ]
+}

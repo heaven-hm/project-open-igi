@@ -31,3 +31,11 @@ position and orientation data for Levels 1, 4 and 7 after the scene adapter also
 retained retail's x87 multiply/add/store order. This is a class-specific data
 checkpoint; material, texture, collision, player and whole-game parity remain
 open. No whole-game 100% equivalence claim follows from these reports.
+
+A subsequent sequential Frida run explicitly invoked the two reviewed pure
+scalar conversion natives (0x004AC66B and 0x004AC6FD) with the same 16 inputs
+each. All 32 outputs matched. These run on Frida agent threads and establish
+that narrow input/output comparison only. The probe uses Windows x86 mscdecl;
+the earlier invalid-ABI attempt failed and remains recorded. Reproduce using
+`capture_world_checkpoint.py --pure-fpu-cases` with the diagnostic executable
+and an operational Frida host. `frida-pure-scalars.json` binds the raw captures.
