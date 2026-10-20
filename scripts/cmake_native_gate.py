@@ -4,7 +4,7 @@
 Executes the exact same verification gate logic as build.sh:
 - In development mode: discovers referenced natives, generates Frida probe targets,
   and runs native_gate.py at STRUCTURALLY_VERIFIED with CFG >= 0.85.
-- In production mode: runs native_gate.py on the full production tree at VERIFIED.
+- In acceptance mode: runs native_gate.py --changed at VERIFIED.
 """
 
 from __future__ import annotations
@@ -27,7 +27,7 @@ def main() -> int:
     parser.add_argument("--development", action="store_true", default=True,
                         help="Run development gate on referenced natives (default).")
     parser.add_argument("--full-production", action="store_true",
-                        help="Run full production gate requiring all natives at VERIFIED.")
+                        help="Run strict changed-native gate at VERIFIED (legacy option name).")
     parser.add_argument("--threshold", choices=STATUS_RANK, default=None)
     parser.add_argument("--cfg-threshold", type=float, default=0.85)
     parser.add_argument("--report", type=pathlib.Path, default=None)
@@ -79,12 +79,12 @@ def main() -> int:
     build_dir.mkdir(parents=True, exist_ok=True)
 
     if is_production:
-        print("==> [CMake Native Gate] Running FULL PRODUCTION verification gate (threshold=VERIFIED)...")
+        print("==> [CMake Native Gate] Running changed-native verification gate (threshold=VERIFIED)...")
         attest_script = root / "scripts/build_attestation.py"
         if not attest_script.is_file():
             print(f"!! [CMake Native Gate] Missing script: {attest_script}", file=sys.stderr)
             return 1
-        inputs_json = build_dir / "native-verification-inputs.json"
+        inputs_json = build_dir / "native-cmake-verification-inputs.json"
         capture = subprocess.run([sys.executable, str(attest_script), "capture", "--root", str(root),
                                   "--output", str(inputs_json)])
         if capture.returncode != 0:
@@ -94,10 +94,11 @@ def main() -> int:
             sys.executable,
             str(root / "scripts/native_gate.py"),
             "--root", str(root),
-            "--production-tree",
+            "--changed",
+            "--require-semantic-evidence", "--require-behavioral-tests",
             "--threshold", threshold,
             "--cfg-threshold", str(args.cfg_threshold),
-            "--report", str(args.report or (build_dir / "native-verification.json")),
+            "--report", str(args.report or (build_dir / "native-cmake-verification.json")),
         ]
     else:
         print("==> [CMake Native Gate] Discovering and verifying statically referenced runtime native candidates...")

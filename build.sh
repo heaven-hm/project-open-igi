@@ -190,15 +190,17 @@ if [[ "$REFERENCED_ONLY" -eq 1 ]]; then
     fi
     exit 0
 fi
-echo "==> [0/4] Verifying all production native transcriptions against retail igi.exe..."
+echo "==> [0/4] Verifying changed natives: static CFG, source semantics and behavioral evidence..."
 python3 "$ROOT_DIR/scripts/build_attestation.py" capture --root "$ROOT_DIR" \
     --output "$ROOT_DIR/build/native-verification-inputs.json"
 python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --changed \
-    --threshold VERIFIED --cfg-threshold 0.85 --report build/native-verification.json || {
+    --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests \
+    --report build/native-verification.json || {
   echo "!! Build BLOCKED: production native code lacks matching binary-bound evidence."
   echo "!! A five-line comment alone cannot authorize compilation or deployment."
   exit 1
 }
+
 mkdir -p "$ROOT_DIR/build" "$ROOT_DIR/build-win32"
 touch "$ROOT_DIR/build/igi_native_verification.stamp" "$ROOT_DIR/build-win32/igi_native_verification.stamp"
 
@@ -207,7 +209,7 @@ python3 "$ROOT_DIR/scripts/build_attestation.py" snapshot --root "$ROOT_DIR" \
     --input-snapshot "$ROOT_DIR/build/native-verification-inputs.json" \
     --gate-report "$ROOT_DIR/build/native-verification.json" \
     --output "$ROOT_DIR/build/native-build-snapshot.json"
-cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+cmake -S . -B build -DIGI_FULL_PRODUCTION_GATE=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 cmake --build build -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
 
 if [[ -f build/compile_commands.json ]]; then
@@ -219,7 +221,7 @@ ctest --test-dir build --output-on-failure
 
 if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
     echo "==> [3/4] Configuring and building 32-bit Windows executable (build-win32/)..."
-    cmake -S . -B build-win32 \
+    cmake -S . -B build-win32 -DIGI_FULL_PRODUCTION_GATE=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DCMAKE_SYSTEM_NAME=Windows \
         -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ \
@@ -228,9 +230,35 @@ if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
         --snapshot "$ROOT_DIR/build/native-build-snapshot.json" \
         --output "$ROOT_DIR/build/native-build-snapshot.json"
     cmake --build build-win32 -j"$(sysctl -n hw.ncpu 2>/dev/null || echo 4)"
+    # Headless runtime verification: one small Frida probe per native, against the
+    # retail game and the newly compiled candidate, before sealing or deployment.
+    if [[ "${IGI_SKIP_RUNTIME_VERIFICATION:-0}" == "1" ]]; then
+      echo "!! Build BLOCKED: IGI_SKIP_RUNTIME_VERIFICATION cannot bypass the Frida acceptance gate." >&2
+      exit 1
+    fi
+    echo "==> Headless runtime verification (Frida, retail igi.exe and open-igi.exe)..."
+    python3 "$ROOT_DIR/scripts/native_frida_diff.py" \
+        --symbols "$ROOT_DIR/assets/candidate_symbol_map.json" \
+        --gate-report "$ROOT_DIR/build/native-verification.json" \
+        --candidate-exe "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe" \
+        --probe "${IGI_NATIVE_PROBE:-$ROOT_DIR/scripts/frida_native_diff.js}" \
+        --level "${IGI_VERIFY_LEVEL:-4}" \
+        --observe "${IGI_VERIFY_OBSERVE:-6}" \
+        --out "$ROOT_DIR/build/native-frida-differential.json" || {
+      echo "!! Build BLOCKED: the headless runtime verification did not complete." >&2
+      exit 1
+    }
+    python3 "$ROOT_DIR/scripts/check_frida_differential.py" \
+        --report "$ROOT_DIR/build/native-frida-differential.json" \
+        --gate-report "$ROOT_DIR/build/native-verification.json" \
+        --candidate-exe "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe" || {
+      echo "!! Build BLOCKED: runtime parity is incomplete or unproven." >&2
+      exit 1
+    }
     python3 "$ROOT_DIR/scripts/build_attestation.py" seal --root "$ROOT_DIR" \
         --snapshot "$ROOT_DIR/build/native-build-snapshot.json" \
         --binary "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe" \
+        --runtime-report "$ROOT_DIR/build/native-frida-differential.json" \
         --output "$ROOT_DIR/build-win32/engine/platform/windows/open-igi.exe.native-verification.json"
 
     IGI_DEST_DIR="${IGI_DIR:-/Users/haseeb-mir/Downloads/IGI}"
@@ -244,10 +272,11 @@ if command -v i686-w64-mingw32-g++ >/dev/null 2>&1; then
         echo "==> [4/4] Skipping copy: $IGI_DEST_DIR does not exist."
     fi
 else
-    echo "==> [3/4] i686-w64-mingw32-g++ not found; skipping 32-bit Windows build."
+    echo "!! Build BLOCKED: Windows x86 compiler is required for candidate runtime verification." >&2
+    exit 1
 fi
 
-echo "==> Build and verification complete."
+echo "==> Build complete for the verified changed-native scope; no whole-game equivalence claim."
 
 if [[ "$RUN_FRIDA" -eq 1 ]]; then
     echo "==> Attaching Frida: $FRIDA_BIN -H $FRIDA_HOST -n $FRIDA_TARGET..."

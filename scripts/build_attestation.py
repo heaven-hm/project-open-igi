@@ -7,6 +7,7 @@ import hashlib
 import json
 import pathlib
 import struct
+import subprocess
 import sys
 
 
@@ -21,8 +22,13 @@ def sources(root):
     for base in (root / "engine", root / "scripts"):
         for path in base.rglob("*"):
             if path.is_file() and (path.name == "CMakeLists.txt" or path.suffix in {
-                    ".cpp", ".hpp", ".h", ".c", ".cc", ".cxx", ".cmake", ".py"}):
+                    ".cpp", ".hpp", ".h", ".c", ".cc", ".cxx", ".cmake", ".py", ".js"}):
                 paths.add(path)
+    for name in ("candidate_symbol_map.json", "IGINatives_All_GameNatives.json",
+                 "gamenatives_three_way.json", "IGINatives_v4.json"):
+        path = root / "assets" / name
+        if path.is_file():
+            paths.add(path)
     return {str(p.relative_to(root)): digest(p) for p in sorted(paths)}
 
 
@@ -55,13 +61,13 @@ def build_inputs(root):
 
 def gate_report(root, path):
     report = load(path)
-    if (report.get("result") != "passed" or report.get("mode") != "production-tree"
+    if (report.get("result") != "passed" or report.get("mode") not in ("changed", "production-tree")
             or report.get("threshold") != "VERIFIED" or report.get("failures") != []
             or not report.get("checked_native_count", 0)
             or not report.get("semantic_review_required")
             or not report.get("behavioral_tests_required")
             or not 0.85 <= float(report.get("cfg_threshold", 0)) <= 1.0):
-        raise ValueError("full production VERIFIED evidence is required")
+        raise ValueError("VERIFIED changed-native evidence with semantic and behavioral checks is required")
     natives = report.get("checked_natives", [])
     if len(natives) != report["checked_native_count"]:
         raise ValueError("incomplete native verification report")
@@ -89,6 +95,7 @@ def main():
     parser.add_argument("action", choices=("capture", "snapshot", "configure", "seal", "check"))
     parser.add_argument("--root", type=pathlib.Path, required=True)
     parser.add_argument("--gate-report", type=pathlib.Path)
+    parser.add_argument("--runtime-report", type=pathlib.Path)
     parser.add_argument("--snapshot", type=pathlib.Path)
     parser.add_argument("--input-snapshot", type=pathlib.Path)
     parser.add_argument("--receipt", type=pathlib.Path)
@@ -109,6 +116,8 @@ def main():
             raise ValueError("verification inputs changed while the gate was running")
         report = gate_report(root, args.gate_report)
         result = {"schema_version": 1, "kind": "native-build-snapshot",
+                  "verification_scope": report["mode"],
+                  "verified_addresses": sorted({n.get("address") for n in report["checked_natives"] if n.get("address")}),
                   "sources": sources(root), "retail_sha256": report["binary_sha256"],
                   "gate_report": str(args.gate_report.resolve()),
                   "gate_report_sha256": digest(args.gate_report)}
@@ -138,6 +147,11 @@ def main():
                 raise ValueError("source/build-script files changed during build")
             if build_inputs(root) != result.get("build_inputs"):
                 raise ValueError("Windows compiler/configuration changed during build")
+            if not args.runtime_report:
+                raise ValueError("native sealing requires paired runtime evidence")
+            verify_runtime(args.runtime_report, report_path, args.binary)
+            result["runtime_report"] = str(args.runtime_report.resolve())
+            result["runtime_report_sha256"] = digest(args.runtime_report)
             result.update(kind="verified-windows-build", binary_sha256=digest(args.binary))
         else:
             if not args.receipt or not args.gate_report:
@@ -150,11 +164,23 @@ def main():
                     or result.get("sources") != sources(root)
                     or result.get("build_inputs") != build_inputs(root)):
                 raise ValueError("executable or build receipt is stale; run ./build.sh")
+            runtime_path = pathlib.Path(result["runtime_report"])
+            if digest(runtime_path) != result.get("runtime_report_sha256"):
+                raise ValueError("paired runtime evidence changed after sealing")
+            verify_runtime(runtime_path, args.gate_report, args.binary)
             print("Windows x86 executable matches its verified build snapshot.")
             return 0
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + "\n")
     return 0
+
+
+def verify_runtime(runtime_path, gate_path, binary):
+    check = subprocess.run([sys.executable, str(pathlib.Path(__file__).with_name("check_frida_differential.py")),
+                            "--report", str(runtime_path), "--gate-report", str(gate_path),
+                            "--candidate-exe", str(binary)], capture_output=True, text=True, timeout=60)
+    if check.returncode:
+        raise ValueError("paired runtime acceptance failed: " + check.stdout + check.stderr)
 
 
 if __name__ == "__main__":

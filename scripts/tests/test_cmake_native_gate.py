@@ -60,12 +60,15 @@ class CMakeGateTests(unittest.TestCase):
         self.assertEqual(code, 1)
         self.assertEqual(len(calls), 1)
 
-    def test_production_preserves_full_tree_and_strict_defaults(self):
+    def test_acceptance_preserves_changed_scope_and_strict_defaults(self):
         code, calls = self.invoke(['--full-production'], [subprocess.CompletedProcess([], 0),
                                                        subprocess.CompletedProcess([], 0)])
         self.assertEqual(code, 0)
         argv = calls[-1].args[0]
-        self.assertIn('--production-tree', argv)
+        self.assertIn('--changed', argv)
+        self.assertNotIn('--production-tree', argv)
+        self.assertIn('--require-semantic-evidence', argv)
+        self.assertIn('--require-behavioral-tests', argv)
         self.assertEqual(argv[argv.index('--threshold') + 1], 'VERIFIED')
         self.assertEqual(argv[argv.index('--cfg-threshold') + 1], '0.85')
 

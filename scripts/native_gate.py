@@ -604,7 +604,7 @@ def check_file_hash(
         return None, None
     try:
         path = resolve_repo_path(root, relative)
-    except GateError as error:
+    except (GateError, OSError) as error:
         errors.append(f"{label}: {error}")
         return None, None
     actual = sha256(path)
@@ -1038,10 +1038,11 @@ def validate_status_evidence(
     require_behavioral: bool,
     require_mutation: bool,
     errors: list[str],
-) -> None:
+) -> dict[str, Any] | None:
     verification = record.get("verification")
     if not isinstance(verification, dict):
         return
+    semantic_artifact = None
     rank = STATUS_RANK[status]
     if rank >= STATUS_RANK["BUILD_VERIFIED"]:
         validate_report_artifact(
@@ -1058,7 +1059,7 @@ def validate_status_evidence(
             binary_digest=binary_digest, implementation_digest=implementation_digest, errors=errors,
         )
     if rank >= STATUS_RANK["VERIFIED"] or require_semantic:
-        validate_report_artifact(
+        semantic_artifact = validate_report_artifact(
             root, verification.get("semantic_review"), report_name="semantic review",
             expected_kind="semantic-review-report", native_address=native_address,
             binary_digest=binary_digest, implementation_digest=implementation_digest, errors=errors,
@@ -1082,6 +1083,7 @@ def validate_status_evidence(
             )
             if path is not None and not path.read_text(encoding="utf-8", errors="replace").strip():
                 errors.append(f"{native_address}: verification scope document is empty")
+    return semantic_artifact
 
 
 def status_meets_threshold(status: str, minimum_status: str) -> bool:
@@ -1428,10 +1430,14 @@ def verify_record(
         else:
             errors.append(f"{address}: structural status requires valid CFG graph artifacts from {decompiler} and Radare2")
 
-    validate_status_evidence(
+    semantic_artifact = validate_status_evidence(
         root, record, address, binary_digest, implementation_digest, status,
         require_semantic, require_behavioral, require_mutation, errors,
     )
+    if semantic_artifact and isinstance(semantic_artifact.get("runtime_contract"), dict):
+        # This artifact has already been checked against the reviewed source,
+        # retail image, native identity and manifest evidence digest.
+        details["runtime_contract"] = semantic_artifact["runtime_contract"]
     if require_behavioral:
         live_report = run_live_behavioral_runner(
             root,
@@ -1655,13 +1661,12 @@ def main() -> int:
     # The confirmed native catalog is checked against the same retail binary so
     # that a stale address, name or signature cannot pass the gate unnoticed.
     v4_errors, v4_warnings, v4_summary = verify_v4_catalog(
-        root, binary_digest, root / "assets" / "gamenatives_three_way.json")
+        root, binary_digest, selected_addresses=addresses if mode != "production-tree" else None)
     failures.extend(v4_errors)
     warnings.extend(v4_warnings)
     report["v4_catalog"] = v4_summary
     if v4_summary:
-        print(f"native_gate: v4 catalog {v4_summary['entries']} entries verified against "
-              f"the retail binary")
+        print(f"native_gate: v4 catalog consistency checked for {v4_summary['entries']} selected entries")
 
     checked = 0
     details_by_key: set[tuple[str, str]] = set()

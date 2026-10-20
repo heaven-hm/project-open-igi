@@ -37,8 +37,10 @@ class BuildAttestationTests(unittest.TestCase):
                        "cfg_threshold": 0.85, "failures": [], "checked_native_count": 1,
                        "semantic_review_required": True, "behavioral_tests_required": True,
                        "binary_sha256": "0" * 64,
-                       "checked_natives": [{"path": "engine/test.cpp", "errors": [],
+                       "checked_natives": [{"path": "engine/test.cpp", "address": "0x00401000", "errors": [],
                            "angr": {"implementation_sha256": module.digest(self.root / "engine/test.cpp")}}]}
+        self.report['checked_natives'][0]['runtime_contract'] = dict(scope='fixture', probe_sha256='a'*64,
+            required_observables=dict(inputs=['value'], outputs=['result'], sideEffects=['counter']))
         self.gate = self.root / "fixture-gate.json"
         self.write_report()
         self.snapshot = self.root / "snapshot.json"
@@ -60,8 +62,25 @@ class BuildAttestationTests(unittest.TestCase):
     def make_receipt(self):
         self.make_snapshot()
         self.assertEqual(self.invoke("configure", "--snapshot", self.snapshot, "--output", self.snapshot).returncode, 0)
-        self.assertEqual(self.invoke("seal", "--snapshot", self.snapshot, "--binary", self.binary,
-                                     "--output", self.receipt).returncode, 0)
+        runtime = self.root / 'runtime.json'
+        comparison = dict(scope='fixture',
+            inputs=dict(retail=[{'value': 1}], candidate=[{'value': 1}]),
+            outputs=dict(retail=[{'result': 2}], candidate=[{'result': 2}]),
+            sideEffects=dict(retail=[{'counter': 3}], candidate=[{'counter': 3}]))
+        runtime.write_text(json.dumps(dict(staticGateSha256=module.digest(self.gate), probeSha256='a'*64,
+            binarySha256=self.report['binary_sha256'], candidateSha256=module.digest(self.binary),
+            results=[dict(address='0x00401000', name='Fixture', retailCalled=True,
+                candidateCalled=True, candidateReachable=True, argumentsMatch=True,
+                scalarReturn=True, valueMatch=True, sideEffectsMatch=True,
+                semanticComparator='a'*64, comparison=comparison)])))
+        extra = ['--runtime-report', runtime]
+        document = json.loads(runtime.read_text())
+        state = dict(scope='fixture', inputs={'value': 1}, outputs={'result': 2}, sideEffects={'counter': 3})
+        document['results'][0].update(retailCalls=[dict(typedState=state)], candidateCalls=[dict(typedState=state)])
+        runtime.write_text(json.dumps(document))
+        result = self.invoke("seal", "--snapshot", self.snapshot, "--binary", self.binary,
+                             "--output", self.receipt, *extra)
+        self.assertEqual(result.returncode, 0, result.stderr)
 
     def make_snapshot(self):
         self.assertEqual(self.invoke("capture", "--output", self.inputs).returncode, 0)
@@ -75,6 +94,37 @@ class BuildAttestationTests(unittest.TestCase):
     def test_unchanged_fixture_receipt_matches(self):
         self.make_receipt()
         self.assertEqual(self.check().returncode, 0)
+
+    def test_changed_native_scope_is_preserved_in_receipt(self):
+        self.report['mode'] = 'changed'
+        self.report['checked_natives'][0]['address'] = '0x00401000'
+        self.write_report()
+        self.make_receipt()
+        receipt = json.loads(self.receipt.read_text())
+        self.assertEqual(receipt['verification_scope'], 'changed')
+        self.assertEqual(receipt['verified_addresses'], ['0x00401000'])
+        self.assertEqual(self.check().returncode, 0)
+
+    def test_no_scope_can_seal_without_paired_runtime(self):
+        for mode in ('changed', 'production-tree'):
+            with self.subTest(mode=mode):
+                self.report['mode'] = mode
+                self.write_report()
+                self.make_snapshot()
+                self.assertEqual(self.invoke('configure', '--snapshot', self.snapshot,
+                                             '--output', self.snapshot).returncode, 0)
+                result = self.invoke('seal', '--snapshot', self.snapshot, '--binary', self.binary,
+                                     '--output', self.receipt)
+                self.assertNotEqual(result.returncode, 0)
+                self.assertIn('paired runtime', result.stderr)
+
+    def test_changed_runtime_report_cannot_be_replaced_after_sealing(self):
+        self.report['mode'] = 'changed'
+        self.report['checked_natives'][0]['address'] = '0x00401000'
+        self.write_report()
+        self.make_receipt()
+        (self.root / 'runtime.json').write_text('{}')
+        self.assertNotEqual(self.check().returncode, 0)
 
     def test_modified_executable_is_blocked(self):
         self.make_receipt()
