@@ -75,6 +75,9 @@ retain their multiplicity. These are the objects explicitly identified through
 the observed EditRigidObj path, not every object in each level. Artifact hashes
 and executable identities are retained in
 `evidence/fpu-state-20261020/paired-transform-matrix.json`.
+Recompute this comparison with `python3 scripts/compare_world_transforms.py`
+followed by the capture directories. Empty, errored, or overflowed captures fail
+as inconclusive; differences return a failing exit status.
 
 The remaining orientation discrepancies were traced to x87 precision/rounding
 initialization and matrix accumulation order. Six retail FPU helpers were
