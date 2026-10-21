@@ -1,0 +1,22 @@
+{
+ "address": "0x004AAD10",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x004AAD10 (Resource_MatchPrefix): if n==0 ret 0; k=min(strlen(a)+1,n); repe cmpsb(b,a,k); al=b[i-1]; cmp al,a[i-1]: equal 0, above -1, below 1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
