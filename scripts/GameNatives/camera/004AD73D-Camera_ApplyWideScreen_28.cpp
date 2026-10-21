@@ -1,71 +1,62 @@
-// IGI native provenance: Camera_ApplyWideScreen_28 - 0x004AD73D - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004AD73D-Camera_ApplyWideScreen_28.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AD73D-Camera_ApplyWideScreen_28.hpp"
-unsigned int __fastcall Camera_ApplyWideScreen_28(int context)
+// IGI native String_ToUpperChar - 0x004AD73D - transcribed from retail igi.exe.
+// Retail: cdecl (ch). Frame 4 bytes (var_4h/var_3h = 2-byte LCMap result buffer). Locale handle g_009361e4 == 0: ASCII a-z minus 0x20.
+// Otherwise single-byte chars use the ctype table g_00544070 (or 0x004A7F2A when g_0054427c > 1), lead bytes are sent as 2 bytes to 0x004AD4D3 with flag 0x200.
+// UNRESOLVED: callees 0x004A7F2A and 0x004AD4D3 are not transcribed yet; they are declared as retail addresses and called exactly as retail does.
+#include <cstdint>
+#include <cstring>
 
+extern std::int32_t g_009361e4;   // 0x009361E4 locale handle
+extern std::int32_t g_0054427c;   // 0x0054427C
+extern std::uint8_t* g_00544070;  // 0x00544070 ctype table (2 bytes per entry)
+
+int __cdecl Crt_IsCType_004A7F2A(int ch, int mask);  // 0x004A7F2A (unresolved)
+int __cdecl Crt_LCMapStringA_004AD4D3(std::int32_t locale, std::uint32_t flags, const char* src, int srcLen, char* dst, int dstLen, int codePage, int flag); // 0x004AD4D3 (unresolved)
+
+int __cdecl String_ToUpperChar(int ch)
 {
-    int item_8 = context;
-    unsigned int arg_4;
-
-    if (!g_9361e4)
-    {
-        unsigned int data_1 = arg_4;
-
-        if (data_1 >= 0x61 && data_1 <= 0x7a)
-            return data_1 - 0x20;
-
-        return data_1;
-    }
-
-    unsigned int context_1 = arg_4;
-    BOOL data_2;
-
-    if (context_1 < 0x100)
-    {
-        if (g_54427c <= 1)
-        {
-            wchar16 (* data_3)[0x21] = g_544070;
-            data_3 = (*data_3)[context_1];
-            data_2 = data_3 & 2;
+    std::uint8_t out[4];   // var_4h at ebp-4, var_3h at ebp-3
+    std::uint8_t in[4];    // arg_8h .. arg_bh, written in place by retail
+    std::memcpy(in, &ch, 4);
+    int eax;
+    int ebx;
+    if (g_009361e4 == 0) {
+        eax = ch;
+        if (eax >= 0x61 && eax <= 0x7a) {
+            eax -= 0x20;
         }
-        else
-        {
-            unsigned int item_14_1 = context_1;
-            int data_val;
-            int entry_data;
-            data_2 = Camera_ApplyBandFilter_12(data_val, entry_data, context, 2);
+        return eax;
+    }
+    ebx = ch;
+    if (ebx < 0x100) {
+        if (g_0054427c > 1) {
+            eax = Crt_IsCType_004A7F2A(ebx, 2);
+        } else {
+            eax = g_00544070[ebx * 2] & 2;
+        }
+        if (eax == 0) {
+            return ebx;
         }
     }
-
-    if (context_1 >= 0x100 || data_2)
+    int len;
     {
-        char data_5 = context_1 >> 8;
-        void* item_10_1;
-
-        if (!(*(&(**&g_544070)[data_5] + 1) & 0x80))
-        {
-            *(&arg_4 + 1) = 0;
-            arg_4 = context_1;
-            item_10_1 = 1;
-        }
-        else
-        {
-            *(&arg_4 + 2) = 0;
-            arg_4 = data_5;
-            *(&arg_4 + 1) = context_1;
-            item_10_1 = 2;
-        }
-
-        int data_7 = Camera_UpdateViewCone_27(g_9361e4, 0x200, &arg_4, item_10_1, &item_8, 3, 0, 1);
-
-        if (data_7)
-        {
-            if (data_7 != 1)
-                return *(&item_8 + 1) << 8 | item_8;
-
-            return item_8;
+        std::uint8_t hi = static_cast<std::uint8_t>(ebx >> 8);
+        if (g_00544070[hi * 2 + 1] & 0x80) {
+            in[2] = 0;
+            in[0] = hi;
+            in[1] = static_cast<std::uint8_t>(ebx);
+            len = 2;
+        } else {
+            in[1] = 0;
+            in[0] = static_cast<std::uint8_t>(ebx);
+            len = 1;
         }
     }
-
-    return context_1;
+    eax = Crt_LCMapStringA_004AD4D3(g_009361e4, 0x200, reinterpret_cast<const char*>(in), len, reinterpret_cast<char*>(out), 3, 0, 1);
+    if (eax == 0) {
+        return ebx;
+    }
+    if (eax == 1) {
+        return out[0];
+    }
+    return (static_cast<int>(out[1]) << 8) | out[0];
 }

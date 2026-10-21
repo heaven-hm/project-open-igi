@@ -4327,45 +4327,27 @@
       "name": "String_ToUpperChar",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/sys/resource_lookup.cpp",
-        "sha256": "3df29856f1d85c2ff463d7792f7467b61bc4f7b63ebb8fce31658f15a8974365",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/camera/004AD73D-Camera_ApplyWideScreen_28.cpp",
+        "sha256": "cd10b4738af47fd4dc32a7121321a5e03a38288eb61f92625644f83799d39ec7",
+        "signature": "int __cdecl String_ToUpperChar(int ch);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/camera/004AD73D-String_ToUpperChar 2.cpp",
-        "sha256": "2f334166a3e41e8aba51b228e3e4df1ef81ecb81136a437719c27d379294ee1e",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/camera/004AD73D-Camera_ApplyWideScreen_28.cpp",
+        "sha256": "cd10b4738af47fd4dc32a7121321a5e03a38288eb61f92625644f83799d39ec7",
+        "signature": "int __cdecl String_ToUpperChar(int ch);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
-        "binary_ninja": {
-          "evidence_id": "bn:live:0x004AD73D",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x004AD73D-binaryninja.json",
-          "evidence_sha256": "a1a8b6db7b21b351ce25194258e46daff983ed4562e71426c1f9e3e94da08a58"
-        },
-        "radare2": {
-          "evidence_id": "r2:live:0x004AD73D",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x004AD73D-radare2.json",
-          "evidence_sha256": "7ca1abb0669804f78511aa786670c3de68db1e0f68721684e8fed12b5eae2111"
-        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail 0x004AD73D is a 32-bit x86 cdecl leaf: one dword argument read at [ebp+8] and an EAX result. The host candidate declares a single std::int32_t argument and returns std::int32_t; the live runner (scripts/native_leaves_runner.py) pushes the same dword and compares EAX exactly across the documented C-locale scope."
-        },
-        "scope": {
-          "path": "docs/fidelity/scopes/0x004AD73D.md",
-          "sha256": "77fa8270356c0b53f5ef8bdeee468efc42f6dd730b33285dfa65f256ba977096"
+          "rationale": "Retail 0x004AD73D (String_ToUpperChar): if g_9361e4==0: ascii a-z minus 0x20; else locale path via ctype table g_544070, isctype 0x4A7F2A, LCMapStringA 0x4AD4D3. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "Only g_9361e4 == 0 (C-locale ASCII) branch implemented; locale/multibyte behavior unavailable.",
-          "Existing CFG evidence describes the retail function, not structural equivalence of this partial candidate.",
-          "Retained decompiler/Radare2 CFGs describe retail recovery only; no full candidate control-flow equivalence is established."
+          "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_leaves_runner.py",
+          "path": "scripts/native_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -4378,20 +4360,35 @@
             "--implementation-sha256",
             "{implementation_sha256}",
             "--root",
-            "{root}",
-            "--cases",
-            "8"
+            "{root}"
           ],
-          "timeout_seconds": 300
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-radare2.json",
+          "evidence_sha256": "7a0cfdb53655451a6006e2b8534ce346038a9ddea7fba3a394c6e65afcee455e",
+          "evidence_id": "r2:live:0x004AD73D",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-binaryninja.json",
+          "evidence_sha256": "78364a009aa4fcf3032d718d0b6b219f38767ea55b0e68e86d5a85efbf152f62",
+          "evidence_id": "bn:live:0x004AD73D",
+          "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004AD73D-build.json",
-          "evidence_sha256": "d9ee12bc49fcd4d601b63fc969535b5eb299235e126e1469cf467f4d470b6b94"
-        },
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AD73D-semantic-review.json",
-          "evidence_sha256": "116d2ebdf19a2ae435b14644df20d55e715bb335112936bf6876f28d16807774"
+          "evidence_sha256": "df607af042c4c5dd5e4e7e3d5d2c21cd714d2ccb6d37d8c0334882e5601af8d2"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-build.json",
+          "evidence_sha256": "06bfe40c8db4af4945f587ae536c772ed7585e30dab92ceceedab3dbc8a88c16"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
+          "evidence_sha256": "67a21d1d2c8d742833c4b592ee8b4e1b76f0d648e597bd266e706c57a7b2458e"
         }
       }
     },
