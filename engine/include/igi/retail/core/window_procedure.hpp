@@ -44,11 +44,11 @@ extern "C" {
 // The retail's handler chain head at 0x005C8DF0. The window procedure reads
 // the first entry from it and walks the chain through the entries' next
 // pointers.
-extern igi::retail::core::WindowHandlerEntry* DAT_005C8DF0;
+extern igi::retail::core::WindowHandlerEntry* Window_HandlerChainHead;
 
 // The retail's debug key flag at 0x005C8E04. The window procedure clears it
 // when F12 is released and the debug key handler sets it when 's' is pressed.
-extern std::uint32_t DAT_005C8E04;
+extern std::uint32_t Window_DebugKeyFlag;
 
 // Native: Retail_WindowProcedure() - VA 0x0048F970 - complete port.
 // Behavior: reads the loop status byte at 0x005C8DE8 and, when it is set,

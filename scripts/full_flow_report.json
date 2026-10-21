@@ -1,0 +1,30 @@
+{
+  "total_functions": 3,
+  "entry_points": [
+    "0x00401050",
+    "0x00402880",
+    "0x004028A0"
+  ],
+  "graph_edges": {},
+  "function_details": {},
+  "failures": [
+    {
+      "address": "0x00401050",
+      "error": ""
+    },
+    {
+      "address": "0x00402880",
+      "error": ""
+    },
+    {
+      "address": "0x004028A0",
+      "error": ""
+    }
+  ],
+  "flow_order": [
+    "0x00401050",
+    "0x00402880",
+    "0x004028A0"
+  ],
+  "cycles": []
+}

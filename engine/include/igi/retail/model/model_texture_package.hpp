@@ -33,6 +33,10 @@ struct MtpPackage
 {
     std::uint32_t root_tag = 0U;
     std::vector<std::string> model_names;
+    // The 'BANM' chunk names the animation files the package's characters use.
+    // The retail loads each as "<prefix>anims/<name>.iff" (DynObj_LoadPackageAnimations,
+    // 0x004CF910), and each file holds that character's skeleton.
+    std::vector<std::string> animation_names;
     std::vector<std::string> texture_names;
     std::vector<std::string> instance_names;
     std::vector<MtpInstance> instances;
@@ -47,7 +51,7 @@ struct MtpPackage
     // Confidence: partial host parser adapter; literal native loader is in mtp_package_loader.cpp.
     // Signature: std::span<const std::byte> -> MtpPackage differs from retail void*(void*, const char*, int32_t).
     // Usage/tests: Used by host MTP inspection tests and diagnostic scene harness.
-    [[nodiscard]] static MtpPackage Host_ParseModelTexturePackage(std::span<const std::byte> file_bytes);
+    [[nodiscard]] static MtpPackage DynObj_LoadModelTexturePackage(std::span<const std::byte> file_bytes);
 };
 
 } // namespace igi::retail::model

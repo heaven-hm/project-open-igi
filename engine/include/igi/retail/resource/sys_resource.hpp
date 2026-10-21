@@ -63,6 +63,9 @@ inline void* Sys_PopStack_15(const char* context, void* arg2, void* arg3, std::i
 //           - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot;
 //           - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot;
 //           - case 3: unlinks `context` and returns slot.
+//           Return value: the new `g_943e28` count when the freed node was the last active slot;
+//           otherwise the address of the node relocated into the freed position by the swap-pop
+//           (retail EAX behavior, verified under angr against retail 0x004B5C90 execution).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes,
 //                 digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2;
 //                 CLEAN/sys/004B5C90-Sys_FreeMemory_16.c.
@@ -113,7 +116,8 @@ inline std::int32_t Sys_ErrorInResourceFileS(const char* context, void* arg2, vo
 //           4. Otherwise (`"RESOURCE"` packed archive header), creates a parent node (`kind = 0`), sets
 //              `loaded_flag = 1`, and iterates `arg2[2]` (`count`) entries starting at `&arg2[8]` (`+0x20`),
 //              copying each entry name (`*(entry + 8)` bytes at `entry + 0x0C`), aligning payload start by
-//              `(name_len + 0x2B) & 0xFFFFFFE0` and next entry by `(data_size + 0x1F) & 0xFFFFFFE0`, and
+//              the retail `and al, 0xE0` name stride (low byte of `name_len + 0x2B`, bits 0-4 cleared,
+//              upper bits preserved) and next entry by `(data_size + 0x1F) & 0xFFFFFFE0`, and
 //              splicing each child (`kind = 1`) into `parent + 0x14`.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5F80-0x004B60E1, 353 bytes,
 //                 digest 7008df670ec82806c208a728e050b93acf7ce0d8b4a333b9ef0d2ef74bae3442;
@@ -131,7 +135,7 @@ inline void* Sys_Resource(const char* context, void* arg2, std::int32_t arg3)
 // Host/test configuration for the resource node pool (`0x00943E20..0x00943E38`).
 void Resource_InitPoolForTest(std::size_t capacity = 64);
 [[nodiscard]] std::int32_t Resource_GetActiveCount() noexcept;
-void Host_SetSysAllocateMemory5(SysAllocateMemory5Fn fn) noexcept;
-void Host_SetSysOpenFileStream5(SysOpenFileStream5Fn fn) noexcept;
+void Sys_SetAllocateMemory5(SysAllocateMemory5Fn fn) noexcept;
+void Sys_SetOpenFileStream5(SysOpenFileStream5Fn fn) noexcept;
 
 } // namespace igi::retail::resource

@@ -13,6 +13,13 @@ using QScriptParseAndAssembleFn = std::int32_t (*)(const char* qas_path, void* q
 using QScriptAssembleFn = std::int32_t (*)(const char* qvm_path, const char* qas_path);
 using QvmErrorCallbackFn = std::int32_t (*)(const char* message, std::int32_t user_data);
 
+// Injectable boundaries for the two Qvm_Cleanup release callees that are not yet
+// transcribed: retail `0x004BD380` (standalone block release) and `0x004B0D10`
+// (pointer-header block release). The defaults return 0 until their allocator-free
+// chains are ported.
+using SysQvmStandaloneReleaseFn = std::int32_t (*)(void* standalone);
+using SysQvmBlockReleaseFn = std::int32_t (*)(void* context);
+
 // Native: Script_GetDebugCompileState() - VA 0x0048F1D0 - complete port.
 // Previous catalog alias: FX_FragmentSimulate_24.
 // Behavior: returns the engine debug/compile-scripts state dword `0x005C8BEC` (`mov eax, [0x005C8BEC]; ret`).
@@ -130,10 +137,12 @@ std::int32_t Qvm_Cleanup(void* qvm);
 void* Qvm_Load(const char* qvm_path);
 
 // Host/test configuration for QVM globals and optional compiler callbacks.
-void Host_SetQvmDebugCompileFlag(std::int32_t enabled) noexcept;
-void Host_SetQvmForcePrecompiledFlag(std::int32_t enabled) noexcept;
-void Host_SetSysDispatchOpcode7(SysDispatchOpcode7Fn fn) noexcept;
-void Host_SetSysResolveSymbol28(SysResolveSymbol28Fn fn) noexcept;
+void Script_SetDebugCompileFlag(std::int32_t enabled) noexcept;
+void Script_SetForcePrecompiledFlag(std::int32_t enabled) noexcept;
+void Qvm_SetDispatchOpcode7(SysDispatchOpcode7Fn fn) noexcept;
+void Sys_SetResolveSymbol28(SysResolveSymbol28Fn fn) noexcept;
+void Sys_SetQvmStandaloneRelease(SysQvmStandaloneReleaseFn fn) noexcept;
+void Sys_SetQvmBlockRelease(SysQvmBlockReleaseFn fn) noexcept;
 [[nodiscard]] std::int32_t Qvm_GetLastPopStack23Value() noexcept;
 
 } // namespace igi::retail::script

@@ -10,9 +10,9 @@
 
 extern "C" {
 
-std::uint32_t DAT_00BC2380 = 0U;
-std::uint32_t DAT_00BC2358[igi::retail::config::action_table_size] = {};
-std::uint32_t DAT_00BC25BC[igi::retail::config::remap_table_size] = {};
+std::uint32_t InputRemap_ActionCount = 0U;
+std::uint32_t InputRemap_ActionTable[igi::retail::config::action_table_size] = {};
+std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size] = {};
 
 // Native: GOInRemap; retail VA 0x004037C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
@@ -27,10 +27,10 @@ std::uint32_t DAT_00BC25BC[igi::retail::config::remap_table_size] = {};
 //           slot arithmetic and the mask are the retail's.
 std::uint32_t IGI_RETAIL_CDECL GOInRemap(void* qvm_context)
 {
-    const std::uint32_t count = DAT_00BC2380;
-    const std::uint32_t action = DAT_00BC2358[count * igi::retail::config::action_table_stride];
+    const std::uint32_t count = InputRemap_ActionCount;
+    const std::uint32_t action = InputRemap_ActionTable[count * igi::retail::config::action_table_stride];
     const std::uint32_t slot = (count - 1U) * 115U + action;
-    std::uint32_t* const entry = DAT_00BC25BC + slot * igi::retail::config::remap_table_stride;
+    std::uint32_t* const entry = InputRemap_Table + slot * igi::retail::config::remap_table_stride;
 
     // The retail reads the arguments through the frame reader at 0x004B8A20,
     // which returns the argument value of the frame at the given index.

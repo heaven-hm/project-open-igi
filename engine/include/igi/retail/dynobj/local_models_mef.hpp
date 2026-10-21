@@ -39,6 +39,6 @@ inline void* DynObj_LocalModelsSMef(const char* model_name)
 using ModelBackendInitFn = void (*)(void** mesh_and_container);
 
 [[nodiscard]] const char* DynObj_GetModelPathBuffer();
-void Host_SetModelBackendInit(std::int32_t backend_id, ModelBackendInitFn callback);
+void Model_SetBackendInit(std::int32_t backend_id, ModelBackendInitFn callback);
 
 } // namespace igi::retail::dynobj

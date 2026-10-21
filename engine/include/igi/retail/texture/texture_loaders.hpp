@@ -135,7 +135,7 @@ inline std::int32_t* Terrain_TextureFileNotOfRequ(const char* arg1)
 //           allocates `count * 0x24` bytes at `*(context + 0x34)` and `count * 0x0C` bytes at
 //           `*(context + 0x38)` via Mem_Alloc (0x004B0C60) when `count > 0` (or clears both to 0),
 //           and iterates each NUL-terminated texture name formatting `"LOCAL:textures/%s.tex"` into
-//           `0x00A4EC6C` via Game_DataSymbolLoad (0x004A53B3) and calling
+//           `0x00A4EC6C` via sprintf (0x004A53B3) and calling
 //           Texture_LoadLoopTextureFile (0x004B24C0).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF790-0x004CF865, 213 bytes,
 //                 digest 75a65077e61f7571a67d6370e3eec880541dbaafcea3aed7af6dec07cf49002f;
@@ -152,9 +152,9 @@ inline void* DynObj_LocalTexturesSTex(void* context)
 
 // Host/test configuration for texture backend state and callbacks.
 [[nodiscard]] std::int8_t Texture_GetUploadFlag() noexcept;
-void Host_SetTextureBackendId(std::int32_t id) noexcept;
-void Host_SetTextureCallbackSlots(std::int32_t slot_primary, std::int32_t slot_secondary,
+void Texture_SetBackendId(std::int32_t id) noexcept;
+void Texture_SetCallbackSlots(std::int32_t slot_primary, std::int32_t slot_secondary,
                                   std::int32_t slot_palette) noexcept;
-void Host_SetTextureBackendCallback(std::int32_t slot, TextureBackendDispatchFn fn) noexcept;
+void Texture_SetBackendCallback(std::int32_t slot, TextureBackendDispatchFn fn) noexcept;
 
 } // namespace igi::retail::texture

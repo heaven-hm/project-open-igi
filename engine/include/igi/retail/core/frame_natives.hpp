@@ -33,15 +33,15 @@ static_assert(sizeof(FrameDispatchRecordView) == 0x30);
 
 extern "C" {
 
-extern std::jmp_buf DAT_0054F8E0;
-extern std::uint8_t DAT_005C8DE8;
-extern std::int32_t DAT_005C8BFC;
-extern igi::retail::core::FrameFlagHandler DAT_005C8C18;
-extern std::int32_t DAT_005C8C1C;
-extern igi::retail::core::FrameDispatchRecordView* DAT_00567C8C;
+extern std::jmp_buf QTask_SetjmpFrame;
+extern std::uint8_t Loop_StatusByte;
+extern std::int32_t AppContext_IsActive;
+extern igi::retail::core::FrameFlagHandler AppContext_OptionalHandler;
+extern std::int32_t AppContext_OptionalHandlerContext;
+extern igi::retail::core::FrameDispatchRecordView* Game_FrameDispatchRecord;
 // The phase 1 base of the retail handler table, 0x00A970E0. The table lives in
 // task_types.cpp, because the retail stores the class handlers in it.
-igi::retail::core::FrameDispatchCallback* DAT_00A970E0();
+igi::retail::core::FrameDispatchCallback* QTask_Phase1HandlerTable();
 
 // Native: QTask_OpenEvent() - VA 0x00401050 - complete port.
 // Behavior: establishes the retail __setjmp3 frame boundary on 0x0054F8E0; when 0, fetches

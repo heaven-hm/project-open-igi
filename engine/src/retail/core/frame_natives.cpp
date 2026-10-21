@@ -12,12 +12,12 @@
 
 extern "C" {
 
-std::jmp_buf DAT_0054F8E0{};
-std::uint8_t DAT_005C8DE8 = 0U;
-std::int32_t DAT_005C8BFC = 0;
-igi::retail::core::FrameFlagHandler DAT_005C8C18 = nullptr;
-std::int32_t DAT_005C8C1C = 0;
-igi::retail::core::FrameDispatchRecordView* DAT_00567C8C = nullptr;
+std::jmp_buf QTask_SetjmpFrame{};
+std::uint8_t Loop_StatusByte = 0U;
+std::int32_t AppContext_IsActive = 0;
+igi::retail::core::FrameFlagHandler AppContext_OptionalHandler = nullptr;
+std::int32_t AppContext_OptionalHandlerContext = 0;
+igi::retail::core::FrameDispatchRecordView* Game_FrameDispatchRecord = nullptr;
 
 // Native: Game_GetContext; retail VA 0x00402880; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
@@ -26,7 +26,7 @@ igi::retail::core::FrameDispatchRecordView* DAT_00567C8C = nullptr;
 // Status/limits: VERIFIED; x86 global pointer load and EAX return, with no caller-visible writes; emulator evidence, not a live game process.
 igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext()
 {
-    return DAT_00567C8C;
+    return Game_FrameDispatchRecord;
 }
 
 // Native: Flow_SetState; retail VA 0x004028A0; signature/calling convention unknown.
@@ -36,7 +36,7 @@ igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext()
 // Status/limits: VERIFIED; valid x86 context, exact DWORD store and EAX bits; original source type unknown; emulator evidence.
 std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value)
 {
-    DAT_00567C8C->unknown_0x2C = value;
+    Game_FrameDispatchRecord->unknown_0x2C = value;
     return value;
 }
 
@@ -47,7 +47,7 @@ std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact instruction behavior.
 void IGI_RETAIL_CDECL Loop_SetStatusByte(std::uint8_t value)
 {
-    DAT_005C8DE8 = value;
+    Loop_StatusByte = value;
 }
 
 // Native: QTask_OpenEvent; retail VA 0x00401050; signature/calling convention unknown.
@@ -57,10 +57,10 @@ void IGI_RETAIL_CDECL Loop_SetStatusByte(std::uint8_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact control flow, offsets, and call order.
 void IGI_RETAIL_CDECL QTask_OpenEvent()
 {
-    if (setjmp(DAT_0054F8E0) == 0) {
+    if (setjmp(QTask_SetjmpFrame) == 0) {
         const std::uint16_t dispatch_index = Game_GetContext()->dispatch_table_index;
         const igi::retail::core::FrameDispatchCallback dispatch_callback =
-            DAT_00A970E0()[dispatch_index];
+            QTask_Phase1HandlerTable()[dispatch_index];
         dispatch_callback(Game_GetContext());
         return;
     }
@@ -75,12 +75,12 @@ void IGI_RETAIL_CDECL QTask_OpenEvent()
 // Status/limits: STRUCTURALLY_VERIFIED; the handler globals are read exactly as the retail reads them.
 std::int32_t IGI_RETAIL_CDECL AppContext_SetIsActive(std::int32_t value)
 {
-    DAT_005C8BFC = static_cast<std::int8_t>(value);
-    if (DAT_005C8C18 == nullptr)
+    AppContext_IsActive = static_cast<std::int8_t>(value);
+    if (AppContext_OptionalHandler == nullptr)
     {
         return value;
     }
-    return DAT_005C8C18(value, DAT_005C8C1C);
+    return AppContext_OptionalHandler(value, AppContext_OptionalHandlerContext);
 }
 
 // Native: AppContext_GetIsActive; retail VA 0x0048F170; signature/calling convention unknown.
@@ -90,7 +90,7 @@ std::int32_t IGI_RETAIL_CDECL AppContext_SetIsActive(std::int32_t value)
 // Status/limits: STRUCTURALLY_VERIFIED; the load and the EAX return match the retail exactly.
 std::int32_t IGI_RETAIL_CDECL AppContext_GetIsActive()
 {
-    return DAT_005C8BFC;
+    return AppContext_IsActive;
 }
 
 } // extern "C"

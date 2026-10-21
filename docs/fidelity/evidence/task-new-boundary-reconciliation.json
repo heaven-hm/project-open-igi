@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "subject": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "format": "PE32",
+    "architecture": "x86",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+  },
+  "candidate": {
+    "address": "0x004F0780",
+    "name": "Task_New",
+    "source_path": "scripts/GameNatives/task/004F0780-Task_New.cpp",
+    "source_sha256": "028682f3247ef50b114cf033d8d2257bcd51525e19e509752d0056e742936a60",
+    "source_comment_status": "CFG 98.6% (PASS; structural only); runtime behavior not verified",
+    "source_signature": "int Task_New(int context, void* arg2, float arg3)"
+  },
+  "radare2": {
+    "version": "6.2.0",
+    "commands": [
+      "aaa",
+      "af @ 0x004F0780",
+      "afi @ 0x004F0780",
+      "afbj @ 0x004F0780"
+    ],
+    "observations": {
+      "entry": "0x004F0780",
+      "body_end_exclusive": "0x004F0A5B",
+      "size_bytes": 731,
+      "calling_convention": "cdecl",
+      "argument_count": 3,
+      "basic_blocks": 30,
+      "cfg_edges": 44,
+      "instructions": 228
+    }
+  },
+  "rea_ghidra": {
+    "provider": "Ghidra 12.1.2 via REA MCP",
+    "instruction_evidence_id": "ev_70d9926470d0bb1594c1ad8161ec295bbacea9386909fc9e3d668fa6885398e1",
+    "registration_evidence_id": "ev_3c29b05709d9a30698521d733f2ee304c709cb46b50e058e4efa90b5213e3aa1",
+    "registration": {
+      "initializer_address": "0x004EE970",
+      "initializer_body": {"start": "0x004EE970", "end_inclusive": "0x004EF7EC", "bytes": 3709},
+      "registration_call": "FUN_004B8890(s_Task_New_00539ABC, &LAB_004F0780, 0, 0xFFFFFFFF)",
+      "xref_to_candidate": "0x004EF795",
+      "interpretation": "The retail initialization routine registers the callback at 0x004F0780 under the Task_New string. This supports the name association, but does not establish the callback's function boundary, signature, or body equivalence."
+    },
+    "instruction_observation": {
+      "address": "0x004F0780",
+      "bytes": "a016dd5400",
+      "disassembly": "MOV AL,[0x0054DD16]",
+      "function": null
+    },
+    "procedure_info_result": "Ghidra FunctionManager reports no procedure at 0x004F0780; analyze_function therefore cannot produce a function dossier."
+  },
+  "binary_ninja": {
+    "status": "unavailable",
+    "observation": "No MCP endpoint is registered in this session; the configured local endpoint 127.0.0.1:24642 refused the connection."
+  },
+  "assessment": {
+    "status": "ANALYZED_BOUNDARY_DISAGREEMENT",
+    "facts": [
+      "Radare2 identifies executable code at the candidate address and recovers a complete 731-byte cdecl routine with three stack arguments.",
+      "REA/Ghidra decodes the entry bytes but does not currently define a procedure at the candidate address.",
+      "REA/Ghidra independently shows the retail initializer registering 0x004F0780 under the Task_New name.",
+      "The GameNatives export is generated pseudocode with unresolved helper/global types and reports structural-only status; its claimed CFG score was not independently reproduced in this review."
+    ],
+    "limits": [
+      "No independent Ghidra function boundary or CFG is available for the candidate.",
+      "No live retail Task_New invocation trace was collected.",
+      "No Task_New implementation is added to the engine by this evidence record."
+    ],
+    "decision": "The Task_New name association is supported, but do not promote or copy this candidate into the engine until the Ghidra function boundary and source control flow are reconciled against the retail bytes."
+  }
+}

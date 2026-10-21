@@ -88,17 +88,17 @@ std::int32_t Resource_GetGlobalStreamFlag()
     return global_stream_flag;
 }
 
-void Host_SetPushStack(std::int32_t device, DispatchPushStackFn operation)
+void Device_SetPushStack(std::int32_t device, DispatchPushStackFn operation)
 {
     store_operation(push_stack_table, device, operation);
 }
 
-void Host_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation)
+void Device_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation)
 {
     store_operation(check_heap_table, device, operation);
 }
 
-void Host_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation)
+void Device_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation)
 {
     store_operation(read_file_block_table, device, operation);
 }

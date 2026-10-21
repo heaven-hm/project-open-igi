@@ -118,7 +118,8 @@ std::int32_t Transcontext_BuildViewBlock(
     std::memcpy(ctx + 0x48, &screen_fov_x, sizeof(screen_fov_x));
 
     // Retail: call Display_ComputeScreenAspect; fmul [ctx+0x48]; fstp [ctx+0x4C].
-    const float screen_fov_y = static_cast<float>(aspect * static_cast<double>(screen_fov_x));
+    const float screen_fov_y = static_cast<float>(
+        Display_ComputeScreenAspect() * static_cast<double>(screen_fov_x));
     std::memcpy(ctx + 0x4C, &screen_fov_y, sizeof(screen_fov_y));
 
     // Retail: fld [0x00BCABB8]; fadd [0x00BCABC8]; fstp [ctx+0x50]; same for Y with 0x00BCABBC/0x00BCABCC.

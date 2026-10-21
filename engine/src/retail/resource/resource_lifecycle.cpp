@@ -85,17 +85,17 @@ void* Resource_Load(const char* resource_path, std::int32_t* out_size)
     return nullptr;
 }
 
-void Host_SetSysFreeMemory16(SysFreeMemory16Fn fn)
+void Sys_SetFreeMemory16(SysFreeMemory16Fn fn)
 {
     g_sys_free_memory_16 = fn;
 }
 
-void Host_SetResourcePackUnpack(ResourcePackUnpackFn fn)
+void Resource_SetPackUnpack(ResourcePackUnpackFn fn)
 {
     g_resource_pack_unpack = fn;
 }
 
-void Host_SetSysResource(SysResourceFn fn)
+void Sys_SetResource(SysResourceFn fn)
 {
     g_sys_resource = fn;
 }

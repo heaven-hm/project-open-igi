@@ -20,7 +20,7 @@ std::span<const std::byte> QvmLoadedScript::file_bytes() const noexcept
     return resource_handle_->bytes;
 }
 
-QvmLoadedScript Host_LoadQvmScript(
+QvmLoadedScript Qvm_LoadScript(
     resource::ResourceCache& resource_cache,
     const std::filesystem::path& qvm_path)
 {
@@ -28,7 +28,7 @@ QvmLoadedScript Host_LoadQvmScript(
     if (compiled_path.extension() == ".qsc" || compiled_path.extension() == ".QSC") {
         compiled_path.replace_extension(compiled_path.extension() == ".QSC" ? ".QVM" : ".qvm");
     }
-    const resource::ResourceHandle resource_handle = resource::Host_LoadResourceFile(resource_cache, compiled_path);
+    const resource::ResourceHandle resource_handle = resource::Resource_OpenFile(resource_cache, compiled_path);
     try {
         QvmCompiledProgram compiled_program = Qvm_LoadCompiledProgram(resource_handle->bytes);
         return QvmLoadedScript(resource_handle, std::move(compiled_program));

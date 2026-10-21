@@ -1,3 +1,8 @@
+// HOST HELPER: host command-line integration of IGIPatch debug feature callbacks.
+// Artifact: port adaptation; IGIPatch hook references are documented in debug_command_line.hpp.
+// Tools/evidence: engine/tests/core/debug_command_line_test.cpp; header provenance notes.
+// Behavior/CFG: parses patch-defined switches and dispatches the port's context setters.
+// Status/limits: HOST HELPER; these switch names are not retail natives; runtime polarity remains unverified.
 #include "igi/retail/core/debug_command_line.hpp"
 
 #include "igi/retail/core/app_context.hpp"

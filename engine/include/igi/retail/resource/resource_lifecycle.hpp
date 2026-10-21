@@ -44,8 +44,8 @@ using SysFreeMemory16Fn = std::int32_t (*)(ResourceHashNode* node);
 using ResourcePackUnpackFn = void* (*)(const char* resource_path, std::int32_t* out_size);
 using SysResourceFn = void* (*)(const char* resolved_alias, void* data, std::int32_t size);
 
-void Host_SetSysFreeMemory16(SysFreeMemory16Fn fn);
-void Host_SetResourcePackUnpack(ResourcePackUnpackFn fn);
-void Host_SetSysResource(SysResourceFn fn);
+void Sys_SetFreeMemory16(SysFreeMemory16Fn fn);
+void Resource_SetPackUnpack(ResourcePackUnpackFn fn);
+void Sys_SetResource(SysResourceFn fn);
 
 } // namespace igi::retail::resource

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "igi/retail/terrain/terrain_loaders.hpp"
+#include "retail_animation.hpp"
 
 #include <array>
 #include <cstdint>
@@ -63,9 +64,8 @@ class TerrainCollisionGrid
     bool indexed_ = false;
 };
 
-// One frame of player input, using the retail bindings decoded from config.qvm:
-// W/A/S/D move, E jump, C crouch toggle, LSHIFT walk/run toggle, mouse look at the retail
-// 0.0035 radians per mouse count.
+// One frame of player input. The platform adapter resolves action keys from config.qvm;
+// mouse look currently follows the retail 0.0035-radian-per-count rate.
 struct PlayerInputFrame
 {
     bool move_forward = false;
@@ -94,11 +94,33 @@ class PlayerController
     // damping and no terminal velocity.
     static constexpr double gravity_per_tick_squared = 84.741692;
 
-    // humanplayer.qvm DefineHumanPlayerGeneral(1.75, 17.5, 27, 0.5, ...): jump horizontal
-    // 17.5 km/h, jump vertical 27 km/h, air-control speed 0.5 km/h.
-    static constexpr double jump_horizontal_per_tick = 17.5 * units_per_tick_per_kmh;
-    static constexpr double jump_vertical_per_tick = 27.0 * units_per_tick_per_kmh; // 1024 exactly
-    static constexpr double air_control_per_tick = 0.5 * units_per_tick_per_kmh;
+    // The movement values come from humanplayer.qvm DefineHumanPlayerGeneral. The host
+    // decodes them with config::decode_human_player_general and installs them before the
+    // first update; the controller compiles no speed of its own.
+    struct HumanPlayerParameters
+    {
+        double root_motion_scale = 0.0;   // argument 0, dimensionless
+        double jump_horizontal_kmh = 0.0; // argument 1
+        double jump_vertical_kmh = 0.0;   // argument 2
+        double air_control_kmh = 0.0;     // argument 3
+    };
+
+    // HOST HELPER: installs the decoded humanplayer.qvm parameters. update() refuses to
+    // run before this call, so a missing parameter file cannot leave a default speed.
+    void set_parameters(const HumanPlayerParameters& parameters) noexcept;
+    [[nodiscard]] const HumanPlayerParameters& parameters() const noexcept {
+        return parameters_;
+    }
+
+    // HOST HELPER: installs the retail animation clips for the player's skeleton
+    // (COMMON/ANIMS/000.IFF, the 000_01_1 model rig). Ground locomotion samples the
+    // retail root translation track; update() refuses to walk when the clips were not
+    // installed or the selected state has no root track.
+    void set_locomotion_clips(std::vector<AnimationClip> clips);
+
+    // Retail animation clock (0x004D2D30): Retail_AnimationTicksPerSecond = 4800.0 / ticks_per_second,
+    // i.e. 160 ms of clip time per 30 Hz tick.
+    static constexpr double animation_step_ms = 4800.0 / 30.0;
 
     // Ground query (retail VA 0x00462390): step-down budgets 0 airborne / 2048 grounded /
     // 8192 sliding; probe origin 1638.4 standing, 819.2 crouched; roof clearance 7372.8.
@@ -124,21 +146,21 @@ class PlayerController
     // Retail look rate (HumanView), the value the look was hardcoded to.
     static constexpr float look_radians_per_count = 0.0035F;
 
-    // Ground locomotion. Retail drives walking by animation root motion, not by a speed
-    // constant, so the port stands in with the jump's take-off speed as the run reference
-    // (17.5 km/h covers almost exactly the forward run animation) and fixed walk and crouch
-    // fractions until locomotion root motion exists.
-    static constexpr double run_fraction_of_reference = 1.0;
-    static constexpr double walk_fraction_of_reference = 0.5;
-    static constexpr double crouch_fraction_of_reference = 0.3333333;
+    // Ground locomotion requires authored animation root-motion samples. No fallback
+    // walking/running/crouching speed is defined; requesting it without those samples fails.
 
     // HOST HELPER: places the human at a feet position (retail units) and level reference.
     void reset(const std::array<double, 3>& feet_position, double yaw, double pitch,
                const std::array<double, 3>& level_origin, double world_scale);
 
     // HOST HELPER: advances the human by wall-clock seconds in fixed 30 Hz retail ticks.
+    // Unsupported ground locomotion throws; reset/discard the controller after that
+    // failure because input/timing state may already have advanced.
     void update(const PlayerInputFrame& input, double delta_seconds,
                 const TerrainCollisionGrid& ground);
+
+    // HOST HELPER: existing look integration, independent of movement availability.
+    void update_view(const PlayerInputFrame& input);
 
     // HOST HELPER: first-person eye through the transcribed retail native (0x00465820).
     [[nodiscard]] std::array<double, 3> eye_position() const;
@@ -156,6 +178,9 @@ class PlayerController
     void tick_step(const PlayerInputFrame& input, bool jump_pressed,
                    const TerrainCollisionGrid& ground);
     void apply_slope_slide(const std::array<float, 3>& normal);
+    [[nodiscard]] int select_locomotion_state(const PlayerInputFrame& input) const noexcept;
+    [[nodiscard]] const AnimationClip* find_locomotion_clip(int state) const noexcept;
+    [[nodiscard]] std::array<double, 3> advance_root_motion(const AnimationClip& clip);
 
     std::array<double, 3> position_{};   // feet, retail units
     std::array<double, 3> velocity_{};   // retail units per tick
@@ -174,6 +199,11 @@ class PlayerController
     bool jump_held_ = false;
     bool crouch_held_ = false;
     bool walk_toggle_held_ = false;
+    HumanPlayerParameters parameters_{};
+    bool parameters_set_ = false;
+    std::vector<AnimationClip> locomotion_clips_;
+    int active_locomotion_state_ = -1;
+    double animation_time_ms_ = 0.0;
 };
 
 } // namespace igi::host

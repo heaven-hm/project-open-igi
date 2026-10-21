@@ -1,0 +1,66 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x0048F530",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "ca4d947c9375018c234500028970b3b0dd3f89e96416a420ee4f9fcfd9763756",
+ "reviewed": true,
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja reports the entry at 0x0048F530 as WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc) and radare2 finds the same entry with a 994-byte body that opens with the push of the string \"IGIMUTEX\" and the call to CreateMutexA. The candidate implements that entry and no other."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "The retail reads the HINSTANCE from the first stack slot and the second int from the slot at 0x0C, and returns the message wParam in EAX under the stdcall convention. The candidate keeps the same two stack arguments, the same argument order and the same return register, so the calling convention at the call site is unchanged."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The retail's literals are reproduced: the mutex name \"IGIMUTEX\", the window class name at 0x00541D68 used for both the class and the menu, the icon and cursor id 0x7F00, the background brush 7, the class style 3, the screen metric offsets 0x1E0 and 0x280, the DirectX version bound 0x700, the sleep of 0x1F4 and the message box styles MB_ICONHAND and MB_OK. The one deliberate deviation is the mutex name, which the candidate takes from OPEN_IGI_MUTEX_NAME so retail and candidate can run side by side; the retail value is documented in the source and in the record's limitations."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The retail writes the status byte at 0x005C8DE8, the context globals at 0x005C8DF0, 0x005C8DF4 and 0x005C8DF8, clears 0xC0 bytes at 0x005C8D28 and reads the class name table at 0x00541D68. The candidate uses the same addresses and the same clear length."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The retail order is CreateMutexA, GetLastError for ERROR_ALREADY_EXISTS and ERROR_INVALID_HANDLE, CoInitialize, GetForegroundWindow, LoadIconA, LoadCursorA, RegisterClassA, the init call block, AppMain_ParseCmdLineArgs for \"Window\", \"WinInput\", \"Germany\" and \"USA\", Display_DinputDll, CreateWindowExA, ShowCursor, ShowWindow, the PeekMessageA and GetMessageA loop, SetForegroundWindow, UnregisterClassA, CoUninitialize and ReleaseMutex. The candidate performs the same calls in the same order."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "The retail returns 0 after the \"IGI is already running.\" message box and after the \"Couldn't open window\" message box, and returns the message wParam when GetMessageA reports WM_QUIT. The candidate keeps the three exits, including the loop that only ends when the status byte at 0x005C8DE8 is cleared."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The body performs no floating-point arithmetic. It reads the x87 control word to check the rounding mode and reports \"Invalid FPU rounding mode.\" when the check fails, but it computes nothing in floating point."
+  }
+ ],
+ "runtime_contract": {
+  "scope": "scalar-arguments-and-result",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
+  },
+  "no_side_effects": true,
+  "note": "The native takes an HINSTANCE and an int and returns a WPARAM, so the generic scalar probe cannot compare it exactly; the retail behaviour is checked with the paired Frida probes and the typed fixtures instead."
+ },
+ "limits": [
+  "The mutex name is OPENIGIMUTEX_TEST in the candidate and IGIMUTEX in the retail, so the two games can run side by side under the same probes. The retail value is documented in the source and must be restored for exact parity.",
+  "Structural verification only: the cfg gate and angr CFGFast. The runtime behaviour is checked with the paired Frida probes."
+ ]
+}

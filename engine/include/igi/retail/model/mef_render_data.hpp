@@ -1,11 +1,15 @@
 #pragma once
 
 #include "igi/retail/model/mef_model_loader.hpp"
+#include "igi/retail/model/iff_skeleton.hpp"
 
 #include <array>
 
 namespace igi::retail::model
 {
+
+// The rig a skinned model uses, defined in mef_bone_rig.hpp.
+struct MefBoneRig;
 
 struct MefRenderVertex
 {
@@ -36,6 +40,12 @@ struct MefRenderData
 // Binary Ninja export and radare2 assembly establish 28/32-byte batch headers and linked index lists.
 // Vertex upload at 0x0049B4B0 copies 32-byte format-0 and 40-byte format-3 records.
 // This helper decodes those fields; it is not a separate original game entry point.
-[[nodiscard]] MefRenderData Display_DecodeMeshRenderData(const MefModel& model);
+// The candidate skeletons for the skinned models, read from the retail
+// animation files the model package names. A skinned MEF carries no skeleton,
+// so the rig comes from the retail animation IFF; the skeleton that fits the
+// model's own influence records is selected per model.
+[[nodiscard]] MefRenderData Display_DecodeMeshRenderData(const MefModel& model,
+                                                          const IffSkeletonTable& skeletons = {},
+                                                          MefBoneRig* out_rig = nullptr);
 
 } // namespace igi::retail::model

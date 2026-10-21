@@ -19,7 +19,7 @@ std::int32_t Render_GetActiveBackendId()
     return render_backend_id;
 }
 
-void Host_SetRenderBackendId(std::int32_t backend_id)
+void Render_SetBackendId(std::int32_t backend_id)
 {
     render_backend_id = backend_id;
 }

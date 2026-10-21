@@ -1,0 +1,2284 @@
+{
+  "address": "0x00401900",
+  "scope": "retail-tasktype-registration-order-v1",
+  "retailImage": "igi.exe",
+  "retailSha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "probe": "scripts/frida_register_trace.js",
+  "probeSha256": "d00697c36343f7c70c5ff2f03241529ca6ce12d639a6a44016fccee1a13b73a8",
+  "rawTrace": "build/runtime-traces/retail-register-order.json",
+  "level": 1,
+  "abi": {
+    "function": "TaskType_Register",
+    "callingConvention": "stdcall",
+    "arguments": [
+      {
+        "index": 0,
+        "type": "char*",
+        "meaning": "class name string (stored at table slot+0)"
+      },
+      {
+        "index": 1,
+        "type": "uint32",
+        "meaning": "object size in bytes (stored at table slot+4)"
+      },
+      {
+        "index": 2,
+        "type": "uint32",
+        "meaning": "parent class id (low 16 bits stored at table slot+8)"
+      }
+    ],
+    "returnValue": "uint16 class id (slot index, sequential from 0)",
+    "evidence": [
+      "Function body 0x00401927-0x00401954: ecx=[esp+0xc] (arg1 size), eax=[esp+8] (arg0 name), edi=[esp+0x18] after push esi/push edi = [entry+0xc] (arg2 parent); stores slot+0=eax, slot+4=ecx, slot+8=di (16-bit).",
+      "Call site 0x0041554b-0x00415556 (Game): push eax(parent from 0x4018f0); push 0x158; push str.Game; call 0x401900; mov word [0x57b1a2], ax.",
+      "Call site 0x00401fc9-0x00401fd1 (Flow): push eax; push 0x54; push str.Flow; call 0x401900.",
+      "0x004018f0 is `mov ax, word [0x54f928]; ret` - the last-registered class id used as implicit parent.",
+      "Parent value 0x181 (385) appears for root classes (QTask, GFXCapsViewer) and is compared against 0x181 inside 0x00401900 at 0x0040194f."
+    ]
+  },
+  "findings": [
+    "Retail registers 279 task-type classes during level-1 startup; class ids are strictly sequential 0..278.",
+    "Class ids measured live: QTask=0, QObj=1, DynCubeObj=2, RigidDynCubeObj=8, LevelFlow=123, Game=124, Flow=125, EditVariable=126, SubLevel=127, GuardGenerator=128, ConditionalContainer=129.",
+    "Object sizes match the earlier measured class slots exactly: LevelFlow 0x128, Game 0x158, Flow 0x54, EditVariable 0xE0, SubLevel 0x120, AIGraph 0xC0.",
+    "Some callers pass stale stack as the parent argument (e.g. DynCubeObj parent=0x01D14101, BoneMagicObj parent=0x3F800000); the table stores the low 16 bits of whatever was passed. The port must replay these values, not clean them up."
+  ],
+  "limits": [
+    "Attach happens as soon as Frida first lists the process; any registration before that moment is unobserved. settleExpiredWithoutRegistration=false here and the id sequence starts at 0 with no gaps, so no early registration is believed missed.",
+    "stackSlot4 is caller stack residue read at [entry+0x10], not a function argument; recorded for completeness only.",
+    "One level-1 run; class registration is per-process startup state, so the order is expected stable across levels, but only level 1 was captured."
+  ],
+  "registrationOrder": [
+    {
+      "classId": 0,
+      "name": "QTask",
+      "namePointer": "0x536164",
+      "objectSize": 32,
+      "parentRaw": 385,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 1,
+      "name": "QObj",
+      "namePointer": "0x54863c",
+      "objectSize": 80,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 2,
+      "name": "DynCubeObj",
+      "namePointer": "0x548760",
+      "objectSize": 104,
+      "parentRaw": 30474241,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 3,
+      "name": "Hazinglayers",
+      "namePointer": "0x54866c",
+      "objectSize": 144,
+      "parentRaw": 1,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 4,
+      "name": "TransparencyList",
+      "namePointer": "0x54f8c4",
+      "objectSize": 128,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 5,
+      "name": "PointlightDynCubeObj",
+      "namePointer": "0x54f818",
+      "objectSize": 128,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 6,
+      "name": "SpotlightDynCubeObj",
+      "namePointer": "0x54f804",
+      "objectSize": 144,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 7,
+      "name": "Sprite3D",
+      "namePointer": "0x54f874",
+      "objectSize": 136,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 8,
+      "name": "RigidDynCubeObj",
+      "namePointer": "0x547f6c",
+      "objectSize": 240,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 9,
+      "name": "MagicObj",
+      "namePointer": "0x548660",
+      "objectSize": 312,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 10,
+      "name": "BoneDynCubeObj",
+      "namePointer": "0x54861c",
+      "objectSize": 216,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 11,
+      "name": "PolyListDynCubeObj",
+      "namePointer": "0x543c84",
+      "objectSize": 184,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 12,
+      "name": "SplineObjSegment",
+      "namePointer": "0x548748",
+      "objectSize": 1464,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 13,
+      "name": "Shadow",
+      "namePointer": "0x548740",
+      "objectSize": 292,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 14,
+      "name": "BoneMagicObj",
+      "namePointer": "0x54f864",
+      "objectSize": 304,
+      "parentRaw": 1065353226,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 15,
+      "name": "Sector",
+      "namePointer": "0x5486c4",
+      "objectSize": 328,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 16,
+      "name": "SectorObject",
+      "namePointer": "0x5486b4",
+      "objectSize": 416,
+      "parentRaw": 15,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 17,
+      "name": "SectorInteriorObject",
+      "namePointer": "0x54869c",
+      "objectSize": 240,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 18,
+      "name": "MagicObjContainer",
+      "namePointer": "0x5486f0",
+      "objectSize": 36,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 19,
+      "name": "Rain",
+      "namePointer": "0x543c5c",
+      "objectSize": 22224,
+      "parentRaw": 12779522,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 20,
+      "name": "SoundSysController",
+      "namePointer": "0x548884",
+      "objectSize": 32,
+      "parentRaw": 30474240,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 21,
+      "name": "SoundSysDef",
+      "namePointer": "0x548878",
+      "objectSize": 160,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 22,
+      "name": "SoundSysDefParent",
+      "namePointer": "0x548864",
+      "objectSize": 160,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 23,
+      "name": "SoundSysMicrophone",
+      "namePointer": "0x54db6c",
+      "objectSize": 104,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 24,
+      "name": "SoundDefGroup",
+      "namePointer": "0x54db4c",
+      "objectSize": 96,
+      "parentRaw": 0,
+      "stackSlot4": 512
+    },
+    {
+      "classId": 25,
+      "name": "SoundDefSound",
+      "namePointer": "0x54d9b8",
+      "objectSize": 304,
+      "parentRaw": 0,
+      "stackSlot4": 512
+    },
+    {
+      "classId": 26,
+      "name": "SoundDefGraph",
+      "namePointer": "0x54dadc",
+      "objectSize": 392,
+      "parentRaw": 0,
+      "stackSlot4": 512
+    },
+    {
+      "classId": 27,
+      "name": "SoundDefTriggerOnce",
+      "namePointer": "0x54da64",
+      "objectSize": 312,
+      "parentRaw": 0,
+      "stackSlot4": 512
+    },
+    {
+      "classId": 28,
+      "name": "Screen",
+      "namePointer": "0x5488d0",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 29,
+      "name": "ViewportQTask",
+      "namePointer": "0x54d990",
+      "objectSize": 200,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 30,
+      "name": "TerraDrawTask",
+      "namePointer": "0x54d9a4",
+      "objectSize": 36,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 31,
+      "name": "CameraControlTask",
+      "namePointer": "0x54d978",
+      "objectSize": 44,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 32,
+      "name": "FreeCamera",
+      "namePointer": "0x54f7d4",
+      "objectSize": 144,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 33,
+      "name": "DebugText",
+      "namePointer": "0x54d968",
+      "objectSize": 32,
+      "parentRaw": 12713984,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 34,
+      "name": "FadeOutStart",
+      "namePointer": "0x54da40",
+      "objectSize": 124,
+      "parentRaw": 53084160,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 35,
+      "name": "FadeOutEnd",
+      "namePointer": "0x54da34",
+      "objectSize": 124,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 36,
+      "name": "GlowTask",
+      "namePointer": "0x54da54",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 37,
+      "name": "ParticleSystemDynCubeObj",
+      "namePointer": "0x54f7b4",
+      "objectSize": 184,
+      "parentRaw": 2,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 38,
+      "name": "SpriteParticleSystemDynCubeObj",
+      "namePointer": "0x54f7e0",
+      "objectSize": 216,
+      "parentRaw": 11010085,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 39,
+      "name": "FlashTask",
+      "namePointer": "0x54f7a4",
+      "objectSize": 136,
+      "parentRaw": 0,
+      "stackSlot4": 2
+    },
+    {
+      "classId": 40,
+      "name": "LineFilter",
+      "namePointer": "0x543dc0",
+      "objectSize": 56,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 41,
+      "name": "WideScreenFilter",
+      "namePointer": "0x543dac",
+      "objectSize": 68,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 42,
+      "name": "BandFilter",
+      "namePointer": "0x543da0",
+      "objectSize": 116,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 43,
+      "name": "HandiCamFilter",
+      "namePointer": "0x543d90",
+      "objectSize": 84,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 44,
+      "name": "Particle2DDynCubeObjTask",
+      "namePointer": "0x54e56c",
+      "objectSize": 256,
+      "parentRaw": 5505026,
+      "stackSlot4": 25
+    },
+    {
+      "classId": 45,
+      "name": "CamTask",
+      "namePointer": "0x54f76c",
+      "objectSize": 136,
+      "parentRaw": 1715601408,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 46,
+      "name": "InputPort",
+      "namePointer": "0x54dbd0",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 47,
+      "name": "Sync",
+      "namePointer": "0x54e834",
+      "objectSize": 2452,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 48,
+      "name": "MenuItemTask",
+      "namePointer": "0x54e70c",
+      "objectSize": 68,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 49,
+      "name": "MenuItem",
+      "namePointer": "0x54e724",
+      "objectSize": 84,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 50,
+      "name": "PushButton",
+      "namePointer": "0x54dee8",
+      "objectSize": 124,
+      "parentRaw": 49,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 51,
+      "name": "SimBoneDynCubeObj",
+      "namePointer": "0x54f704",
+      "objectSize": 320,
+      "parentRaw": 10,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 52,
+      "name": "Level",
+      "namePointer": "0x539688",
+      "objectSize": 56,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 53,
+      "name": "Static",
+      "namePointer": "0x54e004",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 54,
+      "name": "Dynamic",
+      "namePointer": "0x54dffc",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 55,
+      "name": "Idle",
+      "namePointer": "0x541ba4",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 56,
+      "name": "CameraBase",
+      "namePointer": "0x54dff0",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 57,
+      "name": "LevelScript",
+      "namePointer": "0x54f6f4",
+      "objectSize": 40,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 58,
+      "name": "SkyTask",
+      "namePointer": "0x54f6e8",
+      "objectSize": 120,
+      "parentRaw": 30474240,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 59,
+      "name": "PhysicsObj",
+      "namePointer": "0x54e4d0",
+      "objectSize": 1824,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 60,
+      "name": "PhysicsMagicObj",
+      "namePointer": "0x54e68c",
+      "objectSize": 1896,
+      "parentRaw": 59,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 61,
+      "name": "EditorRigidObj",
+      "namePointer": "0x54e638",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 62,
+      "name": "DiscardTerrain",
+      "namePointer": "0x54f6d4",
+      "objectSize": 344,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 63,
+      "name": "DiscardTerrainArea",
+      "namePointer": "0x54f6c0",
+      "objectSize": 120,
+      "parentRaw": 30474248,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 64,
+      "name": "CubeModifier",
+      "namePointer": "0x54f6b0",
+      "objectSize": 376,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 65,
+      "name": "AnimTask",
+      "namePointer": "0x54e1f4",
+      "objectSize": 131424,
+      "parentRaw": 30474301,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 66,
+      "name": "TagItem",
+      "namePointer": "0x54e5cc",
+      "objectSize": 292,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 67,
+      "name": "TagItemInt32",
+      "namePointer": "0x54e5bc",
+      "objectSize": 296,
+      "parentRaw": 66,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 68,
+      "name": "TagItemReal32",
+      "namePointer": "0x54e5ac",
+      "objectSize": 296,
+      "parentRaw": 66,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 69,
+      "name": "TagItemString16",
+      "namePointer": "0x54e59c",
+      "objectSize": 308,
+      "parentRaw": 30474306,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 70,
+      "name": "TagItemString256",
+      "namePointer": "0x54e588",
+      "objectSize": 548,
+      "parentRaw": 66,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 71,
+      "name": "SplineObj",
+      "namePointer": "0x54e5f0",
+      "objectSize": 104,
+      "parentRaw": 30474240,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 72,
+      "name": "SplineObjWaypoint",
+      "namePointer": "0x54e5dc",
+      "objectSize": 424,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 73,
+      "name": "EditRigidObj",
+      "namePointer": "0x54e1c8",
+      "objectSize": 416,
+      "parentRaw": 17,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 74,
+      "name": "TextureModifier",
+      "namePointer": "0x54e7a4",
+      "objectSize": 240,
+      "parentRaw": 573702146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 75,
+      "name": "Water",
+      "namePointer": "0x54ed24",
+      "objectSize": 19528,
+      "parentRaw": 11010056,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 76,
+      "name": "EditHazinglayer",
+      "namePointer": "0x54f6a0",
+      "objectSize": 136,
+      "parentRaw": 65273917,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 77,
+      "name": "LODSettings",
+      "namePointer": "0x54dc14",
+      "objectSize": 64,
+      "parentRaw": 65273856,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 78,
+      "name": "ModelLODSettings",
+      "namePointer": "0x54dc00",
+      "objectSize": 68,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 79,
+      "name": "ModelLODSettingsContainer",
+      "namePointer": "0x54dbe4",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 80,
+      "name": "EditRigidObjAttachedToBone",
+      "namePointer": "0x54e6ec",
+      "objectSize": 312,
+      "parentRaw": 65273864,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 81,
+      "name": "CutScene",
+      "namePointer": "0x54e2b4",
+      "objectSize": 632,
+      "parentRaw": 10747965,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 82,
+      "name": "AnimScaleTask",
+      "namePointer": "0x54f690",
+      "objectSize": 131432,
+      "parentRaw": 5374017,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 83,
+      "name": "AnimRigidDynCubeObj",
+      "namePointer": "0x54f678",
+      "objectSize": 344,
+      "parentRaw": 65273864,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 84,
+      "name": "Graph",
+      "namePointer": "0x54df48",
+      "objectSize": 128,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 85,
+      "name": "GraphNode",
+      "namePointer": "0x54ed0c",
+      "objectSize": 280,
+      "parentRaw": 10944573,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 86,
+      "name": "AnimCam",
+      "namePointer": "0x54f410",
+      "objectSize": 544,
+      "parentRaw": 65273901,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 87,
+      "name": "AreaActivate",
+      "namePointer": "0x54e6a0",
+      "objectSize": 184,
+      "parentRaw": 65273917,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 88,
+      "name": "Vehicle",
+      "namePointer": "0x54e298",
+      "objectSize": 1864,
+      "parentRaw": 65273915,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 89,
+      "name": "GlobalLight",
+      "namePointer": "0x54f18c",
+      "objectSize": 440,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 90,
+      "name": "GlobalLightKeyframe",
+      "namePointer": "0x54f178",
+      "objectSize": 420,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 91,
+      "name": "Dirlight",
+      "namePointer": "0x54f0e8",
+      "objectSize": 100,
+      "parentRaw": 5046272,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 92,
+      "name": "DirlightKeyframe",
+      "namePointer": "0x54f0d4",
+      "objectSize": 84,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 93,
+      "name": "LightmapInfo",
+      "namePointer": "0x54f0ac",
+      "objectSize": 224,
+      "parentRaw": 5046272,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 94,
+      "name": "Lensflare",
+      "namePointer": "0x54f034",
+      "objectSize": 152,
+      "parentRaw": 262144,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 95,
+      "name": "LensflareItem",
+      "namePointer": "0x54f024",
+      "objectSize": 64,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 96,
+      "name": "Container",
+      "namePointer": "0x54e76c",
+      "objectSize": 32,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 97,
+      "name": "Origo",
+      "namePointer": "0x54f010",
+      "objectSize": 304,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 98,
+      "name": "NoiseQTask",
+      "namePointer": "0x54f004",
+      "objectSize": 304,
+      "parentRaw": 65273917,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 99,
+      "name": "MoveRigidObj",
+      "namePointer": "0x54efe0",
+      "objectSize": 520,
+      "parentRaw": 11010056,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 100,
+      "name": "SmoothQTask",
+      "namePointer": "0x54ef70",
+      "objectSize": 256,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 101,
+      "name": "MipMapControl",
+      "namePointer": "0x54ef28",
+      "objectSize": 48,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 102,
+      "name": "ScreenGrab",
+      "namePointer": "0x54dcc0",
+      "objectSize": 40,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 103,
+      "name": "FlatSky",
+      "namePointer": "0x54eed8",
+      "objectSize": 208,
+      "parentRaw": 30474240,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 104,
+      "name": "FlatSkyLayer",
+      "namePointer": "0x54eec8",
+      "objectSize": 620,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 105,
+      "name": "FlatWater",
+      "namePointer": "0x54ee88",
+      "objectSize": 144,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 106,
+      "name": "FlatWaterLayer",
+      "namePointer": "0x54ee78",
+      "objectSize": 620,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 107,
+      "name": "SoundManager",
+      "namePointer": "0x54ee40",
+      "objectSize": 68,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 108,
+      "name": "EditCamera",
+      "namePointer": "0x54e800",
+      "objectSize": 232,
+      "parentRaw": 10747965,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 109,
+      "name": "LevelTimer",
+      "namePointer": "0x54ee30",
+      "objectSize": 272,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 110,
+      "name": "EditorMagicObj",
+      "namePointer": "0x54ee0c",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 111,
+      "name": "AnimSound",
+      "namePointer": "0x54ede8",
+      "objectSize": 4,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 112,
+      "name": "RainDynCubeObj",
+      "namePointer": "0x54e2d8",
+      "objectSize": 17040,
+      "parentRaw": 5177346,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 113,
+      "name": "TerrainLightMap",
+      "namePointer": "0x54e304",
+      "objectSize": 272,
+      "parentRaw": 573702146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 114,
+      "name": "SimpointObjContainer",
+      "namePointer": "0x54e654",
+      "objectSize": 100,
+      "parentRaw": 65339392,
+      "stackSlot4": 32
+    },
+    {
+      "classId": 115,
+      "name": "SimpointObj",
+      "namePointer": "0x54e648",
+      "objectSize": 256,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 116,
+      "name": "SplinePathNodeQTask",
+      "namePointer": "0x54ed54",
+      "objectSize": 200,
+      "parentRaw": 10944512,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 117,
+      "name": "SplinePathDynCubeObj",
+      "namePointer": "0x54eda4",
+      "objectSize": 512,
+      "parentRaw": 65339394,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 118,
+      "name": "SplinePathGuideQTask",
+      "namePointer": "0x54edbc",
+      "objectSize": 68,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 119,
+      "name": "HeightMap",
+      "namePointer": "0x54e7e0",
+      "objectSize": 256,
+      "parentRaw": 573702146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 120,
+      "name": "ShadowTask",
+      "namePointer": "0x54ed40",
+      "objectSize": 48,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 121,
+      "name": "GFXCapsViewer",
+      "namePointer": "0x54ed2c",
+      "objectSize": 32,
+      "parentRaw": 385,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 122,
+      "name": "AIGraph",
+      "namePointer": "0x54e888",
+      "objectSize": 192,
+      "parentRaw": 84,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 123,
+      "name": "LevelFlow",
+      "namePointer": "0x541148",
+      "objectSize": 296,
+      "parentRaw": 10747965,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 124,
+      "name": "Game",
+      "namePointer": "0x539680",
+      "objectSize": 344,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 125,
+      "name": "Flow",
+      "namePointer": "0x536274",
+      "objectSize": 84,
+      "parentRaw": 3259498496,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 126,
+      "name": "EditVariable",
+      "namePointer": "0x5410d4",
+      "objectSize": 224,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 127,
+      "name": "SubLevel",
+      "namePointer": "0x5410c4",
+      "objectSize": 288,
+      "parentRaw": 65404928,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 128,
+      "name": "GuardGenerator",
+      "namePointer": "0x541098",
+      "objectSize": 128,
+      "parentRaw": 65404928,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 129,
+      "name": "ConditionalContainer",
+      "namePointer": "0x54107c",
+      "objectSize": 276,
+      "parentRaw": 65339488,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 130,
+      "name": "IntroScreen",
+      "namePointer": "0x5394cc",
+      "objectSize": 56,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 131,
+      "name": "StatusScreen",
+      "namePointer": "0x540d30",
+      "objectSize": 1264,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 132,
+      "name": "StatusMessageScreen",
+      "namePointer": "0x540b30",
+      "objectSize": 99392,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 133,
+      "name": "StatusMessage",
+      "namePointer": "0x540a90",
+      "objectSize": 480,
+      "parentRaw": 61,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 134,
+      "name": "GameScreen",
+      "namePointer": "0x540a80",
+      "objectSize": 40,
+      "parentRaw": 65404928,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 135,
+      "name": "HumanCamera",
+      "namePointer": "0x540994",
+      "objectSize": 296,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 136,
+      "name": "ExplodeObject",
+      "namePointer": "0x540980",
+      "objectSize": 568,
+      "parentRaw": 6029329,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 137,
+      "name": "Explosion0",
+      "namePointer": "0x540970",
+      "objectSize": 136,
+      "parentRaw": 65404928,
+      "stackSlot4": 32
+    },
+    {
+      "classId": 138,
+      "name": "FireBall",
+      "namePointer": "0x540964",
+      "objectSize": 280,
+      "parentRaw": 8,
+      "stackSlot4": 96
+    },
+    {
+      "classId": 139,
+      "name": "Fragment",
+      "namePointer": "0x540958",
+      "objectSize": 280,
+      "parentRaw": 115,
+      "stackSlot4": 160
+    },
+    {
+      "classId": 140,
+      "name": "ExplosionSmoke",
+      "namePointer": "0x540948",
+      "objectSize": 72,
+      "parentRaw": 0,
+      "stackSlot4": 64
+    },
+    {
+      "classId": 141,
+      "name": "FlashBang",
+      "namePointer": "0x540924",
+      "objectSize": 72,
+      "parentRaw": 0,
+      "stackSlot4": 4
+    },
+    {
+      "classId": 142,
+      "name": "BulletHole",
+      "namePointer": "0x540908",
+      "objectSize": 57672,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 143,
+      "name": "WeaponConfigContainer",
+      "namePointer": "0x538500",
+      "objectSize": 292,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 144,
+      "name": "WeaponConfig",
+      "namePointer": "0x5384f0",
+      "objectSize": 1800,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 145,
+      "name": "GunShot",
+      "namePointer": "0x540890",
+      "objectSize": 3128,
+      "parentRaw": 65470464,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 146,
+      "name": "Gun",
+      "namePointer": "0x54081c",
+      "objectSize": 432,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 147,
+      "name": "GunCasing",
+      "namePointer": "0x540810",
+      "objectSize": 296,
+      "parentRaw": 65339400,
+      "stackSlot4": 50
+    },
+    {
+      "classId": 148,
+      "name": "GunFlame",
+      "namePointer": "0x5407ac",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 149,
+      "name": "GunClip",
+      "namePointer": "0x5407a4",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 150,
+      "name": "GunMovingPart",
+      "namePointer": "0x540794",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 151,
+      "name": "Grenade",
+      "namePointer": "0x5406c4",
+      "objectSize": 1848,
+      "parentRaw": 59,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 152,
+      "name": "M203",
+      "namePointer": "0x540664",
+      "objectSize": 296,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 153,
+      "name": "Mine",
+      "namePointer": "0x540628",
+      "objectSize": 592,
+      "parentRaw": 5701768,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 154,
+      "name": "ProximityMine",
+      "namePointer": "0x540554",
+      "objectSize": 432,
+      "parentRaw": 146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 155,
+      "name": "StationaryGun",
+      "namePointer": "0x54052c",
+      "objectSize": 544,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 156,
+      "name": "GunMP5SD",
+      "namePointer": "0x540500",
+      "objectSize": 440,
+      "parentRaw": 65470610,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 157,
+      "name": "GunM16A2",
+      "namePointer": "0x540448",
+      "objectSize": 432,
+      "parentRaw": 146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 158,
+      "name": "GunDRAGUNOV",
+      "namePointer": "0x5403f8",
+      "objectSize": 440,
+      "parentRaw": 146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 159,
+      "name": "GunSPAS12",
+      "namePointer": "0x540388",
+      "objectSize": 432,
+      "parentRaw": 5701778,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 160,
+      "name": "GunCABarrel",
+      "namePointer": "0x540330",
+      "objectSize": 312,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 161,
+      "name": "GunCAClip",
+      "namePointer": "0x540324",
+      "objectSize": 312,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 162,
+      "name": "BinocularOverlay",
+      "namePointer": "0x540294",
+      "objectSize": 11776,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 163,
+      "name": "BinocularOverlayHolder",
+      "namePointer": "0x54026c",
+      "objectSize": 120,
+      "parentRaw": 5701632,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 164,
+      "name": "Binocular",
+      "namePointer": "0x53ff6c",
+      "objectSize": 456,
+      "parentRaw": 65470610,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 165,
+      "name": "Medipack",
+      "namePointer": "0x53ff04",
+      "objectSize": 432,
+      "parentRaw": 146,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 166,
+      "name": "AIStationaryGun",
+      "namePointer": "0x53fee0",
+      "objectSize": 488,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 167,
+      "name": "AIStationaryGunHolder",
+      "namePointer": "0x53fea8",
+      "objectSize": 9888,
+      "parentRaw": 4587528,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 168,
+      "name": "KnifeStab",
+      "namePointer": "0x53fe9c",
+      "objectSize": 32,
+      "parentRaw": 65405016,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 169,
+      "name": "Gunx2",
+      "namePointer": "0x53fe7c",
+      "objectSize": 312,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 170,
+      "name": "AddAmmo",
+      "namePointer": "0x53fe60",
+      "objectSize": 72,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 171,
+      "name": "AmmoPickup",
+      "namePointer": "0x53fe2c",
+      "objectSize": 312,
+      "parentRaw": 65929233,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 172,
+      "name": "GunPickup",
+      "namePointer": "0x53fde8",
+      "objectSize": 344,
+      "parentRaw": 65404945,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 173,
+      "name": "GenericPickup",
+      "namePointer": "0x53fdb8",
+      "objectSize": 288,
+      "parentRaw": 65339409,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 174,
+      "name": "Computer",
+      "namePointer": "0x53fda0",
+      "objectSize": 408,
+      "parentRaw": 65339400,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 175,
+      "name": "ComputerTextItem",
+      "namePointer": "0x53fd84",
+      "objectSize": 144,
+      "parentRaw": 49,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 176,
+      "name": "ComputerButtonItem",
+      "namePointer": "0x53fd70",
+      "objectSize": 148,
+      "parentRaw": 49,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 177,
+      "name": "ComputerMenu",
+      "namePointer": "0x53fa08",
+      "objectSize": 60,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 178,
+      "name": "ComputerMap",
+      "namePointer": "0x53f778",
+      "objectSize": 172,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 179,
+      "name": "ComputerObjectives",
+      "namePointer": "0x53f700",
+      "objectSize": 56,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 180,
+      "name": "ComputerLog",
+      "namePointer": "0x53f6e4",
+      "objectSize": 36,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 181,
+      "name": "ComputerHilight",
+      "namePointer": "0x53f6d4",
+      "objectSize": 1248,
+      "parentRaw": 5963837,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 182,
+      "name": "ComputerObject",
+      "namePointer": "0x53f6c0",
+      "objectSize": 36,
+      "parentRaw": 65470464,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 183,
+      "name": "DefineComputerObjective",
+      "namePointer": "0x53f564",
+      "objectSize": 1336,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 184,
+      "name": "DefineComputerLimit",
+      "namePointer": "0x53f550",
+      "objectSize": 64,
+      "parentRaw": 65470472,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 185,
+      "name": "ComputerStartup",
+      "namePointer": "0x53f540",
+      "objectSize": 144,
+      "parentRaw": 65929216,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 186,
+      "name": "DeathZone",
+      "namePointer": "0x53f514",
+      "objectSize": 312,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 187,
+      "name": "HumanAttach",
+      "namePointer": "0x53f4f0",
+      "objectSize": 320,
+      "parentRaw": 80,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 188,
+      "name": "HumanView",
+      "namePointer": "0x53f4d8",
+      "objectSize": 808,
+      "parentRaw": 10,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 189,
+      "name": "Human",
+      "namePointer": "0x53f408",
+      "objectSize": 3320,
+      "parentRaw": 10,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 190,
+      "name": "HumanPlayer",
+      "namePointer": "0x538efc",
+      "objectSize": 3568,
+      "parentRaw": 189,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 191,
+      "name": "HumanPlayerInput",
+      "namePointer": "0x53f2f8",
+      "objectSize": 484,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 192,
+      "name": "HumanSoldier",
+      "namePointer": "0x53f2e0",
+      "objectSize": 3408,
+      "parentRaw": 65405117,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 193,
+      "name": "HumanSoldierPistol",
+      "namePointer": "0x53ebf8",
+      "objectSize": 3408,
+      "parentRaw": 65929405,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 194,
+      "name": "HumanSoldierRPG",
+      "namePointer": "0x53e8a8",
+      "objectSize": 3392,
+      "parentRaw": 65929405,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 195,
+      "name": "HumanSoldierFemale",
+      "namePointer": "0x53e64c",
+      "objectSize": 3408,
+      "parentRaw": 65929405,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 196,
+      "name": "PatrolPath",
+      "namePointer": "0x53e3d0",
+      "objectSize": 52,
+      "parentRaw": 65929216,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 197,
+      "name": "PatrolPathCommand",
+      "namePointer": "0x53e288",
+      "objectSize": 40,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 198,
+      "name": "HumanAI",
+      "namePointer": "0x53d404",
+      "objectSize": 16080,
+      "parentRaw": 4456448,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 199,
+      "name": "HumanAIConfig",
+      "namePointer": "0x5383f0",
+      "objectSize": 384,
+      "parentRaw": 5701632,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 200,
+      "name": "HumanAIConfigItem",
+      "namePointer": "0x5383dc",
+      "objectSize": 680,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 201,
+      "name": "AmbientArea",
+      "namePointer": "0x53c90c",
+      "objectSize": 528,
+      "parentRaw": 10747965,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 202,
+      "name": "GlassShatter",
+      "namePointer": "0x53c8fc",
+      "objectSize": 176200,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 203,
+      "name": "Glass",
+      "namePointer": "0x53c878",
+      "objectSize": 328,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 204,
+      "name": "Siren",
+      "namePointer": "0x53c860",
+      "objectSize": 728,
+      "parentRaw": 136,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 205,
+      "name": "RadarDish",
+      "namePointer": "0x53c848",
+      "objectSize": 384,
+      "parentRaw": 65994761,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 206,
+      "name": "Building",
+      "namePointer": "0x53c828",
+      "objectSize": 496,
+      "parentRaw": 16,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 207,
+      "name": "GenericTBA",
+      "namePointer": "0x53c7e0",
+      "objectSize": 680,
+      "parentRaw": 6029448,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 208,
+      "name": "Door",
+      "namePointer": "0x53c770",
+      "objectSize": 808,
+      "parentRaw": 65994760,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 209,
+      "name": "Switch",
+      "namePointer": "0x53c6f4",
+      "objectSize": 552,
+      "parentRaw": 65994769,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 210,
+      "name": "Cabinet",
+      "namePointer": "0x53c6d4",
+      "objectSize": 312,
+      "parentRaw": 65994769,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 211,
+      "name": "Drawer",
+      "namePointer": "0x53c6cc",
+      "objectSize": 352,
+      "parentRaw": 65404937,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 212,
+      "name": "Terminal",
+      "namePointer": "0x53c684",
+      "objectSize": 672,
+      "parentRaw": 136,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 213,
+      "name": "SCamera",
+      "namePointer": "0x53c5e0",
+      "objectSize": 456,
+      "parentRaw": 65994769,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 214,
+      "name": "SCameraLens",
+      "namePointer": "0x53c5d4",
+      "objectSize": 9704,
+      "parentRaw": 65994769,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 215,
+      "name": "SCameraLensViewCone",
+      "namePointer": "0x53c5c0",
+      "objectSize": 312,
+      "parentRaw": 65994761,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 216,
+      "name": "SCameraControl",
+      "namePointer": "0x53c580",
+      "objectSize": 760,
+      "parentRaw": 212,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 217,
+      "name": "AlarmControl",
+      "namePointer": "0x53c540",
+      "objectSize": 848,
+      "parentRaw": 65994964,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 218,
+      "name": "Ladder",
+      "namePointer": "0x53c538",
+      "objectSize": 320,
+      "parentRaw": 65994761,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 219,
+      "name": "Fence",
+      "namePointer": "0x53c510",
+      "objectSize": 376,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 220,
+      "name": "Wire",
+      "namePointer": "0x53c4dc",
+      "objectSize": 312,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 221,
+      "name": "GenericPhysicsObj",
+      "namePointer": "0x53c4c8",
+      "objectSize": 1824,
+      "parentRaw": 65339451,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 222,
+      "name": "GenericPhysicsMagicObj",
+      "namePointer": "0x53c490",
+      "objectSize": 1896,
+      "parentRaw": 60,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 223,
+      "name": "Elevator",
+      "namePointer": "0x53c3ec",
+      "objectSize": 1608,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 224,
+      "name": "ElevatorFloorIndicator",
+      "namePointer": "0x53c364",
+      "objectSize": 584,
+      "parentRaw": 66060296,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 225,
+      "name": "ExplodeMagicObj",
+      "namePointer": "0x53c354",
+      "objectSize": 336,
+      "parentRaw": 66060297,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 226,
+      "name": "SimpointObjGenerator",
+      "namePointer": "0x53c320",
+      "objectSize": 344,
+      "parentRaw": 8,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 227,
+      "name": "Generator",
+      "namePointer": "0x53c300",
+      "objectSize": 704,
+      "parentRaw": 66060424,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 228,
+      "name": "Radio",
+      "namePointer": "0x53c2f4",
+      "objectSize": 744,
+      "parentRaw": 66060424,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 229,
+      "name": "MineField",
+      "namePointer": "0x53c2d4",
+      "objectSize": 208,
+      "parentRaw": 66060349,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 230,
+      "name": "AlarmLight",
+      "namePointer": "0x53c2b4",
+      "objectSize": 504,
+      "parentRaw": 66060305,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 231,
+      "name": "AlarmLightReflector",
+      "namePointer": "0x53c28c",
+      "objectSize": 320,
+      "parentRaw": 66060297,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 232,
+      "name": "RotatingObject",
+      "namePointer": "0x53c1f4",
+      "objectSize": 512,
+      "parentRaw": 5701640,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 233,
+      "name": "PlaceExplosiveTBA",
+      "namePointer": "0x53c1e0",
+      "objectSize": 688,
+      "parentRaw": 66060495,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 234,
+      "name": "GunShotEffect",
+      "namePointer": "0x53c1cc",
+      "objectSize": 32,
+      "parentRaw": 66060288,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 235,
+      "name": "Smoke",
+      "namePointer": "0x53c128",
+      "objectSize": 376,
+      "parentRaw": 10747965,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 236,
+      "name": "EnvironmentSound",
+      "namePointer": "0x53c0a4",
+      "objectSize": 92,
+      "parentRaw": 5701632,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 237,
+      "name": "RainEffect",
+      "namePointer": "0x53c098",
+      "objectSize": 136,
+      "parentRaw": 66060288,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 238,
+      "name": "Rudder",
+      "namePointer": "0x53c084",
+      "objectSize": 320,
+      "parentRaw": 5701641,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 239,
+      "name": "Hatch",
+      "namePointer": "0x53c01c",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 240,
+      "name": "Gear",
+      "namePointer": "0x53bfa4",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 241,
+      "name": "CockpitShield",
+      "namePointer": "0x53bfec",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 242,
+      "name": "Plane",
+      "namePointer": "0x53bfc4",
+      "objectSize": 2184,
+      "parentRaw": 88,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 243,
+      "name": "Heli",
+      "namePointer": "0x53bed0",
+      "objectSize": 11520,
+      "parentRaw": 4391000,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 244,
+      "name": "Wheel",
+      "namePointer": "0x53be4c",
+      "objectSize": 344,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 245,
+      "name": "Car",
+      "namePointer": "0x53be28",
+      "objectSize": 11992,
+      "parentRaw": 4325464,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 246,
+      "name": "Rotor",
+      "namePointer": "0x53bda0",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 247,
+      "name": "Afterburner",
+      "namePointer": "0x53bd74",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 248,
+      "name": "Train",
+      "namePointer": "0x53bd1c",
+      "objectSize": 2272,
+      "parentRaw": 88,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 249,
+      "name": "Missile",
+      "namePointer": "0x53bc80",
+      "objectSize": 2200,
+      "parentRaw": 66060376,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 250,
+      "name": "HitZone",
+      "namePointer": "0x53bb84",
+      "objectSize": 328,
+      "parentRaw": 5701641,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 251,
+      "name": "RocketPod",
+      "namePointer": "0x53bb54",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 252,
+      "name": "HeliDoor",
+      "namePointer": "0x53bb30",
+      "objectSize": 328,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 253,
+      "name": "HeliWheel",
+      "namePointer": "0x53bb0c",
+      "objectSize": 320,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 254,
+      "name": "CarDoor",
+      "namePointer": "0x53bad4",
+      "objectSize": 328,
+      "parentRaw": 9,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 255,
+      "name": "CarAI",
+      "namePointer": "0x53ba90",
+      "objectSize": 132,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 256,
+      "name": "ConditionalSound",
+      "namePointer": "0x53ba00",
+      "objectSize": 296,
+      "parentRaw": 65339392,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 257,
+      "name": "MenuManager",
+      "namePointer": "0x53982c",
+      "objectSize": 10392,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 258,
+      "name": "Cursor",
+      "namePointer": "0x53b9f8",
+      "objectSize": 64,
+      "parentRaw": 66060288,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 259,
+      "name": "MenuWindow",
+      "namePointer": "0x53b9ec",
+      "objectSize": 84,
+      "parentRaw": 6029312,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 260,
+      "name": "ControlsMenu",
+      "namePointer": "0x53b8c0",
+      "objectSize": 868,
+      "parentRaw": 259,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 261,
+      "name": "ModelViewBox",
+      "namePointer": "0x53b858",
+      "objectSize": 200,
+      "parentRaw": 259,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 262,
+      "name": "MenuFrame",
+      "namePointer": "0x53b83c",
+      "objectSize": 180,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 263,
+      "name": "MenuScreen",
+      "namePointer": "0x53b804",
+      "objectSize": 420,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 264,
+      "name": "MenuButton",
+      "namePointer": "0x53b7f4",
+      "objectSize": 152,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 265,
+      "name": "MenuText",
+      "namePointer": "0x53b7e4",
+      "objectSize": 368,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 266,
+      "name": "MenuTextConditional",
+      "namePointer": "0x53b744",
+      "objectSize": 536,
+      "parentRaw": 259,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 267,
+      "name": "SlideBar",
+      "namePointer": "0x53b6c0",
+      "objectSize": 592,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 268,
+      "name": "ListBox",
+      "namePointer": "0x53b698",
+      "objectSize": 3384,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 269,
+      "name": "ToggleBox",
+      "namePointer": "0x53b678",
+      "objectSize": 332,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 270,
+      "name": "InputBox",
+      "namePointer": "0x53b644",
+      "objectSize": 424,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 271,
+      "name": "AsciiBox",
+      "namePointer": "0x53b5f8",
+      "objectSize": 248,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 272,
+      "name": "ScrollListBox",
+      "namePointer": "0x53b5a0",
+      "objectSize": 5116,
+      "parentRaw": 4260099,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 273,
+      "name": "PictureBox",
+      "namePointer": "0x53b590",
+      "objectSize": 2556,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 274,
+      "name": "TextBox",
+      "namePointer": "0x53b584",
+      "objectSize": 8772,
+      "parentRaw": 4260099,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 275,
+      "name": "TypeWriterBox",
+      "namePointer": "0x53b540",
+      "objectSize": 136,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 276,
+      "name": "DialogWindow",
+      "namePointer": "0x539c2c",
+      "objectSize": 92,
+      "parentRaw": 66060547,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 277,
+      "name": "BackgroundFX",
+      "namePointer": "0x539c18",
+      "objectSize": 36,
+      "parentRaw": 66060288,
+      "stackSlot4": 0
+    },
+    {
+      "classId": 278,
+      "name": "MenuLoader",
+      "namePointer": "0x539ae0",
+      "objectSize": 292,
+      "parentRaw": 0,
+      "stackSlot4": 0
+    }
+  ]
+}

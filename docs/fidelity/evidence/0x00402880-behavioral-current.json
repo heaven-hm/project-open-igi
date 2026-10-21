@@ -1,0 +1,302 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x00402880",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "6ac3f7d045f31ec43d083d8c884f86c9028366c35327a20fbb2ba860b1358eeb",
+  "method": "Retail and freshly compiled PE32 x86 native entries executed with angr VEX; measured return, context bytes, global values and non-stack memory writes.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "value-00000000",
+      "input": {
+        "value": 0
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 0,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 0,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-00000001",
+      "input": {
+        "value": 1
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 1,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 1,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-7FFFFFFF",
+      "input": {
+        "value": 2147483647
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2147483647,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2147483647,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-80000000",
+      "input": {
+        "value": 2147483648
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 2147483648,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2147483648,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2147483648,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2147483648,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-FFFFFFFF",
+      "input": {
+        "value": 4294967295
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 4294967295,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 4294967295,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 4294967295,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 4294967295,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-60002000",
+      "input": {
+        "value": 1610620928
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1610620928,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 1610620928,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1610620928,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 1610620928,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-12345678",
+      "input": {
+        "value": 305419896
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 305419896,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 305419896,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 305419896,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 305419896,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "value-A5A5A5A5",
+      "input": {
+        "value": 2779096485
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2779096485,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2779096485,
+          "loop_status": 165
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2779096485,
+        "state_delta": {
+          "context_before": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_after": "031425364758697a8b9cadbecfe0f102132435465768798a9bacbdcedff00112233445566778899aabbccddeef00112233445566778899aabbccddeeff102132",
+          "context_pointer": 2779096485,
+          "loop_status": 165
+        },
+        "side_effects": []
+      }
+    }
+  ],
+  "runner": {
+    "path": "scripts/frame_diff_runner.py",
+    "sha256": "3d1f00ddb838a1f5419fd3d124ae325217fdcc80f101568703735b58a1b1a6fe",
+    "argv": [
+      "python3",
+      "scripts/frame_diff_runner.py",
+      "--address",
+      "0x00402880",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/core/frame_natives.cpp",
+      "--implementation-sha256",
+      "6ac3f7d045f31ec43d083d8c884f86c9028366c35327a20fbb2ba860b1358eeb",
+      "--root",
+      "."
+    ]
+  },
+  "retail_execution": {
+    "tool": "angr",
+    "version": "10.0.4.post1",
+    "engine": "VEX",
+    "candidate_sha256": "8ae582a5f956ff3c95e2ee15ed0128d9e2d5a545aef41134960aa7498465fb30",
+    "candidate_build_command": [
+      "i686-w64-mingw32-g++",
+      "-std=c++20",
+      "-O0",
+      "-shared",
+      "-Wl,--export-all-symbols",
+      "-I/Users/haseeb-mir/Documents/Code/project-open-igi-scope-gate/engine/include",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi-scope-gate/engine/src/retail/core/frame_natives.cpp",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-frame-diff-id7x_v23/unused_dispatch_table.cpp",
+      "-o",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-frame-diff-id7x_v23/candidate.dll"
+    ]
+  },
+  "limitations": [
+    "Concrete emulator fixtures, not a running retail process or a proof of all inputs.",
+    "Stack writes are excluded; original and candidate stack frame layouts can differ.",
+    "Flow/getter EAX and byte-status AL are compared; status EAX upper bits and retail caller return-type expectations remain unresolved.",
+    "QTask_OpenEvent and its dispatch table are not executed.",
+    "The oracle is retail PE32 execution under angr VEX, not a live game process; no Frida call-site observation is claimed."
+  ]
+}

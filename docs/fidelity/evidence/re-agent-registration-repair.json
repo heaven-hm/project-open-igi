@@ -1,0 +1,36 @@
+{
+  "date": "2026-10-19",
+  "setup": {
+    "launcher": "/Users/haseeb-mir/Documents/Code/re-agent/scripts/rea.mjs",
+    "status": "ready",
+    "applied_actions": [
+      "configured_codex",
+      "installed_skill"
+    ],
+    "backup_plan": "build/gate-repair/re-agent-setup-plan.json"
+  },
+  "direct_fork_mcp_doctor": {
+    "healthy": true,
+    "report": "build/gate-repair/re-agent-mcp-doctor.json"
+  },
+  "active_session_before_reconnect": {
+    "package": "rea-agents",
+    "path": "/Users/haseeb-mir/Documents/Code/re-agent/node_modules/rea-agents",
+    "version": "6.4.0"
+  },
+  "limitations": [
+    "Saved configuration repair and direct fork MCP health do not establish replacement of the already connected server.",
+    "Codex computer-use access to its own app was denied; no UI workaround was attempted.",
+    "The documented autonomous Frida profile supports host-architecture 64-bit Mach-O, not Windows x86 CrossOver; this project uses its separate remote Frida workflow.",
+    "The example piecewise-affine reconstruction policy invents a candidate from a limited hypothesis class; it is inappropriate for accepting game-native transcription."
+  ],
+  "live_mcp_after_repair": {
+    "confirmed": true,
+    "package": "re-agent",
+    "version": "6.4.0",
+    "root_path": "/Users/haseeb-mir/Documents/Code/re-agent",
+    "command_path": "/Users/haseeb-mir/Documents/Code/re-agent/scripts/rea.mjs",
+    "started_at": "2026-10-19T13:21:27.161Z",
+    "source": "live binary_session MCP response"
+  }
+}

@@ -4,6 +4,8 @@
 // Behavior/CFG: host-only chunk decode/layout assembly; no retail control flow is transcribed here.
 // Status/limits: outside the native verification scope; correctness is covered by host unit tests.
 #include "igi/retail/model/mef_render_data.hpp"
+
+#include "igi/retail/model/mef_bone_rig.hpp"
 #include "igi/retail/model/mef_skinner.hpp"
 
 #include <algorithm>
@@ -37,7 +39,9 @@ float read_float(std::span<const std::byte> bytes, std::size_t offset)
 
 } // namespace
 
-MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
+MefRenderData Display_DecodeMeshRenderData(const MefModel &model,
+                                      const IffSkeletonTable &skeletons,
+                                      MefBoneRig *out_rig)
 {
     if (!model.render_header.has_value())
     {
@@ -69,11 +73,33 @@ MefRenderData Display_DecodeMeshRenderData(const MefModel &model)
     render_data.vertices.reserve(vertex_count);
     if (skinned)
     {
-        // Retail 0x0049B700: pose the base vertices through the bone palette. Without an
-        // animated palette the identity palette reproduces the authored bind pose.
+        // Retail 0x0049B700: pose the base vertices through the bone palette.
+        // The retail MEF carries no skeleton, so the palette comes from the
+        // retail animation IFF the model package names. The skeleton that fits
+        // the model's own influence records is selected, and the live
+        // animation replaces the palette with the posed bones.
         const int highest_bone = MefSkinPalette_HighestBone(model);
-        const MefSkinPalette palette =
-            MefSkinPalette_Identity(highest_bone < 0 ? 1U : static_cast<std::size_t>(highest_bone) + 1U);
+        const std::uint32_t max_bone_index =
+            highest_bone < 0 ? 0U : static_cast<std::uint32_t>(highest_bone);
+        MefSkinPalette palette;
+        if (!skeletons.by_object_id.empty())
+        {
+            const MefBoneRig rig = MefBoneRig_Select(model, skeletons);
+            palette = MefBoneRig_Palette(skeletons, rig.object_id);
+            if (out_rig != nullptr)
+            {
+                *out_rig = rig;
+            }
+        }
+        else
+        {
+            palette = MefSkinPalette_Identity(
+                highest_bone < 0 ? 1U : static_cast<std::size_t>(highest_bone) + 1U);
+        }
+        if (palette.bones.size() <= static_cast<std::size_t>(max_bone_index))
+        {
+            palette.bones.resize(static_cast<std::size_t>(max_bone_index) + 1U);
+        }
         render_data.vertices.resize(vertex_count);
         Display_EvaluateSkinnedPalette(model, palette, render_data.vertices);
     }

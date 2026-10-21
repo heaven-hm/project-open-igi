@@ -484,7 +484,7 @@ bool decode_input_config(const ScriptProgram& program, InputConfig& out, std::st
     out = InputConfig{};
     // The retail's action count starts at one: the native's slot arithmetic
     // uses count - 1 for the first action.
-    DAT_00BC2380 = 1U;
+    InputRemap_ActionCount = 1U;
     for (const ScriptCall& call : program.calls) {
         if (call.callee == "GOInRemap") {
             if (call.arguments.size() != 3U) {
@@ -505,20 +505,20 @@ bool decode_input_config(const ScriptProgram& program, InputConfig& out, std::st
                 }
                 values[index] = static_cast<std::uint32_t>(argument.integer);
             }
-            const std::uint32_t action = DAT_00BC2380;
+            const std::uint32_t action = InputRemap_ActionCount;
             if (action * igi::retail::config::action_table_stride >=
                 igi::retail::config::action_table_size) {
                 error = "GOInRemap exceeds the retail action table";
                 return false;
             }
-            DAT_00BC2358[action * igi::retail::config::action_table_stride] = action;
+            InputRemap_ActionTable[action * igi::retail::config::action_table_stride] = action;
             igi::retail::config::QvmFrameView frame{};
             frame.argument_values = values;
             GOInRemap(&frame);
-            ++DAT_00BC2380;
+            ++InputRemap_ActionCount;
             const std::uint32_t slot = (action - 1U) * 115U + action;
             const std::uint32_t* const entry =
-                DAT_00BC25BC + slot * igi::retail::config::remap_table_stride;
+                InputRemap_Table + slot * igi::retail::config::remap_table_stride;
             InputBinding binding;
             binding.action = program.constants.symbols[entry[0]];
             binding.device = program.constants.symbols[entry[1]];

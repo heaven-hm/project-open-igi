@@ -2,6 +2,7 @@
 
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
+#include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/texture/loop_terrain_texture.hpp"
 
 #include <algorithm>
@@ -15,8 +16,48 @@
 
 namespace igi::retail::terrain
 {
+// Retail global state, externally observable by other native translation units.
+// Existing host storage covers 20 entries; retail's complete storage extent is unresolved.
+std::array<std::uint32_t, 20> g_data_b97b20{};
+std::int32_t g_b97d24 = 0;
+// Retail texture-modifier state is shared with push/pop native consumers.
+std::array<std::uint32_t, 20> g_b97da0{};
+std::int32_t g_b97df8 = 0;
+std::uint32_t g_ba5060 = 0;
+
 namespace
 {
+
+// TextureModifier_LoadParameters stores a packed one-bit bitmap along with the
+// cube-relative scale and origin.  The renderer must test that bitmap before
+// substituting the modifier's material; an enclosing cube alone is not a
+// texture modifier.  Coordinates follow the byte-row layout calculated by
+// the retail routine (line width is bitmap_size / 8).
+bool texture_modifier_covers_point_impl(const TerrainTextureModifierTask& modifier,
+                                        double world_x, double world_y)
+{
+    if (modifier.bitmap_item == nullptr || modifier.bitmap_size < 8U ||
+        modifier.bitmap_line_width_shift >= 31U || modifier.local_pos_to_bitmap_pos <= 0.0F)
+    {
+        return false;
+    }
+
+    const auto x = static_cast<std::int64_t>(std::floor(
+        (world_x - modifier.cube_min_x) * static_cast<double>(modifier.local_pos_to_bitmap_pos)));
+    const auto y = static_cast<std::int64_t>(std::floor(
+        (world_y - modifier.cube_min_y) * static_cast<double>(modifier.local_pos_to_bitmap_pos)));
+    if (x < 0 || y < 0 || x >= static_cast<std::int64_t>(modifier.bitmap_size) ||
+        y >= static_cast<std::int64_t>(modifier.bitmap_size))
+    {
+        return false;
+    }
+
+    const std::size_t row_stride = std::size_t{1} << modifier.bitmap_line_width_shift;
+    const std::size_t byte_offset = static_cast<std::size_t>(y) * row_stride +
+                                    static_cast<std::size_t>(x) / 8U;
+    const std::uint8_t mask = static_cast<std::uint8_t>(1U << (static_cast<std::uint32_t>(x) & 7U));
+    return (modifier.bitmap_item[byte_offset] & mask) != 0U;
+}
 
 // Retail child index transform table at VA 0x00548060 (64 bytes: 8 cases x 8 children).
 constexpr std::array<std::uint8_t, 64> g_548060 = {
@@ -52,16 +93,11 @@ std::array<TerrainMaterialGroup, 32> g_c28fe0{};
 std::array<TerrainTileMapTable, 64> g_c30080{};
 
 // Active texture modifier and heightmap stacks:
-std::array<std::uint32_t, 20> g_b97da0{};
-std::int32_t g_b97df8 = 0;
-std::uint32_t g_ba5060 = 0;
 
 std::array<std::uint32_t, 64> g_b97d40{};
 std::int32_t g_b97df4 = 0;
 std::uint32_t g_ba2058 = 0;
 
-std::array<std::uint32_t, 20> g_data_b97b20{};
-std::int32_t g_b97d24 = 0;
 
 [[nodiscard]] std::vector<std::byte> read_binary_file(const std::filesystem::path& file_path)
 {
@@ -143,11 +179,17 @@ inline float Script_GetArgFloat(const float* args, int index)
 
 } // namespace
 
+bool TextureModifier_CoversPoint(const TerrainTextureModifierTask& modifier,
+                                     double world_x, double world_y)
+{
+    return texture_modifier_covers_point_impl(modifier, world_x, world_y);
+}
+
 // Native: Terrain_CreateMaterial; retail VA 0x004C6670; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp; CFG 96.7%.
-// Behavior/CFG: Writes 32 material LOD records and copies 24 bytes with defined zero DWORDs at +0/+8/+0xC, descriptor 0x00567C74 at +0x10 and two unspecified padding words; retail stores at 0x004C672D..0x004C674D.
-// Status/limits: TRANSCRIBED; descriptor corrected from retail; argument adapter, bounds guards and undefined return padding still require comparison.
+// Tools/evidence: Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE (VA 0x004C6670-0x004C6755); candidate reference scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp.
+// Behavior/CFG: Reads the material index with Script_GetArg(args,0) (0x004B8A20), stores arg1 at 0x00C28FE0 + index*900, then writes 32 LOD entries of 0x1C bytes starting at group+4 (disassembly 0x004C66AA-0x004C671C): int arg[i-1], float args[i], float args[i+1], float args[i+2]*0.5 (constant 0x3F000000 at 0x00533504), int arg[i+3], float args[i+4]*0.5, int arg[i+5], with i stepping by 7 from 3 while i < 0xE3; finally copies the 24-byte {0,0,0,0,0x00567C74,*uninitialized*} block to the context with rep movsd x6.
+// Status/limits: STRUCTURALLY_VERIFIED; retail index arithmetic has no bounds check (negative/oversized indices write outside 0x00C28FE0 in retail), the port clamps into its 32-group store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/terrain_render_diff_runner.py.
 void* Terrain_CreateMaterial(void* context, const float* args)
 {
     if (args == nullptr)
@@ -171,6 +213,9 @@ void* Terrain_CreateMaterial(void* context, const float* args)
         *reinterpret_cast<float*>(dest_2 + 16) = Script_GetArgFloat(args, i + 2) * 0.5f;
         *reinterpret_cast<int*>(dest_2 + 20) = Script_GetArg(args, i + 3);
         *reinterpret_cast<float*>(dest_2 + 24) = Script_GetArgFloat(args, i + 4) * 0.5f;
+        // Retail writes seven fields per 0x1C entry (disassembly 0x004C66AA-0x004C6716):
+        // arg indices esi-1..esi+5 with esi stepping by 7, the last being `mov [edi+0x14], eax`
+        // (entry offset +0x18, i.e. dest_2+0x1C) fed by `lea edx, [esi+5]; call Script_GetArg`.
         *reinterpret_cast<int*>(dest_2 + 28) = Script_GetArg(args, i + 5);
         i += 7;
         dest_2 += 0x1c;
@@ -187,9 +232,9 @@ void* Terrain_CreateMaterial(void* context, const float* args)
 
 // Native: Terrain_CreateTileMap; retail VA 0x004C6760; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp; CFG 88.9%.
-// Behavior/CFG: Writes 64 tile indices and copies 24 bytes with defined zero DWORDs at +0/+8/+0xC, descriptor 0x00567C74 at +0x10 and two unspecified padding words; retail stores at 0x004C67A7..0x004C67C7.
-// Status/limits: TRANSCRIBED; descriptor corrected from retail; argument adapter, bounds guards and undefined return padding still require comparison.
+// Tools/evidence: Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE (VA 0x004C6760-0x004C67D0); candidate reference scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp.
+// Behavior/CFG: Reads the group index with Script_GetArg(args,0), stores 64 bytes at 0x00C30080 + group*64 where byte i = (int8)Script_GetArg(args,i+1) for i = 0..0x3F (disassembly 0x004C6781-0x004C6796), then copies the 24-byte {0,0,0,0,0x00567C74,*uninitialized*} block to the context with rep movsd x6.
+// Status/limits: STRUCTURALLY_VERIFIED; retail group arithmetic has no bounds check, the port clamps into its 64-table store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/terrain_render_diff_runner.py.
 void* Terrain_CreateTileMap(void* context, const float* args)
 {
     if (args == nullptr)
@@ -221,150 +266,193 @@ void* Terrain_CreateTileMap(void* context, const float* args)
     return context;
 }
 
-// Native: TextureModifier_Push; retail VA 0x00505E40; signature/calling convention unknown.
+// Native: TextureModifier_Push; retail VA 0x00505E40; x86 cdecl void*(void*).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/texturemodifier/00505E40-TextureModifier_Push.cpp; CFG 100.0%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Pushes material index into modifier stack, updates packed material bitmask g_ba5060. Status/limits: TRANSCRIBED; exact stack operations matching retail binary.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Tools/evidence: Binary Ninja view_1; RE-Agent radare2 ev_0041b4b3f7b953ab4744f3a74c261506c6a81a78b59bfd384961ac0184b2d01e.
+// Behavior/CFG: Requires [self+0xBC] >= 0 and the source row [[self+0x68]+0xDCC] to hold a non-zero dword at counter*3 (0x00505E4E-0x00505E5E); pushes [self+0xE4] onto the 20-slot stack at 0x00B97DA0 under counter 0x00B97DF8, folds the packed bitmask 0x00BA5060 = (mask << 8) | (scratch+1), sets self[0xDC] = 1 and returns scratch+1; when the stack is full calls Error_Show("Too many items in texture modifier stack!") and halts in the retail self-loop (0x00505E76 jmp $); otherwise self[0xDC] = 0 and returns self.
+// Status/limits: TRANSCRIBED; scripts/texture_modifier_push_diff_runner.py covers mapped nonaliasing x86 contexts; natural runtime integration remains provisional.
 void* TextureModifier_Push(void* self)
 {
-    if (self == nullptr)
-    {
-        return nullptr;
-    }
     auto* bytes = static_cast<std::uint8_t*>(self);
     const auto counter_val = *reinterpret_cast<std::int32_t*>(bytes + 0xBC);
     if (counter_val >= 0)
     {
-        if (g_b97df8 < 20)
+        // Retail 0x00505E4E-0x00505E5E validates the push source before touching the stack:
+        // row = [[self+0x68] + 0xDCC], and row[counter*3] must be non-zero, otherwise the
+        // push is refused with self[0xDC] = 0.
+        const auto source_table =
+            *reinterpret_cast<const std::uint8_t* const*>(bytes + 0x68);
+        const auto source_row = *reinterpret_cast<const std::uint32_t* const*>(
+            reinterpret_cast<const std::uint8_t*>(source_table) + 0xDCCu);
+        if (source_row[static_cast<std::size_t>(counter_val) * 3U] != 0U)
         {
-            const auto scratch_val = *reinterpret_cast<std::uint32_t*>(bytes + 0xE4);
-            bytes[0xDC] = 1;
-            g_b97da0[static_cast<std::size_t>(g_b97df8)] = scratch_val;
-            g_ba5060 = (g_ba5060 << 8U) | (scratch_val + 1U);
-            ++g_b97df8;
-            return reinterpret_cast<void*>(static_cast<std::uintptr_t>(scratch_val + 1U));
+            if (g_b97df8 < 20)
+            {
+                const auto scratch_val = *reinterpret_cast<std::uint32_t*>(bytes + 0xE4);
+                const std::uint32_t enabled = 1;
+                std::memcpy(bytes + 0xDC, &enabled, sizeof(enabled));
+                const auto stack_index = g_b97df8;
+                g_b97da0[static_cast<std::size_t>(stack_index)] = scratch_val;
+                const auto shifted_mask = g_ba5060 << 8U;
+                g_ba5060 = shifted_mask;
+                const auto result = *reinterpret_cast<std::uint32_t*>(bytes + 0xE4) + 1U;
+                g_ba5060 = shifted_mask | result;
+                g_b97df8 = stack_index + 1;
+                return reinterpret_cast<void*>(static_cast<std::uintptr_t>(result));
+            }
+            error::Error_Show("Too many items in texture modifier stack!");
+            // Retail 0x00505E76: jmp $ — the fatal-error halt.
+            for (;;)
+            {
+            }
         }
-        error::Error_Show("Too many items in texture modifier stack!");
     }
-    bytes[0xDC] = 0;
+    const std::uint32_t disabled = 0;
+    std::memcpy(bytes + 0xDC, &disabled, sizeof(disabled));
     return self;
 }
 
 // Native: HeightMap_Enter; retail VA 0x00506F00; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/heightmap/00506F00-HeightMap_Enter.cpp; CFG 100.0%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Pushes heightmap index into heightmap stack g_ba2058. Status/limits: TRANSCRIBED; exact stack operations matching retail binary.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Tools/evidence: Binary Ninja view_1 0x00506F00; RE-Agent radare2 ev_22f3f96b2b347b99a962a88ea7097bdba7db979f2778c016ff0e252ae2cc0754.
+// Behavior/CFG: Rejects negative/disabled source rows; writes a DWORD flag and pushes the incremented heightmap index.
+// Status/limits: TRANSCRIBED; controlled x86 replay required; game-loop reachability and arbitrary aliasing remain unverified.
 void* HeightMap_Enter(void* context)
 {
-    if (context == nullptr)
-    {
-        return nullptr;
-    }
     auto* bytes = static_cast<std::uint8_t*>(context);
     const auto entity_val = *reinterpret_cast<std::int32_t*>(bytes + 0xBC);
-    if (entity_val < 0)
+    if (entity_val < 0 ||
+        (*reinterpret_cast<std::uint32_t**>(
+            *reinterpret_cast<std::uint8_t**>(bytes + 0x68) + 0xDD0))[entity_val * 3] == 0U)
     {
-        bytes[0xE8] = 0;
+        *reinterpret_cast<std::uint32_t*>(bytes + 0xE8) = 0U;
         return context;
     }
-    const auto temp_3 = *reinterpret_cast<std::uint32_t*>(bytes + 0xF8);
-    bytes[0xE8] = 1;
-    if (g_b97df4 < 64)
-    {
-        g_b97d40[static_cast<std::size_t>(g_b97df4)] = temp_3 + 1U;
-        g_ba2058 = temp_3 + 1U;
-        ++g_b97df4;
-    }
-    return reinterpret_cast<void*>(static_cast<std::uintptr_t>(temp_3 + 1U));
+    const auto stored_index = *reinterpret_cast<std::uint32_t*>(bytes + 0xF8);
+    *reinterpret_cast<std::uint32_t*>(bytes + 0xE8) = 1U;
+    const auto stack_index = g_b97df4;
+    g_b97d40[static_cast<std::size_t>(stack_index)] = stored_index + 1U;
+    const auto active_index = *reinterpret_cast<std::uint32_t*>(bytes + 0xF8) + 1U;
+    g_ba2058 = active_index;
+    g_b97df4 = stack_index + 1;
+    return reinterpret_cast<void*>(static_cast<std::uintptr_t>(active_index));
 }
 
 // Native: TerrainLightMap_Init_2; retail VA 0x004F82B0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrainlightmap/004F82B0-TerrainLightMap_Init_2.cpp; CFG 100.0%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Pushes lightmap index into lightmap stack data_b97b20. Status/limits: TRANSCRIBED; exact stack operations matching retail binary.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Tools/evidence: Binary Ninja and RE-Agent Radare2, docs/fidelity/evidence/lightmap-enter-20261020/; no second decompiler used for this correction.
+// Behavior/CFG: Calls 0x004F1160, tests DWORD +0x108, writes DWORD +0xE0, pushes DWORD +0xD8 and increments 0x00B97D24. Both mode branches retained; no retail stack-cap branch exists here.
+// Status/limits: TRANSCRIBED; nonaliasing valid contexts and existing host stack storage only; overflow/storage layout and natural runtime integration remain unresolved.
 void* TerrainLightMap_Init_2(void* self)
 {
-    if (self == nullptr)
-    {
-        return nullptr;
-    }
+    const auto mode = script::Script_ParseEnumReal32_5();
     auto* bytes = static_cast<std::uint8_t*>(self);
     const auto counter_val = *reinterpret_cast<std::int32_t*>(bytes + 0x108);
-    if (counter_val != 0)
+    if (mode != 0)
+    {
+        if (counter_val != 0)
+        {
+            const auto scratch_val = *reinterpret_cast<std::uint32_t*>(bytes + 0xD8);
+            *reinterpret_cast<std::uint32_t*>(bytes + 0xE0) = 1;
+            const auto stack_index = g_b97d24;
+            g_data_b97b20[static_cast<std::size_t>(stack_index)] = scratch_val;
+            g_b97d24 = stack_index + 1;
+            return reinterpret_cast<void*>(static_cast<std::uintptr_t>(g_b97d24));
+        }
+    }
+    else if (counter_val != 0)
     {
         const auto scratch_val = *reinterpret_cast<std::uint32_t*>(bytes + 0xD8);
-        bytes[0xE0] = 1;
-        if (g_b97d24 < 20)
-        {
-            g_data_b97b20[static_cast<std::size_t>(g_b97d24)] = scratch_val;
-            ++g_b97d24;
-        }
+        *reinterpret_cast<std::uint32_t*>(bytes + 0xE0) = 1;
+        const auto stack_index = g_b97d24;
+        g_data_b97b20[static_cast<std::size_t>(stack_index)] = scratch_val;
+        g_b97d24 = stack_index + 1;
         return reinterpret_cast<void*>(static_cast<std::uintptr_t>(g_b97d24));
     }
-    bytes[0xE0] = 0;
+    *reinterpret_cast<std::uint32_t*>(bytes + 0xE0) = 0;
     return self;
 }
 
 // Native: Terrain_Load; retail VA 0x004C6240; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/dynobj/004C6240-DynObj_Createterrainmateria.cpp; CFG 80.9%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Loads .bit, .hmp, .cmd, .ctr files, registers QVM natives, executes TERRAIN.QVM, relocates CTR command offsets. Status/limits: TRANSCRIBED; port-owned file buffers, structure verified with retail records.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Tools/evidence: Ghidra and Binary Ninja on the retail body 0x004C6240-0x004C666C
+// (25 blocks; reads TERRAIN.BIT/HMP/TEX/CMD/CTR, registers CreateTerrainMaterial/
+// CreateTerrainTileMap, then calls 0x004CE3D0).
+// Behavior/CFG: HOST FILE-STAGE BRIDGE. The port passes TerrainLevelData as the
+// context and runs the same file sequence through Terrain_LoadLevel with
+// apply_tasks=false; the QSC task stage is applied later by the phase-0 caller.
+// Status/limits: TRANSCRIBED (host-backed); retail allocation layout, .bit/.hmp
+// pointer bases and the 0x004CE3D0 call graph are not byte-identical.
 void* Terrain_Load(void* context, const char* base_path)
 {
-    if (base_path == nullptr)
+    auto* const data = static_cast<TerrainLevelData*>(context);
+    if (data == nullptr || base_path == nullptr)
     {
         return nullptr;
     }
-    return context;
+
+    const std::filesystem::path base(base_path);
+    data->Terrain_LoadLevel(base.parent_path(), {}, false);
+    return data;
 }
 
 // Native: Terrain_LoadTexturesAndLightmaps; retail VA 0x004C5F00; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/dynobj/004C5F00-DynObj_ParseConfigFile_7.cpp; CFG 85.7%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Loads .tex via 0x005175A0, sets 256-color palette, loads .lmp lightmap pages into g_b81b20. Status/limits: TRANSCRIBED; port-owned texture storage, verified against Level 1 TERRAIN.TEX.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Tools/evidence: retail Level_Start 0x00415C31 calls this before 0x004C6240 at
+// 0x00415C44; Ghidra and Binary Ninja on the retail body.
+// Behavior/CFG: HOST FILE-STAGE BRIDGE for TERRAIN.LMP lightmap pages. The
+// phase-0 caller invokes it before Terrain_Load, matching the retail order.
+// Status/limits: TRANSCRIBED (host-backed); retail lightmap stack layout and
+// texture-upload sequencing remain unverified.
 std::int32_t Terrain_LoadTexturesAndLightmaps(void* context, const char* base_path)
 {
-    static_cast<void>(context);
-    if (base_path == nullptr)
+    auto* const data = static_cast<TerrainLevelData*>(context);
+    if (data == nullptr || base_path == nullptr)
     {
         return 0;
     }
-    return 1;
+
+    const std::filesystem::path base(base_path);
+    return data->Terrain_LoadLightmaps(base.parent_path()) ? 1 : 0;
 }
 
 // Native: Terrain_TraverseContourQuadtree; retail VA 0x004D14E0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/render/004D14E0-Render_ShouldHaveAllocatedD.cpp; CFG 86.7%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Quadtree traversal from CTR[1], frustum culling with view angles, detail exponent selection, emits chunk queue to g_b16ce0. Status/limits: TRANSCRIBED; port-owned queue and frustum math, verified against retail octree tables.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x004D14E0 is 4181 bytes
+// (frustum/quadtree traversal over the CTR structures with x87 math; r2 recovers it as one
+// function with dozens of basic blocks). No behavioral claims are made for this port body.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
+// transcribe 0x004D14E0 before any VERIFIED/STRUCTURALLY_VERIFIED claim (see MVP terrain slice).
 std::int32_t Terrain_TraverseContourQuadtree(void* context)
 {
-    return context != nullptr ? 1 : 0;
+    static_cast<void>(context);
+    throw std::logic_error("Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable.");
 }
 
 // Native: Terrain_DecodeChunkCommands; retail VA 0x00510010; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00510010-Terrain_RenderQuadtree.cpp; CFG 66.7%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Decodes 4-byte packed vertices from CMD, applies orientation transform, heightmap delta_z, material UV mapping. Status/limits: TRANSCRIBED; port-owned vertex buffers, structure verified with retail CMD/HMP layouts.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Behavior/CFG: Retail performs the operations described in the evidence; this placeholder performs none.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 std::int32_t Terrain_DecodeChunkCommands(void* context)
 {
-    return context != nullptr ? 1 : 0;
+    static_cast<void>(context);
+    throw std::logic_error("Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable.");
 }
 
 // Native: Terrain_Draw; retail VA 0x00512C30; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00512C30-Terrain_Draw.cpp; CFG 77.8%.
-// Behavior/CFG: Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Sets Direct3D 7 device render states, transforms, fog, alpha blending, texture stages, and renders terrain chunks. Status/limits: TRANSCRIBED; Direct3D 7 backend bridge, verified with device draw calls.
-// Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
+// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x00512C30 is 6317 bytes
+// (Direct3D 7 render-state sequencing and terrain chunk submission; r2 recovers it as one
+// function with many basic blocks). No behavioral claims are made for this port body.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
+// transcribe 0x00512C30 before any VERIFIED/STRUCTURALLY_VERIFIED claim (see MVP terrain slice).
 std::int32_t Terrain_Draw(void* context)
 {
-    return context != nullptr ? 1 : 0;
+    static_cast<void>(context);
+    throw std::logic_error("Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable.");
 }
 
 // HOST HELPER: load Level terrain files and QSC tasks.
@@ -372,9 +460,10 @@ std::int32_t Terrain_Draw(void* context)
 // Tools/evidence: scripts/GameNatives/dynobj/004C6240-DynObj_Createterrainmateria.cpp; Project-IGI-Terrain/source/level/terrain.cpp.
 // Behavior/CFG: Bridges retail .bit, .hmp, .cmd, .ctr, .tex, .lmp files into TerrainLevelData container.
 // Status/limits: Host loader bridge; does not claim retail binary memory ownership.
-bool TerrainLevelData::Host_LoadLevelTerrain(
+bool TerrainLevelData::Terrain_LoadLevel(
     const std::filesystem::path& terrain_dir,
-    const std::vector<std::shared_ptr<script::QvmObjectCall>>& object_calls)
+    const std::vector<std::shared_ptr<script::QvmObjectCall>>& object_calls,
+    bool apply_tasks)
 {
     loaded = false;
 
@@ -518,38 +607,11 @@ bool TerrainLevelData::Host_LoadLevelTerrain(
         }
     }
 
-    // Load .lmp (lightmap pages)
-    lmp_file_bytes = read_binary_file(terrain_dir / "TERRAIN.LMP");
-    if (lmp_file_bytes.empty())
-    {
-        lmp_file_bytes = read_binary_file(terrain_dir / "terrain.lmp");
-    }
-    if (!lmp_file_bytes.empty())
-    {
-        std::size_t offset = 0U;
-        while (offset + 4U <= lmp_file_bytes.size())
-        {
-            std::uint32_t size = 0;
-            std::memcpy(&size, lmp_file_bytes.data() + offset, 4);
-            offset += 4U;
-            if (size > 0U && size <= 2048U && offset + static_cast<std::size_t>(size * size) <= lmp_file_bytes.size())
-            {
-                texture::ModelTexturePixels lmp_page{};
-                lmp_page.width = size;
-                lmp_page.height = size;
-                lmp_page.argb_pixels.resize(size * size);
-                const auto* intensity = reinterpret_cast<const std::uint8_t*>(lmp_file_bytes.data() + offset);
-                for (std::size_t p = 0U; p < size * size; ++p)
-                {
-                    const std::uint32_t c = intensity[p];
-                    lmp_page.argb_pixels[p] = 0xFF000000U | (c << 16U) | (c << 8U) | c;
-                }
-                lightmap_layers.push_back(std::move(lmp_page));
-                offset += size * size;
-            }
-        }
-    }
+    // The lightmap pages are loaded by Terrain_LoadTexturesAndLightmaps
+    // (0x004C5F00), which Level_Start calls before Terrain_Load.
 
+    if (apply_tasks)
+    {
     // Parse QSC script calls (TextureModifier, HeightMap, TerrainLightMap)
     for (const auto& call : object_calls)
     {
@@ -732,6 +794,7 @@ bool TerrainLevelData::Host_LoadLevelTerrain(
             // QVM parse fallback: keep default materials
         }
     }
+    } // apply_tasks
 
     material_groups.assign(g_c28fe0.begin(), g_c28fe0.end());
     tile_maps = g_c30080;
@@ -740,12 +803,56 @@ bool TerrainLevelData::Host_LoadLevelTerrain(
     return loaded;
 }
 
+// HOST HELPER: load TERRAIN.LMP lightmap pages for Terrain_LoadTexturesAndLightmaps.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: retail Level_Start 0x00415C31 calls 0x004C5F00 before 0x004C6240.
+// Behavior/CFG: The retail loader walks the LMP page list; this host bridge keeps
+// the same file source and square-page layout used by the port renderer.
+// Status/limits: Host file-stage bridge, not a retail memory-layout transcription.
+bool TerrainLevelData::Terrain_LoadLightmaps(const std::filesystem::path& terrain_dir)
+{
+    lmp_file_bytes = read_binary_file(terrain_dir / "TERRAIN.LMP");
+    if (lmp_file_bytes.empty())
+    {
+        lmp_file_bytes = read_binary_file(terrain_dir / "terrain.lmp");
+    }
+
+    lightmap_layers.clear();
+    if (!lmp_file_bytes.empty())
+    {
+        std::size_t offset = 0U;
+        while (offset + 4U <= lmp_file_bytes.size())
+        {
+            std::uint32_t size = 0;
+            std::memcpy(&size, lmp_file_bytes.data() + offset, 4);
+            offset += 4U;
+            if (size > 0U && size <= 2048U &&
+                offset + static_cast<std::size_t>(size * size) <= lmp_file_bytes.size())
+            {
+                texture::ModelTexturePixels lmp_page{};
+                lmp_page.width = size;
+                lmp_page.height = size;
+                lmp_page.argb_pixels.resize(size * size);
+                const auto* intensity = reinterpret_cast<const std::uint8_t*>(lmp_file_bytes.data() + offset);
+                for (std::size_t p = 0U; p < size * size; ++p)
+                {
+                    const std::uint32_t c = intensity[p];
+                    lmp_page.argb_pixels[p] = 0xFF000000U | (c << 16U) | (c << 8U) | c;
+                }
+                lightmap_layers.push_back(std::move(lmp_page));
+                offset += size * size;
+            }
+        }
+    }
+    return !lightmap_layers.empty();
+}
+
 // HOST HELPER: build decoded render mesh for the given camera and origin.
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: scripts/GameNatives/terrain/00510010-Terrain_RenderQuadtree.cpp; 004D14E0-Render_ShouldHaveAllocatedD.cpp.
 // Behavior/CFG: Traverses contour quadtree, culls frustum, decodes chunk vertices, samples heightmaps, emits batches.
 // Status/limits: Host render mesh generator; produces vertex and index batches for Direct3D 7 device rendering.
-TerrainDecodedMesh TerrainLevelData::Host_BuildRenderMesh(
+TerrainDecodedMesh TerrainLevelData::Terrain_BuildRenderMesh(
     const std::array<double, 3>& origin,
     float world_scale,
     const float camera_position[3],
@@ -813,27 +920,11 @@ TerrainDecodedMesh TerrainLevelData::Host_BuildRenderMesh(
         const int shift = 25 - static_cast<int>(state.lod_level);
         const int v = shift >= 0 ? (static_cast<int>(delta) >> shift) : (static_cast<int>(delta) << (-shift));
 
-        const double dist_metres = dist * static_cast<double>(world_scale);
-        int lod_threshold = 163;
-        if (dist_metres < 250.0)
-        {
-            lod_threshold = 320; // Ultra near detail: force quadtree subdivision deeper
-        }
-        else if (dist_metres < 600.0)
-        {
-            lod_threshold = 220; // Enhanced mid-near detail
-        }
-        else if (dist_metres < 1200.0)
-        {
-            lod_threshold = 163; // Retail standard
-        }
-        else
-        {
-            lod_threshold = 129; // Distant optimization
-        }
-
         const bool has_children = (node.children_mask != 0U) && (state.lod_level < 16U);
-        const bool draw_cur_cube = ((v >= lod_threshold && state.lod_level >= 7U) || state.lod_level >= 16U || !has_children);
+        // Restore the host path's single threshold. The retail producer at
+        // 0x004D2540 derives its threshold from quality/FOV state; see the terrain
+        // divergence audit. This host default is not proof of that producer's parity.
+        const bool draw_cur_cube = ((v >= 163 && state.lod_level >= 7U) || state.lod_level >= 16U || !has_children);
 
         if (draw_cur_cube)
         {
@@ -922,13 +1013,15 @@ TerrainDecodedMesh TerrainLevelData::Host_BuildRenderMesh(
             }
         }
 
-        // Find active texture modifier
+        // A modifier applies only where its packed bitmap bit is set.  Test the
+        // chunk centre so a mask cannot paint its entire enclosing quadtree cube.
         const TerrainTextureModifierTask* active_tm = nullptr;
         for (const auto& tm : texture_modifiers)
         {
             const auto tm_half = ROOT_CUBE_HALF_SIZE >> tm.lod_level;
             if (chunk.pos[0] >= tm.cube_min_x && chunk.pos[0] <= tm.cube_min_x + tm_half * 2 &&
-                chunk.pos[1] >= tm.cube_min_y && chunk.pos[1] <= tm.cube_min_y + tm_half * 2)
+                chunk.pos[1] >= tm.cube_min_y && chunk.pos[1] <= tm.cube_min_y + tm_half * 2 &&
+                TextureModifier_CoversPoint(tm, chunk.pos[0], chunk.pos[1]))
             {
                 active_tm = &tm;
                 break;
@@ -1065,6 +1158,58 @@ TerrainDecodedMesh TerrainLevelData::Host_BuildRenderMesh(
     }
 
     return mesh;
+}
+
+// HOST HELPER: expose the ported terrain globals to differential harnesses. These mirror the
+// retail storage at 0x00C28FE0 / 0x00C30080 / 0x00B97DA0 / 0x00B97DF8 / 0x00BA5060; the retail
+// addresses themselves are absolute in igi.exe and are read directly by the angr side.
+void Terrain_GetMaterialGroupBytes(std::uint32_t index, std::uint8_t* out)
+{
+    if (index >= g_c28fe0.size() || out == nullptr)
+    {
+        return;
+    }
+    std::memcpy(out, &g_c28fe0[index], sizeof(TerrainMaterialGroup));
+}
+
+void Terrain_GetTileMapBytes(std::uint32_t index, std::uint8_t* out)
+{
+    if (index >= g_c30080.size() || out == nullptr)
+    {
+        return;
+    }
+    std::memcpy(out, &g_c30080[index], sizeof(TerrainTileMapTable));
+}
+
+void TextureModifier_GetState(std::uint8_t* out)
+{
+    if (out == nullptr)
+    {
+        return;
+    }
+    std::memcpy(out, &g_b97df8, sizeof(g_b97df8));
+    std::memcpy(out + 4, g_b97da0.data(), sizeof(g_b97da0));
+    std::memcpy(out + 4 + sizeof(g_b97da0), &g_ba5060, sizeof(g_ba5060));
+}
+
+void TextureModifier_SetCount(std::int32_t count)
+{
+    g_b97df8 = count;
+}
+
+void Terrain_ResetGlobals()
+{
+    for (auto& group : g_c28fe0)
+    {
+        group = TerrainMaterialGroup{};
+    }
+    for (auto& table : g_c30080)
+    {
+        table = TerrainTileMapTable{};
+    }
+    g_b97da0.fill(0U);
+    g_b97df8 = 0;
+    g_ba5060 = 0U;
 }
 
 } // namespace igi::retail::terrain

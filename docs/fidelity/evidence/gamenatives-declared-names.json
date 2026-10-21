@@ -1,0 +1,1517 @@
+{
+  "checkedFiles": 17158,
+  "issues": [
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script 2.cpp",
+      "address": "0x004B8C10",
+      "canonical": "BreakScript",
+      "fileNameSubject": "Break_Script",
+      "declared": [
+        "BreakScript",
+        "memcpy",
+        "point"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "point"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script.cpp",
+      "address": "0x004B8C10",
+      "canonical": "BreakScript",
+      "fileNameSubject": "Break_Script",
+      "declared": [
+        "BreakScript",
+        "memcpy",
+        "point"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "point"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script.hpp",
+      "address": "0x004B8C10",
+      "canonical": "BreakScript",
+      "fileNameSubject": "Break_Script",
+      "declared": [
+        "BreakScript"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial 2.cpp",
+      "address": "0x00407F50",
+      "canonical": "DefineGameMaterial",
+      "fileNameSubject": "Define_GameMaterial",
+      "declared": [
+        "DefineGameMaterial",
+        "Mem_Alloc",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "data_28",
+        "data_41",
+        "grammar",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "data_28",
+        "data_41",
+        "grammar",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial.cpp",
+      "address": "0x00407F50",
+      "canonical": "DefineGameMaterial",
+      "fileNameSubject": "Define_GameMaterial",
+      "declared": [
+        "DefineGameMaterial",
+        "Mem_Alloc",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "data_28",
+        "data_41",
+        "grammar",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "data_28",
+        "data_41",
+        "grammar",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial.hpp",
+      "address": "0x00407F50",
+      "canonical": "DefineGameMaterial",
+      "fileNameSubject": "Define_GameMaterial",
+      "declared": [
+        "DefineGameMaterial"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle 2.cpp",
+      "address": "0x004101C0",
+      "canonical": "DefineHumanPlayerWeaponCycle",
+      "fileNameSubject": "Define_HumanPlayerWeaponCycle",
+      "declared": [
+        "DefineHumanPlayerWeaponCycle",
+        "Script_GetArg",
+        "memcpy",
+        "unknown"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "unknown"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle.cpp",
+      "address": "0x004101C0",
+      "canonical": "DefineHumanPlayerWeaponCycle",
+      "fileNameSubject": "Define_HumanPlayerWeaponCycle",
+      "declared": [
+        "DefineHumanPlayerWeaponCycle",
+        "Script_GetArg",
+        "memcpy",
+        "unknown"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "unknown"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle.hpp",
+      "address": "0x004101C0",
+      "canonical": "DefineHumanPlayerWeaponCycle",
+      "fileNameSubject": "Define_HumanPlayerWeaponCycle",
+      "declared": [
+        "DefineHumanPlayerWeaponCycle"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory 2.cpp",
+      "address": "0x00410240",
+      "canonical": "DefineHumanPlayerWeaponCategory",
+      "fileNameSubject": "Define_HumanPlayerWeaponCategory",
+      "declared": [
+        "DefineHumanPlayerWeaponCategory",
+        "Script_GetArg",
+        "block",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "block",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory.cpp",
+      "address": "0x00410240",
+      "canonical": "DefineHumanPlayerWeaponCategory",
+      "fileNameSubject": "Define_HumanPlayerWeaponCategory",
+      "declared": [
+        "DefineHumanPlayerWeaponCategory",
+        "Script_GetArg",
+        "block",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "block",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory.hpp",
+      "address": "0x00410240",
+      "canonical": "DefineHumanPlayerWeaponCategory",
+      "fileNameSubject": "Define_HumanPlayerWeaponCategory",
+      "declared": [
+        "DefineHumanPlayerWeaponCategory"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit 2.cpp",
+      "address": "0x004102D0",
+      "canonical": "DefineHumanPlayerAmmoLimit",
+      "fileNameSubject": "Define_HumanPlayerAmmoLimit",
+      "declared": [
+        "DefineHumanPlayerAmmoLimit",
+        "Script_GetArg",
+        "block",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "block",
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit.cpp",
+      "address": "0x004102D0",
+      "canonical": "DefineHumanPlayerAmmoLimit",
+      "fileNameSubject": "Define_HumanPlayerAmmoLimit",
+      "declared": [
+        "DefineHumanPlayerAmmoLimit",
+        "Script_GetArg",
+        "block",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "block",
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit.hpp",
+      "address": "0x004102D0",
+      "canonical": "DefineHumanPlayerAmmoLimit",
+      "fileNameSubject": "Define_HumanPlayerAmmoLimit",
+      "declared": [
+        "DefineHumanPlayerAmmoLimit"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType 2.cpp",
+      "address": "0x0047CAD0",
+      "canonical": "DefineAmmoType",
+      "fileNameSubject": "Define_AmmoType",
+      "declared": [
+        "DefineAmmoType",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "TaskType_Set",
+        "grammar",
+        "memcpy",
+        "script"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "grammar",
+        "memcpy",
+        "script"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType.cpp",
+      "address": "0x0047CAD0",
+      "canonical": "DefineAmmoType",
+      "fileNameSubject": "Define_AmmoType",
+      "declared": [
+        "DefineAmmoType",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "TaskType_Set",
+        "grammar",
+        "memcpy",
+        "script"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "grammar",
+        "memcpy",
+        "script"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType.hpp",
+      "address": "0x0047CAD0",
+      "canonical": "DefineAmmoType",
+      "fileNameSubject": "Define_AmmoType",
+      "declared": [
+        "DefineAmmoType"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission 2.cpp",
+      "address": "0x00484F60",
+      "canonical": "DefineMission",
+      "fileNameSubject": "Define_Mission",
+      "declared": [
+        "DefineMission",
+        "Error_Show",
+        "FX_ExplosionSpawn_6",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "memcpy",
+        "parsing"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "parsing"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission.cpp",
+      "address": "0x00484F60",
+      "canonical": "DefineMission",
+      "fileNameSubject": "Define_Mission",
+      "declared": [
+        "DefineMission",
+        "Error_Show",
+        "FX_ExplosionSpawn_6",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "memcpy",
+        "parsing"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "parsing"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission.hpp",
+      "address": "0x00484F60",
+      "canonical": "DefineMission",
+      "fileNameSubject": "Define_Mission",
+      "declared": [
+        "DefineMission"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj 2.cpp",
+      "address": "0x004C4520",
+      "canonical": "DefineMagicObj",
+      "fileNameSubject": "Define_MagicObj",
+      "declared": [
+        "DefineMagicObj",
+        "Mem_Alloc",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "data_10",
+        "memcpy",
+        "parsing"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "data_10",
+        "memcpy",
+        "parsing"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj.cpp",
+      "address": "0x004C4520",
+      "canonical": "DefineMagicObj",
+      "fileNameSubject": "Define_MagicObj",
+      "declared": [
+        "DefineMagicObj",
+        "Mem_Alloc",
+        "Script_GetArg",
+        "Sys_ResolveSymbol_23",
+        "data_10",
+        "memcpy",
+        "parsing"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "data_10",
+        "memcpy",
+        "parsing"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj.hpp",
+      "address": "0x004C4520",
+      "canonical": "DefineMagicObj",
+      "fileNameSubject": "Define_MagicObj",
+      "declared": [
+        "DefineMagicObj"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound 2.cpp",
+      "address": "0x004E8C60",
+      "canonical": "DefineSound",
+      "fileNameSubject": "Define_Sound",
+      "declared": [
+        "Define",
+        "DefineSound",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_PlaySoundSample_13",
+        "Sys_ResolveSymbol_23",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "Define",
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound.cpp",
+      "address": "0x004E8C60",
+      "canonical": "DefineSound",
+      "fileNameSubject": "Define_Sound",
+      "declared": [
+        "Define",
+        "DefineSound",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_PlaySoundSample_13",
+        "Sys_ResolveSymbol_23",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "Define",
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound.hpp",
+      "address": "0x004E8C60",
+      "canonical": "DefineSound",
+      "fileNameSubject": "Define_Sound",
+      "declared": [
+        "DefineSound"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce 2.cpp",
+      "address": "0x004E9EC0",
+      "canonical": "DefineTriggerOnce",
+      "fileNameSubject": "Define_TriggerOnce",
+      "declared": [
+        "DefineTriggerOnce",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_InitSoundSys_14",
+        "Sys_ResolveSymbol_23",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce.cpp",
+      "address": "0x004E9EC0",
+      "canonical": "DefineTriggerOnce",
+      "fileNameSubject": "Define_TriggerOnce",
+      "declared": [
+        "DefineTriggerOnce",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_InitSoundSys_14",
+        "Sys_ResolveSymbol_23",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce.hpp",
+      "address": "0x004E9EC0",
+      "canonical": "DefineTriggerOnce",
+      "fileNameSubject": "Define_TriggerOnce",
+      "declared": [
+        "DefineTriggerOnce"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph 2.cpp",
+      "address": "0x004EAD20",
+      "canonical": "DefineGraph",
+      "fileNameSubject": "Define_Graph",
+      "declared": [
+        "DefineGraph",
+        "GRAPH",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_SetFrequency_14",
+        "Sys_ResolveSymbol_23",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "GRAPH",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph.cpp",
+      "address": "0x004EAD20",
+      "canonical": "DefineGraph",
+      "fileNameSubject": "Define_Graph",
+      "declared": [
+        "DefineGraph",
+        "GRAPH",
+        "Profile_ValueSet",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "SoundSys_SetFrequency_14",
+        "Sys_ResolveSymbol_23",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "GRAPH",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph.hpp",
+      "address": "0x004EAD20",
+      "canonical": "DefineGraph",
+      "fileNameSubject": "Define_Graph",
+      "declared": [
+        "DefineGraph"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group 2.cpp",
+      "address": "0x004EBA90",
+      "canonical": "DefineGroup",
+      "fileNameSubject": "Define_Group",
+      "declared": [
+        "DefineGroup",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "Script_SetSymbolContext",
+        "Sys_AllocateMemory_24",
+        "Sys_ResolveSymbol_23",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group.cpp",
+      "address": "0x004EBA90",
+      "canonical": "DefineGroup",
+      "fileNameSubject": "Define_Group",
+      "declared": [
+        "DefineGroup",
+        "QTask_HandleInput",
+        "Script_GetArg",
+        "Script_SetSymbolContext",
+        "Sys_AllocateMemory_24",
+        "Sys_ResolveSymbol_23",
+        "entry",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "entry",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group.hpp",
+      "address": "0x004EBA90",
+      "canonical": "DefineGroup",
+      "fileNameSubject": "Define_Group",
+      "declared": [
+        "DefineGroup"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material 2.cpp",
+      "address": "0x00407E30",
+      "canonical": "DefineQMaterial",
+      "fileNameSubject": "DefineQ_Material",
+      "declared": [
+        "DefineQMaterial",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "grammar",
+        "material",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "grammar",
+        "material",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material.cpp",
+      "address": "0x00407E30",
+      "canonical": "DefineQMaterial",
+      "fileNameSubject": "DefineQ_Material",
+      "declared": [
+        "DefineQMaterial",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "grammar",
+        "material",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "grammar",
+        "material",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material.hpp",
+      "address": "0x00407E30",
+      "canonical": "DefineQMaterial",
+      "fileNameSubject": "DefineQ_Material",
+      "declared": [
+        "DefineQMaterial"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player 2.cpp",
+      "address": "0x004036B0",
+      "canonical": "GOPlayer",
+      "fileNameSubject": "GO_Player",
+      "declared": [
+        "GOPlayer",
+        "Sys_ResolveSymbol_23",
+        "memcpy",
+        "name"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "name"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player.cpp",
+      "address": "0x004036B0",
+      "canonical": "GOPlayer",
+      "fileNameSubject": "GO_Player",
+      "declared": [
+        "GOPlayer",
+        "Sys_ResolveSymbol_23",
+        "memcpy",
+        "name"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "name"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player.hpp",
+      "address": "0x004036B0",
+      "canonical": "GOPlayer",
+      "fileNameSubject": "GO_Player",
+      "declared": [
+        "GOPlayer"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission 2.cpp",
+      "address": "0x00403750",
+      "canonical": "GOActiveMission",
+      "fileNameSubject": "GO_ActiveMission",
+      "declared": [
+        "GOActiveMission",
+        "Script_GetArg",
+        "active",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "active",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission.cpp",
+      "address": "0x00403750",
+      "canonical": "GOActiveMission",
+      "fileNameSubject": "GO_ActiveMission",
+      "declared": [
+        "GOActiveMission",
+        "Script_GetArg",
+        "active",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "active",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission.hpp",
+      "address": "0x00403750",
+      "canonical": "GOActiveMission",
+      "fileNameSubject": "GO_ActiveMission",
+      "declared": [
+        "GOActiveMission"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap 2.cpp",
+      "address": "0x004037C0",
+      "canonical": "GOInRemap",
+      "fileNameSubject": "GO_InRemap",
+      "declared": [
+        "GOInRemap",
+        "Script_GetArg",
+        "binding",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "binding",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap.cpp",
+      "address": "0x004037C0",
+      "canonical": "GOInRemap",
+      "fileNameSubject": "GO_InRemap",
+      "declared": [
+        "GOInRemap",
+        "Script_GetArg",
+        "binding",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "binding",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap.hpp",
+      "address": "0x004037C0",
+      "canonical": "GOInRemap",
+      "fileNameSubject": "GO_InRemap",
+      "declared": [
+        "GOInRemap"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv 2.cpp",
+      "address": "0x00403870",
+      "canonical": "GOInMouInv",
+      "fileNameSubject": "GO_InMouInv",
+      "declared": [
+        "GOInMouInv",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv.cpp",
+      "address": "0x00403870",
+      "canonical": "GOInMouInv",
+      "fileNameSubject": "GO_InMouInv",
+      "declared": [
+        "GOInMouInv",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv.hpp",
+      "address": "0x00403870",
+      "canonical": "GOInMouInv",
+      "fileNameSubject": "GO_InMouInv",
+      "declared": [
+        "GOInMouInv"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens 2.cpp",
+      "address": "0x004038E0",
+      "canonical": "GOInMouSens",
+      "fileNameSubject": "GO_InMouSens",
+      "declared": [
+        "GOInMouSens",
+        "Profile_ValueSet",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens.cpp",
+      "address": "0x004038E0",
+      "canonical": "GOInMouSens",
+      "fileNameSubject": "GO_InMouSens",
+      "declared": [
+        "GOInMouSens",
+        "Profile_ValueSet",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens.hpp",
+      "address": "0x004038E0",
+      "canonical": "GOInMouSens",
+      "fileNameSubject": "GO_InMouSens",
+      "declared": [
+        "GOInMouSens"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp 2.cpp",
+      "address": "0x00403950",
+      "canonical": "GOGfxDisp",
+      "fileNameSubject": "GO_GfxDisp",
+      "declared": [
+        "GOGfxDisp",
+        "Script_GetArg",
+        "list",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "list",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp.cpp",
+      "address": "0x00403950",
+      "canonical": "GOGfxDisp",
+      "fileNameSubject": "GO_GfxDisp",
+      "declared": [
+        "GOGfxDisp",
+        "Script_GetArg",
+        "list",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "list",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp.hpp",
+      "address": "0x00403950",
+      "canonical": "GOGfxDisp",
+      "fileNameSubject": "GO_GfxDisp",
+      "declared": [
+        "GOGfxDisp"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang 2.cpp",
+      "address": "0x00403A00",
+      "canonical": "GOGameLang",
+      "fileNameSubject": "GO_GameLang",
+      "declared": [
+        "Camera_UpdateTransform_6",
+        "GOGameLang",
+        "Script_GetArg",
+        "index",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "index",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang.cpp",
+      "address": "0x00403A00",
+      "canonical": "GOGameLang",
+      "fileNameSubject": "GO_GameLang",
+      "declared": [
+        "Camera_UpdateTransform_6",
+        "GOGameLang",
+        "Script_GetArg",
+        "index",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "index",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang.hpp",
+      "address": "0x00403A00",
+      "canonical": "GOGameLang",
+      "fileNameSubject": "GO_GameLang",
+      "declared": [
+        "GOGameLang"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff 2.cpp",
+      "address": "0x00403AC0",
+      "canonical": "GOGameDiff",
+      "fileNameSubject": "GO_GameDiff",
+      "declared": [
+        "GOGameDiff",
+        "Script_GetArg",
+        "hard",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "hard",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff.cpp",
+      "address": "0x00403AC0",
+      "canonical": "GOGameDiff",
+      "fileNameSubject": "GO_GameDiff",
+      "declared": [
+        "GOGameDiff",
+        "Script_GetArg",
+        "hard",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "hard",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff.hpp",
+      "address": "0x00403AC0",
+      "canonical": "GOGameDiff",
+      "fileNameSubject": "GO_GameDiff",
+      "declared": [
+        "GOGameDiff"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood 2.cpp",
+      "address": "0x00403DF0",
+      "canonical": "GOIsBlood",
+      "fileNameSubject": "GO_IsBlood",
+      "declared": [
+        "GOIsBlood",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood.cpp",
+      "address": "0x00403DF0",
+      "canonical": "GOIsBlood",
+      "fileNameSubject": "GO_IsBlood",
+      "declared": [
+        "GOIsBlood",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood.hpp",
+      "address": "0x00403DF0",
+      "canonical": "GOIsBlood",
+      "fileNameSubject": "GO_IsBlood",
+      "declared": [
+        "GOIsBlood"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech 2.cpp",
+      "address": "0x00403E60",
+      "canonical": "GOSoundSpeech",
+      "fileNameSubject": "GO_SoundSpeech",
+      "declared": [
+        "GOSoundSpeech",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech.cpp",
+      "address": "0x00403E60",
+      "canonical": "GOSoundSpeech",
+      "fileNameSubject": "GO_SoundSpeech",
+      "declared": [
+        "GOSoundSpeech",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech.hpp",
+      "address": "0x00403E60",
+      "canonical": "GOSoundSpeech",
+      "fileNameSubject": "GO_SoundSpeech",
+      "declared": [
+        "GOSoundSpeech"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic 2.cpp",
+      "address": "0x00403EF0",
+      "canonical": "GOSoundMusic",
+      "fileNameSubject": "GO_SoundMusic",
+      "declared": [
+        "GOSoundMusic",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic.cpp",
+      "address": "0x00403EF0",
+      "canonical": "GOSoundMusic",
+      "fileNameSubject": "GO_SoundMusic",
+      "declared": [
+        "GOSoundMusic",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic.hpp",
+      "address": "0x00403EF0",
+      "canonical": "GOSoundMusic",
+      "fileNameSubject": "GO_SoundMusic",
+      "declared": [
+        "GOSoundMusic"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX 2.cpp",
+      "address": "0x00403F80",
+      "canonical": "GOSoundFX",
+      "fileNameSubject": "GO_SoundFX",
+      "declared": [
+        "GOSoundFX",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX.cpp",
+      "address": "0x00403F80",
+      "canonical": "GOSoundFX",
+      "fileNameSubject": "GO_SoundFX",
+      "declared": [
+        "GOSoundFX",
+        "Profile_ValueSet",
+        "Script_GetArg",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX.hpp",
+      "address": "0x00403F80",
+      "canonical": "GOSoundFX",
+      "fileNameSubject": "GO_SoundFX",
+      "declared": [
+        "GOSoundFX"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice 2.cpp",
+      "address": "0x00404010",
+      "canonical": "GOGfxDevice",
+      "fileNameSubject": "GO_GfxDevice",
+      "declared": [
+        "GOGfxDevice",
+        "Sys_ResolveSymbol_23",
+        "device",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "device",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice.cpp",
+      "address": "0x00404010",
+      "canonical": "GOGfxDevice",
+      "fileNameSubject": "GO_GfxDevice",
+      "declared": [
+        "GOGfxDevice",
+        "Sys_ResolveSymbol_23",
+        "device",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "device",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice.hpp",
+      "address": "0x00404010",
+      "canonical": "GOGfxDevice",
+      "fileNameSubject": "GO_GfxDevice",
+      "declared": [
+        "GOGfxDevice"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma 2.cpp",
+      "address": "0x00404080",
+      "canonical": "GOGfxGamma",
+      "fileNameSubject": "GO_GfxGamma",
+      "declared": [
+        "GOGfxGamma",
+        "Profile_ValueSet",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma.cpp",
+      "address": "0x00404080",
+      "canonical": "GOGfxGamma",
+      "fileNameSubject": "GO_GfxGamma",
+      "declared": [
+        "GOGfxGamma",
+        "Profile_ValueSet",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma.hpp",
+      "address": "0x00404080",
+      "canonical": "GOGfxGamma",
+      "fileNameSubject": "GO_GfxGamma",
+      "declared": [
+        "GOGfxGamma"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance 2.cpp",
+      "address": "0x004040F0",
+      "canonical": "GOGfxPerformance",
+      "fileNameSubject": "GO_GfxPerformance",
+      "declared": [
+        "GOGfxPerformance",
+        "Script_GetArg",
+        "mapping",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "mapping",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance.cpp",
+      "address": "0x004040F0",
+      "canonical": "GOGfxPerformance",
+      "fileNameSubject": "GO_GfxPerformance",
+      "declared": [
+        "GOGfxPerformance",
+        "Script_GetArg",
+        "mapping",
+        "memcpy"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "mapping",
+        "memcpy"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance.hpp",
+      "address": "0x004040F0",
+      "canonical": "GOGfxPerformance",
+      "fileNameSubject": "GO_GfxPerformance",
+      "declared": [
+        "GOGfxPerformance"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D3E-MathSys_RestoreFpuCw 2.cpp",
+      "address": "0x004A9D3E",
+      "canonical": null,
+      "fileNameSubject": "MathSys_RestoreFpuCw",
+      "declared": [
+        "MathSys_RestoreFpuCw",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_RestoreFpuCw",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D3E-MathSys_RestoreFpuCw.cpp",
+      "address": "0x004A9D3E",
+      "canonical": null,
+      "fileNameSubject": "MathSys_RestoreFpuCw",
+      "declared": [
+        "MathSys_RestoreFpuCw",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_RestoreFpuCw",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D3E-MathSys_RestoreFpuCw.hpp",
+      "address": "0x004A9D3E",
+      "canonical": null,
+      "fileNameSubject": "MathSys_RestoreFpuCw",
+      "declared": [
+        "MathSys_RestoreFpuCw"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_RestoreFpuCw"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D4B-MathSys_MathExit 2.cpp",
+      "address": "0x004A9D4B",
+      "canonical": null,
+      "fileNameSubject": "MathSys_MathExit",
+      "declared": [
+        "MathSys_MathExit",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_MathExit",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D4B-MathSys_MathExit.cpp",
+      "address": "0x004A9D4B",
+      "canonical": null,
+      "fileNameSubject": "MathSys_MathExit",
+      "declared": [
+        "MathSys_MathExit",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_MathExit",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D4B-MathSys_MathExit.hpp",
+      "address": "0x004A9D4B",
+      "canonical": null,
+      "fileNameSubject": "MathSys_MathExit",
+      "declared": [
+        "MathSys_MathExit"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_MathExit"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D89-MathSys_HandleFpuException 2.cpp",
+      "address": "0x004A9D89",
+      "canonical": null,
+      "fileNameSubject": "MathSys_HandleFpuException",
+      "declared": [
+        "MathSys_HandleFpuException",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_HandleFpuException",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D89-MathSys_HandleFpuException.cpp",
+      "address": "0x004A9D89",
+      "canonical": null,
+      "fileNameSubject": "MathSys_HandleFpuException",
+      "declared": [
+        "MathSys_HandleFpuException",
+        "implementation"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_HandleFpuException",
+        "implementation"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D89-MathSys_HandleFpuException.hpp",
+      "address": "0x004A9D89",
+      "canonical": null,
+      "fileNameSubject": "MathSys_HandleFpuException",
+      "declared": [
+        "MathSys_HandleFpuException"
+      ],
+      "status": "WRONG_NAME",
+      "suspects": [
+        "MathSys_HandleFpuException"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel 2.cpp",
+      "address": "0x004B8C60",
+      "canonical": "_Script_SetWarningLevel",
+      "fileNameSubject": "Script_SetWarningLevel",
+      "declared": [
+        "Script_GetArg",
+        "Sys_ExecuteBytecode_23",
+        "_Script_SetWarningLevel",
+        "memcpy",
+        "running"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "running"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel.cpp",
+      "address": "0x004B8C60",
+      "canonical": "_Script_SetWarningLevel",
+      "fileNameSubject": "Script_SetWarningLevel",
+      "declared": [
+        "Script_GetArg",
+        "Sys_ExecuteBytecode_23",
+        "_Script_SetWarningLevel",
+        "memcpy",
+        "running"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": [
+        "memcpy",
+        "running"
+      ]
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel.hpp",
+      "address": "0x004B8C60",
+      "canonical": "_Script_SetWarningLevel",
+      "fileNameSubject": "Script_SetWarningLevel",
+      "declared": [
+        "_Script_SetWarningLevel"
+      ],
+      "status": "FILENAME_NAME_MISMATCH",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00478540-WeaponGun_InvokeGetList_478540 2.hpp",
+      "address": "0x00478540",
+      "canonical": "WeaponGun_InvokeGetList_478540",
+      "fileNameSubject": "WeaponGun_InvokeGetList_478540",
+      "declared": [],
+      "status": "WRONG_NAME",
+      "suspects": []
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00479C20-WeaponGun_Invoke5_479C20 2.hpp",
+      "address": "0x00479C20",
+      "canonical": "WeaponGun_Invoke5_479C20",
+      "fileNameSubject": "WeaponGun_Invoke5_479C20",
+      "declared": [],
+      "status": "WRONG_NAME",
+      "suspects": []
+    }
+  ]
+}

@@ -51,13 +51,13 @@ extern "C" {
 
 // The retail action count at 0x00BC2380. The native reads it to find the
 // action it binds.
-extern std::uint32_t DAT_00BC2380;
+extern std::uint32_t InputRemap_ActionCount;
 
 // The retail action table at 0x00BC2358.
-extern std::uint32_t DAT_00BC2358[igi::retail::config::action_table_size];
+extern std::uint32_t InputRemap_ActionTable[igi::retail::config::action_table_size];
 
 // The retail remap table at 0x00BC25BC.
-extern std::uint32_t DAT_00BC25BC[igi::retail::config::remap_table_size];
+extern std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size];
 
 // Native: GOInRemap() - VA 0x004037C0 - complete port.
 // Behavior: reads the action count at 0x00BC2380, takes the action's slot

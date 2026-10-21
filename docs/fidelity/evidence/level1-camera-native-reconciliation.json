@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "subject": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "architecture": "x86"
+  },
+  "provider": "REA MCP / Ghidra 12.1.2",
+  "findings": [
+    {
+      "address": "0x004A0110",
+      "candidate": "Camera_UpdateTransform",
+      "evidence_id": "ev_2c2bedd8855e44c388e6eb34fbf38ae04f84756f7d0c5d74b7d550d1a5719314",
+      "ghidra_body": {"start": "0x004A0110", "end_inclusive": "0x004A01A5", "bytes": 150, "basic_blocks": 1},
+      "observed_behavior": "Calls Matrix_InvalidateSlot eight times with these ordered pairs: (0x00BCAD7C,0x007205B8), (0x00BCADAC,0x00723508), (0x00BCADAC,0x007205BC), (0x00BCADE8,0x00723504), (0x00BCADAC,0x007ADDD4), (0x00BCADE8,0x007205B0), (0x00BCAD7C,0x007AC09C), (0x00BCADAC,0x007234B8).",
+      "candidate_status": "ANALYZED",
+      "limits": ["Ghidra pseudocode does not establish the native return semantics.", "No Binary Ninja cross-check or IGI-Probe runtime trace was collected."]
+    },
+    {
+      "address": "0x004A0340",
+      "candidate": "Camera_SetFieldOfView",
+      "evidence_id": "ev_bb48838fde47736034007c945cc9dec8f6cf938b496c3f42c2406abce55fab7f",
+      "ghidra_body": {"start": "0x004A0340", "end_inclusive": "0x004A146E", "bytes": 4399},
+      "radare2": {"version": "6.2.0", "calling_convention": "cdecl", "basic_blocks": 208, "cfg_edges": 286, "instructions": 1354, "arguments": 11},
+      "candidate_signature": "int Camera_SetFieldOfView(float, int, float, int, float, int, float*, float)",
+      "catalog_candidate_claim": "CFG 73.3% (FAIL; structural only)",
+      "decision": "Do not copy this GameNatives candidate into the engine. Its own recorded CFG score is below the declared threshold, and Radare2 reports eleven arguments while the export declares eight; reconcile its function boundary, signature, and body before considering a transcription."
+    },
+    {
+      "address": "0x00497970",
+      "candidate": "DisplayRender_ProcessTransContextPrim",
+      "ghidra_result": "No procedure was returned at the requested address.",
+      "radare2": {"version": "6.2.0", "calling_convention": "cdecl", "bytes": 15, "basic_blocks": 1, "cfg_edges": 0, "instructions": 6, "arguments": 1},
+      "catalog_candidate_claim": "CFG 100.0% (PASS; structural only)",
+      "decision": "Radare2 recovers a one-block wrapper consistent with the candidate's 15-byte body. Ghidra still has no boundary, so this is not independent cross-validation."
+    },
+    {
+      "address": "0x0049DF60",
+      "candidate": "DisplayRender_Processmodelsnotconvert",
+      "ghidra_result": "No procedure was returned at the requested address.",
+      "radare2": {"version": "6.2.0", "calling_convention": "cdecl", "bytes": 3049, "basic_blocks": 86, "cfg_edges": 130, "instructions": 857, "arguments": 1},
+      "catalog_candidate_claim": "Candidate name is inconsistent across duplicate exports; no independent Ghidra body was returned.",
+      "decision": "Radare2 recovers a large renderer routine, but Ghidra has no boundary and the catalog name is disputed. Reconcile candidate body, function name, signature, and CFG before copying it into the engine."
+    }
+  ],
+  "scope": "Static review only. This record does not claim the retail camera/renderer path is implemented or runtime-equivalent."
+}

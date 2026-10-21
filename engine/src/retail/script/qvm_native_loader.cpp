@@ -182,7 +182,7 @@ std::int32_t Qvm_ReportError(const char* format, ...)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B83D0-0x004B8407, 55 bytes, digest 15262421fde0740b2926521a46297cc4d7e66731665240f9736b56887a3f71ff.
 // Behavior/CFG: inspects `qvm[0x23]` (`qvm + 0x8C`); if null, calls `Resource_Unload((const char*)qvm)` (0x004B6380), otherwise calls the standalone release `Sys_CheckHeap_28(standalone)` (0x004BD380); both paths then call the block release `Sys_UnloadBlock(qvm)` (0x004B0D10) and return its value (disassembly 0x004B83DF-0x004B8402). radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
-// Status/limits: STRUCTURALLY_VERIFIED; high for the exact +0x8C branch, call order, and argument re-throws. The two release callees (0x004BD380 and 0x004B0D10) are not yet transcribed; they are invoked through injectable host boundaries (Host_SetQvmStandaloneRelease / Host_SetQvmBlockRelease) that return 0 until their allocator-free chains are ported, so the retail return value of that inner chain is not reproduced by the default boundaries.
+// Status/limits: STRUCTURALLY_VERIFIED; high for the exact +0x8C branch, call order, and argument re-throws. The two release callees (0x004BD380 and 0x004B0D10) are not yet transcribed; they are invoked through injectable host boundaries (Sys_SetQvmStandaloneRelease / Sys_SetQvmBlockRelease) that return 0 until their allocator-free chains are ported, so the retail return value of that inner chain is not reproduced by the default boundaries.
 std::int32_t Qvm_Cleanup(void* qvm)
 {
     auto* const bytes = static_cast<std::uint8_t*>(qvm);
@@ -400,32 +400,32 @@ void* Qvm_Load(const char* qvm_path)
     return result;
 }
 
-void Host_SetQvmDebugCompileFlag(std::int32_t enabled) noexcept
+void Script_SetDebugCompileFlag(std::int32_t enabled) noexcept
 {
     g_5c8bec = enabled;
 }
 
-void Host_SetQvmForcePrecompiledFlag(std::int32_t enabled) noexcept
+void Script_SetForcePrecompiledFlag(std::int32_t enabled) noexcept
 {
     g_5c8bf0 = enabled;
 }
 
-void Host_SetSysDispatchOpcode7(SysDispatchOpcode7Fn fn) noexcept
+void Qvm_SetDispatchOpcode7(SysDispatchOpcode7Fn fn) noexcept
 {
     g_sys_dispatch_opcode_7 = fn;
 }
 
-void Host_SetSysResolveSymbol28(SysResolveSymbol28Fn fn) noexcept
+void Sys_SetResolveSymbol28(SysResolveSymbol28Fn fn) noexcept
 {
     g_sys_resolve_symbol_28 = fn;
 }
 
-void Host_SetQvmStandaloneRelease(SysQvmStandaloneReleaseFn fn) noexcept
+void Sys_SetQvmStandaloneRelease(SysQvmStandaloneReleaseFn fn) noexcept
 {
     g_sys_qvm_standalone_release = fn;
 }
 
-void Host_SetQvmBlockRelease(SysQvmBlockReleaseFn fn) noexcept
+void Sys_SetQvmBlockRelease(SysQvmBlockReleaseFn fn) noexcept
 {
     g_sys_qvm_block_release = fn;
 }

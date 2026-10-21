@@ -42,7 +42,7 @@ public:
 // Confidence: partial archive adapter for host diagnostics/scene harness.
 // Signature: C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.
 // Usage/tests: Used to mount model/texture RES archives in host diagnostic tools; archive fixtures passed.
-[[nodiscard]] ResourceArchive Host_ParseResourceArchive(
+[[nodiscard]] ResourceArchive Resource_ParseArchive(
     std::span<const std::byte> resource_bytes,
     std::string_view source_name);
 
@@ -56,6 +56,6 @@ public:
 // Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
 // Host adapter: reads a file from disk and parses it with Sys_Resource.
 // The retail Resource_Load (VA 0x004B5F00) is a 2-argument cache probe and is NOT this.
-[[nodiscard]] ResourceArchive Host_LoadResourceArchive(const std::filesystem::path& resource_path);
+[[nodiscard]] ResourceArchive Resource_LoadArchive(const std::filesystem::path& resource_path);
 
 } // namespace igi::retail::resource

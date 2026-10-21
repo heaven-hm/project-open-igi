@@ -15,6 +15,14 @@
 
 namespace igi::retail::terrain
 {
+// Shared native globals at retail 0x00B97B20 and 0x00B97D24.
+// The current port's 20-element storage is a documented subset, not a retail extent claim.
+extern std::array<std::uint32_t, 20> g_data_b97b20;
+extern std::int32_t g_b97d24;
+// TextureModifier_Push/Pop retail globals 0x00B97DA0, 0x00B97DF8, 0x00BA5060.
+extern std::array<std::uint32_t, 20> g_b97da0;
+extern std::int32_t g_b97df8;
+extern std::uint32_t g_ba5060;
 
 // Material entry for a single LOD level (32 LOD levels per material group).
 // Retail layout matches table written by Terrain_CreateMaterial at 0x004C6670.
@@ -85,6 +93,22 @@ struct TerrainTextureModifierTask
     const std::uint8_t* bitmap_item = nullptr;
 };
 
+// HOST HELPER: return whether a world-space point is enabled by the modifier's
+// packed one-bit coverage mask.  The mask format and coordinate parameters are
+// populated from TextureModifier_LoadParameters (retail VA 0x005062A0).
+[[nodiscard]] bool TextureModifier_CoversPoint(const TerrainTextureModifierTask& modifier,
+                                                    double world_x, double world_y);
+
+// HOST HELPER: expose the ported terrain globals to the differential harnesses. These mirror
+// the retail storage at 0x00C28FE0 (material groups), 0x00C30080 (tile-map tables) and
+// 0x00B97DA0/0x00B97DF8/0x00BA5060 (texture-modifier stack); the angr side reads the absolute
+// retail addresses directly from the igi.exe image state.
+void Terrain_GetMaterialGroupBytes(std::uint32_t index, std::uint8_t* out);
+void Terrain_GetTileMapBytes(std::uint32_t index, std::uint8_t* out);
+void TextureModifier_GetState(std::uint8_t* out);
+void TextureModifier_SetCount(std::int32_t count);
+void Terrain_ResetGlobals();
+
 // Heightmap parameters parsed from OBJECTS.QSC (Task_New "HeightMap").
 struct TerrainHeightMapTask
 {
@@ -143,11 +167,20 @@ class TerrainLevelData
     bool loaded = false;
 
     // HOST HELPER: load Level terrain files and QSC tasks.
-    bool Host_LoadLevelTerrain(const std::filesystem::path& terrain_dir,
-                               const std::vector<std::shared_ptr<script::QvmObjectCall>>& object_calls);
+    // apply_tasks=false performs the file stage only, which the phase-0
+    // Level_Start order uses before objects.qsc; true applies the
+    // TextureModifier/HeightMap/TerrainLightMap tasks after the script load.
+    bool Terrain_LoadLevel(const std::filesystem::path& terrain_dir,
+                               const std::vector<std::shared_ptr<script::QvmObjectCall>>& object_calls,
+                               bool apply_tasks = true);
+
+    // HOST HELPER: load the TERRAIN.LMP lightmap pages.
+    // Retail calls Terrain_LoadTexturesAndLightmaps (0x004C5F00) before
+    // Terrain_Load (0x004C6240) at 0x00415C31/0x00415C44.
+    bool Terrain_LoadLightmaps(const std::filesystem::path& terrain_dir);
 
     // HOST HELPER: build decoded render mesh for the given camera and origin.
-    TerrainDecodedMesh Host_BuildRenderMesh(const std::array<double, 3>& origin,
+    TerrainDecodedMesh Terrain_BuildRenderMesh(const std::array<double, 3>& origin,
                                            float world_scale,
                                            const float camera_position[3],
                                            const float camera_target[3],
@@ -175,35 +208,35 @@ void* Terrain_CreateTileMap(void* context, const float* args);
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/dynobj/004C6240-DynObj_Createterrainmateria.cpp; CFG 80.9%.
 // Behavior/CFG: Loads .bit, .hmp, .cmd, .ctr files, registers QVM natives, executes TERRAIN.QVM, relocates CTR command offsets.
-// Status/limits: TRANSCRIBED; port-owned file buffers, structure verified with retail records.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 void* Terrain_Load(void* context, const char* base_path);
 
 // Native: Terrain_LoadTexturesAndLightmaps; retail VA 0x004C5F00; signature int32_t(void* context, const char* base_path).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/dynobj/004C5F00-DynObj_ParseConfigFile_7.cpp; CFG 85.7%.
 // Behavior/CFG: Loads .tex via 0x005175A0, sets 256-color palette, loads .lmp lightmap pages into g_b81b20.
-// Status/limits: TRANSCRIBED; port-owned texture storage, verified against Level 1 TERRAIN.TEX.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 std::int32_t Terrain_LoadTexturesAndLightmaps(void* context, const char* base_path);
 
 // Native: Terrain_TraverseContourQuadtree; retail VA 0x004D14E0; signature int32_t(void* context).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/render/004D14E0-Render_ShouldHaveAllocatedD.cpp; CFG 86.7%.
 // Behavior/CFG: Quadtree traversal from CTR[1], frustum culling with view angles, detail exponent selection, emits chunk queue to g_b16ce0.
-// Status/limits: TRANSCRIBED; port-owned queue and frustum math, verified against retail octree tables.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 std::int32_t Terrain_TraverseContourQuadtree(void* context);
 
 // Native: Terrain_DecodeChunkCommands; retail VA 0x00510010; signature int32_t(void* context).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00510010-Terrain_RenderQuadtree.cpp; CFG 66.7%.
 // Behavior/CFG: Decodes 4-byte packed vertices from CMD, applies orientation transform, heightmap delta_z, material UV mapping.
-// Status/limits: TRANSCRIBED; port-owned vertex buffers, structure verified with retail CMD/HMP layouts.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 std::int32_t Terrain_DecodeChunkCommands(void* context);
 
 // Native: Terrain_Draw; retail VA 0x00512C30; signature int32_t(void* context).
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00512C30-Terrain_Draw.cpp; CFG 77.8%.
 // Behavior/CFG: Sets Direct3D 7 device render states, transforms, fog, alpha blending, texture stages, and renders terrain chunks.
-// Status/limits: TRANSCRIBED; Direct3D 7 backend bridge, verified with device draw calls.
+// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
 std::int32_t Terrain_Draw(void* context);
 
 // Native: TextureModifier_Push; retail VA 0x00505E40; signature void*(void* self).

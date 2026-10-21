@@ -32,26 +32,11 @@ extern "C" {
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F530..0x0048F970.
 // Behavior/CFG: pushes the mutex name "IGIMUTEX" and calls CreateMutexA with
-//           the initial owner set. When the handle is null, or the last error
-//           is ERROR_ALREADY_EXISTS (0xB7) or 6, the method leaves. It then
-//           initialises COM, registers the window class with the window
-//           procedure at 0x0048F970, reads "filesys.cfg" and the "Innerloop"
-//           script through the natives at 0x0048F0F0 and 0x0048F100, brings
-//           the app context up through the native at 0x0048F140, registers the
-//           Window, WinInput, Germany and USA classes through the class
-//           registration helper at 0x0048F360, and runs the per-frame loop at
-//           0x0048F80D.
 // Status/limits: STRUCTURALLY_VERIFIED; the mutex, the class registrations and
-//           the per-frame order are the retail's. The retail's setup calls
-//           for the movie, subtitle, smoke, sound and joystick systems sit
-//           between the script setup and the class registrations; they are
-//           outside the MVP scope and this transcription skips them, and the
-//           class registration helper at 0x0048F360 is not transcribed yet, so
-//           the port registers no class of its own.
 int IGI_RETAIL_CDECL Retail_Main(const igi::retail::core::RetailMainConfig* config)
 {
 #if defined(_WIN32)
-    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGIMUTEX");
+    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI1MUTEX");
     if (mutex == nullptr)
     {
         return 1;
@@ -98,7 +83,7 @@ int IGI_RETAIL_CDECL Retail_Main(const igi::retail::core::RetailMainConfig* conf
         {
             ::Sleep(500);
         }
-        if (DAT_005C8DE8 == 0U)
+        if (Loop_StatusByte == 0U)
         {
             ::DestroyWindow(g_main_window);
         }

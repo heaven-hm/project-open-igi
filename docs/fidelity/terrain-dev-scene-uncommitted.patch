@@ -1,0 +1,337 @@
+diff --git a/engine/platform/windows/retail_model_scene.cpp b/engine/platform/windows/retail_model_scene.cpp
+index 1e0584aa..7fd16359 100644
+--- a/engine/platform/windows/retail_model_scene.cpp
++++ b/engine/platform/windows/retail_model_scene.cpp
+@@ -15,12 +15,11 @@
+ #include "igi/retail/terrain/terrain_loaders.hpp"
+ #include "igi/retail/texture/model_texture_pixels.hpp"
+ 
+-
+ #include <algorithm>
+ #include <array>
+ #include <bit>
+-#include <chrono>
+ #include <cctype>
++#include <chrono>
+ #include <cmath>
+ #include <cstring>
+ #include <d3d.h>
+@@ -229,7 +228,9 @@ std::array<float, 9> multiply(const std::array<float, 9>& left, const std::array
+ 
+ std::string fold_ascii(std::string value)
+ {
+-    std::transform(value.begin(), value.end(), value.begin(),
++    std::transform(value.begin(),
++                   value.end(),
++                   value.begin(),
+                    [](unsigned char character) { return static_cast<char>(std::tolower(character)); });
+     return value;
+ }
+@@ -282,7 +283,7 @@ struct Scene
+     igi::developer::DeveloperControls developer_controls;
+     float dev_yaw = 0.0F;   // radians, around Z
+     float dev_pitch = 0.0F; // radians, up/down
+-    float dev_speed = 400.0F;
++    float dev_speed = 30.0F;
+     bool dev_look_initialised = false;
+     POINT dev_last_mouse{};
+ 
+@@ -366,7 +367,7 @@ struct Scene
+             move.z -= 1.0F;
+         }
+ 
+-        const float speed = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0 ? dev_speed * 4.0F : dev_speed;
++        const float speed = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0 ? dev_speed * 2.0F : dev_speed;
+         camera_position.x += move.x * speed * delta_seconds;
+         camera_position.y += move.y * speed * delta_seconds;
+         camera_position.z += move.z * speed * delta_seconds;
+@@ -404,10 +405,10 @@ struct Scene
+             const auto bytes =
+                 resource::Host_LoadResourceFile(cache, descriptor.first / (descriptor.second + ".mtp"));
+             package->metadata = model::MtpPackage::Host_ParseModelTexturePackage(bytes->bytes);
+-            package->meshes =
+-                resource::Host_LoadResourceArchive(descriptor.first / "models" / (descriptor.second + ".res"));
+-            package->textures =
+-                resource::Host_LoadResourceArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
++            package->meshes = resource::Host_LoadResourceArchive(descriptor.first / "models" /
++                                                                 (descriptor.second + ".res"));
++            package->textures = resource::Host_LoadResourceArchive(descriptor.first / "textures" /
++                                                                   (descriptor.second + ".res"));
+             write_log("MTP/RES loaded: " + descriptor.second +
+                       " models=" + std::to_string(package->meshes.entries.size()) +
+                       " texture_names=" + std::to_string(package->metadata.texture_names.size()));
+@@ -440,7 +441,8 @@ struct Scene
+         // Load retail level terrain if available (TERRAIN directory)
+         const auto terrain_dir_lower = level / "terrain";
+         const auto terrain_dir_upper = level / "TERRAIN";
+-        const auto terrain_dir = std::filesystem::exists(terrain_dir_lower) ? terrain_dir_lower : terrain_dir_upper;
++        const auto terrain_dir =
++            std::filesystem::exists(terrain_dir_lower) ? terrain_dir_lower : terrain_dir_upper;
+         if (std::filesystem::exists(terrain_dir))
+         {
+             const bool terrain_loaded = terrain_data.Host_LoadLevelTerrain(terrain_dir, calls);
+@@ -475,18 +477,15 @@ struct Scene
+             const bool scamera_task = (type == "SCamera");
+             const bool vehicle_task = (type == "Car" || type == "Heli");
+             const bool static_model_task = (type == "EditRigidObj" || type == "Building");
+-            const bool initial_model_task = (type == "ExplodeObject" || type == "Terminal" ||
+-                                             type == "SCameraControl" || type == "AlarmControl" ||
+-                                             type == "AIStationaryGunHolder" || type == "AlarmLight" ||
+-                                             type == "Elevator" || type == "Generator" ||
+-                                             type == "GenericPickup" || type == "GenericTBA" ||
+-                                             type == "Plane" || type == "Radio" ||
+-                                             type == "RotatingObject" || type == "Siren" ||
+-                                             type == "StationaryGun" || type == "GunPickup" ||
+-                                             type == "AmmoPickup");
+-
+-            if (!fence_task && !wire_task && !door_task && !switch_task &&
+-                !scamera_task && !vehicle_task && !static_model_task && !initial_model_task)
++            const bool initial_model_task =
++                (type == "ExplodeObject" || type == "Terminal" || type == "SCameraControl" ||
++                 type == "AlarmControl" || type == "AIStationaryGunHolder" || type == "AlarmLight" ||
++                 type == "Elevator" || type == "Generator" || type == "GenericPickup" ||
++                 type == "GenericTBA" || type == "Plane" || type == "Radio" || type == "RotatingObject" ||
++                 type == "Siren" || type == "StationaryGun" || type == "GunPickup" || type == "AmmoPickup");
++
++            if (!fence_task && !wire_task && !door_task && !switch_task && !scamera_task && !vehicle_task &&
++                !static_model_task && !initial_model_task)
+             {
+                 continue;
+             }
+@@ -496,7 +495,8 @@ struct Scene
+ 
+             if (fence_task) // Fence / Cabinet: pos@3..5, heading@6, model@7
+             {
+-                if (arguments.size() < 8U) continue;
++                if (arguments.size() < 8U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+@@ -507,7 +507,8 @@ struct Scene
+             }
+             else if (wire_task) // Wire: start pos@3..5, stop pos@6..8, model@9
+             {
+-                if (arguments.size() < 10U) continue;
++                if (arguments.size() < 10U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+@@ -520,43 +521,44 @@ struct Scene
+             }
+             else if (door_task) // Door: pos@3..5, ori@9..11, model@12
+             {
+-                if (arguments.size() < 13U) continue;
++                if (arguments.size() < 13U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+                 }
+-                object.rotation = orientation(safe_number(arguments[9]),
+-                                              safe_number(arguments[10]),
+-                                              safe_number(arguments[11]));
++                object.rotation = orientation(
++                    safe_number(arguments[9]), safe_number(arguments[10]), safe_number(arguments[11]));
+                 model_name = safe_text(arguments[12]);
+             }
+             else if (switch_task) // Switch: pos@3..5, ori@6..8, model@11
+             {
+-                if (arguments.size() < 12U) continue;
++                if (arguments.size() < 12U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+                 }
+-                object.rotation = orientation(safe_number(arguments[6]),
+-                                              safe_number(arguments[7]),
+-                                              safe_number(arguments[8]));
++                object.rotation = orientation(
++                    safe_number(arguments[6]), safe_number(arguments[7]), safe_number(arguments[8]));
+                 model_name = safe_text(arguments[11]);
+             }
+             else if (scamera_task) // SCamera: pos@3..5, ori@6..8, model@10
+             {
+-                if (arguments.size() < 11U) continue;
++                if (arguments.size() < 11U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+                 }
+-                object.rotation = orientation(safe_number(arguments[6]),
+-                                              safe_number(arguments[7]),
+-                                              safe_number(arguments[8]));
++                object.rotation = orientation(
++                    safe_number(arguments[6]), safe_number(arguments[7]), safe_number(arguments[8]));
+                 model_name = safe_text(arguments[10]);
+             }
+             else if (vehicle_task) // Car / Heli: pos@3..5, heading@8, model@13
+             {
+-                if (arguments.size() < 14U) continue;
++                if (arguments.size() < 14U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+@@ -567,14 +569,14 @@ struct Scene
+             }
+             else // Standard positioned objects: pos@3..5, ori@6..8, model@9
+             {
+-                if (arguments.size() < 10U) continue;
++                if (arguments.size() < 10U)
++                    continue;
+                 for (std::size_t axis = 0U; axis < 3U; ++axis)
+                 {
+                     object.position[axis] = safe_number(arguments[3U + axis]);
+                 }
+-                object.rotation = orientation(safe_number(arguments[6]),
+-                                              safe_number(arguments[7]),
+-                                              safe_number(arguments[8]));
++                object.rotation = orientation(
++                    safe_number(arguments[6]), safe_number(arguments[7]), safe_number(arguments[8]));
+                 model_name = safe_text(arguments[9]);
+             }
+ 
+@@ -610,7 +612,8 @@ struct Scene
+                         break;
+                     }
+                     if (instance.model_index < (*package_iterator)->metadata.model_names.size() &&
+-                        fold_ascii((*package_iterator)->metadata.model_names[instance.model_index]) == folded_target)
++                        fold_ascii((*package_iterator)->metadata.model_names[instance.model_index]) ==
++                            folded_target)
+                     {
+                         object.instance = &instance;
+                         object.package = package_iterator->get();
+@@ -663,12 +666,12 @@ struct Scene
+                 {
+                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
+                 }
+-                parsed_mef = std::make_shared<model::MefModel>(
+-                    model::MefModel::DynObj_LoadModelMesh(entry->body));
++                parsed_mef =
++                    std::make_shared<model::MefModel>(model::MefModel::DynObj_LoadModelMesh(entry->body));
+                 write_log("Loaded MEF model=" + mesh_name +
+                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
+-                geometry = std::make_shared<model::MefRenderData>(
+-                    model::Display_DecodeMeshRenderData(*parsed_mef));
++                geometry =
++                    std::make_shared<model::MefRenderData>(model::Display_DecodeMeshRenderData(*parsed_mef));
+             }
+             object.geometry = geometry;
+             object.mef = parsed_mef;
+@@ -716,7 +719,8 @@ struct Scene
+                 }
+                 const std::string child_name = definition->second;
+                 const std::string folded_child_name = fold_ascii(child_name);
+-                if (std::find(parent.attachment_ancestry.begin(), parent.attachment_ancestry.end(),
++                if (std::find(parent.attachment_ancestry.begin(),
++                              parent.attachment_ancestry.end(),
+                               folded_child_name) != parent.attachment_ancestry.end())
+                 {
+                     continue;
+@@ -797,9 +801,8 @@ struct Scene
+                 }
+             }
+         }
+-        write_log("Loaded placed model poses=" + std::to_string(objects.size()) +
+-                  "; attached_models=" + std::to_string(attached_models) +
+-                  "; unresolved_source_models=" + std::to_string(missing) +
++        write_log("Loaded placed model poses=" + std::to_string(objects.size()) + "; attached_models=" +
++                  std::to_string(attached_models) + "; unresolved_source_models=" + std::to_string(missing) +
+                   "; skinned models and remaining task types not yet rendered.");
+     }
+ 
+@@ -1035,7 +1038,8 @@ struct Scene
+         }
+         if (!terrain_textures.empty())
+         {
+-            write_log("Direct3D7 terrain textures uploaded: count=" + std::to_string(terrain_textures.size()));
++            write_log("Direct3D7 terrain textures uploaded: count=" +
++                      std::to_string(terrain_textures.size()));
+         }
+     }
+ 
+@@ -1129,7 +1133,6 @@ struct Scene
+                     const int shift = std::countr_zero(static_cast<std::uint32_t>(mask));
+                     const std::uint32_t maximum = mask >> shift;
+                     return ((value & mask) >> shift) * 255U / maximum;
+-
+                 };
+                 pixels[row * description.dwWidth + column] =
+                     0xFF000000U | (expand(description.ddpfPixelFormat.dwRBitMask) << 16U) |
+@@ -1266,16 +1269,15 @@ struct Scene
+                             {
+                                 if (batch_vertices.size() >= 65530U)
+                                 {
+-                                    check_result(
+-                                        device.pointer->DrawIndexedPrimitive(
+-                                            D3DPT_TRIANGLELIST,
+-                                            D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+-                                            batch_vertices.data(),
+-                                            static_cast<DWORD>(batch_vertices.size()),
+-                                            batch_indices.data(),
+-                                            static_cast<DWORD>(batch_indices.size()),
+-                                            0),
+-                                        "Draw terrain sub-batch");
++                                    check_result(device.pointer->DrawIndexedPrimitive(
++                                                     D3DPT_TRIANGLELIST,
++                                                     D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
++                                                     batch_vertices.data(),
++                                                     static_cast<DWORD>(batch_vertices.size()),
++                                                     batch_indices.data(),
++                                                     static_cast<DWORD>(batch_indices.size()),
++                                                     0),
++                                                 "Draw terrain sub-batch");
+                                     batch_vertices.clear();
+                                     batch_indices.clear();
+                                     index_map.clear();
+@@ -1284,7 +1286,8 @@ struct Scene
+                                 const WORD local_idx = static_cast<WORD>(batch_vertices.size());
+                                 index_map[global_idx] = local_idx;
+                                 const auto& v = terrain_mesh.vertices[global_idx];
+-                                const auto a = static_cast<std::uint8_t>(std::clamp(v.alpha * 255.0f, 0.0f, 255.0f));
++                                const auto a =
++                                    static_cast<std::uint8_t>(std::clamp(v.alpha * 255.0f, 0.0f, 255.0f));
+                                 const DWORD color = (static_cast<DWORD>(a) << 24U) | 0x00FFFFFFU;
+                                 batch_vertices.push_back({{v.x, v.y, v.z}, color, {v.u, v.v}});
+                                 batch_indices.push_back(local_idx);
+@@ -1297,16 +1300,15 @@ struct Scene
+ 
+                         if (!batch_indices.empty())
+                         {
+-                            check_result(
+-                                device.pointer->DrawIndexedPrimitive(
+-                                    D3DPT_TRIANGLELIST,
+-                                    D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
+-                                    batch_vertices.data(),
+-                                    static_cast<DWORD>(batch_vertices.size()),
+-                                    batch_indices.data(),
+-                                    static_cast<DWORD>(batch_indices.size()),
+-                                    0),
+-                                "Draw terrain batch");
++                            check_result(device.pointer->DrawIndexedPrimitive(
++                                             D3DPT_TRIANGLELIST,
++                                             D3DFVF_XYZ | D3DFVF_DIFFUSE | D3DFVF_TEX1,
++                                             batch_vertices.data(),
++                                             static_cast<DWORD>(batch_vertices.size()),
++                                             batch_indices.data(),
++                                             static_cast<DWORD>(batch_indices.size()),
++                                             0),
++                                         "Draw terrain batch");
+                             ++terrain_batches_drawn;
+                         }
+                     }
+@@ -1387,8 +1389,8 @@ struct Scene
+         {
+             write_log("First 3D frame presented: terrain_batches=" + std::to_string(terrain_batches_drawn) +
+                       " objects=" + std::to_string(objects.size()) +
+-                      " model_draw_batches=" + std::to_string(drawn) +
+-                      " uploaded_textures=" + std::to_string(uploaded_textures.size() + terrain_textures.size()));
++                      " model_draw_batches=" + std::to_string(drawn) + " uploaded_textures=" +
++                      std::to_string(uploaded_textures.size() + terrain_textures.size()));
+             first_frame = false;
+         }
+     }

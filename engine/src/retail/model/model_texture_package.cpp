@@ -12,6 +12,7 @@ constexpr std::uint32_t mods_tag = 0x4D4F4453U;
 constexpr std::uint32_t vnam_tag = 0x564E414DU;
 constexpr std::uint32_t inst_tag = 0x494E5354U;
 constexpr std::uint32_t gtt_tag = 0x47545420U;
+constexpr std::uint32_t banm_tag = 0x42414E4DU;
 constexpr std::size_t root_header_bytes = 12U;
 constexpr std::size_t child_header_bytes = 8U;
 
@@ -169,7 +170,7 @@ struct NativeChunkView
 
 // Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection.
 // The literal retail DynObj_InsertHashItem_14 (VA 0x004CF080) is in mtp_package_loader.cpp.
-MtpPackage MtpPackage::Host_ParseModelTexturePackage(std::span<const std::byte> file_bytes)
+MtpPackage MtpPackage::DynObj_LoadModelTexturePackage(std::span<const std::byte> file_bytes)
 {
     MtpPackage package{};
     const std::vector<NativeChunkView> chunks = read_native_chunks(file_bytes, package.root_tag);
@@ -178,6 +179,13 @@ MtpPackage MtpPackage::Host_ParseModelTexturePackage(std::span<const std::byte> 
         if (chunk.tag == 0x54455846U)
         {
             package.texture_names = read_string_table(chunk.payload, false);
+        }
+    }
+    for (const auto& chunk : chunks)
+    {
+        if (chunk.tag == banm_tag)
+        {
+            package.animation_names = read_string_table(chunk.payload, false);
         }
     }
     package.model_names = read_string_table(require_chunk(chunks, mods_tag).payload, false);

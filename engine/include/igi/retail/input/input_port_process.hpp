@@ -74,10 +74,10 @@ extern "C" {
 
 // The retail input port index at 0x00A5EFA0. The native reads it to select
 // the port it processes.
-extern std::uint16_t DAT_00A5EFA0;
+extern std::uint16_t InputPort_CurrentIndex;
 
 // The retail input port counter at 0x00567C58.
-extern std::uint32_t DAT_00567C58;
+extern std::uint32_t QTask_InputPortCounter;
 
 // Native: InputPort_Process() - VA 0x004ED5C0 - complete port.
 // Behavior: reads the 16-bit input port index at 0x00A5EFA0, and calls the

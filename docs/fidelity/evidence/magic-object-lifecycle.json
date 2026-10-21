@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "artifact": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "format": "PE32",
+    "architecture": "x86"
+  },
+  "analysis": {
+    "provider": {
+      "tool": "REA MCP upstream REA with Ghidra provider",
+      "version": "Ghidra 12.1.2",
+      "basis": "Evidence IDs are from the active analysis snapshot for this exact executable digest; the calls did not re-run the provider."
+    },
+    "radare2": {
+      "tool": "local r2 CLI",
+      "version": "6.2.0",
+      "commands": [
+        "r2 -q -c 'aaa; afij @ 0x4deec0; afbj @ 0x4deec0' /Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "r2 -q -c 'aaa; afij @ 0x4dfa50' /Users/haseeb-mir/Downloads/IGI/igi.exe"
+      ]
+    },
+    "functions": {
+      "0x004DFA50": {
+        "ghidra_evidence_id": "ev_32bb0c07a571b8e1a618bf6ebb1a27bd82b76cfa036d6388e5617c10166a2656",
+        "ghidra_range": "0x004DFA50-0x004E0803",
+        "ghidra_bytes": 3508,
+        "ghidra_blocks": 68,
+        "ghidra_decompiler_signature": "void FUN_004dfa50(int param_1, undefined4 param_2)",
+        "ghidra_direct_calls": [
+          "0x004D0D10",
+          "0x004D0CF0",
+          "0x004C5700",
+          "0x004CEC10",
+          "0x004AF810",
+          "0x004012A0",
+          "indirect callback through 0x00A96AE0"
+        ],
+        "radare2": {
+          "bytes": 3508,
+          "blocks": 68,
+          "edges": 110,
+          "calling_convention": "cdecl",
+          "stack_arguments": 2
+        },
+        "observed_behavior": [
+          "Reads the attachment count from the model reachable through object+0x6C.",
+          "For each attachment, reads the 0x44-byte record through Model_GetAttachment and transforms translation and basis using the parent transform.",
+          "Looks up the attachment type by name in the registry at 0x00B97E00 with 0x28-byte entries.",
+          "Resolves the registered mesh and calls the type-indexed callback at 0x00A96AE0 when the slot is non-null.",
+          "The callback address is indexed by (backend_id & 0xFF) * 0x180 + type_id * 4; the indirect call receives object and local callback-context pointers, then the caller removes eight stack bytes.",
+          "Uses both formal arguments: the lifecycle caller at 0x004DEEC0 supplies the same object pointer twice."
+        ],
+        "catalog_candidate": "scripts/GameNatives/render/004DFA50-Render_MagicObjectTypeSNotD.cpp",
+        "catalog_signature_conflict": "Candidate declares one argument and int* return; Ghidra decompilation and Radare2 recover two stack arguments, with Ghidra decompiling a void return. The candidate signature is not accepted as the retail ABI."
+      },
+      "0x004DEEC0": {
+        "ghidra_evidence_id": "ev_25871085265f5ed8e3836d717e726233aaaa4715f44465c24568333d61810a2a",
+        "ghidra_assembly_evidence_id": "ev_6b4d8f17454410240fbe0ac73af7c141ce8fc378361dd89a2f42c9d134db9361",
+        "ghidra_range": "0x004DEEC0-0x004DF4F9",
+        "ghidra_bytes": 1594,
+        "ghidra_blocks": 46,
+        "ghidra_decompiler_signature": "void FUN_004deec0(int *param_1)",
+        "radare2": {
+          "bytes": 1594,
+          "blocks": 46,
+          "edges": 77,
+          "calling_convention": "cdecl",
+          "stack_arguments": 1
+        },
+        "assembly_observations": [
+          "At 0x004DF4CD, pushes the object pointer twice and calls 0x004DFA50.",
+          "The call is part of the branch where object field +0x18C is zero; the field is set to one after initialization.",
+          "The epilogue restores ESP from EBP and returns with RET, supporting cdecl; Ghidra's separate low-confidence API projection had guessed stdcall."
+        ],
+        "observed_behavior": [
+          "On first initialization, clears/recreates child state, invokes 0x004DFA50 and 0x004DF500, then sets the initialized flag.",
+          "On later calls, updates attached-object transforms and processes event callbacks."
+        ],
+        "catalog_candidate": "scripts/GameNatives/render/004DEEC0-Render_BindTexture_15.cpp",
+        "catalog_name_limit": "The generated catalog name is not supported by the observed lifecycle behavior."
+      }
+    },
+    "task_registration": {
+      "0x004D9A00": {
+        "ghidra_evidence_id": "ev_5d8e686a63af0b4de82e95d6ad5c203e4928a10ef7215eea6410e50e919db8f0",
+        "radare2": {
+          "bytes": 257,
+          "blocks": 1,
+          "edges": 0,
+          "calling_convention": "cdecl",
+          "stack_arguments": 0
+        },
+        "observed_behavior": [
+          "Registers task type MagicObj with size 0x138.",
+          "Registers event handlers including 0x004D9970, 0x004D9B10, and 0x004D9C30, then maps TASKTYPE_MAGICOBJ to the registered ID."
+        ]
+      },
+      "0x004E0840": {
+        "ghidra_evidence_id": "ev_f9e3b08f480e8fa519f131e38e450992e5d21196b3a8ee33f67dd7173e5b84d8",
+        "radare2": {
+          "bytes": 71,
+          "blocks": 1,
+          "edges": 0,
+          "calling_convention": "cdecl",
+          "stack_arguments": 0
+        },
+        "observed_behavior": [
+          "Registers task type MagicObjContainer with size 0x24.",
+          "Registers 0x00488700 as event-1 callback and 0x004E0890 as a type event handler."
+        ]
+      },
+      "0x004E0920": {
+        "ghidra_evidence_id": "ev_2e4394737bb9b224ac61875fdb1f9c03a871197b4ff02ea52d447174def83a2d",
+        "radare2": {
+          "bytes": 14,
+          "blocks": 1,
+          "edges": 0,
+          "calling_convention": "cdecl",
+          "stack_arguments": 0
+        },
+        "observed_behavior": [
+          "Calls the QTask event-close routine with the global MagicObjContainer task type ID."
+        ]
+      },
+      "0x004E0930": {
+        "ghidra_evidence_id": "ev_44bc6eaa466f36dc76ecdf910ca00d79b9fb132f94e75cfe9305c6ba1d8da92a",
+        "radare2": {
+          "bytes": 30,
+          "blocks": 1,
+          "edges": 0,
+          "calling_convention": "cdecl",
+          "stack_arguments": 2
+        },
+        "observed_behavior": [
+          "Calls the retail task constructor with the MagicObjContainer task type ID and null parent, then stores its second argument at task+0x20."
+        ]
+      }
+    },
+    "unresolved": [
+      "The 0x00A96AE0 callback call shape is cdecl with two pointer arguments, but callback-specific types, callback behaviors, and the complete object state layout are not established.",
+      "Binary Ninja MCP and IGI-Probe observations were not available.",
+      "No new host implementation is authorized by this evidence alone; exact callback/manager ABI must be resolved before wiring the native lifecycle into the scene."
+    ]
+  }
+}

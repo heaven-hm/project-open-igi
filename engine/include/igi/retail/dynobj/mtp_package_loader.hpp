@@ -13,7 +13,7 @@ using LovsEntryLoaderFn = void** (*)(const char* name);
 // Behavior: locates the `'BANM'` (`0x42414E4D`) chunk inside `*(context + 0x08)` via
 //           Ilff_FindFormChunk (0x004CEAA0); when present and `*banm > 0`, formats
 //           `"%sanims/%s.iff"` using either `g_a4edf8` (when `g_a4edf8[0] != 0`) or `g_a4ed6c`
-//           via Game_DataSymbolLoad (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0)
+//           via sprintf (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0)
 //           for each NUL-terminated animation name.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);
 //                 VA 0x004CF910-0x004CF9CA, 186 bytes, digest 9bc4b0a10b59709630cf47788d176a5bcca0360df50b4e8349e0edafa1a0d524;
@@ -31,7 +31,7 @@ inline void* DynObj_RemoveSymbol_14(void* context) { return DynObj_LoadPackageAn
 //           Ilff_FindFormChunk (0x004CEAA0), stores `count = *palf` at `*(context + 0x44)`,
 //           allocates `count * 0x0C` bytes via Mem_Alloc (0x004B0C60) into `*(context + 0x3C)` when
 //           `count > 0` (or clears `*(context + 0x3C) = 0`), and iterates each NUL-terminated
-//           palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via Game_DataSymbolLoad
+//           palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via sprintf
 //           and calling Sys_SIsNotAValidPaletteF (0x004B7D30).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF870-0x004CF909, 153 bytes,
 //                 digest 246a42f51d3979bfd848ccefcef6fd53d81b2373c741392b5d719b6b46f29e09;
@@ -102,11 +102,11 @@ inline void* DynObj_InsertHashItem_14(void* context, const char* arg2, std::int3
 }
 
 // Host/test configuration for global package state (`0x00A4EC60`, `0x00A4ED6C`, `0x00A4EDF8`).
-void Host_SetSharedPackageContext(void* shared_pkg) noexcept;
-void Host_SetPackagePrefix(const char* prefix) noexcept;
-void Host_SetAnimOverridePrefix(const char* prefix) noexcept;
-void Host_SetPaletteLoader(PaletteLoaderFn fn) noexcept;
-void Host_SetAnimIffLoader(AnimIffLoaderFn fn) noexcept;
-void Host_SetLovsEntryLoader(LovsEntryLoaderFn fn) noexcept;
+void DynObj_SetSharedPackageContext(void* shared_pkg) noexcept;
+void DynObj_SetPackagePrefix(const char* prefix) noexcept;
+void DynObj_SetAnimOverridePrefix(const char* prefix) noexcept;
+void DynObj_SetPaletteLoader(PaletteLoaderFn fn) noexcept;
+void DynObj_SetAnimIffLoader(AnimIffLoaderFn fn) noexcept;
+void DynObj_SetLovsEntryLoader(LovsEntryLoaderFn fn) noexcept;
 
 } // namespace igi::retail::dynobj

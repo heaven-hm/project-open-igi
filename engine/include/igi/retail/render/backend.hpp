@@ -13,6 +13,6 @@ namespace igi::retail::render {
 inline std::int32_t DynObj_InsertHashItem_13() { return Render_GetActiveBackendId(); }
 
 // Host wiring for the port-owned 0x00548208 storage. Not a retail entry point.
-void Host_SetRenderBackendId(std::int32_t backend_id);
+void Render_SetBackendId(std::int32_t backend_id);
 
 } // namespace igi::retail::render

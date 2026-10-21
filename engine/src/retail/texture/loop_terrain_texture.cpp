@@ -43,7 +43,7 @@ void require_range(std::size_t offset, std::size_t length, std::size_t limit, co
 
 } // namespace
 
-LoopTerrainTextureFile LoopTerrainTextureFile::Host_ParseTerrainTextureFile(
+LoopTerrainTextureFile LoopTerrainTextureFile::Terrain_ParseTextureFile(
     std::span<const std::byte> file_bytes)
 {
     if (file_bytes.size() < loop_header_bytes) {
@@ -117,7 +117,7 @@ LoopTerrainTextureFile LoopTerrainTextureFile::Host_ParseTerrainTextureFile(
     return texture_file;
 }
 
-LoopModelTextureFile LoopModelTextureFile::Host_ParseModelTextureFile(
+LoopModelTextureFile LoopModelTextureFile::DynObj_ParseModelTextureFile(
     std::span<const std::byte> file_bytes)
 {
     if (file_bytes.size() < 0x18U) {

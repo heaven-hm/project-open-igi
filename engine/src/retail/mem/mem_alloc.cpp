@@ -36,12 +36,12 @@ void Mem_ResetGlobalsForTest()
 }
 
 // Host primitive backing the retail HeapAlloc(g_c32428, 0, dwBytes) tail of Camera_ApplyPostProcess_20.
-void* Host_HeapAlloc(std::uint32_t num_bytes)
+void* Mem_HeapAlloc(std::uint32_t num_bytes)
 {
     return std::malloc(static_cast<std::size_t>(num_bytes));
 }
 
-void Host_HeapFree(void* pointer)
+void Mem_HeapFree(void* pointer)
 {
     std::free(pointer);
 }
@@ -143,7 +143,7 @@ void* Mem_AllocateRawBlock(std::uint32_t size)
         }
     }
 
-    return Host_HeapAlloc(dw_bytes);
+    return Mem_HeapAlloc(dw_bytes);
 }
 
 // Native: Mem_AllocWithRetry; retail VA 0x004AA682; signature/calling convention unknown.

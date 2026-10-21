@@ -1,0 +1,14 @@
+{
+  "evidence": [
+    "docs/fidelity/evidence/0x004CF790-angr-behavioral.json",
+    "docs/fidelity/evidence/0x004CF790-semantic-review.json",
+    "docs/fidelity/evidence/0x004CF790-build.json"
+  ],
+  "excluded": [
+    "Arbitrary original game assets and every malformed/truncated-input path",
+    "Real resource filesystem, allocator failure, renderer/GPU behavior and process-fatal callback execution",
+    "Full runtime parity across all retail execution paths"
+  ],
+  "native": "0x004CF790",
+  "scope": "Generated bounded records for the format branches and side-effect boundaries listed in the corresponding angr behavioral report. Retail x86 and freshly compiled candidate x86 results matched for every reported case."
+}

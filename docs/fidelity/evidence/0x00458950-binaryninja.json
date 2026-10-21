@@ -1,0 +1,86 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00458950",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00458950"
+   },
+   {
+    "address": "0x0045897E"
+   },
+   {
+    "address": "0x0045895C"
+   },
+   {
+    "address": "0x004589A8"
+   },
+   {
+    "address": "0x00458986"
+   },
+   {
+    "address": "0x004589D5"
+   },
+   {
+    "address": "0x004589B0"
+   },
+   {
+    "address": "0x004589FA"
+   },
+   {
+    "address": "0x004589DA"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00458950",
+    "target": "0x0045897E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00458950",
+    "target": "0x0045895C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0045897E",
+    "target": "0x004589A8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0045897E",
+    "target": "0x00458986",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004589A8",
+    "target": "0x004589D5",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004589A8",
+    "target": "0x004589B0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004589D5",
+    "target": "0x004589FA",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004589D5",
+    "target": "0x004589DA",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004589DA",
+    "target": "0x004589FA",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

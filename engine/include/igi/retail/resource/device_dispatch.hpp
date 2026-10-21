@@ -49,8 +49,8 @@ using DispatchCheckHeapFn = std::int32_t (*)(std::int32_t device, std::int32_t* 
                                              std::int32_t argument);
 using DispatchReadFileBlockFn = void (*)(std::int32_t device, std::int32_t* context);
 
-void Host_SetPushStack(std::int32_t device, DispatchPushStackFn operation);
-void Host_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation);
-void Host_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation);
+void Device_SetPushStack(std::int32_t device, DispatchPushStackFn operation);
+void Device_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation);
+void Device_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation);
 
 } // namespace igi::retail::resource

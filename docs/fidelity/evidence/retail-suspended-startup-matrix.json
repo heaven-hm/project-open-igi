@@ -1,0 +1,63 @@
+{
+  "kind": "retail-startup-observation-matrix",
+  "date": "2026-10-19",
+  "captures": [
+    {
+      "level": 1,
+      "capture": "build/runtime-traces/retail-suspended-level1-20261019T133003Z/capture.json",
+      "result": "captured",
+      "observed_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+      "hooks_before_resume": 98,
+      "called_methods": 82,
+      "leaf_observations": 0,
+      "leaf_mismatches": 0,
+      "observed_leaf_entries": [],
+      "remaining_games": []
+    },
+    {
+      "level": 4,
+      "capture": "build/runtime-traces/retail-suspended-level4-20261019T133205Z/capture.json",
+      "result": "captured",
+      "observed_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+      "hooks_before_resume": 98,
+      "called_methods": 83,
+      "leaf_observations": 447,
+      "leaf_mismatches": 0,
+      "observed_leaf_entries": [
+        "0x0048f1a0",
+        "0x0048f1e0",
+        "0x0048f230",
+        "0x0048f240",
+        "0x0048f250",
+        "0x0048f260"
+      ],
+      "remaining_games": []
+    },
+    {
+      "level": 7,
+      "capture": "build/runtime-traces/retail-suspended-level7-20261019T133245Z/capture.json",
+      "result": "captured",
+      "observed_cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+      "hooks_before_resume": 98,
+      "called_methods": 81,
+      "leaf_observations": 400,
+      "leaf_mismatches": 0,
+      "observed_leaf_entries": [
+        "0x0048f1a0",
+        "0x0048f1e0",
+        "0x0048f230",
+        "0x0048f240",
+        "0x0048f250",
+        "0x0048f260"
+      ],
+      "remaining_games": []
+    }
+  ],
+  "limitations": [
+    "Retail-only observations; OpenIGI paired scene comparison remains incomplete.",
+    "These are Frida captures, not IGI-Probe schema1 load-trace gate inputs.",
+    "First25seconds of stationary execution under instrumentation; no controls, movement, collision, visual or 30FPS parity acceptance.",
+    "Level1 captured raw entry/return values only; Level4 and7 additionally read statically established app-context DWORD globals.",
+    "Unobserved methods remain unknown, not passing."
+  ]
+}

@@ -66,48 +66,67 @@ extern "C" {
 
 // The retail task type table at 0x00AF5EE0. The retail scans the in-use byte
 // at 0x00AF5F05, which is slot + 0x25.
-extern igi::retail::core::TaskTypeSlot DAT_00AF5EE0[igi::retail::core::task_type_slot_count];
+extern igi::retail::core::TaskTypeSlot QTask_TypeTable[igi::retail::core::task_type_slot_count];
 
 // The retail handler table at 0x00A96AE0. The entry for a class is at
 // class_id * 0x180 + phase, so the phase 1 table starts at 0x00A970E0, which is
 // the table the per-frame dispatch at 0x00401050 reads. The retail stores the
 // class handler itself in the table and the per-frame calls it.
-extern igi::retail::core::FrameHandler DAT_00A96AE0[];
+extern igi::retail::core::FrameHandler QTask_HandlerTable[];
 
 // The retail's event table at 0x0054F930. Each entry is six bytes: the
 // argument word at +0x00, the used byte at +0x02 and the second used byte at
 // +0x03.
-extern std::uint8_t DAT_0054F930[igi::retail::core::event_table_entry_count * 6U];
+extern std::uint8_t QTask_EventTable[igi::retail::core::event_table_entry_count * 6U];
 
 // The retail's current task type, a word at 0x0054F928.
-extern std::uint16_t DAT_0054F928;
+extern std::uint16_t QTask_CurrentType;
 
 // The retail's first-link flag table at 0x0054FF34.
-extern std::uint8_t DAT_0054FF34[igi::retail::core::task_type_slot_count *
+extern std::uint8_t QTask_FirstLinkFlag[igi::retail::core::task_type_slot_count *
                                   igi::retail::core::task_phase_stride];
 
 // The retail's linked-handler counter at 0x00536148.
-extern std::uint32_t DAT_00536148;
+extern std::uint32_t QTask_LinkedHandlerCounter;
 
 // The retail's context-handler count at 0x00567C6C and its no-context count
 // at 0x00567C70.
-extern std::uint32_t DAT_00567C6C;
-extern std::uint32_t DAT_00567C70;
+extern std::uint32_t QTask_ContextHandlerCount;
+extern std::uint32_t QTask_NoContextHandlerCount;
 
 // The phase 1 base of the handler table, 0x00A970E0.
-inline igi::retail::core::FrameHandler* DAT_00A970E0()
+inline igi::retail::core::FrameHandler* QTask_Phase1HandlerTable()
 {
-    return DAT_00A96AE0 + igi::retail::core::task_phase_stride;
+    return QTask_HandlerTable + igi::retail::core::task_phase_stride;
 }
 
-// Native: TaskType_Register() - VA 0x00401900 - complete port.
-// Behavior: scans the type table at 0x00AF5F05 for a free slot in 0x30-byte
-//           steps, marks it used, stores the name at slot+0x25, the object size
-//           at slot+0x21, the parent type at slot+0x1D, and takes the inherited
-//           flags at slot+0x07 from the parent slot, except for the parent
-//           0x0181 which carries 0x20000000. It returns the 16-bit type id.
+// Native: TaskType_Register() - VA 0x00401900.
+// Behavior: scans the type table from 0x00AF5EE0 for a free 0x30-byte slot,
+//           marks it used at slot+0x25, stores the name pointer at slot+0x00,
+//           the object size at slot+0x04 and the parent type's low 16 bits at
+//           slot+0x08, and takes the inherited flags at slot+0x2C from the
+//           parent slot, except for the parent 0x0181 which carries
+//           0x20000000. The fourth stack slot is the task-list argument: when
+//           it is non-zero the retail builds the class task list through
+//           0x004B0B00 at slot+0x0C and sets the has_task_list byte at
+//           slot+0x24. It returns the 16-bit type id.
+// Limits: the port records the task-list argument but does not transcribe the
+//           0x004B0B00 creation path, and it does not copy the parent's
+//           handler phases (the retail tail loop at 0x004019CD); see
+//           task_types.cpp for the full evidence record.
 std::uint16_t IGI_RETAIL_CDECL TaskType_Register(const char* name, std::uint32_t object_size,
-                                                 std::uint16_t parent_type, std::uint32_t flags);
+                                                 std::uint16_t parent_type,
+                                                 std::uint32_t task_list_argument);
+
+// Port-side startup replay bound to the live 0x00401900 registration capture
+// (docs/fidelity/evidence/0x00401900-retail-registration-order.json); not a
+// retail native. Registers every recorded class whose id falls in the
+// inclusive range and fails on an id mismatch, because the per-frame dispatch
+// indexes the handler table by class id and one skipped registration shifts
+// every later id. Ids 0 (QTask), 124 (Game) and 125 (Flow) stay with
+// QTask_Init, Game_Init and Flow_Init; the startup replays 1..123 before
+// Game_Init and 126..278 after Flow_Init.
+void TaskTypes_RegisterRetailClasses(std::uint16_t first_id, std::uint16_t last_id);
 
 // Native: QTask_LinkQTaskEventHandlerNoContextFn() - VA 0x00401530 - complete port.
 // Behavior: increments the no-context handler count at 0x00567C70 and the

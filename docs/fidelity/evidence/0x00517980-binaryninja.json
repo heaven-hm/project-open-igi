@@ -1,0 +1,122 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00517980",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00517980"
+   },
+   {
+    "address": "0x005179B0"
+   },
+   {
+    "address": "0x00517988"
+   },
+   {
+    "address": "0x005179A4"
+   },
+   {
+    "address": "0x00517992"
+   },
+   {
+    "address": "0x005179AA"
+   },
+   {
+    "address": "0x00517999"
+   },
+   {
+    "address": "0x0051798C"
+   },
+   {
+    "address": "0x005179AF"
+   },
+   {
+    "address": "0x0051799F"
+   },
+   {
+    "address": "0x005179A6"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00517980",
+    "target": "0x005179B0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00517980",
+    "target": "0x00517988",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00517988",
+    "target": "0x0051798C",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x005179A4",
+    "target": "0x005179A6",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00517992",
+    "target": "0x005179B0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00517992",
+    "target": "0x00517999",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005179AA",
+    "target": "0x0051798C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005179AA",
+    "target": "0x005179AF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00517999",
+    "target": "0x005179B0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00517999",
+    "target": "0x0051799F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0051798C",
+    "target": "0x005179A4",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0051798C",
+    "target": "0x00517992",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0051799F",
+    "target": "0x005179A6",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x005179A6",
+    "target": "0x005179B0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005179A6",
+    "target": "0x005179AA",
+    "kind": "conditional"
+   }
+  ]
+ }
+}

@@ -50,26 +50,26 @@ void SetGameShutdownHook(GameShutdownHook hook) noexcept { g_shutdown_hook = hoo
 
 extern "C" {
 
-std::uint16_t DAT_0057B1A2 = 0U;
-std::uint8_t DAT_00539540[15] = {};
+std::uint16_t QTask_GameClassId = 0U;
+std::uint8_t QTask_ClassEventIds[15] = {};
 
 IGI_RETAIL_CDECL void Game_Init()
 {
     // The retail derives the Game class from the current task type, which the
     // native at 0x004018F0 reads from 0x0054F928.
-    DAT_0057B1A2 = TaskType_Register("Game", 0x158U, QTask_GetCurrentType(), 0U);
+    QTask_GameClassId = TaskType_Register("Game", 0x158U, QTask_GetCurrentType(), 0U);
     // The retail allocates fifteen events and keeps their identifiers in the
     // bytes at 0x00539540..0x0053954E.
-    for (std::uint8_t& event : DAT_00539540)
+    for (std::uint8_t& event : QTask_ClassEventIds)
     {
         event = QTask_AllocateEvent(0U);
     }
     // The phase 0 handler goes through the context link native at 0x00401400;
     // the phase 1 and phase 2 handlers go through the no-context link native
     // at 0x00401530.
-    QTask_LinkQTaskEventHandler(DAT_0057B1A2, 0U, Level_Start);
-    QTask_LinkQTaskEventHandlerNoContextFn(DAT_0057B1A2, 1U, Game_Setup);
-    QTask_LinkQTaskEventHandlerNoContextFn(DAT_0057B1A2, 2U, Game_DeleteHandler);
+    QTask_LinkQTaskEventHandler(QTask_GameClassId, 0U, Level_Start);
+    QTask_LinkQTaskEventHandlerNoContextFn(QTask_GameClassId, 1U, Game_Setup);
+    QTask_LinkQTaskEventHandlerNoContextFn(QTask_GameClassId, 2U, Game_DeleteHandler);
 }
 
 // Native: Level_Start; retail VA 0x00415B30.

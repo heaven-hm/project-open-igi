@@ -43,11 +43,11 @@ void SetGameShutdownHook(GameShutdownHook hook) noexcept;
 extern "C" {
 
 // The retail Game class id, kept at 0x0057B1A2.
-extern std::uint16_t DAT_0057B1A2;
+extern std::uint16_t QTask_GameClassId;
 
 // The retail class init event identifiers, 0x00539540..0x0053954E. The retail
 // keeps one byte per allocated event.
-extern std::uint8_t DAT_00539540[15];
+extern std::uint8_t QTask_ClassEventIds[15];
 
 // Native: Game_Init; retail VA 0x00415530.
 // Registers the Game class with a 0x158 byte object, clears the fifteen class

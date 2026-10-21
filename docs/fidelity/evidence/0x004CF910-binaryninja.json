@@ -1,0 +1,114 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004CF910",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004CF910"
+   },
+   {
+    "address": "0x004CF9C3"
+   },
+   {
+    "address": "0x004CF937"
+   },
+   {
+    "address": "0x004CF988"
+   },
+   {
+    "address": "0x004CF946"
+   },
+   {
+    "address": "0x004CF98C"
+   },
+   {
+    "address": "0x004CF94A"
+   },
+   {
+    "address": "0x004CF98E"
+   },
+   {
+    "address": "0x004CF94C"
+   },
+   {
+    "address": "0x004CF981"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004CF910",
+    "target": "0x004CF9C3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF910",
+    "target": "0x004CF937",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF937",
+    "target": "0x004CF988",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF937",
+    "target": "0x004CF946",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF988",
+    "target": "0x004CF9C3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF988",
+    "target": "0x004CF98C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF946",
+    "target": "0x004CF9C3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF946",
+    "target": "0x004CF94A",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF98C",
+    "target": "0x004CF98E",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004CF94A",
+    "target": "0x004CF94C",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004CF98E",
+    "target": "0x004CF98E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF98E",
+    "target": "0x004CF9C3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF94C",
+    "target": "0x004CF94C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004CF94C",
+    "target": "0x004CF981",
+    "kind": "conditional"
+   }
+  ]
+ }
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "address": "0x00405850",
+  "selected_decompiler": "binary_ninja",
+  "scope": "retail analysis only; engine integration, semantic acceptance and paired runtime remain missing",
+  "decompile": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x405850\"\narch: \"x86\"\nname: \"Config_Read\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 23\ntotal: 23\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Config_Read(void* arg1)\n\n// Sig: int Config_Read(char* cfg_file)\n// Note: Read game config file, Params:  File: 'LOCAL:config.qsc'\n{\n    int32_t* eax = Qvm_Load(arg1);\n\n    if (!eax)\n    {\n        Config_SaveGraphicOptions();\n        Config_SaveSoundOptions();\n        Config_NoD3DDriversWithHard();\n        return Config_Language_2();\n    }\n\n    Qvm_Execute(eax);\n    Qvm_Cleanup(eax);\n    Config_SaveSoundOptions();\n    Config_NoD3DDriversWithHard();\n    return Config_Language_2();\n}\n````\n"
+      }
+    ],
+    "isError": false
+  },
+  "function_info": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_info\"\nfunction: \"0x405850\"\narch: \"x86\"\nname: \"Config_Read\"\nplatform: \"windows-x86\"\n---\n\n## Function\n\n| Field | Value |\n| --- | --- |\n| Function | 0x405850 (x86) |\n| Name | Config_Read |\n| Start | 0x405850 |\n| Lowest Address | 0x405850 |\n| Highest Address | 0x405899 |\n| Architecture | x86 |\n| Platform | windows-x86 |\n| Definition | int32_t(void* arg1) |\n| Exported | false |\n| Auto Discovered | true |\n| Has User Annotations | true |\n| Needs Update | false |\n| Analysis Skipped | false |\n| Analysis Skip Reason | NoSkipReason |\n| Basic Blocks | 3 |\n| Ranges | 0x405850-0x40589a (74 bytes) |\n\n## Basic Blocks\n\n| Index | Range | Incoming | Outgoing |\n| --- | --- | --- | --- |\n| 0 | 0x405850-0x405864 (20 bytes) | 0 | 2 |\n| 1 | 0x405884-0x40589a (22 bytes) | 1 | 0 |\n| 2 | 0x405864-0x405884 (32 bytes) | 1 | 0 |\n"
+      }
+    ],
+    "isError": false
+  },
+  "callees": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_callees\"\nfunction: \"0x405850\"\narch: \"x86\"\nname: \"Config_Read\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 10\ntotal: 10\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x405856 | x86 | 0x4b80b0 | Qvm_Load (0x4b80b0 (x86)) |\n| 0x405865 | x86 | 0x4b85b0 | Qvm_Execute (0x4b85b0 (x86)) |\n| 0x40586b | x86 | 0x4b83d0 | Qvm_Cleanup (0x4b83d0 (x86)) |\n| 0x405873 | x86 | 0x4058a0 | Config_SaveSoundOptions (0x4058a0 (x86)) |\n| 0x405878 | x86 | 0x405980 | Config_NoD3DDriversWithHard (0x405980 (x86)) |\n| 0x40587d | x86 | 0x405b30 | Config_Language_2 (0x405b30 (x86)) |\n| 0x405884 | x86 | 0x405300 | Config_SaveGraphicOptions (0x405300 (x86)) |\n| 0x405889 | x86 | 0x4058a0 | Config_SaveSoundOptions (0x4058a0 (x86)) |\n| 0x40588e | x86 | 0x405980 | Config_NoD3DDriversWithHard (0x405980 (x86)) |\n| 0x405893 | x86 | 0x405b30 | Config_Language_2 (0x405b30 (x86)) |\n"
+      }
+    ],
+    "isError": false
+  },
+  "basic_blocks": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_basic_blocks\"\nfunction: \"0x405850\"\narch: \"x86\"\nname: \"Config_Read\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 3\ntotal: 3\nnextOffset: null\ntruncated: false\n---\n\n| Index | Range | Flags | Incoming Edges | Outgoing Edges |\n| --- | --- | --- | --- | --- |\n| 0 | 0x405850-0x405864 (20 bytes) | can-exit |  | TrueBranch #1 0x405884-0x40589a (22 bytes)<br>FalseBranch #2 0x405864-0x405884 (32 bytes) fallthrough |\n| 1 | 0x405884-0x40589a (22 bytes) | can-exit | TrueBranch #0 0x405850-0x405864 (20 bytes) |  |\n| 2 | 0x405864-0x405884 (32 bytes) | can-exit | FalseBranch #0 0x405850-0x405864 (20 bytes) fallthrough |  |\n"
+      }
+    ],
+    "isError": false
+  },
+  "disassembly": {
+    "content": [
+      {
+        "type": "text",
+        "text": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x405850\"\narch: \"x86\"\nname: \"Config_Read\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 32\ntotal: 32\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Config_Read(void* arg1)\n\n0x405850  // Sig: int Config_Read(char* cfg_file)\n0x405850  // Note: Read game config file, Params:  File: 'LOCAL:config.qsc'\n0x405850  mov     eax, dword [esp+0x4 {arg1}]\n0x405854  push    esi {__saved_esi}\n0x405855  push    eax {var_8}\n0x405856  call    Qvm_Load\n0x40585b  mov     esi, eax\n0x40585d  add     esp, 0x4\n0x405860  test    esi, esi\n0x405862  je      0x405884\n\n0x405864  push    esi {var_8_1}\n0x405865  call    Qvm_Execute\n0x40586a  push    esi {var_c}\n0x40586b  call    Qvm_Cleanup\n0x405870  add     esp, 0x8\n0x405873  call    Config_SaveSoundOptions\n0x405878  call    Config_NoD3DDriversWithHard\n0x40587d  call    Config_Language_2\n0x405882  pop     esi {__saved_esi}\n0x405883  retn     {__return_addr}\n\n0x405884  call    Config_SaveGraphicOptions\n0x405889  call    Config_SaveSoundOptions\n0x40588e  call    Config_NoD3DDriversWithHard\n0x405893  call    Config_Language_2\n0x405898  pop     esi {__saved_esi}\n0x405899  retn     {__return_addr}\n````\n"
+      }
+    ],
+    "isError": false
+  }
+}

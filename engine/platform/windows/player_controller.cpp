@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cstring>
 #include <limits>
+#include <stdexcept>
 
 // Retail movement model evidence for the constants used here (igi.exe SHA256
 // dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01):
@@ -18,8 +19,8 @@
 //              standing eye 0.69 m, crouched eye 0.35 m.
 //   humanplayer.qvm DefineHumanPlayerGeneral(1.75, 17.5, 27, 0.5, ...): root-motion scale
 //              1.75, jump 17.5 km/h horizontal, 27 km/h vertical, air control 0.5 km/h.
-//   config.qvm (decoded): W/A/S/D move, E jump, C crouch, LSHIFT toggles walk/run, mouse
-//              look at 0.0035 radians per count (the retail hardcoded rate).
+//   config.qvm: the platform adapter reads movement, jump, crouch and walk/run remaps;
+//              mouse look uses the retail hardcoded rate.
 // The C# transcription in /Users/haseeb-mir/Documents/Code/open-igi/src/OpenIGI.Game/Player/
 // (HumanMotion, HumanGroundQuery, HumanSlopeSlide, HumanPlayerParameters) documents the same
 // values per native; this file is host code that applies them and is not a native record.
@@ -226,14 +227,140 @@ void PlayerController::reset(const std::array<double, 3>& feet_position, double 
     jump_held_ = false;
     crouch_held_ = false;
     walk_toggle_held_ = false;
+    active_locomotion_state_ = -1;
+    animation_time_ms_ = 0.0;
+}
+
+void PlayerController::set_parameters(const HumanPlayerParameters& parameters) noexcept
+{
+    parameters_ = parameters;
+    parameters_set_ = true;
+}
+
+void PlayerController::set_locomotion_clips(std::vector<AnimationClip> clips)
+{
+    locomotion_clips_ = std::move(clips);
+    active_locomotion_state_ = -1;
+    animation_time_ms_ = 0.0;
+}
+
+int PlayerController::select_locomotion_state(const PlayerInputFrame& input) const noexcept
+{
+    // The retail human state table at 0x00538870 is indexed by the state number
+    // the movement code stores at +0x10: 0 idle, 1..8 the eight standing
+    // directions, 9..16 their crouched counterparts.
+    int state = 0;
+    if (input.move_forward && input.strafe_right)
+    {
+        state = 2;
+    }
+    else if (input.move_forward && input.strafe_left)
+    {
+        state = 3;
+    }
+    else if (input.move_forward)
+    {
+        state = 1;
+    }
+    else if (input.move_backward && input.strafe_right)
+    {
+        state = 5;
+    }
+    else if (input.move_backward && input.strafe_left)
+    {
+        state = 6;
+    }
+    else if (input.move_backward)
+    {
+        state = 4;
+    }
+    else if (input.strafe_right)
+    {
+        state = 7;
+    }
+    else if (input.strafe_left)
+    {
+        state = 8;
+    }
+
+    if (state != 0 && crouched_)
+    {
+        state += 8;
+    }
+    return state;
+}
+
+const AnimationClip* PlayerController::find_locomotion_clip(int state) const noexcept
+{
+    if (state < 0 || static_cast<std::size_t>(state) >= human_locomotion_animation_ids.size())
+    {
+        return nullptr;
+    }
+    const std::uint32_t id = human_locomotion_animation_ids[static_cast<std::size_t>(state)];
+    for (const AnimationClip& clip : locomotion_clips_)
+    {
+        if (clip.id == id)
+        {
+            return &clip;
+        }
+    }
+    return nullptr;
+}
+
+std::array<double, 3> PlayerController::advance_root_motion(const AnimationClip& clip)
+{
+    // Retail 0x004D2D30 sets the per-tick clip advance to 4800/ticks_per_second
+    // (160 ms at 30 Hz).  The root delta is the difference between the samples
+    // at the old and new clip times; a loop restarts at 0 without adding the
+    // discontinuity between the clip end and the clip start, exactly as the
+    // retail track does.
+    constexpr double epsilon = 1e-9;
+    std::array<double, 3> delta{};
+    double remaining = animation_step_ms;
+    double time = std::clamp(animation_time_ms_, 0.0, clip.duration_ms);
+    while (remaining > epsilon)
+    {
+        const double available = clip.duration_ms - time;
+        if (available <= epsilon)
+        {
+            time = 0.0;
+            continue;
+        }
+        const double step = std::min(remaining, available);
+        const std::array<double, 3> before = clip.sample_root(time);
+        const std::array<double, 3> after = clip.sample_root(time + step);
+        for (std::size_t axis = 0; axis < 3U; ++axis)
+        {
+            delta[axis] += after[axis] - before[axis];
+        }
+        time += step;
+        remaining -= step;
+        if (time >= clip.duration_ms - epsilon)
+        {
+            time = 0.0;
+        }
+    }
+    animation_time_ms_ = time;
+    return delta;
+}
+
+void PlayerController::update_view(const PlayerInputFrame& input)
+{
+    yaw_ += static_cast<double>(input.look_delta_x) * look_radians_per_count;
+    pitch_ = std::clamp(pitch_ - (static_cast<double>(input.look_delta_y) * look_radians_per_count),
+                        -kPitchLimit, kPitchLimit);
 }
 
 void PlayerController::update(const PlayerInputFrame& input, double delta_seconds,
                               const TerrainCollisionGrid& ground)
 {
-    yaw_ += static_cast<double>(input.look_delta_x) * look_radians_per_count;
-    pitch_ = std::clamp(pitch_ - (static_cast<double>(input.look_delta_y) * look_radians_per_count),
-                        -kPitchLimit, kPitchLimit);
+    if (!parameters_set_)
+    {
+        throw std::logic_error(
+            "HumanPlayer parameters are not set; read humanplayer.qvm before the first update.");
+    }
+
+    update_view(input);
 
     if (input.walk_toggle && !walk_toggle_held_)
     {
@@ -296,22 +423,46 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
         wish_y += right_y;
     }
     const double wish_length = std::sqrt((wish_x * wish_x) + (wish_y * wish_y));
+    const int locomotion_state = select_locomotion_state(input);
 
     if (on_ground_)
     {
-        // Ground locomotion. Retail moves a walking human by animation root motion scaled by
-        // 1.75 (0x004614B0 adds the root-motion delta to the velocity); the port has no
-        // locomotion clips yet, so it steps by the run reference (the jump's take-off speed,
-        // 17.5 km/h, which covers almost exactly the forward run animation) with fixed walk
-        // and crouch fractions.
-        const double fraction = crouched_ ? crouch_fraction_of_reference
-                                          : (run_toggled_ ? run_fraction_of_reference
-                                                          : walk_fraction_of_reference);
-        const double step = jump_horizontal_per_tick * fraction;
-        if (wish_length > 0.0)
+        if (locomotion_state != 0)
         {
-            position_[0] += (wish_x / wish_length) * step;
-            position_[1] += (wish_y / wish_length) * step;
+            const AnimationClip* clip = find_locomotion_clip(locomotion_state);
+            if (clip == nullptr || clip->root_keys.empty())
+            {
+                throw std::logic_error(
+                    "Ground locomotion requires the retail animation root-motion clip for "
+                    "state " +
+                    std::to_string(locomotion_state) + "; no fallback speed is available.");
+            }
+            if (active_locomotion_state_ != locomotion_state)
+            {
+                active_locomotion_state_ = locomotion_state;
+                animation_time_ms_ = 0.0;
+            }
+
+            // Retail 0x004D2FB0 samples the root track and 0x004109A0 scales it by
+            // humanplayer.qvm argument 0 (1.75) before rotating it by the body
+            // matrix.  0x004614B0 then adds the result to the per-tick position.
+            const std::array<double, 3> local = advance_root_motion(*clip);
+            const double scale = parameters_.root_motion_scale;
+            const double local_x = local[0] * scale;
+            const double local_y = local[1] * scale;
+            const double local_z = local[2] * scale;
+            const double cosine_yaw = std::cos(yaw_);
+            const double sine_yaw = std::sin(yaw_);
+            // Host yaw basis: forward = (sin, cos), right = (cos, -sin).  The clip's
+            // local +Y is forward and +X is right (clip 4 +Y, clip 11 +X, clip 10 -X).
+            position_[0] += (cosine_yaw * local_x) + (sine_yaw * local_y);
+            position_[1] += (-sine_yaw * local_x) + (cosine_yaw * local_y);
+            position_[2] += local_z;
+            velocity_ = {};
+        }
+        else
+        {
+            active_locomotion_state_ = 0;
         }
         // Slope slide displacement (retail 0x004614B0 bands).
         position_[0] += slide_[0];
@@ -358,11 +509,11 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
             // Jump (humanplayer.qvm general arguments 1 and 2): 27 km/h up, and the
             // horizontal take-off carries 17.5 km/h along the direction being travelled,
             // or the facing direction when standing still.
-            velocity_[2] = jump_vertical_per_tick;
+            velocity_[2] = parameters_.jump_vertical_kmh * units_per_tick_per_kmh;
             const double take_off_x = wish_length > 0.0 ? wish_x / wish_length : forward_x;
             const double take_off_y = wish_length > 0.0 ? wish_y / wish_length : forward_y;
-            velocity_[0] = take_off_x * jump_horizontal_per_tick;
-            velocity_[1] = take_off_y * jump_horizontal_per_tick;
+            velocity_[0] = take_off_x * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
+            velocity_[1] = take_off_y * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
             on_ground_ = false;
             sliding_ = false;
         }
@@ -374,23 +525,23 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
     velocity_[2] -= gravity_per_tick_squared;
     if (input.move_forward)
     {
-        velocity_[0] += forward_x * air_control_per_tick;
-        velocity_[1] += forward_y * air_control_per_tick;
+        velocity_[0] += forward_x * parameters_.air_control_kmh * units_per_tick_per_kmh;
+        velocity_[1] += forward_y * parameters_.air_control_kmh * units_per_tick_per_kmh;
     }
     if (input.move_backward)
     {
-        velocity_[0] -= forward_x * air_control_per_tick;
-        velocity_[1] -= forward_y * air_control_per_tick;
+        velocity_[0] -= forward_x * parameters_.air_control_kmh * units_per_tick_per_kmh;
+        velocity_[1] -= forward_y * parameters_.air_control_kmh * units_per_tick_per_kmh;
     }
     if (input.strafe_left)
     {
-        velocity_[0] -= right_x * air_control_per_tick;
-        velocity_[1] -= right_y * air_control_per_tick;
+        velocity_[0] -= right_x * parameters_.air_control_kmh * units_per_tick_per_kmh;
+        velocity_[1] -= right_y * parameters_.air_control_kmh * units_per_tick_per_kmh;
     }
     if (input.strafe_right)
     {
-        velocity_[0] += right_x * air_control_per_tick;
-        velocity_[1] += right_y * air_control_per_tick;
+        velocity_[0] += right_x * parameters_.air_control_kmh * units_per_tick_per_kmh;
+        velocity_[1] += right_y * parameters_.air_control_kmh * units_per_tick_per_kmh;
     }
     position_[0] += velocity_[0];
     position_[1] += velocity_[1];

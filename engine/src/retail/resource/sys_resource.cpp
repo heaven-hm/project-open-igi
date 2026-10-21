@@ -218,6 +218,11 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes, digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2; CLEAN/sys/004B5C90-Sys_FreeMemory_16.c.
 // Behavior/CFG: switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. radare2 13 blocks/18 edges; Binary Ninja 13 blocks; 100% structural agreement.
+// Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the
+// last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the
+// last active node into the freed position, retail returns that relocated node's address in EAX
+// (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned
+// 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index).
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact switch cases, child recursion, list removal, and pool swap-pop.
 // Previous catalog alias: Sys_FreeMemory_16.
 std::int32_t Resource_FreeNode(void* context)
@@ -287,6 +292,10 @@ std::int32_t Resource_FreeNode(void* context)
                     g_pool_free_indices[static_cast<std::size_t>(temp_2)];
                 g_pool_free_indices[static_cast<std::size_t>(temp_2)] = dest_2;
                 last_node->pool_active_idx = source_1;
+                // Retail leaves EAX holding the relocated last node's address on this path
+                // (the decremented count only when no swap was needed; see provenance above).
+                result = static_cast<std::int32_t>(reinterpret_cast<std::uintptr_t>(last_node)
+                    & 0xFFFFFFFFULL);
             }
             break;
         }
@@ -351,7 +360,11 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
 
             label_4b636f:
                 error::Error_Show("Error in resource file: '%s'", context);
-                return 0;
+                // Retail 0x004B637D: EB FE (jmp $) after Error_Show.
+                // Malformed containers halt here; they do not return a failure code.
+                for (;;)
+                {
+                }
             }
             else
             {
@@ -451,7 +464,7 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
 // Native: Resource_RegisterBuffer; retail VA 0x004B5F80; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: copying each entry name (`*(entry + 8)` bytes at `entry + 0x0C`), aligning payload start by Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5F80-0x004B60E1, 353 bytes, digest 7008df670ec82806c208a728e050b93acf7ce0d8b4a333b9ef0d2ef74bae3442; CLEAN/sys/004B5F80-Sys_Resource.c.
-// Behavior/CFG: registers a loaded buffer `arg2` of byte length `arg3` under `context`: 1. Calls Sys_AllocateMemory_5(&item_8, context) (0x004B1820). 2. If `arg2` is an `ILFF`/`IRES` container (`0x46464C49` / `0x53455249`), creates parent node via Resource_CreateNode(context, nullptr, arg2, 0, 0, &item_8), populates children via Resource_RegisterIlffContainer(context, data_2, arg2, &item_8), sets `data_2->loaded_flag = 1`, and returns `arg2`. 3. Otherwise, if `arg3 < 8` or `Resource_MatchPrefix(arg2, "RESOURCE", 8) != 0`, creates a standalone node (`kind = 2`, `size = arg3`) with `loaded_flag = 1`. 4. Otherwise (`"RESOURCE"` packed archive header), creates a parent node (`kind = 0`), sets `loaded_flag = 1`, and iterates `arg2[2]` (`count`) entries starting at `&arg2[8]` (`+0x20`), `(name_len + 0x2B) & 0xFFFFFFE0` and next entry by `(data_size + 0x1F) & 0xFFFFFFE0`, and splicing each child (`kind = 1`) into `parent + 0x14`. radare2 11 blocks/16 edges; Binary Ninja 11 blocks; 94.4% structural agreement.
+// Behavior/CFG: registers a loaded buffer `arg2` of byte length `arg3` under `context`: 1. Calls Sys_AllocateMemory_5(&item_8, context) (0x004B1820). 2. If `arg2` is an `ILFF`/`IRES` container (`0x46464C49` / `0x53455249`), creates parent node via Resource_CreateNode(context, nullptr, arg2, 0, 0, &item_8), populates children via Resource_RegisterIlffContainer(context, data_2, arg2, &item_8), sets `data_2->loaded_flag = 1`, and returns `arg2`. 3. Otherwise, if `arg3 < 8` or `Resource_MatchPrefix(arg2, "RESOURCE", 8) != 0`, creates a standalone node (`kind = 2`, `size = arg3`) with `loaded_flag = 1`. 4. Otherwise ("RESOURCE" packed archive header), creates a parent node (`kind = 0`), sets `loaded_flag = 1`, and iterates `arg2[2]` (`count`) entries starting at `&arg2[8]` (`+0x20`), advancing by the retail `and al, 0xE0` name stride — the low byte of `name_len + 0x2B` with bits 0-4 cleared, upper bits preserved — and by `(data_size + 0x1F) & 0xFFFFFFE0`, and splicing each child (`kind = 1`) into `parent + 0x14`. radare2 11 blocks/16 edges; Binary Ninja 11 blocks; 94.4% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for all three container branches (`ILFF`/`IRES`, `"RESOURCE"`, and raw file).
 // Previous catalog alias: Sys_Resource.
 void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3)
@@ -505,7 +518,10 @@ void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3
                 std::memcpy(g_943c20, context_2 + 0x0C, static_cast<std::size_t>(data_7));
                 g_943c20[data_7] = '\0';
 
-                const std::uint32_t data_8 = (data_7 + 0x2BU) & 0xFFFFFFE0U;
+                // Retail computes the name stride with `add eax, 0x2B; and al, 0xE0`: only the low
+                // byte participates in the bit clear, so bits 8+ of `name_len + 0x2B` survive.
+                const std::uint32_t stride_input = data_7 + 0x2BU;
+                const std::uint32_t data_8 = (stride_input & 0xFFFFFF00U) | ((stride_input & 0xFFU) & 0xE0U);
                 auto* const context_3 = context_2 + data_8;
                 context_2 = context_3 + ((static_cast<std::uint32_t>(temp_1) + 0x1FU) & 0xFFFFFFE0U);
 
@@ -536,8 +552,8 @@ void Resource_InitPoolForTest(std::size_t capacity)
     root = ResourceHashNode{};
     root.hash = -1;
 
-    Host_SetSysFreeMemory16(&FreeMemory16Thunk);
-    Host_SetSysResource(&Sys_Resource);
+    Sys_SetFreeMemory16(&FreeMemory16Thunk);
+    Sys_SetResource(&Sys_Resource);
 }
 
 std::int32_t Resource_GetActiveCount() noexcept
@@ -545,12 +561,12 @@ std::int32_t Resource_GetActiveCount() noexcept
     return g_943e28;
 }
 
-void Host_SetSysAllocateMemory5(SysAllocateMemory5Fn fn) noexcept
+void Sys_SetAllocateMemory5(SysAllocateMemory5Fn fn) noexcept
 {
     g_sys_allocate_memory_5 = fn;
 }
 
-void Host_SetSysOpenFileStream5(SysOpenFileStream5Fn fn) noexcept
+void Sys_SetOpenFileStream5(SysOpenFileStream5Fn fn) noexcept
 {
     g_sys_open_file_stream_5 = fn;
 }

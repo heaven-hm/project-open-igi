@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048F1A0",
+  "signature": "int32_t App_ContextSetDebugged(int8_t arg_4h)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048F1A0"
+      }
+    ],
+    "edges": []
+  },
+  "observed": {
+    "body_bytes": 11,
+    "instructions": 3,
+    "basic_blocks": 1,
+    "conditional_branches": 0,
+    "calls": 0,
+    "raw_output_path": "docs/fidelity/evidence/0x0048F1A0-radare2.txt",
+    "raw_output_sha256": "1a645e4d2d339337ce7c12e861c375f467af7380423ff6d19006e0a5d1804867"
+  }
+}

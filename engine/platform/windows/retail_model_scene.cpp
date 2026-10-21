@@ -6,6 +6,7 @@
 #include "igi/retail/core/frame_natives.hpp"
 #include "igi/retail/core/window_procedure.hpp"
 #include "igi/retail/core/game_flow.hpp"
+#include "igi/retail/core/flow.hpp"
 #include "igi/retail/core/task_types.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/config/config_graphic_options.hpp"
@@ -536,12 +537,12 @@ struct Scene
         {
             auto package = std::make_unique<Package>();
             const auto bytes =
-                resource::Host_LoadResourceFile(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::Host_ParseModelTexturePackage(bytes->bytes);
+                resource::Resource_OpenFile(cache, descriptor.first / (descriptor.second + ".mtp"));
+            package->metadata = model::MtpPackage::DynObj_LoadModelTexturePackage(bytes->bytes);
             package->meshes =
-                resource::Host_LoadResourceArchive(descriptor.first / "models" / (descriptor.second + ".res"));
+                resource::Resource_LoadArchive(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
-                resource::Host_LoadResourceArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
+                resource::Resource_LoadArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
             write_log("MTP/RES loaded: " + descriptor.second +
                       " models=" + std::to_string(package->meshes.entries.size()) +
                       " texture_names=" + std::to_string(package->metadata.texture_names.size()));
@@ -633,9 +634,9 @@ struct Scene
                   std::to_string(*air_control) + " km/h");
 
         write_log("Flow stage QVM objects: objects.qsc");
-        const auto script = script::Host_LoadQvmScript(cache, level / "objects.qsc");
+        const auto script = script::Qvm_LoadScript(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
-        const auto magic_script = script::Host_LoadQvmScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
+        const auto magic_script = script::Qvm_LoadScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
         std::map<std::string, std::string> magic_object_models;
         for (const auto& call : script::Qvm_ReadObjectCalls(magic_script.program()))
         {
@@ -750,7 +751,7 @@ struct Scene
         // HeightMap and TerrainLightMap tasks.
         if (terrain_files_loaded)
         {
-            const bool terrain_loaded = terrain_data.Host_LoadLevelTerrain(terrain_dir, calls, true);
+            const bool terrain_loaded = terrain_data.Terrain_LoadLevel(terrain_dir, calls, true);
             write_log("Level terrain loaded=" + std::string(terrain_loaded ? "true" : "false") +
                       " nodes=" + std::to_string(terrain_data.contour_nodes.size()) +
                       " layers=" + std::to_string(terrain_data.texture_layers.size()));
@@ -1748,7 +1749,7 @@ struct Scene
             {
                 const float cam_p[3] = {camera_position.x, camera_position.y, camera_position.z};
                 const float cam_t[3] = {camera_target.x, camera_target.y, camera_target.z};
-                const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
+                const auto terrain_mesh = terrain_data.Terrain_BuildRenderMesh(
                     origin, world_scale, cam_p, cam_t, fov_tangents[0], fov_tangents[1], 4000.0f);
 
                 // The ground query the human stands on is indexed from the
@@ -2287,7 +2288,7 @@ int RunRetailModelScene(HINSTANCE instance,
         // The retail game object the per-frame dispatch reads: the phase word
         // at +0x1C selects the handler in the phase 1 table.
         static igi::retail::core::FrameDispatchRecordView game_object{};
-        DAT_00567C8C = &game_object;
+        Game_FrameDispatchRecord = &game_object;
 
         // The retail Game class (0x00415530) links the three phase handlers
         // into the handler table, so the per-frame dispatch at 0x00401050
@@ -2319,11 +2320,26 @@ int RunRetailModelScene(HINSTANCE instance,
         igi::retail::core::SetGameLevelStartHook(&RunLinkedLevelStart);
         igi::retail::core::SetGamePerFrameHook(&Scene::OnGamePerFrame);
         igi::retail::core::SetGameShutdownHook([](void*) {});
+        // The retail assigns class ids in registration order and the per-frame
+        // dispatch indexes the handler table by class id, so the port replays
+        // the captured 279-registration sequence around the inits it keeps:
+        // QTask_Init registers QTask (0), the captured classes fill 1..123,
+        // Game_Init registers Game where the retail's 0x402930 sequence does
+        // (124), Flow_Init registers Flow right after (125), and the captured
+        // classes fill 126..278. Missing one registration would shift every
+        // later id and desync the dispatch.
+        QTask_Init();
+        TaskTypes_RegisterRetailClasses(1U, 123U);
         Game_Init();
+        Flow_Init();
+        TaskTypes_RegisterRetailClasses(126U, 278U);
+        write_log("Flow stage registration replay: classes 0..278, Game id " +
+                  std::to_string(QTask_GameClassId) + ", Flow id " +
+                  std::to_string(QTask_FlowClassId));
         // The retail game object carries the class id in the dispatch word at
         // +0x1C, and the per-frame dispatch reads the phase 1 table at that
         // index, so the word is the class the game object belongs to.
-        game_object.dispatch_table_index = DAT_0057B1A2;
+        game_object.dispatch_table_index = QTask_GameClassId;
         // Retail reaches 0x00415B30 through 0x004012A0 after Game_Init. The
         // port invokes the linked phase-0 handler directly; the handler is the
         // same function registered above, and it runs the level load before
@@ -2354,7 +2370,7 @@ int RunRetailModelScene(HINSTANCE instance,
             {
                 Sleep(500);
             }
-            if (DAT_005C8DE8 == 0U)
+            if (Loop_StatusByte == 0U)
             {
                 DestroyWindow(window);
             }

@@ -4,7 +4,7 @@ namespace igi::retail::texture
 {
 ModelTexturePixels Texture_DecodeModelPixels(std::span<const std::byte> file_bytes)
 {
-    const auto header = LoopModelTextureFile::Host_ParseModelTextureFile(file_bytes);
+    const auto header = LoopModelTextureFile::DynObj_ParseModelTextureFile(file_bytes);
     const std::uint32_t stride = header.operation_arguments[0];
     const std::uint32_t width = header.operation_arguments[1];
     const std::uint32_t height = header.operation_arguments[2];

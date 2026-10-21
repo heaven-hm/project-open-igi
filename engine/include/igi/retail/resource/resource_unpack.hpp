@@ -18,6 +18,6 @@ using ResourceUnpackFn = std::int32_t (*)(std::int32_t device, std::int32_t* str
 std::int32_t Resource_Unpack(std::int32_t* context, std::int32_t destination, std::int32_t size);
 
 // Host wiring for the port-owned device table. Not a retail entry point.
-void Host_SetResourceUnpack(std::int32_t device, ResourceUnpackFn unpack);
+void Resource_SetUnpack(std::int32_t device, ResourceUnpackFn unpack);
 
 } // namespace igi::retail::resource

@@ -21,7 +21,7 @@ std::int32_t Resource_Unpack(std::int32_t* context, std::int32_t destination, st
     return unpack(device, context, destination, size);
 }
 
-void Host_SetResourceUnpack(std::int32_t device, ResourceUnpackFn unpack)
+void Resource_SetUnpack(std::int32_t device, ResourceUnpackFn unpack)
 {
     std::memcpy(device_table + static_cast<std::size_t>(device) * resource_device_record_size,
                 &unpack, sizeof(unpack));

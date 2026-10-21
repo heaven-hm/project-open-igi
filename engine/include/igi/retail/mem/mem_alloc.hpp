@@ -70,8 +70,8 @@ int Mem_InitHeapState();
 inline int Sys_CloseFileStream_2() { return Mem_InitHeapState(); }
 
 // Host primitive backing the retail HeapAlloc(g_c32428, 0, dwBytes) tail of Mem_AllocateRawBlock.
-void* Host_HeapAlloc(std::uint32_t num_bytes);
-void Host_HeapFree(void* pointer);
+void* Mem_HeapAlloc(std::uint32_t num_bytes);
+void Mem_HeapFree(void* pointer);
 
 // Native: Mem_InvokeNewHandler() - VA 0x004AD722 - complete port.
 // Previous catalog alias: Camera_ApplyHandiCam_28.

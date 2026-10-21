@@ -1,0 +1,114 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00526150",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00526150"
+   },
+   {
+    "address": "0x0052619B"
+   },
+   {
+    "address": "0x0052617E"
+   },
+   {
+    "address": "0x00526314"
+   },
+   {
+    "address": "0x005261F8"
+   },
+   {
+    "address": "0x005261B3"
+   },
+   {
+    "address": "0x00526181"
+   },
+   {
+    "address": "0x00526177"
+   },
+   {
+    "address": "0x00526325"
+   },
+   {
+    "address": "0x0052630C"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00526150",
+    "target": "0x00526177",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0052619B",
+    "target": "0x005261B3",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0052617E",
+    "target": "0x005261B3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0052617E",
+    "target": "0x00526181",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00526314",
+    "target": "0x00526177",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00526314",
+    "target": "0x00526325",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005261F8",
+    "target": "0x005261F8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005261F8",
+    "target": "0x0052630C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005261B3",
+    "target": "0x00526314",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005261B3",
+    "target": "0x005261F8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00526181",
+    "target": "0x005261B3",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00526177",
+    "target": "0x0052619B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00526177",
+    "target": "0x0052617E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0052630C",
+    "target": "0x00526314",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

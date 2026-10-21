@@ -24,6 +24,12 @@ add_library(igi_retail_engine STATIC
     src/retail/core/frame_natives.cpp
     src/retail/core/window_procedure.cpp
     src/retail/core/retail_main.cpp
+    src/retail/core/app_startup_natives.cpp
+    src/retail/core/native_0048f0d0.cpp
+    src/retail/core/native_0048f0f0.cpp
+    src/retail/core/native_0048f0e0.cpp
+    src/retail/core/flow.cpp
+    src/retail/core/class_registration.cpp
     src/retail/core/task_types.cpp
     src/retail/core/game_flow.cpp
     src/retail/core/app_context.cpp
@@ -69,6 +75,7 @@ add_library(igi_retail_engine STATIC
     src/retail/script/qvm_compiled_program.cpp
     src/retail/script/qvm_loader.cpp
     src/retail/script/qvm_native_loader.cpp
+    src/retail/script/humanplayer_defines.cpp
     src/retail/script/qvm_object_calls.cpp
     src/retail/script/qvm_stack_natives.cpp
     src/retail/script/script_mode.cpp

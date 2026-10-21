@@ -43,12 +43,28 @@ std::uint32_t RegisterInputPortRecord(InputPortRecord* record) noexcept
     return input_port_registry_size;
 }
 
+// The retail's list insert at 0x004AF8F0, adapted to the port's 32-bit record
+// links.
+void InsertInputPortRecord(HeapList* list, InputPortRecord* record) noexcept
+{
+    const std::uint32_t last = list->last;
+    auto* const last_record = InputPortRecordAt(last);
+    if (last_record != nullptr)
+    {
+        last_record->list_next = static_cast<std::uint32_t>(
+            offsetof(InputPortRecord, list_previous));
+    }
+    record->list_previous = last;
+    record->list_next = static_cast<std::uint32_t>(offsetof(HeapList, first));
+    list->last = RegisterInputPortRecord(record);
+}
+
 } // namespace igi::retail::input
 
 extern "C" {
 
-std::uint16_t DAT_00A5EFA0 = 0U;
-std::uint32_t DAT_00567C58 = 0xFFFFFFFFU;
+std::uint16_t InputPort_CurrentIndex = 0U;
+std::uint32_t QTask_InputPortCounter = 0xFFFFFFFFU;
 
 // Native: InputPort_Process; retail VA 0x004ED5C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
@@ -60,7 +76,7 @@ std::uint32_t DAT_00567C58 = 0xFFFFFFFFU;
 //           call are the retail's.
 void IGI_RETAIL_CDECL InputPort_Process(void* input_port)
 {
-    const std::uint16_t index = DAT_00A5EFA0;
+    const std::uint16_t index = InputPort_CurrentIndex;
     QTask_RegisterInputPortHandler(static_cast<std::uint32_t>(
                                        reinterpret_cast<std::uintptr_t>(input_port)),
                                    index, 0U);
@@ -91,7 +107,7 @@ std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
         igi::retail::input::InsertInputPortRecord(list, record);
     }
     const std::uint16_t dispatch = record->dispatch_index;
-    const auto handler = DAT_00A96AE0[dispatch];
+    const auto handler = QTask_HandlerTable[dispatch];
     if (handler != nullptr)
     {
         handler(record);
@@ -114,9 +130,9 @@ std::uint32_t IGI_RETAIL_CDECL QTask_RegisterInputPortHandler(
 igi::retail::input::InputPortRecord* IGI_RETAIL_CDECL QTask_AllocateInputPort(
     std::uint32_t port_index, std::uint32_t context)
 {
-    ++DAT_00567C58;
+    ++QTask_InputPortCounter;
     const std::uint32_t slot = port_index & 0xFFFFU;
-    auto& type_slot = DAT_00AF5EE0[slot];
+    auto& type_slot = QTask_TypeTable[slot];
     std::uint8_t appended = 0U;
     if (type_slot.has_task_list != 0U)
     {
@@ -144,24 +160,6 @@ igi::retail::input::InputPortRecord* IGI_RETAIL_CDECL QTask_AllocateInputPort(
         offsetof(igi::retail::input::InputPortRecord, list_next));
     igi::retail::input::RegisterInputPortRecord(record);
     return record;
-}
-
-// The retail's list insert at 0x004AF8F0, adapted to the port's 32-bit record
-// links.
-void InsertInputPortRecord(
-    igi::retail::input::HeapList* list, igi::retail::input::InputPortRecord* record) noexcept
-{
-    const std::uint32_t last = list->last;
-    auto* const last_record = igi::retail::input::InputPortRecordAt(last);
-    if (last_record != nullptr)
-    {
-        last_record->list_next = static_cast<std::uint32_t>(
-            offsetof(igi::retail::input::InputPortRecord, list_previous));
-    }
-    record->list_previous = last;
-    record->list_next = static_cast<std::uint32_t>(
-        offsetof(igi::retail::input::HeapList, first));
-    list->last = igi::retail::input::RegisterInputPortRecord(record);
 }
 
 } // extern "C"

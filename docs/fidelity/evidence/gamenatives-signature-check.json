@@ -1,0 +1,1503 @@
+{
+  "checked": 5833,
+  "ok": 5664,
+  "reviewedAdaptations": 15,
+  "issues": [
+    {
+      "path": "scripts/GameNatives/ai/00452920-AI_CombatTarget_4.hpp",
+      "address": "00452920",
+      "name": "AI_CombatTarget_4",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void AI_CombatTarget_4(void);",
+      "retail": "int32_t(int32_t arg1) __pure AI_CombatTarget_4(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/00453870-AI_CheckVisibility_5.hpp",
+      "address": "00453870",
+      "name": "AI_CheckVisibility_5",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void AI_CheckVisibility_5(void);",
+      "retail": "int32_t(int32_t arg1) __pure AI_CheckVisibility_5(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/00453FB0-AI_UpdateOrders_5.hpp",
+      "address": "00453FB0",
+      "name": "AI_UpdateOrders_5",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int AI_UpdateOrders_5(void * context, void * arg2);",
+      "retail": "int32_t AI_UpdateOrders_5(int32_t param_1, void* param_2, void* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/00455EE0-AI_UpdatePatrol_8.hpp",
+      "address": "00455EE0",
+      "name": "AI_UpdatePatrol_8",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int AI_UpdatePatrol_8(void * context, void * arg2);",
+      "retail": "int32_t AI_UpdatePatrol_8(int32_t param_1, void* param_2, void* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/00456380-AI_TakeCover_8.hpp",
+      "address": "00456380",
+      "name": "AI_TakeCover_8",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int AI_TakeCover_8(void * context, void * arg2);",
+      "retail": "int32_t AI_TakeCover_8(int32_t param_1, void* param_2, void* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/0045AB00-AI_CombatTarget_13.hpp",
+      "address": "0045AB00",
+      "name": "AI_CombatTarget_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int AI_CombatTarget_13(void * context, void * arg2);",
+      "retail": "int32_t AI_CombatTarget_13(int32_t param_1, void* param_2, void* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/0045B060-AI_UpdateOrders_13.hpp",
+      "address": "0045B060",
+      "name": "AI_UpdateOrders_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int AI_UpdateOrders_13(void * context, void * arg2);",
+      "retail": "int32_t AI_UpdateOrders_13(int32_t param_1, void* param_2, void* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463140-AI_CheckVisibility_19.hpp",
+      "address": "00463140",
+      "name": "AI_CheckVisibility_19",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void AI_CheckVisibility_19(void);",
+      "retail": "int32_t(int32_t arg1) __pure AI_CheckVisibility_19(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/aifunction/0044EBB0-AIFunction_AddAnimationEntry.hpp",
+      "address": "0044EBB0",
+      "name": "AIFunction_AddAnimationEntry",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 3,
+      "retailArity": 2,
+      "declared": "int AIFunction_AddAnimationEntry(long double context, int arg2, float arg3);",
+      "retail": "void AIFunction_AddAnimationEntry(int32_t param_1, double param_2);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/ammotype/0047CA40-AmmoType_Open.hpp",
+      "address": "0047CA40",
+      "name": "AmmoType_Open",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void AmmoType_Open(void);",
+      "retail": "int32_t* AmmoType_Open(int32_t* param_1);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/animspline/0050A5C0-AnimSpline_ProcessStep_50A5C0.hpp",
+      "address": "0050A5C0",
+      "name": "AnimSpline_ProcessStep_50A5C0",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/app/0048F1A0-AppContext_SetDebugged.hpp",
+      "address": "0048F1A0",
+      "name": "App_ContextSetDebugged",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. The inferred int32_t setter return preserves the observed sign-extended EAX value; original source return type is unknown, despite retained Ghidra void inference. Catalog aliases do not establish semantic names."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/app/0048F1E0-AppContext_SetDebugtextState.hpp",
+      "address": "0048F1E0",
+      "name": "App_ContextSetDebugtextState",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. The inferred int32_t setter return preserves the observed sign-extended EAX value; original source return type is unknown, despite retained Ghidra void inference. Catalog aliases do not establish semantic names."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/app/0048F240-AppContext_SetLightmapsUsed.hpp",
+      "address": "0048F240",
+      "name": "App_ContextSetLightmapsUsed",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. The inferred int32_t setter return preserves the observed sign-extended EAX value; original source return type is unknown, despite retained Ghidra void inference. Catalog aliases do not establish semantic names."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/app/0048F260-AppContext_SetTerrainLightmapsUsed.hpp",
+      "address": "0048F260",
+      "name": "App_ContextSetTerrainLightmapsUsed",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. The inferred int32_t setter return preserves the observed sign-extended EAX value; original source return type is unknown, despite retained Ghidra void inference. Catalog aliases do not establish semantic names."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5210-Camera_ResetMatrix_3.hpp",
+      "address": "004A5210",
+      "name": "Camera_ResetMatrix_3",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ResetMatrix_3(void);",
+      "retail": "void(int32_t arg1) __noreturn Camera_ResetMatrix_3(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5782-Camera_UpdateViewCone_5.hpp",
+      "address": "004A5782",
+      "name": "Camera_UpdateViewCone_5",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 9,
+      "retailArity": 1,
+      "declared": "long double __convention Camera_UpdateViewCone_5(\"regparm\")(int context, short arg2, short arg3, long double arg4, int arg5, int arg6, int arg7, char arg8, int arg9);",
+      "retail": "long double __convention Camera_UpdateViewCone_5(\"regparm\")(int32_t param_1, int16_t param_2, int16_t param_3, long param_4, int32_t param_5, int32_t param_6, int32_t param_7, char param_8, int32_t param_9);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5980-Camera_UpdateTransform_6.hpp",
+      "address": "004A5980",
+      "name": "Camera_UpdateTransform_6",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Camera_UpdateTransform_6(\"regparm\")(int context, int arg2, int arg3, char * arg4, char * arg5);",
+      "retail": "int32_t __convention Camera_UpdateTransform_6(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, char* param_4, char* param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5DD6-Camera_ApplyLineFilter_7.hpp",
+      "address": "004A5DD6",
+      "name": "Camera_ApplyLineFilter_7",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 1,
+      "declared": "void __convention Camera_ApplyLineFilter_7(\"regparm\")(int context, void * arg2);",
+      "retail": "void __convention Camera_ApplyLineFilter_7(\"regparm\")(int32_t param_1, void* param_2);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7290-Camera_ApplyPostProcess_10.hpp",
+      "address": "004A7290",
+      "name": "Camera_ApplyPostProcess_10",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int* __convention Camera_ApplyPostProcess_10(\"regparm\")(int context, int arg2, int arg3, int arg4, int* arg5);",
+      "retail": "int32_t* __convention Camera_ApplyPostProcess_10(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t param_4, int32_t* param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A760B-_flsbuf.hpp",
+      "address": "004A760B",
+      "name": "Camera_ApplyHandiCam_11",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7720-_output.hpp",
+      "address": "004A7720",
+      "name": "Camera_ApplyWideScreen_11",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7F2A-Camera_ApplyBandFilter_12.hpp",
+      "address": "004A7F2A",
+      "name": "Camera_ApplyBandFilter_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "BOOL __convention Camera_ApplyBandFilter_12(\"regparm\")(int context, int arg2, int arg3, int arg4);",
+      "retail": "BOOL __convention Camera_ApplyBandFilter_12(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A7FD4-Camera_ApplyHandiCam_12.hpp",
+      "address": "004A7FD4",
+      "name": "Camera_ApplyHandiCam_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 6,
+      "retailArity": 1,
+      "declared": "long double __convention Camera_ApplyHandiCam_12(\"regparm\")(int context, int arg2, int arg3, int arg4, double arg5, int arg6);",
+      "retail": "long double __convention Camera_ApplyHandiCam_12(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t param_4, double param_5, int32_t param_6);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A80BF-Camera_ApplyPostProcess_12.hpp",
+      "address": "004A80BF",
+      "name": "Camera_ApplyPostProcess_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 6,
+      "declared": "void Camera_ApplyPostProcess_12(void);",
+      "retail": "void(uint32_t arg1, int32_t* arg2, char arg3, int32_t arg4, double* arg5, double* arg6) __noreturn Camera_ApplyPostProcess_12(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A865C-Camera_ApplyLineFilter_13.hpp",
+      "address": "004A865C",
+      "name": "Camera_ApplyLineFilter_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ApplyLineFilter_13(void);",
+      "retail": "int32_t(char arg1) __pure Camera_ApplyLineFilter_13(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8689-Camera_ApplyBandFilter_13.hpp",
+      "address": "004A8689",
+      "name": "Camera_ApplyBandFilter_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ApplyBandFilter_13(void);",
+      "retail": "long double(double arg1) __pure Camera_ApplyBandFilter_13(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A869B-Camera_ApplyHandiCam_13.hpp",
+      "address": "004A869B",
+      "name": "Camera_ApplyHandiCam_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 3,
+      "declared": "void Camera_ApplyHandiCam_13(void);",
+      "retail": "long double(double arg1, int16_t arg2 @ 0xa, int32_t arg3) __pure Camera_ApplyHandiCam_13(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A86C4-Camera_ApplyWideScreen_13.hpp",
+      "address": "004A86C4",
+      "name": "Camera_ApplyWideScreen_13",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 2,
+      "declared": "void Camera_ApplyWideScreen_13(void);",
+      "retail": "int32_t(int32_t arg1, int32_t arg2) __pure Camera_ApplyWideScreen_13(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8BC8-Camera_ApplyLineFilter_15.hpp",
+      "address": "004A8BC8",
+      "name": "Camera_ApplyLineFilter_15",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ApplyLineFilter_15(void);",
+      "retail": "int32_t(int80_t arg1 @ st0) __location(\"st0\") __pure Camera_ApplyLineFilter_15(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A94A6-Camera_UpdateViewCone_16.hpp",
+      "address": "004A94A6",
+      "name": "Camera_UpdateViewCone_16",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 7,
+      "retailArity": 1,
+      "declared": "long double __convention Camera_UpdateViewCone_16(\"regparm\")(int context, int arg2, short arg3, long double arg4, int arg5, long double arg6, long double arg7);",
+      "retail": "long double __convention Camera_UpdateViewCone_16(\"regparm\")(int32_t param_1, int32_t param_2, int16_t param_3, long param_4, int32_t param_5, long param_6, long param_7);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A975E-Camera_UpdateTransform_17.hpp",
+      "address": "004A975E",
+      "name": "Camera_UpdateTransform_17",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 7,
+      "retailArity": 1,
+      "declared": "long double __convention Camera_UpdateTransform_17(\"regparm\")(int context, int arg2, short arg3, long double arg4, int arg5, long double arg6, long double arg7);",
+      "retail": "long double __convention Camera_UpdateTransform_17(\"regparm\")(int32_t param_1, int32_t param_2, int16_t param_3, long param_4, int32_t param_5, long param_6, long param_7);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9F5C-Camera_UpdateTransform_19.hpp",
+      "address": "004A9F5C",
+      "name": "Camera_UpdateTransform_19",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "int __convention Camera_UpdateTransform_19(\"regparm\")(int context, int arg2, int arg3, double arg4);",
+      "retail": "int32_t __convention Camera_UpdateTransform_19(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, double param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AA381-Camera_UpdateViewCone_19.hpp",
+      "address": "004AA381",
+      "name": "Camera_UpdateViewCone_19",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_UpdateViewCone_19(void);",
+      "retail": "int32_t(int32_t arg1) __pure Camera_UpdateViewCone_19(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AC66B-Camera_ApplyBandFilter_24.hpp",
+      "address": "004AC66B",
+      "name": "Camera_ApplyBandFilter_24",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ApplyBandFilter_24(void);",
+      "retail": "int32_t(int16_t arg1) __pure Camera_ApplyBandFilter_24(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AC6FD-Camera_ApplyWideScreen_24.hpp",
+      "address": "004AC6FD",
+      "name": "Camera_ApplyWideScreen_24",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Camera_ApplyWideScreen_24(void);",
+      "retail": "int32_t(int32_t arg1) __pure Camera_ApplyWideScreen_24(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/combat/0048B9C0-Combat_BeginBurst.hpp",
+      "address": "0048B9C0",
+      "name": "Combat_BeginBurst",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 5,
+      "declared": "unsigned int Combat_BeginBurst(int context, char arg2);",
+      "retail": "uint32_t Combat_BeginBurst(void* param_1, int32_t param_2, int32_t param_3, int32_t param_4, char param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/combat/0048D8E0-Combat_RunFire.hpp",
+      "address": "0048D8E0",
+      "name": "Combat_RunFire",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 4,
+      "declared": "int Combat_RunFire(void * context);",
+      "retail": "int32_t Combat_RunFire(void* param_1, int32_t param_2, int32_t param_3, void* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/config/00406220-Config_GetActivePlayerProfile.hpp",
+      "address": "00406220",
+      "name": "Config_GetActivePlayerProfileRecord",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/config/00406320-Config_English_2.hpp",
+      "address": "00406320",
+      "name": "Config_English_2",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Config_English_2(void);",
+      "retail": "void*(int32_t arg1) __pure Config_English_2(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/config/00406330-Config_SavePlayerProfile_2.hpp",
+      "address": "00406330",
+      "name": "Config_SavePlayerProfile_2",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Config_SavePlayerProfile_2(void);",
+      "retail": "void*(int32_t arg1) __pure Config_SavePlayerProfile_2(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/create/004C6760-Create_TerrainTileMap.hpp",
+      "address": "004C6760",
+      "name": "Terrain_CreateTileMap",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "The candidate float-array API adapts the retail Script_GetArg boundary; it is not established as an equivalent x86 interface. Descriptor-tail correction is supported independently; full function remains provisional."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/debug/00415020-GameFunctions_IsDebugKeyPressedOnce.hpp",
+      "address": "00415020",
+      "name": "DEBUG_KEYSENABLEINVALID",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/display/00490230-Keyboard_Update.hpp",
+      "address": "00490230",
+      "name": "Display_CloseDevice",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/display/004966E0-Display_SyncVSync_11.hpp",
+      "address": "004966E0",
+      "name": "Display_SyncVSync_11",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "int __convention Display_SyncVSync_11(\"regparm\")(int context, int arg2, int arg3, void * arg4);",
+      "retail": "int32_t __convention Display_SyncVSync_11(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/display/00499FF0-Display_OpenDevice_18.hpp",
+      "address": "00499FF0",
+      "name": "Display_OpenDevice_18",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Display_OpenDevice_18(void);",
+      "retail": "uint32_t(int32_t arg1) __pure Display_OpenDevice_18(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/displayrender/00493B20-DisplayRender_DefaultHandler_493B20.hpp",
+      "address": "00493B20",
+      "name": "DisplayRender_DefaultHandler_493B20",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C0780-DynObj_RegisterSymbol_3.hpp",
+      "address": "004C0780",
+      "name": "DynObj_RegisterSymbol_3",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention DynObj_RegisterSymbol_3(\"regparm\")(int context, int arg2, int arg3, void * arg4, int* arg5);",
+      "retail": "int32_t __convention DynObj_RegisterSymbol_3(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t* param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C3440-DynObj_UpdateDynTree_4.hpp",
+      "address": "004C3440",
+      "name": "DynObj_UpdateDynTree_4",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void DynObj_UpdateDynTree_4(void);",
+      "retail": "int32_t(int32_t arg1) __pure DynObj_UpdateDynTree_4(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/env/0044D850-Env_ScanViewCone_12.hpp",
+      "address": "0044D850",
+      "name": "Env_ScanViewCone_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 0,
+      "declared": "int* Env_ScanViewCone_12(int context);",
+      "retail": "void Env_ScanViewCone_12(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/env/0044FBA0-Env_WeaponNotInitialized.hpp",
+      "address": "0044FBA0",
+      "name": "Env_WeaponNotInitialized",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 4,
+      "declared": "void Env_WeaponNotInitialized(void * context);",
+      "retail": "void Env_WeaponNotInitialized(void* param_1, int32_t param_2, int32_t param_3, void* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/error/004AF7B0-Debug_Error.hpp",
+      "address": "004AF7B0",
+      "name": "Error_Show",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/flow/00402260-Flow_RunHandler.hpp",
+      "address": "00402260",
+      "name": "Flow_LoadParameters",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/frames/004028B0-Flow_GetTicks.hpp",
+      "address": "004028B0",
+      "name": "Frames_GetUpdateCounter",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F360-AppMain_ParseCmdLineArgs.hpp",
+      "address": "0048F360",
+      "name": "FX_FragmentSimulate_27",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/game/004A53B3-sprintf.hpp",
+      "address": "004A53B3",
+      "name": "Game_DataSymbolLoad",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/graph/004FAFE0-Graph_Cleanup.hpp",
+      "address": "004FAFE0",
+      "name": "Graph_Cleanup",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "int __convention Graph_Cleanup(\"regparm\")(int context, int arg2, int arg3, int* arg4);",
+      "retail": "int32_t __convention Graph_Cleanup(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/00408720-HumanPlayer_PlayFootstep.hpp",
+      "address": "00408720",
+      "name": "HumanPlayer_PlayFootstep",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 2,
+      "declared": "int HumanPlayer_PlayFootstep(void * context);",
+      "retail": "int32_t HumanPlayer_PlayFootstep(int32_t param_1, void* param_2);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/0040E9C0-HumanPlayer_HandleInput_7.hpp",
+      "address": "0040E9C0",
+      "name": "HumanPlayer_HandleInput_7",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 5,
+      "declared": "int* HumanPlayer_HandleInput_7(void * context, int* arg2);",
+      "retail": "int32_t* HumanPlayer_HandleInput_7(void* param_1, int32_t param_2, int32_t param_3, int32_t param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/0040EF70-HumanPlayer_PlayFootstep_7.hpp",
+      "address": "0040EF70",
+      "name": "HumanPlayer_PlayFootstep_7",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "void ** HumanPlayer_PlayFootstep_7(void * context, void * arg2);",
+      "retail": "void* HumanPlayer_PlayFootstep_7(int32_t param_1, void* param_2, struct param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/0040F760-HumanPlayer_UpdateHealth_8.hpp",
+      "address": "0040F760",
+      "name": "HumanPlayer_UpdateHealth_8",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 5,
+      "declared": "int HumanPlayer_UpdateHealth_8(int* context, int arg2);",
+      "retail": "int32_t HumanPlayer_UpdateHealth_8(void* param_1, int32_t param_2, int32_t param_3, int32_t param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/0040FA80-HumanPlayer_UpdateAnimation_8.hpp",
+      "address": "0040FA80",
+      "name": "HumanPlayer_UpdateAnimation_8",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "int HumanPlayer_UpdateAnimation_8(void * context, void * arg2);",
+      "retail": "int32_t HumanPlayer_UpdateAnimation_8(int32_t param_1, void* param_2, struct param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/00413B90-HumanPlayer_TakeDamage_10.hpp",
+      "address": "00413B90",
+      "name": "HumanPlayer_TakeDamage_10",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void HumanPlayer_TakeDamage_10(void);",
+      "retail": "void*(int32_t arg1) __pure HumanPlayer_TakeDamage_10(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/00413CC0-HumanPlayer_UpdateMotion_11.hpp",
+      "address": "00413CC0",
+      "name": "HumanPlayer_UpdateMotion_11",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 4,
+      "declared": "int* HumanPlayer_UpdateMotion_11(int* context, int arg2);",
+      "retail": "int32_t* HumanPlayer_UpdateMotion_11(int32_t param_1, int32_t param_2, void* param_3, int32_t param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/level/00416D20-Game_GetRandomState.hpp",
+      "address": "00416D20",
+      "name": "Level_SetMission_5",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/light/0052A010-Light_U2F.hpp",
+      "address": "0052A010",
+      "name": "Light_U2F",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "int __convention Light_U2F(\"regparm\")(int context, int arg2, int arg3, void * arg4);",
+      "retail": "int32_t __convention Light_U2F(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A5DAA-__abnormal_termination 2.hpp",
+      "address": "004A5DAA",
+      "name": "__abnormal_termination",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A5DAA-__abnormal_termination.hpp",
+      "address": "004A5DAA",
+      "name": "__abnormal_termination",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A7FA0-__allmul 2.hpp",
+      "address": "004A7FA0",
+      "name": "__allmul",
+      "status": "NO_DECLARATION",
+      "retailArity": 4,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A7FA0-__allmul.hpp",
+      "address": "004A7FA0",
+      "name": "__allmul",
+      "status": "NO_DECLARATION",
+      "retailArity": 4,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8BD6-MathSys_DefaultHandler_4A8BD6.hpp",
+      "address": "004A8BD6",
+      "name": "MathSys_DefaultHandler_4A8BD6",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8BDB-MathSys_DefaultHandler_4A8BDB.hpp",
+      "address": "004A8BDB",
+      "name": "MathSys_DefaultHandler_4A8BDB",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8C93-MathSys_ProcessStep_4A8C93.hpp",
+      "address": "004A8C93",
+      "name": "MathSys_ProcessStep_4A8C93",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8DCA-MathSys_DefaultHandler_4A8DCA.hpp",
+      "address": "004A8DCA",
+      "name": "MathSys_DefaultHandler_4A8DCA",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8DD5-MathSys_DefaultHandler_4A8DD5.hpp",
+      "address": "004A8DD5",
+      "name": "MathSys_DefaultHandler_4A8DD5",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8DE0-MathSys_Invoke16_4A8DE0.hpp",
+      "address": "004A8DE0",
+      "name": "MathSys_Invoke16_4A8DE0",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8DE6-MathSys_Invoke16_4A8DE6.hpp",
+      "address": "004A8DE6",
+      "name": "MathSys_Invoke16_4A8DE6",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8DEC-MathSys_Invoke16_4A8DEC.hpp",
+      "address": "004A8DEC",
+      "name": "MathSys_Invoke16_4A8DEC",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8E0E-MathSys_Invoke16_4A8E0E.hpp",
+      "address": "004A8E0E",
+      "name": "MathSys_Invoke16_4A8E0E",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8E29-MathSys_Invoke16_4A8E29.hpp",
+      "address": "004A8E29",
+      "name": "MathSys_Invoke16_4A8E29",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8E9E-MathSys_Invoke16_4A8E9E.hpp",
+      "address": "004A8E9E",
+      "name": "MathSys_Invoke16_4A8E9E",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8EBD-MathSys_Invoke16_4A8EBD.hpp",
+      "address": "004A8EBD",
+      "name": "MathSys_Invoke16_4A8EBD",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8F42-MathSys_Invoke16_4A8F42.hpp",
+      "address": "004A8F42",
+      "name": "MathSys_Invoke16_4A8F42",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8F61-MathSys_Invoke16_4A8F61.hpp",
+      "address": "004A8F61",
+      "name": "MathSys_Invoke16_4A8F61",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A8FE6-MathSys_Invoke16_4A8FE6.hpp",
+      "address": "004A8FE6",
+      "name": "MathSys_Invoke16_4A8FE6",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9005-MathSys_Invoke16_4A9005.hpp",
+      "address": "004A9005",
+      "name": "MathSys_Invoke16_4A9005",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A908A-MathSys_Invoke16_4A908A.hpp",
+      "address": "004A908A",
+      "name": "MathSys_Invoke16_4A908A",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A90A9-MathSys_Invoke16_4A90A9.hpp",
+      "address": "004A90A9",
+      "name": "MathSys_Invoke16_4A90A9",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A912E-MathSys_Invoke16_4A912E.hpp",
+      "address": "004A912E",
+      "name": "MathSys_Invoke16_4A912E",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A914D-MathSys_Invoke16_4A914D.hpp",
+      "address": "004A914D",
+      "name": "MathSys_Invoke16_4A914D",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A91D2-MathSys_Invoke16_4A91D2.hpp",
+      "address": "004A91D2",
+      "name": "MathSys_Invoke16_4A91D2",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A91F1-MathSys_Invoke16_4A91F1.hpp",
+      "address": "004A91F1",
+      "name": "MathSys_Invoke16_4A91F1",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9A19-MathSys_Invoke16_4A9A19.hpp",
+      "address": "004A9A19",
+      "name": "MathSys_Invoke16_4A9A19",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 0,
+      "declared": "int MathSys_Invoke16_4A9A19() __location(\"st0\");",
+      "retail": "int32_t MathSys_Invoke16_4A9A19() param_1);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9A1F-MathSys_Invoke17.hpp",
+      "address": "004A9A1F",
+      "name": "MathSys_Invoke17",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 0,
+      "declared": "int MathSys_Invoke17() __location(\"st0\");",
+      "retail": "int32_t MathSys_Invoke17() param_1);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9AE9-MathSys_Invoke17_4A9AE9.hpp",
+      "address": "004A9AE9",
+      "name": "MathSys_Invoke17_4A9AE9",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 0,
+      "declared": "int MathSys_Invoke17_4A9AE9() __location(\"st0\");",
+      "retail": "int32_t MathSys_Invoke17_4A9AE9() param_1);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9AED-MathSys_Invoke17_4A9AED.hpp",
+      "address": "004A9AED",
+      "name": "MathSys_Invoke17_4A9AED",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 0,
+      "declared": "int MathSys_Invoke17_4A9AED() __location(\"st0\");",
+      "retail": "int32_t MathSys_Invoke17_4A9AED() param_1);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D3E-MathSys_RestoreFpuCw.hpp",
+      "address": "004A9D3E",
+      "name": null,
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D4B-MathSys_MathExit.hpp",
+      "address": "004A9D4B",
+      "name": null,
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A9D89-MathSys_HandleFpuException.hpp",
+      "address": "004A9D89",
+      "name": null,
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/mem/004B0C60-Mem_AllocFn.hpp",
+      "address": "004B0C60",
+      "name": "Mem_Alloc",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/menu/00418FB0-Menu_RequestScreen_4.hpp",
+      "address": "00418FB0",
+      "name": "Menu_RequestScreen_4",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Menu_RequestScreen_4(void);",
+      "retail": "int32_t(int32_t arg1) __pure Menu_RequestScreen_4(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/menu/004199D0-BackgroundFX_New.hpp",
+      "address": "004199D0",
+      "name": "Menu_UpdateLanguage_6",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/menu/0041F2D0-ListBox_AddItem.hpp",
+      "address": "0041F2D0",
+      "name": "Menu_DrawWidget_9",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/menu/00423810-Menu_PlayMusic_12.hpp",
+      "address": "00423810",
+      "name": "Menu_PlayMusic_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 4,
+      "retailArity": 1,
+      "declared": "int __convention Menu_PlayMusic_12(\"regparm\")(int context, int arg2, int arg3, int arg4);",
+      "retail": "int32_t __convention Menu_PlayMusic_12(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/menu/004258C0-Menu_UpdateLanguage_16.hpp",
+      "address": "004258C0",
+      "name": "Menu_UpdateLanguage_16",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Menu_UpdateLanguage_16(void);",
+      "retail": "int32_t(int32_t arg1) __pure Menu_UpdateLanguage_16(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/menu/004258E0-Menu_FormatScreen_16.hpp",
+      "address": "004258E0",
+      "name": "Menu_FormatScreen_16",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Menu_FormatScreen_16(void);",
+      "retail": "int32_t(int32_t arg1) __pure Menu_FormatScreen_16(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.hpp",
+      "address": "004C6670",
+      "name": "Terrain_CreateMaterial",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": {
+        "result": "abi-adapted",
+        "rationale": "The candidate float-array API adapts the retail Script_GetArg boundary; it is not established as an equivalent x86 interface. Descriptor-tail correction is supported independently; full function remains provisional."
+      }
+    },
+    {
+      "path": "scripts/GameNatives/muzzle/00462E50-Muzzle_Eye.hpp",
+      "address": "00462E50",
+      "name": "Muzzle_Eye",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 1,
+      "retailArity": 4,
+      "declared": "void * Muzzle_Eye(void * context);",
+      "retail": "void* Muzzle_Eye(void* param_1, int32_t param_2, int32_t param_3, void* param_4);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/physics/00505920-Physics_SimulateRigidBody_4.hpp",
+      "address": "00505920",
+      "name": "Physics_SimulateRigidBody_4",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 6,
+      "retailArity": 1,
+      "declared": "void * const __convention Physics_SimulateRigidBody_4(\"regparm\")(int context, int arg2, void * arg3, void * arg4, int arg5, int arg6);",
+      "retail": "void* const __convention Physics_SimulateRigidBody_4(\"regparm\")(int32_t param_1, int32_t param_2, void* param_3, void* param_4, int32_t param_5, int32_t param_6);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/physics/00506C60-Physics_ApplyImpulse_5.hpp",
+      "address": "00506C60",
+      "name": "Physics_ApplyImpulse_5",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Physics_ApplyImpulse_5(void);",
+      "retail": "int32_t(int32_t arg1) __pure Physics_ApplyImpulse_5(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/physics/00509CF0-Joypad_Update.hpp",
+      "address": "00509CF0",
+      "name": "Physics_InterpolateWaypoint_10",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qtask/00401530-QTask_LinkQTaskEventHandlerNoContextFn.hpp",
+      "address": "00401530",
+      "name": "QTask_TriggerEvent",
+      "status": "NO_DECLARATION",
+      "retailArity": 3,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qtask/00401810-QTask_NewQTaskEventNoContextFn.hpp",
+      "address": "00401810",
+      "name": "QTask_UnableToAllocateEven_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qtask/004018E0-QTask_DeleteQTaskEventNoContext.hpp",
+      "address": "004018E0",
+      "name": "QTask_CreateTask_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qtask/00401A20-QTask_DeleteQTaskType.hpp",
+      "address": "00401A20",
+      "name": "QTask_CloseEvent_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qvm/004BC950-Qvm_ProcessInstructionnotim.hpp",
+      "address": "004BC950",
+      "name": "Qvm_ProcessInstructionnotim",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/qvm/004BDC40-Qvm_Invoke5.hpp",
+      "address": "004BDC40",
+      "name": "Qvm_Invoke5",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/render/004D3210-AnimController_UpdateChannels.hpp",
+      "address": "004D3210",
+      "name": "Render_ClipMesh_5",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/render/004D3720-Render_SetupLighting_6.hpp",
+      "address": "004D3720",
+      "name": "Render_SetupLighting_6",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 2,
+      "declared": "void Render_SetupLighting_6(void);",
+      "retail": "int32_t(int32_t arg1, int32_t arg2) __pure Render_SetupLighting_6(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8A20-Script_EvalArgInt.hpp",
+      "address": "004B8A20",
+      "name": "Script_GetArg",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004F4910-Script_FormatString_17.hpp",
+      "address": "004F4910",
+      "name": "Script_FormatString_17",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 3,
+      "declared": "void Script_FormatString_17(void);",
+      "retail": "int32_t(int32_t arg1, int32_t arg2, int32_t arg3) __pure Script_FormatString_17(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004FA4E0-Script_ParseEnumReal32_25.hpp",
+      "address": "004FA4E0",
+      "name": "Script_ParseEnumReal32_25",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Script_ParseEnumReal32_25(\"regparm\")(int context, int arg2, int arg3, void * arg4, char arg5);",
+      "retail": "int32_t __convention Script_ParseEnumReal32_25(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, char param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004FA520-Script_ParseEnumString_25.hpp",
+      "address": "004FA520",
+      "name": "Script_ParseEnumString_25",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Script_ParseEnumString_25(\"regparm\")(int context, int arg2, int arg3, void * arg4, char arg5);",
+      "retail": "int32_t __convention Script_ParseEnumString_25(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, char param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004FA560-Script_ExecuteLevelScript_25.hpp",
+      "address": "004FA560",
+      "name": "Script_ExecuteLevelScript_25",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Script_ExecuteLevelScript_25(\"regparm\")(int context, int arg2, int arg3, void * arg4, short arg5);",
+      "retail": "int32_t __convention Script_ExecuteLevelScript_25(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, int16_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/script/004FA5A0-Script_CallNativeHandler_25.hpp",
+      "address": "004FA5A0",
+      "name": "Script_CallNativeHandler_25",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Script_CallNativeHandler_25(\"regparm\")(int context, int arg2, int arg3, void * arg4, short arg5);",
+      "retail": "int32_t __convention Script_CallNativeHandler_25(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, int16_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E6030-SoundSys_SetFrequency 2.hpp",
+      "address": "004E6030",
+      "name": "Timer_SetLimit",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E6030-SoundSys_SetFrequency.hpp",
+      "address": "004E6030",
+      "name": "Timer_SetLimit",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E76E0-TextWindow_vprintf 2.hpp",
+      "address": "004E76E0",
+      "name": "Console_VPrint",
+      "status": "NO_DECLARATION",
+      "retailArity": 3,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E76E0-TextWindow_vprintf.hpp",
+      "address": "004E76E0",
+      "name": "Console_VPrint",
+      "status": "NO_DECLARATION",
+      "retailArity": 3,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7B80-DebugText_SetCursor.hpp",
+      "address": "004E7B80",
+      "name": "SoundSys_InitSoundSys_11",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7BB0-DebugText_Clear.hpp",
+      "address": "004E7BB0",
+      "name": "SoundSys_PlaySoundSample_11",
+      "status": "NO_DECLARATION",
+      "retailArity": 0,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E8200-SoundSys_PlaySoundSample_12.hpp",
+      "address": "004E8200",
+      "name": "SoundSys_PlaySoundSample_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void SoundSys_PlaySoundSample_12(void);",
+      "retail": "int32_t(int32_t arg1) __pure SoundSys_PlaySoundSample_12(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E8240-SoundSys_SetFrequency_12.hpp",
+      "address": "004E8240",
+      "name": "SoundSys_SetFrequency_12",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void SoundSys_SetFrequency_12(void);",
+      "retail": "int32_t(int32_t arg1) __pure SoundSys_SetFrequency_12(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004EE120-SoundSys_LoadSoundDef_18.hpp",
+      "address": "004EE120",
+      "name": "SoundSys_LoadSoundDef_18",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void SoundSys_LoadSoundDef_18(void);",
+      "retail": "void*(int32_t arg1) __pure SoundSys_LoadSoundDef_18(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004EE960-SoundSys_StopSoundSample_19.hpp",
+      "address": "004EE960",
+      "name": "SoundSys_StopSoundSample_19",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void SoundSys_StopSoundSample_19(void);",
+      "retail": "uint32_t(int32_t arg1) __pure SoundSys_StopSoundSample_19(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/soundsysmicrophone/004EBDE0-SoundSysMicrophone_Action.hpp",
+      "address": "004EBDE0",
+      "name": "SoundSysMicrophone_Action",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void SoundSysMicrophone_Action(void);",
+      "retail": "int32_t(int32_t arg1) __pure SoundSysMicrophone_Action(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B1DE0-Sys_CheckHeap_6.hpp",
+      "address": "004B1DE0",
+      "name": "Sys_CheckHeap_6",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Sys_CheckHeap_6(void);",
+      "retail": "void*(int32_t arg1) __pure Sys_CheckHeap_6(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3320-Real64x3_NullVector.hpp",
+      "address": "004B3320",
+      "name": "Vec3_IsZero",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B38E0-Real32x9_Create 2.hpp",
+      "address": "004B38E0",
+      "name": "Mat33_FromEulerAngles",
+      "status": "NO_DECLARATION",
+      "retailArity": 4,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B38E0-Real32x9_Create.hpp",
+      "address": "004B38E0",
+      "name": "Mat33_FromEulerAngles",
+      "status": "NO_DECLARATION",
+      "retailArity": 4,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BAFA0-Sys_OpenFileStream_26.hpp",
+      "address": "004BAFA0",
+      "name": "Sys_OpenFileStream_26",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Sys_OpenFileStream_26(\"regparm\")(int context, int arg2, int arg3, void * arg4, char * arg5);",
+      "retail": "int32_t __convention Sys_OpenFileStream_26(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, char* param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BCAB0-Sys_AllocateMemory_28.hpp",
+      "address": "004BCAB0",
+      "name": "Sys_AllocateMemory_28",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Sys_AllocateMemory_28(\"regparm\")(int context, int arg2, int arg3, float arg4, int arg5);",
+      "retail": "int32_t __convention Sys_AllocateMemory_28(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, float param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BD010-Sys_DispatchOpcode_28.hpp",
+      "address": "004BD010",
+      "name": "Sys_DispatchOpcode_28",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "long double __convention Sys_DispatchOpcode_28(\"regparm\")(int context, int arg2, float arg3, float arg4, int arg5);",
+      "retail": "long double __convention Sys_DispatchOpcode_28(\"regparm\")(int32_t param_1, int32_t param_2, float param_3, float param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/task/004F0D40-Task_New_2.hpp",
+      "address": "004F0D40",
+      "name": "Task_New_2",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "int __convention Task_New_2(\"regparm\")(int context, int arg2, int arg3, void * arg4, int arg5);",
+      "retail": "int32_t __convention Task_New_2(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/tasktype/00401CF0-QTask_IsQTaskTypeDerived.hpp",
+      "address": "00401CF0",
+      "name": "TaskType_IsDerivedFrom",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/terrain/0051682D-Terrain_SampleHeightmap_3.hpp",
+      "address": "0051682D",
+      "name": "Terrain_SampleHeightmap_3",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "long double __convention Terrain_SampleHeightmap_3(\"regparm\")(int context, short arg2, long double arg3, int arg4, int arg5);",
+      "retail": "long double __convention Terrain_SampleHeightmap_3(\"regparm\")(int32_t param_1, int16_t param_2, long param_3, int32_t param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005168FD-Terrain_BuildMipMaps_3.hpp",
+      "address": "005168FD",
+      "name": "Terrain_BuildMipMaps_3",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 5,
+      "retailArity": 1,
+      "declared": "long double __convention Terrain_BuildMipMaps_3(\"regparm\")(int context, short arg2, long double arg3, int arg4, int arg5);",
+      "retail": "long double __convention Terrain_BuildMipMaps_3(\"regparm\")(int32_t param_1, int16_t param_2, long param_3, int32_t param_4, int32_t param_5);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2 2.hpp",
+      "address": "00413A90",
+      "name": "WeaponType_Open_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2.hpp",
+      "address": "00413A90",
+      "name": "WeaponType_Open_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00479990-Weapon_ReloadStart.hpp",
+      "address": "00479990",
+      "name": "Weapon_ReloadStart",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 2,
+      "retailArity": 3,
+      "declared": "void ** Weapon_ReloadStart(void * context, int* arg2);",
+      "retail": "void* Weapon_ReloadStart(int32_t param_1, void* param_2, int32_t* param_3);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapon/0047CD10-Weapon_EjectMagazine_7.hpp",
+      "address": "0047CD10",
+      "name": "Weapon_EjectMagazine_7",
+      "status": "ARITY_MISMATCH",
+      "declaredArity": 0,
+      "retailArity": 1,
+      "declared": "void Weapon_EjectMagazine_7(void);",
+      "retail": "void*(int32_t arg1) __pure Weapon_EjectMagazine_7(void);",
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00478540-WeaponGun_InvokeGetList_478540 2.hpp",
+      "address": "00478540",
+      "name": "WeaponGun_InvokeGetList_478540",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00479C20-WeaponGun_Invoke5_479C20 2.hpp",
+      "address": "00479C20",
+      "name": "WeaponGun_Invoke5_479C20",
+      "status": "NO_DECLARATION",
+      "retailArity": 2,
+      "review": null
+    },
+    {
+      "path": "scripts/GameNatives/weapontype/00414FD0-GameFunctions_IsDebugKeyPressed.hpp",
+      "address": "00414FD0",
+      "name": "WeaponType_GetConfig_2",
+      "status": "NO_DECLARATION",
+      "retailArity": 1,
+      "review": null
+    }
+  ]
+}

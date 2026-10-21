@@ -16,13 +16,15 @@ std::int32_t trans_context_install_count = 0;
 
 } // namespace
 
-// 0x00497E70  Transcontext_SetActiveTransContext
-//
-// Copies the caller's transform context (0xA8 bytes) into the active context, dispatches the
+// Native: Transcontext_SetActiveTransContext; retail VA 0x00497E70.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe; the catalog entry is assets/IGINatives_v4.json.
+// Behavior/CFG: copies the caller's transform context (0xA8 bytes) into the active context, dispatches the
 // registered "SetActiveTransContext" render method, then marks the context installed and
 // increments the install counter. The render method is selected through the render-method
 // table indexed by the id returned when "SetActiveTransContext" was registered; the port has
 // no render-method table yet, so that dispatch is the outstanding dependency.
+// Status/limits: STRUCTURALLY_VERIFIED for the copy, the installed flag and the install counter; the render-method dispatch is not implemented.
 void Transcontext_SetActiveTransContext(const TransContext& context)
 {
     std::memcpy(active_trans_context.bytes.data(), context.bytes.data(), trans_context_size);
@@ -50,6 +52,15 @@ void Transcontext_SetCameraPosition(double x, double y, double z)
     const std::array<double, 3> position{x, y, z};
     std::memcpy(active_trans_context.bytes.data() + trans_context_camera_position_offset,
                 position.data(), sizeof(position));
+}
+
+std::array<float, 2> Transcontext_GetFovTangents()
+{
+    std::array<float, 2> tangents{};
+    std::memcpy(tangents.data(),
+                active_trans_context.bytes.data() + trans_context_vfovx_offset,
+                sizeof(tangents));
+    return tangents;
 }
 
 std::int32_t Transcontext_GetInstalledFlag()
