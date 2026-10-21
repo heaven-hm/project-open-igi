@@ -18,6 +18,7 @@ import json
 import os
 import pathlib
 import subprocess
+import time
 import sys
 from typing import Any
 
@@ -87,7 +88,7 @@ def main() -> int:
     if not binary.is_file():
         raise SystemExit(f"retail executable not found: {binary}")
     targets = load_targets(args, args.targets)
-    addresses = [target["address"] for target in targets]
+    addresses = [f"0x{int(target['address'], 16):08X}" for target in targets]
     print(f"verifying {len(addresses)} retail entries from {binary}", flush=True)
 
     angr = run_angr(binary, addresses)
@@ -99,10 +100,16 @@ def main() -> int:
     records = {("0x" + r["address"][-8:].upper()): r for r in manifest["natives"]}
     results = []
     for index, target in enumerate(targets, start=1):
-        address = target["address"]
+        address = f"0x{int(target['address'], 16):08X}"
         name = target.get("name", address)
         try:
-            bn_nodes, bn_edges = generator.bn_basic_blocks(address, session)
+            # Binary Ninja occasionally returns an empty block table while another
+            # client is analysing the same view; retry once before recording a fail.
+            for attempt in range(2):
+                bn_nodes, bn_edges = generator.bn_basic_blocks(address, session)
+                if bn_nodes:
+                    break
+                time.sleep(1.0)
             r2_nodes, r2_edges = generator.r2_basic_blocks(address, {node["address"] for node in bn_nodes})
         except Exception as error:  # A tool failure is reported, never a pass.
             results.append({"address": address, "name": name, "result": "fail",
@@ -111,7 +118,7 @@ def main() -> int:
             continue
         score = generator.similarity({"nodes": bn_nodes, "edges": bn_edges},
                                       {"nodes": r2_nodes, "edges": r2_edges})
-        angr_entry = angr_functions.get(address.upper()) or angr_functions.get(address) or {}
+        angr_entry = angr_functions.get(address) or angr_functions.get(address.upper()) or {}
         angr_recovered = bool(angr_entry)
         angr_nodes = len(angr_entry.get("nodes", []) or [])
         passed = score >= args.cfg_threshold and angr_recovered
