@@ -1,8 +1,10 @@
-// IGI native provenance: FX_TrailUpdate_22 - 0x0048F0F0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F0F0-FX_TrailUpdate_22.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F0F0-FX_TrailUpdate_22.hpp"
-int FX_TrailUpdate_22(int context)
+// IGI native FX_TrailUpdate_22 - 0x0048F0F0 - transcribed from retail igi.exe.
+// Retail: mov eax,[esp+4]; mov [g_5c8bcc],eax; ret
+#include <cstdint>
+#include <windows.h>
+extern std::int32_t g_5c8bcc;
 
+int __cdecl FX_TrailUpdate_22(int context)
 {
     g_5c8bcc = context;
     return context;
