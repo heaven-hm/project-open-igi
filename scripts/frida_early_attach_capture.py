@@ -93,6 +93,10 @@ def main() -> int:
     parser.add_argument("--targets", type=Path, default=ROOT / "scripts/mvp_native_targets.json")
     parser.add_argument("--seconds", type=float, default=45.0)
     parser.add_argument("--level", type=int, default=1)
+    parser.add_argument("--keys", default="",
+                        help="Comma-separated VK codes to post after hooks install, "
+                             "e.g. 0x1B for Escape to open the menu.")
+    parser.add_argument("--key-interval", type=float, default=2.5)
     parser.add_argument("--report", type=Path, default=ROOT / "build/runtime-traces/early.json")
     args = parser.parse_args()
 
@@ -210,6 +214,21 @@ def main() -> int:
                 break
             time.sleep(1.0)
         report["restart_keys"] = restarts
+
+        # Drive the menu sequence so screens the level never opens (options,
+        # graphics settings) still execute their natives while hooks are live.
+        sequence = [int(key, 0) for key in args.keys.split(",") if key.strip()]
+        pressed = []
+        for key in sequence:
+            time.sleep(args.key_interval)
+            try:
+                sent = script.exports_sync.key(key)
+            except Exception as error:
+                sent = {"error": repr(error)}
+            pressed.append({"key": hex(key), "at": round(time.monotonic() - started, 1),
+                            "result": sent})
+        report["menu_keys"] = pressed
+
         deadline = time.monotonic() + args.seconds
         while time.monotonic() < deadline:
             time.sleep(0.5)

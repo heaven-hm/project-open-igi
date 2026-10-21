@@ -144,5 +144,17 @@
   "0x00512C30"
  ],
  "attach_delay_seconds": 7.318,
- "note": "Attach happened 7.3s after launch; startup natives that ran before the attach are not in this trace. The eight unobserved entries are options-menu paths that this level does not open."
+ "note": "Attach happened 7.3s after launch; startup natives that ran before the attach are not in this trace. The eight unobserved entries are options-menu paths that this level does not open.",
+ "sessions": [
+  "level3 2.98s attach (61)",
+  "level3 3.40s attach + Escape/Escape/Enter menu keys (61)",
+  "level3 7.32s attach (61)"
+ ],
+ "stability": "Three captures with different attach timings and an injected menu sequence all observe the same 61 natives.",
+ "unobserved_analysis": {
+  "count": 8,
+  "reason": "Not reached on the normal level3 boot path.",
+  "evidence": "The six Config_GraphicOptions* natives are all called from 0x00403B70, which is reached from 0x00405300 and pushed as a callback by 0x00402FF0. 0x00405300 is the config-load failure path invoked by Config_Read (0x00405850) when Qvm_Load returns null, so these run only when config.qvm fails to load. Human_TaskViewReset and Qvm_ReportError are likewise not on the observed path.",
+  "next_step": "Capture a session where config.qvm load fails, or drive the view-reset and error-report paths explicitly."
+ }
 }
