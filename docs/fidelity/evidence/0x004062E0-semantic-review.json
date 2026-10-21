@@ -8,7 +8,7 @@
  "reviewed": true,
  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {
-  "scope": "typed-per-native-probe",
+  "scope": "scalar-arguments-and-result",
   "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
   "required_observables": {
    "inputs": [
