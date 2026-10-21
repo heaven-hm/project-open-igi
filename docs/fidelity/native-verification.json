@@ -10817,20 +10817,23 @@
         "signature": "x86 cdecl int32_t(int8_t)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail reads and sign-extends the low byte at ESP+4, writes the DWORD at 0x005C8BF8, leaves the same value in EAX, and returns. The x86 candidate accepts int8_t, writes one 32-bit field, and returns that value."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "Verified scope is typed pre-resume replay over all signed bytes; natural Level 1 gameplay reachability is tracked by the main-flow verification.",
+          "The candidate writes one app-context field and returns the sign-extended argument; six fields are compared before and after each call."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/frida_app_context_setter_pair.py",
           "args": [
             "--address",
             "{address}",
+            "--root",
+            "{root}",
             "--binary",
             "{binary}",
             "--binary-sha256",
@@ -10839,10 +10842,14 @@
             "{implementation}",
             "--implementation-sha256",
             "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "--candidate",
+            "build-win32-no-verify-gate/engine/platform/windows/open-igi.exe",
+            "--receipt",
+            "build/diagnostic-candidate-build.json",
+            "--out",
+            "build/runtime-traces/0x0048F1A0-frida-pair.json"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 1200
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -10860,7 +10867,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-semantic-review.json",
-          "evidence_sha256": "01a222eea6e1ed46e509e8a3c7da505f1966d660f5977847ea062ab15b9cceb4"
+          "evidence_sha256": "3d7000b4dd78d975d096f7318a4fd3f10e78937e65c9cba98edc25a408efcabb"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-build.json",
@@ -10868,7 +10875,11 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-behavioral.json",
-          "evidence_sha256": "3210d9ace580c72d86f520c30a02c0ad048497d40a181e6d309498786a7ac0e5"
+          "evidence_sha256": "3d8425fa18e4d6786e28443713a6556c9df1f5faf503dc8bc686c88421da63d0"
+        },
+        "runtime_tests": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F1A0-behavioral.json",
+          "evidence_sha256": "3d8425fa18e4d6786e28443713a6556c9df1f5faf503dc8bc686c88421da63d0"
         }
       }
     },
