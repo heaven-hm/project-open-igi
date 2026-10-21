@@ -1,8 +1,11 @@
-// IGI native provenance: Texture_DisableUpload - 0x004B26B0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004B26B0-Texture_DisableUpload.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B26B0-Texture_DisableUpload.hpp"
-int Texture_DisableUpload()
+// IGI native Texture_DisableUpload - 0x004B26B0 - transcribed from retail igi.exe.
+// Retail: cdecl, no arguments. Sets the byte g_943b3c to 0.
+#include <cstdint>
+#include <cstring>
 
+extern std::uint8_t g_943b3c;
+
+void __cdecl Texture_DisableUpload(void)
 {
     g_943b3c = 0;
 }
