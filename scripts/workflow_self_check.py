@@ -60,6 +60,25 @@ def main():
                                cwd=ROOT,capture_output=True,text=True)
         cases.append(dict(name='historical_reference_is_not_current_implementation',passed=blocked.returncode!=0 and '\nFalse\n' in '\n'+blocked.stdout,
                           stdout=blocked.stdout,stderr=blocked.stderr))
+        intake_command=[sys.executable,str(ROOT/'scripts/igi_workflow.py'),'intake','0x004036B0',
+                        '--probe',str(ROOT/'docs/fidelity/evidence/0x00404590-behavioral.json'),
+                        '--level','1','--report',str(folder/'intake-report.json')]
+        intake_run=subprocess.run(intake_command,cwd=ROOT,capture_output=True,text=True)
+        intake_report_path=folder/'intake-report.json'
+        intake_doc=json.loads(intake_report_path.read_text()) if intake_report_path.is_file() else {}
+        cases.append(dict(name='intake_rejects_native_without_current_engine_implementation',
+                          passed=intake_run.returncode!=0 and intake_doc.get('result')!='passed',
+                          intake_exit_code=intake_run.returncode,stdout=intake_run.stdout,stderr=intake_run.stderr,
+                          intake_report=intake_doc))
+        static_command=[sys.executable,str(ROOT/'scripts/smart_end_to_end_verification.py'),'--address','0x004036B0','--static-only',
+                        '--report',str(folder/'static-only-report.json')]
+        static_run=subprocess.run(static_command,cwd=ROOT,capture_output=True,text=True)
+        static_report_path=folder/'static-only-report.json'
+        static_doc=json.loads(static_report_path.read_text()) if static_report_path.is_file() else {}
+        cases.append(dict(name='static_only_cannot_be_accepted',
+                          passed=static_run.returncode!=0 and static_doc.get('result')!='passed',
+                          static_exit_code=static_run.returncode,stdout=static_run.stdout,stderr=static_run.stderr,
+                          static_report=static_doc))
     result=dict(kind='igi-workflow-self-check',schema_version=1,result='passed' if all(c['passed'] for c in cases) else 'failed',
                 native_verified=False,scope='report-validator infrastructure only; generated fixtures are not game evidence',cases=cases)
     path=ROOT/'build/workflow-self-check.json'; path.parent.mkdir(parents=True,exist_ok=True)

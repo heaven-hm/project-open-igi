@@ -23,6 +23,11 @@ def main():
     analysis.add_argument('--report', type=Path)
     sub.add_parser('smoke', help='Headless Frida plumbing check of the diagnostic candidate before resume; no game/native verification.')
     sub.add_parser('self-check', help='Exercise fail-closed report validation; infrastructure only.')
+    intake = sub.add_parser('intake', help='Strict new-native intake: static gate + paired runtime + typed comparison; accept only on full pass, reject otherwise.')
+    intake.add_argument('address')
+    intake.add_argument('--probe', type=Path, required=True, help='Reviewed typed probe covering the complete changed-native scope')
+    intake.add_argument('--level', type=int, default=1, choices=range(1,15))
+    intake.add_argument('--report', type=Path, default=ROOT / 'build/native-intake' / 'report.json')
     native = sub.add_parser('native', help='Show historical evidence for one retail address.')
     native.add_argument('address', help='Retail virtual address, e.g. 0x00405850')
     gate = sub.add_parser('static', help='Run the strict native gate for one address.')
@@ -36,6 +41,37 @@ def main():
         return subprocess.run([sys.executable, str(ROOT / 'scripts/frida_shell_smoke.py')], cwd=ROOT, check=False).returncode
     if args.command == 'self-check':
         return subprocess.run([sys.executable, str(ROOT / 'scripts/workflow_self_check.py')], cwd=ROOT, check=False).returncode
+    if args.command == 'intake':
+        try:
+            intake_address = int(args.address, 0)
+            if not 0 <= intake_address <= 0xffffffff:
+                raise ValueError('address out of x86 range')
+        except ValueError:
+            parser.error(f'invalid address: {args.address}')
+        intake_addr = f'0x{intake_address:08X}'
+        from workflow_tools import config
+        settings = config()
+        environment = dict(os.environ, LC_ALL='C', LANG='C')
+        environment.setdefault('IGI_ANGR_PYTHON', settings['angr_python'])
+        environment.setdefault('FRIDA_HOST', settings['frida_host'])
+        run_command = [sys.executable, str(ROOT / 'scripts/smart_end_to_end_verification.py'),
+                       '--address', intake_addr, '--level', str(args.level), '--probe', str(args.probe),
+                       '--report', str(args.report)]
+        completed = subprocess.run(run_command, cwd=ROOT, env=environment, capture_output=True, text=True)
+        accepted = completed.returncode == 0
+        document = {}
+        try:
+            if args.report.is_file():
+                document = json.loads(args.report.read_text())
+        except (OSError, ValueError):
+            document = {}
+        accepted = bool(accepted and isinstance(document, dict) and document.get('result') == 'passed' and document.get('verified') is True)
+        args.report.parent.mkdir(parents=True, exist_ok=True)
+        args.report.write_text(json.dumps(document, indent=2) + '\n')
+        print('True' if accepted else 'False')
+        print(f"{'ACCEPTED' if accepted else 'REJECTED'}: native {intake_addr} static+runtime intake")
+        print(f"report: {args.report}")
+        return 0 if accepted else 1
     if args.command == 'doctor' and args.check:
         from workflow_tools import doctor
         return doctor(args.report)

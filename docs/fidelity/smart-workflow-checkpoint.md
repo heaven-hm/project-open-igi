@@ -13,3 +13,5 @@ The Frida headless shell smoke passed: explicit `Process.findModuleByName` resol
 Independent read-only review found missing `--file` in the per-address wrapper, an ungated default build, and an inconsistent compiler override; these were corrected. All new ignored helpers/configuration/catalog files must be explicitly tracked.
 
 Next increment: evidence-guided retail startup and model/resource/QVM flow, textured Level 1 models, and the explicitly authorized previous developer free camera. Historical source statuses and placement heuristics are not carried forward as accepted behavior. Full paired runtime capture remains subject to availability of the existing game session; do not terminate another agent's run.
+
+Strict intake update: `scripts/igi_workflow.py intake <VA> --probe <reviewed-probe> --level <N>` is now the fail-closed entry for new-native increments; it accepts only on a full static+runtime pass. `--static-only` in `scripts/smart_end_to_end_verification.py` is fail closed and cannot be accepted. `scripts/workflow_self_check.py` regression-covered both reject paths (12/12 checks pass).

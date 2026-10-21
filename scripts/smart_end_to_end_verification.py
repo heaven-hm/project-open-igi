@@ -102,8 +102,11 @@ def main():
         if required != {args.address}:
             raise ValueError('gate must check exactly the requested nonempty native scope')
         if args.static_only:
-            report['result'] = 'gate_passed_runtime_not_run'
-            return 0
+            # Fail closed: a static-only gate pass can never be accepted. Runtime
+            # capture and typed comparison are mandatory before any native can pass.
+            report['result'] = 'blocked'
+            report['error'] = 'static-only verification cannot be accepted; runtime capture and typed comparison are required'
+            return 1
         probe = args.probe
         if probe is None:
             probe_path = record.get('verification', {}).get('runtime_probe', {}).get('path')
