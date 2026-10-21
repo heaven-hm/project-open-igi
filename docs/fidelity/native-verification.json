@@ -38816,6 +38816,4206 @@
           "evidence_sha256": "f30b196cf40229a5d7e4d3a8abf7e963ee7484d516b4cf9cba26643324561e88"
         }
       }
+    },
+    {
+      "address": "0x0040B8B0",
+      "name": "HumanPlayer_UpdateHealth_4",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040B8B0-HumanPlayer_UpdateHealth_4.cpp",
+        "sha256": "fccba1b4b86369e3679439405d1fe41d44fc561a962e09abca64f69ca9cdab07",
+        "signature": "int HumanPlayer_UpdateHealth_4(void * context, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040B8B0-HumanPlayer_UpdateHealth_4.cpp",
+        "sha256": "fccba1b4b86369e3679439405d1fe41d44fc561a962e09abca64f69ca9cdab07",
+        "signature": "int HumanPlayer_UpdateHealth_4(void * context, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040B8B0-radare2.json",
+          "evidence_sha256": "3b2181e8fe913d07c55a670185d2052a10d48cb308419ab8e51124bba8e4956c",
+          "evidence_id": "r2:live:0x0040B8B0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040B8B0-binaryninja.json",
+          "evidence_sha256": "436ec1f8bc48289b49137cb84b149bffeef64f7afbd2912ca73a9446bb3878ec",
+          "evidence_id": "bn:live:0x0040B8B0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040B8B0-semantic-review.json",
+          "evidence_sha256": "89536bfb4b6bf55c2702d4d319cfa484d3ba663ea01eba024029af1ad003e32e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040B8B0-build.json",
+          "evidence_sha256": "c81a329ae46c9430b5ae3234e45e0276b90a17b9069b91f1200d957fa2f56c2e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040B8B0-behavioral.json",
+          "evidence_sha256": "9418bcabd1f4199223f9293e704456deb5504f6358c58954e80ba3c105875460"
+        }
+      }
+    },
+    {
+      "address": "0x0040C150",
+      "name": "HumanPlayer_CheckCollision_4",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040C150-HumanPlayer_CheckCollision_4.cpp",
+        "sha256": "12de3eb60990e0c7f3afa555fcfc0a6b8a0139bec64119cc7fd4e1d6b9eab5fb",
+        "signature": "void * HumanPlayer_CheckCollision_4(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040C150-HumanPlayer_CheckCollision_4.cpp",
+        "sha256": "12de3eb60990e0c7f3afa555fcfc0a6b8a0139bec64119cc7fd4e1d6b9eab5fb",
+        "signature": "void * HumanPlayer_CheckCollision_4(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C150-radare2.json",
+          "evidence_sha256": "b539ce36d9b7dde5e9ad080aea10f7e64b61314d633aabe133efbb1e48e72c98",
+          "evidence_id": "r2:live:0x0040C150",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C150-binaryninja.json",
+          "evidence_sha256": "1bf04c75fe553c600454e508be9d0c9143ac2245e06f466585501006ad26d2ec",
+          "evidence_id": "bn:live:0x0040C150",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C150-semantic-review.json",
+          "evidence_sha256": "3f0d16ef2abead321011f34e5d41c36eacab5a8bd1deeb1a506af184377d33e7"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C150-build.json",
+          "evidence_sha256": "e11438ffb9c790c771f092efcb9db9f4d7dbc02e8f0695ebef1489e463d29a1c"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C150-behavioral.json",
+          "evidence_sha256": "97f1185ce58bfe2e0e72193883de8317b471c25efeb95c4f4cc2368fee534cac"
+        }
+      }
+    },
+    {
+      "address": "0x0040C870",
+      "name": "HumanPlayer_Processtypecompend",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040C870-HumanPlayer_Processtypecompend.cpp",
+        "sha256": "16c49cf522b73948b4415a9be7ebe74bc97b3f3b2521e5814ffa7c523b5d3084",
+        "signature": "int HumanPlayer_Processtypecompend(void* arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040C870-HumanPlayer_Processtypecompend.cpp",
+        "sha256": "16c49cf522b73948b4415a9be7ebe74bc97b3f3b2521e5814ffa7c523b5d3084",
+        "signature": "int HumanPlayer_Processtypecompend(void* arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C870-radare2.json",
+          "evidence_sha256": "b852f125de28a8ffcae9b4b22c57fe64ad59d223d2c3aaa57b14218c15a51be5",
+          "evidence_id": "r2:live:0x0040C870",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C870-binaryninja.json",
+          "evidence_sha256": "106d9f4acb4563d42fa6e555c9693367652b23bfb8413f00abf885470a2722bd",
+          "evidence_id": "bn:live:0x0040C870",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C870-semantic-review.json",
+          "evidence_sha256": "eb8772209dfa30880a9e0701a26596d583d6ca853a7506876c65af5c94e0e523"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C870-build.json",
+          "evidence_sha256": "fe8e070c1e60cd6bfa7c64ee41677d323bc9458b8d5f3ac93ecebb95a0586d1d"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040C870-behavioral.json",
+          "evidence_sha256": "3e38a4079171ebb08638458016ae101e866077068f56066515eb46ce1f9f569a"
+        }
+      }
+    },
+    {
+      "address": "0x0040D580",
+      "name": "HumanPlayer_Invoke21_40D580",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040D580-HumanPlayer_Invoke21_40D580.cpp",
+        "sha256": "f5fb0a81beb019c55d2bac2f313eddcb9d0cb47e733863d281697ce13dcb4ef8",
+        "signature": "int HumanPlayer_Invoke21_40D580(void* arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040D580-HumanPlayer_Invoke21_40D580.cpp",
+        "sha256": "f5fb0a81beb019c55d2bac2f313eddcb9d0cb47e733863d281697ce13dcb4ef8",
+        "signature": "int HumanPlayer_Invoke21_40D580(void* arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040D580-radare2.json",
+          "evidence_sha256": "5bd2ce92a38f9efcdc9d1e263aea7539aa7b48c14f4d79b5583320dec2374cc2",
+          "evidence_id": "r2:live:0x0040D580",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040D580-binaryninja.json",
+          "evidence_sha256": "d6abf308e21a7d7514a550a1ca6284545faeb5f3e1cbe4a8e41ed3ffba9f4982",
+          "evidence_id": "bn:live:0x0040D580",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040D580-semantic-review.json",
+          "evidence_sha256": "6774f54ec4e38a02a47f1b6b79cf10cadbec737a2c561370885eadf3a3a21daf"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040D580-build.json",
+          "evidence_sha256": "792d7375267c770b39307f9f2ce9289605b19ef7c0280d1bab195a480d21dce1"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040D580-behavioral.json",
+          "evidence_sha256": "8f8cb2e8981a976c6cd67bf1eb451d8a2af364c59011aa187638779c87771fd1"
+        }
+      }
+    },
+    {
+      "address": "0x0040DD00",
+      "name": "HumanPlayer_InvokeStateAnimation_40DD00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040DD00-HumanPlayer_InvokeStateAnimation_40DD00.cpp",
+        "sha256": "133d7fdac672cb65a56016ed02b11a13cff54bc2e8929560195bf437708d27d3",
+        "signature": "void* HumanPlayer_InvokeStateAnimation_40DD00(void* arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040DD00-HumanPlayer_InvokeStateAnimation_40DD00.cpp",
+        "sha256": "133d7fdac672cb65a56016ed02b11a13cff54bc2e8929560195bf437708d27d3",
+        "signature": "void* HumanPlayer_InvokeStateAnimation_40DD00(void* arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040DD00-radare2.json",
+          "evidence_sha256": "de44cceda8210fcbe29a3812b4b5ebe0e911300a98ada36bcbca4d512c6fe5b1",
+          "evidence_id": "r2:live:0x0040DD00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040DD00-binaryninja.json",
+          "evidence_sha256": "090c8214bda63341f6a16327184040ed053320317affee14f20a8db364a630c2",
+          "evidence_id": "bn:live:0x0040DD00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040DD00-semantic-review.json",
+          "evidence_sha256": "abc37cf2fde8bc69663d84cb4430cd60f22d2a4bbd9b57b39c416bd48eabd318"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040DD00-build.json",
+          "evidence_sha256": "7babdd1aa8b5b28393028fd9ffc7395a038937573cb4f96005e043963ed6f7a7"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040DD00-behavioral.json",
+          "evidence_sha256": "bb04bd29f4485b2f662e486c0999e9532a9a4f3887f2642b86fa90d93f7e2606"
+        }
+      }
+    },
+    {
+      "address": "0x0040E3C0",
+      "name": "HumanPlayer_UpdateAnimation_6",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040E3C0-HumanPlayer_UpdateAnimation_6.cpp",
+        "sha256": "783c58f42aef94076a05418b5bce449c79767ae00394b98bc90ad4e9bb40300f",
+        "signature": "int HumanPlayer_UpdateAnimation_6(void * context, void * arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040E3C0-HumanPlayer_UpdateAnimation_6.cpp",
+        "sha256": "783c58f42aef94076a05418b5bce449c79767ae00394b98bc90ad4e9bb40300f",
+        "signature": "int HumanPlayer_UpdateAnimation_6(void * context, void * arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E3C0-radare2.json",
+          "evidence_sha256": "c579ed5bcc67d3e77662daf355628d077e2c2136386f0a3e5445d5071410e0fe",
+          "evidence_id": "r2:live:0x0040E3C0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E3C0-binaryninja.json",
+          "evidence_sha256": "2125575030f6adb171805fab2bb6896244e102648c6c0bef0ee101d02d4bde0b",
+          "evidence_id": "bn:live:0x0040E3C0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E3C0-semantic-review.json",
+          "evidence_sha256": "01c4a3d645d8b9dfb26246bd25d619739517155baa610c9616451f8abac41ff8"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E3C0-build.json",
+          "evidence_sha256": "50e5f0699db4ac980f3589f220f37b787e5eebd7d3739eeb33c16e53aa6d9557"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E3C0-behavioral.json",
+          "evidence_sha256": "069c157cfc0ea3930431bc0a64c9a30ffe1a36132b45cbcd0818b6f2da267646"
+        }
+      }
+    },
+    {
+      "address": "0x0040E980",
+      "name": "HumanPlayer_Invoke9",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040E980-HumanPlayer_Invoke9.cpp",
+        "sha256": "8fcd71c91e5f9e1ceeaab353cbff192b5a9ec13ff68304a322e52edb085e5c4d",
+        "signature": "int HumanPlayer_Invoke9(void* arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040E980-HumanPlayer_Invoke9.cpp",
+        "sha256": "8fcd71c91e5f9e1ceeaab353cbff192b5a9ec13ff68304a322e52edb085e5c4d",
+        "signature": "int HumanPlayer_Invoke9(void* arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E980-radare2.json",
+          "evidence_sha256": "3db5b577f474201ef23b2937a1cb69463a7ee9dc99c6a38ebca81faf2f3f102f",
+          "evidence_id": "r2:live:0x0040E980",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E980-binaryninja.json",
+          "evidence_sha256": "e58d4ea7469fd050af1598313e90017c822ff33eee8295f1bc9ad82a02a05212",
+          "evidence_id": "bn:live:0x0040E980",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E980-semantic-review.json",
+          "evidence_sha256": "a3fec0662eaef345cde8551d9a0c98a98b12c88f365899195da0c150c79f6327"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E980-build.json",
+          "evidence_sha256": "798ab609913716b1453e8b36ce1b9db1e88ad9e46a80c099001ca823acce58ee"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040E980-behavioral.json",
+          "evidence_sha256": "6d2ea120b17456515d9e6329db93efb473552443ac6ab57f1855d7a237817eac"
+        }
+      }
+    },
+    {
+      "address": "0x0040F180",
+      "name": "HumanPlayer_TakeDamage_7",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040F180-HumanPlayer_TakeDamage_7.cpp",
+        "sha256": "feaf43fcd46b0c61ef250cbbc16a556e029b23d003c2da73f5a92286948c8d28",
+        "signature": "int HumanPlayer_TakeDamage_7(void * context, void * arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040F180-HumanPlayer_TakeDamage_7.cpp",
+        "sha256": "feaf43fcd46b0c61ef250cbbc16a556e029b23d003c2da73f5a92286948c8d28",
+        "signature": "int HumanPlayer_TakeDamage_7(void * context, void * arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F180-radare2.json",
+          "evidence_sha256": "98b08d918d71cf37fd4d702edb8928d3fd2ace08073d334343cde37aa79d8347",
+          "evidence_id": "r2:live:0x0040F180",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F180-binaryninja.json",
+          "evidence_sha256": "2c1480275a7f67deb9857790a4fd3d55e667f3016ad25998ae9258225e676962",
+          "evidence_id": "bn:live:0x0040F180",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F180-semantic-review.json",
+          "evidence_sha256": "ee349e2d84433043f9a33fbd5ee72a439e21757b66a049dcc1242401e4468a87"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F180-build.json",
+          "evidence_sha256": "386d5fc012b988dd6cea4335b3d05759890ee39112f6d320d3431edfa98c2bb9"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F180-behavioral.json",
+          "evidence_sha256": "17d7ffc38969c8a4629ced4d8d5a359205a7ef3d1370cf75280dd98f5cc3e0f9"
+        }
+      }
+    },
+    {
+      "address": "0x0040F590",
+      "name": "HumanPlayer_GrenadeTick1",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040F590-HumanPlayer_GrenadeTick1.cpp",
+        "sha256": "5635086caaeeec22b35fbcdfe422f86ad66a59a19baee89fc767da4a01f65a53",
+        "signature": "struct status_msg* HumanPlayer_GrenadeTick1(void * context, void * arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040F590-HumanPlayer_GrenadeTick1.cpp",
+        "sha256": "5635086caaeeec22b35fbcdfe422f86ad66a59a19baee89fc767da4a01f65a53",
+        "signature": "struct status_msg* HumanPlayer_GrenadeTick1(void * context, void * arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F590-radare2.json",
+          "evidence_sha256": "e6eaa9cc26e80cb07dca514361cba0c2a2a382cf3ea9dce9004e8284ef60e88c",
+          "evidence_id": "r2:live:0x0040F590",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F590-binaryninja.json",
+          "evidence_sha256": "982681484d5609ef25ab94707ab4de94f2010b6c2ca0be2c862be5019be12fea",
+          "evidence_id": "bn:live:0x0040F590",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F590-semantic-review.json",
+          "evidence_sha256": "8d911a047bcb1608d2af7c5778dd76576d52b3ab4138579526dd395767d3440c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F590-build.json",
+          "evidence_sha256": "367f47a274237795a29b4ec30b99c7b6b1b004497d6e134e59697e599c2642af"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040F590-behavioral.json",
+          "evidence_sha256": "2fd1701f6522845ce9c8baa0e0d0a9588d9a0437918db1244e29f2d8c2536d03"
+        }
+      }
+    },
+    {
+      "address": "0x0040FB30",
+      "name": "HumanPlayer_CheckCollision_8",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/0040FB30-HumanPlayer_CheckCollision_8.cpp",
+        "sha256": "3877f6ccb8a9e0b63252391bec23a808fadcb07703a50355b6f5b65eacf982ae",
+        "signature": "int HumanPlayer_CheckCollision_8(void * context, void * arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/0040FB30-HumanPlayer_CheckCollision_8.cpp",
+        "sha256": "3877f6ccb8a9e0b63252391bec23a808fadcb07703a50355b6f5b65eacf982ae",
+        "signature": "int HumanPlayer_CheckCollision_8(void * context, void * arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0040FB30-radare2.json",
+          "evidence_sha256": "dbc2c44f3eaf3fedd2e667b0b03b1978cae580badbc71995818b31c2a59e8b87",
+          "evidence_id": "r2:live:0x0040FB30",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0040FB30-binaryninja.json",
+          "evidence_sha256": "5f7b403eff3b215fb18253f8559f179dc8a1be820ea1433412e59ed87b5db345",
+          "evidence_id": "bn:live:0x0040FB30",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0040FB30-semantic-review.json",
+          "evidence_sha256": "52097b6769c95287f8e0c079005a1d7b1d9b4e0761eb3a503559bfac4f20194e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0040FB30-build.json",
+          "evidence_sha256": "76b339128c51eeb8eeb2e4b1f49379b7ad5d095db55e04b862c4f9539efe8c47"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0040FB30-behavioral.json",
+          "evidence_sha256": "79bdb0e81966d54edd08798081d556558c3a20ae0b12fff6fb284b9e833c5df8"
+        }
+      }
+    },
+    {
+      "address": "0x00410370",
+      "name": "HumanPlayer_LoadParameters_11",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/00410370-HumanPlayer_LoadParameters_11.cpp",
+        "sha256": "3177185da317fa3cf08fc587485a03b70e4e54bace189cd897571111cb40c976",
+        "signature": "int HumanPlayer_LoadParameters_11(int* context, int arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/00410370-HumanPlayer_LoadParameters_11.cpp",
+        "sha256": "3177185da317fa3cf08fc587485a03b70e4e54bace189cd897571111cb40c976",
+        "signature": "int HumanPlayer_LoadParameters_11(int* context, int arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00410370-radare2.json",
+          "evidence_sha256": "5182af00626ab23b609381ca080b7e9f1199398c1f922640ebb1681f971c41ac",
+          "evidence_id": "r2:live:0x00410370",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00410370-binaryninja.json",
+          "evidence_sha256": "1f2aadee14f05b199e727c9d6b7fd48a041735375cca3fb57d2a1ecfcde70780",
+          "evidence_id": "bn:live:0x00410370",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00410370-semantic-review.json",
+          "evidence_sha256": "5a1e1e86878aeda8d8a39d9e058abcbd332ce0dc569175ab0261f48957ce8e10"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00410370-build.json",
+          "evidence_sha256": "5566fde68f5dc748a5b3ae80ee0eebd80234131f64ef196b07d26a2cf1b0b289"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00410370-behavioral.json",
+          "evidence_sha256": "52a9121c4144dfaad074063f78fe0e20fb2a4ca6b0fe65f8ac953da815121958"
+        }
+      }
+    },
+    {
+      "address": "0x00411000",
+      "name": "HumanPlayer_UpdateHealth_9",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/00411000-HumanPlayer_UpdateHealth_9.cpp",
+        "sha256": "4542c3ced164c292acb81b289a7be45f33666e0e61b356fac5826692c6ac7542",
+        "signature": "int* HumanPlayer_UpdateHealth_9(int* context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/00411000-HumanPlayer_UpdateHealth_9.cpp",
+        "sha256": "4542c3ced164c292acb81b289a7be45f33666e0e61b356fac5826692c6ac7542",
+        "signature": "int* HumanPlayer_UpdateHealth_9(int* context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00411000-radare2.json",
+          "evidence_sha256": "154b5834f71a99becc54cd5fd6a41f734f2c0f9f3aefdf5928bc48408fe19ad2",
+          "evidence_id": "r2:live:0x00411000",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00411000-binaryninja.json",
+          "evidence_sha256": "e4a40e9a84d5ceb266440b8039630d67651c535c2150d0f397d0fb49aa5e5ea7",
+          "evidence_id": "bn:live:0x00411000",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00411000-semantic-review.json",
+          "evidence_sha256": "36e6608d228699c6774fd9f95e944d85d72713b3652d630e43f32e38000a8f36"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00411000-build.json",
+          "evidence_sha256": "bc6581141b4c1291be16db2bb894f501d07afbabca87b46d057f791d58ee40e7"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00411000-behavioral.json",
+          "evidence_sha256": "d5e61a61afd570480027224243715a6b3daf51fe9051a4a45f3355ab14ee404c"
+        }
+      }
+    },
+    {
+      "address": "0x004123F0",
+      "name": "HumanPlayer_ProcessNoactiveplayerpr",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/004123F0-HumanPlayer_ProcessNoactiveplayerpr.cpp",
+        "sha256": "6f5b1ad40df079afc9e7649a9f7e8a5b3de2a7f6cf284a455ba81de9ba183913",
+        "signature": "void* HumanPlayer_ProcessNoactiveplayerpr(int* arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/004123F0-HumanPlayer_ProcessNoactiveplayerpr.cpp",
+        "sha256": "6f5b1ad40df079afc9e7649a9f7e8a5b3de2a7f6cf284a455ba81de9ba183913",
+        "signature": "void* HumanPlayer_ProcessNoactiveplayerpr(int* arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004123F0-radare2.json",
+          "evidence_sha256": "f8ef6854bcb3398da604f5b983fc357a11eb13b6ee48add2305f3c4318cfb6a6",
+          "evidence_id": "r2:live:0x004123F0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004123F0-binaryninja.json",
+          "evidence_sha256": "c2c8c9b44d085fa8490eea888e52761ce366af3e58870a8d14502968ac9edb58",
+          "evidence_id": "bn:live:0x004123F0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004123F0-semantic-review.json",
+          "evidence_sha256": "005a4d901d51823ae941cc820136ef8b5919cda07b33756f06428c6fcb537f2f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004123F0-build.json",
+          "evidence_sha256": "3133376d4d470eaa51de5d8b76c0e82eaa086b3250c2f37a58eeac7a28de55e4"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004123F0-behavioral.json",
+          "evidence_sha256": "c2890cc72744e69a561b740e9d19f529b0c29a95fdd40ad438f131d1557a6a17"
+        }
+      }
+    },
+    {
+      "address": "0x00413770",
+      "name": "HumanPlayer_UpdateAnimation_9",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/00413770-HumanPlayer_UpdateAnimation_9.cpp",
+        "sha256": "dc9ef7e0c566081da997754a83f42cad93a79921b7ef63f5907d33c98e1e5758",
+        "signature": "unsigned int HumanPlayer_UpdateAnimation_9(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/00413770-HumanPlayer_UpdateAnimation_9.cpp",
+        "sha256": "dc9ef7e0c566081da997754a83f42cad93a79921b7ef63f5907d33c98e1e5758",
+        "signature": "unsigned int HumanPlayer_UpdateAnimation_9(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00413770-radare2.json",
+          "evidence_sha256": "c68cf99f909ff796f5f60da7813dcae85d1217ba3d808df9b1ecf637833e44fd",
+          "evidence_id": "r2:live:0x00413770",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00413770-binaryninja.json",
+          "evidence_sha256": "8ceb9c8ee590ccfdd446a82e5fc6c88e84ebd9433de6f404c1526ff23cc600fe",
+          "evidence_id": "bn:live:0x00413770",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00413770-semantic-review.json",
+          "evidence_sha256": "980415681e6ccfafac46b4519aede1a4a4be2e9cf5c495065ee87424a64ac01f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00413770-build.json",
+          "evidence_sha256": "c35188ce37cc2128c2ccf34f4fc3d5494a62ba7e488c53e0b83f9b98a75e8c52"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00413770-behavioral.json",
+          "evidence_sha256": "73c9603038aed60bd53e956d30f2f0287894ddc150ec91a0dc46def348965a41"
+        }
+      }
+    },
+    {
+      "address": "0x00413B20",
+      "name": "HumanPlayer_UpdateHealth_10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/00413B20-HumanPlayer_UpdateHealth_10.cpp",
+        "sha256": "9928bb8ba80505c0578ae5c39388305d8c36872afdf213b8116cf8606aa2788f",
+        "signature": "int HumanPlayer_UpdateHealth_10(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/00413B20-HumanPlayer_UpdateHealth_10.cpp",
+        "sha256": "9928bb8ba80505c0578ae5c39388305d8c36872afdf213b8116cf8606aa2788f",
+        "signature": "int HumanPlayer_UpdateHealth_10(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00413B20-radare2.json",
+          "evidence_sha256": "0f633c3a30d8e96cb16101e731e52aebf56acf8b44706ff9aa4ff4b9bf05b0e7",
+          "evidence_id": "r2:live:0x00413B20",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00413B20-binaryninja.json",
+          "evidence_sha256": "6b14a19037096dd54fe2fdebaa64034818d2904a124710f14022f05961311468",
+          "evidence_id": "bn:live:0x00413B20",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00413B20-semantic-review.json",
+          "evidence_sha256": "33f293642baba61c677dbe488201aad813e1ff867d0ce4dd108eaca4836943cd"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00413B20-build.json",
+          "evidence_sha256": "799ff6a214c4de2b9868b4fed593a6bc3b3dc44ecd3d20007fd4e610be982031"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00413B20-behavioral.json",
+          "evidence_sha256": "6096588d80db2abc25468555a2c345187312302515148ed7506661b978fd9ed1"
+        }
+      }
+    },
+    {
+      "address": "0x00413C00",
+      "name": "HumanPlayer_ApplyRecoil_10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayer/00413C00-HumanPlayer_ApplyRecoil_10.cpp",
+        "sha256": "f0682bd48f5a06cb81f1979e6c558edad16a0201b3e0ba0ceddeb5baf230b8e0",
+        "signature": "void * HumanPlayer_ApplyRecoil_10(char * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayer/00413C00-HumanPlayer_ApplyRecoil_10.cpp",
+        "sha256": "f0682bd48f5a06cb81f1979e6c558edad16a0201b3e0ba0ceddeb5baf230b8e0",
+        "signature": "void * HumanPlayer_ApplyRecoil_10(char * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00413C00-radare2.json",
+          "evidence_sha256": "abe2a7a22b35b6d9003200d5841dcd19bae67005218e87d405592463d970f572",
+          "evidence_id": "r2:live:0x00413C00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00413C00-binaryninja.json",
+          "evidence_sha256": "33539d270c6796e8ded71f546279092a8d69503d87f0c4eb769619a916c6acb6",
+          "evidence_id": "bn:live:0x00413C00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00413C00-semantic-review.json",
+          "evidence_sha256": "1ec7b2d1a711689fc255d440cce9d8b6d41faec768bd5428ee48552cd3be9dd9"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00413C00-build.json",
+          "evidence_sha256": "1114dc2e116ab5daea7dfba9089c732f6cacaa1ba7127cb720a0141dd1fa43dd"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00413C00-behavioral.json",
+          "evidence_sha256": "c84579e4c4228d8f9b996810f1364b99255a48e5b7b8f6ef6847a18ef568d377"
+        }
+      }
+    },
+    {
+      "address": "0x0045DB70",
+      "name": "HumanPlayerInput_Init",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanplayerinput/0045DB70-HumanPlayerInput_Init.cpp",
+        "sha256": "74737e363d95d17a62e001bfce7a9c8f0298fcf78a28250b210acac0980bde90",
+        "signature": "int* HumanPlayerInput_Init(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanplayerinput/0045DB70-HumanPlayerInput_Init.cpp",
+        "sha256": "74737e363d95d17a62e001bfce7a9c8f0298fcf78a28250b210acac0980bde90",
+        "signature": "int* HumanPlayerInput_Init(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0045DB70-radare2.json",
+          "evidence_sha256": "9e566d996cd2b41bdc4a912a5ef8fd3aee673a41c300bda9a751c64efbb6255c",
+          "evidence_id": "r2:live:0x0045DB70",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0045DB70-binaryninja.json",
+          "evidence_sha256": "5dc9c91567c5e42ab088f2fe9861b0f16cbdb4148d5037065e9787aa4f13066b",
+          "evidence_id": "bn:live:0x0045DB70",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0045DB70-semantic-review.json",
+          "evidence_sha256": "ed2e244e96c1eeb65b379c53f1bf1fb6f901969b0cd16b3fbe281f0b8504771c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0045DB70-build.json",
+          "evidence_sha256": "bfd9cdc1c4c0d70a93aace0283defa52046421add5947aaec2f1d0b63e9b5289"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0045DB70-behavioral.json",
+          "evidence_sha256": "90cccaf15e357b2cde9ed5b80b74f803a744af4003fe5b057ee0b4848049a6d9"
+        }
+      }
+    },
+    {
+      "address": "0x0045C9B0",
+      "name": "HumanSoldier_Init_2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humansoldier/0045C9B0-HumanSoldier_Init_2.cpp",
+        "sha256": "fade6ff66307ae01263c44b353397f30b2d0a3ca2c6b7cc2dfc31c93967f3f8e",
+        "signature": "void* HumanSoldier_Init_2(void* context, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humansoldier/0045C9B0-HumanSoldier_Init_2.cpp",
+        "sha256": "fade6ff66307ae01263c44b353397f30b2d0a3ca2c6b7cc2dfc31c93967f3f8e",
+        "signature": "void* HumanSoldier_Init_2(void* context, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0045C9B0-radare2.json",
+          "evidence_sha256": "917df42ffa25ebc42db84e9e2ebee512129a669d65b326e8840b3520a56ef2ad",
+          "evidence_id": "r2:live:0x0045C9B0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0045C9B0-binaryninja.json",
+          "evidence_sha256": "8d1ad2a95ae4a163a8839ef01b2e828dbad84d552e406dd2e094d14d910b1f59",
+          "evidence_id": "bn:live:0x0045C9B0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0045C9B0-semantic-review.json",
+          "evidence_sha256": "7debb9122ae256159a59f9eb4eabf27b518b2e6b404019fdea445e6238e9e856"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0045C9B0-build.json",
+          "evidence_sha256": "4ee8a6cc005b717e4d521da7e5587f28583d02256ecc21a6a936ba0c92f5dc7f"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0045C9B0-behavioral.json",
+          "evidence_sha256": "13502209d32c5d62d1d1cd5277001b65b323b541dc4553d6f7d1bc79a3f24317"
+        }
+      }
+    },
+    {
+      "address": "0x00455780",
+      "name": "HumanSoldierFemale_OnEvent",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humansoldierfemale/00455780-HumanSoldierFemale_OnEvent.cpp",
+        "sha256": "60856b1c7c88cf52f897d0a487f70c125bcb98fd78df2ce4a9fff90f35af9213",
+        "signature": "int HumanSoldierFemale_OnEvent(void * context, float* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humansoldierfemale/00455780-HumanSoldierFemale_OnEvent.cpp",
+        "sha256": "60856b1c7c88cf52f897d0a487f70c125bcb98fd78df2ce4a9fff90f35af9213",
+        "signature": "int HumanSoldierFemale_OnEvent(void * context, float* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00455780-radare2.json",
+          "evidence_sha256": "46217b1ceb9fac10ef69937feabe62276bfa98c16c11ebebce8142d96f84b8b5",
+          "evidence_id": "r2:live:0x00455780",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00455780-binaryninja.json",
+          "evidence_sha256": "9fe6bc7d872f15a8ad8c2774cee47ba8ce675df372715b3b1b847939944508e1",
+          "evidence_id": "bn:live:0x00455780",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00455780-semantic-review.json",
+          "evidence_sha256": "9259855aef453a142b9b9b14b86d26a3bdc87fb2dcfc60a08e867a50af8db26f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00455780-build.json",
+          "evidence_sha256": "40f0e2619f0ff972639967aa746584ee2f5833b063986eceb4b303bd9314bae5"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00455780-behavioral.json",
+          "evidence_sha256": "578a227016c50297d2d5ba82be3d2c155088f04c0ff6cd5c1e46e8cb9d55240f"
+        }
+      }
+    },
+    {
+      "address": "0x00464260",
+      "name": "HumanView_Init",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/humanview/00464260-HumanView_Init.cpp",
+        "sha256": "82025e12f013417db2e389fbce5e8d4feaffe418b373c4e99a401a3632d1299b",
+        "signature": "int HumanView_Init(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/humanview/00464260-HumanView_Init.cpp",
+        "sha256": "82025e12f013417db2e389fbce5e8d4feaffe418b373c4e99a401a3632d1299b",
+        "signature": "int HumanView_Init(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00464260-radare2.json",
+          "evidence_sha256": "f06661c3ce04831b8251647ba897cc5801caed2d951c3c37ac2db56dec1aeab4",
+          "evidence_id": "r2:live:0x00464260",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00464260-binaryninja.json",
+          "evidence_sha256": "d136cea1349664ef208882ab001edc2549adac5723674d2b769dbca549bccdf5",
+          "evidence_id": "bn:live:0x00464260",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00464260-semantic-review.json",
+          "evidence_sha256": "b550d1ab17025f8776697f6c953a1ca3d90c85741d429ffd2ce7cdded7545d27"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00464260-build.json",
+          "evidence_sha256": "bee53e4065f9a299027d325f8bd917b44f001d30f81bf564539365a3c5384b6e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00464260-behavioral.json",
+          "evidence_sha256": "9e8db3e84f1141772d43e5e7a4ff7ec3b9eeb7bd495933cea969557a97ad524e"
+        }
+      }
+    },
+    {
+      "address": "0x00423000",
+      "name": "ModelViewBox_OnEvent",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/modelviewbox/00423000-ModelViewBox_OnEvent.cpp",
+        "sha256": "de292e8e2ff821e41823056450f81678c590e3ceec4cb4a34b953c4d3dff19a7",
+        "signature": "int ModelViewBox_OnEvent(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/modelviewbox/00423000-ModelViewBox_OnEvent.cpp",
+        "sha256": "de292e8e2ff821e41823056450f81678c590e3ceec4cb4a34b953c4d3dff19a7",
+        "signature": "int ModelViewBox_OnEvent(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00423000-radare2.json",
+          "evidence_sha256": "db463135b448b98b86c20cc23869714d47973cc88fcf83084526be4d28eeacf2",
+          "evidence_id": "r2:live:0x00423000",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00423000-binaryninja.json",
+          "evidence_sha256": "37068977dd727344976464aa414ed9a93805064152e53b526bb4b0036c1758f2",
+          "evidence_id": "bn:live:0x00423000",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00423000-semantic-review.json",
+          "evidence_sha256": "e1b7ac14a67df1e1d2406c5c95fa1ac585f5ab7acb11ef0b230fef73e2dd8ff2"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00423000-build.json",
+          "evidence_sha256": "31795bcb7b8456ea9bce90a848e54807382ff33f9edafafbd76a10e37cb831f2"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00423000-behavioral.json",
+          "evidence_sha256": "613754e68ec4b507555aa7048441decaeec7e552ac28a1d94b478a7e430514a7"
+        }
+      }
+    },
+    {
+      "address": "0x004EDFE0",
+      "name": "PhysicsObjType_ParseConfigFile",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsobjtype/004EDFE0-PhysicsObjType_ParseConfigFile.cpp",
+        "sha256": "85a45e23b486c2a9207b62d22f9a6d17e6b6fdae3f4e926fc5d405bdd827a488",
+        "signature": "char * PhysicsObjType_ParseConfigFile(char * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsobjtype/004EDFE0-PhysicsObjType_ParseConfigFile.cpp",
+        "sha256": "85a45e23b486c2a9207b62d22f9a6d17e6b6fdae3f4e926fc5d405bdd827a488",
+        "signature": "char * PhysicsObjType_ParseConfigFile(char * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004EDFE0-radare2.json",
+          "evidence_sha256": "c920eea44037aba9fb3ff15bb2ec81c0898dbc2632a41a57ebeec9229f6793e6",
+          "evidence_id": "r2:live:0x004EDFE0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004EDFE0-binaryninja.json",
+          "evidence_sha256": "99cde38cba048f8cd1a6b63ebfcb440f3c5ffec074eff9d534ff576631d0eea3",
+          "evidence_id": "bn:live:0x004EDFE0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004EDFE0-semantic-review.json",
+          "evidence_sha256": "b2c77d3a99c4a259926035e5bab5f24f009aab23369403b8daa2c6420fc0b03b"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004EDFE0-build.json",
+          "evidence_sha256": "7f274de3885fd80a7e43aac8ec10a56ca589b9968d021a8c421970b3838a1238"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004EDFE0-behavioral.json",
+          "evidence_sha256": "dbed02ac446d876b2d2d8d1e3a82e857a66043bd83baa5142087d106ff042225"
+        }
+      }
+    },
+    {
+      "address": "0x004EE530",
+      "name": "PhysicsTerrain_GetContext_4EE530",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004EE530-PhysicsTerrain_GetContext_4EE530.cpp",
+        "sha256": "346143f291fe49e07641fd5c97764d4f4fd17efb4009bdcb47fb0a0af1fe2aff",
+        "signature": "void* PhysicsTerrain_GetContext_4EE530(void* arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004EE530-PhysicsTerrain_GetContext_4EE530.cpp",
+        "sha256": "346143f291fe49e07641fd5c97764d4f4fd17efb4009bdcb47fb0a0af1fe2aff",
+        "signature": "void* PhysicsTerrain_GetContext_4EE530(void* arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004EE530-radare2.json",
+          "evidence_sha256": "5e071ad0d8a2940d840e0035af44e5a73f4b7a36b5bdba2c45cb7655f2508f67",
+          "evidence_id": "r2:live:0x004EE530",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004EE530-binaryninja.json",
+          "evidence_sha256": "839d3154d4698ca270b715599113ebe4537aeb62ad45bc61e2cd6f417074fb35",
+          "evidence_id": "bn:live:0x004EE530",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004EE530-semantic-review.json",
+          "evidence_sha256": "9bb48f6bf5d652c4856621f46647a5b97fda16ce6f186b0f1412af6813eafc26"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004EE530-build.json",
+          "evidence_sha256": "c767c81595f49caffa9a71b1aa5db283a666b1e3aeaf835dd681e33a3eff0461"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004EE530-behavioral.json",
+          "evidence_sha256": "97cb330f0c1cf19c988fdda445c9b0334e7223bee5aed228e5002a0b21868d45"
+        }
+      }
+    },
+    {
+      "address": "0x004EF990",
+      "name": "PhysicsTerrain_GetContext_4EF990",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004EF990-PhysicsTerrain_GetContext_4EF990.cpp",
+        "sha256": "2189184a761d9adc4dad35d577c9ca968fde8ad100eef852d3fc4f0c22808c99",
+        "signature": "int* PhysicsTerrain_GetContext_4EF990(int arg1, int* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004EF990-PhysicsTerrain_GetContext_4EF990.cpp",
+        "sha256": "2189184a761d9adc4dad35d577c9ca968fde8ad100eef852d3fc4f0c22808c99",
+        "signature": "int* PhysicsTerrain_GetContext_4EF990(int arg1, int* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-radare2.json",
+          "evidence_sha256": "5692ed177462f52fa09829370f3089a4b9ea943cf5820532e3e88431b64b3e2e",
+          "evidence_id": "r2:live:0x004EF990",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-binaryninja.json",
+          "evidence_sha256": "060c183167795808744d024d56c03c772d970975c15db6a6f5796552aebe1793",
+          "evidence_id": "bn:live:0x004EF990",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-semantic-review.json",
+          "evidence_sha256": "ec72e421832ad11a168e5f80379625f1f4a7e74db21c0f291060117d8519cf00"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-build.json",
+          "evidence_sha256": "78f8be5753d94a5c6349f3b6170edcbab71925e4fd7ade37ecf7bcbd684cee09"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004EF990-behavioral.json",
+          "evidence_sha256": "472082db522bca77e8ed80d46bca5422bdf0c07c42305039122d495bc51df175"
+        }
+      }
+    },
+    {
+      "address": "0x004EFB00",
+      "name": "PhysicsTerrain_GetContext_4EFB00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004EFB00-PhysicsTerrain_GetContext_4EFB00.cpp",
+        "sha256": "3a6a6b1814dde3c1c3526e0a0630563f3ee68d5dad5e55db91413748f9a36397",
+        "signature": "int* PhysicsTerrain_GetContext_4EFB00(int* arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004EFB00-PhysicsTerrain_GetContext_4EFB00.cpp",
+        "sha256": "3a6a6b1814dde3c1c3526e0a0630563f3ee68d5dad5e55db91413748f9a36397",
+        "signature": "int* PhysicsTerrain_GetContext_4EFB00(int* arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFB00-radare2.json",
+          "evidence_sha256": "88395ba9be968d848ac8200e2d4ca737cc5fc81a72bc7d0130c74b00303b7b6c",
+          "evidence_id": "r2:live:0x004EFB00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFB00-binaryninja.json",
+          "evidence_sha256": "61252bc3ee2a4527866881510356731c4a4f0c6911605fc0ed14be9894dfc7b3",
+          "evidence_id": "bn:live:0x004EFB00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFB00-semantic-review.json",
+          "evidence_sha256": "f329169f6e7e96091ea71c52bd6b6b937a02fac6a12641e55717346931c4df79"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFB00-build.json",
+          "evidence_sha256": "437ec249cd87e55262c361908e476172b5d944700917bc35814149216c30fb06"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFB00-behavioral.json",
+          "evidence_sha256": "80a1beda4839cc15cb0b5bcf8c42f0036e7e7f867b85f1e56df9c835e39b2106"
+        }
+      }
+    },
+    {
+      "address": "0x004EFD50",
+      "name": "PhysicsTerrain_ExecutePipeline_4EFD50",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004EFD50-PhysicsTerrain_ExecutePipeline_4EFD50.cpp",
+        "sha256": "d44c13e82ce0d25d195433ff458709e7c2d49852f744c451e11d3ee042a0f8e9",
+        "signature": "int PhysicsTerrain_ExecutePipeline_4EFD50(float arg1, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004EFD50-PhysicsTerrain_ExecutePipeline_4EFD50.cpp",
+        "sha256": "d44c13e82ce0d25d195433ff458709e7c2d49852f744c451e11d3ee042a0f8e9",
+        "signature": "int PhysicsTerrain_ExecutePipeline_4EFD50(float arg1, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFD50-radare2.json",
+          "evidence_sha256": "0269a3c0d4ff05203447c185fb83ea97672c3d40ad8d65f2f09180103a56ae0e",
+          "evidence_id": "r2:live:0x004EFD50",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFD50-binaryninja.json",
+          "evidence_sha256": "4547bfaa7eba6cb5117c92ed8613bd3cd522a03a4939584aa4d122298100f719",
+          "evidence_id": "bn:live:0x004EFD50",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFD50-semantic-review.json",
+          "evidence_sha256": "911a0c96865b3779b51874cd3d99fc4e44a5854d66bc8b43bf74b35e021a3458"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFD50-build.json",
+          "evidence_sha256": "9acfa66ac80d71387617c79946d7669d462a7ef1874b6e19343b49d002e333d1"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004EFD50-behavioral.json",
+          "evidence_sha256": "e59ae2329ed7f6af720352201e9b88878e127b0a01d9c1150bb688a786ab0381"
+        }
+      }
+    },
+    {
+      "address": "0x004F0020",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F0020",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F0020-PhysicsTerrain_InvokeDataSymbolLoad_4F0020.cpp",
+        "sha256": "c446080cbd4019eb2c5ad562ba6474cd8ee8dad2bfb68902aa7e02486dfbf1fb",
+        "signature": "int PhysicsTerrain_InvokeDataSymbolLoad_4F0020(int* arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F0020-PhysicsTerrain_InvokeDataSymbolLoad_4F0020.cpp",
+        "sha256": "c446080cbd4019eb2c5ad562ba6474cd8ee8dad2bfb68902aa7e02486dfbf1fb",
+        "signature": "int PhysicsTerrain_InvokeDataSymbolLoad_4F0020(int* arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0020-radare2.json",
+          "evidence_sha256": "67cd0f1bd7d28a64a4b13317a5ab781737121b6a692c42410e9dc7fb14145bd9",
+          "evidence_id": "r2:live:0x004F0020",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0020-binaryninja.json",
+          "evidence_sha256": "ac6c651d6038b40101e922552421d2cb3755e28863eac5ac9574329e58bdb638",
+          "evidence_id": "bn:live:0x004F0020",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0020-semantic-review.json",
+          "evidence_sha256": "62fbb1b8891f8b389a6f3e46af804ce693ea1d43db01d31ac5d4131cc909b92e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0020-build.json",
+          "evidence_sha256": "2dfa4de5bc57e2f590185bacfbcbcca28f77ed3f01d45921d05a56fd77006abd"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0020-behavioral.json",
+          "evidence_sha256": "47d3ab57755eccfa106042b62f0fda7942738016cfd80cc9bdd08380c3d3f7bc"
+        }
+      }
+    },
+    {
+      "address": "0x004F01B0",
+      "name": "PhysicsTerrain_GetContext_4F01B0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F01B0-PhysicsTerrain_GetContext_4F01B0.cpp",
+        "sha256": "8235a404a5c930b2eeb38d7d553e14d311e983b55f5c7d043e2a53bf5423809f",
+        "signature": "int* PhysicsTerrain_GetContext_4F01B0(int* arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F01B0-PhysicsTerrain_GetContext_4F01B0.cpp",
+        "sha256": "8235a404a5c930b2eeb38d7d553e14d311e983b55f5c7d043e2a53bf5423809f",
+        "signature": "int* PhysicsTerrain_GetContext_4F01B0(int* arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F01B0-radare2.json",
+          "evidence_sha256": "602875b9337f365af74a006d85eddac66bda130cf40e6611e1e28524189236f3",
+          "evidence_id": "r2:live:0x004F01B0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F01B0-binaryninja.json",
+          "evidence_sha256": "36d86ae5eca4986318593f2b84c7055caf004285a20966a07f06475a7ebaf242",
+          "evidence_id": "bn:live:0x004F01B0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F01B0-semantic-review.json",
+          "evidence_sha256": "49b46a77ffd611fbbc2cf943aec74ea21c1d298954f1aadd247704a69330da6e"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F01B0-build.json",
+          "evidence_sha256": "f0876862fea1d57ce717387993596a8a4047d8c78cbb0df7643992b28e463f8d"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F01B0-behavioral.json",
+          "evidence_sha256": "93d7d830742fc05bc17372c06c4c49f3f918f15fdec18c2fe83d20ac21d5c7b1"
+        }
+      }
+    },
+    {
+      "address": "0x004F0560",
+      "name": "PhysicsTerrain_GetContext_4F0560",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F0560-PhysicsTerrain_GetContext_4F0560.cpp",
+        "sha256": "94293ec21af2bc51968338e934954f4984d78f24a14da19282519b069eb86674",
+        "signature": "int* PhysicsTerrain_GetContext_4F0560(char* arg1, int* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F0560-PhysicsTerrain_GetContext_4F0560.cpp",
+        "sha256": "94293ec21af2bc51968338e934954f4984d78f24a14da19282519b069eb86674",
+        "signature": "int* PhysicsTerrain_GetContext_4F0560(char* arg1, int* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0560-radare2.json",
+          "evidence_sha256": "b495945db3bfcaa77e065cf660d380d33b8ff38777c6f78231ca3ac2efcbdfad",
+          "evidence_id": "r2:live:0x004F0560",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0560-binaryninja.json",
+          "evidence_sha256": "a172d9154f5d38d69af9438d767a9063f319b9b5cfd7553e1a332de48e5830b1",
+          "evidence_id": "bn:live:0x004F0560",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0560-semantic-review.json",
+          "evidence_sha256": "420318af37728ebb56a127c7dde978b0b24292b084cf4f8d2b47ad9feede2cf5"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0560-build.json",
+          "evidence_sha256": "33fdad74849e75ab016b1c42ce263217aa03870624f9e70966642a4e1994ae11"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F0560-behavioral.json",
+          "evidence_sha256": "296f6c4a5577178eda02baa159cb4ca6573aead35057a092e848bd806490a400"
+        }
+      }
+    },
+    {
+      "address": "0x004F06E0",
+      "name": "PhysicsTerrain_GetParam_4F06E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F06E0-PhysicsTerrain_GetParam_4F06E0.cpp",
+        "sha256": "28f9a5ba6a0e118da29d6b95b1bcf8c9a413affd90fc9016e9db31abcb827556",
+        "signature": "int PhysicsTerrain_GetParam_4F06E0(int arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F06E0-PhysicsTerrain_GetParam_4F06E0.cpp",
+        "sha256": "28f9a5ba6a0e118da29d6b95b1bcf8c9a413affd90fc9016e9db31abcb827556",
+        "signature": "int PhysicsTerrain_GetParam_4F06E0(int arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F06E0-radare2.json",
+          "evidence_sha256": "f83a252a67feb8342982dc25a7bc3d49996c5bece8a4f84e4ac421773319e5df",
+          "evidence_id": "r2:live:0x004F06E0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F06E0-binaryninja.json",
+          "evidence_sha256": "31410958b7a9eb6f01f99adc6f0d3e734325952f078bd4dd8587779c2ede6938",
+          "evidence_id": "bn:live:0x004F06E0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F06E0-semantic-review.json",
+          "evidence_sha256": "173edb1a518e2d4400c980af1b72c37e4e7edd4686438b3032cc0a941dc96d61"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F06E0-build.json",
+          "evidence_sha256": "a88db4aec99422597affb0b4a7cbbe576660a4fdedcc69e497b0c6f3df0d550c"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F06E0-behavioral.json",
+          "evidence_sha256": "2ec8f39cad24074f68d8ff96d51fe3e755ab6b670c05612409052697bf170d46"
+        }
+      }
+    },
+    {
+      "address": "0x004F2B80",
+      "name": "PhysicsTerrain_GetContext_4F2B80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F2B80-PhysicsTerrain_GetContext_4F2B80.cpp",
+        "sha256": "03a38f8bd7e49d1553d26da1fa718f71464ec10c61eed8842b39e9b074259417",
+        "signature": "int* PhysicsTerrain_GetContext_4F2B80(int* arg1)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F2B80-PhysicsTerrain_GetContext_4F2B80.cpp",
+        "sha256": "03a38f8bd7e49d1553d26da1fa718f71464ec10c61eed8842b39e9b074259417",
+        "signature": "int* PhysicsTerrain_GetContext_4F2B80(int* arg1)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F2B80-radare2.json",
+          "evidence_sha256": "bcacfd41c5ebd51d7e8bd574a52d6e92b2adfeafc93eeb1d20edf1c1a3173690",
+          "evidence_id": "r2:live:0x004F2B80",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F2B80-binaryninja.json",
+          "evidence_sha256": "a7631ee7d11a5805648ca1836ad6076f9be112b756954b601fd553dab2ae5313",
+          "evidence_id": "bn:live:0x004F2B80",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F2B80-semantic-review.json",
+          "evidence_sha256": "1775c701a93b1ec265c5f00476847c1df7a88830d47552ee71116b7359077bda"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F2B80-build.json",
+          "evidence_sha256": "f1a46de770d4f7c300c5328ceec2c8a024b4d4d7ce9e725e5512939032b4d4c1"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F2B80-behavioral.json",
+          "evidence_sha256": "857c55ebb71b918a4e28e5337f82d4b918cfdf6f959068924e8fb1c5f007c25d"
+        }
+      }
+    },
+    {
+      "address": "0x004F42D0",
+      "name": "PhysicsTerrain_InvokeComputeNormals",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/physicsterrain/004F42D0-PhysicsTerrain_InvokeComputeNormals.cpp",
+        "sha256": "85eb4b54a19f12fff4a71167cbf98f20e89206dbd6fc3fbc4ca6943c871fc483",
+        "signature": "int PhysicsTerrain_InvokeComputeNormals(float arg1, void* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/physicsterrain/004F42D0-PhysicsTerrain_InvokeComputeNormals.cpp",
+        "sha256": "85eb4b54a19f12fff4a71167cbf98f20e89206dbd6fc3fbc4ca6943c871fc483",
+        "signature": "int PhysicsTerrain_InvokeComputeNormals(float arg1, void* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004F42D0-radare2.json",
+          "evidence_sha256": "7599d096c9201ec494cc8c1162f562f8ab86e027af6152389cb4fc828f42c40c",
+          "evidence_id": "r2:live:0x004F42D0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004F42D0-binaryninja.json",
+          "evidence_sha256": "f23f403bba75eacec36d80b236adf7f6ff88b8c155da985f38d0bcd8dbfa2b41",
+          "evidence_id": "bn:live:0x004F42D0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004F42D0-semantic-review.json",
+          "evidence_sha256": "87f0b364d379b93aa30150495228a845000444e1d2f6f40fd5b182858f205f75"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004F42D0-build.json",
+          "evidence_sha256": "1a90d27a50cec3f241bf8d1177afabf831e2660ce1592c69a7ca75dadfbf87eb"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004F42D0-behavioral.json",
+          "evidence_sha256": "4c4f371a80d3610862cccdf3f092639a97fc25a96b471dde55c177689a4ef3e6"
+        }
+      }
+    },
+    {
+      "address": "0x004D3730",
+      "name": "Render_BindTexture_6",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/render/004D3730-Render_BindTexture_6.cpp",
+        "sha256": "c83f7e31955ae2dcb87953cfb4fb4a6ddb1954196bd9cd76b91e247b892b3429",
+        "signature": "int* Render_BindTexture_6(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/render/004D3730-Render_BindTexture_6.cpp",
+        "sha256": "c83f7e31955ae2dcb87953cfb4fb4a6ddb1954196bd9cd76b91e247b892b3429",
+        "signature": "int* Render_BindTexture_6(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004D3730-radare2.json",
+          "evidence_sha256": "5e691d634950d97f8b0b466faa247c69336269cb58f7bda0dd42c01aed11f763",
+          "evidence_id": "r2:live:0x004D3730",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004D3730-binaryninja.json",
+          "evidence_sha256": "ae21fc0909f2e31b1c7c142516eb4fe805d288b8963131c06ef854ee6743de89",
+          "evidence_id": "bn:live:0x004D3730",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004D3730-semantic-review.json",
+          "evidence_sha256": "bf327c2633356e5e5d05f4e5018231230b0a7e9d50cfd13c82a7b0de6df63425"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004D3730-build.json",
+          "evidence_sha256": "882d068283553ec0d2d50f21d7ca9d787d0db29db77af77d3652d84e44ce8718"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004D3730-behavioral.json",
+          "evidence_sha256": "ff7a87dd9e8877a073db1e7b5e0cdca4cc448da49b18dd1e720a1dc41f5e208f"
+        }
+      }
+    },
+    {
+      "address": "0x005127E0",
+      "name": "Terrain_UpdateWaterWaves_2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/005127E0-Terrain_UpdateWaterWaves_2.cpp",
+        "sha256": "af298bb9284e45ead9d30da966667b9815f27bfea130ef0ed28f6c262db8773d",
+        "signature": "int Terrain_UpdateWaterWaves_2(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/005127E0-Terrain_UpdateWaterWaves_2.cpp",
+        "sha256": "af298bb9284e45ead9d30da966667b9815f27bfea130ef0ed28f6c262db8773d",
+        "signature": "int Terrain_UpdateWaterWaves_2(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x005127E0-radare2.json",
+          "evidence_sha256": "b28d2bf7e80d8eabfb0bfc27e6286d2dc550a749035a9722dcc82820175dd8f6",
+          "evidence_id": "r2:live:0x005127E0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x005127E0-binaryninja.json",
+          "evidence_sha256": "98b9edad165ee6275437efa2291069fd15ab712d55e4d73a5fcc73a4826edad1",
+          "evidence_id": "bn:live:0x005127E0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x005127E0-semantic-review.json",
+          "evidence_sha256": "0f0719af4af50d427138ef0dc52be11400d1be2f1afe5fcfeecb6d38c2d302f5"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x005127E0-build.json",
+          "evidence_sha256": "2a2694cee7f63ce9423716fe71c90c9a572c2cb791b28cd5d735fa86a1fa2537"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x005127E0-behavioral.json",
+          "evidence_sha256": "f3ec826decb9b655e6bebe0c24d6c5bb46d938e4231d31c8a7d10dea967aa5c0"
+        }
+      }
+    },
+    {
+      "address": "0x00514760",
+      "name": "Terrain_BuildMipMaps_2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/00514760-Terrain_BuildMipMaps_2.cpp",
+        "sha256": "c4a8f10dff7f644bf797214ff8d055cffb9a54d47d79b2b246d66eceaf55595b",
+        "signature": "unsigned int Terrain_BuildMipMaps_2(char context, char arg2, int arg3, int* arg4)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/00514760-Terrain_BuildMipMaps_2.cpp",
+        "sha256": "c4a8f10dff7f644bf797214ff8d055cffb9a54d47d79b2b246d66eceaf55595b",
+        "signature": "unsigned int Terrain_BuildMipMaps_2(char context, char arg2, int arg3, int* arg4)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00514760-radare2.json",
+          "evidence_sha256": "01c9b73c382dc55c7c21a753025733bbd24ae7b9c077ef2db70f3bd19cbc6b45",
+          "evidence_id": "r2:live:0x00514760",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00514760-binaryninja.json",
+          "evidence_sha256": "13b679b1609cbcb37c50d01312691a9ceb2c73d2e3b639231aa076243317965a",
+          "evidence_id": "bn:live:0x00514760",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00514760-semantic-review.json",
+          "evidence_sha256": "8bc1240a490a75b4df994457465cecda05538720d7b141c92b9363dbff3c7c37"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00514760-build.json",
+          "evidence_sha256": "76b36acc23a54315f7d821ab757f8290a0218c6b507e730e20630047ea4a520e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00514760-behavioral.json",
+          "evidence_sha256": "2416109073d5df5617c5c1678741addd8e409920eb4f3bc9a4e248aae3b9871a"
+        }
+      }
+    },
+    {
+      "address": "0x005168FD",
+      "name": "Terrain_BuildMipMaps_3",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/005168FD-Terrain_BuildMipMaps_3.cpp",
+        "sha256": "cca7b59e433be7f841a1acfbb9c38baee5f63d458fce584ed3c736631800ff3c",
+        "signature": "long double __convention Terrain_BuildMipMaps_3(\"regparm\")(int context, short arg2, long double arg3, int arg4, int arg5)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/005168FD-Terrain_BuildMipMaps_3.cpp",
+        "sha256": "cca7b59e433be7f841a1acfbb9c38baee5f63d458fce584ed3c736631800ff3c",
+        "signature": "long double __convention Terrain_BuildMipMaps_3(\"regparm\")(int context, short arg2, long double arg3, int arg4, int arg5)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x005168FD-radare2.json",
+          "evidence_sha256": "fc7694f9d775bf0a02bffcb13f373ea383caad65e43c7799b4feeca3f85ab226",
+          "evidence_id": "r2:live:0x005168FD",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x005168FD-binaryninja.json",
+          "evidence_sha256": "5ebf7f44133c1ac387e1fc725e4c7a6ed1d83fb89f8d98b225814f5ad6f7f385",
+          "evidence_id": "bn:live:0x005168FD",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x005168FD-semantic-review.json",
+          "evidence_sha256": "309527205a60eb1e3d8be418023efd9a26329ce1a6e821e6d83bd3b2703b09ee"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x005168FD-build.json",
+          "evidence_sha256": "50156af71e75c0785ec841d58c683d8057557c861f46a9f7ed8db8c38bb4912e"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x005168FD-behavioral.json",
+          "evidence_sha256": "f431e1957d022086fa6ddcef0023e22e36721e94658a7a82f13152004257834d"
+        }
+      }
+    },
+    {
+      "address": "0x00516F14",
+      "name": "Terrain_BuildMipMaps_4",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/00516F14-Terrain_BuildMipMaps_4.cpp",
+        "sha256": "973872d71e0effeca0e0e220b9f381e8afd11c50f2152bd48941cd2e97ac5c68",
+        "signature": "char * Terrain_BuildMipMaps_4(char * context, char * arg2, int arg3)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/00516F14-Terrain_BuildMipMaps_4.cpp",
+        "sha256": "973872d71e0effeca0e0e220b9f381e8afd11c50f2152bd48941cd2e97ac5c68",
+        "signature": "char * Terrain_BuildMipMaps_4(char * context, char * arg2, int arg3)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00516F14-radare2.json",
+          "evidence_sha256": "2db7180ffd75dc0ba8c50cda08fa3fdfe62f8ddc58f9b50d1d205587453a7851",
+          "evidence_id": "r2:live:0x00516F14",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00516F14-binaryninja.json",
+          "evidence_sha256": "8391a9361e90c2354da5967831cf5aeaea4a46f8485163651ef11ca89ac80e6d",
+          "evidence_id": "bn:live:0x00516F14",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00516F14-semantic-review.json",
+          "evidence_sha256": "7ae436f609df28a4ae85ba13637ee94f768c1759fbf1d1f3954ddcad60859f88"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00516F14-build.json",
+          "evidence_sha256": "cdb92539978be563b2e771e6e357eaa82027c8671c0c6bd1a332bd2e048e8bdc"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00516F14-behavioral.json",
+          "evidence_sha256": "0f2c721fa82928130d6901be840858730471ea432db06038bf71525f7dd7b79a"
+        }
+      }
+    },
+    {
+      "address": "0x00517B00",
+      "name": "Terrain_BuildMipMaps_6",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/00517B00-Terrain_BuildMipMaps_6.cpp",
+        "sha256": "eb47401175a9fd324789345cbc054a8517496045d5f56dde79866bde88114928",
+        "signature": "int Terrain_BuildMipMaps_6(int context, int* arg2, int* arg3, int arg4)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/00517B00-Terrain_BuildMipMaps_6.cpp",
+        "sha256": "eb47401175a9fd324789345cbc054a8517496045d5f56dde79866bde88114928",
+        "signature": "int Terrain_BuildMipMaps_6(int context, int* arg2, int* arg3, int arg4)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00517B00-radare2.json",
+          "evidence_sha256": "bec56fe8994914cc7228ab13e2ef7382f1ea5e6c60dc9a0de0449d166cd716ec",
+          "evidence_id": "r2:live:0x00517B00",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00517B00-binaryninja.json",
+          "evidence_sha256": "0d0f2c3ff38065921908e69ba0f0e3cab3438e99b36728693c0b97455d146955",
+          "evidence_id": "bn:live:0x00517B00",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00517B00-semantic-review.json",
+          "evidence_sha256": "7004470cced9986a5fd9601f3e37b65bf58362b816220a73a7062e41b72a4a72"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00517B00-build.json",
+          "evidence_sha256": "1bb8a5614326062726e6639a63379b4c6b7ba16d656b682f0d9e3b095a383766"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00517B00-behavioral.json",
+          "evidence_sha256": "5a5308dddd954426acf14d43d8f1b7cb3d290d79892ea6704a4a6f38de4508c4"
+        }
+      }
+    },
+    {
+      "address": "0x005181F0",
+      "name": "Terrain_BuildMipMaps_7",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/005181F0-Terrain_BuildMipMaps_7.cpp",
+        "sha256": "9ffad1b2b5fd38dc3f884b59fa2b159473dbda3de692bdc47e7611f7c8551c6a",
+        "signature": "void * Terrain_BuildMipMaps_7(void ** context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/005181F0-Terrain_BuildMipMaps_7.cpp",
+        "sha256": "9ffad1b2b5fd38dc3f884b59fa2b159473dbda3de692bdc47e7611f7c8551c6a",
+        "signature": "void * Terrain_BuildMipMaps_7(void ** context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x005181F0-radare2.json",
+          "evidence_sha256": "12e51b87b7689bd504294361168a2bef92e2f9bc37a80d24ddc73c29aaaeedfc",
+          "evidence_id": "r2:live:0x005181F0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x005181F0-binaryninja.json",
+          "evidence_sha256": "f90bfdb0a6319394baae5e29bd731c5ff455de86fd93ad9c49a4fc2994324492",
+          "evidence_id": "bn:live:0x005181F0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x005181F0-semantic-review.json",
+          "evidence_sha256": "ae3141616afa96e5c467070e5980c975409f78882ba6e663757f4ade4d06451c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x005181F0-build.json",
+          "evidence_sha256": "f4d107591287177bf882eb2ebae34008ea6b4844994f30074becfbae8ae5fe01"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x005181F0-behavioral.json",
+          "evidence_sha256": "6a87426057bdefce6fc5c4f7013107b952b7b9d1a6570824fbf49941562fc6cf"
+        }
+      }
+    },
+    {
+      "address": "0x00518550",
+      "name": "Terrain_BuildMipMaps_8",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/00518550-Terrain_BuildMipMaps_8.cpp",
+        "sha256": "014cea0095034dcb2f03031fddd26b09efdca97e43b9d63cdc363b130091663e",
+        "signature": "int Terrain_BuildMipMaps_8(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/00518550-Terrain_BuildMipMaps_8.cpp",
+        "sha256": "014cea0095034dcb2f03031fddd26b09efdca97e43b9d63cdc363b130091663e",
+        "signature": "int Terrain_BuildMipMaps_8(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00518550-radare2.json",
+          "evidence_sha256": "5ba47e535a1243ebb0bcb04f1589e07daf128ecc61663ba12ca0aa06eabfdbf0",
+          "evidence_id": "r2:live:0x00518550",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00518550-binaryninja.json",
+          "evidence_sha256": "25e477527a6df00f9e8b3db2c66fdee58bcc649e975849df83890761e32b6990",
+          "evidence_id": "bn:live:0x00518550",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00518550-semantic-review.json",
+          "evidence_sha256": "67bb3bf77c0c869acb0bf2fb156d45f7c9812b1d49809ce3439385dd07cfba65"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00518550-build.json",
+          "evidence_sha256": "a38b725d59cca0e983f6e9254250e828fb1d5f7d1c3823584c213b2d94b4a4a6"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00518550-behavioral.json",
+          "evidence_sha256": "1097eb79a39b60a36ee512d3129ffc636f35e0d868f57a80cc8aa6c030c2c56a"
+        }
+      }
+    },
+    {
+      "address": "0x0051A0C0",
+      "name": "Terrain_BuildMipMaps_9",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/0051A0C0-Terrain_BuildMipMaps_9.cpp",
+        "sha256": "92206fd33133accc7abf6288943447048692873bf8f9d11c120bc1fa204a3610",
+        "signature": "long double Terrain_BuildMipMaps_9(int context, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/0051A0C0-Terrain_BuildMipMaps_9.cpp",
+        "sha256": "92206fd33133accc7abf6288943447048692873bf8f9d11c120bc1fa204a3610",
+        "signature": "long double Terrain_BuildMipMaps_9(int context, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0051A0C0-radare2.json",
+          "evidence_sha256": "65a5c59757c9b11b76e0feac63a2edd3c13e453df0b94aca1e1e1dc3e96963f9",
+          "evidence_id": "r2:live:0x0051A0C0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0051A0C0-binaryninja.json",
+          "evidence_sha256": "15f6b34cb860d441ea83c625d1eb3aeb4987631b7fa512a804a63dfdfc10b38f",
+          "evidence_id": "bn:live:0x0051A0C0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0051A0C0-semantic-review.json",
+          "evidence_sha256": "45f1842c0f80bd0b70703988be29bad8d34431b0925ce0d6c6ed0084aab7dad9"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0051A0C0-build.json",
+          "evidence_sha256": "681e500c004050705587d5f94288b3dedf8ebfe856f1b716bf8735fe920b7ac3"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0051A0C0-behavioral.json",
+          "evidence_sha256": "3a33020658b89c35682e52c0588983485877ade766f143dbe38cb1dd0edc189e"
+        }
+      }
+    },
+    {
+      "address": "0x0051BF90",
+      "name": "Terrain_BuildMipMaps_10",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/terrain/0051BF90-Terrain_BuildMipMaps_10.cpp",
+        "sha256": "e598abb2de8c642817adf8e90f91523c2ac6ab648e5b03cac001ba620e1b3614",
+        "signature": "unsigned int Terrain_BuildMipMaps_10(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/terrain/0051BF90-Terrain_BuildMipMaps_10.cpp",
+        "sha256": "e598abb2de8c642817adf8e90f91523c2ac6ab648e5b03cac001ba620e1b3614",
+        "signature": "unsigned int Terrain_BuildMipMaps_10(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0051BF90-radare2.json",
+          "evidence_sha256": "90df852caa988eab6a59b50fc0585a8c73614a519e69e2e702832ec200f3c416",
+          "evidence_id": "r2:live:0x0051BF90",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0051BF90-binaryninja.json",
+          "evidence_sha256": "049635951883d58a1c3f3c59fb87e0dec68fa0063a095125c5e9e12c31d55f80",
+          "evidence_id": "bn:live:0x0051BF90",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0051BF90-semantic-review.json",
+          "evidence_sha256": "d448309ed50bca629b79acb025007b4fc5273ca10dc02401d6b62be664000bb4"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0051BF90-build.json",
+          "evidence_sha256": "f8ed3f52eea1bb6aeb96e276647c336546d7a85c35501376a69005f21a42c327"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0051BF90-behavioral.json",
+          "evidence_sha256": "280a031c5af0ea89b72eeb3daf1d1f4c91f469d6aa25a55995761947259aca81"
+        }
+      }
+    },
+    {
+      "address": "0x00505F60",
+      "name": "TextureModifier_Init",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/texturemodifier/00505F60-TextureModifier_Init.cpp",
+        "sha256": "d6618deb4ca47a0401d39a8d0fa964e11228c6b74b7ff3df9fe4c5c4f2d21e9f",
+        "signature": "int* TextureModifier_Init(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/texturemodifier/00505F60-TextureModifier_Init.cpp",
+        "sha256": "d6618deb4ca47a0401d39a8d0fa964e11228c6b74b7ff3df9fe4c5c4f2d21e9f",
+        "signature": "int* TextureModifier_Init(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00505F60-radare2.json",
+          "evidence_sha256": "20de783bc3f6996d05dfec9fd5376ab9c2813e2bb177e819b79052434a85d34a",
+          "evidence_id": "r2:live:0x00505F60",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00505F60-binaryninja.json",
+          "evidence_sha256": "49dcc6f4462f051a426e511e5c000590db892102fc58272a24a14c03a1d94fc0",
+          "evidence_id": "bn:live:0x00505F60",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00505F60-semantic-review.json",
+          "evidence_sha256": "aeff3c566998851a0b4addccd7923cad78c7d1d99ee15cdee2fe60e14d2238f5"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00505F60-build.json",
+          "evidence_sha256": "44ad82af186be9651132ac097b40026e92a47d70779931ad9b5442eebc7c82d6"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00505F60-behavioral.json",
+          "evidence_sha256": "44f3177c5393086d391bc070b74402d4fa9d3e65b83b777e592d5553b4cb42bd"
+        }
+      }
+    },
+    {
+      "address": "0x00435C50",
+      "name": "VehiclePhysics_ProcessVirModelsnotavai_435C50",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/vehiclephysics/00435C50-VehiclePhysics_ProcessVirModelsnotavai_435C50.cpp",
+        "sha256": "e9ba8a3a6e6495955d951dafe2c963458040e0160cfa3aae98b488ad3f5f1700",
+        "signature": "int VehiclePhysics_ProcessVirModelsnotavai_435C50(int* arg1, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/vehiclephysics/00435C50-VehiclePhysics_ProcessVirModelsnotavai_435C50.cpp",
+        "sha256": "e9ba8a3a6e6495955d951dafe2c963458040e0160cfa3aae98b488ad3f5f1700",
+        "signature": "int VehiclePhysics_ProcessVirModelsnotavai_435C50(int* arg1, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00435C50-radare2.json",
+          "evidence_sha256": "4c921244ea30e3d53e8f559ae3c3683614fa66f258eeac2a1dfce21da24b49b0",
+          "evidence_id": "r2:live:0x00435C50",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00435C50-binaryninja.json",
+          "evidence_sha256": "f2dd7a5d40c4a2fe90ae19d5565edeb54ee341abe0eff0b2639a81e1270132e8",
+          "evidence_id": "bn:live:0x00435C50",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00435C50-semantic-review.json",
+          "evidence_sha256": "81db042fd16393898fe0fbd9abc00338b9093adab0e4099fd0844e6e3d6a6047"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00435C50-build.json",
+          "evidence_sha256": "56496796f09e84dead1341e3b98cb66980ee59558b89d0f566621a5952d09f4c"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00435C50-behavioral.json",
+          "evidence_sha256": "f2b7aa46f3f01feccd7ba3309226b77d33f2e1e938a0752f8509bc49b823be6a"
+        }
+      }
+    },
+    {
+      "address": "0x00404160",
+      "name": "Config_GameOptionsInputSetInvertMouse",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00404160-Config_GameOptionsInputSetInvertMouse.cpp",
+        "sha256": "f6a06ea4246d8734643a035c479edf6de214e48ee38160c1d93c812eeabe2b8c",
+        "signature": "int Config_GameOptionsInputSetInvertMouse(long double context, int arg2, float arg3)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00404160-Config_GameOptionsInputSetInvertMouse.cpp",
+        "sha256": "f6a06ea4246d8734643a035c479edf6de214e48ee38160c1d93c812eeabe2b8c",
+        "signature": "int Config_GameOptionsInputSetInvertMouse(long double context, int arg2, float arg3)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00404160-radare2.json",
+          "evidence_sha256": "fddbb4656abf0432b5fdb0781d995a5e785ddf6eecd3e709d0cb9461735c5c7b",
+          "evidence_id": "r2:live:0x00404160",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00404160-binaryninja.json",
+          "evidence_sha256": "6744f108c327a063d2685385c1a79d165a4a4a8bb7eb288e030c8f87ce69cc34",
+          "evidence_id": "bn:live:0x00404160",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00404160-semantic-review.json",
+          "evidence_sha256": "b13c41b3c5f1da1aff0866e6d0d1ce2f7a37dc0eec6860aa829fecc5e0eb269f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00404160-build.json",
+          "evidence_sha256": "5efcfe6fe4414e6c0af733688ec84e4afafbc4de65f6ab79f1c77de618386c56"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00404160-behavioral.json",
+          "evidence_sha256": "90954ee00df83995a0b77685ea549858f9c289a1696f3e2d1d0cecc3ac712957"
+        }
+      }
+    },
+    {
+      "address": "0x00404510",
+      "name": "Config_GraphicOptionsSetResolution",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00404510-Config_GraphicOptionsSetResolution.cpp",
+        "sha256": "d83026d916d4902f6f8ad2808cce7a9c87802bc0758b08561664ba41c1ec1373",
+        "signature": "int Config_GraphicOptionsSetResolution(int context, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00404510-Config_GraphicOptionsSetResolution.cpp",
+        "sha256": "d83026d916d4902f6f8ad2808cce7a9c87802bc0758b08561664ba41c1ec1373",
+        "signature": "int Config_GraphicOptionsSetResolution(int context, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00404510-radare2.json",
+          "evidence_sha256": "c9fc913e35037e4e0cb8649a6da7640d64ea8e7e076e366e1cdb271bdbc759a0",
+          "evidence_id": "r2:live:0x00404510",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00404510-binaryninja.json",
+          "evidence_sha256": "eb3fbc7ce0a0180d3bd1f839529a496b7a7be5380e25bc9d4bd02fc9d9551f74",
+          "evidence_id": "bn:live:0x00404510",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00404510-semantic-review.json",
+          "evidence_sha256": "5d2321d293aa8cc1ccc8569519bea51df2fbc38ccf12d3336ee865fd9d972b41"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00404510-build.json",
+          "evidence_sha256": "a80d04bedf9349464fe92af7850d19257bd531da66f17aeae8013a7db80716a8"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00404510-behavioral.json",
+          "evidence_sha256": "88aeda209dd5723096e18a00bbb18a21145a6e9db7c503689608e097bf3f3fbb"
+        }
+      }
+    },
+    {
+      "address": "0x00404960",
+      "name": "Config_GraphicOptionsSetTransparency",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00404960-Config_GraphicOptionsSetTransparency.cpp",
+        "sha256": "96391619708047dbae148194763b319fc72d8cd632bc8f9613f83e9080240e03",
+        "signature": "int Config_GraphicOptionsSetTransparency(int context, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00404960-Config_GraphicOptionsSetTransparency.cpp",
+        "sha256": "96391619708047dbae148194763b319fc72d8cd632bc8f9613f83e9080240e03",
+        "signature": "int Config_GraphicOptionsSetTransparency(int context, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00404960-radare2.json",
+          "evidence_sha256": "0df700781154a8367a23b3d59d3904e1f6022242cac5cfe23fdb51d1c82d5323",
+          "evidence_id": "r2:live:0x00404960",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00404960-binaryninja.json",
+          "evidence_sha256": "4071c0e684d5c501e4f9fe94142d98f999cc391ef5984f9f09cf6c2a1db45f1e",
+          "evidence_id": "bn:live:0x00404960",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00404960-semantic-review.json",
+          "evidence_sha256": "fdbf5bf7554a7c872a047a5fd89c2d0ac57d01d4ee31b0e666d961e3f9090581"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00404960-build.json",
+          "evidence_sha256": "7da3104c4d942b09877a0b2ca5eb566cb2a3b3e6d3586c86d3ef6f6dd72b2e51"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00404960-behavioral.json",
+          "evidence_sha256": "57732be79553dcb228f3c083c4a244efa24d4a3068ae21ce9f51736f15da8ebe"
+        }
+      }
+    },
+    {
+      "address": "0x00404BF0",
+      "name": "Config_SoundOptionsGetMusic",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00404BF0-Config_SoundOptionsGetMusic.cpp",
+        "sha256": "5094eebd8cabdace7bdab8c324979bfad5cb92e4c49c2bd404185d5aa84305b2",
+        "signature": "int Config_SoundOptionsGetMusic(int context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00404BF0-Config_SoundOptionsGetMusic.cpp",
+        "sha256": "5094eebd8cabdace7bdab8c324979bfad5cb92e4c49c2bd404185d5aa84305b2",
+        "signature": "int Config_SoundOptionsGetMusic(int context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00404BF0-radare2.json",
+          "evidence_sha256": "d89aa601630d02419cfaf36bbff0beb43f06a8703ea68c7b47d667537c500b51",
+          "evidence_id": "r2:live:0x00404BF0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00404BF0-binaryninja.json",
+          "evidence_sha256": "5e944c28691c7a4b9fc9d35199494d0ba1fb8f67aa7f4c3bfc52e051e3348fc3",
+          "evidence_id": "bn:live:0x00404BF0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00404BF0-semantic-review.json",
+          "evidence_sha256": "d57ee23bcc7fff0d3fa8c21cd0e47787b241b244fe0e8d376ad0d4acc44bf93c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00404BF0-build.json",
+          "evidence_sha256": "8271525597218b36de5513fb2b08bc1c626f9c1ac3807dbaefe10a0b841721eb"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00404BF0-behavioral.json",
+          "evidence_sha256": "8ab107baff83c8fe26caad7b164847fd8b75de2189842f8c22e58d5548e56724"
+        }
+      }
+    },
+    {
+      "address": "0x00404EB0",
+      "name": "Config_SoundOptionsGetReverseStereo",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00404EB0-Config_SoundOptionsGetReverseStereo.cpp",
+        "sha256": "e67e02bef7cea5226f13167bfb1032811dcb28dc27e1d2712f984fbf9c86c3d3",
+        "signature": "int Config_SoundOptionsGetReverseStereo(int context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00404EB0-Config_SoundOptionsGetReverseStereo.cpp",
+        "sha256": "e67e02bef7cea5226f13167bfb1032811dcb28dc27e1d2712f984fbf9c86c3d3",
+        "signature": "int Config_SoundOptionsGetReverseStereo(int context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00404EB0-radare2.json",
+          "evidence_sha256": "b731015df071e4a7e8847130d857c7bc248535ab8583e72535e55f90f9a61b31",
+          "evidence_id": "r2:live:0x00404EB0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00404EB0-binaryninja.json",
+          "evidence_sha256": "a1a401ce4ae1b60b9f366531d6c16732cf801045c52f8f17e36906d88440da09",
+          "evidence_id": "bn:live:0x00404EB0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00404EB0-semantic-review.json",
+          "evidence_sha256": "50f47d6e4ecc498c1428e5ba975c7103bbbfe1a9257661e3de63a560ea390029"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00404EB0-build.json",
+          "evidence_sha256": "d28e8bba7d47c118f854e2f51ae926d02bdfcb5d489fddbfd8077dab030ef451"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00404EB0-behavioral.json",
+          "evidence_sha256": "fb1441b59cd4839ae9d798c4412ac9153041c4c348bc7df30ef41963b113adec"
+        }
+      }
+    },
+    {
+      "address": "0x00405400",
+      "name": "Config_DeletePlayerProfile",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00405400-Config_DeletePlayerProfile.cpp",
+        "sha256": "21b96798fed3c3bbcce1f3a976a3b6da5ae83ebd9415258dc4b4d4c096bed86c",
+        "signature": "int Config_DeletePlayerProfile(int context, float arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00405400-Config_DeletePlayerProfile.cpp",
+        "sha256": "21b96798fed3c3bbcce1f3a976a3b6da5ae83ebd9415258dc4b4d4c096bed86c",
+        "signature": "int Config_DeletePlayerProfile(int context, float arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00405400-radare2.json",
+          "evidence_sha256": "74bf70e63a051092808fe9abac4b2ec96a57675b35f2d81a996f6fa8eb1669ed",
+          "evidence_id": "r2:live:0x00405400",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00405400-binaryninja.json",
+          "evidence_sha256": "c594033a85d7513881377bd2794de4421f0e6813cbf76742b274e927d7c21b33",
+          "evidence_id": "bn:live:0x00405400",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00405400-semantic-review.json",
+          "evidence_sha256": "b1d5e12e2ccb0450e4d80a3411b0e27464cec4b9a2e8e6a0355003f190d9f74f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00405400-build.json",
+          "evidence_sha256": "95b096c33f2cbaf422575428c096b23bc56f6bcc9b23840ad40eb8d119232fc9"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00405400-behavioral.json",
+          "evidence_sha256": "a5dbbf92c59f6c25b0e33f145aa1addb4ebe10700e5b36e11aee11f0b0fe97f5"
+        }
+      }
+    },
+    {
+      "address": "0x004057D0",
+      "name": "Config_PlayerGetActiveMission",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/004057D0-Config_PlayerGetActiveMission.cpp",
+        "sha256": "5bd85ee5c183b0ba0d446dc6388231f7bda55c1cad19a9e0ee7994e1ff97f8f5",
+        "signature": "int Config_PlayerGetActiveMission(int context, int arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/004057D0-Config_PlayerGetActiveMission.cpp",
+        "sha256": "5bd85ee5c183b0ba0d446dc6388231f7bda55c1cad19a9e0ee7994e1ff97f8f5",
+        "signature": "int Config_PlayerGetActiveMission(int context, int arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004057D0-radare2.json",
+          "evidence_sha256": "139c0d5294cec731e9d45b5fd1985d9017ae4d7fd0197addf9eededd1ae7cca9",
+          "evidence_id": "r2:live:0x004057D0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004057D0-binaryninja.json",
+          "evidence_sha256": "e0fa9fd0f201750d0498b870a414208fa20b355a07e47b327b278940052ce36c",
+          "evidence_id": "bn:live:0x004057D0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004057D0-semantic-review.json",
+          "evidence_sha256": "55d418789e2b8612443d4822010923f4315939b650c2b5dd46f34b0406ff8eb9"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004057D0-build.json",
+          "evidence_sha256": "c31bef4e119c86924e87be9360ac4558e0ba6788726957c34d7eedab996ac725"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004057D0-behavioral.json",
+          "evidence_sha256": "a56e914cec78d2c071fd7d4237383e34a584de8658fd9831e3668937b9c5b081"
+        }
+      }
+    },
+    {
+      "address": "0x00405D40",
+      "name": "Config_English",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00405D40-Config_English.cpp",
+        "sha256": "852e0d9fef7570ed4ec691bc48c2a8bb6655d385fdc10e8e3d4c402b6e42602c",
+        "signature": "int Config_English(int* context, int arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00405D40-Config_English.cpp",
+        "sha256": "852e0d9fef7570ed4ec691bc48c2a8bb6655d385fdc10e8e3d4c402b6e42602c",
+        "signature": "int Config_English(int* context, int arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00405D40-radare2.json",
+          "evidence_sha256": "9b805ebc5a28ff457c3043a6568f87aab050feb4bb2d05004986d7fd76260083",
+          "evidence_id": "r2:live:0x00405D40",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00405D40-binaryninja.json",
+          "evidence_sha256": "7a2ae623291b57b405eb687af7fd3fcfbcb8a4c9c290a8c850f442398d3c0a8b",
+          "evidence_id": "bn:live:0x00405D40",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00405D40-semantic-review.json",
+          "evidence_sha256": "3355fdaf264e5d58d404b9b431c176133d0066246cf86795e6f32ee880b87490"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00405D40-build.json",
+          "evidence_sha256": "afb6aa88e6eb439835c9c030260ee6a469dc8e1b94b9d5de2095ca0c803b0146"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00405D40-behavioral.json",
+          "evidence_sha256": "f82cfbe079f21849b2b05c74ba16c4c1ee77c5ef6598c52ab6fef5b87b7717a0"
+        }
+      }
+    },
+    {
+      "address": "0x00406310",
+      "name": "Config_SaveInputOptions_2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/config/00406310-Config_SaveInputOptions_2.cpp",
+        "sha256": "70a1004fdecd53c94dda51073fcd442e7e04b2c0ec4d11b7f26d6804a40d2ba8",
+        "signature": "void Config_SaveInputOptions_2(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/config/00406310-Config_SaveInputOptions_2.cpp",
+        "sha256": "70a1004fdecd53c94dda51073fcd442e7e04b2c0ec4d11b7f26d6804a40d2ba8",
+        "signature": "void Config_SaveInputOptions_2(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00406310-radare2.json",
+          "evidence_sha256": "9dd219fe7edad58c737d4f781b9cb33ed9177bfd27c83629a5468fd2351f3afb",
+          "evidence_id": "r2:live:0x00406310",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00406310-binaryninja.json",
+          "evidence_sha256": "25027e68e3e5498bc6bec35133a30bdafffdea84ea4bd0767804178680bf6cdf",
+          "evidence_id": "bn:live:0x00406310",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00406310-semantic-review.json",
+          "evidence_sha256": "133738251ebbf420a96ebdb4c9024fe7f79d25c3fd092c9f74c5243ea8c3cc94"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00406310-build.json",
+          "evidence_sha256": "84bf6e8026aa011a82b930c8364c89189dcbbda213d8acbcbe260fb5b533cfcf"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00406310-behavioral.json",
+          "evidence_sha256": "1497103384b73d3a5032de1ff7888f04d72bf0eb1c90d9a57c263f292eeb3a71"
+        }
+      }
+    },
+    {
+      "address": "0x0052C0B0",
+      "name": "DiscardTerrain_Init_2",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/discardterrain/0052C0B0-DiscardTerrain_Init_2.cpp",
+        "sha256": "6552bc7e1bcb65d5eaf48d498348697388f9b4e02641198fd3eb2c1ee91c2033",
+        "signature": "int DiscardTerrain_Init_2()"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/discardterrain/0052C0B0-DiscardTerrain_Init_2.cpp",
+        "sha256": "6552bc7e1bcb65d5eaf48d498348697388f9b4e02641198fd3eb2c1ee91c2033",
+        "signature": "int DiscardTerrain_Init_2()"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0052C0B0-radare2.json",
+          "evidence_sha256": "de8f7bcce371c7d39e3818a1f62a7905285ce8c3fefc2e23b4a8c0d76cda7cdc",
+          "evidence_id": "r2:live:0x0052C0B0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0052C0B0-binaryninja.json",
+          "evidence_sha256": "72abc949e2339449dee91d58195be37de103e262371cad7affd1a937525df908",
+          "evidence_id": "bn:live:0x0052C0B0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0052C0B0-semantic-review.json",
+          "evidence_sha256": "5497b4dc87fd911bc40da94ff8ce423628e6fc010713b1926b5c20671d06934f"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0052C0B0-build.json",
+          "evidence_sha256": "04f0294327f6bdf08ca8e1a1768b8933ec4ed6e1ec0155583ee02ce0480d86df"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0052C0B0-behavioral.json",
+          "evidence_sha256": "bd9f9c25853381ba6c87d8c69940cf4f778cb8b83c5bd0002d25bb21a01e5e50"
+        }
+      }
+    },
+    {
+      "address": "0x004C6E30",
+      "name": "DynObj_ParseConfigFile_8",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/dynobj/004C6E30-DynObj_ParseConfigFile_8.cpp",
+        "sha256": "4c917e4839cb16a4491d00087d034627e948354de257bd26a68a5849c017225f",
+        "signature": "void * DynObj_ParseConfigFile_8(void * context, void * arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/dynobj/004C6E30-DynObj_ParseConfigFile_8.cpp",
+        "sha256": "4c917e4839cb16a4491d00087d034627e948354de257bd26a68a5849c017225f",
+        "signature": "void * DynObj_ParseConfigFile_8(void * context, void * arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004C6E30-radare2.json",
+          "evidence_sha256": "cbe053bf7ef4a481826222a281b4a27403c5996258be98e4c82c7919a1974504",
+          "evidence_id": "r2:live:0x004C6E30",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004C6E30-binaryninja.json",
+          "evidence_sha256": "002c9de6c25e32f633409c7eba86d8589ef65526bb24bad431161ebab91da510",
+          "evidence_id": "bn:live:0x004C6E30",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004C6E30-semantic-review.json",
+          "evidence_sha256": "3764dcae9ff73debbfd42c57162d2d63c273c5d67c7acd17e05c307004c4dbb3"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004C6E30-build.json",
+          "evidence_sha256": "7ecaab664c446b56abd50b95a7dceb4e32de5c26761aabb52ea8e4bb34420ef0"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004C6E30-behavioral.json",
+          "evidence_sha256": "9864be7c123340a184d38f44a368e5c8b37063bd9814b12ea97518b3881f9686"
+        }
+      }
+    },
+    {
+      "address": "0x00412440",
+      "name": "Human_DamageApply",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/human/00412440-Human_DamageApply.cpp",
+        "sha256": "aea5d3b7ec3ab1cdc301b7aece7abbc5f0eb2b0b34016dd984ee3d6b138b510a",
+        "signature": "float Human_DamageApply(float context, int* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/human/00412440-Human_DamageApply.cpp",
+        "sha256": "aea5d3b7ec3ab1cdc301b7aece7abbc5f0eb2b0b34016dd984ee3d6b138b510a",
+        "signature": "float Human_DamageApply(float context, int* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00412440-radare2.json",
+          "evidence_sha256": "8fd30854d625c7aa12df5f84cf1b6557d3893ad704eff22bc2519873301efc7d",
+          "evidence_id": "r2:live:0x00412440",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00412440-binaryninja.json",
+          "evidence_sha256": "65b2cd8011df8cd5503b58742d5ab836dcb8b67bc1935ed204d0b6a42f8a074b",
+          "evidence_id": "bn:live:0x00412440",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00412440-semantic-review.json",
+          "evidence_sha256": "d2ca80b887a3bd7be386f05b50dcf33f6e6ec2ad7be7dddaba77f7a8da996b33"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00412440-build.json",
+          "evidence_sha256": "3a638aa2ace4639e4c51c9f95a022ee3d97cbd1d97be941a225a1cffb723f883"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00412440-behavioral.json",
+          "evidence_sha256": "0afab8f54853e7cabcc8900f2716737ea3f0f740a978d3523ca20620138aee0d"
+        }
+      }
+    },
+    {
+      "address": "0x0045F280",
+      "name": "Human_LoadParameters",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/human/0045F280-Human_LoadParameters.cpp",
+        "sha256": "a1160f1d3d5e8dec2ab8588641ddb3183a7fc0eeb63133dce709b2038c35b4ad",
+        "signature": "unsigned int Human_LoadParameters(float context, int arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/human/0045F280-Human_LoadParameters.cpp",
+        "sha256": "a1160f1d3d5e8dec2ab8588641ddb3183a7fc0eeb63133dce709b2038c35b4ad",
+        "signature": "unsigned int Human_LoadParameters(float context, int arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0045F280-radare2.json",
+          "evidence_sha256": "24532ddae7c756546afa1921de6c1f7d680ef28df99745b4f524eb5377b8f508",
+          "evidence_id": "r2:live:0x0045F280",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0045F280-binaryninja.json",
+          "evidence_sha256": "4279306a69fd7e071c47b3d1a0d0b174768142d3924978bd566cfc36c1895bc7",
+          "evidence_id": "bn:live:0x0045F280",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0045F280-semantic-review.json",
+          "evidence_sha256": "f2f32792bd029ef3edbb2b1435e0413d609b07914e7f1d6169de8548fc411364"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0045F280-build.json",
+          "evidence_sha256": "4faf87ee2d1b7d41fd8db735104345c787279cb63867713770c3279eb68e2a0d"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0045F280-behavioral.json",
+          "evidence_sha256": "430e7466b2359837d7312226c0cf94478e5e395a3410a8f7368e0abb832656d5"
+        }
+      }
+    },
+    {
+      "address": "0x0045FE70",
+      "name": "Human_Cleanup_4",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/human/0045FE70-Human_Cleanup_4.cpp",
+        "sha256": "41c1b29fc98fc2fe509ace4cb84db6c7d789f48eb9da470e6852d61dd9112741",
+        "signature": "void Human_Cleanup_4(void * context, int* arg2)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/human/0045FE70-Human_Cleanup_4.cpp",
+        "sha256": "41c1b29fc98fc2fe509ace4cb84db6c7d789f48eb9da470e6852d61dd9112741",
+        "signature": "void Human_Cleanup_4(void * context, int* arg2)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0045FE70-radare2.json",
+          "evidence_sha256": "183929a1498e525e1d6f0fc9a0d309e2701c6892bf2ce7693fd52ab693cf5d55",
+          "evidence_id": "r2:live:0x0045FE70",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0045FE70-binaryninja.json",
+          "evidence_sha256": "567038fcbcb316a442a561fa7adcf0e891f50db7b39a679143d08f6a43b7684e",
+          "evidence_id": "bn:live:0x0045FE70",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0045FE70-semantic-review.json",
+          "evidence_sha256": "c036f08cfe7d6a3b1fa1be793ce76e4300ad1ead2edd858e6e5dc46cd97fcecf"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x0045FE70-build.json",
+          "evidence_sha256": "367f139f48961ef387cfc05fadc2af01c5706ceb67784ab3af721221cb84380a"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0045FE70-behavioral.json",
+          "evidence_sha256": "aff22500263917acc2e6aa5456f2528641396f7639f235a125eff69b6bfe8b7a"
+        }
+      }
+    },
+    {
+      "address": "0x004614B0",
+      "name": "Human_MovementIntegrator",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/human/004614B0-Human_MovementIntegrator.cpp",
+        "sha256": "3c5e6459f489fc0f2c008f4edba3dc169e02ed1fb43ab87a2e7476b8a1cedcc0",
+        "signature": "int Human_MovementIntegrator(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/human/004614B0-Human_MovementIntegrator.cpp",
+        "sha256": "3c5e6459f489fc0f2c008f4edba3dc169e02ed1fb43ab87a2e7476b8a1cedcc0",
+        "signature": "int Human_MovementIntegrator(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004614B0-radare2.json",
+          "evidence_sha256": "342dabd15409f46b262871ca78d61e15febfea4eeae2d4fa2b02ccc1002a50c3",
+          "evidence_id": "r2:live:0x004614B0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004614B0-binaryninja.json",
+          "evidence_sha256": "f323b5a14a3fe7e8467258efde1d8858dccc3b32a68b0b7ba44d244c1e1c5d3a",
+          "evidence_id": "bn:live:0x004614B0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004614B0-semantic-review.json",
+          "evidence_sha256": "b6937b240ab44e7e3cb00c930499c6e8c9282bbcb616607b6ad584486710337c"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004614B0-build.json",
+          "evidence_sha256": "cd72a2003227b24813ca7eedc1c6c5b6e699df28484e1f0701c658c6db816530"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004614B0-behavioral.json",
+          "evidence_sha256": "de0536f35454da271c71cf68d5cb66fa432251c83f35472faccc5126c1182c89"
+        }
+      }
+    },
+    {
+      "address": "0x004828D0",
+      "name": "Human_FindNextCamera",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/human/004828D0-Human_FindNextCamera.cpp",
+        "sha256": "728f35a24b2fc5221e3f1eaf261fbd1abde8b3299eda6452dc0d60f0d7c6801a",
+        "signature": "void * Human_FindNextCamera(void * context)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/human/004828D0-Human_FindNextCamera.cpp",
+        "sha256": "728f35a24b2fc5221e3f1eaf261fbd1abde8b3299eda6452dc0d60f0d7c6801a",
+        "signature": "void * Human_FindNextCamera(void * context)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+        },
+        "limitations": [
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004828D0-radare2.json",
+          "evidence_sha256": "1fb9bb16008bf7e45e49fb880479b9fd2c340eb41c272253ebac17d8a9aa2352",
+          "evidence_id": "r2:live:0x004828D0",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004828D0-binaryninja.json",
+          "evidence_sha256": "495ccd3f1ce87289a67833e1b1c69e4bd6639326ea7edb719993cc3c61f9a843",
+          "evidence_id": "bn:live:0x004828D0",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004828D0-semantic-review.json",
+          "evidence_sha256": "62cf8c9cca3a936a8b2c11927509efb6448f0bc5eea873c1b5ae56daae2228f0"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004828D0-build.json",
+          "evidence_sha256": "2690361aa56418810b8107fe68c7cfd1d74132d3745e1914d1b128c45f6eca26"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004828D0-behavioral.json",
+          "evidence_sha256": "e4db96ac706c1d2b60576c48749cbf71228d589a73050061152b67ca5ebbde5c"
+        }
+      }
     }
   ],
   "retired_files": [
