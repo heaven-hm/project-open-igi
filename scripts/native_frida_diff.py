@@ -81,6 +81,7 @@ targets = json.loads(sys.argv[2])
 script_source = sys.stdin.buffer.read().decode("utf-8")
 result_path = sys.argv[4]
 observe = float(sys.argv[5])
+settle = float(sys.argv[6]) if len(sys.argv) > 6 else 0.0
 
 device = frida.get_device_manager().add_remote_device(os.environ.get("FRIDA_HOST", "127.0.0.1:27042"))
 session = device.attach(pid)
@@ -112,7 +113,29 @@ script.on("message", on_message)
 script.load()
 for address in targets:
     script.exports_sync.hook(address)
-time.sleep(observe)
+# Attaching before the game reaches its per-frame loop is required, but a
+# fixed pre-attach sleep cannot know when that happens: retail level loading
+# is much slower than the candidate and varies with the host. Wait for the
+# first real call instead, then observe for the fixed window. A settle that
+# expires without any call is reported instead of silently producing an
+# empty report.
+hook_started = time.time()
+last_hook_at = hook_started
+settle_expired = False
+while time.time() - last_hook_at < settle:
+    if observed:
+        break
+    time.sleep(0.2)
+    last_hook_at = time.time()
+else:
+    settle_expired = not observed
+if observed:
+    time.sleep(observe)
+if settle_expired:
+    json.dump({"settleExpiredWithoutCall": True}, open(result_path, "w"))
+    session.detach()
+    raw_log.close()
+    raise RuntimeError("no native call was observed before the settle window expired")
 if failures:
     raise RuntimeError(f"Frida probe failed: {failures}")
 json.dump(observed, open(result_path, "w"))
@@ -137,22 +160,26 @@ def frida_list():
     return out
 
 
-def run_observation(pid: int, addresses: list[str], observe: float, probe_source: str) -> dict:
+def run_observation(pid: int, addresses: list[str], observe: float, probe_source: str,
+                    settle: float = 0.0, meta: dict | None = None) -> dict:
     child = ROOT / "build" / "frida_observe_child.py"
     child.parent.mkdir(parents=True, exist_ok=True)
     child.write_text(CHILD)
     out = ROOT / "build" / "frida_observed.json"
     out.unlink(missing_ok=True)
     cmd = [FRIDA_PYTHON, str(child), str(pid), json.dumps(addresses),
-           "-", str(out), str(observe)]
+           "-", str(out), str(observe), str(settle)]
     try:
         p = subprocess.run(cmd, input=probe_source, capture_output=True, text=True,
-                           encoding="utf-8", timeout=observe + 180)
+                           encoding="utf-8", timeout=observe + settle + 120)
     except subprocess.TimeoutExpired:
         print("  observation timed out")
         return {}
     if p.returncode != 0 or not out.exists():
-        print(f"  observation failed: {(p.stderr or p.stdout or '')[-600:]}")
+        message = (p.stderr or p.stdout or '')[-600:]
+        print(f"  observation failed: {message}")
+        if meta is not None and "settle window expired" in message:
+            meta["settleExpiredWithoutCall"] = True
         return {}
     data = json.loads(out.read_text())
     out.unlink()

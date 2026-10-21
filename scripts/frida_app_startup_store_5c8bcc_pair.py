@@ -8,6 +8,7 @@ from pathlib import Path
 import re
 import subprocess
 import sys
+import pathlib
 
 from candidate_build_receipt import validate_receipt
 from frida_capture_lease import capture_lease
@@ -27,10 +28,22 @@ def main():
     parser.add_argument('--binary-sha256')
     parser.add_argument('--implementation', type=Path, default=ROOT / 'engine/src/retail/core/native_0048f0f0.cpp')
     parser.add_argument('--implementation-sha256')
-    parser.add_argument('--candidate', type=Path, default=ROOT / 'build-win32-no-verify-gate/engine/platform/windows/open-igi.exe')
-    parser.add_argument('--receipt', type=Path, default=ROOT / 'build/diagnostic-candidate-build.json')
-    parser.add_argument('--out', type=Path, default=ROOT / 'build/runtime-traces/0x0048F0F0-frida-pair.json')
+    parser.add_argument('--candidate', type=Path, default=None)
+    parser.add_argument('--receipt', type=Path, default=None)
+    parser.add_argument('--out', type=Path, default=None)
     args = parser.parse_args()
+    # The gate passes the candidate, its receipt and the output path through
+    # the environment when it drives the runner.
+    if args.candidate is None:
+        candidate_from_env = os.environ.get('IGI_CANDIDATE_EXE', '')
+        args.candidate = pathlib.Path(candidate_from_env) if candidate_from_env \
+            else ROOT / 'build-win32-no-verify-gate/engine/platform/windows/open-igi.exe'
+    if args.receipt is None:
+        receipt_from_env = os.environ.get('IGI_CANDIDATE_BUILD_RECEIPT', '')
+        args.receipt = pathlib.Path(receipt_from_env) if receipt_from_env \
+            else ROOT / 'build/diagnostic-candidate-build.json'
+    if args.out is None:
+        args.out = ROOT / 'build/runtime-traces/0x0048F0F0-frida-pair.json'
     try:
         import frida
     except ImportError:

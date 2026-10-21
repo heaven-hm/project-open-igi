@@ -1917,8 +1917,8 @@
       "name": "App_ContextGetDebugged",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F1B0-App_ContextGetDebugged.cpp",
-        "sha256": "3290faf90cb82d88745e3b4073b10c2620199112a2a619820c14a9d5edeabef1",
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
         "signature": "int __cdecl App_ContextGetDebugged(void);"
       },
       "game_natives": {

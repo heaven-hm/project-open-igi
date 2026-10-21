@@ -36,6 +36,7 @@ TYPED_FRIDA_RUNNERS = {
     0x0048F1A0: ROOT / "scripts/frida_app_context_setter_pair.py",
     0x0048F1B0: ROOT / "scripts/frida_app_context_getter_pair.py",
     0x0048F0E0: ROOT / "scripts/frida_app_startup_store_5c8bc4_pair.py",
+    0x00401050: ROOT / "scripts/frida_401050_pair.py",
 }
 
 RETAINED_SYMBOLS = {
@@ -244,6 +245,33 @@ def main() -> int:
         runtime_env = dict(env)
         runtime_env["IGI_CANDIDATE_EXE"] = str(args.candidate.resolve())
         runtime_env["IGI_CANDIDATE_BUILD_RECEIPT"] = str(args.receipt.resolve())
+        # The dispatch probe drives the candidate through its own interface:
+        # it attaches to the running candidate rather than to the retail.
+        if runner.name == "frida_401050_pair.py":
+            runtime_command = [
+                sys.executable, str(runner),
+                "--candidate-exe", str(args.candidate.resolve()),
+                "--level", str(args.level),
+                "--out", str(runtime_report),
+            ]
+            runtime = run(runtime_command, env=runtime_env, timeout=1200)
+            report["phases"]["runtime"] = runtime
+            if runtime["exit_code"] != 0:
+                write_report(output, report)
+                print(runtime["stdout"], end="")
+                print(runtime["stderr"], end="", file=sys.stderr)
+                print("False")
+                print(f"BLOCKED paired Frida phase; report: {output}")
+                return 1
+            report["result"] = "passed"
+            report["verified"] = True
+            write_report(output, report)
+            print(runtime["stdout"], end="")
+            print("True")
+            print(f"PASS {address}: static/semantic, x86 build binding, and paired Frida runtime")
+            print(f"report: {output}")
+            return 0
+
         runtime = run(runtime_command, env=runtime_env, timeout=1200)
         report["phases"]["runtime"] = compact_output(runtime)
         if runtime_report.is_file():

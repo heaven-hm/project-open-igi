@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x0048F0C0 (FX_FragmentSimulate_22): mov eax,[esp+4]; mov [g_5c8bc8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
+   "note": "The candidate Native_0048F0C0 reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }
