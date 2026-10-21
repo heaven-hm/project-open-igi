@@ -33,7 +33,8 @@ struct TaskTypeSlot
                                               // holding the name by index.
     std::uint32_t object_size;               // +0x04, 0x00AF5EE4
     std::uint16_t parent_type;               // +0x08, 0x00AF5EE8
-    std::uint8_t unknown_0x0A[0x1B];
+    std::uint8_t unknown_0x0A[0x1A];
+    std::uint8_t has_task_list;              // +0x24, 0x00AF5F04
     std::uint8_t in_use;                     // +0x25, 0x00AF5F05
     std::uint8_t unknown_0x26[0x06];
     std::uint32_t inherited_flags;           // +0x2C, 0x00AF5F0C

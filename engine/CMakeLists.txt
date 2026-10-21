@@ -28,6 +28,7 @@ add_library(igi_retail_engine STATIC
     src/retail/core/fpu_state.cpp
     src/retail/core/debug_command_line.cpp
     src/retail/input/input_port.cpp
+    src/retail/input/input_port_process.cpp
     src/retail/diagnostics/log_record.cpp
     src/retail/error/error_show.cpp
     src/retail/human/human_camera_eye.cpp

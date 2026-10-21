@@ -1985,7 +1985,7 @@ double Scene::frame_delta = 1.0 / 30.0;
 LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
 {
     if (message == WM_ACTIVATEAPP)
-        core::Display_ClearSurfaces_16();
+        core::FP_InitExtendedPrecision();
     // The input messages feed the retail input port, which the scene's player
     // update reads at the start of the frame.
     if (g_active_scene != nullptr)
@@ -2154,7 +2154,7 @@ int RunRetailModelScene(HINSTANCE instance,
         // Retail CRT startup 0x004A7157 establishes precision before WinMain;
         // 0x0048F530 then establishes rounding before the game task loop.
         static_cast<void>(core::Camera_ApplyBandFilter_10());
-        core::Display_ClearSurfaces_16();
+        core::FP_InitExtendedPrecision();
         Scene scene;
         SceneWindowLifetime lifetime{scene};
         g_active_scene = &scene;
@@ -2314,11 +2314,11 @@ int RunRetailModelScene(HINSTANCE instance,
         while (running)
         {
             // The retail per-frame order (0x0048F80D inside main at
-            // 0x0048F530): clear the frame surfaces (0x00498460), read the
-            // app context's isActive flag (0x0048F170) and either dispatch the
-            // frame (0x00401050) or sleep 500 ms, then check the loop status
-            // byte (0x005C8DE8) and pump the messages.
-            core::Display_ClearSurfaces_16();
+            // 0x0048F530): set the x87 extended precision (0x00498460), read
+            // the app context's isActive flag (0x0048F170) and either dispatch
+            // the frame (0x00401050) or sleep 500 ms, then check the loop
+            // status byte (0x005C8DE8) and pump the messages.
+            core::FP_InitExtendedPrecision();
             if (AppContext_GetIsActive() != 0)
             {
                 QTask_OpenEvent();
