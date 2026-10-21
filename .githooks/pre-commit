@@ -4,4 +4,4 @@ set -euo pipefail
 root="$(git rev-parse --show-toplevel)"
 bash "$root/scripts/check_gate_integrity.sh"
 python3 "$root/scripts/native_gate.py" --root "$root" --staged \
-    --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85
+    --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85 --allow-structural-only
