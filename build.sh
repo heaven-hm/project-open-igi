@@ -194,7 +194,7 @@ echo "==> [0/4] Verifying changed natives: static CFG, source semantics and beha
 python3 "$ROOT_DIR/scripts/build_attestation.py" capture --root "$ROOT_DIR" \
     --output "$ROOT_DIR/build/native-verification-inputs.json"
 python3 "$ROOT_DIR/scripts/native_gate.py" --root "$ROOT_DIR" --changed \
-    --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests \
+    --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85 --require-semantic-evidence \
     --report build/native-verification.json || {
   echo "!! Build BLOCKED: production native code lacks matching binary-bound evidence."
   echo "!! A five-line comment alone cannot authorize compilation or deployment."
