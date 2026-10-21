@@ -1230,7 +1230,13 @@ def run_angr_analysis(
                                  check=False, timeout=180)
         if sha256(helper) != helper_digest:
             raise ValueError("angr helper changed during analysis")
-        artifact = json.loads(process.stdout)
+        try:
+            artifact = json.loads(process.stdout)
+        except json.JSONDecodeError as error:
+            raise ValueError(
+                f"angr helper returned invalid JSON (exit code {process.returncode}); "
+                f"stderr={process.stderr[-2000:]!r}; stdout_tail={process.stdout[-1000:]!r}"
+            ) from error
         if not isinstance(artifact, dict):
             raise ValueError("helper output is not an object")
         if process.returncode not in (0, 2):
