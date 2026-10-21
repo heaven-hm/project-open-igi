@@ -7919,7 +7919,7 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.0875,
+        "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C0250-semantic-review.json",
           "evidence_sha256": "1def9872e06fe923815a6f8fcc1c2d8066ea6bddf27fde27f0dfbaed53d00d40"
@@ -9566,7 +9566,7 @@
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "cfg_similarity": 0.175,
+        "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x005127D0-semantic-review.json",
           "evidence_sha256": "7d7f1ee76c31c1e7b411a0d08cb95369171577ab4b8ddfe18909f5a2078dc860"
@@ -14402,14 +14402,14 @@
         "signature": "void* HumanPlayer_GetContext_40EF5C(void* arg1)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "INCONCLUSIVE",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "Retail 0x0040EF5C is NOP padding (bytes 90 90 90 90 inside the alignment after the jump table at 0x0040EF46). Radare2 recovers no function at the address and Binary Ninja yields no executable block, so this catalog label is not a real native entry and cannot be structurally verified."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
