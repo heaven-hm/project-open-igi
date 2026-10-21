@@ -59632,7 +59632,1175 @@
       "reviewed": true,
       "rationale": "Renamed to scripts/GameNatives/weapon/00413A90-WeaponType_Open_2.hpp; the retail body of 0x00413A90 adjudicated the function name and the new filename carries it. The transcription, its address and its content are unchanged.",
       "replacedBy": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2.hpp"
+    },
+    {
+      "path": "engine/src/retail/audio/sound_adpcm_decoder.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/audio/sound_attenuation_table.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/audio/sound_ilsf_header.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/audio/sound_ilsf_stream_reader.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/audio/sound_key_functions.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/input_remap.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/retail_config.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/retail_input_bindings.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/app_context.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/app_startup_natives.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/class_registration.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/debug_command_line.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/game_flow.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0d0.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0e0.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0f0.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/retail_main.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/window_procedure.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/diagnostics/log_record.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/dynamic_cube.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/human/human_camera_eye.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/human/human_view.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/input/input_port.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/input/input_port_process.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/heap_list.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_skeleton.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_bone_rig.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_model_loader.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_native_attachments.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_render_data.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_skinner.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/model_texture_package.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/qfile/alias_resolve.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/backend.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/camera_transform.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/lod_settings.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/trans_context.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/view_block.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/device_dispatch.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/is_resource_loaded.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_archive.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_cache.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_unpack.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/humanplayer_defines.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_compiled_program.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_loader.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_object_calls.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/script_mode.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/resource_lookup.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/loop_terrain_texture.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/model_texture_pixels.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
     }
   ],
-  "retired_natives": []
+  "retired_natives": [
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x00404590",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x00404F00",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x00404F60",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x00405530",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x004055C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/config_graphic_options.cpp",
+      "address": "0x00405620",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/config/input_remap.cpp",
+      "address": "0x004037C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/app_context.cpp",
+      "address": "0x0048F1B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/app_startup_natives.cpp",
+      "address": "0x0048F0C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/class_registration.cpp",
+      "address": "0x00402930",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "address": "0x00401FC0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "address": "0x00402070",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "address": "0x00402260",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "address": "0x00402740",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/flow.cpp",
+      "address": "0x00402800",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x00498460",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x004A7157",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x004AC620",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x004AC655",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x004AC66B",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/fpu_state.cpp",
+      "address": "0x004AC6FD",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x00401050",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x00402880",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x004028A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x0048F140",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x0048F170",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/frame_natives.cpp",
+      "address": "0x0048F480",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/game_flow.cpp",
+      "address": "0x00415530",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/game_flow.cpp",
+      "address": "0x00415B30",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0d0.cpp",
+      "address": "0x0048F0D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0e0.cpp",
+      "address": "0x0048F0E0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/native_0048f0f0.cpp",
+      "address": "0x0048F0F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/retail_main.cpp",
+      "address": "0x0048F530",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x004010D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x004011B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x004011D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x00401400",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x00401530",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x004017C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x004018F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/task_types.cpp",
+      "address": "0x00401900",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/core/window_procedure.cpp",
+      "address": "0x0048F970",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/dynamic_cube.cpp",
+      "address": "0x004C67E0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "address": "0x004CEAA0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "address": "0x004CF300",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "address": "0x004CF390",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "address": "0x004CF080",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "address": "0x004CF330",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "address": "0x004CF630",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "address": "0x004CF870",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "address": "0x004CF910",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "address": "0x004A53B3",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "address": "0x004A5702",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "address": "0x004AF7B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/human/human_camera_eye.cpp",
+      "address": "0x00463180",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/human/human_camera_eye.cpp",
+      "address": "0x00465820",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/human/human_view.cpp",
+      "address": "0x004659E0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/input/input_port_process.cpp",
+      "address": "0x004012A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/input/input_port_process.cpp",
+      "address": "0x004012F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/input/input_port_process.cpp",
+      "address": "0x004ED5C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/heap_list.cpp",
+      "address": "0x004AF8F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/heap_list.cpp",
+      "address": "0x004AF960",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004AA670",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004AA682",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004AA6AE",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004AD722",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004B0BA0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004B0C60",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/mem/mem_alloc.cpp",
+      "address": "0x004B0D40",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "address": "0x00517890",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "address": "0x005178E0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "address": "0x00517940",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "address": "0x005179C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/iff_skeleton.cpp",
+      "address": "0x004D67A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_native_attachments.cpp",
+      "address": "0x004D0CF0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/model/mef_native_attachments.cpp",
+      "address": "0x004D0D10",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/backend.cpp",
+      "address": "0x004CEA80",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/camera_transform.cpp",
+      "address": "0x004A2600",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/camera_transform.cpp",
+      "address": "0x004A26C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/camera_transform.cpp",
+      "address": "0x004B7450",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/lod_settings.cpp",
+      "address": "0x004EDB60",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/trans_context.cpp",
+      "address": "0x00497E70",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/view_block.cpp",
+      "address": "0x00491D40",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/render/view_block.cpp",
+      "address": "0x00497D70",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/device_dispatch.cpp",
+      "address": "0x004B1690",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/device_dispatch.cpp",
+      "address": "0x004B1780",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/device_dispatch.cpp",
+      "address": "0x004B17F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "address": "0x004B5F00",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "address": "0x004B6380",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "address": "0x004AAD10",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "address": "0x004B59F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "address": "0x004B5C90",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "address": "0x004B5F80",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/resource/sys_resource.cpp",
+      "address": "0x004B60F0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/humanplayer_defines.cpp",
+      "address": "0x00405850",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/humanplayer_defines.cpp",
+      "address": "0x00410070",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/humanplayer_defines.cpp",
+      "address": "0x004137A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x0048F1D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x0048F340",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B1E90",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B5B60",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B7E10",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B80B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B83D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_native_loader.cpp",
+      "address": "0x004B8A10",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "address": "0x004BCFD0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "address": "0x004BD3D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "address": "0x004BDA00",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/script/script_mode.cpp",
+      "address": "0x004F1160",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7470",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7490",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B74D0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7540",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7570",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7580",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/ilff_navigation.cpp",
+      "address": "0x004B7590",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/resource_lookup.cpp",
+      "address": "0x004AD73D",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/resource_lookup.cpp",
+      "address": "0x004B5AF0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/sys/resource_lookup.cpp",
+      "address": "0x004B5B30",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004C5F00",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004C6240",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004C6670",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004C6760",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004D14E0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x004F82B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x00505E40",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x00506F00",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x00510010",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "address": "0x00512C30",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B0F80",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B23B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B24C0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B26A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B26B0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004B7CF0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x004CF790",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    },
+    {
+      "path": "engine/src/retail/texture/texture_loaders.cpp",
+      "address": "0x005175A0",
+      "reviewed": true,
+      "rationale": "Removed from the clean retail-flow branch at user request; the prior implementation remains in game-engine-flow at 8f05bfc7. This does not assert retail equivalence or retire the native from the game."
+    }
+  ]
 }
