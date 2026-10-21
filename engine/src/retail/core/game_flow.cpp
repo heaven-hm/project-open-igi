@@ -73,6 +73,8 @@ IGI_RETAIL_CDECL void Game_Init()
 }
 
 // Native: Level_Start; retail VA 0x00415B30.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00415B30..0x00415D40.
 // Behavior/CFG: the retail's phase 0 handler runs the level start. It brings the task list up through 0x00402820 and 0x004028D0, looks the mission up through 0x00485170, reads the mission path with "MISSION:" through 0x004B12F0, and then loads the content in the retail's order: the terrain textures and lightmaps through 0x004C5F00 and the terrain through 0x004C6240 at 0x00415C31 and 0x00415C44, the level package through 0x004CFBD0 at 0x00415C88, the common package through 0x004CFC00 at 0x00415C92, and the common forms through 0x004CEFA0 at 0x00415C9E. The calls for the mission scripts, the sound and the camera sit around them and are outside the MVP scope, so this transcription skips them and the port runs the content through the phase 0 hook.
 // Status/limits: STRUCTURALLY_VERIFIED; the content order is the retail's.
 IGI_RETAIL_CDECL void Level_Start(void* game)
