@@ -7045,42 +7045,68 @@
       "name": "Ilff_GetFormType",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/sys/ilff_navigation.cpp",
-        "sha256": "3ca6df6dd3baf32cdc903dc4b1bdf9aab830350570abbe1bc191c2b094724e43",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/resource/004B7570-Ilff_GetFormType.cpp",
+        "sha256": "bbb174b69a53c845fc3177a11bc221a1fdc8c1dfc615b1b045f795ad90e1f090",
+        "signature": "std::uint32_t __cdecl Ilff_GetFormType(void* container);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/sys/004B7570-Ilff_GetFormType 2.cpp",
-        "sha256": "62cc506687b1135b9f421e6c858027a7bc16836c522f52508f964a32cf1aa6d1",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/resource/004B7570-Ilff_GetFormType.cpp",
+        "sha256": "bbb174b69a53c845fc3177a11bc221a1fdc8c1dfc615b1b045f795ad90e1f090",
+        "signature": "std::uint32_t __cdecl Ilff_GetFormType(void* container);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
-        "binary_ninja": {
-          "evidence_id": "bn:live:0x004B7570",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x004B7570-binaryninja.json",
-          "evidence_sha256": "bbebdc97c0871fcc58c57b79e5197f97f662c250b367b533222d4eacb2f0ba7f"
-        },
-        "radare2": {
-          "evidence_id": "r2:live:0x004B7570",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x004B7570-radare2.json",
-          "evidence_sha256": "3c4e51b8686ae0d24aef23d3c80cce54fd1ec8dca2fa5a267ec83b32e989e2ce"
-        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+          "rationale": "Retail 0x004B7570 (Ilff_GetFormType): eax=[esp+4]; if eax==0 ret 0; ret [eax+0x10]. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+        },
+        "limitations": [
+          "Transcribed instruction for instruction from retail. No Frida run yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004B7570-radare2.json",
+          "evidence_sha256": "5d1894117ea1ccd8c614ffbfed0882f2f5da53dec470930ad457e21d637f2a7e",
+          "evidence_id": "r2:live:0x004B7570",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004B7570-binaryninja.json",
+          "evidence_sha256": "1a49236fc034b9c0909b14408d32ab4f435210d48b4e86259d81f578fb935bea",
+          "evidence_id": "bn:live:0x004B7570",
+          "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004B7570-build.json",
-          "evidence_sha256": "6fb385c0ccea09139db8986dd500a965c68c304ed7ca3ad247e4c70b5af7f728"
-        },
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B7570-semantic-review.json",
-          "evidence_sha256": "cc2a2009b19c18e17f34a1eafbd2776c51ceb3c21f13b88d661df9430dd5ffa3"
+          "evidence_sha256": "bbaabca69146d1cd5f834ed6437dc90cb09b11e82f54111ec8f86fc9e116b51a"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004B7570-build.json",
+          "evidence_sha256": "2e327dec9ffb49bf4903d08821b417997041a37857d5252667db4c5769f3842a"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json",
+          "evidence_sha256": "bcb34aee38a9ebe96f70c59bae89dd3a3f1e6b9c62145639f9936e718eaf8e99"
         }
       }
     },
