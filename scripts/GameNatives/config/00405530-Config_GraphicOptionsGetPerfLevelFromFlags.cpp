@@ -1,47 +1,37 @@
-// IGI native provenance: Config_GraphicOptionsGetPerfLevelFromFlags - 0x00405530 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
-// Evidence: 00405530-Config_GraphicOptionsGetPerfLevelFromFlags.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405530-Config_GraphicOptionsGetPerfLevelFromFlags.hpp"
-int Config_GraphicOptionsGetPerfLevelFromFlags(int context, float arg2 )
+// IGI native Config_GraphicOptionsGetPerfLevelFromFlags - 0x00405530 - transcribed from retail igi.exe.
+// Retail: cdecl (result, unused, vm). Picks the table entry (7 dwords at 0x537B74) with the smallest Hamming distance to arg 0. The index variable starts as the vm argument slot, as in retail.
+#include <cstdint>
+#include <cstring>
 
-// Sig: int Config_GraphicOptionsGetPerfLevelFromFlags(int flags)
-// Note: Converts a performance-flag bitmask back into its detail LEVEL number.
-// Param: flags = bitmask from the profile/performance setting. Use to show the
-// current detail level in UI.
+int __cdecl Qvm_GetIntArg(void* vm, int index); // 0x004B8A20
+void* __cdecl Config_GetActiveGraphicOptions(void); // 0x00404590
+extern std::int32_t g_537b74[7];
+
+void __cdecl Config_GraphicOptionsGetPerfLevelFromFlags(std::uint32_t* result, int unused, void* vm)
 {
-    int item_20 = 0x1f;
-    int data_1 = Script_GetArg(arg2, 0);
-    float context_val = 0.0f;
-
-    for (int* i = &g_537b74; i < &g_537b90; )
+    (void)unused;
+    std::uint32_t block[6];
+    int bestDistance = 0x1F;
+    int bestIndex = static_cast<int>(reinterpret_cast<std::intptr_t>(vm));
+    int flags = Qvm_GetIntArg(vm, 0);
+    for (int i = 0; i < 7; ++i)
     {
-        int j_1 = 0x20;
-        int entity_2 = *i ^ data_1;
-        int temp_1 = 0;
-        int j;
-
-        do
+        std::int32_t diff = g_537b74[i] ^ flags;
+        int distance = 0;
+        for (int bit = 32; bit != 0; --bit)
         {
-            temp_1 += entity_2 & 1;
-            entity_2 s>>= 1;
-            j = j_1;
-            j_1 -= 1;
-        } while (j != 1);
-
-        if (temp_1 < item_20)
-        {
-            item_20 = temp_1;
-            arg2 = context_val;
+            distance += diff & 1;
+            diff >>= 1;
         }
-
-        i = &i[1];
-        context_val += 1;
+        if (!(distance >= bestDistance))
+        {
+            bestDistance = distance;
+            bestIndex = i;
+        }
     }
-
-    long double fpu7 = arg2;
-    char* item_8 = &g_567c74;
-    item_20 = fpu7;
-    int item_18 = item_20;
-    double item_10 = fpu7;
-    memcpy(context, &item_18, 0x18);
-    return context;
+    block[0] = static_cast<std::uint32_t>(bestIndex);
+    double value = static_cast<double>(bestIndex);
+    std::memcpy(&block[2], &value, sizeof(value));
+    block[4] = 0x567C74;
+    std::memcpy(result, block, sizeof(block));
 }

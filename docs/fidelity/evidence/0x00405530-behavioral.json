@@ -1,0 +1,22 @@
+{
+ "address": "0x00405530",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x00405530 (Config_GraphicOptionsGetPerfLevelFromFlags): best distance=0x1f; for 7 entries at 0x537b74: popcount([entry]^arg0) over 32 bits; if dist<best: best=dist, index=i; result {index,?,double(index),0x567c74}. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
