@@ -1,24 +1,30 @@
-// IGI native provenance: Config_Read - 0x00405850 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 00405850-Config_Read.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405850-Config_Read.hpp"
-int Config_Read(void* context)
+// IGI native Config_Read - 0x00405850 - transcribed from retail igi.exe.
+// Retail: cdecl, one argument. Loads the config qvm, executes and cleans it up; when loading fails runs 0x405300 first. Both paths then call 0x4058A0, 0x405980 and 0x405B30.
+#include <cstdint>
+#include <cstring>
 
-// Sig: int Config_Read(char* cfg_file)
-// Note: Read game config file, Params:  File: 'LOCAL:config.qsc'
+void* __cdecl Qvm_Load(void* path);        // 0x004B80B0
+void __cdecl Qvm_Execute(void* qvm);       // 0x004B85B0
+void __cdecl Qvm_Cleanup(void* qvm);       // 0x004B83D0
+void __cdecl Config_SaveGraphicOptions(void); // 0x00405300
+void __cdecl Config_SaveSoundOptions(void);   // 0x004058A0
+void __cdecl Config_NoD3DDriversWithHard(void); // 0x00405980
+void __cdecl Config_Language_2(void);         // 0x00405B30
+
+void __cdecl Config_Read(void* path)
 {
-    int* data_val = Qvm_Load(context);
-
-    if (!data_val)
+    void* qvm = Qvm_Load(path);
+    if (qvm != nullptr)
     {
-        Config_SaveGraphicOptions();
+        Qvm_Execute(qvm);
+        Qvm_Cleanup(qvm);
         Config_SaveSoundOptions();
         Config_NoD3DDriversWithHard();
-        return Config_Language_2();
+        Config_Language_2();
+        return;
     }
-
-    Qvm_Execute(data_val);
-    Qvm_Cleanup(data_val);
+    Config_SaveGraphicOptions();
     Config_SaveSoundOptions();
     Config_NoD3DDriversWithHard();
-    return Config_Language_2();
+    Config_Language_2();
 }

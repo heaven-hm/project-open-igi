@@ -1,0 +1,22 @@
+{
+ "address": "0x00405850",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x00405850 (Config_Read): p=Qvm_Load(arg); if p: Qvm_Execute(p); Qvm_Cleanup(p); Config_SaveSoundOptions(); Config_NoD3DDriversWithHard(); Config_Language_2(); else: Config_SaveGraphicOptions(); same three. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
