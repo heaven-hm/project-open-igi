@@ -21,8 +21,8 @@ int __cdecl Qvm_Execute(void* context);                                         
 int __cdecl Qvm_Cleanup(int* context);                                                  // 0x004B83D0
 int __cdecl Sys_CloseFileStream_23(const char* name);                                   // 0x004B8920
 void* __cdecl DynObj_UpdateDynTree_11(void* context);                                   // 0x004CE3D0
-void __cdecl Terrain_CreateTerrainMaterial(void* vm);                                   // 0x004C6670
-void __cdecl Terrain_CreateTerrainTileMap(void* vm);                                    // 0x004C6760
+void __cdecl Terrain_CreateTerrainMaterial(std::uint32_t* result, int arg2, void* vm);                                   // 0x004C6670
+void __cdecl Terrain_CreateTerrainTileMap(std::uint32_t* result, int arg2, void* vm);                                    // 0x004C6760
 
 int __cdecl Terrain_Load(void* context, const char* path)
 {
