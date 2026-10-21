@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "reviewed": true,
+  "address": "0x0048F230",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+  "reviewed_by": "Codex and independent /root/review_divergence_patch review 2026-10-21 (corrected candidate symbol before capture)",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Fresh Binary Ninja identifies six bytes at0048F230, one block; all six bytes match the independent retail Radare2 listing."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No arguments; read DWORD005C8BE4 maps to AppContextState.lightmaps_used."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "No scaling or arithmetic."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "One DWORD read. Fixtures observe all six mapped DWORDs before/after."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No calls or writes in retail body; candidate reads same mapped field. Six-field no-change assertion is scope-limited."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "MOV EAX,[005C8BE4]; RET. Candidate int32 result preserves all32 observed bits."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "rationale": "No floating-point instructions."
+    }
+  ],
+  "runtime_contract": {
+    "scope": "app-context-lightmaps-getter-pre-resume-boundary-dwords",
+    "probe_sha256": "98db1f5f5366905cd9364be95620556e48c0722717d82537451441358af0dcd4",
+    "required_observables": {
+      "inputs": [
+        "args",
+        "initial_state"
+      ],
+      "outputs": [
+        "return_value",
+        "state_delta"
+      ],
+      "sideEffects": [
+        "fields"
+      ]
+    }
+  },
+  "limits": [
+    "Twelve explicit no-argument fixtures including signed extrema and representative DWORD bit patterns.",
+    "Other five fields fixed; only six mapped fields monitored.",
+    "Pre-resume explicit calls; natural consumers/concurrency/unmonitored memory outside scope.",
+    "Binary Ninja selected; no Ghidra on this target."
+  ]
+}

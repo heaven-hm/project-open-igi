@@ -1,0 +1,58 @@
+[
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x48f230\"\narch: \"x86\"\nname: \"App_ContextGetLightmapsUsed\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 7\ntotal: 7\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t App_ContextGetLightmapsUsed()\n\n{\n    return g_5c8be4;\n}\n````\n"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "---\ntool: \"bn_function_info\"\nfunction: \"0x48f230\"\narch: \"x86\"\nname: \"App_ContextGetLightmapsUsed\"\nplatform: \"windows-x86\"\n---\n\n## Function\n\n| Field | Value |\n| --- | --- |\n| Function | 0x48f230 (x86) |\n| Name | App_ContextGetLightmapsUsed |\n| Start | 0x48f230 |\n| Lowest Address | 0x48f230 |\n| Highest Address | 0x48f235 |\n| Architecture | x86 |\n| Platform | windows-x86 |\n| Definition | int32_t() |\n| Exported | false |\n| Auto Discovered | false |\n| Has User Annotations | true |\n| Needs Update | false |\n| Analysis Skipped | false |\n| Analysis Skip Reason | NoSkipReason |\n| Basic Blocks | 1 |\n| Ranges | 0x48f230-0x48f236 (6 bytes) |\n\n## Basic Blocks\n\n| Index | Range | Incoming | Outgoing |\n| --- | --- | --- | --- |\n| 0 | 0x48f230-0x48f236 (6 bytes) | 0 | 0 |\n"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x48f230\"\narch: \"x86\"\nname: \"App_ContextGetLightmapsUsed\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 6\ntotal: 6\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t App_ContextGetLightmapsUsed()\n\n0x48f230  mov     eax, dword [0x5c8be4]\n0x48f235  retn\n````\n"
+        }
+      ],
+      "isError": false
+    }
+  },
+  {
+    "status": "fulfilled",
+    "value": {
+      "content": [
+        {
+          "type": "text",
+          "text": "{\"address\":\"0x48f230\",\"requestedLength\":\"0x6\",\"bytesRead\":6,\"hex\":\"a1e48b5c00c3\",\"base64\":\"oeSLXADD\\n\",\"warnings\":[]}"
+        }
+      ],
+      "structuredContent": {
+        "address": "0x48f230",
+        "requestedLength": "0x6",
+        "bytesRead": 6,
+        "hex": "a1e48b5c00c3",
+        "base64": "oeSLXADD\n",
+        "warnings": []
+      },
+      "isError": false
+    }
+  }
+]
