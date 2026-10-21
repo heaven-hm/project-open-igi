@@ -1,31 +1,25 @@
-// IGI native provenance: Resource_CanonicalizePath - 0x004B5AF0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004B5AF0-Resource_CanonicalizePath.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B5AF0-Resource_CanonicalizePath.hpp"
-int Resource_CanonicalizePath(char* context, char* arg2)
+// IGI native Resource_CanonicalizePath - 0x004B5AF0 - transcribed from retail igi.exe.
+// Retail: cdecl (dst, src). Copies src into dst converting each byte through String_ToUpperChar (0x004AD73D), then terminates dst.
+#include <cstdint>
 
+int __cdecl String_ToUpperChar(int ch); // 0x004AD73D
+
+void __cdecl Resource_CanonicalizePath(char* dst, const char* src)
 {
-    char* dest_val = arg2;
-    char i = *dest_val;
-
-    if (!i)
-    {
-        *context = 0;
-        return i;
+    char* esi;
+    const char* edi = src;
+    char al = *edi;
+    if (al == 0) {
+        *dst = 0;
+        return;
     }
-
-    char* source_val = context;
-
-    do
-    {
-        int i_1 = i;
-        int entity_val;
-        i = Camera_ApplyWideScreen_28(entity_val);
-        *source_val = i;
-        i = dest_val[1];
-        source_val = &source_val[1];
-        dest_val = &dest_val[1];
-    } while (i);
-
-    *source_val = i;
-    return i;
+    esi = dst;
+    do {
+        int r = String_ToUpperChar(static_cast<int>(static_cast<signed char>(al)));
+        *esi = static_cast<char>(r);
+        al = edi[1];
+        esi++;
+        edi++;
+    } while (al != 0);
+    *esi = al;
 }
