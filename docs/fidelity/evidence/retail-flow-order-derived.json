@@ -4,769 +4,3733 @@
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "entry": "0x0048F530",
   "targets": 769,
-  "reachable": 100,
-  "unreachable": 669,
-  "reachable_functions": 1028,
+  "reachable": 413,
+  "unreachable": 356,
+  "reachable_functions": 1440,
+  "runtime_observed": 0,
   "ordered": [
     {
       "order": 1,
       "address": "0x00401050",
       "name": "QTask_OpenEvent",
       "depth": 1,
-      "parent": "0x0048F530"
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 2,
       "address": "0x0048F260",
       "name": "AppContext_SetTerrainLightmapsUsed",
       "depth": 1,
-      "parent": "0x0048F530"
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 3,
       "address": "0x004A53B3",
       "name": "sprintf",
       "depth": 1,
-      "parent": "0x0048F530"
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 4,
       "address": "0x004AF7B0",
       "name": "Error_Show",
       "depth": 1,
-      "parent": "0x0048F530"
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 5,
       "address": "0x00402880",
       "name": "Game_GetContext",
       "depth": 2,
-      "parent": "0x00401050"
+      "parent": "0x00401050",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 6,
       "address": "0x004028A0",
       "name": "Flow_SetState",
       "depth": 2,
-      "parent": "0x00401000"
+      "parent": "0x00401000",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 7,
       "address": "0x0048F480",
       "name": "Loop_SetStatusByte",
       "depth": 2,
-      "parent": "0x00401050"
+      "parent": "0x00401050",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 8,
       "address": "0x004A5702",
       "name": "String_VFormat",
       "depth": 2,
-      "parent": "0x004AF7B0"
+      "parent": "0x004AF7B0",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 9,
       "address": "0x00402F50",
       "name": "Config_YmbeAfp",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 10,
       "address": "0x00402FF0",
       "name": "Config_FillPlayerProfileListBox_2",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 11,
-      "address": "0x00406450",
-      "name": "HumanAIConfig_Init",
+      "address": "0x004057D0",
+      "name": "Config_PlayerGetActiveMission",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 12,
-      "address": "0x00407D60",
-      "name": "HumanPlayer_Setactivematerial",
+      "address": "0x00406450",
+      "name": "HumanAIConfig_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 13,
-      "address": "0x0040FE30",
-      "name": "HumanPlayer_Init",
+      "address": "0x00406D10",
+      "name": "HumanAIConfig_OnEvent",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 14,
-      "address": "0x00422B40",
-      "name": "ModelViewBox_Init",
+      "address": "0x00407D60",
+      "name": "HumanPlayer_Setactivematerial",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 15,
-      "address": "0x0044C8D0",
-      "name": "HumanAI_Init",
+      "address": "0x0040FE30",
+      "name": "HumanPlayer_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 16,
-      "address": "0x00454970",
-      "name": "HumanSoldierFemale_Init",
+      "address": "0x00413730",
+      "name": "HumanPlayer_LoadParameters_14",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 17,
-      "address": "0x00456AD0",
-      "name": "HumanSoldierRPG_Init",
+      "address": "0x00422B40",
+      "name": "ModelViewBox_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 18,
-      "address": "0x00459880",
-      "name": "HumanSoldierPistol_Init",
+      "address": "0x0044C8D0",
+      "name": "HumanAI_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 19,
-      "address": "0x0045CAB0",
-      "name": "HumanSoldier_Init",
+      "address": "0x00454970",
+      "name": "HumanSoldierFemale_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 20,
-      "address": "0x0045DB70",
-      "name": "HumanPlayerInput_Init",
+      "address": "0x00456AD0",
+      "name": "HumanSoldierRPG_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 21,
-      "address": "0x0045E450",
-      "name": "Human_Init",
+      "address": "0x00459880",
+      "name": "HumanSoldierPistol_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 22,
-      "address": "0x00464260",
-      "name": "HumanView_Init",
+      "address": "0x0045CAB0",
+      "name": "HumanSoldier_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 23,
-      "address": "0x00465A10",
-      "name": "HumanAttach_Init",
+      "address": "0x0045DB70",
+      "name": "HumanPlayerInput_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 24,
-      "address": "0x004825C0",
-      "name": "HumanCamera_Init",
+      "address": "0x0045E450",
+      "name": "Human_Init",
       "depth": 3,
-      "parent": "0x00402930"
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 25,
-      "address": "0x00408320",
-      "name": "HumanPlayer_UpdateMotion",
-      "depth": 4,
-      "parent": "0x00438390"
+      "address": "0x00464260",
+      "name": "HumanView_Init",
+      "depth": 3,
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 26,
-      "address": "0x00408330",
-      "name": "HumanPlayer_CheckGround",
-      "depth": 4,
-      "parent": "0x00438390"
+      "address": "0x00465A10",
+      "name": "HumanAttach_Init",
+      "depth": 3,
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 27,
-      "address": "0x00408340",
-      "name": "HumanPlayer_UpdateStamina",
-      "depth": 4,
-      "parent": "0x00438390"
+      "address": "0x00465B00",
+      "name": "HumanAttach_LoadParameters",
+      "depth": 3,
+      "parent": "0x00402930",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 28,
-      "address": "0x00413B00",
-      "name": "HumanPlayer_CheckGround_10",
-      "depth": 4,
-      "parent": "0x00427FF0"
+      "address": "0x004825C0",
+      "name": "HumanCamera_Init",
+      "depth": 3,
+      "parent": "0x00402930",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 29,
-      "address": "0x00413B10",
-      "name": "HumanPlayer_UpdateStamina_10",
+      "address": "0x004037C0",
+      "name": "GOInRemap",
       "depth": 4,
-      "parent": "0x00427FF0"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 30,
-      "address": "0x00413B20",
-      "name": "HumanPlayer_UpdateHealth_10",
+      "address": "0x00403AC0",
+      "name": "GO_GameDiff",
       "depth": 4,
-      "parent": "0x0047B4B0"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 31,
-      "address": "0x00413B30",
-      "name": "HumanPlayer_HandleInput_10",
+      "address": "0x00403B30",
+      "name": "Config_IsGermany",
       "depth": 4,
-      "parent": "0x00470410"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 32,
-      "address": "0x00413B40",
-      "name": "HumanPlayer_ApplyPhysics_10",
+      "address": "0x00403B70",
+      "name": "Config_ResetGraphicOptions",
       "depth": 4,
-      "parent": "0x00470410"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 33,
-      "address": "0x00413B50",
-      "name": "HumanPlayer_PlayFootstep_10",
+      "address": "0x00403C10",
+      "name": "Config_SetContentControlPassword",
       "depth": 4,
-      "parent": "0x00477E30"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 34,
-      "address": "0x00413B60",
-      "name": "HumanPlayer_PlaySound_10",
+      "address": "0x00403C70",
+      "name": "Config_GetContentControlPassword",
       "depth": 4,
-      "parent": "0x00477E30"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 35,
-      "address": "0x00413DB0",
-      "name": "HumanPlayer_UpdateStamina_11",
+      "address": "0x00403CC0",
+      "name": "Config_VerifyContentControlPassword",
       "depth": 4,
-      "parent": "0x00407290"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 36,
-      "address": "0x00413DC0",
-      "name": "HumanPlayer_UpdateHealth_11",
+      "address": "0x00403D90",
+      "name": "Config_IsContentControlPasswordEnabled",
       "depth": 4,
-      "parent": "0x00407290"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 37,
-      "address": "0x00413DD0",
-      "name": "HumanPlayer_HandleInput_11",
+      "address": "0x00404160",
+      "name": "Config_GameOptionsInputSetInvertMouse",
       "depth": 4,
-      "parent": "0x00407290"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 38,
-      "address": "0x00413DE0",
-      "name": "HumanPlayer_ApplyPhysics_11",
+      "address": "0x004041D0",
+      "name": "Config_GameOptionsInputGetInvertMouse",
       "depth": 4,
-      "parent": "0x0046CB70"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 39,
-      "address": "0x004AA670",
-      "name": "Mem_AllocChunk",
+      "address": "0x00404230",
+      "name": "Config_GameOptionsInputSetMouseSensitivity",
       "depth": 4,
-      "parent": "0x004AC323"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 40,
-      "address": "0x004AF8F0",
-      "name": "HeapList_Insert",
+      "address": "0x00404290",
+      "name": "Config_GameOptionsInputGetMouseSensitivity",
       "depth": 4,
-      "parent": "0x004012A0"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 41,
-      "address": "0x004B80B0",
-      "name": "Qvm_Load",
+      "address": "0x004042E0",
+      "name": "Config_GameOptionsInputSetBloodEnabled",
       "depth": 4,
-      "parent": "0x0044C8D0"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 42,
-      "address": "0x004CEBA0",
-      "name": "DynObj_MtpNlodvirmodelD",
+      "address": "0x00404340",
+      "name": "Config_GameOptionsInputGetBloodEnabled",
       "depth": 4,
-      "parent": "0x00488BB0"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 43,
-      "address": "0x005183D0",
-      "name": "Terrain_CalculateNormals_8",
+      "address": "0x00404390",
+      "name": "Config_RegisterOptions",
       "depth": 4,
-      "parent": "0x00508F80"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 44,
-      "address": "0x005186C0",
-      "name": "Terrain_RenderQuadtree_9",
+      "address": "0x00404450",
+      "name": "Config_FillScreenResolutionListBox",
       "depth": 4,
-      "parent": "0x00508F80"
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 45,
-      "address": "0x0048F1D0",
-      "name": "Script_GetDebugCompileState",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x00404590",
+      "name": "Config_GetActiveGraphicOptions",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 46,
-      "address": "0x0048F340",
-      "name": "Script_GetForcePrecompiledState",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x004045B0",
+      "name": "Config_GraphicOptionsGetResolution",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 47,
-      "address": "0x004AA682",
-      "name": "Mem_AllocWithRetry",
-      "depth": 5,
-      "parent": "0x004AA670"
+      "address": "0x004046A0",
+      "name": "Config_FillRenderDeviceListBox",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 48,
-      "address": "0x004AF960",
-      "name": "HeapList_Remove",
-      "depth": 5,
-      "parent": "0x004F9DF0"
+      "address": "0x00404710",
+      "name": "Config_GraphicOptionsGetDevice",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 49,
-      "address": "0x004B0C60",
-      "name": "Mem_Alloc",
-      "depth": 5,
-      "parent": "0x004012F0"
+      "address": "0x004047F0",
+      "name": "Config_GraphicOptionsSetDevice",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 50,
-      "address": "0x004B1E90",
-      "name": "String_FindExtension",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x004048B0",
+      "name": "Config_GraphicOptionsSetGamma",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 51,
-      "address": "0x004B5B60",
-      "name": "Resource_FileExists",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x00404910",
+      "name": "Config_GraphicOptionsGetGamma",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 52,
-      "address": "0x004B5F00",
-      "name": "Resource_Load",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x00404960",
+      "name": "Config_GraphicOptionsSetTransparency",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 53,
-      "address": "0x004B7E10",
-      "name": "Qvm_ReportError",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x004049C0",
+      "name": "Config_GraphicOptionsGetTransparency",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 54,
-      "address": "0x004B83D0",
-      "name": "Qvm_Cleanup",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x00404A70",
+      "name": "Config_SaveGameOptions",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 55,
-      "address": "0x004B8A10",
-      "name": "Qvm_SetGlobalState",
-      "depth": 5,
-      "parent": "0x004B80B0"
+      "address": "0x00404A90",
+      "name": "Config_SoundOptionsGetSoundsEffects",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 56,
-      "address": "0x004F8340",
-      "name": "TerrainLightMap_Init",
-      "depth": 5,
-      "parent": "0x005183D0"
+      "address": "0x00404AE0",
+      "name": "Config_SoundOptionsSetSoundsEffectsVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 57,
-      "address": "0x00505F60",
-      "name": "TextureModifier_Init",
-      "depth": 5,
-      "parent": "0x005183D0"
+      "address": "0x00404B40",
+      "name": "Config_SoundOptionsGetSoundsEffectsVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 58,
-      "address": "0x0052C0C0",
-      "name": "DiscardTerrain_Init",
-      "depth": 5,
-      "parent": "0x005183D0"
+      "address": "0x00404B90",
+      "name": "Config_SoundOptionsSetMusic",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 59,
-      "address": "0x004AA6AE",
-      "name": "Mem_AllocateRawBlock",
-      "depth": 6,
-      "parent": "0x004AA682"
+      "address": "0x00404BF0",
+      "name": "Config_SoundOptionsGetMusic",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 60,
-      "address": "0x004AAD10",
-      "name": "Resource_MatchPrefix",
-      "depth": 6,
-      "parent": "0x004B11A0"
+      "address": "0x00404C40",
+      "name": "Config_SoundOptionsSetMusicVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 61,
-      "address": "0x004AD722",
-      "name": "Mem_InvokeNewHandler",
-      "depth": 6,
-      "parent": "0x004AA682"
+      "address": "0x00404CA0",
+      "name": "Config_SoundOptionsGetMusicVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 62,
-      "address": "0x004AD73D",
-      "name": "String_ToUpperChar",
-      "depth": 6,
-      "parent": "0x004BB270"
+      "address": "0x00404CF0",
+      "name": "Config_SoundOptionsSetSpeech",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 63,
-      "address": "0x004B0BA0",
-      "name": "Mem_InitHeapState",
-      "depth": 6,
-      "parent": "0x004B0C60"
+      "address": "0x00404D50",
+      "name": "Config_SoundOptionsGetSpeech",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 64,
-      "address": "0x004B1690",
-      "name": "Device_CloseStream",
-      "depth": 6,
-      "parent": "0x004BB270"
+      "address": "0x00404DA0",
+      "name": "Config_SoundOptionsSetSpeechVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 65,
-      "address": "0x004B18B0",
-      "name": "Resource_PackUnpack",
-      "depth": 6,
-      "parent": "0x004B5F00"
+      "address": "0x00404E00",
+      "name": "Config_SoundOptionsGetSpeechVolume",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 66,
-      "address": "0x004B5F80",
-      "name": "Resource_RegisterBuffer",
-      "depth": 6,
-      "parent": "0x004B5F00"
+      "address": "0x00404E50",
+      "name": "Config_SoundOptionsSetReverseStereo",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 67,
-      "address": "0x004B6380",
-      "name": "Resource_Unload",
-      "depth": 6,
-      "parent": "0x004B83D0"
+      "address": "0x00404EB0",
+      "name": "Config_SoundOptionsGetReverseStereo",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 68,
-      "address": "0x004B63D0",
-      "name": "Resource_Flush",
-      "depth": 6,
-      "parent": "0x004BB270"
+      "address": "0x00404F00",
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 69,
-      "address": "0x004C0660",
-      "name": "DynObj_ParseConfigFile_2",
-      "depth": 6,
-      "parent": "0x004BB270"
+      "address": "0x00404F60",
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 70,
-      "address": "0x004B0D40",
-      "name": "QHash_ValueSet",
-      "depth": 7,
-      "parent": "0x004B0BA0"
+      "address": "0x00404FA0",
+      "name": "Config_FillPlayerProfileListBox",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 71,
-      "address": "0x004B16D0",
-      "name": "Resource_Unpack",
-      "depth": 7,
-      "parent": "0x004B18B0"
+      "address": "0x00405010",
+      "name": "Config_GetActivePlayerProfileIndex",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 72,
-      "address": "0x004B1780",
-      "name": "Device_GetStreamPosition",
-      "depth": 7,
-      "parent": "0x004B18B0"
+      "address": "0x00405050",
+      "name": "Config_SetActivePlayerProfileIndex",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 73,
-      "address": "0x004B17F0",
-      "name": "Device_SeekStream",
-      "depth": 7,
-      "parent": "0x004B18B0"
+      "address": "0x00405300",
+      "name": "Config_SaveGraphicOptions",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 74,
-      "address": "0x004B59F0",
-      "name": "Resource_CreateNode",
-      "depth": 7,
-      "parent": "0x004B5F80"
+      "address": "0x00405400",
+      "name": "Config_DeletePlayerProfile",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 75,
-      "address": "0x004B5AF0",
-      "name": "Resource_CanonicalizePath",
-      "depth": 7,
-      "parent": "0x004B5B90"
+      "address": "0x004054F0",
+      "name": "Config_GetNumberOfPlayerProfiles",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 76,
-      "address": "0x004B5B30",
-      "name": "Resource_CalculatePathHash",
-      "depth": 7,
-      "parent": "0x004B5B90"
+      "address": "0x00405530",
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 77,
-      "address": "0x004B5C90",
-      "name": "Resource_FreeNode",
-      "depth": 7,
-      "parent": "0x004B6380"
+      "address": "0x004055C0",
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 78,
-      "address": "0x004B60F0",
-      "name": "Resource_RegisterIlffContainer",
-      "depth": 7,
-      "parent": "0x004B5F80"
+      "address": "0x00405620",
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 79,
-      "address": "0x004B7570",
-      "name": "Ilff_GetFormType",
-      "depth": 7,
-      "parent": "0x004B5F80"
+      "address": "0x00405660",
+      "name": "Config_FillMissionSelectionBox",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 80,
-      "address": "0x004B7580",
-      "name": "Ilff_GetChunkTag",
-      "depth": 7,
-      "parent": "0x004B5F80"
+      "address": "0x004056F0",
+      "name": "Config_FillMissionPictureBox",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 81,
-      "address": "0x00517260",
-      "name": "Terrain_SelectTerrainLOD_5",
-      "depth": 7,
-      "parent": "0x004BFC70"
+      "address": "0x00405760",
+      "name": "Config_FillMissionTextBox",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 82,
-      "address": "0x00517510",
-      "name": "Terrain_UpdateWaterWaves_5",
-      "depth": 7,
-      "parent": "0x004BFC70"
+      "address": "0x00406390",
+      "name": "Config_SetResolution_2",
+      "depth": 4,
+      "parent": "0x00406450",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 83,
-      "address": "0x00517570",
-      "name": "Terrain_RenderWaterSurface_5",
-      "depth": 7,
-      "parent": "0x004BFC70"
+      "address": "0x00408320",
+      "name": "HumanPlayer_UpdateMotion",
+      "depth": 4,
+      "parent": "0x00438390",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 84,
-      "address": "0x004B7470",
-      "name": "Ilff_GetNextChunk",
-      "depth": 8,
-      "parent": "0x004B60F0"
+      "address": "0x00408330",
+      "name": "HumanPlayer_CheckGround",
+      "depth": 4,
+      "parent": "0x00438390",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 85,
-      "address": "0x004B7490",
-      "name": "Ilff_GetFirstChunk",
-      "depth": 8,
-      "parent": "0x004B60F0"
+      "address": "0x00408340",
+      "name": "HumanPlayer_UpdateStamina",
+      "depth": 4,
+      "parent": "0x00438390",
+      "edge": "direct",
+      "runtime_order": null
     },
     {
       "order": 86,
-      "address": "0x004B74D0",
-      "name": "Ilff_GetChunkPayload",
-      "depth": 8,
-      "parent": "0x004B60F0"
+      "address": "0x0040FDF0",
+      "name": "HumanPlayer_SetTeam",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 87,
-      "address": "0x004B7540",
-      "name": "Ilff_ReadContainerHeader",
-      "depth": 8,
-      "parent": "0x004B60F0"
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 88,
-      "address": "0x004CEA80",
-      "name": "Render_GetActiveBackendId",
-      "depth": 8,
-      "parent": "0x005311E0"
+      "address": "0x004101C0",
+      "name": "DefineHumanPlayerWeaponCycle",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 89,
-      "address": "0x004CEEB0",
-      "name": "DynObj_Initmodels",
-      "depth": 8,
-      "parent": "0x005311E0"
+      "address": "0x00410240",
+      "name": "Define_HumanPlayerWeaponCategory",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 90,
-      "address": "0x004CFC30",
-      "name": "DynObj_ParseConfigFile_15",
-      "depth": 8,
-      "parent": "0x005311E0"
+      "address": "0x004102D0",
+      "name": "Define_HumanPlayerAmmoLimit",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 91,
-      "address": "0x005125A0",
-      "name": "Terrain_BuildMipMaps",
-      "depth": 8,
-      "parent": "0x005311E0"
+      "address": "0x00410360",
+      "name": "HumanPlayer_DefaultHandler_410360",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 92,
-      "address": "0x00516AD3",
-      "name": "Terrain_SelectTerrainLOD_4",
-      "depth": 8,
-      "parent": "0x00517570"
+      "address": "0x00410700",
+      "name": "HumanPlayer_ExecutePipeline_410700",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 93,
-      "address": "0x00518260",
-      "name": "Terrain_RenderWaterSurface_8",
-      "depth": 8,
-      "parent": "0x005311E0"
+      "address": "0x00410840",
+      "name": "HumanPlayer_Setup",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 94,
-      "address": "0x00516E83",
-      "name": "Terrain_CalculateNormals_4",
-      "depth": 9,
-      "parent": "0x00516AD3"
+      "address": "0x004108B0",
+      "name": "HumanPlayer_Invoke8",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 95,
-      "address": "0x004C0250",
-      "name": "DynObj_ParseConfigFile",
-      "depth": 10,
-      "parent": "0x005323E0"
+      "address": "0x004108C0",
+      "name": "HumanPlayer_Invoke8_4108C0",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 96,
-      "address": "0x004BD3D0",
-      "name": "Qvm_SetOpcodeHandler",
-      "depth": 11,
-      "parent": "0x004C0250"
+      "address": "0x00410900",
+      "name": "HumanPlayer_Invoke29",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 97,
-      "address": "0x004D2C30",
-      "name": "Render_BindTexture_4",
-      "depth": 11,
-      "parent": "0x00531DD0"
+      "address": "0x00411F20",
+      "name": "HumanPlayer_WireSlide",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 98,
-      "address": "0x004B26B0",
-      "name": "Texture_DisableUpload",
-      "depth": 12,
-      "parent": "0x004B2180"
+      "address": "0x004123F0",
+      "name": "HumanPlayer_ProcessNoactiveplayerpr",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 99,
-      "address": "0x005168E0",
-      "name": "Terrain_CalculateNormals_3",
-      "depth": 13,
-      "parent": "0x004B27D0"
+      "address": "0x00412420",
+      "name": "HumanPlayer_Invoke16",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
     },
     {
       "order": 100,
+      "address": "0x00412440",
+      "name": "Human_DamageApply",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 101,
+      "address": "0x00412990",
+      "name": "HumanPlayer_Update",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 102,
+      "address": "0x00412CE0",
+      "name": "HumanPlayer_OnEvent",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 103,
+      "address": "0x00412F80",
+      "name": "HumanPlayer_Action",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 104,
+      "address": "0x00413090",
+      "name": "HumanPlayer_Cleanup",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 105,
+      "address": "0x00413120",
+      "name": "HumanPlayer_Cleanup_2",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 106,
+      "address": "0x00413B00",
+      "name": "HumanPlayer_CheckGround_10",
+      "depth": 4,
+      "parent": "0x00427FF0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 107,
+      "address": "0x00413B10",
+      "name": "HumanPlayer_UpdateStamina_10",
+      "depth": 4,
+      "parent": "0x00427FF0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 108,
+      "address": "0x00413B20",
+      "name": "HumanPlayer_UpdateHealth_10",
+      "depth": 4,
+      "parent": "0x00476730",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 109,
+      "address": "0x00413B30",
+      "name": "HumanPlayer_HandleInput_10",
+      "depth": 4,
+      "parent": "0x004733F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 110,
+      "address": "0x00413B40",
+      "name": "HumanPlayer_ApplyPhysics_10",
+      "depth": 4,
+      "parent": "0x004733F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 111,
+      "address": "0x00413B50",
+      "name": "HumanPlayer_PlayFootstep_10",
+      "depth": 4,
+      "parent": "0x00477E30",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 112,
+      "address": "0x00413B60",
+      "name": "HumanPlayer_PlaySound_10",
+      "depth": 4,
+      "parent": "0x00477E30",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 113,
+      "address": "0x00413DB0",
+      "name": "HumanPlayer_UpdateStamina_11",
+      "depth": 4,
+      "parent": "0x00407290",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 114,
+      "address": "0x00413DC0",
+      "name": "HumanPlayer_UpdateHealth_11",
+      "depth": 4,
+      "parent": "0x00407290",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 115,
+      "address": "0x00413DD0",
+      "name": "HumanPlayer_HandleInput_11",
+      "depth": 4,
+      "parent": "0x00407290",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 116,
+      "address": "0x00413DE0",
+      "name": "HumanPlayer_ApplyPhysics_11",
+      "depth": 4,
+      "parent": "0x0046CB70",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 117,
+      "address": "0x00416D80",
+      "name": "Human_HitDamage",
+      "depth": 4,
+      "parent": "0x00422B40",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 118,
+      "address": "0x00422C90",
+      "name": "ModelViewBox_Process",
+      "depth": 4,
+      "parent": "0x00422B40",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 119,
+      "address": "0x00422DF0",
+      "name": "ModelViewBox_Setup",
+      "depth": 4,
+      "parent": "0x00422B40",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 120,
+      "address": "0x00422E40",
+      "name": "ModelViewBox_Update",
+      "depth": 4,
+      "parent": "0x00422B40",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 121,
+      "address": "0x00422F30",
+      "name": "ModelViewBox_LoadParameters",
+      "depth": 4,
+      "parent": "0x00422B40",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 122,
+      "address": "0x00423000",
+      "name": "ModelViewBox_OnEvent",
+      "depth": 4,
+      "parent": "0x004351E0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 123,
+      "address": "0x00434E10",
+      "name": "VehiclePhysics_ProcessVirModelsnotavai",
+      "depth": 4,
+      "parent": "0x00435870",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 124,
+      "address": "0x00435460",
+      "name": "VehiclePhysics_ProcessVirModelsnotavai_435460",
+      "depth": 4,
+      "parent": "0x00435D90",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 125,
+      "address": "0x00435C50",
+      "name": "VehiclePhysics_ProcessVirModelsnotavai_435C50",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 126,
+      "address": "0x0044F060",
+      "name": "HumanAI_LoadParameters",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 127,
+      "address": "0x0044FEC0",
+      "name": "HumanAI_RunActions",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 128,
+      "address": "0x0044FFC0",
+      "name": "HumanAI_Process",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 129,
+      "address": "0x00450520",
+      "name": "HumanAI_EventQueued",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 130,
+      "address": "0x004505C0",
+      "name": "HumanAI_LoadScript",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 131,
+      "address": "0x004505D0",
+      "name": "HumanAI_OnEvent",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 132,
+      "address": "0x00450770",
+      "name": "HumanAI_Action",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 133,
+      "address": "0x004507D0",
+      "name": "HumanAI_Cleanup",
+      "depth": 4,
+      "parent": "0x00453550",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 134,
+      "address": "0x00453630",
+      "name": "HumanAI_GetContext_453630",
+      "depth": 4,
+      "parent": "0x00453550",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 135,
+      "address": "0x00453650",
+      "name": "HumanAI_Invoke33",
+      "depth": 4,
+      "parent": "0x00453550",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 136,
+      "address": "0x00453670",
+      "name": "HumanAI_Invoke4",
+      "depth": 4,
+      "parent": "0x00453550",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 137,
+      "address": "0x004547B0",
+      "name": "HumanAI_FindAnimation",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 138,
+      "address": "0x00454B10",
+      "name": "HumanAI_Invoke17",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 139,
+      "address": "0x00454EE0",
+      "name": "HumanAI_VerifyAnimation",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 140,
+      "address": "0x00454F00",
+      "name": "HumanAI_PlayAnimation",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 141,
+      "address": "0x00454F10",
+      "name": "HumanSoldierFemale_Setup",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 142,
+      "address": "0x00455070",
+      "name": "HumanAI_InvokeSpeedZMS2F",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 143,
+      "address": "0x004553E0",
+      "name": "HumanSoldierFemale_Process",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 144,
+      "address": "0x00455570",
+      "name": "HumanSoldierFemale_Update",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 145,
+      "address": "0x00456A10",
+      "name": "HumanSoldierRPG_Init_2",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 146,
+      "address": "0x00456CF0",
+      "name": "HumanAI_ExecutePipeline_456CF0",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 147,
+      "address": "0x00456E40",
+      "name": "HumanAI_ResetAnimation",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 148,
+      "address": "0x00456E50",
+      "name": "HumanSoldier_Process",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 149,
+      "address": "0x00456FB0",
+      "name": "HumanAI_Invoke2",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 150,
+      "address": "0x004572D0",
+      "name": "HumanSoldierRPG_Process",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 151,
+      "address": "0x00457430",
+      "name": "HumanSoldierRPG_Update",
+      "depth": 4,
+      "parent": "0x00456AD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 152,
+      "address": "0x00459680",
+      "name": "HumanAI_CheckAnimProgress",
+      "depth": 4,
+      "parent": "0x00459880",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 153,
+      "address": "0x00459A20",
+      "name": "HumanAI_Invoke17_459A20",
+      "depth": 4,
+      "parent": "0x00454970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 154,
+      "address": "0x00459EC0",
+      "name": "HumanSoldier_Setup",
+      "depth": 4,
+      "parent": "0x00459880",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 155,
+      "address": "0x00459F00",
+      "name": "HumanAI_GetContext_459F00",
+      "depth": 4,
+      "parent": "0x00459880",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 156,
+      "address": "0x00459F10",
+      "name": "HumanAI_Invoke3",
+      "depth": 4,
+      "parent": "0x00459880",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 157,
+      "address": "0x0045A230",
+      "name": "HumanSoldierPistol_Process",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 158,
+      "address": "0x0045A3D0",
+      "name": "HumanSoldier_OnEvent",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 159,
+      "address": "0x0045CA80",
+      "name": "HumanSoldier_Update",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 160,
+      "address": "0x0045CC50",
+      "name": "HumanAI_Invoke17_45CC50",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 161,
+      "address": "0x0045CF90",
+      "name": "HumanSoldier_LoadParameters",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 162,
+      "address": "0x0045D030",
+      "name": "HumanAI_GetContext_45D030",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 163,
+      "address": "0x0045D040",
+      "name": "HumanAI_Invoke4_45D040",
+      "depth": 4,
+      "parent": "0x0045CAB0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 164,
+      "address": "0x0045D3C0",
+      "name": "Human_DamageHandler",
+      "depth": 4,
+      "parent": "0x0045DB70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 165,
+      "address": "0x0045DCB0",
+      "name": "HumanAI_GetContext_45DCB0",
+      "depth": 4,
+      "parent": "0x0045DB70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 166,
+      "address": "0x0045DCF0",
+      "name": "HumanPlayerInput_LoadParameters",
+      "depth": 4,
+      "parent": "0x0045DB70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 167,
+      "address": "0x0045DE20",
+      "name": "HumanPlayerInput_Setup",
+      "depth": 4,
+      "parent": "0x0045DB70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 168,
+      "address": "0x0045DF40",
+      "name": "HumanAI_GetContext_45DF40",
+      "depth": 4,
+      "parent": "0x0045DB70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 169,
+      "address": "0x0045DF50",
+      "name": "HumanPlayerInput_Process",
+      "depth": 4,
+      "parent": "0x0043EFF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 170,
+      "address": "0x0045E3D0",
+      "name": "Human_Create",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 171,
+      "address": "0x0045E3E0",
+      "name": "Human_Action",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 172,
+      "address": "0x0045EAE0",
+      "name": "Human_GetCutSceneDeltaTime",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 173,
+      "address": "0x0045EB30",
+      "name": "HumanAI_InvokeQtasklistIsFull",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 174,
+      "address": "0x0045EEA0",
+      "name": "HumanAI_InvokeFindType",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 175,
+      "address": "0x0045EF40",
+      "name": "HumanAI_Invoke4_45EF40",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 176,
+      "address": "0x0045F050",
+      "name": "Human_Setup",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 177,
+      "address": "0x0045F280",
+      "name": "Human_LoadParameters",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 178,
+      "address": "0x0045F500",
+      "name": "Human_Process",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 179,
+      "address": "0x0045F800",
+      "name": "Human_Update",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 180,
+      "address": "0x0045F880",
+      "name": "HumanAI_InvokeMissing",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 181,
+      "address": "0x0045F890",
+      "name": "Human_OnEvent",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 182,
+      "address": "0x0045F900",
+      "name": "HumanAI_GetContext_45F900",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 183,
+      "address": "0x0045F910",
+      "name": "HumanAI_GetContext_45F910",
+      "depth": 4,
+      "parent": "0x00476730",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 184,
+      "address": "0x0045F920",
+      "name": "HumanAI_GetParam_45F920",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 185,
+      "address": "0x0045F930",
+      "name": "Human_BaseDamage",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 186,
+      "address": "0x0045F9D0",
+      "name": "Human_Cleanup",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 187,
+      "address": "0x0045FA80",
+      "name": "Human_Cleanup_2",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 188,
+      "address": "0x0045FCD0",
+      "name": "Human_Cleanup_3",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 189,
+      "address": "0x0045FDA0",
+      "name": "HumanAI_InvokeCheckHearing",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 190,
+      "address": "0x0045FE30",
+      "name": "HumanAI_Invoke22",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 191,
+      "address": "0x0045FE70",
+      "name": "Human_Cleanup_4",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 192,
+      "address": "0x00460070",
+      "name": "HumanAI_Invoke12",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 193,
+      "address": "0x00460090",
+      "name": "HumanAI_ProcessStep_460090",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 194,
+      "address": "0x004600C0",
+      "name": "HumanAI_ProcessStep_4600C0",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 195,
+      "address": "0x004601A0",
+      "name": "HumanAI_ProcessStep_4601A0",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 196,
+      "address": "0x00460210",
+      "name": "HumanAI_ProcessStep_460210",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 197,
+      "address": "0x00460280",
+      "name": "Human_Cleanup_5",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 198,
+      "address": "0x004606D0",
+      "name": "HumanAI_GetContext_4606D0",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 199,
+      "address": "0x004606F0",
+      "name": "Human_Cleanup_6",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 200,
+      "address": "0x00460850",
+      "name": "Human_Cleanup_7",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 201,
+      "address": "0x004608D0",
+      "name": "Human_Cleanup_8",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 202,
+      "address": "0x00460950",
+      "name": "Human_Cleanup_9",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 203,
+      "address": "0x004609A0",
+      "name": "Human_Cleanup_10",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 204,
+      "address": "0x004609F0",
+      "name": "HumanAI_Invoke18",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 205,
+      "address": "0x00460A10",
+      "name": "HumanAI_Invoke18_460A10",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 206,
+      "address": "0x00460A70",
+      "name": "HumanAI_Invoke18_460A70",
+      "depth": 4,
+      "parent": "0x0045E450",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 207,
+      "address": "0x00463760",
+      "name": "Human_ViewCam",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 208,
+      "address": "0x004643A0",
+      "name": "HumanAI_Invoke22_4643A0",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 209,
+      "address": "0x00464470",
+      "name": "HumanView_DeleteHandler",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 210,
+      "address": "0x004644A0",
+      "name": "HumanView_Setup",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 211,
+      "address": "0x00464580",
+      "name": "HumanView_Process",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 212,
+      "address": "0x004645B0",
+      "name": "HumanAI_Invoke005011",
+      "depth": 4,
+      "parent": "0x00464260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 213,
+      "address": "0x004659E0",
+      "name": "Human_TaskViewReset",
+      "depth": 4,
+      "parent": "0x00465A10",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 214,
+      "address": "0x004828D0",
+      "name": "Human_FindNextCamera",
+      "depth": 4,
+      "parent": "0x004825C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 215,
+      "address": "0x004AA670",
+      "name": "Mem_AllocChunk",
+      "depth": 4,
+      "parent": "0x004AC323",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 216,
+      "address": "0x004AF8F0",
+      "name": "HeapList_Insert",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 217,
+      "address": "0x004B80B0",
+      "name": "Qvm_Load",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 218,
+      "address": "0x004CEBA0",
+      "name": "DynObj_MtpNlodvirmodelD",
+      "depth": 4,
+      "parent": "0x00488BB0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 219,
+      "address": "0x004EF850",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi",
+      "depth": 4,
+      "parent": "0x0043F900",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 220,
+      "address": "0x004EF9D0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EF9D0",
+      "depth": 4,
+      "parent": "0x00477220",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 221,
+      "address": "0x004EFAB0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0",
+      "depth": 4,
+      "parent": "0x004464C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 222,
+      "address": "0x004EFCB0",
+      "name": "PhysicsTerrain_GetContext_4EFCB0",
+      "depth": 4,
+      "parent": "0x00448D30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 223,
+      "address": "0x004EFF00",
+      "name": "PhysicsTerrain_GetContext_4EFF00",
+      "depth": 4,
+      "parent": "0x0042ACC0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 224,
+      "address": "0x004F0190",
+      "name": "PhysicsTerrain_GetContext_4F0190",
+      "depth": 4,
+      "parent": "0x00444BF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 225,
+      "address": "0x005182B0",
+      "name": "Terrain_SampleHeightmap_8",
+      "depth": 4,
+      "parent": "0x00508F80",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 226,
+      "address": "0x005183D0",
+      "name": "Terrain_CalculateNormals_8",
+      "depth": 4,
+      "parent": "0x00508F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 227,
+      "address": "0x005186C0",
+      "name": "Terrain_RenderQuadtree_9",
+      "depth": 4,
+      "parent": "0x00508F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 228,
+      "address": "0x00406200",
+      "name": "Config_SetVolume",
+      "depth": 5,
+      "parent": "0x00406390",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 229,
+      "address": "0x00406220",
+      "name": "Config_GetActivePlayerProfile",
+      "depth": 5,
+      "parent": "0x00406390",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 230,
+      "address": "0x0040BED0",
+      "name": "HumanPlayer_TakeDamage_4",
+      "depth": 5,
+      "parent": "0x00411F20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 231,
+      "address": "0x0040C140",
+      "name": "HumanPlayer_UpdateAnimation_4",
+      "depth": 5,
+      "parent": "0x00411F20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 232,
+      "address": "0x0040C270",
+      "name": "HumanPlayer_ApplyRecoil_4",
+      "depth": 5,
+      "parent": "0x00411F20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 233,
+      "address": "0x0040C2D0",
+      "name": "HumanPlayer_LoadParameters_6",
+      "depth": 5,
+      "parent": "0x00411F20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 234,
+      "address": "0x00463310",
+      "name": "Human_SetParent",
+      "depth": 5,
+      "parent": "0x00411F20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 235,
+      "address": "0x0048F1D0",
+      "name": "Script_GetDebugCompileState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 236,
+      "address": "0x0048F340",
+      "name": "Script_GetForcePrecompiledState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 237,
+      "address": "0x004AA682",
+      "name": "Mem_AllocWithRetry",
+      "depth": 5,
+      "parent": "0x004AA670",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 238,
+      "address": "0x004AF960",
+      "name": "HeapList_Remove",
+      "depth": 5,
+      "parent": "0x00450520",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 239,
+      "address": "0x004B0C60",
+      "name": "Mem_Alloc",
+      "depth": 5,
+      "parent": "0x004F1950",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 240,
+      "address": "0x004B1E90",
+      "name": "String_FindExtension",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 241,
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 242,
+      "address": "0x004B5F00",
+      "name": "Resource_Load",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 243,
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 244,
+      "address": "0x004B83D0",
+      "name": "Qvm_Cleanup",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 245,
+      "address": "0x004B8A10",
+      "name": "Qvm_SetGlobalState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 246,
+      "address": "0x004F1160",
+      "name": "Script_ParseEnumReal32_5",
+      "depth": 5,
+      "parent": "0x004F1CD0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 247,
+      "address": "0x004F8340",
+      "name": "TerrainLightMap_Init",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 248,
+      "address": "0x00505F60",
+      "name": "TextureModifier_Init",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 249,
+      "address": "0x00518720",
+      "name": "Terrain_SelectTerrainLOD_9",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 250,
+      "address": "0x005196D0",
+      "name": "Terrain_ConnectGraphNode_9",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 251,
+      "address": "0x0051B0B0",
+      "name": "Terrain_SampleHeightmap_10",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 252,
+      "address": "0x0051B3A0",
+      "name": "Terrain_CalculateNormals_10",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 253,
+      "address": "0x0051BF90",
+      "name": "Terrain_BuildMipMaps_10",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 254,
+      "address": "0x0051C290",
+      "name": "Terrain_RenderQuadtree_11",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 255,
+      "address": "0x0051DDB0",
+      "name": "Terrain_RenderWaterSurface_11",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 256,
+      "address": "0x0051EC70",
+      "name": "Terrain_ConnectGraphNode_11",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 257,
+      "address": "0x0051EEC0",
+      "name": "Terrain_SampleHeightmap_11",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 258,
+      "address": "0x0051FBA0",
+      "name": "Terrain_BuildMipMaps_11",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 259,
+      "address": "0x0052C0C0",
+      "name": "DiscardTerrain_Init",
+      "depth": 5,
+      "parent": "0x005183D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 260,
+      "address": "0x004AA6AE",
+      "name": "Mem_AllocateRawBlock",
+      "depth": 6,
+      "parent": "0x004AA682",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 261,
+      "address": "0x004AAD10",
+      "name": "Resource_MatchPrefix",
+      "depth": 6,
+      "parent": "0x004B11A0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 262,
+      "address": "0x004AD722",
+      "name": "Mem_InvokeNewHandler",
+      "depth": 6,
+      "parent": "0x004AA682",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 263,
+      "address": "0x004AD73D",
+      "name": "String_ToUpperChar",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 264,
+      "address": "0x004B0BA0",
+      "name": "Mem_InitHeapState",
+      "depth": 6,
+      "parent": "0x004B0C60",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 265,
+      "address": "0x004B1690",
+      "name": "Device_CloseStream",
+      "depth": 6,
+      "parent": "0x004BBCB0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 266,
+      "address": "0x004B18B0",
+      "name": "Resource_PackUnpack",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 267,
+      "address": "0x004B5F80",
+      "name": "Resource_RegisterBuffer",
+      "depth": 6,
+      "parent": "0x004B5F00",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 268,
+      "address": "0x004B6380",
+      "name": "Resource_Unload",
+      "depth": 6,
+      "parent": "0x004B83D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 269,
+      "address": "0x004B63D0",
+      "name": "Resource_Flush",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 270,
+      "address": "0x004C0660",
+      "name": "DynObj_ParseConfigFile_2",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 271,
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "depth": 6,
+      "parent": "0x004ED6B0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 272,
+      "address": "0x004EDA70",
+      "name": "PhysicsTerrain_GetContext_4EDA70",
+      "depth": 6,
+      "parent": "0x004ED6B0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 273,
+      "address": "0x004EDFE0",
+      "name": "PhysicsObjType_ParseConfigFile",
+      "depth": 6,
+      "parent": "0x004EE410",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 274,
+      "address": "0x004EE530",
+      "name": "PhysicsTerrain_GetContext_4EE530",
+      "depth": 6,
+      "parent": "0x004EE410",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 275,
+      "address": "0x004EE540",
+      "name": "PhysicsTerrain_ProcessLOCALgrab",
+      "depth": 6,
+      "parent": "0x004EE410",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 276,
+      "address": "0x004EE5E0",
+      "name": "PhysicsTerrain_ProcessLOCALgrab_4EE5E0",
+      "depth": 6,
+      "parent": "0x004EE410",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 277,
+      "address": "0x004EE680",
+      "name": "PhysicsTerrain_Invoke4",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 278,
+      "address": "0x004EF7F0",
+      "name": "PhysicsTerrain_Invoke5",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 279,
+      "address": "0x004EF830",
+      "name": "PhysicsTerrain_InvokeLoadParameters",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 280,
+      "address": "0x004EF8B0",
+      "name": "PhysicsTerrain_GetContext_4EF8B0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 281,
+      "address": "0x004EF990",
+      "name": "PhysicsTerrain_GetContext_4EF990",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 282,
+      "address": "0x004EF9B0",
+      "name": "PhysicsTerrain_GetContext_4EF9B0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 283,
+      "address": "0x004EFA10",
+      "name": "PhysicsTerrain_GetContext_4EFA10",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 284,
+      "address": "0x004EFA20",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 285,
+      "address": "0x004EFA90",
+      "name": "PhysicsTerrain_GetContext_4EFA90",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 286,
+      "address": "0x004EFAA0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFAA0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 287,
+      "address": "0x004EFB00",
+      "name": "PhysicsTerrain_GetContext_4EFB00",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 288,
+      "address": "0x004EFB10",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4EFB10",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 289,
+      "address": "0x004EFB60",
+      "name": "PhysicsTerrain_GetContext_4EFB60",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 290,
+      "address": "0x004EFB80",
+      "name": "PhysicsTerrain_GetContext_4EFB80",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 291,
+      "address": "0x004EFC10",
+      "name": "PhysicsTerrain_Processfffffffff",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 292,
+      "address": "0x004EFC90",
+      "name": "PhysicsTerrain_GetContext_4EFC90",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 293,
+      "address": "0x004EFCD0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFCD0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 294,
+      "address": "0x004EFD50",
+      "name": "PhysicsTerrain_ExecutePipeline_4EFD50",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 295,
+      "address": "0x004EFEE0",
+      "name": "PhysicsTerrain_GetContext_4EFEE0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 296,
+      "address": "0x004EFF20",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFF20",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 297,
+      "address": "0x004EFF60",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4EFF60",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 298,
+      "address": "0x004EFF90",
+      "name": "PhysicsTerrain_GetContext_4EFF90",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 299,
+      "address": "0x004EFFB0",
+      "name": "PhysicsTerrain_GetContext_4EFFB0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 300,
+      "address": "0x004EFFD0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFFD0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 301,
+      "address": "0x004F0020",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F0020",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 302,
+      "address": "0x004F0060",
+      "name": "PhysicsTerrain_GetContext_4F0060",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 303,
+      "address": "0x004F0080",
+      "name": "PhysicsTerrain_GetContext_4F0080",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 304,
+      "address": "0x004F00A0",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4F00A0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 305,
+      "address": "0x004F00E0",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F00E0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 306,
+      "address": "0x004F0140",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F0140",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 307,
+      "address": "0x004F0170",
+      "name": "PhysicsTerrain_GetContext_4F0170",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 308,
+      "address": "0x004F01B0",
+      "name": "PhysicsTerrain_GetContext_4F01B0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 309,
+      "address": "0x004F0270",
+      "name": "PhysicsTerrain_Invoke2",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 310,
+      "address": "0x004F02B0",
+      "name": "PhysicsTerrain_Invoke2_4F02B0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 311,
+      "address": "0x004F0320",
+      "name": "PhysicsTerrain_InvokeTooFewParametersInLi_4F0320",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 312,
+      "address": "0x004F03D0",
+      "name": "PhysicsTerrain_GetContext_4F03D0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 313,
+      "address": "0x004F0430",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F0430",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 314,
+      "address": "0x004F04A0",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F04A0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 315,
+      "address": "0x004F0530",
+      "name": "PhysicsTerrain_InvokeDataSymbolLoad_4F0530",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 316,
+      "address": "0x004F0560",
+      "name": "PhysicsTerrain_GetContext_4F0560",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 317,
+      "address": "0x004F0570",
+      "name": "PhysicsTerrain_GetContext_4F0570",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 318,
+      "address": "0x004F0580",
+      "name": "PhysicsTerrain_ExecutePipeline_4F0580",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 319,
+      "address": "0x004F0600",
+      "name": "PhysicsTerrain_GetParam_4F0600",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 320,
+      "address": "0x004F0610",
+      "name": "PhysicsTerrain_DefaultHandler_4F0610",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 321,
+      "address": "0x004F0620",
+      "name": "PhysicsTerrain_ProcessStep_4F0620",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 322,
+      "address": "0x004F0640",
+      "name": "PhysicsTerrain_ProcessStep_4F0640",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 323,
+      "address": "0x004F0660",
+      "name": "PhysicsTerrain_ExecutePipeline_4F0660",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 324,
+      "address": "0x004F06E0",
+      "name": "PhysicsTerrain_GetParam_4F06E0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 325,
+      "address": "0x004F06F0",
+      "name": "PhysicsTerrain_DefaultHandler_4F06F0",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 326,
+      "address": "0x004F0700",
+      "name": "PhysicsTerrain_GetParam_4F0700",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 327,
+      "address": "0x004F0710",
+      "name": "PhysicsTerrain_DefaultHandler_4F0710",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 328,
+      "address": "0x004F0720",
+      "name": "PhysicsTerrain_GetParam_4F0720",
+      "depth": 6,
+      "parent": "0x004EE970",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 329,
+      "address": "0x004F1D10",
+      "name": "PhysicsTerrain_Invoke3",
+      "depth": 6,
+      "parent": "0x004F2740",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 330,
+      "address": "0x004F2B80",
+      "name": "PhysicsTerrain_GetContext_4F2B80",
+      "depth": 6,
+      "parent": "0x004F3440",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 331,
+      "address": "0x004F3630",
+      "name": "PhysicsTerrain_GetContext_4F3630",
+      "depth": 6,
+      "parent": "0x004F3440",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 332,
+      "address": "0x004F3670",
+      "name": "PhysicsTerrain_GetContext_4F3670",
+      "depth": 6,
+      "parent": "0x004F3440",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 333,
+      "address": "0x004F36B0",
+      "name": "PhysicsTerrain_Invoke5_4F36B0",
+      "depth": 6,
+      "parent": "0x004F36C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 334,
+      "address": "0x004F3940",
+      "name": "PhysicsTerrain_Invoke8",
+      "depth": 6,
+      "parent": "0x004F36C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 335,
+      "address": "0x004F39F0",
+      "name": "PhysicsTerrain_GetContext_4F39F0",
+      "depth": 6,
+      "parent": "0x004F36C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 336,
+      "address": "0x004F3A00",
+      "name": "PhysicsTerrain_DefaultHandler_4F3A00",
+      "depth": 6,
+      "parent": "0x004F36C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 337,
+      "address": "0x004F3CA0",
+      "name": "PhysicsTerrain_Invoke4_4F3CA0",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 338,
+      "address": "0x004F42D0",
+      "name": "PhysicsTerrain_InvokeComputeNormals",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 339,
+      "address": "0x004F4390",
+      "name": "PhysicsTerrain_GetParam_4F4390",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 340,
+      "address": "0x004F43B0",
+      "name": "PhysicsTerrain_Invoke2_4F43B0",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 341,
+      "address": "0x004F43D0",
+      "name": "PhysicsTerrain_Invoke12",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 342,
+      "address": "0x004F44A0",
+      "name": "PhysicsTerrain_Invoke12_4F44A0",
+      "depth": 6,
+      "parent": "0x004F4190",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 343,
+      "address": "0x004F4560",
+      "name": "PhysicsTerrain_Invoke3_4F4560",
+      "depth": 6,
+      "parent": "0x004F8340",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 344,
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "depth": 6,
+      "parent": "0x004F8340",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 345,
+      "address": "0x004F8320",
+      "name": "TerrainLightMap_Render",
+      "depth": 6,
+      "parent": "0x004F8340",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 346,
+      "address": "0x004F86E0",
+      "name": "TerrainLightMap_LoadParameters",
+      "depth": 6,
+      "parent": "0x004F8340",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 347,
+      "address": "0x00503CC0",
+      "name": "Physics_VirmodelIsNull",
+      "depth": 6,
+      "parent": "0x00505F60",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 348,
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "depth": 6,
+      "parent": "0x00505F60",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 349,
+      "address": "0x00505ED0",
+      "name": "TextureModifier_Create",
+      "depth": 6,
+      "parent": "0x00505F60",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 350,
+      "address": "0x00505F20",
+      "name": "TextureModifier_Init_2",
+      "depth": 6,
+      "parent": "0x00505F60",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 351,
+      "address": "0x005062A0",
+      "name": "TextureModifier_LoadParameters",
+      "depth": 6,
+      "parent": "0x00506FA0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 352,
+      "address": "0x0051FED0",
+      "name": "Terrain_RenderQuadtree_12",
+      "depth": 6,
+      "parent": "0x005207A0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 353,
+      "address": "0x0052BFE0",
+      "name": "DiscardTerrain_Prepare",
+      "depth": 6,
+      "parent": "0x0052C0C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 354,
+      "address": "0x0052C000",
+      "name": "DiscardTerrain_LoadParameters",
+      "depth": 6,
+      "parent": "0x0052C0C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 355,
+      "address": "0x0052C0B0",
+      "name": "DiscardTerrain_Init_2",
+      "depth": 6,
+      "parent": "0x0052C0C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 356,
+      "address": "0x0052C290",
+      "name": "DiscardTerrain_Setup",
+      "depth": 6,
+      "parent": "0x0052C0C0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 357,
+      "address": "0x004B0D40",
+      "name": "QHash_ValueSet",
+      "depth": 7,
+      "parent": "0x004B0BA0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 358,
+      "address": "0x004B16D0",
+      "name": "Resource_Unpack",
+      "depth": 7,
+      "parent": "0x004B18B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 359,
+      "address": "0x004B1780",
+      "name": "Device_GetStreamPosition",
+      "depth": 7,
+      "parent": "0x004B18B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 360,
+      "address": "0x004B17F0",
+      "name": "Device_SeekStream",
+      "depth": 7,
+      "parent": "0x004B18B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 361,
+      "address": "0x004B59F0",
+      "name": "Resource_CreateNode",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 362,
+      "address": "0x004B5AF0",
+      "name": "Resource_CanonicalizePath",
+      "depth": 7,
+      "parent": "0x004B5B90",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 363,
+      "address": "0x004B5B30",
+      "name": "Resource_CalculatePathHash",
+      "depth": 7,
+      "parent": "0x004B5B90",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 364,
+      "address": "0x004B5C90",
+      "name": "Resource_FreeNode",
+      "depth": 7,
+      "parent": "0x004B6380",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 365,
+      "address": "0x004B60F0",
+      "name": "Resource_RegisterIlffContainer",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 366,
+      "address": "0x004B7570",
+      "name": "Ilff_GetFormType",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 367,
+      "address": "0x004B7580",
+      "name": "Ilff_GetChunkTag",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 368,
+      "address": "0x00517260",
+      "name": "Terrain_SelectTerrainLOD_5",
+      "depth": 7,
+      "parent": "0x004BFC70",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 369,
+      "address": "0x00517510",
+      "name": "Terrain_UpdateWaterWaves_5",
+      "depth": 7,
+      "parent": "0x004BFC70",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 370,
+      "address": "0x00517570",
+      "name": "Terrain_RenderWaterSurface_5",
+      "depth": 7,
+      "parent": "0x004BFC70",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 371,
+      "address": "0x00497D70",
+      "name": "Transcontext_BuildViewBlock",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 372,
+      "address": "0x004B7470",
+      "name": "Ilff_GetNextChunk",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 373,
+      "address": "0x004B7490",
+      "name": "Ilff_GetFirstChunk",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 374,
+      "address": "0x004B74D0",
+      "name": "Ilff_GetChunkPayload",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 375,
+      "address": "0x004B7540",
+      "name": "Ilff_ReadContainerHeader",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 376,
+      "address": "0x004C6760",
+      "name": "Create_TerrainTileMap",
+      "depth": 8,
+      "parent": "0x004C6D20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 377,
+      "address": "0x004C6E30",
+      "name": "DynObj_ParseConfigFile_8",
+      "depth": 8,
+      "parent": "0x004C6D20",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 378,
+      "address": "0x004CEA80",
+      "name": "Render_GetActiveBackendId",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 379,
+      "address": "0x004CEEB0",
+      "name": "DynObj_Initmodels",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 380,
+      "address": "0x004CFC30",
+      "name": "DynObj_ParseConfigFile_15",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 381,
+      "address": "0x005125A0",
+      "name": "Terrain_BuildMipMaps",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 382,
+      "address": "0x00516AD3",
+      "name": "Terrain_SelectTerrainLOD_4",
+      "depth": 8,
+      "parent": "0x00517570",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 383,
+      "address": "0x00518260",
+      "name": "Terrain_RenderWaterSurface_8",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 384,
+      "address": "0x0048F250",
+      "name": "App_ContextGetTerrainLightmapsUsed",
+      "depth": 9,
+      "parent": "0x00497D70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 385,
+      "address": "0x00491D40",
+      "name": "Display_ComputeScreenAspect",
+      "depth": 9,
+      "parent": "0x00497D70",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 386,
+      "address": "0x0049DF60",
+      "name": "DisplayRender_Processmodelsnotconvert",
+      "depth": 9,
+      "parent": "0x004A1470",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 387,
+      "address": "0x004B8C60",
+      "name": "Script_SetWarningLevel",
+      "depth": 9,
+      "parent": "0x004BD080",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 388,
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "depth": 9,
+      "parent": "0x004BD080",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 389,
+      "address": "0x004D0DC0",
+      "name": "Render_BindTexture_2",
+      "depth": 9,
+      "parent": "0x00531D30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 390,
+      "address": "0x004D9700",
+      "name": "Render_VirmodelIsNull",
+      "depth": 9,
+      "parent": "0x004D9A00",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 391,
+      "address": "0x004D99E0",
+      "name": "MagicObj_ValidateVirModel",
+      "depth": 9,
+      "parent": "0x004D9A00",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 392,
+      "address": "0x004D9B10",
+      "name": "PhysicsRigid_ProcessVirModelsnotavai",
+      "depth": 9,
+      "parent": "0x00531D30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 393,
+      "address": "0x005122B0",
+      "name": "Terrain_CalculateNormals",
+      "depth": 9,
+      "parent": "0x005125A0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 394,
+      "address": "0x005127D0",
+      "name": "Terrain_SelectTerrainLOD_2",
+      "depth": 9,
+      "parent": "0x00518260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 395,
+      "address": "0x00512920",
+      "name": "Terrain_RenderWaterSurface_2",
+      "depth": 9,
+      "parent": "0x00518260",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 396,
+      "address": "0x00516E83",
+      "name": "Terrain_CalculateNormals_4",
+      "depth": 9,
+      "parent": "0x00516AD3",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 397,
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "depth": 10,
+      "parent": "0x005323E0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 398,
+      "address": "0x004C0250",
+      "name": "DynObj_ParseConfigFile",
+      "depth": 10,
+      "parent": "0x005323E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 399,
+      "address": "0x004CEAA0",
+      "name": "Ilff_FindFormChunk",
+      "depth": 10,
+      "parent": "0x004CED50",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 400,
+      "address": "0x004CEE30",
+      "name": "DynObj_ParseConfigFile_13",
+      "depth": 10,
+      "parent": "0x004CED50",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 401,
+      "address": "0x00514760",
+      "name": "Terrain_BuildMipMaps_2",
+      "depth": 10,
+      "parent": "0x0050FAC0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 402,
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "depth": 11,
+      "parent": "0x004B7CF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 403,
+      "address": "0x004B0F80",
+      "name": "Texture_GetActiveBackendId",
+      "depth": 11,
+      "parent": "0x004B7CF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 404,
+      "address": "0x004BD3D0",
+      "name": "Qvm_SetOpcodeHandler",
+      "depth": 11,
+      "parent": "0x004BBC80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 405,
+      "address": "0x004D2C30",
+      "name": "Render_BindTexture_4",
+      "depth": 11,
+      "parent": "0x00531DD0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 406,
+      "address": "0x00514680",
+      "name": "Terrain_OutOfTerrainRenderch",
+      "depth": 11,
+      "parent": "0x00514760",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 407,
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "depth": 12,
+      "parent": "0x004B2180",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 408,
+      "address": "0x0051682D",
+      "name": "Terrain_SampleHeightmap_3",
+      "depth": 12,
+      "parent": "0x004B8CE0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 409,
+      "address": "0x005169B0",
+      "name": "Terrain_RenderQuadtree_4",
+      "depth": 12,
+      "parent": "0x004B8CE0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 410,
+      "address": "0x00516770",
+      "name": "Terrain_RenderWaterSurface_3",
+      "depth": 13,
+      "parent": "0x004B2760",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 411,
+      "address": "0x00516810",
+      "name": "Terrain_ConnectGraphNode_3",
+      "depth": 13,
+      "parent": "0x004B2760",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 412,
+      "address": "0x005168E0",
+      "name": "Terrain_CalculateNormals_3",
+      "depth": 13,
+      "parent": "0x004B27D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 413,
       "address": "0x005168FD",
       "name": "Terrain_BuildMipMaps_3",
       "depth": 14,
-      "parent": "0x005168E0"
+      "parent": "0x005168E0",
+      "edge": "direct",
+      "runtime_order": null
     }
   ],
   "unreachable_addresses": [
-    "0x004037C0",
-    "0x00403AC0",
-    "0x00403B30",
-    "0x00403B70",
-    "0x00403C10",
-    "0x00403C70",
-    "0x00403CC0",
-    "0x00403D90",
-    "0x00404160",
-    "0x004041D0",
-    "0x00404230",
-    "0x00404290",
-    "0x004042E0",
-    "0x00404340",
-    "0x00404390",
-    "0x00404450",
     "0x00404510",
-    "0x00404590",
-    "0x004045B0",
-    "0x004046A0",
-    "0x00404710",
-    "0x004047F0",
-    "0x004048B0",
-    "0x00404910",
-    "0x00404960",
-    "0x004049C0",
     "0x00404A10",
-    "0x00404A70",
-    "0x00404A90",
-    "0x00404AE0",
-    "0x00404B40",
-    "0x00404B90",
-    "0x00404BF0",
-    "0x00404C40",
-    "0x00404CA0",
-    "0x00404CF0",
-    "0x00404D50",
-    "0x00404DA0",
-    "0x00404E00",
-    "0x00404E50",
-    "0x00404EB0",
-    "0x00404F00",
-    "0x00404F60",
-    "0x00404FA0",
-    "0x00405010",
-    "0x00405050",
     "0x004050A0",
-    "0x00405300",
-    "0x00405400",
-    "0x004054F0",
-    "0x00405530",
-    "0x004055C0",
-    "0x00405620",
-    "0x00405660",
-    "0x004056F0",
-    "0x00405760",
-    "0x004057D0",
     "0x00405830",
     "0x00405850",
     "0x004058A0",
@@ -782,8 +3746,6 @@
     "0x004061B0",
     "0x004061C0",
     "0x004061E0",
-    "0x00406200",
-    "0x00406220",
     "0x00406270",
     "0x00406280",
     "0x004062B0",
@@ -795,8 +3757,6 @@
     "0x00406320",
     "0x00406330",
     "0x00406340",
-    "0x00406390",
-    "0x00406D10",
     "0x004082B0",
     "0x00408390",
     "0x004083C0",
@@ -862,12 +3822,8 @@
     "0x0040BBD0",
     "0x0040BDB0",
     "0x0040BE40",
-    "0x0040BED0",
-    "0x0040C140",
     "0x0040C150",
     "0x0040C160",
-    "0x0040C270",
-    "0x0040C2D0",
     "0x0040C2E0",
     "0x0040C2F0",
     "0x0040C510",
@@ -933,19 +3889,8 @@
     "0x0040FBE0",
     "0x0040FD70",
     "0x0040FDA0",
-    "0x0040FDF0",
-    "0x00410070",
-    "0x004101C0",
-    "0x00410240",
-    "0x004102D0",
-    "0x00410360",
     "0x00410370",
     "0x004105C0",
-    "0x00410700",
-    "0x00410840",
-    "0x004108B0",
-    "0x004108C0",
-    "0x00410900",
     "0x00410960",
     "0x004109A0",
     "0x00410F70",
@@ -956,16 +3901,6 @@
     "0x004113C0",
     "0x00411770",
     "0x00411AE0",
-    "0x00411F20",
-    "0x004123F0",
-    "0x00412420",
-    "0x00412440",
-    "0x00412990",
-    "0x00412CE0",
-    "0x00412F80",
-    "0x00413090",
-    "0x00413120",
-    "0x00413730",
     "0x00413770",
     "0x004137A0",
     "0x004137E0",
@@ -979,29 +3914,9 @@
     "0x00413C80",
     "0x00413CC0",
     "0x00413D10",
-    "0x00416D80",
-    "0x00422C90",
-    "0x00422DF0",
-    "0x00422E40",
-    "0x00422F30",
-    "0x00423000",
-    "0x00434E10",
-    "0x00435460",
-    "0x00435C50",
-    "0x0044F060",
     "0x0044F410",
     "0x0044FC90",
-    "0x0044FEC0",
-    "0x0044FFC0",
     "0x00450110",
-    "0x00450520",
-    "0x004505C0",
-    "0x004505D0",
-    "0x00450770",
-    "0x004507D0",
-    "0x00453630",
-    "0x00453650",
-    "0x00453670",
     "0x00453680",
     "0x00453AE0",
     "0x00453CB0",
@@ -1009,14 +3924,6 @@
     "0x00454220",
     "0x00454330",
     "0x00454410",
-    "0x004547B0",
-    "0x00454B10",
-    "0x00454EE0",
-    "0x00454F00",
-    "0x00454F10",
-    "0x00455070",
-    "0x004553E0",
-    "0x00455570",
     "0x00455780",
     "0x00455A40",
     "0x00455BE0",
@@ -1027,14 +3934,7 @@
     "0x00456250",
     "0x004565A0",
     "0x00456920",
-    "0x00456A10",
     "0x00456C70",
-    "0x00456CF0",
-    "0x00456E40",
-    "0x00456E50",
-    "0x00456FB0",
-    "0x004572D0",
-    "0x00457430",
     "0x00457620",
     "0x00457A00",
     "0x00457D30",
@@ -1048,13 +3948,6 @@
     "0x00458DD0",
     "0x00458EB0",
     "0x00459040",
-    "0x00459680",
-    "0x00459A20",
-    "0x00459EC0",
-    "0x00459F00",
-    "0x00459F10",
-    "0x0045A230",
-    "0x0045A3D0",
     "0x0045A5E0",
     "0x0045AD10",
     "0x0045B6E0",
@@ -1070,54 +3963,6 @@
     "0x0045C700",
     "0x0045C740",
     "0x0045C9B0",
-    "0x0045CA80",
-    "0x0045CC50",
-    "0x0045CF90",
-    "0x0045D030",
-    "0x0045D040",
-    "0x0045D3C0",
-    "0x0045DCB0",
-    "0x0045DCF0",
-    "0x0045DE20",
-    "0x0045DF40",
-    "0x0045DF50",
-    "0x0045E3D0",
-    "0x0045E3E0",
-    "0x0045EAE0",
-    "0x0045EB30",
-    "0x0045EEA0",
-    "0x0045EF40",
-    "0x0045F050",
-    "0x0045F280",
-    "0x0045F500",
-    "0x0045F800",
-    "0x0045F880",
-    "0x0045F890",
-    "0x0045F900",
-    "0x0045F910",
-    "0x0045F920",
-    "0x0045F930",
-    "0x0045F9D0",
-    "0x0045FA80",
-    "0x0045FCD0",
-    "0x0045FDA0",
-    "0x0045FE30",
-    "0x0045FE70",
-    "0x00460070",
-    "0x00460090",
-    "0x004600C0",
-    "0x004601A0",
-    "0x00460210",
-    "0x00460280",
-    "0x004606D0",
-    "0x004606F0",
-    "0x00460850",
-    "0x004608D0",
-    "0x00460950",
-    "0x004609A0",
-    "0x004609F0",
-    "0x00460A10",
-    "0x00460A70",
     "0x00460AC0",
     "0x004614B0",
     "0x00461A70",
@@ -1125,37 +3970,18 @@
     "0x00462BA0",
     "0x00462CF0",
     "0x00463180",
-    "0x00463310",
-    "0x00463760",
-    "0x004643A0",
-    "0x00464470",
-    "0x004644A0",
-    "0x00464580",
-    "0x004645B0",
     "0x004645D0",
     "0x00465820",
-    "0x004659E0",
-    "0x00465B00",
     "0x00465BB0",
-    "0x004828D0",
     "0x00484CE0",
     "0x00489E70",
-    "0x0048F250",
-    "0x00491D40",
-    "0x00497D70",
-    "0x0049DF60",
     "0x004A14B0",
     "0x004A2600",
-    "0x004A26C0",
-    "0x004B0F80",
     "0x004B23B0",
     "0x004B24C0",
     "0x004B26A0",
     "0x004B7450",
     "0x004B7590",
-    "0x004B7CF0",
-    "0x004B8C60",
-    "0x004BCFD0",
     "0x004BDA00",
     "0x004C0F80",
     "0x004C2F90",
@@ -1163,14 +3989,10 @@
     "0x004C5F00",
     "0x004C6240",
     "0x004C6670",
-    "0x004C6760",
-    "0x004C6E30",
     "0x004C8130",
     "0x004CB810",
     "0x004CE390",
     "0x004CE910",
-    "0x004CEAA0",
-    "0x004CEE30",
     "0x004CF080",
     "0x004CF300",
     "0x004CF330",
@@ -1183,7 +4005,6 @@
     "0x004D09E0",
     "0x004D0CF0",
     "0x004D0D10",
-    "0x004D0DC0",
     "0x004D1260",
     "0x004D14E0",
     "0x004D31C0",
@@ -1194,132 +4015,32 @@
     "0x004D65B0",
     "0x004D67A0",
     "0x004D74F0",
-    "0x004D9700",
-    "0x004D99E0",
-    "0x004D9B10",
     "0x004DA880",
     "0x004DBF30",
     "0x004DCF00",
     "0x004DEEC0",
     "0x004EC070",
-    "0x004ED5C0",
-    "0x004EDA70",
     "0x004EDB60",
-    "0x004EDFE0",
-    "0x004EE530",
-    "0x004EE540",
-    "0x004EE5E0",
-    "0x004EE680",
-    "0x004EF7F0",
-    "0x004EF830",
-    "0x004EF850",
-    "0x004EF8B0",
-    "0x004EF990",
-    "0x004EF9B0",
-    "0x004EF9D0",
-    "0x004EFA10",
-    "0x004EFA20",
-    "0x004EFA90",
-    "0x004EFAA0",
-    "0x004EFAB0",
-    "0x004EFB00",
-    "0x004EFB10",
-    "0x004EFB60",
-    "0x004EFB80",
-    "0x004EFC10",
-    "0x004EFC90",
-    "0x004EFCB0",
-    "0x004EFCD0",
-    "0x004EFD50",
-    "0x004EFEE0",
-    "0x004EFF00",
-    "0x004EFF20",
-    "0x004EFF60",
-    "0x004EFF90",
-    "0x004EFFB0",
-    "0x004EFFD0",
-    "0x004F0020",
-    "0x004F0060",
-    "0x004F0080",
-    "0x004F00A0",
-    "0x004F00E0",
-    "0x004F0140",
-    "0x004F0170",
-    "0x004F0190",
-    "0x004F01B0",
-    "0x004F0270",
-    "0x004F02B0",
-    "0x004F0320",
-    "0x004F03D0",
-    "0x004F0430",
-    "0x004F04A0",
-    "0x004F0530",
-    "0x004F0560",
-    "0x004F0570",
-    "0x004F0580",
-    "0x004F0600",
-    "0x004F0610",
-    "0x004F0620",
-    "0x004F0640",
-    "0x004F0660",
-    "0x004F06E0",
-    "0x004F06F0",
-    "0x004F0700",
-    "0x004F0710",
-    "0x004F0720",
     "0x004F0730",
     "0x004F0CF0",
-    "0x004F1160",
     "0x004F1CF0",
-    "0x004F1D10",
-    "0x004F2B80",
-    "0x004F3630",
-    "0x004F3670",
-    "0x004F36B0",
-    "0x004F3940",
-    "0x004F39F0",
-    "0x004F3A00",
-    "0x004F3CA0",
-    "0x004F42D0",
-    "0x004F4390",
-    "0x004F43B0",
-    "0x004F43D0",
-    "0x004F44A0",
-    "0x004F4560",
-    "0x004F82B0",
-    "0x004F8320",
-    "0x004F86E0",
     "0x004F8780",
-    "0x00503CC0",
-    "0x00505E40",
-    "0x00505ED0",
-    "0x00505F20",
-    "0x005062A0",
     "0x00506F00",
     "0x00510010",
     "0x00511500",
     "0x005116B0",
     "0x005116D0",
     "0x00512040",
-    "0x005122B0",
     "0x005125C0",
-    "0x005127D0",
     "0x005127E0",
     "0x00512820",
-    "0x00512920",
     "0x00512940",
     "0x00512BA0",
     "0x00512C30",
     "0x005144E0",
-    "0x00514680",
-    "0x00514760",
     "0x00516600",
     "0x00516640",
     "0x005166F0",
-    "0x00516770",
-    "0x00516810",
-    "0x0051682D",
-    "0x005169B0",
     "0x00516B20",
     "0x00516C67",
     "0x00516C91",
@@ -1350,12 +4071,9 @@
     "0x00518240",
     "0x00518250",
     "0x00518290",
-    "0x005182B0",
     "0x00518550",
-    "0x00518720",
     "0x00519650",
     "0x00519690",
-    "0x005196D0",
     "0x00519BA0",
     "0x00519BD0",
     "0x0051A0C0",
@@ -1364,24 +4082,13 @@
     "0x0051A4A0",
     "0x0051A8C0",
     "0x0051ACB0",
-    "0x0051B0B0",
-    "0x0051B3A0",
-    "0x0051BF90",
-    "0x0051C290",
-    "0x0051DDB0",
-    "0x0051EC70",
-    "0x0051EEC0",
     "0x0051F560",
-    "0x0051FBA0",
-    "0x0051FED0",
-    "0x0052BFE0",
-    "0x0052C000",
-    "0x0052C0B0",
-    "0x0052C290",
     "0x0052C5A0"
   ],
+  "runtime_capture": null,
   "limitations": [
-    "Direct call edges only; virtual dispatch and QVM task dispatch are not traversed, so entries reached only through them appear as unreachable.",
-    "The order is a breadth-first call graph from retail main, not an execution trace."
+    "Cross-reference edges record that a function references the entry (dispatch table, vtable or indirect call site); they order the entry but do not prove the call occurs.",
+    "Entries with no direct or referencing caller remain unordered and are listed separately.",
+    "The order is a graph traversal from retail main, not an execution trace."
   ]
 }
