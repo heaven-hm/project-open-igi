@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004659E0 (Human_TaskViewReset): fld [0x5335e8]; fptan; [human+0x1ec]=0; fstp st0; fstp dword [human+0x1e4]; fld [0x5339c0]; fptan; fstp st0; fstp dword [human+0x1e8]; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Human_TaskViewReset reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

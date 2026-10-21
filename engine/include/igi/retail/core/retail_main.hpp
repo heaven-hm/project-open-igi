@@ -40,7 +40,7 @@ struct RetailMainConfig
 
 extern "C" {
 
-// Native: Retail_Main() - VA 0x0048F530 - complete port.
+// Native: Main() - VA 0x0048F530 - complete port.
 // Behavior: creates the IGIMUTEX mutex with the initial owner and leaves when
 //           the mutex already exists or the handle is invalid, initialises
 //           COM, registers the window class with the window procedure at
@@ -50,7 +50,7 @@ extern "C" {
 //           per-frame loop: the x87 precision setup, the app context's
 //           isActive flag, the frame dispatch or a 500 ms sleep, the loop
 //           status byte and the message pump.
-int IGI_RETAIL_CDECL Retail_Main(const igi::retail::core::RetailMainConfig* config);
+int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config);
 
 } // extern "C"
 

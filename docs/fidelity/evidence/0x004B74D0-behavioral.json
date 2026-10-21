@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004B74D0 (Ilff_GetChunkPayload): ecx=[esp+4] chunk; edx=[esp+8] container; checks container align pow2, chunk-container < container size, chunk align pow2 and <= container align, chunk size nonzero; ret container + ((chunk-container + chunkAlign + 0xf) & -chunkAlign); failures set [0xa43e5c]=1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Ilff_GetChunkPayload reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

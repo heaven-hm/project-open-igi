@@ -4,7 +4,7 @@
  "result": "passed",
  "address": "0x004C6760",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "697c37a0d76cd696bd80a4c874ce20291158706898de55eb01e21bfbb34c1aa8",
+ "implementation_sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
  "reviewed": true,
  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {
@@ -26,37 +26,37 @@
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004C6760 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "Not applicable: no floating point in 0x004C6760."
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
   }
  ]
 }

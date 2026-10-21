@@ -6,7 +6,6 @@
 namespace igi::retail::dynobj {
 
 // Native: DynObj_LoadModelMesh() - VA 0x004CF390 - complete port.
-// Previous catalog alias: DynObj_LocalModelsSMef.
 // Behavior: allocates a 24-byte (6-dword) model record via Mem_Alloc(0x18, 4) (0x004B0C60),
 //           clears fields +0x00, +0x04, +0x10, +0x14, formats `"LOCAL:models/%s.mef"` into
 //           global buffer 0x00A4EC6C, loads the resource via Resource_Load(0x00A4EC6C, nullptr)

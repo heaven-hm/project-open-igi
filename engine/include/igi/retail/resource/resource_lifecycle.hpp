@@ -10,7 +10,7 @@ namespace igi::retail::resource {
 // Native: Resource_Unload() - VA 0x004B6380 - complete port.
 // Behavior: probes Is_ResourceLoaded(resource_path, &node) (0x004B5B90); when found, reads
 //           `node->kind` at offset +0x24 (`entity_val[9]`); if `kind != 3 && kind != 1`,
-//           calls Sys_FreeMemory_16(node) (0x004B5C90); otherwise returns `kind`. When not
+//           calls Resource_FreeNode(node) (0x004B5C90); otherwise returns `kind`. When not
 //           found, invokes Error_Show("Resource_Unload() : Resource '%s' is not loaded.").
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);
 //                 VA 0x004B6380-0x004B63C3, 67 bytes, digest 14f9f39cad1672b7ab5c4799581eff2192c542b44cb75b36f6e263c4c74a0345;
@@ -37,7 +37,7 @@ std::int32_t Resource_Unload(const char* resource_path);
 // Usage/tests: primary retail resource loader used by MEF/TEX/QVM; exercised by resource_lifecycle_test.cpp.
 void* Resource_Load(const char* resource_path, std::int32_t* out_size);
 
-// Host hooks for the two unported callees (Sys_FreeMemory_16 at 0x004B5C90 and
+// Host hooks for the two unported callees (Resource_FreeNode at 0x004B5C90 and
 // Resource_PackUnpack at 0x004B18B0) and Sys_Resource (0x004B5F80) so unit tests and callers
 // can exercise the exact retail Resource_Load / Resource_Unload bodies.
 using SysFreeMemory16Fn = std::int32_t (*)(ResourceHashNode* node);

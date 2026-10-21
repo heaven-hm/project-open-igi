@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004AAD10 (Resource_MatchPrefix): if n==0 ret 0; k=min(strlen(a)+1,n); repe cmpsb(b,a,k); al=b[i-1]; cmp al,a[i-1]: equal 0, above -1, below 1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Resource_MatchPrefix reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

@@ -7,7 +7,6 @@ namespace igi::retail::texture {
 using TextureBackendDispatchFn = std::int32_t (*)(void* packet);
 
 // Native: Texture_GetActiveBackendId() - VA 0x004B0F80 - complete port.
-// Previous catalog alias: Sys_ReadFileBlock_3.
 // Behavior: returns the active render backend identifier stored in `0x00A94A64` (`mov eax, [0x00A94A64]; ret`).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);
 //                 VA 0x004B0F80-0x004B0F86, 6 bytes, digest 29ebd30649f3b57e6ec4d50668338cbb32243052c21fe58371cadd573f365c23.
@@ -16,10 +15,8 @@ using TextureBackendDispatchFn = std::int32_t (*)(void* packet);
 // Signature: x86 cdecl int32_t(void); ported as std::int32_t Texture_GetActiveBackendId().
 // Usage/tests: queries the active texture/palette backend id for Texture_UploadMipmapPacket and Texture_UploadPalettePacket; exercised by texture_loaders_test.cpp.
 [[nodiscard]] std::int32_t Texture_GetActiveBackendId();
-inline std::int32_t Sys_ReadFileBlock_3() { return Texture_GetActiveBackendId(); }
 
 // Native: Texture_EnableUpload() - VA 0x004B26A0 - complete port.
-// Previous catalog alias: Sys_PopStack_8.
 // Behavior: sets the texture upload state byte `0x00943B3C` to `1` (`mov byte ptr [0x00943B3C], 1; ret`).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B26A0-0x004B26A8, 8 bytes,
 //                 digest 8209abbcb1723ad9145b7bfe97647edb07b2acc47ff1b02f71fa78fd9ab559e1.
@@ -28,10 +25,8 @@ inline std::int32_t Sys_ReadFileBlock_3() { return Texture_GetActiveBackendId();
 // Signature: x86 cdecl void(void); ported as void Texture_EnableUpload().
 // Usage/tests: enables texture upload flag before Texture_UploadMipmapPacket; exercised by texture_loaders_test.cpp.
 void Texture_EnableUpload();
-inline void Sys_PopStack_8() { Texture_EnableUpload(); }
 
 // Native: Texture_DisableUpload() - VA 0x004B26B0 - complete port.
-// Previous catalog alias: Sys_ResolveSymbol_8.
 // Behavior: clears the texture upload state byte `0x00943B3C` to `0` (`mov byte ptr [0x00943B3C], 0; ret`).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B26B0-0x004B26B8, 8 bytes,
 //                 digest 4893ff3f0d5654223486e4c269627dbfc9c121aa464471eedbf09c918c805d04.
@@ -40,10 +35,8 @@ inline void Sys_PopStack_8() { Texture_EnableUpload(); }
 // Signature: x86 cdecl void(void); ported as void Texture_DisableUpload().
 // Usage/tests: clears texture upload flag after Texture_UploadMipmapPacket; exercised by texture_loaders_test.cpp.
 void Texture_DisableUpload();
-inline void Sys_ResolveSymbol_8() { Texture_DisableUpload(); }
 
 // Native: Texture_UploadMipmapPacket() - VA 0x004B23B0 - complete port.
-// Previous catalog alias: Sys_FreeMemory_8.
 // Behavior: writes `Texture_GetActiveBackendId()` into `*arg1`, zero-initializes a 48-byte (12-dword)
 //           dispatch packet on the stack (`+0x00=arg1`, `+0x04=arg2`, `+0x08=arg7`, `+0x0C=arg3`,
 //           `+0x18=arg4`, `+0x1C=arg5`, `+0x20=arg6`, `+0x24=arg8`, `+0x28=(int8_t)g_943b3c`,
@@ -51,7 +44,7 @@ inline void Sys_ResolveSymbol_8() { Texture_DisableUpload(); }
 //           `0x00A94E84[g_546fb0]` with the packet pointer.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B23B0-0x004B2446, 150 bytes,
 //                 digest 65ce08ad0b3bfb6914e1cd899467c3bcc788ddb0bd6a4c1a2b476295dfe1c109;
-//                 CLEAN/sys/004B23B0-Sys_FreeMemory_8.c.
+//                 CLEAN/sys/004B23B0-Texture_UploadMipmapPacket.c.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact 48-byte packet layout and dual backend dispatch.
 // Signature: x86 cdecl int32_t(int32_t* arg1, void* arg2, int32_t arg3, int32_t arg4, int32_t arg5, int32_t arg6, int32_t arg7, int32_t arg8, void* arg9).
@@ -59,15 +52,8 @@ inline void Sys_ResolveSymbol_8() { Texture_DisableUpload(); }
 std::int32_t Texture_UploadMipmapPacket(std::int32_t* arg1, void* arg2, std::int32_t arg3, std::int32_t arg4,
                                         std::int32_t arg5, std::int32_t arg6, std::int32_t arg7,
                                         std::int32_t arg8, void* arg9);
-inline std::int32_t Sys_FreeMemory_8(std::int32_t* arg1, void* arg2, std::int32_t arg3, std::int32_t arg4,
-                                     std::int32_t arg5, std::int32_t arg6, std::int32_t arg7,
-                                     std::int32_t arg8, void* arg9)
-{
-    return Texture_UploadMipmapPacket(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-}
 
 // Native: Texture_UploadPalettePacket() - VA 0x004B7CF0 - complete port.
-// Previous catalog alias: Sys_PushStack_21.
 // Behavior: writes `Texture_GetActiveBackendId()` into `*arg1`, builds a 12-byte (3-slot) palette
 //           packet (`+0x00=arg1`, `+0x04=arg3`, `+0x08=arg2`), and calls the renderer callback
 //           at `0x00A94E84[g_a84a48]` with the packet pointer.
@@ -78,13 +64,8 @@ inline std::int32_t Sys_FreeMemory_8(std::int32_t* arg1, void* arg2, std::int32_
 // Signature: x86 cdecl int32_t(int32_t* arg1, void* arg2, int32_t arg3).
 // Usage/tests: terrain palette upload dispatcher called by Terrain_LoadTexturePackage; exercised by texture_loaders_test.cpp.
 std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::int32_t arg3);
-inline std::int32_t Sys_PushStack_21(std::int32_t* arg1, void* arg2, std::int32_t arg3)
-{
-    return Texture_UploadPalettePacket(arg1, arg2, arg3);
-}
 
 // Native: Texture_LoadLoopTextureFile() - VA 0x004B24C0 - complete port.
-// Previous catalog alias: Sys_SIsNotAValidTextureF.
 // Behavior: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks
 //           the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`),
 //           calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit
@@ -106,7 +87,6 @@ inline std::int32_t Sys_SIsNotAValidTextureF(std::int32_t* arg1, void* arg2, con
 }
 
 // Native: Terrain_LoadTexturePackage() - VA 0x005175A0 - complete port.
-// Previous catalog alias: Terrain_TextureFileNotOfRequ.
 // Behavior: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via
 //           Resource_Load(arg1, nullptr) (0x004B5F00) (calling Error_Show("Couldn't load texture file '%s'.")
 //           if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`,
@@ -129,7 +109,6 @@ inline std::int32_t* Terrain_TextureFileNotOfRequ(const char* arg1)
 }
 
 // Native: DynObj_LoadModelTextures() - VA 0x004CF790 - complete port.
-// Previous catalog alias: DynObj_LocalTexturesSTex.
 // Behavior: locates the `'TEXF'` (`0x54455846`) chunk inside `*(context + 0x08)` via
 //           Ilff_FindFormChunk (0x004CEAA0), stores `count = *texf` at `*(context + 0x40)`,
 //           allocates `count * 0x24` bytes at `*(context + 0x34)` and `count * 0x0C` bytes at

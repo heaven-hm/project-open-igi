@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004C6760 (Terrain_CreateTerrainTileMap): sub esp,0x18; slot=Qvm_GetIntArg(vm,0); tiles=g_c30080+slot*64; 64 byte args at indices 1..64; result dwords {0,?,0,0,0x567C74,?} copied to arg1. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Terrain_CreateTileMap reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

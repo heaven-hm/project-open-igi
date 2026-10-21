@@ -28,12 +28,12 @@ HWND g_main_window = nullptr;
 
 extern "C" {
 
-// Native: Retail_Main; retail VA 0x0048F530.
+// Native: Main; retail VA 0x0048F530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F530..0x0048F970.
 // Behavior/CFG: pushes the mutex name "IGIMUTEX" and calls CreateMutexA with
 // Status/limits: STRUCTURALLY_VERIFIED; the mutex, the class registrations and
-int IGI_RETAIL_CDECL Retail_Main(const igi::retail::core::RetailMainConfig* config)
+int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
 {
 #if defined(_WIN32)
     HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI1MUTEX");

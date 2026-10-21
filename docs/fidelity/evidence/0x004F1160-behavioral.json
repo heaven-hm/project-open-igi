@@ -18,7 +18,7 @@
      "chunks_read": 0
     }
    },
-   "note": "The candidate Script_ParseEnumReal32_5 reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "note": "The candidate Script_GetParseMode reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

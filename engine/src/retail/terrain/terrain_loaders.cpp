@@ -338,14 +338,14 @@ void* HeightMap_Enter(void* context)
     return reinterpret_cast<void*>(static_cast<std::uintptr_t>(active_index));
 }
 
-// Native: TerrainLightMap_Init_2; retail VA 0x004F82B0; signature/calling convention unknown.
+// Native: TerrainLightMap_PushEntry; retail VA 0x004F82B0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja and RE-Agent Radare2, docs/fidelity/evidence/lightmap-enter-20261020/; no second decompiler used for this correction.
 // Behavior/CFG: Calls 0x004F1160, tests DWORD +0x108, writes DWORD +0xE0, pushes DWORD +0xD8 and increments 0x00B97D24. Both mode branches retained; no retail stack-cap branch exists here.
 // Status/limits: TRANSCRIBED; nonaliasing valid contexts and existing host stack storage only; overflow/storage layout and natural runtime integration remain unresolved.
-void* TerrainLightMap_Init_2(void* self)
+void* TerrainLightMap_PushEntry(void* self)
 {
-    const auto mode = script::Script_ParseEnumReal32_5();
+    const auto mode = script::Script_GetParseMode();
     auto* bytes = static_cast<std::uint8_t*>(self);
     const auto counter_val = *reinterpret_cast<std::int32_t*>(bytes + 0x108);
     if (mode != 0)

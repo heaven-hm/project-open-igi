@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00497E70 (TransContext_SetActiveTransContext): eax=[g_6e5ba4]; h=[0xa94e84+eax*4]; copy 0x2a dwords source->0xbcaae0; arg=0xbcaae0; if h: h(&arg); [0x6e5bb0]=1; [0x6e5bb4]++; ret [0x6e5bb4]. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Transcontext_SetActiveTransContext reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

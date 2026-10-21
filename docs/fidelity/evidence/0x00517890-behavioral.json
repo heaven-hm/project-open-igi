@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00517890 (Iff_FindFormChunk): esi=[esp+4]; edi=[esp+8]; loop: if [esi+0x10]==0x464f524d('FORM') { if [esi+0x14]==edi ret esi; child=[esi+8]; if child { r=Iff_FindFormChunk(child,edi); if r ret r } } else if [esi+0x14]==edi ret esi; esi=[esi]; until 0. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Iff_FindFormChunk reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

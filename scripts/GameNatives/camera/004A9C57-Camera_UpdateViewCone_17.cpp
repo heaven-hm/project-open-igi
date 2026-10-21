@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_UpdateViewCone_17 - 0x004A9C57 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A9C57-Camera_UpdateViewCone_17.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A9C57-Camera_UpdateViewCone_17.hpp"
+#include "Camera_UpdateViewCone_17.h"
 long double __startOneArgErrorHandling(int context, int arg2, long double arg3 , int arg4 , int arg5 )
 
 {

@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_UpdateTransform_15 - 0x004A8AD0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A8AD0-Camera_UpdateTransform_15.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A8AD0-Camera_UpdateTransform_15.hpp"
+#include "Camera_UpdateTransform_15.h"
 int __fastcall __trandisp1(int context, void* arg2, void* arg3 , long double arg4 )
 
 {

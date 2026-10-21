@@ -5,7 +5,7 @@
 
 namespace igi::retail::resource {
 
-// Retail resource hash node (`Sys_PopStack_15` 0x004B59F0 / `Is_ResourceLoaded` 0x004B5B90).
+// Retail resource hash node (`Resource_CreateNode` 0x004B59F0 / `Is_ResourceLoaded` 0x004B5B90).
 // On 32-bit retail ABI:
 //   +0x00: list node prev (`result[0]`)
 //   +0x04: list node next (`result[1]`)

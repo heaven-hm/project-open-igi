@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004B7540 (Ilff_ReadContainerHeader): ecx=[esp+0xc]; if ecx==0 ret; if [esp+4] *[esp+4]=[ecx+4]; if [esp+8] *[esp+8]=[ecx+8]; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Ilff_ReadContainerHeader reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

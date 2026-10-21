@@ -10,7 +10,6 @@ namespace igi::retail::sys {
 // Status/limits: STRUCTURALLY_VERIFIED for the C-locale branch only (locale id 0; all
 // uint32 inputs verified by scripts/native_leaves_runner.py). The locale table, multibyte
 // and locale mapping branches are not implemented; see scopes/0x004AD73D.md.
-// Previous catalog alias: Camera_ApplyWideScreen_28.
 std::uint32_t String_ToUpperChar(std::uint32_t character)
 {
     if (character >= 0x61U && character <= 0x7AU)
@@ -25,7 +24,6 @@ std::uint32_t String_ToUpperChar(std::uint32_t character)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_ResolveSymbol_15.
 std::int32_t Resource_CanonicalizePath(char* destination, char* source)
 {
     char character = *source;
@@ -61,7 +59,6 @@ std::int32_t Resource_CanonicalizePath(char* destination, char* source)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_CheckHeap_15.
 std::uint32_t Resource_CalculatePathHash(const char* text)
 {
     const char* cursor = text;

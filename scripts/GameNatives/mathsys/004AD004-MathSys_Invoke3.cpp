@@ -1,6 +1,7 @@
 // IGI native provenance: MathSys_Invoke3 - 0x004AD004 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AD004-MathSys_Invoke3.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AD004-MathSys_Invoke3.hpp"
+#include "MathSys_Invoke3.h"
+
 int __convention("regparm") MathSys_Invoke3(int arg1, int arg2, int arg3, int* arg4, void* arg5, void* arg6, int arg7)
 
 {

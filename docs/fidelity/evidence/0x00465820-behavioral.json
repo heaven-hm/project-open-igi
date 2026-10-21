@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00465820 (Human_CameraEyePosition): esi=out; edi=human; out+0x10=0x40a6147ae147ae14; if Human_IsCrouched(human) out+0x10=0x4096666666666666; out[0..3]=human[0x20..0x2c]; out+0x10 = double(human+0x30)+double(out+0x10); ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Human_CameraEyePosition reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

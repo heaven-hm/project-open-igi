@@ -43,7 +43,7 @@ struct MtpPackage
     std::vector<MtpMaterialReference> material_references;
 
     // Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection.
-    // The literal retail DynObj_InsertHashItem_14 (VA 0x004CF080) is in mtp_package_loader.hpp.
+    // The literal retail DynObj_LoadModelTexturePackage (VA 0x004CF080) is in mtp_package_loader.hpp.
     // Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
     // Evidence: REA ev_b115c5dcf8484fa999611be81df70c28a1e3299552c8cf4c96817bd6883cc409;
     // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF080, CFG 1.000, 5/6).

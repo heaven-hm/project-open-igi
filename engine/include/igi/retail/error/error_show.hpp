@@ -32,7 +32,7 @@ std::int32_t String_VFormat(char* buffer, const char* format, std::va_list args)
 // CFG: radare2 4 blocks/4 edges; Binary Ninja 4 blocks; 100% structural agreement.
 // Confidence: high for exact variadic sprintf behavior used across retail path builders and Error_Show.
 // Signature: x86 cdecl int32_t(char* buffer, const char* format, ...); ported with matching parameters.
-// Usage/tests: called by Error_Show (0x004AF7B0), DynObj_LocalModelsSMef (0x004CF390), and DynObj_InsertHashItem_14 (0x004CF080); exercised by error_show_test.cpp.
+// Usage/tests: called by Error_Show (0x004AF7B0), DynObj_LocalModelsSMef (0x004CF390), and DynObj_LoadModelTexturePackage (0x004CF080); exercised by error_show_test.cpp.
 std::int32_t sprintf(char* buffer, const char* format, ...);
 
 // Native: Error_Show() - VA 0x004AF7B0 - complete port.

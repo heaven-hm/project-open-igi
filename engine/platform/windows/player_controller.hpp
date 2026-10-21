@@ -118,8 +118,8 @@ class PlayerController
     // installed or the selected state has no root track.
     void set_locomotion_clips(std::vector<AnimationClip> clips);
 
-    // Retail animation clock (0x004D2D30): Retail_AnimationTicksPerSecond = 4800.0 / ticks_per_second,
-    // i.e. 160 ms of clip time per 30 Hz tick.
+    // Retail animation clock (0x004D2D30): the retail divides 4800.0 ticks by the
+    // frame rate, i.e. 160 ms of clip time per 30 Hz tick.
     static constexpr double animation_step_ms = 4800.0 / 30.0;
 
     // Ground query (retail VA 0x00462390): step-down budgets 0 airborne / 2048 grounded /

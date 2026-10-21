@@ -4,7 +4,7 @@
  "result": "passed",
  "address": "0x0048F340",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "d72efb75fc9c03c0f3de150cad9ea39fdcf418b4211d6347cc249ae45374f99e",
+ "implementation_sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
  "reviewed": true,
  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {

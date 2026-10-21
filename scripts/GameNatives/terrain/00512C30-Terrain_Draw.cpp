@@ -1,6 +1,6 @@
 // IGI native provenance: Terrain_Draw - 0x00512C30 - CFG score 77.8% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00512C30-Terrain_Draw.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Terrain_Draw.hpp"
+#include "Terrain_Draw.h"
 ❓  int __stdcall Terrain_Draw(float context , float arg2, float arg3, float arg4, float arg5, float arg6, float arg7, float arg8, double arg9 , double arg10, double arg11 , double arg12)
 // This function has unresolved stack usage. View graph of stack usage to resolve.
 

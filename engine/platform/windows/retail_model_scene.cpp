@@ -497,7 +497,7 @@ struct Scene
     {
         if (mem::g_9422fc == 0U)
         {
-            mem::Sys_CloseFileStream_2();
+            mem::Mem_InitHeapState();
         }
         resource::ResourceCache cache;
 
@@ -2175,7 +2175,7 @@ int RunRetailModelScene(HINSTANCE instance,
     {
         // Retail CRT startup 0x004A7157 establishes precision before WinMain;
         // 0x0048F530 then establishes rounding before the game task loop.
-        static_cast<void>(core::Camera_ApplyBandFilter_10());
+        static_cast<void>(core::FP_SetDefaultPrecision());
         core::FP_InitExtendedPrecision();
         Scene scene;
         SceneWindowLifetime lifetime{scene};

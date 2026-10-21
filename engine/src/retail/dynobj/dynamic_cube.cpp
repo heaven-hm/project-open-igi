@@ -6,10 +6,10 @@ namespace igi::retail::dynobj {
 __attribute__((noinline, optimize("no-omit-frame-pointer")))
 #endif
 
-// Native: DynObj_LinkDynamicCube_7; retail VA 0x004C67E0.
+// Native: DynObj_LinkDynamicCube; retail VA 0x004C67E0.
 // Transcribed from the retail x86 instruction sequence: XOR each paired coordinate, OR the
 // differences, BSR the highest set bit, shift 1 by that index, and apply the retail clamps.
-std::uint32_t DynObj_LinkDynamicCube_7(std::uint32_t min_x,
+std::uint32_t DynObj_LinkDynamicCube(std::uint32_t min_x,
                                       std::uint32_t min_y,
                                       std::uint32_t min_z,
                                       std::uint32_t max_x,

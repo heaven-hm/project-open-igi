@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004C5F00 (Terrain_LoadTexturesAndLightmaps): sub esp,0x484; strcpy g_b97c20,path; name=path+.tex; Terrain_LoadTexFile -> ctx+0xDBC; palette[i]=i<<16 uploaded to ctx+0xDF4; if GetTerrainLightmapsUsed: name=path+.lmp -> ctx+0xE00, Resource_Load, per-entry Texture_UploadMipmapPacket into g_b81b20 (0x2C stride); return Resource_Unload(name). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Terrain_LoadTexturesAndLightmaps reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

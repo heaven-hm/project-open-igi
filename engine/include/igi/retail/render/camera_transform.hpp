@@ -7,14 +7,9 @@
 namespace igi::retail::render {
 
 // Native: Matrix_InvalidateSlot() - VA 0x004B7450 - complete port.
-// Previous catalog alias: Sys_PushStack_19.
 // Clears the 32-bit matrix slot at `matrix + slot_index * 4 + 0x14` and returns `slot_index`.
 // Behaviour verified from the disassembly: three instructions, no branches.
 std::int32_t Matrix_InvalidateSlot(std::int32_t* matrix, std::int32_t slot_index);
-inline std::int32_t Sys_PushStack_19(std::int32_t* matrix, std::int32_t slot_index)
-{
-    return Matrix_InvalidateSlot(matrix, slot_index);
-}
 
 // Camera_UpdateTransform - VA 0x004A0110.
 // Invalidates the eight camera matrix slots. The retail globals referenced by the native are
@@ -41,7 +36,6 @@ static_assert(sizeof(CameraColorContext) == 0x70);
 #endif
 
 // Native: Camera_UpdateFogPalette() - VA 0x004A26C0 - complete port.
-// Previous catalog alias: Camera_UpdateTransform_2.
 // Behavior: scales float RGB by -255.0f (R, G) and 255.0f (B), computes packed color,
 //           fills 256-dword palette buffer at 0x00935C10 with stosd, returns packed color DWORD.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);

@@ -13,7 +13,7 @@
 extern "C" {
 
 extern std::int32_t Native_005C8BCC;
-std::int32_t IGI_RETAIL_CDECL Native_0048F0F0(std::int32_t value);
+std::int32_t IGI_RETAIL_CDECL SetConfigFileName(std::int32_t value);
 
 } // extern "C"
 

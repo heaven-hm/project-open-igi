@@ -1,6 +1,7 @@
 // IGI native provenance: MathSys_Invoke21 - 0x004AAA44 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AAA44-MathSys_Invoke21.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AAA44-MathSys_Invoke21.hpp"
+#include "MathSys_Invoke21.h"
+
 int __convention("regparm") MathSys_Invoke21(int arg1, int arg2, int arg3, int* arg4, void* arg5, void* arg6, int arg7)
 
 {

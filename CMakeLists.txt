@@ -27,7 +27,6 @@ add_executable(igi WIN32
     engine/src/retail/core/fpu_state.cpp
     engine/src/retail/core/frame_natives.cpp
     engine/src/retail/core/game_flow.cpp
-    engine/src/retail/core/native_0048f0d0.cpp
     engine/src/retail/core/native_0048f0e0.cpp
     engine/src/retail/core/native_0048f0f0.cpp
     engine/src/retail/core/native_0048f970.cpp

@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00405530 (Config_GraphicOptionsGetPerfLevelFromFlags): best distance=0x1f; for 7 entries at 0x537b74: popcount([entry]^arg0) over 32 bits; if dist<best: best=dist, index=i; result {index,?,double(index),0x567c74}. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Config_GraphicOptionsGetPerfLevelFromFlags reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

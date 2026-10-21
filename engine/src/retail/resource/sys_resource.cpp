@@ -78,7 +78,7 @@ void UnlinkResourceNodeFromGlobalList(ResourceHashNode* node)
 
 std::int32_t FreeMemory16Thunk(ResourceHashNode* node)
 {
-    return Sys_FreeMemory_16(node);
+    return Resource_FreeNode(node);
 }
 
 } // namespace
@@ -88,7 +88,6 @@ std::int32_t FreeMemory16Thunk(ResourceHashNode* node)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004AAD10-0x004AAD48, 56 bytes, digest 6f465400533e36a49cafc375dc4058fb995240dab60cd989d242464616bf2034; CLEAN/camera/004AAD10-Camera_ApplyLineFilter_21.c.
 // Behavior/CFG: compares up to `max_len` bytes of `str1` (`context`) and `str2` (`arg2`), bounded by the length of `str1` (plus its NUL byte when shorter than `max_len`); returns `-1` if the first differing byte of `str2 > str1`, `1` if `str2 < str1`, or `0` if equal. radare2 6 blocks/8 edges; Binary Ninja 6 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact bounded prefix comparison (`strncmp`-equivalent).
-// Previous catalog alias: Camera_ApplyLineFilter_21.
 std::int32_t Resource_MatchPrefix(const void* context, const void* arg2, std::int32_t arg3)
 {
     std::int32_t i = arg3;
@@ -146,10 +145,9 @@ std::int32_t Resource_MatchPrefix(const void* context, const void* arg2, std::in
 
 // Native: Resource_CreateNode; retail VA 0x004B59F0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B59F0-0x004B5AE9, 249 bytes, digest d1a0fe269c4734cc2da57044b5771afd3f5ea268e254542d7e62292455455c97; CLEAN/sys/004B59F0-Sys_PopStack_15.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B59F0-0x004B5AE9, 249 bytes, digest d1a0fe269c4734cc2da57044b5771afd3f5ea268e254542d7e62292455455c97; CLEAN/sys/004B59F0-Resource_CreateNode.c.
 // Behavior/CFG: allocates a resource table slot from pool `g_943e20` using free-list index table `g_943e24[g_943e28++]` and stride `g_943e30`, records its active index in `*(g_943e34 + result)`, upper-cases `context` into `result + 0x38` (`result[0x0E]`) via Resource_CanonicalizePath (0x004B59C0), normalizes `'\\'` (`0x5C`) to `'/'` (`0x2F`), sets `result[0x0D]` (`+0x34` data pointer) to `arg3 ? arg3 : result`, `result[0x0A]` (`+0x28` size) = `arg4`, `result[0x09]` (`+0x24` kind) = `arg5`, `result[0x0C]` (`+0x30`) = `1`, `result[0x0B]` (`+0x2C` loaded_flag) = `0`, `result[0x8E]` (`+0x238`) = `arg2`, `result[0x08]` (`+0x20` hash) = Resource_CalculatePathHash(`&result[0x0E]`), initializes links `result[0..7]`, links `result` into `g_943e38` (`0x00943E40` hash list) via HeapList_Insert (0x004AF8F0), and copies `arg6[0..1]` into `result[0x8F..0x90]`. radare2 10 blocks/13 edges; Binary Ninja 10 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact slot allocation, path normalization, hash computation, and list insertion.
-// Previous catalog alias: Sys_PopStack_15.
 void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int32_t arg4,
                           std::int32_t arg5, const std::int32_t* arg6)
 {
@@ -160,7 +158,7 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
     result->pool_active_idx = data_10;
     g_943e28 += 1;
 
-    sys::Sys_ResolveSymbol_15(result->name(), const_cast<char*>(context));
+    sys::Resource_CanonicalizePath(result->name(), const_cast<char*>(context));
     char i = result->name()[0];
 
     if (i != '\0')
@@ -191,7 +189,7 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
     result->flag_30 = 1;
     result->loaded_flag = 0;
     result->debug_path_8e = arg2;
-    result->hash = static_cast<std::int32_t>(sys::Sys_CheckHeap_15(result->name()));
+    result->hash = static_cast<std::int32_t>(sys::Resource_CalculatePathHash(result->name()));
     result->next = nullptr;
     result->prev = nullptr;
     result->link_08[1] = nullptr; // result[3] = 0
@@ -216,7 +214,7 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
 
 // Native: Resource_FreeNode; retail VA 0x004B5C90; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes, digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2; CLEAN/sys/004B5C90-Sys_FreeMemory_16.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes, digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2; CLEAN/sys/004B5C90-Resource_FreeNode.c.
 // Behavior/CFG: switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. radare2 13 blocks/18 edges; Binary Ninja 13 blocks; 100% structural agreement.
 // Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the
 // last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the
@@ -224,7 +222,6 @@ void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int3
 // (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned
 // 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index).
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact switch cases, child recursion, list removal, and pool swap-pop.
-// Previous catalog alias: Sys_FreeMemory_16.
 std::int32_t Resource_FreeNode(void* context)
 {
     auto* const node = static_cast<ResourceHashNode*>(context);
@@ -329,12 +326,11 @@ void LinkChildIntoContainer(ResourceHashNode* parent, ResourceHashNode* child)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B60F0-0x004B637F, 655 bytes, digest 115d8cda2c658da73d9407d22baf6b6ee0562634c1e8d259034645ca75867cc6; CLEAN/sys/004B60F0-Sys_ErrorInResourceFileS.c.
 // Behavior/CFG: walks ILFF chunks inside an `ILFF`/`IRES` container (`arg3`) starting at Ilff_GetFirstChunk(arg3) (0x004B7490): requires `NAME` (`0x454D414E`) followed by a payload chunk (`BODY` `0x59444F42`, nested `ILFF`/`IRES` `0x46464C49`/`0x53455249`, `CSTR` `0x52545343`, or `PATH` `0x48544150`, with optional `DBUG` `0x47554244` sibling), allocates a child resource node via Resource_CreateNode (0x004B59F0), and splices `&child[2]` into the parent container's child list (`arg2 + 0x14`) via HeapList_Insert (0x004AF8F0). Calls Error_Show("Error in resource file: '%s'", context) on malformed chunk tags. radare2 28 blocks/45 edges; Binary Ninja 28 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact FourCC constants (`NAME`, `BODY`, `IRES`, `CSTR`, `PATH`, `DBUG`) and child-list linking.
-// Previous catalog alias: Sys_ErrorInResourceFileS.
 std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, void* arg3,
                                             const std::int32_t* arg4)
 {
     auto* const parent = static_cast<ResourceHashNode*>(arg2);
-    auto* source_val = static_cast<std::int32_t*>(sys::Sys_ResolveSymbol_19(arg3));
+    auto* source_val = static_cast<std::int32_t*>(sys::Ilff_GetFirstChunk(arg3));
 
     if (source_val != nullptr)
     {
@@ -347,11 +343,11 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
             std::int32_t item_8 = 0;
             ResourceHashNode* body_child = nullptr;
 
-            if (sys::Sys_OpenFileStream_20(source_val) != 0x454D414E) // 'NAME'
+            if (sys::Ilff_GetChunkTag(source_val) != 0x454D414E) // 'NAME'
             {
-                if (sys::Sys_OpenFileStream_20(source_val) == 0x46464C49) // 'ILFF'
+                if (sys::Ilff_GetChunkTag(source_val) == 0x46464C49) // 'ILFF'
                 {
-                    if (sys::Sys_FreeMemory_20(source_val) != 0x47554244) // 'DBUG'
+                    if (sys::Ilff_GetFormType(source_val) != 0x47554244) // 'DBUG'
                     {
                         goto label_4b636f;
                     }
@@ -368,8 +364,8 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
             }
             else
             {
-                data_2 = static_cast<const char*>(sys::Sys_CheckHeap_19(source_val, arg3));
-                source_val = static_cast<std::int32_t*>(sys::Sys_PopStack_19(source_val));
+                data_2 = static_cast<const char*>(sys::Ilff_GetChunkPayload(source_val, arg3));
+                source_val = static_cast<std::int32_t*>(sys::Ilff_GetNextChunk(source_val));
 
                 if (source_val == nullptr)
                 {
@@ -377,38 +373,38 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
                 }
 
                 context_1 = nullptr;
-                data_4 = static_cast<std::int32_t*>(sys::Sys_PopStack_19(source_val));
+                data_4 = static_cast<std::int32_t*>(sys::Ilff_GetNextChunk(source_val));
 
                 if (data_4 != nullptr
-                    && sys::Sys_OpenFileStream_20(data_4) == 0x46464C49
-                    && sys::Sys_FreeMemory_20(data_4) == 0x47554244)
+                    && sys::Ilff_GetChunkTag(data_4) == 0x46464C49
+                    && sys::Ilff_GetFormType(data_4) == 0x47554244)
                 {
-                    for (auto* i = static_cast<std::int32_t*>(sys::Sys_ResolveSymbol_19(data_4));
+                    for (auto* i = static_cast<std::int32_t*>(sys::Ilff_GetFirstChunk(data_4));
                          i != nullptr;
-                         i = static_cast<std::int32_t*>(sys::Sys_PopStack_19(i)))
+                         i = static_cast<std::int32_t*>(sys::Ilff_GetNextChunk(i)))
                     {
-                        if (sys::Sys_OpenFileStream_20(i) == 0x52545343) // 'CSTR'
+                        if (sys::Ilff_GetChunkTag(i) == 0x52545343) // 'CSTR'
                         {
-                            context_1 = sys::Sys_CheckHeap_19(i, data_4);
+                            context_1 = sys::Ilff_GetChunkPayload(i, data_4);
                         }
                     }
                 }
 
-                if (sys::Sys_OpenFileStream_20(source_val) != 0x59444F42) // 'BODY'
+                if (sys::Ilff_GetChunkTag(source_val) != 0x59444F42) // 'BODY'
                 {
-                    const std::int32_t data_16 = sys::Sys_OpenFileStream_20(source_val);
+                    const std::int32_t data_16 = sys::Ilff_GetChunkTag(source_val);
                     std::int32_t data_17 = 0;
 
                     if (data_16 == 0x46464C49)
                     {
-                        data_17 = sys::Sys_FreeMemory_20(source_val);
+                        data_17 = sys::Ilff_GetFormType(source_val);
                     }
 
                     if (data_16 == 0x46464C49 && data_17 == 0x53455249) // 'ILFF' / 'IRES'
                     {
-                        sys::Sys_AllocateMemory_20(&item_c, &item_8, source_val);
+                        sys::Ilff_ReadContainerHeader(&item_c, &item_8, source_val);
                         auto* const child = static_cast<ResourceHashNode*>(
-                            Sys_PopStack_15(data_2, context_1, source_val, 0, 1, arg4));
+                            Resource_CreateNode(data_2, context_1, source_val, 0, 1, arg4));
                         LinkChildIntoContainer(parent, child);
 
                         if (Sys_ErrorInResourceFileS(context, arg2, source_val, arg4) == 0)
@@ -419,37 +415,37 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
                         goto label_4b6347;
                     }
 
-                    if (sys::Sys_OpenFileStream_20(source_val) == 0x52545343) // 'CSTR'
+                    if (sys::Ilff_GetChunkTag(source_val) == 0x52545343) // 'CSTR'
                     {
-                        sys::Sys_AllocateMemory_20(&item_c, &item_8, source_val);
+                        sys::Ilff_ReadContainerHeader(&item_c, &item_8, source_val);
                         auto* const child = static_cast<ResourceHashNode*>(
-                            Sys_PopStack_15(data_2, nullptr, sys::Sys_CheckHeap_19(source_val, arg3),
+                            Resource_CreateNode(data_2, nullptr, sys::Ilff_GetChunkPayload(source_val, arg3),
                                             item_c, 1, arg4));
                         LinkChildIntoContainer(parent, child);
                         goto label_4b6347;
                     }
 
-                    if (sys::Sys_OpenFileStream_20(source_val) != 0x48544150) // 'PATH'
+                    if (sys::Ilff_GetChunkTag(source_val) != 0x48544150) // 'PATH'
                     {
                         goto label_4b636f;
                     }
 
-                    sys::Sys_AllocateMemory_20(&item_c, &item_8, source_val);
+                    sys::Ilff_ReadContainerHeader(&item_c, &item_8, source_val);
                     auto* const child = static_cast<ResourceHashNode*>(
-                        Sys_PopStack_15(data_2, context_1, sys::Sys_CheckHeap_19(source_val, arg3),
+                        Resource_CreateNode(data_2, context_1, sys::Ilff_GetChunkPayload(source_val, arg3),
                                         item_c, 4, arg4));
                     LinkChildIntoContainer(parent, child);
                     goto label_4b6347;
                 }
 
-                sys::Sys_AllocateMemory_20(&item_c, &item_8, source_val);
+                sys::Ilff_ReadContainerHeader(&item_c, &item_8, source_val);
                 body_child = static_cast<ResourceHashNode*>(
-                    Sys_PopStack_15(data_2, context_1, sys::Sys_CheckHeap_19(source_val, arg3),
+                    Resource_CreateNode(data_2, context_1, sys::Ilff_GetChunkPayload(source_val, arg3),
                                     item_c, 1, arg4));
                 LinkChildIntoContainer(parent, body_child);
 
             label_4b6347:
-                source_val = static_cast<std::int32_t*>(sys::Sys_PopStack_19(source_val));
+                source_val = static_cast<std::int32_t*>(sys::Ilff_GetNextChunk(source_val));
                 if (source_val == nullptr)
                 {
                     break;
@@ -466,7 +462,6 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
 // Tools/evidence: copying each entry name (`*(entry + 8)` bytes at `entry + 0x0C`), aligning payload start by Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5F80-0x004B60E1, 353 bytes, digest 7008df670ec82806c208a728e050b93acf7ce0d8b4a333b9ef0d2ef74bae3442; CLEAN/sys/004B5F80-Sys_Resource.c.
 // Behavior/CFG: registers a loaded buffer `arg2` of byte length `arg3` under `context`: 1. Calls Sys_AllocateMemory_5(&item_8, context) (0x004B1820). 2. If `arg2` is an `ILFF`/`IRES` container (`0x46464C49` / `0x53455249`), creates parent node via Resource_CreateNode(context, nullptr, arg2, 0, 0, &item_8), populates children via Resource_RegisterIlffContainer(context, data_2, arg2, &item_8), sets `data_2->loaded_flag = 1`, and returns `arg2`. 3. Otherwise, if `arg3 < 8` or `Resource_MatchPrefix(arg2, "RESOURCE", 8) != 0`, creates a standalone node (`kind = 2`, `size = arg3`) with `loaded_flag = 1`. 4. Otherwise ("RESOURCE" packed archive header), creates a parent node (`kind = 0`), sets `loaded_flag = 1`, and iterates `arg2[2]` (`count`) entries starting at `&arg2[8]` (`+0x20`), advancing by the retail `and al, 0xE0` name stride — the low byte of `name_len + 0x2B` with bits 0-4 cleared, upper bits preserved — and by `(data_size + 0x1F) & 0xFFFFFFE0`, and splicing each child (`kind = 1`) into `parent + 0x14`. radare2 11 blocks/16 edges; Binary Ninja 11 blocks; 94.4% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for all three container branches (`ILFF`/`IRES`, `"RESOURCE"`, and raw file).
-// Previous catalog alias: Sys_Resource.
 void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3)
 {
     std::int32_t item_8[2]{};
@@ -476,11 +471,11 @@ void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3
     }
 
     auto* const dwords = static_cast<std::int32_t*>(arg2);
-    if (sys::Sys_OpenFileStream_20(dwords) == 0x46464C49
-        && sys::Sys_FreeMemory_20(dwords) == 0x53455249)
+    if (sys::Ilff_GetChunkTag(dwords) == 0x46464C49
+        && sys::Ilff_GetFormType(dwords) == 0x53455249)
     {
         auto* const data_2 = static_cast<ResourceHashNode*>(
-            Sys_PopStack_15(context, nullptr, arg2, 0, 0, item_8));
+            Resource_CreateNode(context, nullptr, arg2, 0, 0, item_8));
         Sys_ErrorInResourceFileS(context, data_2, arg2, item_8);
         data_2->loaded_flag = 1;
         return arg2;
@@ -489,19 +484,19 @@ void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3
     if (arg3 < 8)
     {
         auto* const node = static_cast<ResourceHashNode*>(
-            Sys_PopStack_15(context, nullptr, arg2, arg3, 2, item_8));
+            Resource_CreateNode(context, nullptr, arg2, arg3, 2, item_8));
         node->loaded_flag = 1;
     }
     else if (Camera_ApplyLineFilter_21(arg2, "RESOURCE", 8) != 0)
     {
         auto* const node = static_cast<ResourceHashNode*>(
-            Sys_PopStack_15(context, nullptr, arg2, arg3, 2, item_8));
+            Resource_CreateNode(context, nullptr, arg2, arg3, 2, item_8));
         node->loaded_flag = 1;
     }
     else
     {
         auto* const data_5 = static_cast<ResourceHashNode*>(
-            Sys_PopStack_15(context, nullptr, arg2, 0, 0, item_8));
+            Resource_CreateNode(context, nullptr, arg2, 0, 0, item_8));
         data_5->loaded_flag = 1;
         const std::int32_t entity_1 = dwords[2];
         auto* context_2 = reinterpret_cast<std::uint8_t*>(&dwords[8]);
@@ -526,7 +521,7 @@ void* Resource_RegisterBuffer(const char* context, void* arg2, std::int32_t arg3
                 context_2 = context_3 + ((static_cast<std::uint32_t>(temp_1) + 0x1FU) & 0xFFFFFFE0U);
 
                 auto* const child = static_cast<ResourceHashNode*>(
-                    Sys_PopStack_15(g_943c20, nullptr, context_3, temp_1, 1, item_8));
+                    Resource_CreateNode(g_943c20, nullptr, context_3, temp_1, 1, item_8));
                 LinkChildIntoContainer(data_5, child);
 
                 flag_0_1 = (remaining != 1);

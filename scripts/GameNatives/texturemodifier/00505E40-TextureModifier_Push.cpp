@@ -1,6 +1,7 @@
 // IGI native provenance: TextureModifier_Push - 0x00505E40 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00505E40-TextureModifier_Push.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00505E40-TextureModifier_Push.hpp"
+#include "TextureModifier_Push.h"
+
 void* TextureModifier_Push(void* self)
 
 {

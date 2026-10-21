@@ -9,7 +9,6 @@ namespace igi::retail::mem {
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004AF8F0-0x004AF910, 32 bytes; CLEAN/camera/004AF8F0-Camera_SetFieldOfView_33.c.
 // Behavior/CFG: inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact pointer splice sequence.
-// Previous catalog alias: Camera_SetFieldOfView_33.
 void* HeapList_Insert(void* context, void** arg2)
 {
     auto* const header = static_cast<std::uint8_t*>(context);
@@ -70,7 +69,6 @@ void* HeapList_Insert(void* context, void** arg2)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AF960-0x004AF981, 33 bytes, digest 4ada7252239e45e0b5ed56005655c50a7ca29e3c5e3be153590e183ca807eb46; CLEAN/camera/004AF960-Camera_ApplyHandiCam_33.c.
 // Behavior/CFG: unlinks `context` from an intrusive doubly-linked list by writing `*context[1] = *context`, `*(static_cast<void**>(*context) + 1) = context[1]`, clearing `context[1] = nullptr` and `context[0] = nullptr`, and returning `context`. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact pointer unlink steps.
-// Previous catalog alias: Camera_ApplyHandiCam_33.
 void** HeapList_Remove(void** context)
 {
     *static_cast<void**>(context[1]) = context[0];

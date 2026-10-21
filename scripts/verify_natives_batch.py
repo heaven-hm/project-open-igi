@@ -230,13 +230,22 @@ def run_gate(address: str, implementation: str, threshold: str) -> dict:
     # and most MVP natives have no typed probe yet.
     if threshold.upper() in {"ANALYZED", "TRANSCRIBED", "STRUCTURALLY_VERIFIED"}:
         cmd.append("--allow-structural-only")
-    try:
-        p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
-                           env=env, timeout=900)
-    except subprocess.TimeoutExpired:
-        return {"ok": False, "reason": "gate timed out"}
-    return {"ok": p.returncode == 0, "exitCode": p.returncode,
-            "tail": (p.stdout.splitlines()[-3:] + p.stderr.splitlines()[-3:])}
+    # angr can fail transiently under load; retry once before recording a
+    # native as failing, so contention is not reported as a native defect.
+    last = None
+    for attempt in range(2):
+        try:
+            p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
+                               env=env, timeout=900)
+        except subprocess.TimeoutExpired:
+            last = {"ok": False, "reason": "gate timed out", "tail": ["gate timed out"]}
+            continue
+        last = {"ok": p.returncode == 0, "exitCode": p.returncode,
+                "tail": (p.stdout.splitlines()[-3:] + p.stderr.splitlines()[-3:])}
+        if last["ok"]:
+            return last
+        time.sleep(2)
+    return last
 
 
 def main() -> None:

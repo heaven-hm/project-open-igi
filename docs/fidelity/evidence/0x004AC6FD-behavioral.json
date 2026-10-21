@@ -18,7 +18,7 @@
      "chunks_read": 0
     }
    },
-   "note": "The candidate Camera_ApplyWideScreen_24 reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "note": "The candidate FP_FlagsToControlWord reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

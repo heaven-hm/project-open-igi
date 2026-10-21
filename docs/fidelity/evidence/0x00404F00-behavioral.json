@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00404F00 (Config_GraphicOptionsSetPerformanceFlags): Qvm_GetIntArg(vm,0) -> [Config_GetActiveGraphicOptions()+0xC]; result block {1,?,0,0x3ff00000,0x567c74,?} copied with rep movsd ecx=6. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Config_GraphicOptionsSetPerformanceFlags reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

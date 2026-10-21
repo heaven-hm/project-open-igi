@@ -9,7 +9,6 @@ using SysAllocateMemory5Fn = std::int32_t (*)(std::int32_t* out_meta, const char
 using SysOpenFileStream5Fn = std::int32_t (*)(void* data);
 
 // Native: Resource_MatchPrefix() - VA 0x004AAD10 - complete port.
-// Previous catalog alias: Camera_ApplyLineFilter_21.
 // Behavior: compares up to `max_len` bytes of `str1` (`context`) and `str2` (`arg2`), bounded by
 //           the length of `str1` (plus its NUL byte when shorter than `max_len`); returns `-1`
 //           if the first differing byte of `str2 > str1`, `1` if `str2 < str1`, or `0` if equal.
@@ -27,7 +26,6 @@ inline std::int32_t Camera_ApplyLineFilter_21(const void* context, const void* a
 }
 
 // Native: Resource_CreateNode() - VA 0x004B59F0 - complete port.
-// Previous catalog alias: Sys_PopStack_15.
 // Behavior: allocates a resource table slot from pool `g_943e20` using free-list index table
 //           `g_943e24[g_943e28++]` and stride `g_943e30`, records its active index in
 //           `*(g_943e34 + result)`, upper-cases `context` into `result + 0x38` (`result[0x0E]`) via
@@ -40,21 +38,15 @@ inline std::int32_t Camera_ApplyLineFilter_21(const void* context, const void* a
 //           HeapList_Insert (0x004AF8F0), and copies `arg6[0..1]` into `result[0x8F..0x90]`.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B59F0-0x004B5AE9, 249 bytes,
 //                 digest d1a0fe269c4734cc2da57044b5771afd3f5ea268e254542d7e62292455455c97;
-//                 CLEAN/sys/004B59F0-Sys_PopStack_15.c.
+//                 CLEAN/sys/004B59F0-Resource_CreateNode.c.
 // CFG: radare2 10 blocks/13 edges; Binary Ninja 10 blocks; 100% structural agreement.
 // Confidence: high for exact slot allocation, path normalization, hash computation, and list insertion.
 // Signature: x86 cdecl void*(const char* context, void* arg2, void* arg3, int32_t arg4, int32_t arg5, const int32_t* arg6).
 // Usage/tests: inserts top-level and child resource entries during Resource_RegisterBuffer / Resource_RegisterIlffContainer; exercised by sys_resource_test.cpp.
 void* Resource_CreateNode(const char* context, void* arg2, void* arg3, std::int32_t arg4,
                           std::int32_t arg5, const std::int32_t* arg6);
-inline void* Sys_PopStack_15(const char* context, void* arg2, void* arg3, std::int32_t arg4,
-                             std::int32_t arg5, const std::int32_t* arg6)
-{
-    return Resource_CreateNode(context, arg2, arg3, arg4, arg5, arg6);
-}
 
 // Native: Resource_FreeNode() - VA 0x004B5C90 - complete port.
-// Previous catalog alias: Sys_FreeMemory_16.
 // Behavior: switches on `context[9]` (`+0x24` resource kind):
 //           - case 0 (container): walks child list at `context[5]`, recursively calling
 //             Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via
@@ -68,19 +60,14 @@ inline void* Sys_PopStack_15(const char* context, void* arg2, void* arg3, std::i
 //           (retail EAX behavior, verified under angr against retail 0x004B5C90 execution).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B5C90-0x004B5D6A, 218 bytes,
 //                 digest ff4a8050127977de2b75901a65663b90290f997e9f45732720f5b2c1994cb5b2;
-//                 CLEAN/sys/004B5C90-Sys_FreeMemory_16.c.
+//                 CLEAN/sys/004B5C90-Resource_FreeNode.c.
 // CFG: radare2 13 blocks/18 edges; Binary Ninja 13 blocks; 100% structural agreement.
 // Confidence: high for exact switch cases, child recursion, list removal, and pool swap-pop.
 // Signature: x86 cdecl int32_t(void* context); ported as std::int32_t Resource_FreeNode(void* context).
 // Usage/tests: releases resource nodes and returns pool indices; exercised by sys_resource_test.cpp.
 std::int32_t Resource_FreeNode(void* context);
-inline std::int32_t Sys_FreeMemory_16(void* context)
-{
-    return Resource_FreeNode(context);
-}
 
 // Native: Resource_RegisterIlffContainer() - VA 0x004B60F0 - complete port.
-// Previous catalog alias: Sys_ErrorInResourceFileS.
 // Behavior: walks ILFF chunks inside an `ILFF`/`IRES` container (`arg3`) starting at
 //           Ilff_GetFirstChunk(arg3) (0x004B7490): requires `NAME` (`0x454D414E`) followed by a
 //           payload chunk (`BODY` `0x59444F42`, nested `ILFF`/`IRES` `0x46464C49`/`0x53455249`,
@@ -104,7 +91,6 @@ inline std::int32_t Sys_ErrorInResourceFileS(const char* context, void* arg2, vo
 }
 
 // Native: Resource_RegisterBuffer() - VA 0x004B5F80 - complete port.
-// Previous catalog alias: Sys_Resource.
 // Behavior: registers a loaded buffer `arg2` of byte length `arg3` under `context`:
 //           1. Calls Sys_AllocateMemory_5(&item_8, context) (0x004B1820).
 //           2. If `arg2` is an `ILFF`/`IRES` container (`0x46464C49` / `0x53455249`), creates parent node

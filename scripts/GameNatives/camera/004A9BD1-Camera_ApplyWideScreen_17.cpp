@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_ApplyWideScreen_17 - 0x004A9BD1 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A9BD1-Camera_ApplyWideScreen_17.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A9BD1-Camera_ApplyWideScreen_17.hpp"
+#include "Camera_ApplyWideScreen_17.h"
 int _isintTOS(long double context )
 
 {

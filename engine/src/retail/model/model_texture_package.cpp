@@ -169,7 +169,7 @@ struct NativeChunkView
 } // namespace
 
 // Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection.
-// The literal retail DynObj_InsertHashItem_14 (VA 0x004CF080) is in mtp_package_loader.cpp.
+// The literal retail DynObj_LoadModelTexturePackage (VA 0x004CF080) is in mtp_package_loader.cpp.
 MtpPackage MtpPackage::DynObj_LoadModelTexturePackage(std::span<const std::byte> file_bytes)
 {
     MtpPackage package{};

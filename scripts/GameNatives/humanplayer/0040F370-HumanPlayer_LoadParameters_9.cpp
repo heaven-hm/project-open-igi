@@ -1,6 +1,6 @@
 // IGI native provenance: HumanPlayer_LoadParameters_9 - 0x0040F370 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0040F370-HumanPlayer_LoadParameters_9.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "HumanPlayer_LoadParameters_9.hpp"
+#include "HumanPlayer_LoadParameters_9.h"
 void* HumanPlayer_LoadParameters_9(void* context, void* arg2)
 
 {
