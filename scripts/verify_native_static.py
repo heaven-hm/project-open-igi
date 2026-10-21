@@ -53,19 +53,44 @@ def load_targets(args: argparse.Namespace, target_file: pathlib.Path) -> list[di
     return json.loads(target_file.read_text())
 
 
-def run_angr(binary: pathlib.Path, addresses: list[str]) -> dict[str, Any]:
-    """Recover the exact entries with angr's CFGFast, one project for the run."""
+def _run_angr_once(binary: pathlib.Path, addresses: list[str]) -> dict[str, Any]:
     if not ANGR_PYTHON.is_file():
         return {"result": "fail", "reason": f"angr interpreter not found: {ANGR_PYTHON}", "functions": {}}
     command = [str(ANGR_PYTHON), str(ROOT / "scripts" / "angr_analyze.py"),
                "--binary", str(binary)]
     for address in addresses:
         command += ["--address", address]
-    process = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, timeout=3600)
+    try:
+        process = subprocess.run(command, cwd=ROOT, text=True, capture_output=True, timeout=3600)
+    except subprocess.TimeoutExpired:
+        return {"result": "fail", "reason": "angr helper timed out", "functions": {}}
     try:
         return json.loads(process.stdout)
     except json.JSONDecodeError:
         return {"result": "fail", "reason": (process.stderr or process.stdout)[-400:], "functions": {}}
+
+
+def run_angr(binary: pathlib.Path, addresses: list[str]) -> dict[str, Any]:
+    """Recover exact entries, splitting the batch if angr aborts internally.
+
+    angr occasionally raises ``ReferenceError: weakly-referenced object no
+    longer exists`` for a large seeded CFG, aborting every entry in the batch
+    even though each entry is recoverable on its own. Retry the halves instead
+    of reporting all of them inconclusive.
+    """
+    result = _run_angr_once(binary, addresses)
+    if result.get("functions") or len(addresses) <= 8:
+        return result
+    middle = len(addresses) // 2
+    left = run_angr(binary, addresses[:middle])
+    right = run_angr(binary, addresses[middle:])
+    merged = dict(result)
+    merged["functions"] = {**left.get("functions", {}), **right.get("functions", {})}
+    if merged["functions"]:
+        merged["result"] = "pass" if left.get("result") == "pass" and right.get("result") == "pass" else "partial"
+    merged["split_retry"] = {"left": left.get("result"), "right": right.get("result"),
+                             "reason": str(result.get("reason"))[:200]}
+    return merged
 
 
 def main() -> int:
