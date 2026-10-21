@@ -527,8 +527,12 @@ struct Scene
                       "lightmaps=" + std::to_string(lightmaps));
         }
 
+        // The retail loads the level package first and the common package
+        // after it: "LOCAL:%s/" at 0x00415C75 loads the level through
+        // 0x004CFBD0, and "LOCAL:common/" at 0x00415C8D loads the common
+        // package through 0x004CFC00.
         for (const auto& descriptor :
-             {std::pair(location / "common", std::string("location0")), std::pair(level, level_name)})
+             {std::pair(level, level_name), std::pair(location / "common", std::string("location0"))})
         {
             auto package = std::make_unique<Package>();
             const auto bytes =
