@@ -49,8 +49,11 @@ def stable_source_inputs(snapshot_value, root, build):
 
 def target_output(build):
     # The configured CMake linker rule is authoritative, not a caller's PE path.
-    directory = build / 'engine/platform/windows'
-    link = directory / 'CMakeFiles/open-igi.dir/link.txt'
+    links = list(build.glob('**/CMakeFiles/open-igi.dir/link.txt'))
+    if len(links) != 1:
+        raise ValueError('exactly one configured open-igi target linker rule is required')
+    link = links[0]
+    directory = link.parent.parent.parent
     commands = [shlex.split(line) for line in link.read_text().splitlines()]
     command = next(command for command in commands if '-o' in command)
     result = (directory / command[command.index('-o') + 1]).resolve()

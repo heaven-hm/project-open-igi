@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "retail_exe": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "angr_python": "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+  "binary_ninja_mcp_url": "http://127.0.0.1:24642/mcp",
+  "frida_host": "127.0.0.1:27042",
+  "frida_python": "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+  "reference_catalog": "/Users/haseeb-mir/Documents/Code/project-open-igi-scope-gate/assets/IGINatives_v4.json",
+  "re_agent_root": "/Users/haseeb-mir/Documents/Code/re-agent",
+  "candidate": "build-clean-win32/igi1.exe",
+  "build_directory": "build-clean-win32"
+}

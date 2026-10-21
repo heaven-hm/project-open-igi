@@ -1,0 +1,67 @@
+{
+  "kind": "tool-provider-health",
+  "scope": "RE-Agent MCP process enumeration; not native parity",
+  "tool": "mcp__rea__list_frida_processes",
+  "endpoint": "127.0.0.1:27042",
+  "observed": {
+    "device_id": "socket@127.0.0.1:27042",
+    "processes": [
+      {
+        "pid": 48,
+        "name": "services.exe",
+        "identifier": null
+      },
+      {
+        "pid": 60,
+        "name": "winedevice.exe",
+        "identifier": null
+      },
+      {
+        "pid": 96,
+        "name": "plugplay.exe",
+        "identifier": null
+      },
+      {
+        "pid": 120,
+        "name": "svchost.exe",
+        "identifier": null
+      },
+      {
+        "pid": 144,
+        "name": "winedevice.exe",
+        "identifier": null
+      },
+      {
+        "pid": 204,
+        "name": "frida-server-x86.exe",
+        "identifier": null
+      },
+      {
+        "pid": 216,
+        "name": "conhost.exe",
+        "identifier": null
+      },
+      {
+        "pid": 268,
+        "name": "explorer.exe",
+        "identifier": null
+      },
+      {
+        "pid": 296,
+        "name": "rpcss.exe",
+        "identifier": null
+      },
+      {
+        "pid": 1420,
+        "name": "winewrapper.exe",
+        "identifier": null
+      },
+      {
+        "pid": 1476,
+        "name": "open-igi.exe",
+        "identifier": null
+      }
+    ],
+    "cleanup_error": null
+  }
+}

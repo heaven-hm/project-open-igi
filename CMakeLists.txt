@@ -7,3 +7,7 @@ endif()
 
 add_executable(open-igi WIN32 engine/main.cpp)
 target_compile_features(open-igi PRIVATE cxx_std_20)
+set_target_properties(open-igi PROPERTIES OUTPUT_NAME "igi1")
+if(MINGW)
+    target_link_options(open-igi PRIVATE -static -static-libgcc -static-libstdc++)
+endif()

@@ -1,312 +1,144 @@
 #!/usr/bin/env python3
-"""Strict one-native static, build, and paired-Frida verification workflow.
+"""Strict per-native verification of the current Windows x86 candidate.
 
-The command accepts one retail VA.  It never promotes a native from a partial
-phase: Binary Ninja/Radare2 evidence, exact angr recovery, current semantic
-review, a freshly bound x86 candidate, and a paired retail/candidate runtime
-comparison must all succeed.
-
-Examples:
-  python3 scripts/smart_end_to_end_verification.py --address 0x0048F1A0
-  python3 scripts/smart_end_to_end_verification.py --address 0x00401050 --level 1
+Build binding -> VERIFIED native gate (CFG >= .85, angr, semantics, live
+behavior) -> paired natural-call capture -> typed runtime-contract checker.
+No phase promotes manifest statuses. Partial checks never print True.
 """
-
 from __future__ import annotations
-
 import argparse
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
 from pathlib import Path
 import subprocess
 import sys
-from typing import Any
+import uuid
+from candidate_build_receipt import validate_receipt
 
 ROOT = Path(__file__).resolve().parents[1]
-MANIFEST = ROOT / "docs/fidelity/native-verification.json"
-RETAIL = Path("/Users/haseeb-mir/Downloads/IGI/igi.exe")
-BUILD_DIR = ROOT / "build-win32-no-verify-gate"
-CANDIDATE = BUILD_DIR / "engine/platform/windows/open-igi.exe"
-RECEIPT = ROOT / "build/diagnostic-candidate-build.json"
-
-TYPED_FRIDA_RUNNERS = {
-    0x0048F0C0: ROOT / "scripts/frida_app_startup_store_pair.py",
-    0x0048F0D0: ROOT / "scripts/frida_app_startup_store_5c8bc0_pair.py",
-    0x0048F0F0: ROOT / "scripts/frida_app_startup_store_5c8bcc_pair.py",
-    0x0048F1A0: ROOT / "scripts/frida_app_context_setter_pair.py",
-    0x0048F1B0: ROOT / "scripts/frida_app_context_getter_pair.py",
-    0x0048F0E0: ROOT / "scripts/frida_app_startup_store_5c8bc4_pair.py",
-    0x00401050: ROOT / "scripts/frida_401050_pair.py",
-}
-
-RETAINED_SYMBOLS = {
-    0x0048F0C0: "_Native_0048F0C0",
-    0x0048F0D0: "_Native_0048F0D0",
-    0x0048F0F0: "_Native_0048F0F0",
-    0x0048F0E0: "_SetWindowHandle",
-}
 
 
-def digest(path: Path) -> str:
-    value = hashlib.sha256()
-    with path.open("rb") as stream:
-        for block in iter(lambda: stream.read(1024 * 1024), b""):
-            value.update(block)
-    return value.hexdigest()
+def digest(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def normalize(raw: str) -> str:
-    return f"0x{int(raw, 0):08X}"
+def read_config():
+    return json.loads((ROOT / 'scripts/igi-workflow.json').read_text())
 
 
-def load_record(address: str) -> dict[str, Any]:
-    data = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    matches = [
-        record for record in data.get("natives", [])
-        if int(record.get("address", "0"), 16) == int(address, 16)
-    ]
-    if len(matches) != 1:
-        raise ValueError(
-            f"{address} must have exactly one manifest record; found {len(matches)}"
-        )
-    return matches[0]
+def invoke(command, env, timeout=1200):
+    result = subprocess.run(command, cwd=ROOT, env=env, text=True, capture_output=True, timeout=timeout)
+    return dict(command=command, exit_code=result.returncode, stdout=result.stdout, stderr=result.stderr)
 
 
-def run(command: list[str], *, env: dict[str, str] | None = None,
-        timeout: int = 3600) -> dict[str, Any]:
-    process = subprocess.run(
-        command, cwd=ROOT, text=True, capture_output=True, check=False,
-        env=env, timeout=timeout,
-    )
-    return {
-        "command": command,
-        "exit_code": process.returncode,
-        "stdout": process.stdout,
-        "stderr": process.stderr,
-    }
-
-
-def compact_output(result: dict[str, Any], limit: int = 4096) -> dict[str, Any]:
-    """Keep a diagnostic tail while the dedicated phase report retains full evidence."""
-    compact = dict(result)
-    for field in ("stdout", "stderr"):
-        value = compact.get(field, "")
-        compact[f"{field}_bytes"] = len(value.encode("utf-8"))
-        compact[f"{field}_sha256"] = hashlib.sha256(value.encode("utf-8")).hexdigest()
-        if len(value) > limit:
-            compact[field] = value[-limit:]
-    return compact
-
-
-def write_report(path: Path, report: dict[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, indent=2) + "\n", encoding="utf-8")
-
-
-def main() -> int:
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--address", required=True)
-    parser.add_argument("--level", type=int, default=1)
-    parser.add_argument("--binary", type=Path, default=RETAIL)
-    parser.add_argument("--candidate", type=Path, default=CANDIDATE)
-    parser.add_argument("--receipt", type=Path, default=RECEIPT)
-    parser.add_argument("--skip-build", action="store_true",
-                        help="Reuse a candidate only when its existing receipt validates it.")
-    parser.add_argument("--static-only", action="store_true",
-                        help="Stop after the strict static/semantic phase.")
-    parser.add_argument("--report", type=Path)
+    parser.add_argument('--address', required=True, type=lambda value: f'0x{int(value, 0):08X}')
+    parser.add_argument('--level', type=int, default=1, choices=range(1, 15))
+    parser.add_argument('--binary', type=Path)
+    parser.add_argument('--candidate', type=Path)
+    parser.add_argument('--receipt', type=Path)
+    parser.add_argument('--probe', type=Path, help='Reviewed typed gameplay probe, used unchanged in both images')
+    parser.add_argument('--skip-build', action='store_true', help='Require and revalidate an existing build receipt')
+    parser.add_argument('--static-only', action='store_true', help='Run strict native gate only; never full feature acceptance')
+    parser.add_argument('--report', type=Path)
     args = parser.parse_args()
-
-    address = normalize(args.address)
-    address_value = int(address, 16)
-    output = (args.report or ROOT / "build/native-one" / address / "report.json").resolve()
-    static_report = output.parent / "static-gate.json"
-    runtime_report = output.parent / "frida-pair.json"
-
-    report: dict[str, Any] = {
-        "schema_version": 1,
-        "kind": "igi-one-native-verification",
-        "address": address,
-        "result": "blocked",
-        "verified": False,
-        "phases": {},
-    }
-
+    config = read_config()
+    run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ-') + uuid.uuid4().hex[:8]
+    folder = ROOT / 'build/native-one' / args.address / run_id
+    folder.mkdir(parents=True)
+    output = args.report or folder / 'report.json'
+    static_report, runtime_report = folder / 'static-gate.json', folder / 'frida-pair.json'
+    report = dict(schema_version=1, kind='igi-one-native-verification', address=args.address,
+                  run_id=run_id, result='blocked', verified=False, phases={})
+    env = dict(os.environ, LC_ALL='C', LANG='C')
+    env.setdefault('IGI_ANGR_PYTHON', config['angr_python'])
+    env.setdefault('FRIDA_HOST', config['frida_host'])
     try:
-        record = load_record(address)
-        implementation = (ROOT / record["implementation"]["path"]).resolve()
-        if not implementation.is_file():
-            raise ValueError(f"implementation source is missing: {implementation}")
-        binary = args.binary.resolve()
-        if not binary.is_file():
-            raise ValueError(f"retail binary is missing: {binary}")
-        source_hash = digest(implementation)
-        retail_hash = digest(binary)
-        if source_hash != record["implementation"].get("sha256"):
-            raise ValueError("implementation hash differs from its reviewed manifest record")
-        if retail_hash != record.get("binary_sha256"):
-            raise ValueError("retail image hash differs from the manifest record")
-
-        env = dict(os.environ)
-        env.setdefault("IGI_ANGR_PYTHON", str(ROOT / ".venv-angr/bin/python"))
-        gate_command = [
-            sys.executable, str(ROOT / "scripts/native_gate.py"),
-            "--root", str(ROOT),
-            "--address", address,
-            "--file", str(implementation.relative_to(ROOT)),
-            "--threshold", "STRUCTURALLY_VERIFIED",
-            "--cfg-threshold", "0.85",
-            "--require-semantic-evidence",
-            "--allow-structural-only",
-            "--report", str(static_report),
-        ]
-        static = run(gate_command, env=env)
-        report["phases"]["static"] = static
-        if static["exit_code"] != 0:
-            write_report(output, report)
-            print(static["stdout"], end="")
-            print(static["stderr"], end="", file=sys.stderr)
-            print("False")
-            print(f"BLOCKED static phase; report: {output}")
-            return 1
-
+        binary = (args.binary or Path(config['retail_exe'])).resolve()
+        candidate = (args.candidate or ROOT / config['candidate']).resolve()
+        build = ROOT / config['build_directory']
+        receipt = args.receipt or build / 'candidate-receipt.json'
+        records = json.loads((ROOT / 'docs/fidelity/native-verification.json').read_text())['natives']
+        matches = [r for r in records if int(r['address'], 16) == int(args.address, 16)]
+        if len(matches) != 1:
+            raise ValueError('exactly one address-bound manifest record is required')
+        record = matches[0]
+        implementation = (ROOT / record['implementation']['path']).resolve()
+        if not implementation.is_relative_to(ROOT / 'engine') or not implementation.is_file():
+            raise ValueError('native is not implemented in this clean branch; historical GameNatives cannot approve it')
+        if digest(binary) != config['retail_sha256'] or digest(binary) != record.get('binary_sha256'):
+            raise ValueError('retail image does not match the selected binary identity')
+        if digest(implementation) != record['implementation'].get('sha256'):
+            raise ValueError('current source differs from its reviewed manifest record')
+        report.update(binary_sha256=digest(binary), implementation_sha256=digest(implementation))
+        if not args.static_only:
+            if not args.skip_build:
+                configure = invoke(['cmake', '-S', str(ROOT), '-B', str(build), '-DCMAKE_SYSTEM_NAME=Windows',
+                    '-DCMAKE_CXX_COMPILER=' + os.environ.get('IGI_WIN32_CXX', 'i686-w64-mingw32-g++'), '-DCMAKE_BUILD_TYPE=Release'], env, 120)
+                report['phases']['configure'] = configure
+                if configure['exit_code']:
+                    raise ValueError('candidate configuration failed')
+                compiled = invoke([sys.executable, str(ROOT / 'scripts/candidate_build_receipt.py'), '--root', str(ROOT),
+                    '--build-dir', str(build), '--candidate', str(candidate), '--receipt', str(receipt)], env)
+                report['phases']['build'] = compiled
+                if compiled['exit_code']:
+                    raise ValueError('current candidate build or receipt failed')
+            validate_receipt(receipt, ROOT, candidate, [implementation])
+            env.update(IGI_CANDIDATE_EXE=str(candidate), IGI_CANDIDATE_BUILD_RECEIPT=str(receipt))
+            report['candidate_sha256'] = digest(candidate)
+        command = [sys.executable, str(ROOT / 'scripts/native_gate.py'), '--root', str(ROOT),
+            '--address', args.address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
+            '--threshold', 'VERIFIED', '--cfg-threshold', '0.85', '--require-semantic-evidence',
+            '--require-behavioral-tests', '--report', str(static_report)]
+        gate = invoke(command, env, 1800)
+        report['phases']['static_semantic_behavioral'] = gate
+        if gate['exit_code']:
+            raise ValueError('strict native gate failed; see static-gate.json and retained command output')
+        from verification_scope import load_scope
+        required, _, gate_data = load_scope(static_report)
+        if required != {args.address}:
+            raise ValueError('gate must check exactly the requested nonempty native scope')
         if args.static_only:
-            report["result"] = "static_passed_runtime_not_run"
-            write_report(output, report)
-            print(f"STATIC PASS {address}; runtime deliberately not run; report: {output}")
+            report['result'] = 'gate_passed_runtime_not_run'
             return 0
-
-        if not args.skip_build:
-            configure_command = [
-                "cmake", "-S", str(ROOT), "-B", str(BUILD_DIR),
-                "-DIGI_ENABLE_NATIVE_GATE=OFF",
-                "-DIGI_FULL_PRODUCTION_GATE=OFF",
-                "-DCMAKE_BUILD_TYPE=Release",
-                "-DCMAKE_SYSTEM_NAME=Windows",
-                "-DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++",
-                "-DBUILD_TESTING=OFF",
-                "-DIGI_KEEP_ALL_RETAIL_NATIVES=OFF",
-            ]
-            retained_symbol = RETAINED_SYMBOLS.get(address_value)
-            if retained_symbol:
-                configure_command.append(f"-DIGI_RETAIN_NATIVE_SYMBOL={retained_symbol}")
-            configure = run(configure_command, timeout=600)
-            report["phases"]["configure"] = compact_output(configure)
-            if configure["exit_code"] != 0:
-                write_report(output, report)
-                print(configure["stdout"], end="")
-                print(configure["stderr"], end="", file=sys.stderr)
-                print("False")
-                print(f"BLOCKED candidate configuration; report: {output}")
-                return 1
-
-            receipt = run([
-                sys.executable, str(ROOT / "scripts/candidate_build_receipt.py"),
-                "--root", str(ROOT),
-                "--build-dir", str(BUILD_DIR),
-                "--candidate", str(args.candidate.resolve()),
-                "--receipt", str(args.receipt.resolve()),
-            ], timeout=3600)
-            report["phases"]["build_receipt"] = compact_output(receipt)
-            if receipt["exit_code"] != 0:
-                write_report(output, report)
-                print(receipt["stdout"], end="")
-                print(receipt["stderr"], end="", file=sys.stderr)
-                print("False")
-                print(f"BLOCKED candidate receipt; report: {output}")
-                return 1
-
-        runner = TYPED_FRIDA_RUNNERS.get(address_value)
-        if runner is None:
-            runner = ROOT / "scripts/native_frida_leaf_diff_runner.py"
-
-        runtime_command = [
-            sys.executable, str(runner),
-            "--address", address,
-            "--root", str(ROOT),
-            "--binary", str(binary),
-            "--binary-sha256", retail_hash,
-            "--implementation", str(implementation),
-            "--implementation-sha256", source_hash,
-        ]
-        # The typed pair runners take the candidate, its receipt and the
-        # output path; the leaf runner takes the level instead.
-        if runner.name.startswith("frida_app_context_") or runner.name.startswith("frida_app_startup_store_"):
-            runtime_command += [
-                "--candidate", str(args.candidate.resolve()),
-                "--receipt", str(args.receipt.resolve()),
-                "--out", str(runtime_report),
-            ]
-        else:
-            runtime_command += [
-                "--level", str(args.level),
-            ]
-
-        runtime_env = dict(env)
-        runtime_env["IGI_CANDIDATE_EXE"] = str(args.candidate.resolve())
-        runtime_env["IGI_CANDIDATE_BUILD_RECEIPT"] = str(args.receipt.resolve())
-        # The dispatch probe drives the candidate through its own interface:
-        # it attaches to the running candidate rather than to the retail.
-        if runner.name == "frida_401050_pair.py":
-            runtime_command = [
-                sys.executable, str(runner),
-                "--candidate-exe", str(args.candidate.resolve()),
-                "--level", str(args.level),
-                "--out", str(runtime_report),
-            ]
-            runtime = run(runtime_command, env=runtime_env, timeout=1200)
-            report["phases"]["runtime"] = runtime
-            if runtime["exit_code"] != 0:
-                write_report(output, report)
-                print(runtime["stdout"], end="")
-                print(runtime["stderr"], end="", file=sys.stderr)
-                print("False")
-                print(f"BLOCKED paired Frida phase; report: {output}")
-                return 1
-            report["result"] = "passed"
-            report["verified"] = True
-            write_report(output, report)
-            print(runtime["stdout"], end="")
-            print("True")
-            print(f"PASS {address}: static/semantic, x86 build binding, and paired Frida runtime")
-            print(f"report: {output}")
-            return 0
-
-        runtime = run(runtime_command, env=runtime_env, timeout=1200)
-        report["phases"]["runtime"] = compact_output(runtime)
-        if runtime_report.is_file():
-            report["runtime_report"] = str(runtime_report.relative_to(ROOT))
-            report["runtime_report_sha256"] = digest(runtime_report)
-        if runtime["exit_code"] != 0:
-            write_report(output, report)
-            print(runtime["stdout"], end="")
-            print(runtime["stderr"], end="", file=sys.stderr)
-            print("False")
-            print(f"BLOCKED paired Frida phase; report: {output}")
-            return 1
-
-        report["result"] = "passed"
-        report["verified"] = True
-        write_report(output, report)
-        if runtime_report.is_file():
-            runtime_data = json.loads(runtime_report.read_text(encoding="utf-8"))
-            print(
-                "runtime:",
-                runtime_data.get("result"),
-                f"{runtime_data.get('tests_passed', 0)}/{runtime_data.get('tests_total', 0)} cases",
-            )
-        print("True")
-        print(f"PASS {address}: static/semantic, x86 build binding, and paired Frida runtime")
-        print(f"report: {output}")
+        probe = args.probe
+        if probe is None:
+            probe_path = record.get('verification', {}).get('runtime_probe', {}).get('path')
+            probe = ROOT / probe_path if probe_path else None
+        if probe is None or not probe.is_file():
+            raise ValueError('missing reviewed typed gameplay probe; direct-call replay alone does not prove wiring')
+        contracts = [row.get('runtime_contract', {}) for row in gate_data['checked_natives']]
+        if any(c.get('probe_sha256') != digest(probe) for c in contracts):
+            raise ValueError('probe hash differs from the current source-semantic runtime contract')
+        capture = invoke([sys.executable, str(ROOT / 'scripts/native_frida_diff.py'),
+            '--gate-report', str(static_report), '--candidate-exe', str(candidate), '--probe', str(probe),
+            '--level', str(args.level), '--out', str(runtime_report)], env)
+        report['phases']['paired_runtime_capture'] = capture
+        if capture['exit_code']:
+            raise ValueError('paired runtime capture failed')
+        checked = invoke([sys.executable, str(ROOT / 'scripts/check_frida_differential.py'),
+            '--report', str(runtime_report), '--gate-report', str(static_report), '--candidate-exe', str(candidate)], env)
+        report['phases']['typed_runtime_comparison'] = checked
+        if checked['exit_code']:
+            raise ValueError('typed runtime comparison failed')
+        validate_receipt(receipt, ROOT, candidate, [implementation])
+        if digest(implementation) != report['implementation_sha256'] or digest(binary) != report['binary_sha256']:
+            raise ValueError('source or retail changed during verification')
+        report.update(result='passed', verified=True, scope=f'Native {args.address}, level {args.level}, reviewed probe observations only')
         return 0
-    except (OSError, ValueError, KeyError, subprocess.TimeoutExpired) as error:
-        report["error"] = f"{type(error).__name__}: {error}"
-        write_report(output, report)
-        print("False")
-        print(f"BLOCKED {address}: {error}", file=sys.stderr)
-        print(f"report: {output}", file=sys.stderr)
+    except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
+        report['error'] = str(error)
         return 1
+    finally:
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, indent=2) + '\n')
+        print('True' if report['verified'] else 'False')
+        print(f"{report['result']}: {report.get('error', report.get('scope', 'partial gate only'))}")
+        print(f'report: {output}')
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     raise SystemExit(main())

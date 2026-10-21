@@ -1,0 +1,7 @@
+{
+  "kind": "historical-catalog-provenance",
+  "source_path": "/Users/haseeb-mir/Documents/Code/project-open-igi-scope-gate/assets/IGINatives_v4.json",
+  "destination_path": "assets/IGINatives_v4.json",
+  "sha256": "ffc356836cf5a7126ba1c86506e53c38e06f76a627f7bcc0d304b0fdf7e0996b",
+  "scope": "Historical inventory only; not native implementation or verification."
+}
