@@ -7,43 +7,68 @@
       "name": "QTask_OpenEvent",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "cedfdf84867c1b1d02408f74bfd6f08c36f4a1f05aa67ffccb0b717d1efdb4d9",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/qtask/00401050-QTask_OpenEvent.cpp",
+        "sha256": "502520dc7c619173fea4f0b2442b07671dfd79b714ff6ac497c0c9a40113c3c7",
+        "signature": "void __cdecl QTask_OpenEvent(void);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/qtask/00401050-QTask_OpenEvent 2.cpp",
-        "sha256": "a904e1ebb5e0b39fb9972f5e536df897cbd03aa4fbc2f05b211c5228a893b867",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/qtask/00401050-QTask_OpenEvent.cpp",
+        "sha256": "502520dc7c619173fea4f0b2442b07671dfd79b714ff6ac497c0c9a40113c3c7",
+        "signature": "void __cdecl QTask_OpenEvent(void);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
-        "binary_ninja": {
-          "evidence_id": "bn:live:0x00401050",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x00401050-binaryninja.json",
-          "evidence_sha256": "9bb22e5777942eaf219f950bea908d6cebdff0dbd1b7a9cc147e46d8e34d7a41"
-        },
-        "radare2": {
-          "evidence_id": "r2:live:0x00401050",
-          "signature": "unknown",
-          "evidence_path": "docs/fidelity/evidence/0x00401050-radare2.json",
-          "evidence_sha256": "8f0f9e76162083bd984eb47de54649cfd16b1c5e740384033ede260234dbbed8"
-        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+          "rationale": "Retail 0x00401050 (QTask_OpenEvent): push esi; if(_setjmp3(0x54F8E0,0)==0){ctx=Game_GetContext(); fn=table_A970E0[word ctx+0x1C]; fn(Game_GetContext());} else Loop_SetStatusByte(0). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+        },
+        "limitations": [
+          "Transcribed instruction for instruction from retail. No Frida run yet."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/native_diff_runner.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
+          ],
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x00401050-radare2.json",
+          "evidence_sha256": "2b32ff045fb90b04a4b59b8566a7a7b11b6651164b36b16ce8ac37c54d412391",
+          "evidence_id": "r2:live:0x00401050",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x00401050-binaryninja.json",
+          "evidence_sha256": "514650f53dde985de5293929b1088f9b1057d4db2afbb6f8e014ac0a891dff12",
+          "evidence_id": "bn:live:0x00401050",
+          "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "shared_source_review": "Other function bodies are unchanged; source-file hash refreshed after the reviewed Flow_SetState EAX/interface fix and provenance comments. No QTask or byte-status promotion.",
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x00401050-build.json",
-          "evidence_sha256": "fddf1f8e8e7c453fcd3e7fb24d4c32222e54d99de7194a989af703be1821c51c"
-        },
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00401050-semantic-review.json",
-          "evidence_sha256": "e72f50ebf557b18778630b446cc536b0eb5764338feb5326fb2251b84be0769e"
+          "evidence_sha256": "a6fc7cb1679cc48cecca8b25c161fc4167492f90af9ea45dd13bc4370d370497"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x00401050-build.json",
+          "evidence_sha256": "0e2861596a0cbea2e0b507219c18e611abe7f7ab48fe0b8c541ec4e068861013"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x00401050-behavioral.json",
+          "evidence_sha256": "531a04adb03ca2c8c016e824eecc66a9261d4a4fcb4cacd01ff7a498fa3aa0ac"
         }
       }
     },
