@@ -1,8 +1,10 @@
-// IGI native provenance: FX_FragmentSimulate_22 - 0x0048F0C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F0C0-FX_FragmentSimulate_22.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F0C0-FX_FragmentSimulate_22.hpp"
-int FX_FragmentSimulate_22(int context)
+// IGI native FX_FragmentSimulate_22 - 0x0048F0C0 - transcribed from retail igi.exe.
+// Retail: mov eax,[esp+4]; mov [g_5c8bc8],eax; ret
+#include <cstdint>
+#include <windows.h>
+extern std::int32_t g_5c8bc8;
 
+int __cdecl FX_FragmentSimulate_22(int context)
 {
     g_5c8bc8 = context;
     return context;
