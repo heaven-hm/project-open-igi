@@ -1,24 +1,550 @@
 {
- "address": "0x00497D70",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x00497D70",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "build-view-block-fullscreen-1024x640",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            12.5,
+            -64.25,
+            40.0
+          ],
+          [
+            1024,
+            640
+          ],
+          1.0,
+          [
+            0.0,
+            0.0,
+            1024.0,
+            640.0
+          ],
+          0,
+          1
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1.0,
+          "vfovy": 0.75,
+          "screen_fovx": 512.0,
+          "screen_fovy": 426.6666564941406,
+          "origin_x": 512.0,
+          "origin_y": 320.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "1f262d34737a8188c7ced5dc3b4249508f969da4e3eaf1f8575e656cabb2b9c0ff060d141b222930",
+          "camera_copy_hex": "000000000000294000000000001050c00000000000004440"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1,
+          "vfovy": 0.75,
+          "screen_fovx": 512,
+          "screen_fovy": 426.6666564941406,
+          "origin_x": 512,
+          "origin_y": 320,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "1f262d34737a8188c7ced5dc3b4249508f969da4e3eaf1f8575e656cabb2b9c0ff060d141b222930",
+          "camera_copy_hex": "000000000000294000000000001050c00000000000004440"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-fullscreen-640x480",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            0.0,
+            0.0,
+            0.0
+          ],
+          [
+            640,
+            480
+          ],
+          1.0,
+          [
+            0.0,
+            0.0,
+            640.0,
+            480.0
+          ],
+          1,
+          2
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1.0,
+          "vfovy": 0.75,
+          "screen_fovx": 320.0,
+          "screen_fovy": 320.0,
+          "origin_x": 320.0,
+          "origin_y": 240.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "3e454c539299a0a7e6edf4fb5a61686faeb5bcc302091017767d848bcad1d8df1e252c333a41484f",
+          "camera_copy_hex": "000000000000000000000000000000000000000000000000"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1,
+          "vfovy": 0.75,
+          "screen_fovx": 320,
+          "screen_fovy": 320,
+          "origin_x": 320,
+          "origin_y": 240,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "3e454c539299a0a7e6edf4fb5a61686faeb5bcc302091017767d848bcad1d8df1e252c333a41484f",
+          "camera_copy_hex": "000000000000000000000000000000000000000000000000"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-viewmodel-tangent",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            -8.0,
+            3.5,
+            12.0
+          ],
+          [
+            1024,
+            640
+          ],
+          0.57735026,
+          [
+            0.0,
+            0.0,
+            1024.0,
+            640.0
+          ],
+          2,
+          3
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.5773502588272095,
+          "vfovy": 0.4330126643180847,
+          "screen_fovx": 886.81005859375,
+          "screen_fovy": 739.0083618164062,
+          "origin_x": 512.0,
+          "origin_y": 320.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "5d646b72b1b8bfc6050c131a7980878ecdd4dbe221282f36959ca3aae9f0f7fe3d444b525960676e",
+          "camera_copy_hex": "00000000000020c00000000000000c400000000000002840"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.5773502588272095,
+          "vfovy": 0.4330126643180847,
+          "screen_fovx": 886.81005859375,
+          "screen_fovy": 739.0083618164062,
+          "origin_x": 512,
+          "origin_y": 320,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "5d646b72b1b8bfc6050c131a7980878ecdd4dbe221282f36959ca3aae9f0f7fe3d444b525960676e",
+          "camera_copy_hex": "00000000000020c00000000000000c400000000000002840"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-subrect",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            100.0,
+            200.0,
+            300.0
+          ],
+          [
+            1280,
+            1024
+          ],
+          1.0,
+          [
+            64.0,
+            32.0,
+            1152.0,
+            960.0
+          ],
+          3,
+          4
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1.0,
+          "vfovy": 0.78125,
+          "screen_fovx": 576.0,
+          "screen_fovy": 614.4000244140625,
+          "origin_x": 640.0,
+          "origin_y": 512.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "7c838a91d0d7dee5242b3239989fa6adecf3fa0140474e55b4bbc2c9080f161d5c636a71787f868d",
+          "camera_copy_hex": "000000000000594000000000000069400000000000c07240"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1,
+          "vfovy": 0.78125,
+          "screen_fovx": 576,
+          "screen_fovy": 614.4000244140625,
+          "origin_x": 640,
+          "origin_y": 512,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "7c838a91d0d7dee5242b3239989fa6adecf3fa0140474e55b4bbc2c9080f161d5c636a71787f868d",
+          "camera_copy_hex": "000000000000594000000000000069400000000000c07240"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-half-height-rect",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            -1.0,
+            -2.0,
+            -3.0
+          ],
+          [
+            800,
+            600
+          ],
+          1.25,
+          [
+            0.0,
+            0.0,
+            800.0,
+            300.0
+          ],
+          4,
+          5
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1.25,
+          "vfovy": 0.46875,
+          "screen_fovx": 320.0,
+          "screen_fovy": 320.0,
+          "origin_x": 400.0,
+          "origin_y": 150.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "9ba2a9b0eff6fd04434a5158b7bec5cc0b1219205f666d74d3dae1e8272e353c7b828990979ea5ac",
+          "camera_copy_hex": "000000000000f0bf00000000000000c000000000000008c0"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 1.25,
+          "vfovy": 0.46875,
+          "screen_fovx": 320,
+          "screen_fovy": 320,
+          "origin_x": 400,
+          "origin_y": 150,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "9ba2a9b0eff6fd04434a5158b7bec5cc0b1219205f666d74d3dae1e8272e353c7b828990979ea5ac",
+          "camera_copy_hex": "000000000000f0bf00000000000000c000000000000008c0"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-zoom-in",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            5.0,
+            5.0,
+            5.0
+          ],
+          [
+            1024,
+            640
+          ],
+          0.1,
+          [
+            0.0,
+            0.0,
+            1024.0,
+            640.0
+          ],
+          5,
+          6
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.10000000149011612,
+          "vfovy": 0.07500000298023224,
+          "screen_fovx": 5120.0,
+          "screen_fovy": 4266.66650390625,
+          "origin_x": 512.0,
+          "origin_y": 320.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "bac1c8cf0e151c2362697077d6dde4eb2a31383f7e858c93f2f90007464d545b9aa1a8afb6bdc4cb",
+          "camera_copy_hex": "000000000000144000000000000014400000000000001440"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.10000000149011612,
+          "vfovy": 0.07500000298023224,
+          "screen_fovx": 5120,
+          "screen_fovy": 4266.66650390625,
+          "origin_x": 512,
+          "origin_y": 320,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "bac1c8cf0e151c2362697077d6dde4eb2a31383f7e858c93f2f90007464d545b9aa1a8afb6bdc4cb",
+          "camera_copy_hex": "000000000000144000000000000014400000000000001440"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-zoom-out",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            -100.0,
+            250.0,
+            0.5
+          ],
+          [
+            640,
+            480
+          ],
+          5.0,
+          [
+            0.0,
+            0.0,
+            640.0,
+            480.0
+          ],
+          6,
+          7
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 5.0,
+          "vfovy": 3.75,
+          "screen_fovx": 64.0,
+          "screen_fovy": 64.0,
+          "origin_x": 320.0,
+          "origin_y": 240.0,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "d9e0e7ee2d343b4281888f96f5fc030a4950575e9da4abb211181f26656c737ab9c0c7ced5dce3ea",
+          "camera_copy_hex": "00000000000059c00000000000406f40000000000000e03f"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 5,
+          "vfovy": 3.75,
+          "screen_fovx": 64,
+          "screen_fovy": 64,
+          "origin_x": 320,
+          "origin_y": 240,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "d9e0e7ee2d343b4281888f96f5fc030a4950575e9da4abb211181f26656c737ab9c0c7ced5dce3ea",
+          "camera_copy_hex": "00000000000059c00000000000406f40000000000000e03f"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "build-view-block-odd-screen",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            0.125,
+            -0.5,
+            4096.0
+          ],
+          [
+            1279,
+            1023
+          ],
+          0.9,
+          [
+            17.0,
+            11.0,
+            1024.0,
+            640.5
+          ],
+          7,
+          8
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.8999999761581421,
+          "vfovy": 0.5278589129447937,
+          "screen_fovx": 568.888916015625,
+          "screen_fovy": 606.6962280273438,
+          "origin_x": 529.0,
+          "origin_y": 331.25,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "f8ff060d4c535a61a0a7aeb5141b2229686f767dbcc3cad130373e45848b9299d8dfe6edf4fb0209",
+          "camera_copy_hex": "000000000000c03f000000000000e0bf000000000000b040"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "vfovx": 0.8999999761581421,
+          "vfovy": 0.5278589129447937,
+          "screen_fovx": 568.888916015625,
+          "screen_fovy": 606.6962280273438,
+          "origin_x": 529,
+          "origin_y": 331.25,
+          "is_draw": 1,
+          "layer": 1,
+          "view_copy_hex": "f8ff060d4c535a61a0a7aeb5141b2229686f767dbcc3cad130373e45848b9299d8dfe6edf4fb0209",
+          "camera_copy_hex": "000000000000c03f000000000000e0bf000000000000b040"
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Transcontext_BuildViewBlock reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x00497D70",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/render/view_block.cpp",
+      "--implementation-sha256",
+      "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }

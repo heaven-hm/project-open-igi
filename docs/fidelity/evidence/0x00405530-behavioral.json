@@ -1,24 +1,342 @@
 {
- "address": "0x00405530",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x00405530",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "67d2e3d5b330cde7d5e7e8548d843c2d9b961241b7afb04886d717a107e1ca06",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "config-level-flags-0",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          414,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 0,
+          "block_undefined": 0,
+          "block_real": 0.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 0,
+          "block_undefined": 0,
+          "block_real": 0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-1",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          430,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 1,
+          "block_undefined": 0,
+          "block_real": 1.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 1,
+          "block_undefined": 0,
+          "block_real": 1,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-2",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          13,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 2,
+          "block_undefined": 0,
+          "block_real": 2.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 2,
+          "block_undefined": 0,
+          "block_real": 2,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-3",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          96,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 3,
+          "block_undefined": 0,
+          "block_real": 3.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 3,
+          "block_undefined": 0,
+          "block_real": 3,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-4",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          77,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 4,
+          "block_undefined": 0,
+          "block_real": 4.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 4,
+          "block_undefined": 0,
+          "block_real": 4,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-5",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          65,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 5,
+          "block_undefined": 0,
+          "block_real": 5.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 5,
+          "block_undefined": 0,
+          "block_real": 5,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-6",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 6,
+          "block_undefined": 0,
+          "block_real": 6.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 6,
+          "block_undefined": 0,
+          "block_real": 6,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "config-level-flags-7",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          4294967295,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 0,
+          "block_undefined": 0,
+          "block_real": 0.0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "block_integer": 0,
+          "block_undefined": 0,
+          "block_real": 0,
+          "block_type": 5667956,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Config_GraphicOptionsGetPerfLevelFromFlags reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x00405530",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/config/config_graphic_options.cpp",
+      "--implementation-sha256",
+      "67d2e3d5b330cde7d5e7e8548d843c2d9b961241b7afb04886d717a107e1ca06",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }

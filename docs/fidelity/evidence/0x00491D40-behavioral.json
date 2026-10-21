@@ -1,24 +1,302 @@
 {
- "address": "0x00491D40",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x00491D40",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "screen-aspect-1024x640",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          640,
+          1024,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0.8333333333333334,
+        "state_delta": {
+          "display_width": 1024,
+          "display_height": 640
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0.8333333333333334,
+        "state_delta": {
+          "display_width": 1024,
+          "display_height": 640
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-640x480",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          480,
+          640,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 1.0,
+        "state_delta": {
+          "display_width": 640,
+          "display_height": 480
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "display_width": 640,
+          "display_height": 480
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-800x600",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          600,
+          800,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 1.0,
+        "state_delta": {
+          "display_width": 800,
+          "display_height": 600
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "display_width": 800,
+          "display_height": 600
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-1280x1024",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          1024,
+          1280,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 1.0666666666666667,
+        "state_delta": {
+          "display_width": 1280,
+          "display_height": 1024
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1.0666666666666667,
+        "state_delta": {
+          "display_width": 1280,
+          "display_height": 1024
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-320x200",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          200,
+          320,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0.8333333333333334,
+        "state_delta": {
+          "display_width": 320,
+          "display_height": 200
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0.8333333333333334,
+        "state_delta": {
+          "display_width": 320,
+          "display_height": 200
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-1920x1080",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          1080,
+          1920,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0.75,
+        "state_delta": {
+          "display_width": 1920,
+          "display_height": 1080
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0.75,
+        "state_delta": {
+          "display_width": 1920,
+          "display_height": 1080
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-1279x1023",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1023,
+          1279,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 1.0664581704456606,
+        "state_delta": {
+          "display_width": 1279,
+          "display_height": 1023
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1.0664581704456606,
+        "state_delta": {
+          "display_width": 1279,
+          "display_height": 1023
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "screen-aspect-4096x2161",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          2161,
+          4096,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0.7034505208333334,
+        "state_delta": {
+          "display_width": 4096,
+          "display_height": 2161
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0.7034505208333334,
+        "state_delta": {
+          "display_width": 4096,
+          "display_height": 2161
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Display_ComputeScreenAspect reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x00491D40",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/render/view_block.cpp",
+      "--implementation-sha256",
+      "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }

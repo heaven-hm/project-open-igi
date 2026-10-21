@@ -1,24 +1,750 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "result": "passed",
  "address": "0x004AC6FD",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "tests_total": 16,
+ "tests_passed": 16,
+ "tests_failed": 0,
  "cases": [
   {
-   "id": "static-structure",
+   "id": "case-0-control-037f",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "control_word": 895,
+    "arguments": [
+     0
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 768,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 768,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-1-control-037f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     1
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 800,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 800,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-2-control-037f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     2
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 784,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 784,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-3-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     4
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 776,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 776,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-4-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     8
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 772,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 772,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-5-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     16
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 769,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 769,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-6-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     524288
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 770,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 770,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-7-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     256
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 1792,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 1792,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-8-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     512
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 2816,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 2816,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-9-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     768
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 3840,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 3840,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-10-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     65536
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 512,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 512,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-11-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     131072
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
    },
    "candidate_output": {
     "return_value": 0,
-    "side_effects": [],
     "state_delta": {
-     "chunks_read": 0
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
     }
    },
-   "note": "The candidate FP_FlagsToControlWord reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "result": "passed"
+  },
+  {
+   "id": "case-12-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     196608
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-13-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     262144
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 4864,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 4864,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-14-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     1048575
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 7231,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 7231,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-15-control-037f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [
+     4294967295
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 7231,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 7231,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 895
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
   }
+ ],
+ "runner": {
+  "path": "scripts/fpu_state_diff_runner.py",
+  "sha256": "3e9af28ae90dd961624aece1ead5d7a7f89a58f38230b7d2440827bf4bb2c3e7",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/fpu_state_diff_runner.py",
+   "--address",
+   "0x004AC6FD",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+   "--implementation-sha256",
+   "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+  ]
+ },
+ "retail_execution": {
+  "tool": "Unicorn",
+  "version": "2.1.4",
+  "candidate_sha256": "2c451ae050a1ed21bb387d4b2e6a17eba1437b38458d69996665a82cfb5e65be",
+  "candidate_build_command": [
+   "i686-w64-mingw32-g++",
+   "-std=c++20",
+   "-O2",
+   "-shared",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-6qiqm78c/fpu.cpp",
+   "-Wl,--gc-sections,--image-base,0x10000000",
+   "-o",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-6qiqm78c/fpu.dll"
+  ]
+ },
+ "limitations": [
+  "Eight hardware-control fixtures, or sixteen scalar conversion fixtures; pending x87 exceptions and unmasked traps excluded.",
+  "No whole-game or all floating-point calculations equivalence claim."
  ]
 }

@@ -1,24 +1,541 @@
 {
- "address": "0x004AD73D",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "address": "0x004AD73D",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cases": [
+    {
+      "candidate_output": {
+        "return_value": 0,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "seed-0x0",
+      "input": {
+        "args": [
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 64,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x40",
+      "input": {
+        "args": [
+          64
+        ],
+        "initial_state": {
+          "seed": 64
+        }
+      },
+      "reference_output": {
+        "return_value": 64,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 65,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x41",
+      "input": {
+        "args": [
+          65
+        ],
+        "initial_state": {
+          "seed": 65
+        }
+      },
+      "reference_output": {
+        "return_value": 65,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 96,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x60",
+      "input": {
+        "args": [
+          96
+        ],
+        "initial_state": {
+          "seed": 96
+        }
+      },
+      "reference_output": {
+        "return_value": 96,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 65,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x61",
+      "input": {
+        "args": [
+          97
+        ],
+        "initial_state": {
+          "seed": 97
+        }
+      },
+      "reference_output": {
+        "return_value": 65,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 90,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x7a",
+      "input": {
+        "args": [
+          122
+        ],
+        "initial_state": {
+          "seed": 122
+        }
+      },
+      "reference_output": {
+        "return_value": 90,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 123,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "seed-0x7b",
+      "input": {
+        "args": [
+          123
+        ],
+        "initial_state": {
+          "seed": 123
+        }
+      },
+      "reference_output": {
+        "return_value": 123,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": 128,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "seed-0x80",
+      "input": {
+        "args": [
+          128
+        ],
+        "initial_state": {
+          "seed": 128
+        }
+      },
+      "reference_output": {
+        "return_value": 128,
+        "side_effects": [],
+        "state_delta": {
+          "arg_buffer": [
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        }
+      }
     }
-   },
-   "note": "The candidate String_ToUpperChar reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "executed": true,
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "implementation_sha256": "c1e97e178bd4186786e0ad040cd505579affc83ccf5e5688e228568ad16219e2",
+  "kind": "behavioral-test-report",
+  "method": "Retail instruction bytes for the selected function were executed in Radare2 ESIL with cdecl stack arguments and initialized globals; the current C++ implementation was compiled and called with the same arguments and equivalent seeded state. Return values and instrumented state were compared. Emulation was used because this ARM64 macOS host cannot launch the Windows x86 retail process.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "schema_version": 1,
+  "tests_failed": 0,
+  "tests_passed": 8,
+  "tests_total": 8,
+  "runner": {
+    "path": "scripts/native_leaves_runner.py",
+    "sha256": "fcdc0a4e450ba4ebd75772606f2bdd5ac729eaf96d98494f199844f1597188a0",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_leaves_runner.py",
+      "--address",
+      "0x004AD73D",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/sys/resource_lookup.cpp",
+      "--implementation-sha256",
+      "c1e97e178bd4186786e0ad040cd505579affc83ccf5e5688e228568ad16219e2",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }

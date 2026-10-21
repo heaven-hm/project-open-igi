@@ -1,24 +1,550 @@
 {
- "address": "0x004EDB60",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x004EDB60",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "42619ba0462ea8d100675697b8a67b8843c2385f9d03906b8ecbaf31557f6a92",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "lod-increasing-record",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            7.0,
+            17.0,
+            30.0,
+            35.0,
+            50.0
+          ],
+          "LOD_1",
+          1,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 7.0,
+          "distance_1": 17.0,
+          "distance_2": 30.0,
+          "distance_3": 35.0,
+          "distance_4": 50.0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 28672.0,
+          "record_distance_1": 69632.0,
+          "record_distance_2": 122880.0,
+          "record_distance_3": 143360.0,
+          "record_distance_4": 204800.0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 7,
+          "distance_1": 17,
+          "distance_2": 30,
+          "distance_3": 35,
+          "distance_4": 50,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 28672,
+          "record_distance_1": 69632,
+          "record_distance_2": 122880,
+          "record_distance_3": 143360,
+          "record_distance_4": 204800
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-decreasing-record",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            50.0,
+            40.0,
+            30.0,
+            20.0,
+            10.0
+          ],
+          "LOD_2",
+          1,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 50.0,
+          "distance_1": 50.0,
+          "distance_2": 50.0,
+          "distance_3": 50.0,
+          "distance_4": 50.0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 204800.0,
+          "record_distance_1": 204800.0,
+          "record_distance_2": 204800.0,
+          "record_distance_3": 204800.0,
+          "record_distance_4": 204800.0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 50,
+          "distance_1": 50,
+          "distance_2": 50,
+          "distance_3": 50,
+          "distance_4": 50,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 204800,
+          "record_distance_1": 204800,
+          "record_distance_2": 204800,
+          "record_distance_3": 204800,
+          "record_distance_4": 204800
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-mixed-record",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            10.0,
+            5.0,
+            30.0,
+            25.0,
+            60.0
+          ],
+          "LOD_3",
+          1,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 10.0,
+          "distance_1": 10.0,
+          "distance_2": 30.0,
+          "distance_3": 30.0,
+          "distance_4": 60.0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 40960.0,
+          "record_distance_1": 40960.0,
+          "record_distance_2": 122880.0,
+          "record_distance_3": 122880.0,
+          "record_distance_4": 245760.0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 10,
+          "distance_1": 10,
+          "distance_2": 30,
+          "distance_3": 30,
+          "distance_4": 60,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 40960,
+          "record_distance_1": 40960,
+          "record_distance_2": 122880,
+          "record_distance_3": 122880,
+          "record_distance_4": 245760
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-zero-record",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "LOD_4",
+          1,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 0.0,
+          "distance_1": 0.0,
+          "distance_2": 0.0,
+          "distance_3": 0.0,
+          "distance_4": 0.0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 0.0,
+          "record_distance_1": 0.0,
+          "record_distance_2": 0.0,
+          "record_distance_3": 0.0,
+          "record_distance_4": 0.0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 0,
+          "distance_1": 0,
+          "distance_2": 0,
+          "distance_3": 0,
+          "distance_4": 0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 0,
+          "record_distance_1": 0,
+          "record_distance_2": 0,
+          "record_distance_3": 0,
+          "record_distance_4": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-negative-missing",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            -4.0,
+            -8.0,
+            2.0,
+            1.0,
+            4.0
+          ],
+          "LOD_5",
+          0,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": -4.0,
+          "distance_1": -4.0,
+          "distance_2": 2.0,
+          "distance_3": 2.0,
+          "distance_4": 4.0,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": -4,
+          "distance_1": -4,
+          "distance_2": 2,
+          "distance_3": 2,
+          "distance_4": 4,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-equal-missing",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          [
+            2.5,
+            2.5,
+            2.5,
+            2.5,
+            2.5
+          ],
+          "LOD_6",
+          0,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": 2.5,
+          "distance_1": 2.5,
+          "distance_2": 2.5,
+          "distance_3": 2.5,
+          "distance_4": 2.5,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": 2.5,
+          "distance_1": 2.5,
+          "distance_2": 2.5,
+          "distance_3": 2.5,
+          "distance_4": 2.5,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-large-record",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            1000000.0,
+            999999.5,
+            12345.25,
+            65536.0,
+            4096.0
+          ],
+          "LOD_7",
+          1,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 1000000.0,
+          "distance_1": 1000000.0,
+          "distance_2": 1000000.0,
+          "distance_3": 1000000.0,
+          "distance_4": 1000000.0,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 4096000000.0,
+          "record_distance_1": 4096000000.0,
+          "record_distance_2": 4096000000.0,
+          "record_distance_3": 4096000000.0,
+          "record_distance_4": 4096000000.0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "distance_0": 1000000,
+          "distance_1": 1000000,
+          "distance_2": 1000000,
+          "distance_3": 1000000,
+          "distance_4": 1000000,
+          "changed_after": 0,
+          "record_applied": 1,
+          "record_changed_total": 24,
+          "record_changed_outside": 0,
+          "record_distance_0": 4096000000,
+          "record_distance_1": 4096000000,
+          "record_distance_2": 4096000000,
+          "record_distance_3": 4096000000,
+          "record_distance_4": 4096000000
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "lod-empty-name-missing",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          [
+            1.0,
+            2.0,
+            1.0,
+            4.0,
+            3.0
+          ],
+          "",
+          0,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": 1.0,
+          "distance_1": 2.0,
+          "distance_2": 2.0,
+          "distance_3": 4.0,
+          "distance_4": 4.0,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "distance_0": 1,
+          "distance_1": 2,
+          "distance_2": 2,
+          "distance_3": 4,
+          "distance_4": 4,
+          "changed_after": 0,
+          "record_applied": -1515870811,
+          "record_changed_total": 0,
+          "record_changed_outside": 0,
+          "record_distance_0": -2.8735182454018313e-16,
+          "record_distance_1": -2.8735182454018313e-16,
+          "record_distance_2": -2.8735182454018313e-16,
+          "record_distance_3": -2.8735182454018313e-16,
+          "record_distance_4": -2.8735182454018313e-16
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate LODSettings_LoadParameters reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x004EDB60",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/render/lod_settings.cpp",
+      "--implementation-sha256",
+      "42619ba0462ea8d100675697b8a67b8843c2385f9d03906b8ecbaf31557f6a92",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }

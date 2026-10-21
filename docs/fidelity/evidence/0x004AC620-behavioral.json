@@ -1,24 +1,414 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "result": "passed",
  "address": "0x004AC620",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
  "cases": [
   {
-   "id": "static-structure",
+   "id": "case-0-control-037f",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "control_word": 895,
+    "arguments": [
+     0,
+     197376
+    ],
+    "eax": 305419896,
+    "flags": 514
    },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
+   "reference_output": {
+    "return_value": 524319,
     "state_delta": {
-     "chunks_read": 0
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 831
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
     }
    },
-   "note": "The candidate FP_MergeControlWord reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "candidate_output": {
+    "return_value": 524319,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 831
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-1-control-027f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 639,
+    "arguments": [
+     65792,
+     721664
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 65823,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 1597
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 65823,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 1597
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-2-control-007f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 127,
+    "arguments": [
+     131584,
+     197376
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 655903,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 2111
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 655903,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 2111
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-3-control-077f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 1919,
+    "arguments": [
+     768,
+     721664
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 799,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 3901
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 799,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 3901
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-4-control-0b7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 2943,
+    "arguments": [
+     65536,
+     197376
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 589855,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 575
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 589855,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 575
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-5-control-0f7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 3967,
+    "arguments": [
+     131328,
+     721664
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 131359,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 1085
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 131359,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 1085
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-6-control-067f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 1663,
+    "arguments": [
+     512,
+     197376
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 524831,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 2879
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 524831,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 2879
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-7-control-0e7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 3711,
+    "arguments": [
+     66304,
+     721664
+    ],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": 66335,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 3645
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": 66335,
+    "state_delta": {
+     "EBX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "FPSW": 0,
+     "FPCW": 3645
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
   }
+ ],
+ "runner": {
+  "path": "scripts/fpu_state_diff_runner.py",
+  "sha256": "3e9af28ae90dd961624aece1ead5d7a7f89a58f38230b7d2440827bf4bb2c3e7",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/fpu_state_diff_runner.py",
+   "--address",
+   "0x004AC620",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+   "--implementation-sha256",
+   "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+  ]
+ },
+ "retail_execution": {
+  "tool": "Unicorn",
+  "version": "2.1.4",
+  "candidate_sha256": "d22c0db21d3d63225d4f1c00d7d5680a592238f00093ff1092c5fda66491ddc9",
+  "candidate_build_command": [
+   "i686-w64-mingw32-g++",
+   "-std=c++20",
+   "-O2",
+   "-shared",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-klwut_b7/fpu.cpp",
+   "-Wl,--gc-sections,--image-base,0x10000000",
+   "-o",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-klwut_b7/fpu.dll"
+  ]
+ },
+ "limitations": [
+  "Eight hardware-control fixtures, or sixteen scalar conversion fixtures; pending x87 exceptions and unmasked traps excluded.",
+  "No whole-game or all floating-point calculations equivalence claim."
  ]
 }

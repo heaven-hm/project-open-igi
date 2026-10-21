@@ -1,24 +1,358 @@
 {
- "address": "0x00465820",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x00465820",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "182ce57b7d898f8c8ee40559aa09fc7d4a196a75cd7e5cbdecbc5e7653bea674",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "eye-standing-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          0,
+          1234.5,
+          -2345.25,
+          100.0,
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1234.5,
+          "eye_y": -2345.25,
+          "eye_z": 2926.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1234.5,
+          "eye_y": -2345.25,
+          "eye_z": 2926.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-crouched-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          1,
+          1234.5,
+          -2345.25,
+          100.0,
+          0,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1234.5,
+          "eye_y": -2345.25,
+          "eye_z": 1533.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1234.5,
+          "eye_y": -2345.25,
+          "eye_z": 1533.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-origin",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          0,
+          0.0,
+          0.0,
+          0.0,
+          256,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 0.0,
+          "eye_y": 0.0,
+          "eye_z": 2826.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 0,
+          "eye_y": 0,
+          "eye_z": 2826.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-negative-feet",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          -8192.0,
+          4096.0,
+          -4096.5,
+          384,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": -8192.0,
+          "eye_y": 4096.0,
+          "eye_z": -2662.9,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": -8192,
+          "eye_y": 4096,
+          "eye_z": -2662.9,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-fractional",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          0.5,
+          0.25,
+          0.125,
+          512,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 0.5,
+          "eye_y": 0.25,
+          "eye_z": 2826.365,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 0.5,
+          "eye_y": 0.25,
+          "eye_z": 2826.365,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-large",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          1048576.0,
+          -1048576.0,
+          2048.0,
+          640,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1048576.0,
+          "eye_y": -1048576.0,
+          "eye_z": 3481.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 1048576,
+          "eye_y": -1048576,
+          "eye_z": 3481.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-unaligned",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          7.0,
+          8.0,
+          9.0,
+          1,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 7.0,
+          "eye_y": 8.0,
+          "eye_z": 2835.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 7,
+          "eye_y": 8,
+          "eye_z": 2835.24,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "eye-unaligned-crouched",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          10.0,
+          11.0,
+          12.0,
+          3,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 10.0,
+          "eye_y": 11.0,
+          "eye_z": 1445.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "eye_x": 10,
+          "eye_y": 11,
+          "eye_z": 1445.6,
+          "changed_after": 0
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Human_CameraEyePosition reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x00465820",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/human/human_camera_eye.cpp",
+      "--implementation-sha256",
+      "182ce57b7d898f8c8ee40559aa09fc7d4a196a75cd7e5cbdecbc5e7653bea674",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ]
 }
