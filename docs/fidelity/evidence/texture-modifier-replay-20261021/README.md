@@ -24,6 +24,14 @@ The current shared verification manifest points this address at the
 Do not bind this report to that different source or promote its status without
 fresh matching static, semantic, build and paired runtime evidence.
 
+The existing `docs/fidelity/evidence/0x00505E40-semantic-review.json` (SHA-256
+`aeaab60612958f2df14bba06b71f063fd9f88ca92301504a017eef07125ecd55`)
+is invalid for this native: it describes an unrelated chunk search and claims
+no side effects, despite this function's context and global writes. Independent
+review confirmed the discrepancy. Preserve it for history but do not use it
+to authorize verification; it requires a fresh source-bound semantic review
+and a contract for the actual probe and observed effects.
+
 ## Paired Frida boundary comparison
 
 `frida-pair.json` records eight matching controlled nonfatal inputs executed
