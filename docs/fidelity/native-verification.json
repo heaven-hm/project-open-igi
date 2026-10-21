@@ -2095,27 +2095,24 @@
       "name": "App_ContextGetLightmapsUsed",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/core/app_context.cpp",
-        "sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
-        "signature": "int32_t(void)"
+        "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.cpp",
+        "sha256": "3b418222b66e41daf4145e26ee54bd999a0247cc57df11bdaea43aaa96b51bf1",
+        "signature": "int __cdecl App_ContextGetLightmapsUsed(void);"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.cpp",
-        "sha256": "b8635712d6da619bbdbd037e93744a3598f921890687a8330a71d6f0ada3fda0",
-        "signature": "unresolved"
+        "sha256": "3b418222b66e41daf4145e26ee54bd999a0247cc57df11bdaea43aaa96b51bf1",
+        "signature": "int __cdecl App_ContextGetLightmapsUsed(void);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. Getter returns the observed DWORD in EAX. Catalog aliases do not establish semantic names."
+          "rationale": "Retail 0x0048F230 (App_ContextGetLightmapsUsed): mov eax,[0x5C8BE4]; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "Structural and scoped leaf semantic checks only; live consumer integration and concurrency remain untested.",
-          "Retail globals are mapped to port-owned fields; catalog role names are inferred.",
-          "Setter original source return type is unknown; candidate preserves observed EAX.",
-          "Ghidra setter evidence is a retained snapshot; Binary Ninja getter version is unavailable."
+          "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -2137,25 +2134,29 @@
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F230-app-context-radare2.json",
-          "evidence_sha256": "bfa6acfd307d5f0ed25ef2fb11c032816f948bca97887c93cb845f6ab272724f",
-          "evidence_id": "local-r2-capture:0x0048F230:2026-10-19",
-          "signature": "int32_t(void)"
+          "evidence_path": "docs/fidelity/evidence/0x0048F230-radare2.json",
+          "evidence_sha256": "6bb3660ffa092d7e672296410bbad76e8e60d6f701da3e8c6f420d0c5f457b3a",
+          "evidence_id": "r2:live:0x0048F230",
+          "signature": "not restated"
         },
         "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F230-getter-binaryninja.json",
-          "evidence_sha256": "abc906f6569e9ee58af426faff6cfcdef95056ec7081692419a7aa02351d3164",
-          "evidence_id": "local-mcp-capture:binary-ninja:0x0048F230:2026-10-19",
-          "signature": "int32_t(void)"
+          "evidence_path": "docs/fidelity/evidence/0x0048F230-binaryninja.json",
+          "evidence_sha256": "963fc34cd332ba72176386dcab078a345deb1eea42b16b73acb36093510eb2ed",
+          "evidence_id": "bn:live:0x0048F230",
+          "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-semantic-review.json",
-          "evidence_sha256": "2b54fe5fbcbba54ba45907917fb92eefec60330aea203f502b16cd00a829a740"
+          "evidence_sha256": "1b67ae9ead4ed9432460f65073b4d625896fd23ffb241ad857a5214a11fd21f4"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-build.json",
-          "evidence_sha256": "fecc86f73fe0dada4a466c706edefc57b8f7119a119aa3a9419e942c82336541"
+          "evidence_sha256": "ac5893eb986bdba5144b9b1636e0eb53563ce8c793bbde9d9d8a8e909308ea65"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
+          "evidence_sha256": "5f1de6bf4fbac50120263bbe37b700868a795e589f70c4424da628d29da8f5c6"
         }
       }
     },
