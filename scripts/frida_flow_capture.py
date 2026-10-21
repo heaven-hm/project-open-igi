@@ -90,6 +90,8 @@ def main() -> int:
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--targets", type=Path, default=ROOT / "scripts" / "mvp_native_targets.json")
     parser.add_argument("--binary", type=Path, default=RETAIL)
+    parser.add_argument("--keep-alive", action="store_true",
+                        help="Do not kill the attached process on exit.")
     parser.add_argument("--attach-pid", type=int, default=None,
                         help="Attach to an already running retail process instead of spawning.")
     parser.add_argument("--seconds", type=float, default=30.0)
@@ -152,7 +154,7 @@ def main() -> int:
             report["probe"] = {"hits": streamed, "streamed": True, "rpc_error": repr(error)}
         report["result"] = "captured"
     finally:
-        if pid is not None:
+        if pid is not None and not args.keep_alive:
             try:
                 device.kill(pid)
             except Exception:
