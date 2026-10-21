@@ -1,14 +1,20 @@
-// IGI native provenance: Config_GraphicOptionsGetPerformanceFlags - 0x00404F60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
-// Evidence: 00404F60-Config_GraphicOptionsGetPerformanceFlags.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404F60-Config_GraphicOptionsGetPerformanceFlags.hpp"
-int Config_GraphicOptionsGetPerformanceFlags(int context)
+// IGI native Config_GraphicOptionsGetPerformanceFlags - 0x00404F60 - transcribed from retail igi.exe.
+// Retail: cdecl (result, unused, vm). Result block {active+0xC, ?, (double)(active+0xC), 0x567C74, ?}.
+#include <cstdint>
+#include <cstring>
 
-// Sig: int Config_GraphicOptionsGetPerformanceFlags()
-// Note: Returns the active profile's graphics performance flag bitmask.
+int __cdecl Qvm_GetIntArg(void* vm, int index); // 0x004B8A20
+void* __cdecl Config_GetActiveGraphicOptions(void); // 0x00404590
+extern std::int32_t g_537b74[7];
+
+void __cdecl Config_GraphicOptionsGetPerformanceFlags(std::uint32_t* result, int unused, void* vm)
 {
-    int item_18 = *(Config_GetActiveGraphicOptions() + 0xc);
-    double item_10 = *(Config_GetActiveGraphicOptions() + 0xc);
-    char* item_8 = &g_567c74;
-    memcpy(context, &item_18, 0x18);
-    return context;
+    (void)unused;
+    (void)vm;
+    std::uint32_t block[6];
+    block[0] = static_cast<std::uint32_t>(*reinterpret_cast<std::int32_t*>(static_cast<std::uint8_t*>(Config_GetActiveGraphicOptions()) + 0xC));
+    double value = static_cast<double>(*reinterpret_cast<std::int32_t*>(static_cast<std::uint8_t*>(Config_GetActiveGraphicOptions()) + 0xC));
+    std::memcpy(&block[2], &value, sizeof(value));
+    block[4] = 0x567C74;
+    std::memcpy(result, block, sizeof(block));
 }
