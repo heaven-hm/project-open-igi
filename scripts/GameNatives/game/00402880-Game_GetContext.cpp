@@ -1,12 +1,11 @@
-// IGI native provenance: Game_GetContext - 0x00402880 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 00402880-Game_GetContext.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00402880-Game_GetContext.hpp"
-struct frames_ctx* Game_GetContext()
+// IGI native Game_GetContext - 0x00402880 - transcribed from retail igi.exe.
+// Retail: cdecl, no arguments. Returns the game context pointer stored at 0x567C8C.
+#include <cstdint>
+#include <cstring>
 
-// Sig: void* Game_GetContext(void)
-// Note: Returns the global IGI game-context pointer at DAT_00567C8C. Retail
-// callers use it to dispatch context callbacks and initialize the main game
-// state.
+extern void* g_567c8c;
+
+void* __cdecl Game_GetContext(void)
 {
-    return g_frames_ctx;
+    return g_567c8c;
 }
