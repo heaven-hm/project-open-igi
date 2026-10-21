@@ -1,18 +1,21 @@
-// IGI native provenance: Config_GraphicOptionsSetPerformanceFlags - 0x00404F00 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
-// Evidence: 00404F00-Config_GraphicOptionsSetPerformanceFlags.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404F00-Config_GraphicOptionsSetPerformanceFlags.hpp"
-int Config_GraphicOptionsSetPerformanceFlags(int context, float arg2 )
+// IGI native Config_GraphicOptionsSetPerformanceFlags - 0x00404F00 - transcribed from retail igi.exe.
+// Retail: cdecl (result, unused, vm). Stores arg 0 at active+0xC, then writes the 6-dword result block {1, ?, 0, 0x3FF00000, 0x567C74, ?}.
+#include <cstdint>
+#include <cstring>
 
-// Sig: void Config_GraphicOptionsSetPerformanceFlags(int flags)
-// Note: Sets the raw graphics performance/detail flag bits on the active
-// profile. Param: flags = bitmask (get a valid one from
-// Config_GraphicOptionsGetPerfFlagsFromLevel).
+int __cdecl Qvm_GetIntArg(void* vm, int index); // 0x004B8A20
+void* __cdecl Config_GetActiveGraphicOptions(void); // 0x00404590
+extern std::int32_t g_537b74[7];
+
+void __cdecl Config_GraphicOptionsSetPerformanceFlags(std::uint32_t* result, int unused, void* vm)
 {
-    *(Config_GetActiveGraphicOptions() + 0xc) = Script_GetArg(arg2, 0);
-    int item_18 = 1;
-    int item_10 = 0;
-    int item_c = 0x3ff00000;
-    char* item_8 = &g_567c74;
-    memcpy(context, &item_18, 0x18);
-    return context;
+    (void)unused;
+    std::uint32_t block[6];
+    int flags = Qvm_GetIntArg(vm, 0);
+    *reinterpret_cast<std::int32_t*>(static_cast<std::uint8_t*>(Config_GetActiveGraphicOptions()) + 0xC) = flags;
+    block[0] = 1;
+    block[2] = 0;
+    block[3] = 0x3FF00000;
+    block[4] = 0x567C74;
+    std::memcpy(result, block, sizeof(block));
 }
