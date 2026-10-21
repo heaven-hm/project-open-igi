@@ -2493,6 +2493,45 @@
       }
     },
     {
+      "address": "0x0048F530",
+      "name": "FX_Igimutex",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/fx/0048F530-FX_Igimutex.cpp",
+        "sha256": "ca4d947c9375018c234500028970b3b0dd3f89e96416a420ee4f9fcfd9763756",
+        "signature": "WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/fx/0048F530-FX_Igimutex.cpp",
+        "sha256": "ca4d947c9375018c234500028970b3b0dd3f89e96416a420ee4f9fcfd9763756",
+        "signature": "WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0048F530",
+          "signature": "WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc)",
+          "evidence_path": "docs/fidelity/evidence/0x0048F530-binaryninja.json",
+          "evidence_sha256": "f373d17c593cef682f6da997eb86c511039815226a6b53d0dc01dbf728ccc459"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0048F530",
+          "signature": "int main (char **argv, char **argv);",
+          "evidence_path": "docs/fidelity/evidence/0x0048F530-radare2.json",
+          "evidence_sha256": "4d21d0facc1ee2f7f81272b8877f9887d09bbfc0fd28ac93facec28f2dc465ca"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Binary Ninja reports WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc) and radare2 names the same entry main with two stack arguments; the source keeps the stdcall HINSTANCE plus int boundary of retail igi.exe. Both tools report the same 26 basic blocks and 37 edges."
+        },
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Structural verification only (cfg gate, angr CFGFast). The only change from retail is the mutex name OPEN_IGI_MUTEX_NAME defaulting to OPENIGIMUTEX_TEST so retail and open-igi run side by side; retail uses IGIMUTEX. Runtime behavior is checked with Frida probes, not here."
+        ]
+      }
+    },
+    {
       "address": "0x004903A0",
       "name": "Display_SetGammaRamp",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
