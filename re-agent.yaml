@@ -45,7 +45,7 @@ validation:
   copy_project: true
   project_root: .
   build_commands:
-    - python3 scripts/native_gate.py --root . --production-tree --threshold VERIFIED --cfg-threshold 0.85
+    - python3 scripts/native_gate.py --root . --changed --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests
     - cmake -S . -B build -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
     - cmake --build build
   test_commands:
