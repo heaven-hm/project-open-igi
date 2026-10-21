@@ -4,11 +4,11 @@
  "result": "passed",
  "address": "0x004046A0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "720f134e9476c32c0b9af5b1615a4456fc056a8d01c76c03c5bc9e62c003ab23",
+ "implementation_sha256": "247defe6b35a80beb37b5d0e64cad8dbdce1861bbf8a5c424af4f8470b95d3c2",
  "reviewed": true,
  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {
-  "scope": "typed-per-native-probe",
+  "scope": "scalar-arguments-and-result",
   "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
   "required_observables": {
    "inputs": [
