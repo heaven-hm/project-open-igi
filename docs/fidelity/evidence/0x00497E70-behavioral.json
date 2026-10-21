@@ -1,0 +1,22 @@
+{
+ "address": "0x00497E70",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x00497E70 (TransContext_SetActiveTransContext): eax=[g_6e5ba4]; h=[0xa94e84+eax*4]; copy 0x2a dwords source->0xbcaae0; arg=0xbcaae0; if h: h(&arg); [0x6e5bb0]=1; [0x6e5bb4]++; ret [0x6e5bb4]. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}

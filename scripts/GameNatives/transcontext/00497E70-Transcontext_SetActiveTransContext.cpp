@@ -1,24 +1,27 @@
-// IGI native provenance: Transcontext_SetActiveTransContext - 0x00497E70 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
-// Evidence: 00497E70-Transcontext_SetActiveTransContext.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00497E70-Transcontext_SetActiveTransContext.hpp"
-int Transcontext_SetActiveTransContext(int* context)
+// IGI native TransContext_SetActiveTransContext - 0x00497E70 - transcribed from retail igi.exe.
+// Retail: cdecl (source). Copies 0x2a dwords from source into the active block at 0xbcaae0, calls the handler at g_a94e84[g_6e5ba4] (when set) with a pointer to a stack slot holding the block address, sets g_6e5bb0 to 1 and increments g_6e5bb4, returning the new count.
+#include <cstdint>
+#include <cstring>
+static inline std::uint32_t rd32(const void* p, std::intptr_t off) { std::uint32_t v; std::memcpy(&v, reinterpret_cast<const std::uint8_t*>(p) + off, 4); return v; }
+static inline void wr32(void* p, std::intptr_t off, std::uint32_t v) { std::memcpy(reinterpret_cast<std::uint8_t*>(p) + off, &v, 4); }
+static inline void* ptr32(std::uint32_t v) { return reinterpret_cast<void*>(static_cast<std::uintptr_t>(v)); }
+static inline std::uint32_t u32(const void* p) { return static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(p)); }
 
-// Sig: void Transcontext_SetActiveTransContext(void* ctx)
-// Note: Installs a TRANSFORM CONTEXT as active: copies 0x2A dwords from ctx
-// into global 0xBCAAE0 and bumps state counters at 0x6E5BB0/B4. Param: ctx =
-// transform-context struct (IGIPatch uses this around custom rendering). Use
-// when injecting your own render passes.
+extern std::int32_t g_6e5ba4;
+extern std::uint32_t g_a94e84[];
+extern std::uint8_t g_bcaae0[];
+extern std::int32_t g_6e5bb0;
+extern std::int32_t g_6e5bb4;
+int __cdecl TransContext_SetActiveTransContext(const void* source)
 {
-    int* source_val = context;
-    int data_val = *((g_6e5ba4 << 2) + &g_a94e84);
-    context = &g_bcaae0;
-    memcpy(&g_bcaae0, source_val, 0xa8);
-
-    if (data_val)
-        data_val(&context);
-
-    int data_1 = g_6e5bb4;
+    typedef void (__cdecl *Handler)(void**);
+    Handler handler = reinterpret_cast<Handler>(static_cast<std::uintptr_t>(g_a94e84[g_6e5ba4]));
+    void* arg = g_bcaae0;
+    std::memcpy(g_bcaae0, source, 0x2a * 4);
+    if (handler != nullptr) {
+        handler(&arg);
+    }
     g_6e5bb0 = 1;
-    g_6e5bb4 = data_1 + 1;
-    return data_1 + 1;
+    g_6e5bb4 = g_6e5bb4 + 1;
+    return g_6e5bb4;
 }
