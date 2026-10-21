@@ -20,13 +20,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004036B0",
-          "signature": "int32_t GOPlayer(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004036B0-binaryninja.json",
           "evidence_sha256": "e36eec8decac82dbde5eded8e7784780c7a1b5d835976dfdf1f3f254929a5f24"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004036B0",
-          "signature": "int32_t GOPlayer(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004036B0-radare2.json",
           "evidence_sha256": "c0927182778ed98fd0f09cc7523223fcabb7d243f4b82063d6160f9a65ccec59"
         },
@@ -60,13 +60,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403750",
-          "signature": "int32_t GOActiveMission(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403750-binaryninja.json",
           "evidence_sha256": "54b96936575a3cb2531ecae7ce29467f93bb2c985ff4618110531ffce6fcdb88"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403750",
-          "signature": "int32_t GOActiveMission(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403750-radare2.json",
           "evidence_sha256": "6da296a5b2e5d66516d351db26f2797deddc6a10750e32a75c8d83d4903261a8"
         },
@@ -100,13 +100,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403870",
-          "signature": "int32_t GOInMouInv(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403870-binaryninja.json",
           "evidence_sha256": "3d6c794090d60721bf5378ff7a22788c838e13c94be5b9ce8f471b546e53ca8f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403870",
-          "signature": "int32_t GOInMouInv(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403870-radare2.json",
           "evidence_sha256": "4aba09d4af86c7fba87a643cc1751aff7283f833ce70926b19ad256de5a8d7fa"
         },
@@ -140,13 +140,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004038E0",
-          "signature": "int32_t GOInMouSens(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004038E0-binaryninja.json",
           "evidence_sha256": "632481a711e9081f6de69a6a369b353f133f36538134207ce373c4a99e133bd4"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004038E0",
-          "signature": "int32_t GOInMouSens(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004038E0-radare2.json",
           "evidence_sha256": "7a6de7b3397dfcba99b4ee6eb87f4da4c63e94e6cf7c17c5c495676041c8489f"
         },
@@ -180,13 +180,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403950",
-          "signature": "int32_t GOGfxDisp(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403950-binaryninja.json",
           "evidence_sha256": "3781a4cd8ab3984c2845b910915b18e9bb2777b3ec3cc9b19f92096e0f780e5c"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403950",
-          "signature": "int32_t GOGfxDisp(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403950-radare2.json",
           "evidence_sha256": "203888c184c1daa7af66e2c98cca100f0f081a2dea7d2e68f99c096e81e96082"
         },
@@ -220,13 +220,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403A00",
-          "signature": "int32_t GOGameLang(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403A00-binaryninja.json",
           "evidence_sha256": "8f17b25d0295c683afd7b14b30c1a2afe85df42249a9763c2ef112979106caee"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403A00",
-          "signature": "int32_t GOGameLang(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403A00-radare2.json",
           "evidence_sha256": "c003122b47d9386e2c51db66cdb789720312a15f3c8313f139be6f454be5e6c1"
         },
@@ -260,13 +260,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403AC0",
-          "signature": "int32_t GOGameDiff(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403AC0-binaryninja.json",
           "evidence_sha256": "ef6341c6265dc5b66c050d6148ffc2ce8419d007c3bbf74ebae5cb6e54746b57"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403AC0",
-          "signature": "int32_t GOGameDiff(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403AC0-radare2.json",
           "evidence_sha256": "f174ef77976f8d7fbe669bfa48d852c08a30041e767e5b7964b31fa828cf5691"
         },
@@ -300,13 +300,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403DF0",
-          "signature": "int32_t GOIsBlood(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403DF0-binaryninja.json",
           "evidence_sha256": "3a07237ad1296d9570fbf8e1ee6dfabc8e6eab9f2360a641fa77e5bea4283ba4"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403DF0",
-          "signature": "int32_t GOIsBlood(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403DF0-radare2.json",
           "evidence_sha256": "8afcb60ff433fff89237363f69b2755ddce2c950cfbf7398c94c847612a63f6e"
         },
@@ -340,13 +340,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403E60",
-          "signature": "int32_t GOSoundSpeech(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403E60-binaryninja.json",
           "evidence_sha256": "fc0beb5ef56592275b0bbaf15f2e2c8411e2667efa5c1aff66c502e2c7fea6ff"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403E60",
-          "signature": "int32_t GOSoundSpeech(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403E60-radare2.json",
           "evidence_sha256": "5eddf8ce30240df8c70b009607af28e8b8a05966aa316e78a2e45aed11fdf6cc"
         },
@@ -380,13 +380,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403EF0",
-          "signature": "int32_t GOSoundMusic(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403EF0-binaryninja.json",
           "evidence_sha256": "7812f6d0f3711cfac5d35d3f5b6ac30547ab378465b0cd657e970871f04db3ac"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403EF0",
-          "signature": "int32_t GOSoundMusic(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403EF0-radare2.json",
           "evidence_sha256": "1fcf8a02785ef70966ad4ef7950bab91ede9760d9686c12188f615a200c11b7d"
         },
@@ -420,13 +420,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00403F80",
-          "signature": "int32_t GOSoundFX(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403F80-binaryninja.json",
           "evidence_sha256": "b6dad7fb6b41aa7ccf95dedb4a53e30c065774139aa0e8324e56b8b29ec1897b"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00403F80",
-          "signature": "int32_t GOSoundFX(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00403F80-radare2.json",
           "evidence_sha256": "9a806b040d5db2db7c47740477e4c6b285516a5dd9ca5e6e9d5aa0eaff9f8873"
         },
@@ -460,13 +460,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00404010",
-          "signature": "int32_t GOGfxDevice(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00404010-binaryninja.json",
           "evidence_sha256": "ba8faeb14768305375426504584ad59b500e17ef4a3ce0ec6640b9d5f3c9409c"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00404010",
-          "signature": "int32_t GOGfxDevice(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00404010-radare2.json",
           "evidence_sha256": "11f15a9648239faeab60e34199134f5d0804a14137350138a9ee1a0925fe1a2c"
         },
@@ -500,13 +500,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00404080",
-          "signature": "int32_t GOGfxGamma(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00404080-binaryninja.json",
           "evidence_sha256": "c27635add0306926ee3dd3942ed5de2d8aee176122339214bca13e4318ed6fa1"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00404080",
-          "signature": "int32_t GOGfxGamma(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00404080-radare2.json",
           "evidence_sha256": "d7345e8e86db9c92ac90b2f5dbfcabd6f31ea4837e29c90af3910f1fae666658"
         },
@@ -540,13 +540,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004040F0",
-          "signature": "int32_t GOGfxPerformance(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004040F0-binaryninja.json",
           "evidence_sha256": "3332d81febaf8e940c9be7a4f19b7d30918b4c84a2eebd0650906e23882f4445"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004040F0",
-          "signature": "int32_t GOGfxPerformance(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004040F0-radare2.json",
           "evidence_sha256": "e35780625b50122be862e4193acc50d4ba36e57391709ce2029e5fa11475e87d"
         },
@@ -1000,13 +1000,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00407E30",
-          "signature": "int32_t DefineQMaterial(long param_1, long param_2, long param_3, int32_t param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00407E30-binaryninja.json",
           "evidence_sha256": "20e5f48c97f4e312b53095277a8b0c6009995939658cb1c812eb6ec774f1c72d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00407E30",
-          "signature": "int32_t DefineQMaterial(long param_1, long param_2, long param_3, int32_t param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00407E30-radare2.json",
           "evidence_sha256": "d9bb160778517a4274056dbd2224f142073f6d503e6042d39021b76aa7a718ec"
         },
@@ -1040,13 +1040,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00407F50",
-          "signature": "int32_t DefineGameMaterial(long param_1, long param_2, long param_3, long param_4, int32_t param_5, float param_6);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00407F50-binaryninja.json",
           "evidence_sha256": "727842bd96c5581375be8c858362c9d420ab6dca51de6a19c08a3a073de790c7"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00407F50",
-          "signature": "int32_t DefineGameMaterial(long param_1, long param_2, long param_3, long param_4, int32_t param_5, float param_6);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00407F50-radare2.json",
           "evidence_sha256": "2d93273f379058a69c650c88dc6d62fc3341df093c1b7e81106925ac98cbdecb"
         },
@@ -1080,13 +1080,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00408460",
-          "signature": "int32_t FallLanding(float param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00408460-binaryninja.json",
           "evidence_sha256": "dbf960a4f38f8cdfdf5291b0bf3abb726fc8ffe9252aaa9c377c71c6caa79080"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00408460",
-          "signature": "int32_t FallLanding(float param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00408460-radare2.json",
           "evidence_sha256": "06f2eef65ee9809ffb9524d493fe301e97cd6e2fbcc7d660b0df257f2a1cc521"
         },
@@ -1120,13 +1120,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004101C0",
-          "signature": "int32_t DefineHumanPlayerWeaponCycle(int32_t param_1, int32_t* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004101C0-binaryninja.json",
           "evidence_sha256": "0065fb470c3bb021754409d376930b8c33b3c105555a02e0c80ff6669310ba24"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004101C0",
-          "signature": "int32_t DefineHumanPlayerWeaponCycle(int32_t param_1, int32_t* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004101C0-radare2.json",
           "evidence_sha256": "5cc48296eab04a6aeb4ed3fe09fa2dc7ea10f83586e85294205a6ef54fdc8811"
         },
@@ -1160,13 +1160,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00410240",
-          "signature": "int32_t DefineHumanPlayerWeaponCategory(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00410240-binaryninja.json",
           "evidence_sha256": "e4623542d132d1aaa3e8f03fcc9abda34dcdd96c2af1688a3d12e97f01ad6187"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00410240",
-          "signature": "int32_t DefineHumanPlayerWeaponCategory(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00410240-radare2.json",
           "evidence_sha256": "cd8a9fdab893342632bf574ba7591dcef26703f1fc800d162184696772eeb924"
         },
@@ -1200,13 +1200,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004102D0",
-          "signature": "int32_t DefineHumanPlayerAmmoLimit(int32_t param_1, int32_t* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004102D0-binaryninja.json",
           "evidence_sha256": "6ad9b5ad2e28bcd0715ee5be0b6311f26fbaf6264a635c6c1fa1ee5db49e470e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004102D0",
-          "signature": "int32_t DefineHumanPlayerAmmoLimit(int32_t param_1, int32_t* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004102D0-radare2.json",
           "evidence_sha256": "d0f78d47a8d3d0ea1fc0be8437c550a823e318fdee73ac080d2d48c2e6edc956"
         },
@@ -1240,13 +1240,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004108C0",
-          "signature": "int32_t HumanPlayer_Invoke8_4108C0(int32_t param_1, int32_t param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004108C0-binaryninja.json",
           "evidence_sha256": "47b9364e3dba1244ed5ac4cc652aee021a75600c319fe6680b0fabded5c02e78"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004108C0",
-          "signature": "int32_t HumanPlayer_Invoke8_4108C0(int32_t param_1, int32_t param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004108C0-radare2.json",
           "evidence_sha256": "19470dbb83ccbf51dd04db77adce48ea9d54541caae5d77443d4e5d363b99ef2"
         },
@@ -1490,13 +1490,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00471120",
-          "signature": "int32_t __convention WeaponGun_ProcessWNES(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00471120-binaryninja.json",
           "evidence_sha256": "11eb3a0965942357a25333f358c58fa4fdd908eb0ac795a61adce05f7e54b14d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00471120",
-          "signature": "int32_t __convention WeaponGun_ProcessWNES(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00471120-radare2.json",
           "evidence_sha256": "3cc27cc38bb7f846f80d4334a0645389e13c2914d633164518982b48dc1159de"
         },
@@ -1530,13 +1530,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x0047CAD0",
-          "signature": "int32_t DefineAmmoType(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x0047CAD0-binaryninja.json",
           "evidence_sha256": "6270bffc1d9fcf995e33f50d18c47194d459f8e2d83b26dbed938bef12618ff4"
         },
         "radare2": {
           "evidence_id": "r2:live:0x0047CAD0",
-          "signature": "int32_t DefineAmmoType(long param_1, int32_t param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x0047CAD0-radare2.json",
           "evidence_sha256": "98f80969c5df1c59be85e55f32aada3be73ed217773b4af3736f7d7c8655d015"
         },
@@ -1570,13 +1570,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00484F60",
-          "signature": "int32_t DefineMission(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00484F60-binaryninja.json",
           "evidence_sha256": "041adaf942f08b39632d59628fd48cc075eca9ec1fb425b60eb8c81e1c835a0f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00484F60",
-          "signature": "int32_t DefineMission(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00484F60-radare2.json",
           "evidence_sha256": "f100b7b5a84ae8d7c7053aa9ae3575ed20c760dddd40ac4851f807877e0423c8"
         },
@@ -2029,13 +2029,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00491D40",
-          "signature": "x86 cdecl double()",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00491D40-binaryninja.json",
           "evidence_sha256": "461b15af121e9de8b787a0e420f1faf15c796523440e4e0e51374e0ca09665d3"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00491D40",
-          "signature": "x86 cdecl double()",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00491D40-radare2.json",
           "evidence_sha256": "012a09d61006620a7781794df084fb66fec5a5d23eedc8e1550dfe26724704cb"
         },
@@ -2094,13 +2094,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00497D70",
-          "signature": "x86 cdecl int32_t(void*, const void*, const void*, float)",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00497D70-binaryninja.json",
           "evidence_sha256": "a7458d840dff8fdd29cfaef79fad1c2a0fd811966b4e5d5a3bb24ce5456b310f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00497D70",
-          "signature": "x86 cdecl int32_t(void*, const void*, const void*, float)",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00497D70-radare2.json",
           "evidence_sha256": "7de89bca9a58e744b54d663a1c62a5cc9390c7d9687b9678b45f2dab80fdf72a"
         },
@@ -2159,13 +2159,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A23D0",
-          "signature": "uint32_t Camera_ApplyHandiCam(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A23D0-binaryninja.json",
           "evidence_sha256": "8443dc2d017eb39c2c016b4beea6b46d615804ded3b2365fb89d2391b5ee42b8"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A23D0",
-          "signature": "uint32_t Camera_ApplyHandiCam(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A23D0-radare2.json",
           "evidence_sha256": "28b243770afcb2baa1d5e5f5cb1ff19d16e9b8e9b47b5bb81eedc995410ee361"
         },
@@ -2199,13 +2199,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A2600",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A2600-binaryninja.json",
           "evidence_sha256": "fb67ce78c706982e27023db62736a6c8e41bd5bb6e113596f756cb7cc2fc0921"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A2600",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A2600-radare2.json",
           "evidence_sha256": "b7252051ecb5566c341792377b7d2826970e8ab0f5938e7402bebbf46cf7e6f6"
         },
@@ -2261,13 +2261,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A26C0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A26C0-binaryninja.json",
           "evidence_sha256": "1400da472d28747dfa0b866adddda5901cbe078faa271eef12b31ab7f6171e2b"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A26C0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A26C0-radare2.json",
           "evidence_sha256": "8bcbced3d8e41c54dc10a0d5de7c74c473e21dafe5acfd8c7dcebaf1b51ddd68"
         },
@@ -2394,13 +2394,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A53B3",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A53B3-binaryninja.json",
           "evidence_sha256": "86018301844428a8f1215fee6877d1baeff4ca27b6b97a474ec8cd9480b928b8"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A53B3",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A53B3-radare2.json",
           "evidence_sha256": "e0fb1cc9095ae94cbf1a84e90535a73270a9c9af852896ccefe0c314d5437620"
         },
@@ -2460,13 +2460,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A5702",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A5702-binaryninja.json",
           "evidence_sha256": "b5cfdfc25647ba5a7a8ece981ef092773d5e6673e7b7899dc89575b9282ec035"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A5702",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A5702-radare2.json",
           "evidence_sha256": "4c4e7de89339e4df209aabfe94ca13e8c926ce0c7c95aa9f51bff4308bc31ba9"
         },
@@ -2526,13 +2526,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A5955",
-          "signature": "int32_t Camera_ResetMatrix_5(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A5955-binaryninja.json",
           "evidence_sha256": "d96f1d892cbaf4c1d625fa490b19531d52ec9339d060dad89fa0f5c6106dad4c"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A5955",
-          "signature": "int32_t Camera_ResetMatrix_5(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A5955-radare2.json",
           "evidence_sha256": "c3c90501fe69d296c47221d9b42283af4bc88adc64a54e959e70cdbc630ff173"
         },
@@ -2566,13 +2566,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A67E4",
-          "signature": "int32_t __convention MathSys_Invoke7_4A67E4(\"regparm\")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A67E4-binaryninja.json",
           "evidence_sha256": "698c0019018ae6353f5d13b4b583fa6e6078b531224f3688c63d917d8759488d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A67E4",
-          "signature": "int32_t __convention MathSys_Invoke7_4A67E4(\"regparm\")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A67E4-radare2.json",
           "evidence_sha256": "91cbd304a42234dabdfaf4b84a10df19cd250d19a323f6604701c97096dc5a67"
         },
@@ -2606,13 +2606,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A68A9",
-          "signature": "void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A68A9-binaryninja.json",
           "evidence_sha256": "73d9c84fa31715c330c33e5130a23eab0d80fed0995467d89613b0c7c9c1b952"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A68A9",
-          "signature": "void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A68A9-radare2.json",
           "evidence_sha256": "f7a72f60de42bbe29f0fa2fd3a7dd68aead3db63ea1f3445329966ce2c5151a2"
         },
@@ -2646,13 +2646,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A8A91",
-          "signature": "long double(double arg1, int16_t arg2 @ 0xa) __pure Camera_ResetMatrix_14(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8A91-binaryninja.json",
           "evidence_sha256": "04fc36e00ba1cc05bc7a3f1d544dcc90558d9ba3d483cd8ec66078bae5521b01"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A8A91",
-          "signature": "long double(double arg1, int16_t arg2 @ 0xa) __pure Camera_ResetMatrix_14(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8A91-radare2.json",
           "evidence_sha256": "530aa6c8982255feca256a0bd0606f038511035264f76c489504958eb7d9dde3"
         },
@@ -2686,13 +2686,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A8AD0",
-          "signature": "int32_t __fastcall Camera_UpdateTransform_15(int32_t param_1, void* param_2, void* param_3, long param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8AD0-binaryninja.json",
           "evidence_sha256": "c0f44fc782f215e3b93a42d2efcf602a3ea1dd26b90bdf1b3bb9ccf6d85e717e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A8AD0",
-          "signature": "int32_t __fastcall Camera_UpdateTransform_15(int32_t param_1, void* param_2, void* param_3, long param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8AD0-radare2.json",
           "evidence_sha256": "fc3311457b268bbda12ce2a44393c7ee523b4a158f15c55a3ff2b23bd6907347"
         },
@@ -2726,13 +2726,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A8B37",
-          "signature": "int32_t __fastcall Camera_SetFieldOfView_15(int32_t param_1, void* param_2, void* param_3, long param_4, long param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8B37-binaryninja.json",
           "evidence_sha256": "c55f185502d4430e133263f4260ee65e5f5047f08b0be7de2a606312ebe657a6"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A8B37",
-          "signature": "int32_t __fastcall Camera_SetFieldOfView_15(int32_t param_1, void* param_2, void* param_3, long param_4, long param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A8B37-radare2.json",
           "evidence_sha256": "d5dc7857faaf7631196687d7416df3d451c012f0cd9858dc8d497220652b6ef4"
         },
@@ -2766,13 +2766,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9BD1",
-          "signature": "int32_t Camera_ApplyWideScreen_17(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9BD1-binaryninja.json",
           "evidence_sha256": "341e114a7be7ca2a11fde9b857f5a47c2876e26c9ab16e4db9fd8e2adc14a7d7"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9BD1",
-          "signature": "int32_t Camera_ApplyWideScreen_17(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9BD1-radare2.json",
           "evidence_sha256": "3a8f0097b8d4bcb6f93fd08d46bd4062f2c795ff6f368b018f11fcf3e99bef21"
         },
@@ -2806,13 +2806,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9C40",
-          "signature": "long double __convention Camera_ApplyPostProcess_17(\"regparm\")(int32_t param_1, int32_t param_2, long param_3, int32_t param_4, int32_t param_5, int32_t param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9C40-binaryninja.json",
           "evidence_sha256": "0faf3be6cddadbd2d8249735b01930e4b4707add76d930dc89c1a8e83f2c62b8"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9C40",
-          "signature": "long double __convention Camera_ApplyPostProcess_17(\"regparm\")(int32_t param_1, int32_t param_2, long param_3, int32_t param_4, int32_t param_5, int32_t param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9C40-radare2.json",
           "evidence_sha256": "5934c10107086a5d0ce513eeda50acd9828c48973055690f0ac081d5e01d8e4e"
         },
@@ -2846,13 +2846,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9C57",
-          "signature": "long double __convention Camera_UpdateViewCone_17(\"regparm\")(int32_t param_1, int32_t param_2, long param_3, int32_t param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9C57-binaryninja.json",
           "evidence_sha256": "5f077960965449cdfb07dc1073b93fcf677ad18422cd01ce4cc4e20d48be662e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9C57",
-          "signature": "long double __convention Camera_UpdateViewCone_17(\"regparm\")(int32_t param_1, int32_t param_2, long param_3, int32_t param_4, int32_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9C57-radare2.json",
           "evidence_sha256": "9f07ea75103870adfffacbe78233435f9420c4e6920b8a621dfe3952a9b0b927"
         },
@@ -2886,13 +2886,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9CA0",
-          "signature": "long double Camera_ResetMatrix_17(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CA0-binaryninja.json",
           "evidence_sha256": "985855c034e26045ceb5a1c4e08c4da67da327cea49d9c1616b60fe04e85bd89"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9CA0",
-          "signature": "long double Camera_ResetMatrix_17(long param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CA0-radare2.json",
           "evidence_sha256": "78c8ba3639e8eed053c8d6a2be39625cc959666d997b043c1a90e479795032f5"
         },
@@ -2926,13 +2926,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9CB5",
-          "signature": "int32_t Camera_UpdateTransform_18(int32_t param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CB5-binaryninja.json",
           "evidence_sha256": "2565f230b88795575fcfb44d220ee42e3ce31d6f1ac1975e009db9ab7f162354"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9CB5",
-          "signature": "int32_t Camera_UpdateTransform_18(int32_t param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CB5-radare2.json",
           "evidence_sha256": "f6d5a52443930536f5e36852ea7cee97cea75ddbd6c89adc342413d042ac0e47"
         },
@@ -2966,13 +2966,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9CCC",
-          "signature": "void __convention(\"regparm\")(int32_t arg1, long double arg2 @ st0) __pure Camera_SetFieldOfView_18(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CCC-binaryninja.json",
           "evidence_sha256": "53057035aa233c23459055181c7feaf41b28c68a950afd64faa221bd59cf4b97"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9CCC",
-          "signature": "void __convention(\"regparm\")(int32_t arg1, long double arg2 @ st0) __pure Camera_SetFieldOfView_18(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CCC-radare2.json",
           "evidence_sha256": "76908a3d42b60864f1b222b8bdb5618ee2729f113bebbb82326e6dab8b0875a6"
         },
@@ -3006,13 +3006,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9CE5",
-          "signature": "long double __fastcall Camera_ApplyLineFilter_18(int32_t param_1, double* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CE5-binaryninja.json",
           "evidence_sha256": "74794428e26d6b1466f21166f83000dfb0455ba636f37f9b508983c6dc65c95f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9CE5",
-          "signature": "long double __fastcall Camera_ApplyLineFilter_18(int32_t param_1, double* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9CE5-radare2.json",
           "evidence_sha256": "c6ce9a7fc46e9b5fe7435c080e71547097b7552d01e890704aadfc09dfad47ed"
         },
@@ -3046,13 +3046,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004A9D28",
-          "signature": "int32_t(int32_t arg1 @ 0x8) __pure Camera_ApplyBandFilter_18(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9D28-binaryninja.json",
           "evidence_sha256": "1025818027e8aec3566356a59e745ffebd114458ce583fc30910f17e4c21d694"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004A9D28",
-          "signature": "int32_t(int32_t arg1 @ 0x8) __pure Camera_ApplyBandFilter_18(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004A9D28-radare2.json",
           "evidence_sha256": "fe98627a18ed1832de8e167f9405e0963cc8bcede88f29d4ccc984609e5b2ddf"
         },
@@ -3086,13 +3086,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AA0A6",
-          "signature": "void* __convention MathSys_Invoke19(\"regparm\")(int32_t param_1, char* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AA0A6-binaryninja.json",
           "evidence_sha256": "640b68a7362b96219ba47a329529a48202a1da3cde0c7f345ecab3b746d4de5d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AA0A6",
-          "signature": "void* __convention MathSys_Invoke19(\"regparm\")(int32_t param_1, char* param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AA0A6-radare2.json",
           "evidence_sha256": "fa3ca01abebcc8ce39a5660debf3611c72f6a9e4a259a60831a3b96eff28e70d"
         },
@@ -3126,13 +3126,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AAA44",
-          "signature": "int32_t __convention MathSys_Invoke21(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AAA44-binaryninja.json",
           "evidence_sha256": "c8f7bce14dbd81888a274c9e22aceee178c582cd0ab652b576830f5eff98feb2"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AAA44",
-          "signature": "int32_t __convention MathSys_Invoke21(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AAA44-radare2.json",
           "evidence_sha256": "d4b7a4c4b38415a834c5be2c106a44d9d9dfe3a04252a041d348e0599937f4c6"
         },
@@ -3236,13 +3236,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AD004",
-          "signature": "int32_t __convention MathSys_Invoke3(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD004-binaryninja.json",
           "evidence_sha256": "0741f3b22b198ded11b5cee3bd1f71e3f7f864c445d88284e128fee1b1a74cd0"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AD004",
-          "signature": "int32_t __convention MathSys_Invoke3(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD004-radare2.json",
           "evidence_sha256": "2fb864cad8b0b079e90a25a96a4f1ae7deb8a0621a6062d0011f95c5c61b9822"
         },
@@ -3276,13 +3276,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AD140",
-          "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD140-binaryninja.json",
           "evidence_sha256": "7e200d33eac919370e396b86cf60deb526968c6df0cd78d623dbbd0bf761ffec"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AD140",
-          "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD140-radare2.json",
           "evidence_sha256": "909af6b6ec61e1560341e40161c4f4ec4fedcb78abf3e054d5684585d060b52c"
         },
@@ -3316,13 +3316,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AD1B0",
-          "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_UpdateTransform_27(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD1B0-binaryninja.json",
           "evidence_sha256": "9e75a3342e02319f81d0b114ac3b9ac1c2cea8e5982b41ba9997d3492122c882"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AD1B0",
-          "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_UpdateTransform_27(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AD1B0-radare2.json",
           "evidence_sha256": "082ae96f79b173e1e304b5799e4cde21e2c760798212062ad575bf55ed2a2b33"
         },
@@ -3426,13 +3426,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AE670",
-          "signature": "void __stdcall Camera_ResetMatrix_29(void* param_1, void* param_2, EXCEPTION_RECORD* param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AE670-binaryninja.json",
           "evidence_sha256": "99f8843651915ca57b04b07e8acf7e992f7ac386a42bc9f0fa1e1c510d473ac9"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AE670",
-          "signature": "void __stdcall Camera_ResetMatrix_29(void* param_1, void* param_2, EXCEPTION_RECORD* param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AE670-radare2.json",
           "evidence_sha256": "1a59f3ed8b33bd2aee049c267b7321016e1df6a6474ca7ae4acde34abcfbd620"
         },
@@ -3466,13 +3466,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AE730",
-          "signature": "int32_t Camera_SetFieldOfView_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AE730-binaryninja.json",
           "evidence_sha256": "c06fd097b028554f5fa943fb6f33e004fb16994470465bfe0c1f0fccee0e443d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AE730",
-          "signature": "int32_t Camera_SetFieldOfView_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AE730-radare2.json",
           "evidence_sha256": "d2368679b82b56de2cb61221c88c1010815e5e9bb247780b19f7439c7e6f1b52"
         },
@@ -3506,13 +3506,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF740",
-          "signature": "int32_t Camera_ApplyBandFilter_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF740-binaryninja.json",
           "evidence_sha256": "4573f56cd749d9a83459179363dd6bdc84f665b36dfecce5bb3eaedd02c028e7"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF740",
-          "signature": "int32_t Camera_ApplyBandFilter_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF740-radare2.json",
           "evidence_sha256": "bc71bd9d3c70979a92ef47516ed9b51780536670eb98363afb00d01c0b0cb235"
         },
@@ -3546,13 +3546,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF746",
-          "signature": "int32_t Camera_ApplyHandiCam_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF746-binaryninja.json",
           "evidence_sha256": "21b433967cab821916304d053283ee55525085c53eefb342b6b324af94c6dd2d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF746",
-          "signature": "int32_t Camera_ApplyHandiCam_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF746-radare2.json",
           "evidence_sha256": "831463385e2e139ce76cfe42e9911d95ed1c3a0e354f09ed698c6441a5928e32"
         },
@@ -3586,13 +3586,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF74C",
-          "signature": "HRESULT __stdcall Camera_ApplyWideScreen_30(LPDDENUMCALLBACKEXA param_1, void* param_2, uint32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF74C-binaryninja.json",
           "evidence_sha256": "010853a255e7e3ac9fd18576a368318c09822b76da7f805b323ebb5b8c5fba5f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF74C",
-          "signature": "HRESULT __stdcall Camera_ApplyWideScreen_30(LPDDENUMCALLBACKEXA param_1, void* param_2, uint32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF74C-radare2.json",
           "evidence_sha256": "16ff74db8861bfc7c33276599b92b216967c4b999f88ec289893c0db02dc98bb"
         },
@@ -3626,13 +3626,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF752",
-          "signature": "HRESULT __stdcall Camera_ApplyPostProcess_30(GUID* param_1, void** param_2, GUID* param_3, struct param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF752-binaryninja.json",
           "evidence_sha256": "470364bf83fc8dc51aaff5d5f27214eaece2719386f06d6e31bb0f5a517ebb7f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF752",
-          "signature": "HRESULT __stdcall Camera_ApplyPostProcess_30(GUID* param_1, void** param_2, GUID* param_3, struct param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF752-radare2.json",
           "evidence_sha256": "1e6f05feabcc438bf3f7aa14e6c71c945083ef0a9bdd5f63d9ca83e820a21d65"
         },
@@ -3666,13 +3666,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF758",
-          "signature": "void __stdcall Camera_UpdateViewCone_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF758-binaryninja.json",
           "evidence_sha256": "014e4311ee09a283b841093b5b64a8c31a76b7894030b5358b694fcb5063b0c0"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF758",
-          "signature": "void __stdcall Camera_UpdateViewCone_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF758-radare2.json",
           "evidence_sha256": "a48e68f5a87eff9a4f49bc335dc1fd00264af519f42224b09e1e363eac1c296a"
         },
@@ -3706,13 +3706,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF75E",
-          "signature": "void __stdcall Camera_ResetMatrix_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF75E-binaryninja.json",
           "evidence_sha256": "3b7686383855174e2e8cd8230ef480236b1c7859773f2052a5b8b7d91da9fc1f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF75E",
-          "signature": "void __stdcall Camera_ResetMatrix_30(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF75E-radare2.json",
           "evidence_sha256": "053b65a94e42945aa6ede97b2191305f4ae52527ce5ae4cbb0eb5a79b44ba140"
         },
@@ -3746,13 +3746,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF764",
-          "signature": "uint32_t __stdcall Camera_UpdateTransform_31(struct param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF764-binaryninja.json",
           "evidence_sha256": "45804eae2cb3a11ea8e4f293210ed012e5142aae3eadcc65614a1b45a14d13e8"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF764",
-          "signature": "uint32_t __stdcall Camera_UpdateTransform_31(struct param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF764-radare2.json",
           "evidence_sha256": "10e513531eef98a2631b6dc2b6b7045174c28c2fc128729995a4bcd4ec47676a"
         },
@@ -3786,13 +3786,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF76A",
-          "signature": "uint32_t __stdcall Camera_SetFieldOfView_31(struct param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF76A-binaryninja.json",
           "evidence_sha256": "d5f084374462f28cac3a6c657f986275a036f2dd55c33cac0bc206c26becba1f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF76A",
-          "signature": "uint32_t __stdcall Camera_SetFieldOfView_31(struct param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF76A-radare2.json",
           "evidence_sha256": "7cffabcd233e3a441e80c4d035197490d85ceeb18b823cc797b240c45737b588"
         },
@@ -3826,13 +3826,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF770",
-          "signature": "LRESULT __stdcall Camera_ApplyLineFilter_31(HIC param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF770-binaryninja.json",
           "evidence_sha256": "8557e0e61c3d5dc1c9ffe9890e735a207070364ba03126fb64d26eaaf09ec45a"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF770",
-          "signature": "LRESULT __stdcall Camera_ApplyLineFilter_31(HIC param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF770-radare2.json",
           "evidence_sha256": "d8fe3a784462b145c370e8096e9b1f96da13ee8a83d5bfa9592ce10f23c6f692"
         },
@@ -3866,13 +3866,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF776",
-          "signature": "LRESULT __stdcall Camera_ApplyBandFilter_31(HIC param_1, uint32_t param_2, uint32_t param_3, uint32_t param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF776-binaryninja.json",
           "evidence_sha256": "ac688740b22bff4f3d28f0bbee3a6bb326e83c63f83f102825607f2080e9bbf5"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF776",
-          "signature": "LRESULT __stdcall Camera_ApplyBandFilter_31(HIC param_1, uint32_t param_2, uint32_t param_3, uint32_t param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF776-radare2.json",
           "evidence_sha256": "377b29a909e3d2b73a8e672030ac34b1dbc05fb7433f2ffd47a7127b360883fc"
         },
@@ -3906,13 +3906,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF77C",
-          "signature": "HRESULT __stdcall Camera_ApplyHandiCam_31(struct param_1, int32_t param_2, void* param_3, int32_t* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF77C-binaryninja.json",
           "evidence_sha256": "7d0d47692200bae6600ae3ca121b8f51bbd22e032717f71b0dd295fd169a43cb"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF77C",
-          "signature": "HRESULT __stdcall Camera_ApplyHandiCam_31(struct param_1, int32_t param_2, void* param_3, int32_t* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF77C-radare2.json",
           "evidence_sha256": "cb0aed6dc1de38d1ccb593e4e7189bf4c664e9ca1e30402fb02a712db016f7e7"
         },
@@ -3946,13 +3946,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF782",
-          "signature": "HRESULT __stdcall Camera_ApplyWideScreen_31(struct param_1, struct param_2, int32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF782-binaryninja.json",
           "evidence_sha256": "228b50557a6e93eb0ce647bfaa6ec2592a6e417e2e9bd1d742fd841c025c501a"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF782",
-          "signature": "HRESULT __stdcall Camera_ApplyWideScreen_31(struct param_1, struct param_2, int32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF782-radare2.json",
           "evidence_sha256": "7a3fa550eb1d4f2b46029730042a4153565c279c8e71dd38775b2c125438284e"
         },
@@ -3986,13 +3986,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF788",
-          "signature": "HRESULT __stdcall Camera_ApplyPostProcess_31(struct param_1, struct param_2, uint32_t param_3, int32_t param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF788-binaryninja.json",
           "evidence_sha256": "6a8a81b6b3e6dd2e78f8b90aebb3bbe697f47ced8534ca1d3fe0626bc2b47e0b"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF788",
-          "signature": "HRESULT __stdcall Camera_ApplyPostProcess_31(struct param_1, struct param_2, uint32_t param_3, int32_t param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF788-radare2.json",
           "evidence_sha256": "e1e644a4640531dd7d0545ee64ed9ceb6911e00106391399afcafa3c352d1d60"
         },
@@ -4026,13 +4026,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF78E",
-          "signature": "HRESULT __stdcall Camera_UpdateViewCone_31(struct param_1, struct param_2, int32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF78E-binaryninja.json",
           "evidence_sha256": "07d117012bdcfb79f45d27b76f4250184513f8efd4beab72c5772a251451897e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF78E",
-          "signature": "HRESULT __stdcall Camera_UpdateViewCone_31(struct param_1, struct param_2, int32_t param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF78E-radare2.json",
           "evidence_sha256": "b0b4c244646c2b1cec5a653acaba32191a2056bda0569563b6179ee9794f004a"
         },
@@ -4066,13 +4066,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF794",
-          "signature": "HRESULT __stdcall Camera_ResetMatrix_31(struct param_1, PSTR param_2, uint32_t param_3, GUID* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF794-binaryninja.json",
           "evidence_sha256": "8620067cca56d756f5119c8ba6aec0ef76bb803b8cf9af2d3f05bdf39045b3d1"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF794",
-          "signature": "HRESULT __stdcall Camera_ResetMatrix_31(struct param_1, PSTR param_2, uint32_t param_3, GUID* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF794-radare2.json",
           "evidence_sha256": "c3153fd5888a504879df4adfbf22f38bcb064d1cce9fdf49a17f7d798ec5e797"
         },
@@ -4106,13 +4106,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF79A",
-          "signature": "HIC __stdcall Camera_UpdateTransform_32(uint32_t param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, BITMAPINFOHEADER* param_4, uint16_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF79A-binaryninja.json",
           "evidence_sha256": "a1b3ee40eb979e4dd46921e55eee69c79b54d7a27d63de5a8ce3801813055c06"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF79A",
-          "signature": "HIC __stdcall Camera_UpdateTransform_32(uint32_t param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, BITMAPINFOHEADER* param_4, uint16_t param_5);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF79A-radare2.json",
           "evidence_sha256": "7a6436fe96b170e64107ac695e5e2d89735f9c94227ba66f575bbafb0786b341"
         },
@@ -4146,13 +4146,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF7A0",
-          "signature": "uint32_t __stdcall Camera_SetFieldOfView_32(HIC param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, void* param_4, BITMAPINFOHEADER* param_5, void* param_6);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7A0-binaryninja.json",
           "evidence_sha256": "f4bd8f45c12a07b0d47ac19821159361de375ceb3323714092f8874dd72b18e0"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF7A0",
-          "signature": "uint32_t __stdcall Camera_SetFieldOfView_32(HIC param_1, uint32_t param_2, BITMAPINFOHEADER* param_3, void* param_4, BITMAPINFOHEADER* param_5, void* param_6);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7A0-radare2.json",
           "evidence_sha256": "32a96ab9536ec08a0e86f494c6770260dbbb5a67a6a57116b48c87bb3d0519e8"
         },
@@ -4186,13 +4186,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF7A6",
-          "signature": "HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7A6-binaryninja.json",
           "evidence_sha256": "e6e6e6c835c4450d3fb4a5f278f13a30ba5d92a4724aa22b4ddc561730ab3eef"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF7A6",
-          "signature": "HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7A6-radare2.json",
           "evidence_sha256": "71a5fffd0b30b98b4356e6123a8d1506dd3cd924cdbec452ffbe1b9e9a961bf9"
         },
@@ -4226,13 +4226,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004AF7B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7B0-binaryninja.json",
           "evidence_sha256": "b11c16b9c037663c78ece51c1e43bc345d0600a338aa19b168fc6b37744e1009"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004AF7B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004AF7B0-radare2.json",
           "evidence_sha256": "9dc34b124b551c53d244f82e12f390f45983a620fb24699beba9789e38d5e676"
         },
@@ -4432,13 +4432,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B0B90",
-          "signature": "int32_t Sys_ReadFileBlock_2(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B0B90-binaryninja.json",
           "evidence_sha256": "aa1bf424e792570f0297384feec6c27f2b4e5dcc9d364ae96b54f492d177abc0"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B0B90",
-          "signature": "int32_t Sys_ReadFileBlock_2(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B0B90-radare2.json",
           "evidence_sha256": "821db6ac171d276185f9c786f3941ac366f4a850d55a16cf3b1c57af77bdd9cd"
         },
@@ -4752,13 +4752,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B23B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B23B0-binaryninja.json",
           "evidence_sha256": "cbada4bf3e39fa295e1f3458cd79a925dd837af979b656c5baedee7df46f90e4"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B23B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B23B0-radare2.json",
           "evidence_sha256": "882a60a3d2b9fb54dcc9043e0147922c82e2db83d199095ed9958be136e299c3"
         },
@@ -4796,13 +4796,13 @@
         "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B24C0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B24C0-binaryninja.json",
           "evidence_sha256": "4e6b98b60719618d9b1a0edb36a8ec8a354bca63834f0fe85218ca93e8d783a6"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B24C0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B24C0-radare2.json",
           "evidence_sha256": "4b34c1bde2ffc383ae8b98069474ac2ff73769ace90ac59566ab0acc2bab65b4"
         },
@@ -5006,13 +5006,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B59F0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B59F0-binaryninja.json",
           "evidence_sha256": "fae77d0d601bedc359cac3b01456bdea1e8d89406e7167ea1049b0fb42ff396f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B59F0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B59F0-radare2.json",
           "evidence_sha256": "936bbe6c4904e413aaec8e1591387bde929fc06108f3967b8785663b8d06fbfe"
         },
@@ -5208,13 +5208,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B5C90",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-binaryninja.json",
           "evidence_sha256": "419647938fc6c8f234a835c8dfc488bff0f5d92deccee5d97ece32ac7b1ae28e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B5C90",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-radare2.json",
           "evidence_sha256": "d91eec9bc2e75318b4e41284608c3433c89b4801e8bc1e147d04a313e17662c7"
         },
@@ -5270,13 +5270,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B5F00",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5F00-binaryninja.json",
           "evidence_sha256": "ee6a106f16b6136174340dc3492b3505f6157108de8cc223855f3047e6a529e0"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B5F00",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5F00-radare2.json",
           "evidence_sha256": "d04dba414c6335c0674379ef55c26eafa40318a57793fd5f581ec01ac7b81f44"
         },
@@ -5336,13 +5336,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B5F80",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-binaryninja.json",
           "evidence_sha256": "93358482370c8aadf12469f43faed61df616da0171a27dd6ccd328e176ce4258"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B5F80",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-radare2.json",
           "evidence_sha256": "32b2b3b9ad32c71986ecb898a9d0e4fb3c8b4b100e9a32827a783654d46c76b6"
         },
@@ -5398,13 +5398,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B60F0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B60F0-binaryninja.json",
           "evidence_sha256": "3d547f7fdb7c18e9ac9c1dba3ad74eb5aa15569f5bc35ff75f50f73789e26c36"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B60F0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B60F0-radare2.json",
           "evidence_sha256": "6eb2d6efa8ca5429575e2cb21e44da73c502e10cace2eef54186b9279500ba61"
         },
@@ -5460,13 +5460,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B6380",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B6380-binaryninja.json",
           "evidence_sha256": "81e3eccbeeb4805cbbb2b8f363b854fd614e607d3a1cfa37c876d724a0ae2db7"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B6380",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B6380-radare2.json",
           "evidence_sha256": "0b08934829b067c35daac4bec4f81eafd43bb4e9454a17ebbbfd76b10157711f"
         },
@@ -6086,13 +6086,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B7CF0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B7CF0-binaryninja.json",
           "evidence_sha256": "de9b0f71306c9a852027fe27c0408e2e9b1a8a7043276a6032fad5a622ba02ce"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B7CF0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B7CF0-radare2.json",
           "evidence_sha256": "81d7b1c9bbf080bd3e6d2de3f50e28b7451f881f8672d273da355deac294b8cf"
         },
@@ -6130,13 +6130,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B8C10",
-          "signature": "int32_t BreakScript(int32_t param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B8C10-binaryninja.json",
           "evidence_sha256": "b0866ceb37695b2e8ae066fe19e2455aafc0cc969f82402b026186ba9b2e44bc"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B8C10",
-          "signature": "int32_t BreakScript(int32_t param_1);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B8C10-radare2.json",
           "evidence_sha256": "bf105fd5e2df06b9a6346b987d81e8e4bd9dc292fb78900e67e0fb550a3d8d84"
         },
@@ -6170,13 +6170,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004B8C60",
-          "signature": "int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B8C60-binaryninja.json",
           "evidence_sha256": "257193e3fce678470bb6eea39036bdae1844976e097ab5934d444296471babc9"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004B8C60",
-          "signature": "int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004B8C60-radare2.json",
           "evidence_sha256": "54f743713f19da1dea7e73d1ede59b4b03380d91ff6f72018f84d9c2a41c9a74"
         },
@@ -6210,13 +6210,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004BCFD0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004BCFD0-binaryninja.json",
           "evidence_sha256": "49c24a373ab4a0f9b660e69703916c7cef507f1c9a6999db107bae573edc31cd"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004BCFD0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004BCFD0-radare2.json",
           "evidence_sha256": "5ea9fd6f960d307ebbf19d177f54c2166afff1806dbac18cdde59c721f3e7f9a"
         },
@@ -6394,13 +6394,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004C0250",
-          "signature": "int32_t DynObj_ParseConfigFile(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004C0250-binaryninja.json",
           "evidence_sha256": "7c14366a8a88818556bdcd04f6c557903c9b96f4cd66b2547088e26442aa67fe"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004C0250",
-          "signature": "int32_t DynObj_ParseConfigFile(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004C0250-radare2.json",
           "evidence_sha256": "a526f13f97e0e502a097ca0759c1e59a2543552d0545c578edc065999e5a7ffe"
         },
@@ -6434,13 +6434,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004C4520",
-          "signature": "int32_t DefineMagicObj(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004C4520-binaryninja.json",
           "evidence_sha256": "184f76773130e0759c2ad0972726a94a0b360ec6effc77930dae245ac00fcb73"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004C4520",
-          "signature": "int32_t DefineMagicObj(int32_t param_1, float param_2);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004C4520-radare2.json",
           "evidence_sha256": "0fcfd9198d6ff03c5b4e2f18a2a30b25017bd6f8e88d26e3935ddbcb9be61be8"
         },
@@ -6824,13 +6824,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CEAA0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CEAA0-binaryninja.json",
           "evidence_sha256": "78dedec489f2da415fbcb3a1c583d853d7233592ed4b63e4583e0169b0c3b758"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CEAA0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CEAA0-radare2.json",
           "evidence_sha256": "2f447dab6bd5f216051156582eb3e77fe12d36dbf1fcc1dc7520b2da00ad993d"
         },
@@ -6890,13 +6890,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF080",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF080-binaryninja.json",
           "evidence_sha256": "e7320720cc322c0b6a33266ee3a02317e5d5deaf760fed21fdde88e5c88d58d1"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF080",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF080-radare2.json",
           "evidence_sha256": "b3c213a81521be0b63b32b02b763c0857bd377f47963a346a18b537746856fb2"
         },
@@ -7022,13 +7022,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF330",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF330-binaryninja.json",
           "evidence_sha256": "77258d8ac1beb8557f4e54d6073a1e191b6edd7a570a37706c716a1bb04a193e"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF330",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF330-radare2.json",
           "evidence_sha256": "67ae9d053c0532281b89d0b461d45ea5e12c252de568c306160bc88727fdff60"
         },
@@ -7066,13 +7066,13 @@
         "status": "VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF390",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF390-binaryninja.json",
           "evidence_sha256": "381b3eb0bf5192ef896061b999d0e63e4a3beee4da2d37119257695cbf03572d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF390",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF390-radare2.json",
           "evidence_sha256": "23e41e0030c88c5055380502f8a8bd7869e50abe729a6acf875f211d16cf1760"
         },
@@ -7149,13 +7149,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF630",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF630-binaryninja.json",
           "evidence_sha256": "60954cac75ee56f4f48a05189bd35e2a038078fc99dbb2e1ee3d2ff205c099bc"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF630",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF630-radare2.json",
           "evidence_sha256": "b357eb605cb090c8bf493b3e08aa94d9004080b458fd01b039b322ff5201e911"
         },
@@ -7193,13 +7193,13 @@
         "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF790",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF790-binaryninja.json",
           "evidence_sha256": "73b353ecd0d8d6b056b68f0b8f9ef2fd5ec576c3227f52622835f28686fb7c48"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF790",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF790-radare2.json",
           "evidence_sha256": "708d479c2861dd95a163490d90b68ce8ac52e8ce316780a518e236b10d06c5f9"
         },
@@ -7263,13 +7263,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF870",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF870-binaryninja.json",
           "evidence_sha256": "ff6461fde4b4dcaeebc36e4c931886fb668cbcbd5d9c8a381e00addcd32056bb"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF870",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF870-radare2.json",
           "evidence_sha256": "e2560e783dff74ee115a14d1d80fee4b4ac345bf42e8373ed058e633dc67a721"
         },
@@ -7307,13 +7307,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004CF910",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF910-binaryninja.json",
           "evidence_sha256": "b3ead67422d2da21098e277c9f7f3be4fa029013cc658e826808a974ab89176d"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004CF910",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004CF910-radare2.json",
           "evidence_sha256": "216e59ac15ede575faf7ae180f051aa0dc510455a744ef04e838328ae8f2ad3b"
         },
@@ -7491,13 +7491,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004D14E0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004D14E0-binaryninja.json",
           "evidence_sha256": "76ffb9660c7de0e36296ed905824568e65b636ec59a55039451b1c802a83f283"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004D14E0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004D14E0-radare2.json",
           "evidence_sha256": "a1e602b54ce85128e65877f0d16d48ceed58da8df1b8361dfaf04ed7fbcab248"
         },
@@ -7560,13 +7560,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004E8C60",
-          "signature": "int32_t DefineSound(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004E8C60-binaryninja.json",
           "evidence_sha256": "3f0ef5f0dc0e0618b145daa738fe235c9f0d8df42e2479543a9c4ebff99500d8"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004E8C60",
-          "signature": "int32_t DefineSound(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004E8C60-radare2.json",
           "evidence_sha256": "ea3c8dad5ab520111f59df42c27e4c1f9c2d947e9c4a25436434d0235284fa66"
         },
@@ -7600,13 +7600,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004E9EC0",
-          "signature": "int32_t DefineTriggerOnce(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004E9EC0-binaryninja.json",
           "evidence_sha256": "6e5f886bb3b33278d2ab5ce25f6b279c480435bcb2b648f2e41f2dafd4524657"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004E9EC0",
-          "signature": "int32_t DefineTriggerOnce(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004E9EC0-radare2.json",
           "evidence_sha256": "d815bbb62e7174c3f44eec796262a31df280b6785132bbff7a95248d619d7855"
         },
@@ -7640,13 +7640,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004EAD20",
-          "signature": "int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EAD20-binaryninja.json",
           "evidence_sha256": "2e96c236bbc449041d71f3a346ae2079b30de366c3946c9d8c6689de1df828ae"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004EAD20",
-          "signature": "int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EAD20-radare2.json",
           "evidence_sha256": "ec9701c84e1b642e3326418765ecc6e5b8934abdfc7d611ef6567fa957f58b41"
         },
@@ -7680,13 +7680,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004EBA90",
-          "signature": "int32_t DefineGroup(int32_t param_1, void* param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EBA90-binaryninja.json",
           "evidence_sha256": "29d5fd1f56cca8114f0cc50761df99d7a65048a72a3f59b23405e7af51c24edc"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004EBA90",
-          "signature": "int32_t DefineGroup(int32_t param_1, void* param_2, float param_3);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EBA90-radare2.json",
           "evidence_sha256": "205d0fc4abfdf410fb7ddcecfddc919f30e2650aa5ce5b398b9ac40ef0846147"
         },
@@ -7720,13 +7720,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004EDB60",
-          "signature": "x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EDB60-binaryninja.json",
           "evidence_sha256": "6c80230fb2c010c9a33f7302004fe4a9e31b01188d796311c226a2c54a34c413"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004EDB60",
-          "signature": "x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004EDB60-radare2.json",
           "evidence_sha256": "ca536a5617286d461f7aef532b573a02326fc5c10ea8f8402aeceae5a7b5aff2"
         },
@@ -7786,13 +7786,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004F82B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004F82B0-binaryninja.json",
           "evidence_sha256": "5321ef9a196af5faafa2148d178714e103560105dd0976b6d054bedc981549a5"
         },
         "radare2": {
           "evidence_id": "r2:live:0x004F82B0",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x004F82B0-radare2.json",
           "evidence_sha256": "dc38c8e822fde0d42c698a2eedbc9cbe0b2630126b95504fa0bb5616326f3c26"
         },
@@ -7848,13 +7848,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00505E40",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00505E40-binaryninja.json",
           "evidence_sha256": "2b3a895bba08904027dab3c8dd96efbe993ae91c5a3a2adf74403c90bb2628ca"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00505E40",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00505E40-radare2.json",
           "evidence_sha256": "ca8fbc35dc4ea2442274afbf48f846a051dcc5bb2341440ae665e55d444c1cb0"
         },
@@ -7910,13 +7910,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00506F00",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00506F00-binaryninja.json",
           "evidence_sha256": "78c3ad04097e22ab7df73c0d039242bf51410990ee77f58ea75577bfaa1ab5de"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00506F00",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00506F00-radare2.json",
           "evidence_sha256": "0a2bbf60347b7e698f485ce66557f19789c8a0d33669d76e630a25100209d48e"
         },
@@ -7972,13 +7972,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00510010",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00510010-binaryninja.json",
           "evidence_sha256": "d229fac900b1ee4c4e17bc1c8551994425145a76263cf1cc30ea72baf71edac5"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00510010",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00510010-radare2.json",
           "evidence_sha256": "43478146563656ba010bbb5254db96d5cb27dab670a4ae00f27e2a7bdfae9b9f"
         },
@@ -8041,13 +8041,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x005127D0",
-          "signature": "uint32_t Terrain_SelectTerrainLOD_2(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x005127D0-binaryninja.json",
           "evidence_sha256": "6d17bf1ebff26f58058585db79cbf825dfdfa61b2bfb2e4cb45950f340d0e4d5"
         },
         "radare2": {
           "evidence_id": "r2:live:0x005127D0",
-          "signature": "uint32_t Terrain_SelectTerrainLOD_2(void);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x005127D0-radare2.json",
           "evidence_sha256": "abd8cb7d1a87892c3add6f3188b069b1a4a69712f0bc79cb2f319eed8b3877b3"
         },
@@ -8081,13 +8081,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x00512C30",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00512C30-binaryninja.json",
           "evidence_sha256": "2027cbf54db93e32d796c1fc1f7bd13d3b27542f5cc9be39613c34a07133a72f"
         },
         "radare2": {
           "evidence_id": "r2:live:0x00512C30",
-          "signature": "unknown",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x00512C30-radare2.json",
           "evidence_sha256": "b1c087d5f0a6202bcda54f9939d2c8ccd622357cf0f58029594064e3f90e65a4"
         },
@@ -8150,13 +8150,13 @@
         "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x005236C0",
-          "signature": "int32_t __convention WeatherWaterSky_Invoke7_5236C0(\"regparm\")(int32_t param_1, int32_t param_2, int32_t* param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x005236C0-binaryninja.json",
           "evidence_sha256": "3ad18150374ed2b738d3c198025498b7cbd394042b40392d9bd2f112d2779613"
         },
         "radare2": {
           "evidence_id": "r2:live:0x005236C0",
-          "signature": "int32_t __convention WeatherWaterSky_Invoke7_5236C0(\"regparm\")(int32_t param_1, int32_t param_2, int32_t* param_3, void* param_4);",
+          "signature": "not restated",
           "evidence_path": "docs/fidelity/evidence/0x005236C0-radare2.json",
           "evidence_sha256": "160057d5e13b52169551f950c211294ded9160b2a57e18ed2065efb7197a1a2c"
         },
