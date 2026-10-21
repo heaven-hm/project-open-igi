@@ -1,6 +1,6 @@
 // IGI native provenance: GO_GfxDisp - 0x00403950 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403950-GO_GfxDisp.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403950-GO_GfxDisp.hpp"
+#include "GO_GfxDisp.h"
 int GO_GfxDisp(int context, float arg2 )
 
 // Sig: int GO_GfxDisp(int displayMode)

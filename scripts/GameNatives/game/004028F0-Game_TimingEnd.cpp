@@ -1,6 +1,6 @@
 // IGI native provenance: Game_TimingEnd - 0x004028F0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004028F0-Game_TimingEnd.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004028F0-Game_TimingEnd.hpp"
+#include "Game_TimingEnd.h"
 int Game_TimingEnd()
 
 // Sig: void Game_TimingEnd(void)

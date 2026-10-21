@@ -1,6 +1,6 @@
 // IGI native provenance: Define_AmmoType - 0x0047CAD0 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0047CAD0-Define_AmmoType.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0047CAD0-Define_AmmoType.hpp"
+#include "Define_AmmoType.h"
 int Define_AmmoType(long double context , int arg2, float arg3 )
 
 // Sig: void Define_AmmoType(...)

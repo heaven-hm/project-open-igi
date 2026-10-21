@@ -1,6 +1,6 @@
 // IGI native provenance: Graph_Open - 0x004F9FF0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F9FF0-Graph_Open.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004F9FF0-Graph_Open.hpp"
+#include "Graph_Open.h"
 int Graph_Open(void* context )
 
 // Sig: void Graph_Open(unsigned int level,char* graph_str)

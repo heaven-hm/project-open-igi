@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_FlameUpdate - 0x004779E0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004779E0-Weapon_FlameUpdate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004779E0-Weapon_FlameUpdate.hpp"
+#include "Weapon_FlameUpdate.h"
 void* Weapon_FlameUpdate(void* context, int* arg2)
 
 // Sig: void Weapon_FlameUpdate(WeaponContext* weaponCtx, int* state)

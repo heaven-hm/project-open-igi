@@ -56,10 +56,13 @@ def main():
         if not probe or not probe.is_file(): raise ValueError('missing reviewed typed probe for complete changed scope')
         if any(n.get('runtime_contract',{}).get('probe_sha256')!=digest(probe) for n in data['checked_natives']):
             raise ValueError('probe differs from reviewed runtime contracts')
-        capture=invoke([sys.executable,str(ROOT/'scripts/native_frida_diff.py'),'--gate-report',str(gate_path),
+        capture=invoke([sys.executable,str(ROOT/'scripts/frida_scoped_capture.py'),'--gate-report',str(gate_path),
             '--candidate-exe',str(candidate),'--probe',str(probe),'--level',str(args.level),'--out',str(pair_path)],env)
         report['phases']['paired_capture']=capture
         if capture['exit_code']: raise ValueError('paired capture failed')
+        captured=json.loads(pair_path.read_text())
+        if captured.get('kind')!='igi-paired-native-runtime' or captured.get('result')!='passed':
+            raise ValueError('paired capture report did not pass')
         checked=invoke([sys.executable,str(ROOT/'scripts/check_frida_differential.py'),'--report',str(pair_path),
             '--gate-report',str(gate_path),'--candidate-exe',str(candidate)],env)
         report['phases']['typed_comparison']=checked

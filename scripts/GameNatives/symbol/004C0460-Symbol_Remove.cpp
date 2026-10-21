@@ -1,6 +1,6 @@
 // IGI native provenance: Symbol_Remove - 0x004C0460 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004C0460-Symbol_Remove.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004C0460-Symbol_Remove.hpp"
+#include "Symbol_Remove.h"
 int Symbol_Remove(int* context, int* arg2)
 
 // Sig: int Symbol_Remove(int* symTable, char* symName)

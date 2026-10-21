@@ -1,6 +1,6 @@
 // IGI native provenance: QScript_ParseAndAssemble - 0x004BBCB0 - CFG score 96.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004BBCB0-QScript_ParseAndAssemble.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004BBCB0-QScript_ParseAndAssemble.hpp"
+#include "QScript_ParseAndAssemble.h"
 int QScript_ParseAndAssemble(void* context, void* arg2)
 
 // Sig: int QScript_ParseAndAssemble(char* srcText, int options)

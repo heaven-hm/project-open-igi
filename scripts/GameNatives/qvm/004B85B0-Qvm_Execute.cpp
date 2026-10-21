@@ -3,7 +3,7 @@
 // Scope: Execution context observed after objects.qvm load; individual opcode semantics not verified.
 // IGI native provenance: Qvm_Execute - 0x004B85B0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B85B0-Qvm_Execute.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B85B0-Qvm_Execute.hpp"
+#include "Qvm_Execute.h"
 int Qvm_Execute(void* context)
 
 // Sig: int Qvm_Execute(void* qvm)

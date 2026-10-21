@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsSetSpeechVolume - 0x00404DA0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404DA0-Config_SoundOptionsSetSpeechVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404DA0-Config_SoundOptionsSetSpeechVolume.hpp"
+#include "Config_SoundOptionsSetSpeechVolume.h"
 int Config_SoundOptionsSetSpeechVolume(long double context , int arg2, float arg3 )
 
 // Sig: void Config_SoundOptionsSetSpeechVolume(float volume)

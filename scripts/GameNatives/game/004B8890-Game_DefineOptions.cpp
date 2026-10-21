@@ -1,6 +1,6 @@
 // IGI native provenance: Game_DefineOptions - 0x004B8890 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B8890-Game_DefineOptions.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B8890-Game_DefineOptions.hpp"
+#include "Game_DefineOptions.h"
 void* Game_DefineOptions(int* context, int arg2, int arg3, int arg4)
 
 // Sig: void Game_DefineOptions(int **option_str,int option_func_addr,int

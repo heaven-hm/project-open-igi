@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Patrol - 0x0044D0E0 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D0E0-AIAction_Patrol.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D0E0-AIAction_Patrol.hpp"
+#include "AIAction_Patrol.h"
 int AIAction_Patrol(int context, float arg2 )
 
 // Sig: void AIAction_Patrol(int target, int mustBeZero, int flags)

@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetAlarmControlStatus - 0x0044E4F0 - CFG score 85.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E4F0-AIFunction_GetAlarmControlStatus.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E4F0-AIFunction_GetAlarmControlStatus.hpp"
+#include "AIFunction_GetAlarmControlStatus.h"
 int AIFunction_GetAlarmControlStatus(int context)
 
 // Sig: int AIFunction_GetAlarmControlStatus()

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GameOptionsInputSetBloodEnabled - 0x004042E0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004042E0-Config_GameOptionsInputSetBloodEnabled.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004042E0-Config_GameOptionsInputSetBloodEnabled.hpp"
+#include "Config_GameOptionsInputSetBloodEnabled.h"
 int Config_GameOptionsInputSetBloodEnabled(long double context , int arg2, float arg3 )
 
 // Sig: void Config_GameOptionsInputSetBloodEnabled(int blood)

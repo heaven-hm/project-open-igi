@@ -1,6 +1,6 @@
 // IGI native provenance: Symbol_CheckRegister - 0x004C0560 - CFG score 90.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004C0560-Symbol_CheckRegister.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004C0560-Symbol_CheckRegister.hpp"
+#include "Symbol_CheckRegister.h"
 int Symbol_CheckRegister(int* context, int* arg2, int arg3)
 
 // Sig: void* Symbol_CheckRegister(int* symTable, char* symName, int extra)

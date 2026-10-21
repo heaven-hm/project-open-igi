@@ -1,6 +1,6 @@
 // IGI native provenance: String_VFormat - 0x004A5702 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A5702-String_VFormat.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "String_VFormat.hpp"
+#include "String_VFormat.h"
 int String_VFormat(char* context, char* arg2, int arg3)
 
 // Sig: int String_VFormat(char* buffer, const char* format, va_list args)

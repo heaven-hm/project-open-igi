@@ -1,6 +1,6 @@
 // IGI native provenance: GO_SoundMusic - 0x00403EF0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403EF0-GO_SoundMusic.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403EF0-GO_SoundMusic.hpp"
+#include "GO_SoundMusic.h"
 int GO_SoundMusic(long double context , int arg2, float arg3 )
 
 // Sig: int GO_SoundMusic(float volume)

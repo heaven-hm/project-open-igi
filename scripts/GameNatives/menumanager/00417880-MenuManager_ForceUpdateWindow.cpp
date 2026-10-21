@@ -1,6 +1,6 @@
 // IGI native provenance: MenuManager_ForceUpdateWindow - 0x00417880 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00417880-MenuManager_ForceUpdateWindow.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "MenuManager_ForceUpdateWindow.hpp"
+#include "MenuManager_ForceUpdateWindow.h"
 int MenuManager_ForceUpdateWindow(int context, float arg2 )
 
 // Sig: void MenuManager_ForceUpdateWindow(int args)

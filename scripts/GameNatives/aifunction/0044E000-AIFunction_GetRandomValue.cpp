@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetRandomValue - 0x0044E000 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E000-AIFunction_GetRandomValue.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E000-AIFunction_GetRandomValue.hpp"
+#include "AIFunction_GetRandomValue.h"
 int AIFunction_GetRandomValue(long double context , int arg2, float arg3 )
 
 // Sig: float AIFunction_GetRandomValue(float max)

@@ -1,6 +1,6 @@
 // IGI native provenance: Define_Group - 0x004EBA90 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EBA90-Define_Group.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004EBA90-Define_Group.hpp"
+#include "Define_Group.h"
 int Define_Group(int context, void* arg2, float arg3)
 
 // Sig: void Define_Group(...)

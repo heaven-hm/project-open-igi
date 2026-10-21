@@ -1,6 +1,6 @@
 // IGI native provenance: Game_SetMusicVolume - 0x00415950 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00415950-Game_SetMusicVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00415950-Game_SetMusicVolume.hpp"
+#include "Game_SetMusicVolume.h"
 int Game_SetMusicVolume(long double context , int arg2, float arg3 )
 
 // Sig: void Game_SetMusicVolume(float volume)

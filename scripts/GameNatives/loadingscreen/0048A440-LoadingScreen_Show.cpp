@@ -1,6 +1,6 @@
 // IGI native provenance: LoadingScreen_Show - 0x0048A440 - CFG score 98.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0048A440-LoadingScreen_Show.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048A440-LoadingScreen_Show.hpp"
+#include "LoadingScreen_Show.h"
 int* LoadingScreen_Show(int context)
 
 // Sig: void LoadingScreen_Show(int picVariant)

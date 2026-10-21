@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsSetGamma - 0x004048B0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004048B0-Config_GraphicOptionsSetGamma.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004048B0-Config_GraphicOptionsSetGamma.hpp"
+#include "Config_GraphicOptionsSetGamma.h"
 int Config_GraphicOptionsSetGamma(long double context , int arg2, float arg3 )
 
 // Sig: void Config_GraphicOptionsSetGamma(float gamma)

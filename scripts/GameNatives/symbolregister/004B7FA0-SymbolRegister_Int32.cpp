@@ -1,6 +1,6 @@
 // IGI native provenance: SymbolRegister_Int32 - 0x004B7FA0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B7FA0-SymbolRegister_Int32.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B7FA0-SymbolRegister_Int32.hpp"
+#include "SymbolRegister_Int32.h"
 void* SymbolRegister_Int32(int* context, int arg2)
 
 // Sig: void* SymbolRegister_Int32(int* table, char* name)

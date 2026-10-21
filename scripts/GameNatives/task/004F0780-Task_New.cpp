@@ -1,6 +1,6 @@
 // IGI native provenance: Task_New - 0x004F0780 - CFG score 98.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F0780-Task_New.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Task_New.hpp"
+#include "Task_New.h"
 int Task_New(int context, void* arg2, float arg3)
 
 // Sig: void Task_New(...)

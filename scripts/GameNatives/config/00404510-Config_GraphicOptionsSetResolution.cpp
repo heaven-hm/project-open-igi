@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsSetResolution - 0x00404510 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404510-Config_GraphicOptionsSetResolution.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404510-Config_GraphicOptionsSetResolution.hpp"
+#include "Config_GraphicOptionsSetResolution.h"
 int Config_GraphicOptionsSetResolution(int context, float arg2 )
 
 // Sig: void Config_GraphicOptionsSetResolution(int modeIndex)

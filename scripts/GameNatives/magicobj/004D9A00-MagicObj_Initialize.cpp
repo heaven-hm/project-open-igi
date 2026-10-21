@@ -1,6 +1,6 @@
 // IGI native provenance: MagicObj_Initialize - 0x004D9A00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9A00-MagicObj_Initialize.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9A00-MagicObj_Initialize.hpp"
+#include "MagicObj_Initialize.h"
 void* MagicObj_Initialize()
 
 // Sig: void MagicObj_Initialize(void)

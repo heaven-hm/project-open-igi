@@ -1,6 +1,6 @@
 // IGI native provenance: Config_Compile - 0x004F0CF0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F0CF0-Config_Compile.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004F0CF0-Config_Compile.hpp"
+#include "Config_Compile.h"
 int Config_Compile(int context, void* arg2, char arg3)
 
 // Sig: int Config_Compile(int context, char* cfgName, int flags)

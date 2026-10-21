@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsGetTransparency - 0x004049C0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004049C0-Config_GraphicOptionsGetTransparency.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004049C0-Config_GraphicOptionsGetTransparency.hpp"
+#include "Config_GraphicOptionsGetTransparency.h"
 int Config_GraphicOptionsGetTransparency(int context)
 
 // Sig: int Config_GraphicOptionsGetTransparency()

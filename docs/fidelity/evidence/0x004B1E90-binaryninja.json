@@ -11,19 +11,19 @@
     "address": "0x004B1E90"
    },
    {
+    "address": "0x004B1EAD"
+   },
+   {
     "address": "0x004B1EA4"
    },
    {
-    "address": "0x004B1EAA"
-   },
-   {
-    "address": "0x004B1EAD"
+    "address": "0x004B1ED6"
    },
    {
     "address": "0x004B1EB8"
    },
    {
-    "address": "0x004B1ED6"
+    "address": "0x004B1EAA"
    }
   ],
   "edges": [
@@ -35,6 +35,16 @@
    {
     "source": "0x004B1E90",
     "target": "0x004B1EA4",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B1EAD",
+    "target": "0x004B1ED6",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B1EAD",
+    "target": "0x004B1EB8",
     "kind": "conditional"
    },
    {
@@ -55,16 +65,6 @@
    {
     "source": "0x004B1EAA",
     "target": "0x004B1EAD",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004B1EAD",
-    "target": "0x004B1ED6",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004B1EAD",
-    "target": "0x004B1EB8",
     "kind": "conditional"
    }
   ]

@@ -1,6 +1,6 @@
 // IGI native provenance: SymbolRegister_Bool8 - 0x004B7EE0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B7EE0-SymbolRegister_Bool8.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B7EE0-SymbolRegister_Bool8.hpp"
+#include "SymbolRegister_Bool8.h"
 void* SymbolRegister_Bool8(int* context, int arg2)
 
 // Sig: void* SymbolRegister_Bool8(int* table, char* name)

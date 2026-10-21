@@ -49,9 +49,9 @@ def stable_source_inputs(snapshot_value, root, build):
 
 def target_output(build):
     # The configured CMake linker rule is authoritative, not a caller's PE path.
-    links = list(build.glob('**/CMakeFiles/open-igi.dir/link.txt'))
+    links = list(build.glob('**/CMakeFiles/igi.dir/link.txt'))
     if len(links) != 1:
-        raise ValueError('exactly one configured open-igi target linker rule is required')
+        raise ValueError('exactly one configured igi target linker rule is required')
     link = links[0]
     directory = link.parent.parent.parent
     commands = [shlex.split(line) for line in link.read_text().splitlines()]
@@ -64,7 +64,7 @@ def target_output(build):
 
 def compiled_inputs(root, build):
     output, command, directory = target_output(build)
-    object_dirs = {directory / 'CMakeFiles/open-igi.dir'}
+    object_dirs = {directory / 'CMakeFiles/igi.dir'}
     link_inputs = list(command)
     # CMake generators can keep static-library arguments in an @response file.
     # Include those archives in the receipt so engine sources are bound too.
@@ -136,10 +136,10 @@ def main():
     configured, _, _ = target_output(build)
     candidate = (args.candidate or configured).resolve()
     if candidate != configured:
-        raise ValueError('--candidate must be the configured open-igi target output')
+        raise ValueError('--candidate must be the configured igi target output')
     receipt = args.receipt or root / 'build/diagnostic-candidate-build.json'
     before = snapshot(root, build)
-    command = ['cmake', '--build', str(build), '--target', 'open-igi', '--clean-first', '-j4']
+    command = ['cmake', '--build', str(build), '--target', 'igi', '--clean-first', '-j4']
     subprocess.run(command, cwd=root, check=True)
     after = snapshot(root, build)
     if (before['compiler'] != after['compiler'] or

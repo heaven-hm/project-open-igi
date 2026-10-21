@@ -1,6 +1,6 @@
 // IGI native provenance: Qvm_Cleanup - 0x004B83D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B83D0-Qvm_Cleanup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B83D0-Qvm_Cleanup.hpp"
+#include "Qvm_Cleanup.h"
 int Qvm_Cleanup(int* context)
 
 // Sig: void Qvm_Cleanup(void* qvm)

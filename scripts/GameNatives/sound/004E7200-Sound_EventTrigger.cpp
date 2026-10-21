@@ -1,6 +1,6 @@
 // IGI native provenance: Sound_EventTrigger - 0x004E7200 - CFG score 96.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004E7200-Sound_EventTrigger.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Sound_EventTrigger.hpp"
+#include "Sound_EventTrigger.h"
 int* Sound_EventTrigger(char* context, char* arg2, int arg3)
 
 // Sig: void Sound_EventTrigger(const char* eventName, unsigned int eventId, const

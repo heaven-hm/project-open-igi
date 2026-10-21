@@ -1,28 +1,26 @@
-// IGI native GO_InRemap - 0x004037C0 - transcribed from retail igi.exe.
-// Retail: cdecl (result, unused, vm). Appends a 12-byte entry (arg0, arg1, arg2 & 0x3FFFFFFF) to the remap table at 0xBC25BC for the current group g_bc2380; the per-group counter lives at 0xBC2358 + 1380 * g_bc2380.
-#include <cstdint>
-#include <cstring>
+// IGI native provenance: GO_InRemap - 0x004037C0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004037C0-GO_InRemap.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "GO_InRemap.h"
+int GO_InRemap(int context, float arg2 )
 
-int __cdecl Qvm_GetIntArg(void* vm, int index); // 0x004B8A20
-void* __cdecl Config_GetActiveGraphicOptions(void); // 0x00404590
-extern std::int32_t g_537b74[7];
-extern std::int32_t g_bc2380;
-extern std::uint8_t g_bc2358[];
-extern std::uint8_t g_bc25bc[];
-
-void __cdecl GO_InRemap(std::uint32_t* result, int unused, void* vm)
+// Sig: int GO_InRemap(int key1, int key2, int action)
+// Note: Adds one input binding (key remap) to the current profile. Params: key1
+// = primary key code, key2 = secondary key code, action = in-game action id
+// being bound. Use in input/config scripts, repeat once per binding. Returns 1.
 {
-    (void)unused;
-    std::uint32_t block[6];
-    std::int32_t* counter = reinterpret_cast<std::int32_t*>(g_bc2358 + g_bc2380 * 1380);
-    std::int32_t* entry = reinterpret_cast<std::int32_t*>(g_bc25bc + 12 * (g_bc2380 * 115 + *counter - 115));
-    entry[0] = Qvm_GetIntArg(vm, 0);
-    entry[1] = Qvm_GetIntArg(vm, 1);
-    entry[2] = Qvm_GetIntArg(vm, 2) & 0x3FFFFFFF;
-    *counter = *counter + 1;
-    block[0] = 0;
-    block[2] = 0;
-    block[3] = 0;
-    block[4] = 0x567C74;
-    std::memcpy(result, block, sizeof(block));
+    int data_val = g_bc2380;
+    int entity_4 = data_val * 0x159;
+    int data_2 = data_val * 0x73 + *((entity_4 << 2) + &g_bc2358) - 0x73;
+    int data_4 = Script_GetArg(arg2, 0);
+    int item_30 = 1;
+    *(data_2 * 0xc + &g_bc25bc) = data_4;
+    *(data_2 * 0xc + 0xbc25c0) = Script_GetArg(arg2, item_30);
+    *(data_2 * 0xc + 0xbc25c4) = Script_GetArg(arg2, 2) & 0x3fffffff;
+    *((entity_4 << 2) + &g_bc2358) += 1;
+    int item_18 = 0;
+    int item_10 = 0;
+    int item_c = 0;
+    char* item_8 = &g_567c74;
+    memcpy(context, &item_18, 0x18);
+    return context;
 }

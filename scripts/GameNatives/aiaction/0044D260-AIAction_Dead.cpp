@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Dead - 0x0044D260 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D260-AIAction_Dead.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D260-AIAction_Dead.hpp"
+#include "AIAction_Dead.h"
 int AIAction_Dead(int context, float arg2 )
 
 // Sig: void AIAction_Dead(int args)

@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x0048F140 (FX_SmokeEmit_23): eax=[esp+4]; [0x5c8bfc]=movsx(al); ecx=[0x5c8c18]; if ecx: call ecx(eax,[0x5c8c1c]) cdecl; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
+   "note": "The candidate AppContext_SetIsActive reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

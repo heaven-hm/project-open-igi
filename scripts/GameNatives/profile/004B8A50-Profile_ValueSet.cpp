@@ -1,6 +1,6 @@
 // IGI native provenance: Profile_ValueSet - 0x004B8A50 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B8A50-Profile_ValueSet.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B8A50-Profile_ValueSet.hpp"
+#include "Profile_ValueSet.h"
 int Profile_ValueSet(float context, float arg2)
 
 // Sig: void Profile_ValueSet(void* profile, int index)

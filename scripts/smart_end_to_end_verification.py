@@ -113,12 +113,15 @@ def main():
         contracts = [row.get('runtime_contract', {}) for row in gate_data['checked_natives']]
         if any(c.get('probe_sha256') != digest(probe) for c in contracts):
             raise ValueError('probe hash differs from the current source-semantic runtime contract')
-        capture = invoke([sys.executable, str(ROOT / 'scripts/native_frida_diff.py'),
+        capture = invoke([sys.executable, str(ROOT / 'scripts/frida_scoped_capture.py'),
             '--gate-report', str(static_report), '--candidate-exe', str(candidate), '--probe', str(probe),
             '--level', str(args.level), '--out', str(runtime_report)], env)
         report['phases']['paired_runtime_capture'] = capture
         if capture['exit_code']:
             raise ValueError('paired runtime capture failed')
+        captured = json.loads(runtime_report.read_text())
+        if captured.get('kind') != 'igi-paired-native-runtime' or captured.get('result') != 'passed':
+            raise ValueError('paired capture report did not pass')
         checked = invoke([sys.executable, str(ROOT / 'scripts/check_frida_differential.py'),
             '--report', str(runtime_report), '--gate-report', str(static_report), '--candidate-exe', str(candidate)], env)
         report['phases']['typed_runtime_comparison'] = checked

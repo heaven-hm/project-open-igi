@@ -12,7 +12,7 @@ of those (unported) allocator chains.
 Candidate side: the current C++ implementation is compiled with a harness that
 installs equivalent sentinel stubs (Resource_Unload is linked directly;
 0x004BD380 / 0x004B0D10 arrive via the implementation's injectable host
-boundaries Host_SetQvmStandaloneRelease / Host_SetQvmBlockRelease).
+boundaries Sys_SetQvmStandaloneRelease / Sys_SetQvmBlockRelease).
 """
 
 from __future__ import annotations
@@ -166,8 +166,8 @@ int main(int argc, char** argv) {
     if (!has_standalone) {
         std::memset(buffer + 0x8C, 0, 4);
     }
-    igi::retail::script::Host_SetQvmStandaloneRelease(&standalone_release);
-    igi::retail::script::Host_SetQvmBlockRelease(&block_release);
+    igi::retail::script::Sys_SetQvmStandaloneRelease(&standalone_release);
+    igi::retail::script::Sys_SetQvmBlockRelease(&block_release);
     const std::int32_t result = igi::retail::script::Qvm_Cleanup(buffer);
     std::printf("RET=%d\n", result);
     std::printf("EVENTS=");

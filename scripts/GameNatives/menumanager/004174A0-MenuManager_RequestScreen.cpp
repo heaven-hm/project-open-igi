@@ -1,6 +1,6 @@
 // IGI native provenance: MenuManager_RequestScreen - 0x004174A0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004174A0-MenuManager_RequestScreen.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "MenuManager_RequestScreen.hpp"
+#include "MenuManager_RequestScreen.h"
 int MenuManager_RequestScreen(int context, void* arg2, float arg3)
 
 // Sig: void MenuManager_RequestScreen(int screenId, int flags)

@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetGunnerStatus - 0x0044E5E0 - CFG score 85.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E5E0-AIFunction_GetGunnerStatus.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E5E0-AIFunction_GetGunnerStatus.hpp"
+#include "AIFunction_GetGunnerStatus.h"
 int AIFunction_GetGunnerStatus(int context)
 
 // Sig: int AIFunction_GetGunnerStatus()

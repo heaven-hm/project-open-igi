@@ -1,6 +1,6 @@
 // IGI native provenance: QHash_ValueGet - 0x004B0DB0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B0DB0-QHash_ValueGet.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B0DB0-QHash_ValueGet.hpp"
+#include "QHash_ValueGet.h"
 int QHash_ValueGet()
 
 // Sig: int QHash_ValueGet(int* table, char* key)

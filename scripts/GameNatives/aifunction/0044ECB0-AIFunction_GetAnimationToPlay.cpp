@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetAnimationToPlay - 0x0044ECB0 - CFG score 85.2% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044ECB0-AIFunction_GetAnimationToPlay.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044ECB0-AIFunction_GetAnimationToPlay.hpp"
+#include "AIFunction_GetAnimationToPlay.h"
 int AIFunction_GetAnimationToPlay(int context)
 
 // Sig: int AIFunction_GetAnimationToPlay()

@@ -1,6 +1,6 @@
 // IGI native provenance: CutScene_TaskUpdate - 0x004F51D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F51D0-CutScene_TaskUpdate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "CutScene_TaskUpdate.hpp"
+#include "CutScene_TaskUpdate.h"
 int* CutScene_TaskUpdate(long double context , void* arg2)
 
 // Sig: int CutScene_TaskUpdate(void* cutsceneTask)

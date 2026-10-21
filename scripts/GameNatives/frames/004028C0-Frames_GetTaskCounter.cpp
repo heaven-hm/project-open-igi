@@ -1,6 +1,6 @@
 // IGI native provenance: Frames_GetTaskCounter - 0x004028C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004028C0-Frames_GetTaskCounter.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004028C0-Frames_GetTaskCounter.hpp"
+#include "Frames_GetTaskCounter.h"
 unsigned int Frames_GetTaskCounter()
 
 // Sig: int Frames_GetTaskCounter(void)

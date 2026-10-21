@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_RunPanicking - 0x0044DA00 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044DA00-AIAction_RunPanicking.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044DA00-AIAction_RunPanicking.hpp"
+#include "AIAction_RunPanicking.h"
 int AIAction_RunPanicking(long double context , int arg2, float arg3 )
 
 // Sig: void AIAction_RunPanicking(int param1, int flags)

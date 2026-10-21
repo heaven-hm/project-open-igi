@@ -448,6 +448,12 @@ def main() -> int:
         implementation_sha = sha256(implementation)
 
         bn_nodes, bn_edges = bn_basic_blocks(address, session)
+        if not bn_nodes:
+            # The Binary Ninja session goes stale after a number of captures and
+            # answers with an empty graph. Reconnect and take the capture again
+            # rather than recording an empty CFG.
+            session = bn_session()
+            bn_nodes, bn_edges = bn_basic_blocks(address, session)
         r2_nodes, r2_edges = r2_basic_blocks(
             address, {node["address"] for node in bn_nodes})
         bn_graph = {"nodes": bn_nodes, "edges": bn_edges}

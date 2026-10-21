@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_KickGrenade - 0x0044D960 - CFG score 90.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D960-AIAction_KickGrenade.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D960-AIAction_KickGrenade.hpp"
+#include "AIAction_KickGrenade.h"
 int AIAction_KickGrenade(int context, int arg2 )
 
 // Sig: void AIAction_KickGrenade(int args)

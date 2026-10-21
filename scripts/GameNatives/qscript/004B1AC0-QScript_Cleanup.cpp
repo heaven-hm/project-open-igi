@@ -1,6 +1,6 @@
 // IGI native provenance: QScript_Cleanup - 0x004B1AC0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B1AC0-QScript_Cleanup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B1AC0-QScript_Cleanup.hpp"
+#include "QScript_Cleanup.h"
 int QScript_Cleanup(void* context)
 
 // Sig: void QScript_Cleanup(int* script)

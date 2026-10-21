@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsSetSoundsEffects - 0x00404A10 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404A10-Config_SoundOptionsSetSoundsEffects.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404A10-Config_SoundOptionsSetSoundsEffects.hpp"
+#include "Config_SoundOptionsSetSoundsEffects.h"
 int Config_SoundOptionsSetSoundsEffects(int context, float arg2 )
 
 // Sig: void Config_SoundOptionsSetSoundsEffects(int onOff)

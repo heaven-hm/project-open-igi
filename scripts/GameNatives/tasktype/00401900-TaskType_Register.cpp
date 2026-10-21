@@ -1,6 +1,6 @@
 // IGI native provenance: TaskType_Register - 0x00401900 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00401900-TaskType_Register.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "TaskType_Register.hpp"
+#include "TaskType_Register.h"
 int TaskType_Register(int context, int arg2, short arg3, int arg4)
 
 // Sig: unsigned short TaskType_Register(unsigned int p1, unsigned int p2, unsigned short

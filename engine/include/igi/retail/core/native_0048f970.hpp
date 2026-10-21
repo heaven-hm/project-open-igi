@@ -1,0 +1,63 @@
+#pragma once
+
+// The retail window procedure at 0x0048F970 and its handler chain.
+//
+// igi.exe registers this procedure as the window class's lpfnWndProc. The
+// procedure walks the handler chain at 0x005C8DF0 before it applies the
+// retail's own message handling, so the game's input and event handlers see
+// every message first.
+
+#include <cstdint>
+
+#if defined(_MSC_VER) && defined(_M_IX86)
+#define IGI_RETAIL_CDECL __cdecl
+#elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
+#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#else
+#define IGI_RETAIL_CDECL
+#endif
+
+namespace igi::retail::core {
+
+// One entry of the retail's window message chain. The next entry is at
+// +0x00 and the handler at +0x08.
+struct WindowHandlerEntry
+{
+    WindowHandlerEntry* next;
+    std::intptr_t (*handler)(void* window, std::uint32_t message, std::uintptr_t wparam,
+                              std::intptr_t lparam);
+};
+
+} // namespace igi::retail::core
+
+extern "C" {
+
+// Retail global at VA 0x005C8DF0: the head of the window message chain.
+extern igi::retail::core::WindowHandlerEntry* WindowHandlerChain;
+
+// Retail global at VA 0x005C8DE8: the loop status byte the procedure reads
+// before it walks the chain.
+extern std::uint8_t LoopStatusByte;
+
+// Retail global at VA 0x005C8E04: the debug key flag, cleared when F12 is
+// released.
+extern std::uint32_t DebugKeyFlag;
+
+// Native at VA 0x0048F970.
+// Reads the loop status byte; when it is set it walks the handler chain and
+// calls each entry's handler with the window, the message, wParam and lParam,
+// ending the procedure when a handler returns zero. It then applies the
+// retail's own handling: WM_ACTIVATE returns zero, WM_CREATE returns zero,
+// WM_DESTROY clears the loop status byte, shows the cursor, runs the close
+// native and posts the quit message, WM_KEYUP clears the debug key flag when
+// F12 is released, WM_KEYDOWN runs the debug key handler when 's' is pressed,
+// and every other message goes to DefWindowProcA.
+std::intptr_t IGI_RETAIL_CDECL WindowProcedure(void* window, std::uint32_t message,
+                                              std::uintptr_t wparam, std::intptr_t lparam);
+
+// Links a handler into the retail's window message chain.
+void LinkWindowHandler(igi::retail::core::WindowHandlerEntry* entry) noexcept;
+
+} // extern "C"
+
+#undef IGI_RETAIL_CDECL

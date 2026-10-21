@@ -1,6 +1,6 @@
 // IGI native provenance: GO_SoundFX - 0x00403F80 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403F80-GO_SoundFX.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403F80-GO_SoundFX.hpp"
+#include "GO_SoundFX.h"
 int GO_SoundFX(long double context , int arg2, float arg3 )
 
 // Sig: int GO_SoundFX(float volume)

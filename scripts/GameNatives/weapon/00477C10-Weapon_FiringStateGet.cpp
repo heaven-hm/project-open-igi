@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_FiringStateGet - 0x00477C10 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00477C10-Weapon_FiringStateGet.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00477C10-Weapon_FiringStateGet.hpp"
+#include "Weapon_FiringStateGet.h"
 int Weapon_FiringStateGet()
 
 // Sig: unsigned char Weapon_FiringStateGet(void)

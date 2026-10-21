@@ -1,12 +1,13 @@
-// IGI native Config_GetActiveGraphicOptions - 0x00404590 - transcribed from retail igi.exe.
-// Retail: cdecl, no arguments. Returns 0xBC2394 + g_bc2384 * 1380.
-#include <cstdint>
-#include <cstring>
+// IGI native provenance: Config_GetActiveGraphicOptions - 0x00404590 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 00404590-Config_GetActiveGraphicOptions.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "Config_GetActiveGraphicOptions.h"
+void* Config_GetActiveGraphicOptions()
 
-extern std::int32_t g_bc2384;
-extern std::uint8_t g_bc2394[];
-
-void* __cdecl Config_GetActiveGraphicOptions(void)
 {
-    return g_bc2394 + g_bc2384 * 1380;
+// Sig: GraphicOptions* Config_GetActiveGraphicOptions()
+// Note: Returns a pointer to the ACTIVE PROFILE's graphic-options record inside
+// the global config array. The record base is 0xBC2394 + 0xD14 *
+// activeProfileIndex (verified in igi.exe). Useful for reading/writing raw
+// graphic fields directly (gamma sits at record+0x220).
+    return g_bc2384 * 0x564 + &g_bc2394;
 }

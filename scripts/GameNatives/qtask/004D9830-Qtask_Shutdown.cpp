@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_Shutdown - 0x004D9830 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9830-Qtask_Shutdown.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9830-Qtask_Shutdown.hpp"
+#include "Qtask_Shutdown.h"
 int Qtask_Shutdown()
 
 // Sig: void Qtask_Shutdown(void)

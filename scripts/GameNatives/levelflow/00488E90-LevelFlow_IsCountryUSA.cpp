@@ -1,6 +1,6 @@
 // IGI native provenance: LevelFlow_IsCountryUSA - 0x00488E90 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00488E90-LevelFlow_IsCountryUSA.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00488E90-LevelFlow_IsCountryUSA.hpp"
+#include "LevelFlow_IsCountryUSA.h"
 int LevelFlow_IsCountryUSA(int context)
 
 // Sig: int LevelFlow_IsCountryUSA()

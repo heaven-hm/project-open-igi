@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x00401050 (QTask_OpenEvent): push esi; if(_setjmp3(0x54F8E0,0)==0){ctx=Game_GetContext(); fn=table_A970E0[word ctx+0x1C]; fn(Game_GetContext());} else Loop_SetStatusByte(0). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate QTask_OpenEvent reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

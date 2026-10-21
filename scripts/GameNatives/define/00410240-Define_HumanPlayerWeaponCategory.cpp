@@ -1,6 +1,6 @@
 // IGI native provenance: Define_HumanPlayerWeaponCategory - 0x00410240 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00410240-Define_HumanPlayerWeaponCategory.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00410240-Define_HumanPlayerWeaponCategory.hpp"
+#include "Define_HumanPlayerWeaponCategory.h"
 int Define_HumanPlayerWeaponCategory(int context, float arg2 )
 
 // Sig: void Define_HumanPlayerWeaponCategory(...)

@@ -3,7 +3,7 @@
 // Scope: QVM native callback observed; registry definition is distinct from placed MagicObj instances.
 // IGI native provenance: Define_MagicObj - 0x004C4520 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004C4520-Define_MagicObj.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004C4520-Define_MagicObj.hpp"
+#include "Define_MagicObj.h"
 int Define_MagicObj(int context, float arg2 )
 
 // Sig: void Define_MagicObj(...)

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GameOptionsInputSetInvertMouse - 0x00404160 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404160-Config_GameOptionsInputSetInvertMouse.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404160-Config_GameOptionsInputSetInvertMouse.hpp"
+#include "Config_GameOptionsInputSetInvertMouse.h"
 int Config_GameOptionsInputSetInvertMouse(long double context , int arg2, float arg3 )
 
 // Sig: void Config_GameOptionsInputSetInvertMouse(int invert)

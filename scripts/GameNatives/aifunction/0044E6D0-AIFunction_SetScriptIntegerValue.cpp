@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_SetScriptIntegerValue - 0x0044E6D0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E6D0-AIFunction_SetScriptIntegerValue.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E6D0-AIFunction_SetScriptIntegerValue.hpp"
+#include "AIFunction_SetScriptIntegerValue.h"
 int AIFunction_SetScriptIntegerValue(int context, float arg2 )
 
 // Sig: void AIFunction_SetScriptIntegerValue(int varId, int value)

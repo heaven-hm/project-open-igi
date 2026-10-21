@@ -1,6 +1,6 @@
 // IGI native provenance: Game_EnablePlayerInput - 0x00415830 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00415830-Game_EnablePlayerInput.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00415830-Game_EnablePlayerInput.hpp"
+#include "Game_EnablePlayerInput.h"
 int Game_EnablePlayerInput(int context)
 
 // Sig: void Game_EnablePlayerInput(void)

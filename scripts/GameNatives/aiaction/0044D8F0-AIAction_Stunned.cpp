@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Stunned - 0x0044D8F0 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D8F0-AIAction_Stunned.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D8F0-AIAction_Stunned.hpp"
+#include "AIAction_Stunned.h"
 int AIAction_Stunned(long double context , int arg2, float arg3 )
 
 // Sig: void AIAction_Stunned(int param1, int flags)

@@ -1,6 +1,6 @@
 // IGI native provenance: DefinePhysicsObjType - 0x004EDD20 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EDD20-DefinePhysicsObjType.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004EDD20-DefinePhysicsObjType.hpp"
+#include "DefinePhysicsObjType.h"
 int DefinePhysicsObjType(long double context , long double arg2 , long double arg3 , long double arg4 , int arg5, char* arg6 )
 
 // Sig: unknown DefinePhysicsObjType(unknown param1, unknown param2)

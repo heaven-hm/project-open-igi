@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_SetAnimationInterval - 0x0044EAF0 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044EAF0-AIFunction_SetAnimationInterval.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044EAF0-AIFunction_SetAnimationInterval.hpp"
+#include "AIFunction_SetAnimationInterval.h"
 int AIFunction_SetAnimationInterval(long double context , long double arg2 , int arg3, float arg4 )
 
 // Sig: void AIFunction_SetAnimationInterval(int entryIndex, int interval)

@@ -214,7 +214,14 @@ def stop_game(process: subprocess.Popen) -> None:
 
 def run_gate(address: str, implementation: str, threshold: str) -> dict:
     env = dict(os.environ)
-    env["IGI_ANGR_PYTHON"] = env.get("IGI_ANGR_PYTHON", str(ROOT / ".venv-angr/bin/python"))
+    # Fall back to the shared venv when this worktree has no local one; a missing
+    # interpreter makes every gate exit non-zero for the wrong reason.
+    interpreter = env.get("IGI_ANGR_PYTHON")
+    if not interpreter or not Path(interpreter).is_file():
+        candidates = [ROOT / ".venv-angr/bin/python",
+                      ROOT.parents[1] / ".venv-angr/bin/python"]
+        interpreter = next((str(c) for c in candidates if c.is_file()), str(candidates[0]))
+    env["IGI_ANGR_PYTHON"] = interpreter
     cmd = [sys.executable, str(ROOT / "scripts" / "native_gate.py"),
            "--root", str(ROOT), "--address", address, "--file", implementation,
            "--threshold", threshold, "--cfg-threshold", "0.85"]
@@ -234,29 +241,48 @@ def run_gate(address: str, implementation: str, threshold: str) -> dict:
 
 def main() -> None:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--symbols", default=str(ROOT / "assets" / "candidate_symbol_map.json"))
+    ap.add_argument("--symbols", default=None)
+    ap.add_argument("--targets", default=str(ROOT / "scripts" / "mvp_native_targets.json"),
+                    help="MVP target list; defaults to all listed MVP natives.")
     ap.add_argument("--threshold", default="STRUCTURALLY_VERIFIED")
     ap.add_argument("--duration", type=int, default=20)
     ap.add_argument("--level", type=int, default=4)
     ap.add_argument("--skip-static", action="store_true")
     ap.add_argument("--skip-runtime", action="store_true")
-    ap.add_argument("--only-implemented", action="store_true", default=True)
+    ap.add_argument("--only-implemented", action="store_true", default=False)
     a = ap.parse_args()
 
-    symbol_map = json.load(open(a.symbols))
-    rows = [r for r in symbol_map if r.get("implemented")]
-    # The manifest's implementation path is the source its semantic review and
-    # build evidence were bound to. The symbol map's enginePath is the port's
-    # engine file, which is often a different translation unit, so feeding that
-    # path to the gate rejects every record as "implementation path does not
-    # match". Verify the reviewed implementation instead.
     manifest = json.load(open(ROOT / "docs" / "fidelity" / "native-verification.json"))
-    reviewed = {x["address"]: x["implementation"]["path"] for x in manifest["natives"]}
-    for row in rows:
-        path = reviewed.get(f"0x{int(row['address'], 16):08X}")
-        if path:
-            row["enginePath"] = path
-    print(f"natives with an engine implementation: {len(rows)}", flush=True)
+    reviewed = {f"0x{int(x['address'], 16):08X}": x for x in manifest["natives"]}
+    if a.symbols:
+        symbol_map = json.load(open(a.symbols))
+        rows = [r for r in symbol_map if r.get("implemented")]
+        targets = []
+        for row in rows:
+            address = f"0x{int(row['address'], 16):08X}"
+            record = reviewed.get(address)
+            if record:
+                row["enginePath"] = record["implementation"]["path"]
+            targets.append(row)
+    else:
+        targets = json.load(open(a.targets))
+        rows = []
+        for target in targets:
+            address = f"0x{int(target['address'], 16):08X}"
+            record = reviewed.get(address)
+            if not record:
+                print(f"missing manifest record for {address}; blocking", file=sys.stderr)
+                continue
+            rows.append({
+                "address": address,
+                "retailName": target.get("name", record.get("name", address)),
+                "cppName": record.get("name", target.get("name", address)),
+                "enginePath": record["implementation"]["path"],
+                "status": record["verification"].get("status"),
+            })
+    if a.only_implemented:
+        rows = [r for r in rows if r.get("enginePath")]
+    print(f"natives selected for verification: {len(rows)}", flush=True)
 
     results = {r["address"]: {"address": r["address"], "name": r["retailName"],
                                "cppName": r["cppName"],

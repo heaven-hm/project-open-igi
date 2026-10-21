@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Activate - 0x0044D420 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D420-AIAction_Activate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D420-AIAction_Activate.hpp"
+#include "AIAction_Activate.h"
 int AIAction_Activate(int context, float arg2 )
 
 // Sig: void AIAction_Activate(int target, int param2, int flags)

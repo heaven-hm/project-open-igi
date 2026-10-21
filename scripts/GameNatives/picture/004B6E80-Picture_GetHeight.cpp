@@ -1,6 +1,6 @@
 // IGI native provenance: Picture_GetHeight - 0x004B6E80 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B6E80-Picture_GetHeight.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B6E80-Picture_GetHeight.hpp"
+#include "Picture_GetHeight.h"
 int Picture_GetHeight(int* context)
 
 // Sig: int Picture_GetHeight(void* picture)

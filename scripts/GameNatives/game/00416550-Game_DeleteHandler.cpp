@@ -1,6 +1,6 @@
 // IGI native provenance: Game_DeleteHandler - 0x00416550 - CFG score 98.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00416550-Game_DeleteHandler.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00416550-Game_DeleteHandler.hpp"
+#include "Game_DeleteHandler.h"
 int Game_DeleteHandler()
 
 // Sig: void Game_DeleteHandler(void)

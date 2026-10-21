@@ -1,6 +1,6 @@
 // IGI native provenance: Picture_GetWidth - 0x004B6E70 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B6E70-Picture_GetWidth.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B6E70-Picture_GetWidth.hpp"
+#include "Picture_GetWidth.h"
 int Picture_GetWidth(int* context)
 
 // Sig: int Picture_GetWidth(void* picture)

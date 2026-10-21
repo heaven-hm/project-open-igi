@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_LookAtEvent - 0x0044D870 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D870-AIAction_LookAtEvent.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D870-AIAction_LookAtEvent.hpp"
+#include "AIAction_LookAtEvent.h"
 int AIAction_LookAtEvent(long double context , int arg2, float arg3 )
 
 // Sig: void AIAction_LookAtEvent(int eventId, int flags)

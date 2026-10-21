@@ -14,9 +14,11 @@
    "candidate_output": {
     "return_value": 0,
     "side_effects": [],
-    "state_delta": {}
+    "state_delta": {
+     "chunks_read": 0
+    }
    },
-   "note": "Retail 0x004AA682 (Mem_AllocWithRetry): if size>0xffffffe0 ret 0; loop: p=Mem_AllocateRawBlock(size); if p ret p; if retry==0 ret p; if Mem_InvokeNewHandler(size)==0 ret 0; goto loop. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+   "note": "The candidate Mem_AllocWithRetry reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
   }
  ]
 }

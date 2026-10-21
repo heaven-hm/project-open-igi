@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_UpdateList - 0x00401B20 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00401B20-Qtask_UpdateList.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00401B20-Qtask_UpdateList.hpp"
+#include "Qtask_UpdateList.h"
 int Qtask_UpdateList(int* context)
 
 // Sig: void Qtask_UpdateList(int* p1)

@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_AmmoPickup - 0x0045FF80 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0045FF80-Weapon_AmmoPickup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0045FF80-Weapon_AmmoPickup.hpp"
+#include "Weapon_AmmoPickup.h"
 int Weapon_AmmoPickup(void* context, int* arg2)
 
 // Sig: void Weapon_AmmoPickup(void* player, void* pickupEntity)

@@ -1,6 +1,6 @@
 // IGI native provenance: Q_TaskHashTableSet - 0x004BAAC0 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004BAAC0-Q_TaskHashTableSet.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Q_TaskHashTableSet.hpp"
+#include "Q_TaskHashTableSet.h"
 void* Q_TaskHashTableSet(int* context, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7)
 
 // Sig: void Q_TaskHashTableSet(int** table, void* handler, int nameVal, int p4,

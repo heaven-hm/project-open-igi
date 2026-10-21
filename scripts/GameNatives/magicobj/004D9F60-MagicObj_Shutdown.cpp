@@ -1,6 +1,6 @@
 // IGI native provenance: MagicObj_Shutdown - 0x004D9F60 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9F60-MagicObj_Shutdown.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9F60-MagicObj_Shutdown.hpp"
+#include "MagicObj_Shutdown.h"
 unsigned int MagicObj_Shutdown()
 
 // Sig: void MagicObj_Shutdown(void)

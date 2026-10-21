@@ -1,6 +1,6 @@
 // IGI native provenance: Define_Mission - 0x00484F60 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00484F60-Define_Mission.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00484F60-Define_Mission.hpp"
+#include "Define_Mission.h"
 int Define_Mission(int context, float arg2 )
 
 // Sig: void Define_Mission(...)

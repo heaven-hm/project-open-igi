@@ -1,6 +1,6 @@
 // IGI native provenance: Resource_Flush - 0x004B63D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B63D0-Resource_Flush.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Resource_Flush.hpp"
+#include "Resource_Flush.h"
 int Resource_Flush(int context)
 
 // Sig: void Resource_Flush(void* resEntry)

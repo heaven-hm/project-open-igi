@@ -1,6 +1,6 @@
 // IGI native provenance: Config_IsGermany - 0x00403B30 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403B30-Config_IsGermany.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403B30-Config_IsGermany.hpp"
+#include "Config_IsGermany.h"
 int Config_IsGermany(int context)
 
 // Sig: int Config_IsGermany()

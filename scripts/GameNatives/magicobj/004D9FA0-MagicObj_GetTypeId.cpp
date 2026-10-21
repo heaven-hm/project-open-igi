@@ -1,6 +1,6 @@
 // IGI native provenance: MagicObj_GetTypeId - 0x004D9FA0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9FA0-MagicObj_GetTypeId.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9FA0-MagicObj_GetTypeId.hpp"
+#include "MagicObj_GetTypeId.h"
 int MagicObj_GetTypeId()
 
 // Sig: unsigned short MagicObj_GetTypeId(void)

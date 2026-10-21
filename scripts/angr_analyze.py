@@ -49,6 +49,29 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         address: bool(function.has_unresolved_jumps) if function is not None else None
         for address, function in auto_functions.items()
     }
+    # Snapshot the first graph's structure now. A second CFGFast run on the same
+    # project releases the first graph's blocks, and angr's function objects
+    # only hold a weak reference to them, so reading the graph afterwards
+    # raises "weakly-referenced object no longer exists".
+    def snapshot(function) -> dict[str, Any] | None:
+        if function is None or function.addr is None:
+            return None
+        nodes = sorted({int(node.addr) for node in function.graph.nodes()
+                        if getattr(node, "addr", None) is not None})
+        edges = []
+        for source, target, data in function.graph.edges(data=True):
+            source_addr = getattr(source, "addr", None)
+            target_addr = getattr(target, "addr", None)
+            if source_addr is None or target_addr is None:
+                continue
+            edges.append({
+                "source": f"0x{int(source_addr):08X}",
+                "target": f"0x{int(target_addr):08X}",
+                "kind": str(data.get("jumpkind", "unknown")),
+            })
+        return {"nodes": nodes, "edges": edges, "unresolved": bool(function.has_unresolved_jumps)}
+
+    auto_snapshots = {address: snapshot(function) for address, function in auto_functions.items()}
     initialized_cfg = None
     initialization_model = None
     if 0x004AF7B0 in addresses and baseline_unresolved.get(0x004AF7B0):
@@ -105,16 +128,24 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
             functions[key] = {"result": "inconclusive", "reason": "CFGFast did not recover an exact function entry"}
             continue
 
-        nodes = sorted({int(node.addr) for node in function.graph.nodes() if getattr(node, "addr", None) is not None})
-        edges = []
-        for source, target, data in function.graph.edges(data=True):
-            source_addr = getattr(source, "addr", None)
-            target_addr = getattr(target, "addr", None)
-            if source_addr is None or target_addr is None:
-                continue
-            jumpkind = str(data.get("jumpkind", "unknown"))
-            edges.append({"source": f"0x{int(source_addr):08X}", "target": f"0x{int(target_addr):08X}", "kind": jumpkind})
-        unresolved = bool(function.has_unresolved_jumps)
+        snapshot_data = auto_snapshots.get(address) if recovery_mode == "automatic" else None
+        if snapshot_data is not None:
+            nodes = snapshot_data["nodes"]
+            edges = snapshot_data["edges"]
+            unresolved = snapshot_data["unresolved"]
+        else:
+            nodes = sorted({int(node.addr) for node in function.graph.nodes()
+                            if getattr(node, "addr", None) is not None})
+            edges = []
+            for source, target, data in function.graph.edges(data=True):
+                source_addr = getattr(source, "addr", None)
+                target_addr = getattr(target, "addr", None)
+                if source_addr is None or target_addr is None:
+                    continue
+                edges.append({"source": f"0x{int(source_addr):08X}",
+                              "target": f"0x{int(target_addr):08X}",
+                              "kind": str(data.get("jumpkind", "unknown"))})
+            unresolved = bool(function.has_unresolved_jumps)
         function_result = "pass" if nodes and not unresolved else "inconclusive"
         functions[key] = {
             "result": function_result,

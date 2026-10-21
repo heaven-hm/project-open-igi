@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_SetScriptRealValue - 0x0044E790 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E790-AIFunction_SetScriptRealValue.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E790-AIFunction_SetScriptRealValue.hpp"
+#include "AIFunction_SetScriptRealValue.h"
 int AIFunction_SetScriptRealValue(long double context , int arg2, float arg3 )
 
 // Sig: void AIFunction_SetScriptRealValue(int varId, float value)

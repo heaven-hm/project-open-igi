@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_TypeOpen - 0x00413B70 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00413B70-Weapon_TypeOpen.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00413B70-Weapon_TypeOpen.hpp"
+#include "Weapon_TypeOpen.h"
 int Weapon_TypeOpen()
 
 // Sig: void Weapon_TypeOpen(void)

@@ -1,6 +1,6 @@
 // IGI native provenance: Qsprite_Register4Az - 0x004B53B0 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004B53B0-Qsprite_Register4Az.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B53B0-Qsprite_Register4Az.hpp"
+#include "Qsprite_Register4Az.h"
 int Qsprite_Register4Az(int* context, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, int arg9, float arg10, float arg11, float arg12, int arg13, int arg14, int arg15, int arg16, int arg17)
 
 // Sig: void Qsprite_Register4Az(/*14 args*/)

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsGetSpeech - 0x00404D50 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404D50-Config_SoundOptionsGetSpeech.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404D50-Config_SoundOptionsGetSpeech.hpp"
+#include "Config_SoundOptionsGetSpeech.h"
 int Config_SoundOptionsGetSpeech(int context)
 
 // Sig: int Config_SoundOptionsGetSpeech()

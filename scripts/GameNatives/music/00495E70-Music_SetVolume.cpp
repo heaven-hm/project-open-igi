@@ -1,6 +1,6 @@
 // IGI native provenance: Music_SetVolume - 0x00495E70 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00495E70-Music_SetVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00495E70-Music_SetVolume.hpp"
+#include "Music_SetVolume.h"
 int Music_SetVolume(float context, float arg2)
 
 // Sig: void Music_SetVolume(float volume1,float volume2)

@@ -1,6 +1,6 @@
 // IGI native provenance: GO_Player - 0x004036B0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004036B0-GO_Player.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004036B0-GO_Player.hpp"
+#include "GO_Player.h"
 int GO_Player(int context, float arg2 )
 
 // Sig: int GO_Player(char* name)

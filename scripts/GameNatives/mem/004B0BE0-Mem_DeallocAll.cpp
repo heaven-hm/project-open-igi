@@ -1,6 +1,6 @@
 // IGI native provenance: Mem_DeallocAll - 0x004B0BE0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B0BE0-Mem_DeallocAll.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Mem_DeallocAll.hpp"
+#include "Mem_DeallocAll.h"
 int Mem_DeallocAll()
 
 // Sig: void Mem_DeallocAll(void)

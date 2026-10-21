@@ -1,6 +1,6 @@
 // IGI native provenance: Display_SetBackgroundColourFn - 0x00491E70 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00491E70-Display_SetBackgroundColourFn.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Display_SetBackgroundColourFn.hpp"
+#include "Display_SetBackgroundColourFn.h"
 unsigned int Display_SetBackgroundColourFn(char context, char arg2, char arg3)
 
 // Sig: void Display_SetBackgroundColourFn(char r, char g, char b)

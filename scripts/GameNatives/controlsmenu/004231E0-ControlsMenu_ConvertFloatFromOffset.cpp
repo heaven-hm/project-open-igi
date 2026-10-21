@@ -1,6 +1,6 @@
 // IGI native provenance: ControlsMenu_ConvertFloatFromOffset - 0x004231E0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004231E0-ControlsMenu_ConvertFloatFromOffset.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004231E0-ControlsMenu_ConvertFloatFromOffset.hpp"
+#include "ControlsMenu_ConvertFloatFromOffset.h"
 int ControlsMenu_ConvertFloatFromOffset(int context, int arg2 )
 
 // Sig: float ControlsMenu_ConvertFloatFromOffset(int offset)

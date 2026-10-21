@@ -1,6 +1,6 @@
 // IGI native provenance: GO_SoundSpeech - 0x00403E60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403E60-GO_SoundSpeech.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403E60-GO_SoundSpeech.hpp"
+#include "GO_SoundSpeech.h"
 int GO_SoundSpeech(long double context , int arg2, float arg3 )
 
 // Sig: int GO_SoundSpeech(float volume)

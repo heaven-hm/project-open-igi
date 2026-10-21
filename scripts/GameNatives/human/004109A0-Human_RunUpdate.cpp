@@ -1,6 +1,6 @@
 // IGI native provenance: Human_RunUpdate - 0x004109A0 - CFG score 98.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004109A0-Human_RunUpdate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Human_RunUpdate.hpp"
+#include "Human_RunUpdate.h"
 void* Human_RunUpdate(int* context)
 
 // Sig: void Human_RunUpdate(HumanPlayer* human)

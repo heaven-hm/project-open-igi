@@ -1,6 +1,6 @@
 // IGI native provenance: DefineQ_Material - 0x00407E30 - CFG score 95.2% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00407E30-DefineQ_Material.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00407E30-DefineQ_Material.hpp"
+#include "DefineQ_Material.h"
 int DefineQ_Material(long double context , long double arg2 , long double arg3 , int arg4, int arg5 )
 
 // Sig: void DefineQ_Material(...)

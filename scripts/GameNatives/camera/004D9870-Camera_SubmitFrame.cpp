@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_SubmitFrame - 0x004D9870 - CFG score 90.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9870-Camera_SubmitFrame.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9870-Camera_SubmitFrame.hpp"
+#include "Camera_SubmitFrame.h"
 int* Camera_SubmitFrame(void* context, int arg2, int arg3, int arg4, int arg5, int* arg6 , int arg7, int arg8, float arg9)
 
 // Sig: void Camera_SubmitFrame(CameraContext* camCtx)

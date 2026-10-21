@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GameOptionsInputSetMouseSensitivity - 0x00404230 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404230-Config_GameOptionsInputSetMouseSensitivity.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404230-Config_GameOptionsInputSetMouseSensitivity.hpp"
+#include "Config_GameOptionsInputSetMouseSensitivity.h"
 int Config_GameOptionsInputSetMouseSensitivity(long double context , int arg2, float arg3 )
 
 // Sig: void Config_GameOptionsInputSetMouseSensitivity(int value)
