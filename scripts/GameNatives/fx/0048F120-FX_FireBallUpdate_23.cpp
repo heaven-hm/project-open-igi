@@ -1,10 +1,12 @@
-// IGI native provenance: FX_FireBallUpdate_23 - 0x0048F120 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F120-FX_FireBallUpdate_23.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F120-FX_FireBallUpdate_23.hpp"
-int FX_FireBallUpdate_23(char context)
+// IGI native FX_FireBallUpdate_23 - 0x0048F120 - transcribed from retail igi.exe.
+// Retail: movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret
+#include <cstdint>
+#include <windows.h>
+extern std::int32_t g_5c8c00;
 
+int __cdecl FX_FireBallUpdate_23(int context)
 {
-    int result = context;
-    g_5c8c00 = result;
-    return result;
+    int value = (signed char)context;
+    g_5c8c00 = value;
+    return value;
 }
