@@ -218,6 +218,11 @@ def run_gate(address: str, implementation: str, threshold: str) -> dict:
     cmd = [sys.executable, str(ROOT / "scripts" / "native_gate.py"),
            "--root", str(ROOT), "--address", address, "--file", implementation,
            "--threshold", threshold, "--cfg-threshold", "0.85"]
+    # A STRUCTURALLY_VERIFIED sweep compares decompiler/Radare2/angr structure and
+    # the semantic review. Paired Frida acceptance is a separate VERIFIED phase,
+    # and most MVP natives have no typed probe yet.
+    if threshold.upper() in {"ANALYZED", "TRANSCRIBED", "STRUCTURALLY_VERIFIED"}:
+        cmd.append("--allow-structural-only")
     try:
         p = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True,
                            env=env, timeout=900)
