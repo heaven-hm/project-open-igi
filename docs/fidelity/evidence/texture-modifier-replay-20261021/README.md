@@ -23,3 +23,15 @@ The current shared verification manifest points this address at the
 `scripts/GameNatives` reference rather than the engine source tested here.
 Do not bind this report to that different source or promote its status without
 fresh matching static, semantic, build and paired runtime evidence.
+
+## Paired Frida boundary comparison
+
+`frida-pair.json` records eight matching controlled nonfatal inputs executed
+in the retail process and the receipt-bound x86 candidate, sequentially in the
+same Level 1 setup. The probe ran before the primary thread resumed, restored
+its three globals, and checked context bytes, the selected row, stack, count,
+mask and normalized return. It excludes the fatal path and other table memory.
+Retail Escape was delivered after startup. This does not establish that the
+game naturally calls this native, validate the complete image's behavior, or
+establish texture/render parity. The independent reviewer requested and the
+probe enforces that the context table pointer remains unchanged.
