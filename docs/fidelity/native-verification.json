@@ -8838,57 +8838,27 @@
       "name": "Model_GetAttachmentCount",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/model/mef_native_attachments.cpp",
-        "sha256": "9d61bcbfd52060743c0084cccedd1acf4b922d17702b1e02565119ee4880a78a",
-        "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)"
+        "path": "scripts/GameNatives/render/004D0D10-Model_GetAttachmentCount.cpp",
+        "sha256": "59dc0dd454165d7b9b700011322b69f6afad08bdc44dd98497aea51c89384c4b",
+        "signature": "std::int32_t __cdecl Model_GetAttachmentCount(void* model);"
       },
       "game_natives": {
         "path": "scripts/GameNatives/render/004D0D10-Model_GetAttachmentCount.cpp",
-        "sha256": "9b9041c8519f2523792d86e2b7a7d915e1abede1fecab0a861e32e3c64f7591f",
-        "signature": "int __cdecl Model_GetAttachmentCount(void*)"
+        "sha256": "59dc0dd454165d7b9b700011322b69f6afad08bdc44dd98497aea51c89384c4b",
+        "signature": "std::int32_t __cdecl Model_GetAttachmentCount(void* model);"
       },
       "verification": {
-        "status": "VERIFIED",
-        "ghidra": {
-          "evidence_id": "ev_7b846c0c715632c6acc647ceeb7908041ffd10cb8d1aaede72edff8f32c2ca9d",
-          "signature": "undefined FUN_004d0d10()",
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-ghidra.json",
-          "evidence_sha256": "bc360279d952192e2a20841868e423d1a8c3568abcc50e2f7b16a8860d92ec66",
-          "comparison_reviewed": true,
-          "comparison_rationale": "Ghidra retains an undefined recovered signature; stack offsets, EAX return and pointer/field accesses are established by its instruction listing and agree with the primary pair. Typed C++ names are descriptive aliases."
-        },
-        "radare2": {
-          "evidence_id": "radare2:live:0x004D0D10",
-          "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-radare2.json",
-          "evidence_sha256": "75174f3bbb29d5df9ad3d2c8fb1c8a75e7fc2f6d70136cabca38ed8e71bc0218"
-        },
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Typed C++ model names describe the observed x86 cdecl stack arguments, pointer-chain layout and EAX return; Ghidra recovered types remain undefined. No retail argument slots change."
+          "rationale": "Retail 0x004D0D10 (Model_GetAttachmentCount): ecx=[[esp+4]+0xc]; edx=[ecx+0xc]; movsx eax, word [edx+0x7e]; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
-        "cfg_similarity": 1.0,
-        "binary_ninja": {
-          "evidence_id": "binary_ninja:live:0x004D0D10",
-          "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-binaryninja.json",
-          "evidence_sha256": "c535fea6c3721cf0608ac6581a2f028114df767435e5b0803cbbb3e2e6327ade"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-build.json",
-          "evidence_sha256": "fbcdc01ae24e7138c9c746305054d62c53ae1e88a31997103fb626d82c2d55cc"
-        },
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-semantic-review.json",
-          "evidence_sha256": "514fe2e18221e71114ae23131303d6059a1343610a4c18b1658515b6f7a50ed9"
-        },
-        "runtime_tests": {
-          "evidence_path": "docs/fidelity/evidence/0x004D0D10-behavioral.json",
-          "evidence_sha256": "9ec0dbe3b10cdcef1d78ca1a3c5f96b827ad1f76b009549122f31dde62abca40"
-        },
+        "limitations": [
+          "Transcribed instruction for instruction from retail. No Frida run yet."
+        ],
         "behavioral_runner": {
-          "path": "scripts/attachment_diff_runner.py",
+          "path": "scripts/native_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -8903,7 +8873,33 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 360
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x004D0D10-radare2.json",
+          "evidence_sha256": "048206ea4dc059ee58fe46f7d4412fcc8119f4e3a30fefc9cefe88b48eefcc29",
+          "evidence_id": "r2:live:0x004D0D10",
+          "signature": "not restated"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x004D0D10-binaryninja.json",
+          "evidence_sha256": "dd0be6204c32e368c2d3278f0f931c9dc8ea8e545cbf5028ddd34eb6cbf5130f",
+          "evidence_id": "bn:live:0x004D0D10",
+          "signature": "not restated"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004D0D10-semantic-review.json",
+          "evidence_sha256": "1290186f402dc49b5c2bbdd90d223700da5b4ea5c4570232f2b049c9bf2c4208"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/0x004D0D10-build.json",
+          "evidence_sha256": "e80391d9c7930bf377554fbacc90f9ea604f3b7a251cee872e6b12f92dd7edfb"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x004D0D10-behavioral.json",
+          "evidence_sha256": "92b9b2b2de90b98c451de4856bcb3d406744ee45f5365b7dc36ae06c2947c5fe"
         }
       }
     },
