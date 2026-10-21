@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "natives": [
+    {
+      "address": "0x0048F1B0",
+      "name": "App_ContextGetDebugged",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+        "signature": "int32_t(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/fx/0048F1B0-App_ContextGetDebugged.cpp",
+        "sha256": "f5a6a6178165f9967522706fe37845a78709938690f3d94c2e9a6565d64650cc",
+        "signature": "unresolved"
+      },
+      "verification": {
+        "status": "VERIFIED_WITH_DOCUMENTED_SCOPE",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Address-bound leaf instructions map one retail global to the named port-owned field. Getter returns the observed DWORD in EAX. Catalog aliases do not establish semantic names."
+        },
+        "limitations": [
+          "Twelve explicit boundary DWORD fixtures; six fields only.",
+          "Natural consumers/concurrency/unmonitored memory unverified."
+        ],
+        "behavioral_runner": {
+          "path": "scripts/frida_app_context_getter_pair.py",
+          "args": [
+            "--address",
+            "{address}",
+            "--root",
+            "{root}",
+            "--binary",
+            "{binary}",
+            "--binary-sha256",
+            "{binary_sha256}",
+            "--implementation",
+            "{implementation}",
+            "--implementation-sha256",
+            "{implementation_sha256}"
+          ],
+          "timeout_seconds": 180
+        },
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/app-context-debugged-getter-20261021/radare2.json",
+          "evidence_sha256": "2fa6923dccc02acb64e2e68ad0d35b28afafd47f303a38d38325da9a110330d3",
+          "evidence_id": "local:radare2:0x0048F1B0:20261021",
+          "signature": "int32_t(void)"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/app-context-debugged-getter-20261021/binary_ninja.json",
+          "evidence_sha256": "b8ddc9c4b0325c3c90f6f36da07f9eafaff101d806f364684d8b36a09cfbb8c3",
+          "evidence_id": "local:binary_ninja:0x0048F1B0:20261021",
+          "signature": "int32_t(void)"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/app-context-debugged-getter-20261021/semantic-review.json",
+          "evidence_sha256": "a8caea0f94b4c0c2d24e0a178a66909fe2cfc1366e0df7e6d8a027a3b26061ac"
+        },
+        "build": {
+          "evidence_path": "docs/fidelity/evidence/app-context-debugged-getter-20261021/build.json",
+          "evidence_sha256": "46600dea1426eb9c664a2ad3bf154a0ae0dcbc87ee540ed4941b05f1c432bc3f"
+        },
+        "runtime_tests": {
+          "evidence_path": "docs/fidelity/evidence/app-context-debugged-getter-20261021/frida-pair.json",
+          "evidence_sha256": "3669a93aa69e4e398fdffd68c7c11c379a374cac2323597ffcdbe1a2feffa813"
+        },
+        "scope": {
+          "path": "docs/fidelity/scopes/0x0048F1B0-debugged-getter-20261021.md",
+          "sha256": "7771276bb26fd554f15c0658b1e1d6dd6055b2ec386bc2e0bd70b8df3b95b97d"
+        }
+      }
+    }
+  ]
+}

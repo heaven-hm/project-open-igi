@@ -1,0 +1,2129 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x0048F1B0",
+  "scope": "app-context-debugged-getter-pre-resume-boundary-dwords",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "source_identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-win32-no-verify/engine/platform/windows/open-igi.exe": "1eaa382f61a35b9c78104f0b05f8d9b9b2ecb5879c282af7231e7b12ad6a8255",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_context.cpp": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/include/igi/retail/core/app_context.hpp": "28a700cc94d610483026c26a4532824d53898ad119bc8a8a45b517f041e02df8",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_dynobj_link_dynamic_cube_probe.js": "4a45e9fabe6531434a3f0786f1830498f1a102cf91db18b3f8fd409ca133455c",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_app_context_getter_probe.js": "e7db36a412f4abde665eba6c644b70f40639aca214682d700dc078a8732afa6b",
+    "/Users/haseeb-mir/Downloads/IGI/config.qvm": "9fc8cc579f86db2e456972d0678161a303e84a40857a3f3f1a98e115042dd3b0",
+    "/Users/haseeb-mir/Downloads/IGI/MISSIONS/location0/LEVEL1/OBJECTS.QVM": "90acf17a8af76ddc24d40f061e796fc5964feed9298f321cb02b160ceaa89971",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_app_context_getter_pair.py": "7501e6666a33013565c07bd582948461a7d968308ca6b287a3cadf017ca68936",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_dynobj_link_dynamic_cube_pair.py": "fef5e6e3b10a9b8c3efeda0ea871a580543e99cf3fba309e1cfd9b56ac800bf3",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_capture_lease.py": "eaf52236b2eaabcd45b1b2e45d78dde15bb4cad5a07e0ff560479ff4a8baf92a",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/diagnostic-candidate-build.json": "408ccec3ef75d54bf685e04ab1abb4d3f61372a97e4551005b7e63c54086c665"
+  },
+  "runner": {
+    "path": "scripts/frida_app_context_getter_pair.py",
+    "sha256": "7501e6666a33013565c07bd582948461a7d968308ca6b287a3cadf017ca68936",
+    "command": [
+      "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/frida_app_context_getter_pair.py",
+      "--address",
+      "0x0048F1B0",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_context.cpp",
+      "--implementation-sha256",
+      "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557"
+    ]
+  },
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+  "candidate_sha256": "1eaa382f61a35b9c78104f0b05f8d9b9b2ecb5879c282af7231e7b12ad6a8255",
+  "probe_sha256": "911b8adc460010cf60a6e708af9380ae21dae6ef14d1e0231cc819dd697287b6",
+  "build_receipt_sha256": "408ccec3ef75d54bf685e04ab1abb4d3f61372a97e4551005b7e63c54086c665",
+  "candidate_symbols": {
+    "entry": "0x00402DB0",
+    "state": "0x00402D90"
+  },
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "retail": {
+    "name": "retail",
+    "executable": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "executable_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "cwd": "/Users/haseeb-mir/Downloads/IGI",
+    "result": "captured",
+    "probe_phase": "before-primary-thread-resume",
+    "probe": {
+      "module": "igi.exe",
+      "entry": "0x48f1b0",
+      "globalStateRestored": true,
+      "calls": [
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              0,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 0,
+            "state_delta": {
+              "before": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              1,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 1,
+            "state_delta": {
+              "before": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -1,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -1,
+            "state_delta": {
+              "before": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              127,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 127,
+            "state_delta": {
+              "before": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              128,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 128,
+            "state_delta": {
+              "before": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -128,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -128,
+            "state_delta": {
+              "before": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              305419896,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 305419896,
+            "state_delta": {
+              "before": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -305419896,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -305419896,
+            "state_delta": {
+              "before": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              2147483647,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 2147483647,
+            "state_delta": {
+              "before": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -2147483648,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -2147483648,
+            "state_delta": {
+              "before": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              1431655765,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 1431655765,
+            "state_delta": {
+              "before": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -1431655766,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -1431655766,
+            "state_delta": {
+              "before": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "escape": {
+      "sent": true,
+      "window": "0x5c0072",
+      "key": "Escape",
+      "title": "IGI",
+      "processId": 1740
+    },
+    "owned_process_terminated": true
+  },
+  "candidate": {
+    "name": "candidate",
+    "executable": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-uvgw6v8_.exe",
+    "executable_sha256": "1eaa382f61a35b9c78104f0b05f8d9b9b2ecb5879c282af7231e7b12ad6a8255",
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "cwd": "/Users/haseeb-mir/Downloads/IGI",
+    "result": "captured",
+    "probe_phase": "before-primary-thread-resume",
+    "probe": {
+      "module": "open-igi-probe-uvgw6v8_.exe",
+      "entry": "0x402db0",
+      "globalStateRestored": true,
+      "calls": [
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              0,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 0,
+            "state_delta": {
+              "before": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                0,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              1,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 1,
+            "state_delta": {
+              "before": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -1,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -1,
+            "state_delta": {
+              "before": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -1,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              127,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 127,
+            "state_delta": {
+              "before": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                127,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              128,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 128,
+            "state_delta": {
+              "before": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -128,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -128,
+            "state_delta": {
+              "before": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -128,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              305419896,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 305419896,
+            "state_delta": {
+              "before": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -305419896,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -305419896,
+            "state_delta": {
+              "before": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -305419896,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              2147483647,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 2147483647,
+            "state_delta": {
+              "before": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                2147483647,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -2147483648,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -2147483648,
+            "state_delta": {
+              "before": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -2147483648,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              1431655765,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": 1431655765,
+            "state_delta": {
+              "before": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                1431655765,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        },
+        {
+          "input": {
+            "args": [],
+            "initial_state": [
+              -1431655766,
+              -1,
+              127,
+              -128,
+              1431655765,
+              -2147483648
+            ]
+          },
+          "output": {
+            "return_value": -1431655766,
+            "state_delta": {
+              "before": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ],
+              "after": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            },
+            "side_effects": {
+              "fields": [
+                -1431655766,
+                -1,
+                127,
+                -128,
+                1431655765,
+                -2147483648
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "owned_process_terminated": true
+  },
+  "cases": [
+    {
+      "id": "case-0",
+      "input": {
+        "args": [],
+        "initial_state": [
+          0,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "before": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "before": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            0,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-1",
+      "input": {
+        "args": [],
+        "initial_state": [
+          1,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "before": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "before": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-2",
+      "input": {
+        "args": [],
+        "initial_state": [
+          -1,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -1,
+        "state_delta": {
+          "before": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": -1,
+        "state_delta": {
+          "before": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -1,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-3",
+      "input": {
+        "args": [],
+        "initial_state": [
+          127,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 127,
+        "state_delta": {
+          "before": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 127,
+        "state_delta": {
+          "before": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            127,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-4",
+      "input": {
+        "args": [],
+        "initial_state": [
+          128,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 128,
+        "state_delta": {
+          "before": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 128,
+        "state_delta": {
+          "before": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-5",
+      "input": {
+        "args": [],
+        "initial_state": [
+          -128,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -128,
+        "state_delta": {
+          "before": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": -128,
+        "state_delta": {
+          "before": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -128,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-6",
+      "input": {
+        "args": [],
+        "initial_state": [
+          305419896,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 305419896,
+        "state_delta": {
+          "before": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 305419896,
+        "state_delta": {
+          "before": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-7",
+      "input": {
+        "args": [],
+        "initial_state": [
+          -305419896,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -305419896,
+        "state_delta": {
+          "before": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": -305419896,
+        "state_delta": {
+          "before": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -305419896,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-8",
+      "input": {
+        "args": [],
+        "initial_state": [
+          2147483647,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "before": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 2147483647,
+        "state_delta": {
+          "before": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            2147483647,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-9",
+      "input": {
+        "args": [],
+        "initial_state": [
+          -2147483648,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "before": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "before": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -2147483648,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-10",
+      "input": {
+        "args": [],
+        "initial_state": [
+          1431655765,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1431655765,
+        "state_delta": {
+          "before": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": 1431655765,
+        "state_delta": {
+          "before": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            1431655765,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    },
+    {
+      "id": "case-11",
+      "input": {
+        "args": [],
+        "initial_state": [
+          -1431655766,
+          -1,
+          127,
+          -128,
+          1431655765,
+          -2147483648
+        ]
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -1431655766,
+        "state_delta": {
+          "before": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "candidate_output": {
+        "return_value": -1431655766,
+        "state_delta": {
+          "before": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ],
+          "after": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        },
+        "side_effects": {
+          "fields": [
+            -1431655766,
+            -1,
+            127,
+            -128,
+            1431655765,
+            -2147483648
+          ]
+        }
+      },
+      "result": "passed"
+    }
+  ],
+  "tests_total": 12,
+  "tests_failed": 0,
+  "tests_passed": 12
+}
