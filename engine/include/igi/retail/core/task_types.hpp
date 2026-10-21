@@ -74,7 +74,9 @@ extern igi::retail::core::TaskTypeSlot DAT_00AF5EE0[igi::retail::core::task_type
 // class handler itself in the table and the per-frame calls it.
 extern igi::retail::core::FrameHandler DAT_00A96AE0[];
 
-// The retail's event table at 0x0054F930. Each entry is six bytes.
+// The retail's event table at 0x0054F930. Each entry is six bytes: the
+// argument word at +0x00, the used byte at +0x02 and the second used byte at
+// +0x03.
 extern std::uint8_t DAT_0054F930[igi::retail::core::event_table_entry_count * 6U];
 
 // The retail's current task type, a word at 0x0054F928.
@@ -128,6 +130,26 @@ std::uint32_t IGI_RETAIL_CDECL QTask_LinkQTaskEventHandler(
 // Native: QTask_GetCurrentType() - VA 0x004018F0 - complete port.
 // Behavior: returns the 16-bit current task type at 0x0054F928 in AX.
 std::uint16_t IGI_RETAIL_CDECL QTask_GetCurrentType();
+
+// Native: QTask_Init() - VA 0x004010D0 - complete port.
+// Behavior: zeroes the 0x40 dwords at 0x00AFA6E0, clears the word at
+//           0x00AFA7E0 and the dword at 0x0054F92C, clears the event table
+//           through 0x004011D0 and the task type table through 0x004011B0,
+//           fills the 0x3F dwords at 0x00A969E0 with -1, registers the
+//           "QTask" class with a 0x20 byte object and the parent 0x0181, keeps
+//           the class id at 0x0054F928, and links the phase handlers.
+void IGI_RETAIL_CDECL QTask_Init();
+
+// Native: QTask_ClearEventTable() - VA 0x004011D0 - complete port.
+// Behavior: clears the used byte of every six-byte event entry from
+//           0x0054F932 to 0x0054FF26.
+void IGI_RETAIL_CDECL QTask_ClearEventTable();
+
+// Native: QTask_ClearTaskTypes() - VA 0x004011B0 - complete port.
+// Behavior: clears the in-use byte at slot + 0x25 and the name dword at slot
+//           + 0x00 for every 0x30-byte task type slot from 0x00AF5EE0 to
+//           0x00AFA6E0.
+void IGI_RETAIL_CDECL QTask_ClearTaskTypes();
 
 // Native: QTask_AllocateEvent() - VA 0x004017C0 - complete port.
 // Behavior: scans the event table from id 0x20 in six-byte steps for a free

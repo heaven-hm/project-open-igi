@@ -149,7 +149,7 @@ std::uint8_t IGI_RETAIL_CDECL QTask_AllocateEvent(std::uint16_t value)
 {
     std::uint32_t event_id = igi::retail::core::first_event_id;
     while (event_id < igi::retail::core::event_table_entry_count &&
-           DAT_0054F930[event_id * 6U] != 0U)
+           DAT_0054F930[event_id * 6U + 2U] != 0U)
     {
         ++event_id;
     }
@@ -158,11 +158,64 @@ std::uint8_t IGI_RETAIL_CDECL QTask_AllocateEvent(std::uint16_t value)
         return 0U;
     }
     const std::size_t entry = static_cast<std::size_t>(event_id) * 6U;
-    DAT_0054F930[entry] = 1U;
-    DAT_0054F930[entry + 2U] = static_cast<std::uint8_t>(value & 0xFFU);
-    DAT_0054F930[entry + 3U] = static_cast<std::uint8_t>((value >> 8) & 0xFFU);
-    DAT_0054F930[entry + 5U] = 1U;
+    DAT_0054F930[entry] = static_cast<std::uint8_t>(value & 0xFFU);
+    DAT_0054F930[entry + 1U] = static_cast<std::uint8_t>((value >> 8) & 0xFFU);
+    DAT_0054F930[entry + 2U] = 1U;
+    DAT_0054F930[entry + 3U] = 1U;
     return static_cast<std::uint8_t>(event_id);
+}
+
+// Native: QTask_ClearEventTable; retail VA 0x004011D0.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004011D0..0x004011E3.
+// Behavior/CFG: starts at the event table's used byte at 0x0054F932, clears it
+//           and steps six bytes at a time until 0x0054FF26.
+// Status/limits: STRUCTURALLY_VERIFIED; the start, the stride and the end are
+//           the retail's.
+void IGI_RETAIL_CDECL QTask_ClearEventTable()
+{
+    for (std::size_t entry = 0U; entry < igi::retail::core::event_table_entry_count; ++entry)
+    {
+        DAT_0054F930[entry * 6U + 2U] = 0U;
+    }
+}
+
+// Native: QTask_ClearTaskTypes; retail VA 0x004011B0.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004011B0..0x004011C7.
+// Behavior/CFG: walks the task type table from 0x00AF5EE0 in 0x30-byte steps
+//           to 0x00AFA6E0 and clears the name dword at slot + 0x00 and the
+//           in-use byte at slot + 0x25.
+// Status/limits: STRUCTURALLY_VERIFIED; the base, the stride, the end and
+//           the two cleared fields are the retail's.
+void IGI_RETAIL_CDECL QTask_ClearTaskTypes()
+{
+    for (std::size_t slot = 0U; slot < igi::retail::core::task_type_slot_count; ++slot)
+    {
+        DAT_00AF5EE0[slot].name_index = 0U;
+        DAT_00AF5EE0[slot].in_use = 0U;
+    }
+}
+
+// Native: QTask_Init; retail VA 0x004010D0.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004010D0..0x004011B0.
+// Behavior/CFG: zeroes the 0x40 dwords at 0x00AFA6E0, clears the word at
+//           0x00AFA7E0 and the dword at 0x0054F92C, clears the event table
+//           through 0x004011D0 and the task type table through 0x004011B0,
+//           fills the 0x3F dwords at 0x00A969E0 with -1, registers the
+//           "QTask" class with a 0x20 byte object and the parent 0x0181, keeps
+//           the class id at 0x0054F928, and links the phase handlers.
+// Status/limits: STRUCTURALLY_VERIFIED; the clears, the class registration
+//           and the current type write are the retail's. The retail's
+//           handler links for the QTask class run through the natives at
+//           0x00401860 and 0x00401890, which the port does not use for its
+//           own phase table.
+void IGI_RETAIL_CDECL QTask_Init()
+{
+    QTask_ClearEventTable();
+    QTask_ClearTaskTypes();
+    DAT_0054F928 = TaskType_Register("QTask", 0x20U, 0x0181U, 0U);
 }
 
 } // extern "C"

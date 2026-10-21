@@ -22,6 +22,8 @@ add_library(igi_retail_engine STATIC
     src/retail/audio/sound_adpcm_decoder.cpp
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
+    src/retail/core/window_procedure.cpp
+    src/retail/core/retail_main.cpp
     src/retail/core/task_types.cpp
     src/retail/core/game_flow.cpp
     src/retail/core/app_context.cpp

@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/window_procedure.hpp"
 #include "igi/retail/core/game_flow.hpp"
 #include "igi/retail/core/task_types.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
@@ -37,6 +38,7 @@
 #include <cctype>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <d3d.h>
 #include <ddraw.h>
@@ -1982,8 +1984,14 @@ struct SceneWindowLifetime
 Scene* Scene::frame_scene = nullptr;
 double Scene::frame_delta = 1.0 / 30.0;
 
-LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
+// The retail's window procedure at 0x0048F970 walks its handler chain at
+// 0x005C8DF0 before the retail's own message handling. The port's input
+// handling is one chain entry, so the messages reach it the way they reach
+// the retail's own handlers.
+std::intptr_t scene_message_handler(void* window, std::uint32_t message, std::uintptr_t parameter,
+                                    std::intptr_t detail)
 {
+    HWND const native_window = static_cast<HWND>(native_window);
     if (message == WM_ACTIVATEAPP)
         core::FP_InitExtendedPrecision();
     // The input messages feed the retail input port, which the scene's player
@@ -2000,21 +2008,21 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             break;
         case WM_MOVE:
         case WM_SIZE:
-            if (GetForegroundWindow() == window) g_active_scene->set_mouse_active(true);
+            if (GetForegroundWindow() == native_window) g_active_scene->set_mouse_active(true);
             break;
         case WM_SETCURSOR:
             if (g_active_scene->raw_mouse_enabled && LOWORD(detail) == HTCLIENT &&
-                GetForegroundWindow() == window)
+                GetForegroundWindow() == native_window)
             {
                 SetCursor(nullptr);
-                return TRUE;
+                return 1;
             }
             break;
         case WM_INPUT:
         {
             RAWINPUT input{};
             UINT size = sizeof(input);
-            if (g_active_scene->raw_mouse_enabled && GetForegroundWindow() == window &&
+            if (g_active_scene->raw_mouse_enabled && GetForegroundWindow() == native_window &&
                 GetRawInputData(reinterpret_cast<HRAWINPUT>(detail), RID_INPUT, &input, &size,
                                 sizeof(RAWINPUTHEADER)) != static_cast<UINT>(-1) &&
                 input.header.dwType == RIM_TYPEMOUSE &&
@@ -2023,7 +2031,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
                 g_active_scene->input_port.AddMouseDelta(input.data.mouse.lLastX, input.data.mouse.lLastY);
                 ++g_active_scene->mouse_messages;
             }
-            return DefWindowProcW(window, message, parameter, detail);
+            return 1;
         }
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
@@ -2077,7 +2085,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
                 key = (detail & (LPARAM{1} << 24)) ? VK_RMENU : VK_LMENU;
             g_active_scene->input_port.SetKeyDown(key, down);
             ++g_active_scene->key_messages;
-            return 0;
+            return 1;
         }
         case WM_MOUSEMOVE:
         {
@@ -2099,7 +2107,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             g_active_scene->last_mouse_x = x;
             g_active_scene->last_mouse_y = y;
             ++g_active_scene->mouse_messages;
-            return 0;
+            return 1;
         }
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
@@ -2120,7 +2128,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             const bool down = (message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN ||
                                message == WM_MBUTTONDOWN);
             g_active_scene->input_port.SetMouseButtonDown(button, down);
-            return 0;
+            return 1;
         }
         default:
             break;
@@ -2136,7 +2144,16 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
     {
         return 1;
     }
-    return DefWindowProcW(window, message, parameter, detail);
+    return 1;
+}
+
+LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
+{
+    // The retail's window procedure at 0x0048F970: it walks the handler chain
+    // and then applies the retail's own message handling.
+    return static_cast<LRESULT>(Retail_WindowProcedure(
+        window, static_cast<std::uint32_t>(message), static_cast<std::uintptr_t>(parameter),
+        static_cast<std::intptr_t>(detail)));
 }
 } // namespace
 
@@ -2272,6 +2289,12 @@ int RunRetailModelScene(HINSTANCE instance,
         // into the handler table, so the per-frame dispatch at 0x00401050
         // reaches the scene through the table, the way the retail does.
         Scene::frame_scene = &scene;
+        // The port's input handling joins the retail's window message chain, so
+        // the messages reach it the way they reach the retail's own handlers.
+        static igi::retail::core::WindowHandlerEntry scene_handler{};
+        scene_handler.next = nullptr;
+        scene_handler.handler = &scene_message_handler;
+        LinkWindowHandler(&scene_handler);
         // The retail startup sets the loop status byte (0x005C8DE8) to the
         // running value, so the per-frame check does not end the loop.
         Loop_SetStatusByte(1);
