@@ -1,14 +1,17 @@
-// IGI native provenance: FX_ExplosionSpawn_23 - 0x0048F100 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F100-FX_ExplosionSpawn_23.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F100-FX_ExplosionSpawn_23.hpp"
-BOOL FX_ExplosionSpawn_23(BOOL context)
+// IGI native FX_ExplosionSpawn_23 - 0x0048F100 - transcribed from retail igi.exe.
+// Retail: ecx=[0x5c8bc4]; eax=[esp+4]; [0x5c8bd4]=eax; if ecx: SetWindowTextA(ecx,eax); ret
+#include <cstdint>
+#include <windows.h>
+extern std::int32_t g_5c8bc4;
+extern std::int32_t g_5c8bd4;
 
+int __cdecl FX_ExplosionSpawn_23(int context)
 {
-    HWND hWnd = g_5c8bc4;
+    HWND hWnd = (HWND)(intptr_t)g_5c8bc4;
     g_5c8bd4 = context;
 
     if (!hWnd)
         return context;
 
-    return SetWindowTextA(hWnd, context);
+    return SetWindowTextA(hWnd, (LPCSTR)(intptr_t)context);
 }
