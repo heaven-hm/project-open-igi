@@ -1,0 +1,22 @@
+{
+ "address": "0x00465820",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x00465820 (Human_CameraEyePosition): esi=out; edi=human; out+0x10=0x40a6147ae147ae14; if Human_IsCrouched(human) out+0x10=0x4096666666666666; out[0..3]=human[0x20..0x2c]; out+0x10 = double(human+0x30)+double(out+0x10); ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
