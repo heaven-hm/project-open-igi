@@ -1,22 +1,21 @@
-// IGI native provenance: DynObj_LookupHashItem - 0x004CF300 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004CF300-DynObj_LookupHashItem.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004CF300-DynObj_LookupHashItem.hpp"
-int* DynObj_LookupHashItem(int* context, int arg2)
+// IGI native DynObj_LookupHashItem - 0x004CF300 - transcribed from retail igi.exe.
+// Retail: cdecl (table, index). Starts at the node pointed to by *table and follows the next pointer at +0 index times; null when the chain ends before the node is reached.
+#include <cstdint>
+#include <cstring>
+static inline std::uint32_t rd32(const void* p, std::intptr_t off) { std::uint32_t v; std::memcpy(&v, reinterpret_cast<const std::uint8_t*>(p) + off, 4); return v; }
+static inline void* ptr32(std::uint32_t v) { return reinterpret_cast<void*>(static_cast<std::uintptr_t>(v)); }
 
+void* __cdecl DynObj_LookupHashItem(void* table, std::int32_t index)
 {
-    int temp_val = 0;
-    int* result = *context;
-    int* i = *result;
-
-    while (i)
-    {
-        if (temp_val == arg2)
-            return result;
-
-        result = i;
-        i = *i;
-        temp_val += 1;
+    void* node = ptr32(rd32(table, 0));
+    std::uint32_t next = rd32(node, 0);
+    std::uint32_t i = 0;
+    if (next == 0) return nullptr;
+    for (;;) {
+        if (i == static_cast<std::uint32_t>(index)) return node;
+        node = ptr32(next);
+        next = rd32(node, 0);
+        ++i;
+        if (next == 0) return nullptr;
     }
-
-    return nullptr;
 }
