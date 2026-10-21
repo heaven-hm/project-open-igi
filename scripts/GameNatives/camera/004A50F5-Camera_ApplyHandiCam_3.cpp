@@ -1,64 +1,58 @@
-// IGI native provenance: Camera_ApplyHandiCam_3 - 0x004A50F5 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004A50F5-Camera_ApplyHandiCam_3.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+// IGI native provenance: Camera_ApplyHandiCam_3 - 0x004A50F5 - retail WinMainCRTStartup (CRT entry point); label is the catalog name only.
+// Transcribed from retail igi.exe 0x004A50F5 (radare2). SEH frame: scope table 0x534308, handler 0x4a67ec.
+#include <windows.h>
+#include <stdio.h>
 #include "004A50F5-Camera_ApplyHandiCam_3.hpp"
-int _start()
 
+extern unsigned int g_93607c, g_936078, g_936074, g_936070, g_936054;
+extern LPSTR g_c32554;
+extern char* g_93604c;
+int Camera_ApplyPostProcess_8(int context);              // 0x004A6787
+void Camera_ResetMatrix_3(int context);                  // 0x004A5210
+unsigned int Camera_ApplyHandiCam_8(void);               // 0x004A6467
+PSTR Camera_ApplyBandFilter_8(void);                     // 0x004A6335
+void Camera_SetFieldOfView_8_cdecl(void);                // 0x004A60E8 (retail passes no argument)
+int Camera_UpdateTransform_8(void);                      // 0x004A602F
+int Camera_ApplyLineFilter_6(void);                      // 0x004A5AA8
+char* Camera_ResetMatrix_7(void);                        // 0x004A5FD7
+int Camera_ApplyBandFilter_6(unsigned int exitCode);     // 0x004A5AD5
+int Camera_ApplyPostProcess_7(int code, EXCEPTION_POINTERS* ptrs); // 0x004A5D72
+void Camera_Exit_5A05(int code);                         // 0x004A5A05
+int main(HINSTANCE, HINSTANCE, char*, int);              // retail 'main' call at 0x004A51BB (WinMain)
+
+int Camera_ApplyHandiCam_3()
 {
-    int flagP;
-    int item_4 = flagP;
-    int item_8 = 0xffffffff;
-    int item_c = 0x534308;
-    int item_10 = 0x4a67ec;
-    TEB* fsbase;
-    struct _EXCEPTION_REGISTRATION_RECORD* ExceptionList = fsbase->NtTib.ExceptionList;
-    fsbase->NtTib.ExceptionList = &ExceptionList;
-    int context_val;
-    int item_70 = context_val;
-    int source_val;
-    int item_74 = source_val;
-    int dest_val;
-    int item_78 = dest_val;
-    int* item_1c = &item_78;
-    unsigned int data_1 = GetVersion();
-    int temp_val = 0;
-    temp_val = *(&data_1 + 1);
-    g_93607c = temp_val;
-    unsigned int entity_1 = data_1;
-    g_936078 = entity_1;
-    g_936074 = (entity_1 << 8) + temp_val;
-    g_936070 = data_1 >> 0x10;
+    int rc = 0;
+    int xcode = 0;
+    try {
+        DWORD ver = GetVersion();
+        g_93607c = (ver >> 8) & 0xff;
+        g_936078 = ver & 0xff;
+        g_936074 = (g_936078 << 8) + g_93607c;
+        g_936070 = ver >> 16;
 
-    if (!Camera_ApplyPostProcess_8(0))
-    {
-        Camera_ResetMatrix_3(0x1c);
-        /* no return */
+        if (!Camera_ApplyPostProcess_8(0))
+            Camera_ResetMatrix_3(0x1c);
+
+        Camera_ApplyHandiCam_8();
+        g_c32554 = GetCommandLineA();
+        g_93604c = Camera_ApplyBandFilter_8();
+        Camera_SetFieldOfView_8_cdecl();
+        Camera_UpdateTransform_8();
+        Camera_ApplyLineFilter_6();
+
+        STARTUPINFOA si;
+        si.dwFlags = 0;
+        GetStartupInfoA(&si);
+        char* cmdLine = Camera_ResetMatrix_7();
+        int nShow = (si.dwFlags & 1) ? si.wShowWindow : 10;
+
+        rc = main(GetModuleHandleA(nullptr), nullptr, cmdLine, nShow);
+        Camera_ApplyBandFilter_6((unsigned int)rc);
+    } catch (...) {
+        // retail handler: _XcptFilter(code, ptrs) then _exit(code); exception code is not recoverable from a C++ catch
+        fprintf(stderr, "Camera_ApplyHandiCam_3: exception in CRT entry path\n");
+        Camera_Exit_5A05(xcode);
     }
-
-    int item_8_1 = 0;
-    Camera_ApplyHandiCam_8();
-    g_c32554 = GetCommandLineA();
-    PSTR data_5;
-    int entity_5;
-    data_5 = Camera_ApplyBandFilter_8();
-    g_93604c = data_5;
-    Camera_SetFieldOfView_8(entity_5);
-    Camera_UpdateTransform_8();
-    Camera_ApplyLineFilter_6();
-    STARTUPINFOA startupInfo;
-    startupInfo.dwFlags = 0;
-    GetStartupInfoA(&startupInfo);
-    char* data_6 = Camera_ResetMatrix_7();
-    unsigned int wShowWindow;
-
-    wShowWindow = !(startupInfo.dwFlags & 1) ? 0xa : startupInfo.wShowWindow;
-
-    unsigned int wShowWindow_1 = wShowWindow;
-    int item_84 = 0;
-    WPARAM data_8 = FX_Igimutex(GetModuleHandleA(nullptr), data_6);
-    WPARAM item_64 = data_8;
-    Camera_ApplyBandFilter_6(data_8);
-    int* item_18;
-    int entity_7 = **item_18;
-    int item_6c = entity_7;
-    return Camera_ApplyPostProcess_7(entity_7, item_18);
+    return rc;
 }
