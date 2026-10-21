@@ -1,0 +1,22 @@
+{
+ "address": "0x004C5F00",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x004C5F00 (Terrain_LoadTexturesAndLightmaps): sub esp,0x484; strcpy g_b97c20,path; name=path+.tex; Terrain_LoadTexFile -> ctx+0xDBC; palette[i]=i<<16 uploaded to ctx+0xDF4; if GetTerrainLightmapsUsed: name=path+.lmp -> ctx+0xE00, Resource_Load, per-entry Texture_UploadMipmapPacket into g_b81b20 (0x2C stride); return Resource_Unload(name). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
