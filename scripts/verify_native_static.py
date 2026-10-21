@@ -90,6 +90,12 @@ def run_angr(binary: pathlib.Path, addresses: list[str]) -> dict[str, Any]:
         merged["result"] = "pass" if left.get("result") == "pass" and right.get("result") == "pass" else "partial"
     merged["split_retry"] = {"left": left.get("result"), "right": right.get("result"),
                              "reason": str(result.get("reason"))[:200]}
+    if len(addresses) > 1:
+        # A batch can succeed overall while individual seeded entries stay
+        # inconclusive; those entries recover reliably on their own.
+        missing = [address for address in addresses if address not in merged["functions"]]
+        for address in missing:
+            merged["functions"].update(run_angr(binary, [address]).get("functions", {}))
     return merged
 
 
