@@ -22,6 +22,8 @@ add_library(igi_retail_engine STATIC
     src/retail/audio/sound_adpcm_decoder.cpp
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
+    src/retail/core/task_types.cpp
+    src/retail/core/game_flow.cpp
     src/retail/core/app_context.cpp
     src/retail/core/fpu_state.cpp
     src/retail/core/debug_command_line.cpp
@@ -40,6 +42,7 @@ add_library(igi_retail_engine STATIC
     src/retail/config/config_graphic_options.cpp
     src/retail/config/retail_config.cpp
     src/retail/config/retail_input_bindings.cpp
+    src/retail/config/input_remap.cpp
     src/retail/render/trans_context.cpp
     src/retail/render/view_block.cpp
     src/retail/render/camera_transform.cpp

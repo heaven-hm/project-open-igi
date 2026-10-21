@@ -15,6 +15,8 @@
 namespace igi::retail::core {
 
 using FrameDispatchCallback = void (IGI_RETAIL_CDECL *)(void*);
+// The optional handler the retail calls from AppContext_SetIsActive (0x0048F140).
+using FrameFlagHandler = std::int32_t (IGI_RETAIL_CDECL *)(std::int32_t, std::int32_t);
 
 struct FrameDispatchRecordView {
     std::byte unknown_0x00[0x1C];
@@ -33,14 +35,19 @@ extern "C" {
 
 extern std::jmp_buf DAT_0054F8E0;
 extern std::uint8_t DAT_005C8DE8;
+extern std::int32_t DAT_005C8BFC;
+extern igi::retail::core::FrameFlagHandler DAT_005C8C18;
+extern std::int32_t DAT_005C8C1C;
 extern igi::retail::core::FrameDispatchRecordView* DAT_00567C8C;
-extern igi::retail::core::FrameDispatchCallback DAT_00A970E0[];
+// The phase 1 base of the retail handler table, 0x00A970E0. The table lives in
+// task_types.cpp, because the retail stores the class handlers in it.
+igi::retail::core::FrameDispatchCallback* DAT_00A970E0();
 
 // Native: QTask_OpenEvent() - VA 0x00401050 - complete port.
 // Behavior: establishes the retail __setjmp3 frame boundary on 0x0054F8E0; when 0, fetches
 //           Game_GetContext() (0x00402880), reads the 16-bit dispatch index at +0x1C, and
 //           invokes the callback at 0x00A970E0[index](Game_GetContext()); when non-zero,
-//           calls FX_SmokeEmit_27(0) (0x0048F480).
+//           calls the loop status setter (0x0048F480).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01);
 //                 VA 0x00401050-0x00401094, 68 bytes, digest c1c4e05efbb946828539e30c465e82356be70d32d878a62a0512201816b1ff93.
 // CFG: radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
@@ -70,7 +77,6 @@ igi::retail::core::FrameDispatchRecordView* IGI_RETAIL_CDECL Game_GetContext();
 std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
 
 // Native: Loop_SetStatusByte() - VA 0x0048F480 - complete port.
-// Previous catalog alias: FX_SmokeEmit_27.
 // Behavior: stores `value` into the global loop status byte at 0x005C8DE8.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F480-0x0048F48A, 10 bytes,
 //                 digest ee3c22c2c4363e72b7199c5ea3ec80e0c5661a1354a9c93b5b3ff1b4fd0e1464.
@@ -79,7 +85,20 @@ std::uint32_t IGI_RETAIL_CDECL Flow_SetState(std::uint32_t value);
 // Signature: x86 cdecl void(uint8_t value); ported as void Loop_SetStatusByte(std::uint8_t value).
 // Usage/tests: called by QTask_OpenEvent (0x00401050) on nonlocal abort; exercised by frame_natives_test.cpp.
 void IGI_RETAIL_CDECL Loop_SetStatusByte(std::uint8_t value);
-inline void IGI_RETAIL_CDECL FX_SmokeEmit_27(std::uint8_t value) { Loop_SetStatusByte(value); }
+
+// Native: AppContext_SetIsActive() - VA 0x0048F140 - complete port.
+// Behavior: sign-extends the low byte of the argument, stores it in the global
+//           frame flag at 0x005C8BFC, and when the optional handler at
+//           0x005C8C18 is set, calls it with the argument at 0x005C8C1C and
+//           returns its result.
+std::int32_t IGI_RETAIL_CDECL AppContext_SetIsActive(std::int32_t value);
+
+// Native: AppContext_GetIsActive() - VA 0x0048F170 - complete port.
+// Behavior: returns the global frame flag at 0x005C8BFC. The retail main loop
+//           (0x0048F544) calls it between the frame clear (0x00498460) and
+//           the per-frame dispatch (0x00401050) and branches on the result:
+//           non-zero dispatches the frame, zero sleeps 500 ms.
+std::int32_t IGI_RETAIL_CDECL AppContext_GetIsActive();
 
 }
 
