@@ -1,8 +1,11 @@
-// IGI native provenance: Sys_ReadFileBlock_3 - 0x004B0F80 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004B0F80-Sys_ReadFileBlock_3.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B0F80-Sys_ReadFileBlock_3.hpp"
-int Sys_ReadFileBlock_3()
+// IGI native Texture_GetActiveBackendId - 0x004B0F80 - transcribed from retail igi.exe.
+// Retail: cdecl, no arguments. Returns g_a94a64.
+#include <cstdint>
+#include <cstring>
 
+extern std::int32_t g_a94a64;
+
+std::int32_t __cdecl Texture_GetActiveBackendId(void)
 {
     return g_a94a64;
 }
