@@ -245,6 +245,17 @@ def main() -> None:
 
     symbol_map = json.load(open(a.symbols))
     rows = [r for r in symbol_map if r.get("implemented")]
+    # The manifest's implementation path is the source its semantic review and
+    # build evidence were bound to. The symbol map's enginePath is the port's
+    # engine file, which is often a different translation unit, so feeding that
+    # path to the gate rejects every record as "implementation path does not
+    # match". Verify the reviewed implementation instead.
+    manifest = json.load(open(ROOT / "docs" / "fidelity" / "native-verification.json"))
+    reviewed = {x["address"]: x["implementation"]["path"] for x in manifest["natives"]}
+    for row in rows:
+        path = reviewed.get(f"0x{int(row['address'], 16):08X}")
+        if path:
+            row["enginePath"] = path
     print(f"natives with an engine implementation: {len(rows)}", flush=True)
 
     results = {r["address"]: {"address": r["address"], "name": r["retailName"],
