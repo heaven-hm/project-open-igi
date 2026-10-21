@@ -1,0 +1,13 @@
+{
+  "schema_version": 1,
+  "kind": "build-report",
+  "result": "passed",
+  "executed": true,
+  "address": "0x0048F1E0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4dc2da1fff93aac4d51d0052480c23f8a74c214db67f31bad083186d2733c557",
+  "command": "cmake --build /Users/haseeb-mir/Documents/Code/project-open-igi/build-win32-no-verify --target open-igi --clean-first -j4",
+  "target": "Windows x86 PE32 open-igi, diagnostic only",
+  "candidate_sha256": "1eaa382f61a35b9c78104f0b05f8d9b9b2ecb5879c282af7231e7b12ad6a8255",
+  "receipt": "docs/fidelity/evidence/app-context-debugtext-20261021/diagnostic-build-receipt.json"
+}
