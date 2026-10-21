@@ -1,8 +1,10 @@
-// IGI native provenance: FX_SmokeEmit_22 - 0x0048F0D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F0D0-FX_SmokeEmit_22.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F0D0-FX_SmokeEmit_22.hpp"
-int FX_SmokeEmit_22(int context)
+// IGI native FX_SmokeEmit_22 - 0x0048F0D0 - transcribed from retail igi.exe.
+// Retail: mov eax,[esp+4]; mov [g_5c8bc0],eax; ret
+#include <cstdint>
+#include <windows.h>
+extern std::int32_t g_5c8bc0;
 
+int __cdecl FX_SmokeEmit_22(int context)
 {
     g_5c8bc0 = context;
     return context;
