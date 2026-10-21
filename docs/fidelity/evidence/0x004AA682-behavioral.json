@@ -1,0 +1,22 @@
+{
+ "address": "0x004AA682",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {}
+   },
+   "note": "Retail 0x004AA682 (Mem_AllocWithRetry): if size>0xffffffe0 ret 0; loop: p=Mem_AllocateRawBlock(size); if p ret p; if retry==0 ret p; if Mem_InvokeNewHandler(size)==0 ret 0; goto loop. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+  }
+ ]
+}
