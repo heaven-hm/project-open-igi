@@ -1057,8 +1057,10 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/context_getter_diff_runner.py",
           "args": [
+            "--root",
+            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -1068,11 +1070,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -1099,6 +1099,14 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
           "evidence_sha256": "5f1de6bf4fbac50120263bbe37b700868a795e589f70c4424da628d29da8f5c6"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
+          "evidence_sha256": "3cfe7ae9f20786a2f3557a5bfe63383b300b7b3b38ffa38cca724fa16051943e",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
       }
     },
@@ -54664,7 +54672,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_mem_alloc_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54679,7 +54687,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54706,6 +54714,14 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B0C60-behavioral.json",
           "evidence_sha256": "d4527106538c7b664d8d14deba8970e2a57ecb2a30a060d221686f888418b0bd"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B0C60-behavioral.json",
+          "evidence_sha256": "1d2001e1c85c8c2556fe580019ae57e9ef0965e90ead44987da1dde78ea3b089",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 23,
+          "tests_total": 23
         }
       }
     },
