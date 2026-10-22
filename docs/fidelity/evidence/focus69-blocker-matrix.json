@@ -178,5 +178,26 @@
    "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
   }
  ],
- "rule": "No status promotion is permitted from a placeholder artifact or an unsupported runner; each row requires a dedicated runner or a completed transcription."
+ "rule": "No status promotion is permitted from a placeholder artifact or an unsupported runner; each row requires a dedicated runner or a completed transcription.",
+ "repairability": {
+  "resolved_infrastructure": "IFF runners now resolve build-clean-win32/igi1.exe before legacy open-igi.exe paths.",
+  "requires_dedicated_typed_runner": [
+   "0x004037C0",
+   "0x00410070",
+   "0x004137A0",
+   "0x004ED5C0",
+   "0x004BCFD0",
+   "0x004BDA00",
+   "0x004B7540",
+   "0x004B26B0"
+  ],
+  "requires_transcription_or_typed_terrain_runner": [
+   "0x004C5F00",
+   "0x004C6240",
+   "0x004D14E0",
+   "0x00510010",
+   "0x00512C30"
+  ],
+  "do_not_promote": "Unsupported address dispatch and incomplete terrain implementations remain blocked; no generic adapter was added without ABI/state evidence."
+ }
 }
