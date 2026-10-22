@@ -24,6 +24,7 @@ import json
 import math
 import os
 import pathlib
+import re
 import struct
 import subprocess
 import sys
@@ -1555,6 +1556,10 @@ def wndproc_cases() -> list[dict]:
          "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
         {"id": "keydown-s-no-flag", "categories": ["boundary"], "message": WM_KEYDOWN_RETAIL,
          "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        # The retail's WM_KEYDOWN arm sets the debug flag for F12 at 0x0048fa5f;
+        # without this case the flag-setting branch has no oracle case at all.
+        {"id": "keydown-f12-sets-flag", "categories": ["boundary"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": VK_F12, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
         {"id": "chain-consumes", "categories": ["nominal"], "message": WM_KEYDOWN_RETAIL,
          "wparam": 0x41, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": True,
          "chain_result": 0},
@@ -1807,7 +1812,9 @@ def app_context_set_candidate_source() -> str:
 // The globals the implementation's other units own. The harness links only
 // the implementation under test, so it supplies them here.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -1867,7 +1874,9 @@ def app_context_get_candidate_source() -> str:
 // The globals the implementation's other units own. The harness links only
 // the implementation under test, so it supplies them here.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -1928,7 +1937,9 @@ def loop_status_candidate_source() -> str:
 // The globals the implementation's other units own. The harness links only
 // the implementation under test, so it supplies them here.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -2028,7 +2039,9 @@ def qtask_open_event_candidate_source() -> str:
 // The globals the implementation's other units own. The harness links only
 // the implementation under test, so it supplies them here.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -2127,7 +2140,9 @@ def game_context_candidate_source() -> str:
 
 // The globals the implementation's other units own.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -2185,7 +2200,9 @@ def flow_set_state_candidate_source() -> str:
 
 // The globals the implementation's other units own.
 extern "C" {
-std::uint8_t Loop_StatusByte = 0U;
+// frame_natives.cpp defines Loop_StatusByte itself (the mingw link needs exactly
+// one definition), so declaring it here would duplicate the symbol. Only the
+// handler table is unowned by the unit under test.
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
                                                   igi::retail::core::task_phase_stride] = {};
 }
@@ -2481,6 +2498,35 @@ def ensure_emulator_runtime() -> None:
     )
 
 
+def supply_unowned_globals(harness_source: str, implementation: pathlib.Path) -> str:
+    """Give the harness the retail globals the unit under test does not define.
+
+    The harness links only the implementation under test, so any retail global
+    that the harness touches has to exist exactly once across the two objects.
+    The unit under test owns some of them (frame_natives.cpp defines the loop
+    status byte, for example); supplying those again fails the link with a
+    duplicate symbol, and supplying none of them fails with an undefined one.
+    Read the implementation and define only what it leaves out.
+    """
+    implementation_text = implementation.read_text(encoding="utf-8", errors="replace")
+    owned = {
+        "Loop_StatusByte": r"^\s*std::uint8_t\s+Loop_StatusByte\s*=",
+    }
+    missing = [
+        f"std::uint8_t {symbol} = 0U;"
+        for symbol, pattern in owned.items()
+        if symbol in harness_source and not re.search(pattern, implementation_text, re.MULTILINE)
+    ]
+    if not missing:
+        return harness_source
+    block = "extern \"C\" {\n" + "\n".join(missing) + "\n}\n\n"
+    marker = "int main("
+    offset = harness_source.find(marker)
+    if offset < 0:
+        return block + harness_source
+    return harness_source[:offset] + block + harness_source[offset:]
+
+
 def main() -> int:
     ensure_emulator_runtime()
     parser = argparse.ArgumentParser()
@@ -2518,6 +2564,7 @@ def main() -> int:
     harness_source = adapter["candidate_source"]().replace("@CASES@", harness_cases)
     for marker, replacement in adapter.get("substitutions", {}).items():
         harness_source = harness_source.replace(marker, replacement)
+    harness_source = supply_unowned_globals(harness_source, implementation)
 
     with tempfile.TemporaryDirectory(prefix="igi-native-unicorn-") as workspace:
         workspace_path = pathlib.Path(workspace)
