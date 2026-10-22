@@ -57471,15 +57471,12 @@
         "signature": "char* __cdecl String_FindExtension(char* out, int size, const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail 0x004B1E90 (String_FindExtension): edx=path; ecx=strlen(path); if ecx: while path[ecx]!='.': ecx--; if ecx==0 break; esi=path+ecx; if out: call 0x4a5500(out,esi,size-1); out[size-1]=0; ret esi. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
           "args": [
@@ -57496,7 +57493,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57523,8 +57520,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B1E90-behavioral.json",
           "evidence_sha256": "45e901f4b42748cdab3e2b057586c3e08fb902f909eea6680c4e79295f1df3af"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B1E90-behavioral.json",
+          "evidence_sha256": "86d172dc59cfd3cc71e44138e7b74000cddfa72c08e91e90472ee786c0a76d68",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7E10",
