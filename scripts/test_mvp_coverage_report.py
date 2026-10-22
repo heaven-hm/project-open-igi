@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -198,7 +199,7 @@ class CoverageReportTests(unittest.TestCase):
             with self.assertRaisesRegex(coverage.ReportError, "missing manifest addresses"):
                 coverage.build_report(self.root, self.candidate_path)
 
-    def test_top_level_binary_hash_is_canonical_and_record_mismatch_is_reported(self) -> None:
+    def test_top_level_binary_hash_is_canonical_and_record_mismatch_fails_closed(self) -> None:
         record = self.manifest["natives"][0]
         record["binary_sha256"] = "b" * 64
         artifact = self._artifact("build-report", executed=True, command="compile")
@@ -211,7 +212,132 @@ class CoverageReportTests(unittest.TestCase):
         row = report["natives"][0]
         self.assertEqual(report["inputs"]["retail_binary_sha256"], self.binary_sha)
         self.assertEqual(row["manifest_binary_binding"], "mismatch")
-        self.assertEqual(row["evidence_references"]["build"]["state"], "pass")
+        result = row["evidence_references"]["build"]
+        self.assertEqual(result["state"], "invalid")
+        self.assertIn("per-record", result["reason"])
+
+    def test_absent_top_level_binary_hash_cannot_be_authorised_by_record_hash(self) -> None:
+        self.manifest.pop("binary_sha256")
+        record = self.manifest["natives"][0]
+        record["verification"]["build"] = self._add_evidence(
+            "record-only-build.json", self._artifact("build-report", executed=True, command="compile")
+        )
+        self._write_manifest()
+
+        with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+            report = coverage.build_report(self.root, self.candidate_path)
+
+        row = report["natives"][0]
+        # The report still says the retail binding is unknown; a record-level hash
+        # alone must not turn that into a passing evidence state.
+        self.assertIsNone(report["inputs"]["retail_binary_sha256"])
+        self.assertEqual(row["manifest_binary_binding"], "unknown")
+        result = row["evidence_references"]["build"]
+        self.assertNotEqual(result["state"], "pass")
+        self.assertEqual(result["state"], "unknown")
+        self.assertEqual(result["reason"], "retail binary binding is missing")
+
+    def test_malformed_top_level_binary_hash_fails_closed(self) -> None:
+        record = self.manifest["natives"][0]
+        record["verification"]["build"] = self._add_evidence(
+            "malformed-top-level-build.json", self._artifact("build-report", executed=True, command="compile")
+        )
+        cases = (
+            ("boolean", True),
+            ("non_hex_string", "not-a-hash"),
+            ("integer", 123),
+            ("short_hex", "a" * 63),
+            ("non_hex_64", "z" * 64),
+            ("null", None),
+        )
+        for label, value in cases:
+            with self.subTest(label=label):
+                self.manifest["binary_sha256"] = value
+                self._write_manifest()
+                with self.assertRaisesRegex(coverage.ReportError, "binary_sha256"):
+                    coverage._load_inventory(self.root)
+                with self.assertRaisesRegex(coverage.ReportError, "binary_sha256"):
+                    coverage.build_report(self.root, self.candidate_path)
+                exit_code = coverage.main(
+                    ["--candidate", str(self.candidate_path), "--out", f"build/malformed-{label}.json"],
+                    root=self.root,
+                )
+                self.assertEqual(exit_code, 2)
+                self.assertFalse((self.root / "build" / f"malformed-{label}.json").exists())
+
+    def test_validate_evidence_ref_rejects_missing_or_malformed_top_level_hash(self) -> None:
+        ref = self._add_evidence(
+            "direct-build.json", self._artifact("build-report", executed=True, command="compile")
+        )
+        cases = (
+            ("absent", None, "unknown"),
+            ("boolean", True, "invalid"),
+            ("non_hex", "not-a-hash", "invalid"),
+            ("integer", 123, "invalid"),
+        )
+        for label, value, expected in cases:
+            with self.subTest(label=label):
+                result = coverage.validate_evidence_ref(
+                    self.root,
+                    "build",
+                    ref,
+                    address=self.address,
+                    binary_sha256=value,
+                    implementation_sha256=self.source_sha,
+                    implementation_is_current=True,
+                    record_binary_sha256=self.binary_sha,
+                )
+                self.assertNotEqual(result["state"], "pass")
+                self.assertEqual(result["state"], expected)
+                self.assertIn("retail binary binding", result["reason"])
+
+    def test_fully_agreeing_manifest_record_and_artifact_still_pass(self) -> None:
+        record = self.manifest["natives"][0]
+        verification = record["verification"]
+        verification["semantic_review"] = self._add_evidence(
+            "agreeing-semantic.json", self._artifact("semantic-review-report", reviewed=True)
+        )
+        verification["build"] = self._add_evidence(
+            "agreeing-build.json", self._artifact("build-report", executed=True, command="compile")
+        )
+        behavioral = self._artifact(
+            "behavioral-test-report", executed=True, tests_total=3, tests_passed=3, tests_failed=0
+        )
+        verification["behavioral"] = self._add_evidence("agreeing-behavioral.json", behavioral)
+        self._write_manifest()
+
+        with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+            report = coverage.build_report(self.root, self.candidate_path)
+
+        row = report["natives"][0]
+        self.assertEqual(report["inputs"]["retail_binary_sha256"], self.binary_sha)
+        self.assertEqual(row["manifest_binary_binding"], "matches_manifest")
+        for field in ("semantic_review", "build", "behavioral"):
+            with self.subTest(field=field):
+                self.assertEqual(row["evidence_references"][field]["state"], "pass")
+
+    def test_artifact_retail_hash_must_agree_with_manifest_and_record(self) -> None:
+        record = self.manifest["natives"][0]
+        cases = (
+            ("artifact_differs", self.binary_sha, "b" * 64, "stale"),
+            ("record_differs_from_top_level", "b" * 64, self.binary_sha, "invalid"),
+            ("record_and_artifact_differ", "b" * 64, "b" * 64, "invalid"),
+            ("record_is_malformed", "not-a-hash", self.binary_sha, "invalid"),
+        )
+        for label, record_hash, artifact_hash, expected in cases:
+            with self.subTest(label=label):
+                record["binary_sha256"] = record_hash
+                artifact = self._artifact("build-report", executed=True, command="compile")
+                artifact["binary_sha256"] = artifact_hash
+                record["verification"]["build"] = self._add_evidence(f"retail-{label}.json", artifact)
+                self._write_manifest()
+
+                with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+                    report = coverage.build_report(self.root, self.candidate_path)
+
+                result = report["natives"][0]["evidence_references"]["build"]
+                self.assertEqual(result["state"], expected)
+                self.assertNotEqual(result["state"], "pass")
 
     def test_duplicate_target_or_manifest_addresses_fail_closed(self) -> None:
         self.targets_path.write_text(json.dumps([self.target, self.target]), encoding="utf-8")
@@ -291,17 +417,92 @@ class CoverageReportTests(unittest.TestCase):
                 with self.assertRaisesRegex(coverage.ReportError, "Git or worktree metadata"):
                     coverage._safe_output_path(self.root, str(output), self.candidate_path)
 
+    def test_symlinked_output_parent_or_final_path_is_refused(self) -> None:
+        redirect = self.root / "redirect"
+        redirect.mkdir()
+        parent_link = self.root / "linked-parent"
+        parent_link.symlink_to(redirect, target_is_directory=True)
+        with self.assertRaisesRegex(coverage.ReportError, "symlinked parent"):
+            coverage._safe_output_path(self.root, "linked-parent/report.json", self.candidate_path)
+
+        target = self.root / "existing-input.json"
+        target.write_text("{}", encoding="utf-8")
+        final_link = self.root / "final-link.json"
+        final_link.symlink_to(target)
+        with self.assertRaisesRegex(coverage.ReportError, "symlink"):
+            coverage._safe_output_path(self.root, "final-link.json", self.candidate_path)
+        self.assertEqual(target.read_text(encoding="utf-8"), "{}")
+
+    def test_writer_refuses_parent_swapped_after_validation(self) -> None:
+        output_dir = self.root / "validated-dir"
+        output_dir.mkdir()
+        output = coverage._safe_output_path(self.root, "validated-dir/report.json", self.candidate_path)
+        original = self.root / "validated-dir-original"
+        output_dir.rename(original)
+        redirect = self.root / "swapped-target"
+        redirect.mkdir()
+        output_dir.symlink_to(redirect, target_is_directory=True)
+
+        with self.assertRaisesRegex(coverage.ReportError, "symlink"):
+            coverage._write_output(self.root, output, b"{}\n")
+        self.assertFalse((redirect / "report.json").exists())
+
+    def test_output_cannot_equal_or_hard_link_to_retail_trace(self) -> None:
+        trace = self.root / "build" / "trace.json"
+        trace.parent.mkdir(parents=True, exist_ok=True)
+        trace.write_text(json.dumps({
+            "kind": coverage.DIAGNOSTIC_REPORT_KIND,
+            "diagnostic_only": True,
+            "binary_sha256": self.binary_sha,
+            "observed_order": [self.address],
+        }), encoding="utf-8")
+        before = trace.read_bytes()
+
+        for value in ("build/trace.json", str(trace)):
+            with self.subTest(output=value):
+                with self.assertRaisesRegex(coverage.ReportError, "retail trace"):
+                    coverage._safe_output_path(
+                        self.root, value, self.candidate_path, retail_trace="build/trace.json"
+                    )
+
+        hardlink = self.root / "build" / "trace-alias.json"
+        os.link(trace, hardlink)
+        with self.assertRaisesRegex(coverage.ReportError, "hard-linked"):
+            coverage._safe_output_path(
+                self.root, str(hardlink), self.candidate_path, retail_trace="build/trace.json"
+            )
+
+        with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+            result = coverage.main(
+                [
+                    "--candidate", str(self.candidate_path),
+                    "--retail-trace", "build/trace.json",
+                    "--out", "build/trace.json",
+                ],
+                root=self.root,
+            )
+        self.assertEqual(result, 2)
+        self.assertEqual(before, trace.read_bytes())
+
     def test_cli_writes_only_requested_output_and_preserves_manifest(self) -> None:
         before_manifest = self.manifest_path.read_bytes()
-        output = self.root / "tmp-report.json"
+        output = self.root / "build" / "diagnostic" / "nested-report.json"
         with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
             result = coverage.main(
                 ["--candidate", str(self.candidate_path), "--out", str(output)], root=self.root
             )
         self.assertEqual(result, 0)
+        self.assertTrue(output.is_file())
         report_bytes = output.read_bytes()
         self.assertEqual(json.loads(report_bytes)["kind"], "diagnostic-mvp-native-coverage")
         self.assertEqual(before_manifest, self.manifest_path.read_bytes())
+
+        with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+            rerun = coverage.main(
+                ["--candidate", str(self.candidate_path), "--out", str(output)], root=self.root
+            )
+        self.assertEqual(rerun, 0)
+        self.assertEqual(json.loads(output.read_bytes())["kind"], "diagnostic-mvp-native-coverage")
         output.unlink()
 
 

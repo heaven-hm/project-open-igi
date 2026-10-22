@@ -12,7 +12,9 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import os
 import re
+import stat
 import subprocess
 import sys
 from pathlib import Path
@@ -183,6 +185,7 @@ def validate_evidence_ref(
     binary_sha256: Any,
     implementation_sha256: Any,
     implementation_is_current: bool | None,
+    record_binary_sha256: Any = None,
 ) -> dict[str, Any]:
     if not isinstance(ref, dict):
         return {"state": "unknown", "reason": "no structured evidence reference"}
@@ -217,12 +220,43 @@ def validate_evidence_ref(
     elif field in EVIDENCE_TYPES:
         return {"state": "unknown", "reason": "evidence has no address binding", "actual_sha256": actual_hash}
 
-    artifact_binary = artifact.get("binary_sha256")
-    if binary_sha256 and artifact_binary:
-        if str(artifact_binary).lower() != str(binary_sha256).lower():
-            return {"state": "stale", "reason": "evidence retail binary hash differs from manifest", "actual_sha256": actual_hash}
-    else:
+    # The manifest top-level hash is the canonical retail identity. A per-record
+    # hash, which is annotation-level data, must never authorise evidence on its
+    # own: reject a missing or malformed top-level binding before the expected
+    # hash set is built, so a record-level match cannot fail open.
+    if binary_sha256 is None:
         return {"state": "unknown", "reason": "retail binary binding is missing", "actual_sha256": actual_hash}
+    if not isinstance(binary_sha256, str) or not SHA256_RE.fullmatch(binary_sha256):
+        return {
+            "state": "invalid",
+            "reason": "retail binary binding is malformed; expected a 64-character hex SHA-256",
+            "actual_sha256": actual_hash,
+        }
+
+    # A per-record retail binding that contradicts the manifest top-level binding
+    # is a manifest inconsistency, not a harmless annotation: fail the evidence
+    # closed instead of emitting the disagreement as a note while reporting pass.
+    record_binary = record_binary_sha256
+    if record_binary is not None:
+        if not isinstance(record_binary, str) or not SHA256_RE.fullmatch(record_binary):
+            return {"state": "invalid", "reason": "manifest per-record retail binary hash is malformed", "actual_sha256": actual_hash}
+        if binary_sha256 and str(record_binary).lower() != str(binary_sha256).lower():
+            return {
+                "state": "invalid",
+                "reason": "manifest per-record retail binary hash disagrees with the top-level manifest hash",
+                "actual_sha256": actual_hash,
+            }
+
+    # The top-level binding is validated above, so this set is never empty and
+    # the artifact hash is always compared against a canonical manifest hash.
+    expected_retail_hashes: set[str] = {binary_sha256.lower()}
+    if isinstance(record_binary, str) and record_binary:
+        expected_retail_hashes.add(record_binary.lower())
+    artifact_binary = artifact.get("binary_sha256")
+    if not artifact_binary:
+        return {"state": "unknown", "reason": "retail binary binding is missing", "actual_sha256": actual_hash}
+    if str(artifact_binary).lower() not in expected_retail_hashes:
+        return {"state": "stale", "reason": "evidence retail binary hash differs from manifest", "actual_sha256": actual_hash}
 
     artifact_implementation = artifact.get("implementation_sha256")
     if implementation_sha256 and artifact_implementation:
@@ -272,9 +306,18 @@ def _load_inventory(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[st
     missing = sorted(target_addresses - records.keys())
     if missing:
         raise ReportError("missing manifest addresses: " + ", ".join(missing))
-    binary_sha256 = manifest.get("binary_sha256")
-    if not isinstance(binary_sha256, str) or not SHA256_RE.fullmatch(binary_sha256):
-        binary_sha256 = None
+    # An absent top-level binding is reported as unknown further down, but a
+    # present binding that is not a canonical 64-hex SHA-256 is a manifest
+    # defect: refuse the inventory instead of silently weakening every evidence
+    # reference to a record-level hash.
+    binary_sha256: str | None = None
+    if "binary_sha256" in manifest:
+        declared = manifest["binary_sha256"]
+        if not isinstance(declared, str) or not SHA256_RE.fullmatch(declared):
+            raise ReportError(
+                "manifest top-level binary_sha256 is present but malformed; expected a 64-character hex SHA-256"
+            )
+        binary_sha256 = declared
     return (
         sorted(targets, key=lambda row: int(row["address"], 16)),
         records,
@@ -395,6 +438,7 @@ def build_report(
                 binary_sha256=retail_hash,
                 implementation_sha256=implementation.get("sha256") if isinstance(implementation, dict) else None,
                 implementation_is_current=source.get("state") == "matches",
+                record_binary_sha256=record_binary,
             )
             for field in ("semantic_review", "build", "behavioral", "runtime_tests", "frida_runtime")
         }
@@ -501,11 +545,71 @@ def _git_metadata_paths(root: Path) -> set[Path]:
     return protected
 
 
-def _safe_output_path(root: Path, value: str, candidate: Path) -> Path:
+def _reject_symlinked_output(roots: Sequence[Path], output: Path) -> None:
+    """Refuse a final path or in-repository parent that is a symlink.
+
+    Checking is lexical: resolving first would follow the very symlink that must
+    be refused, so the caller's unresolved components are inspected up to the
+    last existing prefix.
+    """
+    absolute = Path(os.path.abspath(output))
+    if absolute.is_symlink():
+        raise ReportError("output path is a symlink; refusing to write through it")
+    for root in roots:
+        base = Path(os.path.abspath(root))
+        try:
+            relative = absolute.relative_to(base)
+        except ValueError:
+            continue
+        current = base
+        for part in relative.parts[:-1]:
+            current = current / part
+            if current.is_symlink():
+                raise ReportError("output path has a symlinked parent directory; refusing to write through it")
+
+
+def _input_paths(root: Path, manifest: Any) -> set[Path]:
+    """Return every manifest-referenced file this report reads."""
+    paths: set[Path] = set()
+    if not isinstance(manifest, dict):
+        return paths
+    for record in manifest.get("natives", []):
+        if not isinstance(record, dict):
+            continue
+        implementation = record.get("implementation")
+        source = implementation.get("path") if isinstance(implementation, dict) else None
+        if isinstance(source, str) and source:
+            path = Path(source)
+            if not path.is_absolute():
+                paths.add((root / path).resolve())
+        verification = record.get("verification")
+        if isinstance(verification, dict):
+            for reference in verification.values():
+                if not isinstance(reference, dict):
+                    continue
+                evidence_path = reference.get("evidence_path")
+                if isinstance(evidence_path, str) and evidence_path:
+                    path = Path(evidence_path)
+                    if not path.is_absolute():
+                        paths.add((root / path).resolve())
+    return paths
+
+
+def _safe_output_path(
+    root: Path,
+    value: str,
+    candidate: Path,
+    *,
+    retail_trace: str | None = None,
+) -> Path:
+    lexical_root = Path(os.path.abspath(root))
     root = root.resolve()
     output = Path(value)
     if not output.is_absolute():
         output = root / output
+    # Refuse symlink redirection while the caller-visible path is still intact;
+    # resolve() below would otherwise silently follow the swap target.
+    _reject_symlinked_output((lexical_root, root), output)
     output = output.resolve()
     if any(output == path or _inside(path, output) for path in _git_metadata_paths(root)):
         raise ReportError("output path cannot be inside Git or worktree metadata")
@@ -517,16 +621,34 @@ def _safe_output_path(root: Path, value: str, candidate: Path) -> Path:
         Path(__file__).with_name("test_mvp_coverage_report.py").resolve(),
         candidate.resolve(),
     }
+    if retail_trace:
+        trace_path = Path(retail_trace)
+        if not trace_path.is_absolute():
+            trace_path = root / trace_path
+        protected.add(trace_path.resolve())
     manifest, _ = load_json(root / MANIFEST_REL, "native manifest")
-    for record in manifest.get("natives", []) if isinstance(manifest, dict) else []:
-        implementation = record.get("implementation") if isinstance(record, dict) else None
-        source = implementation.get("path") if isinstance(implementation, dict) else None
-        if isinstance(source, str) and source:
-            path = Path(source)
-            if not path.is_absolute():
-                protected.add((root / path).resolve())
+    protected |= _input_paths(root, manifest)
     if any(output == path or _inside(path, output) for path in protected):
-        raise ReportError("output path cannot overwrite candidate, source, tests, manifest, targets, or evidence")
+        raise ReportError(
+            "output path cannot overwrite candidate, source, tests, manifest, targets, evidence, or the retail trace"
+        )
+
+    # Path equality misses hard links, which share an inode under another name.
+    # Refuse any existing output that is the same regular file as a known input.
+    if output.exists():
+        try:
+            output_stat = output.stat()
+        except OSError as error:
+            raise ReportError(f"cannot inspect output path: {error}") from error
+        for path in protected:
+            try:
+                path_stat = path.stat()
+            except OSError:
+                continue
+            if stat.S_ISREG(path_stat.st_mode) and (
+                path_stat.st_dev, path_stat.st_ino
+            ) == (output_stat.st_dev, output_stat.st_ino):
+                raise ReportError("output path is hard-linked to an input file; refusing to overwrite an input")
 
     if _inside(root, output) and (root / ".git").exists():
         relative = output.relative_to(root).as_posix()
@@ -554,6 +676,90 @@ def _safe_output_path(root: Path, value: str, candidate: Path) -> Path:
     return output
 
 
+def _write_output(root: Path, output: Path, payload: bytes) -> None:
+    """Write through a verified directory descriptor and rename atomically.
+
+    The validated pathname is never reopened by name: a temporary file is
+    created with O_EXCL (plus O_NOFOLLOW when available) relative to a directory
+    descriptor opened without following symlinks, written through that
+    descriptor, and only then renamed into place after the directory identity is
+    re-verified.
+    """
+    # Do not re-resolve here: the validated path is symlink-free, and resolving
+    # again would silently follow a parent swapped after validation.
+    output = Path(os.path.abspath(output))
+    _reject_symlinked_output((Path(os.path.abspath(root)), root.resolve()), output)
+    parent = output.parent
+    try:
+        parent.mkdir(parents=True, exist_ok=True)
+    except OSError as error:
+        raise ReportError(f"cannot create output directory {parent}: {error}") from error
+    _reject_symlinked_output((Path(os.path.abspath(root)), root.resolve()), output)
+
+    nofollow = getattr(os, "O_NOFOLLOW", 0)
+    dir_flags = os.O_RDONLY | getattr(os, "O_DIRECTORY", 0) | nofollow
+    try:
+        dir_fd = os.open(parent, dir_flags)
+    except (OSError, NotImplementedError) as error:
+        if parent.is_symlink():
+            raise ReportError(f"output directory {parent} is a symlink; refusing to write through it") from error
+        raise ReportError(f"cannot open validated output directory {parent}: {error}") from error
+
+    temp_name = f".{output.name}.{os.getpid()}.{os.urandom(8).hex()}.tmp"
+    try:
+        try:
+            dir_stat = os.fstat(dir_fd)
+            path_stat = os.stat(parent)
+        except OSError as error:
+            raise ReportError(f"cannot verify output directory {parent}: {error}") from error
+        if (dir_stat.st_dev, dir_stat.st_ino) != (path_stat.st_dev, path_stat.st_ino):
+            raise ReportError("output directory changed after validation; refusing to write")
+
+        create_flags = os.O_WRONLY | os.O_CREAT | os.O_EXCL | nofollow
+        try:
+            temp_fd = os.open(temp_name, create_flags, 0o600, dir_fd=dir_fd)
+        except (OSError, NotImplementedError) as error:
+            raise ReportError(f"cannot create a new file in the validated output directory: {error}") from error
+        try:
+            handle = os.fdopen(temp_fd, "wb")
+        except OSError:
+            os.close(temp_fd)
+            raise
+        try:
+            with handle:
+                handle.write(payload)
+                handle.flush()
+                os.fsync(handle.fileno())
+        except OSError as error:
+            raise ReportError(f"cannot write diagnostic report: {error}") from error
+
+        # Re-verify the resolved parent immediately before the final rename.
+        try:
+            current_parent = parent.resolve(strict=True)
+            current_stat = os.stat(current_parent)
+        except OSError as error:
+            raise ReportError(f"cannot re-verify output directory {parent}: {error}") from error
+        if current_parent != parent or (
+            current_stat.st_dev, current_stat.st_ino
+        ) != (dir_stat.st_dev, dir_stat.st_ino):
+            raise ReportError("output directory changed before rename; refusing to write")
+        if output.is_symlink():
+            raise ReportError("output path became a symlink; refusing to write")
+
+        try:
+            # os.rename is the dir_fd-capable primitive advertised on macOS and
+            # Linux; on POSIX it atomically replaces an existing destination.
+            os.rename(temp_name, output.name, src_dir_fd=dir_fd, dst_dir_fd=dir_fd)
+        except (OSError, NotImplementedError) as error:
+            raise ReportError(f"cannot install diagnostic report: {error}") from error
+    finally:
+        try:
+            os.unlink(temp_name, dir_fd=dir_fd)
+        except (OSError, NotImplementedError):
+            pass
+        os.close(dir_fd)
+
+
 def main(argv: Sequence[str] | None = None, *, root: Path = ROOT) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate", action="append", required=True,
@@ -573,9 +779,9 @@ def main(argv: Sequence[str] | None = None, *, root: Path = ROOT) -> int:
             nm_executable=args.nm,
             retail_trace=args.retail_trace,
         )
-        output = _safe_output_path(root, args.out, candidate)
-        output.parent.mkdir(parents=True, exist_ok=True)
-        output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+        output = _safe_output_path(root, args.out, candidate, retail_trace=args.retail_trace)
+        payload = (json.dumps(report, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        _write_output(root, output, payload)
     except ReportError as error:
         print(f"mvp_coverage_report: error: {error}", file=sys.stderr)
         return 2
