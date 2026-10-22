@@ -1,0 +1,2921 @@
+{
+  "schema_version": 1,
+  "kind": "mvp-coverage-report",
+  "requirement": "A native is only verified end to end when the CFG threshold, angr structural analysis and a Frida paired probe all pass; the probe needs the function to exist in both images.",
+  "candidates": [
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe",
+    "/Users/haseeb-mir/Downloads/IGI/igi1.exe"
+  ],
+  "retail_trace": "build/runtime-traces/ds-level1-retail.json",
+  "summary": {
+    "total": 120,
+    "implementation_present": 120,
+    "candidate_symbol_linked": 100,
+    "behavioral_evidence": 120,
+    "frida_evidence": 1,
+    "retail_reachable": 97,
+    "end_to_end_possible": 100,
+    "fully_verified_end_to_end": 1,
+    "marked_verified_in_manifest": 78
+  },
+  "natives": [
+    {
+      "address": "0x0048F530",
+      "name": "Retail_Main",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00401050",
+      "name": "QTask_OpenEvent",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": true,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": true,
+      "blockers": [],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00402800",
+      "name": "Flow_CreateHandler",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00402880",
+      "name": "Game_GetContext",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004028A0",
+      "name": "Flow_SetState",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F480",
+      "name": "Loop_SetStatusByte",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00404590",
+      "name": "Config_GetActiveGraphicOptions",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00404F00",
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00404F60",
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00405530",
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004055C0",
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00405620",
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "category": "config.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "category": "config.qvm",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004037C0",
+      "name": "GOInRemap",
+      "category": "humanplayer.qvm",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "category": "humanplayer.qvm",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004137A0",
+      "name": "HumanPlayer_LoadParameters",
+      "category": "humanplayer.qvm",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00463180",
+      "name": "Human_IsCrouched",
+      "category": "humanplayer.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00465820",
+      "name": "Human_CameraEyePosition",
+      "category": "humanplayer.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004659E0",
+      "name": "Human_TaskViewReset",
+      "category": "humanplayer.qvm",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "category": "humanplayer.qvm",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F1D0",
+      "name": "Script_GetDebugCompileState",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F340",
+      "name": "Script_GetForcePrecompiledState",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B1E90",
+      "name": "String_FindExtension",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "category": "QVM",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "category": "QVM",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B80B0",
+      "name": "Qvm_Load",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B83D0",
+      "name": "Qvm_Cleanup",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B8A10",
+      "name": "Qvm_SetGlobalState",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "category": "QVM",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004BD3D0",
+      "name": "Qvm_SetOpcodeHandler",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004BDA00",
+      "name": "Qvm_PushInteger",
+      "category": "QVM",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00491D40",
+      "name": "Display_ComputeScreenAspect",
+      "category": "CTR / Camera",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00497D70",
+      "name": "Transcontext_BuildViewBlock",
+      "category": "CTR / Camera",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004A2600",
+      "name": "Camera_ResetMatrix",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7450",
+      "name": "Matrix_InvalidateSlot",
+      "category": "CTR / Camera",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7470",
+      "name": "Ilff_GetNextChunk",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7490",
+      "name": "Ilff_GetFirstChunk",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B74D0",
+      "name": "Ilff_GetChunkPayload",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7540",
+      "name": "Ilff_ReadContainerHeader",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7570",
+      "name": "Ilff_GetFormType",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7580",
+      "name": "Ilff_GetChunkTag",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7590",
+      "name": "Ilff_FindChunk",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CEAA0",
+      "name": "Ilff_FindFormChunk",
+      "category": "ILFF & IFF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AAD10",
+      "name": "Resource_MatchPrefix",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AD73D",
+      "name": "String_ToUpperChar",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B0D40",
+      "name": "QHash_ValueSet",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B1690",
+      "name": "Device_CloseStream",
+      "category": "RES",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B1780",
+      "name": "Device_GetStreamPosition",
+      "category": "RES",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B17F0",
+      "name": "Device_SeekStream",
+      "category": "RES",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B59F0",
+      "name": "Resource_CreateNode",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5AF0",
+      "name": "Resource_CanonicalizePath",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5B30",
+      "name": "Resource_CalculatePathHash",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5C90",
+      "name": "Resource_FreeNode",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5F00",
+      "name": "Resource_Load",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B5F80",
+      "name": "Resource_RegisterBuffer",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B60F0",
+      "name": "Resource_RegisterIlffContainer",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B6380",
+      "name": "Resource_Unload",
+      "category": "RES",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF300",
+      "name": "DynObj_LookupHashItem",
+      "category": "3D Models & MEF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF330",
+      "name": "DynObj_LoadPackageMeshes",
+      "category": "3D Models & MEF",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF390",
+      "name": "DynObj_LoadModelMesh",
+      "category": "3D Models & MEF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF630",
+      "name": "DynObj_LoadPackageLovs",
+      "category": "3D Models & MEF",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF910",
+      "name": "DynObj_LoadPackageAnimations",
+      "category": "3D Models & MEF",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004D0CF0",
+      "name": "Model_GetAttachment",
+      "category": "3D Models & MEF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004D0D10",
+      "name": "Model_GetAttachmentCount",
+      "category": "3D Models & MEF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004EDB60",
+      "name": "LODSettings_LoadParameters",
+      "category": "3D Models & MEF",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF080",
+      "name": "DynObj_LoadModelTexturePackage",
+      "category": "MTP",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "category": "TEX",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B0F80",
+      "name": "Texture_GetActiveBackendId",
+      "category": "TEX",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B23B0",
+      "name": "Texture_UploadMipmapPacket",
+      "category": "TEX",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B24C0",
+      "name": "Texture_LoadLoopTextureFile",
+      "category": "TEX",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B26A0",
+      "name": "Texture_EnableUpload",
+      "category": "TEX",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "category": "TEX",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "category": "TEX",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF790",
+      "name": "DynObj_LoadModelTextures",
+      "category": "TEX",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CF870",
+      "name": "DynObj_LoadPackagePalettes",
+      "category": "TEX",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "category": "TEX",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004C5F00",
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004C6240",
+      "name": "Terrain_Load",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004C6670",
+      "name": "Terrain_CreateMaterial",
+      "category": "Terrain",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004C6760",
+      "name": "Terrain_CreateTileMap",
+      "category": "Terrain",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004CEA80",
+      "name": "Render_GetActiveBackendId",
+      "category": "Terrain",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004D14E0",
+      "name": "Terrain_TraverseContourQuadtree",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "category": "Terrain",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00506F00",
+      "name": "HeightMap_Enter",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00510010",
+      "name": "Terrain_DecodeChunkCommands",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x00512C30",
+      "name": "Terrain_Draw",
+      "category": "Terrain",
+      "manifest_status": "ANALYZED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x005175A0",
+      "name": "Terrain_LoadTexturePackage",
+      "category": "Terrain",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004A53B3",
+      "name": "sprintf",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004A5702",
+      "name": "String_VFormat",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AA670",
+      "name": "Mem_AllocChunk",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AA682",
+      "name": "Mem_AllocWithRetry",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AA6AE",
+      "name": "Mem_AllocateRawBlock",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AD722",
+      "name": "Mem_InvokeNewHandler",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AF7B0",
+      "name": "Error_Show",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AF8F0",
+      "name": "HeapList_Insert",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004AF960",
+      "name": "HeapList_Remove",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B0BA0",
+      "name": "Mem_InitHeapState",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x004B0C60",
+      "name": "Mem_Alloc",
+      "category": "Memory & System",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F140",
+      "name": "AppContext_SetIsActive",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F170",
+      "name": "AppContext_GetIsActive",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F1B0",
+      "name": "App_ContextGetDebugged",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F230",
+      "name": "App_ContextGetLightmapsUsed",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F250",
+      "name": "App_ContextGetTerrainLightmapsUsed",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": true,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": true,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
+      }
+    },
+    {
+      "address": "0x0048F260",
+      "name": "AppContext_SetTerrainLightmapsUsed",
+      "category": "Flow Engine",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00498460",
+      "name": "Display_ClearSurfaces_16",
+      "category": "Flow Engine",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00497E70",
+      "name": "TransContext_SetActiveTransContext",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004A7157",
+      "name": "Camera_ApplyBandFilter_10",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004AC620",
+      "name": "Camera_SetFieldOfView_24",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004AC655",
+      "name": "Camera_ApplyLineFilter_24",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004AC66B",
+      "name": "Camera_ApplyBandFilter_24",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004AC6FD",
+      "name": "Camera_ApplyWideScreen_24",
+      "category": "CTR / Camera",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": false
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004F1160",
+      "name": "Script_ParseEnumReal32_5",
+      "category": "QVM",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x004D67A0",
+      "name": "AnimIff_LoadAnimationFile",
+      "category": "MTP",
+      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00517890",
+      "name": "Iff_FindFormChunk",
+      "category": "MTP",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x005178E0",
+      "name": "Iff_FindChunkBelowForm",
+      "category": "MTP",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x00517940",
+      "name": "Iff_FindChunk",
+      "category": "MTP",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    },
+    {
+      "address": "0x005179C0",
+      "name": "Iff_GetChunkPayload",
+      "category": "MTP",
+      "manifest_status": "VERIFIED",
+      "pillars": {
+        "implementation_present": true,
+        "candidate_symbol_linked": false,
+        "semantic_review": true,
+        "build": true,
+        "behavioral": true,
+        "frida_runtime": false,
+        "retail_reachable": true
+      },
+      "end_to_end_possible": false,
+      "frida_observable_end_to_end": false,
+      "blockers": [
+        "no symbol in the candidate executable",
+        "no paired Frida runtime evidence"
+      ],
+      "candidate_symbol_in": {
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": false,
+        "/Users/haseeb-mir/Downloads/IGI/igi1.exe": false
+      }
+    }
+  ]
+}
