@@ -8,7 +8,7 @@
  "oracle": "retail-binary-execution",
  "runner": {
   "path": "scripts/native_unicorn_runner.py",
-  "sha256": "beafdc18a88c0b4db94a6c061ad0191e0f01053da55dcf8291145663f1fe5b7b",
+  "sha256": "df79fa2de4c65993084f1b2aedebf2ac82aabc89e21be6669dd857721cf0d5a1",
   "command": [
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
    "--address",

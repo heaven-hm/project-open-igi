@@ -927,21 +927,41 @@
   "version": "10.0.4.post1",
   "function_entry": "0x004B74D0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "candidate_sha256": "10c4b633b004776519035f53e62859aa7ded58c24dbc542c47b88cb537d9f6f0",
+  "candidate_sha256": "b94fa7462417acde9294a53d94cf08614ad407bbfb367bed9909d186d4a4179b",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
    "-O0",
    "-shared",
    "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-jn_29oy7/entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-9g2izna4/entry.cpp",
    "engine/src/retail/sys/ilff_navigation.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-jn_29oy7/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-9g2izna4/candidate.dll"
   ]
  },
  "limitations": [
   "Valid finite non-empty lists or bounded FORM chunks only; invalid pointers, cycles, malformed sizes and concurrent writes excluded.",
   "Concrete emulation is not an original-game process or universal equivalence proof."
- ]
+ ],
+ "runner": {
+  "path": "scripts/hash_lookup_diff_runner.py",
+  "sha256": "3e7a6e60ef7bdf7f343084bd3ff6b09a21a6c97c42c63969a69b60f879772ecd",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/hash_lookup_diff_runner.py",
+   "--address",
+   "0x004B74D0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/sys/ilff_navigation.cpp",
+   "--implementation-sha256",
+   "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
 }

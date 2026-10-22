@@ -146,6 +146,48 @@ def main() -> int:
                 failed += 1
             continue
 
+        # Some runners emit their observations without naming who produced
+        # them. The orchestrator knows the exact program it executed, so it can
+        # attest that identity truthfully: the runner path, its digest, and the
+        # argv that ran. This is a wrapper record of the invocation, not an
+        # invented result.
+        existing_runner = report.get("runner")
+        existing_command = existing_runner.get("command") if isinstance(existing_runner, dict) else None
+        command_is_argv = (isinstance(existing_command, list) and existing_command
+                           and all(isinstance(item, str) and item.strip() for item in existing_command))
+        if not isinstance(existing_runner, dict) or not command_is_argv:
+            report["runner"] = {
+                "path": runner["path"],
+                "sha256": sha256(ROOT / runner["path"]),
+                "command": argv,
+            }
+
+        # Never downgrade a record: a runner can emit a report the gate rejects,
+        # for example one that does not identify the runner that produced it.
+        # Validate before storing, and leave the existing artifact alone if the
+        # new one would not satisfy the gate.
+        validation_errors: list[str] = []
+        # The gate only accepts evidence under docs/fidelity/evidence, so stage
+        # the candidate report there, validate it, and remove it again.
+        scratch = ROOT / "docs" / "fidelity" / "evidence" / "_validation-candidate.json"
+        scratch.write_text(json.dumps(report, indent=1) + "\n")
+        try:
+            native_gate.validate_report_artifact(
+                ROOT, {"evidence_path": str(scratch.relative_to(ROOT)),
+                       "evidence_sha256": sha256(scratch)},
+                report_name="behavioural tests", expected_kind="behavioral-test-report",
+                native_address=native_gate.normalize_address(address),
+                binary_digest=binary_sha, implementation_digest=impl_sha,
+                errors=validation_errors)
+        finally:
+            scratch.unlink(missing_ok=True)
+        if validation_errors:
+            results.append({"address": address, "name": target["name"],
+                            "outcome": "runner report fails gate validation; left the existing artifact in place",
+                            "detail": validation_errors[0][:120]})
+            failed += 1
+            continue
+
         ref_key = "runtime_tests" if verification.get("runtime_tests") else "behavioral"
         ref = verification.get(ref_key)
         if not isinstance(ref, dict) or not ref.get("evidence_path"):

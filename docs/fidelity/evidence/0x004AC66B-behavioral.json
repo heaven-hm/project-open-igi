@@ -710,7 +710,7 @@
   "sha256": "3e9af28ae90dd961624aece1ead5d7a7f89a58f38230b7d2440827bf4bb2c3e7",
   "command": [
    "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/fpu_state_diff_runner.py",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/fpu_state_diff_runner.py",
    "--address",
    "0x004AC66B",
    "--binary",
@@ -718,17 +718,17 @@
    "--binary-sha256",
    "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
    "--implementation",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+   "engine/src/retail/core/fpu_state.cpp",
    "--implementation-sha256",
    "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
    "--root",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
   ]
  },
  "retail_execution": {
   "tool": "Unicorn",
   "version": "2.1.4",
-  "candidate_sha256": "1c79ad869ffd14e8503819f50318ddb3240ac255281229a58f2e8508172de6b4",
+  "candidate_sha256": "17e4aeb9860f108f56e39b52d0ca0d602c9c487585c4ab563b262c01a3a34388",
   "candidate_build_command": [
    "i686-w64-mingw32-g++",
    "-std=c++20",
@@ -736,11 +736,11 @@
    "-shared",
    "-ffunction-sections",
    "-fdata-sections",
-   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-y4l9rseg/fpu.cpp",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-zi8c30ns/fpu.cpp",
    "-Wl,--gc-sections,--image-base,0x10000000",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-y4l9rseg/fpu.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-zi8c30ns/fpu.dll"
   ]
  },
  "limitations": [

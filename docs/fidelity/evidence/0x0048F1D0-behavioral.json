@@ -261,5 +261,25 @@
  "tests_passed": 10,
  "tests_total": 10,
  "tests_failed": 0,
- "result": "passed"
+ "result": "passed",
+ "runner": {
+  "path": "scripts/context_getter_diff_runner.py",
+  "sha256": "710482ef607a3a1527c52daf7d84686ad7341efee0cd2b1fd88b729cac5ca2aa",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/context_getter_diff_runner.py",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow",
+   "--address",
+   "0x0048F1D0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "scripts/GameNatives/fx/0048F1D0-Script_GetDebugCompileState.cpp",
+   "--implementation-sha256",
+   "733c8cbb5b8c1052759b3e53d20a9651a543249eeeeb87752c7f310ffab22ad0"
+  ]
+ }
 }

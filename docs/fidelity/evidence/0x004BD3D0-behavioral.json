@@ -244,5 +244,25 @@
  "tests_passed": 8,
  "tests_total": 8,
  "tests_failed": 0,
- "result": "passed"
+ "result": "passed",
+ "runner": {
+  "path": "scripts/qvm_set_opcode_handler_diff_runner.py",
+  "sha256": "ffa2d8962d5e34f21bce4c94bb02199b630729076e02a19693a33b7f80c139ac",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/qvm_set_opcode_handler_diff_runner.py",
+   "--address",
+   "0x004BD3D0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/script/qvm_stack_natives.cpp",
+   "--implementation-sha256",
+   "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
 }

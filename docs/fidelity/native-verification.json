@@ -1103,7 +1103,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
-          "evidence_sha256": "5eabc616e0c8dd0c41278cf2076961cb8956308529b8cd409d8a8f49245c55e8",
+          "evidence_sha256": "da944361edfc2db793ca0bbb2ada682dd65c9ad37065900a8de4f115b529be46",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -1252,7 +1252,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
-          "evidence_sha256": "b75fdb328cb2e3083ae37cf74cd71b69c1bc4f3286c39cd0de64bfd8e73f34ab",
+          "evidence_sha256": "8601bc61c4ba319578f0bd461101d78f7db1ece3ab07a082de359123cf42fb60",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -1332,7 +1332,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
-          "evidence_sha256": "fc35c7b6d99f63e6855012b9aae3c2d49153698879fbae9ade82967b106011f8",
+          "evidence_sha256": "1e02cad680479473869c9fbfd1abda1f5c5a97935b6950d29398a994bfdfce43",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -49944,7 +49944,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404590-behavioral.json",
-          "evidence_sha256": "8b4ceca015796965b0794f8a371c3e8eb51611ec8980ddfcddb718536cd6b09f",
+          "evidence_sha256": "edb89bbea80c6229dbb34ced64fb46b97896c36f55ffd6ca8152250764bdb29f",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50024,7 +50024,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404F00-behavioral.json",
-          "evidence_sha256": "485455b717975a267ce886ecfff04fd0bcb143ebfd3a4be5fffffc4493b09802",
+          "evidence_sha256": "08d06d5d292b5499a76dcef6dca5f52c649873cf5c3991230b57681300a0b704",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50104,7 +50104,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404F60-behavioral.json",
-          "evidence_sha256": "65c44dddc1e12cd730200cda46c46d118ded7c347e6d70d8305534c0289307a0",
+          "evidence_sha256": "4db56a4c4b2a28c1095dd281cd0787e68899e39d315db5032d1e8a0a225cb4d3",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50184,7 +50184,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00405620-behavioral.json",
-          "evidence_sha256": "0edc2b376b7eaac84dabcbde2f4765f9c52adaf2186b42b01502a6705a92b5f6",
+          "evidence_sha256": "b0ef28c5f7d4310631aadaf5e227a39c52f003ea9b87ad686b69a06652f77055",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50264,7 +50264,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004055C0-behavioral.json",
-          "evidence_sha256": "4a53a90878bba20432596fc898bccad2950c98f1f48c9a6e6a7a1b490530cb09",
+          "evidence_sha256": "53e4775fe168be1a9eb8e3bac4f2d93e2d0b1f4aa73b1d5d0db62942c76f1204",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50344,7 +50344,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00405530-behavioral.json",
-          "evidence_sha256": "52b2aa476aa6689874fefa79d8887e9175476f783581268a08cf9a9bc02ff9e3",
+          "evidence_sha256": "2c8c490ea176caeee14b76973f2cb111db5dd7151f6722fdd0d11aed6328a70a",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -50494,7 +50494,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-behavioral.json",
-          "evidence_sha256": "84885ff0fe99cd4c7c929fc21ad776832e1f96440630c7cf24a4344078c07aea",
+          "evidence_sha256": "47b2384406a30a4cbd5ee1f8026ddcb717e5e88d6f048bb44458b8f258ca0bdc",
           "oracle": "retail-binary-execution",
           "tests_passed": 12,
           "tests_total": 12,
@@ -51095,18 +51095,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AC66B",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51138,7 +51138,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004AC66B-behavioral.json",
-          "evidence_sha256": "787951735af63878b8a3dd3883ecd97d2ae5101fba8863f41f8ba1beae765c18"
+          "evidence_sha256": "1ef45420cb80e2d2e25a760ca00c07093e60afe1c20c220bbb7e5b692bd81f37",
+          "result": "passed",
+          "tests_passed": 16,
+          "tests_total": 16
         }
       }
     },
@@ -51169,18 +51172,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AC6FD",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51212,7 +51215,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004AC6FD-behavioral.json",
-          "evidence_sha256": "f400f655e3181981d231c887fa9b3730b73a15cb7ed6ca1ef076aa44f188843e"
+          "evidence_sha256": "aefef940b903365b3c742bd641f91efc38c535adc0be7948815acfe859e3f5fa",
+          "result": "passed",
+          "tests_passed": 16,
+          "tests_total": 16
         }
       }
     },
@@ -51243,18 +51249,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AC620",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51286,7 +51292,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004AC620-behavioral.json",
-          "evidence_sha256": "3c4daafafacbfd1669137bd9e47929375cea05af8dbeaff0764ee6355fe8713e"
+          "evidence_sha256": "274b22a60d4a3dbf581ed343d53215a05a8906830866d56ff6d982724c5b0243",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51317,18 +51326,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AC655",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51360,7 +51369,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004AC655-behavioral.json",
-          "evidence_sha256": "c253bc937c4c9c702f507744386cb87315f52493f350fa30d705db18278c0043"
+          "evidence_sha256": "51e60a63322aae756e2f9570fdbfa03fc5b9dc9a2b4ea9849735e3d213876640",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51391,18 +51403,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004A7157",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51434,7 +51446,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004A7157-behavioral.json",
-          "evidence_sha256": "5f83a655120020f4e83851ce9dbf36270cd38a68f7459f86853c3e699fcc1eb2"
+          "evidence_sha256": "a97a6d96483d2e24ce8d1f2d5151ca58abb46a59ca71a2a6ba9f9e692a30d294",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51465,18 +51480,18 @@
         "behavioral_runner": {
           "path": "scripts/fpu_state_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x00498460",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/fpu_state.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -51508,7 +51523,10 @@
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x00498460-behavioral.json",
-          "evidence_sha256": "aa001fe483e08e5e01aa3f6f2ff41fe3a7fae162b4ed0483ee4827fe84807465"
+          "evidence_sha256": "3d837787e6d6128e9038e3e2ac417a3cc0f2a9f4299897687630d2d9073efbe7",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51578,7 +51596,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402880-behavioral.json",
-          "evidence_sha256": "f7489edf804ea23044ef4d96a74b830f465832e02e68dc3c297eb0d1bd18bd0c",
+          "evidence_sha256": "8232b49310c98852b722b94d0f1577a750406fbc74670f4173721dd2061315a7",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -51656,7 +51674,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004028A0-behavioral.json",
-          "evidence_sha256": "3ba42b3de5b3f6d7aa8442ed7aad702f2c0ae359ee82a06b2bdf4b85b3606b31",
+          "evidence_sha256": "ba9618d5274da06e03de801e3d7192d6e61f83edce6fe2d21688031943d85319",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -51729,7 +51747,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F480-behavioral.json",
-          "evidence_sha256": "8dd29317f38fb65a7c96e736dadddec29dad70283c666837e1fb1dfa0b2a04fe",
+          "evidence_sha256": "6bfe5bac8153f211fcf2b9e320c4ac2c51e461bc42d28b2c35c03e3ccd6f2da0",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -51808,7 +51826,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00401050-behavioral.json",
-          "evidence_sha256": "c83c47b61788d63c2d46db67212197d8c5cab17cd1f3f881bd297e893d2e994f",
+          "evidence_sha256": "3ba65c19c454de20daab199bf15a0b265e6f8e388fdb322aa60c9ea8cd546b6a",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -51888,7 +51906,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F140-behavioral.json",
-          "evidence_sha256": "9a676169df1438c4736a89e9b139f8245f5ef4d1995d487398d63317a812af81",
+          "evidence_sha256": "66c6753b3e2f17c1cce62cd526b03702c517a87b2ace662927059d9bafb4312e",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -51961,7 +51979,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F170-behavioral.json",
-          "evidence_sha256": "5f293661f84b46bb98ad38cc6871031ad252ff32c99f37370014bc578f55829c",
+          "evidence_sha256": "5b4e7c8ca0fb6b53d9103eff8552781f181ca1647bed90ad67e4caa795c101c8",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -53106,7 +53124,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CF300-behavioral.json",
-          "evidence_sha256": "70a661f9df394311d0676286a4f8ffef932afa6de44d5a7c299eb8265d3d5c22",
+          "evidence_sha256": "ca120d7803bc7653892af01859fc38faa9de1cb2a2fe343f665aa237b1c67d9a",
           "oracle": "retail-binary-execution",
           "tests_passed": 27,
           "tests_total": 27,
@@ -53186,7 +53204,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CEAA0-behavioral.json",
-          "evidence_sha256": "1ef027278097a9719ab6962d248208969f76e2b3113ff5024e39008f9935d0e7",
+          "evidence_sha256": "4dc5209d82d140371be2c754850ef010933b0af0a9ce4ac4e9d433a064b9938a",
           "oracle": "retail-binary-execution",
           "tests_passed": 56,
           "tests_total": 56,
@@ -53267,7 +53285,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CF390-behavioral.json",
-          "evidence_sha256": "2f7a7306739703e2f93326450aecbfd03b033aef3459f4186845db38063fb50c",
+          "evidence_sha256": "0b6dff234e71901ec6a5875e4c24b8e5a230c63a661b056a62bd833e50a14e14",
           "oracle": "retail-binary-execution",
           "tests_passed": 11,
           "tests_total": 11,
@@ -53633,7 +53651,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
-          "evidence_sha256": "3e7be6295228c7d7504d30588b96529dbf1bcf1247fd8e0eb33cf493574c0b1e",
+          "evidence_sha256": "da3028e9f4c304663323d0685b2e388dda9ad9ad0c15b6c5c20a997fd3701e95",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -53713,7 +53731,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
-          "evidence_sha256": "5a4c779d58c231e4b369ab45a66f6be2a57f2e34fe25c051ca81688ec0dda9c3",
+          "evidence_sha256": "a9fc2aee2aa503c8301555cd3bf74f6808dd1ed151ca04a6fbea40f2e2223606",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -53793,7 +53811,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
-          "evidence_sha256": "bb9b27eaae29357b37183a779855e03caba63bd285078f00017ca05fa019e0cd",
+          "evidence_sha256": "5bf18a94d7defff73c244c08d879f3f5b7e6222ba1b7a9c68c749de8540943ca",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -53873,7 +53891,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AF7B0-behavioral.json",
-          "evidence_sha256": "2412acce29314a00d3d25ece1be5fdad81a88f22ddca40cf6a987ecfb914a408",
+          "evidence_sha256": "d2f36710ecf40d8092aebe1ba3071a6aef4a0ef1bf678889218791fc79153f89",
           "oracle": "retail-binary-execution",
           "tests_passed": 16,
           "tests_total": 16,
@@ -53953,7 +53971,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00465820-behavioral.json",
-          "evidence_sha256": "ede6251caf9937b1e0cc34a46816c2cf48fc1f372fb47a2cbc0c5f8ccb380a0d",
+          "evidence_sha256": "03022a0ab989e21f90e584b1a56bd375acc34261be3135955669037694742d63",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54033,7 +54051,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00463180-behavioral.json",
-          "evidence_sha256": "cef47cce0972860b35b91532dac0f9b57cf6ba6f9c42589c8f11ba698cf1523d",
+          "evidence_sha256": "0da037825d2f5fd2ebec32f130dbbf0504ae48531cba7da94f09bcad2af8cd95",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54113,7 +54131,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004659E0-behavioral.json",
-          "evidence_sha256": "977cdb348c9cac8f6aa08e5b925cb63b120cfa4ed1c9f88402274c9341ac4d2c",
+          "evidence_sha256": "49ea8f296c5b81520c2cfacd8cc2e11f5005793682cc8a7cac9715ac71cb75c9",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54403,7 +54421,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
-          "evidence_sha256": "eb2c961658e82940bb2de005dee802dc3475bbb630e7bdcffe00f9dd61cf4dd0",
+          "evidence_sha256": "a98f98d0c2200fc7b6e910aa01241b1ea12fa2ac872103baaf76b848e27cded8",
           "oracle": "retail-binary-execution",
           "tests_passed": 12,
           "tests_total": 12,
@@ -54483,7 +54501,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AF960-behavioral.json",
-          "evidence_sha256": "d9de3416e39ba215edded2ecbb07167c580f759fb870bfb86118fb204284abde",
+          "evidence_sha256": "986ff0b23dd4d8f484e91d6adad7d3becf886b3ba9240e54eadc3378b47675f7",
           "oracle": "retail-binary-execution",
           "tests_passed": 15,
           "tests_total": 15,
@@ -54563,7 +54581,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
-          "evidence_sha256": "7a89f9b70f941b9847b0516a46257bbea737a83ad07d1d6ca6f8e6e90409a6b4",
+          "evidence_sha256": "bf4c12b51579c4ad7207a27e51f81b28cfaba7241db6f5782ad8613ff830d2e0",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54648,7 +54666,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0BA0-behavioral.json",
-          "evidence_sha256": "56889ecd5bf0fd35a5c7919078beff53e9e3869480be42eec6ae7d74cc41a475",
+          "evidence_sha256": "e7456dd3c37f7c845e70502ccb4b0ca09200467ceb61075c4a80cb81a296c37c",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54733,7 +54751,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AD722-behavioral.json",
-          "evidence_sha256": "9d55b2b0a837f634602f8df0e8b5d8897780f1bbbed2ecb9c3f8c79a61b9f431",
+          "evidence_sha256": "372fb1dde23514f8e4e6616903323269fb952e34c087f1f9191733dd7016f2c0",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54813,7 +54831,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AA6AE-behavioral.json",
-          "evidence_sha256": "386f615b1acf3fe66e4a0c3e01ae0b64651ff399c883b197c7cf0f0dd0ddd3ab",
+          "evidence_sha256": "998775356074819a20d38911184757b8b56761d1b22ccec22b83a075ced10a21",
           "oracle": "retail-binary-execution",
           "tests_passed": 29,
           "tests_total": 29,
@@ -54893,7 +54911,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AA682-behavioral.json",
-          "evidence_sha256": "78e7433f24440c38b89c9c8f71059aee8e25c9df814b1a673b951a85cfb8ce3f",
+          "evidence_sha256": "fbc9a4fcb0936dd4851d32a2a32e4c859d757c62f546fd8edae30241344fa5d7",
           "oracle": "retail-binary-execution",
           "tests_passed": 16,
           "tests_total": 16,
@@ -54973,7 +54991,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AA670-behavioral.json",
-          "evidence_sha256": "9257ae0bd873667ffb0b52205dae77ef8283115a88617e96a63dd0b248e27dc1",
+          "evidence_sha256": "4a385f1846d483a521b084ed967f8bec18ad9054d7b71074b2028e4f3797d433",
           "oracle": "retail-binary-execution",
           "tests_passed": 13,
           "tests_total": 13,
@@ -55053,7 +55071,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0C60-behavioral.json",
-          "evidence_sha256": "45f44340ef23a71674afae6ceb5faed43f0bf38136a1cda31870b9bfcc279357",
+          "evidence_sha256": "cae4681379c28e6ec61b7f57d64a9c5f2e0a6d87dfae40f890c75a41009e8ffb",
           "oracle": "retail-binary-execution",
           "tests_passed": 23,
           "tests_total": 23,
@@ -55116,7 +55134,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517890-behavioral.json",
-          "evidence_sha256": "f480dabee53106e480cebf0d7f43e8f9e529309b5bc231a41542260675d56823",
+          "evidence_sha256": "f434109d3ec24294fa4d3291a2e1dcc1fe53749a00ee88d19dc4acf0565235bd",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -55214,7 +55232,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517940-behavioral.json",
-          "evidence_sha256": "5bd52f507e3db8122a37bd93a0355e00b57d19f4cfae47e9292480fe0556b10b",
+          "evidence_sha256": "72bf9eb4c165a30015440a6f500b5bf8128abc1d233fdcc3aff5a4bf069c94c6",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -55294,7 +55312,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x005179C0-behavioral.json",
-          "evidence_sha256": "5d96a767bb00be758da42fc26d020aaa708b445a883bb9bd2bf452d4f0dad7ea",
+          "evidence_sha256": "46a2c857b02e51716e6e3e69cb9c7940a8083b33a05c07480a49f42f51360ae4",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -55357,7 +55375,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x005178E0-behavioral.json",
-          "evidence_sha256": "53fd1212f8c9fdbe2b52186d45df6227f33a6d38fd9ae2a8f9f9eeb732a3eac3",
+          "evidence_sha256": "fb46522abfcdb9483412c6219891c5bc8bc792e8fdc603a303cfd361d6dd236c",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -55525,7 +55543,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004D0CF0-behavioral.json",
-          "evidence_sha256": "3ce0f67789d451acdb9fc794617d2df8e15d908299c73e3fb3ba24a1bfeab19e",
+          "evidence_sha256": "e64cfd8e3c4d1554c94f9f39924794970143f4844bfb9ec70443d371b5e36611",
           "oracle": "retail-binary-execution",
           "tests_passed": 12,
           "tests_total": 12,
@@ -55605,7 +55623,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004D0D10-behavioral.json",
-          "evidence_sha256": "8eefa020991137f27e7dc7b6526a0a7974e267aa76568780bc8ad4dbfb40adf0",
+          "evidence_sha256": "a8da54ffa90cc9c3bf72ca81d3c3174e48cd3add6563b6d5e6be4085e07f1774",
           "oracle": "retail-binary-execution",
           "tests_passed": 14,
           "tests_total": 14,
@@ -55685,7 +55703,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CEA80-behavioral.json",
-          "evidence_sha256": "b104f0ea86a7098d7cac975bb33a8246687aff49adbd468b04c3473cfdb93db1",
+          "evidence_sha256": "dbb7f90e7ade7cb099e5895ea48522f3b558288d45cbfbdb65aa3e442f74e620",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -55765,7 +55783,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7450-behavioral.json",
-          "evidence_sha256": "77d790adcf389f928c5002b7ae356759bd7bd3ce200c186c90e6cc07fe325718",
+          "evidence_sha256": "c71e1a1cb880ed6abef3abccef18bbbd6bba2fc0e33c82b27a590146075e428c",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -55840,7 +55858,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A26C0-behavioral.json",
-          "evidence_sha256": "98eed66c5eca9dba118d179f9aa2415aabc5cb91c16869ad24f8dab572229e09",
+          "evidence_sha256": "0e6499e0058ac4c511665597b80e32a3f602f3bbb25ca17255edfcd29350861c",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -55913,7 +55931,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A2600-behavioral.json",
-          "evidence_sha256": "e1c268708e6fa816b37886a1cf1fa4ca66e1994df433a5d09e12771cd905e595",
+          "evidence_sha256": "84feb1409e2551e62d8cebf75741508ee6f260ca95d969471a4d1969231d4750",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -55991,7 +56009,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
-          "evidence_sha256": "9af76769d48ad5edd3d845c975c7b9f61ee989b7ee40c517bd7c3bbf48ad4a21",
+          "evidence_sha256": "26990b9aa51395387a11878af82633785f89fc53f8a02bf0b7fa1e837fabbcae",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56141,7 +56159,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00497D70-behavioral.json",
-          "evidence_sha256": "beea5825db97ad2c72dfa168e74abf51702d9cfdde93b1058a417095ff3381c3",
+          "evidence_sha256": "f383ded64e6e87df6fe5c721001d04f3df23fb13d32990397f1861ad2f9a7ceb",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56221,7 +56239,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00491D40-behavioral.json",
-          "evidence_sha256": "b2e94a2643cbef83b642c85b8e7d3415377a38051e7ce191dc1ce27fb1e060b3",
+          "evidence_sha256": "d6fa7083767658657b04872f9269e9dbd2e5251ff1386b36b533e5407c8ffc2a",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56296,7 +56314,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B1780-behavioral.json",
-          "evidence_sha256": "c8defe8775b059ffdb3ccf321465922c1d713d6e9e8f288924e8e2cb0778e996",
+          "evidence_sha256": "a8f35925e02159bc97ad1eed141ec5bdd7e8ff2363bf5874f2b3311cc7cc75eb",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -56369,7 +56387,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B17F0-behavioral.json",
-          "evidence_sha256": "85ee24803552b7b650ec800eb9404cbf034db437fc379c66ce1f01acc63e2d30",
+          "evidence_sha256": "6b201b7ac33d3b6e7af08900c6772028f1bdaebe0415d3c9133011922767e151",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -56442,7 +56460,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B1690-behavioral.json",
-          "evidence_sha256": "ed23c97a5cf37d0a253fee1a3c79ad9212f5dfa302dd5fd86d80cc6ebbd30c03",
+          "evidence_sha256": "f76c8b792c51386773d20af0737658218599c2dd2e099c7a3a0857027367ca0f",
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
@@ -56520,7 +56538,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
-          "evidence_sha256": "3b70ac3ae1cfed3cbd18b50367c6fcb99e214f378c013531b6c9210e7f16a666",
+          "evidence_sha256": "3281c976fdd4424a57132cd1cf23c91c3d2b17b16470d84473524a56ca5c1709",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56600,7 +56618,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
-          "evidence_sha256": "9db55f9c00737b45ff393903b9f953300958ae5e2cd91a5362880d366265a64d",
+          "evidence_sha256": "28f8997db62ed380ce98be95e364d6d58cc50aabca55f902c02e01aa2402c9b2",
           "oracle": "retail-binary-execution",
           "tests_passed": 16,
           "tests_total": 16,
@@ -56680,7 +56698,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AAD10-behavioral.json",
-          "evidence_sha256": "6a1ca8f041275d82693d28bc3d5453c71c9b37aa82eb9f3cee06abc58b4b918f",
+          "evidence_sha256": "8ccc8e806f776db06c749b1eade56b7507aa1bd446ff1c420390d1c8795f80d8",
           "oracle": "retail-binary-execution",
           "tests_passed": 12,
           "tests_total": 12,
@@ -56760,7 +56778,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B59F0-behavioral.json",
-          "evidence_sha256": "5e659b72b7748f580be3d79213008e923c120645906c080b34f0dde842a08843",
+          "evidence_sha256": "e0f0f168569f82a4f29cb17d2fa22a248bc2a9118ab9ca8d1fb927881234d421",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -56840,7 +56858,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-behavioral.json",
-          "evidence_sha256": "9a5ba16060ebba2bbeb0f0c9bb1b34d1d5b5f031c72fcb1bdf2f6f2d2279700e",
+          "evidence_sha256": "84f5dcf537bed2c6bfc1882d0acb4a2da716d925812477a944017d98331d5e4d",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -56920,7 +56938,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B60F0-behavioral.json",
-          "evidence_sha256": "bb0fb0fd3492739dde95b105f4292480196029e69815cc5b0687eeea25a43bb9",
+          "evidence_sha256": "085fcb6120667b7f2fbd836805cc4d29df5e8c54dac84a626332b12eae5aad5e",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -57000,7 +57018,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-behavioral.json",
-          "evidence_sha256": "08d935575e7a150ff305e9b9c78c45a652f353d9544170cfbbf190420829a578",
+          "evidence_sha256": "479877f6d91710b466e4c430e26ce977fbe77fcd9450832e1960360182c6c352",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -57290,7 +57308,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
-          "evidence_sha256": "146db7045ff83db93d59166501bf376a33d9f859c79c4bb7199501f4e3fb3cb6",
+          "evidence_sha256": "b261468981e6c63dc345e1fbf452e5d7a1abd537abb754235a103cebb064a3f1",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -57370,7 +57388,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
-          "evidence_sha256": "6bdf41dba6fd1d18295becefff4f6098703bd7d8b668a5c7f7e755ae79150c27",
+          "evidence_sha256": "737c5e8f7e0b301b05d6d8adfd5b0d587a3c256a3255a2c0935734a981925889",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -57520,7 +57538,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B8A10-behavioral.json",
-          "evidence_sha256": "e5795b0920cedf913c8aaa71a0ffcde0b954cb1d6f117ea5b87a48881411526f",
+          "evidence_sha256": "91fc5c687bf590aea45a23c57b1406a9c2c5ddebd0c159267de81d8f40d09942",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -57597,7 +57615,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B1E90-behavioral.json",
-          "evidence_sha256": "6f5405047491d083ae9333d87bb0dae59342b33a8f5eb7c09c8e18e74d88107a",
+          "evidence_sha256": "cb3b79329caf76bb76dac0ddb8b41108e5e0bfe0f48789c6bc1e7d66441f507d",
           "oracle": "retail-binary-execution",
           "tests_passed": 12,
           "tests_total": 12,
@@ -57783,18 +57801,18 @@
         "behavioral_runner": {
           "path": "scripts/qvm_load_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004B80B0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_native_loader.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -57831,10 +57849,11 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B80B0-behavioral.json",
-          "evidence_sha256": "3cdb4939ec6d78abd4187d48f0a35729e54294a99c843b8cae79dfdf3d69a3f1",
+          "evidence_sha256": "8bfdbe43016aa6de6bd79b51a58e7bd956185b928befdb7e7ca8621312ad5fa7",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
-          "tests_total": 8
+          "tests_total": 8,
+          "result": "passed"
         }
       },
       "status": "VERIFIED"
@@ -57980,7 +57999,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004BD3D0-behavioral.json",
-          "evidence_sha256": "0119012e45798e3cf0cbe7a0dc18949b416d7b5a3894268f131adbb340c4790b",
+          "evidence_sha256": "b4321ddf8eaa3c89d83be11ac86c5ef8acb4d06d678f4ef056768b29fe0b5d87",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -58130,10 +58149,11 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004F1160-behavioral.json",
-          "evidence_sha256": "7abd58147be449fb51823bd40519076753012605da253ff8186e1df95ff80da0",
+          "evidence_sha256": "dd90852ae567443d4b97451b059eb9adf081c6013cf47b21d737dac41d7a4f2f",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
-          "tests_total": 8
+          "tests_total": 8,
+          "result": "passed"
         }
       },
       "status": "VERIFIED"
@@ -58209,7 +58229,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7470-behavioral.json",
-          "evidence_sha256": "abaf12fcb1a17f4e36be2fc6e7ee36bfc1ccc8452f9378988af854fe1766db2e",
+          "evidence_sha256": "6781e1f351f20a51f24047a503c6840cee4eada34b4014852194ae73c2a8b5fb",
           "oracle": "retail-binary-execution",
           "tests_passed": 9,
           "tests_total": 9,
@@ -58289,7 +58309,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7490-behavioral.json",
-          "evidence_sha256": "b2327ef03a9bf674c8633c41ae9adb839adea311685d949693f2c4aff5646cc5",
+          "evidence_sha256": "db38b71d6d303420cd3c3c76f5b91d24ca69651bd267dba3ee77761f203677d0",
           "oracle": "retail-binary-execution",
           "tests_passed": 65,
           "tests_total": 65,
@@ -58369,7 +58389,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B74D0-behavioral.json",
-          "evidence_sha256": "af5ae80ca8b460e662596c2a2f2615fd71bd8924bc31ff56ad1c679f9a2e989f",
+          "evidence_sha256": "7e55abf799ee96269752740aaa857698471178c6212884cea9ddc6aa8f2875d7",
           "oracle": "retail-binary-execution",
           "tests_passed": 31,
           "tests_total": 31,
@@ -58449,7 +58469,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7540-behavioral.json",
-          "evidence_sha256": "bc703ee4b7458d9f315ff171caeb654d5cbdd6f958a1ed8c38df57ad4313bdaa",
+          "evidence_sha256": "dddc8a86de57fa7cab1fd92f1c9fe936742b4bc7b02002897a501d26667aa1de",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -58529,7 +58549,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json",
-          "evidence_sha256": "a8821d071ba886cae6c036d241c3bc9316abecf378ee7aead5f4efb3b91a1626",
+          "evidence_sha256": "a60985241c0bebcee4a9044ee0689bee016712ca2dc8ab5e6738244cbe7db3c2",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -58609,7 +58629,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7580-behavioral.json",
-          "evidence_sha256": "461ce38b5ef1db03132b542b27cef3ef6ef951324f1585d57998f2682485dd34",
+          "evidence_sha256": "c5c88e9354bedc2b7797c58f7d45f4bbb76fccd3604fdc3d7bfc5d6828e19ce7",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -58689,7 +58709,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7590-behavioral.json",
-          "evidence_sha256": "d358edfa73b42a0bde790329103ca16d1ddfd75f1df911c3619d9376c8b469e3",
+          "evidence_sha256": "39c54b520a537dae2c5f7ffffe82c9fc4d3d4a9707872bbc04fec41cd7a535eb",
           "oracle": "retail-binary-execution",
           "tests_passed": 16,
           "tests_total": 16,
@@ -58769,7 +58789,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
-          "evidence_sha256": "bfe93ed420412b196c2161e86b2773719cbecda656e1f04d2d05d15bfa056b9d",
+          "evidence_sha256": "9a349febe2800a752a31410be28b7b1c369a22b1244e003ace06651934f9d6f7",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -58849,7 +58869,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B5AF0-behavioral.json",
-          "evidence_sha256": "45c6fe5e6e40263e9cdd37d1955ba69f75ca67c46f48814ecb36e18e810ece37",
+          "evidence_sha256": "ce64a98a679a49af26e0fb0807eb80aec801a05197cffaf4ec828c381d082ba2",
           "oracle": "retail-binary-execution",
           "tests_passed": 20,
           "tests_total": 20,
@@ -58929,7 +58949,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B5B30-behavioral.json",
-          "evidence_sha256": "b5cd7b92258dd4325780eefcecb32c32d649c380834aae53489211e907b7623f",
+          "evidence_sha256": "f84eb4169a9376e1ab928677d20f5836ef125ba2161a79eef86c43459216483d",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -59009,7 +59029,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
-          "evidence_sha256": "d99bd92635b470c17cd33df71710381b753132ff2c2f26a5d197e4b59c6ab15e",
+          "evidence_sha256": "78b5a8b3f862b637ba3e52dfe0fa092d70f4f2d3d9cabff3b8938b0bb35fe899",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -59089,7 +59109,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
-          "evidence_sha256": "8bab182fba71b6f10ed68bfbe9bacc484b2f6de3a6ee911800a5187685084839",
+          "evidence_sha256": "8808f74cf1c3d5a516667f760ce6322abb22b2d81dbd4c67271acaab105353f1",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -59748,7 +59768,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0F80-behavioral.json",
-          "evidence_sha256": "aa55bdeb70ea84762523af9db40fed889a8211a59421b9c8777e5b785d4b19dc",
+          "evidence_sha256": "a0e4aea17d6e26491ab0a641312a08af6e411dd18240e14704873b1739788047",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -59828,7 +59848,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B26A0-behavioral.json",
-          "evidence_sha256": "1ab61b0bbe096f3a7f803c9074988b2b790fa5dca7bd5d6abece2176b4a3c4c8",
+          "evidence_sha256": "b8835925a798d3fe3b22e5ddf9e6d781f2be0c0b877fce44b9679447dc3fbfd1",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -60118,7 +60138,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B24C0-behavioral.json",
-          "evidence_sha256": "86d3d1e43e1f5d77a32db4acecd7c951416449b71b014829b43f431db27e8fbf",
+          "evidence_sha256": "ac178a2a1648461c5da8087312354a41c0181609ab73920089853ec7ac8bc44d",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -60198,7 +60218,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x005175A0-behavioral.json",
-          "evidence_sha256": "b90a3f3042413cf7d1ac618f34237d955ad470c72285fa71b96adca901b17e9a",
+          "evidence_sha256": "068576dcfbebf74810557ebaef67f5f27f57a8b6d747124d08fe36aa1eea6de2",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10,
@@ -60278,7 +60298,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CF790-behavioral.json",
-          "evidence_sha256": "b04741a142423365aeea69916153a3020762ccd2269d43080767bb00c9c94fc2",
+          "evidence_sha256": "af7771b8f84893233f924d712268148481d4bff94acb85d5606e66b686baf636",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,

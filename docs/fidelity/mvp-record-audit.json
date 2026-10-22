@@ -2,10 +2,10 @@
  "summary": {
   "total": 120,
   "labelled_verified": 81,
-  "saved_evidence_backed": 71,
+  "saved_evidence_backed": 119,
   "strict_evidence_backed": 119,
   "end_to_end_backed": 8,
-  "records_with_problems": 49
+  "records_with_problems": 1
  },
  "natives": [
   {
@@ -402,15 +402,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F1D0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -421,15 +419,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F340 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -440,15 +436,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B1E90 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -527,15 +521,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B8A10 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -563,15 +555,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004BD3D0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -650,15 +640,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7450 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -669,15 +657,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7470 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -688,15 +674,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7490 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -707,15 +691,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B74D0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -777,15 +759,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7590 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -796,15 +776,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004CEAA0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -815,15 +793,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AAD10 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -834,15 +810,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AD73D behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -853,13 +827,11 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B0D40 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": true
   },
@@ -921,15 +893,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B59F0 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -940,15 +910,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B5AF0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -959,15 +927,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B5B30 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -978,15 +944,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B5C90 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -997,15 +961,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B5F00 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1016,15 +978,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B5F80 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1035,15 +995,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B60F0 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1054,15 +1012,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B6380 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1073,15 +1029,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004CF300 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1158,15 +1112,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004D0CF0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1177,15 +1129,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004D0D10 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1213,15 +1163,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004CF080 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1249,15 +1197,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B0F80 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1285,15 +1231,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B24C0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1304,15 +1248,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B26A0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1357,15 +1299,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004CF790 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1476,15 +1416,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004CEA80 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1580,15 +1518,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x005175A0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1599,15 +1535,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004A53B3 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1618,15 +1552,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004A5702 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1688,15 +1620,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AD722 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1707,15 +1637,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AF7B0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1726,15 +1654,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AF8F0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1745,15 +1671,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004AF960 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1764,13 +1688,11 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B0BA0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": true
   },
@@ -1830,15 +1752,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F1B0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1849,15 +1769,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F230 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1868,15 +1786,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F250 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -1887,15 +1803,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x0048F260 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -2025,16 +1939,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004F1160 behavioral runner hash does not match scripts/native_unicorn_runner.py",
-    "0x004F1160 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -2062,15 +1973,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x00517890 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -2081,15 +1990,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x005178E0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -2100,15 +2007,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x00517940 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -2119,15 +2024,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x005179C0 behavioral report must identify the test runner"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   }

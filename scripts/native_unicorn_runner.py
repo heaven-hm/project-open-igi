@@ -2725,6 +2725,77 @@ int main()
 """
 
 
+
+# ---------------------------------------------------------------------------
+# 0x004F1160 Script_GetParseMode. Two global bytes decide the answer: mode 1
+# unless the first byte is clear and the second is set.
+# ---------------------------------------------------------------------------
+
+SCRIPT_MODE_FLAG_A = 0x00A758BE
+SCRIPT_MODE_FLAG_B = 0x00A758BD
+SCRIPT_GET_PARSE_MODE_ADDRESS = 0x004F1160
+SCRIPT_MODE_SENTINEL = 0x00C0FFEE
+
+SCRIPT_MODE_VALUES = ((0, 0), (0, 1), (1, 0), (1, 1), (2, 0), (0, 255), (255, 1), (128, 128))
+
+
+def script_get_parse_mode_cases() -> list[dict]:
+    return [
+        {"id": f"script-get-parse-mode-{index}", "categories": [category], "seed": index,
+         "flag_a": flag_a, "flag_b": flag_b}
+        for index, (flag_a, flag_b) in enumerate(SCRIPT_MODE_VALUES)
+        for category in ("nominal" if index < 2 else "boundary",)
+    ]
+
+
+def script_get_parse_mode_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(SCRIPT_MODE_FLAG_A, struct.pack("<B", case["flag_a"]))
+    emulator.mem_write(SCRIPT_MODE_FLAG_B, struct.pack("<B", case["flag_b"]))
+    run_with_arguments(emulator, SCRIPT_GET_PARSE_MODE_ADDRESS, [], SCRIPT_MODE_SENTINEL)
+    return {
+        "return_value": emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX) & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def script_get_parse_mode_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/script/script_mode.hpp"
+
+// The implementation unit defines these; the harness only declares them so it
+// can seed the same values the retail side writes into its image.
+namespace igi::retail::script {
+extern std::uint8_t g_a758bd;
+extern std::uint8_t g_a758be;
+}
+
+int main()
+{
+    struct Case { const char* id; std::uint32_t flag_a; std::uint32_t flag_b; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        igi::retail::script::g_a758be = static_cast<std::uint8_t>(item.flag_a);
+        igi::retail::script::g_a758bd = static_cast<std::uint8_t>(item.flag_b);
+        const std::uint32_t returned =
+            static_cast<std::uint32_t>(igi::retail::script::Script_GetParseMode());
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned));
+    }
+    return 0;
+}
+"""
+
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -2896,6 +2967,12 @@ NATIVES = {
         "candidate_source": device_seek_stream_candidate_source,
         "include": ("igi/retail/resource/device_dispatch.hpp",),
     },
+    "0x004F1160": {
+        "cases": script_get_parse_mode_cases,
+        "retail": script_get_parse_mode_retail,
+        "candidate_source": script_get_parse_mode_candidate_source,
+        "include": ("igi/retail/script/script_mode.hpp",),
+    },
 }
 
 
@@ -2914,6 +2991,8 @@ def format_case_literal(address: str, case: dict) -> str:
     if address == "0x004B1690":
         return (f'        {{"{case["id"]}", '
                 f'{"true" if case["special"] else "false"}, {case["kind"]}}},')
+    if address == "0x004F1160":
+        return f'        {{"{case["id"]}", {case["flag_a"]}U, {case["flag_b"]}U}},'
     if address == "0x0048F970":
         return wndproc_case_literal(case)
     if address == "0x00465820":

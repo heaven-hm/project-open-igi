@@ -589,11 +589,11 @@
    "-shared",
    "-Wl,--gc-sections",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-m6dt0egh/heaplist_candidate.dll",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-m6dt0egh/heaplist_entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-w2ywz_4_/heaplist_candidate.dll",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-w2ywz_4_/heaplist_entry.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/heap_list.cpp"
   ],
-  "candidate_sha256": "3a5dd86d1ef9194131f8f6ccf70b1ebd5aa3f0be69be98e84aa1f10c5b4f22af",
+  "candidate_sha256": "14339de3fe94dfb607e8e9948a82417ebd96578cccfc42155d2e8641a8de6256",
   "candidate_target": "PE32 x86 Windows DLL",
   "engine": "VEX",
   "function_entry": "0x004AF8F0",
@@ -605,5 +605,25 @@
  "schema_version": 1,
  "tests_failed": 0,
  "tests_passed": 15,
- "tests_total": 15
+ "tests_total": 15,
+ "runner": {
+  "path": "scripts/native_heaplist_diff_runner.py",
+  "sha256": "023aece91f1ed1381b6ed2b17f6d024391b7c7bead4ba1ef57a7f1d565df5b42",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_heaplist_diff_runner.py",
+   "--address",
+   "0x004AF960",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/mem/heap_list.cpp",
+   "--implementation-sha256",
+   "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
 }

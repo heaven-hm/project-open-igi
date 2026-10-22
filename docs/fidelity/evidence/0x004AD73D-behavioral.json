@@ -517,5 +517,25 @@
  "schema_version": 1,
  "tests_failed": 0,
  "tests_passed": 8,
- "tests_total": 8
+ "tests_total": 8,
+ "runner": {
+  "path": "scripts/native_leaves_runner.py",
+  "sha256": "fcdc0a4e450ba4ebd75772606f2bdd5ac729eaf96d98494f199844f1597188a0",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_leaves_runner.py",
+   "--address",
+   "0x004AD73D",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/sys/resource_lookup.cpp",
+   "--implementation-sha256",
+   "c1e97e178bd4186786e0ad040cd505579affc83ccf5e5688e228568ad16219e2",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
 }

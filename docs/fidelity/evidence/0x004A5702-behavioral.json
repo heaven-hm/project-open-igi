@@ -299,7 +299,7 @@
   "function_entry": "0x004A5702",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "modeled_candidate_crt_boundary": "__Z8vsprintfPcPKcS_",
-  "candidate_sha256": "30dd70857ab3d5d19c73a8e5fda2e773bc59008c11ad45f481174440487720c6",
+  "candidate_sha256": "f213d1e2721edf8dcb3bd1c580c35243f126db84b5ed20a5d7f91f4747b12125",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
@@ -307,15 +307,35 @@
    "-D__USE_MINGW_ANSI_STDIO=0",
    "-shared",
    "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-format-diff-l1ducdyn/entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-format-diff-42mi61nr/entry.cpp",
    "engine/src/retail/error/error_show.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-format-diff-l1ducdyn/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-format-diff-42mi61nr/candidate.dll"
   ]
  },
  "limitations": [
   "Candidate CRT is a SimProcedure model, not actual Windows CRT execution.",
   "Only bounded integer/string C-locale fixtures; no floating formats, overflow, invalid pointers or CRT failures.",
   "No original-game runtime capture or universal equivalence proof."
- ]
+ ],
+ "runner": {
+  "path": "scripts/format_diff_runner.py",
+  "sha256": "7f4a5b0e79616a6fd32adbc14122b2c669640ec897330ced613e00a075e4ca43",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/format_diff_runner.py",
+   "--address",
+   "0x004A5702",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/error/error_show.cpp",
+   "--implementation-sha256",
+   "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
 }
