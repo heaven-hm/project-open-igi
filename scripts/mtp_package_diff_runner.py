@@ -33,7 +33,7 @@ WRAPPER = r'''#include <cstdint>
 #include "igi/retail/error/error_show.hpp"
 static std::uint8_t form_data[512]; static char events[1024]; static int event_count;
 static void event(const char* kind,const char* path) { if(event_count) std::strcat(events,"|"); std::strcat(events,kind); std::strcat(events,":"); std::strcat(events,path?path:""); ++event_count; }
-namespace igi::retail::error { int Game_DataSymbolLoad(char* out,const char* fmt,...) { va_list a;va_start(a,fmt);int n=std::vsnprintf(out,256,fmt,a);va_end(a);return n; } int Error_Show(const char*,...) { return 0; } }
+namespace igi::retail::error { int sprintf(char* out,const char* fmt,...) { va_list a;va_start(a,fmt);int n=std::vsnprintf(out,256,fmt,a);va_end(a);return n; } int Game_DataSymbolLoad(char* out,const char* fmt,...) { va_list a;va_start(a,fmt);int n=std::vsnprintf(out,256,fmt,a);va_end(a);return n; } int Error_Show(const char*,...) { return 0; } }
 namespace igi::retail::resource { void* Resource_Load(const char* p,std::int32_t*) { event("load",p); return form_data; } std::int32_t Resource_Unload(const char* p) { event("unload",p); return 0; } std::int32_t Is_ResourceLoaded(const char*,ResourceHashNode**) { return 0; } }
 namespace igi::retail::mem { void* Mem_Alloc(std::int32_t n,std::int32_t) { return std::calloc(1,n>0?n:1); } void* HeapList_Insert(void*,void**) { return nullptr; } }
 namespace igi::retail::dynobj { void* DynObj_LoadModelMesh(const char*) { return nullptr; } void* DynObj_UpdateDynTree_14(const char*) { return nullptr; } }
