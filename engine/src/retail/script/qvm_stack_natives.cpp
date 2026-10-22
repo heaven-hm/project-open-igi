@@ -16,7 +16,7 @@ static_assert(sizeof(QvmOpcodeHandlerRecord) == 0x18U);
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: REA/Ghidra ev_fc8c4a96e5363fb9ba98aad334c2607004b6ee4cd58f1894cf78e5d43a93a525; bytes verified against IGI.EXE.
 // Behavior/CFG: stores tag 1 at type_stack[--type_stack_index] and the supplied DWORD at value_stack[--value_stack_index]. radare2 1 block/0 edges; Binary Ninja 1 block; source CFG agreement 100% (not C++ semantic accuracy).
-// Status/limits: STRUCTURALLY_VERIFIED; high for this leaf's writes; caller state allocation and complete VM integration are not ported.
+// Status/limits: VERIFIED; retail-execution differential passes all 8 typed cases (docs/fidelity/evidence/0x004BDA00-behavioral.json); caller state allocation and the QVM interpreter loop remain out of scope.
 void Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value)
 {
     const std::int32_t next_type_stack_index = state->type_stack_index - 1;

@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.util
 import json
 import math
 import os
@@ -2656,7 +2657,81 @@ NATIVES = {
 }
 
 
+EXTERNAL_ADAPTER_DIRECTORY = pathlib.Path(__file__).resolve().parent / "native_adapters"
+
+
+def load_external_adapters(directory: pathlib.Path = EXTERNAL_ADAPTER_DIRECTORY) -> dict[str, dict]:
+    """Register one differential adapter per file in scripts/native_adapters/.
+
+    Each adapter file is named 0x<ADDRESS>_<Name>.py and must expose:
+      ADDRESS                 "0x004BDA00"
+      cases()                 -> list[dict]; every case carries id/categories/seed
+      retail(image, case)     -> dict of reference observables
+      candidate_source()      -> C++ harness text containing one @CASES@ marker
+    Optional attributes:
+      case_literal(address, case) -> str   C++ initializer for one case row
+      INCLUDE, SUBSTITUTIONS, EXTRA_CXX_FLAGS, EXTRA_LINK_FLAGS, LIMITS
+
+    Keeping adapters in separate files lets several natives be worked on at the
+    same time without touching this module.  Adapters receive this module as
+    BASE, so they reuse PebImage, read_u32 and run_with_arguments directly.
+    """
+    registered: dict[str, dict] = {}
+    if not directory.is_dir():
+        return registered
+    base_module = sys.modules[__name__]
+    for path in sorted(directory.glob("0x*_*.py")):
+        module_name = f"igi_native_adapter_{path.stem}"
+        spec = importlib.util.spec_from_file_location(module_name, path)
+        if spec is None or spec.loader is None:
+            raise SystemExit(f"cannot load native adapter {path}")
+        module = importlib.util.module_from_spec(spec)
+        module.BASE = base_module
+        sys.modules[module_name] = module
+        try:
+            spec.loader.exec_module(module)
+        except Exception as error:  # noqa: BLE001 - report the adapter, never skip silently
+            raise SystemExit(f"native adapter {path.name} failed to import: {error}") from error
+        address = str(getattr(module, "ADDRESS", "")).upper()
+        if not address.startswith("0X"):
+            raise SystemExit(f"native adapter {path.name} has no valid ADDRESS")
+        address = "0x" + address[2:]
+        expected_prefix = "0x" + path.name.split("_", 1)[0][2:].upper()
+        if address != expected_prefix:
+            raise SystemExit(f"native adapter {path.name} ADDRESS {address} does not match file name")
+        if address in NATIVES:
+            raise SystemExit(f"native adapter {path.name} duplicates registered address {address}")
+        entry: dict = {
+            "cases": module.cases,
+            "retail": module.retail,
+            "candidate_source": module.candidate_source,
+        }
+        include = getattr(module, "INCLUDE", None)
+        if include:
+            entry["include"] = tuple(include)
+        substitutions = getattr(module, "SUBSTITUTIONS", None)
+        if substitutions:
+            entry["substitutions"] = dict(substitutions)
+        for attribute, key in (("EXTRA_CXX_FLAGS", "extra_cxx_flags"),
+                               ("EXTRA_LINK_FLAGS", "extra_link_flags")):
+            values = getattr(module, attribute, None)
+            if values:
+                entry[key] = list(values)
+        limits = getattr(module, "LIMITS", "")
+        if limits:
+            entry["limits"] = limits
+        case_literal = getattr(module, "case_literal", None)
+        if callable(case_literal):
+            entry["case_literal"] = case_literal
+        NATIVES[address] = entry
+        registered[address] = entry
+    return registered
+
+
 def format_case_literal(address: str, case: dict) -> str:
+    override = NATIVES.get(address, {}).get("case_literal")
+    if callable(override):
+        return override(address, case)
     if address == "0x0048F970":
         return wndproc_case_literal(case)
     if address == "0x00465820":
@@ -2806,6 +2881,8 @@ def main() -> int:
     parser.add_argument("--cases", type=int, default=8)
     parser.add_argument("--report", type=pathlib.Path)
     arguments = parser.parse_args()
+
+    load_external_adapters()
 
     address = "0x" + arguments.address[-8:].upper()
     if address not in NATIVES:

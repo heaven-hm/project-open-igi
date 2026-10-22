@@ -4,59 +4,68 @@
  "result": "passed",
  "address": "0x004BDA00",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+ "implementation_sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Lead static review against Binary Ninja and Radare2 disassembly, plus the retail-execution differential report docs/fidelity/evidence/0x004BDA00-behavioral.json",
  "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "scope": "unicorn-retail-differential",
+  "oracle": "retail-binary-execution",
+  "evidence_path": "docs/fidelity/evidence/0x004BDA00-behavioral.json",
   "required_observables": {
    "inputs": [
-    "args"
+    "value_stack_index (state +0x18, int32)",
+    "type_stack_index (state +0x1C, int32)",
+    "value_stack and type_stack contents at the touched slot",
+    "pushed integer value (cdecl argument 2)"
    ],
    "outputs": [
-    "outputs"
+    "new value_stack_index",
+    "new type_stack_index",
+    "value word written to value_stack[new index]",
+    "type tag word written to type_stack[new index] (constant 1)"
    ],
-   "sideEffects": []
+   "sideEffects": [
+    "caller-provided QVM state: two index fields and two stack slots are overwritten"
+   ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "no_side_effects": false,
+  "note": "The retail PE is emulated and the native is executed with the three cdecl arguments on the emulated stack; the same inputs are fed to the compiled candidate by the same runner. Stack indices and slot words are compared exactly. Caller state allocation, the QVM interpreter loop and opcode dispatch are outside this native's contract."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004BDA00 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Binary Ninja and Radare2 both report the single function entry at 0x004BDA00 (Binary Ninja label Sys_PushStack_29) with a one-block CFG and no outgoing edges; the candidate implements exactly that entry and no sibling."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "The retail instructions read the state pointer from [esp+4] and the 32-bit value from [esp+8] (cdecl); the candidate takes (QvmNativeStatePrefix* state, std::uint32_t value) in the same order. The retail leaves the pushed value in EAX, but every recovered caller discards the result, so the candidate declares void and the residual register is excluded from the compared contract."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "The only literal is the integer type tag 1U stored into the type stack, matching the retail immediate. The state field offsets used by the candidate (0x18, 0x1C, 0x24, 0x28) are the retail displacements; no scaling or shift is involved."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "Retail writes [[state+0x28]+type_index*4] and [[state+0x24]+value_index*4] after the decrements; the candidate indexes type_stack[] and value_stack[] with the same 4-byte stride and the same slot order (type tag written first, then the value). Byte offsets inside the candidate struct differ on a 64-bit host, so the differential compares stack indices and slot words rather than raw struct offsets."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The retail native makes no call; its only side effects are the two index decrements and the two stack-slot writes into the caller-provided state. The candidate performs exactly those four writes and no others."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "There is no error path and no branch: the retail function has one basic block and always executes the same stores. The candidate likewise has no conditional. The retail's residual EAX (the pushed value) is not part of the recovered contract because no caller reads it; the pushed value is instead observed through the value stack."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The native moves 32-bit integers only; no floating-point load, store or arithmetic appears in the retail disassembly or the candidate."
   }
  ]
 }
