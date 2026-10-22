@@ -52242,14 +52242,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Binary Ninja and radare2 agree on the entry at 0X0048F970: the candidate keeps the retail's instructions, globals and return."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Not promoted: 0x0048F970 is outside the MVP target list and its GameNatives transcription scripts/GameNatives/input/0048F970-WindowProcedure.cpp is absent in this worktree."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -52304,7 +52305,8 @@
           "tests_total": 10
         }
       },
-      "cfg_similarity": 1.0
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED"
     },
     {
       "address": "0x0048F530",
