@@ -1,0 +1,10 @@
+{
+ "kind": "insufficient-evidence-note",
+ "schema_version": 1,
+ "address": "0x004B8A10",
+ "name": "Qvm_SetGlobalState",
+ "observed": "Retail returns arg1 and stores it at 0x00A965A0. Candidate returns arg1 identically across 8 cases (0,1,7,0xFFFFFFFF,0x7FFFFFFF,0x80000000,0xA5A5A5A5,0xDEADBEEF).",
+ "gap": "The candidate's backing global g_a965a0 lives in an anonymous namespace in qvm_native_loader.cpp and is not exported, so the harness cannot read the stored value. Only the return value is compared.",
+ "consequence": "A setter is verified by its store, not its return. This comparison cannot distinguish a correct store from no store at all, so the record stays STRUCTURALLY_VERIFIED.",
+ "next_step": "Export a read accessor for the global, or build the candidate with an instrumentation hook, then re-run so state_delta compares the stored value."
+}
