@@ -1,0 +1,83 @@
+{
+  "kind": "candidate-symbol-mapping-correction",
+  "schema_version": 1,
+  "address": "0x004CF390",
+  "result": "corrected_mapping_only",
+  "verified": false,
+  "previous_mapping": {
+    "address": "0x004CF390",
+    "retailName": "DynObj_LoadModelMesh",
+    "implemented": true,
+    "cppName": "DynObj_LoadModelMesh",
+    "enginePath": "engine/src/retail/dynobj/local_models_mef.cpp",
+    "candidateSymbol": {
+      "vaddr": "0x0042A5E0",
+      "symbol": "__ZN3igi6retail5model8MefModel20DynObj_LoadModelMeshESt4spanIKSt4byteLj4294967295EE",
+      "demangled": "igi::retail::model::MefModel::DynObj_LoadModelMesh(std::span<std::byte const, 4294967295u>)"
+    },
+    "status": "VERIFIED"
+  },
+  "replacement_mapping": {
+    "address": "0x004CF390",
+    "retailName": "DynObj_LoadModelMesh",
+    "implemented": true,
+    "cppName": "DynObj_LoadModelMesh",
+    "enginePath": "engine/src/retail/dynobj/local_models_mef.cpp",
+    "candidateSymbol": {
+      "vaddr": "0x00421520",
+      "symbol": "__ZN3igi6retail6dynobj20DynObj_LoadModelMeshEPKc",
+      "demangled": "igi::retail::dynobj::DynObj_LoadModelMesh(char const*)"
+    },
+    "status": "STRUCTURALLY_VERIFIED"
+  },
+  "candidate_exe": "build-clean-win32/igi1.exe",
+  "candidate_sha256": "9a46bf65d6e01fd25188704f3a8d5450db0091ee2a5f40c1bca3271e1edf8c5d",
+  "implementation_sha256": "72d6eb79481d3266d6bf7b1cbca21420a9d3a81a0335c231d9f6ff92e09d9c4a",
+  "reason": "Prior candidate symbol identified model::MefModel span parser; retail function takes a model-name pointer and is reconstructed in dynobj namespace. Matching names do not establish ABI/behavior identity.",
+  "limitations": [
+    "Current native status is provisional; legacy mapping VERIFIED label was unsupported.",
+    "Runners must re-resolve exact mangled symbol in each new candidate; recorded VA is for the hashed candidate only.",
+    "Correct symbol selection does not establish candidate calls or paired runtime equivalence.",
+    "Pre-existing retail PID260 observed; no attach, launch or termination performed."
+  ],
+  "guard": {
+    "function": "scripts/verification_scope.py:validate_native_symbol_binding",
+    "consumers": [
+      "scripts/native_frida_diff.py",
+      "scripts/native_frida_leaf_diff_runner.py",
+      "scripts/refresh_candidate_symbols.py"
+    ],
+    "review": "Independent read-only reviewer approved mapping-only guard and confirmed relocation into tracked verification_scope.py.",
+    "checks": [
+      "correct mapping accepted",
+      "original span-parser symbol rejected",
+      "wrong source path rejected",
+      "map refresher rejects without rewriting invalid file",
+      "syntax checks passed",
+      "workflow self-check12/12 infrastructure checks passed; native_verified=False"
+    ],
+    "integrity_pins": [
+      {
+        "path": "scripts/verification_scope.py",
+        "old": "d869d222a53135da48a992a67b4e1171bc92e599e8af0889c258f938b6f18b86",
+        "new": "d36198617f361eac71f00a775283460ee1eb38f8c4616e7f2754331dca84dbb6"
+      },
+      {
+        "path": "scripts/native_frida_diff.py",
+        "old": "b241e5d2b641f4ecd23d1623e4567ae962dc482a3b232a703a0aa1cd0eaef2f3",
+        "new": "96d6f7f058090ef404aa96ebc6a3c4e59291d13f8ca3f7da13702be95d006172"
+      }
+    ]
+  },
+  "strict_intake_mapping_guard": {
+    "path": "scripts/frida_scoped_capture.py",
+    "sha256": "1119bd16344112c7f622e25372cf7441cff1c2d08b4540a01432346b66933ed6",
+    "review": "Independent review approved guard before layout assignment, receipt validation, device connection and process launch.",
+    "regression": {
+      "scope": "Controlled infrastructure fixture only; fake nm advertises both symbols and receipt stage deliberately stops the correct case. No game execution.",
+      "wrong_parser_symbol": "rejected before receipt or runtime",
+      "correct_native_symbol": "passed mapping guard and reached receipt-validation stop"
+    },
+    "limitations": "No runtime parity or native acceptance. Initial fixture attempts lacked an action file and used an unresolved temp-root symlink; corrected infrastructure fixture reached and tested the intended branch."
+  }
+}

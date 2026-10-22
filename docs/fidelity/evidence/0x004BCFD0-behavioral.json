@@ -1,24 +1,664 @@
 {
- "address": "0x004BCFD0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x004BCFD0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "c72f27122c033c58fb3eac13ef70c96d3f4a3d11d897624bbb4f9e795ac041f2",
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x004BCFD0",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_stack_natives.cpp",
+      "--implementation-sha256",
+      "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
+  },
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "Retail leaves the final stop_flag in EAX (mov eax,[esi+0x2c] before pop/ret), but the recovered contract is void: no recovered caller reads EAX after Qvm_ExecuteInstructions. return_value is therefore normalized to null on both sides and the loop state is verified through instruction_offset, stop_flag and error_status instead. The opcode handlers are synthetic: retail handler-table first dwords are redirected to a sentinel trap so each real dispatch site is observed, and both sides apply the same advance/raise policy. The state pointer and code_base are opaque synthetic addresses; the retail 24-byte opcode table and the 64-bit host handler-array layout are never compared byte for byte.",
+  "tests_total": 11,
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "qvm-execute-instructions-nominal-single",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          1,
+          1,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            0
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            0
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-nominal-sequence",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          4,
+          3,
+          0,
+          0,
+          1,
+          67305985,
+          0,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            1,
+            2,
+            3
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            1,
+            2,
+            3
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-nominal-repeat-opcode",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          3,
+          3,
+          0,
+          0,
+          1,
+          460551,
+          0,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            7,
+            7,
+            7
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            7,
+            7,
+            7
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-nominal-error-exit",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          3,
+          2,
+          0,
+          0,
+          1,
+          460293,
+          1,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            5,
+            6
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 2,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            5,
+            6
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 2,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-nominal-error-immediate",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          2,
+          1,
+          0,
+          0,
+          1,
+          2312,
+          1,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            8
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            8
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-initial-error",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          2,
+          5,
+          1,
+          1,
+          1,
+          513,
+          0,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 0,
+          "opcode_trace": [],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 0,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 0,
+          "opcode_trace": [],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 0,
+          "stop_flag": 0,
+          "error_status": 1,
+          "termination": "error_status",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-max-opcode",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          1,
+          0,
+          0,
+          1,
+          48,
+          0,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            48
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            48
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-zero-opcode",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          2,
+          2,
+          0,
+          0,
+          1,
+          0,
+          0,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            0,
+            0
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 2,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            0,
+            0
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 2,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-stride-four",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          5,
+          2,
+          0,
+          0,
+          4,
+          86219297040,
+          0,
+          8
+        ],
+        "initial_state": {
+          "seed": 8
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            16,
+            20
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 8,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 2,
+          "opcode_trace": [
+            16,
+            20
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 8,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-stop-exact",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          3,
+          3,
+          0,
+          0,
+          1,
+          262914,
+          0,
+          9
+        ],
+        "initial_state": {
+          "seed": 9
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            2,
+            3,
+            4
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 3,
+          "opcode_trace": [
+            2,
+            3,
+            4
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 3,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qvm-execute-instructions-boundary-initial-stop-flag",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          1,
+          0,
+          1,
+          1,
+          1,
+          0,
+          10
+        ],
+        "initial_state": {
+          "seed": 10
+        }
+      },
+      "reference_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            1
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": null,
+        "state_delta": {
+          "dispatches": 1,
+          "opcode_trace": [
+            1
+          ],
+          "dispatch_arguments_canonical": true,
+          "state_argument_matches": true,
+          "instruction_offset": 1,
+          "stop_flag": 1,
+          "error_status": 0,
+          "termination": "stop_flag",
+          "fault": ""
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Qvm_ExecuteInstructions reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
- ]
+  ]
 }

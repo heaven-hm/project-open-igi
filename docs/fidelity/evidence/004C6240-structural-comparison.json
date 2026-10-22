@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "kind": "native-structural-comparison",
+  "address": "0x004C6240",
+  "function_name": "Terrain_Load",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
+  "candidate_path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
+  "candidate_build_receipt": "build-clean-win32/candidate-receipt.json",
+  "generated_at": "2026-10-22T22:08:04+00:00",
+  "retail": {
+    "function_entry": "0x004C6240",
+    "signature": "void*(void* arg1, int32_t arg2)",
+    "calling_convention": "cdecl",
+    "size_bytes": 1069,
+    "basic_blocks": 25,
+    "edges": 36,
+    "binary_ninja": "bn_function_basic_blocks; decompile and disassembly inspected",
+    "radare2": "afij/afbj; same node and edge sets as Binary Ninja",
+    "angr": "CFGFast exact entry recovered; has_unresolved_jumps=false; approximate block partition (not compared block-for-block)"
+  },
+  "candidate": {
+    "functions": [
+      {
+        "address": "0x00459730",
+        "name": "method.igi::retail::terrain.Terrain_Load_void__char_const_",
+        "size": 383,
+        "blocks": 12,
+        "edges": 16
+      }
+    ],
+    "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+    "source_sha256": "a043d7b04094ae034871c436d2e9653b1440093b96036c1cf67964bc3ed51d9b",
+    "measured_on_candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc"
+  },
+  "cfg_comparison": {
+    "bn_vs_r2_retail": 1.0,
+    "bn_vs_r2_scope": "retail image only; this is the only numeric CFG score recorded in the manifest",
+    "candidate_vs_retail": "not address-comparable. Candidate block/edge counts above differ from retail; the compared structural properties are listed under compared_properties."
+  },
+  "compared_properties": [
+    "cdecl two-argument boundary; context at [esp+4], path at [esp+8]",
+    "single ret at 0x004C666C; only tail call is DynObj_UpdateDynTree_11(context) at 0x004C665A",
+    "DynObj_UpdateDynTree_11 (0x004CE3D0) writes 0 at context+0xDC8 and returns arg1",
+    "live retail: EAX 0x038910B4 equals the context argument",
+    "retail file order: .bit, .hmp, .cmd, .ctr, .qsc; allocations at context+0xDC0/0xDC4"
+  ],
+  "divergences": [
+    "Candidate Terrain_Load is a 12-block wrapper (383 bytes) that calls Terrain_LoadLevel; retail is a 25-block, 1069-byte function.",
+    "Retail .bit/.hmp pointer tables, context offsets, QVM registration (CreateTerrainMaterial/CreateTerrainTileMap), Qvm_Load/Execute/Cleanup and Mem_Alloc calls are host-adapted.",
+    "Retail clears context+0xDC8 through the tail call; the candidate returns the context but does not perform that write because the port object does not mirror the offset.",
+    "Candidate has host-only null guards returning nullptr; retail dereferences its arguments."
+  ],
+  "limitations": [
+    "Binary Ninja and radare2 CFG scores are retail-image structure only. They do not measure candidate equivalence.",
+    "angr CFGFast is approximate and splits blocks differently; only the exact entry and unresolved-jump result are used as evidence.",
+    "No paired retail/candidate runtime capture exists for this native, so no behavioral equivalence is claimed."
+  ],
+  "candidate_receipt_sha256": "61c35e99bd11fd717803bd6560ebe422bafbf77efad6d00786160ad535347708",
+  "candidate_receipt_created_at": "2026-10-22T22:09:28.154970+00:00",
+  "candidate_rebound_at": "2026-10-22T22:18:42+00:00"
+}

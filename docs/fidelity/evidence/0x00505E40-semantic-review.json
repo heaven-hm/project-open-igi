@@ -37,6 +37,36 @@
    "name": "scope_and_limits",
    "result": "passed",
    "rationale": "This review authorizes only the bounded controlled PE32 fixture cases in texture_modifier_push_diff_runner.py; it does not establish natural game-loop reachability, renderer behavior, null/unmapped pointers, arbitrary aliasing, or every caller integration."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "Retail receives one cdecl context pointer; the implementation exposes one context pointer argument and accesses the documented context fields."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The checked threshold is stack count 20; source row uses index*3 DWORDs; selected field offsets and global VAs are taken from retail instructions, not inferred from other natives."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "Only controlled mapped PE32 context and global storage are exercised; the runner compares the context bytes and three global regions. Arbitrary pointer aliasing/layout is excluded."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "On success the routine updates its flag, modifier stack, packed mask and count. At capacity it calls Error_Show; the runner intercepts that call boundary and tests the caller fatal loop."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "The differential compares context-pointer return when disabled, incremented integer result on push, and the fatal-loop outcome at capacity."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "This native uses integer fields, bit operations and pointer values; there is no floating-point operation in its retail body."
   }
  ],
  "runtime_contract": {

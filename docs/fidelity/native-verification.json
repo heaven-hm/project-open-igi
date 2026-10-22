@@ -50537,13 +50537,146 @@
       "status": "VERIFIED"
     },
     {
+      "address": "0x0048F080",
+      "name": "GetRetailCommandLine",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/app_startup_natives.cpp",
+        "sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a",
+        "header": {
+          "path": "engine/include/igi/retail/core/app_startup_natives.hpp",
+          "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
+        },
+        "signature": "char const* __cdecl(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/fx/0048F080-FX_DebrisSpawn_21.hpp",
+        "sha256": "446d25a9ce92218194065689b1b605658e3c2df96ce1ae0096072331b1ac55c5",
+        "signature": "int32_t __cdecl(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "runtime_layout": {
+          "retail": {
+            "stateVA": "0x005C8BC8"
+          },
+          "candidate": {
+            "stateVA": "_CommandLine"
+          }
+        },
+        "candidate_symbol": "_GetRetailCommandLine",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Binary Ninja recovers int32_t() with the default cdecl convention, Radare2 reports calltype cdecl nargs 0, and angr confirms a returning one-block function at the exact entry; the retail body reads no argument slot and returns the loaded dword in EAX. The candidate declares char const* __cdecl(void), so it keeps the same zero-argument cdecl boundary and returns the same 32-bit EAX word; the pointer type is a source-level adaptation of an untyped 32-bit load, not a different ABI."
+        },
+        "limitations": [
+          "The reviewed scope is the single getter path; the function has no alternate or error path.",
+          "Static, build-shape and emulator/host differential evidence only: Binary Ninja, Radare2, angr CFGFast, a fresh -O3 pe-i386 object and a ten-value retail-ESIL/host check. No paired retail/candidate runtime observation has been captured.",
+          "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
+          "The candidate reads its own mapped CommandLine global rather than retail 0x005C8BC8; the manifest runtime_layout maps them, but this record does not establish process-wide memory-layout equivalence.",
+          "The ten-value host differential is an ad-hoc command, not a committed scripts/native_diff_runner.py case; the committed runner cases cover 0x0048F0C0 and 0x0048F0D0 only.",
+          "The only direct caller 0x0048F360 is not reconstructed. The claim that it consumes the return value as a command-line string rests on Binary Ninja/Radare2 disassembly of the retail caller, not on candidate code.",
+          "The GameNatives binding (0048F080-FX_DebrisSpawn_21.hpp) is an auto-named catalog stub whose declared signature is int(void); its placeholder name does not describe behaviour and is not treated as a retail symbol."
+        ],
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F080-radare2.json",
+          "evidence_sha256": "ecd51dc08c704dcae5524c972e6d61672d99103103d5b7a21f57d10031fc97e5",
+          "evidence_id": "r2:live:0x0048F080",
+          "signature": "int32_t __cdecl(void)"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F080-binaryninja.json",
+          "evidence_sha256": "d927fa7ef84ee8cdd5a6ba55d8ed38003b9bd8e4c4f46c458cdcf4ade4dc47e7",
+          "evidence_id": "bn:live:0x0048F080",
+          "signature": "int32_t __cdecl(void)"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F080-semantic-review.json",
+          "evidence_sha256": "79f6e2a7b6c0f78eee4e0b0f99178cede3ee7fe3b4923f7ffeaebe5597a65df5"
+        },
+        "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F080); not a candidate-versus-retail CFG score"
+      }
+    },
+    {
+      "address": "0x0048F0B0",
+      "name": "GetAppTitle",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/app_startup_natives.cpp",
+        "sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a",
+        "header": {
+          "path": "engine/include/igi/retail/core/app_startup_natives.hpp",
+          "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
+        },
+        "signature": "char const* __cdecl(void)"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/fx/0048F0B0-FX_FireBallUpdate_22.hpp",
+        "sha256": "b2254a1bed4213bed422ce11ffe9646a2e9336daec9ec27be8a82ceae9b3409f",
+        "signature": "int32_t __cdecl(void)"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "runtime_layout": {
+          "retail": {
+            "stateVA": "0x005C8BD4"
+          },
+          "candidate": {
+            "stateVA": "_AppTitle"
+          }
+        },
+        "candidate_symbol": "_GetAppTitle",
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Binary Ninja recovers int32_t() with the default cdecl convention, Radare2 reports calltype cdecl nargs 0, and angr confirms a returning one-block function at the exact entry; the retail body reads no argument slot and returns the loaded dword in EAX. The candidate declares char const* __cdecl(void), so it keeps the same zero-argument cdecl boundary and returns the same 32-bit EAX word; the pointer type is a source-level adaptation of an untyped 32-bit load, not a different ABI."
+        },
+        "limitations": [
+          "The reviewed scope is the single getter path; the function has no alternate or error path.",
+          "Static, build-shape and emulator/host differential evidence only: Binary Ninja, Radare2, angr CFGFast, a fresh -O3 pe-i386 object and a ten-value retail-ESIL/host check. No paired retail/candidate runtime observation has been captured.",
+          "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
+          "The retail global 0x005C8BD4 is a distinct dword from the 0x005C8BC0 instance handle: 0x0048F0D0 writes 0x005C8BC0, 0x0048F090 reads it, and the only writer of 0x005C8BD4 is 0x0048F100 at 0x0048F10C. The corrected candidate therefore reads a separate AppTitle global instead of InstanceHandle.",
+          "Retail 0x005C8BD4 holds the 0x0053B534 \"Innerloop\" pointer after the start-up call at 0x0048F60E. The candidate AppTitle global has no writer because retail 0x0048F100 (SetAppTitle) exists only as an unlinked GameNatives transcription, so the candidate getter returns null until that setter is reconstructed in-tree; this record claims the getter's structure and global identity, not end-to-end start-up parity.",
+          "The project name GetAppTitle is inferred from the retail writer (SetWindowTextA with \"Innerloop\") and from the only caller's MessageBoxA caption use; it is not a retail symbol.",
+          "The ten-value host differential is an ad-hoc command, not a committed scripts/native_diff_runner.py case; no committed runner case exists for this address.",
+          "The GameNatives binding (0048F0B0-FX_FireBallUpdate_22.hpp) is an auto-named catalog stub whose declared signature is int(void); its placeholder name does not describe behaviour and is not treated as a retail symbol."
+        ],
+        "selected_decompiler": "binary_ninja",
+        "radare2": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F0B0-radare2.json",
+          "evidence_sha256": "34d51fe126c145b581eb42109863f4a34da2c7668d241a2afec085facc346155",
+          "evidence_id": "r2:live:0x0048F0B0",
+          "signature": "int32_t __cdecl(void)"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F0B0-binaryninja.json",
+          "evidence_sha256": "423e70b8202be2420844f85470b0c16a861e134a37de24d74e20766550d51f1b",
+          "evidence_id": "bn:live:0x0048F0B0",
+          "signature": "int32_t __cdecl(void)"
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F0B0-semantic-review.json",
+          "evidence_sha256": "2da8affb433ff6162b73ef40bbb87dc4b360a41831fdda62a716d7bcd4a63ef0"
+        },
+        "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F0B0); not a candidate-versus-retail CFG score"
+      }
+    },
+    {
       "address": "0x0048F0C0",
       "name": "StoreCommandLine",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_natives.cpp",
-        "sha256": "ab6f5b8b8be17a2ab634f43288af823675a50f64ca38b6ab033c54d4ed127598",
-        "signature": "int __cdecl int32_t(int32_t)"
+        "sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a",
+        "header": {
+          "path": "engine/include/igi/retail/core/app_startup_natives.hpp",
+          "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
+        },
+        "signature": "char const* __cdecl(char const*)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F0C0-StoreCommandLine.hpp",
@@ -50552,13 +50685,26 @@
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "runtime_layout": {
+          "retail": {
+            "stateVA": "0x005C8BC8"
+          },
+          "candidate": {
+            "stateVA": "_CommandLine"
+          }
+        },
+        "candidate_symbol": "_StoreCommandLine",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Binary Ninja and radare2 agree on the entry at 0x0048F0C0: one basic block loads the 32-bit argument, stores it at the global, and returns the same bits in EAX. The candidate keeps the same load, the same store and the same return."
+          "rationale": "Binary Ninja defines the retail entry as int32_t(int32_t) because it moves one 32-bit word; the value is WinMain's lpCmdLine pointer. The candidate declares char const* __cdecl(char const*) and returns that pointer, which is the same 32-bit EAX value the retail returns. Load, store and return were re-checked against the retail bytes at 0x0048F0C0..0x0048F0CA."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The reviewed scope is the single start-up call from main (0x0048F5F4); the function has no other path.",
+          "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
+          "Candidate structural equivalence rests on the identical one-block load/store/return shape, confirmed in the fresh -O3 object (e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883); the previous linked image predates the AppTitle sibling global and the current revision was not relinked.",
+          "The isolated differential runner scripts/native_diff_runner.py has a 0x0048F0C0 case: ten 32-bit pointer-bit inputs against the retail ESIL bytes and the current candidate, comparing return bits, the mapped global store and untouched neighboring state. It passed 10/10 when re-run on the current revision (337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a). This is emulator/host evidence, not a live game process.",
+          "The shared translation unit now also defines AppTitle for retail 0x005C8BD4, which changes link-time .bss offsets (AppTitle +0x0, InstanceHandle +0x4, CommandLine +0x8); the StoreCommandLine body and its global mapping are unchanged."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -50581,29 +50727,33 @@
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-radare2.json",
-          "evidence_sha256": "b7fcfe5af43656c0026f30019b4de023adba2bf48b20c04e9eef4919333bd2e1",
+          "evidence_sha256": "ad08c3045bac22b54cfcebed0ab67771bb5509af13fb911a6ebff16f38361cb4",
           "evidence_id": "r2:live:0x0048F0C0",
-          "signature": "not restated"
+          "signature": "int32_t __cdecl(int32_t)"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-binaryninja.json",
-          "evidence_sha256": "dbee03c9514418392c71332a1683d776ca7cd0f970fdb28a7e2dca19bc2a70f2",
+          "evidence_sha256": "2ba57906c5e754daa32ea47d93f3156c8a5dab6ba7d9ad7152e85a1b39789e83",
           "evidence_id": "bn:live:0x0048F0C0",
-          "signature": "not restated"
+          "signature": "int32_t __cdecl(int32_t)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-semantic-review.json",
-          "evidence_sha256": "89431e8783803f8ff9d8209ed37faa19706caf3302a8a217b622e1809927260f"
+          "evidence_sha256": "0ea79bf3f0156283de15e4fafd0be69b7a42c3eabf224d1a52f9623540d65010"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-build.json",
-          "evidence_sha256": "0b5ef943786752000d2382fa2ca56ce387b6f5243c1af47c63740a4287683c79"
+          "evidence_sha256": "bb8939e8610fbde53952d22a4b9bbec4eaf80a77c9bafa257b67bf87bccfca2b"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-behavioral.json",
-          "evidence_sha256": "66b91b10834570a35d17a3bd043c56f04e2939b2e9d4c99e160c4850520c9bcc"
-        }
+          "evidence_sha256": "62f334105c511062131b97212c4c015ca5681c32c2fe3cf10b4761d82606af14",
+          "valid": false,
+          "superseded": true,
+          "note": "Superseded chunk-walk record rewritten as a retraction; it is not behavioral evidence for this native. The current differential is the live 0x0048F0C0 case in scripts/native_diff_runner.py (10/10, emulator/host). Paired typed Frida runtime capture is still outstanding."
+        },
+        "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F0C0); not a candidate-versus-retail CFG score"
       }
     },
     {
@@ -50612,8 +50762,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_startup_natives.cpp",
-        "sha256": "ab6f5b8b8be17a2ab634f43288af823675a50f64ca38b6ab033c54d4ed127598",
-        "signature": "int __cdecl int32_t(int32_t)"
+        "sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a",
+        "signature": "void* __cdecl StoreInstanceHandle(void*)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F0D0-StoreInstanceHandle.hpp",
@@ -50625,10 +50775,15 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Binary Ninja and radare2 agree on the entry at 0x0048F0D0: one basic block loads the 32-bit argument, stores it at the global, and returns the same bits in EAX. The candidate keeps the same load, the same store and the same return."
+          "rationale": "Binary Ninja, radare2 and angr CFGFast agree on the entry at 0x0048F0D0: one basic block of 10 bytes, 8b442404 a3c08b5c00 c3, loads the 32-bit cdecl argument, stores it at the 0x005C8BC0 global and returns the same bits in EAX. The candidate now keeps the same load, the same store and the same return; the earlier candidate returned 0, which the retail bytes cannot produce for a non-zero argument."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "Static, build and emulator/host differential evidence only: Binary Ninja, Radare2, angr CFGFast, an x86 compile and the 10-case differential. No paired retail/candidate runtime observation of the start-up call has been captured.",
+          "The retail caller main 0x0048F530 discards EAX after the call at 0x0048F5FA (the next instruction pushes the literal address of \"filesys.cfg\"), so the corrected return value is contract-correct but not consumed by that caller.",
+          "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
+          "Candidate structural equivalence rests on the identical one-block load/store/return shape, confirmed in the fresh -O3 object (e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883) and the 10-case differential re-run on the current revision (337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a); the current revision was not relinked, so no linked-image claim is made.",
+          "The candidate shares engine/src/retail/core/app_startup_natives.cpp with 0x0048F080, 0x0048F0B0 and 0x0048F0C0, so this implementation digest binds those siblings as well.",
+          "The earlier sibling defect at 0x0048F0B0 (it returned the 0x005C8BC0 instance handle while retail reads 0x005C8BD4) is now corrected by a separate AppTitle global and has its own record; the remaining gap is that the retail writer 0x0048F100 is not yet part of the engine build. That sibling gap is documented there and not claimed here."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -50651,29 +50806,42 @@
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-radare2.json",
-          "evidence_sha256": "9aacace2fab9cefa4a4e714626f081a43938c8d5dfb3e520d90fdaaa188489eb",
+          "evidence_sha256": "167ce06005e6aff311bbcf0de7ede869b4020f097a51aaecc673638f9747210b",
           "evidence_id": "r2:live:0x0048F0D0",
-          "signature": "not restated"
+          "signature": "int32_t __cdecl(int32_t)"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-binaryninja.json",
-          "evidence_sha256": "c44411a6c514dec392485add55fe6ca3cbe4944d3ad2ac92a823c8c497c5c092",
+          "evidence_sha256": "bc6ae2c645705079ac987f3d5fa78551dcfa39d6c2658baedf93a104033a360d",
           "evidence_id": "bn:live:0x0048F0D0",
-          "signature": "not restated"
+          "signature": "int32_t __cdecl(int32_t)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-semantic-review.json",
-          "evidence_sha256": "c748a85b3a57f598a2e18ee7ba1db6a2c2b0f8def82bb046166c78d161c1c34e"
+          "evidence_sha256": "027154aeb7935f083544e89c94afef7f9c9a82d6ed880ec90152001733d6705b"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-build.json",
-          "evidence_sha256": "c5778d6d20347bd614341c048ee1578a53caa89fd26b463e06b9620965b21547"
+          "evidence_sha256": "93fb48d06432cdbb2ca740976152185cae9f8167e2438df71d31bf95e9ccb172"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-behavioral.json",
-          "evidence_sha256": "31acc30731ed74e977e4bddd32e8168b72b7baa356a6cb0b48c5642bf7cee2dd"
-        }
+          "evidence_sha256": "eb8e8c0a75d9484b986adfedf0ac01cfd4146c763ef5724463b0062159aaf8e9",
+          "valid": false,
+          "superseded": true,
+          "note": "Superseded false chunk-walk record rewritten as a retraction; it is not behavioral evidence. The current differential is the live 0x0048F0D0 case in scripts/native_diff_runner.py (10/10, emulator/host). Paired typed Frida runtime capture is still outstanding."
+        },
+        "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F0D0); not a candidate-versus-retail CFG score",
+        "runtime_layout": {
+          "retail": {
+            "stateVA": "0x005C8BC0"
+          },
+          "candidate": {
+            "stateVA": "_InstanceHandle"
+          }
+        },
+        "candidate_symbol": "_StoreInstanceHandle"
       }
     },
     {
@@ -52300,43 +52468,36 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_0048f970.cpp",
-        "sha256": "880e0a77f7ed6b4384e74cf9f20f480604b9f6b1aac17c4e1dc73f9075600a7f",
-        "signature": "unknown"
+        "sha256": "35213d3e50059d801ba28e53c0dc9972aa5acc7005360fc63d58fcc29b74cd6d",
+        "signature": "intptr_t __stdcall WindowProcedure(void* window, uint32_t message, uintptr_t wparam, intptr_t lparam); chain node is 12 bytes with next at +0x00, previous link at +0x04 and handler at +0x08; handlers are intptr_t (__cdecl*)(void*, uint32_t, uintptr_t, intptr_t)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/input/0048F970-WindowProcedure.cpp",
         "sha256": "b3e84c890219209f8e3c2073232f0442f4d8af1e3f808737b4ec08edfccf75c1",
-        "signature": "unknown"
+        "signature": "LRESULT __stdcall Input_GetDIErrStr(HWND self, unsigned int args, WPARAM flags, LPARAM arg4)"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Binary Ninja and radare2 agree on the entry at 0X0048F970: the candidate keeps the retail's instructions, globals and return."
+          "rationale": "Retail 0x0048F970 is a 258-byte stdcall window procedure (0x0048F970-0x0048FA6F) that ends in ret 0x10 at 0x0048FA6F and reads four dword arguments from the stack (window, message, wParam, lParam). Its handler-chain node is 12 bytes: next at +0x00 (mov esi,dword [eax] at 0x0048F98E), previous link at +0x04 (0x0048F696 writes 0x005C8DF0 into the head node's +0x04, and the stride 12 loop at 0x0048F49C uses add eax,0xC), and handler at +0x08 (call dword [eax+8] at 0x0048F99C, cleaned by add esp,0x10 at 0x0048F99F, so handlers are cdecl). The candidate keeps that shape with std::intptr_t __stdcall for the window procedure and a cdecl WindowHandlerCallback; the adaptation is the C++ pointer/integer types (uintptr_t/intptr_t) in place of raw dwords.",
+          "checked_against": "Binary Ninja live prototype LRESULT __stdcall(HWND, uint32_t, WPARAM, LPARAM); radare2 nargs 4 with ret 0x10; candidate COFF symbol _WindowProcedure@16 at 0x0041F970 with retl $0x10"
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "Not promoted: 0x0048F970 is outside the MVP target list and its GameNatives transcription scripts/GameNatives/input/0048F970-WindowProcedure.cpp is absent in this worktree."
+          "STATUS SCOPE: this record is STRUCTURALLY_VERIFIED only. Function identity, argument layout, dispatch constants, chain-walk order and the control-flow decision graph were checked against retail; behavioral, side-effect and runtime equivalence are NOT claimed.",
+          "WM_DESTROY: retail clears the byte at 0x005C8DE8, calls USER32!ShowCursor(TRUE) at 0x0048F9CE, calls 0x004010B0 at 0x0048F9D4, calls USER32!PostQuitMessage(0) at 0x0048F9DB and returns 0. The candidate reproduces the documented ordering but deliberately omits the 0x004010B0 call because that 28-byte body is unreconstructed. This is a real WM_DESTROY side-effect gap, not a reproduced no-op.",
+          "Candidate-only null guards: the candidate tests WindowHandlerChain != nullptr at 0x41F99C, the first chained entry != nullptr at 0x41F9A6 and caller->handler != nullptr at 0x41F9DF before calling a handler. Retail loads [0x005C8DF0] at 0x0048F989, dereferences it at 0x0048F98E and calls [eax+8] at 0x0048F99C with no null test. Under the retail invariant (0x0048F68C initialises the head to the sentinel cell 0x005C8DF4 and registration sets +0x08 before insertion) the guards are unreachable; they exist only so a malformed port chain cannot fault, and they add candidate-only CFG blocks.",
+          "CFG NUMBERS ARE NOT CANDIDATE EQUIVALENCE: the manifest cfg_similarity 1.0 is the gate's Binary Ninja-versus-radare2 score computed from the two retail-only artifacts (21 nodes/29 edges each), and the gate recomputes it. No retail-versus-candidate CFG score is claimed. The independent candidate recovery is in docs/fidelity/evidence/0x0048F970-structural-comparison.json: retail Binary Ninja 21 blocks/29 edges, retail radare2 21/29, retail angr CFGFast 29/37, candidate radare2 27/41, candidate angr CFGFast 32/46. The delta is accounted for by the two guards, GCC loop/switch lowering and a shared epilogue.",
+          "Candidate binary identity: build-clean-win32/igi1.exe has SHA-256 4af8c89413897cbaaf5e1b35cd6bb43d36b077d93f705e83766e2e869cd30571 and build-clean-win32/candidate-receipt.json binds it to engine/src/retail/core/native_0048f970.cpp SHA-256 3031bb9d.... The current source SHA-256 is 35213d3e...; the only later change is the provenance/status comment text, so the machine code analyzed is the code in this source, but no rebuild was performed in this task. No binary with the 0675983a... digest named in the task brief exists in build-clean-win32.",
+          "Node +0x04 is a previous link in retail: 0x0048F696 stores 0x005C8DF0 (the address of the chain-head cell) into the head node's +0x04, and the registration loop at 0x0048F49C advances by 12 bytes (add eax,0xC). The candidate's WindowHandlerEntry declares a previous pointer at +0x04, but LinkWindowHandler never initialises or maintains it, so the ported chain is forward-only. WindowProcedure never reads +0x04, so this does not change its dispatch.",
+          "WM_ACTIVATEAPP: message 0x001C is Win32 WM_ACTIVATEAPP (WM_ACTIVATE is 0x0006). Retail calls 0x00498460, the x87 chop-rounding setter, at 0x0048F9EA; the candidate calls the repository's FP_InitExtendedPrecision transcription at the same branch. The 0x00498460 static analysis records the fnstcw/or 0x0C00/fldcw sequence and the same global control-word slot; no window-activation behaviour is modelled.",
+          "WM_SYSKEYDOWN VK_F4 path: retail calls the zero-argument getter 0x0048F0A0 at 0x0048FA45 and passes its result to PostMessageA. The 0x0048F0A0 static analysis proves the getter is exactly mov eax,[0x005C8BC4]; ret, so the candidate's direct read of its matching window-handle global (g_window_handle) is equivalent at that expression only, provided the value equals the retail dword at the moment of the call; the getter call instruction itself is not reproduced.",
+          "No paired retail/candidate typed runtime evidence exists, so this record cannot rise above STRUCTURALLY_VERIFIED. The stored behavioral report docs/fidelity/evidence/0x0048F970-behavioral.json is bound to the superseded implementation digest 880e0a77... and a different worktree; it is not evidence and is not bound here. The stored build report 0x0048F970-build.json is also bound to 880e0a77... and is not claimed for the current source; both remain superseded history.",
+          "The two CFG artifacts describe the retail image only: docs/fidelity/evidence/0x0048F970-binaryninja.json (sha256 dcff5ba8058194eb211a00e3def3d47b50381c1fef7e60faf5533072bf98c8a3) and docs/fidelity/evidence/0x0048F970-radare2.json (sha256 f698ce1f67cec95c6077be6647d6973c7c42d0bb5b78ffbd97a611c97bfc8ffd) are bound to retail dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01. Their live node and edge sets were re-derived in this task and match the files exactly.",
+          "The GameNatives reference scripts/GameNatives/input/0048F970-WindowProcedure.cpp (sha256 b3e84c890219209f8e3c2073232f0442f4d8af1e3f808737b4ec08edfccf75c1) is named Input_GetDIErrStr and is retained as a reference transcription only. It was not compiled here and it is not paired runtime evidence.",
+          "The focused host test suite uses explicit Win32 spies and a null-chain state that retail would fault on; it checks dispatch intent and state changes, not Windows or retail execution. The MinGW object check confirms stdcall decoration, ret 16, the 0x00498460 transcription call and the absence of a 0x004010B0 placeholder symbol."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_unicorn_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 600
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-radare2.json",
@@ -52351,25 +52512,60 @@
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
+        "static_analysis_evidence": [
+          {
+            "evidence_id": "0x0048F0A0-static-analysis",
+            "evidence_path": "docs/fidelity/evidence/0x0048F0A0-static-analysis.json",
+            "evidence_sha256": "94b5abd3eaaa807f93a66c66d5c0f24fe388df5e60aa3f67665937275a32276b"
+          },
+          {
+            "evidence_id": "0x00498460-static-analysis",
+            "evidence_path": "docs/fidelity/evidence/0x00498460-static-analysis.json",
+            "evidence_sha256": "e35c0bcf73cec3a936ede8fd8d1a0e1e14cdf252e6c8a3066a8d437784de9344"
+          },
+          {
+            "evidence_id": "0x004010B0-static-analysis",
+            "evidence_path": "docs/fidelity/evidence/0x004010B0-static-analysis.json",
+            "evidence_sha256": "70a2ab285851c2497a9bd2975f767fca63697ab3393f9115a701ea997475ff51"
+          }
+        ],
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-semantic-review.json",
-          "evidence_sha256": "b1e97808f414e230579f5b10ad2b3d7623afb7cbc91ac2bb20622990f880a8a8"
+          "evidence_sha256": "f7d0b9335c37bf04c1d87b17bfeb6ec49995cc4d6cbb967bf1ef08f750528155"
         },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F970-build.json",
-          "evidence_sha256": "b85f0bbb1402fc9279b7424bd18172956dd89a4334dbae0d63d1d7c1f81dfeb5"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
-          "evidence_sha256": "a2f94c68741331bd712125d0a98f6d3f2f9e76a473d35a53628f8904290f5b77"
-        },
-        "runtime_tests": {
-          "status": "PASS",
-          "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
-          "evidence_sha256": "a2f94c68741331bd712125d0a98f6d3f2f9e76a473d35a53628f8904290f5b77",
-          "oracle": "retail-binary-execution",
-          "tests_passed": 10,
-          "tests_total": 10
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F970-structural-comparison.json",
+          "evidence_sha256": "e0d8f685cae0b7883edbb11de4f5979f720879ecef15cb251da18d0e74ceee4a",
+          "retail_cfg": {
+            "binary_ninja": {
+              "blocks": 21,
+              "edges": 29
+            },
+            "radare2": {
+              "blocks": 21,
+              "edges": 29
+            },
+            "angr_cfgfast": {
+              "blocks": 29,
+              "edges": 37,
+              "has_unresolved_jumps": false
+            }
+          },
+          "candidate_cfg": {
+            "radare2": {
+              "blocks": 27,
+              "edges": 41
+            },
+            "angr_cfgfast": {
+              "blocks": 32,
+              "edges": 46,
+              "has_unresolved_jumps": false
+            }
+          },
+          "candidate_binary_sha256": "4af8c89413897cbaaf5e1b35cd6bb43d36b077d93f705e83766e2e869cd30571",
+          "candidate_symbol": "_WindowProcedure@16",
+          "candidate_entry": "0x0041F970",
+          "candidate_scalar_similarity": null
         }
       },
       "cfg_similarity": 1.0,
@@ -52381,8 +52577,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/retail_main.cpp",
-        "sha256": "25bebe7d59ddbe2fecbd31d31c4c5e431aae162980bb15a111cdbe9c296ba16f",
-        "signature": "WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )"
+        "sha256": "7499b59e6d6e3e6b6db66428669aba25c2305f08c3d04faf64ea80167ede72e4",
+        "signature": "int __cdecl Main(const igi::retail::core::RetailMainConfig* config)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F530-Main.hpp",
@@ -52394,55 +52590,54 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Binary Ninja reports WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc) and radare2 names the same entry main with two stack arguments; the source keeps the stdcall HINSTANCE plus int boundary of retail igi.exe. Both tools report the same 26 basic blocks and 37 edges."
+          "rationale": "Binary Ninja reports the retail entry as WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc) with a 994-byte body, 26 blocks and 37 edges; Radare2 reports the same entry and the same node/edge sets; angr CFGFast recovers the exact entry with no unresolved jumps. The candidate exposes an ABI-adapted host entry, int __cdecl Main(const RetailMainConfig*), with a 789-byte/22-block/31-edge CFG at 0x0041FB60. The reviewed mutex prefix consumes neither retail argument, so the IGIMUTEX transcription is independent of the adaptation, but the interfaces and full CFGs are not identical."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate Main is ABI-adapted (__cdecl, one RetailMainConfig pointer) and is not called by the diagnostic WinMain, so call-site compatibility with the retail __stdcall(HINSTANCE, int) boundary is not demonstrated.",
+          "The candidate uses WNDCLASSEXW/RegisterClassExW and CreateWindowExW with wide-string message APIs, while retail uses WNDCLASSA/RegisterClassA and CreateWindowExA. Semantic equivalence of the window shell is not established.",
+          "Retail does not test the RegisterClassA result at 0x0048F5E6, and it shows MessageBoxA(NULL, \"Couldn't open window\", \"Innerloop\", MB_ICONERROR) then returns 0 when CreateWindowExA returns NULL (0x0048F77F -> 0x0048F78B -> 0x0048F8FC). The candidate returns 1 without a box on both failures, so those error paths are not retail-faithful yet.",
+          "Retail normal teardown calls SetForegroundWindow, UnregisterClassA and CoUninitialize in addition to ReleaseMutex; the candidate calls only ReleaseMutex. Retail can also return the WM_QUIT wParam stored at [esp+0x14] (0x0048F8A3); the candidate returns 0.",
+          "The diagnostic Win32 shell (engine/platform/windows/scene_main.cpp WinMain) has its own mutex path, never calls ReleaseMutex or CloseHandle, and releases the mutex only through process exit. The reconstructed Main is not wired into the shell.",
+          "No paired retail/candidate runtime capture exists. The recorded CFG similarity 1.0 is the Binary Ninja-vs-Radare2 score for the retail image only; the candidate CFG is 22 blocks/31 edges at 0x0041FB60 versus retail 26/37, and only the mutex prefix and shared failure block were compared structurally."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-radare2.json",
-          "evidence_sha256": "e8247216b049b17120670d9024e8617d851c78891f4dc6f431523688e3f4ed78",
+          "evidence_sha256": "0cdc966699f4b5f2d9904775b961d67362303c8699fd00070c03560bfd9be4e3",
           "evidence_id": "r2:live:0x0048F530",
           "signature": "not restated"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-binaryninja.json",
-          "evidence_sha256": "bd360791a2ec49d64be754105b3f958dbb896835dc06fc312daa5ecf0b3e73be",
+          "evidence_sha256": "2764ef4982dd2f1ce0f0d49568498309588a447b01c0d3fa545af6b8e5acf5ce",
           "evidence_id": "bn:live:0x0048F530",
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F530-semantic-review.json",
-          "evidence_sha256": "7e2192616e362ecbbeb2bfca3043695f2a285048d71dce0478d0a4c1debaeffd"
+          "evidence_path": "docs/fidelity/evidence/0048F530-semantic-review.json",
+          "evidence_sha256": "f4b8ed27f7618c24c8496a0133d1564fc2b72c6f0f49d19a73a99911bbac75aa"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-build.json",
-          "evidence_sha256": "20c51834f264816c2e8cfb77c35f02c70524b2d26df90e38c330f6977d5657de"
+          "evidence_sha256": "bd1dfae39d89530e43679f910cf36e08702b8ff52f06511fbc5320a26b43206d"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-behavioral.json",
-          "evidence_sha256": "e68713584b3f6deddb7c154ba2ad42603aa9700aa99c34d50236cfdd63c36272"
-        }
+          "evidence_sha256": "e09a591188477c659bc37d2a6fa5c2507ecd2aeb8a96bb695dba9ddacec36b0c"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/0048F530-structural-comparison.json",
+          "evidence_sha256": "fed339ce9fc8248f66e51a4d2a16f22e91d7888960b53e7866cf2e3de7f6e519"
+        },
+        "cfg_comparison": {
+          "value": 1.0,
+          "method": "scripts/native_gate.py cfg_score: 0.35 * Jaccard(nodes) + 0.65 * Jaccard(edges)",
+          "scope": "retail image only (Binary Ninja vs Radare2 on igi.exe)",
+          "candidate_vs_retail": "not an address-bound equivalence score; candidate CFG counts and divergences are recorded in verification.structural_comparison"
+        },
+        "decompiler_selection_note": "Binary Ninja is the single selected decompiler for retail. Radare2 and angr provide independent CFG evidence. No Ghidra analysis was run for these targets.",
+        "behavioral_status": "not_performed: no paired retail/candidate runtime capture exists; strict behavioral mode must fail closed."
       }
     },
     {
@@ -59153,10 +59348,12 @@
           "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_leaves_runner.py",
+          "path": "scripts/texture_modifier_push_diff_runner.py",
           "args": [
             "--address",
             "{address}",
+            "--root",
+            "{root}",
             "--binary",
             "{binary}",
             "--binary-sha256",
@@ -59164,11 +59361,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 300
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -59186,7 +59381,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00505E40-semantic-review.json",
-          "evidence_sha256": "8e571d566ed8d586b891bdbfeabae41d7b7bea21190f57287f92b63a24e52128"
+          "evidence_sha256": "9ca77eece4bcede2b64382f0a076cf21c47c4e03aaf3458eabcc1dda7b394b00"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00505E40-build.json",
@@ -59371,8 +59566,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
-        "signature": "int __cdecl Terrain_Load(void* context, const char* path);"
+        "sha256": "a043d7b04094ae034871c436d2e9653b1440093b96036c1cf67964bc3ed51d9b",
+        "signature": "void* __cdecl Terrain_Load(void* context, const char* path);"
       },
       "game_natives": {
         "path": "scripts/GameNatives/dynobj/004C6240-Terrain_Load.cpp",
@@ -59380,62 +59575,57 @@
         "signature": "int __cdecl Terrain_Load(void* context, const char* path);"
       },
       "verification": {
-        "status": "TRANSCRIBED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail 0x004C6240 (Terrain_Load): sub esp,0x88; Render_ComputeNormals_3; name=path+.bit -> Resource_Load -> ctx+0xDCC (0xC00 table, flags g_b81a20); name=path+.hmp if Resource_FileExists -> ctx+0xDD0 (flags g_b81920) else 0; .cmd -> ctx+8; .ctr -> ctx+0xC; .qsc: Game_DefineOptions CreateTerrainMaterial(0x4C6670,0xE2) and CreateTerrainTileMap(0x4C6760,0x41), Qvm_Load/Execute/Cleanup, Sys_CloseFileStream_23 x2; relocate ctr entries +0x1C by ctx+8; Mem_Alloc 0x1000->ctx+0xDC0, 0x10000->ctx+0xDC4, clear; DynObj_UpdateDynTree_11(ctx). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+          "rationale": "Retail 0x004C6240 (Terrain_Load): x86 cdecl, context [esp+4] (moved to EBP at 0x004C62B6), path [esp+8]; Binary Ninja and Radare2 both report 25 blocks/36 edges and identical node/edge sets, body 0x004C6240-0x004C666C, 1069 bytes; angr CFGFast recovers the exact entry with no unresolved jumps. There is one ret at 0x004C666C; the only tail call is DynObj_UpdateDynTree_11(context) at 0x004C665A (0x004CE3D0: mov eax,[esp+4]; mov [eax+0xDC8],0; ret), so every path returns arg1. Live retail EAX 0x038910B4 equals the context argument. The candidate is a 12-block host file-stage wrapper (0x00459730, 383 bytes) with the retail void* return; it returns the context on retail-corresponding paths and nullptr only on a host-only null guard. The full candidate CFG is not equivalent to retail."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
+          "HOST FILE-STAGE BRIDGE: the port runs the .bit/.hmp/.cmd/.ctr file sequence through TerrainLevelData::Terrain_LoadLevel with apply_tasks=false; retail allocation layout, .bit/.hmp pointer bases, QVM native registration/execution and the 0x004CE3D0 tail call are not byte-identical.",
+          "Retail's DynObj_UpdateDynTree_11 tail also writes 0 at context+0xDC8; the host object does not mirror that offset, so the write is not performed (the arg1 return value is reproduced).",
+          "Candidate CFG divergence: the candidate is a 12-block/16-edge wrapper (0x00459730, 383 bytes) calling Terrain_LoadLevel, while retail is a 25-block/36-edge, 1069-byte function. The recorded CFG similarity 1.0 is the Binary Ninja-vs-Radare2 score for the retail image only; it does not describe candidate equivalence.",
+          "No paired retail/candidate runtime capture exists. The only runtime observation is the retail load-phase call in build/runtime-traces/20261023T015650-level1-retail (EAX 0x038910B4 = context); no candidate capture exists, so status is capped at STRUCTURALLY_VERIFIED."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-radare2.json",
-          "evidence_sha256": "93cdd5db6723af5f005b3528a58b95bf3fab93c7752322206a2d7404be618c1b",
+          "evidence_sha256": "d54efff2f19a12cce3a70982a53982f9a02c1ff21ad3368b293d69ad2ea06096",
           "evidence_id": "r2:live:0x004C6240",
           "signature": "not restated"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-binaryninja.json",
-          "evidence_sha256": "e0324a38be6eee5120b05d129e49fc232b20fcc51bf37a8a796b7b64edc497b3",
+          "evidence_sha256": "bc1689081b8f2643ad381e87caca7e7ccd66566a36f6e921ac75a0ecf3f526ba",
           "evidence_id": "bn:live:0x004C6240",
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
-          "evidence_sha256": "753c12aed8f115b56acadf5ffca57df6569fafa70ee8bef52b5495a8278d7069"
+          "evidence_sha256": "ed28675ba349fe0e59ab204a89809f630134b1c0a266acc8ac9dd84c3562e75c"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-build.json",
-          "evidence_sha256": "c60436e8a07f9e0027cb2a624585b5dd271211e2691e02089b4e284e7df25cd0"
+          "evidence_sha256": "2d7a39f42b1da7b617ba76cbbb9c0f55cc8578071144ec74e844445fbe468fe0"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
-          "evidence_sha256": "b830d0ef080bd45b020fbf3be2eaf1305ea542aee224775a6a295c7b3fec7877"
-        }
-      },
-      "status": "TRANSCRIBED"
+          "evidence_sha256": "26b4d978907ecb2eb5a27357664b6de063955268db2474a50ec3a8eca3357bcb"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/004C6240-structural-comparison.json",
+          "evidence_sha256": "7a8a88b330c727bc1b55a2eeea4162755be7fbc2ce4f76d88764e83167d1a7b9"
+        },
+        "cfg_comparison": {
+          "value": 1.0,
+          "method": "scripts/native_gate.py cfg_score: 0.35 * Jaccard(nodes) + 0.65 * Jaccard(edges)",
+          "scope": "retail image only (Binary Ninja vs Radare2 on igi.exe)",
+          "candidate_vs_retail": "not an address-bound equivalence score; candidate CFG counts and divergences are recorded in verification.structural_comparison"
+        },
+        "decompiler_selection_note": "Binary Ninja is the single selected decompiler for retail. Radare2 and angr provide independent CFG evidence. No Ghidra analysis was run for these targets.",
+        "behavioral_status": "not_performed: no paired retail/candidate runtime capture exists; strict behavioral mode must fail closed."
+      }
     },
     {
       "address": "0x004C5F00",
@@ -59443,7 +59633,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "a043d7b04094ae034871c436d2e9653b1440093b96036c1cf67964bc3ed51d9b",
         "signature": "int __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* path);"
       },
       "game_natives": {
@@ -59452,62 +59642,58 @@
         "signature": "int __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* path);"
       },
       "verification": {
-        "status": "TRANSCRIBED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail 0x004C5F00 (Terrain_LoadTexturesAndLightmaps): sub esp,0x484; strcpy g_b97c20,path; name=path+.tex; Terrain_LoadTexFile -> ctx+0xDBC; palette[i]=i<<16 uploaded to ctx+0xDF4; if GetTerrainLightmapsUsed: name=path+.lmp -> ctx+0xE00, Resource_Load, per-entry Texture_UploadMipmapPacket into g_b81b20 (0x2C stride); return Resource_Unload(name). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+          "rationale": "Retail 0x004C5F00 (Terrain_LoadTexturesAndLightmaps): x86 cdecl, context [esp+4], path [esp+8]; Binary Ninja and Radare2 both report 20 blocks/30 edges and identical node/edge sets, body 0x004C5F00-0x004C6156, 599 bytes; angr CFGFast recovers the exact entry with no unresolved jumps. Return paths: 0x004C600B returns 0 when App_ContextGetTerrainLightmapsUsed()==0; 0x004C6096 returns 0 when Resource_FileExists(\"<path>.lmp\")==0; otherwise 0x004C613F-0x004C6144 calls Resource_Unload and no instruction writes EAX before ret 0x004C6156, so the return is Resource_Unload's EAX. Resource_Unload (0x004B6380) returns kind for 1/3, otherwise Resource_FreeNode's result (remaining pool count or relocated node address). Live retail EAX 0xA is the post-unload pool count with no swap. The candidate is a 12-block wrapper plus a 193-block helper that returns 0 on the two early host paths and Resource_Unload's value only for a registered .lmp; because the host stage never registers it, 0xA is not reproduced."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
+          "HOST FILE-STAGE BRIDGE: retail's .tex texture-list load (Terrain_LoadTexturePackage 0x005175A0), palette upload (<<16 per index) and per-page Texture_UploadMipmapPacket uploads into g_b81b20 are host-adapted into ModelTexturePixels vectors; the retail stack layout is not mirrored.",
+          "Return value: the host file stage reads TERRAIN.LMP directly and does not register it in the retail-style resource table. The loaded path therefore returns the port's Resource_Unload value only for a registered resource and otherwise 0; live retail returned 0xA (remaining resource-pool count after Resource_FreeNode, no slot swap), which is not reproduced and must not be hard-coded.",
+          "Retail's App_ContextGetTerrainLightmapsUsed() gate is omitted by the host bridge because Config_SetResolution_2 (0x004063D1), the setter's caller, is not wired in this branch.",
+          "Candidate CFG divergence: the candidate is a 12-block/16-edge wrapper (0x0045AC50, 335 bytes) plus Terrain_LoadLightmaps (0x00459930, 193 blocks/283 edges), while retail is a single 20-block/30-edge, 599-byte function. The recorded CFG similarity 1.0 is the Binary Ninja-vs-Radare2 score for the retail image only; it does not describe candidate equivalence.",
+          "No paired retail/candidate runtime capture exists. The only runtime observation is the retail load-phase call in build/runtime-traces/20261023T015650-level1-retail; no candidate capture exists, so status is capped at STRUCTURALLY_VERIFIED."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-radare2.json",
-          "evidence_sha256": "def1ab38c73bf49c1fb451045e92675899422b3605c21ea16993edae8e785fd0",
+          "evidence_sha256": "17c396e381dcb3402c22921a7f5877b2e7e5f8d33a29830489da6d44d5277c40",
           "evidence_id": "r2:live:0x004C5F00",
           "signature": "not restated"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-binaryninja.json",
-          "evidence_sha256": "4acbd4ca3140041a3910137664672f3040734f8a9fbc6f08b071597662a4d69d",
+          "evidence_sha256": "fcb928b47f7ea1c9d8cc3bfe172a56c4b81ab69c0b7be8c167a3e006788c55ca",
           "evidence_id": "bn:live:0x004C5F00",
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-semantic-review.json",
-          "evidence_sha256": "35807ea6f7beb9c5bc7843cb3bb5d93f5f169b0129595885684c90078886375e"
+          "evidence_sha256": "aea926edcf3ae8e88847285c5f11b93b02b07142af4942c87ce19bb1f4982057"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-build.json",
-          "evidence_sha256": "cd8c395393e1a10659ef959e0dc71b5e5ac29496d9e4d649c106cb08a5626032"
+          "evidence_sha256": "419b3f4da7f8b71bd2496c13889b630493d9373111e347ee87cd8c6ae4d590d6"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-behavioral.json",
-          "evidence_sha256": "d9651088cebb6bb57364a9f67c5e4b0fcbcf996e5e0b7be7d6e565b8ee1c0fe2"
-        }
-      },
-      "status": "TRANSCRIBED"
+          "evidence_sha256": "6837e0bb240565c3b3ac63a4cd1d7e6ffa8c56cc4423f00e2f5fa1b23f5407eb"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/004C5F00-structural-comparison.json",
+          "evidence_sha256": "43bcb16a2039456e780e64c3b5877b4aadc6e7ed758d356bab9e0f879e517702"
+        },
+        "cfg_comparison": {
+          "value": 1.0,
+          "method": "scripts/native_gate.py cfg_score: 0.35 * Jaccard(nodes) + 0.65 * Jaccard(edges)",
+          "scope": "retail image only (Binary Ninja vs Radare2 on igi.exe)",
+          "candidate_vs_retail": "not an address-bound equivalence score; candidate CFG counts and divergences are recorded in verification.structural_comparison"
+        },
+        "decompiler_selection_note": "Binary Ninja is the single selected decompiler for retail. Radare2 and angr provide independent CFG evidence. No Ghidra analysis was run for these targets.",
+        "behavioral_status": "not_performed: no paired retail/candidate runtime capture exists; strict behavioral mode must fail closed."
+      }
     },
     {
       "address": "0x004D14E0",
