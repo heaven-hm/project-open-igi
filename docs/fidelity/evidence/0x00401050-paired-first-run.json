@@ -1,38 +1,30 @@
 {
- "kind": "paired-runtime-first-result",
+ "kind": "paired-runtime-result",
  "schema_version": 1,
  "native": "QTask_OpenEvent 0x00401050",
- "captureMode": "sequential (retail fully closed before the candidate starts)",
- "level": 5,
+ "captureMode": "sequential: retail fully closed before the candidate starts, both at level5, windowed",
  "probe": "scripts/frida_401050_dispatch.js",
- "probeSha256": "current",
- "retail_calls": 1347,
- "candidate_calls": 113,
- "calls_compared": 113,
+ "retail_calls": 1490,
+ "candidate_calls": 413,
+ "calls_compared": 413,
  "agrees": {
   "record_present": true,
   "record_readable": true,
-  "status_byte_after": 1,
-  "note": "The loop status byte after the dispatch matches exactly across all 113 compared calls, and the candidate now reads the dispatch record correctly."
+  "dispatch_index": "125 on both sides",
+  "status_byte_after_dispatch": "1 on both sides",
+  "handler_nonzero": "true on both sides"
  },
- "diverges": {
-  "dispatch_index": {
-   "retail": 125,
-   "candidate": 124,
-   "meaning": "The candidate's phase-1 table index is one lower than retail's for the same level."
-  },
-  "handler_va": {
-   "retail": 8800,
-   "candidate": 4290772992,
-   "meaning": "The candidate's table slot holds a non-code value (0xFFC0xxxx), so handler_selected is false and handler_nonzero false. The table is not populated the way retail populates it."
-  }
+ "remaining_difference": {
+  "field": "handler_va",
+  "retail": "0x2260 Flow_RunHandler",
+  "candidate": "0x1ED60 (anonymous namespace)::Flow_RunHandler_Handler, which calls Flow_RunHandler",
+  "assessment": "The two binaries link the same logic at different offsets, so comparing image-relative VAs directly is not a valid equivalence test. The candidate slot does hold a live code pointer to the Flow phase-1 handler, which is the behaviour the native provides."
  },
- "blockers_fixed_to_get_here": [
-  "The paired script launched both games at once against the single-instance mutex; capture is now sequential.",
-  "Candidate dispatch and Level_Start were hardcoded to a stale link (0x42C630/0x42C8A0); now resolved from the built image.",
-  "The probe's candidate globals were stale, so record_readable was false; corrected to 0x005D4BE0 / 0x005F9380 / 0x005D4BF0.",
-  "The candidate aborted every frame with DDERR_INVALIDRECT because the blit destination exceeded the 1024x768 primary surface; the destination is now clamped."
+ "fixes_that_produced_this": [
+  "Clamped the DirectDraw blit destination into the primary surface; the candidate previously aborted with DDERR_INVALIDRECT (0x88760096) on frame one.",
+  "Set dispatch_table_index to QTask_FlowClassId instead of QTask_GameClassId. Retail Flow_Start 0x00402070 stores arg_4h to 0x00567C8C and calls 0x004018F0, so the dispatch record belongs to Flow (125), not Game (124). This also raised the candidate from 8 to 26.8 FPS because the real per-frame handler now runs.",
+  "Corrected the probe table base from table+0x180 bytes to table+0x600: task_phase_stride is 0x180 ELEMENTS of FrameHandler, and a FrameHandler is a 4-byte function pointer.",
+  "Made capture sequential and resolved candidate symbols from the built image instead of hardcoded stale addresses."
  ],
- "consequence": "QTask_OpenEvent stays STRUCTURALLY_VERIFIED. Two divergences must be corrected from retail evidence before it can pass: the dispatch index and the phase-1 handler table population.",
- "next_step": "Compare QTask_RegisterClasses and the phase-1 table initialization against retail 0x00402930 so the table holds the same handlers at the same indices."
+ "consequence": "Three of four typed observables now agree and the fourth differs only because the comparison compares raw VAs across two separately linked images. 0x00401050 stays STRUCTURALLY_VERIFIED until the comparison is made symbol-aware and the runtime contract is re-derived."
 }

@@ -2372,10 +2372,14 @@ int RunRetailModelScene(HINSTANCE instance,
         write_log("Flow stage registration replay: classes 0..278, Game id " +
                   std::to_string(QTask_GameClassId) + ", Flow id " +
                   std::to_string(QTask_FlowClassId));
-        // The retail game object carries the class id in the dispatch word at
-        // +0x1C, and the per-frame dispatch reads the phase 1 table at that
-        // index, so the word is the class the game object belongs to.
-        game_object.dispatch_table_index = QTask_GameClassId;
+        // The per-frame dispatch reads the phase-1 table at the class id in the
+        // dispatch word at +0x1C. Retail Flow_Start (0x00402070) installs the
+        // FLOW object as the dispatch record at 0x00567C8C: it stores arg_4h
+        // there and then calls QTask_GetCurrentType (0x004018F0). The record's
+        // class is therefore Flow (captured id 125), not Game (124). Paired
+        // retail capture confirms dispatch_index 125 and handler 0x00402260
+        // (Flow_RunHandler), so the port must carry the Flow class id here.
+        game_object.dispatch_table_index = QTask_FlowClassId;
         // Retail reaches 0x00415B30 through 0x004012A0 after Game_Init. The
         // port invokes the linked phase-0 handler directly; the handler is the
         // same function registered above, and it runs the level load before

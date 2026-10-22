@@ -31,7 +31,7 @@ const IMAGE = (() => {
       // _QTask_HandlerTable + task_phase_stride (0x180). The previously
       // hardcoded values were from an older link and made record_readable false.
       recordGlobal: 0x005D4BE0,   // Game_FrameDispatchRecord
-      tableBase: 0x005F9380,      // _QTask_HandlerTable + 0x180
+      tableBase: 0x005F9800,      // _QTask_HandlerTable + 0x180 elements * 4 bytes = +0x600
       statusGlobal: 0x005D4BF0,   // Loop_StatusByte
       phase1Handler: 0x0041F9E0,  // Game_Setup
       levelStart: 0x0041F9C0      // Level_Start
