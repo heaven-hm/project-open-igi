@@ -1,261 +1,261 @@
 {
- "schema_version": 1,
- "kind": "behavioral-test-report",
- "address": "0x005178E0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
- "executed": true,
- "oracle": "retail-binary-execution",
- "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected.",
- "observable_fields": [
-  "return_value",
-  "state_delta",
-  "side_effects"
- ],
- "limitations": [
-  "The generated graph tests walk semantics, not compatibility with every original asset.",
-  "The port holds the tree by value, so selection is compared by node index rather than by raw retail address."
- ],
- "cases": [
-  {
-   "id": "flat-two-chunks-match-second",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 1111638594,
-    "nodes": 2
-   },
-   "reference_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x005178E0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "59b458ed285d72b0ab1865bd27fe089993836bd65bf2f2faa7c555e209f938fb",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "limitations": [
+    "The generated graph tests walk semantics, not compatibility with every original asset.",
+    "The port holds the tree by value, so selection is compared by node index rather than by raw retail address."
+  ],
+  "cases": [
+    {
+      "id": "flat-two-chunks-match-second",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 1111638594,
+        "nodes": 2
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
+    {
+      "id": "flat-three-chunks-match-first",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 286331153,
+        "nodes": 3
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "flat-three-chunks-match-first",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 286331153,
-    "nodes": 3
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
+    {
+      "id": "form-with-child",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 1145132097,
+        "nodes": 2
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
+    {
+      "id": "form-match-on-form-type",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 1296385585,
+        "nodes": 2
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "form-with-child",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 1145132097,
-    "nodes": 2
-   },
-   "reference_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
+    {
+      "id": "no-match",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "query": 3735928559,
+        "nodes": 2
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
+    {
+      "id": "empty-child-form",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "query": 1094795585,
+        "nodes": 2
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "form-match-on-form-type",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 1296385585,
-    "nodes": 2
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
+    {
+      "id": "second-form-child-hit",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 1515870810,
+        "nodes": 3
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 2
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "selected_index": 2
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
+    {
+      "id": "child-tag-collides-form-type",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "query": 1129270322,
+        "nodes": 3
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "no-match",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "query": 3735928559,
-    "nodes": 2
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "empty-child-form",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "query": 1094795585,
-    "nodes": 2
-   },
-   "reference_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 1
-    },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "second-form-child-hit",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 1515870810,
-    "nodes": 3
-   },
-   "reference_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 2
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 1,
-    "state_delta": {
-     "selected_index": 2
-    },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "child-tag-collides-form-type",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "query": 1129270322,
-    "nodes": 3
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   }
-  },
-  {
-   "id": "deep-form-second-child",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "query": 1330660657,
-    "nodes": 3
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "selected_index": -1
-    },
-    "side_effects": []
-   }
+    {
+      "id": "deep-form-second-child",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "query": 1330660657,
+        "nodes": 3
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "selected_index": -1
+        },
+        "side_effects": []
+      }
+    }
+  ],
+  "tests_passed": 9,
+  "tests_total": 9,
+  "tests_failed": 0,
+  "result": "passed",
+  "runner": {
+    "path": "scripts/iff_chunk_tree_diff_runner.py",
+    "sha256": "a44c8b82fba2e69b04d606cad38be2b80fcd16a4bf541e5574e190e5fd4c8b8d",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/iff_chunk_tree_diff_runner.py",
+      "--address",
+      "0x005178E0",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/model/iff_chunk_tree.cpp",
+      "--implementation-sha256",
+      "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+    ]
   }
- ],
- "tests_passed": 9,
- "tests_total": 9,
- "tests_failed": 0,
- "result": "passed",
- "runner": {
-  "path": "scripts/iff_chunk_tree_diff_runner.py",
-  "sha256": "a44c8b82fba2e69b04d606cad38be2b80fcd16a4bf541e5574e190e5fd4c8b8d",
-  "command": [
-   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/iff_chunk_tree_diff_runner.py",
-   "--address",
-   "0x005178E0",
-   "--binary",
-   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-   "--binary-sha256",
-   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-   "--implementation",
-   "engine/src/retail/model/iff_chunk_tree.cpp",
-   "--implementation-sha256",
-   "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-   "--root",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
-  ]
- }
 }

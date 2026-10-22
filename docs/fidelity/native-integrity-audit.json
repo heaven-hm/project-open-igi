@@ -3,10 +3,9 @@
   "kind": "native-integrity-audit",
   "checked": 120,
   "counts": {
-    "ok": 112,
+    "ok": 116,
     "not-in-build": 3,
-    "missing-definition": 2,
-    "wrong-impl-path": 3
+    "missing-definition": 1
   },
   "failures": [
     {
@@ -36,34 +35,6 @@
       "status": "STRUCTURALLY_VERIFIED",
       "problem": "missing-definition",
       "detail": "no definition of AnimIff_LoadAnimationFile anywhere under engine/src"
-    },
-    {
-      "address": "0x00517890",
-      "name": "Iff_FindFormChunk",
-      "status": "VERIFIED",
-      "problem": "wrong-impl-path",
-      "detail": "engine/src/retail/model/iff_chunk_tree.cpp does not define it; the definition is in engine/src/retail/dynobj/hash_lookup.cpp"
-    },
-    {
-      "address": "0x005178E0",
-      "name": "Iff_FindChunkBelowForm",
-      "status": "VERIFIED",
-      "problem": "missing-definition",
-      "detail": "no definition of Iff_FindChunkBelowForm anywhere under engine/src"
-    },
-    {
-      "address": "0x00517940",
-      "name": "Iff_FindChunk",
-      "status": "VERIFIED",
-      "problem": "wrong-impl-path",
-      "detail": "engine/src/retail/model/iff_chunk_tree.cpp does not define it; the definition is in engine/src/retail/sys/ilff_navigation.cpp"
-    },
-    {
-      "address": "0x005179C0",
-      "name": "Iff_GetChunkPayload",
-      "status": "VERIFIED",
-      "problem": "wrong-impl-path",
-      "detail": "engine/src/retail/model/iff_chunk_tree.cpp does not define it; the definition is in engine/src/retail/sys/ilff_navigation.cpp"
     }
   ]
 }

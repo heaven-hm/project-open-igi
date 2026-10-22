@@ -56,6 +56,10 @@
     "0x005178E0": {
       "symbol": "igi::retail::model::IffChunk_FindBelowForm",
       "reason": "the port's below-form search is a namespaced C++ function"
+    },
+    "0x005179C0": {
+      "symbol": "igi::retail::sys::Ilff_GetChunkPayload",
+      "reason": "the catalog spells this native Iff_GetChunkPayload while the port defines it as Ilff_GetChunkPayload in engine/src/retail/sys/ilff_navigation.cpp; without the alias the capture reports the native as unlinked even though the symbol is in the image."
     }
   }
 }

@@ -405,8 +405,9 @@ Of 120 records, 112 are sound. The rest:
 | natives | problem | what it means |
 |---|---|---|
 | `Config_Read`, `DefineHumanPlayerGeneral`, `HumanPlayer_LoadParameters` | not-in-build | the implementation is `engine/src/retail/script/humanplayer_defines.cpp`, which CMake never compiles - the file is not in the source list, so these ports are not in the image, and `Qvm_Execute` (called by `Config_Read`) has no definition anywhere, which is why the file was left out |
-| `Iff_FindFormChunk`, `Iff_FindChunk`, `Iff_GetChunkPayload` | wrong-impl-path | the records name `engine/src/retail/model/iff_chunk_tree.cpp`, but the definitions live in `dynobj/hash_lookup.cpp` and `sys/ilff_navigation.cpp` - the catalog spells them `Iff_*` while the port spells them `Ilff_*`, so the record's path was taken from a comment rather than from the definition |
-| `AnimIff_LoadAnimationFile`, `Iff_FindChunkBelowForm` | missing-definition | no definition exists under `engine/src` under either spelling; the records claim a STRUCTURALLY_VERIFIED implementation that is not there |
+| `Iff_FindFormChunk`, `Iff_FindChunk`, `Iff_GetChunkPayload` | wrong-impl-path (fixed this round) | the records name `engine/src/retail/model/iff_chunk_tree.cpp`, but the definitions live in `dynobj/hash_lookup.cpp` and `sys/ilff_navigation.cpp` - the catalog spells them `Iff_*` while the port spells them `Ilff_*`, so the record's path was taken from a comment rather than from the definition |
+| `AnimIff_LoadAnimationFile` | missing-definition (open) |
+| `Iff_FindChunkBelowForm` | missing-definition (fixed: canonical source bound) | no definition exists under `engine/src` under either spelling; the records claim a STRUCTURALLY_VERIFIED implementation that is not there |
 
 The checker handles the `Iff_`/`Ilff_` spelling split explicitly, because two of its first-pass findings
 were that split rather than real defects - the same distinction cost an earlier round when a canonical
@@ -415,3 +416,28 @@ file was named from the catalog while the port used the shorter spelling.
 These are honesty defects, not reach defects: a record that names a file without the function is not
 evidence of a port, and the 75 candidate-unreachable natives should not be read as "ported but unwired"
 until the paths they name are confirmed. The two missing definitions are the actionable pair.
+
+## Correcting the records whose paths were comments, not definitions
+
+The audit's wrong-path findings were fixed rather than re-labelled. `Iff_FindFormChunk` now points at
+`engine/src/retail/dynobj/hash_lookup.cpp`, `Iff_FindChunk` and `Iff_GetChunkPayload` at
+`engine/src/retail/sys/ilff_navigation.cpp` - the units that actually define `Ilff_FindFormChunk`,
+`Ilff_FindChunk` and `Ilff_GetChunkPayload`.
+
+Two consequences had to be handled honestly:
+
+* the IFF behavioural runner compiled only the implementation unit, so moving the path broke its link
+  (`undefined reference to IffChunk_FindByTag`, defined in `iff_chunk_tree.cpp`). It now compiles the
+  chunk-tree helpers as a companion unit, and all three natives were re-run: 9 cases each, 9 passed.
+* `Iff_FindChunkBelowForm` has no engine definition at all, but a canonical transcription exists at
+  `scripts/GameNatives/terrain/005178E0-Iff_FindChunkBelowForm.cpp`. Its record now points there and is
+  STRUCTURALLY_VERIFIED: the record describes the reference source, and says so.
+
+`Iff_GetChunkPayload` also moved from VERIFIED to STRUCTURALLY_VERIFIED. The capture never observes it -
+retail did not call it during the level-5 run either - so there are no paired probes to justify the
+higher status. The alias added this round maps its catalog name to the port's `Ilff_` spelling, which
+moved it out of the unlinked bucket (6 -> 5) without inventing reach.
+
+`AnimIff_LoadAnimationFile` remains the one missing definition. Its name is also a catalog defect: the
+canonical file for VA 0x004D67A0 is `Render_FileSIsNotIffFile`, a different native. It needs either a
+transcription or an explicit not-ported record next.

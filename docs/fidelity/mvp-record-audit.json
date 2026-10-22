@@ -1,11 +1,11 @@
 {
  "summary": {
   "total": 120,
-  "labelled_verified": 83,
-  "saved_evidence_backed": 120,
+  "labelled_verified": 81,
+  "saved_evidence_backed": 118,
   "strict_evidence_backed": 120,
   "end_to_end_backed": 16,
-  "records_with_problems": 0
+  "records_with_problems": 2
  },
  "natives": [
   {
@@ -1959,18 +1959,20 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [],
+   "behavioral_errors": [
+    "0x00517890 behavioural tests: SHA-256 does not match docs/fidelity/evidence/0x00517890-behavioral.json"
+   ],
    "semantic_errors": [],
    "frida_errors": [],
    "runner_configured": true,
-   "saved_evidence_backed": true,
+   "saved_evidence_backed": false,
    "strict_evidence_backed": true,
    "end_to_end_backed": true
   },
   {
    "address": "0x005178E0",
    "name": "Iff_FindChunkBelowForm",
-   "status": "VERIFIED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1991,18 +1993,20 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [],
+   "behavioral_errors": [
+    "0x00517940 behavioural tests: SHA-256 does not match docs/fidelity/evidence/0x00517940-behavioral.json"
+   ],
    "semantic_errors": [],
    "frida_errors": [],
    "runner_configured": true,
-   "saved_evidence_backed": true,
+   "saved_evidence_backed": false,
    "strict_evidence_backed": true,
    "end_to_end_backed": true
   },
   {
    "address": "0x005179C0",
    "name": "Iff_GetChunkPayload",
-   "status": "VERIFIED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],

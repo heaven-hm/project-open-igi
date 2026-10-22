@@ -256,6 +256,10 @@ def candidate_observations(root: pathlib.Path, implementation: pathlib.Path,
             [CROSS_CXX, "-std=c++20", "-O1", "-w", "-static",
              "-ffunction-sections", "-fdata-sections", f"-DADDRESS={selector}",
              f"-I{root / 'engine/include'}", str(harness), str(implementation),
+             # The harness builds chunk trees with the helpers that live in iff_chunk_tree.cpp;
+             # the native under test may be defined in another unit.
+             *([] if str(implementation).endswith("iff_chunk_tree.cpp")
+               else [str(root / "engine/src/retail/model/iff_chunk_tree.cpp")]),
              "-Wl,--gc-sections", "-Wl,--unresolved-symbols=ignore-all",
              "-o", str(executable)],
             cwd=root, text=True, capture_output=True, timeout=300, check=False,
