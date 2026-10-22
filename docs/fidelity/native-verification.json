@@ -50910,6 +50910,11 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402260-behavioral.json",
           "evidence_sha256": "5f81bd69bcdd59edb6983c1c639a8ebfcdc01bded459b1b8bdb454449dfc5c04"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x00402260-frida-runtime.json",
+          "evidence_sha256": "e57ccaaf201b7fd37819242794dc616fdd49df0e1e352a82e17b10a49cf480fc"
         }
       }
     },

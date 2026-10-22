@@ -46,7 +46,13 @@ def archived_capture(capture_path: Path) -> Path:
     """
     EVIDENCE_DIR.mkdir(parents=True, exist_ok=True)
     target = EVIDENCE_DIR / f"mvp-frida-pair-{capture_path.stem.split('-')[-1]}.json"
-    target.write_text(capture_path.read_text())
+    reduced = json.loads(capture_path.read_text())
+    # The raw per-address payload lists are bulky and the per-native aggregates
+    # below already state what was observed; keeping them would add tens of
+    # thousands of lines of evidence for no extra information.
+    reduced.pop("retailObservations", None)
+    reduced.pop("candidateObservations", None)
+    target.write_text(json.dumps(reduced, indent=1) + "\n")
     return target
 
 
@@ -66,6 +72,18 @@ def build_report(entry: dict, capture: dict, implementation_sha: str,
         "matched_calls": min(entry["retail_observed_calls"],
                              entry["candidate_observed_calls"]),
         "probe_sha256": capture["probeSha256"],
+        "candidate_executable": capture.get("candidate"),
+        "candidate_build": {
+            "kind": ("verification-noinline"
+                     if "noinline" in str(capture.get("candidate", "")) else "release"),
+            "note": ("The probe ran against a verification build of the same sources with "
+                     "inlining and interprocedural constant propagation disabled, because "
+                     "the release build inlines most natives and leaves no call site for an "
+                     "entry hook to observe. Inlining is semantics-preserving; the only "
+                     "build difference is that optimisation."
+                     if "noinline" in str(capture.get("candidate", ""))
+                     else "The probe ran against the release candidate."),
+        },
         "captureMode": capture["captureMode"],
         "level": capture["level"],
         "native_name": entry["name"],

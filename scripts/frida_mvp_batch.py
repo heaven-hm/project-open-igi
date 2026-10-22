@@ -166,7 +166,15 @@ def main() -> int:
                         default=ROOT / "build-win32-no-verify-gate" / "igi1.exe")
     parser.add_argument("--targets", type=Path, default=TARGETS)
     parser.add_argument("--level", type=int, default=5)
-    parser.add_argument("--observe", type=float, default=6.0)
+    parser.add_argument("--observe", type=float, default=6.0,
+                        help="observation window for retail")
+    parser.add_argument("--observe-candidate", type=float, default=None,
+                        help="observation window for the candidate (defaults to --observe). "
+                             "The candidate reaches gameplay later than retail, so it "
+                             "usually needs a longer window.")
+    parser.add_argument("--reuse-retail", type=Path, default=None,
+                        help="reuse the retail observations of an earlier capture whose "
+                             "retail image digest still matches, instead of relaunching retail")
     parser.add_argument("--settle", type=float, default=30.0)
     parser.add_argument("--limit", type=int, default=0,
                         help="capture only the first N linked natives (0 = all)")
@@ -200,18 +208,34 @@ def main() -> int:
 
     retail_result: dict = {}
     candidate_result: dict = {}
-    print(f"capturing retail igi.exe (level {args.level}) ...", flush=True)
-    capture("igi.exe", "Z:" + str(retail).replace("/", "\\"),
-            [item["retail_va"] for item in plan], args.observe, args.settle,
-            args.level, retail_result)
-    print(f"retail: {len(retail_result.get('observed') or {})} natives observed"
-          f" error={retail_result.get('error')}", flush=True)
+    reused = None
+    if args.reuse_retail:
+        prior = json.loads(args.reuse_retail.read_text())
+        # Only reuse observations that belong to the same retail image: a
+        # different build would make the captured addresses meaningless.
+        if prior.get("retailSha256") == file_digest(retail):
+            retail_result = {"observed": prior.get("retailObservations") or {},
+                             "pid": (prior.get("capture") or {}).get("retail", {}).get("pid"),
+                             "meta": {"reused_from": str(args.reuse_retail)}}
+            reused = args.reuse_retail
+            print(f"reusing retail observations from {args.reuse_retail}", flush=True)
+        else:
+            print("retail image changed since the prior capture; capturing retail", flush=True)
+
+    if not reused:
+        print(f"capturing retail igi.exe (level {args.level}) ...", flush=True)
+        capture("igi.exe", "Z:" + str(retail).replace("/", "\\"),
+                [item["retail_va"] for item in plan], args.observe, args.settle,
+                args.level, retail_result)
+        print(f"retail: {len(retail_result.get('observed') or {})} natives observed"
+              f" error={retail_result.get('error')}", flush=True)
 
     print("retail closed; capturing the candidate ...", flush=True)
     with stage_candidate(candidate, retail.resolve().parent) as staged:
         nfd.os.environ["IGI_SCENE_LOG"] = "open-igi-scene.log"
+        candidate_window = args.observe_candidate if args.observe_candidate else args.observe
         capture(staged.name.lower(), "Z:" + str(staged).replace("/", "\\"),
-                [item["candidate_va"] for item in plan], args.observe, args.settle,
+                [item["candidate_va"] for item in plan], candidate_window, args.settle,
                 args.level, candidate_result)
     print(f"candidate: {len(candidate_result.get('observed') or {})} natives observed"
           f" error={candidate_result.get('error')}", flush=True)
@@ -244,6 +268,7 @@ def main() -> int:
         "probeSha256": file_digest(PROBE),
         "retail": str(retail),
         "retailSha256": file_digest(retail),
+        "retailObservations": retail_observed,
         "candidate": str(candidate),
         "candidateSha256": file_digest(candidate),
         "level": args.level,
