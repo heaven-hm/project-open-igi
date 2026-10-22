@@ -25,6 +25,7 @@ EVIDENCE_REL = Path("docs/fidelity/evidence")
 ADDRESS_RE = re.compile(r"^(?:0x)?([0-9a-fA-F]{1,8})$")
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 TEXT_SYMBOL_TYPES = {"T", "t", "W", "w"}
+SUPPORTED_EVIDENCE_SCHEMA_VERSION = 1
 
 # This is a reviewed port naming difference, not a general fuzzy-match rule.
 SYMBOL_ALIASES = {"Retail_Main": ("Main",)}
@@ -148,6 +149,9 @@ def _artifact_pass_state(field: str, ref: dict[str, Any], artifact: dict[str, An
     expected_kind = EVIDENCE_TYPES.get(field)
     if expected_kind is None:
         return "unknown", "unrecognized evidence field; integrity checked only"
+    schema_version = artifact.get("schema_version")
+    if type(schema_version) is not int or schema_version != SUPPORTED_EVIDENCE_SCHEMA_VERSION:
+        return "invalid", f"unsupported evidence schema_version {schema_version!r}; expected {SUPPORTED_EVIDENCE_SCHEMA_VERSION}"
     if artifact.get("kind") != expected_kind:
         return "invalid", f"expected kind {expected_kind!r}, got {artifact.get('kind')!r}"
     if artifact.get("result") != "passed":

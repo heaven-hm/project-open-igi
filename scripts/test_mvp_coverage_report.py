@@ -192,6 +192,31 @@ class CoverageReportTests(unittest.TestCase):
         with self.assertRaisesRegex(coverage.ReportError, "duplicate address in manifest"):
             coverage._load_inventory(self.root)
 
+    def test_evidence_requires_supported_schema_version(self) -> None:
+        for label, version in (("missing", None), ("unsupported", 2)):
+            with self.subTest(label=label):
+                artifact = self._artifact("build-report", executed=True, command="compile")
+                if version is None:
+                    artifact.pop("schema_version")
+                else:
+                    artifact["schema_version"] = version
+                self.manifest["natives"][0]["verification"]["build"] = self._add_evidence(
+                    f"{label}-schema.json", artifact
+                )
+                self._write_manifest()
+                with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+                    report = coverage.build_report(self.root, self.candidate_path)
+                evidence = report["natives"][0]["evidence_references"]["build"]
+                self.assertEqual(evidence["state"], "invalid")
+                self.assertIn("schema_version", evidence["reason"])
+
+    def test_parse_nm_symbols_keeps_defined_text_names(self) -> None:
+        output = """\n00000000 T igi::retail::Foo(int, unsigned char)\n00000010 W weak_function()\n00000020 D global_data\n         U unresolved()\n"""
+        self.assertEqual(
+            coverage.parse_nm_symbols(output),
+            ["igi::retail::Foo(int, unsigned char)", "weak_function()"],
+        )
+
     def test_nm_error_and_empty_symbol_table_fail_closed(self) -> None:
         failed = lambda *_args, **_kwargs: SimpleNamespace(returncode=3, stderr="bad executable", stdout="")
         with self.assertRaisesRegex(coverage.ReportError, "nm failed with exit code 3"):
