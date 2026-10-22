@@ -156,7 +156,13 @@
   "count": 8,
   "reason": "Not reached on the normal level3 boot path.",
   "evidence": "The six Config_GraphicOptions* natives are all called from 0x00403B70, which is reached from 0x00405300 and pushed as a callback by 0x00402FF0. 0x00405300 is the config-load failure path invoked by Config_Read (0x00405850) when Qvm_Load returns null, so these run only when config.qvm fails to load. Human_TaskViewReset and Qvm_ReportError are likewise not on the observed path.",
-  "next_step": "Capture a session where config.qvm load fails, or drive the view-reset and error-report paths explicitly."
+  "next_step": "Capture a session where config.qvm load fails, or drive the view-reset and error-report paths explicitly.",
+  "caller_classification": {
+   "Config_GraphicOptions*": "Registered/callback path in fcn.00402FF0 and calls from fcn.00403B70; not executed by the normal Level 3 config load observed in the captures.",
+   "Qvm_ReportError": "Called from Qvm_Load/QVM error branches at fcn.004B80B0 and fcn.004B8410; requires a failing QVM compile/load case.",
+   "Human_TaskViewReset": "Called from a mission/task dispatch switch around fcn.0040CD6B; requires the corresponding task transition."
+  },
+  "capture_conclusion": "The eight remain conditionally reachable natives, not missing static records. Normal Level 3 runtime traces cover the ordinary path; explicit failure/task scenarios are required for the remaining branches."
  },
  "config_failure_experiment": {
   "attempted": true,
