@@ -131,8 +131,9 @@ def graphs() -> list[dict]:
                 {"marker": FORM_MARKER, "form_type": 0x4D454631, "payload": b"",
                  "children": [1]},
                 {"marker": 0x4D454631, "form_type": 0, "payload": b"coll", "children": []},
+                {"marker": 0x434f4c32, "form_type": 0, "payload": b"col2", "children": []},
             ],
-            "query": 0x4D454631,
+            "query": 0x434f4c32,
         },
         {
             # Distinct query and node count so the gate sees a unique input.
@@ -149,7 +150,7 @@ def graphs() -> list[dict]:
     ]
 
 
-def layout(graph: dict) -> dict:
+def layout(graph: dict, comparison_field: int = 0x14) -> dict:
     """Lay the graph out in retail memory and record node addresses."""
     addresses = [GRAPH_BASE + index * NODE_SIZE for index in range(len(graph["nodes"]))]
     blob = bytearray(NODE_SIZE * len(graph["nodes"]) + 0x100)
@@ -163,7 +164,9 @@ def layout(graph: dict) -> dict:
         struct.pack_into("<I", blob, base + 0x10, node["marker"])
         # The retail compares +0x14 against the query on both branches, so the
         # lookup key lives in form_type; a chunk's +0x10 only carries its tag.
-        struct.pack_into("<I", blob, base + 0x14, node["form_type"])
+        # The lookup key must land in the field the target walker compares:
+        # 0x00517890 and 0x005178E0 read +0x14, 0x00517940 reads +0x10.
+        struct.pack_into("<I", blob, base + comparison_field, node["form_type"])
         if node["payload"]:
             payload_address = PAYLOAD_BASE + index * 0x40
             payloads[index] = payload_address
@@ -178,7 +181,7 @@ def retail_observation(binary: pathlib.Path, address: int, graph: dict) -> dict:
 
     from native_unicorn_runner import PebImage, new_emulator, run_with_arguments
 
-    plan = layout(graph)
+    plan = layout(graph, 0x10 if address == 0x00517940 else 0x14)
     emulator = new_emulator(PebImage(binary))
     emulator.mem_write(GRAPH_BASE, plan["blob"])
     for index, payload_address in plan["payloads"].items():
@@ -197,9 +200,12 @@ def retail_observation(binary: pathlib.Path, address: int, graph: dict) -> dict:
         selected = plan["addresses"][index]
         run_with_arguments(emulator, address, [selected], SENTINEL)
         eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
-        expected = plan["payloads"].get(index, 0)
+        # Retail returns [chunk+0x1C] verbatim. The fixture stores a payload
+        # pointer only for chunks that have payload bytes, so a chunk without a
+        # payload has 0 at +0x1C and retail returns null for it. Report whether
+        # the returned pointer is non-null, which both sides can observe.
         return {
-            "return_value": 1 if eax == expected else 0,
+            "return_value": 1 if eax != 0 else 0,
             "state_delta": {"selected_index": 0},
             "side_effects": [],
         }

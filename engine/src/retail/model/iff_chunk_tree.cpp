@@ -117,6 +117,7 @@ IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)
     {
         if (node->tag == iff_form_marker)
         {
+            // Retail 0x5178B1 compares +0x14 against the query for a form.
             if (node->form_type == tag)
             {
                 return node;
@@ -130,8 +131,10 @@ IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)
                 }
             }
         }
-        else if (node->tag == tag)
+        else if (node->form_type == tag)
         {
+            // Retail 0x5178AB also compares +0x14, not the +0x10 tag. A plain
+            // chunk therefore matches on the field at +0x14.
             return node;
         }
     }
