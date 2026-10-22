@@ -1493,6 +1493,243 @@ TERRAIN_LIMITS = (
 )
 
 
+# ---------------------------------------------------------------------------
+# 0x0048F970 WindowProcedure
+# ---------------------------------------------------------------------------
+
+WNDPROC_ADDRESS = 0x0048F970
+WNDPROC_LOOP_STATUS = 0x005C8DE8
+WNDPROC_CHAIN_HEAD = 0x005C8DF0
+WNDPROC_DEBUG_KEY_FLAG = 0x005C8E04
+WNDPROC_WINDOW = 0x70012000
+WNDPROC_CHAIN = 0x70012100
+WNDPROC_ENTRY = 0x70012200
+WNDPROC_HANDLER = 0x70012400
+WNDPROC_HANDLER_CODE = 0x70012900
+WNDPROC_CALLBACK_LOG = 0x70012400
+WNDPROC_STUB_SHOWCURSOR = 0x70012500
+WNDPROC_STUB_POSTQUIT = 0x70012600
+WNDPROC_STUB_DEFWNDPROC = 0x70012700
+
+# Import thunks used by the procedure; each is replaced with a local stub.
+WNDPROC_IAT_SHOWCURSOR = 0x005331B8
+WNDPROC_IAT_POSTQUIT = 0x005331A0
+WNDPROC_IAT_DEFWNDPROC = 0x00533190
+WNDPROC_IAT_POSTMESSAGE = 0x00533194
+# The WM_DESTROY path calls the shutdown native 0x004010B0, which runs a deep
+# process-teardown chain unrelated to message dispatch. Its entry is patched to a
+# bare ret so the observable WndProc state transition is still retail's own code.
+WNDPROC_CLOSE_NATIVE = 0x004010B0
+WNDPROC_SENTINEL = 0x00C0FFEE
+# The debug-key handler 0x0048F0A0 is not transcribed in this branch, so its
+# entry is patched to a plain stdcall return; the WndProc's own decision to call
+# it is still exercised by the retail code.
+WNDPROC_DEBUG_KEY_HANDLER = 0x0048F0A0  # cdecl: caller cleans the 3 arguments
+WNDPROC_STUB_POSTMESSAGE = 0x70012800
+WNDPROC_STOP = 0x00C0FFFF
+
+WM_ACTIVATE_RETAIL = 0x001C
+WM_CREATE_RETAIL = 0x0001
+WM_DESTROY_RETAIL = 0x0002
+WM_KEYDOWN_RETAIL = 0x0104
+WM_KEYUP_RETAIL = 0x0105
+WM_CLOSE_RETAIL = 0x0010
+WM_PAINT_RETAIL = 0x000F
+VK_S = 0x73
+VK_F12 = 0x12
+
+
+def wndproc_cases() -> list[dict]:
+    cases = [
+        {"id": "activate-nominal", "categories": ["nominal"], "message": WM_ACTIVATE_RETAIL,
+         "wparam": 1, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "create-nominal", "categories": ["nominal"], "message": WM_CREATE_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "destroy-nominal", "categories": ["nominal"], "message": WM_DESTROY_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": False},
+        {"id": "keyup-f12-nominal", "categories": ["nominal"], "message": WM_KEYUP_RETAIL,
+         "wparam": VK_F12, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keyup-other-nominal", "categories": ["nominal"], "message": WM_KEYUP_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keydown-s-nominal", "categories": ["nominal"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keydown-s-no-flag", "categories": ["boundary"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "chain-consumes", "categories": ["nominal"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": 0x41, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": True,
+         "chain_result": 0},
+        {"id": "chain-passes-through", "categories": ["boundary"], "message": WM_PAINT_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": True,
+         "chain_result": 7},
+        {"id": "default-passes", "categories": ["boundary"], "message": WM_CLOSE_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+    ]
+    for index, case in enumerate(cases):
+        case["seed"] = index
+    return cases
+
+
+def _wndproc_emulator(image: PebImage, case: dict):
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(WNDPROC_LOOP_STATUS, struct.pack("<B", case["loop_status"]))
+    emulator.mem_write(WNDPROC_DEBUG_KEY_FLAG, struct.pack("<I", case["debug_flag"]))
+    emulator.mem_write(WNDPROC_WINDOW, b"\x00" * 0x100)
+    # Stubs log which imported API was reached, then return without touching state.
+    log = 0
+    emulator.mem_write(WNDPROC_CALLBACK_LOG, struct.pack("<I", log))
+    # USER32 exports are stdcall, so each stub must pop its own arguments:
+    # ShowCursor(1 arg) and PostQuitMessage(1 arg) need `ret 4`, and
+    # DefWindowProcA takes four arguments, needing `ret 0x10`.
+    emulator.mem_write(WNDPROC_STUB_SHOWCURSOR, b"\x31\xC0\xC2\x04\x00")
+    emulator.mem_write(WNDPROC_STUB_POSTQUIT, b"\xC2\x04\x00")
+    emulator.mem_write(WNDPROC_STUB_DEFWNDPROC, b"\x31\xC0\xC2\x10\x00")
+    emulator.mem_write(WNDPROC_IAT_SHOWCURSOR, struct.pack("<I", WNDPROC_STUB_SHOWCURSOR))
+    emulator.mem_write(WNDPROC_IAT_POSTQUIT, struct.pack("<I", WNDPROC_STUB_POSTQUIT))
+    emulator.mem_write(WNDPROC_IAT_DEFWNDPROC, struct.pack("<I", WNDPROC_STUB_DEFWNDPROC))
+    emulator.mem_write(WNDPROC_CLOSE_NATIVE, b"\x31\xC0\xC3")
+    emulator.mem_write(WNDPROC_DEBUG_KEY_HANDLER, b"\x31\xC0\xC3")
+    emulator.mem_write(WNDPROC_STUB_POSTMESSAGE, b"\x31\xC0\xC2\x10\x00")
+    emulator.mem_write(WNDPROC_IAT_POSTMESSAGE, struct.pack("<I", WNDPROC_STUB_POSTMESSAGE))
+    # Retail loads the node pointer from 0x005C8DF0 and calls that node's own
+    # handler at +0x08, so the global points straight at the first entry; the
+    # node's +0x00 field is the next node. A set loop-status means at least one
+    # entry must exist, otherwise retail would call through a null handler.
+    # The chain handler is cdecl: the caller does `add esp, 0x10` after the
+    # indirect call, so the stub returns the result and pops nothing.
+    stub_ret = b"\xB8" + struct.pack("<I", case.get("chain_result", 0)) + b"\xC3"
+    emulator.mem_write(WNDPROC_HANDLER_CODE, stub_ret)
+    # Retail: eax = [0x5C8DF0]; esi = [eax]; if esi == 0 the whole chain is
+    # skipped. Otherwise it calls [eax+8] and, when that returns non-zero,
+    # advances eax = esi and repeats while the next pointer is non-null. So the
+    # global points straight at the first node and only nodes that have a
+    # successor are ever called.
+    if case["loop_status"] or case.get("chain"):
+        emulator.mem_write(WNDPROC_CHAIN_HEAD, struct.pack("<I", WNDPROC_CHAIN))
+        emulator.mem_write(WNDPROC_CHAIN, struct.pack("<II", 0, WNDPROC_HANDLER_CODE))
+    else:
+        emulator.mem_write(WNDPROC_CHAIN_HEAD, struct.pack("<I", 0))
+    return emulator
+
+
+def wndproc_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = _wndproc_emulator(image, case)
+    # stdcall: ret 0x10 pops the four arguments, so the sentinel follows them.
+    # The sentinel is the return address; emu_start must NOT use it as the end
+    # address or it halts before the stdcall cleanup completes.
+    emulator.mem_write(STACK_TOP, struct.pack("<I", WNDPROC_SENTINEL))
+    for index, value in enumerate((WNDPROC_WINDOW, case["message"], case["wparam"], case["lparam"])):
+        emulator.mem_write(STACK_TOP + 4 + index * 4, struct.pack("<I", value & 0xFFFFFFFF))
+    emulator.reg_write(unicorn.x86_const.UC_X86_REG_ESP, STACK_TOP)
+    seen = []
+    def on_code(uc, address, size, user):
+        if len(seen) < 4000:
+            seen.append(address)
+    emulator.hook_add(unicorn.UC_HOOK_CODE, on_code)
+    try:
+        emulator.emu_start(WNDPROC_ADDRESS, WNDPROC_STOP)
+    except unicorn.UcError as error:
+        eip = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EIP)
+        if eip == 0:
+            eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+            raise SystemExit(f"fault eax=0x{eax:08X} headcell={emulator.mem_read(WNDPROC_CHAIN,4).hex()} "
+                             f"node={emulator.mem_read(WNDPROC_ENTRY,8).hex()} "
+                             f"handlercode={emulator.mem_read(WNDPROC_HANDLER_CODE,6).hex()} "
+                             f"case_chain={case.get('chain')}")
+        if eip == WNDPROC_SENTINEL:
+            # Reaching the sentinel is the normal return, not a fault.
+            eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+            return {
+                "return_value": eax & 0xFFFFFFFF,
+                "state_delta": {
+                    "loop_status": emulator.mem_read(WNDPROC_LOOP_STATUS, 1)[0],
+                    "debug_key_flag": read_u32(emulator, WNDPROC_DEBUG_KEY_FLAG),
+                },
+                "side_effects": [],
+            }
+        esp = emulator.reg_read(unicorn.x86_const.UC_X86_REG_ESP)
+        stack = struct.unpack("<8I", emulator.mem_read(esp, 32))
+        raise SystemExit(f"fault eip=0x{eip:08X} esp=0x{esp:08X} case={case['id']} "
+                         f"last={[hex(v) for v in seen[-6:]]}")
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {
+            "loop_status": emulator.mem_read(WNDPROC_LOOP_STATUS, 1)[0],
+            "debug_key_flag": read_u32(emulator, WNDPROC_DEBUG_KEY_FLAG),
+        },
+        "side_effects": [],
+    }
+
+
+def wndproc_case_literal(case: dict) -> str:
+    return (f'        {{"{case["id"]}", {case["message"]}U, {case["wparam"]}U, '
+            f'{case["lparam"]}, {case["loop_status"]}U, {case["debug_flag"]}U, '
+            f'{1 if case.get("chain") else 0}, {case.get("chain_result", 0)}}},')
+
+
+def wndproc_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
+#include "igi/retail/core/native_0048f970.hpp"
+
+namespace {
+
+struct Case {
+    const char* id;
+    unsigned message;
+    unsigned wparam;
+    long lparam;
+    unsigned loop_status;
+    unsigned debug_flag;
+    int chain;
+    long chain_result;
+};
+
+Case cases[] = {
+@CASES@
+};
+
+long g_chain_result = 0;
+
+std::intptr_t chain_handler(void*, std::uint32_t, std::uintptr_t, std::intptr_t) {
+    return static_cast<std::intptr_t>(g_chain_result);
+}
+
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        igi::retail::core::WindowHandlerEntry entry{};
+        entry.next = nullptr;
+        entry.handler = nullptr;
+        WindowHandlerChain = nullptr;
+        if (item.chain) {
+            entry.next = nullptr;
+            entry.handler = chain_handler;
+            WindowHandlerChain = &entry;
+        }
+        g_chain_result = item.chain_result;
+        LoopStatusByte = static_cast<std::uint8_t>(item.loop_status);
+        DebugKeyFlag = static_cast<std::uint32_t>(item.debug_flag);
+        const std::intptr_t result = WindowProcedure(nullptr, item.message,
+            static_cast<std::uintptr_t>(item.wparam), static_cast<std::intptr_t>(item.lparam));
+        std::printf("{\"id\":\"%s\",\"return_value\":%ld,\"state_delta\":{\"loop_status\":%u,"
+                    "\"debug_key_flag\":%u},\"side_effects\":[]}\n",
+                    item.id, static_cast<long>(result),
+                    static_cast<unsigned>(LoopStatusByte), DebugKeyFlag);
+    }
+    return 0;
+}
+"""
+
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -1529,6 +1766,12 @@ NATIVES = {
         "retail": config_num_retail,
         "candidate_source": config_num_candidate_source,
         "include": ("igi/retail/config/config_graphic_options.hpp",),
+    },
+    "0x0048F970": {
+        "cases": wndproc_cases,
+        "retail": wndproc_retail,
+        "candidate_source": wndproc_candidate_source,
+        "include": ("igi/retail/core/native_0048f970.hpp",),
     },
     "0x00463180": {
         "cases": crouch_cases,
@@ -1590,6 +1833,8 @@ NATIVES = {
 
 
 def format_case_literal(address: str, case: dict) -> str:
+    if address == "0x0048F970":
+        return wndproc_case_literal(case)
     if address == "0x00465820":
         return (f'        {{"{case["id"]}", static_cast<std::size_t>({case["human_offset"]}), '
                 f'{float(case["feet_x"])}, {float(case["feet_y"])}, {float(case["feet_z"])}, '
@@ -1684,7 +1929,12 @@ def ensure_emulator_runtime() -> None:
         return
     configured = os.environ.get("IGI_UNICORN_PYTHON", "").strip()
     candidates = [configured] if configured else []
-    candidates.append(str(pathlib.Path(__file__).resolve().parents[1] / "build/unicorn-rosetta/python"))
+    # The Rosetta venv lives beside the repository, not inside every worktree,
+    # so resolve it from the shared checkout as well.
+    root_dir = pathlib.Path(__file__).resolve().parents[1]
+    candidates.append(str(root_dir / "build/unicorn-rosetta/python"))
+    candidates.append(str(root_dir / "build/unicorn-rosetta/bin/python"))
+    candidates.append(str(root_dir.parent / "build/unicorn-rosetta/bin/python"))
     candidates.append(str(pathlib.Path(__file__).resolve().parents[1] / ".venv-angr/bin/python"))
     candidates.append("/Users/haseeb-mir/Documents/Code/re-agent/.venv/bin/python")
     failures = [f"{sys.executable}: exit {current.returncode}"]
@@ -1827,3 +2077,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+

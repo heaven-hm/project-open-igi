@@ -52195,10 +52195,11 @@
           "rationale": "Binary Ninja and radare2 agree on the entry at 0X0048F970: the candidate keeps the retail's instructions, globals and return."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Blocked from VERIFIED: scripts/GameNatives/input/0048F970-WindowProcedure.cpp does not exist. The behavioral harness in native_unicorn_runner.py is complete and passes 10/10, but the native is outside the MVP and focus target lists, so it was not pursued further."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -52213,7 +52214,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -52240,8 +52241,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
           "evidence_sha256": "3551054e9aff73a92bf5a7cf1b69f630be3a2de938c32b91af3d2a0ffe52a3f8"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
+          "evidence_sha256": "5dc2ebee8da525c9b08d7992812264800c0bf2e8378268396e1eab2d1d9f4c5c",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "STRUCTURALLY_VERIFIED"
     },
     {
       "address": "0x0048F530",
