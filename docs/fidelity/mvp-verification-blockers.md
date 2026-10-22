@@ -7,14 +7,26 @@ categories and what each one needs.
 
 | blocker | natives | meaning |
 | --- | --- | --- |
-| candidate-unreachable | 69 | retail calls it, the candidate program never does: the subsystem is not built into the scene |
-| unlinked | 20 | the port has no symbol at all for the native |
-| retail-unobserved | 18 | neither run at this level reached it |
-| end-to-end | 8 | both sides observed; 6 pass every pillar, 2 need a runner case |
-| paired-mismatch | 5 | both sides observed, observed classes disagree |
+| candidate-unreachable | 75 | retail calls it, the candidate program never does: the subsystem is not built into the scene |
+| retail-unobserved | 23 | neither run reached it |
+| end-to-end | 10 | both sides observed; 7 pass every pillar, 3 fail another pillar |
+| unlinked | 6 | no candidate symbol at all |
+| paired-mismatch | 6 | both sides observed, observed classes disagree |
 
-Level 1 and level 5 produce the same candidate picture - 18 linked natives observed,
-8 matched - so the shortfall is structural, not a matter of which level is loaded.
+An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
+the catalog name and the port's name differ at the same retail address (the port
+implements the x87 control-word helpers at the addresses the catalog labels
+`Camera_*`, for example). `scripts/mvp_candidate_symbol_aliases.json` now records
+those mappings with the reason each address is authoritative, and the capture
+driver resolves through it. Linked coverage rose from 100 to 114 and the paired
+capture then matched 10 natives instead of 8 - the two new ones are
+`Display_ClearSurfaces_16` (the x87 init body) and `Iff_FindChunk`.
+
+The six that remain unlinked are honest gaps: `QTask_CreateTask` and
+`AnimIff_LoadAnimationFile` have no implementation, `Iff_GetChunkPayload` has no
+function because the port holds the payload by value, and the three
+`humanplayer_defines.cpp` natives cannot link until its five unimplemented
+config/QVM dependencies exist.
 
 ## The flow fact that frames everything
 

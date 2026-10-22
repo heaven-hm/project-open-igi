@@ -51,14 +51,43 @@ def candidate_symbol_table(executable: Path) -> dict[str, str]:
     return table
 
 
-def resolve(table: dict[str, str], native_name: str) -> str | None:
-    """The candidate VA for one native, allowing a C++ namespace prefix."""
-    if native_name in table:
-        return table[native_name]
-    suffix = "::" + native_name
-    for base, address in table.items():
-        if base.endswith(suffix):
-            return address
+ALIASES_PATH = ROOT / "scripts" / "mvp_candidate_symbol_aliases.json"
+
+
+def load_symbol_aliases() -> dict[str, str]:
+    """Address to candidate symbol, for natives whose catalog and port names differ."""
+    if not ALIASES_PATH.is_file():
+        return {}
+    data = json.loads(ALIASES_PATH.read_text())
+    aliases = data.get("aliases") or {}
+    return {address.lower(): entry.get("symbol", "") for address, entry in aliases.items()
+            if isinstance(entry, dict) and entry.get("symbol")}
+
+
+SYMBOL_ALIASES = load_symbol_aliases()
+
+
+def resolve(table: dict[str, str], native_name: str, address: str = "") -> str | None:
+    """The candidate VA for one native, allowing a namespace prefix or a known alias.
+
+    The catalog name and the ported name are not always the same word - the port
+    sometimes implements an address under a different name, and for a few MVP
+    entries the catalog name does not describe the code at the address at all.
+    When an alias is recorded for the address it wins, because the address is
+    what binds the implementation to the retail image.
+    """
+    candidates = []
+    alias = SYMBOL_ALIASES.get(address.lower())
+    if alias:
+        candidates.append(alias)
+    candidates.append(native_name)
+    for wanted in candidates:
+        if wanted in table:
+            return table[wanted]
+        suffix = "::" + wanted
+        for base, resolved in table.items():
+            if base.endswith(suffix):
+                return resolved
     return None
 
 
@@ -313,12 +342,13 @@ def main() -> int:
     unlinked = []
     for target in targets:
         address = target["address"]
-        linked = resolve(table, target["name"])
+        linked = resolve(table, target["name"], address)
         if linked is None:
             unlinked.append({"name": target["name"], "address": address})
             continue
         plan.append({"name": target["name"], "address": address,
-                     "retail_va": address, "candidate_va": linked})
+                     "retail_va": address, "candidate_va": linked,
+                     "candidate_symbol": SYMBOL_ALIASES.get(address.lower(), target["name"])})
     if args.limit:
         plan = plan[:args.limit]
     print(f"linked {len(plan)} / {len(targets)} MVP natives; "

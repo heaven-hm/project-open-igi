@@ -1,14 +1,14 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-level5.json",
-  "level": 5,
+  "capture": "build/runtime-traces/mvp-frida-pair-aliased.json",
+  "level": 1,
   "counts": {
-    "candidate-unreachable": 69,
-    "end-to-end": 8,
-    "paired-mismatch": 5,
-    "retail-unobserved": 18,
-    "unlinked": 20
+    "candidate-unreachable": 75,
+    "end-to-end": 10,
+    "paired-mismatch": 6,
+    "retail-unobserved": 23,
+    "unlinked": 6
   },
   "natives": [
     {
@@ -17,9 +17,9 @@
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -29,7 +29,7 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     },
@@ -52,7 +52,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -63,7 +63,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -96,7 +96,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -107,7 +107,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "the candidate executes it but the retail run at this level did not",
+      "detail": "the candidate executes it but the retail run did not",
       "called_by_retail_main": false
     },
     {
@@ -118,7 +118,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "the candidate executes it but the retail run at this level did not",
+      "detail": "the candidate executes it but the retail run did not",
       "called_by_retail_main": false
     },
     {
@@ -129,7 +129,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "the candidate executes it but the retail run at this level did not",
+      "detail": "the candidate executes it but the retail run did not",
       "called_by_retail_main": false
     },
     {
@@ -140,7 +140,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -151,7 +151,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -162,7 +162,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "the candidate executes it but the retail run at this level did not",
+      "detail": "the candidate executes it but the retail run did not",
       "called_by_retail_main": false
     },
     {
@@ -173,7 +173,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -183,7 +183,7 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     },
@@ -195,7 +195,7 @@
       "evidence_backed": true,
       "blocker": "paired-mismatch",
       "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed return classes disagree",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -205,7 +205,7 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     },
@@ -216,7 +216,7 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     },
@@ -228,7 +228,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 216903 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 51426 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -239,7 +239,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 216566 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 51426 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -250,7 +250,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -261,7 +261,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -272,7 +272,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 127 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 121 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -283,7 +283,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 6166 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 6160 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -294,7 +294,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 163 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 167 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -305,7 +305,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1724 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1439 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -316,7 +316,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -327,7 +327,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 127 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 121 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -338,7 +338,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 83 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 83 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -349,7 +349,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 127 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 121 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -360,7 +360,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 43527 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 43208 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -371,7 +371,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 472 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 472 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -382,7 +382,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 30756 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 28802 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -393,7 +393,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 560 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 840 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -404,7 +404,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 280 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 420 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -415,7 +415,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -426,7 +426,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -437,7 +437,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 68013 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 71573 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -448,7 +448,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 8722 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 9463 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -459,7 +459,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 18847 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 18984 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -470,7 +470,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 5698 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 5444 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -481,7 +481,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 35 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 35 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -492,7 +492,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 22138 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 21381 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -503,7 +503,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 8329 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 9050 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -514,7 +514,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 569 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 618 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -525,7 +525,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 57047 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 50543 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -536,7 +536,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1523432 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1443586 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -558,7 +558,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 350 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 350 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -569,7 +569,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 198 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 203 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -580,7 +580,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 198 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 203 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -591,7 +591,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 5885 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 5636 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -602,7 +602,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 14894 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 13370 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -613,7 +613,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 14894 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 13370 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -624,7 +624,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1167 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1153 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -635,7 +635,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 5401 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 4649 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -646,7 +646,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 198 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 203 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -657,7 +657,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 29 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 29 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -668,7 +668,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1218 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1204 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -679,7 +679,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 555 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 604 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -690,7 +690,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 2 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 2 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -712,7 +712,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 2 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 2 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -723,7 +723,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 2 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 2 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -734,7 +734,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 458 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 660 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -745,7 +745,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 777 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1067 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -756,7 +756,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 462 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 462 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -767,7 +767,7 @@
       "evidence_backed": true,
       "blocker": "paired-mismatch",
       "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed return classes disagree",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -778,7 +778,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -789,7 +789,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 3215 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 3128 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -800,7 +800,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1334 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1387 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -811,7 +811,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 707 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 683 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -822,7 +822,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 708 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 684 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -833,7 +833,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 709 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 685 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -844,7 +844,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 4 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 4 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -855,7 +855,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 2 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 2 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -866,7 +866,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 2 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 2 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -877,7 +877,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1197 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 7286 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -888,7 +888,7 @@
       "evidence_backed": true,
       "blocker": "paired-mismatch",
       "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed return classes disagree",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -910,7 +910,7 @@
       "evidence_backed": true,
       "blocker": "paired-mismatch",
       "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed return classes disagree",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -921,7 +921,7 @@
       "evidence_backed": true,
       "blocker": "paired-mismatch",
       "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed return classes disagree",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -932,7 +932,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1111 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1209 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -943,7 +943,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 280 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 420 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -952,9 +952,9 @@
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 61149 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -963,9 +963,9 @@
       "subsystem": "Terrain",
       "status": "ANALYZED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 1133 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -976,7 +976,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 158 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 386 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -987,7 +987,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 279 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 419 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -998,7 +998,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1009,7 +1009,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 16319 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 14055 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": true
     },
     {
@@ -1020,7 +1020,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1031,7 +1031,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 75445 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 73265 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1042,7 +1042,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 75445 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 73265 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1053,7 +1053,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 75445 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 73265 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1064,7 +1064,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1075,7 +1075,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": true
     },
     {
@@ -1086,7 +1086,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 107601 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 98350 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1097,7 +1097,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 59020 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 62008 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1119,7 +1119,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 75224 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 73040 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1130,7 +1130,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "the candidate executes it but the retail run at this level did not",
+      "detail": "the candidate executes it but the retail run did not",
       "called_by_retail_main": true
     },
     {
@@ -1152,7 +1152,7 @@
       "evidence_backed": true,
       "blocker": "retail-unobserved",
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it at this level",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1163,7 +1163,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 14 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 22 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1174,7 +1174,7 @@
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
       "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 317 time(s); the candidate program never executes this subsystem",
+      "detail": "retail called it 386 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1183,9 +1183,9 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 1 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": true
     },
     {
@@ -1194,9 +1194,9 @@
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "end-to-end",
+      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "detail": "paired observation accepted",
       "called_by_retail_main": true
     },
     {
@@ -1205,9 +1205,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 840 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1216,9 +1216,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1227,9 +1227,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1238,9 +1238,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1249,9 +1249,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1260,9 +1260,9 @@
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "retail-unobserved",
+      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "detail": "neither side called it",
       "called_by_retail_main": false
     },
     {
@@ -1271,9 +1271,9 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 61810 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1283,7 +1283,7 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     },
@@ -1293,9 +1293,9 @@
       "subsystem": "MTP",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "paired-mismatch",
+      "next_action": "resolve the behavioural difference against the retail body",
+      "detail": "both sides called it but the observed classes disagree",
       "called_by_retail_main": false
     },
     {
@@ -1304,9 +1304,9 @@
       "subsystem": "MTP",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "candidate-unreachable",
+      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "detail": "retail called it 388 time(s); the candidate never executes this subsystem",
       "called_by_retail_main": false
     },
     {
@@ -1315,9 +1315,9 @@
       "subsystem": "MTP",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
-      "detail": "no candidate symbol for this name",
+      "blocker": "end-to-end",
+      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "detail": "paired observation accepted",
       "called_by_retail_main": false
     },
     {
@@ -1327,7 +1327,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "unlinked",
-      "next_action": "link the ported unit into the executable, or transcribe it",
+      "next_action": "transcribe it or make the ported unit linkable",
       "detail": "no candidate symbol for this name",
       "called_by_retail_main": false
     }
