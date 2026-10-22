@@ -25,6 +25,8 @@ import tempfile
 TARGETS = {
     "0x0048F230": ("App_ContextGetLightmapsUsed", "g_5c8be4", 0x005C8BE4),
     "0x0048F1B0": ("App_ContextGetDebugged", "g_5c8bf8", 0x005C8BF8),
+    "0x0048F1D0": ("Script_GetDebugCompileState", "g_5c8bec", 0x005C8BEC),
+    "0x0048F340": ("Script_GetForcePrecompiledState", "g_5c8bf0", 0x005C8BF0),
 }
 
 PROBES = [0x00000000, 0x00000001, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000,

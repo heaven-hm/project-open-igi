@@ -56690,8 +56690,8 @@
       "name": "Script_GetDebugCompileState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "path": "scripts/GameNatives/fx/0048F1D0-Script_GetDebugCompileState.cpp",
+        "sha256": "733c8cbb5b8c1052759b3e53d20a9651a543249eeeeb87752c7f310ffab22ad0",
         "signature": "int __cdecl Script_GetDebugCompileState(void);"
       },
       "game_natives": {
@@ -56710,8 +56710,10 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/context_getter_diff_runner.py",
           "args": [
+            "--root",
+            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -56721,11 +56723,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56743,7 +56743,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-semantic-review.json",
-          "evidence_sha256": "d3ead59a90642e7970397f47d6485792d8f9af8e34cd9baaf297ba2cb7c0e593"
+          "evidence_sha256": "16aaf1f1d63e781e433fef4642cff41e04a483e8e59654edddacb4c04ca58dbf"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-build.json",
@@ -56752,6 +56752,14 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
           "evidence_sha256": "76d11ccfe3aeebd632618c7d8e3e0dc6e6a746deba9e9a768b85d14718739393"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
+          "evidence_sha256": "c86a9d27ba0fd2b0e22c16b98b0773869d15d1b8f289cac0f8077784ec3454ae",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
       }
     },
@@ -56760,8 +56768,8 @@
       "name": "Script_GetForcePrecompiledState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "path": "scripts/GameNatives/fx/0048F340-Script_GetForcePrecompiledState.cpp",
+        "sha256": "1d4f7cebb120ff15e9194242012ef5c697ef22d36bfdfb67124750c5f23021e9",
         "signature": "int __cdecl Script_GetForcePrecompiledState(void);"
       },
       "game_natives": {
@@ -56780,8 +56788,10 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/context_getter_diff_runner.py",
           "args": [
+            "--root",
+            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -56791,11 +56801,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56813,7 +56821,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-semantic-review.json",
-          "evidence_sha256": "0fdbac20daed29aed661f5822a0123eb5177cb468880e8bd612c0fce994d4c84"
+          "evidence_sha256": "592016987c546813a7f5f44daa70922f0599ae7f84877ab9e6b67baa07467cd2"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-build.json",
@@ -56822,6 +56830,14 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
           "evidence_sha256": "011191045685964e584b30d84a12a019270d483464b8be4a408fff3ff6fe70a0"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
+          "evidence_sha256": "6f30609847b22a14aaa36931496366cec368c3bc92cfeae6f83d1ebbc0b2bb34",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
       }
     },
