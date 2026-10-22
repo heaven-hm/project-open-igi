@@ -39,3 +39,28 @@ subsystems the candidate does not run.
    resource, then animation/human/weapon.
 4. `retail-unobserved` (18) - widen the retail run or record them as not exercised at
    MVP levels.
+
+## Decoded contract for the first mismatch: GOInRemap 0x004037C0
+
+Read from the full retail body (161 bytes, `0x004037C0..0x00403861`), not from the
+current implementation comment, which understates it. The retail signature is
+`uint32_t* __cdecl GOInRemap(void* destination, void* frame)` - two stack pointers,
+not a single QVM context:
+
+1. `count = [0x00BC2380]`.
+2. `action = [0x00BC2358 + count * 345 * 4]` (stride 345 dwords), `slot = (count - 1) * 115 + action`,
+   `entry = 0x00BC25BC + slot * 12` (three dwords).
+3. `entry[0] = ReadArgument(frame, 0)`, `entry[1] = ReadArgument(frame, 1)`,
+   `entry[2] = ReadArgument(frame, 2) & 0x3FFFFFFF`, through retail 0x004B8A20.
+4. `[0x00BC2358 + count * 345 * 4] += 1` - the increment lands on the same slot the read
+   came from, not on the remap row.
+5. A 24-byte (six dword) record is copied to `destination` with `rep movsd`. Four of its
+   dwords are written first: three zeros and the constant `0x00567C74`; two dwords are
+   never written, so the retail copies whatever those stack slots held.
+6. Returns `destination`, not a masked argument.
+
+Two consequences for the port: the signature and the caller convention have to change
+(the QVM dispatcher passes three script arguments today), and the record copy cannot be
+bit-exact because two of its dwords are uninitialized on the retail side - the port must
+either define them and document the divergence or the comparison must scope them out.
+That makes this a transcription task with a scope decision, not a one-line repair.
