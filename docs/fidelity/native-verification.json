@@ -58997,14 +58997,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
         ],
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
@@ -59050,7 +59051,8 @@
           "evidence_path": "docs/fidelity/evidence/0x004D14E0-behavioral.json",
           "evidence_sha256": "cc7cb56111ea12b87f1efb01882123efd6158b8d5068561d8fcce22141b0aa09"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x00510010",
@@ -59067,14 +59069,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
         ],
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
@@ -59120,7 +59123,8 @@
           "evidence_path": "docs/fidelity/evidence/0x00510010-behavioral.json",
           "evidence_sha256": "0c180415c4e684fd9517c8cf2bdd4dac1d1b080d4fca56d859fe3281db505fb6"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x00512C30",
@@ -59137,14 +59141,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
         ],
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
@@ -59190,7 +59195,8 @@
           "evidence_path": "docs/fidelity/evidence/0x00512C30-behavioral.json",
           "evidence_sha256": "265312d51c3e943c2a72705c70838e9631d567e94a1014a57cfd59d3622d7a7f"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x004B0F80",
