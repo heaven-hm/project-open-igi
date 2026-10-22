@@ -1,309 +1,253 @@
 {
- "address": "0x0048F1B0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": 0
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-00000000",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 0
-    }
-   },
-   "reference_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": 0
-   }
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x0048F1B0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "398a6c72a5949997605ff1f4219f7a5a99d054502752a80d1d60e55fac6e5371",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "f103cebb00b365aa2b18d055165652aeee9f84f39719b38ac892719b00040720",
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x0048F1B0",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/engine/src/retail/core/app_context.cpp",
+      "--implementation-sha256",
+      "398a6c72a5949997605ff1f4219f7a5a99d054502752a80d1d60e55fac6e5371",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow"
+    ]
   },
-  {
-   "candidate_output": {
-    "return_value": 1,
-    "side_effects": [],
-    "state_delta": 1
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "state-00000001",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 1
-    }
-   },
-   "reference_output": {
-    "return_value": 1,
-    "side_effects": [],
-    "state_delta": 1
-   }
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
   },
-  {
-   "candidate_output": {
-    "return_value": -1,
-    "side_effects": [],
-    "state_delta": -1
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-ffffffff",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": -1
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "app-context-flag-0",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-1",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          1,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-2",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          2,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-3",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          3,
+          127
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 127,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 127,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-4",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          4,
+          128
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 128,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 128,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-5",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          5,
+          255
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 255,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 255,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-6",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          6,
+          256
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 256,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 256,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-7",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          "0x0048F1B0",
+          7,
+          4294967295
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 4294967295,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 4294967295,
+        "state_delta": {},
+        "side_effects": []
+      }
     }
-   },
-   "reference_output": {
-    "return_value": -1,
-    "side_effects": [],
-    "state_delta": -1
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": 127,
-    "side_effects": [],
-    "state_delta": 127
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-0000007f",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 127
-    }
-   },
-   "reference_output": {
-    "return_value": 127,
-    "side_effects": [],
-    "state_delta": 127
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": 128,
-    "side_effects": [],
-    "state_delta": 128
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-00000080",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 128
-    }
-   },
-   "reference_output": {
-    "return_value": 128,
-    "side_effects": [],
-    "state_delta": 128
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": -128,
-    "side_effects": [],
-    "state_delta": -128
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-ffffff80",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": -128
-    }
-   },
-   "reference_output": {
-    "return_value": -128,
-    "side_effects": [],
-    "state_delta": -128
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": 305419896,
-    "side_effects": [],
-    "state_delta": 305419896
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "state-12345678",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 305419896
-    }
-   },
-   "reference_output": {
-    "return_value": 305419896,
-    "side_effects": [],
-    "state_delta": 305419896
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": -305419896,
-    "side_effects": [],
-    "state_delta": -305419896
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "state-edcba988",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": -305419896
-    }
-   },
-   "reference_output": {
-    "return_value": -305419896,
-    "side_effects": [],
-    "state_delta": -305419896
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": 2147483647,
-    "side_effects": [],
-    "state_delta": 2147483647
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-7fffffff",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 2147483647
-    }
-   },
-   "reference_output": {
-    "return_value": 2147483647,
-    "side_effects": [],
-    "state_delta": 2147483647
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": -2147483648,
-    "side_effects": [],
-    "state_delta": -2147483648
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "state-80000000",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": -2147483648
-    }
-   },
-   "reference_output": {
-    "return_value": -2147483648,
-    "side_effects": [],
-    "state_delta": -2147483648
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": 1431655765,
-    "side_effects": [],
-    "state_delta": 1431655765
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "state-55555555",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": 1431655765
-    }
-   },
-   "reference_output": {
-    "return_value": 1431655765,
-    "side_effects": [],
-    "state_delta": 1431655765
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": -1431655766,
-    "side_effects": [],
-    "state_delta": -1431655766
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "state-aaaaaaaa",
-   "input": {
-    "args": [],
-    "initial_state": {
-     "debugged": -1431655766
-    }
-   },
-   "reference_output": {
-    "return_value": -1431655766,
-    "side_effects": [],
-    "state_delta": -1431655766
-   }
-  }
- ],
- "executed": true,
- "float_tolerance": {
-  "absolute": 0,
-  "relative": 0
- },
- "implementation_sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
- "kind": "behavioral-test-report",
- "method": "Retail x86 global-load/RET instructions from the selected igi.exe were executed in Radare2 ESIL with twelve seeded 32-bit global values; the current candidate was compiled and called with the same values. Return values and unchanged state were compared. This is emulator evidence, not a live IGI.exe process.",
- "observable_fields": [
-  "return_value",
-  "state_delta",
-  "side_effects"
- ],
- "oracle": "retail-binary-execution",
- "result": "passed",
- "schema_version": 1,
- "tests_failed": 0,
- "tests_passed": 12,
- "tests_total": 12,
- "runner": {
-  "path": "scripts/native_diff_runner.py",
-  "sha256": "21faa5d737c1834fa42814acd13d0b3e6628e3b2d21e2a7b72d7aaa4c113ad07",
-  "command": [
-   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_diff_runner.py",
-   "--address",
-   "0x0048F1B0",
-   "--binary",
-   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-   "--binary-sha256",
-   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-   "--implementation",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/app_context.cpp",
-   "--implementation-sha256",
-   "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
-   "--root",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
   ]
- }
 }

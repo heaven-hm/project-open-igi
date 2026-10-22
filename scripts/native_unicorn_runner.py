@@ -2211,6 +2211,160 @@ int main()
 """
 
 
+# ---------------------------------------------------------------------------
+# 0x0048F1B0, 0x0048F230 and 0x0048F250 the app context flags. The retail
+# loads each 32-bit flag from its own global and returns it in EAX.
+# ---------------------------------------------------------------------------
+
+APP_CONTEXT_DEBUGGED = 0x005C8BF8
+APP_CONTEXT_LIGHTMAPS_USED = 0x005C8BE4
+APP_CONTEXT_TERRAIN_LIGHTMAPS_USED = 0x005C8BE8
+APP_CONTEXT_GET_DEBUGGED_ADDRESS = 0x0048F1B0
+APP_CONTEXT_GET_LIGHTMAPS_ADDRESS = 0x0048F230
+APP_CONTEXT_GET_TERRAIN_LIGHTMAPS_ADDRESS = 0x0048F250
+
+APP_CONTEXT_FLAG_ADDRESSES = {
+    "0x0048F1B0": APP_CONTEXT_GET_DEBUGGED_ADDRESS,
+    "0x0048F230": APP_CONTEXT_GET_LIGHTMAPS_ADDRESS,
+    "0x0048F250": APP_CONTEXT_GET_TERRAIN_LIGHTMAPS_ADDRESS,
+}
+APP_CONTEXT_FLAG_GLOBALS = {
+    "0x0048F1B0": APP_CONTEXT_DEBUGGED,
+    "0x0048F230": APP_CONTEXT_LIGHTMAPS_USED,
+    "0x0048F250": APP_CONTEXT_TERRAIN_LIGHTMAPS_USED,
+}
+APP_CONTEXT_FLAG_GETTERS = {
+    "0x0048F1B0": "App_ContextGetDebugged",
+    "0x0048F230": "App_ContextGetLightmapsUsed",
+    "0x0048F250": "App_ContextGetTerrainLightmapsUsed",
+}
+
+
+def app_context_flag_cases(address: str) -> list[dict]:
+    return [
+        {"id": f"app-context-flag-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value, "address": address}
+        for index, value in enumerate(GAME_CONTEXT_VALUES)
+    ]
+
+
+def app_context_flag_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    address = case["address"]
+    global_address = APP_CONTEXT_FLAG_GLOBALS[address]
+    emulator = new_emulator(image)
+    emulator.mem_write(global_address, struct.pack("<I", case["value"] & 0xFFFFFFFF))
+    run_with_arguments(emulator, APP_CONTEXT_FLAG_ADDRESSES[address], [], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def app_context_flag_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/core/app_context.hpp"
+
+int main()
+{
+    struct Case { const char* id; std::int32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        // The native loads the flag from its own global, so the harness seeds
+        // the same field the retail's global holds.
+        igi::retail::core::AppContext_Get().debugged = item.value;
+        igi::retail::core::AppContext_Get().lightmaps_used = item.value;
+        igi::retail::core::AppContext_Get().terrain_lightmaps_used = item.value;
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(
+                        static_cast<std::uint32_t>(igi::retail::core::@GETTER@())));
+    }
+    return 0;
+}
+"""
+
+
+# ---------------------------------------------------------------------------
+# 0x0048F1A0 and 0x0048F240 the app context setters. The retail sign extends
+# the argument's low byte and stores it in the flag's own dword.
+# ---------------------------------------------------------------------------
+
+APP_CONTEXT_SET_DEBUGGED_ADDRESS = 0x0048F1A0
+APP_CONTEXT_SET_LIGHTMAPS_ADDRESS = 0x0048F240
+APP_CONTEXT_SETTER_ADDRESSES = {
+    "0x0048F1A0": APP_CONTEXT_SET_DEBUGGED_ADDRESS,
+    "0x0048F240": APP_CONTEXT_SET_LIGHTMAPS_ADDRESS,
+}
+APP_CONTEXT_SETTER_GLOBALS = {
+    "0x0048F1A0": APP_CONTEXT_DEBUGGED,
+    "0x0048F240": APP_CONTEXT_LIGHTMAPS_USED,
+}
+APP_CONTEXT_SETTER_CALLS = {
+    "0x0048F1A0": "App_ContextSetDebugged",
+    "0x0048F240": "App_ContextSetLightmapsUsed",
+}
+
+
+def app_context_setter_cases(address: str) -> list[dict]:
+    return [
+        {"id": f"app-context-setter-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value, "address": address}
+        for index, value in enumerate(GAME_CONTEXT_VALUES)
+    ]
+
+
+def app_context_setter_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    address = case["address"]
+    global_address = APP_CONTEXT_SETTER_GLOBALS[address]
+    emulator = new_emulator(image)
+    emulator.mem_write(global_address, struct.pack("<I", 0x5A5A5A5A))
+    run_with_arguments(emulator, APP_CONTEXT_SETTER_ADDRESSES[address],
+                       [case["value"] & 0xFF], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {"stored": read_u32(emulator, global_address)},
+        "side_effects": [],
+    }
+
+
+def app_context_setter_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/core/app_context.hpp"
+
+int main()
+{
+    struct Case { const char* id; std::int32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        const std::int32_t returned = igi::retail::core::@SETTER@(static_cast<std::int8_t>(item.value));
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{\"stored\":%lu},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(static_cast<std::uint32_t>(returned)),
+                    static_cast<unsigned long>(static_cast<std::uint32_t>(returned)));
+    }
+    return 0;
+}
+"""
+
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -2314,6 +2468,41 @@ NATIVES = {
         "candidate_source": flow_set_state_candidate_source,
         "include": ("igi/retail/core/frame_natives.hpp",),
     },
+    "0x0048F1A0": {
+        "cases": lambda: app_context_setter_cases("0x0048F1A0"),
+        "retail": app_context_setter_retail,
+        "candidate_source": app_context_setter_candidate_source,
+        "include": ("igi/retail/core/app_context.hpp",),
+        "substitutions": {"@SETTER@": "App_ContextSetDebugged"},
+    },
+    "0x0048F240": {
+        "cases": lambda: app_context_setter_cases("0x0048F240"),
+        "retail": app_context_setter_retail,
+        "candidate_source": app_context_setter_candidate_source,
+        "include": ("igi/retail/core/app_context.hpp",),
+        "substitutions": {"@SETTER@": "App_ContextSetLightmapsUsed"},
+    },
+    "0x0048F1B0": {
+        "cases": lambda: app_context_flag_cases("0x0048F1B0"),
+        "retail": app_context_flag_retail,
+        "candidate_source": app_context_flag_candidate_source,
+        "include": ("igi/retail/core/app_context.hpp",),
+        "substitutions": {"@GETTER@": "App_ContextGetDebugged"},
+    },
+    "0x0048F230": {
+        "cases": lambda: app_context_flag_cases("0x0048F230"),
+        "retail": app_context_flag_retail,
+        "candidate_source": app_context_flag_candidate_source,
+        "include": ("igi/retail/core/app_context.hpp",),
+        "substitutions": {"@GETTER@": "App_ContextGetLightmapsUsed"},
+    },
+    "0x0048F250": {
+        "cases": lambda: app_context_flag_cases("0x0048F250"),
+        "retail": app_context_flag_retail,
+        "candidate_source": app_context_flag_candidate_source,
+        "include": ("igi/retail/core/app_context.hpp",),
+        "substitutions": {"@GETTER@": "App_ContextGetTerrainLightmapsUsed"},
+    },
     "0x00491D40": {
         "cases": aspect_cases,
         "retail": aspect_retail,
@@ -2376,6 +2565,10 @@ def format_case_literal(address: str, case: dict) -> str:
         return f'        {{"{case["id"]}", static_cast<std::size_t>({case["pointer_offset"]})}},'
     if address in ("0x00402880", "0x004028A0"):
         return f'        {{"{case["id"]}", {case["value"] & 0xFFFFFFFF}U}},'
+    if address in APP_CONTEXT_FLAG_ADDRESSES:
+        return f'        {{"{case["id"]}", {signed32(case["value"])}}},'
+    if address in APP_CONTEXT_SETTER_ADDRESSES:
+        return f'        {{"{case["id"]}", {signed32(case["value"])}}},'
     if address == "0x00401050":
         return (f'        {{"{case["id"]}", {case["index"]}U, '
                 f'{"true" if case["abort"] else "false"}}},')

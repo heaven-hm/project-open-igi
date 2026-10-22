@@ -3,181 +3,251 @@
   "kind": "behavioral-test-report",
   "address": "0x0048F230",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "3b418222b66e41daf4145e26ee54bd999a0247cc57df11bdaea43aaa96b51bf1",
+  "implementation_sha256": "398a6c72a5949997605ff1f4219f7a5a99d054502752a80d1d60e55fac6e5371",
   "executed": true,
   "oracle": "retail-binary-execution",
-  "method": "Retail was replayed in radare2 ESIL with the target global seeded to each probe value; the candidate was compiled with i686-w64-mingw32-g++ and executed under CrossOver with the same seeded global. Only the returned low byte is observable through the process exit status.",
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "f103cebb00b365aa2b18d055165652aeee9f84f39719b38ac892719b00040720",
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x0048F230",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/engine/src/retail/core/app_context.cpp",
+      "--implementation-sha256",
+      "398a6c72a5949997605ff1f4219f7a5a99d054502752a80d1d60e55fac6e5371",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow"
+    ]
+  },
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
   "observable_fields": [
-    "return_low_byte"
+    "return_value",
+    "state_delta",
+    "side_effects"
   ],
-  "limitations": [
-    "Only the low byte of the returned dword is observable through a process exit status.",
-    "The getter reads one global and has no other input, so the seed is the entire state."
-  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
   "cases": [
     {
-      "id": "seed-00000000",
+      "id": "app-context-flag-0",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          "0x0048F230",
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-1",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          "0x0048F230",
+          1,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "app-context-flag-2",
       "categories": [
         "boundary"
       ],
       "input": {
-        "global_value": 0
+        "args": [
+          "0x0048F230",
+          2,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
-      },
-      "passed": true
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
     {
-      "id": "seed-00000001",
-      "categories": [
-        "nominal"
-      ],
-      "input": {
-        "global_value": 1
-      },
-      "reference_output": {
-        "return_low_byte": 1
-      },
-      "candidate_output": {
-        "return_low_byte": 1
-      },
-      "passed": true
-    },
-    {
-      "id": "seed-ffffffff",
+      "id": "app-context-flag-3",
       "categories": [
         "boundary"
       ],
       "input": {
-        "global_value": 4294967295
+        "args": [
+          "0x0048F230",
+          3,
+          127
+        ],
+        "initial_state": {
+          "seed": 3
+        }
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 127,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
-      },
-      "passed": true
+        "return_value": 127,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
     {
-      "id": "seed-7fffffff",
+      "id": "app-context-flag-4",
       "categories": [
         "boundary"
       ],
       "input": {
-        "global_value": 2147483647
+        "args": [
+          "0x0048F230",
+          4,
+          128
+        ],
+        "initial_state": {
+          "seed": 4
+        }
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 128,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
-      },
-      "passed": true
+        "return_value": 128,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
     {
-      "id": "seed-80000000",
+      "id": "app-context-flag-5",
       "categories": [
         "boundary"
       ],
       "input": {
-        "global_value": 2147483648
+        "args": [
+          "0x0048F230",
+          5,
+          255
+        ],
+        "initial_state": {
+          "seed": 5
+        }
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 255,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
-      },
-      "passed": true
+        "return_value": 255,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
     {
-      "id": "seed-00000100",
+      "id": "app-context-flag-6",
       "categories": [
-        "nominal"
+        "boundary"
       ],
       "input": {
-        "global_value": 256
+        "args": [
+          "0x0048F230",
+          6,
+          256
+        ],
+        "initial_state": {
+          "seed": 6
+        }
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 256,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
-      },
-      "passed": true
+        "return_value": 256,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
     {
-      "id": "seed-0000ffff",
+      "id": "app-context-flag-7",
       "categories": [
-        "nominal"
+        "boundary"
       ],
       "input": {
-        "global_value": 65535
+        "args": [
+          "0x0048F230",
+          7,
+          4294967295
+        ],
+        "initial_state": {
+          "seed": 7
+        }
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 4294967295,
+        "state_delta": {},
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
-      },
-      "passed": true
-    },
-    {
-      "id": "seed-deadbeef",
-      "categories": [
-        "nominal"
-      ],
-      "input": {
-        "global_value": 3735928559
-      },
-      "reference_output": {
-        "return_low_byte": 239
-      },
-      "candidate_output": {
-        "return_low_byte": 239
-      },
-      "passed": true
-    },
-    {
-      "id": "seed-12345678",
-      "categories": [
-        "nominal"
-      ],
-      "input": {
-        "global_value": 305419896
-      },
-      "reference_output": {
-        "return_low_byte": 120
-      },
-      "candidate_output": {
-        "return_low_byte": 120
-      },
-      "passed": true
-    },
-    {
-      "id": "seed-a5a5a5a5",
-      "categories": [
-        "nominal"
-      ],
-      "input": {
-        "global_value": 2779096485
-      },
-      "reference_output": {
-        "return_low_byte": 165
-      },
-      "candidate_output": {
-        "return_low_byte": 165
-      },
-      "passed": true
+        "return_value": 4294967295,
+        "state_delta": {},
+        "side_effects": []
+      }
     }
-  ],
-  "tests_passed": 10,
-  "tests_total": 10,
-  "tests_failed": 0,
-  "result": "passed"
+  ]
 }
