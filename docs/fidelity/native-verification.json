@@ -53566,7 +53566,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53591,7 +53591,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53618,8 +53618,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
           "evidence_sha256": "4a9d447c97d4f9622fe3cf905063ddc2a42aa907f52a45dca1cd06201c1ae37d"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
+          "evidence_sha256": "3e7be6295228c7d7504d30588b96529dbf1bcf1247fd8e0eb33cf493574c0b1e",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A5702",
@@ -53715,7 +53724,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53740,7 +53749,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53767,8 +53776,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
           "evidence_sha256": "ec61ecd74a8ee095411939201ae043c5bcae371222db07246222ee5ac69afca4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
+          "evidence_sha256": "ebd3488ee853ea2e5e5e749f138b6918c237a63221eff0dafb43464e303558bf",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AF7B0",
