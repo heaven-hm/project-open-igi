@@ -12,23 +12,24 @@ extern "C" {
 
 char const* CommandLine = nullptr;
 void* InstanceHandle = nullptr;
+char const* AppTitle = nullptr;
 
 // Native: StoreCommandLine; retail VA 0x0048F0C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F0C0..0x0048F0CA.
-// Behavior/CFG: one basic block loads the 32-bit argument, stores it at 0x005C8BC8, and returns the same bits in EAX. igi.exe's main pushes the command line and calls this native before it registers the window class.
-// Status/limits: STRUCTURALLY_VERIFIED; the load, the store and the return are the retail's. The paired start-up runtime comparison is still required for acceptance.
-std::int32_t IGI_RETAIL_CDECL StoreCommandLine(char const* command_line)
+// Tools/evidence: Binary Ninja 6.0.10601, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x0048F0C0..0x0048F0CA (10 bytes, 3 instructions, 1 basic block, no edges).
+// Behavior/CFG: bytes 8b442404 a3c88b5c00 c3: mov eax,[esp+4]; mov [0x005C8BC8],eax; ret. One block, no calls: the cdecl argument (main's lpCmdLine, pushed at 0x0048F5F3) is written to the 32-bit global at 0x005C8BC8 and the identical bits are returned in EAX.
+// Status/limits: STRUCTURALLY_VERIFIED; the retail load/store/return are reproduced. Paired start-up runtime comparison and the live behavioral runner are still required for acceptance.
+char const* IGI_RETAIL_CDECL StoreCommandLine(char const* command_line)
 {
     CommandLine = command_line;
-    return 0;
+    return command_line;
 }
 
-// Native: GetCommandLine; retail VA 0x0048F080.
+// Native: GetRetailCommandLine; retail VA 0x0048F080.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F080..0x0048F086.
-// Behavior/CFG: one basic block loads the 32-bit global at 0x005C8BC8 and returns it in EAX.
-// Status/limits: STRUCTURALLY_VERIFIED; the load and the EAX return are the retail's.
+// Tools/evidence: Binary Ninja 6.0.10601 free (UI MCP 0.1.0), Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x0048F080..0x0048F086 (6 bytes, bytes a1c88b5c00c3, 2 instructions, 1 basic block, no edges).
+// Behavior/CFG: mov eax,[0x005C8BC8]; ret. One block, no calls and no arguments: returns the 32-bit command-line pointer that 0x0048F0C0 stores at 0x0048F0C4. The only direct caller is 0x0048F360 at 0x0048F369, which scans that string for its terminator and parses it with the " \t" separators; the global itself is written only at 0x0048F0C4.
+// Status/limits: STRUCTURALLY_VERIFIED; the retail load and EAX return are reproduced by a candidate that reads the same candidate global its own StoreCommandLine writes. Paired start-up runtime comparison is still required for acceptance.
 char const* IGI_RETAIL_CDECL GetRetailCommandLine()
 {
     return CommandLine;
@@ -36,23 +37,23 @@ char const* IGI_RETAIL_CDECL GetRetailCommandLine()
 
 // Native: StoreInstanceHandle; retail VA 0x0048F0D0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F0D0..0x0048F0DA.
-// Behavior/CFG: one basic block loads the 32-bit argument, stores it at 0x005C8BC0, and returns the same bits in EAX. igi.exe's main pushes the instance handle and calls this native right after the command line.
-// Status/limits: STRUCTURALLY_VERIFIED; the load, the store and the return are the retail's.
-std::int32_t IGI_RETAIL_CDECL StoreInstanceHandle(void* instance)
+// Tools/evidence: Binary Ninja MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x0048F0D0..0x0048F0D9 (10 bytes, bytes 8b442404 a3c08b5c00 c3, 3 instructions, 1 basic block, no edges).
+// Behavior/CFG: mov eax,[esp+4]; mov [0x005C8BC0],eax; ret. One cdecl argument; the argument bits are stored at the 32-bit global 0x005C8BC0 and returned unchanged in EAX. The only caller is main 0x0048F530 at 0x0048F5FA, which does not read EAX afterwards.
+// Status/limits: STRUCTURALLY_VERIFIED; retail load/store/return reproduced, the translation unit compiles for x86, and the 10-case retail-vs-candidate differential passes. Paired startup runtime comparison is still required for acceptance.
+void* IGI_RETAIL_CDECL StoreInstanceHandle(void* instance)
 {
     InstanceHandle = instance;
-    return 0;
+    return instance;
 }
 
-// Native: GetInstanceHandle; retail VA 0x0048F0B0.
+// Native: GetAppTitle; retail VA 0x0048F0B0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F0B0..0x0048F0B6.
-// Behavior/CFG: one basic block loads the 32-bit global at 0x005C8BC0 and returns it in EAX.
-// Status/limits: STRUCTURALLY_VERIFIED; the load and the EAX return are the retail's.
-void* IGI_RETAIL_CDECL GetInstanceHandle()
+// Tools/evidence: Binary Ninja 6.0.10601 free (UI MCP 0.1.0), Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x0048F0B0..0x0048F0B6 (6 bytes, bytes a1d48b5c00c3, 2 instructions, 1 basic block, no edges).
+// Behavior/CFG: mov eax,[0x005C8BD4]; ret. One block, no calls and no arguments: returns the 32-bit pointer that 0x0048F100 stores at 0x0048F10C before passing it to SetWindowTextA (the start-up call at 0x0048F60E supplies "Innerloop"); the only direct caller is 0x4988D0 at 0x4988DD, which passes the value to MessageBoxA as lpCaption. This is not the instance handle: 0x005C8BC0 is written by 0x0048F0D0 and read by the separate getter 0x0048F090.
+// Status/limits: STRUCTURALLY_VERIFIED; the candidate now reads a distinct 4-byte global for retail 0x005C8BD4 instead of returning the instance handle. That candidate global has no writer yet because retail 0x0048F100 (SetAppTitle) exists only as an unlinked GameNatives transcription, so it stays null until the setter is reconstructed in-tree; paired runtime comparison is still required.
+char const* IGI_RETAIL_CDECL GetAppTitle()
 {
-    return InstanceHandle;
+    return AppTitle;
 }
 
 } // extern "C"

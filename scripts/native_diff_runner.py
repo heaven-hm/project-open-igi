@@ -4,6 +4,9 @@
 App Context setters are checked over their full byte input domain. Model
 attachment accessors execute both the retail body and a freshly compiled x86
 candidate object in Radare2 ESIL, using identical synthetic x86 memory layouts.
+The start-up command-line store executes the retail body in Radare2 ESIL and the
+current candidate translation unit on the host, comparing the returned 32-bit
+argument bits, the mapped global store, and the untouched neighboring state.
 """
 
 from __future__ import annotations
@@ -35,6 +38,10 @@ GETTERS = {
 CONTEXT_ACCESSOR_ADDRESS = "0x00402880"
 CONTEXT_STATE_SETTER_ADDRESS = "0x004028A0"
 LOOP_STATUS_SETTER_ADDRESS = "0x0048F480"
+STORE_COMMAND_LINE_ADDRESS = "0x0048F0C0"
+COMMAND_LINE_GLOBAL_ADDRESS = "0x005C8BC8"
+STORE_INSTANCE_HANDLE_ADDRESS = "0x0048F0D0"
+INSTANCE_HANDLE_GLOBAL_ADDRESS = "0x005C8BC0"
 STRING_FIND_EXTENSION_ADDRESS = "0x004B1E90"
 CONTEXT_GLOBAL_ADDRESS = "0x00567c8c"
 MODEL_GET_ATTACHMENT_ADDRESS = "0x004D0CF0"
@@ -413,6 +420,57 @@ def retail_getter_observation(r2: str, binary: pathlib.Path, address: str, globa
     return signed32(int(values[-1], 0))
 
 
+def retail_store_return_observation(
+    r2: str, binary: pathlib.Path, address: str, global_address: int,
+    value: int, initial: int, neighbor: int,
+) -> dict:
+    """Execute a retail store/return leaf and read back the mapped global.
+
+    Both 0x0048F0C0 and 0x0048F0D0 are mov eax,[esp+4]; mov [abs32],eax; ret.
+    The argument is seeded at [esp+4], the return address at [esp], the mapped
+    dword and its two neighboring words get distinct sentinels, then all three
+    memory words and EAX are read back.
+    """
+    stack = 0x70008000
+    lower, upper = global_address - 4, global_address + 4
+    commands = ";".join((
+        "aei",
+        "aeim 0x70000000 0x10000 stack",
+        "aeim 0x005c0000 0x10000 globals",
+        f"aer esp=0x{stack:08x}",
+        "aer eax=0xa5a5a5a5",
+        f"ae 0xdeadbeef,0x{stack:08x},=[4]",
+        f"ae 0x{value & 0xffffffff:08x},0x{stack + 4:08x},=[4]",
+        f"ae 0x{initial & 0xffffffff:08x},0x{global_address:08x},=[4]",
+        f"ae 0x{neighbor & 0xffffffff:08x},0x{lower:08x},=[4]",
+        f"ae 0x{neighbor & 0xffffffff:08x},0x{upper:08x},=[4]",
+        f"s {address}",
+        f"aer eip={address}",
+        "aes", "aes", "aes",
+        "aer eax",
+        f"ae 0x{global_address:08x},[4]",
+        f"ae 0x{lower:08x},[4]",
+        f"ae 0x{upper:08x},[4]",
+    ))
+    process = subprocess.run(
+        [r2, "-q", "-e", "bin.relocs.apply=true", "-c", commands, str(binary)],
+        text=True, capture_output=True, check=False, timeout=10,
+    )
+    if process.returncode != 0:
+        raise RuntimeError(f"Radare2 ESIL failed ({process.returncode}): {process.stderr.strip()}")
+    values = re.findall(r"(?m)^\s*(0x[0-9a-fA-F]+|\d+)\s*$", process.stdout)
+    if len(values) < 4:
+        raise RuntimeError(f"Could not read ESIL EAX/global outputs: {process.stdout!r} {process.stderr!r}")
+    eax, stored, before, after = (int(value, 0) & 0xffffffff for value in values[-4:])
+    return {
+        "return_value": eax,
+        "state_delta": stored,
+        "side_effects": [f"write:{global_address:#010X}"],
+        "unrelated_state_unchanged": before == (neighbor & 0xffffffff)
+                                     and after == (neighbor & 0xffffffff),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--address", required=True)
@@ -428,6 +486,7 @@ def main() -> int:
     address = "0x" + args.address[-8:].upper()
     if address not in (
         CONTEXT_ACCESSOR_ADDRESS, CONTEXT_STATE_SETTER_ADDRESS, LOOP_STATUS_SETTER_ADDRESS,
+        STORE_COMMAND_LINE_ADDRESS, STORE_INSTANCE_HANDLE_ADDRESS,
         MODEL_GET_ATTACHMENT_ADDRESS, MODEL_GET_ATTACHMENT_COUNT_ADDRESS, STRING_FIND_EXTENSION_ADDRESS,
     ) and address not in NATIVES and address not in GETTERS:
         raise SystemExit(f"unsupported native address: {args.address}")
@@ -438,6 +497,208 @@ def main() -> int:
         raise SystemExit("retail binary SHA-256 changed")
     if digest(implementation) != args.implementation_sha256:
         raise SystemExit("implementation SHA-256 changed")
+
+    if address == STORE_COMMAND_LINE_ADDRESS:
+        harness = '''#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include "igi/retail/core/app_startup_natives.hpp"
+int main(int argc, char** argv) {
+    if (argc != 2) return 2;
+    const auto raw = static_cast<std::uintptr_t>(std::strtoull(argv[1], nullptr, 0));
+    CommandLine = reinterpret_cast<char const*>(static_cast<std::uintptr_t>(0x5A5A5A5AU));
+    InstanceHandle = reinterpret_cast<void*>(static_cast<std::uintptr_t>(0xC3C3C3C3U));
+    const auto result = reinterpret_cast<std::uintptr_t>(
+        StoreCommandLine(reinterpret_cast<char const*>(raw)));
+    const auto stored = reinterpret_cast<std::uintptr_t>(CommandLine);
+    const auto sibling = reinterpret_cast<std::uintptr_t>(InstanceHandle);
+    std::printf("%llu %llu %d\\n",
+                static_cast<unsigned long long>(result),
+                static_cast<unsigned long long>(stored),
+                sibling == static_cast<std::uintptr_t>(0xC3C3C3C3U) ? 1 : 0);
+    return 0;
+}
+'''
+        # Null, low, image-base, self-alias, signed-boundary and all-ones pointer
+        # bits exercise the full 32-bit load/store/return without dereferencing
+        # any candidate or retail pointer.
+        values = (0x00000000, 0x00000001, 0x00001000, 0x00400000, 0x005C8BC8,
+                  0x7FFFFFFF, 0x80000000, 0xA5A5A5A5, 0xDEADBEEF, 0xFFFFFFFF)
+        initial = 0x5A5A5A5A
+        neighbor = 0xC3C3C3C3
+        cases = []
+        with tempfile.TemporaryDirectory(prefix="igi-native-diff-") as temp:
+            tempdir = pathlib.Path(temp)
+            harness_path = tempdir / "candidate_runner.cpp"
+            candidate = tempdir / "candidate"
+            harness_path.write_text(harness, encoding="utf-8")
+            dead_section_flag = "-Wl,-dead_strip" if sys.platform == "darwin" else "-Wl,--gc-sections"
+            built = subprocess.run(
+                [args.cxx, "-std=c++20", "-ffunction-sections", "-fdata-sections",
+                 f"-I{root / 'engine/include'}", str(implementation), str(harness_path),
+                 dead_section_flag, "-o", str(candidate)],
+                cwd=root, text=True, capture_output=True, check=False, timeout=60,
+            )
+            if built.returncode != 0:
+                raise RuntimeError(f"candidate harness compilation failed: {built.stderr[-4000:]}")
+            for value in values:
+                reference = retail_store_return_observation(
+                    args.r2, binary, STORE_COMMAND_LINE_ADDRESS,
+                    int(COMMAND_LINE_GLOBAL_ADDRESS, 16), value, initial, neighbor)
+                actual = subprocess.run(
+                    [str(candidate), str(value)], text=True, capture_output=True,
+                    check=False, timeout=5,
+                )
+                if actual.returncode != 0:
+                    raise RuntimeError(f"candidate call failed for value {value:#x}: {actual.stderr.strip()}")
+                try:
+                    observed_return, observed_state, sibling_unchanged = map(
+                        int, actual.stdout.strip().split())
+                except ValueError as error:
+                    raise RuntimeError(f"candidate output malformed: {actual.stdout!r}") from error
+                candidate_output = {
+                    "return_value": observed_return & 0xffffffff,
+                    "state_delta": observed_state & 0xffffffff,
+                    "side_effects": [f"write:{COMMAND_LINE_GLOBAL_ADDRESS.upper()}"],
+                    "unrelated_state_unchanged": bool(sibling_unchanged),
+                }
+                cases.append({
+                    "id": f"value-{value:08x}",
+                    "input": {
+                        "args": [value],
+                        "initial_state": {
+                            "command_line_global": initial,
+                            "neighbor_words": neighbor,
+                        },
+                    },
+                    "categories": ["boundary" if value in (
+                        0, 1, 0x7FFFFFFF, 0x80000000, 0xFFFFFFFF) else "nominal"],
+                    "reference_output": reference,
+                    "candidate_output": candidate_output,
+                })
+        failed = sum(case["reference_output"] != case["candidate_output"] for case in cases)
+        report = {
+            "schema_version": 1, "kind": "behavioral-test-report",
+            "result": "passed" if failed == 0 else "failed", "executed": True,
+            "oracle": "retail-binary-execution", "address": address,
+            "binary_sha256": args.binary_sha256,
+            "implementation_sha256": args.implementation_sha256,
+            "method": "The retail x86 bytes at 0x0048F0C0 (mov eax,[esp+4]; mov [0x005C8BC8],eax; ret) were executed by Radare2 ESIL from the exact retail PE for ten 32-bit pointer-bit inputs. The current C++ candidate translation unit was compiled and called with the same bits; its CommandLine global and the mapped retail dword 0x005C8BC8 were compared, together with the returned EAX bits and unchanged neighboring words/InstanceHandle. Pointer values are never dereferenced. This is emulator evidence, not a live IGI.exe process.",
+            "observable_fields": [
+                "return_value", "state_delta", "side_effects", "unrelated_state_unchanged",
+            ],
+            "float_tolerance": {"absolute": 0, "relative": 0},
+            "tests_total": len(cases), "tests_passed": len(cases) - failed,
+            "tests_failed": failed, "cases": cases,
+            "limitations": [
+                "The runner emulates the retail store/return pair and calls the host-built candidate; it does not launch either game.",
+                "Only the single observed path exists; no error branch is exercised.",
+                "Paired typed Frida evidence in a live retail and candidate process is still required for runtime acceptance.",
+            ],
+        }
+        print(json.dumps(report, separators=(",", ":"), sort_keys=True))
+        return 0 if failed == 0 else 1
+
+    if address == STORE_INSTANCE_HANDLE_ADDRESS:
+        harness = '''#include <cstdint>
+#include <cstdio>
+#include <cstdlib>
+#include "igi/retail/core/app_startup_natives.hpp"
+int main(int argc, char** argv) {
+    if (argc != 2) return 2;
+    const auto raw = static_cast<std::uintptr_t>(std::strtoull(argv[1], nullptr, 0));
+    CommandLine = reinterpret_cast<char const*>(static_cast<std::uintptr_t>(0xC3C3C3C3U));
+    InstanceHandle = reinterpret_cast<void*>(static_cast<std::uintptr_t>(0x5A5A5A5AU));
+    const auto result = reinterpret_cast<std::uintptr_t>(
+        StoreInstanceHandle(reinterpret_cast<void*>(raw)));
+    const auto stored = reinterpret_cast<std::uintptr_t>(InstanceHandle);
+    const auto sibling = reinterpret_cast<std::uintptr_t>(CommandLine);
+    std::printf("%llu %llu %d\\n",
+                static_cast<unsigned long long>(result),
+                static_cast<unsigned long long>(stored),
+                sibling == static_cast<std::uintptr_t>(0xC3C3C3C3U) ? 1 : 0);
+    return 0;
+}
+'''
+        # Same 32-bit pointer-bit boundary set as the command-line store: the
+        # argument is never dereferenced, only compared as bits.
+        values = (0x00000000, 0x00000001, 0x00001000, 0x00400000, 0x005C8BC0,
+                  0x7FFFFFFF, 0x80000000, 0xA5A5A5A5, 0xDEADBEEF, 0xFFFFFFFF)
+        initial = 0x5A5A5A5A
+        neighbor = 0xC3C3C3C3
+        cases = []
+        with tempfile.TemporaryDirectory(prefix="igi-native-diff-") as temp:
+            tempdir = pathlib.Path(temp)
+            harness_path = tempdir / "candidate_runner.cpp"
+            candidate = tempdir / "candidate"
+            harness_path.write_text(harness, encoding="utf-8")
+            dead_section_flag = "-Wl,-dead_strip" if sys.platform == "darwin" else "-Wl,--gc-sections"
+            built = subprocess.run(
+                [args.cxx, "-std=c++20", "-ffunction-sections", "-fdata-sections",
+                 f"-I{root / 'engine/include'}", str(implementation), str(harness_path),
+                 dead_section_flag, "-o", str(candidate)],
+                cwd=root, text=True, capture_output=True, check=False, timeout=60,
+            )
+            if built.returncode != 0:
+                raise RuntimeError(f"candidate harness compilation failed: {built.stderr[-4000:]}")
+            for value in values:
+                reference = retail_store_return_observation(
+                    args.r2, binary, STORE_INSTANCE_HANDLE_ADDRESS,
+                    int(INSTANCE_HANDLE_GLOBAL_ADDRESS, 16), value, initial, neighbor)
+                actual = subprocess.run(
+                    [str(candidate), str(value)], text=True, capture_output=True,
+                    check=False, timeout=5,
+                )
+                if actual.returncode != 0:
+                    raise RuntimeError(f"candidate call failed for value {value:#x}: {actual.stderr.strip()}")
+                try:
+                    observed_return, observed_state, sibling_unchanged = map(
+                        int, actual.stdout.strip().split())
+                except ValueError as error:
+                    raise RuntimeError(f"candidate output malformed: {actual.stdout!r}") from error
+                candidate_output = {
+                    "return_value": observed_return & 0xffffffff,
+                    "state_delta": observed_state & 0xffffffff,
+                    "side_effects": [f"write:{INSTANCE_HANDLE_GLOBAL_ADDRESS.upper()}"],
+                    "unrelated_state_unchanged": bool(sibling_unchanged),
+                }
+                cases.append({
+                    "id": f"value-{value:08x}",
+                    "input": {
+                        "args": [value],
+                        "initial_state": {
+                            "instance_handle_global": initial,
+                            "neighbor_words": neighbor,
+                        },
+                    },
+                    "categories": ["boundary" if value in (
+                        0, 1, 0x7FFFFFFF, 0x80000000, 0xFFFFFFFF) else "nominal"],
+                    "reference_output": reference,
+                    "candidate_output": candidate_output,
+                })
+        failed = sum(case["reference_output"] != case["candidate_output"] for case in cases)
+        report = {
+            "schema_version": 1, "kind": "behavioral-test-report",
+            "result": "passed" if failed == 0 else "failed", "executed": True,
+            "oracle": "retail-binary-execution", "address": address,
+            "binary_sha256": args.binary_sha256,
+            "implementation_sha256": args.implementation_sha256,
+            "method": "The retail x86 bytes at 0x0048F0D0 (mov eax,[esp+4]; mov [0x005C8BC0],eax; ret) were executed by Radare2 ESIL from the exact retail PE for ten 32-bit pointer-bit inputs. The current C++ candidate translation unit was compiled and called with the same bits; its InstanceHandle global and the mapped retail dword 0x005C8BC0 were compared, together with the returned EAX bits and unchanged neighboring words/CommandLine. Pointer values are never dereferenced. This is emulator evidence, not a live IGI.exe process.",
+            "observable_fields": [
+                "return_value", "state_delta", "side_effects", "unrelated_state_unchanged",
+            ],
+            "float_tolerance": {"absolute": 0, "relative": 0},
+            "tests_total": len(cases), "tests_passed": len(cases) - failed,
+            "tests_failed": failed, "cases": cases,
+            "limitations": [
+                "The runner emulates the retail store/return pair and calls the host-built candidate; it does not launch either game.",
+                "Only the single observed path exists; no error branch is exercised.",
+                "The retail caller main 0x0048F530 discards EAX after the 0x0048F5FA call, so the return value is not observable in that start-up trace.",
+                "Paired typed Frida evidence in a live retail and candidate process is still required for runtime acceptance.",
+            ],
+        }
+        print(json.dumps(report, separators=(",", ":"), sort_keys=True))
+        return 0 if failed == 0 else 1
 
     if address == STRING_FIND_EXTENSION_ADDRESS:
         raise SystemExit(run_string_find_extension(args, binary, implementation, root))
