@@ -4,59 +4,70 @@
  "result": "passed",
  "address": "0x0048F970",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "880e0a77f7ed6b4384e74cf9f20f480604b9f6b1aac17c4e1dc73f9075600a7f",
+ "implementation_sha256": "982ee5366cebfcffa29dcc94ad8eaac2cf7343b4847a6b5bec961210cda07d12",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Automated static review (Radare2 disassembly of 0x0048f970..0x0048fa6f, CFG, unicorn behavioral oracle over the retail bytes)",
  "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "scope": "static-and-behavioral-only",
+  "note": "No typed paired Frida probe exists for 0x0048F970: it is outside the MVP list and is not driven by a dispatch path the current paired-capture harness reaches. The behavioral oracle of scripts/native_unicorn_runner.py executes the retail bytes under unicorn and the candidate natively over the same synthetic state and compares return value plus the loop-status, debug-flag and chain-call-count deltas; it does not observe the show-cursor, post-quit, post-message or sibling calls, which are named as gaps in calls_and_side_effects.",
   "required_observables": {
    "inputs": [
-    "args"
+    "window",
+    "message",
+    "wparam",
+    "lparam",
+    "loop_status",
+    "debug_key_flag",
+    "handler_chain"
    ],
    "outputs": [
-    "outputs"
+    "return_value"
    ],
-   "sideEffects": []
+   "sideEffects": [
+    "loop_status",
+    "debug_key_flag",
+    "handler_chain_calls",
+    "show_cursor",
+    "post_quit_message"
+   ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "no_side_effects": false
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x0048F970 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Radare2 identifies a single function entry at 0x0048F970 whose body runs to the ret 0x10 at 0x0048fa6f; it carries the standard window-procedure signature (window, message, wParam, lParam) and is reached from the message pump as a WNDPROC. It is not an IFF/chunk helper: the previous revision of this report described chunk-tag searches, which was a review of a different function, and that text has been replaced. Binary Ninja and Radare2 agree on the CFG node and edge sets recorded in the -binaryninja and -radare2 evidence."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "The retail body reads its four stack arguments as the window handle, the message id (compared against 0x1c/0x1/0x2/0x104/0x105 at 0x0048f9b2 and 0x0048f9f8), wParam in ebp (compared with the key codes 0x12 and 0x73) and lParam in edx (forwarded to DefWindowProcA at 0x0048fa04). The candidate takes window/message/wparam/lparam in the same order with the same widths and forwards lParam to the default handler."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "Every literal in the candidate is a retail literal: WM_ACTIVATE 0x001c, WM_CREATE 0x0001, WM_DESTROY 0x0002, WM_KEYDOWN 0x0104, WM_KEYUP 0x0105 (0x0048f9b2, 0x0048f9f8-0x0048fa02), virtual key F12 0x12 and 's' 0x73 (0x0048fa19, 0x0048fa31, 0x0048fa5a), the status byte 0 (0x0048f9c5), the debug flag 0 and 1 (0x0048fa21, 0x0048fa5f), ShowCursor's TRUE 1 (0x0048f9c7), PostQuitMessage's 0 (0x0048f9e2) and the four-argument cdecl stack cleanup (add esp,0x10 at 0x0048f9a2 and ret 0x10). There is no scaling: the function performs no arithmetic on its arguments."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "The retail reads the loop status byte at 0x005c8de8 and gates the chain walk on it (0x0048f970-0x0048f97c); it loads the chain head pointer from 0x005c8df0 (0x0048f989) and treats the head's first dword as the first entry (mov esi,[eax] at 0x0048f98e), so an entry's next pointer is at +0x00 and its handler at +0x08 (call dword [eax+8] at 0x0048f99c); the debug flag is the dword at 0x005c8e04 (0x0048fa21, 0x0048fa36, 0x0048fa5f). The port uses the same three globals through the owning header and the same +0x00/+0x08 entry layout through igi::retail::core::WindowHandlerEntry, and the head's next pointer seeds the walk exactly as the retail does."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The candidate reproduces the chain walk (head's own handler called first, caller advanced to the returned entry, walk ending when the next pointer is null, and an immediate zero return when a handler returns zero at 0x0048fa69) and the observed side effects: it clears the loop status byte on WM_DESTROY, clears the debug flag on F12 key-up, sets the debug flag on F12 key-down (verified against the retail bytes by the new keydown-f12-sets-flag oracle case), and calls DefWindowProcA only for the messages the retail sends there. Three retail calls are NOT reproduced because the callees have no implementation in this branch, and they are stated as gaps in the implementation itself rather than approximated: 0x00498460 on WM_ACTIVATE (0x0048f9ea), 0x004010B0 on WM_DESTROY (0x0048f9d4), and 0x0048F0A0 followed by PostMessageA on 's' key-down with the debug flag set (0x0048fa45-0x0048fa4b). Their absence is why this native is recorded STRUCTURALLY_VERIFIED and not VERIFIED."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "The retail returns zero on every message it handles - WM_ACTIVATE, WM_CREATE, WM_DESTROY, WM_KEYDOWN and WM_KEYUP including its F12 and non-F12 arms - and otherwise forwards to DefWindowProcA and returns its result (0x0048fa0c-0x0048fa16). The candidate matches after correction: the key-up and key-down arms now return zero on every branch instead of falling through to the default handler, which the earlier revision of the implementation got wrong for non-F12 key-up and for key-down."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The function is integer and pointer only: the retail body contains no x87 or SSE instruction, so there is no floating-point behaviour for the port to reproduce."
   }
  ]
 }

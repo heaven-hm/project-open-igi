@@ -36,8 +36,10 @@ extern "C" {
 extern igi::retail::core::WindowHandlerEntry* WindowHandlerChain;
 
 // Retail global at VA 0x005C8DE8: the loop status byte the procedure reads
-// before it walks the chain.
-extern std::uint8_t LoopStatusByte;
+// before it walks the chain. Loop_SetStatusByte owns this global, so the name
+// and the storage come from frame_natives.hpp; declaring a second spelling here
+// gave the 0x005C8DE8 byte two symbol names and broke the candidate link.
+extern std::uint8_t Loop_StatusByte;
 
 // Retail global at VA 0x005C8E04: the debug key flag, cleared when F12 is
 // released.
