@@ -9,9 +9,9 @@ categories and what each one needs.
 | --- | --- | --- |
 | candidate-unreachable | 75 | retail calls it, the candidate program never does: the subsystem is not built into the scene |
 | retail-unobserved | 23 | neither run reached it |
-| end-to-end | 11 | both sides observed; 9 pass every pillar, 2 fail another pillar |
+| end-to-end | 12 | both sides observed; 9 pass every pillar, 3 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
-| paired-mismatch | 5 | both sides observed, observed classes disagree |
+| paired-mismatch | 4 | both sides observed, observed classes disagree |
 
 An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
 the catalog name and the port's name differ at the same retail address (the port
@@ -89,3 +89,30 @@ address, and the emitted report states reachability as its basis instead of impl
 return-value agreement. With that recorded honestly, `Iff_FindFormChunk` passes the strict
 gate on the pillars that do apply - CFG, angr, the live behavioural differential and a
 paired observation in both images - making it the ninth native verified end to end.
+
+## GOInRemap: the contract is decoded, the fix is not landed yet
+
+`GOInRemap` 0x004037C0 has read as a paired mismatch on every capture: retail returns a
+pointer, the candidate returns a series of small integers. Radare2 shows why. The native
+does write the three frame arguments into the remap table, but that is not its return: at
+0x0040382E it loads its first argument into EDI, builds a six-dword stack block holding four
+zeros and 0x00567C74, copies the block with `rep movsd`, and leaves that destination in EAX.
+Its signature is `uint32_t* __cdecl(void* destination, void* frame)`, and it also increments
+the action slot it read (0x00403824). The port returns the third argument masked to 30 bits
+and never writes a destination block.
+
+A port of that contract was written and captured: with it in place the paired capture
+observed `ptr` on both sides, 81 calls each, and matches rose from 11 to 12 while mismatches
+fell to 4. It was then reverted rather than pushed, for a concrete reason. The repository's
+integrity gate refuses to accept a changed native source without a full evidence set for
+that address - a build report, a behavioural differential from a runner, a semantic review
+and the paired probes. Two pieces are missing: `scripts/native_diff_runner.py` has no
+adapter for this address (its retail-side fixtures assume simple global setters, while this
+native reads a QVM frame and writes a destination block), and the record's canonical
+GameNatives path `scripts/GameNatives/go/004037C0-GOInRemap.hpp` does not exist.
+
+So the change is held at the gate, not waved through. Landing it needs, in order: a
+differential runner that can drive this native's frame reader, a canonical GameNatives
+transcription at that path, and a semantic review of the destination-block contract. The
+decoded body, signature and return are recorded here and in the record's status line so the
+next pass starts from the facts rather than rediscovering them.
