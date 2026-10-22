@@ -239,3 +239,16 @@ capture differs from the one in the disassembly.
 The next test is deliberately smaller than a full capture: hook only these two addresses, report each
 entry immediately instead of through the 1.5-second aggregate, and run the candidate once with the
 settle variable set, so a single `onEnter` answers whether the code runs at all under observation.
+
+## Minimal-probe attempt: the standalone harness is not the driver
+
+A two-hook standalone probe (only `0x0040B0B0` and `0x0040A6C0`, immediate `onEnter` reporting,
+settle variable set) was run against the candidate directly. The image launches under the bottle and
+creates its window, but the pid discovered by process name is gone by the time frida attaches: under
+this Wine setup the game is not the process the name lookup returns for long, which is exactly the
+problem the capture driver solves with its staging path and retry loop.
+
+So the minimal test must be built on the driver's own launch and pid-discovery code rather than
+re-implemented beside it, otherwise it measures attach behaviour instead of the port's behaviour.
+That is the next step: run the same two-address probe through `frida_mvp_batch.capture`, with the
+immediate `onEnter` reporting replacing the 1.5-second aggregate.
