@@ -148,7 +148,8 @@
  "sessions": [
   "level3 2.98s attach (61)",
   "level3 3.40s attach + Escape/Escape/Enter menu keys (61)",
-  "level3 7.32s attach (61)"
+  "level3 7.32s attach (61)",
+  "level3 with config.qvm temporarily removed (attach 8.06s, 60 observed, did not reach the config natives)"
  ],
  "stability": "Three captures with different attach timings and an injected menu sequence all observe the same 61 natives.",
  "unobserved_analysis": {
@@ -156,5 +157,13 @@
   "reason": "Not reached on the normal level3 boot path.",
   "evidence": "The six Config_GraphicOptions* natives are all called from 0x00403B70, which is reached from 0x00405300 and pushed as a callback by 0x00402FF0. 0x00405300 is the config-load failure path invoked by Config_Read (0x00405850) when Qvm_Load returns null, so these run only when config.qvm fails to load. Human_TaskViewReset and Qvm_ReportError are likewise not on the observed path.",
   "next_step": "Capture a session where config.qvm load fails, or drive the view-reset and error-report paths explicitly."
+ },
+ "config_failure_experiment": {
+  "hypothesis": "The six Config_GraphicOptions* natives run on Config_Read's config-load failure path (0x00405884 -> 0x00405300 -> 0x00403B70).",
+  "status": "hypothesis supported statically but NOT confirmed at runtime",
+  "attempt": "config.qvm was moved aside (SHA-256 backed up and verified byte-identical on restore) and the level relaunched with hooks installed.",
+  "outcome": "Attach landed at 8.06s, after the config load had already completed, so 60 natives were observed and none of the six config natives appeared. The failure path executes during early startup, which a late attach cannot instrument.",
+  "file_restored": "config.qvm restored; SHA-256 ebd47eb264a85d8aead50716300cdc1512af305a62e7860eacc3e20602025e1c matches the backup.",
+  "conclusion": "Reaching these eight requires instrumentation that runs before the config load, i.e. pre-resume injection, which is unavailable on this host (Frida spawn hangs; spawn gating unsupported)."
  }
 }
