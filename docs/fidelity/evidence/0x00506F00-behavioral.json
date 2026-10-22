@@ -376,7 +376,7 @@
   "retail_execution": {
     "tool": "Unicorn",
     "version": "2.1.4",
-    "candidate_sha256": "f80bb9a5f60794f98be19af597f1db35b45b751209f6e7c322cfe7fd9d443076",
+    "candidate_sha256": "f5a364e24e9c22ae0e837a96f9b80e6b0737b8697068951415171f58e1dd185f",
     "candidate_build_command": [
       "i686-w64-mingw32-g++",
       "-std=c++20",
@@ -385,12 +385,12 @@
       "-ffunction-sections",
       "-fdata-sections",
       "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heightmap-diff-iq21p4jh/heightmap.cpp",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heightmap-diff-6g_r9yeh/heightmap.cpp",
       "-Wl,--gc-sections,--exclude-all-symbols,--image-base,0x10000000",
       "-static-libgcc",
       "-static-libstdc++",
       "-o",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heightmap-diff-iq21p4jh/heightmap.dll"
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heightmap-diff-6g_r9yeh/heightmap.dll"
     ]
   },
   "limitations": [

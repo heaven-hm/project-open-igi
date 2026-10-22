@@ -1,519 +1,539 @@
 {
- "address": "0x004CF080",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
+  "address": "0x004CF080",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cases": [
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "local-no-textures",
+      "input": {
+        "args": [
+          "actors/guard",
+          0
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/actors/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/actors/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "local-textures",
+      "input": {
+        "args": [
+          "actors/guard",
+          1
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/actors/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/actors/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/x.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "short-no-textures",
+      "input": {
+        "args": [
+          "x",
+          0
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/x.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/x.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/x.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/x.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "short-textures",
+      "input": {
+        "args": [
+          "x",
+          1
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/x.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/x.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/x.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/levels/level5/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "nested-no-textures",
+      "input": {
+        "args": [
+          "levels/level5/actors/guard",
+          0
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/levels/level5/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/levels/level5/actors/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/levels/level5/actors/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/levels/level5/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "id": "nested-textures",
+      "input": {
+        "args": [
+          "levels/level5/actors/guard",
+          1
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/levels/level5/actors/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/levels/level5/actors/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/levels/level5/actors/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/actors/abcdefghijklm/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "long-no-textures",
+      "input": {
+        "args": [
+          "actors/abcdefghijklm/guard",
+          0
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:models/actors/abcdefghijklm/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": null,
+          "texture_count": null
+        }
+      }
+    },
+    {
+      "candidate_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/actors/abcdefghijklm/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/actors/abcdefghijklm/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/actors/abcdefghijklm/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "id": "long-textures",
+      "input": {
+        "args": [
+          "actors/abcdefghijklm/guard",
+          1
+        ],
+        "initial_state": {
+          "chunk_counts": {
+            "BANM": 0,
+            "INST": 0,
+            "LOVS": 0,
+            "MODS": 0,
+            "PALF": 0,
+            "TEXF": 0,
+            "VNAM": 0
+          }
+        }
+      },
+      "reference_output": {
+        "return_value": true,
+        "side_effects": [
+          [
+            "load",
+            "LOCAL:textures/actors/abcdefghijklm/guard.res"
+          ],
+          [
+            "unload",
+            "LOCAL:textures/actors/abcdefghijklm/guard.res"
+          ],
+          [
+            "load",
+            "LOCAL:models/actors/abcdefghijklm/guard.res"
+          ]
+        ],
+        "state_delta": {
+          "context_form_preserved": true,
+          "model_resource_loaded": true,
+          "palette_count": 0,
+          "texture_count": 0
+        }
+      }
     }
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "local-no-textures",
-   "input": {
-    "args": [
-     "actors/guard",
-     0
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   }
+  ],
+  "executed": true,
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
   },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/actors/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/actors/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "local-textures",
-   "input": {
-    "args": [
-     "actors/guard",
-     1
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/actors/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/actors/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/x.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "short-no-textures",
-   "input": {
-    "args": [
-     "x",
-     0
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/x.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/x.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/x.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/x.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "short-textures",
-   "input": {
-    "args": [
-     "x",
-     1
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/x.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/x.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/x.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/levels/level5/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "nested-no-textures",
-   "input": {
-    "args": [
-     "levels/level5/actors/guard",
-     0
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/levels/level5/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/levels/level5/actors/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/levels/level5/actors/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/levels/level5/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   },
-   "categories": [
-    "nominal"
-   ],
-   "id": "nested-textures",
-   "input": {
-    "args": [
-     "levels/level5/actors/guard",
-     1
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/levels/level5/actors/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/levels/level5/actors/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/levels/level5/actors/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/actors/abcdefghijklm/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "long-no-textures",
-   "input": {
-    "args": [
-     "actors/abcdefghijklm/guard",
-     0
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:models/actors/abcdefghijklm/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": null,
-     "texture_count": null
-    }
-   }
-  },
-  {
-   "candidate_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/actors/abcdefghijklm/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/actors/abcdefghijklm/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/actors/abcdefghijklm/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   },
-   "categories": [
-    "boundary"
-   ],
-   "id": "long-textures",
-   "input": {
-    "args": [
-     "actors/abcdefghijklm/guard",
-     1
-    ],
-    "initial_state": {
-     "chunk_counts": {
-      "BANM": 0,
-      "INST": 0,
-      "LOVS": 0,
-      "MODS": 0,
-      "PALF": 0,
-      "TEXF": 0,
-      "VNAM": 0
-     }
-    }
-   },
-   "reference_output": {
-    "return_value": true,
-    "side_effects": [
-     [
-      "load",
-      "LOCAL:textures/actors/abcdefghijklm/guard.res"
-     ],
-     [
-      "unload",
-      "LOCAL:textures/actors/abcdefghijklm/guard.res"
-     ],
-     [
-      "load",
-      "LOCAL:models/actors/abcdefghijklm/guard.res"
-     ]
-    ],
-    "state_delta": {
-     "context_form_preserved": true,
-     "model_resource_loaded": true,
-     "palette_count": 0,
-     "texture_count": 0
-    }
-   }
+  "implementation_sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+  "kind": "behavioral-test-report",
+  "limitations": [
+    "Instance VNAM/INST loops, shared-package hash lookup, non-empty mesh/texture/palette/animation/LOVS payloads are outside these zero-count fixtures.",
+    "Runtime texture branch is exercised only through empty TEXF/PALF forms; texture file parsing and renderer effects are outside scope.",
+    "Retail helper functions for animation, texture, palette, mesh, and LOVS processing are modeled at call boundaries; candidate helper implementations execute on the matching empty forms.",
+    "Retail binary and candidate run under different execution environments; compared fields and pointer relationships are normalized."
+  ],
+  "method": "Retail DynObj_LoadModelTexturePackage was executed in angr/VEX for valid empty IFF chunk fixtures. C++ candidate executed from equivalent in-memory forms. Compared return path, preserved form pointer, loaded model pointer, empty texture/palette counts, and resource load/unload path sequence.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "schema_version": 1,
+  "tests_failed": 0,
+  "tests_passed": 8,
+  "tests_total": 8,
+  "runner": {
+    "path": "scripts/mtp_package_diff_runner.py",
+    "sha256": "2922d68668952d3a32857347ab93e114be3b881922a263d8c0781c85c03e6a48",
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/mtp_package_diff_runner.py",
+      "--address",
+      "0x004CF080",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "--implementation-sha256",
+      "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+    ]
   }
- ],
- "executed": true,
- "float_tolerance": {
-  "absolute": 0,
-  "relative": 0
- },
- "implementation_sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
- "kind": "behavioral-test-report",
- "limitations": [
-  "Instance VNAM/INST loops, shared-package hash lookup, non-empty mesh/texture/palette/animation/LOVS payloads are outside these zero-count fixtures.",
-  "Runtime texture branch is exercised only through empty TEXF/PALF forms; texture file parsing and renderer effects are outside scope.",
-  "Retail helper functions for animation, texture, palette, mesh, and LOVS processing are modeled at call boundaries; candidate helper implementations execute on the matching empty forms.",
-  "Retail binary and candidate run under different execution environments; compared fields and pointer relationships are normalized."
- ],
- "method": "Retail DynObj_LoadModelTexturePackage was executed in angr/VEX for valid empty IFF chunk fixtures. C++ candidate executed from equivalent in-memory forms. Compared return path, preserved form pointer, loaded model pointer, empty texture/palette counts, and resource load/unload path sequence.",
- "observable_fields": [
-  "return_value",
-  "state_delta",
-  "side_effects"
- ],
- "oracle": "retail-binary-execution",
- "result": "passed",
- "schema_version": 1,
- "tests_failed": 0,
- "tests_passed": 8,
- "tests_total": 8
 }

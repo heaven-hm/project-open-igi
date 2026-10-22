@@ -11,7 +11,7 @@
     "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_compiled_program.cpp": "1d6a1b93e858dc08816b0b31b2b8db85ba2d4431d116fb1f40a08963fb5dd7df",
     "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_object_calls.cpp": "2ff35a45c6e879beb364388bfbfb6797034f96db36a5c146ea22ecbc9ff854cd",
     "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include/igi/retail/terrain/terrain_loaders.hpp": "8ddbe3de3d77d71b7698938241a4f5546485cade4dbb3f034f4f3c6fc9fc949e",
-    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826"
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py": "c72f27122c033c58fb3eac13ef70c96d3f4a3d11d897624bbb4f9e795ac041f2"
   },
   "observable_fields": [
     "return_value",
@@ -594,7 +594,7 @@
   "retail_execution": {
     "tool": "Unicorn",
     "version": "2.1.4",
-    "candidate_sha256": "ee958388329e0150287bf2942bc58f256680960e6e025ca54a4f47503533e72d",
+    "candidate_sha256": "c78b891a39f07d470ad4679064f008f5167d11cf95d16ab748e621de3bd32bcf",
     "candidate_build_command": [
       "i686-w64-mingw32-g++",
       "-std=c++20",
@@ -603,14 +603,14 @@
       "-ffunction-sections",
       "-fdata-sections",
       "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-modifier-diff-gmr3b6cj/candidate.cpp",
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-modifier-diff-7azv7sq7/candidate.cpp",
       "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_compiled_program.cpp",
       "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/qvm_object_calls.cpp",
       "-Wl,--gc-sections,--exclude-all-symbols,--image-base,0x10000000",
       "-static-libgcc",
       "-static-libstdc++",
       "-o",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-modifier-diff-gmr3b6cj/candidate.dll"
+      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-modifier-diff-7azv7sq7/candidate.dll"
     ]
   },
   "limitations": [
