@@ -24,29 +24,46 @@ at different points of level load and advance at different frame rates.
 Only `0x00401050` and `0x004CF390` currently satisfy the full
 `CFG >= 0.85` + angr + behavioural + Frida requirement.
 
-## The dominant gap: the candidate does not call 74 of the natives retail calls
+## The dominant limit: inlining, not a missing flow
 
-The candidate is not stuck. It runs its frame loop and calls the dispatch more
-often than retail does (`QTask_OpenEvent`: 2420 candidate calls vs 1610
-retail). It simply never executes 74 of the 100 linked natives that retail
-executes during the same level, for example:
+A first reading of the run was that the candidate never calls 74 of the
+natives retail calls. That reading was wrong and is retracted here.
 
-| native | retail calls | candidate calls |
-| --- | --- | --- |
-| `Human_IsCrouched` | 11664 | 0 |
-| `Human_CameraEyePosition` | 11664 | 0 |
-| `Script_GetForcePrecompiledState` | 6160 | 0 |
-| `Game_GetContext` | 3222 | 0 |
-| `Flow_RunHandler` | 1610 | 0 |
-| `Resource_FileExists` | 1439 | 0 |
-| `String_FindExtension` | 167 | 0 |
-| `Script_GetDebugCompileState` | 121 | 0 |
+The candidate does run its frame loop: it calls the dispatch more often than
+retail does (`QTask_OpenEvent` 2420 candidate calls vs 1610 retail). What
+differs is how the calls are emitted. The candidate is a Release build with
+the retail sources inlined across translation units, so many natives have no
+entry that is ever branched to: their bodies exist in the image, but every
+call site was inlined into its caller.
 
-Those natives are linked and hookable in the candidate, so this is not a probe
-limitation: the ported flow does not execute the script VM, the human-player
-update, the resource lookup or the flow handler chain that retail runs every
-frame. No amount of additional runtime evidence can verify a native the
-candidate never calls; the candidate flow has to reach it first.
+Proof from the candidate's own dispatch: `QTask_OpenEvent` at `0x0041f930`
+reaches `Game_GetContext` by reading the global directly
+(`mov eax, dword [0x5d4be0]`) instead of `call 0x0041f900`. Same for
+`Flow_RunHandler` `0x0041f070`, which is inlined into
+`(anonymous namespace)::Flow_RunHandler_Handler` at `0x0041ed60`.
+
+Counting direct call and jump sites in the built candidate separates the two
+cases:
+
+| | natives |
+| --- | --- |
+| linked in the candidate | 100 |
+| with at least one direct call/jump site | 46 |
+| with zero direct call sites, i.e. fully inlined | 54 |
+| hook-observable and reached by retail | 38 |
+| already observed in both images | 9 |
+
+Natives retail executes at very high frequency that can never be observed by
+an entry hook in this build include `String_ToUpperChar` (1443550 retail
+calls), `Mem_AllocChunk` (73216), `Qvm_ExecuteInstructions` (42712) and
+`Human_IsCrouched` (7382).
+
+So absence of a hook hit does not prove absence of execution, and an
+address-entry hook cannot verify an inlined native at all. The ceiling for
+this probe against the shipped candidate is 38 of the 100 linked natives; the
+other 62 (54 inlined plus 8 never reached at level 1) would need either a
+non-inlined verification build of the same sources or a per-native typed probe
+of the caller.
 
 ## The five return-class divergences
 
@@ -93,5 +110,10 @@ because a function that returns nothing leaves an arbitrary EAX.
   images, in addition to CFG, angr and behavioural evidence.
 - Reachability alone is not parity. The reports emitted from this capture say
   so explicitly in their `comparison.basis` and `limitations` fields.
-- The next lever is candidate flow coverage, not more probing: 74 natives need
-  the candidate to execute them before they can be verified.
+- The next lever is a verification build compiled with inlining disabled
+  (`-fno-inline`, `-fno-inline-functions-called-once`, `-fno-ipa-cp`) from the
+  same sources. Inlining is semantics-preserving, so that build executes the
+  same program while giving each native a real call site the probe can hook;
+  the report must record that build's digest and state the difference.
+  Alternatively, per-native typed probes can observe the inlined body through
+  its caller.

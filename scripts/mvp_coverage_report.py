@@ -36,16 +36,16 @@ RETAIL_TRACE = ROOT / "build" / "runtime-traces" / "ds-level1-retail.json"
 PAIR_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-level1.json"
 
 
-def candidate_symbols(executable: Path) -> set[str]:
-    """Every defined text symbol, demangled, without the @-suffix."""
+def candidate_symbols(executable: Path) -> dict[str, int]:
+    """Every defined text symbol that has an address, keyed by demangled name."""
     result = subprocess.run(
         ["i686-w64-mingw32-nm", "-C", str(executable)],
         capture_output=True, text=True, timeout=600, check=False)
-    symbols = set()
+    symbols: dict[str, int] = {}
     for line in result.stdout.splitlines():
         parts = line.split()
         if len(parts) >= 3 and parts[1] in {"T", "t"}:
-            symbols.add(parts[2].split("@")[0])
+            symbols.setdefault(parts[2].split("@")[0], int(parts[0], 16))
     return symbols
 
 
@@ -63,14 +63,51 @@ def base_spellings(symbol: str) -> list[str]:
     return out
 
 
-def matches(name: str, symbols: set[str]) -> bool:
-    """True when the native name is linked, allowing a C++ namespace prefix."""
+def direct_call_sites(executable: Path) -> dict[int, int]:
+    """Count direct call/jump sites per target address in the built executable.
+
+    A native whose call sites were all inlined has no site left, so an entry
+    hook on its address can never fire even though the code executes. This is
+    the difference between "not executed" and "not observable", and it matters
+    before any runtime claim is made.
+    """
+    result = subprocess.run(
+        ["i686-w64-mingw32-objdump", "-d", str(executable)],
+        capture_output=True, text=True, timeout=1800, check=False)
+    calls: dict[int, int] = {}
+    # objdump lines look like "  41f95b:\tff 14 95 ...\tcall   41f900 <sym>", so
+    # the mnemonic is the third tab-separated field, not the first token.
+    for line in result.stdout.splitlines():
+        fields = line.split("\t")
+        if len(fields) < 3:
+            continue
+        instruction = fields[2].strip().split()
+        if not instruction or instruction[0] not in {"call", "jmp"}:
+            continue
+        # The mnemonic and its operand share one tab field:
+        # "call   496f80 <_fflush>" or "call   *0x69e608".
+        operands = instruction[1:]
+        if not operands and len(fields) > 3:
+            operands = fields[3].split()
+        if not operands:
+            continue
+        target = operands[0].rstrip(",")
+        try:
+            value = int(target, 16)
+        except ValueError:
+            continue
+        calls[value] = calls.get(value, 0) + 1
+    return calls
+
+
+def resolve(name: str, symbols: dict[str, int]) -> int | None:
+    """The linked address of one native, allowing a C++ namespace prefix."""
     suffix = "::" + name
-    for symbol in symbols:
+    for symbol, address in symbols.items():
         for base in base_spellings(symbol):
             if base == name or base.endswith(suffix):
-                return True
-    return False
+                return address
+    return None
 
 
 def retail_reachability() -> dict[str, dict]:
@@ -129,6 +166,9 @@ def main() -> int:
 
     executables = args.candidate or [path for path in DEFAULT_CANDIDATES if path.exists()]
     symbol_sets = [(path, candidate_symbols(path)) for path in executables]
+    call_sites = {}
+    for path in executables:
+        call_sites[path] = direct_call_sites(path)
 
     rows = []
     for target in targets:
@@ -141,8 +181,12 @@ def main() -> int:
         impl_exists = bool(impl_path) and (ROOT / impl_path).exists()
 
         linked = {}
+        sites = 0
         for path, symbols in symbol_sets:
-            linked[str(path)] = matches(name, symbols)
+            linked_address = resolve(name, symbols)
+            linked[str(path)] = linked_address is not None
+            if linked_address is not None:
+                sites = max(sites, call_sites[path].get(linked_address, 0))
 
         pillars = {
             "implementation_present": impl_exists,
@@ -183,6 +227,8 @@ def main() -> int:
             and pillars["candidate_symbol_linked"],
             "blockers": blockers,
             "candidate_symbol_in": {k: v for k, v in linked.items()},
+            "candidate_direct_call_sites": sites,
+            "hook_observable": bool(sites),
         })
 
     total = len(rows)
@@ -203,6 +249,10 @@ def main() -> int:
             1 for r in rows if r["runtime"]["retail_calls"]),
         "runtime_observed_candidate": sum(
             1 for r in rows if r["runtime"]["candidate_calls"]),
+        "hook_observable": sum(1 for r in rows if r["hook_observable"]),
+        "hook_observable_and_retail_reached": sum(
+            1 for r in rows if r["hook_observable"]
+            and r["runtime"]["retail_calls"]),
         "runtime_observed_both": sum(
             1 for r in rows if r["runtime"]["retail_calls"]
             and r["runtime"]["candidate_calls"]),
@@ -228,10 +278,14 @@ def main() -> int:
         if key != "total":
             print(f"  {key:30} {value}")
     print(f"\nwrote {args.out.relative_to(ROOT)}")
-    print("\nNatives that can be Frida-verified today (linked + evidence missing):")
+    print("\nHook-observable natives still missing paired Frida evidence:")
     for row in rows:
-        if row["end_to_end_possible"] and not row["frida_observable_end_to_end"]:
+        if row["hook_observable"] and not row["frida_observable_end_to_end"]:
             print(f"  {row['address']}  {row['name']}")
+    print("\nInlined natives that need a non-inlined verification build:")
+    inlined = [row for row in rows
+               if row["pillars"]["candidate_symbol_linked"] and not row["hook_observable"]]
+    print(f"  {len(inlined)} of {len(rows)}")
     print("\nNatives with no implementation in the candidate:")
     missing = [row for row in rows if not row["pillars"]["candidate_symbol_linked"]]
     print(f"  {len(missing)} of {total}")
