@@ -1917,6 +1917,122 @@ int main()
 }
 """
 
+
+def ilff_getter_cases() -> list[dict]:
+    cases = [
+        {"id": "getter-nominal", "categories": ["nominal"], "context": ILFF_CONTEXT,
+         "tag": 0x1234, "form": 0x4D454631},
+        {"id": "getter-zero", "categories": ["nominal"], "context": ILFF_CONTEXT,
+         "tag": 0, "form": 0},
+        {"id": "getter-null", "categories": ["boundary"], "context": 0,
+         "tag": 0, "form": 0},
+        {"id": "getter-max", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "tag": 0xFFFFFFFF, "form": 0x7FFFFFFF},
+        {"id": "getter-min", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "tag": 0x80000000, "form": 0xFFFFFFFF},
+        {"id": "getter-a5", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "tag": 0xA5A5A5A5, "form": 0x5A5A5A5A},
+        {"id": "getter-fourcc-meff", "categories": ["nominal"], "context": ILFF_CONTEXT,
+         "tag": 0x46464553, "form": 0x4D454646},
+        {"id": "getter-one", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "tag": 1, "form": 1},
+    ]
+    for i, c in enumerate(cases):
+        c["seed"] = i
+    return cases
+
+
+def _ilff_getter_prepare(image: PebImage, case: dict):
+    emulator = new_emulator(image)
+    emulator.mem_write(ILFF_CONTEXT, b"\x00" * 0x100)
+    if case["context"]:
+        emulator.mem_write(ILFF_CONTEXT, struct.pack("<I", case["tag"] & 0xFFFFFFFF))
+        emulator.mem_write(ILFF_CONTEXT + 0x10, struct.pack("<I", case["form"] & 0xFFFFFFFF))
+    return emulator
+
+
+def ilff_form_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+    emulator = _ilff_getter_prepare(image, case)
+    run_with_arguments(emulator, ILFF_FORM_ADDRESS, [case["context"]], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {"return_value": eax & 0xFFFFFFFF, "state_delta": {}, "side_effects": []}
+
+
+def ilff_tag_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+    emulator = _ilff_getter_prepare(image, case)
+    run_with_arguments(emulator, ILFF_TAG_ADDRESS, [case["context"]], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {"return_value": eax & 0xFFFFFFFF, "state_delta": {}, "side_effects": []}
+
+
+def ilff_getter_case_literal(case: dict) -> str:
+    return (f'        {{"{case["id"]}", {case["context"]}U, {case["tag"]}, {case["form"]}}},')
+
+
+def ilff_form_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+namespace {
+struct Case { const char* id; unsigned context; long tag; long form; };
+Case cases[] = {
+@CASES@
+};
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        static std::uint8_t buffer[0x100];
+        std::memset(buffer, 0, sizeof(buffer));
+        *reinterpret_cast<std::int32_t*>(buffer) = static_cast<std::int32_t>(item.tag);
+        *reinterpret_cast<std::int32_t*>(buffer + 0x10) = static_cast<std::int32_t>(item.form);
+        const std::uint32_t result = static_cast<std::uint32_t>(
+            igi::retail::sys::Ilff_GetFormType(item.context ? buffer : nullptr));
+        std::printf("{\"id\":\"%s\",\"return_value\":%u,\"state_delta\":{},"
+                    "\"side_effects\":[]}\n", item.id, result);
+    }
+    return 0;
+}
+"""
+
+
+def ilff_tag_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+namespace {
+struct Case { const char* id; unsigned context; long tag; long form; };
+Case cases[] = {
+@CASES@
+};
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        static std::uint8_t buffer[0x100];
+        std::memset(buffer, 0, sizeof(buffer));
+        *reinterpret_cast<std::int32_t*>(buffer) = static_cast<std::int32_t>(item.tag);
+        *reinterpret_cast<std::int32_t*>(buffer + 0x10) = static_cast<std::int32_t>(item.form);
+        const std::uint32_t result = static_cast<std::uint32_t>(
+            igi::retail::sys::Ilff_GetChunkTag(item.context
+                ? reinterpret_cast<const std::int32_t*>(buffer) : nullptr));
+        std::printf("{\"id\":\"%s\",\"return_value\":%u,\"state_delta\":{},"
+                    "\"side_effects\":[]}\n", item.id, result);
+    }
+    return 0;
+}
+"""
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -1953,6 +2069,18 @@ NATIVES = {
         "retail": config_num_retail,
         "candidate_source": config_num_candidate_source,
         "include": ("igi/retail/config/config_graphic_options.hpp",),
+    },
+    "0x004B7570": {
+        "cases": ilff_getter_cases,
+        "retail": ilff_form_retail,
+        "candidate_source": ilff_form_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
+    },
+    "0x004B7580": {
+        "cases": ilff_getter_cases,
+        "retail": ilff_tag_retail,
+        "candidate_source": ilff_tag_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
     },
     "0x004B7540": {
         "cases": ilff_header_cases,
@@ -2038,6 +2166,8 @@ def format_case_literal(address: str, case: dict) -> str:
         return parse_mode_case_literal(case)
     if address == "0x004B7540":
         return ilff_header_case_literal(case)
+    if address in ("0x004B7570", "0x004B7580"):
+        return ilff_getter_case_literal(case)
     if address == "0x00465820":
         return (f'        {{"{case["id"]}", static_cast<std::size_t>({case["human_offset"]}), '
                 f'{float(case["feet_x"])}, {float(case["feet_y"])}, {float(case["feet_z"])}, '

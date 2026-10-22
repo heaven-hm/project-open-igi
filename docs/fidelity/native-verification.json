@@ -58069,7 +58069,7 @@
         "signature": "std::uint32_t __cdecl Ilff_GetFormType(void* container);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58079,7 +58079,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58094,7 +58094,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58121,8 +58121,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json",
           "evidence_sha256": "7f41fd24829b5be1cad6308532fde7aca6507b7738192e8af601b0eba0dea552"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json",
+          "evidence_sha256": "ec17eb4d3dc949892cb92e92db41b6733bfbab45ff1e1dab3d3412bf9730d7f3",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7580",
@@ -58139,7 +58148,7 @@
         "signature": "std::uint32_t __cdecl Ilff_GetChunkTag(void* chunk);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58149,7 +58158,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58164,7 +58173,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58191,8 +58200,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B7580-behavioral.json",
           "evidence_sha256": "f4d48e3fdf5457b5df8ff12ea7ca14c9a6b3b38d7b2328009c5150ba7ece63dd"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B7580-behavioral.json",
+          "evidence_sha256": "09924c3963876cdc91c97a8513a9806cf989ed95eb1325c8388d9112fee20285",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7590",

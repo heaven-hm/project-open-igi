@@ -1,24 +1,242 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x004B7570",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 1e-06,
+  "relative": 1e-06
+ },
+ "limits": "",
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
  "cases": [
   {
-   "id": "static-structure",
+   "id": "getter-nominal",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "args": [
+     1879126016,
+     1296385585,
+     0,
+     4660
+    ],
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 1296385585,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1296385585,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-zero",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     0,
+     1,
+     0
+    ],
+    "initial_state": {
+     "seed": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
    },
    "candidate_output": {
     "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-null",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     0,
+     0,
+     2,
+     0
+    ],
+    "initial_state": {
+     "seed": 2
     }
    },
-   "note": "The candidate Ilff_GetFormType reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-max",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     2147483647,
+     3,
+     4294967295
+    ],
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 2147483647,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 2147483647,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-min",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     4294967295,
+     4,
+     2147483648
+    ],
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-a5",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     1515870810,
+     5,
+     2779096485
+    ],
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 1515870810,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1515870810,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-fourcc-meff",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     1296385606,
+     6,
+     1179010387
+    ],
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 1296385606,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1296385606,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "getter-one",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1879126016,
+     1,
+     7,
+     1
+    ],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
   }
  ]
 }
