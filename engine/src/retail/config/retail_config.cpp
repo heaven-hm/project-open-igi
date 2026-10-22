@@ -506,9 +506,13 @@ bool decode_input_config(const ScriptProgram& program, InputConfig& out, std::st
                 values[index] = static_cast<std::uint32_t>(argument.integer);
             }
             const std::uint32_t action = InputRemap_ActionCount;
-            if (action * igi::retail::config::action_table_stride >=
-                igi::retail::config::action_table_size) {
-                error = "GOInRemap exceeds the retail action table";
+            // Retail 0x004037C0 has no capacity comparison at all: it forms the
+            // index 345*action and stores without checking. An earlier port
+            // compared the product against a 0x6000-dword table and rejected the
+            // real config.qvm at action 72. Keep the bound only as a host safety
+            // guard, sized above every entry the shipped script declares.
+            if (action >= igi::retail::config::action_table_capacity) {
+                error = "GOInRemap exceeds the host action table capacity";
                 return false;
             }
             InputRemap_ActionTable[action * igi::retail::config::action_table_stride] = action;
