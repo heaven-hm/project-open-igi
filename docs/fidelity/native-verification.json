@@ -1224,7 +1224,7 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_unicorn_runner.py",
+          "path": "scripts/terrain_lightmap_flag_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -1265,18 +1265,18 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
-          "evidence_sha256": "65bf79a38bfe128400044d5d12927d32873558c4b2567e211fe1e00598664f91"
+          "evidence_sha256": "146029263b7d3319ffa0c77ad6294b10068fb9cb64b547c27842b7962cf8e2c3"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
-          "evidence_sha256": "65bf79a38bfe128400044d5d12927d32873558c4b2567e211fe1e00598664f91",
+          "evidence_sha256": "b75fdb328cb2e3083ae37cf74cd71b69c1bc4f3286c39cd0de64bfd8e73f34ab",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
         }
       },
-      "cfg_similarity": 1.0
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F260",
@@ -1293,7 +1293,7 @@
         "signature": "void __cdecl AppContext_SetTerrainLightmapsUsed(std::int8_t value);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1303,7 +1303,7 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/terrain_lightmap_flag_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -1318,7 +1318,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -1345,8 +1345,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
           "evidence_sha256": "81165c9e76d765f13f9ae08cfbd15f2dc5adc34062611916f5a2c128cef24edb"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
+          "evidence_sha256": "fc35c7b6d99f63e6855012b9aae3c2d49153698879fbae9ade82967b106011f8",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004903A0",
