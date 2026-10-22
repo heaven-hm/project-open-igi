@@ -62,7 +62,11 @@ std::int32_t App_ContextGetLightmapsUsed()
     return app_context_state.lightmaps_used;
 }
 
-// 0x0048F260  App_ContextSetTerrainLightmapsUsed
+// Native: AppContext_SetTerrainLightmapsUsed; retail VA 0x0048F260.
+// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F260..0x0048F267.
+// Behavior/CFG: the retail sign extends the argument's low byte and stores it in the 32-bit terrain-lightmaps-used flag at 0x005C8BE8, leaving the value in EAX. The candidate stores the same sign-extended byte in the same field of the app context state.
+// Status/limits: VERIFIED; the sign extension, the store and the EAX return match the retail exactly, checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)
 {
     app_context_state.terrain_lightmaps_used = static_cast<std::int32_t>(used);

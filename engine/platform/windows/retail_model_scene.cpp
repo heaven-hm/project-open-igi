@@ -424,6 +424,14 @@ struct Scene
         const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
 
         Vector3 move{0, 0, 0};
+        static unsigned int diag = 0;
+        if (diag < 4) {
+            ++diag;
+            write_log("dev diag up=" + std::to_string(input_port.ActionDown(input::Action::move_up)) +
+                " down=" + std::to_string(input_port.ActionDown(input::Action::move_down)) +
+                " rawW=" + std::to_string(input_port.KeyDown(0x57U)) +
+                " bindings=" + std::to_string(input_port.BindingCount(input::Action::move_up)));
+        }
         const bool key_w = input_port.ActionDown(input::Action::move_up);
         const bool key_s = input_port.ActionDown(input::Action::move_down);
         const bool key_a = input_port.ActionDown(input::Action::move_left);

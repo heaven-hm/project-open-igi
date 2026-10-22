@@ -8,7 +8,7 @@
   "oracle": "retail-binary-execution",
   "runner": {
     "path": "scripts/native_unicorn_runner.py",
-    "sha256": "f103cebb00b365aa2b18d055165652aeee9f84f39719b38ac892719b00040720",
+    "sha256": "9aecbbcd3649f84dd7dc4c727ff7a06b24930a05e7c8831f4765218283a9953c",
     "command": [
       "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/scripts/native_unicorn_runner.py",
       "--address",

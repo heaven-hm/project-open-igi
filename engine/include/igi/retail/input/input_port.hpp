@@ -106,6 +106,13 @@ class InputPort {
     void Run();
 
     [[nodiscard]] bool ActionDown(Action action) const noexcept;
+
+    // HOST HELPER: the number of bindings an action has, and the raw key state,
+    // for the scene log.
+    [[nodiscard]] std::size_t BindingCount(Action action) const noexcept
+    {
+        return bindings_[static_cast<std::size_t>(action)].size();
+    }
     [[nodiscard]] bool ActionPressed(Action action) const noexcept;
 
     // The look delta since the last Run, already scaled by the retail mouse
