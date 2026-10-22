@@ -48,6 +48,10 @@ def defined_anywhere(name: str, sources: dict[pathlib.Path, str]) -> list[str]:
     return [str(p.relative_to(ROOT)) for p, text in sources.items() if pattern.search(text)]
 
 
+RANK = {"ANALYZED": 0, "TRANSCRIBED": 1, "STRUCTURALLY_VERIFIED": 2, "BUILD_VERIFIED": 3,
+        "RUNTIME_TESTED": 4, "VERIFIED": 5, "VERIFIED_WITH_DOCUMENTED_SCOPE": 5}
+
+
 def check(record: dict, built: set[str], sources: dict[pathlib.Path, str]) -> tuple[str, str]:
     impl = (record.get("implementation") or {})
     path_text = impl.get("path") or ""
@@ -58,6 +62,14 @@ def check(record: dict, built: set[str], sources: dict[pathlib.Path, str]) -> tu
         return "missing-file", f"{path_text} does not exist"
     name = record["name"]
     text = path.read_text(errors="replace")
+    status = record["verification"]["status"]
+    if definition_pattern(name).search(text) is None and RANK.get(status, 0) == 0:
+        # An ANALYZED record only claims the retail body was read; the transcription may be a
+        # non-compiling stub, so the address-bound provenance line is evidence enough.
+        address = record["address"][2:].upper()
+        if address in text.upper():
+            return "ok", f"ANALYZED; {path_text} mentions the address but has no compilable definition"
+        return "missing-definition", f"{path_text} neither defines {name} nor mentions {record['address']}"
     if not definition_pattern(name).search(text):
         elsewhere = defined_anywhere(name, sources)
         if not elsewhere:

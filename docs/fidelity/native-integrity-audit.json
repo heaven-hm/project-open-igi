@@ -3,9 +3,8 @@
   "kind": "native-integrity-audit",
   "checked": 120,
   "counts": {
-    "ok": 116,
-    "not-in-build": 3,
-    "missing-definition": 1
+    "ok": 117,
+    "not-in-build": 3
   },
   "failures": [
     {
@@ -28,13 +27,6 @@
       "status": "STRUCTURALLY_VERIFIED",
       "problem": "not-in-build",
       "detail": "engine/src/retail/script/humanplayer_defines.cpp is not in the CMake source list"
-    },
-    {
-      "address": "0x004D67A0",
-      "name": "AnimIff_LoadAnimationFile",
-      "status": "STRUCTURALLY_VERIFIED",
-      "problem": "missing-definition",
-      "detail": "no definition of AnimIff_LoadAnimationFile anywhere under engine/src"
     }
   ]
 }

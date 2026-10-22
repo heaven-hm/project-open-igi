@@ -441,3 +441,24 @@ moved it out of the unlinked bucket (6 -> 5) without inventing reach.
 `AnimIff_LoadAnimationFile` remains the one missing definition. Its name is also a catalog defect: the
 canonical file for VA 0x004D67A0 is `Render_FileSIsNotIffFile`, a different native. It needs either a
 transcription or an explicit not-ported record next.
+
+## 0x004D67A0 is Render_FileSIsNotIffFile, and its record no longer claims a port
+
+The last integrity failure was `AnimIff_LoadAnimationFile`. It is a catalog naming defect: VA 0x004D67A0
+is `Render_FileSIsNotIffFile` (1434 bytes, 31 basic blocks, cyclomatic complexity 15), which loads a
+resource, checks the IFF signature and reports "File %s is not IFF file.".
+
+There is no engine port. The only transcription is an auto-generated stub under
+`scripts/GameNatives/render/` that includes `Render_FileSIsNotIffFile.h`, a header that does not exist,
+so it cannot compile and cannot serve as evidence. The record previously carried build, behavioural and
+semantic references; those are removed, the implementation now names the stub with its real digest, and
+the status is ANALYZED - the retail body has been read, nothing was transcribed.
+
+The integrity checker now treats ANALYZED records differently from verified ones, because an ANALYZED
+record only claims the retail body was read: for those an address-bound provenance line is enough, while
+a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
+distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
+
+Also of note: 81 manifest records carry a VERIFIED status label, but only 11 have been shown to pass the
+strict gate with paired runtime probes. The label and the proof are different things, and the register
+should be read as the proof.

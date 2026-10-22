@@ -1938,7 +1938,7 @@
   {
    "address": "0x004D67A0",
    "name": "AnimIff_LoadAnimationFile",
-   "status": "STRUCTURALLY_VERIFIED",
+   "status": "ANALYZED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],

@@ -1164,7 +1164,7 @@
       "address": "0x004D67A0",
       "name": "AnimIff_LoadAnimationFile",
       "subsystem": "MTP",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "ANALYZED",
       "evidence_backed": true,
       "blocker": "unlinked",
       "next_action": "transcribe it or make the ported unit linkable",
