@@ -24,7 +24,7 @@
     "runtime_observed_both": 9,
     "runtime_return_class_matched": 4,
     "verification_build_observed_candidate": 18,
-    "verification_build_matched": 6
+    "verification_build_matched": 8
   },
   "natives": [
     {

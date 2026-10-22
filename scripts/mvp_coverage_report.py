@@ -37,7 +37,7 @@ PAIR_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-level1.
 # The release build inlines most natives, so the same measurement is repeated
 # against the non-inlined verification build; both are recorded, neither is a
 # verdict on its own.
-VERIFY_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-long.json"
+VERIFY_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-recompar.json"
 
 
 def candidate_symbols(executable: Path) -> dict[str, int]:
