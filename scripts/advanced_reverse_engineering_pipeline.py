@@ -233,6 +233,8 @@ def main() -> int:
     parser.add_argument("--install", action="store_true", help="Best-effort tool install before doctor (fail closed if doctor still fails).")
     parser.add_argument("--skip-intake", action="store_true", help="Scoped mode: strict single-native gate only, no intake.")
     parser.add_argument("--max-natives", type=int, default=1, help="Max natives processed per pipeline run; extras are deferred.")
+    parser.add_argument("--important", action="append", default=[], metavar="ADDRESS",
+                        help="Retail address considered important (repeatable); deferred natives in this set are flagged important.")
     parser.add_argument("--report", type=Path, default=ROOT / "build/advanced_reverse_engineering_report.json")
     args = parser.parse_args()
 
@@ -265,9 +267,10 @@ def main() -> int:
     selected = addresses[: max(0, args.max_natives)]
     deferred = addresses[max(0, args.max_natives):]
 
+    important_addresses: set[str] = {f"0x{int(str(a), 0):08X}" for a in args.important}
     per_native: dict[str, Any] = {}
     for address in selected:
-        record: dict[str, Any] = {"address": address, "status": "deferred", "important": True}
+        record: dict[str, Any] = {"address": address, "status": "deferred", "important": address in important_addresses}
         implementation = find_implementation_file(ROOT, address)
         if implementation is None:
             record["status"] = "failed"
@@ -305,7 +308,8 @@ def main() -> int:
         per_native[address] = record
 
     for address in deferred:
-        per_native[address] = {"address": address, "status": "not_solved_in_this_run", "important": True,
+        per_native[address] = {"address": address, "status": "not_solved_in_this_run",
+                               "important": address in important_addresses,
                                "error": "deferred: outside --max-natives cap for this run"}
 
     final = dict(schema_version=1, kind="advanced-reverse-engineering-pipeline",
