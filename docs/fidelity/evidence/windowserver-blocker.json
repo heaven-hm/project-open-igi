@@ -5,5 +5,61 @@
  "root_cause": "SELF-INFLICTED. To test a hypothesis about the C++ runtime, I moved drive_c/windows/system32/ucrtbase.dll aside with `mv` and never restored it. Without that DLL the Wine GUI stack cannot create windows, so register-class still succeeded while CreateWindowEx failed. The earlier conclusion that this was a macOS WindowServer problem was wrong.",
  "correction": "Restored system32/ucrtbase.dll (809552 bytes) from the project-igi bottle. A trivial Win32 test now prints hwnd=00010052 and exits 0, and the candidate renders at 6.33 FPS.",
  "process_lesson": "Any experiment that mutates the bottle must restore the original state in the same step, and a 'blocker' must be reproduced from a pristine environment before it is recorded as an environment fact.",
- "superseded_note": "Anything that cited this file as an environment blocker is wrong."
+ "superseded_note": "Anything that cited this file as an environment blocker is wrong.",
+ "independent_recheck": {
+  "agent": "deepseek-smart-workflow (runtime+verification subagent)",
+  "date_utc": "2026-10-22",
+  "bottle": "open-igi",
+  "probe": {
+   "source": "/tmp/ds-wintest/w.c",
+   "build": "i686-w64-mingw32-gcc -O1 -mwindows w.c -luser32 -lgdi32",
+   "win32_calls": [
+    "RegisterClassA",
+    "CreateWindowExA",
+    "ShowWindow",
+    "GetLastError"
+   ],
+   "observed": {
+    "register_class_atom": 49200,
+    "register_class_error": 0,
+    "create_window_ex_handle": "0x003800D6",
+    "get_last_error_after_create": 1400,
+    "process_exit_code": 0
+   },
+   "interpretation": "Window creation works under bottle open-igi. The trailing GetLastError()==1400 is stale state from an earlier call in the probe, not a CreateWindowEx failure: the returned HWND is non-null and the process exits 0. Do not re-report 1400 as a blocker."
+  },
+  "conclusion": "CONFIRMS the recorded resolution. The WindowServer/GUI stack in bottle open-igi is functional; window creation is not a blocker for paired runtime capture.",
+  "paired_capture_feasibility": {
+   "retail": {
+    "ran": true,
+    "result": "captured",
+    "report": "build/runtime-traces/ds-level1-retail.json",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "level": 1,
+    "display_mode": "window",
+    "attach_delay_seconds": 1.231,
+    "hooks_installed": 120,
+    "natives_observed": 97
+   },
+   "candidate": {
+    "ran": true,
+    "process_stayed_alive": true,
+    "result": "no native observations",
+    "binary": "build-clean-win32/igi1.exe",
+    "binary_sha256": "9e4d7cd35eba9b10de2a96dd248aa54043348b2c060aca0d07e382609be8f373",
+    "level": 1,
+    "display_mode": "window",
+    "early_attach_error": "RuntimeError(\"image never became hookable: InvalidOperationError('script has been destroyed')\")",
+    "late_attach": {
+     "module_base": "0x400000",
+     "image_size": 15286272,
+     "threads": 2,
+     "interceptor_install": "4/4 targets installed (0x00498460,0x004C5F00,0x00505E40,0x004D14E0)",
+     "hits_in_6s": 0,
+     "terrain_native_ranges": "all 7 terrain addresses mapped r-x"
+    }
+   }
+  },
+  "gap": "The candidate launches and stays alive in the bottle, and Frida can hook it after startup, but the early-attach driver loses its script during the hook phase against the candidate image, so no candidate native-entry observations were collected. Paired per-native comparison for level 1 is therefore NOT established; only runtime feasibility of both binaries is demonstrated."
+ }
 }
