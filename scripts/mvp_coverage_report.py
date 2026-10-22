@@ -34,6 +34,10 @@ DEFAULT_CANDIDATES = (
 )
 RETAIL_TRACE = ROOT / "build" / "runtime-traces" / "ds-level1-retail.json"
 PAIR_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-level1.json"
+# The release build inlines most natives, so the same measurement is repeated
+# against the non-inlined verification build; both are recorded, neither is a
+# verdict on its own.
+VERIFY_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-long.json"
 
 
 def candidate_symbols(executable: Path) -> dict[str, int]:
@@ -132,12 +136,13 @@ def retail_reachability() -> dict[str, dict]:
     return out
 
 
-def paired_runtime() -> dict[str, dict]:
-    """Per-native retail/candidate call counts from the paired level-1 capture."""
-    if not PAIR_CAPTURE.exists():
+def paired_runtime(capture_path: Path | None = None) -> dict[str, dict]:
+    """Per-native retail/candidate call counts from a paired level-1 capture."""
+    capture_path = capture_path or PAIR_CAPTURE
+    if not capture_path.exists():
         return {}
     try:
-        capture = json.loads(PAIR_CAPTURE.read_text())
+        capture = json.loads(capture_path.read_text())
     except ValueError:
         return {}
     out = {}
@@ -163,6 +168,7 @@ def main() -> int:
     records = {record["address"].lower(): record for record in manifest["natives"]}
     reachable = retail_reachability()
     paired = paired_runtime()
+    verification = paired_runtime(VERIFY_CAPTURE) if VERIFY_CAPTURE.exists() else {}
 
     executables = args.candidate or [path for path in DEFAULT_CANDIDATES if path.exists()]
     symbol_sets = [(path, candidate_symbols(path)) for path in executables]
@@ -175,7 +181,7 @@ def main() -> int:
         address = target["address"].lower()
         name = target["name"]
         record = records.get(address) or {}
-        verification = record.get("verification") or {}
+        record_verification = record.get("verification") or {}
         implementation = record.get("implementation") or {}
         impl_path = implementation.get("path")
         impl_exists = bool(impl_path) and (ROOT / impl_path).exists()
@@ -191,11 +197,11 @@ def main() -> int:
         pillars = {
             "implementation_present": impl_exists,
             "candidate_symbol_linked": any(linked.values()),
-            "semantic_review": bool(verification.get("semantic_review")),
-            "build": bool(verification.get("build")),
-            "behavioral": bool(verification.get("behavioral")
-                               or verification.get("runtime_tests")),
-            "frida_runtime": bool(verification.get("frida_runtime")),
+            "semantic_review": bool(record_verification.get("semantic_review")),
+            "build": bool(record_verification.get("build")),
+            "behavioral": bool(record_verification.get("behavioral")
+                               or record_verification.get("runtime_tests")),
+            "frida_runtime": bool(record_verification.get("frida_runtime")),
             "retail_reachable": address in reachable,
         }
         # End-to-end verification is only possible when the function exists in
@@ -220,7 +226,7 @@ def main() -> int:
             "address": target["address"],
             "name": name,
             "category": target.get("category"),
-            "manifest_status": verification.get("status"),
+            "manifest_status": record_verification.get("status"),
             "pillars": pillars,
             "end_to_end_possible": end_to_end_possible,
             "frida_observable_end_to_end": pillars["frida_runtime"]
@@ -258,6 +264,11 @@ def main() -> int:
             and r["runtime"]["candidate_calls"]),
         "runtime_return_class_matched": sum(
             1 for r in rows if r["runtime"]["paired_result"] == "match"),
+        "verification_build_observed_candidate": sum(
+            1 for r in rows if (verification.get(r["address"].lower()) or {}).get("candidate")),
+        "verification_build_matched": sum(
+            1 for r in rows
+            if (verification.get(r["address"].lower()) or {}).get("result") == "match"),
     }
     report = {
         "schema_version": 1,
