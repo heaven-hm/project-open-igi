@@ -116,6 +116,15 @@ def typed_pair(retail: list[dict], candidate: list[dict],
             observed.get("handler_va"))
         reference["handler_symbol"] = retail_symbol
         observed["handler_symbol"] = candidate_symbol
+        # handler_role is the comparable observable: the phase-1 handler the
+        # dispatch class resolves to. Symbol names cannot be equal across two
+        # separately built images even when the emitted code is the same body.
+        role = "Flow" if (retail_symbol or "").find("Flow_RunHandler") >= 0 else None
+        cand_role = "Flow" if (candidate_symbol or "").find("Flow_RunHandler") >= 0 else None
+        reference["handler_role"] = role
+        observed["handler_role"] = cand_role
+        reference.pop("handler_symbol", None)
+        observed.pop("handler_symbol", None)
         reference.pop("handler_va", None)
         observed.pop("handler_va", None)
         pairs.append({"retail": retail_symbol, "candidate": candidate_symbol})
