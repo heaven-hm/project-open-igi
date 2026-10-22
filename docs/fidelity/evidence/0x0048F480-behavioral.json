@@ -1,24 +1,258 @@
 {
- "address": "0x0048F480",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x0048F480",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "cc715e50ab17d87b8b4cd7b0df441956f59211dd9a8b6d7b556b68491f7827b0",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "loop-status-0",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-1",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          1,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-2",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          2,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 2
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 2
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-3",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          3,
+          127
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 127
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 127
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-4",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          4,
+          128
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 128
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 128
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-5",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          5,
+          255
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 255
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 255
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-6",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          6,
+          256
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "loop-status-7",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          7,
+          4294967295
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 255
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "stored": 255
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Loop_SetStatusByte reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
- ]
+  ]
 }
