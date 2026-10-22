@@ -50428,7 +50428,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004037c0-frida-runtime.json",
-          "evidence_sha256": "a941b6b9d6e0d8f465fa8266a2f32b57db210960d176ac30b31cd1b7875a9976"
+          "evidence_sha256": "5d4108f7c27b29b26334645b4bc5d90f598f3dbe84012988d3479289c2780b51"
         }
       }
     },
@@ -50933,7 +50933,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00402260-frida-runtime.json",
-          "evidence_sha256": "3ecba386f9aeaef6a327e1fd10c92c270ba0921338d9f572afda913dfab28cd3"
+          "evidence_sha256": "02654ff4be023e9ed701056931e5b8565a5254418ee23132437b8800a0946fd5"
         }
       }
     },
@@ -51537,7 +51537,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00498460-frida-runtime.json",
-          "evidence_sha256": "3c80f132ef5bf16ec9fa3c44305c7ec9f031dcd55023946ea0c30f0a03931452"
+          "evidence_sha256": "c7d38e8bf8a97442a5e466fb77b0b69752432a7a46e50928336f357f40e3d212"
         }
       }
     },
@@ -51615,7 +51615,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00402880-frida-runtime.json",
-          "evidence_sha256": "cc1541142930a5731376edabd6843e2724d8f1a8e20c2480584b700ef3075b11"
+          "evidence_sha256": "95cd5bebd2b27e824dc4e78502bf16efbc65d9191320534a05f0c42f8bb6134a"
         }
       }
     },
@@ -51846,7 +51846,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00401050-frida-runtime.json",
-          "evidence_sha256": "d617ec6bf948988f93f67ad08fd466c49fc8fe3339f9d1b37ceb2d8fa242b34d"
+          "evidence_sha256": "556273ae35e7226be0810fd52290c8fe0652820820c48be3adc6cb7cbffae795"
         }
       },
       "cfg_similarity": 1.0
@@ -51998,7 +51998,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f170-frida-runtime.json",
-          "evidence_sha256": "e86a7e9d623bf1df1b9502b35e73553d3a4fca0b0d0f8ac0244832744463ed79"
+          "evidence_sha256": "c62414e06c4cf16b646df11cf62c1054382c68abd0506bc76c4e1fe9603f608b"
         }
       }
     },
@@ -53303,7 +53303,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004cf390-frida-runtime.json",
-          "evidence_sha256": "4db1ba151d61abb9fad6462aca356da735ff248826bfc5592ad63360de67b13a"
+          "evidence_sha256": "ef7a9ce9d705bd6615fa72f85a59ad1e3b27f11151d715ede5d808c21a374970"
         }
       },
       "status": "STRUCTURALLY_VERIFIED",
@@ -53669,7 +53669,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004cf080-frida-runtime.json",
-          "evidence_sha256": "0afd19955e6ade16d363e1f901e71ad1f956c8450ab1e139b923e52b857038f4"
+          "evidence_sha256": "f2fe8a58aae9c9b4ac7d810e9e5f6982fae5e5dc1e2d007e8c9cda67a7c089a0"
         }
       },
       "status": "VERIFIED"
@@ -54604,7 +54604,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0d40-frida-runtime.json",
-          "evidence_sha256": "10071ed332a9f46e6c1ea40706edfa8f3d966ee997e75341c45752dfc9f1980b"
+          "evidence_sha256": "bf996884492d22f44f8fafd89903eea94553b2cfc8eab4d36dacfbfd54130737"
         }
       },
       "status": "VERIFIED"
@@ -54689,7 +54689,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0ba0-frida-runtime.json",
-          "evidence_sha256": "4a85c1a79a2c66b2f04cd22121afd7f6a38e5f626c1bc6fa574279d56434e9d2"
+          "evidence_sha256": "19281b87ad8e1131ffff970974b59cba2190dd37c5aec86384570ad7ceaf9af6"
         }
       },
       "status": "VERIFIED"
@@ -55175,7 +55175,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517890-frida-runtime.json",
-          "evidence_sha256": "3eea10c2e19a4cd0de69dcc292f28d518cabde4a6e7fdd8711b5522e30b45fc3"
+          "evidence_sha256": "c35a17b3dccd83236fe82046ca9cdda32563f4d28351591b7031c35a6f1fea4e"
         }
       },
       "status": "VERIFIED"
@@ -55260,7 +55260,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517940-frida-runtime.json",
-          "evidence_sha256": "51a290bf25a860f1b25960c8526ea6f5ed2cdcfe356294840aae5c688834dd7c"
+          "evidence_sha256": "5b14a225bb238527c22b199dad5719015d9c1c2c0a3f4634d3db5239cb603a49"
         }
       },
       "status": "VERIFIED"
@@ -58988,13 +58988,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "void __cdecl Terrain_CreateTerrainMaterial(std::uint32_t* result, int arg2, void* vm);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/misc/004C6670-Terrain_CreateMaterial.hpp",
-        "sha256": "b781db39fe171e894716b913a1b634149a7996dbbec21a7b46a76d40ed9e81d0",
-        "signature": "void __cdecl Terrain_CreateTerrainMaterial(std::uint32_t* result, int arg2, void* vm);"
+        "path": "scripts/GameNatives/terrainlightmap/004C6670-CreateTerrainMaterial.hpp",
+        "sha256": "5bd8d3b8a0260690caa4419c8d103cfe0f11185a430c36f302e8e6f906858822",
+        "signature": "void* __cdecl (void* context, const void* arguments);"
       },
       "verification": {
         "status": "VERIFIED",
@@ -59040,11 +59040,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C6670-semantic-review.json",
-          "evidence_sha256": "80ef5233d97ab81afa4dbe02d2c78243758c3361b03eda7086b389dfca6c5787"
+          "evidence_sha256": "2853f79ce9ca4dfd68b4fa35337d82dfb304a3763ab253b3702b2a48b1fd36ba"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C6670-build.json",
-          "evidence_sha256": "2112d44e1228a848fb5830f4aa530e7b91206447c03d1788a0da5da1ec86be4e"
+          "evidence_sha256": "8c80842261076bdf69921d43fe395be3029856dc9a77b6a9ce1c28b2fcbcc867"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
@@ -59053,11 +59053,16 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
-          "evidence_sha256": "78b5a8b3f862b637ba3e52dfe0fa092d70f4f2d3d9cabff3b8938b0bb35fe899",
+          "evidence_sha256": "4015553b047b306e489d6a3e26ef55dc737f0d9d49c49b9cce29e86b58c0d80d",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004c6670-frida-runtime.json",
+          "evidence_sha256": "67376b1df358f16808057e7e77b7487ebbc948a2bfa1f79c65349fc714a2c8c1"
         }
       },
       "status": "VERIFIED"
@@ -59068,13 +59073,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "void __cdecl Terrain_CreateTerrainTileMap(std::uint32_t* result, int arg2, void* vm);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/dynobj/004C6760-Terrain_CreateTileMap.cpp",
-        "sha256": "697c37a0d76cd696bd80a4c874ce20291158706898de55eb01e21bfbb34c1aa8",
-        "signature": "void __cdecl Terrain_CreateTerrainTileMap(std::uint32_t* result, int arg2, void* vm);"
+        "path": "scripts/GameNatives/terrainlightmap/004C6760-Create_TerrainTileMap.hpp",
+        "sha256": "3b277f6c8197904000aae0e95be6981536e8231b44e4bcc3de36cd5720929ae7",
+        "signature": "void* __cdecl (void* context, const void* arguments);"
       },
       "verification": {
         "status": "VERIFIED",
@@ -59120,11 +59125,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C6760-semantic-review.json",
-          "evidence_sha256": "e9515c3fe076d640809b31c623ac959549ebcad482772d1adb6caf533c308ae1"
+          "evidence_sha256": "1badfce68aa9c68fa11d968db01d40fe5e276375af61afc9966b19a2606793a4"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C6760-build.json",
-          "evidence_sha256": "4ec1b2dfe18ff008c650d3af25ba856dd3e3981d3fe8b6c9f9ea78051fc61e27"
+          "evidence_sha256": "2e9d1f5221fcd4044eb7c2e93dc8549329f69bdc94f3c947e0ebe1a2d96f939f"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
@@ -59133,11 +59138,16 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
-          "evidence_sha256": "8808f74cf1c3d5a516667f760ce6322abb22b2d81dbd4c67271acaab105353f1",
+          "evidence_sha256": "a138eccd483caee85a5ed9b3708f013ff878d67d67dad13736a6c746c48d136d",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004c6760-frida-runtime.json",
+          "evidence_sha256": "2914cc65fc764f78c6ef25106dec80b2c446dee8d25c97837a9769bbd6031956"
         }
       },
       "status": "VERIFIED"
@@ -59148,7 +59158,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -59157,7 +59167,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59201,15 +59211,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00505E40-semantic-review.json",
-          "evidence_sha256": "8e571d566ed8d586b891bdbfeabae41d7b7bea21190f57287f92b63a24e52128"
+          "evidence_sha256": "1fdf6531777be85e640bdb06c46645a3149bede6f9525b829ba3c7c22f925ade"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00505E40-build.json",
-          "evidence_sha256": "c2099f8c326bd553934f05dc21a84778eb1ef4bab71f32a76b4a39b5143e94cf"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00505E40-behavioral.json",
-          "evidence_sha256": "49a7240027be20ea949f125d47398360a367e8bb4797129f815c1407ad5ab286"
+          "evidence_sha256": "ef6dc169ee618b291e7f0b2f4e63157cf205b368a7c368737cc6e55a09a07dea"
         }
       },
       "status": "ANALYZED"
@@ -59220,7 +59226,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -59229,7 +59235,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59273,15 +59279,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00506F00-semantic-review.json",
-          "evidence_sha256": "6875823ea984a44b92c60d97098d8e189ad6b95ce4c86d0cee9a7868031788fb"
+          "evidence_sha256": "76e82555e1fda5cffb682a3fc56f084c6ec32e89e427255a191b5f03ed372bc1"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00506F00-build.json",
-          "evidence_sha256": "001928710ab15d34958d1c48de359386cd7a8361a224aff276838490158f3778"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00506F00-behavioral.json",
-          "evidence_sha256": "d203135dae9ffcc44f4b682022703167ce3b5a10d1f6172ca202b00f4f181052"
+          "evidence_sha256": "544cac25c684bd3a2fb8f391b1e9bcdf1e973c758e690f4543c99886a6ede4ed"
         }
       },
       "status": "ANALYZED"
@@ -59292,13 +59294,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/terrainlightmap/004F82B0-TerrainLightMap_PushEntry.cpp",
-        "sha256": "5bfb9029abef579864bd1598c60714596295d8a21fa83ff25743283fe1bb144d",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/terrainlightmap/004F82B0-TerrainLightMap_PushEntry.hpp",
+        "sha256": "c38e3fc243292d86c08240ae0967cb41d12cc631475440f4932a3202e2595576",
+        "signature": "void* __cdecl (void* context, const void* arguments);"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
@@ -59344,15 +59346,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004F82B0-semantic-review.json",
-          "evidence_sha256": "7bba751bb79b2cfd7f12e0e0edd4d7eca371c97da25ff727ce97321608053b83"
+          "evidence_sha256": "6b6e0f488b378f6ba22fd7dcb65464dff9c5c9366f9f3db1cfcb19e68a858e36"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004F82B0-build.json",
-          "evidence_sha256": "d0d7e0364d57745e53f2751e9a62ac073a1f962663b26a233976a7a7c387ad32"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004F82B0-behavioral.json",
-          "evidence_sha256": "ef60b8a0ad49c5174547a0758c32e88dff771bd1cd3e8ff3e687c6a5f4728fcc"
+          "evidence_sha256": "d6231b4d0c644fd946a08556fd137dca4df5fe28fdf82d5cdb00e088022fae6a"
         }
       }
     },
@@ -59362,7 +59360,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "int __cdecl Terrain_Load(void* context, const char* path);"
       },
       "game_natives": {
@@ -59371,7 +59369,7 @@
         "signature": "int __cdecl Terrain_Load(void* context, const char* path);"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59415,20 +59413,16 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
-          "evidence_sha256": "753c12aed8f115b56acadf5ffca57df6569fafa70ee8bef52b5495a8278d7069"
+          "evidence_sha256": "99d2082c292a1f0a22d04dfd847085773e41ffcd10edf54c8bde41fcdadce26b"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-build.json",
-          "evidence_sha256": "c60436e8a07f9e0027cb2a624585b5dd271211e2691e02089b4e284e7df25cd0"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
-          "evidence_sha256": "b830d0ef080bd45b020fbf3be2eaf1305ea542aee224775a6a295c7b3fec7877"
+          "evidence_sha256": "5789778e76847d9aea4f29cce530b8e5c4aeac1f0bc8d92a546bc9635ae48cfa"
         },
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004c6240-frida-runtime.json",
-          "evidence_sha256": "5d424d8b3f5e468bb216ebeafff8357301d015d3252d1411e44b24e7eb7c9a1c"
+          "evidence_sha256": "60640233d5fea6a7671ed727ba913c9a1c3a44bfc0859c574727fdbf5624b914"
         }
       },
       "status": "ANALYZED"
@@ -59439,7 +59433,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "int __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* path);"
       },
       "game_natives": {
@@ -59448,7 +59442,7 @@
         "signature": "int __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* path);"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59492,15 +59486,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-semantic-review.json",
-          "evidence_sha256": "35807ea6f7beb9c5bc7843cb3bb5d93f5f169b0129595885684c90078886375e"
+          "evidence_sha256": "4b78da72c7a234526754d15618fb5be90ba1cc2ce0a0e594b50af914ab4f1f71"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-build.json",
-          "evidence_sha256": "cd8c395393e1a10659ef959e0dc71b5e5ac29496d9e4d649c106cb08a5626032"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004C5F00-behavioral.json",
-          "evidence_sha256": "d9651088cebb6bb57364a9f67c5e4b0fcbcf996e5e0b7be7d6e565b8ee1c0fe2"
+          "evidence_sha256": "4799f7958935ba8f8a8b950ac4db9522a2dd3d9faa757de463221dc9636c70df"
         }
       },
       "status": "ANALYZED"
@@ -59511,7 +59501,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -59520,7 +59510,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59564,15 +59554,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D14E0-semantic-review.json",
-          "evidence_sha256": "48f7701f4552baf44d0ad3bb33791b6ed2896479ce31092b79dda407aef14bee"
+          "evidence_sha256": "d5d6f55cea40b2fc787f33ac62a839b757456397a9b92d5c0e80db0ed762737d"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004D14E0-build.json",
-          "evidence_sha256": "6f0fb5c7080649baf7e7bf063e8efb396545f0a07a8dad737c7b36bb4a92d158"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004D14E0-behavioral.json",
-          "evidence_sha256": "cc7cb56111ea12b87f1efb01882123efd6158b8d5068561d8fcce22141b0aa09"
+          "evidence_sha256": "28b27094e17d50e16da48bcfa7cc8a61aed964409c6cadd29393140dbf2a5121"
         }
       },
       "status": "ANALYZED"
@@ -59583,7 +59569,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -59592,7 +59578,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59636,15 +59622,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00510010-semantic-review.json",
-          "evidence_sha256": "a032d67ea314a7d45031c6eed35da308710d5dcb9e9ea51904b46139b1443314"
+          "evidence_sha256": "adc69e5ebbc0b9f59b4e648a403e7576f0fa522d84845fa1ef79b4466790a4b7"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00510010-build.json",
-          "evidence_sha256": "5f54744fb6816648dc1bbf0dcfc4f08733209a0376c4dc3b27383aa94bc0fcdd"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00510010-behavioral.json",
-          "evidence_sha256": "0c180415c4e684fd9517c8cf2bdd4dac1d1b080d4fca56d859fe3281db505fb6"
+          "evidence_sha256": "9a948b80e29b4c1f5977fc7eb5e20c99152f7d7b324bebf8e27a9839e7b486e5"
         }
       },
       "status": "ANALYZED"
@@ -59655,7 +59637,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_loaders.cpp",
-        "sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+        "sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -59664,7 +59646,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -59708,15 +59690,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00512C30-semantic-review.json",
-          "evidence_sha256": "80a1419e2e549fa1dc1e55e9a3f7e5838dacbb4d9f9c0713c815da5621355609"
+          "evidence_sha256": "8504e839a97fdbad26ac73ce22f57b3b950dc331712f7ae214f12647e35bfe4a"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00512C30-build.json",
-          "evidence_sha256": "08124c4c5d8465f14153f038b9210398225eb9986e53155444a5dc3630eab1f2"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00512C30-behavioral.json",
-          "evidence_sha256": "265312d51c3e943c2a72705c70838e9631d567e94a1014a57cfd59d3622d7a7f"
+          "evidence_sha256": "fbc53fe40f6a98041fce6105344dc17da6af6f9189e57eff2dab1f6ae37c3550"
         }
       },
       "status": "ANALYZED"

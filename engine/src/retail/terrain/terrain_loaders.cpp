@@ -764,7 +764,10 @@ bool TerrainLevelData::Terrain_LoadLevel(
                             args.push_back(0.0f);
                         }
                     }
-                    Terrain_CreateMaterial(nullptr, args.data());
+                    // Retail's dispatcher supplies the 24-byte result block this
+                    // native fills and returns; the emulation supplies one too.
+                    alignas(4) std::uint32_t material_result_block[6] = {};
+                    Terrain_CreateMaterial(material_result_block, args.data());
                 }
                 else if (call->function_name == "CreateTerrainTileMap" && call->arguments.size() >= 65U)
                 {
@@ -785,7 +788,8 @@ bool TerrainLevelData::Terrain_LoadLevel(
                             args.push_back(0.0f);
                         }
                     }
-                    Terrain_CreateTileMap(nullptr, args.data());
+                    alignas(4) std::uint32_t tilemap_result_block[6] = {};
+                    Terrain_CreateTileMap(tilemap_result_block, args.data());
                 }
             }
         }

@@ -4,7 +4,7 @@
   "labelled_verified": 83,
   "saved_evidence_backed": 120,
   "strict_evidence_backed": 120,
-  "end_to_end_backed": 13,
+  "end_to_end_backed": 15,
   "records_with_problems": 0
  },
  "natives": [
@@ -1323,7 +1323,7 @@
   {
    "address": "0x00505E40",
    "name": "TextureModifier_Push",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1340,7 +1340,7 @@
   {
    "address": "0x004C5F00",
    "name": "Terrain_LoadTexturesAndLightmaps",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1357,7 +1357,7 @@
   {
    "address": "0x004C6240",
    "name": "Terrain_Load",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1378,13 +1378,11 @@
    "build_errors": [],
    "behavioral_errors": [],
    "semantic_errors": [],
-   "frida_errors": [
-    "no paired Frida report"
-   ],
+   "frida_errors": [],
    "runner_configured": true,
    "saved_evidence_backed": true,
    "strict_evidence_backed": true,
-   "end_to_end_backed": false
+   "end_to_end_backed": true
   },
   {
    "address": "0x004C6760",
@@ -1395,13 +1393,11 @@
    "build_errors": [],
    "behavioral_errors": [],
    "semantic_errors": [],
-   "frida_errors": [
-    "no paired Frida report"
-   ],
+   "frida_errors": [],
    "runner_configured": true,
    "saved_evidence_backed": true,
    "strict_evidence_backed": true,
-   "end_to_end_backed": false
+   "end_to_end_backed": true
   },
   {
    "address": "0x004CEA80",
@@ -1423,7 +1419,7 @@
   {
    "address": "0x004D14E0",
    "name": "Terrain_TraverseContourQuadtree",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1457,7 +1453,7 @@
   {
    "address": "0x00506F00",
    "name": "HeightMap_Enter",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1474,7 +1470,7 @@
   {
    "address": "0x00510010",
    "name": "Terrain_DecodeChunkCommands",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -1491,7 +1487,7 @@
   {
    "address": "0x00512C30",
    "name": "Terrain_Draw",
-   "status": "ANALYZED",
+   "status": "STRUCTURALLY_VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],

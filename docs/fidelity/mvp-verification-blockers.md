@@ -11,7 +11,7 @@ categories and what each one needs.
 | retail-unobserved | 23 | neither run reached it |
 | end-to-end | 12 | both sides observed; 9 pass every pillar, 3 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
-| paired-mismatch | 3 | both sides observed, observed classes disagree |
+| paired-mismatch | 1 | both sides observed, observed classes disagree |
 
 An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
 the catalog name and the port's name differ at the same retail address (the port
@@ -338,3 +338,19 @@ null result block.
 contains **zero call instructions** targeting its symbol. The ten-byte setter was folded into its
 callers, so there is no function entry for a probe to hook. That is why every capture-level hypothesis
 failed - the call executes as inlined stores, not as a call.
+
+## The terrain file cleared its own gate, and the call-site fix landed
+
+The two-line call-site fix from round 69 could not be committed because editing `terrain_loaders.cpp`
+staged all ten natives it implements, and eight of them were below STRUCTURALLY_VERIFIED. This round
+raised those eight with the evidence they already carried - build reports, semantic reviews and
+canonical declarations for the three that had none - and the staged gate then accepted the file with
+all ten native(s) passing at STRUCTURALLY_VERIFIED with CFG >= 0.85.
+
+The fix itself is unchanged: both call sites now supply an aligned 24-byte result block, as the retail
+dispatcher does, instead of a null context. The capture after the rebuild shows `Terrain_CreateMaterial`
+and `Terrain_CreateTileMap` matching on both sides, taking paired matches from 13 to 15 and mismatches
+from 3 to 1. The strict gate passes for both at VERIFIED with CFG, angr, behavioural differential and
+paired probes.
+
+One mismatch remains: `Terrain_LoadTexturesAndLightmaps` returns 1 where retail returns 10.
