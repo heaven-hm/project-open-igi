@@ -1,0 +1,15 @@
+{
+ "kind": "retail-target-profile",
+ "schema_version": 1,
+ "binary": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "machine": "0x014c (IMAGE_FILE_MACHINE_I386, 32-bit x86)",
+ "subsystem": "2 (WINDOWS_GUI)",
+ "floating_point": "x87 FPU, not SSE. Retail uses fld dword/qword/xword (80-bit extended) and stores through fstp; control-word handling is native x87.",
+ "era": "Windows 2000-era 32-bit build",
+ "implications": [
+  "Numeric comparison must use x87 80-bit extended semantics, not double-precision SSE.",
+  "FP natives (FP_InitExtendedPrecision, FP_SetDefaultPrecision, FP_MergeControlWord, FP_*ControlWord*) depend on the x87 control word and must be compared on that basis.",
+  "Candidate x86 builds default to the same x87 unit, so the same control word applies to both sides."
+ ]
+}

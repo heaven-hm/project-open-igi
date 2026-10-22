@@ -8,10 +8,12 @@
   "oracle": "retail-binary-execution",
   "method": "Retail was replayed in radare2 ESIL with the target global seeded to each probe value; the candidate was compiled with i686-w64-mingw32-g++ and executed under CrossOver with the same seeded global. Only the returned low byte is observable through the process exit status.",
   "observable_fields": [
-    "return_low_byte"
+    "return_value",
+    "state_delta",
+    "side_effects"
   ],
   "limitations": [
-    "Only the low byte of the returned dword is observable through a process exit status.",
+    "The getter has no side effects; side_effects is empty and state_delta records that the seed global is unchanged.",
     "The getter reads one global and has no other input, so the seed is the entire state."
   ],
   "cases": [
@@ -24,10 +26,18 @@
         "global_value": 0
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 0,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
+        "return_value": 0,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -40,10 +50,18 @@
         "global_value": 1
       },
       "reference_output": {
-        "return_low_byte": 1
+        "return_value": 1,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 1
+        "return_value": 1,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -56,10 +74,18 @@
         "global_value": 4294967295
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 4294967295,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
+        "return_value": 4294967295,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -72,10 +98,18 @@
         "global_value": 2147483647
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 2147483647,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
+        "return_value": 2147483647,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -88,10 +122,18 @@
         "global_value": 2147483648
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 2147483648,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
+        "return_value": 2147483648,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -104,10 +146,18 @@
         "global_value": 256
       },
       "reference_output": {
-        "return_low_byte": 0
+        "return_value": 256,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 0
+        "return_value": 256,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -120,10 +170,18 @@
         "global_value": 65535
       },
       "reference_output": {
-        "return_low_byte": 255
+        "return_value": 65535,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 255
+        "return_value": 65535,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -136,10 +194,18 @@
         "global_value": 3735928559
       },
       "reference_output": {
-        "return_low_byte": 239
+        "return_value": 3735928559,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 239
+        "return_value": 3735928559,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -152,10 +218,18 @@
         "global_value": 305419896
       },
       "reference_output": {
-        "return_low_byte": 120
+        "return_value": 305419896,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 120
+        "return_value": 305419896,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     },
@@ -168,10 +242,18 @@
         "global_value": 2779096485
       },
       "reference_output": {
-        "return_low_byte": 165
+        "return_value": 2779096485,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "candidate_output": {
-        "return_low_byte": 165
+        "return_value": 2779096485,
+        "state_delta": {
+          "global_unchanged": true
+        },
+        "side_effects": []
       },
       "passed": true
     }

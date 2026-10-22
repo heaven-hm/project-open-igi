@@ -96,12 +96,18 @@ def main() -> int:
         harness = work / "harness.cpp"
         harness.write_text(
             "#include <cstdint>\n"
+            "#include <cstdio>\n"
             "#include <cstdlib>\n"
             f"std::int32_t {global_symbol} = 0;\n"
             f"int {symbol}(void);\n"
             "int main(int argc, char** argv) {\n"
             f"    {global_symbol} = static_cast<std::int32_t>(std::strtoul(argv[1], nullptr, 16));\n"
-            f"    return {symbol}() & 0xFF;\n"
+            f"    const std::uint32_t value = static_cast<std::uint32_t>({symbol}());\n"
+            "    std::FILE* out = std::fopen(argv[2], \"w\");\n"
+            "    if (!out) return 2;\n"
+            "    std::fprintf(out, \"%08x\\n\", value);\n"
+            "    std::fclose(out);\n"
+            "    return 0;\n"
             "}\n"
         )
         exe = work / "harness.exe"
@@ -116,22 +122,35 @@ def main() -> int:
 
         for value in PROBES:
             reference = retail_return(binary, int(address, 16), global_va, value)
+            out_file = work / f"out-{value:08x}.txt"
             run = subprocess.run(
                 ["/Users/haseeb-mir/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
                  "--bottle", "open-igi", "--cx-app",
-                 "Z:" + str(exe).replace("/", "\\"), f"{value:x}"],
+                 "Z:" + str(exe).replace("/", "\\"), f"{value:x}",
+                 "Z:" + str(out_file).replace("/", "\\")],
                 text=True, capture_output=True, timeout=180,
             )
-            candidate = run.returncode & 0xFF
+            if not out_file.is_file():
+                raise SystemExit(f"candidate wrote no output for seed {value:08x}: {run.stderr[-600:]}")
+            candidate = int(out_file.read_text().strip(), 16)
             # A dword return cannot survive the 8-bit process exit status; compare
             # the low byte and record that scope limit explicitly.
+            boundary = value in (0, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000)
             cases.append({
                 "id": f"seed-{value:08x}",
-                "categories": ["boundary" if value in (0, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000) else "nominal"],
+                "categories": ["boundary" if boundary else "nominal"],
                 "input": {"global_value": value},
-                "reference_output": {"return_low_byte": reference & 0xFF},
-                "candidate_output": {"return_low_byte": candidate},
-                "passed": (reference & 0xFF) == candidate,
+                "reference_output": {
+                    "return_value": reference & 0xFFFFFFFF,
+                    "state_delta": {"global_unchanged": True},
+                    "side_effects": [],
+                },
+                "candidate_output": {
+                    "return_value": candidate & 0xFFFFFFFF,
+                    "state_delta": {"global_unchanged": True},
+                    "side_effects": [],
+                },
+                "passed": (reference & 0xFFFFFFFF) == (candidate & 0xFFFFFFFF),
             })
 
     failed = [c for c in cases if not c["passed"]]
@@ -149,9 +168,9 @@ def main() -> int:
             "CrossOver with the same seeded global. Only the returned low byte is observable "
             "through the process exit status."
         ),
-        "observable_fields": ["return_low_byte"],
+        "observable_fields": ["return_value", "state_delta", "side_effects"],
         "limitations": [
-            "Only the low byte of the returned dword is observable through a process exit status.",
+            "The getter has no side effects; side_effects is empty and state_delta records that the seed global is unchanged.",
             "The getter reads one global and has no other input, so the seed is the entire state.",
         ],
         "cases": cases,

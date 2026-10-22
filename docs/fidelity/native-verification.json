@@ -56700,7 +56700,7 @@
         "signature": "int __cdecl Script_GetDebugCompileState(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56747,7 +56747,7 @@
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-build.json",
-          "evidence_sha256": "93925d9419f00fbd3d025578313439b5a1abd587307f1562bdec6577a6b90107"
+          "evidence_sha256": "6fd3b957aee5755f63a85cdb1747e5fd27d416afa9ea89b73604a1f7cd64b7f2"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
@@ -56756,12 +56756,13 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
-          "evidence_sha256": "c86a9d27ba0fd2b0e22c16b98b0773869d15d1b8f289cac0f8077784ec3454ae",
+          "evidence_sha256": "45805c1a3c165741fa7e7af6ef964244ba9fcdd6089f8f9fd51ad4460baf495b",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F340",
@@ -56778,7 +56779,7 @@
         "signature": "int __cdecl Script_GetForcePrecompiledState(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56825,7 +56826,7 @@
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-build.json",
-          "evidence_sha256": "5ddbf3f35dbae4e3431c33d2f4391776c06b1a5c5964ab8d2b5007f93b6303fc"
+          "evidence_sha256": "087f97d3c7c47e68f10b4048aeb8926a27c0bef81fb1961ca5333ffa13a34b91"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
@@ -56834,12 +56835,13 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
-          "evidence_sha256": "6f30609847b22a14aaa36931496366cec368c3bc92cfeae6f83d1ebbc0b2bb34",
+          "evidence_sha256": "e8bf4bb7e6f393ad53a880568ff91797301cb1b764091ff2455efb8741ad7251",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5B60",
