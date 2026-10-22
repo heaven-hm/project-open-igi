@@ -9,7 +9,7 @@ categories and what each one needs.
 | --- | --- | --- |
 | candidate-unreachable | 75 | retail calls it, the candidate program never does: the subsystem is not built into the scene |
 | retail-unobserved | 23 | neither run reached it |
-| end-to-end | 10 | both sides observed; 7 pass every pillar, 3 fail another pillar |
+| end-to-end | 10 | both sides observed; 8 pass every pillar, 2 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
 | paired-mismatch | 6 | both sides observed, observed classes disagree |
 
