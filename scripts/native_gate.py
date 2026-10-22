@@ -1069,14 +1069,14 @@ def validate_status_evidence(
             # A paired observation must show both programs were instrumented, the
             # same probe was used, and at least one call was observed in each.
             if frida_artifact.get("candidate_executable_sha256") in (None, ""):
-                errors.append(f"{address}: Frida evidence is not bound to a candidate executable")
+                errors.append(f"{native_address}: Frida evidence is not bound to a candidate executable")
             retail_seen = frida_artifact.get("retail_observed_calls")
             candidate_seen = frida_artifact.get("candidate_observed_calls")
             if not isinstance(retail_seen, int) or retail_seen <= 0:
-                errors.append(f"{address}: Frida evidence records no retail calls")
+                errors.append(f"{native_address}: Frida evidence records no retail calls")
             if not isinstance(candidate_seen, int) or candidate_seen <= 0:
                 errors.append(
-                    f"{address}: Frida evidence records no candidate calls, so the native is not "
+                    f"{native_address}: Frida evidence records no candidate calls, so the native is not "
                     "proven reachable end to end")
     if rank >= STATUS_RANK["VERIFIED"] or require_semantic:
         semantic_artifact = validate_report_artifact(
