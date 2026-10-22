@@ -274,3 +274,24 @@ The decisive test is an unconditional delay with the same two hooks: if both cal
 propagation is the cause and the fix is in how the driver passes the window; if the setter still does
 not appear, the binary under test is not the one the disassembly was taken from and that must be
 established before anything else.
+
+## Unconditional delay does not help either, and a single-hook run sees nothing
+
+Two further experiments, both through the driver's own staging and attach path:
+
+1. An unconditional ten-second `Sleep` at Main's entry replaced the env-gated one (temporary
+   diagnostic, reverted). With both addresses hooked, `0x40B0B0` was observed once and `0x40A6C0`
+   still was not. So environment propagation is not the cause either: the delay definitely happened,
+   and the setter was still invisible.
+2. Hooking only `0x40A6C0`, with the same delay, recorded no call at all in the settle window - the
+   observation never started.
+
+The current build's disassembly shows the two calls unconditionally adjacent: `0x40B5A4` calls the
+is-active setter and `0x40B5B0` calls the lightmaps setter, with no branch between them. One is
+observed, the other is never seen, and the single-address run sees neither. That combination cannot
+be explained by attach timing, aliasing or the aggregate.
+
+The next step is in-process evidence rather than more captures: a hook whose callback also records the
+caller's return address would show whether `0x40B5B0` is ever reached, and a marker written from
+inside the setter itself would show whether the body runs. Until one of those is measured, the
+register keeps the conclusion narrow: the candidate's startup observation is unexplained, not absent.
