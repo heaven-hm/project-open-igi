@@ -1730,6 +1730,87 @@ int main()
 """
 
 
+
+# ---------------------------------------------------------------------------
+# 0x004F1160 Script_GetParseMode (catalog label Script_ParseEnumReal32_5)
+# ---------------------------------------------------------------------------
+
+PARSE_MODE_ADDRESS = 0x004F1160
+PARSE_MODE_BE = 0x00A758BE
+PARSE_MODE_BD = 0x00A758BD
+
+
+def parse_mode_cases() -> list[dict]:
+    cases = [
+        {"id": "both-clear", "categories": ["nominal"], "be": 0, "bd": 0},
+        {"id": "be-set-nominal", "categories": ["nominal"], "be": 1, "bd": 0},
+        {"id": "bd-set-nominal", "categories": ["nominal"], "be": 0, "bd": 1},
+        {"id": "both-set", "categories": ["nominal"], "be": 1, "bd": 1},
+        {"id": "be-high-bit", "categories": ["boundary"], "be": 0x80, "bd": 0},
+        {"id": "bd-high-bit", "categories": ["boundary"], "be": 0, "bd": 0x80},
+        {"id": "be-max", "categories": ["boundary"], "be": 0xFF, "bd": 0xFF},
+        {"id": "bd-max-be-clear", "categories": ["boundary"], "be": 0, "bd": 0xFF},
+    ]
+    for index, case in enumerate(cases):
+        case["seed"] = index
+    return cases
+
+
+def parse_mode_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(PARSE_MODE_BE, struct.pack("<B", case["be"]))
+    emulator.mem_write(PARSE_MODE_BD, struct.pack("<B", case["bd"]))
+    run_with_arguments(emulator, PARSE_MODE_ADDRESS, [], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.X86_CONST_EAX) if False else emulator.reg_read(
+        unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {
+            "be": emulator.mem_read(PARSE_MODE_BE, 1)[0],
+            "bd": emulator.mem_read(PARSE_MODE_BD, 1)[0],
+        },
+        "side_effects": [],
+    }
+
+
+def parse_mode_case_literal(case: dict) -> str:
+    return f'        {{"{case["id"]}", {case["be"]}U, {case["bd"]}U}},'
+
+
+def parse_mode_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/script/script_mode.hpp"
+
+namespace {
+
+struct Case { const char* id; unsigned be; unsigned bd; };
+
+Case cases[] = {
+@CASES@
+};
+
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        igi::retail::script::g_a758be = static_cast<std::uint8_t>(item.be);
+        igi::retail::script::g_a758bd = static_cast<std::uint8_t>(item.bd);
+        const std::uint32_t result = igi::retail::script::Script_GetParseMode();
+        std::printf("{\"id\":\"%s\",\"return_value\":%u,\"state_delta\":{\"be\":%u,"
+                    "\"bd\":%u},\"side_effects\":[]}\n",
+                    item.id, result,
+                    static_cast<unsigned>(igi::retail::script::g_a758be),
+                    static_cast<unsigned>(igi::retail::script::g_a758bd));
+    }
+    return 0;
+}
+"""
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -1766,6 +1847,12 @@ NATIVES = {
         "retail": config_num_retail,
         "candidate_source": config_num_candidate_source,
         "include": ("igi/retail/config/config_graphic_options.hpp",),
+    },
+    "0x004F1160": {
+        "cases": parse_mode_cases,
+        "retail": parse_mode_retail,
+        "candidate_source": parse_mode_candidate_source,
+        "include": ("igi/retail/script/script_mode.hpp",),
     },
     "0x0048F970": {
         "cases": wndproc_cases,
@@ -1835,6 +1922,8 @@ NATIVES = {
 def format_case_literal(address: str, case: dict) -> str:
     if address == "0x0048F970":
         return wndproc_case_literal(case)
+    if address == "0x004F1160":
+        return parse_mode_case_literal(case)
     if address == "0x00465820":
         return (f'        {{"{case["id"]}", static_cast<std::size_t>({case["human_offset"]}), '
                 f'{float(case["feet_x"])}, {float(case["feet_y"])}, {float(case["feet_z"])}, '

@@ -57669,12 +57669,12 @@
         "signature": "int Script_ParseEnumReal32_5(void)"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/script/004F1160-Script_GetParseMode.hpp",
-        "sha256": "7e829d4b61a6fab79a00d5cfe51435adec3fb8cda981c9c29f41eb5d012465a1",
-        "signature": "int Script_ParseEnumReal32_5(void)"
+        "path": "scripts/GameNatives/script/004F1160-Script_GetParseMode.cpp",
+        "signature": "uint32_t __cdecl(void)",
+        "sha256": "9b621e869c420c34235df0f27d949a3ea505aef449b311a25709fc6257b4407b"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57684,7 +57684,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -57699,7 +57699,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57726,8 +57726,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004F1160-behavioral.json",
           "evidence_sha256": "c6b9f635e922d985544e405403644350f68530255f4983cec32c8296eb30f243"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004F1160-behavioral.json",
+          "evidence_sha256": "42f244d1ee8ca825215c4971b73f322c26d10794c1f9f8e00f6befbe0065fa8a",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7470",
