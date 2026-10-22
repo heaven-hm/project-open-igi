@@ -285,7 +285,7 @@ def main() -> int:
             "The retail byte range of 0x004B83D0 was executed under Unicorn with the three "
             "callees (0x004B6380, 0x004BD380, 0x004B0D10) hooked as sentinel-returning stubs; "
             "the current C++ implementation was compiled with equivalent sentinel stubs "
-            "(Resource_Unload linked, 0x004BD380/0x004B0D10 via Host_SetQvm*Release). For each "
+            "(Resource_Unload linked, 0x004BD380/0x004B0D10 via the QVM release hook). For each "
             "case the returned value, the callee call sequence, and the untouched 0x100-byte "
             "qvm body were compared. Emulation is used because this ARM64 macOS host cannot "
             "launch the Windows x86 retail process."

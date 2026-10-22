@@ -156,8 +156,8 @@ __declspec(dllexport) std::int32_t NativeFreeData(void* data) {
 }
 
 __declspec(dllexport) void* NativeRegisterBuffer(const char* name, void* buffer, std::int32_t size) {
-    Host_SetSysAllocateMemory5(&NativeAllocate);
-    Host_SetSysOpenFileStream5(&NativeFreeData);
+    Sys_SetAllocateMemory5(&NativeAllocate);
+    Sys_SetOpenFileStream5(&NativeFreeData);
     return Resource_RegisterBuffer(name, buffer, size);
 }
 
@@ -205,8 +205,8 @@ __declspec(dllexport) std::int32_t NativeCreateCase(std::int32_t spec_count, std
 
 __declspec(dllexport) std::int32_t NativeContainerCase(std::int32_t name, std::int32_t buffer, std::int32_t meta) {
     Resource_InitPoolForTest(64);
-    Host_SetSysAllocateMemory5(&NativeAllocate);
-    Host_SetSysOpenFileStream5(&NativeFreeData);
+    Sys_SetAllocateMemory5(&NativeAllocate);
+    Sys_SetOpenFileStream5(&NativeFreeData);
     void* parent = Resource_CreateNode(reinterpret_cast<const char*>(name), nullptr,
         reinterpret_cast<void*>(buffer), 0, 0, reinterpret_cast<const std::int32_t*>(meta));
     NativeNodes[0] = reinterpret_cast<std::uint32_t>(parent);
@@ -218,7 +218,7 @@ __declspec(dllexport) std::int32_t NativeContainerCase(std::int32_t name, std::i
 __declspec(dllexport) std::int32_t NativeFreeCase(std::int32_t node_count, std::int32_t free_index,
                                                   std::int32_t link_children) {
     Resource_InitPoolForTest(64);
-    Host_SetSysOpenFileStream5(&NativeFreeData);
+    Sys_SetOpenFileStream5(&NativeFreeData);
     static const char* const kNames[8] = {
         "LOCAL:HARNESS/FREENODE.0", "LOCAL:HARNESS/FREENODE.1", "LOCAL:HARNESS/FREENODE.2",
         "LOCAL:HARNESS/FREENODE.3", "LOCAL:HARNESS/FREENODE.4", "LOCAL:HARNESS/FREENODE.5",
@@ -472,7 +472,7 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
             if target is None:
                 if op == "freedata":
                     # The candidate reaches the free-data boundary through the port's own
-                    # Host_SetSysOpenFileStream5 hook; no image symbol hook is needed.
+                    # Sys_SetOpenFileStream5 hook; no image symbol hook is needed.
                     continue
                 target = symbol({
                     "tag": "Ilff_GetChunkTag", "form": "Ilff_GetFormType",

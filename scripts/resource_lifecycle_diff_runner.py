@@ -44,7 +44,7 @@ static std::int32_t free_payload(void* p) {
 }
 int NativeFree(int kind, int active) {
     Resource_InitPoolForTest(4);
-    Host_SetSysOpenFileStream5(&free_payload);
+    Sys_SetOpenFileStream5(&free_payload);
     std::int32_t meta[2] = {0, 0};
     auto* first = static_cast<ResourceHashNode*>(Resource_CreateNode(
         "LOCAL:one.bin", nullptr, reinterpret_cast<void*>(0x12345678), 17, kind, meta));
@@ -81,8 +81,8 @@ int main(int argc, char** argv) {
 namespace igi::retail::resource {
 static ResourceHashNode test_root;
 ResourceHashNode& Resource_GetHashRoot() { return test_root; }
-void Host_SetSysFreeMemory16(SysFreeMemory16Fn) {}
-void Host_SetSysResource(SysResourceFn) {}
+void Sys_SetFreeMemory16(SysFreeMemory16Fn) {}
+void Sys_SetResource(SysResourceFn) {}
 }
 namespace igi::retail::sys {
 std::int32_t Resource_CanonicalizePath(char* out, char* in) {
@@ -276,11 +276,11 @@ int Error_Show(const char* format, ...) {
 }
 }
 extern "C" __declspec(dllexport) void* NativeLoad(const char* path, int* size) {
-    Host_SetResourcePackUnpack(NativePack); Host_SetSysResource(NativeRegister);
+    Resource_SetPackUnpack(NativePack); Sys_SetResource(NativeRegister);
     return Resource_Load(path,size);
 }
 extern "C" __declspec(dllexport) int NativeUnload(const char* path) {
-    Host_SetSysFreeMemory16(NativeFree); return Resource_Unload(path);
+    Sys_SetFreeMemory16(NativeFree); return Resource_Unload(path);
 }
 '''
     if args.address == "0x004B6380":

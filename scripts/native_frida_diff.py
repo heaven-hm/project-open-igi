@@ -23,6 +23,7 @@ from pathlib import Path
 from verification_scope import (address as normalize_address, file_digest, load_scope,
                                 pair_typed_sequences, stage_candidate, validate_runtime_contract)
 from check_frida_differential import behavior_matches
+from verification_scope import validate_native_symbol_binding
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -238,6 +239,7 @@ def main() -> None:
         if len(parts) == 3 and parts[1] in ("T", "t"):
             symbols[parts[2]] = f"0x{int(parts[0], 16):08X}"
     for row in rows:
+        validate_native_symbol_binding(row)
         symbol = (row.get("candidateSymbol") or {}).get("symbol")
         if not symbol or symbol not in symbols:
             raise ValueError(f"candidate symbol unavailable in current executable: {row['address']} {symbol}")

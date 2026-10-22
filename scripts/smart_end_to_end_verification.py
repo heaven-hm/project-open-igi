@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -33,25 +34,14 @@ def invoke(command, env, timeout=1200):
     return dict(command=command, exit_code=result.returncode, stdout=result.stdout, stderr=result.stderr)
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--address', required=True, type=lambda value: f'0x{int(value, 0):08X}')
-    parser.add_argument('--level', type=int, default=1, choices=range(1, 15))
-    parser.add_argument('--binary', type=Path)
-    parser.add_argument('--candidate', type=Path)
-    parser.add_argument('--receipt', type=Path)
-    parser.add_argument('--probe', type=Path, help='Reviewed typed gameplay probe, used unchanged in both images')
-    parser.add_argument('--skip-build', action='store_true', help='Require and revalidate an existing build receipt')
-    parser.add_argument('--static-only', action='store_true', help='Run strict native gate only; never full feature acceptance')
-    parser.add_argument('--report', type=Path)
-    args = parser.parse_args()
+def run(address: str, args) -> tuple[dict, int]:
     config = read_config()
     run_id = datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ-') + uuid.uuid4().hex[:8]
-    folder = ROOT / 'build/native-one' / args.address / run_id
+    folder = ROOT / 'build/native-one' / address / run_id
     folder.mkdir(parents=True)
     output = args.report or folder / 'report.json'
     static_report, runtime_report = folder / 'static-gate.json', folder / 'frida-pair.json'
-    report = dict(schema_version=1, kind='igi-one-native-verification', address=args.address,
+    report = dict(schema_version=1, kind='igi-one-native-verification', address=address,
                   run_id=run_id, result='blocked', verified=False, phases={})
     env = dict(os.environ, LC_ALL='C', LANG='C')
     env.setdefault('IGI_ANGR_PYTHON', config['angr_python'])
@@ -62,7 +52,7 @@ def main():
         build = ROOT / config['build_directory']
         receipt = args.receipt or build / 'candidate-receipt.json'
         records = json.loads((ROOT / 'docs/fidelity/native-verification.json').read_text())['natives']
-        matches = [r for r in records if int(r['address'], 16) == int(args.address, 16)]
+        matches = [r for r in records if int(r['address'], 16) == int(address, 16)]
         if len(matches) != 1:
             raise ValueError('exactly one address-bound manifest record is required')
         record = matches[0]
@@ -90,7 +80,7 @@ def main():
             env.update(IGI_CANDIDATE_EXE=str(candidate), IGI_CANDIDATE_BUILD_RECEIPT=str(receipt))
             report['candidate_sha256'] = digest(candidate)
         command = [sys.executable, str(ROOT / 'scripts/native_gate.py'), '--root', str(ROOT),
-            '--address', args.address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
+            '--address', address, '--file', str(implementation.relative_to(ROOT)), '--binary', str(binary),
             '--threshold', 'VERIFIED', '--cfg-threshold', '0.85', '--require-semantic-evidence',
             '--require-behavioral-tests', '--report', str(static_report)]
         gate = invoke(command, env, 1800)
@@ -99,14 +89,14 @@ def main():
             raise ValueError('strict native gate failed; see static-gate.json and retained command output')
         from verification_scope import load_scope
         required, _, gate_data = load_scope(static_report)
-        if required != {args.address}:
+        if required != {address}:
             raise ValueError('gate must check exactly the requested nonempty native scope')
         if args.static_only:
             # Fail closed: a static-only gate pass can never be accepted. Runtime
             # capture and typed comparison are mandatory before any native can pass.
             report['result'] = 'blocked'
             report['error'] = 'static-only verification cannot be accepted; runtime capture and typed comparison are required'
-            return 1
+            return report, 1
         probe = args.probe
         if probe is None:
             probe_path = record.get('verification', {}).get('runtime_probe', {}).get('path')
@@ -133,17 +123,92 @@ def main():
         validate_receipt(receipt, ROOT, candidate, [implementation])
         if digest(implementation) != report['implementation_sha256'] or digest(binary) != report['binary_sha256']:
             raise ValueError('source or retail changed during verification')
-        report.update(result='passed', verified=True, scope=f'Native {args.address}, level {args.level}, reviewed probe observations only')
-        return 0
+        report.update(result='passed', verified=True, scope=f'Native {address}, level {args.level}, reviewed probe observations only')
+        return report, 0
     except (OSError, ValueError, KeyError, TypeError, subprocess.SubprocessError) as error:
         report['error'] = str(error)
-        return 1
+        return report, 1
     finally:
         output.parent.mkdir(parents=True, exist_ok=True)
         output.write_text(json.dumps(report, indent=2) + '\n')
         print('True' if report['verified'] else 'False')
         print(f"{report['result']}: {report.get('error', report.get('scope', 'partial gate only'))}")
         print(f'report: {output}')
+
+
+def scan_changed_native_addresses() -> list[str]:
+    """Map changed/new source paths to address-bound retail natives for auto scanning."""
+    changed: set[str] = set()
+    status = subprocess.run(['git', 'status', '--porcelain'], cwd=ROOT, capture_output=True, text=True)
+    for line in status.stdout.splitlines():
+        if not line.strip():
+            continue
+        path = line[3:].strip().strip('"')
+        if path:
+            changed.add(path)
+    diff = subprocess.run(['git', 'diff', '--name-only', 'HEAD'], cwd=ROOT, capture_output=True, text=True)
+    changed.update(p.strip() for p in diff.stdout.split() if p.strip())
+    token_re = re.compile(r'(?<![0-9A-Fa-f])([0-9A-Fa-f]{8})(?![0-9A-Fa-f])')
+    candidates: set[str] = set()
+    for path in sorted(changed):
+        for token in token_re.findall(path):
+            candidates.add(f'0x{int(token, 16):08X}')
+    records = json.loads((ROOT / 'docs/fidelity/native-verification.json').read_text()).get('natives', [])
+    bound: list[str] = []
+    for address in sorted(candidates):
+        matches = [r for r in records if int(str(r.get('address', '0')), 16) == int(address, 16)]
+        if len(matches) == 1:
+            implementation = matches[0].get('implementation', {}).get('path', '')
+            if implementation.startswith('engine/') and (ROOT / implementation).resolve().is_file():
+                bound.append(address)
+    return bound
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--address', type=lambda value: f'0x{int(value, 0):08X}')
+    parser.add_argument('--level', type=int, default=1, choices=range(1, 15))
+    parser.add_argument('--binary', type=Path)
+    parser.add_argument('--candidate', type=Path)
+    parser.add_argument('--receipt', type=Path)
+    parser.add_argument('--probe', type=Path, help='Reviewed typed gameplay probe, used unchanged in both images')
+    parser.add_argument('--skip-build', action='store_true', help='Require and revalidate an existing build receipt')
+    parser.add_argument('--static-only', action='store_true', help='Run strict native gate only; never full feature acceptance')
+    parser.add_argument('--auto', action='store_true', help='Scan changed/new source files for address-bound natives and run the full end-to-end static+runtime verification for each changed native')
+    parser.add_argument('--report', type=Path)
+    args = parser.parse_args()
+    addresses = [args.address] if not args.auto else scan_changed_native_addresses()
+    if not addresses:
+        report = dict(schema_version=1, kind='igi-one-native-verification', address=args.address, run_id='', result='blocked', verified=False, phases={}, error='no address-bound changed native detected; new code must map to a retail address before static+runtime comparison')
+        output = args.report or (ROOT / 'build/native-one' / 'auto' / 'report.json')
+        output.parent.mkdir(parents=True, exist_ok=True)
+        output.write_text(json.dumps(report, indent=2) + '\n')
+        print('False')
+        print(f"blocked: {report.get('error', 'no address-bound changed native')}")
+        print(f'report: {output}')
+        return 1
+    if len(addresses) == 1:
+        return run(addresses[0], args)[1]
+    aggregate = dict(schema_version=1, kind='igi-one-native-e2e-changed-scope', addresses=addresses, result='blocked', verified=False, phases={}, differences=[])
+    failed = False
+    saved_report = args.report
+    args.report = None
+    for address in addresses:
+        report, code = run(address, args)
+        aggregate.setdefault('results', []).append(report)
+        if code:
+            failed = True
+            aggregate['differences'].append(f"{address}: {report.get('error', 'verification failed')}")
+    args.report = saved_report
+    aggregate['result'] = 'blocked' if failed else 'passed'
+    aggregate['verified'] = not failed
+    output = args.report or (ROOT / 'build/native-one' / 'auto' / 'report.json')
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(aggregate, indent=2) + '\n')
+    print('True' if aggregate['verified'] else 'False')
+    print(f"{aggregate['result']}: changed-native end-to-end scope with {len(addresses)} address(es)")
+    print(f'report: {output}')
+    return 0 if aggregate['verified'] else 1
 
 
 if __name__ == '__main__':

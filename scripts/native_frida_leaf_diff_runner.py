@@ -27,6 +27,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
 
 import verification_scope  # noqa: E402
+from verification_scope import validate_native_symbol_binding
 
 spec = importlib.util.spec_from_file_location(
     "nfd", ROOT / "scripts" / "native_frida_diff.py")
@@ -41,6 +42,8 @@ CANDIDATE_NAME = "open-igi.exe"
 
 def load_symbols() -> dict:
     entries = json.loads(SYMBOL_MAP.read_text())
+    for entry in entries:
+        validate_native_symbol_binding(entry)
     return {entry["address"].lower(): entry for entry in entries}
 
 

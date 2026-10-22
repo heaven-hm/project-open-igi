@@ -49,14 +49,20 @@ def sha256(path: pathlib.Path) -> str:
 
 def run_runner(record: dict, binary: pathlib.Path, binary_sha: str) -> dict | None:
     implementation = ROOT / record["implementation"]["path"]
+    # The manifest records the runner each native is verified with, so a native
+    # whose runner is not the live leaf runner still runs the runner it is
+    # bound to.
+    runner_record = record["verification"].get("behavioral_runner", {})
+    runner = runner_record.get("path", RUNNER)
+    runner_args = runner_record.get("args") or RUNNER_ARGS
     expanded = []
-    for arg in RUNNER_ARGS:
+    for arg in runner_args:
         expanded.append(arg.format(
             address=record["address"], binary=str(binary), binary_sha256=binary_sha,
             implementation=str(implementation), implementation_sha256=sha256(implementation),
             root=str(ROOT),
         ))
-    process = subprocess.run([sys.executable, str(ROOT / RUNNER), *expanded],
+    process = subprocess.run([sys.executable, str(ROOT / runner), *expanded],
                              cwd=ROOT, capture_output=True, text=True, check=False, timeout=600)
     if process.returncode != 0 or not process.stdout.strip().startswith("{"):
         return None
@@ -256,9 +262,11 @@ def main() -> int:
                   f"{report.get('tests_failed')}/{report.get('tests_total')}")
             continue
         record["verification"]["status"] = "VERIFIED"
-        record["verification"]["behavioral_runner"] = {
+        # The record keeps the runner it was verified with; the live leaf
+        # runner is only the default for a record that names no runner.
+        record["verification"].setdefault("behavioral_runner", {
             "path": RUNNER, "args": RUNNER_ARGS, "timeout_seconds": 600,
-        }
+        })
         promoted += 1
         print(f"{record['address']} {record['name']}: promoted to VERIFIED "
               f"({report['tests_passed']}/{report['tests_total']})")

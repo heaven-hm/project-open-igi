@@ -1396,10 +1396,10 @@ int main()
         }
         std::array<std::uint8_t, 0x18> context{};
         context.fill(0xA5);
-        igi::retail::terrain::Host_ResetTerrainGlobals();
+        igi::retail::terrain::Terrain_ResetGlobals();
         void* result = igi::retail::terrain::Terrain_CreateMaterial(context.data(), args.data());
         std::array<std::uint8_t, 900> group{};
-        igi::retail::terrain::Host_GetMaterialGroupBytes(item.group, group.data());
+        igi::retail::terrain::Terrain_GetMaterialGroupBytes(item.group, group.data());
         char group_hex[901 * 2];
         char context_hex[0x18 * 2 + 1];
         for (std::size_t index = 0; index < group.size(); ++index)
@@ -1453,10 +1453,10 @@ int main()
         }
         std::array<std::uint8_t, 0x18> context{};
         context.fill(0xA5);
-        igi::retail::terrain::Host_ResetTerrainGlobals();
+        igi::retail::terrain::Terrain_ResetGlobals();
         void* result = igi::retail::terrain::Terrain_CreateTileMap(context.data(), args.data());
         std::array<std::uint8_t, 64> table{};
-        igi::retail::terrain::Host_GetTileMapBytes(item.group, table.data());
+        igi::retail::terrain::Terrain_GetTileMapBytes(item.group, table.data());
         char table_hex[65 * 2];
         char context_hex[0x18 * 2 + 1];
         for (std::size_t index = 0; index < table.size(); ++index)
@@ -1491,6 +1491,724 @@ TERRAIN_LIMITS = (
     "same residue. The retail group index is not bounds checked; every case here uses an index "
     "inside the ported table so the port's documented clamping is not exercised."
 )
+
+
+# ---------------------------------------------------------------------------
+# 0x0048F970 WindowProcedure
+# ---------------------------------------------------------------------------
+
+WNDPROC_ADDRESS = 0x0048F970
+WNDPROC_LOOP_STATUS = 0x005C8DE8
+WNDPROC_CHAIN_HEAD = 0x005C8DF0
+WNDPROC_DEBUG_KEY_FLAG = 0x005C8E04
+WNDPROC_WINDOW = 0x70012000
+WNDPROC_CHAIN = 0x70012100
+WNDPROC_ENTRY = 0x70012200
+WNDPROC_HANDLER = 0x70012400
+WNDPROC_HANDLER_CODE = 0x70012900
+WNDPROC_CALLBACK_LOG = 0x70012400
+WNDPROC_STUB_SHOWCURSOR = 0x70012500
+WNDPROC_STUB_POSTQUIT = 0x70012600
+WNDPROC_STUB_DEFWNDPROC = 0x70012700
+
+# Import thunks used by the procedure; each is replaced with a local stub.
+WNDPROC_IAT_SHOWCURSOR = 0x005331B8
+WNDPROC_IAT_POSTQUIT = 0x005331A0
+WNDPROC_IAT_DEFWNDPROC = 0x00533190
+WNDPROC_IAT_POSTMESSAGE = 0x00533194
+# The WM_DESTROY path calls the shutdown native 0x004010B0, which runs a deep
+# process-teardown chain unrelated to message dispatch. Its entry is patched to a
+# bare ret so the observable WndProc state transition is still retail's own code.
+WNDPROC_CLOSE_NATIVE = 0x004010B0
+WNDPROC_SENTINEL = 0x00C0FFEE
+# The debug-key handler 0x0048F0A0 is not transcribed in this branch, so its
+# entry is patched to a plain stdcall return; the WndProc's own decision to call
+# it is still exercised by the retail code.
+WNDPROC_DEBUG_KEY_HANDLER = 0x0048F0A0  # cdecl: caller cleans the 3 arguments
+WNDPROC_STUB_POSTMESSAGE = 0x70012800
+WNDPROC_STOP = 0x00C0FFFF
+
+WM_ACTIVATE_RETAIL = 0x001C
+WM_CREATE_RETAIL = 0x0001
+WM_DESTROY_RETAIL = 0x0002
+WM_KEYDOWN_RETAIL = 0x0104
+WM_KEYUP_RETAIL = 0x0105
+WM_CLOSE_RETAIL = 0x0010
+WM_PAINT_RETAIL = 0x000F
+VK_S = 0x73
+VK_F12 = 0x12
+
+
+def wndproc_cases() -> list[dict]:
+    cases = [
+        {"id": "activate-nominal", "categories": ["nominal"], "message": WM_ACTIVATE_RETAIL,
+         "wparam": 1, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "create-nominal", "categories": ["nominal"], "message": WM_CREATE_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "destroy-nominal", "categories": ["nominal"], "message": WM_DESTROY_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": False},
+        {"id": "keyup-f12-nominal", "categories": ["nominal"], "message": WM_KEYUP_RETAIL,
+         "wparam": VK_F12, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keyup-other-nominal", "categories": ["nominal"], "message": WM_KEYUP_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keydown-s-nominal", "categories": ["nominal"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 1, "chain": False},
+        {"id": "keydown-s-no-flag", "categories": ["boundary"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": VK_S, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+        {"id": "chain-consumes", "categories": ["nominal"], "message": WM_KEYDOWN_RETAIL,
+         "wparam": 0x41, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": True,
+         "chain_result": 0},
+        {"id": "chain-passes-through", "categories": ["boundary"], "message": WM_PAINT_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 1, "debug_flag": 0, "chain": True,
+         "chain_result": 7},
+        {"id": "default-passes", "categories": ["boundary"], "message": WM_CLOSE_RETAIL,
+         "wparam": 0, "lparam": 0, "loop_status": 0, "debug_flag": 0, "chain": False},
+    ]
+    for index, case in enumerate(cases):
+        case["seed"] = index
+    return cases
+
+
+def _wndproc_emulator(image: PebImage, case: dict):
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(WNDPROC_LOOP_STATUS, struct.pack("<B", case["loop_status"]))
+    emulator.mem_write(WNDPROC_DEBUG_KEY_FLAG, struct.pack("<I", case["debug_flag"]))
+    emulator.mem_write(WNDPROC_WINDOW, b"\x00" * 0x100)
+    # Stubs log which imported API was reached, then return without touching state.
+    log = 0
+    emulator.mem_write(WNDPROC_CALLBACK_LOG, struct.pack("<I", log))
+    # USER32 exports are stdcall, so each stub must pop its own arguments:
+    # ShowCursor(1 arg) and PostQuitMessage(1 arg) need `ret 4`, and
+    # DefWindowProcA takes four arguments, needing `ret 0x10`.
+    emulator.mem_write(WNDPROC_STUB_SHOWCURSOR, b"\x31\xC0\xC2\x04\x00")
+    emulator.mem_write(WNDPROC_STUB_POSTQUIT, b"\xC2\x04\x00")
+    emulator.mem_write(WNDPROC_STUB_DEFWNDPROC, b"\x31\xC0\xC2\x10\x00")
+    emulator.mem_write(WNDPROC_IAT_SHOWCURSOR, struct.pack("<I", WNDPROC_STUB_SHOWCURSOR))
+    emulator.mem_write(WNDPROC_IAT_POSTQUIT, struct.pack("<I", WNDPROC_STUB_POSTQUIT))
+    emulator.mem_write(WNDPROC_IAT_DEFWNDPROC, struct.pack("<I", WNDPROC_STUB_DEFWNDPROC))
+    emulator.mem_write(WNDPROC_CLOSE_NATIVE, b"\x31\xC0\xC3")
+    emulator.mem_write(WNDPROC_DEBUG_KEY_HANDLER, b"\x31\xC0\xC3")
+    emulator.mem_write(WNDPROC_STUB_POSTMESSAGE, b"\x31\xC0\xC2\x10\x00")
+    emulator.mem_write(WNDPROC_IAT_POSTMESSAGE, struct.pack("<I", WNDPROC_STUB_POSTMESSAGE))
+    # Retail loads the node pointer from 0x005C8DF0 and calls that node's own
+    # handler at +0x08, so the global points straight at the first entry; the
+    # node's +0x00 field is the next node. A set loop-status means at least one
+    # entry must exist, otherwise retail would call through a null handler.
+    # The chain handler is cdecl: the caller does `add esp, 0x10` after the
+    # indirect call, so the stub returns the result and pops nothing.
+    stub_ret = b"\xB8" + struct.pack("<I", case.get("chain_result", 0)) + b"\xC3"
+    emulator.mem_write(WNDPROC_HANDLER_CODE, stub_ret)
+    # Retail: eax = [0x5C8DF0]; esi = [eax]; if esi == 0 the whole chain is
+    # skipped. Otherwise it calls [eax+8] and, when that returns non-zero,
+    # advances eax = esi and repeats while the next pointer is non-null. So the
+    # global points straight at the first node and only nodes that have a
+    # successor are ever called.
+    if case["loop_status"] or case.get("chain"):
+        # The retail's node is twelve bytes: the next node at +0x00, a zero
+        # word at +0x04 and the handler at +0x08. The global at 0x005C8DF0
+        # points straight at the first node, and the procedure calls that
+        # node's own handler first.
+        emulator.mem_write(WNDPROC_CHAIN_HEAD, struct.pack("<I", WNDPROC_CHAIN))
+        emulator.mem_write(WNDPROC_CHAIN, struct.pack("<III", WNDPROC_ENTRY, 0, WNDPROC_HANDLER_CODE))
+        emulator.mem_write(WNDPROC_ENTRY, struct.pack("<III", 0, 0, WNDPROC_HANDLER_CODE))
+    else:
+        emulator.mem_write(WNDPROC_CHAIN_HEAD, struct.pack("<I", 0))
+    return emulator
+
+
+def wndproc_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = _wndproc_emulator(image, case)
+    # stdcall: ret 0x10 pops the four arguments, so the sentinel follows them.
+    # The sentinel is the return address; emu_start must NOT use it as the end
+    # address or it halts before the stdcall cleanup completes.
+    emulator.mem_write(STACK_TOP, struct.pack("<I", WNDPROC_SENTINEL))
+    for index, value in enumerate((WNDPROC_WINDOW, case["message"], case["wparam"], case["lparam"])):
+        emulator.mem_write(STACK_TOP + 4 + index * 4, struct.pack("<I", value & 0xFFFFFFFF))
+    emulator.reg_write(unicorn.x86_const.UC_X86_REG_ESP, STACK_TOP)
+    seen = []
+    chain_calls = [0]
+    def on_code(uc, address, size, user):
+        if len(seen) < 4000:
+            seen.append(address)
+        if address == WNDPROC_HANDLER_CODE:
+            chain_calls[0] += 1
+    emulator.hook_add(unicorn.UC_HOOK_CODE, on_code)
+    try:
+        emulator.emu_start(WNDPROC_ADDRESS, WNDPROC_STOP)
+    except unicorn.UcError as error:
+        eip = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EIP)
+        if eip == 0:
+            eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+            raise SystemExit(f"fault eax=0x{eax:08X} headcell={emulator.mem_read(WNDPROC_CHAIN,4).hex()} "
+                             f"node={emulator.mem_read(WNDPROC_ENTRY,8).hex()} "
+                             f"handlercode={emulator.mem_read(WNDPROC_HANDLER_CODE,6).hex()} "
+                             f"case_chain={case.get('chain')}")
+        if eip == WNDPROC_SENTINEL:
+            # Reaching the sentinel is the normal return, not a fault.
+            eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+            return {
+                "return_value": eax & 0xFFFFFFFF,
+                "state_delta": {
+                    "loop_status": emulator.mem_read(WNDPROC_LOOP_STATUS, 1)[0],
+                    "debug_key_flag": read_u32(emulator, WNDPROC_DEBUG_KEY_FLAG),
+                    "chain_calls": chain_calls[0],
+                },
+                "side_effects": [],
+            }
+        esp = emulator.reg_read(unicorn.x86_const.UC_X86_REG_ESP)
+        stack = struct.unpack("<8I", emulator.mem_read(esp, 32))
+        raise SystemExit(f"fault eip=0x{eip:08X} esp=0x{esp:08X} case={case['id']} "
+                         f"last={[hex(v) for v in seen[-6:]]}")
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {
+            "loop_status": emulator.mem_read(WNDPROC_LOOP_STATUS, 1)[0],
+            "debug_key_flag": read_u32(emulator, WNDPROC_DEBUG_KEY_FLAG),
+            "chain_calls": chain_calls[0],
+        },
+        "side_effects": [],
+    }
+
+
+def wndproc_case_literal(case: dict) -> str:
+    return (f'        {{"{case["id"]}", {case["message"]}U, {case["wparam"]}U, '
+            f'{case["lparam"]}, {case["loop_status"]}U, {case["debug_flag"]}U, '
+            f'{1 if case.get("chain") else 0}, {case.get("chain_result", 0)}}},')
+
+
+def wndproc_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
+#include "igi/retail/core/native_0048f970.hpp"
+
+namespace {
+
+struct Case {
+    const char* id;
+    unsigned message;
+    unsigned wparam;
+    long lparam;
+    unsigned loop_status;
+    unsigned debug_flag;
+    int chain;
+    long chain_result;
+};
+
+Case cases[] = {
+@CASES@
+};
+
+long g_chain_result = 0;
+long g_chain_calls = 0;
+
+std::intptr_t chain_handler(void*, std::uint32_t, std::uintptr_t, std::intptr_t) {
+    ++g_chain_calls;
+    return static_cast<std::intptr_t>(g_chain_result);
+}
+
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        // The chain mirrors the retail's shape: the global points at the
+        // first node, that node's next points at the second, and the second
+        // node's next is null.
+        igi::retail::core::WindowHandlerEntry head{};
+        igi::retail::core::WindowHandlerEntry second{};
+        head.next = nullptr;
+        head.handler = nullptr;
+        second.next = nullptr;
+        second.handler = nullptr;
+        WindowHandlerChain = nullptr;
+        if (item.loop_status || item.chain) {
+            head.next = &second;
+            head.handler = chain_handler;
+            second.next = nullptr;
+            second.handler = nullptr;
+            WindowHandlerChain = &head;
+        }
+        g_chain_result = item.chain_result;
+        g_chain_calls = 0;
+        Loop_StatusByte = static_cast<std::uint8_t>(item.loop_status);
+        DebugKeyFlag = static_cast<std::uint32_t>(item.debug_flag);
+        const std::intptr_t result = WindowProcedure(nullptr, item.message,
+            static_cast<std::uintptr_t>(item.wparam), static_cast<std::intptr_t>(item.lparam));
+        std::printf("{\"id\":\"%s\",\"return_value\":%ld,\"state_delta\":{\"loop_status\":%u,"
+                    "\"debug_key_flag\":%u,\"chain_calls\":%ld},\"side_effects\":[]}\n",
+                    item.id, static_cast<long>(result),
+                    static_cast<unsigned>(Loop_StatusByte), DebugKeyFlag, g_chain_calls);
+    }
+    return 0;
+}
+"""
+
+
+# ---------------------------------------------------------------------------
+# 0x0048F140, 0x0048F170 and 0x0048F480 the app context flag and the loop
+# status byte. The retail stores the sign extended low byte of the argument
+# and reads the stored dword back.
+# ---------------------------------------------------------------------------
+
+APP_CONTEXT_ACTIVE = 0x005C8BFC
+APP_CONTEXT_HANDLER = 0x005C8C18
+APP_CONTEXT_HANDLER_ARG = 0x005C8C1C
+APP_CONTEXT_SET_ACTIVE_ADDRESS = 0x0048F140
+APP_CONTEXT_GET_ACTIVE_ADDRESS = 0x0048F170
+LOOP_STATUS_BYTE = 0x005C8DE8
+LOOP_STATUS_SETTER_ADDRESS = 0x0048F480
+
+APP_CONTEXT_VALUES = (0, 1, 2, 0x7F, 0x80, 0xFF, 0x100, 0xFFFFFFFF)
+
+
+def app_context_set_cases() -> list[dict]:
+    return [
+        {"id": f"app-context-set-active-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value}
+        for index, value in enumerate(APP_CONTEXT_VALUES)
+    ]
+
+
+def app_context_set_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    # The retail stores the sign extended low byte of the argument, so the
+    # stored dword only depends on that byte.
+    stored = case["value"] & 0xFF
+    stored = stored - 0x100 if stored & 0x80 else stored
+    emulator.mem_write(APP_CONTEXT_ACTIVE, struct.pack("<i", 0x5A5A5A5A))
+    run_with_arguments(emulator, APP_CONTEXT_SET_ACTIVE_ADDRESS,
+                       [case["value"] & 0xFFFFFFFF], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {"stored": read_u32(emulator, APP_CONTEXT_ACTIVE)},
+        "side_effects": [],
+    }
+
+
+def app_context_set_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <csetjmp>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own. The harness links only
+// the implementation under test, so it supplies them here.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+int main()
+{
+    struct Case { const char* id; std::int32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        AppContext_SetIsActive(item.value);
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{\"stored\":%lu},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(
+                        static_cast<std::uint32_t>(AppContext_SetIsActive(item.value))),
+                    static_cast<unsigned long>(
+                        static_cast<std::uint32_t>(AppContext_GetIsActive())));
+    }
+    return 0;
+}
+"""
+
+
+def app_context_get_cases() -> list[dict]:
+    return [
+        {"id": f"app-context-get-active-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "stored": value}
+        for index, value in enumerate(APP_CONTEXT_VALUES)
+    ]
+
+
+def app_context_get_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(APP_CONTEXT_ACTIVE, struct.pack("<i", signed32(case["stored"])))
+    run_with_arguments(emulator, APP_CONTEXT_GET_ACTIVE_ADDRESS, [], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def app_context_get_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <csetjmp>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own. The harness links only
+// the implementation under test, so it supplies them here.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+int main()
+{
+    struct Case { const char* id; std::int32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        // The native reads the global, so the harness seeds it with the same
+        // raw value the retail side writes into memory.
+        AppContext_IsActive = item.value;
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(
+                        static_cast<std::uint32_t>(AppContext_GetIsActive())));
+    }
+    return 0;
+}
+"""
+
+
+def loop_status_cases() -> list[dict]:
+    return [
+        {"id": f"loop-status-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value}
+        for index, value in enumerate(APP_CONTEXT_VALUES)
+    ]
+
+
+def loop_status_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(LOOP_STATUS_BYTE, b"\x5A")
+    run_with_arguments(emulator, LOOP_STATUS_SETTER_ADDRESS,
+                       [case["value"] & 0xFF], 0x00C0FFEE)
+    # The native returns nothing, so the caller ignores the return register and
+    # the observable is the stored byte.
+    return {
+        "return_value": 0,
+        "state_delta": {"stored": emulator.mem_read(LOOP_STATUS_BYTE, 1)[0]},
+        "side_effects": [],
+    }
+
+
+def loop_status_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <csetjmp>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own. The harness links only
+// the implementation under test, so it supplies them here.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+int main()
+{
+    struct Case { const char* id; std::uint8_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        Loop_SetStatusByte(item.value);
+        std::printf("{\"id\":\"%s\",\"return_value\":0,\"state_delta\":{\"stored\":%u},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned>(Loop_StatusByte));
+    }
+    return 0;
+}
+"""
+
+
+# ---------------------------------------------------------------------------
+# 0x00401050 QTask_OpenEvent, the per-frame dispatch. The retail establishes
+# the setjmp frame boundary, then reads the dispatch index from the game
+# context and calls the phase one handler the index selects.
+# ---------------------------------------------------------------------------
+
+QTASK_OPEN_EVENT_ADDRESS = 0x00401050
+QTASK_LOOP_STATUS = 0x005C8DE8
+QTASK_GAME_CONTEXT_ADDRESS = 0x00402880
+QTASK_SETJMP_ADDRESS = 0x004A5000
+QTASK_PHASE1_HANDLERS = 0x00A970E0
+QTASK_CONTEXT_RECORD = 0x70013000
+QTASK_STUB_SETJMP = 0x70013100
+QTASK_STUB_CONTEXT = 0x70013110
+QTASK_STUB_HANDLER = 0x70013120
+QTASK_STUB_LOOP_STATUS = 0x70013130
+
+
+def qtask_open_event_cases() -> list[dict]:
+    cases = []
+    for index in range(8):
+        cases.append({"id": f"qtask-open-event-{index}",
+                      "categories": ["nominal" if index < 2 else "boundary"],
+                      "seed": index, "index": index, "abort": 0})
+    cases.append({"id": "qtask-open-event-abort", "categories": ["boundary"],
+                  "seed": 8, "index": 1, "abort": 1})
+    return cases
+
+
+def qtask_open_event_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(QTASK_LOOP_STATUS, b"\x5A")
+    # The retail's setjmp frame setup and the game context accessor are
+    # replaced with local stubs, so the dispatch the native performs is
+    # observed with a known context and a known frame result.
+    # The handler records that it ran by writing to the scratch marker.
+    emulator.mem_write(QTASK_STUB_HANDLER,
+                       b"\xC7\x05" + struct.pack("<I", QTASK_STUB_LOOP_STATUS) + b"\x01\x00\x00\x00\xC3")
+    emulator.mem_write(QTASK_CONTEXT_RECORD + 0x1C, struct.pack("<H", case["index"]))
+    emulator.mem_write(QTASK_PHASE1_HANDLERS + case["index"] * 4,
+                       struct.pack("<I", QTASK_STUB_HANDLER))
+    # The loop status setter is reached only on the abort path.
+    emulator.mem_write(QTASK_STUB_LOOP_STATUS + 8, b"\xC2\x04\x00")
+    # Patch the two retail calls the native makes: the frame setup and the
+    # game context accessor.
+    # The two retail calls are replaced in place: the frame setup returns the
+    # frame result and the game context accessor returns the context record.
+    emulator.mem_write(QTASK_SETJMP_ADDRESS,
+                       b"\xB8" + struct.pack("<I", case["abort"]) + b"\xC3")
+    emulator.mem_write(QTASK_GAME_CONTEXT_ADDRESS,
+                       b"\xB8" + struct.pack("<I", QTASK_CONTEXT_RECORD) + b"\xC3")
+    run_with_arguments(emulator, QTASK_OPEN_EVENT_ADDRESS, [], 0x00C0FFEE)
+    # The native returns nothing, so the caller ignores the return register.
+    handler_ran = emulator.mem_read(QTASK_STUB_LOOP_STATUS, 4)[0]
+    return {
+        "return_value": 0,
+        "state_delta": {
+            "loop_status": emulator.mem_read(QTASK_LOOP_STATUS, 1)[0],
+            "handler_ran": handler_ran,
+        },
+        "side_effects": [],
+    }
+
+
+def qtask_open_event_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <csetjmp>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own. The harness links only
+// the implementation under test, so it supplies them here.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+namespace {
+
+std::uint32_t g_handler_ran = 0;
+bool g_abort = false;
+
+void frame_handler(void*)
+{
+    if (g_abort)
+    {
+        // The retail restores the frame from the handler, so the native's
+        // setjmp returns non-zero and the abort path runs. The handler's
+        // effect is abandoned.
+        longjmp(QTask_SetjmpFrame, 1);
+    }
+    g_handler_ran = 1;
+}
+
+}
+
+int main()
+{
+    struct Case { const char* id; std::uint16_t index; bool abort; };
+    static const Case cases[] = {
+@CASES@
+    };
+    igi::retail::core::FrameDispatchRecordView record{};
+    for (const Case& item : cases)
+    {
+        record.dispatch_table_index = item.index;
+        Game_FrameDispatchRecord = &record;
+        QTask_Phase1HandlerTable()[item.index] = &frame_handler;
+        g_handler_ran = 0;
+        g_abort = item.abort;
+        Loop_SetStatusByte(0x5AU);
+        QTask_OpenEvent();
+        std::printf("{\"id\":\"%s\",\"return_value\":0,\"state_delta\":{\"loop_status\":%u,"
+                    "\"handler_ran\":%u},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned>(Loop_StatusByte),
+                    static_cast<unsigned>(g_handler_ran));
+    }
+    return 0;
+}
+"""
+
+
+# ---------------------------------------------------------------------------
+# 0x00402880 and 0x004028A0 the game context accessor and the flow state
+# setter. The retail keeps the context pointer in the global at 0x00567C8C.
+# ---------------------------------------------------------------------------
+
+GAME_CONTEXT_POINTER = 0x00567C8C
+GAME_CONTEXT_ADDRESS = 0x00402880
+FLOW_SET_STATE_ADDRESS = 0x004028A0
+GAME_CONTEXT_RECORD = 0x70014000
+FLOW_STATE_OFFSET = 0x2C
+
+GAME_CONTEXT_VALUES = (0, 1, 2, 0x7F, 0x80, 0xFF, 0x100, 0xFFFFFFFF)
+
+
+def game_context_cases() -> list[dict]:
+    return [
+        {"id": f"game-context-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value}
+        for index, value in enumerate(GAME_CONTEXT_VALUES)
+    ]
+
+
+def game_context_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(GAME_CONTEXT_POINTER, struct.pack("<I", GAME_CONTEXT_RECORD))
+    run_with_arguments(emulator, GAME_CONTEXT_ADDRESS, [], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    # The accessor returns the context pointer it holds. The two sides run in
+    # different processes, so the observable is the offset from the record the
+    # harness installed.
+    return {
+        "return_value": (eax - GAME_CONTEXT_RECORD) & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def game_context_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+int main()
+{
+    struct Case { const char* id; std::uint32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    igi::retail::core::FrameDispatchRecordView record{};
+    for (const Case& item : cases)
+    {
+        Game_FrameDispatchRecord = &record;
+        const std::uintptr_t offset = reinterpret_cast<std::uintptr_t>(Game_GetContext()) -
+                                      reinterpret_cast<std::uintptr_t>(&record);
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(offset));
+    }
+    return 0;
+}
+"""
+
+
+def flow_set_state_cases() -> list[dict]:
+    return [
+        {"id": f"flow-set-state-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"],
+         "seed": index, "value": value}
+        for index, value in enumerate(GAME_CONTEXT_VALUES)
+    ]
+
+
+def flow_set_state_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(GAME_CONTEXT_POINTER, struct.pack("<I", GAME_CONTEXT_RECORD))
+    emulator.mem_write(GAME_CONTEXT_RECORD + FLOW_STATE_OFFSET, struct.pack("<I", 0x5A5A5A5A))
+    run_with_arguments(emulator, FLOW_SET_STATE_ADDRESS, [case["value"] & 0xFFFFFFFF], 0x00C0FFEE)
+    eax = emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
+    return {
+        "return_value": eax & 0xFFFFFFFF,
+        "state_delta": {"stored": read_u32(emulator, GAME_CONTEXT_RECORD + FLOW_STATE_OFFSET)},
+        "side_effects": [],
+    }
+
+
+def flow_set_state_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/task_types.hpp"
+
+// The globals the implementation's other units own.
+extern "C" {
+std::uint8_t Loop_StatusByte = 0U;
+igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
+                                                  igi::retail::core::task_phase_stride] = {};
+}
+
+int main()
+{
+    struct Case { const char* id; std::uint32_t value; };
+    static const Case cases[] = {
+@CASES@
+    };
+    igi::retail::core::FrameDispatchRecordView record{};
+    for (const Case& item : cases)
+    {
+        Game_FrameDispatchRecord = &record;
+        const std::uint32_t returned = Flow_SetState(item.value);
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{\"stored\":%lu},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned),
+                    static_cast<unsigned long>(record.unknown_0x2C));
+    }
+    return 0;
+}
+"""
 
 
 NATIVES = {
@@ -1530,6 +2248,12 @@ NATIVES = {
         "candidate_source": config_num_candidate_source,
         "include": ("igi/retail/config/config_graphic_options.hpp",),
     },
+    "0x0048F970": {
+        "cases": wndproc_cases,
+        "retail": wndproc_retail,
+        "candidate_source": wndproc_candidate_source,
+        "include": ("igi/retail/core/native_0048f970.hpp",),
+    },
     "0x00463180": {
         "cases": crouch_cases,
         "retail": crouch_retail,
@@ -1553,6 +2277,42 @@ NATIVES = {
         "retail": view_reset_retail,
         "candidate_source": view_reset_candidate_source,
         "include": ("igi/retail/human/human_view.hpp",),
+    },
+    "0x0048F140": {
+        "cases": app_context_set_cases,
+        "retail": app_context_set_retail,
+        "candidate_source": app_context_set_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp",),
+    },
+    "0x0048F170": {
+        "cases": app_context_get_cases,
+        "retail": app_context_get_retail,
+        "candidate_source": app_context_get_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp",),
+    },
+    "0x0048F480": {
+        "cases": loop_status_cases,
+        "retail": loop_status_retail,
+        "candidate_source": loop_status_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp",),
+    },
+    "0x00401050": {
+        "cases": qtask_open_event_cases,
+        "retail": qtask_open_event_retail,
+        "candidate_source": qtask_open_event_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp", "igi/retail/core/task_types.hpp"),
+    },
+    "0x00402880": {
+        "cases": game_context_cases,
+        "retail": game_context_retail,
+        "candidate_source": game_context_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp",),
+    },
+    "0x004028A0": {
+        "cases": flow_set_state_cases,
+        "retail": flow_set_state_retail,
+        "candidate_source": flow_set_state_candidate_source,
+        "include": ("igi/retail/core/frame_natives.hpp",),
     },
     "0x00491D40": {
         "cases": aspect_cases,
@@ -1590,6 +2350,8 @@ NATIVES = {
 
 
 def format_case_literal(address: str, case: dict) -> str:
+    if address == "0x0048F970":
+        return wndproc_case_literal(case)
     if address == "0x00465820":
         return (f'        {{"{case["id"]}", static_cast<std::size_t>({case["human_offset"]}), '
                 f'{float(case["feet_x"])}, {float(case["feet_y"])}, {float(case["feet_z"])}, '
@@ -1612,6 +2374,17 @@ def format_case_literal(address: str, case: dict) -> str:
         return f'        {{"{case["id"]}", {case["level"]}}},'
     if address == "0x004659E0":
         return f'        {{"{case["id"]}", static_cast<std::size_t>({case["pointer_offset"]})}},'
+    if address in ("0x00402880", "0x004028A0"):
+        return f'        {{"{case["id"]}", {case["value"] & 0xFFFFFFFF}U}},'
+    if address == "0x00401050":
+        return (f'        {{"{case["id"]}", {case["index"]}U, '
+                f'{"true" if case["abort"] else "false"}}},')
+    if address == "0x0048F140":
+        return f'        {{"{case["id"]}", {signed32(case["value"])}}},'
+    if address == "0x0048F170":
+        return f'        {{"{case["id"]}", {signed32(case["stored"])}}},'
+    if address == "0x0048F480":
+        return f'        {{"{case["id"]}", {case["value"] & 0xFF}U}},'
     if address == "0x00491D40":
         return (f'        {{"{case["id"]}", {case["display_width"]}, {case["display_height"]}}},')
     if address in ("0x004C6670", "0x004C6760"):
@@ -1684,7 +2457,12 @@ def ensure_emulator_runtime() -> None:
         return
     configured = os.environ.get("IGI_UNICORN_PYTHON", "").strip()
     candidates = [configured] if configured else []
-    candidates.append(str(pathlib.Path(__file__).resolve().parents[1] / "build/unicorn-rosetta/python"))
+    # The Rosetta venv lives beside the repository, not inside every worktree,
+    # so resolve it from the shared checkout as well.
+    root_dir = pathlib.Path(__file__).resolve().parents[1]
+    candidates.append(str(root_dir / "build/unicorn-rosetta/python"))
+    candidates.append(str(root_dir / "build/unicorn-rosetta/bin/python"))
+    candidates.append(str(root_dir.parent / "build/unicorn-rosetta/bin/python"))
     candidates.append(str(pathlib.Path(__file__).resolve().parents[1] / ".venv-angr/bin/python"))
     candidates.append("/Users/haseeb-mir/Documents/Code/re-agent/.venv/bin/python")
     failures = [f"{sys.executable}: exit {current.returncode}"]
@@ -1794,6 +2572,7 @@ def main() -> int:
             },
         })
 
+    runner_path = pathlib.Path(__file__).resolve()
     report = {
         "schema_version": 1,
         "kind": "behavioral-test-report",
@@ -1802,6 +2581,15 @@ def main() -> int:
         "implementation_sha256": arguments.implementation_sha256,
         "executed": True,
         "oracle": "retail-binary-execution",
+        "runner": {
+            "path": runner_path.relative_to(root).as_posix(),
+            "sha256": sha256(runner_path),
+            "command": [str(runner_path), "--address", address, "--binary", str(binary),
+                        "--binary-sha256", arguments.binary_sha256,
+                        "--implementation", str(implementation),
+                        "--implementation-sha256", arguments.implementation_sha256,
+                        "--root", str(root)],
+        },
         "result": "passed" if failed == 0 else "failed",
         "method": (
             "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 "
@@ -1827,3 +2615,4 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
+
