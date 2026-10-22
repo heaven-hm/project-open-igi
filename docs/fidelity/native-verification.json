@@ -57785,7 +57785,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004F1160-behavioral.json",
-          "evidence_sha256": "42f244d1ee8ca825215c4971b73f322c26d10794c1f9f8e00f6befbe0065fa8a",
+          "evidence_sha256": "7abd58147be449fb51823bd40519076753012605da253ff8186e1df95ff80da0",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -58101,7 +58101,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7540-behavioral.json",
-          "evidence_sha256": "864a61faa4b03bacac8f0506304952ea3dd3b4ae820b7317f569f8d4b98f9a1f",
+          "evidence_sha256": "67e954229392bc5466a34105a356048d8e1bdd69a6205da938bdabba8cb801e6",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -58180,7 +58180,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json",
-          "evidence_sha256": "ec17eb4d3dc949892cb92e92db41b6733bfbab45ff1e1dab3d3412bf9730d7f3",
+          "evidence_sha256": "39bbb4e5dfd6adb4bbfc45c7a8413635d050cc580151881895ce2661945e9141",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -58259,7 +58259,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B7580-behavioral.json",
-          "evidence_sha256": "09924c3963876cdc91c97a8513a9806cf989ed95eb1325c8388d9112fee20285",
+          "evidence_sha256": "1d19b4a3860a8fc41adcc4c47c91abc9701139eba71d56630506095c1270c478",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8

@@ -6,6 +6,10 @@
  "implementation_sha256": "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
  "executed": true,
  "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/native_unicorn_runner.py",
+  "sha256": "b1d05ee0ce43492e406d8cc7b0a0ce3b16f5e3c92a823096b8c2349e76276083"
+ },
  "result": "passed",
  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
  "observable_fields": [
