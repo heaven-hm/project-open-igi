@@ -163,3 +163,21 @@ natives (Terrain_LoadTexturesAndLightmaps, Terrain_Load, Terrain_TraverseContour
 Terrain_DecodeChunkCommands, Terrain_Draw, TextureModifier_Push, HeightMap_Enter), a canonical
 GameNatives source for TerrainLightMap_PushEntry, and runners for the addresses whose current
 runners do not support them. Once those exist the two-line call-site change goes in unchanged.
+
+## Main-to-end flow: what the candidate's Main covers, measured
+
+Retail `_start` 0x0048F530 calls seven MVP natives. The candidate's Main now covers three of them
+in the same shape as retail: `FP_InitExtendedPrecision` (x87 setup), `AppContext_GetIsActive` in the
+per-frame condition, and `QTask_OpenEvent` on the active branch, with `Loop_StatusByte` driving the
+window teardown exactly as the retail's loop does.
+
+Two retail startup calls are not mirrored yet: `AppContext_SetIsActive` and
+`App_ContextSetTerrainLightmapsUsed`. Both are ported and already carry paired observations, so
+adding them to Main's startup is a two-line change. It is not made in this round because Main's
+record holds a semantic review but no build report, so the change needs its build artifact created
+and the semantic review re-reviewed against the new body - both mechanical, but the review must be
+rewritten rather than re-stamped, since the added calls change what the function does.
+
+The remaining two retail calls are not flow gaps in the ported sense: `sprintf` and `Error_Show` sit
+on retail's startup-error path, which the candidate takes only when a subsystem fails to
+initialise.
