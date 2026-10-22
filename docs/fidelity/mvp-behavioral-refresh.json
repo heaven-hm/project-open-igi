@@ -1,8 +1,8 @@
 {
  "summary": {
-  "stored": 75,
+  "stored": 78,
   "unsupported": 25,
-  "failed": 19,
+  "failed": 16,
   "skipped": 1
  },
  "natives": [
@@ -346,23 +346,29 @@
   {
    "address": "0x004B7540",
    "name": "Ilff_ReadContainerHeader",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "no differential adapter registered for 0x004B7540",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B7540-behavioral.json"
   },
   {
    "address": "0x004B7570",
    "name": "Ilff_GetFormType",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "no differential adapter registered for 0x004B7570",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B7570-behavioral.json"
   },
   {
    "address": "0x004B7580",
    "name": "Ilff_GetChunkTag",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "no differential adapter registered for 0x004B7580",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B7580-behavioral.json"
   },
   {
    "address": "0x004B7590",
@@ -709,7 +715,7 @@
    "address": "0x004F82B0",
    "name": "TerrainLightMap_Init_2",
    "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: dyld[35785]: missing symbol called",
+   "detail": "candidate failed for seed 0x0: dyld[44091]: missing symbol called",
    "exit_code": 1
   },
   {

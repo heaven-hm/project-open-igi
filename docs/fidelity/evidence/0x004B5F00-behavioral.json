@@ -819,17 +819,17 @@
   "engine": "VEX",
   "version": "10.0.4.post1",
   "function_entry": "0x004B5F00",
-  "candidate_sha256": "0f4beab96bb905c56860c014840da1e45a788029128d70bcdd793d8d1f5afa5a",
+  "candidate_sha256": "33ca4dd70e403a54cb52168c66fffd0fc9ffd076800b29b32db249a89f86a567",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
    "-O0",
    "-shared",
    "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-0kvgu1wj/entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-hszh1rk7/entry.cpp",
    "engine/src/retail/resource/resource_lifecycle.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-0kvgu1wj/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-hszh1rk7/candidate.dll"
   ],
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
  },

@@ -8,7 +8,22 @@
  "oracle": "retail-binary-execution",
  "runner": {
   "path": "scripts/native_unicorn_runner.py",
-  "sha256": "b1d05ee0ce43492e406d8cc7b0a0ce3b16f5e3c92a823096b8c2349e76276083"
+  "sha256": "1783dddc43b7bd15d069df5bfe258a9650dd0bb22dce311a9f913e9f807f76a0",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
+   "--address",
+   "0x004B7570",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/sys/ilff_navigation.cpp",
+   "--implementation-sha256",
+   "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
  },
  "result": "passed",
  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
@@ -27,42 +42,46 @@
  "tests_failed": 0,
  "cases": [
   {
-   "id": "getter-nominal",
+   "id": "ilff-header-0",
    "categories": [
     "nominal"
    ],
    "input": {
     "args": [
-     1879126016,
-     1296385585,
+     16,
+     1179603533,
+     true,
      0,
-     4660
+     32,
+     1179603533
     ],
     "initial_state": {
      "seed": 0
     }
    },
    "reference_output": {
-    "return_value": 1296385585,
+    "return_value": 1179603533,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 1296385585,
+    "return_value": 1179603533,
     "state_delta": {},
     "side_effects": []
    }
   },
   {
-   "id": "getter-zero",
+   "id": "ilff-header-1",
    "categories": [
     "nominal"
    ],
    "input": {
     "args": [
-     1879126016,
      0,
+     0,
+     false,
      1,
+     0,
      0
     ],
     "initial_state": {
@@ -81,7 +100,7 @@
    }
   },
   {
-   "id": "getter-null",
+   "id": "ilff-header-2",
    "categories": [
     "boundary"
    ],
@@ -89,7 +108,9 @@
     "args": [
      0,
      0,
+     true,
      2,
+     0,
      0
     ],
     "initial_state": {
@@ -108,15 +129,17 @@
    }
   },
   {
-   "id": "getter-max",
+   "id": "ilff-header-3",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     1879126016,
-     2147483647,
+     4294967295,
+     4294967295,
+     true,
      3,
+     4294967295,
      4294967295
     ],
     "initial_state": {
@@ -124,26 +147,28 @@
     }
    },
    "reference_output": {
-    "return_value": 2147483647,
+    "return_value": 4294967295,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 2147483647,
+    "return_value": 4294967295,
     "state_delta": {},
     "side_effects": []
    }
   },
   {
-   "id": "getter-min",
+   "id": "ilff-header-4",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     1879126016,
-     4294967295,
+     2147483648,
+     2147483648,
+     true,
      4,
+     2147483648,
      2147483648
     ],
     "initial_state": {
@@ -151,93 +176,99 @@
     }
    },
    "reference_output": {
-    "return_value": 4294967295,
+    "return_value": 2147483648,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 4294967295,
+    "return_value": 2147483648,
     "state_delta": {},
     "side_effects": []
    }
   },
   {
-   "id": "getter-a5",
+   "id": "ilff-header-5",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     1879126016,
-     1515870810,
+     1,
+     1279873876,
+     true,
      5,
-     2779096485
+     256,
+     1094861636
     ],
     "initial_state": {
      "seed": 5
     }
    },
    "reference_output": {
-    "return_value": 1515870810,
+    "return_value": 1279873876,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 1515870810,
+    "return_value": 1279873876,
     "state_delta": {},
     "side_effects": []
    }
   },
   {
-   "id": "getter-fourcc-meff",
+   "id": "ilff-header-6",
    "categories": [
-    "nominal"
+    "boundary"
    ],
    "input": {
     "args": [
-     1879126016,
-     1296385606,
+     2,
+     3,
+     true,
      6,
-     1179010387
+     4,
+     1
     ],
     "initial_state": {
      "seed": 6
     }
    },
    "reference_output": {
-    "return_value": 1296385606,
+    "return_value": 3,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 1296385606,
+    "return_value": 3,
     "state_delta": {},
     "side_effects": []
    }
   },
   {
-   "id": "getter-one",
+   "id": "ilff-header-7",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     1879126016,
-     1,
+     2147483647,
+     2147483647,
+     true,
      7,
-     1
+     2147483647,
+     2147483647
     ],
     "initial_state": {
      "seed": 7
     }
    },
    "reference_output": {
-    "return_value": 1,
+    "return_value": 2147483647,
     "state_delta": {},
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 1,
+    "return_value": 2147483647,
     "state_delta": {},
     "side_effects": []
    }

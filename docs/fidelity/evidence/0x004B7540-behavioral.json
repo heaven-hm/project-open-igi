@@ -8,7 +8,22 @@
  "oracle": "retail-binary-execution",
  "runner": {
   "path": "scripts/native_unicorn_runner.py",
-  "sha256": "b1d05ee0ce43492e406d8cc7b0a0ce3b16f5e3c92a823096b8c2349e76276083"
+  "sha256": "1783dddc43b7bd15d069df5bfe258a9650dd0bb22dce311a9f913e9f807f76a0",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
+   "--address",
+   "0x004B7540",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/sys/ilff_navigation.cpp",
+   "--implementation-sha256",
+   "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
  },
  "result": "passed",
  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
@@ -27,281 +42,273 @@
  "tests_failed": 0,
  "cases": [
   {
-   "id": "header-nominal",
+   "id": "ilff-container-header-0",
    "categories": [
     "nominal"
    ],
    "input": {
     "args": [
      16,
-     1879126016,
-     1879126528,
-     1879126272,
+     true,
+     true,
      0,
-     4660
+     32,
+     true,
+     1179603533
     ],
     "initial_state": {
      "seed": 0
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 4660,
-     "out_align": 16
+     "size": 32,
+     "alignment": 16
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 4660,
-     "out_align": 16
+     "size": 32,
+     "alignment": 16
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-zero-fields",
+   "id": "ilff-container-header-1",
    "categories": [
     "nominal"
    ],
    "input": {
     "args": [
-     0,
-     1879126016,
-     1879126528,
-     1879126272,
+     16,
+     false,
+     true,
      1,
-     0
+     256,
+     true,
+     1179603533
     ],
     "initial_state": {
      "seed": 1
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 256,
+     "alignment": 1515870810
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 256,
+     "alignment": 1515870810
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-null-context",
+   "id": "ilff-container-header-2",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     0,
-     0,
-     1879126528,
-     1879126272,
+     256,
+     true,
+     true,
      2,
-     0
+     32,
+     false,
+     1179603533
     ],
     "initial_state": {
      "seed": 2
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 1515870810,
+     "alignment": 256
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 1515870810,
+     "alignment": 256
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-null-size-out",
+   "id": "ilff-container-header-3",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     102,
-     1879126016,
-     1879126528,
-     0,
+     16,
+     false,
+     true,
      3,
-     85
+     32,
+     false,
+     1179603533
     ],
     "initial_state": {
      "seed": 3
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 102
+     "size": 1515870810,
+     "alignment": 1515870810
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 102
+     "size": 1515870810,
+     "alignment": 1515870810
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-null-align-out",
+   "id": "ilff-container-header-4",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     136,
-     1879126016,
-     0,
-     1879126272,
+     16,
+     true,
+     false,
      4,
-     119
+     32,
+     true,
+     1179603533
     ],
     "initial_state": {
      "seed": 4
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 119,
-     "out_align": 0
+     "size": 1515870810,
+     "alignment": 1515870810
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 119,
-     "out_align": 0
+     "size": 1515870810,
+     "alignment": 1515870810
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-both-null-out",
+   "id": "ilff-container-header-5",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     2,
-     1879126016,
      0,
-     0,
+     true,
+     true,
      5,
-     1
+     0,
+     true,
+     0
     ],
     "initial_state": {
      "seed": 5
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 0,
+     "alignment": 0
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 0,
-     "out_align": 0
+     "size": 0,
+     "alignment": 0
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-max-negative",
+   "id": "ilff-container-header-6",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     -2,
-     1879126016,
-     1879126528,
-     1879126272,
+     4294967295,
+     true,
+     true,
      6,
-     -1
+     4294967295,
+     true,
+     4294967295
     ],
     "initial_state": {
      "seed": 6
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": -1,
-     "out_align": -2
+     "size": 4294967295,
+     "alignment": 4294967295
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": -1,
-     "out_align": -2
+     "size": 4294967295,
+     "alignment": 4294967295
     },
     "side_effects": []
    }
   },
   {
-   "id": "header-high-bit",
+   "id": "ilff-container-header-7",
    "categories": [
     "boundary"
    ],
    "input": {
     "args": [
-     -2147483648,
-     1879126016,
-     1879126528,
-     1879126272,
+     2147483648,
+     true,
+     true,
      7,
-     2147483647
+     2147483647,
+     true,
+     2147483648
     ],
     "initial_state": {
      "seed": 7
     }
    },
    "reference_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 2147483647,
-     "out_align": -2147483648
+     "size": 2147483647,
+     "alignment": 2147483648
     },
     "side_effects": []
    },
    "candidate_output": {
-    "return_value": 0,
     "state_delta": {
-     "out_size": 2147483647,
-     "out_align": -2147483648
+     "size": 2147483647,
+     "alignment": 2147483648
     },
     "side_effects": []
    }

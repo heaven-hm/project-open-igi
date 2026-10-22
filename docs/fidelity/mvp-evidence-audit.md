@@ -12,7 +12,7 @@ Run on the current branch:
 | --- | --- |
 | MVP natives | 120 |
 | labelled `VERIFIED` in the manifest | 78 |
-| saved evidence the gate's validators accept | 68 (53 before the refresh below) |
+| saved evidence the gate's validators accept | 70 (53 before the refresh below) |
 | runner configured, so the strict gate runs it live | 119 (upper bound) |
 | paired Frida evidence with calls in both images | 8 |
 | records that pass the full strict gate today | 6 |
@@ -32,9 +32,16 @@ The dominant problem is not missing evidence, it is malformed saved evidence:
 It executes each record's own configured runner (with the angr and unicorn
 interpreters the gate provides) and stores what the runner actually returns.
 
-- 75 records produced a valid `behavioral-test-report` and were rebound, lifting
-  saved-evidence coverage from 53 to 68.
-- 25 records were refused by their runner (`unsupported native address`).
+- 78 records produced a valid `behavioral-test-report` and were rebound, lifting
+  saved-evidence coverage from 53 to 70.
+- Three of those are new capability rather than re-plumbing: differential
+  adapters were written for the Ilff chunk accessors (`0x004B7540`
+  ReadContainerHeader, `0x004B7570` GetFormType, `0x004B7580` GetChunkTag), so
+  those natives are now compared case by case against the retail
+  instruction bytes under unicorn instead of being refused by the runner. The
+  void one compares the out parameters and treats a missing return value as "not
+  applicable" rather than inventing one.
+- 25 records are still refused by their runner (`unsupported native address`).
 - 19 records' runners ran but produced no report: missing differential adapters
   for the Ilff family, incomplete argument templates for the fpu-state and QVM
   load runners, and candidate-side build failures (uncaught exceptions, missing
@@ -80,3 +87,17 @@ callees, and Terrain_Load is a host-backed bridge held at ANALYZED.
 - The remaining work is mechanical for most records (regenerate the behavioural
   artifact from the runner) and harness work for the rest (addresses the runner
   does not support, and natives the candidate never executes).
+
+## A runner edit invalidates every saved behavioural report
+
+Each saved report records the runner's digest, because the report is only
+trustworthy if the code that produced it is identified. That binding has a
+consequence worth stating: editing the runner makes every previously saved
+report stale at once. During this work the audit count visibly dropped from 68
+to 50 the moment `scripts/native_unicorn_runner.py` gained the Ilff adapters,
+then recovered to 70 once the refresh was re-run against the final runner.
+
+The lesson for the campaign: finish runner changes before refreshing evidence,
+or budget a full re-run (about forty addresses take a few minutes) after any
+runner change. The alternative — loosening the digest binding — would destroy
+exactly the property that makes these reports worth anything.

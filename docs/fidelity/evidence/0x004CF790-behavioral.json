@@ -899,18 +899,18 @@
   "engine": "VEX",
   "version": "10.0.4.post1",
   "function_entry": "0x004CF790",
-  "candidate_sha256": "5d6c76b39fb7b71fc7ccd6dcbef14206256944965071e7dd59d52146eefd851c",
+  "candidate_sha256": "78510b4119ab875b3fd0a370b981e741990ab18597907ac5a8e5cd76382aeed3",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
    "-O0",
    "-shared",
    "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-texture-loaders-2x64okp8/entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-texture-loaders-qs4swg02/entry.cpp",
    "engine/src/retail/texture/texture_loaders.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/dynobj/hash_lookup.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-texture-loaders-2x64okp8/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-texture-loaders-qs4swg02/candidate.dll"
   ],
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
  },

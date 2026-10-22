@@ -2228,6 +2228,238 @@ int main()
 """
 
 
+
+# ---------------------------------------------------------------------------
+# 0x004B7540, 0x004B7570 and 0x004B7580 the Ilff chunk accessors. Each reads
+# fields out of a caller supplied chunk header behind a null check and nothing
+# else, so the cases cover the null context, nominal FourCC values and the
+# sign and width boundaries a tag can carry.
+# ---------------------------------------------------------------------------
+
+ILFF_CONTEXT_ADDR = 0x70013000
+ILFF_OUT_ADDR = 0x70013040
+ILFF_SENTINEL = 0x00C0FFEE
+ILFF_FILL = 0x5A
+ILFF_READ_CONTAINER_HEADER_ADDRESS = 0x004B7540
+ILFF_GET_FORM_TYPE_ADDRESS = 0x004B7570
+ILFF_GET_CHUNK_TAG_ADDRESS = 0x004B7580
+
+
+def ilff_write_header(emulator, tag: int, size: int, alignment: int, form: int) -> None:
+    """Leave the chunk header in the same shape the candidate harness builds."""
+    emulator.mem_write(ILFF_CONTEXT_ADDR, bytes([ILFF_FILL]) * 0x20)
+    emulator.mem_write(ILFF_CONTEXT_ADDR + 0x00, struct.pack("<I", tag & 0xFFFFFFFF))
+    emulator.mem_write(ILFF_CONTEXT_ADDR + 0x04, struct.pack("<I", size & 0xFFFFFFFF))
+    emulator.mem_write(ILFF_CONTEXT_ADDR + 0x08, struct.pack("<I", alignment & 0xFFFFFFFF))
+    emulator.mem_write(ILFF_CONTEXT_ADDR + 0x10, struct.pack("<I", form & 0xFFFFFFFF))
+
+
+ILFF_HEADER_VALUES = (
+    (True, 0x464F524D, 0x00000020, 0x00000010, 0x464F524D),   # nominal: FORM header
+    (False, 0x00000000, 0x00000000, 0x00000000, 0x00000000),  # boundary: null context
+    (True, 0x00000000, 0x00000000, 0x00000000, 0x00000000),   # boundary: all zero fields
+    (True, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF),   # boundary: all ones
+    (True, 0x80000000, 0x80000000, 0x80000000, 0x80000000),   # boundary: sign bit only
+    (True, 0x41424344, 0x00000100, 0x00000001, 0x4C495354),   # nominal: other FourCCs
+    (True, 0x00000001, 0x00000004, 0x00000002, 0x00000003),   # nominal: small values
+    (True, 0x7FFFFFFF, 0x7FFFFFFF, 0x7FFFFFFF, 0x7FFFFFFF),   # boundary: signed maximum
+)
+
+
+def ilff_header_cases() -> list[dict]:
+    return [
+        {"id": f"ilff-header-{index}", "categories": [category], "seed": index,
+         "present": present, "tag": tag, "size": size, "alignment": alignment, "form": form}
+        for index, (present, tag, size, alignment, form) in enumerate(ILFF_HEADER_VALUES)
+        for category in ("nominal" if index < 2 else "boundary",)
+    ]
+
+
+def ilff_container_header_cases() -> list[dict]:
+    """The void accessor: what matters is which out parameters get written."""
+    shapes = (
+        (True, True, True, 0x464F524D, 0x00000020, 0x00000010),
+        (True, True, False, 0x464F524D, 0x00000100, 0x00000010),
+        (True, False, True, 0x464F524D, 0x00000020, 0x00000100),
+        (True, False, False, 0x464F524D, 0x00000020, 0x00000010),
+        (False, True, True, 0x464F524D, 0x00000020, 0x00000010),
+        (True, True, True, 0x00000000, 0x00000000, 0x00000000),
+        (True, True, True, 0xFFFFFFFF, 0xFFFFFFFF, 0xFFFFFFFF),
+        (True, True, True, 0x80000000, 0x7FFFFFFF, 0x80000000),
+    )
+    return [
+        {"id": f"ilff-container-header-{index}",
+         "categories": ["nominal" if index < 2 else "boundary"], "seed": index,
+         "context_present": context_present, "size_out": size_out,
+         "alignment_out": alignment_out, "tag": tag, "size": size, "alignment": alignment}
+        for index, (context_present, size_out, alignment_out, tag, size, alignment)
+        in enumerate(shapes)
+    ]
+
+
+def ilff_get_chunk_tag_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    ilff_write_header(emulator, case["tag"], case["size"], case["alignment"], case["form"])
+    context = ILFF_CONTEXT_ADDR if case["present"] else 0
+    run_with_arguments(emulator, ILFF_GET_CHUNK_TAG_ADDRESS, [context], ILFF_SENTINEL)
+    return {
+        "return_value": emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX) & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def ilff_get_chunk_tag_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+int main()
+{
+    struct Case { const char* id; bool present; std::uint32_t tag; std::uint32_t size;
+                  std::uint32_t alignment; std::uint32_t form; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        // The same header shape the retail side seeds, so a difference can only
+        // come from the accessor's own logic.
+        unsigned char header[0x20];
+        std::memset(header, 0x5A, sizeof(header));
+        std::memcpy(header + 0x00, &item.tag, 4);
+        std::memcpy(header + 0x04, &item.size, 4);
+        std::memcpy(header + 0x08, &item.alignment, 4);
+        std::memcpy(header + 0x10, &item.form, 4);
+        const void* context = item.present ? static_cast<const void*>(header) : nullptr;
+        const std::uint32_t returned = static_cast<std::uint32_t>(
+            igi::retail::sys::Ilff_GetChunkTag(static_cast<const std::int32_t*>(context)));
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned));
+    }
+    return 0;
+}
+"""
+
+
+def ilff_get_form_type_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    ilff_write_header(emulator, case["tag"], case["size"], case["alignment"], case["form"])
+    context = ILFF_CONTEXT_ADDR if case["present"] else 0
+    run_with_arguments(emulator, ILFF_GET_FORM_TYPE_ADDRESS, [context], ILFF_SENTINEL)
+    return {
+        "return_value": emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX) & 0xFFFFFFFF,
+        "state_delta": {},
+        "side_effects": [],
+    }
+
+
+def ilff_get_form_type_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+int main()
+{
+    struct Case { const char* id; bool present; std::uint32_t tag; std::uint32_t size;
+                  std::uint32_t alignment; std::uint32_t form; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        unsigned char header[0x20];
+        std::memset(header, 0x5A, sizeof(header));
+        std::memcpy(header + 0x00, &item.tag, 4);
+        std::memcpy(header + 0x04, &item.size, 4);
+        std::memcpy(header + 0x08, &item.alignment, 4);
+        std::memcpy(header + 0x10, &item.form, 4);
+        const void* context = item.present ? static_cast<const void*>(header) : nullptr;
+        const std::uint32_t returned = static_cast<std::uint32_t>(
+            igi::retail::sys::Ilff_GetFormType(context));
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,\"state_delta\":{},"
+                    "\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned));
+    }
+    return 0;
+}
+"""
+
+
+def ilff_container_header_retail(image: PebImage, case: dict) -> dict:
+    import unicorn  # noqa: F401 - the emulator is required, not inspected here
+
+    emulator = new_emulator(image)
+    ilff_write_header(emulator, case["tag"], case["size"], case["alignment"], 0x464F524D)
+    emulator.mem_write(ILFF_OUT_ADDR, bytes([ILFF_FILL]) * 8)
+    size_pointer = ILFF_OUT_ADDR if case["size_out"] else 0
+    alignment_pointer = ILFF_OUT_ADDR + 4 if case["alignment_out"] else 0
+    context = ILFF_CONTEXT_ADDR if case["context_present"] else 0
+    run_with_arguments(emulator, ILFF_READ_CONTAINER_HEADER_ADDRESS,
+                       [size_pointer, alignment_pointer, context], ILFF_SENTINEL)
+    # The native is void; the observable is which out parameters it wrote.
+    return {
+        "state_delta": {
+            "size": read_u32(emulator, ILFF_OUT_ADDR),
+            "alignment": read_u32(emulator, ILFF_OUT_ADDR + 4),
+        },
+        "side_effects": [],
+    }
+
+
+def ilff_container_header_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+int main()
+{
+    struct Case { const char* id; bool context_present; bool size_out; bool alignment_out;
+                  std::uint32_t tag; std::uint32_t size; std::uint32_t alignment; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        unsigned char header[0x20];
+        std::memset(header, 0x5A, sizeof(header));
+        std::memcpy(header + 0x00, &item.tag, 4);
+        std::memcpy(header + 0x04, &item.size, 4);
+        std::memcpy(header + 0x08, &item.alignment, 4);
+        const std::uint32_t form = 0x464F524D;
+        std::memcpy(header + 0x10, &form, 4);
+        // Unwritten out parameters must keep the sentinel, exactly as retail
+        // leaves the stack slot alone when its guard skips the write.
+        // The native takes signed out pointers; the sentinel bit pattern is the
+        // same either way, and the report prints the raw 32-bit value.
+        std::int32_t size_slot = static_cast<std::int32_t>(0x5A5A5A5AU);
+        std::int32_t alignment_slot = static_cast<std::int32_t>(0x5A5A5A5AU);
+        igi::retail::sys::Ilff_ReadContainerHeader(
+            item.size_out ? &size_slot : nullptr,
+            item.alignment_out ? &alignment_slot : nullptr,
+            item.context_present ? static_cast<const void*>(header) : nullptr);
+        std::printf("{\"id\":\"%s\",\"state_delta\":{\"size\":%lu,\"alignment\":%lu},"
+                    "\"side_effects\":[]}\n",
+                    item.id,
+                    static_cast<unsigned long>(static_cast<std::uint32_t>(size_slot)),
+                    static_cast<unsigned long>(static_cast<std::uint32_t>(alignment_slot)));
+    }
+    return 0;
+}
+"""
+
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -2363,10 +2595,37 @@ NATIVES = {
         "extra_link_flags": TERRAIN_LINK_FLAGS,
         "limits": TERRAIN_LIMITS,
     },
+    "0x004B7540": {
+        "cases": ilff_container_header_cases,
+        "retail": ilff_container_header_retail,
+        "candidate_source": ilff_container_header_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
+    },
+    "0x004B7570": {
+        "cases": ilff_header_cases,
+        "retail": ilff_get_form_type_retail,
+        "candidate_source": ilff_get_form_type_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
+    },
+    "0x004B7580": {
+        "cases": ilff_header_cases,
+        "retail": ilff_get_chunk_tag_retail,
+        "candidate_source": ilff_get_chunk_tag_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
+    },
 }
 
 
 def format_case_literal(address: str, case: dict) -> str:
+    if address in ("0x004B7570", "0x004B7580"):
+        return (f'        {{"{case["id"]}", {"true" if case["present"] else "false"}, '
+                f'{case["tag"]}U, {case["size"]}U, {case["alignment"]}U, {case["form"]}U}},')
+    if address == "0x004B7540":
+        return (f'        {{"{case["id"]}", '
+                f'{"true" if case["context_present"] else "false"}, '
+                f'{"true" if case["size_out"] else "false"}, '
+                f'{"true" if case["alignment_out"] else "false"}, '
+                f'{case["tag"]}U, {case["size"]}U, {case["alignment"]}U}},')
     if address == "0x0048F970":
         return wndproc_case_literal(case)
     if address == "0x00465820":
@@ -2432,6 +2691,10 @@ def compare_outputs(reference: dict, candidate: dict) -> list[str]:
     for field in ("return_value", "state_delta", "side_effects"):
         reference_value = reference.get(field)
         candidate_value = candidate.get(field)
+        if reference_value is None and candidate_value is None:
+            # A void native has no return value to compare; its observable is the
+            # state it leaves behind, so the absent field is not a difference.
+            continue
         if isinstance(reference_value, dict) and isinstance(candidate_value, dict):
             for key in sorted(set(reference_value) | set(candidate_value)):
                 if key not in reference_value:
@@ -2612,10 +2875,12 @@ def main() -> int:
                 "initial_state": {"seed": case["seed"]},
             },
             "reference_output": reference,
+            # Only report the observables both sides actually produced, so a
+            # void native's report does not invent a return value.
             "candidate_output": {
-                "return_value": candidate["return_value"],
-                "state_delta": candidate["state_delta"],
-                "side_effects": candidate["side_effects"],
+                field: candidate[field]
+                for field in ("return_value", "state_delta", "side_effects")
+                if field in candidate and field in reference
             },
         })
 

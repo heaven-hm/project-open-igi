@@ -2,10 +2,10 @@
  "summary": {
   "total": 120,
   "labelled_verified": 78,
-  "saved_evidence_backed": 68,
+  "saved_evidence_backed": 70,
   "strict_evidence_backed": 119,
   "end_to_end_backed": 8,
-  "records_with_problems": 52
+  "records_with_problems": 50
  },
  "natives": [
   {
@@ -727,8 +727,25 @@
    "record_errors": [],
    "build_errors": [],
    "behavioral_errors": [
-    "0x004B7540 behavioral runner hash does not match scripts/native_unicorn_runner.py",
-    "0x004B7540 behavioral report must record the executed runner command as an argv array"
+    "0x004B7540 case[0] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[0] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[1] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[1] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[2] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[2] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[3] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[3] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[4] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[4] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[5] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[5] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[6] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[6] candidate_output omits observables: ['return_value']",
+    "0x004B7540 case[7] reference_output omits observables: ['return_value']",
+    "0x004B7540 case[7] candidate_output omits observables: ['return_value']",
+    "0x004B7540 behavioral comparison failed: 8 failing case(s) out of 8",
+    "0x004B7540 reported test counts (8, 8, 0) do not match recomputed counts (8, 0, 8)",
+    "0x004B7540 behavioral report result does not match the recomputed comparison result"
    ],
    "semantic_errors": [],
    "frida_errors": [
@@ -746,16 +763,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7570 behavioral runner hash does not match scripts/native_unicorn_runner.py",
-    "0x004B7570 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -766,16 +780,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7580 behavioral runner hash does not match scripts/native_unicorn_runner.py",
-    "0x004B7580 behavioral report must record the executed runner command as an argv array"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
