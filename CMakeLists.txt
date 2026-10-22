@@ -85,7 +85,13 @@ target_include_directories(igi PRIVATE engine/include)
 target_compile_features(igi PRIVATE cxx_std_20)
 set_target_properties(igi PROPERTIES OUTPUT_NAME "igi1")
 if(MINGW)
-    target_link_options(igi PRIVATE -static -static-libgcc -static-libstdc++)
+    # The bottle is Windows 2000-era and ships no api-ms-win-crt-* redistributable,
+    # so statically bind the C runtime rather than importing the UCRT DLLs.
+    # The bottle is Windows 2000-era and ships no api-ms-win-crt-* or libstdc++-6
+    # redistributable, so both the C and C++ runtimes must be fully static. The
+    # trailing -Bstatic keeps the subsequent libraries static as well.
+    target_link_options(igi PRIVATE -static -static-libgcc -static-libstdc++
+                        -Wl,-Bstatic)
     # The retail renders through DirectDraw 7 (igi.exe imports ddraw.dll).
     target_link_libraries(igi PRIVATE ddraw dxguid dinput)
 endif()

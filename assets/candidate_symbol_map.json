@@ -1,0 +1,2020 @@
+[
+ {
+  "address": "0x00401050",
+  "retailName": "QTask_OpenEvent",
+  "implemented": true,
+  "cppName": "QTask_OpenEvent",
+  "enginePath": "engine/src/retail/core/frame_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00402D40",
+   "symbol": "_QTask_OpenEvent",
+   "demangled": "_QTask_OpenEvent"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004017C0",
+  "retailName": "QTask_UnableToAllocateEven",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00402880",
+  "retailName": "Game_GetContext",
+  "implemented": true,
+  "cppName": "Game_GetContext",
+  "enginePath": "engine/src/retail/core/frame_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00402D10",
+   "symbol": "_Game_GetContext",
+   "demangled": "_Game_GetContext"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004028A0",
+  "retailName": "Flow_SetState",
+  "implemented": true,
+  "cppName": "Flow_SetState",
+  "enginePath": "engine/src/retail/core/frame_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00402D20",
+   "symbol": "_Flow_SetState",
+   "demangled": "_Flow_SetState"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004036B0",
+  "retailName": "GOPlayer",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403750",
+  "retailName": "GOActiveMission",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004037C0",
+  "retailName": "GOInRemap",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403870",
+  "retailName": "GOInMouInv",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004038E0",
+  "retailName": "GOInMouSens",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403950",
+  "retailName": "GOGfxDisp",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403A00",
+  "retailName": "GOGameLang",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403AC0",
+  "retailName": "GOGameDiff",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403DF0",
+  "retailName": "GOIsBlood",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403E60",
+  "retailName": "GOSoundSpeech",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403EF0",
+  "retailName": "GOSoundMusic",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00403F80",
+  "retailName": "GOSoundFX",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00404010",
+  "retailName": "GOGfxDevice",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00404080",
+  "retailName": "GOGfxGamma",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004040F0",
+  "retailName": "GOGfxPerformance",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00404590",
+  "retailName": "Config_GetActiveGraphicOptions",
+  "implemented": true,
+  "cppName": "Config_GetActiveGraphicOptions",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410850",
+   "symbol": "__ZN3igi6retail6config30Config_GetActiveGraphicOptionsEv",
+   "demangled": "igi::retail::config::Config_GetActiveGraphicOptions()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00404F00",
+  "retailName": "Config_GraphicOptionsSetPerformanceFlags",
+  "implemented": true,
+  "cppName": "Config_GraphicOptionsSetPerformanceFlags",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410870",
+   "symbol": "__ZN3igi6retail6config40Config_GraphicOptionsSetPerformanceFlagsEPvi",
+   "demangled": "igi::retail::config::Config_GraphicOptionsSetPerformanceFlags(void*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00404F60",
+  "retailName": "Config_GraphicOptionsGetPerformanceFlags",
+  "implemented": true,
+  "cppName": "Config_GraphicOptionsGetPerformanceFlags",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004108D0",
+   "symbol": "__ZN3igi6retail6config40Config_GraphicOptionsGetPerformanceFlagsEPv",
+   "demangled": "igi::retail::config::Config_GraphicOptionsGetPerformanceFlags(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00405530",
+  "retailName": "Config_GraphicOptionsGetPerfLevelFromFlags",
+  "implemented": true,
+  "cppName": "Config_GraphicOptionsGetPerfLevelFromFlags",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004109E0",
+   "symbol": "__ZN3igi6retail6config42Config_GraphicOptionsGetPerfLevelFromFlagsEPvi",
+   "demangled": "igi::retail::config::Config_GraphicOptionsGetPerfLevelFromFlags(void*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004055C0",
+  "retailName": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+  "implemented": true,
+  "cppName": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410980",
+   "symbol": "__ZN3igi6retail6config42Config_GraphicOptionsGetPerfFlagsFromLevelEPvi",
+   "demangled": "igi::retail::config::Config_GraphicOptionsGetPerfFlagsFromLevel(void*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00405620",
+  "retailName": "Config_GraphicOptionsNumPerfLevels",
+  "implemented": true,
+  "cppName": "Config_GraphicOptionsNumPerfLevels",
+  "enginePath": "engine/src/retail/config/config_graphic_options.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410930",
+   "symbol": "__ZN3igi6retail6config34Config_GraphicOptionsNumPerfLevelsEPv",
+   "demangled": "igi::retail::config::Config_GraphicOptionsNumPerfLevels(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00407E30",
+  "retailName": "DefineQMaterial",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00407F50",
+  "retailName": "DefineGameMaterial",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00408460",
+  "retailName": "FallLanding",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004101C0",
+  "retailName": "DefineHumanPlayerWeaponCycle",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00410240",
+  "retailName": "DefineHumanPlayerWeaponCategory",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004102D0",
+  "retailName": "DefineHumanPlayerAmmoLimit",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004108C0",
+  "retailName": "HumanPlayer_Invoke8_4108C0",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00463180",
+  "retailName": "Human_IsCrouched",
+  "implemented": true,
+  "cppName": "Human_IsCrouched",
+  "enginePath": "engine/src/retail/human/human_camera_eye.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00414A10",
+   "symbol": "__ZN3igi6retail5human16Human_IsCrouchedEPKv",
+   "demangled": "igi::retail::human::Human_IsCrouched(void const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00465820",
+  "retailName": "Human_CameraEyePosition",
+  "implemented": true,
+  "cppName": "Human_CameraEyePosition",
+  "enginePath": "engine/src/retail/human/human_camera_eye.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00414A20",
+   "symbol": "__ZN3igi6retail5human23Human_CameraEyePositionEPvPKv",
+   "demangled": "igi::retail::human::Human_CameraEyePosition(void*, void const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004659E0",
+  "retailName": "Human_TaskViewReset",
+  "implemented": true,
+  "cppName": "Human_TaskViewReset",
+  "enginePath": "engine/src/retail/human/human_view.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00404160",
+   "symbol": "__ZN3igi6retail5human19Human_TaskViewResetEPv",
+   "demangled": "igi::retail::human::Human_TaskViewReset(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00471120",
+  "retailName": "WeaponGun_ProcessWNES",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0047CAD0",
+  "retailName": "DefineAmmoType",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00484F60",
+  "retailName": "DefineMission",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F1A0",
+  "retailName": "App_ContextSetDebugged",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F1B0",
+  "retailName": "App_ContextGetDebugged",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F1D0",
+  "retailName": "Script_GetDebugCompileState",
+  "implemented": true,
+  "cppName": "Script_GetDebugCompileState",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D240",
+   "symbol": "__ZN3igi6retail6script27Script_GetDebugCompileStateEv",
+   "demangled": "igi::retail::script::Script_GetDebugCompileState()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F1E0",
+  "retailName": "App_ContextSetDebugtextState",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F230",
+  "retailName": "App_ContextGetLightmapsUsed",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F240",
+  "retailName": "App_ContextSetLightmapsUsed",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F250",
+  "retailName": "App_ContextGetTerrainLightmapsUsed",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F260",
+  "retailName": "App_ContextSetTerrainLightmapsUsed",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F340",
+  "retailName": "Script_GetForcePrecompiledState",
+  "implemented": true,
+  "cppName": "Script_GetForcePrecompiledState",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D250",
+   "symbol": "__ZN3igi6retail6script31Script_GetForcePrecompiledStateEv",
+   "demangled": "igi::retail::script::Script_GetForcePrecompiledState()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x0048F480",
+  "retailName": "Loop_SetStatusByte",
+  "implemented": true,
+  "cppName": "Loop_SetStatusByte",
+  "enginePath": "engine/src/retail/core/frame_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00402D30",
+   "symbol": "_Loop_SetStatusByte",
+   "demangled": "_Loop_SetStatusByte"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004903A0",
+  "retailName": "Display_SetGammaRamp",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00491D40",
+  "retailName": "Display_ComputeScreenAspect",
+  "implemented": true,
+  "cppName": "Display_ComputeScreenAspect",
+  "enginePath": "engine/src/retail/render/view_block.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410BF0",
+   "symbol": "__ZN3igi6retail6render27Display_ComputeScreenAspectEv",
+   "demangled": "igi::retail::render::Display_ComputeScreenAspect()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00497D70",
+  "retailName": "Transcontext_BuildViewBlock",
+  "implemented": true,
+  "cppName": "Transcontext_BuildViewBlock",
+  "enginePath": "engine/src/retail/render/view_block.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410C10",
+   "symbol": "__ZN3igi6retail6render27Transcontext_BuildViewBlockEPvPKvS4_f",
+   "demangled": "igi::retail::render::Transcontext_BuildViewBlock(void*, void const*, void const*, float)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A23D0",
+  "retailName": "Camera_ApplyHandiCam",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A2600",
+  "retailName": "Camera_ResetMatrix",
+  "implemented": true,
+  "cppName": "Camera_ResetMatrix",
+  "enginePath": "engine/src/retail/render/camera_transform.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410E70",
+   "symbol": "__ZN3igi6retail6render18Camera_ResetMatrixEPKNS1_18CameraColorContextE",
+   "demangled": "igi::retail::render::Camera_ResetMatrix(igi::retail::render::CameraColorContext const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A26C0",
+  "retailName": "Camera_UpdateFogPalette",
+  "implemented": true,
+  "cppName": "Camera_UpdateFogPalette",
+  "enginePath": "engine/src/retail/render/camera_transform.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410DF0",
+   "symbol": "__ZN3igi6retail6render23Camera_UpdateFogPaletteEPKNS1_18CameraColorContextE",
+   "demangled": "igi::retail::render::Camera_UpdateFogPalette(igi::retail::render::CameraColorContext const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A50F5",
+  "retailName": "Camera_ApplyHandiCam_3",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A53B3",
+  "retailName": "Game_DataSymbolLoad",
+  "implemented": true,
+  "cppName": "Game_DataSymbolLoad",
+  "enginePath": "engine/src/retail/error/error_show.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00403FB0",
+   "symbol": "__ZN3igi6retail5error19Game_DataSymbolLoadEPcPKcz",
+   "demangled": "igi::retail::error::Game_DataSymbolLoad(char*, char const*, ...)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004A5702",
+  "retailName": "String_VFormat",
+  "implemented": true,
+  "cppName": "String_VFormat",
+  "enginePath": "engine/src/retail/error/error_show.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043B400",
+   "symbol": "__ZN3igi6retail5error14String_VFormatEPcPKcS2_",
+   "demangled": "igi::retail::error::String_VFormat(char*, char const*, char*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004A5955",
+  "retailName": "Camera_ResetMatrix_5",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A67E4",
+  "retailName": "MathSys_Invoke7_4A67E4",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A68A9",
+  "retailName": "Camera_UpdateViewCone_8",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A8A91",
+  "retailName": "Camera_ResetMatrix_14",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A8AD0",
+  "retailName": "Camera_UpdateTransform_15",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A8B37",
+  "retailName": "Camera_SetFieldOfView_15",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9BD1",
+  "retailName": "Camera_ApplyWideScreen_17",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9C40",
+  "retailName": "Camera_ApplyPostProcess_17",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9C57",
+  "retailName": "Camera_UpdateViewCone_17",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9CA0",
+  "retailName": "Camera_ResetMatrix_17",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9CB5",
+  "retailName": "Camera_UpdateTransform_18",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9CCC",
+  "retailName": "Camera_SetFieldOfView_18",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9CE5",
+  "retailName": "Camera_ApplyLineFilter_18",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004A9D28",
+  "retailName": "Camera_ApplyBandFilter_18",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AA0A6",
+  "retailName": "MathSys_Invoke19",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AA670",
+  "retailName": "Mem_AllocChunk",
+  "implemented": true,
+  "cppName": "Mem_AllocChunk",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F4A0",
+   "symbol": "__ZN3igi6retail3mem14Mem_AllocChunkEj",
+   "demangled": "igi::retail::mem::Mem_AllocChunk(unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AA682",
+  "retailName": "Mem_AllocWithRetry",
+  "implemented": true,
+  "cppName": "Mem_AllocWithRetry",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F3F0",
+   "symbol": "__ZN3igi6retail3mem18Mem_AllocWithRetryEjj",
+   "demangled": "igi::retail::mem::Mem_AllocWithRetry(unsigned int, unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AA6AE",
+  "retailName": "Mem_AllocateRawBlock",
+  "implemented": true,
+  "cppName": "Mem_AllocateRawBlock",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F3A0",
+   "symbol": "__ZN3igi6retail3mem20Mem_AllocateRawBlockEj",
+   "demangled": "igi::retail::mem::Mem_AllocateRawBlock(unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AAA44",
+  "retailName": "MathSys_Invoke21",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AAD10",
+  "retailName": "Resource_MatchPrefix",
+  "implemented": true,
+  "cppName": "Resource_MatchPrefix",
+  "enginePath": "engine/src/retail/resource/sys_resource.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00412950",
+   "symbol": "__ZN3igi6retail8resource20Resource_MatchPrefixEPKvS3_i",
+   "demangled": "igi::retail::resource::Resource_MatchPrefix(void const*, void const*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AD004",
+  "retailName": "MathSys_Invoke3",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AD140",
+  "retailName": "Camera_ResetMatrix_26",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AD1B0",
+  "retailName": "Camera_UpdateTransform_27",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AD722",
+  "retailName": "Mem_InvokeNewHandler",
+  "implemented": true,
+  "cppName": "Mem_InvokeNewHandler",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F370",
+   "symbol": "__ZN3igi6retail3mem20Mem_InvokeNewHandlerEj",
+   "demangled": "igi::retail::mem::Mem_InvokeNewHandler(unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AD73D",
+  "retailName": "String_ToUpperChar",
+  "implemented": true,
+  "cppName": "String_ToUpperChar",
+  "enginePath": "engine/src/retail/sys/resource_lookup.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411220",
+   "symbol": "__ZN3igi6retail3sys18String_ToUpperCharEj",
+   "demangled": "igi::retail::sys::String_ToUpperChar(unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AE670",
+  "retailName": "Camera_ResetMatrix_29",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AE730",
+  "retailName": "Camera_SetFieldOfView_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF740",
+  "retailName": "Camera_ApplyBandFilter_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF746",
+  "retailName": "Camera_ApplyHandiCam_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF74C",
+  "retailName": "Camera_ApplyWideScreen_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF752",
+  "retailName": "Camera_ApplyPostProcess_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF758",
+  "retailName": "Camera_UpdateViewCone_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF75E",
+  "retailName": "Camera_ResetMatrix_30",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF764",
+  "retailName": "Camera_UpdateTransform_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF76A",
+  "retailName": "Camera_SetFieldOfView_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF770",
+  "retailName": "Camera_ApplyLineFilter_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF776",
+  "retailName": "Camera_ApplyBandFilter_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF77C",
+  "retailName": "Camera_ApplyHandiCam_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF782",
+  "retailName": "Camera_ApplyWideScreen_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF788",
+  "retailName": "Camera_ApplyPostProcess_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF78E",
+  "retailName": "Camera_UpdateViewCone_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF794",
+  "retailName": "Camera_ResetMatrix_31",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF79A",
+  "retailName": "Camera_UpdateTransform_32",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF7A0",
+  "retailName": "Camera_SetFieldOfView_32",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF7A6",
+  "retailName": "Camera_ApplyLineFilter_32",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004AF7B0",
+  "retailName": "Error_Show",
+  "implemented": true,
+  "cppName": "Error_Show",
+  "enginePath": "engine/src/retail/error/error_show.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043B460",
+   "symbol": "__ZN3igi6retail5error10Error_ShowEPKcz",
+   "demangled": "igi::retail::error::Error_Show(char const*, ...)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004AF8F0",
+  "retailName": "HeapList_Insert",
+  "implemented": true,
+  "cppName": "HeapList_Insert",
+  "enginePath": "engine/src/retail/mem/heap_list.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043C8B0",
+   "symbol": "__ZN3igi6retail3mem15HeapList_InsertEPvPS2_",
+   "demangled": "igi::retail::mem::HeapList_Insert(void*, void**)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004AF960",
+  "retailName": "HeapList_Remove",
+  "implemented": true,
+  "cppName": "HeapList_Remove",
+  "enginePath": "engine/src/retail/mem/heap_list.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043C8D0",
+   "symbol": "__ZN3igi6retail3mem15HeapList_RemoveEPPv",
+   "demangled": "igi::retail::mem::HeapList_Remove(void**)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B0B90",
+  "retailName": "Sys_ReadFileBlock_2",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B0BA0",
+  "retailName": "Mem_InitHeapState",
+  "implemented": true,
+  "cppName": "Mem_InitHeapState",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F330",
+   "symbol": "__ZN3igi6retail3mem17Mem_InitHeapStateEv",
+   "demangled": "igi::retail::mem::Mem_InitHeapState()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B0C60",
+  "retailName": "Mem_Alloc",
+  "implemented": true,
+  "cppName": "Mem_Alloc",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F560",
+   "symbol": "__ZN3igi6retail3mem9Mem_AllocEii",
+   "demangled": "igi::retail::mem::Mem_Alloc(int, int)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B0D40",
+  "retailName": "QHash_ValueSet",
+  "implemented": true,
+  "cppName": "QHash_ValueSet",
+  "enginePath": "engine/src/retail/mem/mem_alloc.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041F320",
+   "symbol": "__ZN3igi6retail3mem14QHash_ValueSetEv",
+   "demangled": "igi::retail::mem::QHash_ValueSet()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B0F80",
+  "retailName": "Texture_GetActiveBackendId",
+  "implemented": true,
+  "cppName": "Texture_GetActiveBackendId",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432100",
+   "symbol": "__ZN3igi6retail7texture26Texture_GetActiveBackendIdEv",
+   "demangled": "igi::retail::texture::Texture_GetActiveBackendId()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B1690",
+  "retailName": "Device_CloseStream",
+  "implemented": true,
+  "cppName": "Device_CloseStream",
+  "enginePath": "engine/src/retail/resource/device_dispatch.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00413990",
+   "symbol": "__ZN3igi6retail8resource18Device_CloseStreamEPi",
+   "demangled": "igi::retail::resource::Device_CloseStream(int*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B1780",
+  "retailName": "Device_GetStreamPosition",
+  "implemented": true,
+  "cppName": "Device_GetStreamPosition",
+  "enginePath": "engine/src/retail/resource/device_dispatch.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00413940",
+   "symbol": "__ZN3igi6retail8resource24Device_GetStreamPositionEPi",
+   "demangled": "igi::retail::resource::Device_GetStreamPosition(int*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B17F0",
+  "retailName": "Device_SeekStream",
+  "implemented": true,
+  "cppName": "Device_SeekStream",
+  "enginePath": "engine/src/retail/resource/device_dispatch.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00413960",
+   "symbol": "__ZN3igi6retail8resource17Device_SeekStreamEPii",
+   "demangled": "igi::retail::resource::Device_SeekStream(int*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B1E90",
+  "retailName": "String_FindExtension",
+  "implemented": true,
+  "cppName": "String_FindExtension",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D2B0",
+   "symbol": "__ZN3igi6retail6script20String_FindExtensionEPciS2_",
+   "demangled": "igi::retail::script::String_FindExtension(char*, int, char*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B23B0",
+  "retailName": "Texture_UploadMipmapPacket",
+  "implemented": true,
+  "cppName": "Texture_UploadMipmapPacket",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432130",
+   "symbol": "__ZN3igi6retail7texture26Texture_UploadMipmapPacketEPiPviiiiiiS3_",
+   "demangled": "igi::retail::texture::Texture_UploadMipmapPacket(int*, void*, int, int, int, int, int, int, void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B24C0",
+  "retailName": "Texture_LoadLoopTextureFile",
+  "implemented": true,
+  "cppName": "Texture_LoadLoopTextureFile",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432240",
+   "symbol": "__ZN3igi6retail7texture27Texture_LoadLoopTextureFileEPiPvPKc",
+   "demangled": "igi::retail::texture::Texture_LoadLoopTextureFile(int*, void*, char const*)"
+  },
+  "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+ },
+ {
+  "address": "0x004B26A0",
+  "retailName": "Texture_EnableUpload",
+  "implemented": true,
+  "cppName": "Texture_EnableUpload",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432110",
+   "symbol": "__ZN3igi6retail7texture20Texture_EnableUploadEv",
+   "demangled": "igi::retail::texture::Texture_EnableUpload()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B26B0",
+  "retailName": "Texture_DisableUpload",
+  "implemented": true,
+  "cppName": "Texture_DisableUpload",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432120",
+   "symbol": "__ZN3igi6retail7texture21Texture_DisableUploadEv",
+   "demangled": "igi::retail::texture::Texture_DisableUpload()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B59F0",
+  "retailName": "Resource_CreateNode",
+  "implemented": true,
+  "cppName": "Resource_CreateNode",
+  "enginePath": "engine/src/retail/resource/sys_resource.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00412A00",
+   "symbol": "__ZN3igi6retail8resource19Resource_CreateNodeEPKcPvS4_iiPKi",
+   "demangled": "igi::retail::resource::Resource_CreateNode(char const*, void*, void*, int, int, int const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B5AF0",
+  "retailName": "Resource_CanonicalizePath",
+  "implemented": true,
+  "cppName": "Resource_CanonicalizePath",
+  "enginePath": "engine/src/retail/sys/resource_lookup.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411240",
+   "symbol": "__ZN3igi6retail3sys25Resource_CanonicalizePathEPcS2_",
+   "demangled": "igi::retail::sys::Resource_CanonicalizePath(char*, char*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B5B30",
+  "retailName": "Resource_CalculatePathHash",
+  "implemented": true,
+  "cppName": "Resource_CalculatePathHash",
+  "enginePath": "engine/src/retail/sys/resource_lookup.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004112B0",
+   "symbol": "__ZN3igi6retail3sys26Resource_CalculatePathHashEPKc",
+   "demangled": "igi::retail::sys::Resource_CalculatePathHash(char const*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B5B60",
+  "retailName": "Resource_FileExists",
+  "implemented": true,
+  "cppName": "Resource_FileExists",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D260",
+   "symbol": "__ZN3igi6retail6script19Resource_FileExistsEPKc",
+   "demangled": "igi::retail::script::Resource_FileExists(char const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B5C90",
+  "retailName": "Resource_FreeNode",
+  "implemented": true,
+  "cppName": "Resource_FreeNode",
+  "enginePath": "engine/src/retail/resource/sys_resource.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00412BA0",
+   "symbol": "__ZN3igi6retail8resource17Resource_FreeNodeEPv",
+   "demangled": "igi::retail::resource::Resource_FreeNode(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B5F00",
+  "retailName": "Resource_Load",
+  "implemented": true,
+  "cppName": "Resource_Load",
+  "enginePath": "engine/src/retail/resource/resource_lifecycle.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004123B0",
+   "symbol": "__ZN3igi6retail8resource13Resource_LoadEPKcPi",
+   "demangled": "igi::retail::resource::Resource_Load(char const*, int*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B5F80",
+  "retailName": "Resource_RegisterBuffer",
+  "implemented": true,
+  "cppName": "Resource_RegisterBuffer",
+  "enginePath": "engine/src/retail/resource/sys_resource.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00413210",
+   "symbol": "__ZN3igi6retail8resource23Resource_RegisterBufferEPKcPvi",
+   "demangled": "igi::retail::resource::Resource_RegisterBuffer(char const*, void*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B60F0",
+  "retailName": "Resource_RegisterIlffContainer",
+  "implemented": true,
+  "cppName": "Resource_RegisterIlffContainer",
+  "enginePath": "engine/src/retail/resource/sys_resource.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00412E80",
+   "symbol": "__ZN3igi6retail8resource30Resource_RegisterIlffContainerEPKcPvS4_PKi",
+   "demangled": "igi::retail::resource::Resource_RegisterIlffContainer(char const*, void*, void*, int const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B6380",
+  "retailName": "Resource_Unload",
+  "implemented": true,
+  "cppName": "Resource_Unload",
+  "enginePath": "engine/src/retail/resource/resource_lifecycle.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00412340",
+   "symbol": "__ZN3igi6retail8resource15Resource_UnloadEPKc",
+   "demangled": "igi::retail::resource::Resource_Unload(char const*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B7450",
+  "retailName": "Matrix_InvalidateSlot",
+  "implemented": true,
+  "cppName": "Matrix_InvalidateSlot",
+  "enginePath": "engine/src/retail/render/camera_transform.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410D40",
+   "symbol": "__ZN3igi6retail6render21Matrix_InvalidateSlotEPii",
+   "demangled": "igi::retail::render::Matrix_InvalidateSlot(int*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B7470",
+  "retailName": "Ilff_GetNextChunk",
+  "implemented": true,
+  "cppName": "Ilff_GetNextChunk",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411000",
+   "symbol": "__ZN3igi6retail3sys17Ilff_GetNextChunkEPv",
+   "demangled": "igi::retail::sys::Ilff_GetNextChunk(void*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B7490",
+  "retailName": "Ilff_GetFirstChunk",
+  "implemented": true,
+  "cppName": "Ilff_GetFirstChunk",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411030",
+   "symbol": "__ZN3igi6retail3sys18Ilff_GetFirstChunkEPv",
+   "demangled": "igi::retail::sys::Ilff_GetFirstChunk(void*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B74D0",
+  "retailName": "Ilff_GetChunkPayload",
+  "implemented": true,
+  "cppName": "Ilff_GetChunkPayload",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004110B0",
+   "symbol": "__ZN3igi6retail3sys20Ilff_GetChunkPayloadEPvS2_",
+   "demangled": "igi::retail::sys::Ilff_GetChunkPayload(void*, void*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B7540",
+  "retailName": "Ilff_ReadContainerHeader",
+  "implemented": true,
+  "cppName": "Ilff_ReadContainerHeader",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411160",
+   "symbol": "__ZN3igi6retail3sys24Ilff_ReadContainerHeaderEPiS2_PKv",
+   "demangled": "igi::retail::sys::Ilff_ReadContainerHeader(int*, int*, void const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B7570",
+  "retailName": "Ilff_GetFormType",
+  "implemented": true,
+  "cppName": "Ilff_GetFormType",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411190",
+   "symbol": "__ZN3igi6retail3sys16Ilff_GetFormTypeEPKv",
+   "demangled": "igi::retail::sys::Ilff_GetFormType(void const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B7580",
+  "retailName": "Ilff_GetChunkTag",
+  "implemented": true,
+  "cppName": "Ilff_GetChunkTag",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004111B0",
+   "symbol": "__ZN3igi6retail3sys16Ilff_GetChunkTagEPKi",
+   "demangled": "igi::retail::sys::Ilff_GetChunkTag(int const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B7590",
+  "retailName": "Ilff_FindChunk",
+  "implemented": true,
+  "cppName": "Ilff_FindChunk",
+  "enginePath": "engine/src/retail/sys/ilff_navigation.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004111D0",
+   "symbol": "__ZN3igi6retail3sys14Ilff_FindChunkEPii",
+   "demangled": "igi::retail::sys::Ilff_FindChunk(int*, int)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004B7CF0",
+  "retailName": "Texture_UploadPalettePacket",
+  "implemented": true,
+  "cppName": "Texture_UploadPalettePacket",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004321F0",
+   "symbol": "__ZN3igi6retail7texture27Texture_UploadPalettePacketEPiPvi",
+   "demangled": "igi::retail::texture::Texture_UploadPalettePacket(int*, void*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B7E10",
+  "retailName": "Qvm_ReportError",
+  "implemented": true,
+  "cppName": "Qvm_ReportError",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D380",
+   "symbol": "__ZN3igi6retail6script15Qvm_ReportErrorEPKcz",
+   "demangled": "igi::retail::script::Qvm_ReportError(char const*, ...)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B80B0",
+  "retailName": "Qvm_Load",
+  "implemented": true,
+  "cppName": "Qvm_Load",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D430",
+   "symbol": "__ZN3igi6retail6script8Qvm_LoadEPKc",
+   "demangled": "igi::retail::script::Qvm_Load(char const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B83D0",
+  "retailName": "Qvm_Cleanup",
+  "implemented": true,
+  "cppName": "Qvm_Cleanup",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D3E0",
+   "symbol": "__ZN3igi6retail6script11Qvm_CleanupEPv",
+   "demangled": "igi::retail::script::Qvm_Cleanup(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B8A10",
+  "retailName": "Qvm_SetGlobalState",
+  "implemented": true,
+  "cppName": "Qvm_SetGlobalState",
+  "enginePath": "engine/src/retail/script/qvm_native_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041D2A0",
+   "symbol": "__ZN3igi6retail6script18Qvm_SetGlobalStateEi",
+   "demangled": "igi::retail::script::Qvm_SetGlobalState(int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B8C10",
+  "retailName": "BreakScript",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004B8C60",
+  "retailName": "_Script_SetWarningLevel",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004BCFD0",
+  "retailName": "Qvm_ExecuteInstructions",
+  "implemented": true,
+  "cppName": "Qvm_ExecuteInstructions",
+  "enginePath": "engine/src/retail/script/qvm_stack_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00430A50",
+   "symbol": "__ZN3igi6retail6script23Qvm_ExecuteInstructionsEPNS1_20QvmNativeStatePrefixE",
+   "demangled": "igi::retail::script::Qvm_ExecuteInstructions(igi::retail::script::QvmNativeStatePrefix*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004BD3D0",
+  "retailName": "Qvm_SetOpcodeHandler",
+  "implemented": true,
+  "cppName": "Qvm_SetOpcodeHandler",
+  "enginePath": "engine/src/retail/script/qvm_stack_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00430A30",
+   "symbol": "__ZN3igi6retail6script20Qvm_SetOpcodeHandlerEiiPFvPNS1_20QvmNativeStatePrefixEjjjE",
+   "demangled": "igi::retail::script::Qvm_SetOpcodeHandler(int, int, void (*)(igi::retail::script::QvmNativeStatePrefix*, unsigned int, unsigned int, unsigned int))"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004BDA00",
+  "retailName": "Qvm_PushInteger",
+  "implemented": true,
+  "cppName": "Qvm_PushInteger",
+  "enginePath": "engine/src/retail/script/qvm_stack_natives.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00430A00",
+   "symbol": "__ZN3igi6retail6script15Qvm_PushIntegerEPNS1_20QvmNativeStatePrefixEj",
+   "demangled": "igi::retail::script::Qvm_PushInteger(igi::retail::script::QvmNativeStatePrefix*, unsigned int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004C0250",
+  "retailName": "DynObj_ParseConfigFile",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004C4520",
+  "retailName": "DefineMagicObj",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004C5F00",
+  "retailName": "Terrain_LoadTexturesAndLightmaps",
+  "implemented": true,
+  "cppName": "Terrain_LoadTexturesAndLightmaps",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x005661B2",
+   "symbol": "__ZN3igi6retail7terrain32Terrain_LoadTexturesAndLightmapsEPvPKc",
+   "demangled": "igi::retail::terrain::Terrain_LoadTexturesAndLightmaps(void*, char const*)"
+  },
+  "status": "ANALYZED"
+ },
+ {
+  "address": "0x004C6240",
+  "retailName": "Terrain_Load",
+  "implemented": true,
+  "cppName": "Terrain_Load",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0056611C",
+   "symbol": "__ZN3igi6retail7terrain12Terrain_LoadEPvPKc",
+   "demangled": "igi::retail::terrain::Terrain_Load(void*, char const*)"
+  },
+  "status": "ANALYZED"
+ },
+ {
+  "address": "0x004C6670",
+  "retailName": "Terrain_CreateMaterial",
+  "implemented": true,
+  "cppName": "Terrain_CreateMaterial",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432E60",
+   "symbol": "__ZN3igi6retail7terrain22Terrain_CreateMaterialEPvPKf",
+   "demangled": "igi::retail::terrain::Terrain_CreateMaterial(void*, float const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004C6760",
+  "retailName": "Terrain_CreateTileMap",
+  "implemented": true,
+  "cppName": "Terrain_CreateTileMap",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432F70",
+   "symbol": "__ZN3igi6retail7terrain21Terrain_CreateTileMapEPvPKf",
+   "demangled": "igi::retail::terrain::Terrain_CreateTileMap(void*, float const*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CEA80",
+  "retailName": "Render_GetActiveBackendId",
+  "implemented": true,
+  "cppName": "Render_GetActiveBackendId",
+  "enginePath": "engine/src/retail/render/backend.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00410FE0",
+   "symbol": "__ZN3igi6retail6render25Render_GetActiveBackendIdEv",
+   "demangled": "igi::retail::render::Render_GetActiveBackendId()"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CEAA0",
+  "retailName": "Ilff_FindFormChunk",
+  "implemented": true,
+  "cppName": "Ilff_FindFormChunk",
+  "enginePath": "engine/src/retail/dynobj/hash_lookup.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411350",
+   "symbol": "__ZN3igi6retail6dynobj18Ilff_FindFormChunkEPviPi",
+   "demangled": "igi::retail::dynobj::Ilff_FindFormChunk(void*, int, int*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004CF080",
+  "retailName": "DynObj_LoadModelTexturePackage",
+  "implemented": true,
+  "cppName": "DynObj_LoadModelTexturePackage",
+  "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411AF0",
+   "symbol": "__ZN3igi6retail6dynobj30DynObj_LoadModelTexturePackageEPvPKci",
+   "demangled": "igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, char const*, int)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CF300",
+  "retailName": "DynObj_LookupHashItem",
+  "implemented": true,
+  "cppName": "DynObj_LookupHashItem",
+  "enginePath": "engine/src/retail/dynobj/hash_lookup.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411300",
+   "symbol": "__ZN3igi6retail6dynobj21DynObj_LookupHashItemEPPNS1_8HashItemEi",
+   "demangled": "igi::retail::dynobj::DynObj_LookupHashItem(igi::retail::dynobj::HashItem**, int)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004CF330",
+  "retailName": "DynObj_LoadPackageMeshes",
+  "implemented": true,
+  "cppName": "DynObj_LoadPackageMeshes",
+  "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411990",
+   "symbol": "__ZN3igi6retail6dynobj24DynObj_LoadPackageMeshesEPv",
+   "demangled": "igi::retail::dynobj::DynObj_LoadPackageMeshes(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CF390",
+  "retailName": "DynObj_LoadModelMesh",
+  "implemented": true,
+  "cppName": "DynObj_LoadModelMesh",
+  "enginePath": "engine/src/retail/dynobj/local_models_mef.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00418C60",
+   "symbol": "__ZN3igi6retail5model8MefModel20DynObj_LoadModelMeshESt4spanIKSt4byteLj4294967295EE",
+   "demangled": "igi::retail::model::MefModel::DynObj_LoadModelMesh(std::span<std::byte const, 4294967295u>)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004CF630",
+  "retailName": "DynObj_LoadPackageLovs",
+  "implemented": true,
+  "cppName": "DynObj_LoadPackageLovs",
+  "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00411A30",
+   "symbol": "__ZN3igi6retail6dynobj22DynObj_LoadPackageLovsEPv",
+   "demangled": "igi::retail::dynobj::DynObj_LoadPackageLovs(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CF790",
+  "retailName": "DynObj_LoadModelTextures",
+  "implemented": true,
+  "cppName": "DynObj_LoadModelTextures",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00432870",
+   "symbol": "__ZN3igi6retail7texture24DynObj_LoadModelTexturesEPv",
+   "demangled": "igi::retail::texture::DynObj_LoadModelTextures(void*)"
+  },
+  "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+ },
+ {
+  "address": "0x004CF870",
+  "retailName": "DynObj_LoadPackagePalettes",
+  "implemented": true,
+  "cppName": "DynObj_LoadPackagePalettes",
+  "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004118B0",
+   "symbol": "__ZN3igi6retail6dynobj26DynObj_LoadPackagePalettesEPv",
+   "demangled": "igi::retail::dynobj::DynObj_LoadPackagePalettes(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004CF910",
+  "retailName": "DynObj_LoadPackageAnimations",
+  "implemented": true,
+  "cppName": "DynObj_LoadPackageAnimations",
+  "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004116F0",
+   "symbol": "__ZN3igi6retail6dynobj28DynObj_LoadPackageAnimationsEPv",
+   "demangled": "igi::retail::dynobj::DynObj_LoadPackageAnimations(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004D0CF0",
+  "retailName": "Model_GetAttachment",
+  "implemented": true,
+  "cppName": "Model_GetAttachment",
+  "enginePath": "engine/src/retail/model/mef_native_attachments.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00439C80",
+   "symbol": "__ZN3igi6retail5model19Model_GetAttachmentEPNS1_20MefNativeModelRecordEi",
+   "demangled": "igi::retail::model::Model_GetAttachment(igi::retail::model::MefNativeModelRecord*, int)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004D0D10",
+  "retailName": "Model_GetAttachmentCount",
+  "implemented": true,
+  "cppName": "Model_GetAttachmentCount",
+  "enginePath": "engine/src/retail/model/mef_native_attachments.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00439CA0",
+   "symbol": "__ZN3igi6retail5model24Model_GetAttachmentCountEPNS1_20MefNativeModelRecordE",
+   "demangled": "igi::retail::model::Model_GetAttachmentCount(igi::retail::model::MefNativeModelRecord*)"
+  },
+  "status": "VERIFIED"
+ },
+ {
+  "address": "0x004D14E0",
+  "retailName": "Terrain_TraverseContourQuadtree",
+  "implemented": true,
+  "cppName": "Terrain_TraverseContourQuadtree",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00566248",
+   "symbol": "__ZN3igi6retail7terrain31Terrain_TraverseContourQuadtreeEPv",
+   "demangled": "igi::retail::terrain::Terrain_TraverseContourQuadtree(void*)"
+  },
+  "status": "ANALYZED"
+ },
+ {
+  "address": "0x004E8C60",
+  "retailName": "DefineSound",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004E9EC0",
+  "retailName": "DefineTriggerOnce",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004EAD20",
+  "retailName": "DefineGraph",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004EBA90",
+  "retailName": "DefineGroup",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004EDB60",
+  "retailName": "LODSettings_LoadParameters",
+  "implemented": true,
+  "cppName": "LODSettings_LoadParameters",
+  "enginePath": "engine/src/retail/render/lod_settings.cpp",
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004F82B0",
+  "retailName": "TerrainLightMap_Init_2",
+  "implemented": true,
+  "cppName": "TerrainLightMap_Init_2",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00433100",
+   "symbol": "__ZN3igi6retail7terrain22TerrainLightMap_Init_2EPv",
+   "demangled": "igi::retail::terrain::TerrainLightMap_Init_2(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00505E40",
+  "retailName": "TextureModifier_Push",
+  "implemented": true,
+  "cppName": "TextureModifier_Push",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00433020",
+   "symbol": "__ZN3igi6retail7terrain20TextureModifier_PushEPv",
+   "demangled": "igi::retail::terrain::TextureModifier_Push(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00506F00",
+  "retailName": "HeightMap_Enter",
+  "implemented": true,
+  "cppName": "HeightMap_Enter",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004330C0",
+   "symbol": "__ZN3igi6retail7terrain15HeightMap_EnterEPv",
+   "demangled": "igi::retail::terrain::HeightMap_Enter(void*)"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00510010",
+  "retailName": "Terrain_DecodeChunkCommands",
+  "implemented": true,
+  "cppName": "Terrain_DecodeChunkCommands",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x005662DE",
+   "symbol": "__ZN3igi6retail7terrain27Terrain_DecodeChunkCommandsEPv",
+   "demangled": "igi::retail::terrain::Terrain_DecodeChunkCommands(void*)"
+  },
+  "status": "ANALYZED"
+ },
+ {
+  "address": "0x005127D0",
+  "retailName": "Terrain_SelectTerrainLOD_2",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00512C30",
+  "retailName": "Terrain_Draw",
+  "implemented": true,
+  "cppName": "Terrain_Draw",
+  "enginePath": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00566374",
+   "symbol": "__ZN3igi6retail7terrain12Terrain_DrawEPv",
+   "demangled": "igi::retail::terrain::Terrain_Draw(void*)"
+  },
+  "status": "ANALYZED"
+ },
+ {
+  "address": "0x005175A0",
+  "retailName": "Terrain_LoadTexturePackage",
+  "implemented": true,
+  "cppName": "Terrain_LoadTexturePackage",
+  "enginePath": "engine/src/retail/texture/texture_loaders.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x004323F0",
+   "symbol": "__ZN3igi6retail7texture26Terrain_LoadTexturePackageEPKc",
+   "demangled": "igi::retail::texture::Terrain_LoadTexturePackage(char const*)"
+  },
+  "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+ },
+ {
+  "address": "0x005236C0",
+  "retailName": "WeatherWaterSky_Invoke7_5236C0",
+  "implemented": false,
+  "cppName": null,
+  "enginePath": null,
+  "candidateSymbol": null,
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00517890",
+  "retailName": "Iff_FindFormChunk",
+  "implemented": true,
+  "cppName": "Iff_FindFormChunk",
+  "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043B580",
+   "symbol": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+   "demangled": "Iff_FindFormChunk"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x00517940",
+  "retailName": "Iff_FindChunk",
+  "implemented": true,
+  "cppName": "Iff_FindChunk",
+  "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043B880",
+   "symbol": "__ZN3igi6retail5model23IffChunk_FindChildByTagEPNS1_12IffChunkNodeEj",
+   "demangled": "Iff_FindChunk"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x005179C0",
+  "retailName": "Iff_GetChunkPayload",
+  "implemented": true,
+  "cppName": "Iff_GetChunkPayload",
+  "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043BB50",
+   "symbol": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+   "demangled": "Iff_GetChunkPayload"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x005178E0",
+  "retailName": "Iff_FindChunkBelowForm",
+  "implemented": true,
+  "cppName": "Iff_FindChunkBelowForm",
+  "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0043BB70",
+   "symbol": "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
+   "demangled": "Iff_FindChunkBelowForm"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ },
+ {
+  "address": "0x004D67A0",
+  "retailName": "AnimIff_LoadAnimationFile",
+  "implemented": true,
+  "cppName": "AnimIff_LoadAnimationFile",
+  "enginePath": "engine/src/retail/model/iff_skeleton.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x00414A70",
+   "symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+   "demangled": "AnimIff_LoadAnimationFile"
+  },
+  "status": "STRUCTURALLY_VERIFIED"
+ }
+]

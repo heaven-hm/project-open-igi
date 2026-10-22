@@ -1,0 +1,15 @@
+{
+ "kind": "behavioural-divergence",
+ "schema_version": 1,
+ "retail_binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "natives": [
+  "Iff_FindFormChunk 0x00517890",
+  "Iff_FindChunkBelowForm 0x005178E0"
+ ],
+ "method": "scripts/iff_chunk_tree_diff_runner.py with scripts/iff_chunk_tree_harness.cpp.in. Retail bytes run under unicorn over a synthetic IFF graph; the candidate port runs under CrossOver.",
+ "observation": "Eight of nine fixtures agree. The ninth (deep-form-second-child: a FORM holding two children, query 0x4F504531) diverges: retail returns null, the port returns the second child.",
+ "cause": "Retail 0x00517890 loads [esi+0x10], compares it to 0x464F524D (FORM), then loads [esi+0x14] and compares THAT to the query on both branches (0x005178AB for non-forms, 0x005178B1 for forms). The port instead compares node->tag for non-form chunks and only compares form_type for forms.",
+ "consequence": "For a chunk whose +0x10 tag differs from its +0x14 field, retail matches on +0x14 and the port matches on +0x10. The fixtures in the runner put the query key in both fields for chunks, which hid the difference until a fixture used distinct values.",
+ "status": "Unresolved. Both walkers stay STRUCTURALLY_VERIFIED. Settling it needs the real on-disk chunk header layout: what +0x10 and +0x14 hold for a plain chunk produced by IffChunkTree_Parse.",
+ "also_open": "Iff_GetChunkPayload 0x005179C0 returns [chunk+0x1C] unconditionally in retail, while the port returns null for an empty payload vector. And Iff_FindChunk 0x00517940 starts at [form+0x08] in retail, which the harness now mirrors."
+}

@@ -1,24 +1,248 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x004BD3D0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "method": "Retail bytes execute under unicorn with the opcode-handler table seeded to a sentinel; the candidate is compiled with i686-w64-mingw32-g++ and run under CrossOver. Both sides report the handler stored at 0x00A96108 + (variant + opcode*6) dwords, so the setter is compared by its store.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "limitations": [
+  "Only the slot the retail lea chain addresses is compared; neighbouring slots are seeded and left untouched."
+ ],
  "cases": [
   {
-   "id": "static-structure",
+   "id": "opcode-0-variant-0",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "opcode": 0,
+    "variant": 0,
+    "handler": 286331153,
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 286331153
+    },
+    "side_effects": []
    },
    "candidate_output": {
     "return_value": 0,
-    "side_effects": [],
     "state_delta": {
-     "chunks_read": 0
+     "stored_handler": 286331153
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-0-variant-1",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "opcode": 0,
+    "variant": 1,
+    "handler": 572662306,
+    "initial_state": {
+     "seed": 1
     }
    },
-   "note": "The candidate Qvm_SetOpcodeHandler reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 572662306
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 572662306
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-1-variant-0",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "opcode": 1,
+    "variant": 0,
+    "handler": 858993459,
+    "initial_state": {
+     "seed": 2
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 858993459
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 858993459
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-1-variant-2",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "opcode": 1,
+    "variant": 2,
+    "handler": 1145324612,
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1145324612
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1145324612
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-5-variant-3",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "opcode": 5,
+    "variant": 3,
+    "handler": 1431655765,
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1431655765
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1431655765
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-17-variant-0",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "opcode": 17,
+    "variant": 0,
+    "handler": 1717986918,
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1717986918
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 1717986918
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-0-variant-5",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "opcode": 0,
+    "variant": 5,
+    "handler": 2004318071,
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 2004318071
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 2004318071
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "opcode-63-variant-1",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "opcode": 63,
+    "variant": 1,
+    "handler": 2290649224,
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 2290649224
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored_handler": 2290649224
+    },
+    "side_effects": []
+   }
   }
- ]
+ ],
+ "tests_passed": 8,
+ "tests_total": 8,
+ "tests_failed": 0,
+ "result": "passed"
 }
