@@ -2212,30 +2212,6 @@ int main()
 
 
 NATIVES = {
-    "0x004B7580": {
-        "cases": ilff_getter_cases,
-        "retail": ilff_tag_retail,
-        "candidate_source": ilff_tag_candidate_source,
-        "include": ("igi/retail/sys/ilff_navigation.hpp",),
-    },
-    "0x004B7570": {
-        "cases": ilff_getter_cases,
-        "retail": ilff_form_retail,
-        "candidate_source": ilff_form_candidate_source,
-        "include": ("igi/retail/sys/ilff_navigation.hpp",),
-    },
-    "0x004B7540": {
-        "cases": ilff_header_cases,
-        "retail": ilff_header_retail,
-        "candidate_source": ilff_header_candidate_source,
-        "include": ("igi/retail/sys/ilff_navigation.hpp",),
-    },
-    "0x004F1160": {
-        "cases": parse_mode_cases,
-        "retail": parse_mode_retail,
-        "candidate_source": parse_mode_candidate_source,
-        "include": ("igi/retail/script/script_mode.hpp",),
-    },
     "0x00404590": {
         "cases": config_active_cases,
         "retail": config_active_retail,
