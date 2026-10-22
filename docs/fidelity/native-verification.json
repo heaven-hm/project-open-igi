@@ -57555,7 +57555,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57580,7 +57580,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 300
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57607,8 +57607,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B83D0-behavioral.json",
           "evidence_sha256": "5132e84c31d1c7166520cc3ed627266a1f8f47ccb0e3aec4e6a0ef29a532a9d2"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B83D0-behavioral.json",
+          "evidence_sha256": "221c4e015c8ab8a4aeefc44ef15e6050fe2a12ee1067230e7dd975ba6313816a",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B80B0",
