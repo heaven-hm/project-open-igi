@@ -12,12 +12,12 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 TARGETS = {
-    0x00498460: ('Display_ClearSurfaces_16', 0, False),
-    0x004AC66B: ('Camera_ApplyBandFilter_24', 1, True),
-    0x004AC6FD: ('Camera_ApplyWideScreen_24', 1, True),
-    0x004AC620: ('Camera_SetFieldOfView_24', 2, True),
-    0x004AC655: ('Camera_ApplyLineFilter_24', 2, True),
-    0x004A7157: ('Camera_ApplyBandFilter_10', 0, True),
+    0x00498460: ('FP_InitExtendedPrecision', 0, False),
+    0x004AC66B: ('FP_ControlWordToFlags', 1, True),
+    0x004AC6FD: ('FP_FlagsToControlWord', 1, True),
+    0x004AC620: ('FP_MergeControlWord', 2, True),
+    0x004AC655: ('FP_MergeControlWordNoDenormal', 2, True),
+    0x004A7157: ('FP_SetDefaultPrecision', 0, True),
 }
 
 

@@ -1,24 +1,333 @@
 {
- "address": "0x00401050",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x00401050",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "9aecbbcd3649f84dd7dc4c727ff7a06b24930a05e7c8831f4765218283a9953c",
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x00401050",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/engine/src/retail/core/frame_natives.cpp",
+      "--implementation-sha256",
+      "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow"
+    ]
+  },
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 9,
+  "tests_passed": 9,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "qtask-open-event-0",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          0,
+          0,
+          0
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-1",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          0,
+          1,
+          1
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-2",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          2,
+          2
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-3",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          3,
+          3
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-4",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          4,
+          4
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-5",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          5,
+          5
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-6",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          6,
+          6
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-7",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          0,
+          7,
+          7
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 90,
+          "handler_ran": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "qtask-open-event-abort",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          1,
+          1,
+          8
+        ],
+        "initial_state": {
+          "seed": 8
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "handler_ran": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "handler_ran": 0
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate QTask_OpenEvent reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
- ]
+  ]
 }

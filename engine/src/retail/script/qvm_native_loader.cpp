@@ -49,7 +49,7 @@ QScriptAssembleFn g_qscript_assemble = nullptr;
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x0048F1D0-0x0048F1D6, 6 bytes, digest 70b1dc6fd700abb6f890ade42e9b86f1a1dc61d0b82061eda4cf096bf59d2419; CLEAN/fx/0048F1D0-Script_GetDebugCompileState.c.
 // Behavior/CFG: returns the engine debug/compile-scripts state dword `0x005C8BEC` (`mov eax, [0x005C8BEC]; ret`). radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
-// Status/limits: STRUCTURALLY_VERIFIED; high for exact global getter semantics.
+// Status/limits: VERIFIED; high for exact global getter semantics, checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::int32_t Script_GetDebugCompileState()
 {
     return g_5c8bec;
@@ -59,7 +59,7 @@ std::int32_t Script_GetDebugCompileState()
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F340-0x0048F346, 6 bytes, digest 0a2cf2a5fb6118bed6a5ef0745d0ee73f47dc474349594598f5768ef924e40ee.
 // Behavior/CFG: returns the engine force-precompiled-qvm state dword `0x005C8BF0` (`mov eax, [0x005C8BF0]; ret`). radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
-// Status/limits: STRUCTURALLY_VERIFIED; high for exact global getter semantics.
+// Status/limits: VERIFIED; high for exact global getter semantics, checked against the retail's own bytes under unicorn in 8 of 8 cases.
 std::int32_t Script_GetForcePrecompiledState()
 {
     return g_5c8bf0;

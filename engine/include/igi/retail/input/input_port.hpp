@@ -88,6 +88,14 @@ class InputPort {
 
     // HOST HELPER: the platform adapter reports the raw device state.
     void SetKeyDown(std::uint32_t code, bool down);
+
+    // HOST HELPER: the raw key state, for a key the configuration does not
+    // bind to an action. The retail keeps the whole keyboard state, so a key
+    // the configuration leaves out is still held.
+    [[nodiscard]] bool KeyDown(std::uint32_t code) const noexcept
+    {
+        return raw_key_down_[code & 0x3FU];
+    }
     void SetMouseButtonDown(int button, bool down);
     void AddMouseDelta(int delta_x, int delta_y);
 
@@ -98,6 +106,13 @@ class InputPort {
     void Run();
 
     [[nodiscard]] bool ActionDown(Action action) const noexcept;
+
+    // HOST HELPER: the number of bindings an action has, and the raw key state,
+    // for the scene log.
+    [[nodiscard]] std::size_t BindingCount(Action action) const noexcept
+    {
+        return bindings_[static_cast<std::size_t>(action)].size();
+    }
     [[nodiscard]] bool ActionPressed(Action action) const noexcept;
 
     // The look delta since the last Run, already scaled by the retail mouse
@@ -123,6 +138,8 @@ class InputPort {
   private:
     std::array<std::vector<Binding>, static_cast<std::size_t>(Action::count)> bindings_{};
     std::array<std::array<bool, 64>, static_cast<std::size_t>(Action::count)> key_down_{};
+    // The raw keyboard state, for the keys the configuration does not bind.
+    std::array<bool, 64> raw_key_down_{};
     std::array<std::array<bool, 64>, static_cast<std::size_t>(Action::count)> key_pressed_{};
     std::array<std::array<bool, 64>, static_cast<std::size_t>(Action::count)> key_pending_{};
     std::array<bool, 64> mouse_buttons_{};

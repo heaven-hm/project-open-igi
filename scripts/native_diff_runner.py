@@ -569,12 +569,14 @@ def main() -> int:
 #include <cstdio>
 #include <cstdlib>
 #include "igi/retail/core/frame_natives.hpp"
+// Isolated storage for the global owned by native_0048f970.cpp in the game.
+extern "C" { std::uint8_t Loop_StatusByte = 0U; }
 int main(int argc, char** argv) {
     if (argc != 2) return 2;
     const auto value = static_cast<std::uint8_t>(std::strtoul(argv[1], nullptr, 0));
-    DAT_005C8DE8 = 0xa5U;
-    Loop_SetStatusByte(static_cast<std::int8_t>(value));
-    std::printf("0 %u\\n", static_cast<unsigned>(DAT_005C8DE8));
+    Loop_StatusByte = 0xa5U;
+    Loop_SetStatusByte(value);
+    std::printf("0 %u\\n", static_cast<unsigned>(Loop_StatusByte));
     return 0;
 }
 '''
@@ -638,7 +640,7 @@ int main(int argc, char** argv) {
     if (argc != 2) return 2;
     igi::retail::core::FrameDispatchRecordView context{};
     context.unknown_0x2C = 0xa5a5a5a5U;
-    DAT_00567C8C = &context;
+    Game_FrameDispatchRecord = &context;
     const auto value = static_cast<std::int32_t>(std::strtoll(argv[1], nullptr, 0));
     Flow_SetState(value);
     std::printf("0 %u\\n", context.unknown_0x2C);
@@ -708,7 +710,7 @@ int main(int argc, char** argv) {
 int main(int argc, char** argv) {
     if (argc != 2) return 2;
     const auto raw = static_cast<std::uintptr_t>(std::strtoull(argv[1], nullptr, 0));
-    DAT_00567C8C = reinterpret_cast<igi::retail::core::FrameDispatchRecordView*>(raw);
+    Game_FrameDispatchRecord = reinterpret_cast<igi::retail::core::FrameDispatchRecordView*>(raw);
     std::printf("%llu\\n", static_cast<unsigned long long>(
         reinterpret_cast<std::uintptr_t>(Game_GetContext())));
     return 0;

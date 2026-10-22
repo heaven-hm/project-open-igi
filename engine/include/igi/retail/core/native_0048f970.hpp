@@ -19,11 +19,14 @@
 
 namespace igi::retail::core {
 
-// One entry of the retail's window message chain. The next entry is at
-// +0x00 and the handler at +0x08.
+// One entry of the retail's window message chain. The retail's node is twelve
+// bytes: the next entry at +0x00, a zero word at +0x04 and the handler at
+// +0x08, so the procedure reads the handler at the same offset the retail
+// reads it at.
 struct WindowHandlerEntry
 {
     WindowHandlerEntry* next;
+    std::uint32_t reserved;
     std::intptr_t (*handler)(void* window, std::uint32_t message, std::uintptr_t wparam,
                               std::intptr_t lparam);
 };
@@ -37,7 +40,9 @@ extern igi::retail::core::WindowHandlerEntry* WindowHandlerChain;
 
 // Retail global at VA 0x005C8DE8: the loop status byte the procedure reads
 // before it walks the chain.
-extern std::uint8_t LoopStatusByte;
+// The retail's loop status byte at 0x005C8DE8. The setter at 0x0048F480 and
+// the window procedure at 0x0048F970 share it.
+extern std::uint8_t Loop_StatusByte;
 
 // Retail global at VA 0x005C8E04: the debug key flag, cleared when F12 is
 // released.

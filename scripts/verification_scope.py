@@ -107,3 +107,21 @@ def validate_runtime_contract(record, contract, probe_digest):
                     raise ValueError(f"runtime comparison omits reviewed {part} observables")
     if len(set(counts)) != 1:
         raise ValueError("runtime call sequences differ in length")
+
+
+# Exact investigated x86 mapping identities; these do not grant acceptance.
+MODEL_LOADER = {
+    "enginePath": "engine/src/retail/dynobj/local_models_mef.cpp",
+    "symbol": "__ZN3igi6retail6dynobj20DynObj_LoadModelMeshEPKc",
+}
+
+
+def validate_native_symbol_binding(row):
+    if int(row["address"], 16) != 0x004CF390:
+        return  # No reviewed identity constraint for other natives here.
+    symbol = (row.get("candidateSymbol") or {}).get("symbol")
+    if row.get("enginePath") != MODEL_LOADER["enginePath"] or symbol != MODEL_LOADER["symbol"]:
+        raise ValueError(
+            "0x004CF390 must map to dynobj::DynObj_LoadModelMesh(char const*) "
+            "in local_models_mef.cpp; the model::MefModel span parser is not that native"
+        )

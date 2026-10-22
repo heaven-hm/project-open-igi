@@ -34,6 +34,8 @@ static_assert(sizeof(FrameDispatchRecordView) == 0x30);
 extern "C" {
 
 extern std::jmp_buf QTask_SetjmpFrame;
+// The retail's loop status byte at 0x005C8DE8, shared with the window
+// procedure at 0x0048F970.
 extern std::uint8_t Loop_StatusByte;
 extern std::int32_t AppContext_IsActive;
 extern igi::retail::core::FrameFlagHandler AppContext_OptionalHandler;

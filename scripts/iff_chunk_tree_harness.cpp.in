@@ -1,0 +1,83 @@
+// Harness template for scripts/iff_chunk_tree_diff_runner.py.
+//
+#include <cstdio>
+#include <cstdint>
+#include <vector>
+
+#include "igi/retail/model/iff_chunk_tree.hpp"
+
+namespace {
+
+struct NodePlan {
+    unsigned marker;
+    unsigned form_type;
+    int has_payload;
+    int child;
+};
+
+struct Case {
+    const char* id;
+    unsigned query;
+    int offset;
+    int count;
+};
+
+NodePlan nodes[] = {
+NODE_TABLE_PLACEHOLDER
+
+};
+
+Case cases[] = {
+CASE_TABLE_PLACEHOLDER
+
+};
+
+} // namespace
+
+int main()
+{
+    for (const Case& item : cases) {
+        std::vector<igi::retail::model::IffChunkNode*> list;
+        list.reserve(item.count);
+        for (int i = 0; i < item.count; ++i) {
+            auto* node = new igi::retail::model::IffChunkNode();
+            node->tag = nodes[item.offset + i].marker;
+            node->form_type = nodes[item.offset + i].form_type;
+            if (nodes[item.offset + i].has_payload) {
+                node->payload = {std::byte{1}};
+            }
+            list.push_back(node);
+        }
+        for (int i = 0; i < item.count; ++i) {
+            list[i]->next = (i + 1 < item.count) ? list[i + 1] : nullptr;
+            const int child = nodes[item.offset + i].child;
+            if (child >= 0) {
+                list[i]->first_child = list[child];
+            }
+        }
+
+        long selected = -1;
+        long returned = 0;
+        if (ADDRESS_SELECTOR_PLACEHOLDER == 3) {
+            const std::byte* hit = igi::retail::model::IffChunk_GetPayload(list[0]);
+            returned = hit ? 1 : 0;
+            selected = 0;
+        } else {
+            igi::retail::model::IffChunkNode* hit =
+                (ADDRESS_SELECTOR_PLACEHOLDER == 2)
+                    ? igi::retail::model::IffChunk_FindBelowForm(list[0], item.query)
+                    : igi::retail::model::IffChunk_FindByTag(list[0], item.query);
+            for (int i = 0; i < item.count; ++i) {
+                if (list[i] == hit) {
+                    selected = i;
+                }
+            }
+            returned = hit ? 1 : 0;
+        }
+
+        std::printf("{\"id\":\"%s\",\"return_value\":%ld,"
+                    "\"state_delta\":{\"selected_index\":%ld},\"side_effects\":[]}\n",
+                    item.id, returned, selected);
+    }
+    return 0;
+}

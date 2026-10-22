@@ -20,8 +20,12 @@
 
 namespace igi::retail::config {
 
-// The retail action table stride: 0xBC2358 + index * 345 dwords.
-inline constexpr std::uint32_t action_table_stride = 0x345U;
+// The retail action table stride is 345 dwords, not 0x345. The retail computes
+// it from the index with `lea ecx,[eax+eax*2]` (3a), `shl ecx,3` (24a),
+// `sub ecx,eax` (23a), `lea ecx,[ecx+ecx*2]` (69a) and
+// `lea ecx,[ecx+ecx*4]` (345a), indexing with `[ecx*4]`. Writing 0x345 here made
+// the stride 837 and rejected the thirtieth valid remap entry.
+inline constexpr std::uint32_t action_table_stride = 345U;
 
 // The retail frame the script arguments live in. The native reads them
 // through the frame reader at 0x004B8A20, which takes the frame and the
@@ -40,6 +44,11 @@ inline constexpr std::uint32_t remap_table_stride = 3U;
 // first of them is the remap slot the native writes. The retail region runs
 // from 0x00BC2358 to about 0x00BD8000 for the actions the retail registers.
 inline constexpr std::uint32_t action_table_size = 0x6000U;
+
+// Retail 0x004037C0 performs no capacity check, so the host side needs its own
+// limit. The shipped config.qvm declares 72 remap entries; 128 leaves headroom
+// while still bounding the index against action_table_size.
+inline constexpr std::uint32_t action_table_capacity = 128U;
 
 // The retail remap table at 0x00BC25BC. Each slot holds the three arguments
 // the native reads from the script frame.

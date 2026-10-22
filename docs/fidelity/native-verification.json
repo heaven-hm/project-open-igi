@@ -1037,8 +1037,8 @@
       "name": "App_ContextGetLightmapsUsed",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.cpp",
-        "sha256": "3b418222b66e41daf4145e26ee54bd999a0247cc57df11bdaea43aaa96b51bf1",
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "int __cdecl App_ContextGetLightmapsUsed(void);"
       },
       "game_natives": {
@@ -1047,7 +1047,7 @@
         "signature": "int __cdecl App_ContextGetLightmapsUsed(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1057,10 +1057,8 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/context_getter_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
-            "--root",
-            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -1070,7 +1068,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}"
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -1090,25 +1090,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-semantic-review.json",
-          "evidence_sha256": "1b67ae9ead4ed9432460f65073b4d625896fd23ffb241ad857a5214a11fd21f4"
+          "evidence_sha256": "7ead67be5dd336bd391feed5c6e7270f23c8e0faa9e156f6fc0b528da5a85709"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-build.json",
-          "evidence_sha256": "ac5893eb986bdba5144b9b1636e0eb53563ce8c793bbde9d9d8a8e909308ea65"
+          "evidence_sha256": "2538f7ca9142d0903bc15c3f5092f95d318c4e198377271d4056d4a1416e1c9a"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
-          "evidence_sha256": "5f1de6bf4fbac50120263bbe37b700868a795e589f70c4424da628d29da8f5c6"
+          "evidence_sha256": "50a764c63b226c109f00dbfc1f395c3762f164ce5e4da7f5c8e6c60cd15e4a80"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
-          "evidence_sha256": "3cfe7ae9f20786a2f3557a5bfe63383b300b7b3b38ffa38cca724fa16051943e",
+          "evidence_sha256": "50a764c63b226c109f00dbfc1f395c3762f164ce5e4da7f5c8e6c60cd15e4a80",
           "oracle": "retail-binary-execution",
-          "tests_passed": 10,
-          "tests_total": 10
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F240",
@@ -1116,7 +1117,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_context.cpp",
-        "sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "int32_t(int8_t)"
       },
       "game_natives": {
@@ -1125,7 +1126,7 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1144,7 +1145,7 @@
           "signature": "void(char param_1)"
         },
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -1159,33 +1160,52 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
-        "selected_decompiler": "ghidra",
+        "selected_decompiler": "binary_ninja",
         "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F240-app-context-radare2.json",
-          "evidence_sha256": "eddccfe2d9ae470a77cd717417666b7c1a2967bcbeb16bc7f1177aaad4cd70c4",
-          "evidence_id": "local-r2-capture:0x0048F240:2026-10-19",
-          "signature": "int32_t(int8_t)"
+          "evidence_path": "docs/fidelity/evidence/0x0048F240-radare2.json",
+          "evidence_sha256": "12fd9a5611df72e55c3b4f3d70c7a3511e6ecef96ff5da6aca574755c8bbc5d0",
+          "evidence_id": "r2:live:0x0048F240",
+          "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F240-semantic-review.json",
-          "evidence_sha256": "3a463a45caa3a9956995f1ff7c7f317a44bda78d2832ac5d2231582f13b070fc"
+          "evidence_sha256": "a5d6a5e7a9a2acd61c8a164deb789056fbb8ad25e215ac1fdfabfe3fccd7386d"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F240-build.json",
-          "evidence_sha256": "77118aa6b97df20f6336df552c19708e4322168605c0fac01177ab0a914f291b"
+          "evidence_sha256": "ba51c26d5f928c0a564f81e16fc5212444aae1e4db421730af80bd6ae724d62e"
+        },
+        "binary_ninja": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F240-binaryninja.json",
+          "evidence_sha256": "bb866466ec18a726ec01dc09a9cfbf271c7cd096d4aa7fa67e5f65d435825f7d",
+          "evidence_id": "bn:live:0x0048F240",
+          "signature": "not restated"
+        },
+        "behavioral": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F240-behavioral.json",
+          "evidence_sha256": "5663730d79e06cb4b0e176a5af924eb7d1a0254d76776cbe261047f5bccd7584"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F240-behavioral.json",
+          "evidence_sha256": "5663730d79e06cb4b0e176a5af924eb7d1a0254d76776cbe261047f5bccd7584",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F250",
       "name": "App_ContextGetTerrainLightmapsUsed",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F250-App_ContextGetTerrainLightmapsUsed.cpp",
-        "sha256": "fa19e97f43ce75e6ad5d16ecea6a75b218a70104851457b35cfbc1d8ed6738a4",
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "int __cdecl App_ContextGetTerrainLightmapsUsed(void);"
       },
       "game_natives": {
@@ -1194,7 +1214,7 @@
         "signature": "int __cdecl App_ContextGetTerrainLightmapsUsed(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1204,7 +1224,7 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -1219,7 +1239,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -1237,25 +1257,34 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F250-semantic-review.json",
-          "evidence_sha256": "4e3ff3e1545d71723259e71d86a2de4fff1483397716765f6bac9758f93045d9"
+          "evidence_sha256": "48ed56c7cd51a767fe6d08f99f875a64d3e9367a80ae1acff63af9ebab324ae7"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F250-build.json",
-          "evidence_sha256": "b1e84b0f784eb5c4de96a2e9e45d0109e6614ca89916588009489567439ee67f"
+          "evidence_sha256": "24b20531877b40a94cc6ebae725bc9820b6aadeb635c0183e1c0ea68e1ac7612"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
-          "evidence_sha256": "146029263b7d3319ffa0c77ad6294b10068fb9cb64b547c27842b7962cf8e2c3"
+          "evidence_sha256": "8db9cb3b09a33dd0344f2205831e4e70346ff6775bf3aa06f562e37ebe44cba0"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
+          "evidence_sha256": "8db9cb3b09a33dd0344f2205831e4e70346ff6775bf3aa06f562e37ebe44cba0",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F260",
       "name": "AppContext_SetTerrainLightmapsUsed",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F260-AppContext_SetTerrainLightmapsUsed.cpp",
-        "sha256": "7bfed79736facca365c3c88fd4566f7ce049469a09b5ae55bfc82c097f85046f",
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "void __cdecl AppContext_SetTerrainLightmapsUsed(std::int8_t value);"
       },
       "game_natives": {
@@ -1264,7 +1293,7 @@
         "signature": "void __cdecl AppContext_SetTerrainLightmapsUsed(std::int8_t value);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1274,7 +1303,7 @@
           "Transcribed instruction for instruction from retail. No Frida run yet."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -1289,7 +1318,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -1307,17 +1336,27 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-semantic-review.json",
-          "evidence_sha256": "af25bc26ce0c40712ee6055d028f60e9d6c45e6e608df8a468115380d281e83b"
+          "evidence_sha256": "8006a1491457d13958f7f2f774e89386f42df173e6cdbb95f01d0547c9d04193"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-build.json",
-          "evidence_sha256": "a587034571a2df8712366217b212ab6081d9a11c332809cbdbf4a5faa2e5f051"
+          "evidence_sha256": "e1868149a2e96bcf7d57eba2d0728685893cfc31dadab851addbb498a98219f0"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
-          "evidence_sha256": "81165c9e76d765f13f9ae08cfbd15f2dc5adc34062611916f5a2c128cef24edb"
+          "evidence_sha256": "2158884d67bc1f8066449275cd7d79c48ef5e8f11c4f5197e390d55800d3e253"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
+          "evidence_sha256": "2158884d67bc1f8066449275cd7d79c48ef5e8f11c4f5197e390d55800d3e253",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED",
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004903A0",
@@ -3716,7 +3755,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_context.cpp",
-        "sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "x86 cdecl int32_t(int8_t)"
       },
       "game_natives": {
@@ -3736,12 +3775,10 @@
           "The candidate writes one app-context field and returns the sign-extended argument; six fields are compared before and after each call."
         ],
         "behavioral_runner": {
-          "path": "scripts/frida_app_context_setter_pair.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
-            "--root",
-            "{root}",
             "--binary",
             "{binary}",
             "--binary-sha256",
@@ -3750,14 +3787,10 @@
             "{implementation}",
             "--implementation-sha256",
             "{implementation_sha256}",
-            "--candidate",
-            "build-win32-no-verify-gate/engine/platform/windows/open-igi.exe",
-            "--receipt",
-            "build/diagnostic-candidate-build.json",
-            "--out",
-            "build/runtime-traces/0x0048F1A0-frida-pair.json"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 1200
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -3775,21 +3808,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-semantic-review.json",
-          "evidence_sha256": "3d7000b4dd78d975d096f7318a4fd3f10e78937e65c9cba98edc25a408efcabb"
+          "evidence_sha256": "d977f5edf96b2f9edbc553e3df004d2ea4922b3db661b12cde4851b5b1192a73"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-build.json",
-          "evidence_sha256": "88c70e8720488f83f72fda2553621e3548da57b4af0fd4fa687ef77879897827"
+          "evidence_sha256": "fde09ff48c1fa8ec9c538d1b91553dca5f59b8b8e6703b92dbb6ca88407bf0b3"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-behavioral.json",
-          "evidence_sha256": "3d8425fa18e4d6786e28443713a6556c9df1f5faf503dc8bc686c88421da63d0"
+          "evidence_sha256": "ebf3ed57cc623dee1c72c34dfa286b356c81d7bd285a1f24e37839780eb8db05"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1A0-behavioral.json",
-          "evidence_sha256": "3d8425fa18e4d6786e28443713a6556c9df1f5faf503dc8bc686c88421da63d0"
+          "evidence_sha256": "ebf3ed57cc623dee1c72c34dfa286b356c81d7bd285a1f24e37839780eb8db05",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x00402FF0",
@@ -49917,12 +49955,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00404590-behavioral.json",
-          "evidence_sha256": "e2d763d5d47ddd87651b38203342a494303998501fada15b129b7112b625f600"
+          "evidence_sha256": "aa337b51a2cb52e8ea83f372eee54b3274cfa4cb1a9ec8ce9538785c3d7f53e4"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404590-behavioral.json",
-          "evidence_sha256": "c1bd4380aeebb33e3a60ba1b039ab1a5f67ccdbc5b43cf45113c672c32ee974d",
+          "evidence_sha256": "aa337b51a2cb52e8ea83f372eee54b3274cfa4cb1a9ec8ce9538785c3d7f53e4",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -49996,12 +50034,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00404F00-behavioral.json",
-          "evidence_sha256": "a342710ee42888b3299825f2842d4e873be237a2041e8e8ff005e0892c7869c6"
+          "evidence_sha256": "5ed02081f2e8a516daabda4913f660c42302cf3ecaf69a6c9d60ea3d6b704a14"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404F00-behavioral.json",
-          "evidence_sha256": "7bc0ba51a8817400bd102b963d8476ecff9cb2d8e3a6028d36835e90a6645d4a",
+          "evidence_sha256": "5ed02081f2e8a516daabda4913f660c42302cf3ecaf69a6c9d60ea3d6b704a14",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -50075,12 +50113,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00404F60-behavioral.json",
-          "evidence_sha256": "f376f7590deb02a4910ab90e7deede55fa89cef7bc259b048b9614f18c1ac1fb"
+          "evidence_sha256": "f2144ee3b443114b4c1e3129b388fb445807dd489f66bbd02295321f885b68f6"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00404F60-behavioral.json",
-          "evidence_sha256": "641f0b80c5660e47418a24eb999d892a387a92c222aec3cd6f1d996334ea0ead",
+          "evidence_sha256": "f2144ee3b443114b4c1e3129b388fb445807dd489f66bbd02295321f885b68f6",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -50154,12 +50192,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00405620-behavioral.json",
-          "evidence_sha256": "0bf2c2c63ba1e3472259a2cc93274a174511d0d22e92e4ea28582f1925fd81b8"
+          "evidence_sha256": "634e4f8798dcc5d2ace9e03154c951e77790a4944bdbfa19988b52d88c409c76"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00405620-behavioral.json",
-          "evidence_sha256": "41ee3a53e5cf2e20d2aa54006d1d1640e155aa405a768fbad6d780c175c1d0f4",
+          "evidence_sha256": "634e4f8798dcc5d2ace9e03154c951e77790a4944bdbfa19988b52d88c409c76",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -50233,12 +50271,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004055C0-behavioral.json",
-          "evidence_sha256": "89eb3b32be4f07839f05a962259689e7ae0b8275c2783d94fe2ba36fe2601621"
+          "evidence_sha256": "52d43a3981f3f04107a23a928396b824c7a8a902ebed0c33430b2024ee6f8f54"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004055C0-behavioral.json",
-          "evidence_sha256": "d59c68a4e1d8d88a59bd72b7bd1b46a6ec910ef344582f5e57a1d1d704491859",
+          "evidence_sha256": "52d43a3981f3f04107a23a928396b824c7a8a902ebed0c33430b2024ee6f8f54",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -50312,12 +50350,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00405530-behavioral.json",
-          "evidence_sha256": "a5d6c6a78bed6b217b855076e58470de15d7601f6b9cfd151a4e98a240694384"
+          "evidence_sha256": "b65df024bd2f857d9cb854a902c12296e4a1a633037afdaea4106e0de681fade"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00405530-behavioral.json",
-          "evidence_sha256": "b804ead47e093a3e5851619a740334af9a41ded6c451924ac672caf3011cfca5",
+          "evidence_sha256": "b65df024bd2f857d9cb854a902c12296e4a1a633037afdaea4106e0de681fade",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -50401,7 +50439,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/app_context.cpp",
-        "sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
         "signature": "int __cdecl App_ContextGetDebugged(void);"
       },
       "game_natives": {
@@ -50410,7 +50448,7 @@
         "signature": "int __cdecl App_ContextGetDebugged(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50420,20 +50458,20 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x0048F1B0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/app_context.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -50453,21 +50491,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-semantic-review.json",
-          "evidence_sha256": "5fde720d4611cf1b57e5f2b490196a38b8bfc9130ee40143fcf0f8f28c5b5e9f"
+          "evidence_sha256": "858cb3b7b79d1f31aaa72ae31c7d2a2376a94e793fad07a177c5d220475215d2"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-build.json",
-          "evidence_sha256": "6ea278625c2f8640bc5325ada8edeb0f5ed8fd46c632b71f7cc090eb4949f684"
+          "evidence_sha256": "bce085506682f0e77d40ab34f463e62c5912df25e048c2e3a2f10f7dcd980009"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-behavioral.json",
-          "evidence_sha256": "1e483726ab740b967776fb78e8abda4556f400c16a389ba7d591f35acbd91db4"
+          "evidence_sha256": "cb50f5701cdcf7a80942c81eb82c2a57cf86d565e8adffbc9d80268b0063b608"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-behavioral.json",
-          "evidence_sha256": "1e483726ab740b967776fb78e8abda4556f400c16a389ba7d591f35acbd91db4"
+          "evidence_sha256": "cb50f5701cdcf7a80942c81eb82c2a57cf86d565e8adffbc9d80268b0063b608",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F0C0",
@@ -51479,7 +51522,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "void* __cdecl Game_GetContext(void);"
       },
       "game_natives": {
@@ -51488,7 +51531,7 @@
         "signature": "void* __cdecl Game_GetContext(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51498,7 +51541,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51513,7 +51556,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51531,17 +51574,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00402880-semantic-review.json",
-          "evidence_sha256": "1b982d255d707fbcd767edc1e486139805e8c29778bbfa8f6866cb3dc2d6bfd3"
+          "evidence_sha256": "1231b0aeaa32bc7a9adf3326c883214c0978baa0471492bafb6c7caf3921f188"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00402880-build.json",
-          "evidence_sha256": "b17cbac7d55ec1c8672bc4450e19dad71c653cee56afe37028e741cb4ad3823f"
+          "evidence_sha256": "feb4057c01262e4c594682e20b77a38f9d29e83f3e9d205d210f342fdbd590d3"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402880-behavioral.json",
-          "evidence_sha256": "6cc54a2966312648ba006c8a04469993fdde44530f9de95c0d43d0387a1ffb8f"
+          "evidence_sha256": "3cc230e694065bab5a0811176237a7dbb7044d41c73dcf3bc90032a25a92ff5b"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x00402880-behavioral.json",
+          "evidence_sha256": "3cc230e694065bab5a0811176237a7dbb7044d41c73dcf3bc90032a25a92ff5b",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004028A0",
@@ -51549,7 +51601,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "void __cdecl Flow_SetState(int state);"
       },
       "game_natives": {
@@ -51558,7 +51610,7 @@
         "signature": "void __cdecl Flow_SetState(int state);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51568,7 +51620,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51583,7 +51635,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51601,17 +51653,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004028A0-semantic-review.json",
-          "evidence_sha256": "b83d4b60db49db699b050acbfb94e2f64ad5963ff2ba58982de311a87e826d35"
+          "evidence_sha256": "dbaa94fd51ddbb39376786ca10d60a693ed5c47e44e7bbc274c13b4e0cf225e9"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004028A0-build.json",
-          "evidence_sha256": "7d2eb99eee0aa1ca9c5926a933e8ff3d7c4048737d4345d91118960138fb8895"
+          "evidence_sha256": "6b9224077886fdf85681eee9e6c6ae78459c34d144d3e61dce5e7ded56975566"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004028A0-behavioral.json",
-          "evidence_sha256": "ad90d0f69a9e324dbf06646ab728f2d01a5419541e64cf5b72e935efa726ae26"
+          "evidence_sha256": "4b99d342041010d9c9d9072fa01502babe1f760060e7511d9d5ab41744509307"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004028A0-behavioral.json",
+          "evidence_sha256": "4b99d342041010d9c9d9072fa01502babe1f760060e7511d9d5ab41744509307",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F480",
@@ -51619,7 +51680,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "void __cdecl Loop_SetStatusByte(std::int8_t value);"
       },
       "game_natives": {
@@ -51628,7 +51689,7 @@
         "signature": "void __cdecl Loop_SetStatusByte(std::int8_t value);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51638,7 +51699,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51653,7 +51714,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51671,17 +51732,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F480-semantic-review.json",
-          "evidence_sha256": "220825dc35788c42c66988f568d48de8ee04eaa2ce42eda2cbe7735ce5917840"
+          "evidence_sha256": "d2ce5dbc79d5894148b32418058cce4a35d1f699603b97cf130fd5462a6e9896"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F480-build.json",
-          "evidence_sha256": "512b97f99f894bdb1050351d822b8eb3d7be72cca3d84e1fd66232e84f381cc1"
+          "evidence_sha256": "08fc7bf49dd7612d72452400ec8b5e2285d25030f62508f7df8f3aa1e5d8d7e6"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F480-behavioral.json",
-          "evidence_sha256": "7d9cb01ac124bf2f02d710f90f0cae5b7c575b11ebae90d9dbdd96979d0ad35c"
+          "evidence_sha256": "578212346a3e680e65786f4b9c582444111a72f00b48dfa17d32960e1582a474"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F480-behavioral.json",
+          "evidence_sha256": "578212346a3e680e65786f4b9c582444111a72f00b48dfa17d32960e1582a474",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x00401050",
@@ -51689,7 +51759,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "void __cdecl QTask_OpenEvent(void);"
       },
       "game_natives": {
@@ -51698,7 +51768,7 @@
         "signature": "void __cdecl QTask_OpenEvent(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51708,7 +51778,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51723,7 +51793,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51741,17 +51811,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00401050-semantic-review.json",
-          "evidence_sha256": "78f54c49644349e813f43860f70ddd7af4dfb092b3d8b1459af2977d78572515"
+          "evidence_sha256": "bcd80e7df832f34eb0f3cab7da9c54e83810880d9db8611798c31c5ff883de4f"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00401050-build.json",
-          "evidence_sha256": "ba1243ebe3367bb5dee2f51cf5137b5e019f2257e307bfadc9c328bc60db95f7"
+          "evidence_sha256": "67b0168a8905507ed9425eaf9d1dba7178877c0e2776b3a57d664f6ab910f974"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00401050-behavioral.json",
-          "evidence_sha256": "acc6abe2d875dff21187571a4b7770e84f8e21ebee30bde9e3a7acdaf1d850cf"
+          "evidence_sha256": "c25300fef114199a4ba3fbfa205b1b4338486902dba9a238c10b824247427dd1"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x00401050-behavioral.json",
+          "evidence_sha256": "c25300fef114199a4ba3fbfa205b1b4338486902dba9a238c10b824247427dd1",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 9,
+          "tests_total": 9
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F140",
@@ -51759,7 +51838,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "int __cdecl FX_SmokeEmit_23(int context);"
       },
       "game_natives": {
@@ -51768,7 +51847,7 @@
         "signature": "int __cdecl FX_SmokeEmit_23(int context);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51778,7 +51857,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51793,7 +51872,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51811,17 +51890,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F140-semantic-review.json",
-          "evidence_sha256": "091c80dc0af80f6f492de050e7fe08b33af0579550275e177c9701aefde62337"
+          "evidence_sha256": "fc23b12733e1d88f455bd84d685bae9aef194966144890e7053ba525d086130c"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F140-build.json",
-          "evidence_sha256": "e346a59f18bc001c70b8747af6682d755f77716ba69ccba2309a886c1d07dbb9"
+          "evidence_sha256": "ef7a7025c07a56bf45d183990eb78193919b0b330ea69116c7ee2299054398db"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F140-behavioral.json",
-          "evidence_sha256": "702b00dc6c31b229de0237bd7561f285944d28d9d9f7fbfc04a08d6227595a9d"
+          "evidence_sha256": "fdedd5bdf4e0ac0e771d6b38ef6de708c70961e19bcb13b2e68ac10f4df5fce7"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F140-behavioral.json",
+          "evidence_sha256": "fdedd5bdf4e0ac0e771d6b38ef6de708c70961e19bcb13b2e68ac10f4df5fce7",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F170",
@@ -51829,7 +51917,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "268bcea9726f8d4107a68b054c1ad7326dd22c3bc0ea4d99025b2abf0595ff6f",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
         "signature": "int __cdecl AppContext_GetIsActive(void);"
       },
       "game_natives": {
@@ -51838,7 +51926,7 @@
         "signature": "int __cdecl AppContext_GetIsActive(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51848,7 +51936,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51863,7 +51951,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51881,17 +51969,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F170-semantic-review.json",
-          "evidence_sha256": "f3f007e6ed5e8ef319a101861d17025aa3f8e7b132ab1fcd19b60fa232d6145a"
+          "evidence_sha256": "3846701b5bd99f38d332c96583d8a6c1c65576e85b0e5c9dabd244eda3e0fb99"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F170-build.json",
-          "evidence_sha256": "91467bc0e2484758aa3d31474301d351e7a7a8cd7ae4f19d25da27a6904c20a1"
+          "evidence_sha256": "a622f568c316a220f9c2e7707cf24e6fb5f2bbfe751564b82438adf3e9a6f688"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F170-behavioral.json",
-          "evidence_sha256": "c4a34045e03a7758876f1a0297fb1d91b9c96c82fe83cd87cfdbc22480ce009f"
+          "evidence_sha256": "47a63009b506fae3fe66fe7e5d432af00ad2fce48645ff504e107086aff2565e"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F170-behavioral.json",
+          "evidence_sha256": "47a63009b506fae3fe66fe7e5d432af00ad2fce48645ff504e107086aff2565e",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x00415530",
@@ -52179,7 +52276,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_0048f970.cpp",
-        "sha256": "87da42d04a0d2aacb771f49dd9b68d763cb0afb665475071e4d9e48741e0304a",
+        "sha256": "880e0a77f7ed6b4384e74cf9f20f480604b9f6b1aac17c4e1dc73f9075600a7f",
         "signature": "unknown"
       },
       "game_natives": {
@@ -52188,7 +52285,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -52198,7 +52295,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -52213,7 +52310,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -52231,17 +52328,26 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-semantic-review.json",
-          "evidence_sha256": "beb7922289b94782be5069b639f692e2cee89c208c1fe5549987a76df5b9f98d"
+          "evidence_sha256": "b1e97808f414e230579f5b10ad2b3d7623afb7cbc91ac2bb20622990f880a8a8"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-build.json",
-          "evidence_sha256": "f54a1c5db5808165c80b54502809adbf02493f316ade67af4df5f523ff847512"
+          "evidence_sha256": "b85f0bbb1402fc9279b7424bd18172956dd89a4334dbae0d63d1d7c1f81dfeb5"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
-          "evidence_sha256": "3551054e9aff73a92bf5a7cf1b69f630be3a2de938c32b91af3d2a0ffe52a3f8"
+          "evidence_sha256": "a2f94c68741331bd712125d0a98f6d3f2f9e76a473d35a53628f8904290f5b77"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x0048F970-behavioral.json",
+          "evidence_sha256": "a2f94c68741331bd712125d0a98f6d3f2f9e76a473d35a53628f8904290f5b77",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F530",
@@ -53107,7 +53213,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/dynobj/local_models_mef.cpp",
-        "sha256": "72d6eb79481d3266d6bf7b1cbca21420a9d3a81a0335c231d9f6ff92e09d9c4a",
+        "sha256": "c41e38440d81333cbce4963827c438b89ab6ba330610bf69ca2112f13a418144",
         "signature": "unknown"
       },
       "game_natives": {
@@ -53116,7 +53222,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53127,7 +53233,7 @@
           "2026-10-22 acceptance audit: x86 emulator fixtures and a build do not satisfy paired game acceptance; semantic review is blocked and no reviewed typed runtime contract exists. Retained runtime_tests are emulator observations, not paired game parity."
         ],
         "behavioral_runner": {
-          "path": "scripts/model_mesh_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -53142,7 +53248,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 900
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53160,26 +53266,27 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004CF390-semantic-review.json",
-          "evidence_sha256": "1db66ace6eb84694366d17a9ad6d6087a0a414c7296f90a44ac8dfdc2236bcb1"
+          "evidence_sha256": "a8e6c7690db5535cfc3e7e3c4bb19f7d609afb20c7e0c0441b7cdffe01d67564"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004CF390-build.json",
-          "evidence_sha256": "988813b6d5f14f8c4fe251b9c03887cae6e03bd19ff6c41710336ebd46490d77"
+          "evidence_sha256": "4a783a07c0a09e5f16e4c0fb2189854d5b7e49ba1c6f3b39843e886660be1e1e"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004CF390-behavioral.json",
-          "evidence_sha256": "133d9edf0fdf9a74d7a1bc4929160e5c6cbefef72b5624aa41ab9b31b649a770"
+          "evidence_sha256": "e31300df64da0dfaf0648d89761162a910aafeddd2ec6e10007d226c4e6cdf8b"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004CF390-behavioral.json",
-          "evidence_sha256": "914cf4420d999a0a6c4e54093edff2bd483641c308224748d25cba8a507caf89",
+          "evidence_sha256": "e31300df64da0dfaf0648d89761162a910aafeddd2ec6e10007d226c4e6cdf8b",
           "oracle": "retail-binary-execution",
           "tests_passed": 11,
           "tests_total": 11
         }
       },
-      "status": "STRUCTURALLY_VERIFIED"
+      "status": "STRUCTURALLY_VERIFIED",
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004CF910",
@@ -53476,7 +53583,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53501,7 +53608,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53528,8 +53635,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
           "evidence_sha256": "4a9d447c97d4f9622fe3cf905063ddc2a42aa907f52a45dca1cd06201c1ae37d"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
+          "evidence_sha256": "3e7be6295228c7d7504d30588b96529dbf1bcf1247fd8e0eb33cf493574c0b1e",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A5702",
@@ -53546,7 +53662,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53571,7 +53687,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53598,8 +53714,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
           "evidence_sha256": "81d966dd750d275b2db2285c83a599277fc0f255fe499443efd43166b919f964"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
+          "evidence_sha256": "5b6584246dbd69f07509c9752f644324e005ada71f2c5224f47a7769467d2d63",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A53B3",
@@ -53616,7 +53741,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53641,7 +53766,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53668,8 +53793,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
           "evidence_sha256": "ec61ecd74a8ee095411939201ae043c5bcae371222db07246222ee5ac69afca4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
+          "evidence_sha256": "ebd3488ee853ea2e5e5e749f138b6918c237a63221eff0dafb43464e303558bf",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AF7B0",
@@ -53682,11 +53816,11 @@
       },
       "game_natives": {
         "path": "scripts/GameNatives/error/004AF7B0-Error_Show.hpp",
-        "sha256": "7858f9860bad53024d800bfb34b1167022a7dec5fb18925aaccd04f732b92041",
+        "sha256": "88887fe0ea09385be5991acc3c92562eb1d0002802c0d53ab5e5490970410240",
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53698,20 +53832,20 @@
         "behavioral_runner": {
           "path": "scripts/error_show_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AF7B0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/error/error_show.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53740,10 +53874,15 @@
           "evidence_sha256": "88e64ebd729e95ff2c11329aa99f33ac771801b359452c0637a0a76afe573f59"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AF7B0-behavioral.json",
-          "evidence_sha256": "88e64ebd729e95ff2c11329aa99f33ac771801b359452c0637a0a76afe573f59"
+          "evidence_sha256": "b8bac4fdfa24115ee5d01823cf1caa8e999c926abbde0ba9d050ce488999e15b",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00465820",
@@ -53811,12 +53950,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00465820-behavioral.json",
-          "evidence_sha256": "fce8566cf1f3475d31a2e8c2d3915ca81da52db79fbdfc2deed19973dfb3c03c"
+          "evidence_sha256": "247bbd61b1e95d98f44885e33a80955e760830bea6f5b75b5d85d8fcdfd628e6"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00465820-behavioral.json",
-          "evidence_sha256": "02faed4910676cae7bd2b6e6ac52496df0bbba1bb51c1898db8a7239fe6a08d1",
+          "evidence_sha256": "247bbd61b1e95d98f44885e33a80955e760830bea6f5b75b5d85d8fcdfd628e6",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -53890,12 +54029,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00463180-behavioral.json",
-          "evidence_sha256": "a1270e8fa87bd229500fc25972a03305b8237873ec255901f18c0a020f8fc1ea"
+          "evidence_sha256": "b2957cb20e936224d3d9892c8ec2f10aeacba21500e34ee072cba51b068bbb17"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00463180-behavioral.json",
-          "evidence_sha256": "fc00a429b3dc0eb9f85fdd6efa2d1784b2acf4dfc2f327ff2f661b501b24f8a9",
+          "evidence_sha256": "b2957cb20e936224d3d9892c8ec2f10aeacba21500e34ee072cba51b068bbb17",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -53969,12 +54108,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004659E0-behavioral.json",
-          "evidence_sha256": "f41494d17b9a606e5ac21abab136205c85b60663f87a81ac7783c09f2dc34414"
+          "evidence_sha256": "82fcbfc28b044338c1bd042faa701fcf605f6b26dd8f33f0f1352a79bcd0c808"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004659E0-behavioral.json",
-          "evidence_sha256": "c80577b63a6dac07416accf8974a1503a26c5ae579ed77db4d48394908443a9b",
+          "evidence_sha256": "82fcbfc28b044338c1bd042faa701fcf605f6b26dd8f33f0f1352a79bcd0c808",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -53988,7 +54127,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/input_port_process.cpp",
-        "sha256": "7e852c6618ee9b77053dccf39f2fee2cef150edd4acf63e622b2b7135ecb98bd",
+        "sha256": "6f8c3b613b4b4e6980d2fc7de088121b0a1553b3d28da595ce92f754c46b98e2",
         "signature": "struct status_msg* InputPort_Process(void * context)"
       },
       "game_natives": {
@@ -54040,17 +54179,18 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004ED5C0-semantic-review.json",
-          "evidence_sha256": "ed683777ef458aad0a771e951505c8726c094261910af691a7cbe3917bc0ce1d"
+          "evidence_sha256": "8499583d642f33267156cd4f64dc9067b4b0404f777973ee231d4f1623d7894e"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004ED5C0-build.json",
-          "evidence_sha256": "2426ef361d1fa16c17b772c2b2a426b515fa01d4eec07a6dda87c93c67e7750c"
+          "evidence_sha256": "4ce392881907891d0c1848385966a44a5d918a39de771232db9e2525ff1ee874"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004ED5C0-behavioral.json",
           "evidence_sha256": "67cae36eb43048fcda670e2843e9657f800062d3784f569d4edf34be12e42f97"
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004012A0",
@@ -54058,7 +54198,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/input_port_process.cpp",
-        "sha256": "7e852c6618ee9b77053dccf39f2fee2cef150edd4acf63e622b2b7135ecb98bd",
+        "sha256": "6f8c3b613b4b4e6980d2fc7de088121b0a1553b3d28da595ce92f754c46b98e2",
         "signature": "x86 cdecl uint32_t(uint32_t, uint32_t, uint32_t)"
       },
       "game_natives": {
@@ -54110,17 +54250,18 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004012A0-semantic-review.json",
-          "evidence_sha256": "0a2db3abd169f740e1f16fe674138671fde60c9e3fb19afe27e847e93862834e"
+          "evidence_sha256": "882b37af60ef6fb951dc0cd15d60ea1965f717929ad0c920330be63e4a7757e5"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004012A0-build.json",
-          "evidence_sha256": "d3153b77095ac5ffc845403f829322e32f79af84f1ac6e7b4be4e665a94985fc"
+          "evidence_sha256": "64eadad736f446ce9e7dee26b5d944e673cef5541a24139c6ea8921d17d052b7"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004012A0-behavioral.json",
           "evidence_sha256": "34d7e1b37eb25f50a76f5d29a93bb8dd828093ecc2b3f2abbd813549bee22a9a"
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004012F0",
@@ -54128,7 +54269,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/input/input_port_process.cpp",
-        "sha256": "7e852c6618ee9b77053dccf39f2fee2cef150edd4acf63e622b2b7135ecb98bd",
+        "sha256": "6f8c3b613b4b4e6980d2fc7de088121b0a1553b3d28da595ce92f754c46b98e2",
         "signature": "x86 cdecl void*(uint32_t, uint32_t)"
       },
       "game_natives": {
@@ -54180,17 +54321,18 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004012F0-semantic-review.json",
-          "evidence_sha256": "91dc7dadac3ba24c4b2cff83f2186971843e3ccde5a147036f2db6fd9b63b1bc"
+          "evidence_sha256": "49267c378741eee0fc1bf5488b46f55277e120c706de94e45ea4ca65b6bc6d13"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004012F0-build.json",
-          "evidence_sha256": "a2daeaca45c2594588d65f449616031206ba873ca6db0894ee887e3c765aad7c"
+          "evidence_sha256": "0d9aeab36cb54aa2842e63ddb4a1d3402ee76b81b1a25ad217ee0b57b46f3fbc"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004012F0-behavioral.json",
           "evidence_sha256": "e5e8f5016ea823899c88d80ac962394274bab8cde03de09f29dae823340480ab"
         }
-      }
+      },
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004AF8F0",
@@ -54207,7 +54349,7 @@
         "signature": "void __cdecl HeapList_Insert(void* node, void* head);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54217,7 +54359,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_heaplist_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54232,7 +54374,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54259,8 +54401,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
           "evidence_sha256": "b6d6d87cd5344d3affe31d154e8d697b741f1bed806e716c0717ceb311d7b0a4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
+          "evidence_sha256": "ba9220329f069fd6fa0a1318d1fdad4420ab98775cc979fee4c60a8d2d2ed3fc",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AF960",
@@ -54277,7 +54428,7 @@
         "signature": "void __cdecl HeapList_Remove(void* node);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54287,7 +54438,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_heaplist_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54302,7 +54453,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54329,8 +54480,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AF960-behavioral.json",
           "evidence_sha256": "9ebd0dbd17d13c01c59c7630dd24a2d6bf543a1b5119578bf04771b77327f70b"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AF960-behavioral.json",
+          "evidence_sha256": "bb3304380b357964c31f9330c8258d03052e9900557b6dfff3adb442f25f11b9",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 15,
+          "tests_total": 15
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0D40",
@@ -54347,7 +54507,7 @@
         "signature": "void __cdecl QHash_ValueSet(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54357,7 +54517,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54372,7 +54532,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54399,8 +54559,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
           "evidence_sha256": "4e042640be280a768b7789d0b6add20ba87bfd4a17db7ff0bd30a67b6985f38a"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
+          "evidence_sha256": "7a89f9b70f941b9847b0516a46257bbea737a83ad07d1d6ca6f8e6e90409a6b4",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0BA0",
@@ -54417,7 +54586,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54429,20 +54598,20 @@
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004B0BA0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/mem/mem_alloc.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54471,10 +54640,15 @@
           "evidence_sha256": "0575befcad51befb412569431be2c250e1f3a9e88b0ce29b78433703024ad9c5"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0BA0-behavioral.json",
-          "evidence_sha256": "0575befcad51befb412569431be2c250e1f3a9e88b0ce29b78433703024ad9c5"
+          "evidence_sha256": "56889ecd5bf0fd35a5c7919078beff53e9e3869480be42eec6ae7d74cc41a475",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AD722",
@@ -54491,7 +54665,7 @@
         "signature": "int __cdecl Mem_InvokeNewHandler(std::uint32_t size);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54501,7 +54675,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54516,7 +54690,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54543,8 +54717,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AD722-behavioral.json",
           "evidence_sha256": "1f5f76f1780e200af0e63fcea37d3bc5a908ae7b1dbb08ac4c04e55e29aa9c48"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AD722-behavioral.json",
+          "evidence_sha256": "9d55b2b0a837f634602f8df0e8b5d8897780f1bbbed2ecb9c3f8c79a61b9f431",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA6AE",
@@ -54561,7 +54744,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54571,7 +54754,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54586,7 +54769,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54613,8 +54796,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA6AE-behavioral.json",
           "evidence_sha256": "46ba9f44e0676d7fa16ae8d9169222a0759cf3a786ef2db4da5239769bfd0709"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA6AE-behavioral.json",
+          "evidence_sha256": "09db4c6ee42d7ba0a34a4087dc28a084fd69b45aa708e56801127a4275d585fd",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 29,
+          "tests_total": 29
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA682",
@@ -54631,7 +54823,7 @@
         "signature": "void* __cdecl Mem_AllocWithRetry(std::uint32_t size, std::int32_t retry);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54641,7 +54833,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54656,7 +54848,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54683,8 +54875,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA682-behavioral.json",
           "evidence_sha256": "72a89b03b9b6db48198fb905ad612eed245f8e177496fb1aefad7e043e14c941"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA682-behavioral.json",
+          "evidence_sha256": "4717ace16c5fd478cb3da5d32353873c95dee3b63435991f4aba4473ceef0722",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA670",
@@ -54701,7 +54902,7 @@
         "signature": "void* __cdecl Mem_AllocChunk(std::uint32_t size);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54711,7 +54912,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54726,7 +54927,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54753,8 +54954,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA670-behavioral.json",
           "evidence_sha256": "6c022a905a2ffc69e4e1aa5803fa816fe542053f212f5c9ba1d5f74b194c89a2"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA670-behavioral.json",
+          "evidence_sha256": "3078a95f21a8642fe09e627ac8ebcfcc33a7c6ddff42277ce8aca2b167cc11cf",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 13,
+          "tests_total": 13
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0C60",
@@ -54771,7 +54981,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54827,12 +55037,13 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0C60-behavioral.json",
-          "evidence_sha256": "1d2001e1c85c8c2556fe580019ae57e9ef0965e90ead44987da1dde78ea3b089",
+          "evidence_sha256": "54bd6cf1610feee5a3965a98bd4d0e72cbefb6b52516c14a9539284091ef7a2a",
           "oracle": "retail-binary-execution",
           "tests_passed": 23,
           "tests_total": 23
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00517890",
@@ -55436,7 +55647,7 @@
         "signature": "void __cdecl Matrix_InvalidateSlot(void* context, std::int32_t slot);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -55446,7 +55657,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -55461,7 +55672,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -55488,8 +55699,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B7450-behavioral.json",
           "evidence_sha256": "9432b2f0011fc9bf47f96bd92e9cf424191c56e9dbebff9cefe569849600a7fd"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B7450-behavioral.json",
+          "evidence_sha256": "77d790adcf389f928c5002b7ae356759bd7bd3ce200c186c90e6cc07fe325718",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A26C0",
@@ -55697,7 +55917,15 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
-          "evidence_sha256": "161bf768d57ee3bd3ba85e1eb17bb983bb4001f9c17a5a1c34ad13aa5a4daa34"
+          "evidence_sha256": "fd2895ff73030745990c2d77b95c5e7642c96204afc64b9ee46f69fbd5e586dc"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
+          "evidence_sha256": "fd2895ff73030745990c2d77b95c5e7642c96204afc64b9ee46f69fbd5e586dc",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -55837,12 +56065,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00497D70-behavioral.json",
-          "evidence_sha256": "8b9f52cc64455f9967d9704cb500c7883f142effd5ae84c8e884935e672f90fc"
+          "evidence_sha256": "b0ee5677336d36120302f488c3729ecd25546d2409ff42138cc561549406a7dd"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00497D70-behavioral.json",
-          "evidence_sha256": "d78d0b7292bdd95333ff8a0643157153da3f1357155f342e4125237bc8482930",
+          "evidence_sha256": "b0ee5677336d36120302f488c3729ecd25546d2409ff42138cc561549406a7dd",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -55916,12 +56144,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00491D40-behavioral.json",
-          "evidence_sha256": "e197cf3d5fb3d7d606c57d896ea06a7901f08343da1c96feabd3d2b3f907f99c"
+          "evidence_sha256": "9181d39f574b5d8db4b65f55334b1c7aa06236f68045a9f0de758210c5340358"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00491D40-behavioral.json",
-          "evidence_sha256": "3ab56a5c7e53cebc9b5c886da328553e509f4827be6feae7d18c47faa12841b8",
+          "evidence_sha256": "9181d39f574b5d8db4b65f55334b1c7aa06236f68045a9f0de758210c5340358",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -56154,7 +56382,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56179,7 +56407,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56206,8 +56434,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
           "evidence_sha256": "56627eaf7c4de67ebcef9945f1c7297c3ebc0a3148cf104a174e5e6499d8f37f"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
+          "evidence_sha256": "5c886e603d9a1da3f791aaa6d574a3e4a3d5591ebe8c188b2c8d882a35e1c83d",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5F00",
@@ -56224,7 +56461,7 @@
         "signature": "void* Resource_Load(const char*, int32_t*) (candidate cdecl; callback fallback differences remain unverified)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56249,7 +56486,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56276,8 +56513,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
           "evidence_sha256": "ee2103f1aeb1cbef513b806c55290965809dda66377445d2900c5ff2a2685f68"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
+          "evidence_sha256": "8a15cf37cd4939a56c6f46563e71e9d6cb34bfb19c4578def342a832c6016811",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AAD10",
@@ -56294,7 +56540,7 @@
         "signature": "int __cdecl Resource_MatchPrefix(const char* a, const char* b, std::uint32_t n);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56304,7 +56550,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/resource_sys_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56319,7 +56565,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56346,8 +56592,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AAD10-behavioral.json",
           "evidence_sha256": "bb98dc9dd0fbffc769878af5b0a27aa72941ab675cc0b366a8cd36575d59652f"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AAD10-behavioral.json",
+          "evidence_sha256": "c6f2caa41de2c0d3df01de4892daa167b148767c5ac8a7fdc0b6479fb5076462",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B59F0",
@@ -56364,7 +56619,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56389,7 +56644,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56416,8 +56671,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B59F0-behavioral.json",
           "evidence_sha256": "013033bcdba603d28b5c88b75fa50b41cc6c72eff0e3c50916a78972a174394b"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B59F0-behavioral.json",
+          "evidence_sha256": "d85d272adf14186032fa33be0241b3f6ff8103b196d0a2bb2054c7a0b8677297",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5C90",
@@ -56434,7 +56698,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56444,7 +56708,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/resource_lifecycle_diff_runner.py",
+          "path": "scripts/resource_sys_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56459,7 +56723,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56486,8 +56750,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-behavioral.json",
           "evidence_sha256": "74b2bfcf41b9a33534cbae1bc64491f52a8e79b6dcd0d756aba500ffd63977a4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5C90-behavioral.json",
+          "evidence_sha256": "9cca3982de42e1e0f519e477fd475f2c76d2304e0dbde203ea21f65dab2a4d81",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B60F0",
@@ -56504,7 +56777,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56529,7 +56802,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56556,8 +56829,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B60F0-behavioral.json",
           "evidence_sha256": "3c52e19a8c132b08f12441ba24f9ddbc56d0cac90279ef304d92e1f6cff945b9"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B60F0-behavioral.json",
+          "evidence_sha256": "95cccf04d225fe45489b36fbc6ef6eac2c4ac4a466c0cf0be7d003a0f3495694",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5F80",
@@ -56574,7 +56856,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56599,7 +56881,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56626,8 +56908,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-behavioral.json",
           "evidence_sha256": "4098ea6fd0e0064694276cb07acaf82aa238add4bf81e3aa81c9aa399a293c44"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5F80-behavioral.json",
+          "evidence_sha256": "08d935575e7a150ff305e9b9c78c45a652f353d9544170cfbbf190420829a578",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00410070",
@@ -56844,8 +57135,8 @@
       "name": "Script_GetDebugCompileState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F1D0-Script_GetDebugCompileState.cpp",
-        "sha256": "733c8cbb5b8c1052759b3e53d20a9651a543249eeeeb87752c7f310ffab22ad0",
+        "path": "engine/src/retail/script/qvm_native_loader.cpp",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "int __cdecl Script_GetDebugCompileState(void);"
       },
       "game_natives": {
@@ -56864,10 +57155,8 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/context_getter_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
-            "--root",
-            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -56877,7 +57166,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}"
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -56897,34 +57188,35 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-semantic-review.json",
-          "evidence_sha256": "16aaf1f1d63e781e433fef4642cff41e04a483e8e59654edddacb4c04ca58dbf"
+          "evidence_sha256": "f9f71fd3098aa080e698baacacd7fee8c60508bbf0f208e32e336866630ca721"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-build.json",
-          "evidence_sha256": "6fd3b957aee5755f63a85cdb1747e5fd27d416afa9ea89b73604a1f7cd64b7f2"
+          "evidence_sha256": "5f62c2d1a8e81ae57d84af68524849c351df12e0cb93748a27baec1111038cc4"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
-          "evidence_sha256": "76d11ccfe3aeebd632618c7d8e3e0dc6e6a746deba9e9a768b85d14718739393"
+          "evidence_sha256": "f168ffce248195dc154f9426bec64c6a0cb4b4937b7c59dea222499b7e223b29"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1D0-behavioral.json",
-          "evidence_sha256": "45805c1a3c165741fa7e7af6ef964244ba9fcdd6089f8f9fd51ad4460baf495b",
+          "evidence_sha256": "f168ffce248195dc154f9426bec64c6a0cb4b4937b7c59dea222499b7e223b29",
           "oracle": "retail-binary-execution",
-          "tests_passed": 10,
-          "tests_total": 10
+          "tests_passed": 8,
+          "tests_total": 8
         }
       },
-      "status": "VERIFIED"
+      "status": "VERIFIED",
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x0048F340",
       "name": "Script_GetForcePrecompiledState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
-        "path": "scripts/GameNatives/fx/0048F340-Script_GetForcePrecompiledState.cpp",
-        "sha256": "1d4f7cebb120ff15e9194242012ef5c697ef22d36bfdfb67124750c5f23021e9",
+        "path": "engine/src/retail/script/qvm_native_loader.cpp",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "int __cdecl Script_GetForcePrecompiledState(void);"
       },
       "game_natives": {
@@ -56943,10 +57235,8 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/context_getter_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
-            "--root",
-            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -56956,7 +57246,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}"
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
           ],
           "timeout_seconds": 600
         },
@@ -56976,26 +57268,27 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-semantic-review.json",
-          "evidence_sha256": "592016987c546813a7f5f44daa70922f0599ae7f84877ab9e6b67baa07467cd2"
+          "evidence_sha256": "73e58a14fc26c893940e837463b1ce7ecc5f90cdf5d3f2cb355f2b3f4867f9bb"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-build.json",
-          "evidence_sha256": "087f97d3c7c47e68f10b4048aeb8926a27c0bef81fb1961ca5333ffa13a34b91"
+          "evidence_sha256": "dc4e4a4b22f6bb430ec41d420f3d225d08f42501365c7f2fa0498b521e0ea4ff"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
-          "evidence_sha256": "011191045685964e584b30d84a12a019270d483464b8be4a408fff3ff6fe70a0"
+          "evidence_sha256": "5d7163aadb4a48d3d388a03627303e5a6283f1070f9e75bab6d44def1d52a311"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F340-behavioral.json",
-          "evidence_sha256": "e8bf4bb7e6f393ad53a880568ff91797301cb1b764091ff2455efb8741ad7251",
+          "evidence_sha256": "5d7163aadb4a48d3d388a03627303e5a6283f1070f9e75bab6d44def1d52a311",
           "oracle": "retail-binary-execution",
-          "tests_passed": 10,
-          "tests_total": 10
+          "tests_passed": 8,
+          "tests_total": 8
         }
       },
-      "status": "VERIFIED"
+      "status": "VERIFIED",
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004B5B60",
@@ -57003,7 +57296,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "int __cdecl Resource_FileExists(const char* path);"
       },
       "game_natives": {
@@ -57073,7 +57366,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "int __cdecl Qvm_SetGlobalState(int state);"
       },
       "game_natives": {
@@ -57082,7 +57375,7 @@
         "signature": "int __cdecl Qvm_SetGlobalState(int state);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57092,7 +57385,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/qvm_set_global_state_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -57107,7 +57400,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57134,8 +57427,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B8A10-behavioral.json",
           "evidence_sha256": "340f69c0e5838a19a69c6df27feecb18b47844e2094e7ade996885fd6972a87a"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B8A10-behavioral.json",
+          "evidence_sha256": "e5795b0920cedf913c8aaa71a0ffcde0b954cb1d6f117ea5b87a48881411526f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B1E90",
@@ -57143,7 +57445,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "char* __cdecl String_FindExtension(char* out, int size, const char* path);"
       },
       "game_natives": {
@@ -57213,7 +57515,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "unknown"
       },
       "game_natives": {
@@ -57283,7 +57585,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "unknown"
       },
       "game_natives": {
@@ -57292,7 +57594,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57317,7 +57619,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 300
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57344,8 +57646,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B83D0-behavioral.json",
           "evidence_sha256": "5132e84c31d1c7166520cc3ed627266a1f8f47ccb0e3aec4e6a0ef29a532a9d2"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B83D0-behavioral.json",
+          "evidence_sha256": "221c4e015c8ab8a4aeefc44ef15e6050fe2a12ee1067230e7dd975ba6313816a",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B80B0",
@@ -57353,7 +57664,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_native_loader.cpp",
-        "sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+        "sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
         "signature": "int32_t* Qvm_Load(void* qvm_path)"
       },
       "game_natives": {
@@ -58251,7 +58562,7 @@
         "signature": "int __cdecl String_ToUpperChar(int ch);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58261,7 +58572,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58276,7 +58587,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58303,8 +58614,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
           "evidence_sha256": "9fbb6b4a182bc0edfd23cdeeb10bc292da29bdf47cafdb6af210a4488a7546fe"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
+          "evidence_sha256": "bfe93ed420412b196c2161e86b2773719cbecda656e1f04d2d05d15bfa056b9d",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5AF0",
@@ -58321,7 +58641,7 @@
         "signature": "void __cdecl Resource_CanonicalizePath(char* dst, const char* src);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58331,7 +58651,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/hash_lookup_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58346,7 +58666,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58373,8 +58693,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5AF0-behavioral.json",
           "evidence_sha256": "c055a75b29514221fba43b566eb627740f0135584d903b35fd19e752db2d1eb0"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5AF0-behavioral.json",
+          "evidence_sha256": "fb40f5c5e77771098c23651db848fbc2a2b012adf0528afea7fc7d1e69e1412f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 20,
+          "tests_total": 20
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5B30",
@@ -58391,7 +58720,7 @@
         "signature": "std::uint32_t __cdecl Resource_CalculatePathHash(const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58401,7 +58730,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/hash_lookup_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58416,7 +58745,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58443,8 +58772,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5B30-behavioral.json",
           "evidence_sha256": "c12c7124dfb382971c62517e29c006e06049573ba8b8e0c94436d24edbedae3e"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5B30-behavioral.json",
+          "evidence_sha256": "9fcc302106ee9df1cd833663ac2479fa0a41c9241d360f46fbd37df8fb75f8a1",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004C6670",
@@ -58512,12 +58850,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
-          "evidence_sha256": "8e5ebac421b152d110a9a3b8ea86ed3ba254bfb79557dd5b6b1e1efa80678d76"
+          "evidence_sha256": "acc31e02e8af18ab8b37b8e823d6d72971c564c13b3fed21412e6f0c8e46c14b"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
-          "evidence_sha256": "bd0c6c600c9670ddfdb9474ab74eb027474d51311cbc2b4c449e8689d33d1587",
+          "evidence_sha256": "acc31e02e8af18ab8b37b8e823d6d72971c564c13b3fed21412e6f0c8e46c14b",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
@@ -58591,12 +58929,12 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
-          "evidence_sha256": "e5cb774d966194f1afbfafdb1593138f2da6472504493e13ac613361a5dbaf16"
+          "evidence_sha256": "19261f43880b61aeb3f2867c42f5144c75835658a2a501aaec7ca9c1c04e5562"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
-          "evidence_sha256": "83f2eaf8f3deaae6b5b54a23e549c21c61d2d0f22fd8813d0261b2c85b8e2f36",
+          "evidence_sha256": "19261f43880b61aeb3f2867c42f5144c75835658a2a501aaec7ca9c1c04e5562",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8

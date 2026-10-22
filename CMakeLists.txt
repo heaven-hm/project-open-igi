@@ -40,7 +40,6 @@ add_executable(igi WIN32
     engine/src/retail/error/error_show.cpp
     engine/src/retail/human/human_camera_eye.cpp
     engine/src/retail/human/human_view.cpp
-    engine/src/retail/input/input_port.cpp
     engine/src/retail/input/input_port_process.cpp
     engine/src/retail/mem/heap_list.cpp
     engine/src/retail/mem/mem_alloc.cpp
@@ -79,6 +78,7 @@ add_executable(igi WIN32
     engine/src/retail/texture/texture_loaders.cpp
     engine/platform/windows/player_controller.cpp
     engine/platform/windows/retail_animation.cpp
+    engine/platform/windows/direct_input_mouse.cpp
     engine/platform/windows/retail_model_scene.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
@@ -87,5 +87,5 @@ set_target_properties(igi PROPERTIES OUTPUT_NAME "igi1")
 if(MINGW)
     target_link_options(igi PRIVATE -static -static-libgcc -static-libstdc++)
     # The retail renders through DirectDraw 7 (igi.exe imports ddraw.dll).
-    target_link_libraries(igi PRIVATE ddraw dxguid)
+    target_link_libraries(igi PRIVATE ddraw dxguid dinput)
 endif()

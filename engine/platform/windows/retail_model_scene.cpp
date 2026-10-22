@@ -1,6 +1,7 @@
 #define WIN32_LEAN_AND_MEAN
 #define UNICODE
 #define _UNICODE
+#include "direct_input_mouse.hpp"
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
@@ -321,6 +322,8 @@ struct Scene
     bool player_ready = false;
     bool player_motion_available = true;
     bool raw_mouse_enabled = false;
+    // The DirectInput mouse device the retail reads the counts from.
+    igi::platform::DirectInputMouse mouse_device;
     bool owns_mouse_clip = false;
 
     // Windows device adapter: relative counts continue when the cursor reaches an edge.
@@ -371,6 +374,9 @@ struct Scene
         LPARAM lparam;
     };
     std::array<float, 2> last_look_delta{0.0F, 0.0F};
+    // The shift modifier, for the developer free camera's shift+space up. The
+    // retail binds space to jump, so the pairing is a host control.
+    bool shift_down = false;
     std::vector<DemoEvent> input_demo_events;
     unsigned int input_demo_frame = 0;
     unsigned int input_demo_next = 0;
@@ -386,6 +392,8 @@ struct Scene
     float dev_yaw = 0.0F;
     float dev_pitch = 0.0F;
     float dev_speed = 50.0F; // Existing inspection speed, not HumanPlayer movement data.
+    // The movement flags the developer camera acted on, for the scene log.
+    std::string dev_move_flags;
     Vector3 dev_saved_position{};
     Vector3 dev_saved_target{};
 
@@ -402,6 +410,7 @@ struct Scene
     {
         input_port.Run();
         const auto look = input_port.TakeMouseDelta();
+        last_look_delta = {look[0], look[1]};
         dev_yaw += look[0] * host::PlayerController::look_radians_per_count;
         dev_pitch = std::clamp(dev_pitch - look[1] * host::PlayerController::look_radians_per_count,
                                -1.5533F, 1.5533F);
@@ -415,11 +424,24 @@ struct Scene
         const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
 
         Vector3 move{0, 0, 0};
+        static unsigned int diag = 0;
+        if (diag < 4) {
+            ++diag;
+            write_log("dev diag up=" + std::to_string(input_port.ActionDown(input::Action::move_up)) +
+                " down=" + std::to_string(input_port.ActionDown(input::Action::move_down)) +
+                " rawW=" + std::to_string(input_port.KeyDown(0x57U)) +
+                " bindings=" + std::to_string(input_port.BindingCount(input::Action::move_up)));
+        }
         const bool key_w = input_port.ActionDown(input::Action::move_up);
         const bool key_s = input_port.ActionDown(input::Action::move_down);
         const bool key_a = input_port.ActionDown(input::Action::move_left);
         const bool key_d = input_port.ActionDown(input::Action::move_right);
-        const bool key_up = input_port.ActionDown(input::Action::jump);
+        // Shift with the space key raises the camera, and the C key lowers it.
+        // The retail binds the C key to crouch and the E key to jump, so the
+        // developer control pairs the space key with the shift modifier and
+        // leaves the configured crouch binding alone.
+        const bool space_held = input_port.KeyDown(0x20U);
+        const bool key_up = shift_down && space_held;
         const bool key_down = input_port.ActionDown(input::Action::crouch);
 
         if (key_w)
@@ -454,6 +476,15 @@ struct Scene
         {
             move.z -= 1.0F;
         }
+
+        dev_move_flags.clear();
+        if (key_w) dev_move_flags += "W";
+        if (key_s) dev_move_flags += "S";
+        if (key_a) dev_move_flags += "A";
+        if (key_d) dev_move_flags += "D";
+        if (key_up) dev_move_flags += "UP";
+        if (key_down) dev_move_flags += "DOWN";
+        if (shift_down) dev_move_flags += "SHIFT";
 
         const float speed = dev_speed;
         camera_position.x += move.x * speed * delta_seconds;
@@ -1515,8 +1546,30 @@ struct Scene
     }
 
     // The retail per-frame body, driven by the phase 1 handler.
+    // Reads the mouse device and hands the relative counts to the retail
+    // input port, the way the retail's own input port takes them.
+    void poll_mouse()
+    {
+        if (!raw_mouse_enabled)
+        {
+            return;
+        }
+        const igi::platform::MouseCounts counts = mouse_device.Poll();
+        if (counts.delta_x != 0 || counts.delta_y != 0)
+        {
+            input_port.AddMouseDelta(counts.delta_x, counts.delta_y);
+            ++mouse_messages;
+        }
+        // The device reports the buttons as absolute held state, so the port
+        // latches the edges exactly like the window-message path does.
+        input_port.SetMouseButtonDown(0, counts.left_down);
+        input_port.SetMouseButtonDown(1, counts.right_down);
+        input_port.SetMouseButtonDown(2, counts.middle_down);
+    }
+
     void run_frame(double delta_seconds)
     {
+        poll_mouse();
         if (developer_controls.free_camera_enabled)
             update_dev_camera(static_cast<float>(delta_seconds));
         else
@@ -1651,6 +1704,24 @@ struct Scene
     // in the scene log.
     void log_player_state()
     {
+        if (developer_controls.free_camera_enabled)
+        {
+            // The developer free camera replaces the player view, so the
+            // camera's own place and heading are what the log reports.
+            std::ostringstream state;
+            state << std::fixed << std::setprecision(3)
+                  << "DeveloperCamera pos=" << camera_position.x << '/' << camera_position.y << '/'
+                  << camera_position.z
+                  << " yaw=" << dev_yaw << " pitch=" << dev_pitch
+                  << " key_msgs=" << key_messages
+                  << " mouse_msgs=" << mouse_messages
+                  << " look_dx=" << last_look_delta[0]
+                  << " look_dy=" << last_look_delta[1]
+                  << " mouse_xy=" << last_mouse_x << '/' << last_mouse_y
+                  << " move=" << dev_move_flags;
+            write_log(state.str());
+            return;
+        }
         if (!player_ready)
         {
             return;
@@ -1976,11 +2047,7 @@ struct SceneWindowLifetime
     ~SceneWindowLifetime()
     {
         scene.set_mouse_active(false);
-        if (scene.raw_mouse_enabled)
-        {
-            const RAWINPUTDEVICE mouse{0x02, 0x01, RIDEV_REMOVE, nullptr};
-            RegisterRawInputDevices(&mouse, 1, sizeof(mouse));
-        }
+        (void)scene;
         if (g_active_scene == &scene) g_active_scene = nullptr;
         if (owned_window != nullptr && IsWindow(owned_window)) DestroyWindow(owned_window);
     }
@@ -2024,20 +2091,9 @@ std::intptr_t scene_message_handler(void* window, std::uint32_t message, std::ui
             }
             break;
         case WM_INPUT:
-        {
-            RAWINPUT input{};
-            UINT size = sizeof(input);
-            if (g_active_scene->raw_mouse_enabled && GetForegroundWindow() == native_window &&
-                GetRawInputData(reinterpret_cast<HRAWINPUT>(detail), RID_INPUT, &input, &size,
-                                sizeof(RAWINPUTHEADER)) != static_cast<UINT>(-1) &&
-                input.header.dwType == RIM_TYPEMOUSE &&
-                (input.data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0)
-            {
-                g_active_scene->input_port.AddMouseDelta(input.data.mouse.lLastX, input.data.mouse.lLastY);
-                ++g_active_scene->mouse_messages;
-            }
+            // The counts come from the DirectInput device, so the raw-input
+            // message carries nothing the port needs.
             return 1;
-        }
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         case WM_KEYUP:
@@ -2083,7 +2139,10 @@ std::intptr_t scene_message_handler(void* window, std::uint32_t message, std::ui
             // separately. Translate the Windows message, without assigning actions.
             std::uint32_t key = static_cast<std::uint32_t>(parameter);
             if (key == VK_SHIFT)
+            {
+                g_active_scene->shift_down = down;
                 key = MapVirtualKeyW(static_cast<UINT>((detail >> 16) & 0xFF), MAPVK_VSC_TO_VK_EX);
+            }
             else if (key == VK_CONTROL)
                 key = (detail & (LPARAM{1} << 24)) ? VK_RCONTROL : VK_LCONTROL;
             else if (key == VK_MENU)
@@ -2244,14 +2303,29 @@ int RunRetailModelScene(HINSTANCE instance,
         scene.initialize(window, windowed);
         if (!input_demo)
         {
-            const RAWINPUTDEVICE mouse{0x02, 0x01, 0, window};
-            if (!RegisterRawInputDevices(&mouse, 1, sizeof(mouse)))
-                throw std::runtime_error("Register relative mouse input failed.");
-            scene.raw_mouse_enabled = true;
-            write_log("Relative mouse input registered; config.qvm sensitivity and inversion remain active.");
+            // The retail reads the mouse through DirectInput rather than
+            // through a window message. When the device is unavailable the
+            // game still runs and the window messages carry the mouse, which
+            // is the path the keyboard already uses.
+            if (scene.mouse_device.Open())
+            {
+                scene.raw_mouse_enabled = true;
+                write_log("DirectInput mouse device opened; config.qvm sensitivity and inversion remain active.");
+            }
+            else
+            {
+                write_log("DirectInput mouse device unavailable (hr=0x" +
+                          std::to_string(scene.mouse_device.OpenResult()) +
+                          "); the window messages carry the mouse instead.");
+            }
         }
         ShowWindow(window, show_command);
         UpdateWindow(window);
+        // The keyboard and the mouse only reach the window while it holds the
+        // focus, so the scene asks for it once the window is on screen.
+        SetForegroundWindow(window);
+        SetFocus(window);
+        SetActiveWindow(window);
         scene.set_mouse_active(GetForegroundWindow() == window);
 
         // Apply the highest retail graphics mode. Retail keeps seven performance levels in the

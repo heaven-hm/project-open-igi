@@ -59,6 +59,11 @@ def main():
         if args.address == "0x004A5702":
             signature = "char* out, const char* format, char* arguments"
             call = "String_VFormat(out, format, arguments)"
+        elif args.address == "0x004A53B3":
+            # The port's sprintf is variadic and forwards to String_VFormat, so the
+            # harness marshals the fixed cases into matching integer argument pairs.
+            signature = "char* out, const char* format, unsigned a, unsigned b"
+            call = "sprintf(out, format, a, b)"
         else:
             signature = "char* out, const char* format, unsigned a, unsigned b"
             call = "Game_DataSymbolLoad(out, format, a, b)"

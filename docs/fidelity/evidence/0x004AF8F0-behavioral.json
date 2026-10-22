@@ -1,580 +1,560 @@
 {
-  "address": "0x004AF8F0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "cases": [
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "000100500000000000010050",
-          "0x50000100": "0400005000000050"
-        }
-      },
-      "categories": [
-        "boundary"
-      ],
-      "id": "append-to-0-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 0
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "000100500000000000010050",
-          "0x50000100": "0400005000000050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005000020050",
-          "0x50000200": "0001005000000050"
-        }
-      },
-      "categories": [
-        "boundary"
-      ],
-      "id": "append-to-1-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 1
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005000020050",
-          "0x50000200": "0001005000000050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005020020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "0001005000020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-2-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 2
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005020020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "0001005000020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005040020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "0001005020020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-3-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 3
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005040020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "0001005020020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005060020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "0001005040020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-4-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 4
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005060020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "0001005040020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005080020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "0001005060020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-5-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 5
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005080020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "0001005060020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050a0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "0001005080020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-6-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 6
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050a0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "0001005080020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050c0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "00010050a0020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-7-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 7
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050c0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "00010050a0020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050e0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00010050c0020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-8-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 8
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "04000050e0020050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00010050c0020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005000030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "00010050e0020050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-9-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 9
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005000030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "00010050e0020050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005020030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "20030050e0020050",
-          "0x50000320": "0001005000030050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-10-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 10
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005020030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "20030050e0020050",
-          "0x50000320": "0001005000030050"
-        }
-      }
-    },
-    {
-      "candidate_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005040030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "20030050e0020050",
-          "0x50000320": "4003005000030050",
-          "0x50000340": "0001005020030050"
-        }
-      },
-      "categories": [
-        "nominal"
-      ],
-      "id": "append-to-11-existing",
-      "input": {
-        "args": [
-          "context",
-          "node"
-        ],
-        "initial_state": {
-          "existing_nodes": 11
-        }
-      },
-      "reference_output": {
-        "return_value": 1342177280,
-        "side_effects": [],
-        "state_delta": {
-          "0x50000000": "040000500002005000010050",
-          "0x50000100": "0400005040030050",
-          "0x50000200": "2002005000000050",
-          "0x50000220": "4002005000020050",
-          "0x50000240": "6002005020020050",
-          "0x50000260": "8002005040020050",
-          "0x50000280": "a002005060020050",
-          "0x500002A0": "c002005080020050",
-          "0x500002C0": "e0020050a0020050",
-          "0x500002E0": "00030050c0020050",
-          "0x50000300": "20030050e0020050",
-          "0x50000320": "4003005000030050",
-          "0x50000340": "0001005020030050"
-        }
-      }
+ "address": "0x004AF8F0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "000100500000000000010050",
+     "0x50000100": "0400005000000050"
     }
-  ],
-  "executed": true,
-  "float_tolerance": {
-    "absolute": 0,
-    "relative": 0
-  },
-  "implementation_sha256": "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
-  "kind": "behavioral-test-report",
-  "limitations": [
-    "These tests cover valid list layouts and first/middle/last removal positions; they do not test invalid pointers or malformed list state.",
-    "Execution is instruction-level VEX under angr, not a live retail game process."
-  ],
-  "method": "Retail PE32 code and a freshly compiled candidate PE32 DLL executed under angr/VEX; the return pointer and exact list/node memory bytes were compared for valid intrusive-list layouts.",
-  "observable_fields": [
-    "return_value",
-    "state_delta",
-    "side_effects"
-  ],
-  "oracle": "retail-binary-execution",
-  "result": "passed",
-  "retail_execution": {
-    "analysis": "Retail PE32 function and freshly compiled candidate PE32 DLL executed against identical list layouts",
-    "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-    "candidate_build_command": [
-      "/opt/homebrew/bin/i686-w64-mingw32-g++",
-      "-std=c++20",
-      "-O0",
-      "-ffunction-sections",
-      "-fdata-sections",
-      "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
-      "-shared",
-      "-Wl,--gc-sections",
-      "-o",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-tzp8a6l3/heaplist_candidate.dll",
-      "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-tzp8a6l3/heaplist_entry.cpp",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/mem/heap_list.cpp"
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "append-to-0-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
     ],
-    "candidate_sha256": "25f7686550b4c1b76bac2c4879254042b58aab79a7c42105debf269e35b96492",
-    "candidate_target": "PE32 x86 Windows DLL",
-    "engine": "VEX",
-    "function_entry": "0x004AF8F0",
-    "helper_path": "scripts/angr_heaplist_execute.py",
-    "helper_sha256": "317f9db445b21c288bde70591f6fd1938ceb88390006448bdbd552e77d765bd1",
-    "tool": "angr",
-    "version": "10.0.4.post1"
+    "initial_state": {
+     "existing_nodes": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "000100500000000000010050",
+     "0x50000100": "0400005000000050"
+    }
+   }
   },
-  "schema_version": 1,
-  "tests_failed": 0,
-  "tests_passed": 12,
-  "tests_total": 12,
-  "runner": {
-    "path": "scripts/native_heaplist_diff_runner.py",
-    "sha256": "023aece91f1ed1381b6ed2b17f6d024391b7c7bead4ba1ef57a7f1d565df5b42",
-    "command": [
-      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_heaplist_diff_runner.py",
-      "--address",
-      "0x004AF8F0",
-      "--binary",
-      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-      "--binary-sha256",
-      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-      "--implementation",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/mem/heap_list.cpp",
-      "--implementation-sha256",
-      "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
-      "--root",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
-    ]
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005000020050",
+     "0x50000200": "0001005000000050"
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "append-to-1-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005000020050",
+     "0x50000200": "0001005000000050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005020020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "0001005000020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-2-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 2
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005020020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "0001005000020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005040020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "0001005020020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-3-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005040020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "0001005020020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005060020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "0001005040020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-4-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005060020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "0001005040020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005080020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "0001005060020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-5-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005080020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "0001005060020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050a0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "0001005080020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-6-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050a0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "0001005080020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050c0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "00010050a0020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-7-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050c0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "00010050a0020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050e0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00010050c0020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-8-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 8
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "04000050e0020050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00010050c0020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005000030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "00010050e0020050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-9-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 9
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005000030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "00010050e0020050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005020030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "20030050e0020050",
+     "0x50000320": "0001005000030050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-10-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 10
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005020030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "20030050e0020050",
+     "0x50000320": "0001005000030050"
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005040030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "20030050e0020050",
+     "0x50000320": "4003005000030050",
+     "0x50000340": "0001005020030050"
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "append-to-11-existing",
+   "input": {
+    "args": [
+     "context",
+     "node"
+    ],
+    "initial_state": {
+     "existing_nodes": 11
+    }
+   },
+   "reference_output": {
+    "return_value": 1342177280,
+    "side_effects": [],
+    "state_delta": {
+     "0x50000000": "040000500002005000010050",
+     "0x50000100": "0400005040030050",
+     "0x50000200": "2002005000000050",
+     "0x50000220": "4002005000020050",
+     "0x50000240": "6002005020020050",
+     "0x50000260": "8002005040020050",
+     "0x50000280": "a002005060020050",
+     "0x500002A0": "c002005080020050",
+     "0x500002C0": "e0020050a0020050",
+     "0x500002E0": "00030050c0020050",
+     "0x50000300": "20030050e0020050",
+     "0x50000320": "4003005000030050",
+     "0x50000340": "0001005020030050"
+    }
+   }
   }
+ ],
+ "executed": true,
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "implementation_sha256": "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
+ "kind": "behavioral-test-report",
+ "limitations": [
+  "These tests cover valid list layouts and first/middle/last removal positions; they do not test invalid pointers or malformed list state.",
+  "Execution is instruction-level VEX under angr, not a live retail game process."
+ ],
+ "method": "Retail PE32 code and a freshly compiled candidate PE32 DLL executed under angr/VEX; the return pointer and exact list/node memory bytes were compared for valid intrusive-list layouts.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "retail_execution": {
+  "analysis": "Retail PE32 function and freshly compiled candidate PE32 DLL executed against identical list layouts",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_build_command": [
+   "/opt/homebrew/bin/i686-w64-mingw32-g++",
+   "-std=c++20",
+   "-O0",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
+   "-shared",
+   "-Wl,--gc-sections",
+   "-o",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-v5zt9_6d/heaplist_candidate.dll",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-heaplist-diff-v5zt9_6d/heaplist_entry.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/heap_list.cpp"
+  ],
+  "candidate_sha256": "727db7484d2bb30c53f3c9e0ecb1b99ddaba78db5465d4ce3e392ca33b509c79",
+  "candidate_target": "PE32 x86 Windows DLL",
+  "engine": "VEX",
+  "function_entry": "0x004AF8F0",
+  "helper_path": "scripts/angr_heaplist_execute.py",
+  "helper_sha256": "317f9db445b21c288bde70591f6fd1938ceb88390006448bdbd552e77d765bd1",
+  "tool": "angr",
+  "version": "10.0.4.post1"
+ },
+ "schema_version": 1,
+ "tests_failed": 0,
+ "tests_passed": 12,
+ "tests_total": 12
 }

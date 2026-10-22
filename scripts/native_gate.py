@@ -1708,10 +1708,13 @@ def main() -> int:
         warnings.extend(helper_errors)
         if not natives:
             if any(relative.startswith(prefix) for prefix in NATIVE_ROOTS):
-                if not has_host_helpers:
-                    warnings.append(f"{relative}: source/header has no Native or HOST HELPER provenance")
-                if relative not in {"engine/src/retail/diagnostics/log_record.cpp",
-                                    "engine/src/retail/core/debug_command_line.cpp"}:
+                # A source in the retail tree that implements no retail native
+                # still has to document itself: the file carries a five-line
+                # HOST HELPER block naming the artifact, the tools, the
+                # behaviour and its limits. Without that block the file's
+                # logic escapes every check, so the gate stops the commit.
+                if not has_host_helpers or helper_errors:
+                    failures.append(f"{relative}: source/header has no valid Native or HOST HELPER provenance")
                     failures.append(f"{relative}: no address-bound native identity is available to verify this source's logic")
             continue
         for native in natives:

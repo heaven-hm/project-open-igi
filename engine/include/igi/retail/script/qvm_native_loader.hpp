@@ -86,7 +86,6 @@ char* String_FindExtension(char* dst, std::int32_t max_len, char* path);
 // Signature: x86 cdecl int32_t(const char* format, ...); ported as variadic function.
 // Usage/tests: QVM compilation/load error reporter called by Qvm_Load; exercised by qvm_native_loader_test.cpp.
 std::int32_t Qvm_ReportError(const char* format, ...);
-template <typename... Args>
 
 // Native: Qvm_Cleanup() - VA 0x004B83D0 - complete port.
 // Behavior: inspects `qvm[0x23]` (`qvm + 0x8C`); if null, calls `Resource_Unload((const char*)qvm)`

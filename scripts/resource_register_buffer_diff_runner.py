@@ -72,8 +72,8 @@ static std::int32_t allocate_meta(std::int32_t* out, const char* path) {
 namespace igi::retail::resource {
 static ResourceHashNode test_root;
 ResourceHashNode& Resource_GetHashRoot() { return test_root; }
-void Host_SetSysFreeMemory16(SysFreeMemory16Fn) {}
-void Host_SetSysResource(SysResourceFn) {}
+void Sys_SetFreeMemory16(SysFreeMemory16Fn) {}
+void Sys_SetResource(SysResourceFn) {}
 }
 namespace igi::retail::sys {
 std::int32_t Resource_CanonicalizePath(char* out, char* in) {
@@ -95,7 +95,7 @@ int main(int argc, char** argv) {
     static const int lengths[] = {0, 7, -1, 8, 8, 8, 8, 19};
     if (fixture < 0 || fixture >= 8) return 3;
     Resource_InitPoolForTest(4);
-    Host_SetSysAllocateMemory5(&allocate_meta);
+    Sys_SetAllocateMemory5(&allocate_meta);
     auto* buffer = const_cast<char*>(data[fixture]);
     void* result = Resource_RegisterBuffer("LOCAL:runtime-probe.qvm", buffer, lengths[fixture]);
     auto* node = static_cast<ResourceHashNode*>(Resource_GetHashRoot().next);
