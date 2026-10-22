@@ -1047,7 +1047,7 @@
         "signature": "int __cdecl App_ContextGetLightmapsUsed(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -1059,8 +1059,6 @@
         "behavioral_runner": {
           "path": "scripts/context_getter_diff_runner.py",
           "args": [
-            "--root",
-            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -1070,9 +1068,11 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}"
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -1103,12 +1103,13 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F230-behavioral.json",
-          "evidence_sha256": "3cfe7ae9f20786a2f3557a5bfe63383b300b7b3b38ffa38cca724fa16051943e",
+          "evidence_sha256": "5eabc616e0c8dd0c41278cf2076961cb8956308529b8cd409d8a8f49245c55e8",
           "oracle": "retail-binary-execution",
           "tests_passed": 10,
           "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F240",
@@ -50410,7 +50411,7 @@
         "signature": "int __cdecl App_ContextGetDebugged(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50422,20 +50423,20 @@
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x0048F1B0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/app_context.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -50464,10 +50465,15 @@
           "evidence_sha256": "1e483726ab740b967776fb78e8abda4556f400c16a389ba7d591f35acbd91db4"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048F1B0-behavioral.json",
-          "evidence_sha256": "1e483726ab740b967776fb78e8abda4556f400c16a389ba7d591f35acbd91db4"
+          "evidence_sha256": "84885ff0fe99cd4c7c929fc21ad776832e1f96440630c7cf24a4344078c07aea",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x0048F0C0",
@@ -53612,7 +53618,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53637,7 +53643,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53664,8 +53670,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
           "evidence_sha256": "81d966dd750d275b2db2285c83a599277fc0f255fe499443efd43166b919f964"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
+          "evidence_sha256": "5b6584246dbd69f07509c9752f644324e005ada71f2c5224f47a7769467d2d63",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A53B3",
@@ -53748,11 +53763,11 @@
       },
       "game_natives": {
         "path": "scripts/GameNatives/error/004AF7B0-Error_Show.hpp",
-        "sha256": "7858f9860bad53024d800bfb34b1167022a7dec5fb18925aaccd04f732b92041",
+        "sha256": "88887fe0ea09385be5991acc3c92562eb1d0002802c0d53ab5e5490970410240",
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53764,20 +53779,20 @@
         "behavioral_runner": {
           "path": "scripts/error_show_diff_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004AF7B0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/error/error_show.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -53806,10 +53821,15 @@
           "evidence_sha256": "88e64ebd729e95ff2c11329aa99f33ac771801b359452c0637a0a76afe573f59"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004AF7B0-behavioral.json",
-          "evidence_sha256": "88e64ebd729e95ff2c11329aa99f33ac771801b359452c0637a0a76afe573f59"
+          "evidence_sha256": "b8bac4fdfa24115ee5d01823cf1caa8e999c926abbde0ba9d050ce488999e15b",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00465820",
@@ -54273,7 +54293,7 @@
         "signature": "void __cdecl HeapList_Insert(void* node, void* head);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54283,7 +54303,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_heaplist_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54298,7 +54318,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54325,8 +54345,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
           "evidence_sha256": "b6d6d87cd5344d3affe31d154e8d697b741f1bed806e716c0717ceb311d7b0a4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
+          "evidence_sha256": "ba9220329f069fd6fa0a1318d1fdad4420ab98775cc979fee4c60a8d2d2ed3fc",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AF960",
@@ -54343,7 +54372,7 @@
         "signature": "void __cdecl HeapList_Remove(void* node);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54353,7 +54382,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_heaplist_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54368,7 +54397,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54395,8 +54424,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AF960-behavioral.json",
           "evidence_sha256": "9ebd0dbd17d13c01c59c7630dd24a2d6bf543a1b5119578bf04771b77327f70b"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AF960-behavioral.json",
+          "evidence_sha256": "bb3304380b357964c31f9330c8258d03052e9900557b6dfff3adb442f25f11b9",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 15,
+          "tests_total": 15
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0D40",
@@ -54413,7 +54451,7 @@
         "signature": "void __cdecl QHash_ValueSet(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54423,7 +54461,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54438,7 +54476,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54465,8 +54503,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
           "evidence_sha256": "4e042640be280a768b7789d0b6add20ba87bfd4a17db7ff0bd30a67b6985f38a"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
+          "evidence_sha256": "7a89f9b70f941b9847b0516a46257bbea737a83ad07d1d6ca6f8e6e90409a6b4",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0BA0",
@@ -54483,7 +54530,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54495,20 +54542,20 @@
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
           "args": [
+            "--address",
             "{address}",
-            "0x004B0BA0",
+            "--binary",
             "{binary}",
-            "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+            "--binary-sha256",
             "{binary_sha256}",
-            "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "--implementation",
             "{implementation}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/mem/mem_alloc.cpp",
+            "--implementation-sha256",
             "{implementation_sha256}",
-            "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
-            "{root}",
-            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54537,10 +54584,15 @@
           "evidence_sha256": "0575befcad51befb412569431be2c250e1f3a9e88b0ce29b78433703024ad9c5"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0BA0-behavioral.json",
-          "evidence_sha256": "0575befcad51befb412569431be2c250e1f3a9e88b0ce29b78433703024ad9c5"
+          "evidence_sha256": "56889ecd5bf0fd35a5c7919078beff53e9e3869480be42eec6ae7d74cc41a475",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AD722",
@@ -54557,7 +54609,7 @@
         "signature": "int __cdecl Mem_InvokeNewHandler(std::uint32_t size);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54567,7 +54619,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54582,7 +54634,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54609,8 +54661,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AD722-behavioral.json",
           "evidence_sha256": "1f5f76f1780e200af0e63fcea37d3bc5a908ae7b1dbb08ac4c04e55e29aa9c48"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AD722-behavioral.json",
+          "evidence_sha256": "9d55b2b0a837f634602f8df0e8b5d8897780f1bbbed2ecb9c3f8c79a61b9f431",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA6AE",
@@ -54627,7 +54688,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54637,7 +54698,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54652,7 +54713,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54679,8 +54740,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA6AE-behavioral.json",
           "evidence_sha256": "46ba9f44e0676d7fa16ae8d9169222a0759cf3a786ef2db4da5239769bfd0709"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA6AE-behavioral.json",
+          "evidence_sha256": "09db4c6ee42d7ba0a34a4087dc28a084fd69b45aa708e56801127a4275d585fd",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 29,
+          "tests_total": 29
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA682",
@@ -54697,7 +54767,7 @@
         "signature": "void* __cdecl Mem_AllocWithRetry(std::uint32_t size, std::int32_t retry);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54707,7 +54777,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54722,7 +54792,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54749,8 +54819,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA682-behavioral.json",
           "evidence_sha256": "72a89b03b9b6db48198fb905ad612eed245f8e177496fb1aefad7e043e14c941"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA682-behavioral.json",
+          "evidence_sha256": "4717ace16c5fd478cb3da5d32353873c95dee3b63435991f4aba4473ceef0722",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AA670",
@@ -54767,7 +54846,7 @@
         "signature": "void* __cdecl Mem_AllocChunk(std::uint32_t size);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54777,7 +54856,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_abi_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54792,7 +54871,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54819,8 +54898,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AA670-behavioral.json",
           "evidence_sha256": "6c022a905a2ffc69e4e1aa5803fa816fe542053f212f5c9ba1d5f74b194c89a2"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AA670-behavioral.json",
+          "evidence_sha256": "3078a95f21a8642fe09e627ac8ebcfcc33a7c6ddff42277ce8aca2b167cc11cf",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 13,
+          "tests_total": 13
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B0C60",
@@ -54837,7 +54925,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54893,12 +54981,13 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0C60-behavioral.json",
-          "evidence_sha256": "1d2001e1c85c8c2556fe580019ae57e9ef0965e90ead44987da1dde78ea3b089",
+          "evidence_sha256": "54bd6cf1610feee5a3965a98bd4d0e72cbefb6b52516c14a9539284091ef7a2a",
           "oracle": "retail-binary-execution",
           "tests_passed": 23,
           "tests_total": 23
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00517890",
@@ -55502,7 +55591,7 @@
         "signature": "void __cdecl Matrix_InvalidateSlot(void* context, std::int32_t slot);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -55512,7 +55601,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -55527,7 +55616,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -55554,8 +55643,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B7450-behavioral.json",
           "evidence_sha256": "9432b2f0011fc9bf47f96bd92e9cf424191c56e9dbebff9cefe569849600a7fd"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B7450-behavioral.json",
+          "evidence_sha256": "77d790adcf389f928c5002b7ae356759bd7bd3ce200c186c90e6cc07fe325718",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004A26C0",
@@ -56229,7 +56327,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56254,7 +56352,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56281,8 +56379,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
           "evidence_sha256": "56627eaf7c4de67ebcef9945f1c7297c3ebc0a3148cf104a174e5e6499d8f37f"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
+          "evidence_sha256": "5c886e603d9a1da3f791aaa6d574a3e4a3d5591ebe8c188b2c8d882a35e1c83d",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5F00",
@@ -56299,7 +56406,7 @@
         "signature": "void* Resource_Load(const char*, int32_t*) (candidate cdecl; callback fallback differences remain unverified)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56324,7 +56431,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56351,8 +56458,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
           "evidence_sha256": "ee2103f1aeb1cbef513b806c55290965809dda66377445d2900c5ff2a2685f68"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
+          "evidence_sha256": "8a15cf37cd4939a56c6f46563e71e9d6cb34bfb19c4578def342a832c6016811",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 16,
+          "tests_total": 16
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004AAD10",
@@ -56369,7 +56485,7 @@
         "signature": "int __cdecl Resource_MatchPrefix(const char* a, const char* b, std::uint32_t n);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56379,7 +56495,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/resource_sys_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56394,7 +56510,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56421,8 +56537,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AAD10-behavioral.json",
           "evidence_sha256": "bb98dc9dd0fbffc769878af5b0a27aa72941ab675cc0b366a8cd36575d59652f"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AAD10-behavioral.json",
+          "evidence_sha256": "c6f2caa41de2c0d3df01de4892daa167b148767c5ac8a7fdc0b6479fb5076462",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 12,
+          "tests_total": 12
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B59F0",
@@ -56439,7 +56564,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56464,7 +56589,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56491,8 +56616,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B59F0-behavioral.json",
           "evidence_sha256": "013033bcdba603d28b5c88b75fa50b41cc6c72eff0e3c50916a78972a174394b"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B59F0-behavioral.json",
+          "evidence_sha256": "d85d272adf14186032fa33be0241b3f6ff8103b196d0a2bb2054c7a0b8677297",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5C90",
@@ -56509,7 +56643,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56519,7 +56653,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/resource_lifecycle_diff_runner.py",
+          "path": "scripts/resource_sys_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56534,7 +56668,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56561,8 +56695,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5C90-behavioral.json",
           "evidence_sha256": "74b2bfcf41b9a33534cbae1bc64491f52a8e79b6dcd0d756aba500ffd63977a4"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5C90-behavioral.json",
+          "evidence_sha256": "9cca3982de42e1e0f519e477fd475f2c76d2304e0dbde203ea21f65dab2a4d81",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B60F0",
@@ -56579,7 +56722,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56604,7 +56747,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56631,8 +56774,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B60F0-behavioral.json",
           "evidence_sha256": "3c52e19a8c132b08f12441ba24f9ddbc56d0cac90279ef304d92e1f6cff945b9"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B60F0-behavioral.json",
+          "evidence_sha256": "95cccf04d225fe45489b36fbc6ef6eac2c4ac4a466c0cf0be7d003a0f3495694",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5F80",
@@ -56649,7 +56801,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56674,7 +56826,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 180
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -56701,8 +56853,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5F80-behavioral.json",
           "evidence_sha256": "4098ea6fd0e0064694276cb07acaf82aa238add4bf81e3aa81c9aa399a293c44"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5F80-behavioral.json",
+          "evidence_sha256": "08d935575e7a150ff305e9b9c78c45a652f353d9544170cfbbf190420829a578",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00410070",
@@ -58371,7 +58532,7 @@
         "signature": "int __cdecl String_ToUpperChar(int ch);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58381,7 +58542,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_leaves_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58396,7 +58557,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58423,8 +58584,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
           "evidence_sha256": "9fbb6b4a182bc0edfd23cdeeb10bc292da29bdf47cafdb6af210a4488a7546fe"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004AD73D-behavioral.json",
+          "evidence_sha256": "bfe93ed420412b196c2161e86b2773719cbecda656e1f04d2d05d15bfa056b9d",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5AF0",
@@ -58441,7 +58611,7 @@
         "signature": "void __cdecl Resource_CanonicalizePath(char* dst, const char* src);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58451,7 +58621,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/hash_lookup_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58466,7 +58636,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58493,8 +58663,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5AF0-behavioral.json",
           "evidence_sha256": "c055a75b29514221fba43b566eb627740f0135584d903b35fd19e752db2d1eb0"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5AF0-behavioral.json",
+          "evidence_sha256": "fb40f5c5e77771098c23651db848fbc2a2b012adf0528afea7fc7d1e69e1412f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 20,
+          "tests_total": 20
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B5B30",
@@ -58511,7 +58690,7 @@
         "signature": "std::uint32_t __cdecl Resource_CalculatePathHash(const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58521,7 +58700,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/hash_lookup_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58536,7 +58715,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58563,8 +58742,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5B30-behavioral.json",
           "evidence_sha256": "c12c7124dfb382971c62517e29c006e06049573ba8b8e0c94436d24edbedae3e"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B5B30-behavioral.json",
+          "evidence_sha256": "9fcc302106ee9df1cd833663ac2479fa0a41c9241d360f46fbd37df8fb75f8a1",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004C6670",
