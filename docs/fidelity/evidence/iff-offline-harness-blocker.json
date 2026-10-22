@@ -1,0 +1,21 @@
+{
+ "kind": "environment-blocker-note",
+ "schema_version": 1,
+ "natives": [
+  "Iff_FindFormChunk 0x00517890",
+  "Iff_FindChunk 0x00517940",
+  "Iff_GetChunkPayload 0x005179C0",
+  "Iff_FindChunkBelowForm 0x005178E0"
+ ],
+ "goal": "Verify the four pure chunk-tree walkers offline, so they do not depend on the candidate being wired into the model loaders.",
+ "built": "scripts/iff_chunk_tree_diff_runner.py plus scripts/iff_chunk_tree_harness.cpp.in. Retail bytes execute correctly under unicorn over a synthetic IFF graph laid out at the retail offsets (sibling +0x08, first child +0x0C, tag/FORM +0x10, form type +0x14, payload +0x1C).",
+ "blocker": "The candidate side cannot run. Any candidate exe that links engine/src/retail/model/iff_chunk_tree.cpp exits 53 under CrossOver before main prints anything, because that translation unit includes <fstream> and <filesystem>, which pull in the UCRT api-ms-win-crt-* import set. The bottle ships ucrtbase.dll but no api-ms-win-crt-* forwarder DLLs, and Wine does not synthesise them.",
+ "isolation": "Proved by reducing to a two-line main: linking a printf-only main together with iff_chunk_tree.cpp exits 53, while the same main alone prints and exits 0. A minimal std::vector program also exits 53; the working Qvm_SetGlobalState runner avoids the affected headers.",
+ "not_a_native_problem": "The walkers themselves are untouched by this. What is missing is a way to execute a candidate binary that depends on <fstream>/<filesystem> in this bottle.",
+ "options": [
+  "Obtain the api-ms-win-crt-* forwarder set for the bottle.",
+  "Build the candidate with a CRT that exports directly to msvcrt for these harnesses.",
+  "Wire the IFF family into the real model loaders and verify it through the live candidate instead, which is the path already proven to work for other natives."
+ ],
+ "consequence": "The four IFF walkers stay STRUCTURALLY_VERIFIED. No result was claimed for them."
+}
