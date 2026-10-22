@@ -57156,7 +57156,7 @@
         "signature": "int __cdecl Qvm_SetGlobalState(int state);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57166,7 +57166,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/qvm_set_global_state_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -57181,7 +57181,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57208,8 +57208,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B8A10-behavioral.json",
           "evidence_sha256": "340f69c0e5838a19a69c6df27feecb18b47844e2094e7ade996885fd6972a87a"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B8A10-behavioral.json",
+          "evidence_sha256": "e5795b0920cedf913c8aaa71a0ffcde0b954cb1d6f117ea5b87a48881411526f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B1E90",
