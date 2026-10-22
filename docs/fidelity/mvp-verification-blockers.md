@@ -136,3 +136,30 @@ So the comparison basis for this address is now reachability, with that reasonin
 `scripts/mvp_runtime_comparability.json` and in the emitted report. The native passes the strict
 gate on the pillars that apply - CFG, angr, its dedicated behavioural differential and paired
 probes on both sides - making it the eleventh native verified end to end.
+
+## The terrain result block: fix identified, landing blocked by the file's own gate
+
+`Terrain_CreateMaterial` and `Terrain_CreateTileMap` mismatch for one reason: the retail dispatcher
+supplies a 24-byte result block that each native fills and returns, while the port's script
+emulation calls `Terrain_CreateMaterial(nullptr, args)` and `Terrain_CreateTileMap(nullptr, args)`.
+Both natives then faithfully return the null they were given, so retail read `ptr` and the
+candidate read `null` on every capture.
+
+I implemented the correct fix at the two call sites - an aligned 24-byte block, as a retail caller
+supplies - rebuilt, and captured it. It works: the paired capture then observed `ptr` on both sides
+for both natives, matches rose from 13 to 15 and mismatches fell from 3 to 1. The differentials
+kept passing throughout because they exercise the natives with a real context and never covered the
+caller's omission, which is precisely why this stayed invisible.
+
+The change was then reverted, because the repository gate refuses to accept it. Editing
+`terrain_loaders.cpp` stages ten natives at once, and the pre-commit gate requires every native in a
+staged source to satisfy its requirement set: build report, behavioural differential, semantic
+review and (at VERIFIED) paired probes. Eight of those ten sit at ANALYZED or STRUCTURALLY_VERIFIED
+with no semantic review and, for several, no runner that can drive their address. So the commit is
+blocked by the other eight natives in the file, not by anything wrong with the fix.
+
+What landing it needs, concretely: semantic reviews and behavioural evidence for the seven ANALYZED
+natives (Terrain_LoadTexturesAndLightmaps, Terrain_Load, Terrain_TraverseContourQuadtree,
+Terrain_DecodeChunkCommands, Terrain_Draw, TextureModifier_Push, HeightMap_Enter), a canonical
+GameNatives source for TerrainLightMap_PushEntry, and runners for the addresses whose current
+runners do not support them. Once those exist the two-line call-site change goes in unchanged.
