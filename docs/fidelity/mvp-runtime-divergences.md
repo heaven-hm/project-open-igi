@@ -128,3 +128,24 @@ because a function that returns nothing leaves an arbitrary EAX.
   the report must record that build's digest and state the difference.
   Alternatively, per-native typed probes can observe the inlined body through
   its caller.
+
+## Two natives with paired evidence that the gate still blocks
+
+`Flow_RunHandler` `0x00402260` is observed in both images on the verification
+build (retail 1610 calls, candidate 1157, same return class), and its
+implementation digest is current. It still cannot pass, for two reasons:
+
+- its recorded GameNatives source `scripts/GameNatives/flow/00402260-Flow_RunHandler.cpp`
+  was absent from this worktree. The copy in the cmdc worktree matches the
+  recorded digest `7043aea9…` exactly and has been placed at that path, but the
+  pre-commit gate refuses to accept a legacy GameNatives source as an
+  implementation (the record's implementation is `engine/src/retail/core/flow.cpp`),
+  so the file cannot be committed here and a fresh checkout will not have it;
+- `scripts/native_unicorn_runner.py` has no case for `0x00402260`. The function
+  is 1213 bytes and calls `0x00490370`, `0x004EE940`, `0x00491220` and
+  `0x004E7BB0`, so a behavioural case is a harness job, not a table entry.
+
+`Terrain_Load` `0x004C6240` also has paired evidence, and is correctly held at
+ANALYZED: its implementation is a host-backed bridge that returns a boolean
+where the retail returns a status code, and no behavioural case exists for it.
+Promoting it would be a false claim.
