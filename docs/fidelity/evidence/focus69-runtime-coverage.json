@@ -159,11 +159,14 @@
   "next_step": "Capture a session where config.qvm load fails, or drive the view-reset and error-report paths explicitly."
  },
  "config_failure_experiment": {
-  "hypothesis": "The six Config_GraphicOptions* natives run on Config_Read's config-load failure path (0x00405884 -> 0x00405300 -> 0x00403B70).",
-  "status": "hypothesis supported statically but NOT confirmed at runtime",
-  "attempt": "config.qvm was moved aside (SHA-256 backed up and verified byte-identical on restore) and the level relaunched with hooks installed.",
-  "outcome": "Attach landed at 8.06s, after the config load had already completed, so 60 natives were observed and none of the six config natives appeared. The failure path executes during early startup, which a late attach cannot instrument.",
-  "file_restored": "config.qvm restored; SHA-256 ebd47eb264a85d8aead50716300cdc1512af305a62e7860eacc3e20602025e1c matches the backup.",
-  "conclusion": "Reaching these eight requires instrumentation that runs before the config load, i.e. pre-resume injection, which is unavailable on this host (Frida spawn hangs; spawn gating unsupported)."
+  "attempted": true,
+  "asset": "/Users/haseeb-mir/Downloads/IGI/config.qvm",
+  "method": "Temporarily moved config.qvm to config.qvm.mvp-capture-disabled during a level3 early-attach capture; restored automatically before returning.",
+  "restored": true,
+  "result": "The six Config_GraphicOptions* natives were not observed. Config_Read and the normal QVM path still executed, so the relevant config resource/callback was not the hidden file or the path did not reach the expected failure callback.",
+  "observed_unique": 60,
+  "limitations": [
+   "This is a negative runtime observation only; it does not prove the option natives are unreachable."
+  ]
  }
 }
