@@ -1,0 +1,3207 @@
+{
+  "schema_version": 1,
+  "kind": "mvp-paired-capture",
+  "tool": "frida",
+  "captureMode": "sequential",
+  "probe": "scripts/frida_mvp_batch.js",
+  "probeSha256": "0e20b059058dd39f92db46548a50bc5261f084abffd05a4997b6108b12584d2a",
+  "retail": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "retailSha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe",
+  "candidateSha256": "375895daeca4c1ee6374521bf51ccaef4334e13065d1f6e333531a5eb84df6da",
+  "level": 1,
+  "observe_seconds": 30.0,
+  "settle_seconds": 45.0,
+  "capture": {
+    "retail": {
+      "pid": 1136,
+      "error": null
+    },
+    "candidate": {
+      "pid": 1276,
+      "error": null
+    }
+  },
+  "summary": {
+    "planned": 100,
+    "unlinked": 20,
+    "retail_observed": 83,
+    "candidate_observed": 13,
+    "matched": 4,
+    "mismatched": 5,
+    "inconclusive": 91
+  },
+  "unlinked": [
+    {
+      "name": "Retail_Main",
+      "address": "0x0048F530"
+    },
+    {
+      "name": "QTask_CreateTask",
+      "address": "0x00401000"
+    },
+    {
+      "name": "Config_Read",
+      "address": "0x00405850"
+    },
+    {
+      "name": "DefineHumanPlayerGeneral",
+      "address": "0x00410070"
+    },
+    {
+      "name": "HumanPlayer_LoadParameters",
+      "address": "0x004137A0"
+    },
+    {
+      "name": "TerrainLightMap_Init_2",
+      "address": "0x004F82B0"
+    },
+    {
+      "name": "AppContext_SetTerrainLightmapsUsed",
+      "address": "0x0048F260"
+    },
+    {
+      "name": "Display_ClearSurfaces_16",
+      "address": "0x00498460"
+    },
+    {
+      "name": "TransContext_SetActiveTransContext",
+      "address": "0x00497E70"
+    },
+    {
+      "name": "Camera_ApplyBandFilter_10",
+      "address": "0x004A7157"
+    },
+    {
+      "name": "Camera_SetFieldOfView_24",
+      "address": "0x004AC620"
+    },
+    {
+      "name": "Camera_ApplyLineFilter_24",
+      "address": "0x004AC655"
+    },
+    {
+      "name": "Camera_ApplyBandFilter_24",
+      "address": "0x004AC66B"
+    },
+    {
+      "name": "Camera_ApplyWideScreen_24",
+      "address": "0x004AC6FD"
+    },
+    {
+      "name": "Script_ParseEnumReal32_5",
+      "address": "0x004F1160"
+    },
+    {
+      "name": "AnimIff_LoadAnimationFile",
+      "address": "0x004D67A0"
+    },
+    {
+      "name": "Iff_FindFormChunk",
+      "address": "0x00517890"
+    },
+    {
+      "name": "Iff_FindChunkBelowForm",
+      "address": "0x005178E0"
+    },
+    {
+      "name": "Iff_FindChunk",
+      "address": "0x00517940"
+    },
+    {
+      "name": "Iff_GetChunkPayload",
+      "address": "0x005179C0"
+    }
+  ],
+  "natives": [
+    {
+      "name": "QTask_OpenEvent",
+      "address": "0x00401050",
+      "retail_va": "0x00401050",
+      "candidate_va": "0x0041F930",
+      "retail_observed_calls": 1543,
+      "candidate_observed_calls": 821,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1543,
+        "candidate_observed_calls": 821,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [
+          "null"
+        ],
+        "ret_classes_match": true,
+        "retail_argument_class_patterns": [
+          "null|null|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "null|null|ptr|null",
+          "null|null|ptr|small:74",
+          "ptr|null|null|null",
+          "ptr|ptr|ptr|small:56",
+          "ptr|small:513|ptr|small:221"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": true
+      },
+      "result": "match"
+    },
+    {
+      "name": "QTask_RegisterClasses",
+      "address": "0x00402930",
+      "retail_va": "0x00402930",
+      "candidate_va": "0x0058DCE8",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:7"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "small:1|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Flow_CreateHandler",
+      "address": "0x00402800",
+      "retail_va": "0x00402800",
+      "candidate_va": "0x0041F2D0",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|small:1|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Flow_RunHandler",
+      "address": "0x00402260",
+      "retail_va": "0x00402260",
+      "candidate_va": "0x0041F070",
+      "retail_observed_calls": 1543,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1543,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Game_GetContext",
+      "address": "0x00402880",
+      "retail_va": "0x00402880",
+      "candidate_va": "0x0041F900",
+      "retail_observed_calls": 3088,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 3088,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Flow_SetState",
+      "address": "0x004028A0",
+      "retail_va": "0x004028A0",
+      "candidate_va": "0x0041F910",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:4"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "small:4|ptr|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Loop_SetStatusByte",
+      "address": "0x0048F480",
+      "retail_va": "0x0048F480",
+      "candidate_va": "0x0041F920",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [
+          "small:1"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [
+          "small:1|small:128|ptr|small:6"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GetActiveGraphicOptions",
+      "address": "0x00404590",
+      "retail_va": "0x00404590",
+      "candidate_va": "0x0040C750",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "address": "0x00404F00",
+      "retail_va": "0x00404F00",
+      "candidate_va": "0x0040C770",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [
+          "ptr"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [
+          "ptr|null|small:12|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "address": "0x00404F60",
+      "retail_va": "0x00404F60",
+      "candidate_va": "0x0040C7D0",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "address": "0x00405530",
+      "retail_va": "0x00405530",
+      "candidate_va": "0x0040C8E0",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "address": "0x004055C0",
+      "retail_va": "0x004055C0",
+      "candidate_va": "0x0040C880",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [
+          "small:514"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [
+          "ptr|small:6|small:12|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "address": "0x00405620",
+      "retail_va": "0x00405620",
+      "candidate_va": "0x0040C830",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "GOInRemap",
+      "address": "0x004037C0",
+      "retail_va": "0x004037C0",
+      "candidate_va": "0x0040C980",
+      "retail_observed_calls": 81,
+      "candidate_observed_calls": 81,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 81,
+        "candidate_observed_calls": 81,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [
+          "small:11",
+          "small:13",
+          "small:15",
+          "small:18",
+          "small:20",
+          "small:22",
+          "small:24",
+          "small:9"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|small:11|null",
+          "ptr|ptr|small:12|null",
+          "ptr|ptr|small:14|null",
+          "ptr|ptr|small:5|null",
+          "ptr|ptr|small:6|null",
+          "ptr|ptr|small:9|null",
+          "ptr|small:1152|small:10|null",
+          "ptr|small:144|small:5|null",
+          "ptr|small:2304|small:5|null",
+          "ptr|small:288|small:14|null",
+          "ptr|small:576|small:5|null",
+          "ptr|small:72|small:5|null"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "mismatch"
+    },
+    {
+      "name": "Human_IsCrouched",
+      "address": "0x00463180",
+      "retail_va": "0x00463180",
+      "candidate_va": "0x00422540",
+      "retail_observed_calls": 7382,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 7382,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|small:35|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Human_CameraEyePosition",
+      "address": "0x00465820",
+      "retail_va": "0x00465820",
+      "candidate_va": "0x00422550",
+      "retail_observed_calls": 7382,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 7382,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Human_TaskViewReset",
+      "address": "0x004659E0",
+      "retail_va": "0x004659E0",
+      "candidate_va": "0x004225A0",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "InputPort_Process",
+      "address": "0x004ED5C0",
+      "retail_va": "0x004ED5C0",
+      "candidate_va": "0x00422E30",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|small:29|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Script_GetDebugCompileState",
+      "address": "0x0048F1D0",
+      "retail_va": "0x0048F1D0",
+      "candidate_va": "0x0043EB40",
+      "retail_observed_calls": 121,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 121,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|ptr|ptr|null",
+          "ptr|null|ptr|null",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|small:12|ptr|null",
+          "ptr|small:16|ptr|null",
+          "ptr|small:20|ptr|null",
+          "ptr|small:24|ptr|null",
+          "ptr|small:28|ptr|null",
+          "ptr|small:32|ptr|null",
+          "ptr|small:4|ptr|null",
+          "ptr|small:8|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Script_GetForcePrecompiledState",
+      "address": "0x0048F340",
+      "retail_va": "0x0048F340",
+      "candidate_va": "0x0043EB50",
+      "retail_observed_calls": 6160,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 6160,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|ptr|ptr|null",
+          "ptr|null|ptr|null",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|small:12|ptr|null",
+          "ptr|small:16|ptr|null",
+          "ptr|small:20|ptr|null",
+          "ptr|small:24|ptr|null",
+          "ptr|small:28|ptr|null",
+          "ptr|small:32|ptr|null",
+          "ptr|small:4|ptr|null",
+          "ptr|small:8|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "String_FindExtension",
+      "address": "0x004B1E90",
+      "retail_va": "0x004B1E90",
+      "candidate_va": "0x0043EBB0",
+      "retail_observed_calls": 167,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 167,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|null|ptr|null",
+          "null|null|ptr|ptr",
+          "ptr|small:10|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_FileExists",
+      "address": "0x004B5B60",
+      "retail_va": "0x004B5B60",
+      "candidate_va": "0x0043EB60",
+      "retail_observed_calls": 1439,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1439,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|small:128|ptr",
+          "ptr|ptr|small:12|ptr",
+          "ptr|ptr|small:16|ptr",
+          "ptr|ptr|small:20|ptr",
+          "ptr|ptr|small:24|ptr",
+          "ptr|ptr|small:28|ptr",
+          "ptr|ptr|small:32|ptr",
+          "ptr|ptr|small:4|ptr",
+          "ptr|ptr|small:8|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_ReportError",
+      "address": "0x004B7E10",
+      "retail_va": "0x004B7E10",
+      "candidate_va": "0x0043EC80",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_Load",
+      "address": "0x004B80B0",
+      "retail_va": "0x004B80B0",
+      "candidate_va": "0x0043ED30",
+      "retail_observed_calls": 121,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 121,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:10",
+          "ptr|ptr|ptr|small:1506",
+          "ptr|ptr|ptr|small:1898",
+          "ptr|ptr|ptr|small:1989",
+          "ptr|ptr|ptr|small:2022",
+          "ptr|ptr|ptr|small:2217",
+          "ptr|ptr|ptr|small:3032",
+          "ptr|ptr|ptr|small:3091",
+          "ptr|ptr|ptr|small:3099",
+          "ptr|ptr|ptr|small:3201"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_Cleanup",
+      "address": "0x004B83D0",
+      "retail_va": "0x004B83D0",
+      "candidate_va": "0x0043ECE0",
+      "retail_observed_calls": 83,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 83,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:1"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_SetGlobalState",
+      "address": "0x004B8A10",
+      "retail_va": "0x004B8A10",
+      "candidate_va": "0x0043EBA0",
+      "retail_observed_calls": 121,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 121,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|small:148|small:4|null",
+          "null|small:148|small:4|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_ExecuteInstructions",
+      "address": "0x004BCFD0",
+      "retail_va": "0x004BCFD0",
+      "candidate_va": "0x00452350",
+      "retail_observed_calls": 42712,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 42712,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|ptr|small:2",
+          "ptr|small:10728|ptr|small:2",
+          "ptr|small:11920|ptr|small:2",
+          "ptr|small:1192|ptr|small:2",
+          "ptr|small:2384|ptr|small:2",
+          "ptr|small:3576|ptr|small:2",
+          "ptr|small:4768|ptr|small:2",
+          "ptr|small:5960|ptr|small:2",
+          "ptr|small:7152|ptr|small:2",
+          "ptr|small:8344|ptr|small:2",
+          "ptr|small:9536|ptr|small:2"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_SetOpcodeHandler",
+      "address": "0x004BD3D0",
+      "retail_va": "0x004BD3D0",
+      "candidate_va": "0x00452330",
+      "retail_observed_calls": 472,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 472,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|null|ptr|ptr",
+          "small:10|null|ptr|ptr",
+          "small:11|null|ptr|ptr",
+          "small:1|null|ptr|ptr",
+          "small:2|null|ptr|ptr",
+          "small:3|null|ptr|ptr",
+          "small:4|null|ptr|ptr",
+          "small:5|null|ptr|ptr",
+          "small:6|null|ptr|ptr",
+          "small:7|null|ptr|ptr",
+          "small:8|null|ptr|ptr",
+          "small:9|null|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Qvm_PushInteger",
+      "address": "0x004BDA00",
+      "retail_va": "0x004BDA00",
+      "candidate_va": "0x00452300",
+      "retail_observed_calls": 25973,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 25973,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:10",
+          "small:11",
+          "small:12",
+          "small:13",
+          "small:14",
+          "small:2",
+          "small:3"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|small:10|ptr|ptr",
+          "ptr|small:11|ptr|ptr",
+          "ptr|small:12|ptr|ptr",
+          "ptr|small:13|ptr|ptr",
+          "ptr|small:14|ptr|ptr",
+          "ptr|small:1|ptr|ptr",
+          "ptr|small:2|ptr|ptr",
+          "ptr|small:3|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:5|ptr|ptr",
+          "ptr|small:6|ptr|ptr",
+          "ptr|small:7|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Display_ComputeScreenAspect",
+      "address": "0x00491D40",
+      "retail_va": "0x00491D40",
+      "candidate_va": "0x00433E40",
+      "retail_observed_calls": 118,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 118,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Transcontext_BuildViewBlock",
+      "address": "0x00497D70",
+      "retail_va": "0x00497D70",
+      "candidate_va": "0x00433E60",
+      "retail_observed_calls": 59,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 59,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Camera_ResetMatrix",
+      "address": "0x004A2600",
+      "retail_va": "0x004A2600",
+      "candidate_va": "0x00433A90",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Matrix_InvalidateSlot",
+      "address": "0x004B7450",
+      "retail_va": "0x004B7450",
+      "candidate_va": "0x00433960",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_GetNextChunk",
+      "address": "0x004B7470",
+      "retail_va": "0x004B7470",
+      "candidate_va": "0x004523D0",
+      "retail_observed_calls": 71573,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 71573,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:-1"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_GetFirstChunk",
+      "address": "0x004B7490",
+      "retail_va": "0x004B7490",
+      "candidate_va": "0x00452400",
+      "retail_observed_calls": 9463,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 9463,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|null",
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:-1"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_GetChunkPayload",
+      "address": "0x004B74D0",
+      "retail_va": "0x004B74D0",
+      "candidate_va": "0x00452480",
+      "retail_observed_calls": 18984,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 18984,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:1",
+          "ptr|ptr|small:1056|small:1",
+          "ptr|ptr|small:160|small:1",
+          "ptr|ptr|small:16416|small:1",
+          "ptr|ptr|small:2080|small:1",
+          "ptr|ptr|small:288|small:1",
+          "ptr|ptr|small:32800|small:1",
+          "ptr|ptr|small:4128|small:1",
+          "ptr|ptr|small:544|small:1",
+          "ptr|ptr|small:61|small:4",
+          "ptr|ptr|small:8224|small:1"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_ReadContainerHeader",
+      "address": "0x004B7540",
+      "retail_va": "0x004B7540",
+      "candidate_va": "0x00452530",
+      "retail_observed_calls": 5444,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 5444,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_GetFormType",
+      "address": "0x004B7570",
+      "retail_va": "0x004B7570",
+      "candidate_va": "0x00452560",
+      "retail_observed_calls": 35,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 35,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|small:1|ptr|ptr",
+          "ptr|small:2|ptr|ptr",
+          "ptr|small:3|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:5|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_GetChunkTag",
+      "address": "0x004B7580",
+      "retail_va": "0x004B7580",
+      "candidate_va": "0x00452580",
+      "retail_observed_calls": 21381,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 21381,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr",
+          "small:16"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:1",
+          "ptr|ptr|ptr|small:10",
+          "ptr|ptr|ptr|small:2",
+          "ptr|ptr|ptr|small:3",
+          "ptr|ptr|ptr|small:4",
+          "ptr|ptr|ptr|small:5",
+          "ptr|ptr|ptr|small:6",
+          "ptr|ptr|ptr|small:7",
+          "ptr|ptr|ptr|small:8",
+          "ptr|ptr|ptr|small:9"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_FindChunk",
+      "address": "0x004B7590",
+      "retail_va": "0x004B7590",
+      "candidate_va": "0x004525A0",
+      "retail_observed_calls": 9050,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 9050,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Ilff_FindFormChunk",
+      "address": "0x004CEAA0",
+      "retail_va": "0x004CEAA0",
+      "candidate_va": "0x00421670",
+      "retail_observed_calls": 618,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 618,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_MatchPrefix",
+      "address": "0x004AAD10",
+      "retail_va": "0x004AAD10",
+      "candidate_va": "0x0043B650",
+      "retail_observed_calls": 50491,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 50491,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "small:-1",
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|small:12|null",
+          "ptr|ptr|small:12|ptr",
+          "ptr|ptr|small:12|small:35",
+          "ptr|ptr|small:13|null",
+          "ptr|ptr|small:13|ptr",
+          "ptr|ptr|small:13|small:35",
+          "ptr|ptr|small:6|null",
+          "ptr|ptr|small:6|ptr",
+          "ptr|ptr|small:8|null",
+          "ptr|ptr|small:8|ptr",
+          "ptr|ptr|small:9|null",
+          "ptr|ptr|small:9|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "String_ToUpperChar",
+      "address": "0x004AD73D",
+      "retail_va": "0x004AD73D",
+      "candidate_va": "0x00452600",
+      "retail_observed_calls": 1443550,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1443550,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:58",
+          "small:65",
+          "small:66",
+          "small:67",
+          "small:68",
+          "small:69",
+          "small:76",
+          "small:79"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "small:100|ptr|ptr|ptr",
+          "small:101|ptr|ptr|ptr",
+          "small:102|ptr|ptr|ptr",
+          "small:103|ptr|ptr|ptr",
+          "small:117|ptr|ptr|ptr",
+          "small:46|ptr|ptr|ptr",
+          "small:58|ptr|ptr|ptr",
+          "small:65|ptr|ptr|ptr",
+          "small:67|ptr|ptr|ptr",
+          "small:76|ptr|ptr|ptr",
+          "small:79|ptr|ptr|ptr",
+          "small:98|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "QHash_ValueSet",
+      "address": "0x004B0D40",
+      "retail_va": "0x004B0D40",
+      "candidate_va": "0x00422F20",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:8"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Device_CloseStream",
+      "address": "0x004B1690",
+      "retail_va": "0x004B1690",
+      "candidate_va": "0x00433FD0",
+      "retail_observed_calls": 345,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 345,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:-1",
+          "ptr|ptr|ptr|small:5",
+          "ptr|ptr|small:9|ptr",
+          "ptr|small:1|ptr|ptr",
+          "ptr|small:2|ptr|ptr",
+          "ptr|small:3|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:5|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Device_GetStreamPosition",
+      "address": "0x004B1780",
+      "retail_va": "0x004B1780",
+      "candidate_va": "0x00433F80",
+      "retail_observed_calls": 203,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 203,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr",
+          "small:255",
+          "small:259",
+          "small:270",
+          "small:313",
+          "small:314",
+          "small:319",
+          "small:354"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:-1",
+          "ptr|ptr|ptr|small:5",
+          "ptr|small:1|ptr|ptr",
+          "ptr|small:2|ptr|ptr",
+          "ptr|small:3|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:5|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Device_SeekStream",
+      "address": "0x004B17F0",
+      "retail_va": "0x004B17F0",
+      "candidate_va": "0x00433FA0",
+      "retail_observed_calls": 203,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 203,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_CreateNode",
+      "address": "0x004B59F0",
+      "retail_va": "0x004B59F0",
+      "candidate_va": "0x0043B700",
+      "retail_observed_calls": 5636,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 5636,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|ptr|small:20604",
+          "ptr|null|ptr|small:255",
+          "ptr|null|ptr|small:259",
+          "ptr|null|ptr|small:263",
+          "ptr|null|ptr|small:266",
+          "ptr|null|ptr|small:267",
+          "ptr|null|ptr|small:270",
+          "ptr|null|ptr|small:313",
+          "ptr|null|ptr|small:314",
+          "ptr|null|ptr|small:319",
+          "ptr|null|ptr|small:354"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_CanonicalizePath",
+      "address": "0x004B5AF0",
+      "retail_va": "0x004B5AF0",
+      "candidate_va": "0x00452620",
+      "retail_observed_calls": 13366,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 13366,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_CalculatePathHash",
+      "address": "0x004B5B30",
+      "retail_va": "0x004B5B30",
+      "candidate_va": "0x00452690",
+      "retail_observed_calls": 13366,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 13366,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:10406",
+          "small:3015",
+          "small:4384",
+          "small:5523",
+          "small:583",
+          "small:6908",
+          "small:843",
+          "small:9268"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:255",
+          "ptr|ptr|ptr|small:259",
+          "ptr|ptr|ptr|small:263",
+          "ptr|ptr|ptr|small:266",
+          "ptr|ptr|ptr|small:267",
+          "ptr|ptr|ptr|small:270",
+          "ptr|ptr|ptr|small:313",
+          "ptr|ptr|ptr|small:314",
+          "ptr|ptr|ptr|small:319",
+          "ptr|ptr|ptr|small:354"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_FreeNode",
+      "address": "0x004B5C90",
+      "retail_va": "0x004B5C90",
+      "candidate_va": "0x0043B8A0",
+      "retail_observed_calls": 1153,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1153,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr",
+          "small:1",
+          "small:10",
+          "small:11",
+          "small:12",
+          "small:14",
+          "small:15",
+          "small:152"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_Load",
+      "address": "0x004B5F00",
+      "retail_va": "0x004B5F00",
+      "candidate_va": "0x0043B0B0",
+      "retail_observed_calls": 4647,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 4647,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|ptr|small:1",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|small:30|small:31",
+          "ptr|ptr|small:33|small:34",
+          "ptr|ptr|small:34|small:35",
+          "ptr|ptr|small:35|small:36",
+          "ptr|ptr|small:36|small:37",
+          "ptr|ptr|small:37|small:38",
+          "ptr|ptr|small:38|small:39",
+          "ptr|ptr|small:39|small:40"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_RegisterBuffer",
+      "address": "0x004B5F80",
+      "retail_va": "0x004B5F80",
+      "candidate_va": "0x0043BF10",
+      "retail_observed_calls": 203,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 203,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|small:255|ptr",
+          "ptr|ptr|small:259|ptr",
+          "ptr|ptr|small:263|ptr",
+          "ptr|ptr|small:264|ptr",
+          "ptr|ptr|small:266|ptr",
+          "ptr|ptr|small:267|ptr",
+          "ptr|ptr|small:270|ptr",
+          "ptr|ptr|small:313|ptr",
+          "ptr|ptr|small:314|ptr",
+          "ptr|ptr|small:319|ptr",
+          "ptr|ptr|small:354|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_RegisterIlffContainer",
+      "address": "0x004B60F0",
+      "retail_va": "0x004B60F0",
+      "candidate_va": "0x0043BB80",
+      "retail_observed_calls": 29,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 29,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Resource_Unload",
+      "address": "0x004B6380",
+      "retail_va": "0x004B6380",
+      "candidate_va": "0x0043B040",
+      "retail_observed_calls": 1204,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1204,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:10",
+          "small:15",
+          "small:206",
+          "small:2666",
+          "small:4454",
+          "small:622"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:128",
+          "ptr|ptr|ptr|small:16",
+          "ptr|ptr|ptr|small:256",
+          "ptr|ptr|ptr|small:32",
+          "ptr|ptr|ptr|small:512",
+          "ptr|ptr|ptr|small:64",
+          "ptr|ptr|small:23|ptr",
+          "ptr|ptr|small:53|small:25526",
+          "ptr|ptr|small:79|ptr",
+          "ptr|ptr|small:9|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LookupHashItem",
+      "address": "0x004CF300",
+      "retail_va": "0x004CF300",
+      "candidate_va": "0x00421620",
+      "retail_observed_calls": 604,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 604,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|null|ptr",
+          "ptr|small:10|null|ptr",
+          "ptr|small:11|null|ptr",
+          "ptr|small:1|null|ptr",
+          "ptr|small:2|null|ptr",
+          "ptr|small:3|null|ptr",
+          "ptr|small:4|null|ptr",
+          "ptr|small:5|null|ptr",
+          "ptr|small:6|null|ptr",
+          "ptr|small:7|null|ptr",
+          "ptr|small:8|null|ptr",
+          "ptr|small:9|null|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadPackageMeshes",
+      "address": "0x004CF330",
+      "retail_va": "0x004CF330",
+      "candidate_va": "0x00421CC0",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadModelMesh",
+      "address": "0x004CF390",
+      "retail_va": "0x004CF390",
+      "candidate_va": "0x0042A620",
+      "retail_observed_calls": 604,
+      "candidate_observed_calls": 138,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 604,
+        "candidate_observed_calls": 138,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [
+          "ptr"
+        ],
+        "ret_classes_match": true,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|small:20184|small:17",
+          "ptr|ptr|small:3088|null",
+          "ptr|ptr|small:3332|null",
+          "ptr|ptr|small:3564|null",
+          "ptr|ptr|small:4536|null",
+          "ptr|ptr|small:4616|null",
+          "ptr|ptr|small:4836|null",
+          "ptr|ptr|small:5716|null",
+          "ptr|ptr|small:5776|null",
+          "ptr|ptr|small:6560|null",
+          "ptr|ptr|small:8300|null",
+          "ptr|ptr|small:8340|null"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": true
+      },
+      "result": "match"
+    },
+    {
+      "name": "DynObj_LoadPackageLovs",
+      "address": "0x004CF630",
+      "retail_va": "0x004CF630",
+      "candidate_va": "0x00421D60",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadPackageAnimations",
+      "address": "0x004CF910",
+      "retail_va": "0x004CF910",
+      "candidate_va": "0x00421A20",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Model_GetAttachment",
+      "address": "0x004D0CF0",
+      "retail_va": "0x004D0CF0",
+      "candidate_va": "0x0042E4E0",
+      "retail_observed_calls": 638,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 638,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|small:93|ptr",
+          "ptr|small:1|ptr|ptr",
+          "ptr|small:1|small:93|ptr",
+          "ptr|small:2|ptr|ptr",
+          "ptr|small:2|small:93|ptr",
+          "ptr|small:3|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:5|ptr|ptr",
+          "ptr|small:6|ptr|ptr",
+          "ptr|small:7|ptr|ptr",
+          "ptr|small:8|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Model_GetAttachmentCount",
+      "address": "0x004D0D10",
+      "retail_va": "0x004D0D10",
+      "candidate_va": "0x0042E500",
+      "retail_observed_calls": 1048,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1048,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "small:1",
+          "small:14",
+          "small:17",
+          "small:18",
+          "small:5",
+          "small:8",
+          "small:9"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|null",
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|small:65535|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "LODSettings_LoadParameters",
+      "address": "0x004EDB60",
+      "retail_va": "0x004EDB60",
+      "candidate_va": "0x00433C30",
+      "retail_observed_calls": 462,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 462,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadModelTexturePackage",
+      "address": "0x004CF080",
+      "retail_va": "0x004CF080",
+      "candidate_va": "0x00431B90",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 2,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 2,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [
+          "ptr"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|small:1|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|small:13256|null",
+          "ptr|ptr|small:26528|null"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "mismatch"
+    },
+    {
+      "name": "Camera_UpdateFogPalette",
+      "address": "0x004A26C0",
+      "retail_va": "0x004A26C0",
+      "candidate_va": "0x00433A10",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_GetActiveBackendId",
+      "address": "0x004B0F80",
+      "retail_va": "0x004B0F80",
+      "candidate_va": "0x0045BB70",
+      "retail_observed_calls": 2768,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2768,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null",
+          "small:-1",
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "null|null|small:133|small:1",
+          "null|ptr|small:2|ptr",
+          "ptr|null|ptr|ptr",
+          "ptr|null|small:3|null",
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:131",
+          "ptr|ptr|ptr|small:16",
+          "ptr|ptr|ptr|small:32",
+          "ptr|ptr|small:-1|ptr",
+          "ptr|small:530|ptr|ptr",
+          "small:20|small:1|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_UploadMipmapPacket",
+      "address": "0x004B23B0",
+      "retail_va": "0x004B23B0",
+      "candidate_va": "0x0045BBA0",
+      "retail_observed_calls": 1387,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1387,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1364",
+          "small:170",
+          "small:18",
+          "small:2048",
+          "small:32768",
+          "small:43690",
+          "small:512",
+          "small:8192"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|small:256|small:128",
+          "ptr|null|small:256|small:64",
+          "ptr|ptr|small:128|small:128",
+          "ptr|ptr|small:128|small:64",
+          "ptr|ptr|small:16|small:16",
+          "ptr|ptr|small:16|small:8",
+          "ptr|ptr|small:256|small:128",
+          "ptr|ptr|small:32|small:16",
+          "ptr|ptr|small:32|small:32",
+          "ptr|ptr|small:512|small:256",
+          "ptr|ptr|small:64|small:32",
+          "ptr|ptr|small:64|small:64"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_LoadLoopTextureFile",
+      "address": "0x004B24C0",
+      "retail_va": "0x004B24C0",
+      "candidate_va": "0x0045BCB0",
+      "retail_observed_calls": 683,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 683,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:4454"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|ptr|small:93",
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_EnableUpload",
+      "address": "0x004B26A0",
+      "retail_va": "0x004B26A0",
+      "candidate_va": "0x0045BB80",
+      "retail_observed_calls": 684,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 684,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:5"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_DisableUpload",
+      "address": "0x004B26B0",
+      "retail_va": "0x004B26B0",
+      "candidate_va": "0x0045BB90",
+      "retail_observed_calls": 685,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 685,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr",
+          "small:1",
+          "small:18",
+          "small:4454"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:5"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Texture_UploadPalettePacket",
+      "address": "0x004B7CF0",
+      "retail_va": "0x004B7CF0",
+      "candidate_va": "0x0045BC60",
+      "retail_observed_calls": 4,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 4,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|small:1|ptr",
+          "ptr|ptr|small:1|small:12"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadModelTextures",
+      "address": "0x004CF790",
+      "retail_va": "0x004CF790",
+      "candidate_va": "0x0045C2E0",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "DynObj_LoadPackagePalettes",
+      "address": "0x004CF870",
+      "retail_va": "0x004CF870",
+      "candidate_va": "0x00421BE0",
+      "retail_observed_calls": 2,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 2,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|small:14148|ptr|null",
+          "ptr|small:9864|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "TextureModifier_Push",
+      "address": "0x00505E40",
+      "retail_va": "0x00505E40",
+      "candidate_va": "0x00452CE0",
+      "retail_observed_calls": 3233,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 3233,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:2",
+          "small:3",
+          "small:4",
+          "small:5",
+          "small:6",
+          "small:7",
+          "small:8"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|small:1|ptr",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|small:1|ptr",
+          "ptr|small:1280|ptr|ptr",
+          "ptr|small:1280|small:1|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "address": "0x004C5F00",
+      "retail_va": "0x004C5F00",
+      "candidate_va": "0x0045A340",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [
+          "small:10"
+        ],
+        "candidate_ret_classes": [
+          "small:1"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "mismatch"
+    },
+    {
+      "name": "Terrain_Load",
+      "address": "0x004C6240",
+      "retail_va": "0x004C6240",
+      "candidate_va": "0x00459870",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [
+          "ptr"
+        ],
+        "ret_classes_match": true,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": true
+      },
+      "result": "match"
+    },
+    {
+      "name": "Terrain_CreateMaterial",
+      "address": "0x004C6670",
+      "retail_va": "0x004C6670",
+      "candidate_va": "0x00452B20",
+      "retail_observed_calls": 6,
+      "candidate_observed_calls": 6,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 6,
+        "candidate_observed_calls": 6,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [
+          "null"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [
+          "null|ptr|small:5|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "mismatch"
+    },
+    {
+      "name": "Terrain_CreateTileMap",
+      "address": "0x004C6760",
+      "retail_va": "0x004C6760",
+      "candidate_va": "0x00452C30",
+      "retail_observed_calls": 8,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 8,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Render_GetActiveBackendId",
+      "address": "0x004CEA80",
+      "retail_va": "0x004CEA80",
+      "candidate_va": "0x00433940",
+      "retail_observed_calls": 1209,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1209,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:40"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:184",
+          "ptr|ptr|ptr|small:185",
+          "ptr|ptr|ptr|small:186",
+          "ptr|ptr|ptr|small:187",
+          "ptr|ptr|ptr|small:188",
+          "ptr|ptr|ptr|small:189",
+          "ptr|ptr|small:185|ptr",
+          "ptr|ptr|small:186|ptr",
+          "ptr|ptr|small:187|ptr",
+          "ptr|ptr|small:188|ptr",
+          "ptr|ptr|small:189|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Terrain_TraverseContourQuadtree",
+      "address": "0x004D14E0",
+      "retail_va": "0x004D14E0",
+      "candidate_va": "0x0058DF30",
+      "retail_observed_calls": 59,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 59,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:2048"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|small:163|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "HeightMap_Enter",
+      "address": "0x00506F00",
+      "retail_va": "0x00506F00",
+      "candidate_va": "0x00452D80",
+      "retail_observed_calls": 360,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 360,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:2",
+          "small:3"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "ptr|null|small:1|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Terrain_DecodeChunkCommands",
+      "address": "0x00510010",
+      "retail_va": "0x00510010",
+      "candidate_va": "0x0058DFC6",
+      "retail_observed_calls": 44,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 44,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1",
+          "small:2",
+          "small:3",
+          "small:39",
+          "small:42",
+          "small:499",
+          "small:5",
+          "small:8"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Terrain_Draw",
+      "address": "0x00512C30",
+      "retail_va": "0x00512C30",
+      "candidate_va": "0x0058E05C",
+      "retail_observed_calls": 59,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 59,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "null"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "small:1|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Terrain_LoadTexturePackage",
+      "address": "0x005175A0",
+      "retail_va": "0x005175A0",
+      "candidate_va": "0x0045BE60",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "sprintf",
+      "address": "0x004A53B3",
+      "retail_va": "0x004A53B3",
+      "candidate_va": "0x00496CF0",
+      "retail_observed_calls": 14055,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 14055,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:15",
+          "small:17",
+          "small:19",
+          "small:20",
+          "small:21",
+          "small:27",
+          "small:29",
+          "small:31"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|null|null",
+          "ptr|ptr|null|ptr",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:28225",
+          "ptr|ptr|small:1|ptr",
+          "ptr|ptr|small:2|ptr",
+          "ptr|ptr|small:3|ptr",
+          "ptr|ptr|small:4|ptr",
+          "ptr|ptr|small:5|ptr",
+          "ptr|ptr|small:6|ptr",
+          "ptr|ptr|small:7|ptr",
+          "ptr|ptr|small:8|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "String_VFormat",
+      "address": "0x004A5702",
+      "retail_va": "0x004A5702",
+      "candidate_va": "0x004223C0",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Mem_AllocChunk",
+      "address": "0x004AA670",
+      "retail_va": "0x004AA670",
+      "candidate_va": "0x004230A0",
+      "retail_observed_calls": 73216,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 73216,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|small:584|ptr|ptr",
+          "small:12032|small:8|ptr|ptr",
+          "small:2464|ptr|ptr|null",
+          "small:40|ptr|null|ptr",
+          "small:51|ptr|ptr|ptr",
+          "small:52|ptr|ptr|ptr",
+          "small:53|ptr|ptr|ptr",
+          "small:54|ptr|ptr|ptr",
+          "small:60020|small:4999|ptr|ptr",
+          "small:60|ptr|null|ptr",
+          "small:80|ptr|ptr|ptr",
+          "small:92|ptr|small:10|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Mem_AllocWithRetry",
+      "address": "0x004AA682",
+      "retail_va": "0x004AA682",
+      "candidate_va": "0x00422FF0",
+      "retail_observed_calls": 73216,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 73216,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|null|ptr|ptr",
+          "small:12032|null|ptr|small:12032",
+          "small:2464|null|ptr|small:2464",
+          "small:40|null|ptr|small:40",
+          "small:51|null|ptr|small:51",
+          "small:52|null|ptr|small:52",
+          "small:53|null|ptr|small:53",
+          "small:54|null|ptr|small:54",
+          "small:60020|null|ptr|small:60020",
+          "small:60|null|ptr|small:60",
+          "small:80|null|ptr|small:80",
+          "small:92|null|ptr|small:92"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Mem_AllocateRawBlock",
+      "address": "0x004AA6AE",
+      "retail_va": "0x004AA6AE",
+      "candidate_va": "0x00422FA0",
+      "retail_observed_calls": 73216,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 73216,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "small:12032|ptr|small:12032|null",
+          "small:2464|ptr|small:2464|null",
+          "small:40|ptr|small:40|null",
+          "small:51|ptr|small:51|null",
+          "small:52|ptr|small:52|null",
+          "small:53|ptr|small:53|null",
+          "small:54|ptr|small:54|null",
+          "small:60020|ptr|small:60020|null",
+          "small:60|ptr|small:60|null",
+          "small:80|ptr|small:80|null",
+          "small:92|ptr|small:92|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Mem_InvokeNewHandler",
+      "address": "0x004AD722",
+      "retail_va": "0x004AD722",
+      "candidate_va": "0x00422F70",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Error_Show",
+      "address": "0x004AF7B0",
+      "retail_va": "0x004AF7B0",
+      "candidate_va": "0x00422420",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "HeapList_Insert",
+      "address": "0x004AF8F0",
+      "retail_va": "0x004AF8F0",
+      "candidate_va": "0x00422E80",
+      "retail_observed_calls": 95888,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 95888,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:10",
+          "ptr|ptr|ptr|small:256",
+          "ptr|ptr|small:20|ptr",
+          "ptr|ptr|small:24|ptr",
+          "ptr|ptr|small:32|ptr",
+          "ptr|ptr|small:48|ptr",
+          "ptr|ptr|small:4999|ptr",
+          "ptr|ptr|small:56|ptr",
+          "ptr|ptr|small:584|ptr",
+          "ptr|ptr|small:8|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "HeapList_Remove",
+      "address": "0x004AF960",
+      "retail_va": "0x004AF960",
+      "candidate_va": "0x00422EA0",
+      "retail_observed_calls": 43006,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 43006,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr",
+          "ptr|ptr|ptr|small:108",
+          "ptr|ptr|ptr|small:24",
+          "ptr|ptr|ptr|small:28",
+          "ptr|ptr|ptr|small:324",
+          "ptr|ptr|ptr|small:4",
+          "ptr|ptr|ptr|small:8",
+          "ptr|small:108|ptr|ptr",
+          "ptr|small:28|ptr|ptr",
+          "ptr|small:324|ptr|ptr",
+          "ptr|small:4|ptr|ptr",
+          "ptr|small:8|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "Mem_InitHeapState",
+      "address": "0x004B0BA0",
+      "retail_va": "0x004B0BA0",
+      "candidate_va": "0x00422F30",
+      "retail_observed_calls": 1,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [
+          "small:8"
+        ],
+        "candidate_ret_classes": [
+          "null"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "ptr|ptr|ptr|ptr"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "mismatch"
+    },
+    {
+      "name": "Mem_Alloc",
+      "address": "0x004B0C60",
+      "retail_va": "0x004B0C60",
+      "candidate_va": "0x00423160",
+      "retail_observed_calls": 72995,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 72995,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "ptr"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|small:4|ptr|ptr",
+          "small:12000|small:4|ptr|ptr",
+          "small:19|small:4|ptr|ptr",
+          "small:20|small:4|ptr|ptr",
+          "small:21|small:4|ptr|ptr",
+          "small:22|small:4|ptr|ptr",
+          "small:2432|small:4|ptr|ptr",
+          "small:28|small:4|small:1|ptr",
+          "small:48|small:4|ptr|ptr",
+          "small:59988|small:4|small:8|small:4",
+          "small:60|small:4|ptr|ptr",
+          "small:8|small:4|ptr|null"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "AppContext_SetIsActive",
+      "address": "0x0048F140",
+      "retail_va": "0x0048F140",
+      "candidate_va": "0x0041F980",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 1,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 1,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [
+          "small:1"
+        ],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [
+          "small:1|small:128|ptr|small:6"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "AppContext_GetIsActive",
+      "address": "0x0048F170",
+      "retail_va": "0x0048F170",
+      "candidate_va": "0x0041F9B0",
+      "retail_observed_calls": 1544,
+      "candidate_observed_calls": 821,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 1544,
+        "candidate_observed_calls": 821,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [
+          "small:1"
+        ],
+        "ret_classes_match": true,
+        "retail_argument_class_patterns": [
+          "null|null|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [
+          "null|null|ptr|null",
+          "null|null|ptr|small:74",
+          "ptr|null|null|null",
+          "ptr|ptr|ptr|small:56",
+          "ptr|small:513|ptr|small:221"
+        ],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": true
+      },
+      "result": "match"
+    },
+    {
+      "name": "App_ContextGetDebugged",
+      "address": "0x0048F1B0",
+      "retail_va": "0x0048F1B0",
+      "candidate_va": "0x0041E940",
+      "retail_observed_calls": 0,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 0,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "App_ContextGetLightmapsUsed",
+      "address": "0x0048F230",
+      "retail_va": "0x0048F230",
+      "candidate_va": "0x0041E970",
+      "retail_observed_calls": 22,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 22,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "small:93|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    },
+    {
+      "name": "App_ContextGetTerrainLightmapsUsed",
+      "address": "0x0048F250",
+      "retail_va": "0x0048F250",
+      "candidate_va": "0x0041E990",
+      "retail_observed_calls": 386,
+      "candidate_observed_calls": 0,
+      "comparison": {
+        "basis": "reachability plus return-value class set",
+        "retail_observed_calls": 386,
+        "candidate_observed_calls": 0,
+        "retail_ret_classes": [
+          "small:1"
+        ],
+        "candidate_ret_classes": [],
+        "ret_classes_match": false,
+        "retail_argument_class_patterns": [
+          "ptr|ptr|ptr|null",
+          "ptr|small:3|ptr|ptr",
+          "small:93|ptr|ptr|ptr"
+        ],
+        "candidate_argument_class_patterns": [],
+        "arguments_compared": false,
+        "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+        "match": false
+      },
+      "result": "inconclusive"
+    }
+  ],
+  "limitations": [
+    "The probe records arguments and return values as process-independent classes: pointers cannot be compared by value because heap addresses differ, so only the class (null/small-exact/pointer) is comparable.",
+    "Retail and the candidate are captured one at a time because both hold a single-instance mutex, and the two runs attach at different points of level load, so call indices, call counts and per-call arguments do not correspond. Only the return-value class set is compared.",
+    "A captured call proves the native was reached in both images and that both returned the same class of value; it does not prove behavioural parity and does not establish any side effect."
+  ]
+}

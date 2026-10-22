@@ -53273,6 +53273,11 @@
           "oracle": "retail-binary-execution",
           "tests_passed": 11,
           "tests_total": 11
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004cf390-frida-runtime.json",
+          "evidence_sha256": "15e178067c2c6c14647fb5c182533626ccb0920db7cecea1862e341c4e3cf69c"
         }
       },
       "status": "STRUCTURALLY_VERIFIED",
@@ -59299,6 +59304,11 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
           "evidence_sha256": "b830d0ef080bd45b020fbf3be2eaf1305ea542aee224775a6a295c7b3fec7877"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004c6240-frida-runtime.json",
+          "evidence_sha256": "fa8a36fced0fd8bbdf29efccb773f0d7a7383e9113a2e37e31b3197e28bd536a"
         }
       },
       "status": "ANALYZED"
