@@ -1,0 +1,2174 @@
+{
+ "summary": {
+  "total": 120,
+  "labelled_verified": 78,
+  "saved_evidence_backed": 53,
+  "strict_evidence_backed": 119,
+  "end_to_end_backed": 8,
+  "records_with_problems": 67
+ },
+ "natives": [
+  {
+   "address": "0x0048F530",
+   "name": "Retail_Main",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": false,
+   "record_errors": [
+    "implementation digest does not match the record"
+   ],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": false,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00401000",
+   "name": "QTask_CreateTask",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00401050",
+   "name": "QTask_OpenEvent",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00401050 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x00402930",
+   "name": "QTask_RegisterClasses",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00402800",
+   "name": "Flow_CreateHandler",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00402260",
+   "name": "Flow_RunHandler",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x00402880",
+   "name": "Game_GetContext",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x004028A0",
+   "name": "Flow_SetState",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F480",
+   "name": "Loop_SetStatusByte",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00404590",
+   "name": "Config_GetActiveGraphicOptions",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00404590 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00404F00",
+   "name": "Config_GraphicOptionsSetPerformanceFlags",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00404F00 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00404F60",
+   "name": "Config_GraphicOptionsGetPerformanceFlags",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00404F60 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00405530",
+   "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00405530 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004055C0",
+   "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004055C0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00405620",
+   "name": "Config_GraphicOptionsNumPerfLevels",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00405620 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00405850",
+   "name": "Config_Read",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004037C0",
+   "name": "GOInRemap",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00410070",
+   "name": "DefineHumanPlayerGeneral",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004137A0",
+   "name": "HumanPlayer_LoadParameters",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00463180",
+   "name": "Human_IsCrouched",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00463180 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00465820",
+   "name": "Human_CameraEyePosition",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00465820 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004659E0",
+   "name": "Human_TaskViewReset",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004659E0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004ED5C0",
+   "name": "InputPort_Process",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F1D0",
+   "name": "Script_GetDebugCompileState",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F1D0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F340",
+   "name": "Script_GetForcePrecompiledState",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F340 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B1E90",
+   "name": "String_FindExtension",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B1E90 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5B60",
+   "name": "Resource_FileExists",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7E10",
+   "name": "Qvm_ReportError",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B80B0",
+   "name": "Qvm_Load",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B83D0",
+   "name": "Qvm_Cleanup",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B8A10",
+   "name": "Qvm_SetGlobalState",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B8A10 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004BCFD0",
+   "name": "Qvm_ExecuteInstructions",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004BD3D0",
+   "name": "Qvm_SetOpcodeHandler",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004BD3D0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004BDA00",
+   "name": "Qvm_PushInteger",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00491D40",
+   "name": "Display_ComputeScreenAspect",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00491D40 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00497D70",
+   "name": "Transcontext_BuildViewBlock",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00497D70 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004A2600",
+   "name": "Camera_ResetMatrix",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7450",
+   "name": "Matrix_InvalidateSlot",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7450 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7470",
+   "name": "Ilff_GetNextChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7470 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7490",
+   "name": "Ilff_GetFirstChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7490 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B74D0",
+   "name": "Ilff_GetChunkPayload",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B74D0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7540",
+   "name": "Ilff_ReadContainerHeader",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7540 behavioral runner hash does not match scripts/native_unicorn_runner.py",
+    "0x004B7540 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7570",
+   "name": "Ilff_GetFormType",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7570 behavioral runner hash does not match scripts/native_unicorn_runner.py",
+    "0x004B7570 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7580",
+   "name": "Ilff_GetChunkTag",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7580 behavioral runner hash does not match scripts/native_unicorn_runner.py",
+    "0x004B7580 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7590",
+   "name": "Ilff_FindChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B7590 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CEAA0",
+   "name": "Ilff_FindFormChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004CEAA0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AAD10",
+   "name": "Resource_MatchPrefix",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AAD10 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AD73D",
+   "name": "String_ToUpperChar",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AD73D behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B0D40",
+   "name": "QHash_ValueSet",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B0D40 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x004B1690",
+   "name": "Device_CloseStream",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B1780",
+   "name": "Device_GetStreamPosition",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B17F0",
+   "name": "Device_SeekStream",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B59F0",
+   "name": "Resource_CreateNode",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B59F0 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5AF0",
+   "name": "Resource_CanonicalizePath",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B5AF0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5B30",
+   "name": "Resource_CalculatePathHash",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B5B30 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5C90",
+   "name": "Resource_FreeNode",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B5C90 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5F00",
+   "name": "Resource_Load",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B5F00 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B5F80",
+   "name": "Resource_RegisterBuffer",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B5F80 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B60F0",
+   "name": "Resource_RegisterIlffContainer",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B60F0 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B6380",
+   "name": "Resource_Unload",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B6380 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF300",
+   "name": "DynObj_LookupHashItem",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004CF300 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF330",
+   "name": "DynObj_LoadPackageMeshes",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF390",
+   "name": "DynObj_LoadModelMesh",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x004CF630",
+   "name": "DynObj_LoadPackageLovs",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF910",
+   "name": "DynObj_LoadPackageAnimations",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004D0CF0",
+   "name": "Model_GetAttachment",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004D0CF0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004D0D10",
+   "name": "Model_GetAttachmentCount",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004D0D10 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004EDB60",
+   "name": "LODSettings_LoadParameters",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004EDB60 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF080",
+   "name": "DynObj_LoadModelTexturePackage",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004CF080 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004A26C0",
+   "name": "Camera_UpdateFogPalette",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B0F80",
+   "name": "Texture_GetActiveBackendId",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B0F80 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B23B0",
+   "name": "Texture_UploadMipmapPacket",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B24C0",
+   "name": "Texture_LoadLoopTextureFile",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B24C0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B26A0",
+   "name": "Texture_EnableUpload",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B26A0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B26B0",
+   "name": "Texture_DisableUpload",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B7CF0",
+   "name": "Texture_UploadPalettePacket",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF790",
+   "name": "DynObj_LoadModelTextures",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004CF790 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CF870",
+   "name": "DynObj_LoadPackagePalettes",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00505E40",
+   "name": "TextureModifier_Push",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004C5F00",
+   "name": "Terrain_LoadTexturesAndLightmaps",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004C6240",
+   "name": "Terrain_Load",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x004C6670",
+   "name": "Terrain_CreateMaterial",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004C6670 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004C6760",
+   "name": "Terrain_CreateTileMap",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004C6760 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004CEA80",
+   "name": "Render_GetActiveBackendId",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004CEA80 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004D14E0",
+   "name": "Terrain_TraverseContourQuadtree",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004F82B0",
+   "name": "TerrainLightMap_Init_2",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00506F00",
+   "name": "HeightMap_Enter",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00510010",
+   "name": "Terrain_DecodeChunkCommands",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00512C30",
+   "name": "Terrain_Draw",
+   "status": "ANALYZED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x005175A0",
+   "name": "Terrain_LoadTexturePackage",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x005175A0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004A53B3",
+   "name": "sprintf",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004A53B3 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004A5702",
+   "name": "String_VFormat",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004A5702 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AA670",
+   "name": "Mem_AllocChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AA682",
+   "name": "Mem_AllocWithRetry",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AA6AE",
+   "name": "Mem_AllocateRawBlock",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AD722",
+   "name": "Mem_InvokeNewHandler",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AD722 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AF7B0",
+   "name": "Error_Show",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AF7B0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AF8F0",
+   "name": "HeapList_Insert",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AF8F0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AF960",
+   "name": "HeapList_Remove",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004AF960 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004B0BA0",
+   "name": "Mem_InitHeapState",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004B0BA0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x004B0C60",
+   "name": "Mem_Alloc",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F140",
+   "name": "AppContext_SetIsActive",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F170",
+   "name": "AppContext_GetIsActive",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": true
+  },
+  {
+   "address": "0x0048F1B0",
+   "name": "App_ContextGetDebugged",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F1B0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F230",
+   "name": "App_ContextGetLightmapsUsed",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F230 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F250",
+   "name": "App_ContextGetTerrainLightmapsUsed",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F250 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x0048F260",
+   "name": "AppContext_SetTerrainLightmapsUsed",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x0048F260 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00498460",
+   "name": "Display_ClearSurfaces_16",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00497E70",
+   "name": "TransContext_SetActiveTransContext",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004A7157",
+   "name": "Camera_ApplyBandFilter_10",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AC620",
+   "name": "Camera_SetFieldOfView_24",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AC655",
+   "name": "Camera_ApplyLineFilter_24",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AC66B",
+   "name": "Camera_ApplyBandFilter_24",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004AC6FD",
+   "name": "Camera_ApplyWideScreen_24",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004F1160",
+   "name": "Script_ParseEnumReal32_5",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x004F1160 behavioral runner hash does not match scripts/native_unicorn_runner.py",
+    "0x004F1160 behavioral report must record the executed runner command as an argv array"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x004D67A0",
+   "name": "AnimIff_LoadAnimationFile",
+   "status": "STRUCTURALLY_VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00517890",
+   "name": "Iff_FindFormChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00517890 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x005178E0",
+   "name": "Iff_FindChunkBelowForm",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x005178E0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x00517940",
+   "name": "Iff_FindChunk",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x00517940 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  },
+  {
+   "address": "0x005179C0",
+   "name": "Iff_GetChunkPayload",
+   "status": "VERIFIED",
+   "implementation_digest_matches": true,
+   "record_errors": [],
+   "build_errors": [],
+   "behavioral_errors": [
+    "0x005179C0 behavioral report must identify the test runner"
+   ],
+   "semantic_errors": [],
+   "frida_errors": [
+    "no paired Frida report"
+   ],
+   "runner_configured": true,
+   "saved_evidence_backed": false,
+   "strict_evidence_backed": true,
+   "end_to_end_backed": false
+  }
+ ]
+}
