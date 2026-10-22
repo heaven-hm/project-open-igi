@@ -51568,7 +51568,10 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402880-behavioral.json",
-          "evidence_sha256": "b74f69ba88445c1a6b731af8b9eaf94ae379dd2f0acafcb3313906c92d3e5944"
+          "evidence_sha256": "a2f6bef9dd325a3de7a07b3fc6b8c1b961a641331fbfa6884112c6d8bd31356a",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         },
         "frida_runtime": {
           "status": "PASS",
@@ -51643,7 +51646,10 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004028A0-behavioral.json",
-          "evidence_sha256": "bccb9c2ba93f2ec3c0b0cf1af71011d9369dfe9649d743a8ba0f81015c61344e"
+          "evidence_sha256": "05e69eb4c347db59850a50ea81b3dbcffc55da978f005956eb74e085b17ba7cf",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51713,7 +51719,10 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F480-behavioral.json",
-          "evidence_sha256": "c6f25da5392eeb73d559706ac313cdbe790df84a3e5590eb090eba171c79aa91"
+          "evidence_sha256": "27e585c3945b421470ad0d3aba10cb9e119c96e4377638aa9d4094321a337cd5",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51868,7 +51877,10 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F140-behavioral.json",
-          "evidence_sha256": "432366af2003586bfa37067cbc864929a2f84d265c9ad7c1364ea64855b9576a"
+          "evidence_sha256": "6093f54917f1e79a781016e149ff40005570a7676c8e57e8721883a72a369fa2",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         }
       }
     },
@@ -51938,7 +51950,10 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F170-behavioral.json",
-          "evidence_sha256": "24c2ba582238cce8d32dd0be81baf975ec33507068b1eedb5e4769061ca832b7"
+          "evidence_sha256": "0a6f9944453444100f85adf8a86701e14a54db92f943da860022e4e14d1dca0c",
+          "result": "passed",
+          "tests_passed": 8,
+          "tests_total": 8
         },
         "frida_runtime": {
           "status": "PASS",

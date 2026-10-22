@@ -1,24 +1,277 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x0048F480",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "7f9e768cf7a81fb22956a042f9ce40212a51b5d1d91838c647cf56e18af978da",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/native_unicorn_runner.py",
+  "sha256": "d3868d28bd0d047efb4c43d1e5659f943e24b43b3dfe503a73872921c62cde41",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
+   "--address",
+   "0x0048F480",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/core/frame_natives.cpp",
+   "--implementation-sha256",
+   "7f9e768cf7a81fb22956a042f9ce40212a51b5d1d91838c647cf56e18af978da",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ },
+ "result": "passed",
+ "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 1e-06,
+  "relative": 1e-06
+ },
+ "limits": "",
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
  "cases": [
   {
-   "id": "static-structure",
+   "id": "loop-status-0",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "args": [
+     0,
+     0
+    ],
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 0
+    },
+    "side_effects": []
    },
    "candidate_output": {
     "return_value": 0,
-    "side_effects": [],
     "state_delta": {
-     "chunks_read": 0
+     "stored": 0
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-1",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     1,
+     1
+    ],
+    "initial_state": {
+     "seed": 1
     }
    },
-   "note": "The candidate Loop_SetStatusByte reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 1
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 1
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-2",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     2,
+     2
+    ],
+    "initial_state": {
+     "seed": 2
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 2
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 2
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-3",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     3,
+     127
+    ],
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 127
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 127
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-4",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     4,
+     128
+    ],
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 128
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 128
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-5",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     5,
+     255
+    ],
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 255
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 255
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-6",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     6,
+     256
+    ],
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 0
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 0
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "loop-status-7",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     7,
+     4294967295
+    ],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 255
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "stored": 255
+    },
+    "side_effects": []
+   }
   }
  ]
 }
