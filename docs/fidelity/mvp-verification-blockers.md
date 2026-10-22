@@ -354,3 +354,20 @@ from 3 to 1. The strict gate passes for both at VERIFIED with CFG, angr, behavio
 paired probes.
 
 One mismatch remains: `Terrain_LoadTexturesAndLightmaps` returns 1 where retail returns 10.
+
+## The last mismatch: retail returns 10, the port's lightmap parse finds 191 chunks
+
+`Terrain_LoadTexturesAndLightmaps` 0x004C5F00 returns the value left by the tail call at 0x004C6144
+(`Resource_Unload`, 0x004B6380): the paired capture reads 10 there. The port returned a boolean from
+its lightmap loader, so the classes were 1 against 10.
+
+Returning the parsed layer count instead was tried and captured: the candidate then read 191 against
+retail's 10. That is not a return-value bug at all - it shows the port's `TERRAIN.LMP` parsing splits
+the file into 191 chunks where the retail's resource loader resolves 10 lightmap pages. The retail body
+loops with a counter it compares against a value read from the resource (`cmp ebp, [var_10h]` at
+0x004C6139), so 10 comes from the file's own header, not from a count the port can approximate.
+
+The speculative return change was reverted; the mismatch stays open with a concrete next step: decode
+the LMP container header from the retail loop at 0x004C60CD..0x004C6139 and make
+`TerrainLevelData::Terrain_LoadLightmaps` parse the same structure, then the returned page count should
+agree.
