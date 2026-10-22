@@ -40,7 +40,6 @@ add_executable(igi WIN32
     engine/src/retail/error/error_show.cpp
     engine/src/retail/human/human_camera_eye.cpp
     engine/src/retail/human/human_view.cpp
-    engine/src/retail/input/input_port.cpp
     engine/src/retail/input/input_port_process.cpp
     engine/src/retail/mem/heap_list.cpp
     engine/src/retail/mem/mem_alloc.cpp
