@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 11 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 13 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -475,12 +475,12 @@ re-run. Of 120:
 
 | state | count |
 |---|---|
-| re-runnable | 88 |
+| re-runnable | 90 |
 | artifact has no runner metadata | 20 |
 | no behavioural evidence | 10 |
-| runner does not mention the address | 2 |
+| runner does not mention the address | 0 |
 
-So 22 records carry a behavioural claim that cannot be replayed. They are honest artifacts in the sense
+So 20 records carry a behavioural claim that cannot be replayed. They are honest artifacts in the sense
 that they were produced by some run, but they cannot back a VERIFIED status under the current gate, and
 the ones without runner metadata cannot even say what produced them. This is why "81 records at VERIFIED"
 and "11 records proven" are so far apart: for 22 of them the behavioural pillar is frozen, and for most
@@ -493,3 +493,37 @@ basic blocks, but it is an orchestrator over six interpreter helpers - 0x004BD08
 0x004BFA80, 0x004BF8F0 and 0x004BEFC0 - none of which is ported. Porting it therefore means porting the
 QVM interpreter core, not one function. The three not-in-build natives stay blocked on that, and the
 estimate should be recorded as interpreter-core work rather than a single missing symbol.
+
+## The verified count was 13, not 11
+
+The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
+angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
+when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
+register now records the proven set explicitly: 13 addresses, each one a matched paired observation whose
+record passes `--threshold VERIFIED --require-frida-probes`.
+
+## Regenerating the unreplayable behavioural evidence
+
+The audit's 32 records with no replayable behavioural evidence were all re-submitted to the current runner set. Only two could
+be regenerated: `Camera_ResetMatrix` and `Camera_UpdateFogPalette` (both stored with runner metadata).
+They stay STRUCTURALLY_VERIFIED regardless, because the capture never observes them - retail did not call
+them during the level-5 run either - so no paired probes exist.
+
+The other 30 cannot be regenerated as they stand:
+
+| count | reason |
+|---|---|
+| 22 | no runner supports the address, so there is no differential to run |
+| 5 | the candidate fixture crashes (uncaught C++ exception or `missing symbol called`) - the runners need fixture work before these natives can be exercised |
+| 2 | runner ran but produced no report |
+| 1 | the record's implementation is a stub whose executable path does not resolve |
+
+So the behavioural pillar for those 30 is a dead claim until either a runner is extended for the address
+or its fixtures are made safe. That is the concrete work behind the 20 frozen records noted last round.
+
+A note on the audit's own accuracy: its first pass flagged two Camera natives as naming a runner that
+never mentions their address. That was wrong. `native_leaves_runner.py` resolves signatures and fixtures
+from `docs/fidelity/native-verification.json` at run time, so it supports any address with a record and
+hard-codes nothing to grep. The audit now recognises manifest-driven runners, which moved those two out
+of the frozen set - the count is 20, not 22 - and the two regenerated Camera artifacts now carry that
+runner's metadata.

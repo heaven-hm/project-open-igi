@@ -1210,5 +1210,21 @@
       "next_action": "widen the retail run (level, interaction) or record it as not exercised",
       "detail": "neither side called it"
     }
-  ]
+  ],
+  "verified_strict_gate": [
+    "0x00401050",
+    "0x00402880",
+    "0x004037C0",
+    "0x004B0D40",
+    "0x004CF390",
+    "0x004CF080",
+    "0x004C6670",
+    "0x004C6760",
+    "0x004B0BA0",
+    "0x0048F170",
+    "0x00498460",
+    "0x00517890",
+    "0x00517940"
+  ],
+  "verified_strict_gate_count": 13
 }

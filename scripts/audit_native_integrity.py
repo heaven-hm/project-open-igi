@@ -100,7 +100,12 @@ def behavioural_state(record: dict) -> str:
     runner_path = ROOT / path_text
     if not runner_path.exists():
         return "runner-file-missing"
-    if record["address"][2:].upper() not in runner_path.read_text(errors="replace").upper():
+    runner_text = runner_path.read_text(errors="replace")
+    if "native-verification.json" in runner_text:
+        # The runner resolves signatures and fixtures from the manifest, so it supports any
+        # address that has a record; no hard-coded address list to compare against.
+        return "re-runnable"
+    if record["address"][2:].upper() not in runner_text.upper():
         return "runner-does-not-mention-address"
     return "re-runnable"
 
