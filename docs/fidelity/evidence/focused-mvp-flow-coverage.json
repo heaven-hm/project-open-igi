@@ -458,5 +458,10 @@
   "runtime": "Retail attach captures from documented IGI level launch; order is observed call order only.",
   "limitation": "Static and runtime sequences are separate evidence streams and are not concatenated as a false total execution order."
  },
- "result": "partial-flow-coverage"
+ "result": "partial-flow-coverage",
+ "union_missing_addresses": [
+  "0x00405620",
+  "0x004659E0"
+ ],
+ "note": "Six of the eight runtime-unobserved natives are statically ordered via callback/cross-reference evidence; only 0x00405620 and 0x004659E0 are absent from both static order and runtime observations."
 }
