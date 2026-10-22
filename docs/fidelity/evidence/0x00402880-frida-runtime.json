@@ -5,10 +5,10 @@
  "address": "0x00402880",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "7f9e768cf7a81fb22956a042f9ce40212a51b5d1d91838c647cf56e18af978da",
- "candidate_executable_sha256": "1ff5483fc1688e60d1da1df9c8c9f3addb638237eef9d4bc174ce0e566e75677",
+ "candidate_executable_sha256": "700ee75a8118eb0c9f206c8775995185e73f9b5db0930a765a183a9dea1b3874",
  "retail_observed_calls": 6862,
- "candidate_observed_calls": 2298,
- "matched_calls": 2298,
+ "candidate_observed_calls": 2368,
+ "matched_calls": 2368,
  "probe_sha256": "0e20b059058dd39f92db46548a50bc5261f084abffd05a4997b6108b12584d2a",
  "candidate_executable": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-verify-noinline/igi1.exe",
  "candidate_build": {
@@ -20,7 +20,7 @@
  "native_name": "Game_GetContext",
  "addresses": {
   "retail_va": "0x00402880",
-  "candidate_va": "0x0040B020"
+  "candidate_va": "0x0040B060"
  },
  "comparison": {
   "basis": "reachability plus return-value class set",
@@ -37,8 +37,8 @@
   "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-goinremap3.json",
-  "paired_capture_sha256": "c3c8d5d9e3cf0ce7bba8016ac303666b4c19bc8b603f397803cb59b19b8e563f"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-realentry.json",
+  "paired_capture_sha256": "2f09a032fbb40bf7cf3f9d1246aa4e5199b1ddb3ba6bac45b0a00ac8a8bd3a0b"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

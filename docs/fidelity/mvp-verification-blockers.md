@@ -317,3 +317,24 @@ so "the flow" measured by captures is the candidate's own scene entry, not the r
 transcription. The next step is to determine which entry the shipping image actually uses and mirror
 retail's startup there - or to make the image call the ported Main as its entry - before any further
 main-to-end flow claims are made.
+
+## The real entry now mirrors retail's startup and frame loop
+
+The shipping image's entry is `engine/platform/windows/scene_main.cpp`'s WinMain (the only WinMain in
+the CMake source list; `retail_main.cpp`'s Main is a ported reference copy that nothing calls). That
+function now performs retail `_start`'s startup sequence - `FP_InitExtendedPrecision`,
+`AppContext_SetIsActive(1)`, `App_ContextSetTerrainLightmapsUsed(1)`, `Loop_SetStatusByte(1)` - and its
+message loop re-asserts the precision and dispatches the frame event through `AppContext_GetIsActive` /
+`QTask_OpenEvent` exactly as the retail loop at 0x0048F80D does.
+
+The capture after the change shows the difference: the candidate now observes `QTask_OpenEvent`
+(2368 calls against retail's 3430), `AppContext_GetIsActive` (2368 vs 3431) and
+`Display_ClearSurfaces_16` (2368 vs 3435) as *matches*, plus `Loop_SetStatusByte` and
+`AppContext_SetIsActive` on the candidate side. The level loads reached the terrain natives too, which
+now show their known return-value mismatches again because the port's script call sites still pass a
+null result block.
+
+`App_ContextSetTerrainLightmapsUsed` remains unobserved for a now-established reason: the current image
+contains **zero call instructions** targeting its symbol. The ten-byte setter was folded into its
+callers, so there is no function entry for a probe to hook. That is why every capture-level hypothesis
+failed - the call executes as inlined stores, not as a call.

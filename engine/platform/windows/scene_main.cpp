@@ -24,6 +24,9 @@
 #include <vector>
 #include <windows.h>
 
+#include "igi/retail/core/app_context.hpp"
+#include "igi/retail/core/fpu_state.hpp"
+#include "igi/retail/core/frame_natives.hpp"
 #include "retail_model_scene.hpp"
 
 namespace
@@ -542,9 +545,24 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command
     ShowWindow(window_handle, show_command);
     UpdateWindow(window_handle);
 
+    // Retail _start's startup sequence: the x87 control word, then the application
+    // context marked active with terrain lightmaps enabled (native 0x0048F140 and
+    // 0x0048F260), before the message loop starts.
+    igi::retail::core::FP_InitExtendedPrecision();
+    ::AppContext_SetIsActive(1);
+    igi::retail::core::App_ContextSetTerrainLightmapsUsed(1);
+    ::Loop_SetStatusByte(1U);
+
     MSG message{};
     while (GetMessageW(&message, nullptr, 0, 0) > 0)
     {
+        // Retail's per-frame loop at 0x0048F80D: re-assert the precision, dispatch the
+        // frame event when the context is active, then pump messages.
+        igi::retail::core::FP_InitExtendedPrecision();
+        if (::AppContext_GetIsActive() != 0)
+        {
+            ::QTask_OpenEvent();
+        }
         TranslateMessage(&message);
         DispatchMessageW(&message);
     }
