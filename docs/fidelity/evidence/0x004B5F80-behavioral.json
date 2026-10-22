@@ -3,22 +3,556 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "cases": [
   {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
    "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      0,
+      2,
+      7,
+      11
+     ]
+    ],
     "state_delta": {
-     "chunks_read": 0
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 0
     }
    },
-   "note": "The candidate Resource_RegisterBuffer reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "categories": [
+    "boundary"
+   ],
+   "id": "empty-buffer",
+   "input": {
+    "args": [
+     0
+    ],
+    "initial_state": {
+     "buffer_prefix": ""
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      0,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 0
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      7,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 7
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "short-seven",
+   "input": {
+    "args": [
+     7
+    ],
+    "initial_state": {
+     "buffer_prefix": "1234567"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      7,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 7
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      -1,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": -1
+    }
+   },
+   "categories": [
+    "edge"
+   ],
+   "id": "short-negative",
+   "input": {
+    "args": [
+     -1
+    ],
+    "initial_state": {
+     "buffer_prefix": "12345678"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      -1,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": -1
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "prefix-mismatch-first",
+   "input": {
+    "args": [
+     8
+    ],
+    "initial_state": {
+     "buffer_prefix": "XESOURCE"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "prefix-mismatch-middle",
+   "input": {
+    "args": [
+     8
+    ],
+    "initial_state": {
+     "buffer_prefix": "RESXURCE"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "prefix-mismatch-last",
+   "input": {
+    "args": [
+     8
+    ],
+    "initial_state": {
+     "buffer_prefix": "RESOURCX"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "nonarchive-eight",
+   "input": {
+    "args": [
+     8
+    ],
+    "initial_state": {
+     "buffer_prefix": "NOTARCH!"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      8,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 8
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      19,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 19
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "nonarchive-long",
+   "input": {
+    "args": [
+     19
+    ],
+    "initial_state": {
+     "buffer_prefix": "QVM:script-data-01"
+    }
+   },
+   "reference_output": {
+    "return_value": true,
+    "side_effects": [
+     [
+      "allocate",
+      1,
+      true
+     ],
+     [
+      "create",
+      "LOCAL:runtime-probe.qvm",
+      true,
+      19,
+      2,
+      7,
+      11
+     ]
+    ],
+    "state_delta": {
+     "active_count": 1,
+     "kind": 2,
+     "loaded": 1,
+     "metadata_first": 7,
+     "size": 19
+    }
+   }
   }
- ]
+ ],
+ "executed": true,
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "implementation_sha256": "d5d7c04371f06db5793794ca340387d6e90de7a8f42ebf1f72f5ebd44de38e1c",
+ "kind": "behavioral-test-report",
+ "limitations": [
+  "Only raw-buffer paths are differentially executed; ILFF/IRES and RESOURCE archive parsing remain outside this runner.",
+  "Retail and candidate use different execution engines (angr/VEX versus host-native), with caller-observable fields normalized.",
+  "Allocator and Resource_CreateNode are modeled on the retail side; their own implementations are not compared here."
+ ],
+ "method": "Retail Resource_RegisterBuffer at 0x004B5F80 was executed in angr/VEX for short and non-RESOURCE raw buffers. The candidate was compiled from current C++ and executed natively. Hooks model only allocator metadata, ILFF field reads, prefix comparison, and Resource_CreateNode; compared return-to-input-buffer, kind/size/loaded state, active count, metadata, path, and registration arguments.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "schema_version": 1,
+ "tests_failed": 0,
+ "tests_passed": 8,
+ "tests_total": 8
 }
