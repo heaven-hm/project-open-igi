@@ -55230,7 +55230,7 @@
         "signature": "std::int32_t __cdecl Render_GetActiveBackendId(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -55240,8 +55240,10 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/context_getter_diff_runner.py",
           "args": [
+            "--root",
+            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -55251,11 +55253,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -55282,8 +55282,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004CEA80-behavioral.json",
           "evidence_sha256": "8ae150f095d0ffa27c1513b4c195da97c3767db4f09453975f3daf74ae6ebaed"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004CEA80-behavioral.json",
+          "evidence_sha256": "54563a81e2426edb3e78bc94156718a004c9d64381efee025272b958651b3e43",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7450",
@@ -58971,7 +58980,7 @@
         "signature": "std::int32_t __cdecl Texture_GetActiveBackendId(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58981,8 +58990,10 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/context_getter_diff_runner.py",
           "args": [
+            "--root",
+            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -58992,11 +59003,9 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
+            "{implementation_sha256}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -59023,8 +59032,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B0F80-behavioral.json",
           "evidence_sha256": "b584241bb983ea07bc4a3980b61c7c0e90462cd74a77da7029dc54dd2a01e2b8"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B0F80-behavioral.json",
+          "evidence_sha256": "3efc35fc6d513c652e2f8f84373eed56390ae1be036302afa2077101e5107bf7",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 10,
+          "tests_total": 10
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B26A0",

@@ -27,6 +27,12 @@ TARGETS = {
     "0x0048F1B0": ("App_ContextGetDebugged", "g_5c8bf8", 0x005C8BF8),
     "0x0048F1D0": ("Script_GetDebugCompileState", "g_5c8bec", 0x005C8BEC),
     "0x0048F340": ("Script_GetForcePrecompiledState", "g_5c8bf0", 0x005C8BF0),
+    "0x004B0F80": ("Texture_GetActiveBackendId", "g_a94a64", 0x00A94A64,
+                   "igi/retail/texture/texture_loaders.hpp",
+                   "igi::retail::texture::Texture_SetBackendId", "igi::retail::texture::Texture_GetActiveBackendId"),
+    "0x004CEA80": ("Render_GetActiveBackendId", "render_backend_id", 0x00548208,
+                   "igi/retail/render/backend.hpp",
+                   "igi::retail::render::Render_SetBackendId", "igi::retail::render::Render_GetActiveBackendId"),
 }
 
 PROBES = [0x00000000, 0x00000001, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000,
@@ -81,7 +87,11 @@ def main() -> int:
     address = f"0x{int(args.address, 16):08X}"
     if address not in TARGETS:
         raise SystemExit(f"{address} is not a supported direct context getter")
-    symbol, global_symbol, global_va = TARGETS[address]
+    entry = TARGETS[address]
+    symbol, global_symbol, global_va = entry[0], entry[1], entry[2]
+    header = entry[3] if len(entry) > 3 else None
+    setter = entry[4] if len(entry) > 4 else None
+    qualified_getter = entry[5] if len(entry) > 5 else symbol
 
     binary = args.binary.resolve()
     if digest(binary) != args.binary_sha256:
@@ -94,12 +104,31 @@ def main() -> int:
     with tempfile.TemporaryDirectory(prefix="igi-getter-diff-") as temp:
         work = pathlib.Path(temp)
         harness = work / "harness.cpp"
-        harness.write_text(
-            "#include <cstdint>\n"
-            "#include <cstdio>\n"
-            "#include <cstdlib>\n"
-            f"std::int32_t {global_symbol} = 0;\n"
-            f"int {symbol}(void);\n"
+        if setter:
+            # The global sits in an anonymous namespace, so seed it through the
+            # implementation's own public setter instead of reaching into private
+            # storage, which is not externally linkable.
+            harness.write_text(
+                "#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n"
+                f"#include \"{header}\"\n"
+                "int main(int argc, char** argv) {\n"
+                f"    {setter}(static_cast<std::int32_t>(std::strtoul(argv[1], nullptr, 16)));\n"
+                f"    const std::uint32_t value = static_cast<std::uint32_t>({qualified_getter}());\n"
+                "    std::FILE* out = std::fopen(argv[2], \"w\");\n"
+                "    if (!out) return 2;\n"
+                "    std::fprintf(out, \"%08x\\n\", value);\n"
+                "    std::fclose(out);\n"
+                "    return 0;\n}\n"
+            )
+            pre = None
+            gc_root = symbol
+        else:
+            harness.write_text(
+                "#include <cstdint>\n"
+                "#include <cstdio>\n"
+                "#include <cstdlib>\n"
+                f"std::int32_t {global_symbol} = 0;\n"
+                f"int {symbol}(void);\n"
             "int main(int argc, char** argv) {\n"
             f"    {global_symbol} = static_cast<std::int32_t>(std::strtoul(argv[1], nullptr, 16));\n"
             f"    const std::uint32_t value = static_cast<std::uint32_t>({symbol}());\n"
@@ -109,12 +138,32 @@ def main() -> int:
             "    std::fclose(out);\n"
             "    return 0;\n"
             "}\n"
+            )
+        # The implementation may be namespaced, so its symbol is mangled. Find
+        # the real emitted name so it can be kept as a linker GC root.
+        obj = work / "impl.o"
+        pre = subprocess.run(
+            ["i686-w64-mingw32-g++", "-std=c++20", "-O1", "-w",
+             f"-I{args.root.resolve() / 'engine/include'}", "-c", str(implementation), "-o", str(obj)],
+            text=True, capture_output=True, timeout=180,
         )
+        gc_root = symbol
+        if pre.returncode == 0:
+            nm = subprocess.run(["i686-w64-mingw32-nm", str(obj)], text=True, capture_output=True, timeout=60)
+            matches = [line.split()[-1] for line in nm.stdout.splitlines()
+                       if symbol in line and line.split()[-2:-1] == ["T"]]
+            if matches:
+                gc_root = matches[0]
         exe = work / "harness.exe"
         built = subprocess.run(
-            ["i686-w64-mingw32-g++", "-std=c++20", "-O0", "-w",
-             f"-I{args.root.resolve() / 'engine/include'}",
-             str(harness), str(implementation), "-o", str(exe)],
+            # The implementation may live in a file with many other natives and
+            # external dependencies; compile it separately and let the linker
+            # discard every section except the target getter and its global.
+            ["i686-w64-mingw32-g++", "-std=c++20", "-O1", "-w", "-ffunction-sections",
+             "-fdata-sections", f"-I{args.root.resolve() / 'engine/include'}",
+             str(harness), str(implementation), "-o", str(exe),
+             "-Wl,--gc-sections", "-Wl,--unresolved-symbols=ignore-all",
+             f"-Wl,--undefined={gc_root}"],
             text=True, capture_output=True, timeout=180,
         )
         if built.returncode != 0:
