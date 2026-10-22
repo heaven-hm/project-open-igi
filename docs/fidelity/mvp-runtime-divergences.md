@@ -76,13 +76,24 @@ because a function that returns nothing leaves an arbitrary EAX.
    candidate explicitly returns 0. Return-class comparison is meaningless for
    this native and must not be counted as a pass or a failure.
 
-2. `0x004037C0 GOInRemap` — **real risk, argument mapping.**
-   Retail masks the third script argument (`and eax, 0x3fffffff` after
-   `call 0x004B8A20`) and the observed class is `ptr`. The candidate returns
-   `entry[2] & 0x3FFFFFFF` but reads the argument from its own `QvmFrameView`
-   layout, and produced `small:9…24`. The mask matches the retail; the value fed
-   into it does not, so the candidate's frame view does not represent the retail
-   argument source.
+2. `0x004037C0 GOInRemap` — **real contract mismatch in the candidate.**
+   The retail body at `0x004037C0`..`0x00403860` takes its first stack argument
+   as a destination buffer, calls the frame reader `0x004B8A20` three times to
+   fetch script arguments 0, 1 and 2, stores them at the remap entry, masks only
+   the third with `0x3FFFFFFF` before storing it, increments the slot counter at
+   `0x00BC2358 + slot*4`, then copies 24 bytes (six dwords) of a stack-local
+   struct into the destination with `rep movsd`, and returns the destination
+   pointer itself.
+
+   The candidate is declared `std::uint32_t GOInRemap(void* qvm_context)`, reads
+   the three values through its own `QvmFrameView` layout instead of the retail
+   frame reader, and returns the masked third value. That is why the observed
+   classes disagree: retail returns a pointer, the candidate returns a small
+   integer. The candidate's comment and manifest note ("returns the third
+   argument masked to the low 30 bits") describe behaviour the retail does not
+   have, so the disagreement is a defect in the record and in the port, not a
+   probe artefact. Fixing it needs the two-argument ABI, the `0x004B8A20` frame
+   reader, the 24-byte destination copy and the returned destination pointer.
 
 3. `0x004CF080 DynObj_LoadModelTexturePackage` — **open.**
    Retail's last EAX write is `dec eax` on `[esp+0x1c]`, and the observed class
