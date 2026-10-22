@@ -1,7 +1,7 @@
 {
  "summary": {
-  "stored": 78,
-  "unsupported": 25,
+  "stored": 81,
+  "unsupported": 22,
   "failed": 16,
   "skipped": 1
  },
@@ -418,23 +418,29 @@
   {
    "address": "0x004B1690",
    "name": "Device_CloseStream",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B1690",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B1690-behavioral.json"
   },
   {
    "address": "0x004B1780",
    "name": "Device_GetStreamPosition",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B1780",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B1780-behavioral.json"
   },
   {
    "address": "0x004B17F0",
    "name": "Device_SeekStream",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B17F0",
-   "exit_code": 1
+   "outcome": "report stored",
+   "result": "passed",
+   "tests_passed": 8,
+   "tests_total": 8,
+   "evidence_path": "docs/fidelity/evidence/0x004B17F0-behavioral.json"
   },
   {
    "address": "0x004B59F0",
@@ -715,7 +721,7 @@
    "address": "0x004F82B0",
    "name": "TerrainLightMap_Init_2",
    "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: dyld[44091]: missing symbol called",
+   "detail": "candidate failed for seed 0x0: dyld[51679]: missing symbol called",
    "exit_code": 1
   },
   {

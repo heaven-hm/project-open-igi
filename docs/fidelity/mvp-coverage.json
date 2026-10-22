@@ -16,7 +16,7 @@
     "retail_reachable": 97,
     "end_to_end_possible": 100,
     "paired_frida_evidence": 8,
-    "marked_verified_in_manifest": 78,
+    "marked_verified_in_manifest": 81,
     "runtime_observed_retail": 83,
     "runtime_observed_candidate": 13,
     "hook_observable": 46,
@@ -1552,7 +1552,7 @@
       "address": "0x004B1690",
       "name": "Device_CloseStream",
       "category": "RES",
-      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "manifest_status": "VERIFIED",
       "pillars": {
         "implementation_present": true,
         "candidate_symbol_linked": true,
@@ -1583,7 +1583,7 @@
       "address": "0x004B1780",
       "name": "Device_GetStreamPosition",
       "category": "RES",
-      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "manifest_status": "VERIFIED",
       "pillars": {
         "implementation_present": true,
         "candidate_symbol_linked": true,
@@ -1614,7 +1614,7 @@
       "address": "0x004B17F0",
       "name": "Device_SeekStream",
       "category": "RES",
-      "manifest_status": "STRUCTURALLY_VERIFIED",
+      "manifest_status": "VERIFIED",
       "pillars": {
         "implementation_present": true,
         "candidate_symbol_linked": true,

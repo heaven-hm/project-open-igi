@@ -2408,6 +2408,9 @@ def ilff_container_header_retail(image: PebImage, case: dict) -> dict:
                        [size_pointer, alignment_pointer, context], ILFF_SENTINEL)
     # The native is void; the observable is which out parameters it wrote.
     return {
+        # The native is void, so there is no return value to compare; null keeps
+        # the observable present on both sides without inventing one.
+        "return_value": None,
         "state_delta": {
             "size": read_u32(emulator, ILFF_OUT_ADDR),
             "alignment": read_u32(emulator, ILFF_OUT_ADDR + 4),
@@ -2449,11 +2452,273 @@ int main()
             item.size_out ? &size_slot : nullptr,
             item.alignment_out ? &alignment_slot : nullptr,
             item.context_present ? static_cast<const void*>(header) : nullptr);
-        std::printf("{\"id\":\"%s\",\"state_delta\":{\"size\":%lu,\"alignment\":%lu},"
+        std::printf("{\"id\":\"%s\",\"return_value\":null,"
+                    "\"state_delta\":{\"size\":%lu,\"alignment\":%lu},"
                     "\"side_effects\":[]}\n",
                     item.id,
                     static_cast<unsigned long>(static_cast<std::uint32_t>(size_slot)),
                     static_cast<unsigned long>(static_cast<std::uint32_t>(alignment_slot)));
+    }
+    return 0;
+}
+"""
+
+
+
+# ---------------------------------------------------------------------------
+# 0x004B1690, 0x004B1780 and 0x004B17F0 the device stream dispatch helpers. Each
+# loads a device id from the caller's context and calls the operation pointer in
+# a table indexed by that id, 0x8C bytes per record. The adapter installs a
+# scratch stub in the retail table entry so the emulator observes the dispatch
+# instead of following a real device implementation, and installs the matching
+# stub into the candidate's own table through its host wiring.
+# ---------------------------------------------------------------------------
+
+DEVICE_CLOSE_TABLE = 0x009436BC
+DEVICE_POSITION_TABLE = 0x009436D0
+DEVICE_SEEK_TABLE = 0x009436E4
+DEVICE_RECORD_SIZE = 0x8C
+DEVICE_GLOBAL_STREAM = 0x00943980
+DEVICE_GLOBAL_FLAG = 0x00943988
+DEVICE_CONTEXT_ADDR = 0x70014000
+DEVICE_STUB_ADDR = 0x70014100
+DEVICE_MARKER_ADDR = 0x70014200
+DEVICE_SENTINEL = 0x00C0FFEE
+DEVICE_CLOSE_ADDRESS = 0x004B1690
+DEVICE_GET_STREAM_POSITION_ADDRESS = 0x004B1780
+DEVICE_SEEK_STREAM_ADDRESS = 0x004B17F0
+
+# The stub writes 1 into the marker cell, so the report can tell a dispatched
+# call from the global-stream special case that retail handles without a table.
+DEVICE_KINDS = (0, 1, 2, 3, 7, 15, 8, 14)
+DEVICE_ARGUMENTS = (0, 1, 2, 3, -1, 0x7FFFFFFF, 100, 4096)
+
+
+def device_position_stub_bytes() -> bytes:
+    return (b"\x8B\x44\x24\x04"                                   # mov eax, [esp+4]
+            + b"\x05" + struct.pack("<I", 0x5100)                     # add eax, 0x5100
+            + b"\xC7\x05" + struct.pack("<I", DEVICE_MARKER_ADDR)    # mov dword [marker], 1
+            + struct.pack("<I", 1) + b"\xC3")
+
+
+def device_seek_stub_bytes() -> bytes:
+    return (b"\x8B\x44\x24\x04"                                   # mov eax, [esp+4]
+            + b"\x69\xC0" + struct.pack("<I", 1000)                  # imul eax, eax, 1000
+            + b"\x03\x44\x24\x0C"                                   # add eax, [esp+12]
+            + b"\xC7\x05" + struct.pack("<I", DEVICE_MARKER_ADDR)
+            + struct.pack("<I", 1) + b"\xC3")
+
+
+def device_close_stub_bytes() -> bytes:
+    return (b"\x8B\x44\x24\x04"                                   # mov eax, [esp+4]
+            + b"\x05" + struct.pack("<I", 0x6000)                     # add eax, 0x6000
+            + b"\xC7\x05" + struct.pack("<I", DEVICE_MARKER_ADDR)
+            + struct.pack("<I", 1) + b"\xC3")
+
+
+def device_install_stub(emulator, table: int, kind: int, code: bytes) -> None:
+    emulator.mem_write(DEVICE_STUB_ADDR, code)
+    emulator.mem_write(table + kind * DEVICE_RECORD_SIZE, struct.pack("<I", DEVICE_STUB_ADDR))
+    emulator.mem_write(DEVICE_MARKER_ADDR, struct.pack("<I", 0))
+
+
+def device_stream_position_cases() -> list[dict]:
+    return [
+        {"id": f"device-stream-position-{kind}", "categories": [category], "seed": index,
+         "kind": kind, "argument": 0}
+        for index, kind in enumerate(DEVICE_KINDS)
+        for category in ("nominal" if index < 2 else "boundary",)
+    ]
+
+
+def device_stream_position_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    device_install_stub(emulator, DEVICE_POSITION_TABLE, case["kind"], device_position_stub_bytes())
+    emulator.mem_write(DEVICE_CONTEXT_ADDR, struct.pack("<i", case["kind"]))
+    run_with_arguments(emulator, DEVICE_GET_STREAM_POSITION_ADDRESS,
+                       [DEVICE_CONTEXT_ADDR], DEVICE_SENTINEL)
+    return {
+        "return_value": emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX) & 0xFFFFFFFF,
+        "state_delta": {"dispatched": read_u32(emulator, DEVICE_MARKER_ADDR)},
+        "side_effects": [],
+    }
+
+
+def device_stream_position_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/resource/device_dispatch.hpp"
+
+namespace resource = igi::retail::resource;
+
+static int g_dispatched = 0;
+
+static std::int32_t position_stub(std::int32_t device, std::int32_t* context)
+{
+    (void)context;
+    ++g_dispatched;
+    return device + 0x5100;
+}
+
+int main()
+{
+    struct Case { const char* id; std::int32_t kind; std::int32_t argument; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        std::int32_t context[0x10] = {};
+        context[0] = item.kind;
+        resource::Device_SetPushStack(item.kind, position_stub);
+        g_dispatched = 0;
+        const std::uint32_t returned = static_cast<std::uint32_t>(
+            resource::Device_GetStreamPosition(context));
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,"
+                    "\"state_delta\":{\"dispatched\":%d},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned), g_dispatched);
+    }
+    return 0;
+}
+"""
+
+
+def device_seek_stream_cases() -> list[dict]:
+    return [
+        {"id": f"device-seek-stream-{kind}-{index}",
+         "categories": [category], "seed": index,
+         "kind": kind, "argument": argument}
+        for index, (kind, argument) in enumerate(zip(DEVICE_KINDS, DEVICE_ARGUMENTS))
+        for category in ("nominal" if index < 2 else "boundary",)
+    ]
+
+
+def device_seek_stream_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    device_install_stub(emulator, DEVICE_SEEK_TABLE, case["kind"], device_seek_stub_bytes())
+    emulator.mem_write(DEVICE_CONTEXT_ADDR, struct.pack("<i", case["kind"]))
+    run_with_arguments(emulator, DEVICE_SEEK_STREAM_ADDRESS,
+                       [DEVICE_CONTEXT_ADDR, case["argument"]], DEVICE_SENTINEL)
+    return {
+        "return_value": emulator.reg_read(unicorn.x86_const.UC_X86_REG_EAX) & 0xFFFFFFFF,
+        "state_delta": {"dispatched": read_u32(emulator, DEVICE_MARKER_ADDR)},
+        "side_effects": [],
+    }
+
+
+def device_seek_stream_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/resource/device_dispatch.hpp"
+
+namespace resource = igi::retail::resource;
+
+static int g_dispatched = 0;
+
+static std::int32_t seek_stub(std::int32_t device, std::int32_t* context, std::int32_t argument)
+{
+    (void)context;
+    ++g_dispatched;
+    return device * 1000 + argument;
+}
+
+int main()
+{
+    struct Case { const char* id; std::int32_t kind; std::int32_t argument; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        std::int32_t context[0x10] = {};
+        context[0] = item.kind;
+        resource::Device_SetCheckHeap(item.kind, seek_stub);
+        g_dispatched = 0;
+        const std::uint32_t returned = static_cast<std::uint32_t>(
+            resource::Device_SeekStream(context, item.argument));
+        std::printf("{\"id\":\"%s\",\"return_value\":%lu,"
+                    "\"state_delta\":{\"dispatched\":%d},\"side_effects\":[]}\n",
+                    item.id, static_cast<unsigned long>(returned), g_dispatched);
+    }
+    return 0;
+}
+"""
+
+
+def device_close_stream_cases() -> list[dict]:
+    cases = [{"id": "device-close-stream-global", "categories": ["nominal"],
+              "seed": 0, "special": True, "kind": 0}]
+    for index, kind in enumerate(DEVICE_KINDS[:7]):
+        cases.append({"id": f"device-close-stream-{kind}",
+                      "categories": ["nominal" if index == 0 else "boundary"],
+                      "seed": index + 1, "special": False, "kind": kind})
+    return cases
+
+
+def device_close_stream_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+
+    emulator = new_emulator(image)
+    emulator.mem_write(DEVICE_GLOBAL_FLAG, struct.pack("<I", 0))
+    if case["special"]:
+        context = DEVICE_GLOBAL_STREAM
+    else:
+        device_install_stub(emulator, DEVICE_CLOSE_TABLE, case["kind"], device_close_stub_bytes())
+        emulator.mem_write(DEVICE_CONTEXT_ADDR, struct.pack("<i", case["kind"]))
+        context = DEVICE_CONTEXT_ADDR
+    run_with_arguments(emulator, DEVICE_CLOSE_ADDRESS, [context], DEVICE_SENTINEL)
+    # The native is void: the observable is whether the table was reached at
+    # all, which is what separates the global-stream special case from a
+    # dispatched close. Its EAX is whatever the callee left there, not a return.
+    return {
+        # Void native: null keeps return_value present without claiming one.
+        "return_value": None,
+        "state_delta": {"dispatched": read_u32(emulator, DEVICE_MARKER_ADDR)},
+        "side_effects": [],
+    }
+
+
+def device_close_stream_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include "igi/retail/resource/device_dispatch.hpp"
+
+namespace resource = igi::retail::resource;
+
+static int g_dispatched = 0;
+
+static void close_stub(std::int32_t device, std::int32_t* context)
+{
+    (void)device;
+    (void)context;
+    ++g_dispatched;
+}
+
+int main()
+{
+    struct Case { const char* id; bool special; std::int32_t kind; };
+    static const Case cases[] = {
+@CASES@
+    };
+    for (const Case& item : cases)
+    {
+        std::int32_t context[0x10] = {};
+        context[0] = item.kind;
+        resource::Device_SetReadFileBlock(item.kind, close_stub);
+        g_dispatched = 0;
+        // The retail global stream is a special case handled before the table,
+        // so the harness passes the port-owned global stream by identity.
+        resource::Device_CloseStream(item.special ? resource::Resource_GetGlobalStream() : context);
+        std::printf("{\"id\":\"%s\",\"return_value\":null,"
+                    "\"state_delta\":{\"dispatched\":%d},\"side_effects\":[]}\n",
+                    item.id, g_dispatched);
     }
     return 0;
 }
@@ -2613,6 +2878,24 @@ NATIVES = {
         "candidate_source": ilff_get_chunk_tag_candidate_source,
         "include": ("igi/retail/sys/ilff_navigation.hpp",),
     },
+    "0x004B1690": {
+        "cases": device_close_stream_cases,
+        "retail": device_close_stream_retail,
+        "candidate_source": device_close_stream_candidate_source,
+        "include": ("igi/retail/resource/device_dispatch.hpp",),
+    },
+    "0x004B1780": {
+        "cases": device_stream_position_cases,
+        "retail": device_stream_position_retail,
+        "candidate_source": device_stream_position_candidate_source,
+        "include": ("igi/retail/resource/device_dispatch.hpp",),
+    },
+    "0x004B17F0": {
+        "cases": device_seek_stream_cases,
+        "retail": device_seek_stream_retail,
+        "candidate_source": device_seek_stream_candidate_source,
+        "include": ("igi/retail/resource/device_dispatch.hpp",),
+    },
 }
 
 
@@ -2626,6 +2909,11 @@ def format_case_literal(address: str, case: dict) -> str:
                 f'{"true" if case["size_out"] else "false"}, '
                 f'{"true" if case["alignment_out"] else "false"}, '
                 f'{case["tag"]}U, {case["size"]}U, {case["alignment"]}U}},')
+    if address in ("0x004B1780", "0x004B17F0"):
+        return (f'        {{"{case["id"]}", {case["kind"]}, {case["argument"]}}},')
+    if address == "0x004B1690":
+        return (f'        {{"{case["id"]}", '
+                f'{"true" if case["special"] else "false"}, {case["kind"]}}},')
     if address == "0x0048F970":
         return wndproc_case_literal(case)
     if address == "0x00465820":

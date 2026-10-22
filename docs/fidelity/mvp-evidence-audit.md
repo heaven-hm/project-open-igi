@@ -11,8 +11,8 @@ Run on the current branch:
 | measure | count |
 | --- | --- |
 | MVP natives | 120 |
-| labelled `VERIFIED` in the manifest | 78 |
-| saved evidence the gate's validators accept | 70 (53 before the refresh below) |
+| labelled `VERIFIED` in the manifest | 81 |
+| saved evidence the gate's validators accept | 71 (53 before the refresh below) |
 | runner configured, so the strict gate runs it live | 119 (upper bound) |
 | paired Frida evidence with calls in both images | 8 |
 | records that pass the full strict gate today | 6 |
@@ -32,15 +32,25 @@ The dominant problem is not missing evidence, it is malformed saved evidence:
 It executes each record's own configured runner (with the angr and unicorn
 interpreters the gate provides) and stores what the runner actually returns.
 
-- 78 records produced a valid `behavioral-test-report` and were rebound, lifting
-  saved-evidence coverage from 53 to 70.
+- 81 records produced a valid `behavioral-test-report` and were rebound, lifting
+  saved-evidence coverage from 53 to 71.
 - Three of those are new capability rather than re-plumbing: differential
   adapters were written for the Ilff chunk accessors (`0x004B7540`
   ReadContainerHeader, `0x004B7570` GetFormType, `0x004B7580` GetChunkTag), so
   those natives are now compared case by case against the retail
   instruction bytes under unicorn instead of being refused by the runner. The
-  void one compares the out parameters and treats a missing return value as "not
-  applicable" rather than inventing one.
+  void one compares the out parameters and reports an explicit null return rather
+  than inventing one.
+- Differential adapters were also written for the device stream dispatch helpers
+  (`0x004B1690` Device_CloseStream, `0x004B1780` Device_GetStreamPosition,
+  `0x004B17F0` Device_SeekStream). Their retail bodies load a device id from the
+  caller's context and call a table entry 0x8C bytes per id, so the adapter
+  installs a scratch stub in the emulated retail table and the matching stub in
+  the candidate's own table through its host wiring. That makes the dispatch
+  itself the observable, including the global-stream special case that retail
+  answers without touching a table. Those three records were also raised from
+  STRUCTURALLY_VERIFIED to VERIFIED, because their build, semantic and new
+  behavioural evidence all validate.
 - 25 records are still refused by their runner (`unsupported native address`).
 - 19 records' runners ran but produced no report: missing differential adapters
   for the Ilff family, incomplete argument templates for the fpu-state and QVM

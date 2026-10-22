@@ -1,11 +1,11 @@
 {
  "summary": {
   "total": 120,
-  "labelled_verified": 78,
-  "saved_evidence_backed": 70,
+  "labelled_verified": 81,
+  "saved_evidence_backed": 71,
   "strict_evidence_backed": 119,
   "end_to_end_backed": 8,
-  "records_with_problems": 50
+  "records_with_problems": 49
  },
  "natives": [
   {
@@ -726,33 +726,13 @@
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
-   "behavioral_errors": [
-    "0x004B7540 case[0] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[0] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[1] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[1] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[2] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[2] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[3] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[3] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[4] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[4] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[5] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[5] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[6] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[6] candidate_output omits observables: ['return_value']",
-    "0x004B7540 case[7] reference_output omits observables: ['return_value']",
-    "0x004B7540 case[7] candidate_output omits observables: ['return_value']",
-    "0x004B7540 behavioral comparison failed: 8 failing case(s) out of 8",
-    "0x004B7540 reported test counts (8, 8, 0) do not match recomputed counts (8, 0, 8)",
-    "0x004B7540 behavioral report result does not match the recomputed comparison result"
-   ],
+   "behavioral_errors": [],
    "semantic_errors": [],
    "frida_errors": [
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
+   "saved_evidence_backed": true,
    "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
@@ -886,7 +866,7 @@
   {
    "address": "0x004B1690",
    "name": "Device_CloseStream",
-   "status": "STRUCTURALLY_VERIFIED",
+   "status": "VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -903,7 +883,7 @@
   {
    "address": "0x004B1780",
    "name": "Device_GetStreamPosition",
-   "status": "STRUCTURALLY_VERIFIED",
+   "status": "VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
@@ -920,7 +900,7 @@
   {
    "address": "0x004B17F0",
    "name": "Device_SeekStream",
-   "status": "STRUCTURALLY_VERIFIED",
+   "status": "VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],
