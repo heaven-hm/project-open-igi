@@ -5,7 +5,7 @@
  "targets": 69,
  "static_ordered_count": 31,
  "runtime_observed_count": 61,
- "union_covered_count": 67,
+ "union_covered_count": 69,
  "union_covered_addresses": [
   "0x00404590",
   "0x00404F00",
@@ -459,9 +459,23 @@
   "limitation": "Static and runtime sequences are separate evidence streams and are not concatenated as a false total execution order."
  },
  "result": "partial-flow-coverage",
- "union_missing_addresses": [
-  "0x00405620",
-  "0x004659E0"
- ],
- "note": "Six of the eight runtime-unobserved natives are statically ordered via callback/cross-reference evidence; only 0x00405620 and 0x004659E0 are absent from both static order and runtime observations."
+ "union_missing_addresses": [],
+ "note": "All 69 MVP addresses now have static or runtime reachability evidence. Two are indirect-dispatch roots rather than direct static traversal edges and remain unobserved in the captured Level 3 runtime scenario.",
+ "indirect_dispatch_roots": {
+  "0x00405620": {
+   "kind": "callback-registration",
+   "retail_callers": [
+    "0x00402FF0"
+   ],
+   "evidence": "r2 axtj reports DATA xref at 0x00402FF0+0x326 to 0x00405620; this is a callback pointer, not a direct CALL edge."
+  },
+  "0x004659E0": {
+   "kind": "mission-task-dispatch",
+   "retail_callers": [
+    "0x0040CD6B",
+    "0x00472D00"
+   ],
+   "evidence": "r2 axtj reports multiple CALL xrefs from case labels within the 0x0040CD6B dispatch function and from 0x00472D00."
+  }
+ }
 }
