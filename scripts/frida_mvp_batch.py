@@ -122,6 +122,23 @@ EAX_WRITE = re.compile(
     r"\s+(e?ax|al|eax)\b", re.IGNORECASE)
 
 
+COMPARABILITY_PATH = ROOT / "scripts" / "mvp_runtime_comparability.json"
+
+
+def load_comparability_overrides() -> dict[str, dict]:
+    """Curated per-address exceptions to the return-class comparison."""
+    if not COMPARABILITY_PATH.is_file():
+        return {}
+    data = json.loads(COMPARABILITY_PATH.read_text())
+    overrides = data.get("overrides") or {}
+    return {address: {"comparable": bool(entry.get("comparable", True)),
+                      "reason": str(entry.get("reason", ""))}
+            for address, entry in overrides.items() if isinstance(entry, dict)}
+
+
+COMPARABILITY_OVERRIDES = load_comparability_overrides()
+
+
 def return_comparability(r2: str, binary: Path, addresses: list[str]) -> dict[str, dict]:
     """Decide whether each native's return value can be compared across images.
 
@@ -131,8 +148,10 @@ def return_comparability(r2: str, binary: Path, addresses: list[str]) -> dict[st
     numbers differ. The retail body is the authority: if it never writes EAX on
     any path, the return value is not part of its contract.
     """
-    result: dict[str, dict] = {}
+    result: dict[str, dict] = dict(COMPARABILITY_OVERRIDES)
     for address in addresses:
+        if address.lower() in {key.lower() for key in result}:
+            continue
         out = subprocess.run(
             [r2, "-q", "-e", "bin.relocs.apply=true", "-e", "scr.color=false",
              "-c", f"s {address}; af; pdfj; q", str(binary)],

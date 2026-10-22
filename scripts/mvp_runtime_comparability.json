@@ -1,0 +1,9 @@
+{
+  "_comment": "Per-address overrides for the paired-runtime return comparison. The default criterion is the set of return-value classes each image produced. That is only a valid criterion when a native's return class does not depend on which call it is; for a lookup whose result depends on its arguments the two independently timed runs make different calls, so class-set equality is meaningless. Each override records why, and the emitted report then states reachability as its basis instead of implying a return-value agreement.",
+  "overrides": {
+    "0x00517890": {
+      "comparable": false,
+      "reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values."
+    }
+  }
+}

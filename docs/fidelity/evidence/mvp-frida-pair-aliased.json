@@ -27,11 +27,15 @@
   "unlinked": 6,
   "retail_observed": 91,
   "candidate_observed": 21,
-  "matched": 10,
-  "mismatched": 6,
+  "matched": 11,
+  "mismatched": 5,
   "inconclusive": 98
  },
  "returnComparability": {
+  "0x00517890": {
+   "comparable": false,
+   "reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values."
+  },
   "0x0048F530": {
    "comparable": true,
    "reason": "the body writes EAX (xor eax, eax) before returning"
@@ -475,10 +479,6 @@
   "0x004F1160": {
    "comparable": true,
    "reason": "the body writes EAX (mov eax, 1) before returning"
-  },
-  "0x00517890": {
-   "comparable": true,
-   "reason": "the body writes EAX (mov eax, esi) before returning"
   },
   "0x005178E0": {
    "comparable": true,
@@ -4261,9 +4261,9 @@
    "retail_observed_calls": 406,
    "candidate_observed_calls": 18,
    "comparison": {
-    "basis": "reachability plus return-value class set",
-    "return_comparison": "classes",
-    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values.",
     "retail_observed_calls": 406,
     "candidate_observed_calls": 18,
     "retail_ret_classes": [
@@ -4287,10 +4287,10 @@
      "ptr|ptr|ptr|ptr"
     ],
     "arguments_compared": false,
-    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
-    "match": false
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
    },
-   "result": "mismatch"
+   "result": "match"
   },
   {
    "name": "Iff_FindChunkBelowForm",

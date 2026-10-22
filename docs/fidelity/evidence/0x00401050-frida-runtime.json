@@ -38,7 +38,7 @@
  },
  "evidence": {
   "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-aliased.json",
-  "paired_capture_sha256": "6535caf0b84ecf6cd14729841cefda47659fa7734e6a98d5632f9823e6232e7d"
+  "paired_capture_sha256": "0c41e29291e42d011db1f6d07e84a983d33f5be03f5d42c9f660033ab08943b2"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

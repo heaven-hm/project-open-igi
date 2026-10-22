@@ -9,9 +9,9 @@ categories and what each one needs.
 | --- | --- | --- |
 | candidate-unreachable | 75 | retail calls it, the candidate program never does: the subsystem is not built into the scene |
 | retail-unobserved | 23 | neither run reached it |
-| end-to-end | 10 | both sides observed; 8 pass every pillar, 2 fail another pillar |
+| end-to-end | 11 | both sides observed; 9 pass every pillar, 2 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
-| paired-mismatch | 6 | both sides observed, observed classes disagree |
+| paired-mismatch | 5 | both sides observed, observed classes disagree |
 
 An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
 the catalog name and the port's name differ at the same retail address (the port
@@ -76,3 +76,16 @@ Two consequences for the port: the signature and the caller convention have to c
 bit-exact because two of its dwords are uninitialized on the retail side - the port must
 either define them and document the divergence or the comparison must scope them out.
 That makes this a transcription task with a scope decision, not a one-line repair.
+
+## Return classes that depend on the arguments
+
+The default paired criterion is the set of return-value classes each image produced. That
+is invalid for a lookup: `Iff_FindFormChunk` returns the node whose tag matches the
+argument or null, so its class depends on which call it is. The two runs made different
+calls (retail 406, candidate 18), so comparing class sets compares two different samples.
+
+`scripts/mvp_runtime_comparability.json` now holds curated exceptions with a reason per
+address, and the emitted report states reachability as its basis instead of implying a
+return-value agreement. With that recorded honestly, `Iff_FindFormChunk` passes the strict
+gate on the pillars that do apply - CFG, angr, the live behavioural differential and a
+paired observation in both images - making it the ninth native verified end to end.
