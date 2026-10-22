@@ -205,3 +205,20 @@ prefers the alias), so the gap is in hook installation for this internal, non-ex
 than in the name mapping. Until that is diagnosed the emission leaves the entry inconclusive, which
 is the truthful state: the source mirrors the call, the binary contains it, and the runtime
 observation has not been captured.
+
+## The attach race was not the cause either
+
+To test the "hooks installed too late" explanation, Main gained an env-gated settle window
+(`IGI2_ATTACH_SETTLE_MS`): a Sleep at entry that no normal run sets, so the observation driver can
+install its hooks before the startup calls execute. The rebuilt image was captured with a six-second
+window, which is far longer than the driver needs to find the pid and attach.
+
+The candidate still records zero calls for `App_ContextSetTerrainLightmapsUsed` while recording one
+for `AppContext_SetIsActive`, even though both calls are adjacent in the same function and both are
+present in the image. So the race hypothesis is disproven: nothing was installed late. The remaining
+explanation is that `Interceptor.attach` on that particular entry point fails or is dropped - the
+function is 0x14 bytes at 0x0040A6C0, adjacent to other small setters, and the probe installs hooks
+without reporting failures.
+
+The settle window stays in the port as documented instrumentation, since it is exactly what a
+future capture needs once the hook path is fixed, and it is inert unless the variable is set.

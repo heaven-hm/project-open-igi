@@ -14,6 +14,8 @@
 #endif
 
 #if defined(_WIN32)
+#include <cstdlib>
+
 #include <windows.h>
 #endif
 
@@ -36,6 +38,17 @@ extern "C" {
 // Status/limits: STRUCTURALLY_VERIFIED; startup order and the per-frame loop are transcribed, but the retail main's DirectX version check, script setup, ~20 startup getter/registration calls, movie and subtitle playback, smoke and particle emitters, debug key handlers and sound and joystick backends are skipped by this MVP scope.
 int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
 {
+
+    // Instrumentation-only: the observation driver needs the startup window to
+    // stay open until its hooks are installed. Absent in normal runs.
+    if (const char* settle_ms = std::getenv("IGI2_ATTACH_SETTLE_MS"))
+    {
+        const int delay = std::atoi(settle_ms);
+        if (delay > 0)
+        {
+            ::Sleep(static_cast<DWORD>(delay));
+        }
+    }
 #if defined(_WIN32)
     HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI2MUTEX");
     if (mutex == nullptr)

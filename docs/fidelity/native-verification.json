@@ -52370,7 +52370,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/retail_main.cpp",
-        "sha256": "d9fd0e24a5b972bf61a78aa6ac31b5cafa28a948d22ee1f59ce0b77243ec714c",
+        "sha256": "e447db16d0b97c16462359bae7df654cefb184005939bd3027ae4bd24c145232",
         "signature": "WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )"
       },
       "game_natives": {
@@ -52424,11 +52424,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-semantic-review.json",
-          "evidence_sha256": "4f9cbbb904ccd9442b2fd5ebf7d04ce9e0f267ca8129a059350dd87fa6d627f2"
+          "evidence_sha256": "0d5f17a6b4af1953c60a90f60e655209f8c806cad297f354be9a317feb250c6d"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F530-build.json",
-          "evidence_sha256": "94aae353919e4a4828ae0ba6abb97b717b1dce4460a1f2f11eaa72e3b8534963"
+          "evidence_sha256": "c91448100862a5da68b12f777486c7bf4e351a77b3eaebf9f9eb54a89e811ae5"
         }
       }
     },

@@ -4,9 +4,9 @@
  "result": "passed",
  "address": "0x0048F530",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "d9fd0e24a5b972bf61a78aa6ac31b5cafa28a948d22ee1f59ce0b77243ec714c",
+ "implementation_sha256": "e447db16d0b97c16462359bae7df654cefb184005939bd3027ae4bd24c145232",
  "executed": true,
  "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/core/retail_main.cpp -o /tmp/native-main.o",
  "target": "Windows x86 (Intel 80386 COFF object)",
- "note": "Compiled after Main gained the two retail startup calls (SetIsActive, SetTerrainLightmapsUsed)."
+ "note": "Compiled with the env-gated startup settle window used only by the observation driver."
 }
