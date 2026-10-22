@@ -295,3 +295,25 @@ The next step is in-process evidence rather than more captures: a hook whose cal
 caller's return address would show whether `0x40B5B0` is ever reached, and a marker written from
 inside the setter itself would show whether the body runs. Until one of those is measured, the
 register keeps the conclusion narrow: the candidate's startup observation is unexplained, not absent.
+
+## The root cause: Main is a ported copy, not the entry the game runs
+
+A three-hook run asked the question the captures could not: hook `Main` 0x0040B3F0 itself alongside the
+two startup calls. `Main` was never observed. Checking the linked image explains it - `objdump` finds
+**zero call instructions** targeting 0x40B3F0; its only two references are in data.
+
+That is consistent with the source: `engine/src/retail/core/retail_main.cpp` defines Main and is the
+only caller of `FP_InitExtendedPrecision`, `AppContext_GetIsActive` and `QTask_OpenEvent`, but the
+candidate's real entry lives in `engine/main.cpp`/`engine/platform/windows/scene_main.cpp` and does not
+call it.
+
+So the startup calls added in round 71 are in a function the game never executes. That also explains
+every contradictory observation since: the is-active getter is seen once from other code paths, the
+lightmaps setter never fires because its only call site is in a dead function, and a longer settle
+window changed nothing because the code under observation never ran.
+
+This is the most important finding of the flow work: the ported `Main` is a harness/reference copy,
+so "the flow" measured by captures is the candidate's own scene entry, not the retail `_start`
+transcription. The next step is to determine which entry the shipping image actually uses and mirror
+retail's startup there - or to make the image call the ported Main as its entry - before any further
+main-to-end flow claims are made.
