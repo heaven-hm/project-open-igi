@@ -33,6 +33,7 @@ DEFAULT_CANDIDATES = (
     Path("/Users/haseeb-mir/Downloads/IGI/igi1.exe"),
 )
 RETAIL_TRACE = ROOT / "build" / "runtime-traces" / "ds-level1-retail.json"
+PAIR_CAPTURE = ROOT / "docs" / "fidelity" / "evidence" / "mvp-frida-pair-level1.json"
 
 
 def candidate_symbols(executable: Path) -> set[str]:
@@ -94,6 +95,24 @@ def retail_reachability() -> dict[str, dict]:
     return out
 
 
+def paired_runtime() -> dict[str, dict]:
+    """Per-native retail/candidate call counts from the paired level-1 capture."""
+    if not PAIR_CAPTURE.exists():
+        return {}
+    try:
+        capture = json.loads(PAIR_CAPTURE.read_text())
+    except ValueError:
+        return {}
+    out = {}
+    for entry in capture.get("natives") or []:
+        out[entry["address"].lower()] = {
+            "retail": entry.get("retail_observed_calls", 0),
+            "candidate": entry.get("candidate_observed_calls", 0),
+            "result": entry.get("result"),
+        }
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--candidate", type=Path, action="append",
@@ -106,6 +125,7 @@ def main() -> int:
     manifest = json.loads(MANIFEST.read_text())
     records = {record["address"].lower(): record for record in manifest["natives"]}
     reachable = retail_reachability()
+    paired = paired_runtime()
 
     executables = args.candidate or [path for path in DEFAULT_CANDIDATES if path.exists()]
     symbol_sets = [(path, candidate_symbols(path)) for path in executables]
@@ -146,7 +166,13 @@ def main() -> int:
             blockers.append("no paired Frida runtime evidence")
         if not pillars["behavioral"]:
             blockers.append("no behavioural test evidence")
+        runtime = paired.get(address) or {}
         rows.append({
+            "runtime": {
+                "retail_calls": runtime.get("retail", 0),
+                "candidate_calls": runtime.get("candidate", 0),
+                "paired_result": runtime.get("result"),
+            },
             "address": target["address"],
             "name": name,
             "category": target.get("category"),
@@ -168,9 +194,20 @@ def main() -> int:
         "frida_evidence": sum(r["pillars"]["frida_runtime"] for r in rows),
         "retail_reachable": sum(r["pillars"]["retail_reachable"] for r in rows),
         "end_to_end_possible": sum(r["end_to_end_possible"] for r in rows),
-        "fully_verified_end_to_end": sum(r["frida_observable_end_to_end"] for r in rows),
+        # Evidence presence, not a verdict: a native can have paired Frida
+        # evidence while another pillar (behavioural, semantic) still blocks it.
+        "paired_frida_evidence": sum(r["frida_observable_end_to_end"] for r in rows),
         "marked_verified_in_manifest": sum(
             1 for r in rows if r["manifest_status"] == "VERIFIED"),
+        "runtime_observed_retail": sum(
+            1 for r in rows if r["runtime"]["retail_calls"]),
+        "runtime_observed_candidate": sum(
+            1 for r in rows if r["runtime"]["candidate_calls"]),
+        "runtime_observed_both": sum(
+            1 for r in rows if r["runtime"]["retail_calls"]
+            and r["runtime"]["candidate_calls"]),
+        "runtime_return_class_matched": sum(
+            1 for r in rows if r["runtime"]["paired_result"] == "match"),
     }
     report = {
         "schema_version": 1,
