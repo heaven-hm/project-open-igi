@@ -1811,6 +1811,112 @@ int main()
 }
 """
 
+
+# ---------------------------------------------------------------------------
+# 0x004B7540 Ilff_ReadContainerHeader, 0x004B7570 Ilff_GetFormType,
+# 0x004B7580 Ilff_GetChunkTag
+# ---------------------------------------------------------------------------
+
+ILFF_HDR_ADDRESS = 0x004B7540
+ILFF_FORM_ADDRESS = 0x004B7570
+ILFF_TAG_ADDRESS = 0x004B7580
+ILFF_CONTEXT = 0x70013000
+ILFF_OUT_SIZE = 0x70013100
+ILFF_OUT_ALIGN = 0x70013200
+
+
+def ilff_header_cases() -> list[dict]:
+    cases = [
+        {"id": "header-nominal", "categories": ["nominal"], "context": ILFF_CONTEXT,
+         "size": 0x1234, "align": 0x10, "out_size": ILFF_OUT_SIZE, "out_align": ILFF_OUT_ALIGN},
+        {"id": "header-zero-fields", "categories": ["nominal"], "context": ILFF_CONTEXT,
+         "size": 0, "align": 0, "out_size": ILFF_OUT_SIZE, "out_align": ILFF_OUT_ALIGN},
+        {"id": "header-null-context", "categories": ["boundary"], "context": 0,
+         "size": 0, "align": 0, "out_size": ILFF_OUT_SIZE, "out_align": ILFF_OUT_ALIGN},
+        {"id": "header-null-size-out", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "size": 0x55, "align": 0x66, "out_size": 0, "out_align": ILFF_OUT_ALIGN},
+        {"id": "header-null-align-out", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "size": 0x77, "align": 0x88, "out_size": ILFF_OUT_SIZE, "out_align": 0},
+        {"id": "header-both-null-out", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "size": 1, "align": 2, "out_size": 0, "out_align": 0},
+        {"id": "header-max-negative", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "size": -1, "align": -2, "out_size": ILFF_OUT_SIZE, "out_align": ILFF_OUT_ALIGN},
+        {"id": "header-high-bit", "categories": ["boundary"], "context": ILFF_CONTEXT,
+         "size": 0x7FFFFFFF, "align": -2147483648, "out_size": ILFF_OUT_SIZE, "out_align": ILFF_OUT_ALIGN},
+    ]
+    for i, c in enumerate(cases):
+        c["seed"] = i
+    return cases
+
+
+def _ilff_prepare(image: PebImage, case: dict):
+    import unicorn
+    emulator = new_emulator(image)
+    emulator.mem_write(ILFF_CONTEXT, b"\x00" * 0x100)
+    if case.get("size") is not None:
+        emulator.mem_write(ILFF_CONTEXT + 4, struct.pack("<i", case["size"]))
+    if case.get("align") is not None:
+        emulator.mem_write(ILFF_CONTEXT + 8, struct.pack("<i", case["align"]))
+    emulator.mem_write(ILFF_OUT_SIZE, b"\x00" * 4)
+    emulator.mem_write(ILFF_OUT_ALIGN, b"\x00" * 4)
+    return emulator
+
+
+def ilff_header_retail(image: PebImage, case: dict) -> dict:
+    import unicorn
+    emulator = _ilff_prepare(image, case)
+    run_with_arguments(emulator, ILFF_HDR_ADDRESS,
+                       [case["out_size"], case["out_align"], case["context"]], 0x00C0FFEE)
+    return {
+        "return_value": 0,
+        "state_delta": {
+            "out_size": struct.unpack("<i", emulator.mem_read(ILFF_OUT_SIZE, 4))[0],
+            "out_align": struct.unpack("<i", emulator.mem_read(ILFF_OUT_ALIGN, 4))[0],
+        },
+        "side_effects": [],
+    }
+
+
+def ilff_header_case_literal(case: dict) -> str:
+    return (f'        {{"{case["id"]}", {case["out_size"]}U, {case["out_align"]}U, '
+            f'{case["context"]}U, {case["size"]}, {case["align"]}}},')
+
+
+def ilff_header_candidate_source() -> str:
+    return r"""
+#include <cstdio>
+#include <cstdint>
+#include <cstdlib>
+#include <cstring>
+#include "igi/retail/sys/ilff_navigation.hpp"
+
+namespace {
+struct Case { const char* id; unsigned out_size; unsigned out_align; unsigned context; long size; long align; };
+Case cases[] = {
+@CASES@
+};
+}
+
+int main()
+{
+    for (const Case& item : cases) {
+        static std::uint8_t buffer[0x100];
+        std::memset(buffer, 0, sizeof(buffer));
+        *reinterpret_cast<std::int32_t*>(buffer + 4) = static_cast<std::int32_t>(item.size);
+        *reinterpret_cast<std::int32_t*>(buffer + 8) = static_cast<std::int32_t>(item.align);
+        std::int32_t out_size = 0, out_align = 0;
+        igi::retail::sys::Ilff_ReadContainerHeader(
+            item.out_size ? &out_size : nullptr,
+            item.out_align ? &out_align : nullptr,
+            item.context ? buffer : nullptr);
+        std::printf("{\"id\":\"%s\",\"return_value\":0,\"state_delta\":{\"out_size\":%d,"
+                    "\"out_align\":%d},\"side_effects\":[]}\n",
+                    item.id, out_size, out_align);
+    }
+    return 0;
+}
+"""
+
 NATIVES = {
     "0x00404590": {
         "cases": config_active_cases,
@@ -1847,6 +1953,12 @@ NATIVES = {
         "retail": config_num_retail,
         "candidate_source": config_num_candidate_source,
         "include": ("igi/retail/config/config_graphic_options.hpp",),
+    },
+    "0x004B7540": {
+        "cases": ilff_header_cases,
+        "retail": ilff_header_retail,
+        "candidate_source": ilff_header_candidate_source,
+        "include": ("igi/retail/sys/ilff_navigation.hpp",),
     },
     "0x004F1160": {
         "cases": parse_mode_cases,
@@ -1924,6 +2036,8 @@ def format_case_literal(address: str, case: dict) -> str:
         return wndproc_case_literal(case)
     if address == "0x004F1160":
         return parse_mode_case_literal(case)
+    if address == "0x004B7540":
+        return ilff_header_case_literal(case)
     if address == "0x00465820":
         return (f'        {{"{case["id"]}", static_cast<std::size_t>({case["human_offset"]}), '
                 f'{float(case["feet_x"])}, {float(case["feet_y"])}, {float(case["feet_z"])}, '

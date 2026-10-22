@@ -57990,7 +57990,7 @@
         "signature": "void __cdecl Ilff_ReadContainerHeader(std::uint32_t* outSize, std::uint32_t* outAlign, void* container);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -58000,7 +58000,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/native_unicorn_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -58015,7 +58015,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -58042,8 +58042,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B7540-behavioral.json",
           "evidence_sha256": "2e4c2b5979bfc715560e0403faf88b15962097e32a764be40d0fe87dc0cf4c55"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004B7540-behavioral.json",
+          "evidence_sha256": "864a61faa4b03bacac8f0506304952ea3dd3b4ae820b7317f569f8d4b98f9a1f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004B7570",
@@ -58647,14 +58656,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
         ],
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
@@ -58700,7 +58710,8 @@
           "evidence_path": "docs/fidelity/evidence/0x00505E40-behavioral.json",
           "evidence_sha256": "49a7240027be20ea949f125d47398360a367e8bb4797129f815c1407ad5ab286"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x00506F00",
@@ -58717,14 +58728,15 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
         ],
         "behavioral_runner": {
           "path": "scripts/native_leaves_runner.py",
@@ -58770,7 +58782,8 @@
           "evidence_path": "docs/fidelity/evidence/0x00506F00-behavioral.json",
           "evidence_sha256": "d203135dae9ffcc44f4b682022703167ce3b5a10d1f6172ca202b00f4f181052"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x004F82B0",
@@ -58857,14 +58870,15 @@
         "signature": "int __cdecl Terrain_Load(void* context, const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail 0x004C6240 (Terrain_Load): sub esp,0x88; Render_ComputeNormals_3; name=path+.bit -> Resource_Load -> ctx+0xDCC (0xC00 table, flags g_b81a20); name=path+.hmp if Resource_FileExists -> ctx+0xDD0 (flags g_b81920) else 0; .cmd -> ctx+8; .ctr -> ctx+0xC; .qsc: Game_DefineOptions CreateTerrainMaterial(0x4C6670,0xE2) and CreateTerrainTileMap(0x4C6760,0x41), Qvm_Load/Execute/Cleanup, Sys_CloseFileStream_23 x2; relocate ctr entries +0x1C by ctx+8; Mem_Alloc 0x1000->ctx+0xDC0, 0x10000->ctx+0xDC4, clear; DynObj_UpdateDynTree_11(ctx). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -58910,7 +58924,8 @@
           "evidence_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
           "evidence_sha256": "b830d0ef080bd45b020fbf3be2eaf1305ea542aee224775a6a295c7b3fec7877"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x004C5F00",
@@ -58927,14 +58942,15 @@
         "signature": "int __cdecl Terrain_LoadTexturesAndLightmaps(void* context, const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail 0x004C5F00 (Terrain_LoadTexturesAndLightmaps): sub esp,0x484; strcpy g_b97c20,path; name=path+.tex; Terrain_LoadTexFile -> ctx+0xDBC; palette[i]=i<<16 uploaded to ctx+0xDF4; if GetTerrainLightmapsUsed: name=path+.lmp -> ctx+0xE00, Resource_Load, per-entry Texture_UploadMipmapPacket into g_b81b20 (0x2C stride); return Resource_Unload(name). The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -58980,7 +58996,8 @@
           "evidence_path": "docs/fidelity/evidence/0x004C5F00-behavioral.json",
           "evidence_sha256": "d9651088cebb6bb57364a9f67c5e4b0fcbcf996e5e0b7be7d6e565b8ee1c0fe2"
         }
-      }
+      },
+      "status": "ANALYZED"
     },
     {
       "address": "0x004D14E0",
