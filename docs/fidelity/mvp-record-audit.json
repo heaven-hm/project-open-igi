@@ -2,20 +2,18 @@
  "summary": {
   "total": 120,
   "labelled_verified": 81,
-  "saved_evidence_backed": 119,
-  "strict_evidence_backed": 119,
+  "saved_evidence_backed": 120,
+  "strict_evidence_backed": 120,
   "end_to_end_backed": 8,
-  "records_with_problems": 1
+  "records_with_problems": 0
  },
  "natives": [
   {
    "address": "0x0048F530",
    "name": "Retail_Main",
    "status": "STRUCTURALLY_VERIFIED",
-   "implementation_digest_matches": false,
-   "record_errors": [
-    "implementation digest does not match the record"
-   ],
+   "implementation_digest_matches": true,
+   "record_errors": [],
    "build_errors": [],
    "behavioral_errors": [],
    "semantic_errors": [],
@@ -23,8 +21,8 @@
     "no paired Frida report"
    ],
    "runner_configured": true,
-   "saved_evidence_backed": false,
-   "strict_evidence_backed": false,
+   "saved_evidence_backed": true,
+   "strict_evidence_backed": true,
    "end_to_end_backed": false
   },
   {

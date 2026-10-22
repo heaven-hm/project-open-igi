@@ -35,15 +35,32 @@ new report under `docs/fidelity/evidence`, validates it with the gate's own
 report the gate would reject can no longer overwrite a good artifact with a bad
 one.
 
-One record remains unbacked by design of the pipeline, not for lack of
-attention: `Retail_Main 0x0048F530`. Its reviewed implementation changed after
-its evidence was written, in commit `8027a34c`, which renames the candidate
-single-instance mutex string from `IGI1MUTEX` to `IGI2MUTEX` so retail and the
-candidate can run side by side for paired observation. That is a deliberate,
-documented divergence, but the record's build and semantic artifacts still bind
-the old source digest, and no differential runner covers a `main` entry point.
-The honest state is therefore "evidence stale, re-review needed", and it is
-recorded as such rather than re-stamped.
+`Retail_Main 0x0048F530` needed a different kind of repair. Its saved semantic
+review did not describe `main` at all: it asserted chunk-tag constants, a
+sibling/child walk and a payload pointer, which is an IFF chunk-tree review. Its
+implementation comment was also truncated mid-sentence, and its block referenced
+build and behavioural artifacts bound to a source digest that no longer existed.
+
+The record was re-reviewed against the actual retail body instead of re-stamped.
+Radare2 over `0x0048F530..0x0048F970` shows the WinMain shape: `CreateMutexA`,
+`CoInitialize`, `GetForegroundWindow`, `LoadIconA`/`LoadCursorA`,
+`RegisterClassA`, ~20 startup getter/registration calls, a DirectX version check
+with a MessageBox, and then the per-frame loop. The port's `Main` is a scoped
+transcription of that startup order plus the frame loop.
+
+The corrected review states exactly what is and is not claimed: identity,
+argument mapping, constants and return/error paths pass; memory layout and
+floating point are not applicable; and the skipped subsystems (DirectX check,
+script setup, the startup registrations, movie/subtitle, particles, debug keys,
+sound/joystick) are enumerated rather than implied. Two divergences are recorded
+openly: the class name registered by that unit is `IGI` while the executable's
+real entry registers the retail `Innerloop`, and the mutex is `IGI2MUTEX` by
+design for paired observation. The stale build and behavioural references were
+removed rather than left pointing at artifacts for a source that no longer
+exists; at STRUCTURALLY_VERIFIED the gate does not require them.
+
+That makes all 120 records self-consistent. It does not make `Main` a verified
+1:1 transcription, and the record now says so.
 
 ## What the end-to-end number means
 

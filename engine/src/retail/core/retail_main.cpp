@@ -30,9 +30,9 @@ extern "C" {
 
 // Native: Main; retail VA 0x0048F530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F530..0x0048F970.
-// Behavior/CFG: pushes the mutex name "IGIMUTEX" and calls CreateMutexA with
-// Status/limits: STRUCTURALLY_VERIFIED; the mutex, the class registrations and
+// Tools/evidence: Radare2 0x0048F530..0x0048F970 (CreateMutexA, CoInitialize, GetForegroundWindow, LoadIconA, LoadCursorA, RegisterClassA, CreateWindowExA, the per-frame loop) and Binary Ninja CFG (26 blocks, 37 edges).
+// Behavior/CFG: takes a single-instance mutex, initialises COM, registers the window class whose procedure is retail 0x0048F970, creates and shows the window, then runs the per-frame loop: x87 precision setup, the app-context isActive test, the frame dispatch, the loop status byte and the message pump. The mutex here is "IGI2MUTEX" and the class "IGI"; retail takes "IGIMUTEX" and registers "Innerloop", the mutex rename being the port's deliberate divergence for paired observation.
+// Status/limits: STRUCTURALLY_VERIFIED; startup order and the per-frame loop are transcribed, but the retail main's DirectX version check, script setup, ~20 startup getter/registration calls, movie and subtitle playback, smoke and particle emitters, debug key handlers and sound and joystick backends are skipped by this MVP scope.
 int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
 {
 #if defined(_WIN32)
