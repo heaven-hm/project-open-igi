@@ -55656,7 +55656,7 @@
         "signature": "x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -55681,7 +55681,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 300
+          "timeout_seconds": 600
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -55708,8 +55708,17 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
           "evidence_sha256": "161bf768d57ee3bd3ba85e1eb17bb983bb4001f9c17a5a1c34ad13aa5a4daa34"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
+          "evidence_sha256": "62ef3ff4fed63c78e95dc2eed5cf4a926e0f19f0bbd75bb2f69eae51ee24df2f",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x00497E70",
