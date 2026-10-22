@@ -1,0 +1,24 @@
+{
+ "kind": "paired-runtime-divergence",
+ "schema_version": 1,
+ "retail_binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "method": "native_iff_diff_runner.py, Frida spawn suspended, hooks installed before resume, 70s observation, level4",
+ "retail": {
+  "observations": 32480,
+  "escape_posted": true
+ },
+ "candidate": {
+  "observations": 0
+ },
+ "hooks_installed": "5/5 in the candidate at 0x4232E0, 0x4235E0, 0x4238B0, 0x4238D0, 0x424660",
+ "natives": [
+  "Iff_FindFormChunk (0x00517890)",
+  "Iff_FindChunk (0x00517940)",
+  "Iff_GetChunkPayload (0x005179C0)",
+  "Iff_FindChunkBelowForm (0x005178E0)",
+  "AnimIff_LoadAnimationFile (0x004D67A0)"
+ ],
+ "finding": "Every one of the five IFF natives is transcribed in the candidate but has zero call sites outside its own definition. Retail calls Iff_FindFormChunk 32480 times during the same run; the candidate never calls it.",
+ "consequence": "These natives cannot be promoted to VERIFIED. Hooks install correctly and the candidate runs, so this is a real behavioural divergence in the reconstruction: the IFF family is dead code until the model/terrain loaders are wired to it.",
+ "note": "This is the same 1-to-1 flow gap the objective targets, now demonstrated with paired runtime evidence rather than inferred from static call graphs."
+}
