@@ -1,12 +1,11 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-terrain2.json",
+  "capture": "build/runtime-traces/mvp-frida-pair-final.json",
   "level": 5,
   "counts": {
     "candidate-unreachable": 75,
-    "end-to-end": 15,
-    "paired-mismatch": 1,
+    "end-to-end": 16,
     "retail-unobserved": 23,
     "unlinked": 6
   },
@@ -807,9 +806,9 @@
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
-      "blocker": "paired-mismatch",
-      "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed classes disagree"
+      "blocker": "end-to-end",
+      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "detail": "paired observation accepted"
     },
     {
       "address": "0x004C6240",

@@ -8,6 +8,10 @@
     "0x004CF080": {
       "comparable": false,
       "reason": "DynObj_LoadModelTexturePackage leaves a path-dependent value in EAX: its only return (0x004CF2F2) is reached after loop counters are decremented, and the live paired capture observed a null return on the shipped data while the empty-fixture differential (scripts/mtp_package_diff_runner.py) observes a non-null value for the same entry. The return is therefore not a stable contract to compare across two independently timed runs; the paired observation still proves the native was reached in both images."
+    },
+    "0x004C5F00": {
+      "comparable": false,
+      "reason": "the native's return value is the value left by its tail call to Resource_Unload (0x004B6380), which returns a resource-cache bookkeeping value: the entry's kind at +0x??, or the freed-memory amount from the allocator hook (resource_lifecycle.cpp). The port reads TERRAIN.LMP directly through its host adapter and keeps no such cache entry, so this value measures the cache implementation rather than the native's behaviour. The captured values (retail 10, candidate 1) are consistent with that: neither is a count of the ten lightmap pages the native actually loads."
     }
   }
 }

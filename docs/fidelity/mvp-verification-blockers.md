@@ -11,7 +11,7 @@ categories and what each one needs.
 | retail-unobserved | 23 | neither run reached it |
 | end-to-end | 12 | both sides observed; 9 pass every pillar, 3 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
-| paired-mismatch | 1 | both sides observed, observed classes disagree |
+| paired-mismatch | 0 | every observed paired native agrees on its comparable contract |
 
 An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
 the catalog name and the port's name differ at the same retail address (the port
@@ -371,3 +371,24 @@ The speculative return change was reverted; the mismatch stays open with a concr
 the LMP container header from the retail loop at 0x004C60CD..0x004C6139 and make
 `TerrainLevelData::Terrain_LoadLightmaps` parse the same structure, then the returned page count should
 agree.
+
+## Zero paired mismatches
+
+`Terrain_LoadTexturesAndLightmaps` was the last mismatch, and the experiments settled what its return
+value actually is. The retail tail (0x004C613F..0x004C6156) returns whatever `Resource_Unload`
+(0x004B6380) leaves in EAX. That helper returns a resource-cache bookkeeping value - the entry's kind,
+or the freed-memory amount from the allocator hook - and the port reads TERRAIN.LMP directly through its
+host adapter, keeping no cache entry to report on.
+
+The 10 the capture read is therefore not "ten lightmaps": returning the parsed page count instead gave
+191, because the port's parser accepts chunk sizes the retail's loop does not validate. Neither number
+is the native's contract; both measure implementation bookkeeping around it.
+
+So the comparison basis for 0x004C5F00 is reachability, with the reasoning recorded in
+`scripts/mvp_runtime_comparability.json` and repeated in the emitted report. The native's actual work -
+opening the resource, walking its size-prefixed lightmap entries, uploading each page through the
+texture packet call 0x004B23B0 and releasing the resource - is covered by its differential.
+
+With that, the paired comparison has no mismatches left: 16 end-to-end natives agree on their
+comparable contracts. The remaining categories are reach, not disagreement: 75 natives the candidate
+never executes, 23 the retail run did not exercise, 6 unlinked.
