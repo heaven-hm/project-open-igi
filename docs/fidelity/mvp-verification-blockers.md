@@ -462,3 +462,34 @@ distinction is what makes the remaining not-in-build trio comparable to this one
 Also of note: 81 manifest records carry a VERIFIED status label, but only 11 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
+
+## What the behavioural pillar can actually be re-run for
+
+Trying to promote `Flow_RunHandler` (0x00402260) from STRUCTURALLY_VERIFIED to VERIFIED exposed a second
+evidence defect. Its behavioural artifact is present and its runner is recorded, but the gate re-executes
+that runner and the runner answers "unsupported native address: 0x00402260". The artifact was therefore
+not reproducible, and the promotion was refused - correctly.
+
+The audit now reports, for every MVP record, whether its behavioural artifact names a runner that can be
+re-run. Of 120:
+
+| state | count |
+|---|---|
+| re-runnable | 88 |
+| artifact has no runner metadata | 20 |
+| no behavioural evidence | 10 |
+| runner does not mention the address | 2 |
+
+So 22 records carry a behavioural claim that cannot be replayed. They are honest artifacts in the sense
+that they were produced by some run, but they cannot back a VERIFIED status under the current gate, and
+the ones without runner metadata cannot even say what produced them. This is why "81 records at VERIFIED"
+and "11 records proven" are so far apart: for 22 of them the behavioural pillar is frozen, and for most
+of the rest the runtime pillar was never required.
+
+## Qvm_Execute is not one function
+
+Last round described Qvm_Execute (0x004B85B0) as the single gate to the QVM path. It is 301 bytes and 14
+basic blocks, but it is an orchestrator over six interpreter helpers - 0x004BD080, 0x004BFC70, 0x004BF1F0,
+0x004BFA80, 0x004BF8F0 and 0x004BEFC0 - none of which is ported. Porting it therefore means porting the
+QVM interpreter core, not one function. The three not-in-build natives stay blocked on that, and the
+estimate should be recorded as interpreter-core work rather than a single missing symbol.

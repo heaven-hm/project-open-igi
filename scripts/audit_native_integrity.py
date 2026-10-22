@@ -83,6 +83,28 @@ def check(record: dict, built: set[str], sources: dict[pathlib.Path, str]) -> tu
     return "ok", f"{path_text} is compiled into the engine"
 
 
+def behavioural_state(record: dict) -> str:
+    """Whether the behavioural artifact names a runner that can be re-run for this address.
+
+    The strict gate re-executes the runner, so an artifact whose runner is gone (or never mentions the
+    address) cannot back a VERIFIED claim even though the report itself is present.
+    """
+    ev = record["verification"].get("behavioral")
+    if not ev:
+        return "no-behavioural-evidence"
+    data = json.loads((ROOT / ev["evidence_path"]).read_text())
+    runner = data.get("runner") or {}
+    path_text = runner.get("path")
+    if not path_text:
+        return "artifact-has-no-runner-metadata"
+    runner_path = ROOT / path_text
+    if not runner_path.exists():
+        return "runner-file-missing"
+    if record["address"][2:].upper() not in runner_path.read_text(errors="replace").upper():
+        return "runner-does-not-mention-address"
+    return "re-runnable"
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--json", type=pathlib.Path, help="write the full report here")
@@ -95,6 +117,8 @@ def main() -> int:
     built = cmake_sources()
     sources = {p: p.read_text(errors="replace") for p in (ROOT / "engine/src").rglob("*.cpp")}
     failures: list[dict] = []
+    behavioural: dict[str, int] = {}
+    behavioural_failures: list[dict] = []
     counts: dict[str, int] = {}
     for target in targets:
         address = target["address"].lower()
@@ -106,18 +130,25 @@ def main() -> int:
             continue
         problem, detail = check(record, built, sources)
         counts[problem] = counts.get(problem, 0) + 1
+        state = behavioural_state(record)
+        behavioural[state] = behavioural.get(state, 0) + 1
+        if state != "re-runnable":
+            behavioural_failures.append({"address": target["address"], "name": target["name"],
+                                         "state": state})
         if problem != "ok":
             failures.append({"address": target["address"], "name": target["name"],
                              "status": record["verification"]["status"],
                              "problem": problem, "detail": detail})
     report = {"schema_version": 1, "kind": "native-integrity-audit",
-              "checked": len(targets), "counts": counts, "failures": failures}
+              "checked": len(targets), "counts": counts, "failures": failures,
+              "behavioural_counts": behavioural, "behavioural_failures": behavioural_failures}
     if args.json:
         args.json.write_text(json.dumps(report, indent=2) + "\n")
     for failure in failures:
         print(f'{failure["address"]} {failure["name"][:34]:34s} {failure["status"]:22s} '
               f'{failure["problem"]:18s} {failure["detail"]}')
     print(f"\nchecked {len(targets)}: " + ", ".join(f"{k}={v}" for k, v in sorted(counts.items())))
+    print("behavioural evidence: " + ", ".join(f"{k}={v}" for k, v in sorted(behavioural.items())))
     return 0
 
 

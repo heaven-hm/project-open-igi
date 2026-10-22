@@ -28,5 +28,173 @@
       "problem": "not-in-build",
       "detail": "engine/src/retail/script/humanplayer_defines.cpp is not in the CMake source list"
     }
+  ],
+  "behavioural_counts": {
+    "no-behavioural-evidence": 10,
+    "artifact-has-no-runner-metadata": 20,
+    "re-runnable": 88,
+    "runner-does-not-mention-address": 2
+  },
+  "behavioural_failures": [
+    {
+      "address": "0x0048F530",
+      "name": "Retail_Main",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00402800",
+      "name": "Flow_CreateHandler",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004137A0",
+      "name": "HumanPlayer_LoadParameters",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004BDA00",
+      "name": "Qvm_PushInteger",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004A2600",
+      "name": "Camera_ResetMatrix",
+      "state": "runner-does-not-mention-address"
+    },
+    {
+      "address": "0x004CF330",
+      "name": "DynObj_LoadPackageMeshes",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004CF630",
+      "name": "DynObj_LoadPackageLovs",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004CF910",
+      "name": "DynObj_LoadPackageAnimations",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "state": "runner-does-not-mention-address"
+    },
+    {
+      "address": "0x004B23B0",
+      "name": "Texture_UploadMipmapPacket",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004CF870",
+      "name": "DynObj_LoadPackagePalettes",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x004C5F00",
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x004C6240",
+      "name": "Terrain_Load",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x004D14E0",
+      "name": "Terrain_TraverseContourQuadtree",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x00506F00",
+      "name": "HeightMap_Enter",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x00510010",
+      "name": "Terrain_DecodeChunkCommands",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x00512C30",
+      "name": "Terrain_Draw",
+      "state": "no-behavioural-evidence"
+    },
+    {
+      "address": "0x00497E70",
+      "name": "TransContext_SetActiveTransContext",
+      "state": "artifact-has-no-runner-metadata"
+    },
+    {
+      "address": "0x004D67A0",
+      "name": "AnimIff_LoadAnimationFile",
+      "state": "no-behavioural-evidence"
+    }
   ]
 }
