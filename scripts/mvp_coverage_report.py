@@ -26,6 +26,7 @@ ADDRESS_RE = re.compile(r"^(?:0x)?([0-9a-fA-F]{1,8})$")
 SHA256_RE = re.compile(r"^[0-9a-fA-F]{64}$")
 TEXT_SYMBOL_TYPES = {"T", "t", "W", "w"}
 SUPPORTED_EVIDENCE_SCHEMA_VERSION = 1
+SUPPORTED_MANIFEST_SCHEMA_VERSION = 1
 
 # This is a reviewed port naming difference, not a general fuzzy-match rule.
 SYMBOL_ALIASES = {"Retail_Main": ("Main",)}
@@ -164,8 +165,8 @@ def _artifact_pass_state(field: str, ref: dict[str, Any], artifact: dict[str, An
         total = artifact.get("tests_total")
         passed = artifact.get("tests_passed")
         failed = artifact.get("tests_failed")
-        if (artifact.get("executed") is not True or not isinstance(total, int)
-                or not isinstance(passed, int) or not isinstance(failed, int)
+        if (artifact.get("executed") is not True or type(total) is not int
+                or type(passed) is not int or type(failed) is not int
                 or total <= 0 or passed != total or failed != 0):
             return "failed", "behavioral result/case counts are incomplete or inconsistent"
         if ref.get("status") not in (None, "PASS", "passed"):
@@ -244,6 +245,9 @@ def _load_inventory(root: Path) -> tuple[list[dict[str, Any]], dict[str, dict[st
     manifest, manifest_bytes = load_json(root / MANIFEST_REL, "native manifest")
     if not isinstance(targets_value, list) or not isinstance(manifest, dict) or not isinstance(manifest.get("natives"), list):
         raise ReportError("target list or manifest has an unexpected top-level shape")
+    version = manifest.get("schema_version")
+    if type(version) is not int or version != SUPPORTED_MANIFEST_SCHEMA_VERSION:
+        raise ReportError(f"unsupported manifest schema_version {version!r}; expected {SUPPORTED_MANIFEST_SCHEMA_VERSION}")
 
     targets: list[dict[str, Any]] = []
     target_addresses: set[str] = set()
@@ -467,12 +471,44 @@ def _catalog_status_counts(rows: Sequence[dict[str, Any]]) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def _git_metadata_paths(root: Path) -> set[Path]:
+    marker = root / ".git"
+    protected = {marker.resolve()}
+    if marker.is_dir():
+        return protected
+    if not marker.is_file():
+        return protected
+    try:
+        line = marker.read_text(encoding="utf-8").strip()
+    except OSError as error:
+        raise ReportError(f"cannot read worktree metadata pointer: {error}") from error
+    if not line.startswith("gitdir:"):
+        raise ReportError("unrecognized .git worktree metadata pointer")
+    git_dir = Path(line.partition(":")[2].strip())
+    if not git_dir.is_absolute():
+        git_dir = root / git_dir
+    git_dir = git_dir.resolve()
+    protected.add(git_dir)
+    common_file = git_dir / "commondir"
+    if common_file.is_file():
+        try:
+            common_dir = Path(common_file.read_text(encoding="utf-8").strip())
+        except OSError as error:
+            raise ReportError(f"cannot read shared Git metadata pointer: {error}") from error
+        if not common_dir.is_absolute():
+            common_dir = git_dir / common_dir
+        protected.add(common_dir.resolve())
+    return protected
+
+
 def _safe_output_path(root: Path, value: str, candidate: Path) -> Path:
     root = root.resolve()
     output = Path(value)
     if not output.is_absolute():
         output = root / output
     output = output.resolve()
+    if any(output == path or _inside(path, output) for path in _git_metadata_paths(root)):
+        raise ReportError("output path cannot be inside Git or worktree metadata")
     protected = {
         (root / MANIFEST_REL).resolve(),
         (root / TARGETS_REL).resolve(),

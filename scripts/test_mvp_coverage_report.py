@@ -136,6 +136,37 @@ class CoverageReportTests(unittest.TestCase):
         self.assertEqual(refs["semantic_review"]["state"], "invalid")
         self.assertEqual(refs["behavioral"]["state"], "unknown")
 
+    def test_boolean_behavioral_counts_are_not_valid_integers(self) -> None:
+        for field, value in (("tests_total", True), ("tests_passed", True), ("tests_failed", False)):
+            with self.subTest(field=field):
+                artifact = self._artifact(
+                    "behavioral-test-report", executed=True, tests_total=1, tests_passed=1, tests_failed=0
+                )
+                artifact[field] = value
+                self.manifest["natives"][0]["verification"]["behavioral"] = self._add_evidence(
+                    f"boolean-{field}.json", artifact
+                )
+                self._write_manifest()
+
+                with patch.object(coverage, "candidate_symbols", side_effect=self._symbols):
+                    report = coverage.build_report(self.root, self.candidate_path)
+
+                result = report["natives"][0]["evidence_references"]["behavioral"]
+                self.assertEqual(result["state"], "failed")
+                self.assertIn("counts", result["reason"])
+
+    def test_manifest_requires_supported_schema_version(self) -> None:
+        for label, version in (("missing", None), ("unsupported", 2), ("boolean", True), ("string", "1")):
+            with self.subTest(label=label):
+                if version is None:
+                    self.manifest.pop("schema_version", None)
+                else:
+                    self.manifest["schema_version"] = version
+                self._write_manifest()
+                with self.assertRaisesRegex(coverage.ReportError, "manifest schema_version"):
+                    coverage._load_inventory(self.root)
+                self.manifest["schema_version"] = 1
+
     def test_mismatched_evidence_source_hash_is_stale(self) -> None:
         artifact = self._artifact("build-report", executed=True, command="compile")
         artifact["implementation_sha256"] = "b" * 64
@@ -241,6 +272,24 @@ class CoverageReportTests(unittest.TestCase):
         with patch.object(coverage.subprocess, "run", return_value=SimpleNamespace(returncode=0, stdout="", stderr="")):
             with self.assertRaisesRegex(coverage.ReportError, "output path is tracked"):
                 coverage._safe_output_path(self.root, "tracked.json", self.candidate_path)
+
+    def test_output_rejects_git_marker_worktree_and_common_metadata(self) -> None:
+        metadata_root = self.root / "git-metadata"
+        gitdir = metadata_root / "worktrees" / "reporter"
+        gitdir.mkdir(parents=True)
+        (gitdir / "commondir").write_text("../..", encoding="utf-8")
+        marker = self.root / ".git"
+        marker.write_text("gitdir: git-metadata/worktrees/reporter\n", encoding="utf-8")
+
+        outputs = (
+            marker / "config",
+            gitdir / "index",
+            metadata_root / "config",
+        )
+        for output in outputs:
+            with self.subTest(output=output):
+                with self.assertRaisesRegex(coverage.ReportError, "Git or worktree metadata"):
+                    coverage._safe_output_path(self.root, str(output), self.candidate_path)
 
     def test_cli_writes_only_requested_output_and_preserves_manifest(self) -> None:
         before_manifest = self.manifest_path.read_bytes()
