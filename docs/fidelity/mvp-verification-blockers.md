@@ -182,3 +182,19 @@ the emission leaves it inconclusive rather than matched.
 The remaining two retail calls are not flow gaps in the ported sense: `sprintf` and `Error_Show` sit
 on retail's startup-error path, which the candidate takes only when a subsystem fails to
 initialise.
+
+## The setter's candidate observation still does not land
+
+`App_ContextSetTerrainLightmapsUsed` 0x0048F260 executes in the candidate - the rebuilt image
+contains four references to its body at `0x0040A6C0`, including the startup call added to Main - but
+the probe still records zero candidate calls for it while recording one for `AppContext_SetIsActive`
+on the adjacent line.
+
+A candidate symbol alias was added for the address
+(`igi::retail::core::App_ContextSetTerrainLightmapsUsed`, the port's actual name for the setter) and a
+fresh capture was taken with the alias in place; the candidate count stayed at zero. The alias table
+is loaded and normalised correctly (`load_symbol_aliases` lowercases addresses and the resolver
+prefers the alias), so the gap is in hook installation for this internal, non-exported symbol rather
+than in the name mapping. Until that is diagnosed the emission leaves the entry inconclusive, which
+is the truthful state: the source mirrors the call, the binary contains it, and the runtime
+observation has not been captured.

@@ -43,7 +43,7 @@
     },
     "0x0048F260": {
       "symbol": "igi::retail::core::App_ContextSetTerrainLightmapsUsed",
-      "reason": "the port spells the native with the App_ underscore prefix"
+      "reason": "the port implements the lightmaps-enabled setter at this address; the catalog name AppContext_SetTerrainLightmapsUsed describes the same behaviour"
     },
     "0x00517940": {
       "symbol": "igi::retail::model::IffChunk_FindByTag",
