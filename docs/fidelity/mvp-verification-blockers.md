@@ -252,3 +252,25 @@ So the minimal test must be built on the driver's own launch and pid-discovery c
 re-implemented beside it, otherwise it measures attach behaviour instead of the port's behaviour.
 That is the next step: run the same two-address probe through `frida_mvp_batch.capture`, with the
 immediate `onEnter` reporting replacing the 1.5-second aggregate.
+
+## Minimal probe through the driver: the call still does not appear
+
+The two-address probe was run through `frida_mvp_batch.capture` itself - the driver's own staging,
+launch, pid discovery and attach - with a probe that reports every `onEnter` immediately instead of
+through the 1.5-second aggregate, and with the settle variable set to eight seconds.
+
+Result: `0x40B0B0` (`AppContext_SetIsActive`) was observed once; `0x40A6C0`
+(`App_ContextSetTerrainLightmapsUsed`) was not observed at all. No hook failures were reported, and
+the image under test was the freshly staged copy.
+
+That is the cleanest statement of the problem so far: with hooks installed early and reporting
+immediately, one adjacent call is seen and the other is not, so the aggregate cannot be blamed. The
+remaining suspect is that the settle window is not actually delaying the candidate - the variable is
+read with `std::getenv`, and CrossOver's launcher may not pass a Unix environment variable through to
+the Windows process. If the delay never happens, Main executes its startup calls before the attach
+lands, and only natives that are called again later (like the is-active getter) are ever seen.
+
+The decisive test is an unconditional delay with the same two hooks: if both calls appear, environment
+propagation is the cause and the fix is in how the driver passes the window; if the setter still does
+not appear, the binary under test is not the one the disassembly was taken from and that must be
+established before anything else.
