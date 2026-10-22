@@ -1,5 +1,6 @@
 #include "igi/retail/core/retail_main.hpp"
 
+#include "igi/retail/core/app_context.hpp"
 #include "igi/retail/core/frame_natives.hpp"
 #include "igi/retail/core/fpu_state.hpp"
 #include "igi/retail/core/native_0048f970.hpp"
@@ -66,6 +67,11 @@ int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
     }
     ::ShowWindow(g_main_window, config->show_command);
     ::UpdateWindow(g_main_window);
+
+    // Retail startup marks the app context active and enables terrain lightmaps
+    // before entering the frame loop (natives 0x0048F140 and 0x0048F260).
+    AppContext_SetIsActive(1);
+    igi::retail::core::App_ContextSetTerrainLightmapsUsed(1);
 
     // The retail's per-frame loop at 0x0048F80D: the x87 precision setup,
     // the app context's isActive flag, the frame dispatch or a 500 ms sleep,

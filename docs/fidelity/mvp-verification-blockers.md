@@ -171,12 +171,13 @@ in the same shape as retail: `FP_InitExtendedPrecision` (x87 setup), `AppContext
 per-frame condition, and `QTask_OpenEvent` on the active branch, with `Loop_StatusByte` driving the
 window teardown exactly as the retail's loop does.
 
-Two retail startup calls are not mirrored yet: `AppContext_SetIsActive` and
-`App_ContextSetTerrainLightmapsUsed`. Both are ported and already carry paired observations, so
-adding them to Main's startup is a two-line change. It is not made in this round because Main's
-record holds a semantic review but no build report, so the change needs its build artifact created
-and the semantic review re-reviewed against the new body - both mechanical, but the review must be
-rewritten rather than re-stamped, since the added calls change what the function does.
+Both retail startup calls are now mirrored. `AppContext_SetIsActive(1)` and
+`App_ContextSetTerrainLightmapsUsed(1)` run before the frame loop, and Main's record gained the
+build artifact it was missing plus a semantic review re-written against the new body rather than
+re-stamped. The fresh capture observes `AppContext_SetIsActive` once on the candidate side, which is
+the call the retail's startup makes once too; `App_ContextSetTerrainLightmapsUsed` executes in the
+candidate but has no candidate symbol binding yet, so its candidate call count cannot be recorded and
+the emission leaves it inconclusive rather than matched.
 
 The remaining two retail calls are not flow gaps in the ported sense: `sprintf` and `Error_Show` sit
 on retail's startup-error path, which the candidate takes only when a subsystem fails to
