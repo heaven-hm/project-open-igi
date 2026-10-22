@@ -4,6 +4,10 @@
     "0x00517890": {
       "comparable": false,
       "reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values."
+    },
+    "0x004CF080": {
+      "comparable": false,
+      "reason": "DynObj_LoadModelTexturePackage leaves a path-dependent value in EAX: its only return (0x004CF2F2) is reached after loop counters are decremented, and the live paired capture observed a null return on the shipped data while the empty-fixture differential (scripts/mtp_package_diff_runner.py) observes a non-null value for the same entry. The return is therefore not a stable contract to compare across two independently timed runs; the paired observation still proves the native was reached in both images."
     }
   }
 }

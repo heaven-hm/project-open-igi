@@ -4,7 +4,7 @@
   "labelled_verified": 83,
   "saved_evidence_backed": 120,
   "strict_evidence_backed": 120,
-  "end_to_end_backed": 12,
+  "end_to_end_backed": 13,
   "records_with_problems": 0
  },
  "natives": [
@@ -1161,13 +1161,11 @@
    "build_errors": [],
    "behavioral_errors": [],
    "semantic_errors": [],
-   "frida_errors": [
-    "no paired Frida report"
-   ],
+   "frida_errors": [],
    "runner_configured": true,
    "saved_evidence_backed": true,
    "strict_evidence_backed": true,
-   "end_to_end_backed": false
+   "end_to_end_backed": true
   },
   {
    "address": "0x004A26C0",

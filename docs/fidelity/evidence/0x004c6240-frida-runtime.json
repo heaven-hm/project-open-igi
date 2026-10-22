@@ -37,8 +37,8 @@
   "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-goinremap2.json",
-  "paired_capture_sha256": "fa8a269488b97577a2e35395f971da2a33eac60aba8cd028f9632b2c164b5626"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-goinremap3.json",
+  "paired_capture_sha256": "c3c8d5d9e3cf0ce7bba8016ac303666b4c19bc8b603f397803cb59b19b8e563f"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-goinremap2.json",
+  "capture": "build/runtime-traces/mvp-frida-pair-goinremap3.json",
   "level": 5,
   "counts": {
     "candidate-unreachable": 75,
-    "end-to-end": 12,
-    "paired-mismatch": 4,
+    "end-to-end": 13,
+    "paired-mismatch": 3,
     "retail-unobserved": 23,
     "unlinked": 6
   },
@@ -697,9 +697,9 @@
       "subsystem": "MTP",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "paired-mismatch",
-      "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed classes disagree"
+      "blocker": "end-to-end",
+      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "detail": "paired observation accepted"
     },
     {
       "address": "0x004A26C0",

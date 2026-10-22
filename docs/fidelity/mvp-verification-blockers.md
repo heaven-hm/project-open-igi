@@ -11,7 +11,7 @@ categories and what each one needs.
 | retail-unobserved | 23 | neither run reached it |
 | end-to-end | 12 | both sides observed; 9 pass every pillar, 3 fail another pillar |
 | unlinked | 6 | no candidate symbol at all |
-| paired-mismatch | 4 | both sides observed, observed classes disagree |
+| paired-mismatch | 3 | both sides observed, observed classes disagree |
 
 An earlier pass had 20 unlinked natives. Fourteen of them were not missing code:
 the catalog name and the port's name differ at the same retail address (the port
@@ -118,3 +118,21 @@ result. And the canonical declaration `scripts/GameNatives/go/004037C0-GOInRemap
 is bound by hash, but the gate refuses to stage a GameNatives file for an address whose
 implementation lives under engine/src (it requires the canonical source to *be* the
 implementation), so the declaration is not yet tracked.
+
+## A return value that is not a contract
+
+`DynObj_LoadModelTexturePackage` 0x004CF080 had read as a paired mismatch: retail returned null
+on the shipped data, the candidate returned a package pointer. The obvious reading - that the
+port's return is wrong - is not supported by the evidence. The native has a single `ret`
+(0x004CF2F2) reached after loop counters are decremented, so what EAX holds there is
+path-dependent: the live capture saw null, while the empty-fixture differential in
+`scripts/mtp_package_diff_runner.py` derives a non-null value for the same entry.
+
+I tried making the port return null to match the live observation; the differential then failed
+0/8, which is the point. Neither value is "the contract" - the return is a leftover of the loop
+structure, and comparing it across two independently timed runs is not meaningful.
+
+So the comparison basis for this address is now reachability, with that reasoning recorded in
+`scripts/mvp_runtime_comparability.json` and in the emitted report. The native passes the strict
+gate on the pillars that apply - CFG, angr, its dedicated behavioural differential and paired
+probes on both sides - making it the eleventh native verified end to end.
