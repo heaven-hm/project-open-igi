@@ -30,21 +30,31 @@ extern "C" {
 
 // Native: Main; retail VA 0x0048F530.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F530..0x0048F970.
-// Behavior/CFG: pushes the mutex name "IGIMUTEX" and calls CreateMutexA with
-// Status/limits: STRUCTURALLY_VERIFIED; the mutex, the class registrations and
+// Tools/evidence: Binary Ninja MCP, Radare2 and angr CFGFast on retail IGI.EXE; mutex VA 0x0048F530..0x0048F578, duplicate path 0x0048F8F0..0x0048F912.
+// Behavior/CFG: CreateMutexA(NULL, TRUE, "IGIMUTEX") at 0x0048F53A; a NULL handle or GetLastError ERROR_ALREADY_EXISTS (0xB7) / ERROR_INVALID_HANDLE (6) reaches MessageBoxA(NULL, "IGI is already running.", "Error", MB_ICONERROR) and returns 0; the success path calls ReleaseMutex at 0x0048F8CA.
+// Status/limits: STRUCTURALLY_VERIFIED; mutex creation and duplicate-instance path checked against retail disassembly, the 26-block Binary Ninja/Radare2 CFG and angr CFGFast; the Win32 window and per-frame loop remain partially transcribed.
 int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
 {
 #if defined(_WIN32)
-    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI2MUTEX");
-    if (mutex == nullptr)
+    // Retail 0x0048F544: CreateMutexA(NULL, TRUE, "IGIMUTEX"). A NULL handle
+    // jumps straight to the shared failure box; otherwise GetLastError is
+    // sampled for ERROR_ALREADY_EXISTS (0xB7) and, if that misses, sampled
+    // again for ERROR_INVALID_HANDLE (6). All three reach the box at
+    // 0x0048F8F0 and the routine returns 0.
+    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGIMUTEX");
+    bool refuse_second_instance = mutex == nullptr;
+    if (!refuse_second_instance && ::GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        return 1;
+        refuse_second_instance = true;
     }
-    const DWORD last_error = ::GetLastError();
-    if (last_error == ERROR_ALREADY_EXISTS || last_error == 6)
+    if (!refuse_second_instance && ::GetLastError() == ERROR_INVALID_HANDLE)
     {
-        return 1;
+        refuse_second_instance = true;
+    }
+    if (refuse_second_instance)
+    {
+        ::MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
+        return 0;
     }
     ::CoInitialize(nullptr);
 
@@ -98,6 +108,9 @@ int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
             ::DispatchMessageW(&message);
         }
     }
+    // Retail releases the mutex on the normal teardown path at 0x0048F8CA; its
+    // failure paths branch past that call and never release.
+    ::ReleaseMutex(mutex);
     return 0;
 #else
     (void)config;

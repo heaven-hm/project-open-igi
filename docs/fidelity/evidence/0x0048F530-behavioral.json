@@ -1,24 +1,22 @@
 {
- "address": "0x0048F530",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
-    }
-   },
-   "note": "The candidate Main reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
- ]
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "not_performed",
+  "address": "0x0048F530",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7499b59e6d6e3e6b6db66428669aba25c2305f08c3d04faf64ea80167ede72e4",
+  "candidate_sha256": "4af8c89413897cbaaf5e1b35cd6bb43d36b077d93f705e83766e2e869cd30571",
+  "executed": false,
+  "tests_total": 0,
+  "tests_passed": 0,
+  "tests_failed": 0,
+  "cases": [],
+  "recorded_at": "2026-10-22T22:09:15+00:00",
+  "reason": "No paired retail/candidate runtime capture exists for this native. The previous file in this slot claimed a static-structure case and a chunk-walk result that did not describe this function; it was replaced rather than reused.",
+  "limitations": [
+    "The gate run for commit uses --allow-structural-only, so this report is not presented as behavioral evidence.",
+    "The saved structural evidence is docs/fidelity/evidence/0048F530-structural-comparison.json.",
+    "A behavioral pass would require a reviewed typed probe and paired retail/candidate observations; neither is available in this session."
+  ],
+  "note": "This report intentionally records no behavioral test. It must not be cited as a behavioral pass."
 }

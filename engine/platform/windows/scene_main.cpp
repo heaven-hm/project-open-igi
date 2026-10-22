@@ -338,14 +338,26 @@ LRESULT CALLBACK window_procedure(HWND window_handle,
 int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command)
 {
 
-    // Retail IGI.EXE creates the "IGIMUTEX" mutex and refuses a second instance with
-    // "IGI is already running." (VA 0x00541ECC / 0x00541DBC).
-    HANDLE single_instance_mutex = CreateMutexA(nullptr, FALSE, "IGI2MUTEX");
-    if (single_instance_mutex != nullptr && GetLastError() == ERROR_ALREADY_EXISTS)
+    // Retail IGI.EXE creates the single-instance mutex at 0x0048F544 with
+    // CreateMutexA(NULL, TRUE, "IGIMUTEX"); the name bytes are at VA 0x00541ECC.
+    // A NULL handle, ERROR_ALREADY_EXISTS (0xB7) or ERROR_INVALID_HANDLE (6)
+    // reaches the shared MessageBoxA at 0x0048F8F0: MessageBoxA(NULL,
+    // "IGI is already running.", "Error", MB_ICONERROR), then returns 0. The
+    // retail does not release or close the handle on that path.
+    HANDLE const single_instance_mutex = CreateMutexA(nullptr, TRUE, "IGIMUTEX");
+    bool refuse_second_instance = single_instance_mutex == nullptr;
+    if (!refuse_second_instance && GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        MessageBoxA(nullptr, "IGI is already running.", "IGI1", MB_OK | MB_ICONERROR);
-        CloseHandle(single_instance_mutex);
-        return 1;
+        refuse_second_instance = true;
+    }
+    if (!refuse_second_instance && GetLastError() == ERROR_INVALID_HANDLE)
+    {
+        refuse_second_instance = true;
+    }
+    if (refuse_second_instance)
+    {
+        MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
+        return 0;
     }
 
     int argument_count = 0;
