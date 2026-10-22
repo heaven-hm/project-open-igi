@@ -57907,7 +57907,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57936,10 +57936,15 @@
           "evidence_sha256": "56920c62a2cb6bfe5e0092fd63da12c4c64fef4067cd77ca092cb8886d27f592"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004BDA00-behavioral.json",
-          "evidence_sha256": "56920c62a2cb6bfe5e0092fd63da12c4c64fef4067cd77ca092cb8886d27f592"
+          "evidence_sha256": "3533ce9652109167ec60778eb5f1214d4933e2f4bba04f6b676e4f881da54090",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8
         }
-      }
+      },
+      "status": "VERIFIED"
     },
     {
       "address": "0x004BD3D0",
