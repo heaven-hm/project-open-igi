@@ -19,6 +19,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -26,6 +27,7 @@ from pathlib import Path
 import native_frida_diff as nfd
 from verification_scope import file_digest, stage_candidate
 
+R2 = "/opt/homebrew/bin/r2"
 ROOT = Path(__file__).resolve().parent.parent
 PROBE = ROOT / "scripts" / "frida_mvp_batch.js"
 TARGETS = ROOT / "scripts" / "mvp_native_targets.json"
@@ -86,7 +88,48 @@ def aggregate(observed: dict, address: str) -> dict:
             "arg_patterns": sorted(arg_patterns)}
 
 
-def compare(retail: dict, candidate: dict) -> dict:
+EAX_WRITE = re.compile(
+    r"^(mov|movzx|movsx|lea|xor|or|and|sub|add|imul|inc|dec|pop|shl|shr|sar|neg|not|sete|setne|setl|setg)"
+    r"\s+(e?ax|al|eax)\b", re.IGNORECASE)
+
+
+def return_comparability(r2: str, binary: Path, addresses: list[str]) -> dict[str, dict]:
+    """Decide whether each native's return value can be compared across images.
+
+    A function that returns nothing leaves an arbitrary EAX: whatever its last
+    callee happened to leave there. Comparing that value turns a correct port
+    into a mismatch, or a broken one into a match, purely because two unrelated
+    numbers differ. The retail body is the authority: if it never writes EAX on
+    any path, the return value is not part of its contract.
+    """
+    result: dict[str, dict] = {}
+    for address in addresses:
+        out = subprocess.run(
+            [r2, "-q", "-e", "bin.relocs.apply=true", "-e", "scr.color=false",
+             "-c", f"s {address}; af; pdfj; q", str(binary)],
+            capture_output=True, text=True, timeout=300, check=False).stdout
+        try:
+            ops = json.loads(out).get("ops") or []
+        except ValueError:
+            result[address] = {"comparable": True, "reason": "disassembly unavailable"}
+            continue
+        writes = [op for op in ops
+                  if op.get("type") != "call" and EAX_WRITE.match(op.get("disasm", ""))]
+        if writes:
+            result[address] = {
+                "comparable": True,
+                "reason": f"the body writes EAX ({writes[-1].get('disasm', '')}) before returning",
+            }
+        else:
+            result[address] = {
+                "comparable": False,
+                "reason": ("the body never writes EAX, so the return value is whatever its "
+                           "last callee left there and is not part of this function's contract"),
+            }
+    return result
+
+
+def compare(retail: dict, candidate: dict, comparability: dict | None = None) -> dict:
     """Compare what is actually comparable across two separately timed runs.
 
     The two runs attach at different points of a level load and advance at
@@ -98,9 +141,26 @@ def compare(retail: dict, candidate: dict) -> dict:
     verdict, because their frequency depends on the same timing.
     """
     both_observed = retail["hits"] > 0 and candidate["hits"] > 0
-    matched = both_observed and retail["ret_classes"] == candidate["ret_classes"]
+    verdict = comparability or {"comparable": True, "reason": ""}
+    comparable = bool(verdict.get("comparable", True))
+    classes_match = retail["ret_classes"] == candidate["ret_classes"]
+    if comparable:
+        matched = both_observed and classes_match
+        basis = "reachability plus return-value class set"
+        note = ("Call counts and per-call arguments differ because the two runs are "
+                "timed independently; only the return-value class set is compared.")
+    else:
+        # Reachability is still worth recording, but it is not a return-value
+        # agreement and the report must say so rather than imply one.
+        matched = both_observed
+        basis = "reachability only; the native's return value is not comparable"
+        note = ("The retail body does not write EAX, so it returns nothing and the "
+                "observed value belongs to its callee. This native is compared on "
+                "reachability, not on a return value.")
     return {
-        "basis": "reachability plus return-value class set",
+        "basis": basis,
+        "return_comparison": "classes" if comparable else "not_applicable",
+        "return_comparability_reason": verdict.get("reason", ""),
         "retail_observed_calls": retail["hits"],
         "candidate_observed_calls": candidate["hits"],
         "retail_ret_classes": retail["ret_classes"],
@@ -110,8 +170,7 @@ def compare(retail: dict, candidate: dict) -> dict:
         "retail_argument_class_patterns": retail["arg_patterns"][:12],
         "candidate_argument_class_patterns": candidate["arg_patterns"][:12],
         "arguments_compared": False,
-        "note": "Call counts and per-call arguments differ because the two runs are "
-                "timed independently; only the return-value class set is compared.",
+        "note": note,
         "match": matched,
     }
 
@@ -178,9 +237,48 @@ def main() -> int:
     parser.add_argument("--settle", type=float, default=30.0)
     parser.add_argument("--limit", type=int, default=0,
                         help="capture only the first N linked natives (0 = all)")
+    parser.add_argument("--recompare", type=Path, default=None,
+                        help="recompute the verdicts of an existing capture offline, using the "
+                             "current comparison rules, instead of running the games again")
     parser.add_argument("--out", type=Path,
                         default=ROOT / "build" / "runtime-traces" / "mvp-frida-pair.json")
     args = parser.parse_args()
+
+    if args.recompare:
+        capture_data = json.loads(args.recompare.read_text())
+        binary = Path(capture_data["retail"])
+        comparability = return_comparability(
+            R2, binary, [n["retail_va"] for n in capture_data["natives"]])
+        for entry in capture_data["natives"]:
+            prior = entry["comparison"]
+            retail_agg = {"hits": entry["retail_observed_calls"],
+                          "ret_classes": prior["retail_ret_classes"],
+                          "arg_patterns": prior["retail_argument_class_patterns"]}
+            candidate_agg = {"hits": entry["candidate_observed_calls"],
+                             "ret_classes": prior["candidate_ret_classes"],
+                             "arg_patterns": prior["candidate_argument_class_patterns"]}
+            entry["comparison"] = compare(
+                retail_agg, candidate_agg, comparability.get(entry["retail_va"]))
+            entry["result"] = ("match" if entry["comparison"]["match"]
+                               else "inconclusive"
+                               if not retail_agg["hits"] or not candidate_agg["hits"]
+                               else "mismatch")
+        capture_data["returnComparability"] = comparability
+        counts = {"matched": sum(1 for n in capture_data["natives"] if n["result"] == "match"),
+                  "mismatched": sum(1 for n in capture_data["natives"] if n["result"] == "mismatch"),
+                  "inconclusive": sum(1 for n in capture_data["natives"] if n["result"] == "inconclusive")}
+        capture_data["summary"].update(counts)
+        out = args.out or args.recompare
+        out.write_text(json.dumps(capture_data, indent=1) + "\n")
+        print(json.dumps({"planned": len(capture_data["natives"]),
+                          "unlinked": len(capture_data.get("unlinked") or []),
+                          "retail_observed": sum(1 for n in capture_data["natives"]
+                                                 if n["retail_observed_calls"]),
+                          "candidate_observed": sum(1 for n in capture_data["natives"]
+                                                    if n["candidate_observed_calls"]),
+                          **counts}, indent=1))
+        print(f"wrote {out}")
+        return 0
 
     targets = json.loads(args.targets.read_text())
     candidate = args.candidate.resolve()
@@ -243,6 +341,8 @@ def main() -> int:
     retail_observed = retail_result.get("observed") or {}
     candidate_observed = candidate_result.get("observed") or {}
 
+    comparability = return_comparability(
+        R2, retail, [item["retail_va"] for item in plan])
     natives = []
     for item in plan:
         retail_agg = aggregate(retail_observed, item["retail_va"])
@@ -251,7 +351,8 @@ def main() -> int:
         entry.update({
             "retail_observed_calls": retail_agg["hits"],
             "candidate_observed_calls": candidate_agg["hits"],
-            "comparison": compare(retail_agg, candidate_agg),
+            "comparison": compare(retail_agg, candidate_agg,
+                                  comparability.get(item["retail_va"])),
         })
         entry["result"] = ("match" if entry["comparison"]["match"]
                            else "inconclusive"
@@ -290,6 +391,7 @@ def main() -> int:
             "mismatched": sum(1 for n in natives if n["result"] == "mismatch"),
             "inconclusive": sum(1 for n in natives if n["result"] == "inconclusive"),
         },
+        "returnComparability": comparability,
         "unlinked": unlinked,
         "natives": natives,
         "limitations": [

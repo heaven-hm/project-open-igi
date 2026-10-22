@@ -93,6 +93,8 @@ def build_report(entry: dict, capture: dict, implementation_sha: str,
         },
         "comparison": {
             "basis": comparison["basis"],
+            "return_comparison": comparison.get("return_comparison", "classes"),
+            "return_comparability_reason": comparison.get("return_comparability_reason", ""),
             "retail_ret_classes": comparison["retail_ret_classes"],
             "candidate_ret_classes": comparison["candidate_ret_classes"],
             "ret_classes_match": comparison["ret_classes_match"],

@@ -12,10 +12,10 @@
     "implementation_present": 120,
     "candidate_symbol_linked": 100,
     "behavioral_evidence": 120,
-    "frida_evidence": 6,
+    "frida_evidence": 8,
     "retail_reachable": 97,
     "end_to_end_possible": 100,
-    "paired_frida_evidence": 6,
+    "paired_frida_evidence": 8,
     "marked_verified_in_manifest": 78,
     "runtime_observed_retail": 83,
     "runtime_observed_candidate": 13,
@@ -1530,14 +1530,12 @@
         "semantic_review": true,
         "build": true,
         "behavioral": true,
-        "frida_runtime": false,
+        "frida_runtime": true,
         "retail_reachable": true
       },
       "end_to_end_possible": true,
-      "frida_observable_end_to_end": false,
-      "blockers": [
-        "no paired Frida runtime evidence"
-      ],
+      "frida_observable_end_to_end": true,
+      "blockers": [],
       "candidate_symbol_in": {
         "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
         "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
@@ -3108,14 +3106,12 @@
         "semantic_review": true,
         "build": true,
         "behavioral": true,
-        "frida_runtime": false,
+        "frida_runtime": true,
         "retail_reachable": true
       },
       "end_to_end_possible": true,
-      "frida_observable_end_to_end": false,
-      "blockers": [
-        "no paired Frida runtime evidence"
-      ],
+      "frida_observable_end_to_end": true,
+      "blockers": [],
       "candidate_symbol_in": {
         "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify-gate/igi1.exe": true,
         "/Users/haseeb-mir/Downloads/IGI/igi1.exe": true
