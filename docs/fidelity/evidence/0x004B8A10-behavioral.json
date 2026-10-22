@@ -1,24 +1,248 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x004B8A10",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "method": "Retail bytes execute under unicorn x86-32; the candidate is compiled with i686-w64-mingw32-g++ and run under CrossOver. Each case compares the returned dword and the stored global at 0x00A965A0, read back through Qvm_GetLastPopStack23Value, so the store itself is compared.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "limitations": [
+  "The global is compared inside each process's own address space, not across them."
+ ],
  "cases": [
   {
-   "id": "static-structure",
+   "id": "state-nominal",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
+    "args": [
+     7
+    ],
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 7,
+    "state_delta": {
+     "global_state": 7
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 7,
+    "state_delta": {
+     "global_state": 7
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-zero",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     0
+    ],
+    "initial_state": {
+     "seed": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "global_state": 0
+    },
+    "side_effects": []
    },
    "candidate_output": {
     "return_value": 0,
-    "side_effects": [],
     "state_delta": {
-     "chunks_read": 0
+     "global_state": 0
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-one",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     1
+    ],
+    "initial_state": {
+     "seed": 2
     }
    },
-   "note": "The candidate Qvm_SetGlobalState reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "global_state": 1
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "global_state": 1
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-minus-one",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     4294967295
+    ],
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "global_state": 4294967295
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "global_state": 4294967295
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-max",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     2147483647
+    ],
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 2147483647,
+    "state_delta": {
+     "global_state": 2147483647
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 2147483647,
+    "state_delta": {
+     "global_state": 2147483647
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-min",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     2147483648
+    ],
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 2147483648,
+    "state_delta": {
+     "global_state": 2147483648
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 2147483648,
+    "state_delta": {
+     "global_state": 2147483648
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-pattern",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     2779096485
+    ],
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 2779096485,
+    "state_delta": {
+     "global_state": 2779096485
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 2779096485,
+    "state_delta": {
+     "global_state": 2779096485
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "state-other-pattern",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     3735928559
+    ],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 3735928559,
+    "state_delta": {
+     "global_state": 3735928559
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 3735928559,
+    "state_delta": {
+     "global_state": 3735928559
+    },
+    "side_effects": []
+   }
   }
- ]
+ ],
+ "tests_passed": 8,
+ "tests_total": 8,
+ "tests_failed": 0,
+ "result": "passed"
 }
