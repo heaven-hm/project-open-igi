@@ -174,10 +174,17 @@ window teardown exactly as the retail's loop does.
 Both retail startup calls are now mirrored. `AppContext_SetIsActive(1)` and
 `App_ContextSetTerrainLightmapsUsed(1)` run before the frame loop, and Main's record gained the
 build artifact it was missing plus a semantic review re-written against the new body rather than
-re-stamped. The fresh capture observes `AppContext_SetIsActive` once on the candidate side, which is
-the call the retail's startup makes once too; `App_ContextSetTerrainLightmapsUsed` executes in the
-candidate but has no candidate symbol binding yet, so its candidate call count cannot be recorded and
-the emission leaves it inconclusive rather than matched.
+re-stamped. The capture method cannot see those calls, and the earlier reading that `AppContext_SetIsActive`
+was "observed once at startup" was wrong. The driver starts the image to a level and attaches
+afterwards, so one-shot startup calls execute before any hook exists. `AppContext_SetIsActive` still
+records a hit because other code paths call it later; `App_ContextSetTerrainLightmapsUsed` is called
+once, at startup, and is therefore never observed - the alias resolves to the right VA (0x0040A6C0)
+and the image contains the call at 0x40B5A0 inside Main, but no hook is installed at the time Main
+runs it.
+
+Observing a startup call needs a capture that spawns suspended, installs hooks and only then resumes
+the image. That is a change to the capture driver, not to the port, and it would apply to every
+startup-window native rather than to this one.
 
 The remaining two retail calls are not flow gaps in the ported sense: `sprintf` and `Error_Show` sit
 on retail's startup-error path, which the candidate takes only when a subsystem fails to
