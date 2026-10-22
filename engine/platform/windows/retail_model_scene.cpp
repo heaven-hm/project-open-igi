@@ -1937,8 +1937,41 @@ struct Scene
         ClientToScreen(window, &top_left);
         ClientToScreen(window, &bottom_right);
         destination = {top_left.x, top_left.y, bottom_right.x, bottom_right.y};
-        check_result(primary.pointer->Blt(&destination, back_buffer.pointer, nullptr, DDBLT_WAIT, nullptr),
-                     "Present frame");
+        // A lost DirectDraw surface (mode switch, moving the window across
+        // displays, another process taking exclusive mode) makes Blt return
+        // DDERR_SURFACELOST. Restore both surfaces and retry once; without this
+        // the game exits on the first lost frame.
+        // The window client area can be larger than the desktop primary surface
+        // (a maximized window whose borders push the client past the screen
+        // edge). Blt rejects such a destination with DDERR_INVALIDRECT, so clamp
+        // the destination into the primary surface instead of failing the frame.
+        DDSURFACEDESC2 primary_description{};
+        primary_description.dwSize = sizeof(primary_description);
+        if (primary.pointer->GetSurfaceDesc(&primary_description) == DD_OK)
+        {
+            const LONG surface_width = static_cast<LONG>(primary_description.dwWidth);
+            const LONG surface_height = static_cast<LONG>(primary_description.dwHeight);
+            destination.left = std::max<LONG>(0, std::min(destination.left, surface_width));
+            destination.top = std::max<LONG>(0, std::min(destination.top, surface_height));
+            destination.right = std::max<LONG>(destination.left, std::min(destination.right, surface_width));
+            destination.bottom = std::max<LONG>(destination.top, std::min(destination.bottom, surface_height));
+        }
+        HRESULT present_result =
+            primary.pointer->Blt(&destination, back_buffer.pointer, nullptr, DDBLT_WAIT, nullptr);
+        if (present_result == DDERR_SURFACELOST)
+        {
+            const HRESULT restore_primary = primary.pointer->Restore();
+            const HRESULT restore_back = back_buffer.pointer->Restore();
+            write_log("DirectDraw surface lost; restore primary=0x" +
+                      std::to_string(static_cast<unsigned long>(restore_primary)) + " back=0x" +
+                      std::to_string(static_cast<unsigned long>(restore_back)));
+            if (restore_primary == DD_OK && restore_back == DD_OK)
+            {
+                present_result = primary.pointer->Blt(&destination, back_buffer.pointer, nullptr,
+                                                      DDBLT_WAIT, nullptr);
+            }
+        }
+        check_result(present_result, "Present frame");
         if (first_frame)
         {
             write_log("First 3D frame presented: terrain_batches=" + std::to_string(terrain_batches_drawn) +

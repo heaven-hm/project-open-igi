@@ -1,0 +1,38 @@
+{
+ "kind": "paired-runtime-first-result",
+ "schema_version": 1,
+ "native": "QTask_OpenEvent 0x00401050",
+ "captureMode": "sequential (retail fully closed before the candidate starts)",
+ "level": 5,
+ "probe": "scripts/frida_401050_dispatch.js",
+ "probeSha256": "current",
+ "retail_calls": 1347,
+ "candidate_calls": 113,
+ "calls_compared": 113,
+ "agrees": {
+  "record_present": true,
+  "record_readable": true,
+  "status_byte_after": 1,
+  "note": "The loop status byte after the dispatch matches exactly across all 113 compared calls, and the candidate now reads the dispatch record correctly."
+ },
+ "diverges": {
+  "dispatch_index": {
+   "retail": 125,
+   "candidate": 124,
+   "meaning": "The candidate's phase-1 table index is one lower than retail's for the same level."
+  },
+  "handler_va": {
+   "retail": 8800,
+   "candidate": 4290772992,
+   "meaning": "The candidate's table slot holds a non-code value (0xFFC0xxxx), so handler_selected is false and handler_nonzero false. The table is not populated the way retail populates it."
+  }
+ },
+ "blockers_fixed_to_get_here": [
+  "The paired script launched both games at once against the single-instance mutex; capture is now sequential.",
+  "Candidate dispatch and Level_Start were hardcoded to a stale link (0x42C630/0x42C8A0); now resolved from the built image.",
+  "The probe's candidate globals were stale, so record_readable was false; corrected to 0x005D4BE0 / 0x005F9380 / 0x005D4BF0.",
+  "The candidate aborted every frame with DDERR_INVALIDRECT because the blit destination exceeded the 1024x768 primary surface; the destination is now clamped."
+ ],
+ "consequence": "QTask_OpenEvent stays STRUCTURALLY_VERIFIED. Two divergences must be corrected from retail evidence before it can pass: the dispatch index and the phase-1 handler table population.",
+ "next_step": "Compare QTask_RegisterClasses and the phase-1 table initialization against retail 0x00402930 so the table holds the same handlers at the same indices."
+}
