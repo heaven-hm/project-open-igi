@@ -1,18 +1,9 @@
 {
- "kind": "environment-blocker",
+ "kind": "resolved-environment-issue",
  "schema_version": 1,
- "observed_at": "2026-10-22T13:44Z",
- "symptom": "CreateWindowExA/W returns 0 with GetLastError()==1400 (ERROR_INVALID_WINDOW_HANDLE).",
- "minimal_reproduction": "A 15-line Win32 program that registers a DefWindowProcA class and calls CreateWindowExA prints hwnd=00000000 err=1400 and exits 2. RegisterClassA succeeds; only window creation fails.",
- "scope": "Affects every GUI program in the open-igi bottle: retail igi.exe, the candidate, and the trivial test above. Not specific to any native or to our source.",
- "earlier_evidence": "The same candidate ran a level at 7.3 FPS as recently as 2026-10-22T07:16Z, per igi.log. After that timestamp every launch logs 'Create model-scene window failed.'",
- "ruled_out": [
-  "Not the Frida server: killing frida-server-x86.exe changed nothing.",
-  "Not the launch form: both --cx-app and plain wine fail identically.",
-  "Not the mutex: no game process is running.",
-  "Not the build: cmake reports '[100%] Built target igi' and the binary is unchanged."
- ],
- "likely_cause": "The macOS graphics session that CrossOver draws into is no longer available to this process context (for example a locked or logged-out WindowServer session, or a sandbox without window-server access).",
- "consequence": "Paired Frida runtime capture cannot proceed. Every in-game observation, including the --require-frida-probes gate, is blocked until a GUI session is available.",
- "next_step": "Restore an interactive desktop session for the account running the bottle, then re-run scripts/frida_401050_pair.py --level 1."
+ "original_symptom": "CreateWindowExA/W returned 0 with GetLastError()==1400 (ERROR_INVALID_WINDOW_HANDLE) for every GUI program in the open-igi bottle.",
+ "root_cause": "SELF-INFLICTED. To test a hypothesis about the C++ runtime, I moved drive_c/windows/system32/ucrtbase.dll aside with `mv` and never restored it. Without that DLL the Wine GUI stack cannot create windows, so register-class still succeeded while CreateWindowEx failed. The earlier conclusion that this was a macOS WindowServer problem was wrong.",
+ "correction": "Restored system32/ucrtbase.dll (809552 bytes) from the project-igi bottle. A trivial Win32 test now prints hwnd=00010052 and exits 0, and the candidate renders at 6.33 FPS.",
+ "process_lesson": "Any experiment that mutates the bottle must restore the original state in the same step, and a 'blocker' must be reproduced from a pristine environment before it is recorded as an environment fact.",
+ "superseded_note": "Anything that cited this file as an environment blocker is wrong."
 }
