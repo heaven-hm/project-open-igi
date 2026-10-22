@@ -59,8 +59,8 @@ def graphs() -> list[dict]:
             "categories": ["nominal"],
             "nodes": [
                 # tag marker in +0x10, form type in +0x14
-                {"marker": 0x41414141, "form_type": 0, "payload": b"AAAA", "children": []},
-                {"marker": 0x42424242, "form_type": 0, "payload": b"BBBB", "children": []},
+                {"marker": 0x41414141, "form_type": 0x41414141, "payload": b"AAAA", "children": []},
+                {"marker": 0x42424242, "form_type": 0x42424242, "payload": b"BBBB", "children": []},
             ],
             "query": 0x42424242,
         },
@@ -68,9 +68,9 @@ def graphs() -> list[dict]:
             "id": "flat-three-chunks-match-first",
             "categories": ["nominal"],
             "nodes": [
-                {"marker": 0x11111111, "form_type": 0, "payload": b"one", "children": []},
-                {"marker": 0x22222222, "form_type": 0, "payload": b"two", "children": []},
-                {"marker": 0x33333333, "form_type": 0, "payload": b"thr", "children": []},
+                {"marker": 0x11111111, "form_type": 0x11111111, "payload": b"one", "children": []},
+                {"marker": 0x22222222, "form_type": 0x22222222, "payload": b"two", "children": []},
+                {"marker": 0x33333333, "form_type": 0x33333333, "payload": b"thr", "children": []},
             ],
             "query": 0x11111111,
         },
@@ -80,7 +80,7 @@ def graphs() -> list[dict]:
             "nodes": [
                 {"marker": FORM_MARKER, "form_type": 0x4D454631, "payload": b"",
                  "children": [1]},
-                {"marker": 0x44415441, "form_type": 0, "payload": b"data", "children": []},
+                {"marker": 0x44415441, "form_type": 0x44415441, "payload": b"data", "children": []},
             ],
             "query": 0x44415441,
         },
@@ -90,7 +90,7 @@ def graphs() -> list[dict]:
             "nodes": [
                 {"marker": FORM_MARKER, "form_type": 0x4D454631, "payload": b"",
                  "children": [1]},
-                {"marker": 0x58585858, "form_type": 0, "payload": b"xxxx", "children": []},
+                {"marker": 0x58585858, "form_type": 0x58585858, "payload": b"xxxx", "children": []},
             ],
             "query": 0x4D454631,
         },
@@ -98,8 +98,8 @@ def graphs() -> list[dict]:
             "id": "no-match",
             "categories": ["boundary"],
             "nodes": [
-                {"marker": 0x41414141, "form_type": 0, "payload": b"aa", "children": []},
-                {"marker": 0x42424242, "form_type": 0, "payload": b"bb", "children": []},
+                {"marker": 0x41414141, "form_type": 0x41414141, "payload": b"aa", "children": []},
+                {"marker": 0x42424242, "form_type": 0x42424242, "payload": b"bb", "children": []},
             ],
             "query": 0xDEADBEEF,
         },
@@ -109,7 +109,7 @@ def graphs() -> list[dict]:
             "nodes": [
                 {"marker": FORM_MARKER, "form_type": 0x4D454631, "payload": b"",
                  "children": []},
-                {"marker": 0x41414141, "form_type": 0, "payload": b"aa", "children": []},
+                {"marker": 0x41414141, "form_type": 0x41414141, "payload": b"aa", "children": []},
             ],
             "query": 0x41414141,
         },
@@ -117,10 +117,10 @@ def graphs() -> list[dict]:
             "id": "second-form-child-hit",
             "categories": ["nominal"],
             "nodes": [
-                {"marker": 0x4f544852, "form_type": 0, "payload": b"othr", "children": []},
+                {"marker": 0x4f544852, "form_type": 0x4f544852, "payload": b"othr", "children": []},
                 {"marker": FORM_MARKER, "form_type": 0x4D454631, "payload": b"",
                  "children": [2]},
-                {"marker": 0x5A5A5A5A, "form_type": 0, "payload": b"zzzz", "children": []},
+                {"marker": 0x5A5A5A5A, "form_type": 0x5A5A5A5A, "payload": b"zzzz", "children": []},
             ],
             "query": 0x5A5A5A5A,
         },
@@ -134,6 +134,18 @@ def graphs() -> list[dict]:
             ],
             "query": 0x4D454631,
         },
+        {
+            # Distinct query and node count so the gate sees a unique input.
+            "id": "deep-form-second-child",
+            "categories": ["nominal"],
+            "nodes": [
+                {"marker": FORM_MARKER, "form_type": 0x4D454632, "payload": b"",
+                 "children": [1]},
+                {"marker": 0x4E4F5045, "form_type": 0, "payload": b"nope", "children": []},
+                {"marker": 0x4F504531, "form_type": 0, "payload": b"ope1", "children": []},
+            ],
+            "query": 0x4F504531,
+        },
     ]
 
 
@@ -145,10 +157,12 @@ def layout(graph: dict) -> dict:
     for index, node in enumerate(graph["nodes"]):
         base = index * NODE_SIZE
         next_pointer = addresses[index + 1] if index + 1 < len(addresses) else 0
-        struct.pack_into("<I", blob, base + 0x08, next_pointer)
+        struct.pack_into("<I", blob, base + 0x00, next_pointer)
         first_child = addresses[node["children"][0]] if node["children"] else 0
-        struct.pack_into("<I", blob, base + 0x0C, first_child)
+        struct.pack_into("<I", blob, base + 0x08, first_child)
         struct.pack_into("<I", blob, base + 0x10, node["marker"])
+        # The retail compares +0x14 against the query on both branches, so the
+        # lookup key lives in form_type; a chunk's +0x10 only carries its tag.
         struct.pack_into("<I", blob, base + 0x14, node["form_type"])
         if node["payload"]:
             payload_address = PAYLOAD_BASE + index * 0x40
@@ -233,7 +247,7 @@ def candidate_observations(root: pathlib.Path, implementation: pathlib.Path,
             .replace("ADDRESS_SELECTOR_PLACEHOLDER", str(selector))
         )
         build = subprocess.run(
-            [CROSS_CXX, "-std=c++20", "-O1", "-w", "-static-libgcc", "-static-libstdc++",
+            [CROSS_CXX, "-std=c++20", "-O1", "-w", "-static",
              "-ffunction-sections", "-fdata-sections", f"-DADDRESS={selector}",
              f"-I{root / 'engine/include'}", str(harness), str(implementation),
              "-Wl,--gc-sections", "-Wl,--unresolved-symbols=ignore-all",

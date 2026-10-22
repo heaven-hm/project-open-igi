@@ -63,10 +63,18 @@ int main()
             returned = hit ? 1 : 0;
             selected = 0;
         } else {
-            igi::retail::model::IffChunkNode* hit =
-                (ADDRESS_SELECTOR_PLACEHOLDER == 2)
-                    ? igi::retail::model::IffChunk_FindBelowForm(list[0], item.query)
-                    : igi::retail::model::IffChunk_FindByTag(list[0], item.query);
+            // 0x00517940 walks the children of the form it is handed; the other
+            // two walkers start from the node itself.
+            igi::retail::model::IffChunkNode* start = list[0];
+            if (ADDRESS_SELECTOR_PLACEHOLDER == 1 && list[0]->first_child != nullptr) {
+                start = list[0]->first_child;
+            }
+            igi::retail::model::IffChunkNode* hit = nullptr;
+            if (ADDRESS_SELECTOR_PLACEHOLDER == 2) {
+                hit = igi::retail::model::IffChunk_FindBelowForm(list[0], item.query);
+            } else {
+                hit = igi::retail::model::IffChunk_FindByTag(start, item.query);
+            }
             for (int i = 0; i < item.count; ++i) {
                 if (list[i] == hit) {
                     selected = i;

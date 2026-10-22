@@ -55047,26 +55047,9 @@
           "rationale": "Retail 0x00517890 (Iff_FindFormChunk): esi=[esp+4]; edi=[esp+8]; loop: if [esi+0x10]==0x464f524d('FORM') { if [esi+0x14]==edi ret esi; child=[esi+8]; if child { r=Iff_FindFormChunk(child,edi); if r ret r } } else if [esi+0x14]==edi ret esi; esi=[esi]; until 0. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Offline differential harness passes 8 fixtures but a ninth fixture exposes an unresolved semantic question: retail 0x00517890 compares the +0x14 field against the query for non-form chunks as well as forms, while the port compares node->tag. Not promoted until that field mapping is settled."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_iff_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 600
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-radare2.json",
@@ -55093,7 +55076,8 @@
           "evidence_path": "docs/fidelity/evidence/0x00517890-behavioral.json",
           "evidence_sha256": "bf2f280e225b1739e48351df9696aadaa26efdd67f6d215b5ed815259a681f56"
         }
-      }
+      },
+      "status": "STRUCTURALLY_VERIFIED"
     },
     {
       "address": "0x00517940",
@@ -55257,26 +55241,9 @@
           "rationale": "Retail 0x005178E0 (Iff_FindChunkBelowForm): esi=[esp+4]; edi=[esp+8]; if [esi+0x14]==edi esi=[esi]; loop while esi: FORM(0x464f524d at +0x10): match +0x14==edi ret esi, else child=[esi+8] -> Iff_FindFormChunk(child,edi); non-FORM: match +0x14==edi ret esi; esi=[esi]. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Offline differential harness passes 8 fixtures but a ninth fixture exposes an unresolved semantic question: retail 0x00517890 compares the +0x14 field against the query for non-form chunks as well as forms, while the port compares node->tag. Not promoted until that field mapping is settled."
         ],
-        "behavioral_runner": {
-          "path": "scripts/native_iff_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 600
-        },
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-radare2.json",
@@ -55303,7 +55270,8 @@
           "evidence_path": "docs/fidelity/evidence/0x005178E0-behavioral.json",
           "evidence_sha256": "f137711b708ab5665b07fb9df5eb3813d6586e9f8d50b98ae2bd4215b4785d01"
         }
-      }
+      },
+      "status": "STRUCTURALLY_VERIFIED"
     },
     {
       "address": "0x004D67A0",
