@@ -175,9 +175,30 @@ def compare(retail: dict, candidate: dict, comparability: dict | None = None) ->
     }
 
 
+def start_with_arguments(executable: str, level: int, extra_arguments: tuple[str, ...]):
+    """Launch an image with the retail window/level words plus extra scene modes."""
+    environment = dict(nfd.os.environ)
+    return nfd.subprocess.Popen(
+        ["env", "LC_ALL=C", "LANG=C", nfd.vnb.WINE, "--bottle", nfd.vnb.BOTTLE, executable,
+         "window", f"level{level}", *extra_arguments],
+        cwd=Path(nfd.vnb.GAME_DIR), stdout=nfd.subprocess.DEVNULL,
+        stderr=nfd.subprocess.DEVNULL, env=environment)
+
+
 def capture(process_name: str, executable: str, addresses: list[str], observe: float,
-            settle: float, level: int, result: dict) -> None:
-    process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
+            settle: float, level: int, result: dict,
+            extra_arguments: tuple[str, ...] = ()) -> None:
+    """Start one image and observe the selected natives.
+
+    The retail vocabulary is "window levelN"; the candidate also understands
+    scene modes the reconstruction uses to reach more of its own code (devmode,
+    inputdemo), so those can be added for the candidate run without changing the
+    retail invocation.
+    """
+    if extra_arguments:
+        process = start_with_arguments(executable, level, extra_arguments)
+    else:
+        process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
     try:
         pid = 0
         for _ in range(120):
@@ -227,6 +248,9 @@ def main() -> int:
     parser.add_argument("--level", type=int, default=5)
     parser.add_argument("--observe", type=float, default=6.0,
                         help="observation window for retail")
+    parser.add_argument("--candidate-args", nargs="*", default=(),
+                        help="extra scene modes passed to the candidate only, such as "
+                             "devmode or inputdemo; retail always gets window levelN")
     parser.add_argument("--observe-candidate", type=float, default=None,
                         help="observation window for the candidate (defaults to --observe). "
                              "The candidate reaches gameplay later than retail, so it "
@@ -312,7 +336,25 @@ def main() -> int:
         # Only reuse observations that belong to the same retail image: a
         # different build would make the captured addresses meaningless.
         if prior.get("retailSha256") == file_digest(retail):
-            retail_result = {"observed": prior.get("retailObservations") or {},
+            prior_observed = prior.get("retailObservations") or {}
+            if not prior_observed:
+                # Archived captures drop the raw snapshots and keep only the
+                # per-native aggregate. That is enough to reuse: rebuild one
+                # final snapshot per native from the recorded counts.
+                prior_observed = {}
+                for entry in prior.get("natives") or []:
+                    hits = entry.get("retail_observed_calls") or 0
+                    comparison = entry.get("comparison") or {}
+                    key = f"0x{int(entry['retail_va'], 16):x}"
+                    prior_observed[key] = [{
+                        "role": "native",
+                        "aggregate": {
+                            "hits": hits,
+                            "ret_classes": comparison.get("retail_ret_classes") or [],
+                            "arg_patterns": comparison.get("retail_argument_class_patterns") or [],
+                        },
+                    }]
+            retail_result = {"observed": prior_observed,
                              "pid": (prior.get("capture") or {}).get("retail", {}).get("pid"),
                              "meta": {"reused_from": str(args.reuse_retail)}}
             reused = args.reuse_retail
@@ -334,7 +376,8 @@ def main() -> int:
         candidate_window = args.observe_candidate if args.observe_candidate else args.observe
         capture(staged.name.lower(), "Z:" + str(staged).replace("/", "\\"),
                 [item["candidate_va"] for item in plan], candidate_window, args.settle,
-                args.level, candidate_result)
+                args.level, candidate_result,
+                extra_arguments=tuple(args.candidate_args or ()))
     print(f"candidate: {len(candidate_result.get('observed') or {})} natives observed"
           f" error={candidate_result.get('error')}", flush=True)
 

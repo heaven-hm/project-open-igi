@@ -126,3 +126,38 @@ corresponds to a subsystem of the retail flow that the port has not wired
 into its frame loop yet; the individual natives in that subsystem are
 already implemented and compiled, which is why they have call sites and
 symbols, but nothing calls them.
+
+
+## Measured 2026-10-23: candidate scene modes do not extend reachability
+
+The candidate supports command-line scene modes beyond `window levelN`, including
+`devmode` (free camera and developer keys) and `inputdemo` (posts the retail key
+sequence so the input port, human controller and camera can run without a
+keyboard). Both were plausible ways to reach more of the linked natives.
+
+The paired capture driver now accepts `--candidate-args` for exactly this test,
+and the experiment was run with `devmode inputdemo` at level 1, reusing the
+earlier retail observations:
+
+| run | linked natives observed in the candidate |
+| --- | --- |
+| window level1 | 18 |
+| window level1 devmode inputdemo | 18, identical set |
+
+Every observed native was the same, by name: the model, terrain, config, flow
+and frame natives. So the shortfall is not attach timing, observation window or
+scene mode - the diagnostics baseline simply does not execute the Human, Script,
+Qvm, Resource, Animation or Weapon code paths, because those units are not part
+of the built scene. Closing that gap is porting work, not probing work.
+
+## Reusing retail observations from an archived capture
+
+Captures are archived to `docs/fidelity/evidence/` with the raw per-call
+snapshots dropped, which silently broke `--reuse-retail`: the driver looked for
+`retailObservations`, found none, and reported zero retail observations, so every
+native came out inconclusive. It now falls back to the per-native aggregate the
+archive does keep (`retail_observed_calls`, `retail_ret_classes`,
+`retail_argument_class_patterns`) and rebuilds one final snapshot per native.
+Verified against the corrected capture: retail 83 observed, candidate 18,
+matched 8, mismatched 5 - the same verdicts as the full paired run, without
+relaunching retail.
