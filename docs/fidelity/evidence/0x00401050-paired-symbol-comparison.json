@@ -1,0 +1,24 @@
+{
+ "kind": "paired-runtime-result",
+ "schema_version": 1,
+ "native": "QTask_OpenEvent 0x00401050",
+ "captureMode": "sequential, level5, windowed; retail fully closed before the candidate starts",
+ "probe": "scripts/frida_401050_dispatch.js",
+ "calls_compared": 386,
+ "agrees": {
+  "record_present": true,
+  "record_readable": true,
+  "dispatch_index": "125 on both sides",
+  "status_byte_after_dispatch": "1 on both sides",
+  "handler_nonzero": "true on both sides",
+  "handler_role": "both select the Flow phase-1 handler"
+ },
+ "symbol_comparison": {
+  "retail": "Flow_RunHandler (0x00402260)",
+  "candidate": "(anonymous namespace)::Flow_RunHandler_Handler, which is exactly `{ Flow_RunHandler(flow); }`",
+  "equivalence": "The port links a transparent one-line trampoline where retail links the target directly. Behaviour is identical; only the intermediate frame differs."
+ },
+ "why_this_matters": "Before this round the comparison compared raw image-relative VAs across two separately linked binaries, which can never match. It now resolves both to symbol identities (nm -C for the candidate, a VA-to-name table for the stripped retail image) and additionally reports the canonical handler role.",
+ "open_question": "The runtime contract for 0x00401050 must state whether `handler_symbol` (exact symbol identity) or `handler_role` (the phase-1 handler the class resolves to) is the required observable. Exact symbol identity would fail on the trampoline even though behaviour matches; handler_role is the evidence-supported comparison.",
+ "consequence": "QTask_OpenEvent stays STRUCTURALLY_VERIFIED until that contract is settled and recorded; the four behavioural observables already agree across 386 paired calls."
+}

@@ -53,7 +53,46 @@ def observed_for(observations: dict, address: str) -> list[dict]:
     return [call for call in calls if call.get("role") == "dispatch"]
 
 
-def typed_pair(retail: list[dict], candidate: list[dict]) -> dict | None:
+def symbol_at(executable: Path, address: int) -> str | None:
+    """Return the demangled name of the function starting exactly at `address`.
+
+    Retail and the candidate link separately, so the same logic sits at a
+    different image-relative VA in each. Comparing raw VAs proves nothing; the
+    comparison has to be by symbol identity.
+    """
+    result = subprocess.run(["i686-w64-mingw32-nm", "-C", str(executable)],
+                            capture_output=True, text=True, timeout=120, check=False)
+    if result.returncode != 0:
+        return None
+    for line in result.stdout.splitlines():
+        parts = line.split()
+        if len(parts) >= 3 and parts[1] in {"T", "t"} and int(parts[0], 16) == address:
+            # Keep the full demangled name: "(anonymous namespace)::Foo" is
+            # meaningful and splitting on "(" would truncate it.
+            return " ".join(parts[2:])
+    return None
+
+
+def retail_symbol_at(address: int) -> str | None:
+    """Resolve a retail VA to the name the project already uses for it.
+
+    Retail igi.exe is a stripped PE with no symbol table, so nm cannot help.
+    The manifest and the decompiler artifacts already name these addresses; the
+    dispatch handler retail selects is Flow_RunHandler (0x00402260) per the
+    paired capture and the flow transcription.
+    """
+    known = {
+        0x00402260: "Flow_RunHandler",
+        0x00415B30: "Level_Start",
+        0x00416260: "Game_Setup",
+        0x00402070: "Flow_Start",
+        0x00402740: "Flow_Delete_Handler",
+    }
+    return known.get(address) or f"retail_0x{address:08X}"
+
+
+def typed_pair(retail: list[dict], candidate: list[dict],
+               retail_symbol_at=None, candidate_symbol_at=None) -> dict | None:
     if not retail or not candidate:
         return None
     count = min(len(retail), len(candidate))
@@ -64,6 +103,24 @@ def typed_pair(retail: list[dict], candidate: list[dict]) -> dict | None:
             "retail": [call["typedState"][part] for call in retail[:count]],
             "candidate": [call["typedState"][part] for call in candidate[:count]],
         }
+
+    # Canonicalise the selected handler to a symbol identity. A raw
+    # image-relative VA differs between two separately linked images even when
+    # the selected handler performs the same role, so it cannot be compared.
+    retail_out = result["outputs"]["retail"]
+    candidate_out = result["outputs"]["candidate"]
+    pairs = []
+    for reference, observed in zip(retail_out, candidate_out):
+        retail_symbol = (retail_symbol_at or (lambda _va: None))(reference.get("handler_va"))
+        candidate_symbol = (candidate_symbol_at or (lambda _va: None))(
+            observed.get("handler_va"))
+        reference["handler_symbol"] = retail_symbol
+        observed["handler_symbol"] = candidate_symbol
+        reference.pop("handler_va", None)
+        observed.pop("handler_va", None)
+        pairs.append({"retail": retail_symbol, "candidate": candidate_symbol})
+    result["handler_symbols"] = pairs
+
     result["match"] = all(
         result[part]["retail"] == result[part]["candidate"] for part in fields
     )
@@ -189,7 +246,13 @@ def main() -> None:
     candidate_obs = candidate_result["observed"]
     retail_dispatch = observed_for(retail_obs, RETAIL_DISPATCH)
     candidate_dispatch = observed_for(candidate_obs, CANDIDATE_DISPATCH)
-    comparison = typed_pair(retail_dispatch, candidate_dispatch)
+    comparison = typed_pair(
+        retail_dispatch, candidate_dispatch,
+        # handler_va is image-relative, so add the 0x400000 PE base back before
+        # looking the address up in the symbol table.
+        retail_symbol_at=lambda va: None if va is None else retail_symbol_at(va + 0x400000),
+        candidate_symbol_at=lambda va: None if va is None else symbol_at(candidate, va + 0x400000),
+    )
     report = {
         "tool": "frida",
         "captureMode": "sequential",
