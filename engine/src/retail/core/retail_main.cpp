@@ -36,7 +36,7 @@ extern "C" {
 int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
 {
 #if defined(_WIN32)
-    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI1MUTEX");
+    HANDLE const mutex = ::CreateMutexA(nullptr, TRUE, "IGI2MUTEX");
     if (mutex == nullptr)
     {
         return 1;

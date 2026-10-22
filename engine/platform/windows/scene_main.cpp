@@ -340,7 +340,7 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command
 
     // Retail IGI.EXE creates the "IGIMUTEX" mutex and refuses a second instance with
     // "IGI is already running." (VA 0x00541ECC / 0x00541DBC).
-    HANDLE single_instance_mutex = CreateMutexA(nullptr, FALSE, "IGI1MUTEX");
+    HANDLE single_instance_mutex = CreateMutexA(nullptr, FALSE, "IGI2MUTEX");
     if (single_instance_mutex != nullptr && GetLastError() == ERROR_ALREADY_EXISTS)
     {
         MessageBoxA(nullptr, "IGI is already running.", "IGI1", MB_OK | MB_ICONERROR);
