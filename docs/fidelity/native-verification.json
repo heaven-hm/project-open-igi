@@ -57947,7 +57947,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_stack_natives.cpp",
-        "sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+        "sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
         "signature": "int __cdecl Qvm_SetOpcodeHandler(int group, int index, int handler);"
       },
       "game_natives": {
@@ -57956,14 +57956,15 @@
         "signature": "int __cdecl Qvm_SetOpcodeHandler(int group, int index, int handler);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail 0x004BD3D0 (Qvm_SetOpcodeHandler): eax=group*3; edx=index+eax*2; [0xa96108+edx*4]=handler; ret handler. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Behavioral artifact has eight cases but no runner identity; status is not VERIFIED until a reproducible runner is bound."
         ],
         "behavioral_runner": {
           "path": "scripts/qvm_set_opcode_handler_diff_runner.py",
@@ -57999,22 +58000,22 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004BD3D0-semantic-review.json",
-          "evidence_sha256": "e3b41a07321a2432ec0c29ed25edde990a356b521437a2e41273b51c5ebd621a"
+          "evidence_sha256": "eb0640da35b575ff050c1e4a1d2a54b0641b15480e19d63474b964aae23f56dd"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004BD3D0-build.json",
-          "evidence_sha256": "c3b4eaa65d73505b291def00f7d8e20a987e3abe8fb87766ab8abfe5f5571a92"
+          "evidence_sha256": "c09bfc171e38abf41ba7aa2f60de6d428b8ae1aae5a3fbcb36bec0cdc0a7ec4a"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004BD3D0-behavioral.json",
-          "evidence_sha256": "d04a305b6e9a80074242690ec2b5b99b023ba8b49853831ac1fad0af8e2da718"
+          "evidence_sha256": "f8f3ac2adc8503b6c2ac0bf1c3d0dc5d5f7c4b7bb8ab26e59761f8098ba2312e"
         },
         "runtime_tests": {
           "evidence_path": "docs/fidelity/evidence/0x004BD3D0-behavioral.json",
-          "evidence_sha256": "0119012e45798e3cf0cbe7a0dc18949b416d7b5a3894268f131adbb340c4790b"
+          "evidence_sha256": "f8f3ac2adc8503b6c2ac0bf1c3d0dc5d5f7c4b7bb8ab26e59761f8098ba2312e"
         }
       },
-      "status": "VERIFIED"
+      "status": "STRUCTURALLY_VERIFIED"
     },
     {
       "address": "0x004BCFD0",
@@ -58022,7 +58023,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/qvm_stack_natives.cpp",
-        "sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a",
+        "sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
         "signature": "unknown"
       },
       "game_natives": {
@@ -58074,15 +58075,15 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004BCFD0-semantic-review.json",
-          "evidence_sha256": "228cd15a1d714a5ec4a0ae49022f936e8de2e0c6df9020809ab668731aa6399a"
+          "evidence_sha256": "272cfa2c108cdd7ac599f1a18798b2dfc03f28a8ee3a0ebbba722f54867b8ff5"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004BCFD0-build.json",
-          "evidence_sha256": "ef9f2597863d2f30922c7e5d1ad78dc58511d3656ba9cae4ffbd93ac3d93757d"
+          "evidence_sha256": "0edc4ca950b299218f948960c9b60c4b8ec2cfa9b7517b10af34e1c84b54003b"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004BCFD0-behavioral.json",
-          "evidence_sha256": "4c6be7e37c9b25f1262624f1c28aefbcb6036f0488189d8ce9e1ddd11338d6db"
+          "evidence_sha256": "2ad62eeace3d975b4248a9ef9a0a1fb337a51448634b1deb1545f1c0e641e0c6"
         }
       }
     },
