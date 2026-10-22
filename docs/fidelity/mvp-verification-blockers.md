@@ -222,3 +222,20 @@ without reporting failures.
 
 The settle window stays in the port as documented instrumentation, since it is exactly what a
 future capture needs once the hook path is fixed, and it is inert unless the variable is set.
+
+## Hook installation is fine too
+
+The probe already records hook outcomes: every installed hook reports `hooked` and a failed attach
+reports `hook_failed` into the raw trace log the child writes for each run. Reading the log from the
+startup capture shows 114 `hooked` messages and no `hook_failed` at all, and `0x40A6C0` is among them
+with the correct candidate image base.
+
+So three explanations are now eliminated by direct evidence rather than argument: the alias resolves
+correctly, the hook is installed without error, and the call exists in the image at `0x40B5A0` inside
+Main. What remains is that the candidate does not execute those lines during a capture - the settle
+window either does not reach the game process as expected, or the startup path taken under the
+capture differs from the one in the disassembly.
+
+The next test is deliberately smaller than a full capture: hook only these two addresses, report each
+entry immediately instead of through the 1.5-second aggregate, and run the candidate once with the
+settle variable set, so a single `onEnter` answers whether the code runs at all under observation.
