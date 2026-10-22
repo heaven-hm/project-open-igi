@@ -90,29 +90,31 @@ return-value agreement. With that recorded honestly, `Iff_FindFormChunk` passes 
 gate on the pillars that do apply - CFG, angr, the live behavioural differential and a
 paired observation in both images - making it the ninth native verified end to end.
 
-## GOInRemap: the contract is decoded, the fix is not landed yet
+## GOInRemap verified: the tenth native
 
-`GOInRemap` 0x004037C0 has read as a paired mismatch on every capture: retail returns a
-pointer, the candidate returns a series of small integers. Radare2 shows why. The native
-does write the three frame arguments into the remap table, but that is not its return: at
-0x0040382E it loads its first argument into EDI, builds a six-dword stack block holding four
-zeros and 0x00567C74, copies the block with `rep movsd`, and leaves that destination in EAX.
-Its signature is `uint32_t* __cdecl(void* destination, void* frame)`, and it also increments
-the action slot it read (0x00403824). The port returns the third argument masked to 30 bits
-and never writes a destination block.
+`GOInRemap` 0x004037C0 had read as a paired mismatch on every capture. Radare2 showed why:
+the native writes the three frame arguments into the remap table, then at 0x0040382E loads
+its destination into EDI, builds a six-dword block (four zeros and 0x00567C74), copies it and
+returns that destination in EAX. It also increments the action slot it read (0x00403824). The
+port returned the third argument masked to 30 bits.
 
-A port of that contract was written and captured: with it in place the paired capture
-observed `ptr` on both sides, 81 calls each, and matches rose from 11 to 12 while mismatches
-fell to 4. It was then reverted rather than pushed, for a concrete reason. The repository's
-integrity gate refuses to accept a changed native source without a full evidence set for
-that address - a build report, a behavioural differential from a runner, a semantic review
-and the paired probes. Two pieces are missing: `scripts/native_diff_runner.py` has no
-adapter for this address (its retail-side fixtures assume simple global setters, while this
-native reads a QVM frame and writes a destination block), and the record's canonical
-GameNatives path `scripts/GameNatives/go/004037C0-GOInRemap.hpp` does not exist.
+Landing it needed the evidence the gate demands, so this round added the missing pieces:
 
-So the change is held at the gate, not waved through. Landing it needs, in order: a
-differential runner that can drive this native's frame reader, a canonical GameNatives
-transcription at that path, and a semantic review of the destination-block contract. The
-decoded body, signature and return are recorded here and in the record's status line so the
-next pass starts from the facts rather than rediscovering them.
+- `scripts/goinremap_diff_runner.py` executes the retail instruction bytes under Unicorn with
+  the true PE mapped, replaces the frame reader 0x004B8A20 with a hook returning the fixture
+  argument, supplies the caller's destination slot ([esp+0x28], where the retail reads it),
+  and runs the candidate translation unit natively against the same table and frame
+  fixtures. It compares the remap entry, the incremented action slot, the returned block's
+  defined dwords and whether the destination came back: 8/8.
+- A semantic review records function identity, argument mapping (frame reader), the 345-dword
+  action stride, the (count-1)*115 slot arithmetic, the remap stride, the 30-bit mask, the
+  0x567C74 descriptor, the single return path and the block-ownership deviation.
+- The paired capture then observed `ptr` on both sides with 81 calls each.
+
+The strict gate passes every pillar, which makes this the tenth native verified end to end.
+Two honest caveats are recorded rather than hidden. The retail caller supplies the destination
+buffer, while this port returns a private static block because its config decoder discards the
+result. And the canonical declaration `scripts/GameNatives/go/004037C0-GOInRemap.hpp` exists and
+is bound by hash, but the gate refuses to stage a GameNatives file for an address whose
+implementation lives under engine/src (it requires the canonical source to *be* the
+implementation), so the declaration is not yet tracked.

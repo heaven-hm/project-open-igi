@@ -75,7 +75,7 @@ extern std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size];
 //           arguments with the frame reader at 0x004B8A20, stores them in the
 //           remap table at 0x00BC25BC, and returns the third argument masked
 //           to the low 30 bits.
-std::uint32_t IGI_RETAIL_CDECL GOInRemap(void* qvm_context);
+std::uint32_t* IGI_RETAIL_CDECL GOInRemap(void* qvm_context);
 
 } // extern "C"
 

@@ -4,59 +4,63 @@
  "result": "passed",
  "address": "0x004037C0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "3b72614e1c7348240e3723090a5bab5d55da72442d53800a997b1a080c9019f3",
+ "implementation_sha256": "70794b7d8af573367f8af700a951bfc6f6dec8047665ddd69ae938119df75da6",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Automated static review (Radare2 0x004037C0..0x0040385E + Binary Ninja, paired Frida capture, 8/8 unicorn differential)",
  "runtime_contract": {
   "scope": "typed-per-native-probe",
   "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
   "required_observables": {
    "inputs": [
-    "args"
+    "frame"
    ],
    "outputs": [
-    "outputs"
+    "result_block"
    ],
    "sideEffects": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "no_side_effects": false,
+  "note": "The native writes the remap table and the action slot; the differential compares the table entry, the incremented action slot and the returned block's defined dwords. Retail leaves dwords 1 and 5 of the block uninitialised, so they are excluded from the comparison."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004037C0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Radare2 and Binary Ninja both identify a single function at 0x004037C0; the candidate implements that entry and the CFG similarity is recorded in the manifest."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "The retail reads the QVM frame from its second argument and the frame reader 0x004B8A20 supplies the three script arguments; the port reads the same three values from the same frame view."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "The action table base 0x00BC2358, the 345-dword stride, the count global 0x00BC2380, the (count-1)*115 slot arithmetic, the remap table base 0x00BC25BC, the three-dword stride, the 0x3FFFFFFF mask and the 0x00567C74 descriptor are the literal retail values."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "The port writes the same table addresses with the same strides; it returns a private 24-byte block where the retail writes the caller's buffer, and the difference is recorded in the status line."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The only call in the retail body is the frame reader, which has no side effects; the port reads the frame directly and performs the same two table writes plus the action-slot increment."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "Retail has one path: fill the block, return the destination in EAX. The port has the same single path and returns the block pointer."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The function performs no floating-point arithmetic."
   }
+ ],
+ "limitations": [
+  "The destination-buffer ownership differs: the retail caller supplies it, this port returns a private static block.",
+  "The paired Frida comparison covers the returned class, not the block contents, because the block is only observable through the differential."
  ]
 }

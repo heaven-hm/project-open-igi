@@ -1,12 +1,12 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-aliased.json",
-  "level": 1,
+  "capture": "build/runtime-traces/mvp-frida-pair-goinremap2.json",
+  "level": 5,
   "counts": {
     "candidate-unreachable": 75,
-    "end-to-end": 11,
-    "paired-mismatch": 5,
+    "end-to-end": 12,
+    "paired-mismatch": 4,
     "retail-unobserved": 23,
     "unlinked": 6
   },
@@ -175,11 +175,11 @@
       "address": "0x004037C0",
       "name": "GOInRemap",
       "subsystem": "humanplayer.qvm",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "paired-mismatch",
-      "next_action": "resolve the behavioural difference against the retail body",
-      "detail": "both sides called it but the observed classes disagree"
+      "blocker": "end-to-end",
+      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "detail": "paired observation accepted"
     },
     {
       "address": "0x00410070",
