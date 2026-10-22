@@ -392,3 +392,26 @@ texture packet call 0x004B23B0 and releasing the resource - is covered by its di
 With that, the paired comparison has no mismatches left: 16 end-to-end natives agree on their
 comparable contracts. The remaining categories are reach, not disagreement: 75 natives the candidate
 never executes, 23 the retail run did not exercise, 6 unlinked.
+
+## Why six natives were never in the image: the integrity audit
+
+The six "unlinked" natives are not one problem but three, and a new checker separates them:
+`scripts/audit_native_integrity.py` walks every MVP record and asks whether the implementation it
+names actually exists on disk, actually contains a definition of the native, and is actually compiled
+by CMake. Its report is `docs/fidelity/native-integrity-audit.json`.
+
+Of 120 records, 112 are sound. The rest:
+
+| natives | problem | what it means |
+|---|---|---|
+| `Config_Read`, `DefineHumanPlayerGeneral`, `HumanPlayer_LoadParameters` | not-in-build | the implementation is `engine/src/retail/script/humanplayer_defines.cpp`, which CMake never compiles - the file is not in the source list, so these ports are not in the image, and `Qvm_Execute` (called by `Config_Read`) has no definition anywhere, which is why the file was left out |
+| `Iff_FindFormChunk`, `Iff_FindChunk`, `Iff_GetChunkPayload` | wrong-impl-path | the records name `engine/src/retail/model/iff_chunk_tree.cpp`, but the definitions live in `dynobj/hash_lookup.cpp` and `sys/ilff_navigation.cpp` - the catalog spells them `Iff_*` while the port spells them `Ilff_*`, so the record's path was taken from a comment rather than from the definition |
+| `AnimIff_LoadAnimationFile`, `Iff_FindChunkBelowForm` | missing-definition | no definition exists under `engine/src` under either spelling; the records claim a STRUCTURALLY_VERIFIED implementation that is not there |
+
+The checker handles the `Iff_`/`Ilff_` spelling split explicitly, because two of its first-pass findings
+were that split rather than real defects - the same distinction cost an earlier round when a canonical
+file was named from the catalog while the port used the shorter spelling.
+
+These are honesty defects, not reach defects: a record that names a file without the function is not
+evidence of a port, and the 75 candidate-unreachable natives should not be read as "ported but unwired"
+until the paths they name are confirmed. The two missing definitions are the actionable pair.
