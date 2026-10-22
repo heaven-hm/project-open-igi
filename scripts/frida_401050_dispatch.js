@@ -26,11 +26,15 @@ const IMAGE = (() => {
   if (name.indexOf('open-igi') >= 0) {
     return {
       side: 'candidate',
-      recordGlobal: 0x005A70A0,   // DAT_00567C8C
-      tableBase: 0x005CBC80,      // DAT_00A96AE0 + 0x600 (phase 1)
-      statusGlobal: 0x005A70B0,   // DAT_005C8DE8
-      phase1Handler: 0x0042C8C0,  // Game_Setup
-      levelStart: 0x0042C8A0      // Level_Start
+      // Addresses resolved from the freshly built candidate with
+      // `i686-w64-mingw32-nm -C`: Game_FrameDispatchRecord, Loop_StatusByte and
+      // _QTask_HandlerTable + task_phase_stride (0x180). The previously
+      // hardcoded values were from an older link and made record_readable false.
+      recordGlobal: 0x005D4BE0,   // Game_FrameDispatchRecord
+      tableBase: 0x005F9800,      // _QTask_HandlerTable + 0x180 elements * 4 bytes = +0x600
+      statusGlobal: 0x005D4BF0,   // Loop_StatusByte
+      phase1Handler: 0x0041F9E0,  // Game_Setup
+      levelStart: 0x0041F9C0      // Level_Start
     };
   }
   return {
