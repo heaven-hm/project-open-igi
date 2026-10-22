@@ -1,7 +1,7 @@
 {
  "summary": {
   "total": 120,
-  "labelled_verified": 81,
+  "labelled_verified": 82,
   "saved_evidence_backed": 120,
   "strict_evidence_backed": 120,
   "end_to_end_backed": 10,
@@ -1814,7 +1814,7 @@
   {
    "address": "0x00498460",
    "name": "Display_ClearSurfaces_16",
-   "status": "STRUCTURALLY_VERIFIED",
+   "status": "VERIFIED",
    "implementation_digest_matches": true,
    "record_errors": [],
    "build_errors": [],

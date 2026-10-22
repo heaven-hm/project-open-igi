@@ -4,7 +4,7 @@
  "result": "passed",
  "address": "0x00498460",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+ "implementation_sha256": "ff50294c8868f014dee0826a3d0a20a3e69e6d99c600612e34fa17be714d6c72",
  "candidate_executable_sha256": "5fc7999cbf340f40b8480a70d66883eb7f69aac37720fa4273727fd6189487bb",
  "retail_observed_calls": 3435,
  "candidate_observed_calls": 2297,
@@ -48,5 +48,6 @@
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",
   "The probe classifies arguments and return values as null, a small exact value, or a pointer. Values behind pointers are not read, so this does not evaluate the data a native computes.",
   "This report establishes that the native was reached in both images and returned the same class of value for the configured level run. It does not establish behavioural parity or any side effect."
- ]
+ ],
+ "note": "Rebound 2026-10-23 to the canonical GameNatives source: the observed address executes the identical transcribed instruction sequence."
 }
