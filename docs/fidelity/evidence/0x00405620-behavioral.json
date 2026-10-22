@@ -310,25 +310,5 @@
         "side_effects": []
       }
     }
-  ],
-  "runner": {
-    "path": "scripts/native_unicorn_runner.py",
-    "sha256": "d59e370d7e1fee12204b8ecd08c8e39f2ce658aa321584507ff4cc23f55a7826",
-    "command": [
-      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
-      "--address",
-      "0x00405620",
-      "--binary",
-      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-      "--binary-sha256",
-      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-      "--implementation",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/config/config_graphic_options.cpp",
-      "--implementation-sha256",
-      "67d2e3d5b330cde7d5e7e8548d843c2d9b961241b7afb04886d717a107e1ca06",
-      "--root",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
-    ]
-  }
+  ]
 }
