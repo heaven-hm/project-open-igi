@@ -1521,13 +1521,13 @@
    "-shared",
    "-Wl,--gc-sections",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-c0qhuzsg/allocator_candidate.dll",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-c0qhuzsg/allocator_entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-ksm7xv44/allocator_candidate.dll",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-allocator-diff-ksm7xv44/allocator_entry.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/mem_alloc.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/heap_list.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/error/error_show.cpp"
   ],
-  "candidate_sha256": "c25d709852b82a5aa1a1b281d065364e2c5e0f508a8ca6667aea306d8dbce20b",
+  "candidate_sha256": "a13ef2c4350bee86a35190c14ed7746f9a78e1bb1957882ebbbf271ad1acd264",
   "candidate_target": "PE32 x86 Windows DLL",
   "engine": "VEX",
   "function_entry": "0x004AA682",
@@ -1539,7 +1539,7 @@
  "runner": {
   "command": [
    "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "scripts/native_abi_diff_runner.py",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_abi_diff_runner.py",
    "--address",
    "0x004AA682",
    "--binary",
@@ -1551,7 +1551,7 @@
    "--implementation-sha256",
    "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
    "--root",
-   "."
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
   ],
   "path": "scripts/native_abi_diff_runner.py",
   "sha256": "b09008393a048870514df25c4a68df8f6b84a0fbd06aa1f994995529db0893c9"

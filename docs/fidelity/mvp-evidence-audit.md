@@ -12,7 +12,7 @@ Run on the current branch:
 | --- | --- |
 | MVP natives | 120 |
 | labelled `VERIFIED` in the manifest | 78 |
-| saved evidence the gate's validators accept | 53 |
+| saved evidence the gate's validators accept | 68 (53 before the refresh below) |
 | runner configured, so the strict gate runs it live | 119 (upper bound) |
 | paired Frida evidence with calls in both images | 8 |
 | records that pass the full strict gate today | 6 |
@@ -23,10 +23,26 @@ The dominant problem is not missing evidence, it is malformed saved evidence:
 
 | cause | records |
 | --- | --- |
-| behavioural report does not identify the test runner | 58 |
+| behavioural report does not identify the test runner | 43 |
 | behavioural report's runner command is not an argv array | 8 |
 | behavioural report's runner hash no longer matches `scripts/native_unicorn_runner.py` | 4 |
 | implementation digest does not match the record | 1 |
+
+`scripts/refresh_mvp_behavioral.py` was added and run to attack this directly.
+It executes each record's own configured runner (with the angr and unicorn
+interpreters the gate provides) and stores what the runner actually returns.
+
+- 75 records produced a valid `behavioral-test-report` and were rebound, lifting
+  saved-evidence coverage from 53 to 68.
+- 25 records were refused by their runner (`unsupported native address`).
+- 19 records' runners ran but produced no report: missing differential adapters
+  for the Ilff family, incomplete argument templates for the fpu-state and QVM
+  load runners, and candidate-side build failures (uncaught exceptions, missing
+  symbols) for several terrain natives.
+- 1 record (`Retail_Main`) still has a stale implementation digest.
+
+Every remaining failure is harness work — an adapter to write or a native the
+candidate build cannot execute — not a relabelling exercise.
 
 The first two are the same defect: the saved behavioural artifacts predate the
 schema the gate now requires, or were produced by the generator's stub (see

@@ -1692,13 +1692,13 @@
    "-shared",
    "-Wl,--gc-sections",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-mem-alloc-diff-0fj0eegv/mem_alloc_candidate.dll",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-mem-alloc-diff-0fj0eegv/mem_alloc_entry.cpp",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-mem-alloc-diff-cc9bt575/mem_alloc_candidate.dll",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-mem-alloc-diff-cc9bt575/mem_alloc_entry.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/mem_alloc.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/heap_list.cpp",
    "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/error/error_show.cpp"
   ],
-  "candidate_sha256": "f02c88f8cc6493490911681ebde5d33f46755f66320f94922dce07500a9a5337",
+  "candidate_sha256": "22f888ec6f242c1f88ec4523424dab165874be7a0d04b8038fa30e8863b07c63",
   "candidate_target": "PE32 x86 Windows DLL",
   "engine": "VEX",
   "function_entry": "0x004B0C60",
@@ -1721,7 +1721,7 @@
    "--implementation-sha256",
    "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
    "--root",
-   "."
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
   ],
   "path": "scripts/native_mem_alloc_diff_runner.py",
   "sha256": "f60761d4174fc53fe2688585b8ceed78cb5bce593b73a8d9a906ecc17196d4fe"
