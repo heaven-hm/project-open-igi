@@ -1,62 +1,131 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004A9D28",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1cfdc089918d31b8b0d3ba8c7740cc37465052830803c0146ecfa8c4ec571b79",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004A9D28",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1cfdc089918d31b8b0d3ba8c7740cc37465052830803c0146ecfa8c4ec571b79",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004A9D28 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004A9D28-Camera_ApplyBandFilter_18.cpp at sha256 1cfdc089918d31b8b0d3ba8c7740cc37465052830803c0146ecfa8c4ec571b79 (recorded implementation.signature: int32_t(int32_t arg1 @ 0x8) __pure Camera_ApplyBandFilter_18(void);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004A9D28",
+    "name": "Camera_ApplyBandFilter_18",
+    "binary_ninja_name": "Camera_ApplyBandFilter_18",
+    "signature": "int32_t(int32_t arg1 @ 0x8) __pure",
+    "start": "0x004A9D28",
+    "end": "0x004A9D3D",
+    "basic_blocks": 3,
+    "edges": 2,
+    "cfg_similarity": 1.0,
+    "summary": "Three blocks 0x4A9D28-0x4A9D3D: EAX=[E+8]; EAX&=0x7FF00000; if EAX==0x7FF00000 return [E+8]; else return EAX.",
+    "blocks": [
+      {
+        "address": "0x004A9D28",
+        "start": "0x4a9d28",
+        "end": "0x4a9d38",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004A9D39",
+        "start": "0x4a9d39",
+        "end": "0x4a9d3e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004A9D38",
+        "start": "0x4a9d38",
+        "end": "0x4a9d39",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004A9D28 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004A9D28-Camera_ApplyBandFilter_18.cpp",
+    "sha256": "1cfdc089918d31b8b0d3ba8c7740cc37465052830803c0146ecfa8c4ec571b79",
+    "signature": "int32_t(int32_t arg1 @ 0x8) __pure Camera_ApplyBandFilter_18(void);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "__checkTOS_withFB(int context) implements the same mask/compare/returns, taking its argument as `context`."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Argument slot is [E+4] in the candidate but [E+8] in retail/BN and radare2."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004A9D28 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004A9D28-Camera_ApplyBandFilter_18.cpp (sha256 1cfdc089918d31b8b0d3ba8c7740cc37465052830803c0146ecfa8c4ec571b79). Three blocks 0x4A9D28-0x4A9D3D: EAX=[E+8]; EAX&=0x7FF00000; if EAX==0x7FF00000 return [E+8]; else return EAX. Candidate: __checkTOS_withFB(int context) implements the same mask/compare/returns, taking its argument as `context`."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN models the single argument at [E+8] (`int32_t(int32_t arg1 @ 0x8)`); radare2 also reports arg_8h. The candidate's cdecl `context` is the [E+4] slot, so the read would come from the wrong stack word."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Retail reads [E+8]; the candidate reads [E+4]. The argument slot is shifted by one word."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 3 blocks / 2 edges (similarity 1.000); angr CFGFast recovers 3 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "No calls in either."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "0x7FF00000 mask and comparison match."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "Only the single argument word is read in both."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Both return the masked value or the untouched argument word."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "detail": "No floating-point state is touched; the mask is integer-only."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t(int32_t arg1 @ 0x8) __pure\" at 0x004A9D28; radare2 recovers \"fcn.004a9d28 (int32_t arg_8h);\". Both tools place the entry at 0x004A9D28 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t(int32_t arg1 @ 0x8) __pure Camera_ApplyBandFilter_18(void);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004A9D28-binaryninja.json",
+      "sha256": "2f1176c9acb6da918b449b8bd9468296f271be25640584df534f066ffa3d3758"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004A9D28-radare2.json",
+      "sha256": "5e850e2a39deebbc63dd3eb4454d89810954763f149ef80087389500d660f77d"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004A9D28-angr-20261023.json",
+      "sha256": "06685bda188cad43456e126d80041db9fe6e32a161eab1692f7e3055e3dd16bd"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines __checkTOS_withFB, not the catalog name Camera_ApplyBandFilter_18."
+  ]
 }

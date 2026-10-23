@@ -2,15 +2,44 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004AF746",
- "signature": "not restated",
+ "symbol": "Camera_ApplyHandiCam_30",
+ "signature": "int32_t()",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004AF746",
+  "end": "0x004AF74B",
+  "size_bytes": 6,
+  "basic_blocks": 1,
+  "instruction_count": 5
+ },
+ "bytes_hex": "ff2544305300",
+ "bytes_sha256": "5f94ad0d58f98931dc4346ab820d96e38f91518df2d33090002bf60bf1d87770",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004AF746",
   "nodes": [
    {
-    "address": "0x004AF746"
+    "address": "0x004AF746",
+    "start": "0x4af746",
+    "end": "0x4af74c",
+    "size": 6,
+    "flags": "can-exit, undetermined-outgoing"
    }
   ],
   "edges": []
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4af746\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 5\ntotal: 5\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Camera_ApplyHandiCam_30()\n\n0x4af746  jmp     dword [0x533044]\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4af746\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam_30\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 8\ntotal: 8\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Camera_ApplyHandiCam_30()\n\n{\n    /* tailcall */\n    return Ordinal_DSOUND_1();\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4af746\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4af746 | x86 | 0x533044 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4af746\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x495375 | x86 | Display_ClearSurfaces_8 (0x4952f0 (x86)) |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

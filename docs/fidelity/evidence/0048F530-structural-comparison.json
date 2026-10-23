@@ -5,12 +5,12 @@
   "function_name": "Main",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
+  "candidate_sha256": "209f500b18bbbe93f33b2fdd9e228d10b24fe2836d0870be56eb07dbba54fcdb",
   "candidate_path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
   "candidate_build_receipt": "build-clean-win32/candidate-receipt.json",
-  "candidate_receipt_sha256": "e84c813a48f30d589e393a35ee1ed57b266971cfffb8f2a185594549724fd199",
-  "candidate_receipt_created_at": "2026-10-23T12:43:07.997508+00:00",
-  "generated_at": "2026-10-23T13:02:28Z",
+  "candidate_receipt_sha256": "8f8551cbb9cbfbd132810bcf56f6dcea3e1802f85ed94a85fde67ca432e5725f",
+  "candidate_receipt_created_at": "2026-10-23T14:24:41.755958+00:00",
+  "generated_at": "2026-10-23T14:31:00Z",
   "retail": {
     "function_entry": "0x0048F530",
     "signature": "WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc)",
@@ -32,10 +32,11 @@
         "edges": 31
       }
     ],
-    "source": "engine/src/retail/core/retail_main.cpp",
-    "source_sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617",
-    "measured_on_candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
-    "measurement": "radare2 afij on build-clean-win32/igi1.exe at 0x0041FCA0; 821 bytes, 22 blocks, 31 edges. The previous image measured 789 bytes / 22 blocks / 31 edges at 0x0041FB60; the two startup calls add 32 bytes without adding a block or edge."
+    "source": "engine/src/retail/core/main.cpp",
+    "source_sha256": "f5043ca45c4f4dde1e0d3e7995f8242d8e80d31126c11f6264b12e817c829dac",
+    "measured_on_candidate_sha256": "209f500b18bbbe93f33b2fdd9e228d10b24fe2836d0870be56eb07dbba54fcdb",
+    "measurement": "radare2 afij on build-clean-win32/igi1.exe at 0x0041FCA0; 821 bytes, 22 blocks, 31 edges. The previous image measured 789 bytes / 22 blocks / 31 edges at 0x0041FB60; the two startup calls add 32 bytes without adding a block or edge. The pre-rename and post-rename images measure identically; the rename was comment/type-name only (docs/fidelity/evidence/0x0048F530-main-rename-identity-20261023.json).",
+    "renamed_from": "engine/src/retail/core/retail_main.cpp"
   },
   "cfg_comparison": {
     "bn_vs_r2_retail": 1.0,
@@ -53,7 +54,7 @@
     "AppContext_SetTerrainLightmapsUsed(1) at retail 0x0048F63D / candidate 0x0041FDE0, immediately after the is-active store and before window creation"
   ],
   "divergences": [
-    "Candidate Main is cdecl and takes RetailMainConfig*, while retail is __stdcall(HINSTANCE, int) with ret 0x10.",
+    "Candidate Main is cdecl and takes MainConfig*, while retail is __stdcall(HINSTANCE, int) with ret 0x10.",
     "Candidate window shell uses WNDCLASSEXW/RegisterClassExW/CreateWindowExW; retail uses WNDCLASSA/RegisterClassA/CreateWindowExA.",
     "Retail does not test RegisterClassA; candidate returns 1 on RegisterClassExW failure. Retail shows MessageBoxA(NULL, \"Couldn't open window\", \"Innerloop\", MB_ICONERROR) and returns 0 on CreateWindowExA failure; candidate returns 1 without a box.",
     "Retail normal teardown also calls SetForegroundWindow, UnregisterClassA and CoUninitialize; candidate does not.",
@@ -65,6 +66,7 @@
     "The candidate mutex prefix and the two app-context calls were compared instruction-by-instruction. The remainder of Main is a host adaptation and was not claimed equivalent.",
     "Binary Ninja and radare2 CFG scores are retail-image structure only. They do not measure candidate equivalence.",
     "angr CFGFast is approximate and splits blocks differently; only the exact entry and unresolved-jump result are used as evidence.",
-    "No paired retail/candidate runtime capture exists for this native, so no behavioral equivalence is claimed."
+    "No paired retail/candidate runtime capture exists for this native, so no behavioral equivalence is claimed.",
+    "2026-10-23 Main-unit rename: the translation unit moved from retail_main.cpp to main.cpp and the unit-local type RetailMainConfig became MainConfig. The compiled object sections, the 821-byte/22-block/31-edge _Main body at 0x0041FCA0 and all sixteen PE sections of the image are byte-identical to the pre-rename build, so the structural measurements below are unchanged; the candidate digest was rebound to the receipt of the rename build."
   ]
 }

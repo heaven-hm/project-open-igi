@@ -2559,14 +2559,14 @@
     },
     {
       "address": "0x004B8A50",
-      "name": "Profile_ValueSet",
-      "signature": "int32_t Profile_ValueSet(float param_1, float param_2);",
+      "name": "Qvm_GetFloatArg",
+      "signature": "long double Qvm_GetFloatArg(void* param_1, int32_t param_2);",
       "callingConvention": "cdecl",
       "cfgScore": 1.0,
       "status": "100%_VERIFIED",
-      "bnPrototype": "int32_t(float arg1, float arg2)",
-      "bnName": "Profile_ValueSet",
-      "namingEvidence": "no divergence",
+      "bnPrototype": "long double(void* param_1, int32_t param_2)",
+      "bnName": "Qvm_GetFloatArg",
+      "namingEvidence": "The stored Profile_ValueSet name and its int32_t(float, float) prototype were stale Binary Ninja auto-labels on the wrong function. The cdecl long double(void*, int32_t) signature is recovered from the two stack arguments (mov eax,[esp+4]; mov ecx,[eax+4]; mov ecx,[esp+8]) and the x87 return consumed by the call sites, for example call 0x004B8A50 at 0x0041007D followed by fstp dword [0x0056E1E8] at 0x00410082.",
       "namingWinner": "same"
     },
     {

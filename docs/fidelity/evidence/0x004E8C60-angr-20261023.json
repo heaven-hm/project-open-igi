@@ -1,0 +1,132 @@
+{
+ "schema_version": 1,
+ "kind": "angr-analysis",
+ "tool": "angr",
+ "angr_version": "10.0.4.post1",
+ "analysis": "CFGFast",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x004E8C60",
+ "result": "pass",
+ "has_unresolved_jumps": false,
+ "block_count": 18,
+ "nodes": [
+  "0x004E8C60",
+  "0x004E8C7F",
+  "0x004E8C98",
+  "0x004E8CAA",
+  "0x004E8CB2",
+  "0x004E8CC1",
+  "0x004E8CD0",
+  "0x004E8CDF",
+  "0x004E8CF1",
+  "0x004E8D00",
+  "0x004E8D0F",
+  "0x004E8D1E",
+  "0x004E8D2D",
+  "0x004E8D3C",
+  "0x004E8D4B",
+  "0x004E8D74",
+  "0x004E8DA9",
+  "0x004E8DAB"
+ ],
+ "edges": [
+  {
+   "kind": "unknown",
+   "source": "0x004E8C60",
+   "target": "0x004E8C7F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8C7F",
+   "target": "0x004E8C98"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8C98",
+   "target": "0x004E8CAA"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CAA",
+   "target": "0x004E8CB2"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CB2",
+   "target": "0x004E8CC1"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CC1",
+   "target": "0x004E8CD0"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CD0",
+   "target": "0x004E8CDF"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CDF",
+   "target": "0x004E8CF1"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8CF1",
+   "target": "0x004E8D00"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D00",
+   "target": "0x004E8D0F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D0F",
+   "target": "0x004E8D1E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D1E",
+   "target": "0x004E8D2D"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D2D",
+   "target": "0x004E8D3C"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D3C",
+   "target": "0x004E8D4B"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D4B",
+   "target": "0x004E8D74"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8D74",
+   "target": "0x004E8DA9"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8DA9",
+   "target": "0x004E8DA9"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004E8DA9",
+   "target": "0x004E8DAB"
+  }
+ ],
+ "recovery_mode": "automatic",
+ "reason": null,
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence"
+ ]
+}

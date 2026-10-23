@@ -1,62 +1,120 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004AF7A6",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "507038a2cdd46ee9a066d9ca0d180d0de6c5ab1a23c1529ef4f48ce997210f53",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004AF7A6",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "507038a2cdd46ee9a066d9ca0d180d0de6c5ab1a23c1529ef4f48ce997210f53",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004AF7A6 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004AF7A6-Camera_ApplyLineFilter_32.cpp at sha256 507038a2cdd46ee9a066d9ca0d180d0de6c5ab1a23c1529ef4f48ce997210f53 (recorded implementation.signature: HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004AF7A6",
+    "name": "Camera_ApplyLineFilter_32",
+    "binary_ninja_name": "Camera_ApplyLineFilter_32",
+    "signature": "HRESULT __stdcall(struct IAVIStream pavi, int32_t lStart, int32_t lSamples, void* lpBuffer, int32_t cbBuffer, int32_t* plBytes, int32_t* plSamples)",
+    "start": "0x004AF7A6",
+    "end": "0x004AF7AB",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Six-byte import thunk 0x004AF7A6: `jmp dword [0x533010]` to AVIStreamRead; one block, no edges, no locals, no numeric constants.",
+    "blocks": [
+      {
+        "address": "0x004AF7A6",
+        "start": "0x4af7a6",
+        "end": "0x4af7ac",
+        "flags": "can-exit, undetermined-outgoing"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AF7A6 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004AF7A6-Camera_ApplyLineFilter_32.cpp",
+    "sha256": "507038a2cdd46ee9a066d9ca0d180d0de6c5ab1a23c1529ef4f48ce997210f53",
+    "signature": "HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "The candidate file defines `AVIStreamRead` with AVIStreamRead's own prototype and the body `return AVIStreamRead();`, i.e. a self-recursive call to itself."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Candidate defines AVIStreamRead itself and tail-calls AVIStreamRead, turning the retail IAT thunk (jmp dword [0x533010]) into an infinite self-call.",
+      "The record's declared function Camera_ApplyLineFilter_32 is never defined in the candidate; only the import name is defined."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004AF7A6 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004AF7A6-Camera_ApplyLineFilter_32.cpp (sha256 507038a2cdd46ee9a066d9ca0d180d0de6c5ab1a23c1529ef4f48ce997210f53). Six-byte import thunk 0x004AF7A6: `jmp dword [0x533010]` to AVIStreamRead; one block, no edges, no locals, no numeric constants. Candidate: The candidate file defines `AVIStreamRead` with AVIStreamRead's own prototype and the body `return AVIStreamRead();`, i.e. a self-recursive call to itself."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Binary Ninja models 0x004AF7A6 with the imported routine's prototype (AVIStreamRead); the candidate's record signature is Camera_ApplyLineFilter_32's prototype but the file defines `AVIStreamRead` with the import's prototype, so the declared record function is not the function the file defines."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Retail forwards the caller's frame unchanged through the IAT slot 0x533010; the candidate's `AVIStreamRead()` takes the import's parameter list and passes it to itself."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 1 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail has exactly one indirect jump to the IAT entry 0x533010 (AVIStreamRead); the candidate calls AVIStreamRead, which it itself defines, so the call never reaches the import."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Single relocatable constant: the IAT slot 0x533010."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "No stack locals and no global writes; the only memory access is the IAT pointer load performed by the jmp."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns AVIStreamRead's EAX/EDX unchanged because the jmp forwards the callee's return; the candidate never reaches the real body and cannot return its value."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"HRESULT __stdcall(struct IAVIStream pavi, int32_t lStart, int32_t lSamples, void* lpBuffer, int32_t cbBuffer, int32_t* plBytes, int32_t* plSamples)\" at 0x004AF7A6; radare2 recovers \"sub.AVIFIL32.dll_AVIStreamRead ();\". Both tools place the entry at 0x004AF7A6 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: HRESULT __stdcall Camera_ApplyLineFilter_32(struct param_1, int32_t param_2, int32_t param_3, void* param_4, int32_t param_5, int32_t* param_6, int32_t* param_7);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004AF7A6-binaryninja.json",
+      "sha256": "21b61ac46d2e0430b2176877c1a506b8b4993925cb1189db6becf0f5b57959dd"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004AF7A6-radare2.json",
+      "sha256": "bcc82f9fd4a987862f55e051e57dfeae57c9641e8af384f1ee7d35ffa4a6cab7"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004AF7A6-angr-20261023.json",
+      "sha256": "da3b279245315869b32f5145665b49a5ae46e2af6493ac58b315b2e4895b58be"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The catalog name Camera_ApplyLineFilter_32 is a harvest label for the import thunk at 0x004AF7A6; the real retail identity is the IAT forwarder to AVIStreamRead."
+  ]
 }

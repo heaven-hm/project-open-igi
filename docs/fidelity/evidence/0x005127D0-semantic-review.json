@@ -1,62 +1,121 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x005127D0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "771de6e2f0ec1ea6cd4896d1be2be506f7d7ccf6dd49d7c2a45a59542ccdd1a4",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x005127D0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "771de6e2f0ec1ea6cd4896d1be2be506f7d7ccf6dd49d7c2a45a59542ccdd1a4",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x005127D0 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/terrain/005127D0-Terrain_SelectTerrainLOD_2.cpp at sha256 771de6e2f0ec1ea6cd4896d1be2be506f7d7ccf6dd49d7c2a45a59542ccdd1a4 (recorded implementation.signature: uint32_t Terrain_SelectTerrainLOD_2(void);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x005127D0",
+    "name": "Terrain_SelectTerrainLOD_2",
+    "binary_ninja_name": "Terrain_SelectTerrainLOD_2",
+    "signature": "uint32_t()",
+    "start": "0x005127D0",
+    "end": "0x005127D4",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Five-byte compiler jump thunk 0x005127D0: `jmp Render_ClipMesh_11` to 0x4D95E0; one block, no edges, no locals, no constants.",
+    "blocks": [
+      {
+        "address": "0x005127D0",
+        "start": "0x5127d0",
+        "end": "0x5127d5",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Render_ClipMesh_11"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x005127D0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/terrain/005127D0-Terrain_SelectTerrainLOD_2.cpp",
+    "sha256": "771de6e2f0ec1ea6cd4896d1be2be506f7d7ccf6dd49d7c2a45a59542ccdd1a4",
+    "signature": "uint32_t Terrain_SelectTerrainLOD_2(void);",
+    "status_after_review": "STRUCTURALLY_VERIFIED",
+    "summary": "The candidate defines `j_Render_ClipMesh_11()` with the body `return Render_ClipMesh_11();`, a single tail call to Render_ClipMesh_11."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "match",
+    "divergences": [],
+    "statement": "No candidate divergence found in the checked dimensions."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x005127D0 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/terrain/005127D0-Terrain_SelectTerrainLOD_2.cpp (sha256 771de6e2f0ec1ea6cd4896d1be2be506f7d7ccf6dd49d7c2a45a59542ccdd1a4). Five-byte compiler jump thunk 0x005127D0: `jmp Render_ClipMesh_11` to 0x4D95E0; one block, no edges, no locals, no constants. Candidate: The candidate defines `j_Render_ClipMesh_11()` with the body `return Render_ClipMesh_11();`, a single tail call to Render_ClipMesh_11."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "BN models 0x005127D0 as `int32_t()`/`uint32_t()` (no arguments, 32-bit result) and the candidate's `j_Render_ClipMesh_11()` has the same no-argument ABI; the header declares the catalog prototype Terrain_SelectTerrainLOD_2(void)."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "No arguments; the tail call forwards the caller's stack and registers unchanged, exactly like the retail jmp."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 1 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Retail's single instruction is the jump to Render_ClipMesh_11 (0x4D95E0); the candidate's single statement is a tail call to Render_ClipMesh_11 at the same address (BN callee table)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "No numeric constants in either."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "No stack locals and no global writes in either."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "The jmp forwards Render_ClipMesh_11's 32-bit return value unchanged; `return Render_ClipMesh_11();` returns the same register."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"uint32_t()\" at 0x005127D0; radare2 recovers \"fcn.005127d0 ();\". Both tools place the entry at 0x005127D0 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: uint32_t Terrain_SelectTerrainLOD_2(void);."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x005127D0-binaryninja.json",
+      "sha256": "01c1364f1d8e568aad2cdd6f817afef7ab579f6604a411b1981bd4c4076192f4"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x005127D0-radare2.json",
+      "sha256": "cb0837e4c443941ebd737308f2edffdeb5d540f01e79e7980ac8f9f5d6fb228f"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x005127D0-angr-20261023.json",
+      "sha256": "5329164fc2052d15e7928735bf4969f4b4430bcef79dfb42e8d5eadf1a40960f"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The catalog name Terrain_SelectTerrainLOD_2 is a harvest label: the retail bytes at 0x005127D0 are a compiler jump thunk to Render_ClipMesh_11 (0x4D95E0), not an implementation of Terrain_SelectTerrainLOD_2.",
+    "The candidate file defines `j_Render_ClipMesh_11` while its header declares Terrain_SelectTerrainLOD_2; the header also does not declare Render_ClipMesh_11. The definition/header names disagree even though the address-bound body matches retail.",
+    "The body is a source-level tail call; whether the compiler emits a jmp or a call+ret for it is a build-time question outside this structural review."
+  ]
 }

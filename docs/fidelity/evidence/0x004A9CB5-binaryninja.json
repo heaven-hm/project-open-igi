@@ -2,15 +2,44 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004A9CB5",
- "signature": "not restated",
+ "symbol": "Camera_UpdateTransform_18",
+ "signature": "int32_t(int32_t arg1)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004A9CB5",
+  "end": "0x004A9CCB",
+  "size_bytes": 23,
+  "basic_blocks": 1,
+  "instruction_count": 10
+ },
+ "bytes_hex": "8b54240481e20003000083ca7f6689",
+ "bytes_sha256": "e3610e5aa25f7c4b90daee361770fbdf4903127b0f078ea7f130995466eec463",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004A9CB5",
   "nodes": [
    {
-    "address": "0x004A9CB5"
+    "address": "0x004A9CB5",
+    "start": "0x4a9cb5",
+    "end": "0x4a9ccc",
+    "size": 23,
+    "flags": "can-exit"
    }
   ],
   "edges": []
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4a9cb5\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_18\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 10\ntotal: 10\nnextOffset: null\ntruncated: false\n---\n\n````asm\n\ud83c\udf10  int32_t Camera_UpdateTransform_18(int32_t arg1)\n\n0x4a9cb5  mov     edx, dword [esp+0x4]\n0x4a9cb9  and     edx, 0x300\n0x4a9cbf  or      edx, 0x7f\n0x4a9cc2  mov     word [esp+0x6], dx\n0x4a9cc7  fldcw   word [esp+0x6]\n0x4a9ccb  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4a9cb5\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_18\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 10\ntotal: 10\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n\ud83c\udf10  int32_t Camera_UpdateTransform_18(int32_t arg1)\n\n{\n    *(&arg1 + 2) = (arg1 & 0x300) | 0x7f;\n    int16_t x87control;\n    int16_t x87status;\n    x87control = __fldcw_memmem16(*(&arg1 + 2));\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a9cb5\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_18\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a9cb5\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_18\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 3\ntotal: 3\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4a5791 | x86 | Camera_UpdateViewCone_5 (0x4a5782 (x86)) |\n| 0x51683c | x86 | Terrain_SampleHeightmap_3 (0x51682d (x86)) |\n| 0x51690c | x86 | Terrain_BuildMipMaps_3 (0x5168fd (x86)) |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

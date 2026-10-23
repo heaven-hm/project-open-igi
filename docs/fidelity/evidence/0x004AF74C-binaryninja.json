@@ -2,15 +2,44 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004AF74C",
- "signature": "not restated",
+ "symbol": "Camera_ApplyWideScreen_30",
+ "signature": "HRESULT __stdcall(LPDDENUMCALLBACKEXA lpCallback, void* lpContext, uint32_t dwFlags)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004AF74C",
+  "end": "0x004AF751",
+  "size_bytes": 6,
+  "basic_blocks": 1,
+  "instruction_count": 5
+ },
+ "bytes_hex": "ff252c305300",
+ "bytes_sha256": "3b225309af7f87b41eb53410987223901ba567596747ead8406a90d406f26a95",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004AF74C",
   "nodes": [
    {
-    "address": "0x004AF74C"
+    "address": "0x004AF74C",
+    "start": "0x4af74c",
+    "end": "0x4af752",
+    "size": 6,
+    "flags": "can-exit, undetermined-outgoing"
    }
   ],
   "edges": []
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4af74c\"\narch: \"x86\"\nname: \"Camera_ApplyWideScreen_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 5\ntotal: 5\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  HRESULT __stdcall Camera_ApplyWideScreen_30(LPDDENUMCALLBACKEXA lpCallback, void* lpContext, uint32_t dwFlags)\n\n0x4af74c  jmp     dword [0x53302c]\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4af74c\"\narch: \"x86\"\nname: \"Camera_ApplyWideScreen_30\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 8\ntotal: 8\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  HRESULT __stdcall Camera_ApplyWideScreen_30(LPDDENUMCALLBACKEXA lpCallback, void* lpContext, uint32_t dwFlags)\n\n{\n    /* tailcall */\n    return DirectDrawEnumerateExA(lpCallback, lpContext, dwFlags);\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4af74c\"\narch: \"x86\"\nname: \"Camera_ApplyWideScreen_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4af74c | x86 | 0x53302c |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4af74c\"\narch: \"x86\"\nname: \"Camera_ApplyWideScreen_30\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x491efc | x86 | Display_CloseDevice_6 (0x491ef0 (x86)) |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

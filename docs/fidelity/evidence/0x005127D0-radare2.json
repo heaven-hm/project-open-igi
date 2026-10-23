@@ -2,15 +2,38 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "radare2",
+ "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
  "function_entry": "0x005127D0",
- "signature": "not restated",
+ "symbol": "fcn.005127d0",
+ "signature": "fcn.005127d0 ();",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "analysis": {
+  "commands": "s 0x005127D0; af-*; af; afij; afbj",
+  "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+ },
+ "function": {
+  "size_bytes": 233973,
+  "basic_block_count": 2,
+  "instruction_count": 11,
+  "call_convention": "cdecl",
+  "edge_count": 1,
+  "argument_count": 0,
+  "is_linear": false
+ },
+ "bytes_hex": "e90b6efcff90909090909090909090",
+ "bytes_sha256": "3890c098312efa6a98b46e43dc5259bb4909d54fbb0a6ac5b2b6c806d868165f",
  "cfg": {
+  "entry": "0x005127D0",
   "nodes": [
    {
     "address": "0x005127D0"
    }
   ],
   "edges": []
- }
+ },
+ "limitations": [
+  "radare2 block boundaries and edge kinds are its own analysis; the Binary Ninja block table is the selected decompiler's evidence."
+ ]
 }

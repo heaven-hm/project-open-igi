@@ -2,19 +2,47 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004C4520",
- "signature": "not restated",
+ "symbol": "Define_MagicObj",
+ "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004C4520",
+  "end": "0x004C4657",
+  "size_bytes": 312,
+  "basic_blocks": 3,
+  "instruction_count": 93
+ },
+ "bytes_hex": "a13c43a40083ec188d048056c1e003",
+ "bytes_sha256": "897e2c057f69a1ec6c0c71521de037cd0919a3d7689d66cdf5a1659b976e4783",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004C4520",
   "nodes": [
    {
-    "address": "0x004C4520"
+    "address": "0x004C4520",
+    "start": "0x4c4520",
+    "end": "0x4c45b3",
+    "size": 147,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004C4616"
+    "address": "0x004C4616",
+    "start": "0x4c4616",
+    "end": "0x4c4658",
+    "size": 66,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004C45B3"
+    "address": "0x004C45B3",
+    "start": "0x4c45b3",
+    "end": "0x4c4616",
+    "size": 99,
+    "flags": "can-exit"
    }
   ],
   "edges": [
@@ -34,5 +62,14 @@
     "kind": "unconditional"
    }
   ]
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4c4520\"\narch: \"x86\"\nname: \"Define_MagicObj\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 93\ntotal: 93\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Define_MagicObj(int32_t arg1, float arg2 @ 0xc)\n\n0x4c4520  // Sig: void Define_MagicObj(...)\n0x4c4520  // Note: Defines a MAGIC OBJECT type during magicobj definition parsing (pairs\n0x4c4520  // with the MAGICOBJ\\ folder data). Parser-context only.\n0x4c4520  mov     eax, dword [0xa4433c]\n0x4c4525  sub     esp, 0x18\n0x4c4528  lea     eax, [eax+eax*4]\n0x4c452b  push    esi\n0x4c452c  shl     eax, 0x3\n0x4c452f  push    edi\n0x4c4530  mov     edi, dword [esp+0x2c]\n0x4c4534  mov     dword [eax+0xb97e24], 0x0\n0x4c453e  lea     eax, [eax+0xb97e00]\n0x4c4544  push    0x10\n0x4c4546  push    eax\n0x4c4547  push    0x0\n0x4c4549  push    edi\n0x4c454a  call    Sys_ResolveSymbol_23\n0x4c454f  mov     eax, dword [0xa4433c]\n0x4c4554  push    0x10\n0x4c4556  lea     ecx, [eax+eax*4]\n0x4c4559  lea     edx, [ecx*8+0xb97e10]\n0x4c4560  push    edx\n0x4c4561  push    0x1\n0x4c4563  push    edi\n0x4c4564  call    Sys_ResolveSymbol_23\n0x4c4569  mov     eax, dword [0xa4433c]\n0x4c456e  push    0x2\n0x4c4570  push    edi\n0x4c4571  lea     esi, [eax+eax*4]\n0x4c4574  shl     esi, 0x3\n0x4c4577  call    Script_EvalArgInt\n0x4c457c  mov     word [esi+0xb97e20], ax\n0x4c4583  xor     eax, eax\n0x4c4585  mov     al, byte [0x547f3d]\n0x4c458a  xor     ecx, ecx\n0x4c458c  mov     dword [esi+0xb97e24], 0x0\n0x4c4596  mov     cx, word [esi+0xb97e20]\n0x4c459d  lea     eax, [eax+eax*2]\n0x4c45a0  add     esp, 0x28\n0x4c45a3  shl     eax, 0x7\n0x4c45a6  add     eax, ecx\n0x4c45a8  mov     eax, dword [eax*4+0xa96ae0]\n0x4c45af  test    eax, eax\n0x4c45b1  je      0x4c4616\n\n0x4c45b3  lea     edx, [esp+0x2c]\n0x4c45b7  push    edx\n0x4c45b8  push    0x0\n0x4c45ba  call    eax\n0x4c45bc  mov     eax, dword [esp+0x34]\n0x4c45c0  push    0x4\n0x4c45c2  push    eax\n0x4c45c3  call    Mem_AllocFn\n0x4c45c8  mov     ecx, dword [0xa4433c]\n0x4c45ce  mov     dword [esp+0x18], eax\n0x4c45d2  xor     edx, edx\n0x4c45d4  mov     dword [esp+0x1c], edi\n0x4c45d8  lea     ecx, [ecx+ecx*4]\n0x4c45db  mov     dword [esp+0x20], 0x3\n0x4c45e3  shl     ecx, 0x3\n0x4c45e6  mov     dword [ecx+0xb97e24], eax\n0x4c45ec  mov     eax, dword [0x547f3c]\n0x4c45f1  mov     dx, word [ecx+0xb97e20]\n0x4c45f8  and     eax, 0xff\n0x4c45fd  lea     ecx, [esp+0x18]\n0x4c4601  lea     eax, [eax+eax*2]\n0x4c4604  push    ecx\n0x4c4605  shl     eax, 0x7\n0x4c4608  add     edx, eax\n0x4c460a  push    0x0\n0x4c460c  call    dword [edx*4+0xa96ae0]\n0x4c4613  add     esp, 0x18\n\n0x4c4616  mov     eax, dword [0xa4433c]\n0x4c461b  mov     ecx, 0x6\n0x4c4620  inc     eax\n0x4c4621  lea     esi, [esp+0x8]\n0x4c4625  mov     dword [0xa4433c], eax\n0x4c462a  mov     eax, dword [esp+0x24]\n0x4c462e  mov     edi, eax\n0x4c4630  mov     dword [esp+0x8], 0x1\n0x4c4638  mov     dword [esp+0x10], 0x0\n0x4c4640  mov     dword [esp+0x14], 0x3ff00000\n0x4c4648  mov     dword [esp+0x18], 0x567c74\n0x4c4650  rep movsd dword [edi], [esi]\n0x4c4652  pop     edi\n0x4c4653  pop     esi\n0x4c4654  add     esp, 0x18\n0x4c4657  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4c4520\"\narch: \"x86\"\nname: \"Define_MagicObj\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 51\ntotal: 51\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Define_MagicObj(int32_t arg1, float arg2 @ 0xc)\n\n// Sig: void Define_MagicObj(...)\n// Note: Defines a MAGIC OBJECT type during magicobj definition parsing (pairs\n// with the MAGICOBJ\\ folder data). Parser-context only.\n{\n    int32_t eax_1 = g_a4433c * 0x28;\n    float edi = arg2;\n    *(eax_1 + &g_b97e24) = 0;\n    char* var_24 = 0x10;\n    int32_t var_2c = 0;\n    float var_30 = edi;\n    Sys_ResolveSymbol_23(var_30, var_2c, eax_1 + &g_b97e00, var_24);\n    Sys_ResolveSymbol_23(edi, 1, g_a4433c * 0x28 + &g_b97e10, 0x10);\n    int32_t esi_1 = g_a4433c * 0x28;\n    *(esi_1 + 0xb97e20) = Script_EvalArgInt(edi, 2);\n    int32_t eax_6 = 0;\n    eax_6 = g_547f3d;\n    int32_t ecx_1 = 0;\n    *(esi_1 + &g_b97e24) = 0;\n    ecx_1 = *(esi_1 + 0xb97e20);\n    int32_t eax_10 = *(((eax_6 * 0x180 + ecx_1) << 2) + &g_a96ae0);\n    void* var_18;\n\n    if (eax_10)\n    {\n        eax_10(0, &arg2);\n        int32_t var_2c_1 = 4;\n        var_30 = arg2;\n        void* eax_12 = Mem_AllocFn(var_30, var_2c_1);\n        int32_t a4433c_1 = g_a4433c;\n        var_18 = eax_12;\n        int32_t edx_1 = 0;\n        float var_14_1 = edi;\n        int32_t var_10_1 = 3;\n        int32_t ecx_3 = a4433c_1 * 0x28;\n        *(ecx_3 + &g_b97e24) = eax_12;\n        edx_1 = *(ecx_3 + 0xb97e20);\n        (*(((edx_1 + *g_547f3c * 0x180) << 2) + &g_a96ae0))(0, &var_18, var_30);\n    }\n\n    g_a4433c += 1;\n    var_18 = 1;\n    int32_t var_10_2 = 0;\n    int32_t var_c = 0x3ff00000;\n    char* var_8 = &g_script_ret_type;\n    __builtin_memcpy(arg1, &var_18, 0x18);\n    return arg1;\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4c4520\"\narch: \"x86\"\nname: \"Define_MagicObj\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 5\ntotal: 5\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4c454a | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x4c4564 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x4c4577 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4c45c3 | x86 | 0x4b0c60 | Mem_AllocFn (0x4b0c60 (x86)) |\n| 0x4c4650 | x86 | 0xc35040 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4c4520\"\narch: \"x86\"\nname: \"Define_MagicObj\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

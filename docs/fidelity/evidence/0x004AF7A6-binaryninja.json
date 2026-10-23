@@ -2,15 +2,44 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004AF7A6",
- "signature": "not restated",
+ "symbol": "Camera_ApplyLineFilter_32",
+ "signature": "HRESULT __stdcall(struct IAVIStream pavi, int32_t lStart, int32_t lSamples, void* lpBuffer, int32_t cbBuffer, int32_t* plBytes, int32_t* plSamples)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004AF7A6",
+  "end": "0x004AF7AB",
+  "size_bytes": 6,
+  "basic_blocks": 1,
+  "instruction_count": 5
+ },
+ "bytes_hex": "ff2510305300",
+ "bytes_sha256": "53a42d277644e0f6b4a126b03f59b3c96bd4fcce59e1db99f80502c38334829c",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004AF7A6",
   "nodes": [
    {
-    "address": "0x004AF7A6"
+    "address": "0x004AF7A6",
+    "start": "0x4af7a6",
+    "end": "0x4af7ac",
+    "size": 6,
+    "flags": "can-exit, undetermined-outgoing"
    }
   ],
   "edges": []
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4af7a6\"\narch: \"x86\"\nname: \"Camera_ApplyLineFilter_32\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 5\ntotal: 5\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  HRESULT __stdcall Camera_ApplyLineFilter_32(struct IAVIStream pavi, int32_t lStart, int32_t lSamples, void* lpBuffer, int32_t cbBuffer, int32_t* plBytes, int32_t* plSamples)\n\n0x4af7a6  jmp     dword [0x533010]\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4af7a6\"\narch: \"x86\"\nname: \"Camera_ApplyLineFilter_32\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 8\ntotal: 8\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  HRESULT __stdcall Camera_ApplyLineFilter_32(struct IAVIStream pavi, int32_t lStart, int32_t lSamples, void* lpBuffer, int32_t cbBuffer, int32_t* plBytes, int32_t* plSamples)\n\n{\n    /* tailcall */\n    return AVIStreamRead(pavi, lStart, lSamples, lpBuffer, cbBuffer, plBytes, plSamples);\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4af7a6\"\narch: \"x86\"\nname: \"Camera_ApplyLineFilter_32\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4af7a6 | x86 | 0x533010 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4af7a6\"\narch: \"x86\"\nname: \"Camera_ApplyLineFilter_32\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x490eb6 | x86 | Display_ClearSurfaces_2 (0x490e90 (x86)) |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

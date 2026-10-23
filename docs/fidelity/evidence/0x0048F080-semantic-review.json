@@ -10,7 +10,7 @@
     "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
   },
   "reviewed": true,
-  "reviewed_by": "Automated source-semantic review by the delegated coding agent against live Binary Ninja 6.0.10601 (MCP), Radare2 6.2.0, angr 10.0.4.post1 CFGFast and an ad-hoc retail-ESIL/host-built differential",
+  "reviewed_by": "Automated source-semantic review by the delegated coding agent against live Binary Ninja 6.0.10601 (MCP), Radare2 6.2.0, angr 10.0.4.post1 CFGFast and an ad-hoc retail-ESIL/host-built differential The record was renamed from GetRetailCommandLine to GetCommandLine on 2026-10-23; the reviewed body, object and differential results are unchanged and the implementation digests below still bind the same source.",
   "reviewed_at": "2026-10-22T22:33:00Z",
   "source_revision": "f674b36b3441561549e9db680c26373f00556f15",
   "review_basis": "The working-tree revision of engine/src/retail/core/app_startup_natives.cpp read for this report hashes to 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and its header hashes to 790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50. The retail body was disassembled and decompiled through the live Binary Ninja MCP view, recovered independently with Radare2 6.2.0 and angr CFGFast at the exact entry, and the candidate function was exercised against the retail bytes in Radare2 ESIL for ten 32-bit values.",
@@ -142,6 +142,16 @@
     "Candidate structural equivalence rests on the identical one-block load/return shape, the fresh -O3 object and the ten-case retail-ESIL/host differential, not on a paired runtime capture. A paired typed Frida capture of retail igi.exe and the staged candidate is outstanding.",
     "The ten-case host differential is an ad-hoc command, not a committed case in scripts/native_diff_runner.py; only 0x0048F0C0 and 0x0048F0D0 have committed runner cases.",
     "The candidate reads its own mapped 4-byte global rather than retail 0x005C8BC8; this review does not establish process-wide memory-layout equivalence.",
-    "The only direct caller 0x0048F360 was not reconstructed or compared; the claim that it consumes the return value as a command-line string rests on Binary Ninja/Radare2 disassembly of the retail caller, not on candidate code."
-  ]
+    "The only direct caller 0x0048F360 was not reconstructed or compared; the claim that it consumes the return value as a command-line string rests on Binary Ninja/Radare2 disassembly of the retail caller, not on candidate code.",
+    "Naming: the record name GetCommandLine is a project-chosen neutral name, not a recovered game symbol (igi.exe is stripped). The source identifier in app_startup_natives.cpp is still GetRetailCommandLine pending a rename of that translation unit, which is outside this task's ownership; until it lands, the manifest record name and the source identifier differ."
+  ],
+  "naming": {
+    "record_name": "GetCommandLine",
+    "previous_record_name": "GetRetailCommandLine",
+    "source_identifier": "GetRetailCommandLine",
+    "source_identifier_pending_rename": true,
+    "original_symbol": "unknown: igi.exe is stripped and neither Binary Ninja (FX_DebrisSpawn_21) nor Radare2 (fcn.0048f080) recovers a game symbol for this address",
+    "rationale": "The project name must be a plain game-style name. The original symbol cannot be recovered from the stripped executable, so GetCommandLine is a neutral description of what the body does, chosen to pair with the sibling setter StoreCommandLine (retail VA 0x0048F0C0). It is not claimed to be the game's own symbol.",
+    "pending": "The C identifier in engine/src/retail/core/app_startup_natives.cpp and its header is still GetRetailCommandLine because that translation unit is outside this rename task's owned files. Renaming it must also update implementation.sha256, the header digest and verification.candidate_symbol in the manifest; the source name must not be introduced in a translation unit that includes <windows.h>, where GetCommandLine is a Win32 macro."
+  }
 }

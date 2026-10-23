@@ -1,62 +1,127 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004E8C60",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "ece8f43bcbdd6135ff3766cde112d0df082e27cb267ba3c7a5f6829b33930ccb",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004E8C60",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "ece8f43bcbdd6135ff3766cde112d0df082e27cb267ba3c7a5f6829b33930ccb",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004E8C60 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/define/004E8C60-DefineSound.cpp at sha256 ece8f43bcbdd6135ff3766cde112d0df082e27cb267ba3c7a5f6829b33930ccb (recorded implementation.signature: int32_t DefineSound(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004E8C60",
+    "name": "DefineSound",
+    "binary_ninja_name": "Define_Sound",
+    "signature": "int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, long double arg7 @ st6, int32_t arg8, void* arg9, float arg10)",
+    "start": "0x004E8C60",
+    "end": "0x004E8DB3",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Single block 0x4E8C60-0x4E8DB3: consume seven x87 values (fstp qword [esp+0xF4], st0), call SoundSys_PlaySoundSample_13, resolve 0x20-byte strings through Sys_ResolveSymbol_23, call Sound_LoadSample (0x4E75E0), set Profile values, and copy the 24-byte record to the result buffer. The QVM frame is read from [E+0x10].",
+    "blocks": [
+      {
+        "address": "0x004E8C60",
+        "start": "0x4e8c60",
+        "end": "0x4e8db4",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "SoundSys_PlaySoundSample_13",
+      "Sys_ResolveSymbol_23",
+      "Profile_ValueSet",
+      "Script_EvalArgInt",
+      "QTask_HandleInput"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004E8C60 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/define/004E8C60-DefineSound.cpp",
+    "sha256": "ece8f43bcbdd6135ff3766cde112d0df082e27cb267ba3c7a5f6829b33930ccb",
+    "signature": "int32_t DefineSound(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Define_Sound(long double, x7, int arg8, void* arg9, float arg10) reproduces the call order and constants but delivers the seven x87 values and the QVM frame as ordinary cdecl stack parameters."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "x87 argument delivery: st0-st6 in retail vs cdecl long-double stack parameters.",
+      "QVM frame slot: retail [E+0x10]; the candidate's arg8/arg9/arg10 occupy [E+4]+.",
+      "Result-buffer/return slot not preserved."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004E8C60 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/define/004E8C60-DefineSound.cpp (sha256 ece8f43bcbdd6135ff3766cde112d0df082e27cb267ba3c7a5f6829b33930ccb). Single block 0x4E8C60-0x4E8DB3: consume seven x87 values (fstp qword [esp+0xF4], st0), call SoundSys_PlaySoundSample_13, resolve 0x20-byte strings through Sys_ResolveSymbol_23, call Sound_LoadSample (0x4E75E0), set Profile values, and copy the 24-byte record to the result buffer. The QVM frame is read from [E+0x10]. Candidate: Define_Sound(long double, x7, int arg8, void* arg9, float arg10) reproduces the call order and constants but delivers the seven x87 values and the QVM frame as ordinary cdecl stack parameters."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Retail consumes st0-st6 through `fstp qword [esp+0xF4]` etc. and reads the QVM frame from [E+0x10]; BN models `int32_t(long double @ st0 ... long double @ st6, int32_t arg8, void* arg9, float arg10)`. The candidate declares the same long-double list but as cdecl parameters, which the compiler places on the stack, and its arg8/arg9/arg10 land at [E+4].. instead of the retail slots."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Seven floating-point arguments must arrive on the x87 stack and the frame at [E+0x10]; the candidate's parameters are stack words. The x87 stack depth and the QVM frame slot are both lost."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 18 blocks with has_unresolved_jumps=false. The angr block-count difference is a granularity artifact of CFGFast splitting at call returns / rep movsd; the BN and radare2 block and edge tables are identical."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "The call sequence matches: SoundSys_PlaySoundSample_13, Sys_ResolveSymbol_23, Sound_LoadSample, Profile_LoadValue/Profile_ValueSet (all at the same addresses)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "0x20 resolve widths, the 0x180/0x159 profile strides and the f32 constants match."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "The 24-byte record build and copy match the retail stack writes."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns the result-buffer word; the candidate's declared first parameter is at [E+4] instead of the retail result slot, so the returned pointer differs."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "The seven x87 inputs are consumed from st0-st6 in retail; the candidate's long double parameters are passed in memory, so the floating-point stack contract is not preserved."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, long double arg7 @ st6, int32_t arg8, void* arg9, float arg10)\" at 0x004E8C60; radare2 recovers \"fcn.004e8c60 (int32_t arg_15ch, int32_t arg_198h, int32_t arg_168h);\". Both tools place the entry at 0x004E8C60 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineSound(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, long param_7, int32_t param_8, void* param_9, float param_10);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004E8C60-binaryninja.json",
+      "sha256": "d460b39b23a454f2fc2dda978c7e9da146d476432275ea66d9d88d52d2906713"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004E8C60-radare2.json",
+      "sha256": "cce5819a4e83ba72057ba1f200c70a2169e8f421fff66e7edf2e7594d019522a"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004E8C60-angr-20261023.json",
+      "sha256": "87a1aeaefba5dd91077de64b6be0d88704786d771cd5756873861e07918c3068"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines Define_Sound; the catalog spelling DefineSound differs only in the underscore."
+  ]
 }

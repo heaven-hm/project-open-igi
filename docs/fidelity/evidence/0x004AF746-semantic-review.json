@@ -1,62 +1,120 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004AF746",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "e822febf09c61845f18af9b30010926412e800ffbe4634eabf223c32b3ca0745",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "scalar-arguments-and-result",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004AF746",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "e822febf09c61845f18af9b30010926412e800ffbe4634eabf223c32b3ca0745",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004AF746 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004AF746-Camera_ApplyHandiCam_30.cpp at sha256 e822febf09c61845f18af9b30010926412e800ffbe4634eabf223c32b3ca0745 (recorded implementation.signature: int32_t Camera_ApplyHandiCam_30(void);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004AF746",
+    "name": "Camera_ApplyHandiCam_30",
+    "binary_ninja_name": "Camera_ApplyHandiCam_30",
+    "signature": "int32_t()",
+    "start": "0x004AF746",
+    "end": "0x004AF74B",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Six-byte import thunk 0x004AF746: `jmp dword [0x533044]` to Ordinal_DSOUND_1; one block, no edges, no locals, no numeric constants.",
+    "blocks": [
+      {
+        "address": "0x004AF746",
+        "start": "0x4af746",
+        "end": "0x4af74c",
+        "flags": "can-exit, undetermined-outgoing"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AF746 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004AF746-Camera_ApplyHandiCam_30.cpp",
+    "sha256": "e822febf09c61845f18af9b30010926412e800ffbe4634eabf223c32b3ca0745",
+    "signature": "int32_t Camera_ApplyHandiCam_30(void);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "The candidate file defines `Ordinal_DSOUND_1` with Ordinal_DSOUND_1's own prototype and the body `return Ordinal_DSOUND_1();`, i.e. a self-recursive call to itself."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Candidate defines Ordinal_DSOUND_1 itself and tail-calls Ordinal_DSOUND_1, turning the retail IAT thunk (jmp dword [0x533044]) into an infinite self-call.",
+      "The record's declared function Camera_ApplyHandiCam_30 is never defined in the candidate; only the import name is defined."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004AF746 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004AF746-Camera_ApplyHandiCam_30.cpp (sha256 e822febf09c61845f18af9b30010926412e800ffbe4634eabf223c32b3ca0745). Six-byte import thunk 0x004AF746: `jmp dword [0x533044]` to Ordinal_DSOUND_1; one block, no edges, no locals, no numeric constants. Candidate: The candidate file defines `Ordinal_DSOUND_1` with Ordinal_DSOUND_1's own prototype and the body `return Ordinal_DSOUND_1();`, i.e. a self-recursive call to itself."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Binary Ninja models 0x004AF746 with the imported routine's prototype (Ordinal_DSOUND_1); the candidate's record signature is Camera_ApplyHandiCam_30's prototype but the file defines `Ordinal_DSOUND_1` with the import's prototype, so the declared record function is not the function the file defines."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Retail forwards the caller's frame unchanged through the IAT slot 0x533044; the candidate's `Ordinal_DSOUND_1()` takes the import's parameter list and passes it to itself."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 1 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail has exactly one indirect jump to the IAT entry 0x533044 (Ordinal_DSOUND_1); the candidate calls Ordinal_DSOUND_1, which it itself defines, so the call never reaches the import."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Single relocatable constant: the IAT slot 0x533044."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "No stack locals and no global writes; the only memory access is the IAT pointer load performed by the jmp."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns Ordinal_DSOUND_1's EAX/EDX unchanged because the jmp forwards the callee's return; the candidate never reaches the real body and cannot return its value."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t()\" at 0x004AF746; radare2 recovers \"sub.DSOUND.dll_DirectSoundCreate ();\". Both tools place the entry at 0x004AF746 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t Camera_ApplyHandiCam_30(void);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004AF746-binaryninja.json",
+      "sha256": "018cd7362f137e9b6100f7d96f45a08e5ccdced2e50e57067488c9e71754c0a9"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004AF746-radare2.json",
+      "sha256": "5a12d53ee80ff4312bb63410b282725bd65f0bf3257b3532ec5583132fda882a"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004AF746-angr-20261023.json",
+      "sha256": "e08d4e7fd665aa32a16d77cb7a30f1d30e50acb16313a04abe43e1dc4b6074ee"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The catalog name Camera_ApplyHandiCam_30 is a harvest label for the import thunk at 0x004AF746; the real retail identity is the IAT forwarder to Ordinal_DSOUND_1."
+  ]
 }

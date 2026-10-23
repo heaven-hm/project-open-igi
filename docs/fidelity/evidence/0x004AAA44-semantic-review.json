@@ -1,62 +1,146 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004AAA44",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "59047f9a142c0bd55098649305f91688331055eb3cce177d7bdb1eae2967514b",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004AAA44",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "59047f9a142c0bd55098649305f91688331055eb3cce177d7bdb1eae2967514b",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004AAA44 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.cpp at sha256 59047f9a142c0bd55098649305f91688331055eb3cce177d7bdb1eae2967514b (recorded implementation.signature: int32_t __convention MathSys_Invoke21(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004AAA44",
+    "name": "MathSys_Invoke21",
+    "binary_ninja_name": "MathSys_Invoke21",
+    "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)",
+    "start": "0x004AAA44",
+    "end": "0x004AAAE4",
+    "basic_blocks": 5,
+    "edges": 0,
+    "cfg_similarity": 0.72,
+    "summary": "Five BN blocks (0x4AAA44-0x4AAA8E, 0x4AAAA0-0x4AAAB5, 0x4AAAB8-0x4AAAE4): copy seven dwords from [ESI+ECX*4+0x1C..+4] to [EDI+ECX*4+...], copy ECX*4 to ESI/EDI, then `jmp dword [edx*4+table]` on arg2 with cases 0-3; each case ends in the shared epilogue `mov eax,[ebp+8]; pop esi; pop edi; leave; retn` (the return is arg4[2]).",
+    "blocks": [
+      {
+        "address": "0x004AAA44",
+        "start": "0x4aaa44",
+        "end": "0x4aaa8e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AAAA0",
+        "start": "0x4aaaa0",
+        "end": "0x4aaaa7",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AAAA8",
+        "start": "0x4aaaa8",
+        "end": "0x4aaab5",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AAAB8",
+        "start": "0x4aaab8",
+        "end": "0x4aaacb",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AAACC",
+        "start": "0x4aaacc",
+        "end": "0x4aaae5",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AAA44 with matching CFG node and edge sets (recorded similarity 0.720); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.cpp",
+    "sha256": "59047f9a142c0bd55098649305f91688331055eb3cce177d7bdb1eae2967514b",
+    "signature": "int32_t __convention MathSys_Invoke21(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "MathSys_Invoke21 transcribes the seven dword copies and a default-less switch 0-3 whose cases fall into `return *arg4?`/`return arg4[2]`, but it omits the default/out-of-range arm and does not model the shared epilogue."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Indirect switch dispatch (`jmp dword [edx*4+table]`) is unresolved: radare2 sees 1 block, angr reports has_unresolved_jumps=true, and the candidate has no default arm.",
+      "Shared epilogue at the end of the third BN range is not transcribed; out-of-range arg2 falls off the switch.",
+      "Byte-indexed `[esi+ecx*4+off]`/`[edi+ecx*4+off]` addressing is rewritten as typed pointer arithmetic, which rescales the index."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004AAA44 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.cpp (sha256 59047f9a142c0bd55098649305f91688331055eb3cce177d7bdb1eae2967514b). Five BN blocks (0x4AAA44-0x4AAA8E, 0x4AAAA0-0x4AAAB5, 0x4AAAB8-0x4AAAE4): copy seven dwords from [ESI+ECX*4+0x1C..+4] to [EDI+ECX*4+...], copy ECX*4 to ESI/EDI, then `jmp dword [edx*4+table]` on arg2 with cases 0-3; each case ends in the shared epilogue `mov eax,[ebp+8]; pop esi; pop edi; leave; retn` (the return is arg4[2]). Candidate: MathSys_Invoke21 transcribes the seven dword copies and a default-less switch 0-3 whose cases fall into `return *arg4?`/`return arg4[2]`, but it omits the default/out-of-range arm and does not model the shared epilogue."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Retail uses regparm plus EBP/ESI/EDI register arguments (BN: `int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)`). The candidate declares the recorded 7-parameter regparm prototype but never binds arg5/arg6 to ESI/EDI or arg4 to EBP."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "arg3 (ECX) indexes the copy, arg5 (ESI) is the source base and arg6 (EDI) the destination in retail; the candidate's body uses the parameter names but its pointer arithmetic (`arg5 + (arg3 << 2) + 0x1C`) does not reproduce the byte-indexed retail addressing and arg4/EBP is unused."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "failed",
+      "detail": "BN reports 5 blocks / 0 edges plus three ranges (main body, jump-table island, shared epilogue); radare2 stops at the indirect jump and reports 1 block, and angr CFGFast marks the function inconclusive with has_unresolved_jumps=true. The indirect `jmp dword [edx*4 + table]` dispatch is not resolved statically by either CFG tool."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "No calls in either; the dispatch is an indirect jump in both."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "The seven offsets 0x1C/0x18/0x14/0x10/0xC/8/4 and the \u00d74 index scaling match."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "Retail copies `[esi+ecx*4+off]` to `[edi+ecx*4+off]` byte-addressed; the candidate's `arg5 + (arg3 << 2) + 0x1C` is pointer arithmetic on the parameter type, which rescales the offset. The destination base also does not carry the ECX*4 adjustment the retail code applies to EDI."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail's shared epilogue returns [EBP+8] (arg4[2]) from every case; the candidate's `return arg4[2]` relies on the decompiler's `*arg4;` dead load and has no default arm, so an out-of-range arg2 falls off the function."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)\" at 0x004AAA44; radare2 recovers \"fcn.004aaa44 ();\". Both tools place the entry at 0x004AAA44 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t __convention MathSys_Invoke21(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, int32_t* param_4, void* param_5, void* param_6, int32_t param_7);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004AAA44-binaryninja.json",
+      "sha256": "97dbea5e8a536e37803f22c6100ea2d57c7c4111e0a35e904588315cb7366613"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004AAA44-radare2.json",
+      "sha256": "27f9643aeb72dbb70253013df6e36de9d95aa7308eaf945987bcac3fcfba8682"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004AAA44-angr-20261023.json",
+      "sha256": "8ada1120236fc84499d4d41000bd98a2cf320578e3e68747408ae13303620be2"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines MathSys_Invoke21; the catalog name is a harvest label.",
+    "BN's three ranges total 140 bytes while the block table covers 138; the 2-byte difference is an uncovered BN block boundary, not candidate evidence."
+  ]
 }

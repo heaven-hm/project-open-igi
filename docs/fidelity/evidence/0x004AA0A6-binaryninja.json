@@ -1,264 +1,402 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004AA0A6",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004AA0A6"
-   },
-   {
-    "address": "0x004AA0CB"
-   },
-   {
-    "address": "0x004AA0B8"
-   },
-   {
-    "address": "0x004AA118"
-   },
-   {
-    "address": "0x004AA0FC"
-   },
-   {
-    "address": "0x004AA090"
-   },
-   {
-    "address": "0x004AA0BF"
-   },
-   {
-    "address": "0x004AA155"
-   },
-   {
-    "address": "0x004AA11F"
-   },
-   {
-    "address": "0x004AA0D6"
-   },
-   {
-    "address": "0x004AA103"
-   },
-   {
-    "address": "0x004AA114"
-   },
-   {
-    "address": "0x004AA0C3"
-   },
-   {
-    "address": "0x004AA112"
-   },
-   {
-    "address": "0x004AA123"
-   },
-   {
-    "address": "0x004AA10A"
-   },
-   {
-    "address": "0x004AA14E"
-   },
-   {
-    "address": "0x004AA127"
-   },
-   {
-    "address": "0x004AA12B"
-   },
-   {
-    "address": "0x004AA147"
-   },
-   {
-    "address": "0x004AA132"
-   },
-   {
-    "address": "0x004AA136"
-   },
-   {
-    "address": "0x004AA140"
-   },
-   {
-    "address": "0x004AA13A"
-   },
-   {
-    "address": "0x004AA13E"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x004AA0A6",
-    "target": "0x004AA0CB",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0A6",
-    "target": "0x004AA0B8",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0CB",
-    "target": "0x004AA0D6",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004AA0B8",
-    "target": "0x004AA090",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0B8",
-    "target": "0x004AA0BF",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA118",
-    "target": "0x004AA155",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA118",
-    "target": "0x004AA11F",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0FC",
-    "target": "0x004AA0D6",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0FC",
-    "target": "0x004AA103",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0BF",
-    "target": "0x004AA114",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0BF",
-    "target": "0x004AA0C3",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA11F",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA11F",
-    "target": "0x004AA123",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0D6",
-    "target": "0x004AA118",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0D6",
-    "target": "0x004AA0FC",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA103",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA103",
-    "target": "0x004AA10A",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0C3",
-    "target": "0x004AA0B8",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA0C3",
-    "target": "0x004AA0CB",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA112",
-    "target": "0x004AA114",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004AA123",
-    "target": "0x004AA14E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA123",
-    "target": "0x004AA127",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA10A",
-    "target": "0x004AA0D6",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA10A",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA127",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA127",
-    "target": "0x004AA12B",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA12B",
-    "target": "0x004AA147",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA12B",
-    "target": "0x004AA132",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA132",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA132",
-    "target": "0x004AA136",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA136",
-    "target": "0x004AA140",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA136",
-    "target": "0x004AA13A",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA13A",
-    "target": "0x004AA112",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA13A",
-    "target": "0x004AA13E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004AA13E",
-    "target": "0x004AA0D6",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004AA0A6",
+  "symbol": "MathSys_Invoke19",
+  "signature": "void* __convention(\"regparm\")(int32_t arg1, char* arg2 @ 0x4)",
+  "analyzed_at": "2026-10-23T13:47:40Z",
+  "function": {
+    "start": "0x004AA0A6",
+    "end": "0x004AA15B",
+    "size_bytes": 187,
+    "basic_blocks": 25,
+    "instruction_count": 115,
+    "ranges": [
+      {
+        "start": "0x4aa090",
+        "end": "0x4aa095",
+        "size": 5
+      },
+      {
+        "start": "0x4aa0a6",
+        "end": "0x4aa15c",
+        "size": 182
+      }
+    ]
+  },
+  "bytes_hex": "538bd8c1e0088b542408f7c2030000",
+  "bytes_sha256": "d4817f183ebdbe9cfe60a02739480327dc07fb1376e9f58ec90d3aca1b165a04",
+  "bytes_basis": "first 15 bytes at the entry (p8 15)",
+  "cfg": {
+    "entry": "0x004AA0A6",
+    "nodes": [
+      {
+        "address": "0x004AA0A6",
+        "start": "0x4aa0a6",
+        "end": "0x4aa0b8",
+        "size": 18,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0CB",
+        "start": "0x4aa0cb",
+        "end": "0x4aa0d6",
+        "size": 11,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0B8",
+        "start": "0x4aa0b8",
+        "end": "0x4aa0bf",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA118",
+        "start": "0x4aa118",
+        "end": "0x4aa11f",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0FC",
+        "start": "0x4aa0fc",
+        "end": "0x4aa103",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA090",
+        "start": "0x4aa090",
+        "end": "0x4aa095",
+        "size": 5,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0BF",
+        "start": "0x4aa0bf",
+        "end": "0x4aa0c3",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA155",
+        "start": "0x4aa155",
+        "end": "0x4aa15c",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA11F",
+        "start": "0x4aa11f",
+        "end": "0x4aa123",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0D6",
+        "start": "0x4aa0d6",
+        "end": "0x4aa0fc",
+        "size": 38,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA103",
+        "start": "0x4aa103",
+        "end": "0x4aa10a",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA114",
+        "start": "0x4aa114",
+        "end": "0x4aa118",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0C3",
+        "start": "0x4aa0c3",
+        "end": "0x4aa0cb",
+        "size": 8,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA112",
+        "start": "0x4aa112",
+        "end": "0x4aa114",
+        "size": 2,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA123",
+        "start": "0x4aa123",
+        "end": "0x4aa127",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA10A",
+        "start": "0x4aa10a",
+        "end": "0x4aa112",
+        "size": 8,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA14E",
+        "start": "0x4aa14e",
+        "end": "0x4aa155",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA127",
+        "start": "0x4aa127",
+        "end": "0x4aa12b",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA12B",
+        "start": "0x4aa12b",
+        "end": "0x4aa132",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA147",
+        "start": "0x4aa147",
+        "end": "0x4aa14e",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA132",
+        "start": "0x4aa132",
+        "end": "0x4aa136",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA136",
+        "start": "0x4aa136",
+        "end": "0x4aa13a",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA140",
+        "start": "0x4aa140",
+        "end": "0x4aa147",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA13A",
+        "start": "0x4aa13a",
+        "end": "0x4aa13e",
+        "size": 4,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA13E",
+        "start": "0x4aa13e",
+        "end": "0x4aa140",
+        "size": 2,
+        "flags": "can-exit"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004AA0A6",
+        "target": "0x004AA0CB",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0A6",
+        "target": "0x004AA0B8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0CB",
+        "target": "0x004AA0D6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004AA0B8",
+        "target": "0x004AA090",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0B8",
+        "target": "0x004AA0BF",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA118",
+        "target": "0x004AA155",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA118",
+        "target": "0x004AA11F",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0FC",
+        "target": "0x004AA0D6",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0FC",
+        "target": "0x004AA103",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0BF",
+        "target": "0x004AA114",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0BF",
+        "target": "0x004AA0C3",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA11F",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA11F",
+        "target": "0x004AA123",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0D6",
+        "target": "0x004AA118",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0D6",
+        "target": "0x004AA0FC",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA103",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA103",
+        "target": "0x004AA10A",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0C3",
+        "target": "0x004AA0B8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA0C3",
+        "target": "0x004AA0CB",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA112",
+        "target": "0x004AA114",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004AA123",
+        "target": "0x004AA14E",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA123",
+        "target": "0x004AA127",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA10A",
+        "target": "0x004AA0D6",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA10A",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA127",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA127",
+        "target": "0x004AA12B",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA12B",
+        "target": "0x004AA147",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA12B",
+        "target": "0x004AA132",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA132",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA132",
+        "target": "0x004AA136",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA136",
+        "target": "0x004AA140",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA136",
+        "target": "0x004AA13A",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA13A",
+        "target": "0x004AA112",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA13A",
+        "target": "0x004AA13E",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004AA13E",
+        "target": "0x004AA0D6",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4aa0a6\"\narch: \"x86\"\nname: \"MathSys_Invoke19\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 115\ntotal: 115\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  void* __convention(\"regparm\") MathSys_Invoke19(int32_t arg1, char* arg2 @ 0x4)\n\n0x4aa0a6  push    ebx\n0x4aa0a7  mov     ebx, eax\n0x4aa0a9  shl     eax, 0x8\n0x4aa0ac  mov     edx, dword [esp+0x8]\n0x4aa0b0  test    edx, 0x3\n0x4aa0b6  je      0x4aa0cb\n\n0x4aa090  lea     eax, [edx-0x1]\n0x4aa093  pop     ebx\n0x4aa094  retn\n\n0x4aa0b8  mov     cl, byte [edx]\n0x4aa0ba  inc     edx\n0x4aa0bb  cmp     cl, bl\n0x4aa0bd  je      0x4aa090\n\n0x4aa0bf  test    cl, cl\n0x4aa0c1  je      0x4aa114\n\n0x4aa0c3  test    edx, 0x3\n0x4aa0c9  jne     0x4aa0b8\n\n0x4aa0cb  or      ebx, eax\n0x4aa0cd  push    edi\n0x4aa0ce  mov     eax, ebx\n0x4aa0d0  shl     ebx, 0x10\n0x4aa0d3  push    esi\n0x4aa0d4  or      ebx, eax\n\n0x4aa0d6  mov     ecx, dword [edx]\n0x4aa0d8  mov     edi, 0x7efefeff\n0x4aa0dd  mov     eax, ecx\n0x4aa0df  mov     esi, edi\n0x4aa0e1  xor     ecx, ebx\n0x4aa0e3  add     esi, eax\n0x4aa0e5  add     edi, ecx\n0x4aa0e7  xor     ecx, 0xffffffff\n0x4aa0ea  xor     eax, 0xffffffff\n0x4aa0ed  xor     ecx, edi\n0x4aa0ef  xor     eax, esi\n0x4aa0f1  add     edx, 0x4\n0x4aa0f4  and     ecx, 0x81010100\n0x4aa0fa  jne     0x4aa118\n\n0x4aa0fc  and     eax, 0x81010100\n0x4aa101  je      0x4aa0d6\n\n0x4aa103  and     eax, 0x1010100\n0x4aa108  jne     0x4aa112\n\n0x4aa10a  and     esi, 0x80000000\n0x4aa110  jne     0x4aa0d6\n\n0x4aa112  pop     esi\n0x4aa113  pop     edi\n\n0x4aa114  pop     ebx\n0x4aa115  xor     eax, eax\n0x4aa117  retn\n\n0x4aa118  mov     eax, dword [edx-0x4]\n0x4aa11b  cmp     al, bl\n0x4aa11d  je      0x4aa155\n\n0x4aa11f  test    al, al\n0x4aa121  je      0x4aa112\n\n0x4aa123  cmp     ah, bl\n0x4aa125  je      0x4aa14e\n\n0x4aa127  test    ah, ah\n0x4aa129  je      0x4aa112\n\n0x4aa12b  shr     eax, 0x10\n0x4aa12e  cmp     al, bl\n0x4aa130  je      0x4aa147\n\n0x4aa132  test    al, al\n0x4aa134  je      0x4aa112\n\n0x4aa136  cmp     ah, bl\n0x4aa138  je      0x4aa140\n\n0x4aa13a  test    ah, ah\n0x4aa13c  je      0x4aa112\n\n0x4aa13e  jmp     0x4aa0d6\n\n0x4aa140  pop     esi\n0x4aa141  pop     edi\n0x4aa142  lea     eax, [edx-0x1]\n0x4aa145  pop     ebx\n0x4aa146  retn\n\n0x4aa147  lea     eax, [edx-0x2]\n0x4aa14a  pop     esi\n0x4aa14b  pop     edi\n0x4aa14c  pop     ebx\n0x4aa14d  retn\n\n0x4aa14e  lea     eax, [edx-0x3]\n0x4aa151  pop     esi\n0x4aa152  pop     edi\n0x4aa153  pop     ebx\n0x4aa154  retn\n\n0x4aa155  lea     eax, [edx-0x4]\n0x4aa158  pop     esi\n0x4aa159  pop     edi\n0x4aa15a  pop     ebx\n0x4aa15b  retn\n````\n",
+  "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4aa0a6\"\narch: \"x86\"\nname: \"MathSys_Invoke19\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 75\ntotal: 75\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  void* __convention(\"regparm\") MathSys_Invoke19(int32_t arg1, char* arg2 @ 0x4)\n\n{\n    char* edx = arg2;\n\n    while (edx & 3)\n    {\n        char ecx_1 = *edx;\n        edx = &edx[1];\n\n        if (ecx_1 == arg1)\n            return &edx[0xffffffff];\n\n        if (!ecx_1)\n            return 0;\n    }\n\n    int32_t ebx_1 = arg1 | arg1 << 8;\n    int32_t ebx_3 = ebx_1 << 0x10 | ebx_1;\n\n    while (true)\n    {\n        int32_t ecx_2 = *edx;\n        int32_t ecx_3 = ecx_2 ^ ebx_3;\n        edx = &edx[4];\n\n        if ((ecx_3 ^ 0xffffffff ^ (0x7efefeff + ecx_3)) & 0x81010100)\n        {\n            int32_t eax_8 = *(edx - 4);\n\n            if (eax_8 == ebx_3)\n                return &edx[0xfffffffc];\n\n            if (!eax_8)\n                break;\n\n            if (*(&eax_8 + 1) == ebx_3)\n                return &edx[0xfffffffd];\n\n            if (!*(&eax_8 + 1))\n                break;\n\n            uint16_t eax_9 = eax_8 >> 0x10;\n\n            if (eax_9 == ebx_3)\n                return &edx[0xfffffffe];\n\n            if (!eax_9)\n                break;\n\n            if (*(&eax_9 + 1) == ebx_3)\n                return &edx[0xffffffff];\n\n            if (!*(&eax_9 + 1))\n                break;\n        }\n        else\n        {\n            int32_t eax_5 = (ecx_2 ^ 0xffffffff ^ (0x7efefeff + ecx_2)) & 0x81010100;\n\n            if (eax_5)\n            {\n                if (eax_5 & 0x1010100)\n                    break;\n\n                if (!((0x7efefeff + ecx_2) & 0x80000000))\n                    break;\n            }\n        }\n    }\n\n    return 0;\n}\n````\n",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4aa0a6\"\narch: \"x86\"\nname: \"MathSys_Invoke19\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4aa0a6\"\narch: \"x86\"\nname: \"MathSys_Invoke19\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4a5c1e | x86 | Camera_UpdateViewCone_6 (0x4a5bb0 (x86)) |\n| 0x4aa0a2 | x86 | Camera_ApplyLineFilter_19 (0x4aa0a0 (x86)) |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols.",
+    "Binary Ninja reports this function as 2 disjoint ranges (0x0x4aa090-0x0x4aa095 (5 bytes), 0x0x4aa0a6-0x0x4aa15c (182 bytes)); size_bytes is their sum, not the entry span. The shared epilogue/jump-table blocks are part of the function."
   ]
- }
 }

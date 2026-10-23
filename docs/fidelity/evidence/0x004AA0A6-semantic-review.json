@@ -1,62 +1,265 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004AA0A6",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "204a77fef67d9e471479bbc88b5688cb7300c665dd6420a472dff3fea6563f00",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004AA0A6",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "204a77fef67d9e471479bbc88b5688cb7300c665dd6420a472dff3fea6563f00",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004AA0A6 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.cpp at sha256 204a77fef67d9e471479bbc88b5688cb7300c665dd6420a472dff3fea6563f00 (recorded implementation.signature: void* __convention MathSys_Invoke19(\"regparm\")(int32_t param_1, char* param_2);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004AA0A6",
+    "name": "MathSys_Invoke19",
+    "binary_ninja_name": "MathSys_Invoke19",
+    "signature": "void* __convention(\"regparm\")(int32_t arg1, char* arg2 @ 0x4)",
+    "start": "0x004AA0A6",
+    "end": "0x004AA15B",
+    "basic_blocks": 25,
+    "edges": 35,
+    "cfg_similarity": 1.0,
+    "summary": "25 blocks / 35 edges across two BN ranges 0x4AA090-0x4AA095 and 0x4AA0A6-0x4AA15C: align EDX to 4, scan byte-wise for the character or NUL, then scan a dword at a time with the 0x7EFEFEFF haszero trick; on a hit compare the four bytes with AL/AH (cmp al,bl at 0x4AA11B, cmp ah,bl at 0x4AA123, shr 0x10 then cmp al,bl at 0x4AA12E and cmp ah,bl at 0x4AA136) and return EDX-1/-2/-3/-4; the shared epilogue is 0x4AA090 (lea eax,[edx-1]; pop ebx; ret) and 0x4AA114 returns 0.",
+    "blocks": [
+      {
+        "address": "0x004AA0A6",
+        "start": "0x4aa0a6",
+        "end": "0x4aa0b8",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0CB",
+        "start": "0x4aa0cb",
+        "end": "0x4aa0d6",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0B8",
+        "start": "0x4aa0b8",
+        "end": "0x4aa0bf",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA118",
+        "start": "0x4aa118",
+        "end": "0x4aa11f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0FC",
+        "start": "0x4aa0fc",
+        "end": "0x4aa103",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA090",
+        "start": "0x4aa090",
+        "end": "0x4aa095",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0BF",
+        "start": "0x4aa0bf",
+        "end": "0x4aa0c3",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA155",
+        "start": "0x4aa155",
+        "end": "0x4aa15c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA11F",
+        "start": "0x4aa11f",
+        "end": "0x4aa123",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0D6",
+        "start": "0x4aa0d6",
+        "end": "0x4aa0fc",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA103",
+        "start": "0x4aa103",
+        "end": "0x4aa10a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA114",
+        "start": "0x4aa114",
+        "end": "0x4aa118",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA0C3",
+        "start": "0x4aa0c3",
+        "end": "0x4aa0cb",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA112",
+        "start": "0x4aa112",
+        "end": "0x4aa114",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA123",
+        "start": "0x4aa123",
+        "end": "0x4aa127",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA10A",
+        "start": "0x4aa10a",
+        "end": "0x4aa112",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA14E",
+        "start": "0x4aa14e",
+        "end": "0x4aa155",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA127",
+        "start": "0x4aa127",
+        "end": "0x4aa12b",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA12B",
+        "start": "0x4aa12b",
+        "end": "0x4aa132",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA147",
+        "start": "0x4aa147",
+        "end": "0x4aa14e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA132",
+        "start": "0x4aa132",
+        "end": "0x4aa136",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA136",
+        "start": "0x4aa136",
+        "end": "0x4aa13a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA140",
+        "start": "0x4aa140",
+        "end": "0x4aa147",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA13A",
+        "start": "0x4aa13a",
+        "end": "0x4aa13e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AA13E",
+        "start": "0x4aa13e",
+        "end": "0x4aa140",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AA0A6 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.cpp",
+    "sha256": "204a77fef67d9e471479bbc88b5688cb7300c665dd6420a472dff3fea6563f00",
+    "signature": "void* __convention MathSys_Invoke19(\"regparm\")(int32_t param_1, char* param_2);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "MathSys_Invoke19(int arg1, char* arg2) reproduces the alignment loop, the haszero scan and the six hit/NUL branches, but its per-byte comparisons are the decompiler's dword-typed forms `*(&eax_8 + 1) == ebx_3` and `*(&eax_9 + 1) == ebx_3`."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Per-byte hit checks use dword-typed expressions `*(&eax_8 + 1) == ebx_3` and `*(&eax_9 + 1) == ebx_3`; retail compares the byte registers (cmp al,bl at 0x4AA11B, cmp ah,bl at 0x4AA123, cmp al,bl at 0x4AA12E, cmp ah,bl at 0x4AA136). The candidate's comparisons therefore test the wrong width and offset.",
+      "The candidate also compares the first dword with `eax_8 == ebx_3` where retail compares only AL (0x4AA11B)."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004AA0A6 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.cpp (sha256 204a77fef67d9e471479bbc88b5688cb7300c665dd6420a472dff3fea6563f00). 25 blocks / 35 edges across two BN ranges 0x4AA090-0x4AA095 and 0x4AA0A6-0x4AA15C: align EDX to 4, scan byte-wise for the character or NUL, then scan a dword at a time with the 0x7EFEFEFF haszero trick; on a hit compare the four bytes with AL/AH (cmp al,bl at 0x4AA11B, cmp ah,bl at 0x4AA123, shr 0x10 then cmp al,bl at 0x4AA12E and cmp ah,bl at 0x4AA136) and return EDX-1/-2/-3/-4; the shared epilogue is 0x4AA090 (lea eax,[edx-1]; pop ebx; ret) and 0x4AA114 returns 0. Candidate: MathSys_Invoke19(int arg1, char* arg2) reproduces the alignment loop, the haszero scan and the six hit/NUL branches, but its per-byte comparisons are the decompiler's dword-typed forms `*(&eax_8 + 1) == ebx_3` and `*(&eax_9 + 1) == ebx_3`."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "Retail takes the character in EAX (BL) and the string at [E+4]; BN and the candidate both declare `void* __convention(\"regparm\")(int32_t arg1, char* arg2 @ 0x4)`, so arg2 is the [E+4] slot and the register count matches."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "arg1 (EAX) is the searched character, arg2 ([E+4]) is the string base; both are used in the same roles in the candidate."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 25 blocks / 35 edges (similarity 1.000); angr CFGFast recovers 25 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Leaf function; no calls in retail or candidate."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "0x7EFEFEFF, 0x81010100, 0x1010100, 0x80000000 and the 8/0x10 replication shifts all match."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "Retail's byte-hit checks read the byte registers (AL/AH) of the dword at [EDX-4]. The candidate's `*(&eax_8 + 1)` / `*(&eax_9 + 1)` are int/uint16 pointer expressions: as written they address +4 and +2 bytes and compare a wider value against the replicated dword ebx_3, so the compared width/offset does not match the retail `cmp al,bl` / `cmp ah,bl` instructions."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "All return paths are present: EDX-1/-2/-3/-4 on a hit and NULL when the scan reaches a NUL."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"void* __convention(\"regparm\")(int32_t arg1, char* arg2 @ 0x4)\" at 0x004AA0A6; radare2 recovers \"fcn.004aa0a6 (int32_t arg_8h);\". Both tools place the entry at 0x004AA0A6 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: void* __convention MathSys_Invoke19(\"regparm\")(int32_t param_1, char* param_2);."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004AA0A6-binaryninja.json",
+      "sha256": "38493288c2502f08daba57ea10e2d8de9e10a69772019479ea0a8306094dfb12"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004AA0A6-radare2.json",
+      "sha256": "13db7a2fc778281e77e7c00a1872040356cf6de6567196d60bc8f3ebccb11fe0"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004AA0A6-angr-20261023.json",
+      "sha256": "7f9507c27637ea095fa4abb69d7d15708d932cc2bacb98852878f35a89ea189e"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines MathSys_Invoke19; the catalog name is a harvest label for a strchr-shaped CRT helper, not a game routine.",
+    "The record entry is 0x4AA0A6, but BN also reports a 5-byte shared epilogue range at 0x4AA090 and a separate 6-byte adaptor entry at 0x4AA0A0 (xor eax,eax; mov al,[esp+8]) which falls into the entry; neither is covered by the candidate."
+  ]
 }

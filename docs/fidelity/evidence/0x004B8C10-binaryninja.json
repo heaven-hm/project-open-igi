@@ -2,15 +2,44 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004B8C10",
- "signature": "not restated",
+ "symbol": "BreakScript",
+ "signature": "int32_t(int32_t arg1)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004B8C10",
+  "end": "0x004B8C55",
+  "size_bytes": 70,
+  "basic_blocks": 1,
+  "instruction_count": 24
+ },
+ "bytes_hex": "83ec188b44241c5657b9060000008d",
+ "bytes_sha256": "88bb020ef3de059675521a5ea37e7fd2acfcab7b738b05cb9d8a6ead6cb4a79c",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004B8C10",
   "nodes": [
    {
-    "address": "0x004B8C10"
+    "address": "0x004B8C10",
+    "start": "0x4b8c10",
+    "end": "0x4b8c56",
+    "size": 70,
+    "flags": "can-exit"
    }
   ],
   "edges": []
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4b8c10\"\narch: \"x86\"\nname: \"BreakScript\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 24\ntotal: 24\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t BreakScript(int32_t arg1)\n\n0x4b8c10  // Sig: void Break_Script()\n0x4b8c10  // Note: Breaks/aborts the currently-executing script at this point (70-byte\n0x4b8c10  // function). Takes no args. Use as an early-exit inside .qsc scripts.\n0x4b8c10  sub     esp, 0x18\n0x4b8c13  mov     eax, dword [esp+0x1c]\n0x4b8c17  push    esi\n0x4b8c18  push    edi\n0x4b8c19  mov     ecx, 0x6\n0x4b8c1e  lea     esi, [esp+0x8]\n0x4b8c22  mov     edi, eax\n0x4b8c24  mov     dword [0xa965a4], 0x1\n0x4b8c2e  mov     dword [esp+0x8], 0x0\n0x4b8c36  mov     dword [esp+0x10], 0x0\n0x4b8c3e  mov     dword [esp+0x14], 0x0\n0x4b8c46  mov     dword [esp+0x18], 0x567c74\n0x4b8c4e  rep movsd dword [edi], [esi]\n0x4b8c50  pop     edi\n0x4b8c51  pop     esi\n0x4b8c52  add     esp, 0x18\n0x4b8c55  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4b8c10\"\narch: \"x86\"\nname: \"BreakScript\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 16\ntotal: 16\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t BreakScript(int32_t arg1)\n\n// Sig: void Break_Script()\n// Note: Breaks/aborts the currently-executing script at this point (70-byte\n// function). Takes no args. Use as an early-exit inside .qsc scripts.\n{\n    g_a965a4 = 1;\n    int32_t var_18 = 0;\n    int32_t var_10 = 0;\n    int32_t var_c = 0;\n    char* var_8 = &g_script_ret_type;\n    __builtin_memcpy(arg1, &var_18, 0x18);\n    return arg1;\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4b8c10\"\narch: \"x86\"\nname: \"BreakScript\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4b8c4e | x86 | 0xc35040 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4b8c10\"\narch: \"x86\"\nname: \"BreakScript\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

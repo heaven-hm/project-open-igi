@@ -1,28 +1,91 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004AD004",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004AD004"
-   },
-   {
-    "address": "0x004AD060"
-   },
-   {
-    "address": "0x004AD068"
-   },
-   {
-    "address": "0x004AD078"
-   },
-   {
-    "address": "0x004AD08C"
-   }
-  ],
-  "edges": []
- }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004AD004",
+  "symbol": "MathSys_Invoke3",
+  "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)",
+  "analyzed_at": "2026-10-23T13:47:40Z",
+  "function": {
+    "start": "0x004AD004",
+    "end": "0x004AD0A4",
+    "size_bytes": 140,
+    "basic_blocks": 5,
+    "instruction_count": 58,
+    "ranges": [
+      {
+        "start": "0x4ad004",
+        "end": "0x4ad04e",
+        "size": 74
+      },
+      {
+        "start": "0x4ad060",
+        "end": "0x4ad075",
+        "size": 21
+      },
+      {
+        "start": "0x4ad078",
+        "end": "0x4ad0a5",
+        "size": 45
+      }
+    ]
+  },
+  "bytes_hex": "8b448e1c89448f1c8b448e1889448f",
+  "bytes_sha256": "74e624230722092bcbd8cf9b79a01a1dcd2a33dbb7410be32e170813fb7b0ee5",
+  "bytes_basis": "first 15 bytes at the entry (p8 15)",
+  "cfg": {
+    "entry": "0x004AD004",
+    "nodes": [
+      {
+        "address": "0x004AD004",
+        "start": "0x4ad004",
+        "end": "0x4ad04e",
+        "size": 74,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD060",
+        "start": "0x4ad060",
+        "end": "0x4ad067",
+        "size": 7,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD068",
+        "start": "0x4ad068",
+        "end": "0x4ad075",
+        "size": 13,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD078",
+        "start": "0x4ad078",
+        "end": "0x4ad08b",
+        "size": 19,
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD08C",
+        "start": "0x4ad08c",
+        "end": "0x4ad0a5",
+        "size": 25,
+        "flags": "can-exit"
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4ad004\"\narch: \"x86\"\nname: \"MathSys_Invoke3\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 58\ntotal: 58\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t __convention(\"regparm\") MathSys_Invoke3(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)\n\n0x4ad004  mov     eax, dword [esi+ecx*4+0x1c]\n0x4ad008  mov     dword [edi+ecx*4+0x1c], eax\n0x4ad00c  mov     eax, dword [esi+ecx*4+0x18]\n0x4ad010  mov     dword [edi+ecx*4+0x18], eax\n0x4ad014  mov     eax, dword [esi+ecx*4+0x14]\n0x4ad018  mov     dword [edi+ecx*4+0x14], eax\n0x4ad01c  mov     eax, dword [esi+ecx*4+0x10]\n0x4ad020  mov     dword [edi+ecx*4+0x10], eax\n0x4ad024  mov     eax, dword [esi+ecx*4+0xc]\n0x4ad028  mov     dword [edi+ecx*4+0xc], eax\n0x4ad02c  mov     eax, dword [esi+ecx*4+0x8]\n0x4ad030  mov     dword [edi+ecx*4+0x8], eax\n0x4ad034  mov     eax, dword [esi+ecx*4+0x4]\n0x4ad038  mov     dword [edi+ecx*4+0x4], eax\n0x4ad03c  lea     eax, [ecx*4]\n0x4ad043  add     esi, eax\n0x4ad045  add     edi, eax\n0x4ad047  jmp     dword [edx*4+0x4ad050]\n\n0x4ad060  mov     eax, dword [ebp+0x8]\n0x4ad063  pop     esi\n0x4ad064  pop     edi\n0x4ad065  leave\n0x4ad066  retn\n\n0x4ad068  mov     al, byte [esi+0x3]\n0x4ad06b  mov     byte [edi+0x3], al\n0x4ad06e  mov     eax, dword [ebp+0x8]\n0x4ad071  pop     esi\n0x4ad072  pop     edi\n0x4ad073  leave\n0x4ad074  retn\n\n0x4ad078  mov     al, byte [esi+0x3]\n0x4ad07b  mov     byte [edi+0x3], al\n0x4ad07e  mov     al, byte [esi+0x2]\n0x4ad081  mov     byte [edi+0x2], al\n0x4ad084  mov     eax, dword [ebp+0x8]\n0x4ad087  pop     esi\n0x4ad088  pop     edi\n0x4ad089  leave\n0x4ad08a  retn\n\n0x4ad08c  mov     al, byte [esi+0x3]\n0x4ad08f  mov     byte [edi+0x3], al\n0x4ad092  mov     al, byte [esi+0x2]\n0x4ad095  mov     byte [edi+0x2], al\n0x4ad098  mov     al, byte [esi+0x1]\n0x4ad09b  mov     byte [edi+0x1], al\n0x4ad09e  mov     eax, dword [ebp+0x8]\n0x4ad0a1  pop     esi\n0x4ad0a2  pop     edi\n0x4ad0a3  leave\n0x4ad0a4  retn\n````\n",
+  "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4ad004\"\narch: \"x86\"\nname: \"MathSys_Invoke3\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 50\ntotal: 50\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t __convention(\"regparm\") MathSys_Invoke3(int32_t arg1, int32_t arg2, int32_t arg3, int32_t* arg4 @ ebp, void* arg5 @ esi, void* arg6 @ edi, int32_t arg7)\n\n{\n    *(arg6 + (arg3 << 2) + 0x1c) = *(arg5 + (arg3 << 2) + 0x1c);\n    *(arg6 + (arg3 << 2) + 0x18) = *(arg5 + (arg3 << 2) + 0x18);\n    *(arg6 + (arg3 << 2) + 0x14) = *(arg5 + (arg3 << 2) + 0x14);\n    *(arg6 + (arg3 << 2) + 0x10) = *(arg5 + (arg3 << 2) + 0x10);\n    *(arg6 + (arg3 << 2) + 0xc) = *(arg5 + (arg3 << 2) + 0xc);\n    *(arg6 + (arg3 << 2) + 8) = *(arg5 + (arg3 << 2) + 8);\n    *(arg6 + (arg3 << 2) + 4) = *(arg5 + (arg3 << 2) + 4);\n    int32_t eax_6 = arg3 << 2;\n    void* esi = arg5 + eax_6;\n    void* edi = arg6 + eax_6;\n\n    switch (arg2)\n    {\n        case 0:\n        {\n            *arg4;\n            return arg4[2];\n            break;\n        }\n        case 1:\n        {\n            *(edi + 3) = *(esi + 3);\n            *arg4;\n            return arg4[2];\n            break;\n        }\n        case 2:\n        {\n            *(edi + 3) = *(esi + 3);\n            *(edi + 2) = *(esi + 2);\n            *arg4;\n            return arg4[2];\n            break;\n        }\n        case 3:\n        {\n            *(edi + 3) = *(esi + 3);\n            *(edi + 2) = *(esi + 2);\n            *(edi + 1) = *(esi + 1);\n            *arg4;\n            return arg4[2];\n            break;\n        }\n    }\n}\n````\n",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4ad004\"\narch: \"x86\"\nname: \"MathSys_Invoke3\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4ad004\"\narch: \"x86\"\nname: \"MathSys_Invoke3\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols.",
+    "Binary Ninja reports this function as 3 disjoint ranges (0x0x4ad004-0x0x4ad04e (74 bytes), 0x0x4ad060-0x0x4ad075 (21 bytes), 0x0x4ad078-0x0x4ad0a5 (45 bytes)); size_bytes is their sum, not the entry span. The shared epilogue/jump-table blocks are part of the function."
+  ]
 }

@@ -1,62 +1,180 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004AD140",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "44665af0127cfccec9cfe87875f6d4f01f9f6d270cf7fd91a63e750d739a68b2",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004AD140",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "44665af0127cfccec9cfe87875f6d4f01f9f6d270cf7fd91a63e750d739a68b2",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004AD140 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004AD140-Camera_ResetMatrix_26.cpp at sha256 44665af0127cfccec9cfe87875f6d4f01f9f6d270cf7fd91a63e750d739a68b2 (recorded implementation.signature: uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004AD140",
+    "name": "Camera_ResetMatrix_26",
+    "binary_ninja_name": "Camera_ResetMatrix_26",
+    "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure",
+    "start": "0x004AD140",
+    "end": "0x004AD1A7",
+    "basic_blocks": 11,
+    "edges": 16,
+    "cfg_similarity": 1.0,
+    "summary": "11 blocks / 16 edges: if arg4==0 return ((arg2%arg3)<<32 | arg1) / arg3; else normalise arg4/arg3/arg2/arg1 with RRCD doubling, divide COMBINE(edx,eax) by the normalised divisor, then correct the quotient by comparing HIGHD(arg3*result)+result*arg4 with arg2/arg1. Returns the 64-bit quotient in EDX:EAX (the caller at 0x4A7CE4 reads both: `mov esi,eax; mov edi,edx`).",
+    "blocks": [
+      {
+        "address": "0x004AD140",
+        "start": "0x4ad140",
+        "end": "0x4ad14a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD162",
+        "start": "0x4ad162",
+        "end": "0x4ad170",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD14A",
+        "start": "0x4ad14a",
+        "end": "0x4ad162",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD170",
+        "start": "0x4ad170",
+        "end": "0x4ad17c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD17C",
+        "start": "0x4ad17c",
+        "end": "0x4ad190",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD1A3",
+        "start": "0x4ad1a3",
+        "end": "0x4ad1a8",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD19E",
+        "start": "0x4ad19e",
+        "end": "0x4ad19f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD190",
+        "start": "0x4ad190",
+        "end": "0x4ad196",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD196",
+        "start": "0x4ad196",
+        "end": "0x4ad198",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD19F",
+        "start": "0x4ad19f",
+        "end": "0x4ad1a3",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004AD198",
+        "start": "0x4ad198",
+        "end": "0x4ad19e",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AD140 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004AD140-Camera_ResetMatrix_26.cpp",
+    "sha256": "44665af0127cfccec9cfe87875f6d4f01f9f6d270cf7fd91a63e750d739a68b2",
+    "signature": "uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "__aulldiv(arg1, arg2, arg3, arg4) is a direct lift of the BN pseudocode: the arg4==0 path and the normalised path with RRCD/COMBINE/HIGHD/LOWD all match, but the function is declared `unsigned int` and returns only the low 32 bits."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Return width: retail returns EDX:EAX (and _output consumes EDX at 0x004A7CEE); the candidate returns a 32-bit value and drops the high half."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004AD140 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004AD140-Camera_ResetMatrix_26.cpp (sha256 44665af0127cfccec9cfe87875f6d4f01f9f6d270cf7fd91a63e750d739a68b2). 11 blocks / 16 edges: if arg4==0 return ((arg2%arg3)<<32 | arg1) / arg3; else normalise arg4/arg3/arg2/arg1 with RRCD doubling, divide COMBINE(edx,eax) by the normalised divisor, then correct the quotient by comparing HIGHD(arg3*result)+result*arg4 with arg2/arg1. Returns the 64-bit quotient in EDX:EAX (the caller at 0x4A7CE4 reads both: `mov esi,eax; mov edi,edx`). Candidate: __aulldiv(arg1, arg2, arg3, arg4) is a direct lift of the BN pseudocode: the arg4==0 path and the normalised path with RRCD/COMBINE/HIGHD/LOWD all match, but the function is declared `unsigned int` and returns only the low 32 bits."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "Retail uses __stdcall with four dwords and `retn 0x10` (BN: `uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4)`) which the candidate reproduces; the stack frame and cleanup match."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "arg1/arg2 are the low/high halves of the dividend, arg3/arg4 the low/high halves of the divisor; the candidate's COMBINE(0,arg2)/COMBINE(arg2,arg1) usage matches the retail register mapping."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 11 blocks / 16 edges (similarity 1.000); angr CFGFast recovers 11 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Leaf function; no calls in either."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "The correction compares HIGHD(arg3*result)+result*arg4 against arg2 and LOWD(arg3*result) against arg1, matching the retail mul/add/cmp sequence."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "Only argument words and the return registers are touched."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns a 64-bit quotient in EDX:EAX and its caller reads EDX (0x004A7CEE `mov edi,edx`). The candidate is declared `unsigned int` and truncates the 64-bit quotient expression to EAX, leaving EDX undefined; the high half is lost on every fast-path result above 2^32."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure\" at 0x004AD140; radare2 recovers \"fcn.004ad140 (int32_t arg_ch, int32_t arg_10h, int32_t arg_14h, int32_t arg_18h);\". Both tools place the entry at 0x004AD140 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: uint32_t __stdcall(int32_t arg1, uint32_t arg2, int32_t arg3, uint32_t arg4) __pure Camera_ResetMatrix_26(void);."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004AD140-binaryninja.json",
+      "sha256": "5749ac3d23932d17491e9d4c47628ba522a7106659ec607a7726ec7c208b290e"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004AD140-radare2.json",
+      "sha256": "26ed12c3d8ed968ca1f54b93f24fafe20d0142a3fffd77dce2ed4dd5b78422d6"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004AD140-angr-20261023.json",
+      "sha256": "cf28770d936b6d875db4139ee58c8b2aea898ef4eb9c4ab7c76c1cfa66ff3426"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines __aulldiv, not the catalog name Camera_ResetMatrix_26.",
+    "The retail identity is the MSVC 64-bit unsigned divide helper, not a camera routine; the catalog name is a harvest label."
+  ]
 }

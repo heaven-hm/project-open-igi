@@ -1,62 +1,213 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x005236C0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1f4dd9ea76f631af54599bca4ef4d75ef7a3315372466fae172aff9aaeb19ca6",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x005236C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1f4dd9ea76f631af54599bca4ef4d75ef7a3315372466fae172aff9aaeb19ca6",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x005236C0 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.cpp at sha256 1f4dd9ea76f631af54599bca4ef4d75ef7a3315372466fae172aff9aaeb19ca6 (recorded implementation.signature: int32_t __convention WeatherWaterSky_Invoke7_5236C0(\"regparm\")(int32_t param_1, int32_t param_2, int32_t* param_3, void* param_4);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x005236C0",
+    "name": "WeatherWaterSky_Invoke7_5236C0",
+    "binary_ninja_name": "WeatherWaterSky_Invoke7_5236C0",
+    "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)",
+    "start": "0x005236C0",
+    "end": "0x005237DC",
+    "basic_blocks": 15,
+    "edges": 22,
+    "cfg_similarity": 1.0,
+    "summary": "15 blocks / 22 edges 0x5236C0-0x5237DC: remove the object at [E+4] from the dynobj list, clear/release the light pointer at [obj+0xC8], walk the lightmap list at [obj+0x88] (stride 0x24) sampling and clearing each entry, dispatch through the 0x180-stride handler table g_a96ae0 with the byte index g_547f3d masked by 0xFF and the WORD at [frame+0x1C], then update the lightmap free list (g_a83a08/g_a83a04/g_a83a14) and optionally unload 0xA83B54.",
+    "blocks": [
+      {
+        "address": "0x005236C0",
+        "start": "0x5236c0",
+        "end": "0x5236eb",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005236FA",
+        "start": "0x5236fa",
+        "end": "0x523705",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005236EB",
+        "start": "0x5236eb",
+        "end": "0x5236fa",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0052375D",
+        "start": "0x52375d",
+        "end": "0x523778",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00523705",
+        "start": "0x523705",
+        "end": "0x523709",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005237B3",
+        "start": "0x5237b3",
+        "end": "0x5237bb",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00523778",
+        "start": "0x523778",
+        "end": "0x5237b3",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0052372B",
+        "start": "0x52372b",
+        "end": "0x52375d",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00523709",
+        "start": "0x523709",
+        "end": "0x52370c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005237DB",
+        "start": "0x5237db",
+        "end": "0x5237dd",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005237BB",
+        "start": "0x5237bb",
+        "end": "0x5237cd",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00523721",
+        "start": "0x523721",
+        "end": "0x52372b",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00523712",
+        "start": "0x523712",
+        "end": "0x523721",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x005237CD",
+        "start": "0x5237cd",
+        "end": "0x5237db",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0052370C",
+        "start": "0x52370c",
+        "end": "0x523712",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "DynObj_RemoveSymbol_7",
+      "Light_SetLightColor_2",
+      "Light_SampleLightmap_2",
+      "DynObj_FindSymbol_16",
+      "Light_LightmapsRes",
+      "Sys_CheckHeap_16",
+      "Resource_Unload"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x005236C0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.cpp",
+    "sha256": "1f4dd9ea76f631af54599bca4ef4d75ef7a3315372466fae172aff9aaeb19ca6",
+    "signature": "int32_t __convention WeatherWaterSky_Invoke7_5236C0(\"regparm\")(int32_t param_1, int32_t param_2, int32_t* param_3, void* param_4);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "WeatherWaterSky_Invoke7_5236C0 transcribes the whole body, but uses the full dword of g_547f3d for the dispatch index and reads a dword at [ecx+0x1C] where retail reads a zero-extended word."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Dispatch index is not masked with 0xFF: retail `and eax,0xff` at 0x523738 before the 0x180-stride table lookup; the candidate uses the raw DynObj_FindSymbol_16 result.",
+      "Dword vs zero-extended word load at [ecx+0x1C]: retail `xor eax,eax; mov ax,word ...`; the candidate reads four bytes."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x005236C0 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.cpp (sha256 1f4dd9ea76f631af54599bca4ef4d75ef7a3315372466fae172aff9aaeb19ca6). 15 blocks / 22 edges 0x5236C0-0x5237DC: remove the object at [E+4] from the dynobj list, clear/release the light pointer at [obj+0xC8], walk the lightmap list at [obj+0x88] (stride 0x24) sampling and clearing each entry, dispatch through the 0x180-stride handler table g_a96ae0 with the byte index g_547f3d masked by 0xFF and the WORD at [frame+0x1C], then update the lightmap free list (g_a83a08/g_a83a04/g_a83a14) and optionally unload 0xA83B54. Candidate: WeatherWaterSky_Invoke7_5236C0 transcribes the whole body, but uses the full dword of g_547f3d for the dispatch index and reads a dword at [ecx+0x1C] where retail reads a zero-extended word."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "Retail uses three register arguments (EAX/EDX/ECX) and one stack argument at [E+4]; BN models `int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)`. The candidate declares the same regparm prototype and uses arg3 (ECX) as the local copy and arg4 ([E+4]) as the object pointer."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "arg1/arg2 are unused by the body; arg3 arrives in ECX and is copied into var_4; arg4 at [E+4] is the object whose fields 0x88/0xC8/0x14/0x74 are walked. The candidate's uses match those slots."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 15 blocks / 22 edges (similarity 1.000); angr CFGFast recovers 24 blocks with has_unresolved_jumps=false. The angr block-count difference is a granularity artifact of CFGFast splitting at call returns / rep movsd; the BN and radare2 block and edge tables are identical."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "DynObj_RemoveSymbol_7 (0x4C6840), Light_SetLightColor_2 (0x523670), Light_SampleLightmap_2 (0x5237E0), DynObj_FindSymbol_16 (0x4CFC80), Light_LightmapsRes (0x5210E0, twice), Sys_CheckHeap_16 (0x4B64E0) and Resource_Unload (0x4B6380) all match the retail callee addresses."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "failed",
+      "detail": "Retail masks the dispatch index with `and eax,0xff` (0x523738) before the 0x180-stride table multiply; the candidate uses the unmasked DynObj_FindSymbol_16 result."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "Retail loads the table index with `xor eax,eax; mov ax, word [ecx+0x1c]` (zero-extended 16-bit load); the candidate reads a full dword at [ecx+0x1C], so the upper half of the frame word is not discarded."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Both return the decremented g_a83a08 value, or Resource_Unload's result on the unload path."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)\" at 0x005236C0; radare2 recovers \"fcn.005236c0 (int32_t arg_14h, int32_t arg_74h, int32_t arg_88h, int32_t arg_c8h, int32_t arg_10h);\". Both tools place the entry at 0x005236C0 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t __convention WeatherWaterSky_Invoke7_5236C0(\"regparm\")(int32_t param_1, int32_t param_2, int32_t* param_3, void* param_4);."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x005236C0-binaryninja.json",
+      "sha256": "44c4d401334c149d1b264198152e3563d4aa230fc1983b71f610c969aee6ed50"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x005236C0-radare2.json",
+      "sha256": "ac882dcb8ebbb986976dd8473e57a503eff2a022805075eb86de93ffe651a4e4"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x005236C0-angr-20261023.json",
+      "sha256": "f82d67e800afe086aa73d28fedc0f447c072977e8cb38875b17ddb951d13f107"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines WeatherWaterSky_Invoke7_5236C0; the catalog name matches.",
+    "angr CFGFast reports 24 blocks against BN/radare2's 15; the extra angr nodes come from splitting blocks at call returns, not from real branches."
+  ]
 }

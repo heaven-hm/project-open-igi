@@ -4,14 +4,14 @@
   "result": "passed",
   "address": "0x0048F530",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617",
+  "implementation_sha256": "f5043ca45c4f4dde1e0d3e7995f8242d8e80d31126c11f6264b12e817c829dac",
   "reviewed": true,
-  "reviewed_by": "Automated static review, 2026-10-23 (Binary Ninja MCP, Radare2 6.2.0, angr 10.0.4.post1 CFGFast) against retail igi.exe and the current retail_main.cpp",
+  "reviewed_by": "Automated static review, 2026-10-23 (Binary Ninja MCP, Radare2 6.2.0, angr 10.0.4.post1 CFGFast) against retail igi.exe and the current main.cpp",
   "scope": "Single-instance mutex creation, the three duplicate-instance/failure conditions, the shared MessageBoxA failure block, the normal-path ReleaseMutex, and the two app-context startup calls (AppContext_SetIsActive(1) at 0x0048F615 and AppContext_SetTerrainLightmapsUsed(1) at 0x0048F63D). The wider Win32 window shell is a candidate-only adaptation and is not claimed equivalent.",
   "structural_comparison_evidence": "docs/fidelity/evidence/0048F530-structural-comparison.json",
   "signature": {
     "retail": "WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc), ret 0x10, 994-byte body, 26 blocks / 37 edges",
-    "candidate": "int __cdecl Main(const igi::retail::core::RetailMainConfig* config), 821 bytes, 22 blocks / 31 edges",
+    "candidate": "int __cdecl Main(const igi::retail::core::MainConfig* config), 821 bytes, 22 blocks / 31 edges",
     "note": "The candidate is an ABI-adapted host entry. The mutex prefix consumes neither retail argument, so the mutex transcription is independent of the adaptation; the interfaces are not identical."
   },
   "checks": [
@@ -57,7 +57,8 @@
     "Retail makes additional calls between the two setters that are outside this fix: push ebx(0)/call 0x0048F1A0 at 0x0048F621/0x0048F622 (debugged), push 1/call 0x0048F1C0 at 0x0048F627/0x0048F629 (debug text), push ebx(0)/call 0x0048F1E0 at 0x0048F62E/0x0048F62F (lightmaps), push 1/call 0x0048F240 at 0x0048F634/0x0048F636, and push 1/call 0x0048F120 at 0x0048F61A/0x0048F61C. The candidate does not wire them; this is recorded as a limitation, not as equivalence.",
     "The candidate Main is ABI-adapted and its window/message-loop shell is not retail-equivalent; only the mutex prefix, the shared failure block and the two startup setters were compared.",
     "Retail can return the WM_QUIT wParam stored at [esp+0x14] at 0x0048F8A3; the candidate returns 0. Retail normal teardown also calls SetForegroundWindow, UnregisterClassA and CoUninitialize; candidate does not.",
-    "No paired retail/candidate runtime capture exists. This review authorizes STRUCTURALLY_VERIFIED only, not behavioral equivalence."
+    "No paired retail/candidate runtime capture exists. This review authorizes STRUCTURALLY_VERIFIED only, not behavioral equivalence.",
+    "2026-10-23 Main-unit rename: the source reviewed here moved from retail_main.cpp to main.cpp and its unit-local type RetailMainConfig became MainConfig. The reviewed body, the extern \"C\" _Main symbol, the mutex prefix, the shared failure block and the two startup app-context calls are unchanged; the compiled sections are byte-identical and the linked image differs only in the PE link timestamp, the PE checksum and the COFF source-file name (docs/fidelity/evidence/0x0048F530-main-rename-identity-20261023.json). This review's scope and conclusions therefore carry over unchanged."
   ],
   "limits": [
     "Candidate entry is __cdecl with one RetailMainConfig pointer, not retail __stdcall(HINSTANCE, int) with ret 0x10; call-site compatibility is not demonstrated.",
@@ -67,5 +68,6 @@
     "The intervening retail calls between the two app-context setters (0x0048F61C, 0x0048F622, 0x0048F629, 0x0048F62F, 0x0048F636) are not wired; only SetIsActive and SetTerrainLightmapsUsed are reproduced.",
     "The diagnostic Win32 shell (engine/platform/windows/scene_main.cpp) has its own mutex path and never calls ReleaseMutex or CloseHandle; it relies on process exit. The reconstructed Main is not wired into the shell.",
     "No paired retail/candidate runtime capture exists; status is capped at STRUCTURALLY_VERIFIED."
-  ]
+  ],
+  "renamed_from": "engine/src/retail/core/retail_main.cpp"
 }

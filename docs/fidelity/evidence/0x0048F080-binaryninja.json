@@ -9,7 +9,7 @@
   "view": "PE32, x86, windows-x86, image 0x400000-0xC35058, entry point 0x004A50F5",
   "function_entry": "0x0048F080",
   "symbol": "FX_DebrisSpawn_21",
-  "symbol_note": "Binary Ninja auto-generated placeholder symbol; the project name is GetRetailCommandLine. The placeholder does not describe behaviour.",
+  "symbol_note": "Binary Ninja auto-generated placeholder symbol. The project record names this native GetCommandLine: the original igi.exe is stripped, so the game's own symbol for this address is unknown, and the project name is a plain description of the getter (it returns the stored command-line pointer) rather than a recovered symbol. The placeholder does not describe behaviour.",
   "signature": "int32_t __cdecl(void)",
   "signature_raw": "int32_t()",
   "analyzed_at": "2026-10-22T22:33:00Z",
@@ -61,5 +61,7 @@
     "This artifact is retail-image CFG/disassembly structure only; it is not candidate code and does not by itself establish candidate equivalence.",
     "The candidate's start-up runtime path was not executed for this artifact; no paired retail/candidate process capture is recorded here.",
     "Binary Ninja's function symbol and its caller name are auto-generated placeholders; only addresses and instruction semantics are treated as facts."
-  ]
+  ],
+  "project_name": "GetCommandLine",
+  "naming_note": "The previous project name GetRetailCommandLine was replaced on 2026-10-23 because the naming policy forbids Retail-derived names. The decompiler symbol recorded above is unchanged; only the project-side name moved."
 }

@@ -1,0 +1,115 @@
+{
+ "schema_version": 1,
+ "kind": "angr-analysis",
+ "tool": "angr",
+ "angr_version": "10.0.4.post1",
+ "analysis": "CFGFast",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x004AD140",
+ "result": "pass",
+ "has_unresolved_jumps": false,
+ "block_count": 11,
+ "nodes": [
+  "0x004AD140",
+  "0x004AD14A",
+  "0x004AD162",
+  "0x004AD170",
+  "0x004AD17C",
+  "0x004AD190",
+  "0x004AD196",
+  "0x004AD198",
+  "0x004AD19E",
+  "0x004AD19F",
+  "0x004AD1A3"
+ ],
+ "edges": [
+  {
+   "kind": "unknown",
+   "source": "0x004AD140",
+   "target": "0x004AD14A"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD140",
+   "target": "0x004AD162"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD14A",
+   "target": "0x004AD1A3"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD162",
+   "target": "0x004AD170"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD170",
+   "target": "0x004AD170"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD170",
+   "target": "0x004AD17C"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD17C",
+   "target": "0x004AD190"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD17C",
+   "target": "0x004AD19E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD190",
+   "target": "0x004AD196"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD190",
+   "target": "0x004AD19E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD196",
+   "target": "0x004AD198"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD196",
+   "target": "0x004AD19F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD198",
+   "target": "0x004AD19E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD198",
+   "target": "0x004AD19F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD19E",
+   "target": "0x004AD19F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AD19F",
+   "target": "0x004AD1A3"
+  }
+ ],
+ "recovery_mode": "automatic",
+ "reason": null,
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence"
+ ]
+}

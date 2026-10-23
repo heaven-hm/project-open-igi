@@ -2,55 +2,131 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x005236C0",
- "signature": "not restated",
+ "symbol": "WeatherWaterSky_Invoke7_5236C0",
+ "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x005236C0",
+  "end": "0x005237DC",
+  "size_bytes": 285,
+  "basic_blocks": 15,
+  "instruction_count": 113
+ },
+ "bytes_hex": "51a14443a40053558b6c24105633db",
+ "bytes_sha256": "0f586675f0375401f1e64e1d8261254c0b42665046be7d687e582821810b0d82",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x005236C0",
   "nodes": [
    {
-    "address": "0x005236C0"
+    "address": "0x005236C0",
+    "start": "0x5236c0",
+    "end": "0x5236eb",
+    "size": 43,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005236FA"
+    "address": "0x005236FA",
+    "start": "0x5236fa",
+    "end": "0x523705",
+    "size": 11,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005236EB"
+    "address": "0x005236EB",
+    "start": "0x5236eb",
+    "end": "0x5236fa",
+    "size": 15,
+    "flags": "can-exit"
    },
    {
-    "address": "0x0052375D"
+    "address": "0x0052375D",
+    "start": "0x52375d",
+    "end": "0x523778",
+    "size": 27,
+    "flags": "can-exit"
    },
    {
-    "address": "0x00523705"
+    "address": "0x00523705",
+    "start": "0x523705",
+    "end": "0x523709",
+    "size": 4,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005237B3"
+    "address": "0x005237B3",
+    "start": "0x5237b3",
+    "end": "0x5237bb",
+    "size": 8,
+    "flags": "can-exit"
    },
    {
-    "address": "0x00523778"
+    "address": "0x00523778",
+    "start": "0x523778",
+    "end": "0x5237b3",
+    "size": 59,
+    "flags": "can-exit"
    },
    {
-    "address": "0x0052372B"
+    "address": "0x0052372B",
+    "start": "0x52372b",
+    "end": "0x52375d",
+    "size": 50,
+    "flags": "can-exit"
    },
    {
-    "address": "0x00523709"
+    "address": "0x00523709",
+    "start": "0x523709",
+    "end": "0x52370c",
+    "size": 3,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005237DB"
+    "address": "0x005237DB",
+    "start": "0x5237db",
+    "end": "0x5237dd",
+    "size": 2,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005237BB"
+    "address": "0x005237BB",
+    "start": "0x5237bb",
+    "end": "0x5237cd",
+    "size": 18,
+    "flags": "can-exit"
    },
    {
-    "address": "0x00523721"
+    "address": "0x00523721",
+    "start": "0x523721",
+    "end": "0x52372b",
+    "size": 10,
+    "flags": "can-exit"
    },
    {
-    "address": "0x00523712"
+    "address": "0x00523712",
+    "start": "0x523712",
+    "end": "0x523721",
+    "size": 15,
+    "flags": "can-exit"
    },
    {
-    "address": "0x005237CD"
+    "address": "0x005237CD",
+    "start": "0x5237cd",
+    "end": "0x5237db",
+    "size": 14,
+    "flags": "can-exit"
    },
    {
-    "address": "0x0052370C"
+    "address": "0x0052370C",
+    "start": "0x52370c",
+    "end": "0x523712",
+    "size": 6,
+    "flags": "can-exit"
    }
   ],
   "edges": [
@@ -165,5 +241,14 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x5236c0\"\narch: \"x86\"\nname: \"WeatherWaterSky_Invoke7_5236C0\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 113\ntotal: 113\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t __convention(\"regparm\") WeatherWaterSky_Invoke7_5236C0(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)\n\n0x5236c0  push    ecx\n0x5236c1  mov     eax, dword [0xa44344]\n0x5236c6  push    ebx\n0x5236c7  push    ebp\n0x5236c8  mov     ebp, dword [esp+0x10]\n0x5236cc  push    esi\n0x5236cd  xor     ebx, ebx\n0x5236cf  push    edi\n0x5236d0  mov     edi, dword [ebp+0x88]\n0x5236d6  push    ebx\n0x5236d7  push    ebp\n0x5236d8  push    eax\n0x5236d9  call    DynObj_RemoveSymbol_7\n0x5236de  mov     eax, dword [ebp+0xc8]\n0x5236e4  add     esp, 0xc\n0x5236e7  cmp     eax, ebx\n0x5236e9  je      0x5236fa\n\n0x5236eb  push    eax\n0x5236ec  call    Light_SetLightColor_2\n0x5236f1  add     esp, 0x4\n0x5236f4  mov     dword [ebp+0xc8], ebx\n\n0x5236fa  mov     ecx, dword [ebp+0x14]\n0x5236fd  cmp     edi, ebx\n0x5236ff  mov     dword [esp+0x18], ecx\n0x523703  je      0x52375d\n\n0x523705  cmp     dword [edi], ebx\n0x523707  jle     0x52372b\n\n0x523709  lea     esi, [edi+0x18]\n\n0x52370c  mov     eax, dword [esi]\n0x52370e  test    eax, eax\n0x523710  je      0x523721\n\n0x523712  push    eax\n0x523713  call    Light_SampleLightmap_2\n0x523718  add     esp, 0x4\n0x52371b  mov     dword [esi], 0x0\n\n0x523721  mov     eax, dword [edi]\n0x523723  inc     ebx\n0x523724  add     esi, 0x24\n0x523727  cmp     ebx, eax\n0x523729  jl      0x52370c\n\n0x52372b  mov     dword [esp+0x10], edi\n0x52372f  call    DynObj_FindSymbol_16\n0x523734  mov     ecx, dword [esp+0x18]\n0x523738  and     eax, 0xff\n0x52373d  lea     edx, [eax+eax*2]\n0x523740  xor     eax, eax\n0x523742  mov     ax, word [ecx+0x1c]\n0x523746  shl     edx, 0x7\n0x523749  add     edx, eax\n0x52374b  mov     eax, dword [edx*4+0xa96ae0]\n0x523752  lea     edx, [esp+0x10]\n0x523756  push    edx\n0x523757  push    ecx\n0x523758  call    eax\n0x52375a  add     esp, 0x8\n\n0x52375d  mov     eax, dword [ebp+0x74]\n0x523760  mov     esi, dword [0xa83a14]\n0x523766  mov     ecx, dword [eax+esi]\n0x523769  mov     eax, dword [0xa83a08]\n0x52376e  dec     eax\n0x52376f  cmp     ecx, eax\n0x523771  mov     dword [0xa83a08], eax\n0x523776  je      0x5237b3\n\n0x523778  mov     edx, dword [0xa83a04]\n0x52377e  mov     edi, dword [0xa83a00]\n0x523784  mov     eax, dword [edx+eax*4]\n0x523787  imul    eax, dword [0xa83a10]\n0x52378e  add     eax, edi\n0x523790  mov     edi, dword [edx+ecx*4]\n0x523793  mov     esi, dword [esi+eax]\n0x523796  mov     ebx, dword [edx+esi*4]\n0x523799  mov     dword [edx+ecx*4], ebx\n0x52379c  mov     edx, dword [0xa83a04]\n0x5237a2  mov     dword [edx+esi*4], edi\n0x5237a5  mov     edx, dword [0xa83a14]\n0x5237ab  mov     dword [edx+eax], ecx\n0x5237ae  mov     eax, dword [0xa83a08]\n\n0x5237b3  pop     edi\n0x5237b4  pop     esi\n0x5237b5  pop     ebp\n0x5237b6  pop     ebx\n0x5237b7  test    eax, eax\n0x5237b9  jne     0x5237db\n\n0x5237bb  call    Light_LightmapsRes\n0x5237c0  push    eax\n0x5237c1  call    Sys_CheckHeap_16\n0x5237c6  add     esp, 0x4\n0x5237c9  test    eax, eax\n0x5237cb  je      0x5237db\n\n0x5237cd  call    Light_LightmapsRes\n0x5237d2  push    eax\n0x5237d3  call    Resource_Unload\n0x5237d8  add     esp, 0x4\n\n0x5237db  pop     ecx\n0x5237dc  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x5236c0\"\narch: \"x86\"\nname: \"WeatherWaterSky_Invoke7_5236C0\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 78\ntotal: 78\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t __convention(\"regparm\") WeatherWaterSky_Invoke7_5236C0(int32_t arg1, int32_t arg2, int32_t* arg3, void* arg4)\n\n{\n    int32_t* var_4 = arg3;\n    int32_t i = 0;\n    int32_t* edi = *(arg4 + 0x88);\n    DynObj_RemoveSymbol_7(g_a44344, arg4, 0);\n    int32_t* eax_1 = *(arg4 + 0xc8);\n\n    if (eax_1)\n    {\n        Light_SetLightColor_2(eax_1);\n        *(arg4 + 0xc8) = 0;\n    }\n\n    void* ecx = *(arg4 + 0x14);\n\n    if (edi)\n    {\n        if (*edi > 0)\n        {\n            int32_t* esi_1 = &edi[6];\n\n            do\n            {\n                void* eax_2 = *esi_1;\n\n                if (eax_2)\n                {\n                    Light_SampleLightmap_2(eax_2);\n                    *esi_1 = 0;\n                }\n\n                i += 1;\n                esi_1 = &esi_1[9];\n            } while (i < *edi);\n        }\n\n        var_4 = edi;\n        uint32_t eax_5 = DynObj_FindSymbol_16();\n        int32_t eax_6 = 0;\n        eax_6 = *(ecx + 0x1c);\n        (*(((eax_5 * 0x180 + eax_6) << 2) + &g_a96ae0))(ecx, &var_4);\n    }\n\n    int32_t* esi_2 = data_a83a14;\n    int32_t ecx_2 = *(*(arg4 + 0x74) + esi_2);\n    int32_t a83a08_1 = g_a83a08 - 1;\n    g_a83a08 = a83a08_1;\n\n    if (ecx_2 != a83a08_1)\n    {\n        int32_t a83a04_1 = g_a83a04;\n        int32_t eax_12 = *(a83a04_1 + (a83a08_1 << 2)) * g_a83a10 + g_a83a00;\n        int32_t edi_2 = *(a83a04_1 + (ecx_2 << 2));\n        int32_t esi_3 = *(esi_2 + eax_12);\n        *(a83a04_1 + (ecx_2 << 2)) = *(a83a04_1 + (esi_3 << 2));\n        *(g_a83a04 + (esi_3 << 2)) = edi_2;\n        *(data_a83a14 + eax_12) = ecx_2;\n        a83a08_1 = g_a83a08;\n    }\n\n    if (!a83a08_1)\n    {\n        Light_LightmapsRes();\n        a83a08_1 = Sys_CheckHeap_16(0xa83b54);\n\n        if (a83a08_1)\n        {\n            Light_LightmapsRes();\n            return Resource_Unload(0xa83b54);\n        }\n    }\n\n    return a83a08_1;\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x5236c0\"\narch: \"x86\"\nname: \"WeatherWaterSky_Invoke7_5236C0\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 8\ntotal: 8\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x5236d9 | x86 | 0x4c6840 | DynObj_RemoveSymbol_7 (0x4c6840 (x86)) |\n| 0x5236ec | x86 | 0x523670 | Light_SetLightColor_2 (0x523670 (x86)) |\n| 0x523713 | x86 | 0x5237e0 | Light_SampleLightmap_2 (0x5237e0 (x86)) |\n| 0x52372f | x86 | 0x4cfc80 | DynObj_FindSymbol_16 (0x4cfc80 (x86)) |\n| 0x5237bb | x86 | 0x5210e0 | Light_LightmapsRes (0x5210e0 (x86)) |\n| 0x5237c1 | x86 | 0x4b64e0 | Sys_CheckHeap_16 (0x4b64e0 (x86)) |\n| 0x5237cd | x86 | 0x5210e0 | Light_LightmapsRes (0x5210e0 (x86)) |\n| 0x5237d3 | x86 | 0x4b6380 | Resource_Unload (0x4b6380 (x86)) |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x5236c0\"\narch: \"x86\"\nname: \"WeatherWaterSky_Invoke7_5236C0\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

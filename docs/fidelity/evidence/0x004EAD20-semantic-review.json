@@ -1,62 +1,150 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004EAD20",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "034557e01b09c77c764e1f059cb4be96603b70f625ec893307a3e870b9586602",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004EAD20",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "034557e01b09c77c764e1f059cb4be96603b70f625ec893307a3e870b9586602",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004EAD20 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/define/004EAD20-DefineGraph.cpp at sha256 034557e01b09c77c764e1f059cb4be96603b70f625ec893307a3e870b9586602 (recorded implementation.signature: int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004EAD20",
+    "name": "DefineGraph",
+    "binary_ninja_name": "Define_Graph",
+    "signature": "int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, int32_t arg7, void* arg8, float arg9)",
+    "start": "0x004EAD20",
+    "end": "0x004EAEAB",
+    "basic_blocks": 5,
+    "edges": 6,
+    "cfg_similarity": 1.0,
+    "summary": "Five blocks / 6 edges 0x4EAD20-0x4EAEAB: graph definition with six x87 stack arguments, two `fstp qword [esp+...]` spills, a `fild dword [esp+0x1C]` reload, table dispatch and the 24-byte result record.",
+    "blocks": [
+      {
+        "address": "0x004EAD20",
+        "start": "0x4ead20",
+        "end": "0x4eae14",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004EAE14",
+        "start": "0x4eae14",
+        "end": "0x4eae2f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004EAE2F",
+        "start": "0x4eae2f",
+        "end": "0x4eae3b",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004EAE3B",
+        "start": "0x4eae3b",
+        "end": "0x4eae51",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004EAE51",
+        "start": "0x4eae51",
+        "end": "0x4eaeac",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "SoundSys_SetFrequency_14",
+      "Sys_ResolveSymbol_23",
+      "Profile_ValueSet",
+      "Script_EvalArgInt",
+      "QTask_HandleInput"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004EAD20 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/define/004EAD20-DefineGraph.cpp",
+    "sha256": "034557e01b09c77c764e1f059cb4be96603b70f625ec893307a3e870b9586602",
+    "signature": "int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "DefineGraph still contains decompiler placeholders: two `/* unimplemented {fstp dword [flagP], fp0} */` markers, an `/* unimplemented {fild fp0, dword [stack_ptr+0x1c]} */` marker, and a `double item_198 = /* ... */;` declaration whose initialiser is an unimplemented marker."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Candidate retains three `unimplemented` decompiler markers (fstp/fild) and an uninitialised `double item_198`, so the retail x87 store/reload blocks are absent.",
+      "x87 argument/frame ABI not preserved."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004EAD20 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/define/004EAD20-DefineGraph.cpp (sha256 034557e01b09c77c764e1f059cb4be96603b70f625ec893307a3e870b9586602). Five blocks / 6 edges 0x4EAD20-0x4EAEAB: graph definition with six x87 stack arguments, two `fstp qword [esp+...]` spills, a `fild dword [esp+0x1C]` reload, table dispatch and the 24-byte result record. Candidate: DefineGraph still contains decompiler placeholders: two `/* unimplemented {fstp dword [flagP], fp0} */` markers, an `/* unimplemented {fild fp0, dword [stack_ptr+0x1c]} */` marker, and a `double item_198 = /* ... */;` declaration whose initialiser is an unimplemented marker."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Same x87 st0-st5 + QVM frame contract; the candidate's cdecl long-double list does not express it."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "The x87 arguments and frame slot are not delivered as in retail."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "failed",
+      "detail": "Retail has 5 blocks / 6 edges; the candidate keeps `unimplemented` markers for the fstp/fild blocks, so those paths are not implemented at all."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "The unresolved blocks sit between the definition parsing and the profile writes; the call graph cannot be shown complete when the block bodies are placeholders."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "The constants that are present match the BN pseudocode."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The stack record and x87 spill slots are only partly written (unimplemented fstp/fild markers)."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "The return path depends on the unimplemented blocks."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "The fstp store and fild reload are unimplemented markers."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, int32_t arg7, void* arg8, float arg9)\" at 0x004EAD20; radare2 recovers \"fcn.004ead20 (int32_t arg_1cch_2, int32_t arg_1c4h, int32_t arg_1cch);\". Both tools place the entry at 0x004EAD20 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineGraph(long param_1, long param_2, long param_3, long param_4, long param_5, long param_6, int32_t param_7, void* param_8, float param_9);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004EAD20-binaryninja.json",
+      "sha256": "e49b588c1ec4c0647b87b2b4681b20d7184e0228316fe50c2689abb68534e0b2"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004EAD20-radare2.json",
+      "sha256": "7ae04315d791c93d331c66fd56798f11c33b7165084a3712ad237c57c7c57be4"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004EAD20-angr-20261023.json",
+      "sha256": "8642ef8ead3578ae13f79670f99e15a1596d574571a685b0972aff8d7e351157"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines DefineGraph; the catalog name matches."
+  ]
 }

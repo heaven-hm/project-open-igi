@@ -1,62 +1,124 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004B8C60",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "39215cd8c63f72a83423fb43b4bcf1df44021ace2bb5e14b3065aaf52b5340f5",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004B8C60",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "39215cd8c63f72a83423fb43b4bcf1df44021ace2bb5e14b3065aaf52b5340f5",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004B8C60 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/script/004B8C60-_Script_SetWarningLevel.cpp at sha256 39215cd8c63f72a83423fb43b4bcf1df44021ace2bb5e14b3065aaf52b5340f5 (recorded implementation.signature: int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004B8C60",
+    "name": "_Script_SetWarningLevel",
+    "binary_ninja_name": "Script_SetWarningLevel",
+    "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+    "start": "0x004B8C60",
+    "end": "0x004B8CB0",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Single block 0x4B8C60-0x4B8CB0: call 0x4B8A20 (Script_EvalArgInt, arg2, 0), feed the result to 0x4B8970 (Sys_ExecuteBytecode_23), then rep-movsd a 24-byte record {0,?,0,0,&g_script_ret_type,?} from [E-0xC] to the result buffer read from [E+0x10], and return [E+0x10]. The QVM frame pointer is read from [E+0xc].",
+    "blocks": [
+      {
+        "address": "0x004B8C60",
+        "start": "0x4b8c60",
+        "end": "0x4b8cb1",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Script_EvalArgInt",
+      "Sys_ExecuteBytecode_23"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004B8C60 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/script/004B8C60-_Script_SetWarningLevel.cpp",
+    "sha256": "39215cd8c63f72a83423fb43b4bcf1df44021ace2bb5e14b3065aaf52b5340f5",
+    "signature": "int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Script_SetWarningLevel(int context, float arg2) performs the same two calls and the same 24-byte record copy, but declares `context` at [E+4] and `arg2` at [E+8]."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "QVM frame slot: retail reads [E+0xc], the candidate's second parameter is at [E+8].",
+      "Result buffer: retail returns/writes [E+0x10], the candidate's first parameter is [E+4].",
+      "The candidate returns the wrong word (its context slot instead of the [E+0x10] buffer)."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004B8C60 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/script/004B8C60-_Script_SetWarningLevel.cpp (sha256 39215cd8c63f72a83423fb43b4bcf1df44021ace2bb5e14b3065aaf52b5340f5). Single block 0x4B8C60-0x4B8CB0: call 0x4B8A20 (Script_EvalArgInt, arg2, 0), feed the result to 0x4B8970 (Sys_ExecuteBytecode_23), then rep-movsd a 24-byte record {0,?,0,0,&g_script_ret_type,?} from [E-0xC] to the result buffer read from [E+0x10], and return [E+0x10]. The QVM frame pointer is read from [E+0xc]. Candidate: Script_SetWarningLevel(int context, float arg2) performs the same two calls and the same 24-byte record copy, but declares `context` at [E+4] and `arg2` at [E+8]."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN models the frame word at [E+0xc] (`int32_t(int32_t arg1, float arg2 @ 0xc)`) and the result buffer at [E+0x10]. The candidate declares `(int context, float arg2)`, i.e. [E+4] and [E+8], so both QVM words are read from the wrong slots."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Retail reads the QVM frame from [E+0xc] and writes the result to [E+0x10]; the candidate's context/arg2 occupy [E+4] and [E+8]. The argument layout is shifted by two words."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 5 blocks with has_unresolved_jumps=false. The angr block-count difference is a granularity artifact of CFGFast splitting at call returns / rep movsd; the BN and radare2 block and edge tables are identical."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Retail calls 0x4B8A20 then 0x4B8970; the candidate calls the same addresses under the names Script_GetArg / Sys_ExecuteBytecode_23 (Project OpenIGI binds Script_GetArg to 0x004B8A20 in engine/src/retail/terrain)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "The 24-byte record, the 0x18 count and the g_script_ret_type pointer match."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "The 24-byte stack record layout and its copy to the result buffer match retail."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns the result-buffer pointer read from [E+0x10]; the candidate returns its `context` parameter ([E+4]), so the returned pointer is wrong."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t(int32_t arg1, float arg2 @ 0xc)\" at 0x004B8C60; radare2 recovers \"fcn.004b8c60 (int32_t arg_30h, int32_t arg_24h);\". Both tools place the entry at 0x004B8C60 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t _Script_SetWarningLevel(int32_t param_1, float param_2);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004B8C60-binaryninja.json",
+      "sha256": "6d28001d0ec7c4f75b9d67a6463f76f9057ff52d42bdfff16717336f9a2ccc67"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004B8C60-radare2.json",
+      "sha256": "1ecbd29b6f9a822ea0c1f90204fc852466894813c287de6d41d5ff6a99f74e26"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004B8C60-angr-20261023.json",
+      "sha256": "37f7f21f377296deb1bd84b69ab31e1728ac5328c6535e4dba02c8e224033298"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines Script_SetWarningLevel while the catalog name carries a leading underscore (_Script_SetWarningLevel)."
+  ]
 }

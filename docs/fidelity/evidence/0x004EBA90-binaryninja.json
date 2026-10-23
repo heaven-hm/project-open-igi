@@ -2,22 +2,54 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004EBA90",
- "signature": "not restated",
+ "symbol": "Define_Group",
+ "signature": "int32_t(int32_t arg1, void* arg2, float arg3)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004EBA90",
+  "end": "0x004EBB99",
+  "size_bytes": 266,
+  "basic_blocks": 4,
+  "instruction_count": 93
+ },
+ "bytes_hex": "81ec8400000053558bac2498000000",
+ "bytes_sha256": "13e22e08be87524c7f51a18e83700e373582a904643320b036b480e93be54b07",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004EBA90",
   "nodes": [
    {
-    "address": "0x004EBA90"
+    "address": "0x004EBA90",
+    "start": "0x4eba90",
+    "end": "0x4ebb1e",
+    "size": 142,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EBB38"
+    "address": "0x004EBB38",
+    "start": "0x4ebb38",
+    "end": "0x4ebb9a",
+    "size": 98,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EBB1E"
+    "address": "0x004EBB1E",
+    "start": "0x4ebb1e",
+    "end": "0x4ebb34",
+    "size": 22,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EBB34"
+    "address": "0x004EBB34",
+    "start": "0x4ebb34",
+    "end": "0x4ebb38",
+    "size": 4,
+    "flags": "can-exit"
    }
   ],
   "edges": [
@@ -47,5 +79,14 @@
     "kind": "unconditional"
    }
   ]
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4eba90\"\narch: \"x86\"\nname: \"Define_Group\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 93\ntotal: 93\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Define_Group(int32_t arg1, void* arg2, float arg3)\n\n0x4eba90  // Sig: void Define_Group(...)\n0x4eba90  // Note: Defines a GROUP entry (sound-group/entity grouping) during definition\n0x4eba90  // parsing. Parser-context only.\n0x4eba90  sub     esp, 0x84\n0x4eba96  push    ebx\n0x4eba97  push    ebp\n0x4eba98  mov     ebp, dword [esp+0x98]\n0x4eba9f  push    esi\n0x4ebaa0  push    edi\n0x4ebaa1  lea     ecx, [esp+0x56]\n0x4ebaa5  push    0x20\n0x4ebaa7  push    ecx\n0x4ebaa8  lea     eax, [esp+0x3c]\n0x4ebaac  mov     ebx, 0x1\n0x4ebab1  push    0x0\n0x4ebab3  push    ebp\n0x4ebab4  mov     dword [esp+0x24], eax\n0x4ebab8  mov     byte [esp+0x28], bl\n0x4ebabc  mov     dword [esp+0x20], ebx\n0x4ebac0  call    Sys_ResolveSymbol_23\n0x4ebac5  mov     ax, word [0x54db4a]\n0x4ebacb  mov     edi, dword [esp+0xac]\n0x4ebad2  lea     edx, [esp+0x24]\n0x4ebad6  mov     byte [esp+0x64], bl\n0x4ebada  push    edx\n0x4ebadb  push    eax\n0x4ebadc  push    edi\n0x4ebadd  call    QTask_HandleInput\n0x4ebae2  mov     esi, eax\n0x4ebae4  push    esi\n0x4ebae5  push    0x548858  {\"DefineGroup\"}\n0x4ebaea  call    Script_SetSymbolContext\n0x4ebaef  push    esi\n0x4ebaf0  push    0x54884c  {\"DefineSound\"}\n0x4ebaf5  call    Script_SetSymbolContext\n0x4ebafa  push    esi\n0x4ebafb  push    0x548840  {\"DefineGraph\"}\n0x4ebb00  call    Script_SetSymbolContext\n0x4ebb05  push    esi\n0x4ebb06  push    0x54882c  {\"DefineTriggerOnce\"}\n0x4ebb0b  call    Script_SetSymbolContext\n0x4ebb10  push    ebx\n0x4ebb11  push    ebp\n0x4ebb12  call    Sys_AllocateMemory_24\n0x4ebb17  add     esp, 0x44\n0x4ebb1a  test    eax, eax\n0x4ebb1c  je      0x4ebb38\n\n0x4ebb1e  push    ebx\n0x4ebb1f  push    ebp\n0x4ebb20  call    Script_EvalArgInt\n0x4ebb25  inc     ebx\n0x4ebb26  push    ebx\n0x4ebb27  push    ebp\n0x4ebb28  call    Sys_AllocateMemory_24\n0x4ebb2d  add     esp, 0x10\n0x4ebb30  test    eax, eax\n0x4ebb32  jne     0x4ebb1e\n\n0x4ebb34  mov     dword [esp+0x10], ebx\n\n0x4ebb38  push    edi\n0x4ebb39  push    0x548858  {\"DefineGroup\"}\n0x4ebb3e  call    Script_SetSymbolContext\n0x4ebb43  push    edi\n0x4ebb44  push    0x54884c  {\"DefineSound\"}\n0x4ebb49  call    Script_SetSymbolContext\n0x4ebb4e  push    edi\n0x4ebb4f  push    0x548840  {\"DefineGraph\"}\n0x4ebb54  call    Script_SetSymbolContext\n0x4ebb59  push    edi\n0x4ebb5a  push    0x54882c  {\"DefineTriggerOnce\"}\n0x4ebb5f  call    Script_SetSymbolContext\n0x4ebb64  fild    st0, dword [esp+0x30]\n0x4ebb68  mov     eax, dword [esp+0xb8]\n0x4ebb6f  mov     ecx, 0x6\n0x4ebb74  lea     esi, [esp+0x3c]\n0x4ebb78  mov     edi, eax\n0x4ebb7a  fstp    qword [esp+0x44], st0\n0x4ebb7e  add     esp, 0x20\n0x4ebb81  mov     dword [esp+0x1c], ebx\n0x4ebb85  mov     dword [esp+0x2c], 0x567c74\n0x4ebb8d  rep movsd dword [edi], [esi]\n0x4ebb8f  pop     edi\n0x4ebb90  pop     esi\n0x4ebb91  pop     ebp\n0x4ebb92  pop     ebx\n0x4ebb93  add     esp, 0x84\n0x4ebb99  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4eba90\"\narch: \"x86\"\nname: \"Define_Group\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 46\ntotal: 46\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Define_Group(int32_t arg1, void* arg2, float arg3)\n\n// Sig: void Define_Group(...)\n// Note: Defines a GROUP entry (sound-group/entity grouping) during definition\n// parsing. Parser-context only.\n{\n    int32_t ebx = 1;\n    void var_60;\n    void* flags = &var_60;\n    char var_7c = 1;\n    int32_t var_84 = 1;\n    void var_3e;\n    char* kind = Sys_ResolveSymbol_23(arg3, 0, &var_3e, 0x20);\n    kind = g_54db4a;\n    char var_40 = 1;\n    struct status_msg* eax = QTask_HandleInput(arg2, kind, &flags);\n    Script_SetSymbolContext(\"DefineGroup\", eax);\n    Script_SetSymbolContext(\"DefineSound\", eax);\n    Script_SetSymbolContext(\"DefineGraph\", eax);\n    Script_SetSymbolContext(\"DefineTriggerOnce\", eax);\n\n    if (Sys_AllocateMemory_24(arg3, 1))\n    {\n        int32_t i;\n\n        do\n        {\n            Script_EvalArgInt(arg3, ebx);\n            ebx += 1;\n            i = Sys_AllocateMemory_24(arg3, ebx);\n        } while (i);\n        var_84 = ebx;\n    }\n\n    Script_SetSymbolContext(\"DefineGroup\", arg2);\n    Script_SetSymbolContext(\"DefineSound\", arg2);\n    Script_SetSymbolContext(\"DefineGraph\", arg2);\n    Script_SetSymbolContext(\"DefineTriggerOnce\", arg2);\n    double var_70 = var_84;\n    int32_t var_78 = ebx;\n    char* var_68 = &g_script_ret_type;\n    __builtin_memcpy(arg1, &var_78, 0x18);\n    return arg1;\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4eba90\"\narch: \"x86\"\nname: \"Define_Group\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 14\ntotal: 14\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4ebac0 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x4ebadd | x86 | 0x4012a0 | QTask_HandleInput (0x4012a0 (x86)) |\n| 0x4ebaea | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebaf5 | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb00 | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb0b | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb12 | x86 | 0x4b8b00 | Sys_AllocateMemory_24 (0x4b8b00 (x86)) |\n| 0x4ebb20 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4ebb28 | x86 | 0x4b8b00 | Sys_AllocateMemory_24 (0x4b8b00 (x86)) |\n| 0x4ebb3e | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb49 | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb54 | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb5f | x86 | 0x4b8930 | Script_SetSymbolContext (0x4b8930 (x86)) |\n| 0x4ebb8d | x86 | 0xc35040 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4eba90\"\narch: \"x86\"\nname: \"Define_Group\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

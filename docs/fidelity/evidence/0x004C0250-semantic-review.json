@@ -1,62 +1,121 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004C0250",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "4390b3c1e25856d83fad6effdeb6d211ae16d0fdfc993339043bba92db564761",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004C0250",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4390b3c1e25856d83fad6effdeb6d211ae16d0fdfc993339043bba92db564761",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004C0250 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/dynobj/004C0250-DynObj_ParseConfigFile.cpp at sha256 4390b3c1e25856d83fad6effdeb6d211ae16d0fdfc993339043bba92db564761 (recorded implementation.signature: int32_t DynObj_ParseConfigFile(void);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004C0250",
+    "name": "DynObj_ParseConfigFile",
+    "binary_ninja_name": "DynObj_ParseConfigFile",
+    "signature": "int32_t()",
+    "start": "0x004C0250",
+    "end": "0x004C0254",
+    "basic_blocks": 1,
+    "edges": 0,
+    "cfg_similarity": 1.0,
+    "summary": "Five-byte compiler jump thunk 0x004C0250: `jmp DynObj_UpdateDynTree_3` to 0x4C10E0; one block, no edges, no locals, no constants.",
+    "blocks": [
+      {
+        "address": "0x004C0250",
+        "start": "0x4c0250",
+        "end": "0x4c0255",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "DynObj_UpdateDynTree_3"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004C0250 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/dynobj/004C0250-DynObj_ParseConfigFile.cpp",
+    "sha256": "4390b3c1e25856d83fad6effdeb6d211ae16d0fdfc993339043bba92db564761",
+    "signature": "int32_t DynObj_ParseConfigFile(void);",
+    "status_after_review": "STRUCTURALLY_VERIFIED",
+    "summary": "The candidate defines `j_DynObj_UpdateDynTree_3()` with the body `return DynObj_UpdateDynTree_3();`, a single tail call to DynObj_UpdateDynTree_3."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "match",
+    "divergences": [],
+    "statement": "No candidate divergence found in the checked dimensions."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004C0250 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/dynobj/004C0250-DynObj_ParseConfigFile.cpp (sha256 4390b3c1e25856d83fad6effdeb6d211ae16d0fdfc993339043bba92db564761). Five-byte compiler jump thunk 0x004C0250: `jmp DynObj_UpdateDynTree_3` to 0x4C10E0; one block, no edges, no locals, no constants. Candidate: The candidate defines `j_DynObj_UpdateDynTree_3()` with the body `return DynObj_UpdateDynTree_3();`, a single tail call to DynObj_UpdateDynTree_3."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "BN models 0x004C0250 as `int32_t()`/`uint32_t()` (no arguments, 32-bit result) and the candidate's `j_DynObj_UpdateDynTree_3()` has the same no-argument ABI; the header declares the catalog prototype DynObj_ParseConfigFile(void)."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "No arguments; the tail call forwards the caller's stack and registers unchanged, exactly like the retail jmp."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 1 blocks / 0 edges (similarity 1.000); angr CFGFast recovers 1 blocks with has_unresolved_jumps=false."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Retail's single instruction is the jump to DynObj_UpdateDynTree_3 (0x4C10E0); the candidate's single statement is a tail call to DynObj_UpdateDynTree_3 at the same address (BN callee table)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "No numeric constants in either."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "No stack locals and no global writes in either."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "The jmp forwards DynObj_UpdateDynTree_3's 32-bit return value unchanged; `return DynObj_UpdateDynTree_3();` returns the same register."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t()\" at 0x004C0250; radare2 recovers \"fcn.004c0250 ();\". Both tools place the entry at 0x004C0250 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DynObj_ParseConfigFile(void);."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004C0250-binaryninja.json",
+      "sha256": "79a2a43080c784fe1fa2bfc9a40c270da6014642c46718b5f12d0feeec172433"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004C0250-radare2.json",
+      "sha256": "e6ab744fdbd979aafdccb386d0bf9be7eb808b13a5c19aab60eb6e3b98885699"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004C0250-angr-20261023.json",
+      "sha256": "ca9a31d15b741a2ea5ae6ecd6df6e52038e257b3ca20fbb11571354938f92557"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The catalog name DynObj_ParseConfigFile is a harvest label: the retail bytes at 0x004C0250 are a compiler jump thunk to DynObj_UpdateDynTree_3 (0x4C10E0), not an implementation of DynObj_ParseConfigFile.",
+    "The candidate file defines `j_DynObj_UpdateDynTree_3` while its header declares DynObj_ParseConfigFile; the header also does not declare DynObj_UpdateDynTree_3. The definition/header names disagree even though the address-bound body matches retail.",
+    "The body is a source-level tail call; whether the compiler emits a jmp or a call+ret for it is a build-time question outside this structural review."
+  ]
 }

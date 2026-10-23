@@ -2,25 +2,61 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "view_1",
  "function_entry": "0x004EAD20",
- "signature": "not restated",
+ "symbol": "Define_Graph",
+ "signature": "int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, int32_t arg7, void* arg8, float arg9)",
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "function": {
+  "start": "0x004EAD20",
+  "end": "0x004EAEAB",
+  "size_bytes": 396,
+  "basic_blocks": 5,
+  "instruction_count": 127
+ },
+ "bytes_hex": "81ecac0100005355568d4c2430578d",
+ "bytes_sha256": "e43ffb7717108dd9173da6aa2c4757bd214e694419d60df6db931b7077bebe70",
+ "bytes_basis": "first 15 bytes at the entry (p8 15)",
  "cfg": {
+  "entry": "0x004EAD20",
   "nodes": [
    {
-    "address": "0x004EAD20"
+    "address": "0x004EAD20",
+    "start": "0x4ead20",
+    "end": "0x4eae14",
+    "size": 244,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EAE14"
+    "address": "0x004EAE14",
+    "start": "0x4eae14",
+    "end": "0x4eae2f",
+    "size": 27,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EAE2F"
+    "address": "0x004EAE2F",
+    "start": "0x4eae2f",
+    "end": "0x4eae3b",
+    "size": 12,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EAE3B"
+    "address": "0x004EAE3B",
+    "start": "0x4eae3b",
+    "end": "0x4eae51",
+    "size": 22,
+    "flags": "can-exit"
    },
    {
-    "address": "0x004EAE51"
+    "address": "0x004EAE51",
+    "start": "0x4eae51",
+    "end": "0x4eaeac",
+    "size": 91,
+    "flags": "can-exit"
    }
   ],
   "edges": [
@@ -55,5 +91,14 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "disassembly": "---\ntool: \"bn_function_disassembly\"\nfunction: \"0x4ead20\"\narch: \"x86\"\nname: \"Define_Graph\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 127\ntotal: 127\nnextOffset: null\ntruncated: false\n---\n\n````asm\n  int32_t Define_Graph(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, int32_t arg7, void* arg8, float arg9)\n\n0x4ead20  // Sig: void Define_Graph(...)\n0x4ead20  // Note: Defines a GRAPH (sound/graph transition graph) entry inside definition\n0x4ead20  // blocks - OpenIGI maps it to SoundDefinitionKind.Graph. Parser-context only.\n0x4ead20  sub     esp, 0x1ac\n0x4ead26  push    ebx\n0x4ead27  push    ebp\n0x4ead28  push    esi\n0x4ead29  lea     ecx, [esp+0x30]\n0x4ead2d  push    edi\n0x4ead2e  lea     eax, [esp+0x34]\n0x4ead32  push    ecx\n0x4ead33  mov     dword [esp+0x18], eax\n0x4ead37  mov     byte [esp+0x1c], 0x1\n0x4ead3c  call    SoundSys_SetFrequency_14\n0x4ead41  mov     esi, dword [esp+0x1cc]\n0x4ead48  lea     edx, [esp+0x178]\n0x4ead4f  push    0x20\n0x4ead51  push    edx\n0x4ead52  push    0x0\n0x4ead54  push    esi\n0x4ead55  call    Sys_ResolveSymbol_23\n0x4ead5a  lea     eax, [esp+0x1a8]\n0x4ead61  push    0x20\n0x4ead63  push    eax\n0x4ead64  push    0x1\n0x4ead66  push    esi\n0x4ead67  call    Sys_ResolveSymbol_23\n0x4ead6c  push    0x2\n0x4ead6e  push    esi\n0x4ead6f  call    Profile_ValueSet\n0x4ead74  fstp    qword [esp+0x100], st0\n0x4ead7b  push    0x3\n0x4ead7d  push    esi\n0x4ead7e  call    Profile_ValueSet\n0x4ead83  fstp    qword [esp+0x110], st0\n0x4ead8a  push    0x4\n0x4ead8c  push    esi\n0x4ead8d  call    Profile_ValueSet\n0x4ead92  fstp    qword [esp+0x120], st0\n0x4ead99  push    0x5\n0x4ead9b  push    esi\n0x4ead9c  call    Profile_ValueSet\n0x4eada1  fstp    dword [esp+0x130], st0\n0x4eada8  add     esp, 0x44\n0x4eadab  push    0x6\n0x4eadad  push    esi\n0x4eadae  call    Profile_ValueSet\n0x4eadb3  fstp    dword [esp+0x104], st0\n0x4eadba  push    0x7\n0x4eadbc  push    esi\n0x4eadbd  call    Profile_ValueSet\n0x4eadc2  fstp    dword [esp+0x110], st0\n0x4eadc9  push    0x8\n0x4eadcb  push    esi\n0x4eadcc  call    Script_EvalArgInt\n0x4eadd1  push    0x9\n0x4eadd3  push    esi\n0x4eadd4  mov     dword [esp+0x12c], eax\n0x4eaddb  call    Script_EvalArgInt\n0x4eade0  push    0xa\n0x4eade2  push    esi\n0x4eade3  mov     dword [esp+0x138], eax\n0x4eadea  call    Script_EvalArgInt\n0x4eadef  push    0xb\n0x4eadf1  push    esi\n0x4eadf2  mov     dword [esp+0x148], eax\n0x4eadf9  mov     edi, 0xc\n0x4eadfe  call    Script_EvalArgInt\n0x4eae03  add     esp, 0x30\n0x4eae06  mov     dword [esp+0x114], eax\n0x4eae0d  lea     ebp, [esp+0x11c]\n\n0x4eae14  mov     eax, edi\n0x4eae16  inc     edi\n0x4eae17  push    eax\n0x4eae18  push    esi\n0x4eae19  call    Profile_ValueSet\n0x4eae1e  \ud83d\udeab\ud83d\udeab\ud83d\udeabfstp    dword [ebp], st0\n0x4eae21  lea     ecx, [edi-0xc]\n0x4eae24  add     esp, 0x8\n0x4eae27  add     ebp, 0x4\n0x4eae2a  cmp     ecx, 0xb\n0x4eae2d  jl      0x4eae14\n\n0x4eae2f  lea     ebp, [esp+0x148]\n0x4eae36  mov     ebx, 0xb\n\n0x4eae3b  mov     eax, edi\n0x4eae3d  inc     edi\n0x4eae3e  push    eax\n0x4eae3f  push    esi\n0x4eae40  call    Profile_ValueSet\n0x4eae45  \ud83d\udeab\ud83d\udeab\ud83d\udeabfstp    dword [ebp], st0\n0x4eae48  add     esp, 0x8\n0x4eae4b  add     ebp, 0x4\n0x4eae4e  dec     ebx\n0x4eae4f  jne     0x4eae3b\n\n0x4eae51  mov     ax, word [0x54dada]\n0x4eae57  mov     ecx, dword [esp+0x1c4]\n0x4eae5e  lea     edx, [esp+0x14]\n0x4eae62  mov     dword [esp+0x10], edi\n0x4eae66  push    edx\n0x4eae67  push    eax\n0x4eae68  push    ecx\n0x4eae69  mov     byte [esp+0x114], 0x1\n0x4eae71  call    QTask_HandleInput\n0x4eae76  \ud83d\udeab\ud83d\udeabfild    st0, dword [esp+0x1c]\n0x4eae7a  mov     eax, dword [esp+0x1cc]\n0x4eae81  mov     dword [esp+0x28], edi\n0x4eae85  mov     ecx, 0x6\n0x4eae8a  lea     esi, [esp+0x28]\n0x4eae8e  \ud83d\udeab\ud83d\udeab\ud83d\udeabfstp    qword [esp+0x30], st0\n0x4eae92  mov     edi, eax\n0x4eae94  add     esp, 0xc\n0x4eae97  mov     dword [esp+0x2c], 0x567c74\n0x4eae9f  rep movsd dword [edi], [esi]\n0x4eaea1  pop     edi\n0x4eaea2  pop     esi\n0x4eaea3  pop     ebp\n0x4eaea4  pop     ebx\n0x4eaea5  add     esp, 0x1ac\n0x4eaeab  retn\n````\n",
+ "pseudocode": "---\ntool: \"bn_function_decompile\"\nfunction: \"0x4ead20\"\narch: \"x86\"\nname: \"Define_Graph\"\nplatform: \"windows-x86\"\nlanguage: \"Pseudo C\"\noffset: 0\nlimit: 1000\ncount: 78\ntotal: 78\nnextOffset: null\ntruncated: false\nneedsUpdate: false\n---\n\n````bn-pseudoc\n  int32_t Define_Graph(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, long double arg5 @ st4, long double arg6 @ st5, int32_t arg7, void* arg8, float arg9)\n\n// Sig: void Define_Graph(...)\n// Note: Defines a GRAPH (sound/graph transition graph) entry inside definition\n// blocks - OpenIGI maps it to SoundDefinitionKind.Graph. Parser-context only.\n{\n    void var_188;\n    void* flags = &var_188;\n    char var_1a4 = 1;\n    SoundSys_SetFrequency_14(&var_188);\n    void var_48;\n    Sys_ResolveSymbol_23(arg9, 0, &var_48, 0x20);\n    void var_28;\n    Sys_ResolveSymbol_23(arg9, 1, &var_28, 0x20);\n    Profile_ValueSet(arg9, 2.80259693e-45f);\n    double var_e8 = arg1;\n    Profile_ValueSet(arg9, 4.20389539e-45f);\n    double var_e0 = arg2;\n    Profile_ValueSet(arg9, 5.60519386e-45f);\n    double var_d8 = arg3;\n    Profile_ValueSet(arg9, 7.00649232e-45f);\n    float var_d0 = arg4;\n    Profile_ValueSet(arg9, 8.40779079e-45f);\n    float var_c0 = arg5;\n    Profile_ValueSet(arg9, 9.80908925e-45f);\n    float var_bc = arg6;\n    int16_t top = 6;\n    int32_t var_b0 = Script_EvalArgInt(arg9, 8);\n    int32_t var_ac = Script_EvalArgInt(arg9, 9);\n    int32_t var_a4 = Script_EvalArgInt(arg9, 0xa);\n    float edi = 1.68155816e-44f;\n    int32_t var_a8 = Script_EvalArgInt(arg9, 0xb);\n    void var_a0;\n    float* ebp = &var_a0;\n\n    do\n    {\n        float eax_4 = edi;\n        edi += 1;\n        Profile_ValueSet(arg9, eax_4);\n\ud83d\udeab\ud83d\udeab\ud83d\udeab        *ebp = /* *ebp = unimplemented  {fstp dword [ebp], st0} */;\n        /* unimplemented  {fstp dword [ebp], st0} */\n        top += 1;\n        ebp = &ebp[1];\n    } while (edi - 0xc < 0xb);\n\n    void var_74;\n    float* ebp_1 = &var_74;\n    int32_t i_1 = 0xb;\n    int32_t kind;\n    int32_t i;\n\n    do\n    {\n        float eax_5 = edi;\n        edi += 1;\n        kind = Profile_ValueSet(arg9, eax_5);\n\ud83d\udeab\ud83d\udeab\ud83d\udeab        *ebp_1 = /* *ebp_1 = unimplemented  {fstp dword [ebp], st0} */;\n        /* unimplemented  {fstp dword [ebp], st0} */\n        top += 1;\n        ebp_1 = &ebp_1[1];\n        i = i_1;\n        i_1 -= 1;\n    } while (i != 1);\n    kind = g_54dada;\n    float var_1ac = edi;\n    char var_b4 = 1;\n    QTask_HandleInput(arg8, kind, &flags);\n\ud83d\udeab\ud83d\udeab    /* unimplemented  {fild st0, dword [esp+0x1c]} */\n    float var_1a0 = edi;\n\ud83d\udeab\ud83d\udeab\ud83d\udeab    double var_198 = /* double var_198 = unimplemented  {fstp qword [esp+0x30], st0} */;\n    /* unimplemented  {fstp qword [esp+0x30], st0} */\n    char* var_190 = &g_script_ret_type;\n    __builtin_memcpy(arg7, &var_1a0, 0x18);\n    return arg7;\n}\n````\n",
+ "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4ead20\"\narch: \"x86\"\nname: \"Define_Graph\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 17\ntotal: 17\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4ead3c | x86 | 0x4ea7b0 | SoundSys_SetFrequency_14 (0x4ea7b0 (x86)) |\n| 0x4ead55 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x4ead67 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x4ead6f | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4ead7e | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4ead8d | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4ead9c | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4eadae | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4eadbd | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4eadcc | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4eaddb | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4eadea | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4eadfe | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4eae19 | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4eae40 | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x4eae71 | x86 | 0x4012a0 | QTask_HandleInput (0x4012a0 (x86)) |\n| 0x4eae9f | x86 | 0xc35040 |  |\n",
+ "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4ead20\"\narch: \"x86\"\nname: \"Define_Graph\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 1000\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+ "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile/bn_function_callees/bn_function_callers",
+ "limitations": [
+  "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+  "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ ]
 }

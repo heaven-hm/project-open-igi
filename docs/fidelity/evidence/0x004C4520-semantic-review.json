@@ -1,62 +1,139 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004C4520",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "bce2a66ebf389f5b9e88a234efd5f8967b82f85b9d0321ddf6d5d14a9778488b",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004C4520",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "bce2a66ebf389f5b9e88a234efd5f8967b82f85b9d0321ddf6d5d14a9778488b",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T14:20:00Z",
+  "source_revision": "21c98f9a27012837406f6516886866367767c516",
+  "review_basis": "Retail 0x004C4520 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/define/004C4520-DefineMagicObj.cpp at sha256 bce2a66ebf389f5b9e88a234efd5f8967b82f85b9d0321ddf6d5d14a9778488b (recorded implementation.signature: int32_t DefineMagicObj(int32_t param_1, float param_2);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004C4520",
+    "name": "DefineMagicObj",
+    "binary_ninja_name": "Define_MagicObj",
+    "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+    "start": "0x004C4520",
+    "end": "0x004C4657",
+    "basic_blocks": 3,
+    "edges": 3,
+    "cfg_similarity": 1.0,
+    "summary": "Three blocks / 3 edges 0x4C4520-0x4C4657: read the QVM frame from [E+0xc], compute index g_a4433c*0x28, clear g_b97e24, resolve two 0x10-byte strings into g_b97e00/g_b97e10, store the Script_EvalArgInt result into the WORD at [index+0xb97e20], read the byte g_547f3d, dispatch through g_a96ae0[byte*0x180 + word], allocate 4 bytes from the callback's output at [E+0x34], store it at [index+0xb97e24], call the second handler with (0,&block), increment g_a4433c and copy the 24-byte record to the result buffer BN models as arg1.",
+    "blocks": [
+      {
+        "address": "0x004C4520",
+        "start": "0x4c4520",
+        "end": "0x4c45b3",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004C4616",
+        "start": "0x4c4616",
+        "end": "0x4c4658",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004C45B3",
+        "start": "0x4c45b3",
+        "end": "0x4c4616",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Sys_ResolveSymbol_23",
+      "Script_EvalArgInt",
+      "Mem_AllocFn"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004C4520 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/define/004C4520-DefineMagicObj.cpp",
+    "sha256": "bce2a66ebf389f5b9e88a234efd5f8967b82f85b9d0321ddf6d5d14a9778488b",
+    "signature": "int32_t DefineMagicObj(int32_t param_1, float param_2);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Define_MagicObj(int context, float arg2) reproduces the two resolve calls, the table dispatch, the allocation and the record copy, but uses full dword loads/stores for the values retail touches as bytes/words and passes the wrong word to Mem_Alloc."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Word vs dword access on [index+0xb97e20]: retail `mov word ...,ax` / `mov dx,word ...`; candidate uses 32-bit access.",
+      "Byte loads with 0xFF masking (g_547f3d / g_547f3c) are transcribed as unmasked dword reads, so the handler index can be wrong.",
+      "Mem_AllocFn argument is the callback output at [E+0x34] in retail, but the candidate passes `arg2` (the QVM frame pointer).",
+      "QVM frame slot: retail [E+0xc], candidate's arg2 at [E+8].",
+      "Result-buffer slot: the candidate's first parameter is [E+4], while retail's result buffer is the slot BN models as arg1 after the mid-function stack adjustments; the two are not shown to coincide."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004C4520 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/define/004C4520-DefineMagicObj.cpp (sha256 bce2a66ebf389f5b9e88a234efd5f8967b82f85b9d0321ddf6d5d14a9778488b). Three blocks / 3 edges 0x4C4520-0x4C4657: read the QVM frame from [E+0xc], compute index g_a4433c*0x28, clear g_b97e24, resolve two 0x10-byte strings into g_b97e00/g_b97e10, store the Script_EvalArgInt result into the WORD at [index+0xb97e20], read the byte g_547f3d, dispatch through g_a96ae0[byte*0x180 + word], allocate 4 bytes from the callback's output at [E+0x34], store it at [index+0xb97e24], call the second handler with (0,&block), increment g_a4433c and copy the 24-byte record to the result buffer BN models as arg1. Candidate: Define_MagicObj(int context, float arg2) reproduces the two resolve calls, the table dispatch, the allocation and the record copy, but uses full dword loads/stores for the values retail touches as bytes/words and passes the wrong word to Mem_Alloc."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Retail reads the QVM frame from [E+0xc] (0x4C4530 `mov edi,[esp+0x2c]` with esp=E-0x20); BN models it as `int32_t(int32_t arg1, float arg2 @ 0xc)` and the result buffer as arg1. The candidate declares `(int context, float arg2)`, so its arg2 is the [E+8] slot rather than [E+0xc]."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "The frame pointer must be [E+0xc] (verified at 0x4C4530); the candidate's second parameter is the [E+8] argc slot. Mem_AllocFn also receives the callback output read from [E+0x34] in retail (0x4C45BC), while the candidate passes `arg2` (the frame pointer). The result-buffer slot is not re-derived here: the mid-function `add esp,0x28`/`add esp,0x18` adjustments at 0x4C45A0 and 0x4C4613 depend on the callees' cleanup, so only BN's arg1 naming is reported."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Binary Ninja and radare2 agree on 3 blocks / 3 edges (similarity 1.000); angr CFGFast recovers 11 blocks with has_unresolved_jumps=false. The angr block-count difference is a granularity artifact of CFGFast splitting at call returns / rep movsd; the BN and radare2 block and edge tables are identical."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Both call Sys_ResolveSymbol_23 twice, the two handler slots at g_a96ae0 and Mem_AllocFn; no call is elided."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "failed",
+      "detail": "Retail masks the dispatch index with `and eax,0xff` after loading the byte g_547f3d / g_547f3c; the candidate uses the full dword (`*g_547f3d`, `*g_547f3c`) and omits the 0xFF mask. Retail also ORs the second index with 3 (`var_10_1 = 3`) which the candidate keeps."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "Retail stores a WORD (`mov word [esi+0xb97e20], ax`) and reloads a WORD (`mov dx, word [ecx+0xb97e20]`); the candidate uses dword loads/stores, so the upper half of the slot is not preserved. The allocation size also comes from the callback output at [E+0x34], not the frame pointer."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "The 24-byte record build and the `memcpy(arg1,...); return arg1` shape match BN's model of the retail copy and return."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point state is touched."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "divergent",
+    "rationale": "Binary Ninja reports \"int32_t(int32_t arg1, float arg2 @ 0xc)\" at 0x004C4520; radare2 recovers \"fcn.004c4520 (int32_t arg_24h, int32_t arg_2ch);\". Both tools place the entry at 0x004C4520 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineMagicObj(int32_t param_1, float param_2);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "path": "docs/fidelity/evidence/0x004C4520-binaryninja.json",
+      "sha256": "8f6d74311285ef81188f9c494fc9db55c01265d21baffd304c263f62ba246122"
+    },
+    "radare2": {
+      "path": "docs/fidelity/evidence/0x004C4520-radare2.json",
+      "sha256": "8d2a461ae0241a477f079861be3accd5d4aaab8978e0e28f2f801816fb04e62c"
+    },
+    "angr": {
+      "path": "docs/fidelity/evidence/0x004C4520-angr-20261023.json",
+      "sha256": "6f71af91d24745e60ce943352f06565197c541653a3d140e39ee50f2191b7d14"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate defines Define_MagicObj; no runtime observation is claimed here."
+  ]
 }
