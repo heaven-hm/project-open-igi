@@ -458,11 +458,15 @@
  },
  {
   "address": "0x0048F260",
-  "retailName": "App_ContextSetTerrainLightmapsUsed",
-  "implemented": false,
-  "cppName": null,
-  "enginePath": null,
-  "candidateSymbol": null,
+  "retailName": "AppContext_SetTerrainLightmapsUsed",
+  "implemented": true,
+  "cppName": "App_ContextSetTerrainLightmapsUsed",
+  "enginePath": "engine/src/retail/core/app_context.cpp",
+  "candidateSymbol": {
+   "vaddr": "0x0041E7C0",
+   "symbol": "AppContext_SetTerrainLightmapsUsed",
+   "demangled": "AppContext_SetTerrainLightmapsUsed"
+  },
   "status": "STRUCTURALLY_VERIFIED"
  },
  {
@@ -1956,11 +1960,11 @@
   "address": "0x00517890",
   "retailName": "Iff_FindFormChunk",
   "implemented": true,
-  "cppName": "Iff_FindFormChunk",
+  "cppName": "IffChunk_FindByTag",
   "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
   "candidateSymbol": {
-   "vaddr": "0x0043B580",
-   "symbol": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+   "vaddr": "0x004232A0",
+   "symbol": "Iff_FindFormChunk",
    "demangled": "Iff_FindFormChunk"
   },
   "status": "STRUCTURALLY_VERIFIED"
@@ -1969,11 +1973,11 @@
   "address": "0x00517940",
   "retailName": "Iff_FindChunk",
   "implemented": true,
-  "cppName": "Iff_FindChunk",
+  "cppName": "IffChunk_FindChildByTag",
   "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
   "candidateSymbol": {
-   "vaddr": "0x0043B880",
-   "symbol": "__ZN3igi6retail5model23IffChunk_FindChildByTagEPNS1_12IffChunkNodeEj",
+   "vaddr": "0x004235B0",
+   "symbol": "Iff_FindChunk",
    "demangled": "Iff_FindChunk"
   },
   "status": "STRUCTURALLY_VERIFIED"
@@ -1982,11 +1986,11 @@
   "address": "0x005179C0",
   "retailName": "Iff_GetChunkPayload",
   "implemented": true,
-  "cppName": "Iff_GetChunkPayload",
+  "cppName": "IffChunk_GetPayload",
   "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
   "candidateSymbol": {
-   "vaddr": "0x0043BB50",
-   "symbol": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+   "vaddr": "0x00423880",
+   "symbol": "Iff_GetChunkPayload",
    "demangled": "Iff_GetChunkPayload"
   },
   "status": "STRUCTURALLY_VERIFIED"
@@ -1995,11 +1999,11 @@
   "address": "0x005178E0",
   "retailName": "Iff_FindChunkBelowForm",
   "implemented": true,
-  "cppName": "Iff_FindChunkBelowForm",
+  "cppName": "IffChunk_FindBelowForm",
   "enginePath": "engine/src/retail/model/iff_chunk_tree.cpp",
   "candidateSymbol": {
-   "vaddr": "0x0043BB70",
-   "symbol": "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
+   "vaddr": "0x004238A0",
+   "symbol": "Iff_FindChunkBelowForm",
    "demangled": "Iff_FindChunkBelowForm"
   },
   "status": "STRUCTURALLY_VERIFIED"
@@ -2008,11 +2012,11 @@
   "address": "0x004D67A0",
   "retailName": "AnimIff_LoadAnimationFile",
   "implemented": true,
-  "cppName": "AnimIff_LoadAnimationFile",
+  "cppName": "IffSkeleton_Read",
   "enginePath": "engine/src/retail/model/iff_skeleton.cpp",
   "candidateSymbol": {
-   "vaddr": "0x00414A70",
-   "symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+   "vaddr": "0x00424620",
+   "symbol": "AnimIff_LoadAnimationFile",
    "demangled": "AnimIff_LoadAnimationFile"
   },
   "status": "STRUCTURALLY_VERIFIED"

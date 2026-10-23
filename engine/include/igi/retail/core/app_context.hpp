@@ -45,7 +45,14 @@ std::int32_t App_ContextSetLightmapsUsed(std::int8_t used);
 [[nodiscard]] std::int32_t App_ContextGetLightmapsUsed();
 
 // 0x0048F260:  movsx eax, byte [esp+4] ; mov dword [0x005C8BE8], eax ; retn
-std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used);
+//
+// The definition already has external linkage; the declaration pins its
+// assembler name to the retail catalog name with a GCC asm-label so the
+// out-of-line definition is addressable in the linked image under the name the
+// symbol map and the paired probes resolve. Linkage, the cdecl argument, the
+// sign extension, the return value and the side effect are unchanged.
+std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)
+    asm("AppContext_SetTerrainLightmapsUsed");
 // 0x0048F250:  mov eax, dword [0x005C8BE8] ; retn
 [[nodiscard]] std::int32_t App_ContextGetTerrainLightmapsUsed();
 
