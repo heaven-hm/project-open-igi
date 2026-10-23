@@ -3,6 +3,8 @@
 #define _UNICODE
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/core/debug_command_line.hpp"
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/model/mef_model_loader.hpp"
 #include "igi/retail/resource/resource_archive.hpp"
@@ -11,6 +13,7 @@
 #include <chrono>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 #include <cstdio>
 #include <cstdlib>
 #include <ddraw.h>
@@ -545,6 +548,15 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command
     ShowWindow(window_handle, show_command);
     UpdateWindow(window_handle);
 
+    // The paired capture attaches Frida only once the process is visible, so the startup
+    // natives below would otherwise run before the probes are installed and be missed.
+    // Holding the startup sequence briefly makes them observable; the window is already up,
+    // so the game stays in the same state it is in during play.
+    if (const char* const settle_ms = std::getenv("IGI2_ATTACH_SETTLE_MS"))
+    {
+        ::Sleep(static_cast<DWORD>(std::atoi(settle_ms)));
+    }
+
     // Retail _start's startup sequence: the x87 control word, then the application
     // context marked active with terrain lightmaps enabled (native 0x0048F140 and
     // 0x0048F260), before the message loop starts.
@@ -552,6 +564,17 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command
     ::AppContext_SetIsActive(1);
     igi::retail::core::App_ContextSetTerrainLightmapsUsed(1);
     ::Loop_SetStatusByte(1U);
+
+    // Retail allocates the flow object's frame dispatch record through Mem_Alloc (0x004B0C60)
+    // before Flow_Start stores it at 0x00567C8C. Allocate the port's record through the same
+    // allocator, so the retail heap path (Mem_Alloc -> Mem_AllocChunk -> Mem_AllocateRawBlock,
+    // with the lazy heap initialisation and heap-list insertion) runs in the same order.
+    if (void* const frame_record = igi::retail::mem::Mem_Alloc(0, static_cast<std::int32_t>(sizeof(igi::retail::core::FrameDispatchRecordView))))
+    {
+        std::memset(frame_record, 0, sizeof(igi::retail::core::FrameDispatchRecordView));
+        ::Game_FrameDispatchRecord =
+            static_cast<igi::retail::core::FrameDispatchRecordView*>(frame_record);
+    }
 
     MSG message{};
     while (GetMessageW(&message, nullptr, 0, 0) > 0)

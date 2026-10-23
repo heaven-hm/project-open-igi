@@ -2314,6 +2314,14 @@ int RunRetailModelScene(HINSTANCE instance,
             write_log(graphics_log);
         }
 
+        // The paired capture attaches Frida only once the process is visible, so the startup
+        // natives below would otherwise run before the probes are installed. The window is up,
+        // so holding here keeps the game in the state it is in during play.
+        if (const char* const settle_ms = std::getenv("IGI2_ATTACH_SETTLE_MS"))
+        {
+            ::Sleep(static_cast<DWORD>(std::atoi(settle_ms)));
+        }
+
         MSG message{};
         bool running = true;
         // Retail's player simulation is 30 Hz. Pace the host presentation at that same

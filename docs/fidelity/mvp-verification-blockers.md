@@ -527,3 +527,35 @@ from `docs/fidelity/native-verification.json` at run time, so it supports any ad
 hard-codes nothing to grep. The audit now recognises manifest-driven runners, which moved those two out
 of the frozen set - the count is 20, not 22 - and the two regenerated Camera artifacts now carry that
 runner's metadata.
+
+## The capture never runs WinMain's message loop
+
+`window level5` sets `model_scene_requested` in WinMain, so the capture takes the
+`RunRetailModelScene` branch and returns before the message loop is ever reached. The startup and
+per-frame calls added to WinMain in round 80 - `FP_InitExtendedPrecision`, `AppContext_SetIsActive`,
+`Loop_SetStatusByte`, `QTask_OpenEvent` - are therefore not executed in a capture. The natives they were
+meant to exercise are observed because `RunRetailModelScene` performs the equivalent calls on its own
+path, which is why the counts looked plausible and the confusion persisted.
+
+Two consequences:
+
+* startup alignment has to be measured and applied in `engine/platform/windows/retail_model_scene.cpp`,
+  not in WinMain, whenever the capture's `window` token is what is being tested;
+* the settle window belongs there too, because that is the path the probe attaches to. Both functions now
+  honour `IGI2_ATTACH_SETTLE_MS`, and a capture with a 12 s settle still observes 21 candidate natives
+  and 16 matches - the window is raised after the frame is presented, so the game stays in play state.
+
+## The allocator wiring crashed the run
+
+`Mem_Alloc` and its chain (`Mem_AllocChunk`, `Mem_AllocateRawBlock`, `HeapList_Insert`, 73k-98k retail
+calls each) are unobserved because the port allocates its game object statically. Allocating it through
+`Mem_Alloc(0, 0x30)` and assigning the result to `Game_FrameDispatchRecord` was tried on the scene path:
+the candidate then produced **zero** observations and the scene log stopped before `Level_Start`
+completion, so the run died between the allocation and the level load. The wiring was reverted - the
+static object is back - and the p
+
+aired capture is healthy again (21 observed, 16 matched).
+
+That rules out the cheap version of this alignment: the retail allocator cannot simply be handed a
+30-byte request at scene start. Whatever `Mem_Alloc` needs (heap state initialised by an earlier retail
+call, or a different argument pair) has to be established first, and the crash is the evidence.
