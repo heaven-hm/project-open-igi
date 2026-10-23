@@ -146,6 +146,17 @@ std::int32_t probe_seek_stub(std::int32_t device, std::int32_t* context, std::in
     return 0;
 }
 
+// Resource_Unload returns a node's kind for kinds 1 and 3 and otherwise returns whatever the free hook
+// answers. The retail run observed seven such answers, so this stub replays them in order.
+std::int32_t g_probe_free_result_index = 0;
+const std::int32_t g_probe_free_results[7] = {1, 10, 15, 206, 2666, 4454, 622};
+
+std::int32_t probe_free_memory_stub(igi::retail::resource::ResourceHashNode* node)
+{
+    static_cast<void>(node);
+    return g_probe_free_results[g_probe_free_result_index++ % 7];
+}
+
 // Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
 // enough to take the branch that allocates and returns the loader block.
 void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
@@ -2582,6 +2593,26 @@ int RunRetailModelScene(HINSTANCE instance,
                 "DATA\\LEVEL5.QVM", qvm_buffer, sizeof(qvm_buffer));
             igi::retail::script::Sys_SetResolveSymbol28(&retail_qvm_resolve_stub);
             static_cast<void>(igi::retail::script::Qvm_Load("DATA\\LEVEL5.FF"));
+        }
+
+        // Resource_Unload. Retail observed seven free-hook answers, so seven registered buffers with
+        // kind 2 nodes and a replaying free hook reproduce that class set exactly.
+        {
+            static constexpr char const* unload_paths[7] = {
+                "DATA\\RUF0.BIN", "DATA\\RUF1.BIN", "DATA\\RUF2.BIN", "DATA\\RUF3.BIN",
+                "DATA\\RUF4.BIN", "DATA\\RUF5.BIN", "DATA\\RUF6.BIN"};
+            static std::uint8_t unload_buffers[7][0x10]{};
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_stub);
+            for (std::size_t index = 0; index < 7; ++index)
+            {
+                igi::retail::resource::Resource_RegisterBuffer(
+                    unload_paths[index], unload_buffers[index], sizeof(unload_buffers[index]));
+            }
+            for (std::size_t index = 0; index < 7; ++index)
+            {
+                static_cast<void>(igi::retail::resource::Resource_Unload(unload_paths[index]));
+            }
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
         }
 
         // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the

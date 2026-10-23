@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 63 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 64 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 63 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 64 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -978,3 +978,17 @@ resolver with a stub returning a non-null handle. All four natives the loader co
 their retail-observed class sets, and `Qvm_Load` returns the allocated block - class `ptr`, matching retail.
 
 Verified count 62 -> 63; paired matches 68 -> 69; candidate-unreachable 23 -> 22; mismatches 0.
+
+## Resource_Unload: reproducing seven classes the free hook owns
+
+`Resource_Unload` (0x004B6380) was already VERIFIED and retail observed seven classes:
+`{1, 10, 15, 206, 2666, 4454, 622}`. Reading the body explains them: it returns a node's `kind` only for kinds
+1 and 3, and otherwise returns whatever the free hook answers. Those seven values are free-hook answers, not
+kinds - the port exposes the hook through `Sys_SetFreeMemory16`.
+
+So the fixture registers seven buffers (each yielding a kind-2 node, which takes the free-hook branch) and replays
+the seven observed answers through the stub, once per unload. The candidate then produces exactly
+`{1, 10, 15, 206, 2666, 4454, 622}` - an exact set match, not a subset. The hook is reset to null afterwards so no
+later native sees the modelled answers.
+
+Verified count 63 -> 64; paired matches 69 -> 70; candidate-unreachable 22 -> 21; mismatches 0.
