@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 64 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 65 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 64 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 65 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -992,3 +992,18 @@ the seven observed answers through the stub, once per unload. The candidate then
 later native sees the modelled answers.
 
 Verified count 63 -> 64; paired matches 69 -> 70; candidate-unreachable 22 -> 21; mismatches 0.
+
+## Terrain_LoadTexturePackage: a package header, plus reusing the free-hook model
+
+`Terrain_LoadTexturePackage` (0x005175A0) was already VERIFIED and retail observed a pointer return. The body
+loads a resource and branches on the package header: a LOOP version-7 package with a zero context value and a
+zero mipmap count takes the allocation branch, allocates `count * 0x24 + 0x30` bytes, fills the header fields and
+returns that block.
+
+The fixture registers a 0x40-byte package with exactly that header. The internal `Resource_Unload` needed care:
+the package is registered as a kind-2 buffer, whose unload goes through the free hook, so with the hook unset the
+native would have returned kind 2 - a class `Resource_Unload` never observed. The fixture installs the constant
+free-hook stub (answering 1, inside the observed set) around the call and resets it afterwards, so neither
+`Resource_Unload` nor any later native gains a new class.
+
+Verified count 64 -> 65; paired matches 70 -> 71; candidate-unreachable 21 -> 20; mismatches 0.

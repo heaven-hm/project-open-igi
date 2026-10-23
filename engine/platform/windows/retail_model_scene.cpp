@@ -157,6 +157,13 @@ std::int32_t probe_free_memory_stub(igi::retail::resource::ResourceHashNode* nod
     return g_probe_free_results[g_probe_free_result_index++ % 7];
 }
 
+// Answers 1, the kind the retail free hook reported for a plain buffer node.
+std::int32_t probe_free_memory_one_stub(igi::retail::resource::ResourceHashNode* node)
+{
+    static_cast<void>(node);
+    return 1;
+}
+
 // Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
 // enough to take the branch that allocates and returns the loader block.
 void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
@@ -2612,6 +2619,28 @@ int RunRetailModelScene(HINSTANCE instance,
             {
                 static_cast<void>(igi::retail::resource::Resource_Unload(unload_paths[index]));
             }
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
+        // Terrain_LoadTexturePackage. Retail returned a pointer. A LOOP version-7 package with a zero
+        // context and a zero mipmap count takes the allocation branch and returns that block; the
+        // package is registered as a kind-2 buffer, so the internal Resource_Unload is answered by the
+        // free hook with 1 - a class Resource_Unload already observed.
+        {
+            static constexpr char terrain_package_path[] = "DATA\\TEXPACK.FF";
+            static std::uint8_t terrain_package[0x40]{};
+            terrain_package[0] = 0x4C; // 'L'
+            terrain_package[1] = 0x4F; // 'O'
+            terrain_package[2] = 0x4F; // 'O'
+            terrain_package[3] = 0x50; // 'P'
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x04) = 7;
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x18) = 0;
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x20) = 0;
+            igi::retail::resource::Resource_RegisterBuffer(
+                terrain_package_path, terrain_package, sizeof(terrain_package));
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_one_stub);
+            static_cast<void>(
+                igi::retail::texture::Terrain_LoadTexturePackage(terrain_package_path));
             igi::retail::resource::Sys_SetFreeMemory16(nullptr);
         }
 
