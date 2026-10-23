@@ -1,0 +1,34 @@
+{
+ "schema_version": 1,
+ "kind": "retail-static-analysis",
+ "record_id": "0x00510010-static-analysis",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00510010",
+ "captured_at": "2026-10-22T23:03:40+00:00",
+ "tools": {
+  "binary_ninja": "binaryninja_ui_mcp 0.1.0 bn_function_basic_blocks",
+  "radare2": "radare2 6.2.0 af-*; af; afbj",
+  "angr": "10.0.4.post1"
+ },
+ "cfg": {
+  "binary_ninja": {
+   "nodes": 143,
+   "edges": 212
+  },
+  "radare2": {
+   "nodes": 143,
+   "edges": 212
+  },
+  "angr_cfgfast": {
+   "nodes": 157,
+   "function_entry": "0x00510010",
+   "has_unresolved_jumps": false
+  }
+ },
+ "summary": "143 retail blocks / 212 edges; angr CFGFast 157 nodes with no unresolved jumps. Host placeholder throws std::logic_error and is not a transcription.",
+ "status": "ANALYZED",
+ "limitations": [
+  "Retail-image evidence only; no candidate implementation exists for comparison.",
+  "CFG agreement between Binary Ninja and Radare2 is retail structural agreement, not candidate equivalence."
+ ]
+}

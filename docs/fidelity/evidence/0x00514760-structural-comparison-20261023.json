@@ -1,0 +1,530 @@
+{
+ "schema_version": 1,
+ "kind": "native-structural-comparison",
+ "address": "0x00514760",
+ "function_name": "Terrain_BuildMipMaps_2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "binary_size_bytes": 1384448,
+ "image_base": "0x00400000",
+ "generated_at": "2026-10-23T05:19:00Z",
+ "comparison_scope": "Retail structure recovered from Binary Ninja MCP (selected decompiler), radare2 CFG and angr CFGFast at the exact entry. Candidate structure recovered from the source text and from the i686-w64-mingw32-g++ -O3 object disassembly. This is a property-level comparison with an explicit CFG-shape divergence; it is not a CFG-isomorphism claim and not a behavioral-equivalence claim.",
+ "retail": {
+  "function_entry": "0x00514760",
+  "function_extent": [
+   "0x00514760",
+   "0x005165FE"
+  ],
+  "size_bytes": 7839,
+  "bytes_sha256": "0efe8f9d806e5f9de8a795cbd2a32b317063062a4ce94528f8b0969f68ca911c",
+  "bytes_sha256_scope": "BN memory read and retail file .text bytes at VA 0x00514760 agree",
+  "signature": "std::uint32_t __cdecl Terrain_BuildMipMaps_2(TerrainMipMapsVertex r1, TerrainMipMapsVertex r2, TerrainMipMapsVertex r3, TerrainMipMapsCall* call)",
+  "calling_convention": "cdecl; the caller pushes the 0x14-byte call-record pointer, then copies three 0x40-byte vertex records by value below it and cleans 0xC4 bytes. The same shape is used at the five recursion sites.",
+  "arguments": [
+   {
+    "index": 0,
+    "location": "[E+0x04]",
+    "size": "0x40",
+    "meaning": "vertex record 1 (by value)"
+   },
+   {
+    "index": 1,
+    "location": "[E+0x44]",
+    "size": "0x40",
+    "meaning": "vertex record 2 (by value)"
+   },
+   {
+    "index": 2,
+    "location": "[E+0x84]",
+    "size": "0x40",
+    "meaning": "vertex record 3 (by value)"
+   },
+   {
+    "index": 3,
+    "location": "[E+0xC4]",
+    "size": "4",
+    "meaning": "pointer to the 0x14-byte call record"
+   }
+  ],
+  "return": {
+   "register": "EAX",
+   "meaning": "incidental value; callers use the call record, not EAX"
+  },
+  "instructions": 2257,
+  "basic_blocks": 210,
+  "edges": 284,
+  "returns": 7,
+  "call_sites": 26,
+  "real_callees": [
+   {
+    "site": "0x00515101",
+    "target": "0x00514760",
+    "kind": "self-recursion"
+   },
+   {
+    "site": "0x005156A0",
+    "target": "0x00514760",
+    "kind": "self-recursion"
+   },
+   {
+    "site": "0x00515BB0",
+    "target": "0x00514760",
+    "kind": "self-recursion"
+   },
+   {
+    "site": "0x00516079",
+    "target": "0x00514760",
+    "kind": "self-recursion"
+   },
+   {
+    "site": "0x005164D3",
+    "target": "0x00514760",
+    "kind": "self-recursion"
+   }
+  ],
+  "pseudo_callees": {
+   "address": "0x00C35040",
+   "count": 21,
+   "meaning": "Binary Ninja's __builtin_memcpy for the 21 `rep movsd` 16-dword copies; radare2 does not treat them as calls"
+  },
+  "callers": [
+   {
+    "site": "0x00513EF7",
+    "function": "Terrain_Draw (0x00512C30)"
+   },
+   {
+    "site": "0x00514308",
+    "function": "Terrain_Draw (0x00512C30)"
+   }
+  ],
+  "loops": [
+   {
+    "header": "0x0051481A",
+    "latch": "0x0051487B",
+    "kind": "near-plane three-vertex transform/attribute pass"
+   },
+   {
+    "header": "0x00514C3E",
+    "latch": "0x00514C3E",
+    "kind": "near count==2 attribute scale pass"
+   },
+   {
+    "header": "0x0051501A",
+    "latch": "0x0051501A",
+    "kind": "near count==1 attribute scale pass"
+   },
+   {
+    "header": "0x0051651B",
+    "latch": "0x0051651B",
+    "kind": "three-vertex emitter"
+   }
+  ],
+  "stage_regions": [
+   {
+    "range": [
+     "0x00514760",
+     "0x005147E4"
+    ],
+    "blocks": 2,
+    "role": "entry, g_a7e070, AND reject, near-bit dispatch"
+   },
+   {
+    "range": [
+     "0x005147E5",
+     "0x00515136"
+    ],
+    "blocks": 69,
+    "role": "near plane in clip space (bit 0x10)"
+   },
+   {
+    "range": [
+     "0x00515136",
+     "0x005156D5"
+    ],
+    "blocks": 52,
+    "role": "left bound x vs g_bcabd0 (bit 0x01)"
+   },
+   {
+    "range": [
+     "0x005156D5",
+     "0x00515BE5"
+    ],
+    "blocks": 40,
+    "role": "top bound y vs g_bcabd4 (bit 0x02)"
+   },
+   {
+    "range": [
+     "0x00515BE5",
+     "0x005160AE"
+    ],
+    "blocks": 28,
+    "role": "right bound x vs g_bcabd8 (bit 0x04)"
+   },
+   {
+    "range": [
+     "0x005160AE",
+     "0x005164F3"
+    ],
+    "blocks": 16,
+    "role": "bottom bound y vs g_bcabdc (bit 0x08)"
+   },
+   {
+    "range": [
+     "0x005164F3",
+     "0x005165FE"
+    ],
+    "blocks": 3,
+    "role": "three-vertex/three-index emitter and return"
+   }
+  ],
+  "globals": [
+   "0x00A7E070 increment on entry / decrement on every return",
+   "0x00BCADC0 near-plane clip threshold",
+   "0x00BCABD0 left x bound; 0x00BCABD4 top y bound; 0x00BCABD8 right x bound; 0x00BCABDC bottom y bound",
+   "0x00C311A0/A4/B0/B4 projection scale/offset for x and y",
+   "0x00BCAD70 depth scale; 0x00A7F894 fog scale; 0x00A7E074 fog offset; 0x005333E0 float 1.0f"
+  ],
+  "binary_ninja": "210 blocks, 284 edges, 2257 instructions, 7 return blocks, 26 call sites",
+  "radare2": "afij: size 7839, 210 blocks, 284 edges, 2257 instructions, cdecl, recursive, cc 88",
+  "angr": "CFGFast exact entry: result pass, 259 nodes, 354 edges, no unresolved jumps (call-site splits explain the extra nodes)",
+  "cfg_cross_check": "Binary Ninja and radare2 node/edge sets are identical; gate CFG score 1.0"
+ },
+ "candidate": {
+  "source": "engine/src/retail/terrain/terrain_mipmaps.cpp",
+  "header": "engine/include/igi/retail/terrain/terrain_mipmaps.hpp",
+  "source_sha256": "7e3c712ab28ca6e0fca6a0eb15f2dc5b5dab1b47c86e3f74b87d278a7aa2f9ab",
+  "header_sha256": "5779ab01040ef76100b67ba24e6a068a68362b0e51c0cad0e28e445daab541b2",
+  "object": {
+   "path": "build/task-c-evidence/terrain_mipmaps.o",
+   "sha256": "caac572588f2c4932a5f98a5806a57f59062a8b79085864e23ec6798a8fea69e",
+   "size_bytes": 11979,
+   "format": "pe-i386",
+   "text_section_size": "0x2480",
+   "symbol": "00000150 T Terrain_BuildMipMaps_2",
+   "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_mipmaps.cpp -o build/task-c-evidence/terrain_mipmaps.o"
+  },
+  "function_extent": [
+   "0x00000150",
+   "0x0000247B"
+  ],
+  "instructions": 2253,
+  "basic_blocks": 260,
+  "edges": 352,
+  "conditional_branches": 93,
+  "call_instructions": 12,
+  "returns": 1,
+  "call_sites": [
+   {
+    "site": "0x000004E0",
+    "target": "recompute_outcode (local helper)"
+   },
+   {
+    "site": "0x000005F2",
+    "target": "recompute_outcode (local helper)"
+   },
+   {
+    "site": "0x000008B8",
+    "target": "llrintl"
+   },
+   {
+    "site": "0x000008D0",
+    "target": "llrintl"
+   },
+   {
+    "site": "0x000008E7",
+    "target": "llrintl"
+   },
+   {
+    "site": "0x00000900",
+    "target": "llrintl"
+   },
+   {
+    "site": "0x00000C4F",
+    "target": "recompute_outcode (local helper)"
+   },
+   {
+    "site": "0x00000DB6",
+    "target": "recompute_outcode (local helper)"
+   },
+   {
+    "site": "0x00000FD3",
+    "target": "Terrain_BuildMipMaps_2 (self)"
+   },
+   {
+    "site": "0x00001C3A",
+    "target": "Terrain_BuildMipMaps_2 (self)"
+   },
+   {
+    "site": "0x00001C65",
+    "target": "unresolved_state (noreturn abort helper)"
+   },
+   {
+    "site": "0x0000245D",
+    "target": "unresolved_state (noreturn abort helper)"
+   }
+  ],
+  "self_recursion_sites": [
+   "0x00000FD3",
+   "0x00001C3A"
+  ],
+  "loops": {
+   "cyclic_sccs": 2,
+   "description": "a 114-block cyclic SCC that contains the near stage plus the four-stage dispatch loop and its shared tails, and a one-block emitter loop at 0x00000819"
+  },
+  "signature_emitted": "extern \"C\" std::uint32_t Terrain_BuildMipMaps_2(TerrainMipMapsVertex, TerrainMipMapsVertex, TerrainMipMapsVertex, TerrainMipMapsCall*)",
+  "runtime_stack_shape": "the compiler passes the three 0x40-byte records by value (0x40 stride in the prologue) and the pointer separately; the two static recursive sites copy three 0x40-byte records into the outgoing argument area before calling. The net by-value ABI matches retail; the candidate does not emit the retail add esp,0xC4 sequence at those sites.",
+  "linked_executable": {
+   "path": "build-clean-win32/igi1.exe",
+   "sha256": "35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6",
+   "receipt": "build-clean-win32/candidate-receipt.json",
+   "receipt_sha256": "30f130a18476a74fa441c667138fc104aaa3ba81db595d51aece079520571105",
+   "contains": "the pre-fix transcription: receipt records source sha256 b90d5eaa9a7b303de8b9ae123fdc71b99d2cfce780deb51671cba6d0965ac001 and TU object 63e864d5c1cf4d1644438215ed1de0b9c50b8a13e0da6dcc29da03e0b985f1cf; the symbol is at 0x00460C50",
+   "does_not_contain": "the corrected source 7e3c712ab28ca6e0fca6a0eb15f2dc5b5dab1b47c86e3f74b87d278a7aa2f9ab / object caac572588f2c4932a5f98a5806a57f59062a8b79085864e23ec6798a8fea69e; no relink was performed"
+  }
+ },
+ "compared_properties": [
+  {
+   "property": "function identity and entry",
+   "retail": "0x00514760..0x005165FE, 7839 bytes, symbol Terrain_BuildMipMaps_2; only external callers 0x00513EF7/0x00514308 in Terrain_Draw",
+   "candidate": "same VA and name bound through igi::retail::terrain; two call sites in terrain_draw.cpp; the retail sites 0x00513EF7/0x00514308 are documented in the header and were not re-derived in this review",
+   "result": "match"
+  },
+  {
+   "property": "ABI and argument layout",
+   "retail": "cdecl; three 0x40-byte records by value + 0x14-byte call-record pointer; caller cleans 0xC4",
+   "candidate": "cdecl; identical by-value record signature; the object prologue reads the three flag bytes at a 0x40-byte stride (0x258/0x298/0x2D8 relative to its frame), consistent with three 0x40-byte by-value records",
+   "result": "match"
+  },
+  {
+   "property": "entry gate, frame counter and reject return",
+   "retail": "increment g_a7e070; load three outcode bytes; reject when (r1 & r2 & r3) != 0 returning r1's low byte; else test near bit 0x10",
+   "candidate": "same order; ++g_a7e070; same AND test; same reject return (flag1); same near-bit dispatch",
+   "result": "match"
+  },
+  {
+   "property": "near-plane stage (0x005147E5..0x00515136)",
+   "retail": "three clip-space scratch slots; record +0x24 points at the slot; flagged vertices keep input xyz, unflagged are unprojected as 1/z, (x-g_c311B0)/(g_c311A4*z), (y-g_c311B4)/(g_c311A0*z); colour bytes become six float attributes; clip against g_bcadc0; two-outside replaces both, one-outside saves the outside vertex and recurses",
+   "candidate": "same scratch layout, same +0x24 install, same unprojection expressions with extended intermediates and rounded 1/z, same attribute initialisation, same two-outside/one-outside split and recursion order",
+   "result": "match"
+  },
+  {
+   "property": "screen-stage order, masks and compare axis",
+   "retail": "left (bit 0x01, x < g_bcabd0, recompute from top), top (0x02, y < g_bcabd4, recompute from right), right (0x04, x > g_bcabd8, recompute from bottom), bottom (0x08, y > g_bcabdc, clears the outcode); each stage skips when the OR has no bit",
+   "candidate": "same four-entry order and parameters in the ScreenStage table; same bits, planes, compare axes, first_bit values and OR skip",
+   "result": "match"
+  },
+  {
+   "property": "intersection rounding flavour",
+   "retail": "per intersection, not per stage: near all extended; left/right all rounded; top and bottom count==2 both extended, count==1 first extended and second rounded",
+   "candidate": "round_t covers the two-outside path and the first one-outside intersection; round_second covers the second one-outside intersection (top/bottom true, left/right true); fixed during this review",
+   "result": "match-after-fix",
+   "evidence": [
+    "0x00514D2D",
+    "0x00514E7D",
+    "0x005151C9",
+    "0x005152BA",
+    "0x00515437",
+    "0x00515539",
+    "0x00515768",
+    "0x00515830",
+    "0x00515983",
+    "0x00515A62",
+    "0x00515C81",
+    "0x00515D3A",
+    "0x00515E7E",
+    "0x00515F47",
+    "0x00516146",
+    "0x005161D7",
+    "0x005162E9",
+    "0x0051638E"
+   ]
+  },
+  {
+   "property": "one-outside recursion and return-value rule",
+   "retail": "save the outside record, clip it toward the first inside vertex, clip the saved copy toward the second inside vertex, recurse with (I1, I2, inside2), then continue with (I1, inside1, inside2); left/top/right return the AND-of-outcodes, bottom returns the callee's EAX",
+   "candidate": "same saved-copy shape and argument order; same AND computation; same bottom-stage return rule",
+   "result": "match"
+  },
+  {
+   "property": "outcode recomputation",
+   "retail": "x87 FCOMP with CF/AH tests: x < bound, y < bound, x > bound, y > bound; unordered counts as below",
+   "candidate": "x87_below/x87_below_or_equal helpers reproduce the CF and CF|ZF|PF predicates; same per-stage recompute ranges",
+   "result": "match"
+  },
+  {
+   "property": "emitter (0x005164F3..0x005165F4)",
+   "retail": "triangle_count++; index cursor = index_output + 3*n uint16; three iterations; 0x20-byte vertex copy; u/v multiplied by 1/z; alpha FISTP qword << 24; colour red<<8|green<<8|blue -> +0x10; fog z*g_a7f894+g_a7e074 -> +0x08; depth z*g_bcad70 -> +0x0C; index = vertex_index + base",
+   "candidate": "same counter update, cursor arithmetic, three-iteration loop, 0x20-byte copy, u/v scaling, alpha/colour packing, fog/depth stores and index sum",
+   "result": "match"
+  },
+  {
+   "property": "global side effects",
+   "retail": "g_a7e070 increments once and decrements on every return path; writes only the caller's vertex/index buffers and by-value records",
+   "candidate": "same g_a7e070 pair and same caller-buffer writes; no allocation",
+   "result": "match"
+  },
+  {
+   "property": "CFG shape",
+   "retail": "210 blocks, 284 edges, 7 retn sites, 4 cyclic SCCs, 5 static self-recursion sites",
+   "candidate": "260 blocks, 352 edges, 1 ret site, 2 cyclic SCCs, 2 static self-recursion sites",
+   "result": "differs",
+   "note": "documented as D1; the candidate is not CFG-isomorphic"
+  }
+ ],
+ "divergences": [
+  {
+   "id": "MP-D1",
+   "kind": "structure",
+   "severity": "medium",
+   "status": "accepted-with-caveat",
+   "summary": "The four duplicated retail screen stages are one parameterised clip_screen_plane() driven by a four-entry table/loop; the near stage and its attribute scaling are also folded into the same candidate CFG region.",
+   "retail": "four separate stage regions with their own one-outside recursion sites (0x00515101, 0x005156A0, 0x00515BB0, 0x00516079) plus the near site 0x005164D3; 210 blocks, 284 edges, 4 cyclic SCCs, 7 retn sites.",
+   "candidate": "one stage loop; 2 static self-recursion sites (0x00000FD3 near, 0x00001C3A screen); 260 blocks, 352 edges, 2 cyclic SCCs, 1 ret site.",
+   "impact": "The stage order and per-stage parameters are reproduced, but a CFG-score or block-count comparison against retail is not meaningful and is not claimed. Runtime call order for the four stages is the same: left, top, right, bottom, with the same recursion arguments.",
+   "resolution": "Recorded as a structural difference, not a semantic one. The property comparison above is the structural evidence; the candidate is explicitly not CFG-isomorphic."
+  },
+  {
+   "id": "MP-D2",
+   "kind": "structure",
+   "severity": "low",
+   "status": "accepted-with-caveat",
+   "summary": "The candidate emits helper and libm calls that retail inlines: four recompute_outcode calls, four llrintl calls, and two calls to the noreturn abort helper.",
+   "retail": "no external callee; outcode recomputation, FISTP and the fatal paths are inline.",
+   "candidate": "12 call instructions: 4 recompute_outcode, 4 llrintl, 2 self-recursion, 2 unresolved_state.",
+   "impact": "Extra call/return and, for llrintl, a library rounding implementation instead of an inline FISTP.",
+   "resolution": "Documented; no external state is touched by the helpers."
+  },
+  {
+   "id": "MP-D3",
+   "kind": "control-flow",
+   "severity": "medium",
+   "status": "open",
+   "summary": "clip_near_plane() and clip_screen_plane() call [[noreturn]] unresolved_state() and abort when all three vertices carry the stage bit.",
+   "retail": "has no such branch. For the near stage the entry AND test makes all-three impossible; for a screen stage retail's count computation would take the count==3 value into the one-outside path and scan for an 'inside' vertex that does not exist.",
+   "candidate": "aborts with a diagnostic instead of executing that retail path.",
+   "impact": "A count==3 screen stage is not proved unreachable from this function alone. If it is reachable, the candidate terminates where retail would continue with out-of-range role assignment.",
+   "resolution": "Left as a documented, deliberate trap. This is the main reason the status is STRUCTURALLY_VERIFIED and not a behavioral claim."
+  },
+  {
+   "id": "MP-D4",
+   "kind": "semantic",
+   "severity": "low",
+   "status": "open",
+   "summary": "The purpose of g_a7e070 (0x00A7E070) is not established.",
+   "retail": "incremented on entry and decremented on every return path; no other access in this function.",
+   "candidate": "the same increment/decrement pair, with no invented meaning.",
+   "impact": "If the counter has a semantic consumer elsewhere, only the pair is reproduced here.",
+   "resolution": "Documented; the name is not asserted."
+  },
+  {
+   "id": "MP-D5",
+   "kind": "floating-point",
+   "severity": "low",
+   "status": "open",
+   "summary": "Retail converts the packed colour/alpha with FISTP under the caller's inherited x87 control word; the candidate calls llrintl.",
+   "retail": "FISTP qword at 0x00516592, 0x005165A7, 0x005165B9, 0x005165CD; no FLDCW in the function.",
+   "candidate": "llrintl per the C contract rounds according to the current rounding mode, but the MinGW libm implementation and its use of the inherited x87/MXCSR state were not inspected.",
+   "impact": "A non-default inherited rounding mode could change the packed colour/alpha by one.",
+   "resolution": "Not proved either way; recorded as a limitation."
+  },
+  {
+   "id": "MP-D6",
+   "kind": "memory-layout",
+   "severity": "low",
+   "status": "accepted",
+   "summary": "Record bytes +0x21..+0x23 are never read by this function.",
+   "retail": "the caller's by-value copies leave the three padding bytes as stack garbage; the emitter copies 0x20 bytes including them.",
+   "candidate": "the same three bytes are carried through the record and copied; terrain_draw.cpp's caller-side zero-initialisation is documented separately.",
+   "impact": "Output bytes +0x21..+0x23 can differ from retail because the caller initialises them differently; this function itself is faithful.",
+   "resolution": "Recorded; caller-side difference, not a divergence in this unit."
+  },
+  {
+   "id": "MP-D7",
+   "kind": "memory-layout",
+   "severity": "low",
+   "status": "accepted",
+   "summary": "Record +0x24 is a pointer into this function's frame and dangles after return.",
+   "retail": "writes the clip scratch pointer into each record; the caller's by-value copies retain the dangling value.",
+   "candidate": "same write and escape.",
+   "impact": "No read after return in either implementation.",
+   "resolution": "Reproduced deliberately."
+  },
+  {
+   "id": "MP-D8",
+   "kind": "compiler-runtime",
+   "severity": "low",
+   "status": "accepted",
+   "summary": "The noreturn abort helper registers an SJLJ unwind frame; the main function does not.",
+   "retail": "no unwind registration.",
+   "candidate": "unresolved_state() references _Unwind_SjLj_Register and __gxx_personality_sj0; the main function has no unwind registration.",
+   "impact": "Only the trap path is affected.",
+   "resolution": "Documented."
+  },
+  {
+   "id": "MP-D9",
+   "kind": "naming",
+   "severity": "low",
+   "status": "accepted",
+   "summary": "The catalog name Terrain_BuildMipMaps_2 implies mip-chain construction, but the body has no level loop, allocation or texture access.",
+   "retail": "per-triangle clip-project-and-emit routine.",
+   "candidate": "retains the established symbol for the VA and documents the contradiction.",
+   "impact": "None on the transcription.",
+   "resolution": "Name retained; semantics documented."
+  }
+ ],
+ "limitations": [
+  "The candidate is not CFG-isomorphic: 260 blocks / 352 edges / 2 cyclic SCCs vs retail 210 / 284 / 4, because the four retail screen stages are factored into one table-driven loop.",
+  "No runtime, Frida/IGI-Probe, paired-game or rendered-output evidence exists for this function; RUNTIME_TESTED and VERIFIED are not claimed.",
+  "The screen-stage count==3 abort path is not proved unreachable, so the candidate may terminate where retail would continue.",
+  "llrintl's rounding-mode behaviour was not verified against the inherited x87 control word.",
+  "The purpose of g_a7e070 is unknown; only its increment/decrement pair is reproduced.",
+  "The +0x21..+0x23 padding bytes depend on the caller's initialisation and can differ.",
+  "The linked candidate build-clean-win32/igi1.exe (sha256 35d92a3a...) contains the pre-fix transcription (receipt source b90d5eaa..., TU object 63e864d5..., symbol at 0x00460C50), not the corrected source 7e3c712a... / object caac5725.... The corrected object was compiled standalone and was not relinked or run here.",
+  "The object leaves 13 retail globals undefined by design; this report does not prove the link-time definitions are correct."
+ ],
+ "status_recommendation": {
+  "status": "STRUCTURALLY_VERIFIED",
+  "rationale": "The retail function was recovered at the exact entry with Binary Ninja, radare2 and angr; the BN and radare2 node/edge sets are identical (score 1.0). The candidate reproduces the entry gate, stage order and masks, per-intersection rounding, one-outside recursion, outcode recomputation, emitter and g_a7e070 side effects at source and object level. The comparison is property-level and explicitly not CFG-isomorphic.",
+  "not_claimed": [
+   "BUILD_VERIFIED as a status increment",
+   "RUNTIME_TESTED",
+   "VERIFIED",
+   "CFG-isomorphism",
+   "bit-exact floating point"
+  ],
+  "remaining": [
+   "No runtime observation.",
+   "Screen-stage count==3 abort is a deliberate divergence.",
+   "x87 control-word inheritance at the FISTP replacements is unresolved.",
+   "g_a7e070 purpose is unknown."
+  ],
+  "gate_projection": "With the manifest record rebound to this source, the structural checks (binary hash, address, implementation path/hash, BN/r2/angr evidence, semantic review) can pass at --threshold STRUCTURALLY_VERIFIED. The strict default also requires a live behavioral_runner, which this record does not have; that check must remain a blocker."
+ },
+ "tool_evidence": {
+  "binary_ninja": {
+   "artifact": "docs/fidelity/evidence/0x00514760-binaryninja-20261023.json",
+   "tool": "binaryninja_ui_mcp 0.1.0",
+   "view": "view_1 (PE x86, base 0x00400000, entry 0x004A50F5)"
+  },
+  "radare2": {
+   "artifact": "docs/fidelity/evidence/0x00514760-radare2-20261023.json",
+   "tool": "radare2 6.2.0"
+  },
+  "angr": {
+   "artifact": "docs/fidelity/evidence/0x00514760-angr-20261023.json",
+   "tool": "angr 10.0.4.post1 CFGFast"
+  },
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "objdump": "i686-w64-mingw32-objdump -d --no-show-raw-insn"
+ },
+ "commands": [
+  "bn_function_info 0x00514760",
+  "bn_function_basic_blocks 0x00514760",
+  "bn_function_disassembly 0x00514760",
+  "bn_function_callees 0x00514760",
+  "r2 -q -2 -e bin.relocs.apply=true -c 'af @ 0x00514760; afij @ 0x00514760; agfj @ 0x00514760' igi.exe",
+  ".venv-angr/bin/python scripts/angr_analyze.py --binary igi.exe --address 0x00514760",
+  "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_mipmaps.cpp -o build/task-c-evidence/terrain_mipmaps.o",
+  "i686-w64-mingw32-objdump -d --no-show-raw-insn build/task-c-evidence/terrain_mipmaps.o"
+ ]
+}

@@ -1,24 +1,22 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "result": "not_performed",
  "address": "0x004F82B0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
-    }
-   },
-   "note": "The candidate TerrainLightMap_PushEntry reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
- ]
+ "implementation_sha256": "7af66a6085cea2df6496a9be2612b586686f2b527b1a38feefd19f744607ba03",
+ "candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
+ "executed": false,
+ "tests_total": 0,
+ "tests_passed": 0,
+ "tests_failed": 0,
+ "cases": [],
+ "recorded_at": "2026-10-22T23:01:28+00:00",
+ "reason": "No differential runner covers TerrainLightMap_PushEntry. The previous artifact in this slot was a hand-written 'static-structure' case, not an executed comparison, and the older 0x004F82B0-frida-paired-20261021.json is bound to implementation 133d9ddb and candidate 185c61e7, neither of which is the current source or candidate build. scripts/native_leaves_runner.py was attempted and reports 'candidate failed for seed 0x0'. No behavioral pass is claimed.",
+ "limitations": [
+  "The host Win32 replay harness does not provide the script parse-mode fixture or the g_b97d24/g_data_b97b20 storage the native manipulates, so the generic leaf runner cannot compare it.",
+  "Static structure (6 blocks/6 edges BN and r2; angr exact entry, 7 nodes) is recorded separately and does not establish behavioral equivalence.",
+  "Overflow handling and natural runtime integration remain unresolved."
+ ],
+ "note": "This report intentionally records no behavioral test. It must not be cited as a behavioral pass."
 }

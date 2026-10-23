@@ -1,7 +1,11 @@
 #include "igi/retail/terrain/terrain_loaders.hpp"
 
+#include "igi/retail/terrain/terrain_quadtree.hpp"
+
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
+#include "igi/retail/resource/is_resource_loaded.hpp"
+#include "igi/retail/resource/resource_lifecycle.hpp"
 #include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/texture/loop_terrain_texture.hpp"
 
@@ -12,7 +16,6 @@
 #include <iostream>
 #include <limits>
 #include <map>
-#include <stdexcept>
 
 namespace igi::retail::terrain
 {
@@ -20,10 +23,75 @@ namespace igi::retail::terrain
 // Existing host storage covers 20 entries; retail's complete storage extent is unresolved.
 std::array<std::uint32_t, 20> g_data_b97b20{};
 std::int32_t g_b97d24 = 0;
+// 0x00B97DF4 and 0x00BA2058: heightmap stack depth and current heightmap index.  These are
+// defined here (outside this file's anonymous namespace) because HeightMap_Enter writes them and
+// DynObj_ParseConfigFile_6 (terrain_scene_state.cpp) and Terrain_TraverseContourQuadtree
+// (terrain_quadtree.cpp) read or clear the same retail storage.  The declarations live in
+// terrain_quadtree.hpp so the one definition below is checked against its extern consumers.
+std::int32_t g_b97df4 = 0;
+std::uint32_t g_ba2058 = 0;
 // Retail texture-modifier state is shared with push/pop native consumers.
 std::array<std::uint32_t, 20> g_b97da0{};
 std::int32_t g_b97df8 = 0;
 std::uint32_t g_ba5060 = 0;
+
+// -------------------------------------------------------------------------------------------------
+// Retail state consumed by Terrain_DecodeChunkCommands (0x00510010).
+//
+// 0x00B16CA4 / 0x00B16C9C are the per-frame record and descriptor counts published by
+// 0x004D14E0 (Terrain_TraverseContourQuadtree).  The 0x30-byte records themselves live at
+// 0x00B16CE0..0x00B46CDF (0x1000 records); this function reads g_b16ca4 records and advances the
+// record pointer by 0x30, it does not read the 0x1000 limit.
+// -------------------------------------------------------------------------------------------------
+std::int32_t g_b16ca4 = 0;
+std::int32_t g_b16c9c = 0;
+std::array<std::uint8_t, 0x30 * 0x1000> g_b16ce0{};
+std::int32_t g_c31090 = 0; // 0x00C31090: accumulation of the record count, reset by caller 0x0050FE60
+
+// Three identical terrain allocation pools (0x004D23CC family).  The handle tables are byte
+// addressed: retail stores `*(int*)((char*)handles + offset)` where offset already contains
+// base + map[slot] * stride.
+std::int32_t* g_b12b74 = nullptr; // pool A handles, 0x00B12B74
+std::int32_t g_b12b68 = 0;        // pool A count,   0x00B12B68
+std::int32_t g_b12b6c = 0;        // pool A limit,   0x00B12B6C
+std::int32_t* g_b12b64 = nullptr; // pool A map,     0x00B12B64
+std::int32_t g_b12b60 = 0;        // pool A base,    0x00B12B60
+std::int32_t g_b12b70 = 0;        // pool A stride,  0x00B12B70
+std::int32_t* g_b12c54 = nullptr; // pool B handles, 0x00B12C54
+std::int32_t g_b12c48 = 0;        // pool B count,   0x00B12C48
+std::int32_t g_b12c4c = 0;        // pool B limit,   0x00B12C4C
+std::int32_t* g_b12c44 = nullptr; // pool B map,     0x00B12C44
+std::int32_t g_b12c40 = 0;        // pool B base,    0x00B12C40
+std::int32_t g_b12c50 = 0;        // pool B stride,  0x00B12C50
+std::int32_t* g_b16cd4 = nullptr; // pool C handles, 0x00B16CD4
+std::int32_t g_b16cc8 = 0;        // pool C count,   0x00B16CC8
+std::int32_t g_b16ccc = 0;        // pool C limit,   0x00B16CCC
+std::int32_t* g_b16cc4 = nullptr; // pool C map,     0x00B16CC4
+std::int32_t g_b16cc0 = 0;        // pool C base,    0x00B16CC0
+std::int32_t g_b16cd0 = 0;        // pool C stride,  0x00B16CD0
+
+// 0x00B12C5C / 0x00B12C60: descriptor-array side tables.  The consumer indexes them by
+// g_b16c9c.  Retail passes the literal address 0x00B12C60 to both users (0x00513038 in
+// Terrain_Draw and 0x004D1559 in Terrain_TraverseContourQuadtree), so 0x00B12C60 is the array
+// itself, not a pointer stored there; it is defined here as the single array definition and
+// declared `extern std::uint32_t g_b12c60[]` in terrain_quadtree.hpp.  The retail extent is not
+// established; 0x1000 entries is the candidate's bounded storage.
+std::array<std::uint32_t, 0x1000> g_b12c5c{};
+std::uint32_t g_b12c60[0x1000]{};
+
+// 0x00B12BA0 / 0x00B12BA8 / 0x00B12BB0: world-space origin added to the current record before the
+// per-material page coordinates are formed.  Set by the render setup; not written here.
+double g_b12ba0 = 0.0;
+double g_b12ba8 = 0.0;
+double g_b12bb0 = 0.0;
+
+// Runtime-populated tables addressed by the packed record token.  Retail keeps these in BSS and
+// fills them from the texture-modifier and tile-map loaders; the candidate provides zeroed shadow
+// storage so the transcription is self-contained.  Each entry is 0x30 bytes.
+std::array<std::uint8_t, 0x30 * 256> g_ba2030_texture_modifiers{}; // 0x00BA2030
+std::array<std::uint8_t, 0x30 * 256> g_ba5050_neighbor_modifiers{}; // 0x00BA5050
+std::array<std::uint8_t, 0x30 * 256> g_ba80b0_material_pages{};    // 0x00BA80B0
+std::uint8_t* g_c30060 = nullptr;                                  // 0x00C30060 vertex-declaration base
 
 namespace
 {
@@ -95,9 +163,6 @@ std::array<TerrainTileMapTable, 64> g_c30080{};
 // Active texture modifier and heightmap stacks:
 
 std::array<std::uint32_t, 64> g_b97d40{};
-std::int32_t g_b97df4 = 0;
-std::uint32_t g_ba2058 = 0;
-
 
 [[nodiscard]] std::vector<std::byte> read_binary_file(const std::filesystem::path& file_path)
 {
@@ -177,6 +242,834 @@ inline float Script_GetArgFloat(const float* args, int index)
     return args != nullptr ? args[index] : 0.0f;
 }
 
+// -------------------------------------------------------------------------------------------------
+// Raw little-endian accessors for the retail record/table layout.  The transcription deliberately
+// keeps byte offsets rather than introducing guessed structures for the runtime-populated tables.
+// -------------------------------------------------------------------------------------------------
+inline std::uint32_t load_u32(const void* base, std::size_t offset) noexcept
+{
+    std::uint32_t value = 0;
+    std::memcpy(&value, static_cast<const std::uint8_t*>(base) + offset, sizeof value);
+    return value;
+}
+
+inline std::int32_t load_i32(const void* base, std::size_t offset) noexcept
+{
+    std::int32_t value = 0;
+    std::memcpy(&value, static_cast<const std::uint8_t*>(base) + offset, sizeof value);
+    return value;
+}
+
+inline std::uint16_t load_u16(const void* base, std::size_t offset) noexcept
+{
+    std::uint16_t value = 0;
+    std::memcpy(&value, static_cast<const std::uint8_t*>(base) + offset, sizeof value);
+    return value;
+}
+
+inline float load_f32(const void* base, std::size_t offset) noexcept
+{
+    float value = 0.0f;
+    std::memcpy(&value, static_cast<const std::uint8_t*>(base) + offset, sizeof value);
+    return value;
+}
+
+inline double load_f64(const void* base, std::size_t offset) noexcept
+{
+    double value = 0.0;
+    std::memcpy(&value, static_cast<const std::uint8_t*>(base) + offset, sizeof value);
+    return value;
+}
+
+inline void store_u32(void* base, std::size_t offset, std::uint32_t value) noexcept
+{
+    std::memcpy(static_cast<std::uint8_t*>(base) + offset, &value, sizeof value);
+}
+
+inline void store_i32(void* base, std::size_t offset, std::int32_t value) noexcept
+{
+    std::memcpy(static_cast<std::uint8_t*>(base) + offset, &value, sizeof value);
+}
+
+inline void store_f32(void* base, std::size_t offset, float value) noexcept
+{
+    std::memcpy(static_cast<std::uint8_t*>(base) + offset, &value, sizeof value);
+}
+
+inline std::uint8_t* pointer_from_bits(std::uint32_t value) noexcept
+{
+    return reinterpret_cast<std::uint8_t*>(static_cast<std::uintptr_t>(value));
+}
+
+inline std::uint32_t pointer_bits(const void* value) noexcept
+{
+    return static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(value));
+}
+
+// One of the three identical free-list pools.  `handles` is byte addressed, exactly as the retail
+// instructions address it (`mov edi,[ecx+edi]` with the pool offset in ecx, no scale).
+struct RetailPool
+{
+    std::int32_t*& handles;
+    std::int32_t& count;
+    std::int32_t& limit;
+    std::int32_t*& map;
+    std::int32_t& base;
+    std::int32_t& stride;
+};
+
+inline RetailPool pool_a() noexcept
+{
+    return {g_b12b74, g_b12b68, g_b12b6c, g_b12b64, g_b12b60, g_b12b70};
+}
+
+inline RetailPool pool_b() noexcept
+{
+    return {g_b12c54, g_b12c48, g_b12c4c, g_b12c44, g_b12c40, g_b12c50};
+}
+
+inline RetailPool pool_c() noexcept
+{
+    return {g_b16cd4, g_b16cc8, g_b16ccc, g_b16cc4, g_b16cc0, g_b16cd0};
+}
+
+inline std::uint32_t pool_allocate(RetailPool pool) noexcept
+{
+    const std::int32_t slot = pool.count;
+    const std::uint32_t offset =
+        static_cast<std::uint32_t>(pool.map[slot] * pool.stride + pool.base);
+    store_i32(pool.handles, offset, slot);
+    ++pool.count;
+    return offset;
+}
+
+// 0x004D23CC family: remove `data` from the pool and repair the map/handle back-references.
+void pool_release(std::uint32_t data, RetailPool pool) noexcept
+{
+    const std::int32_t handle = load_i32(pool.handles, data);
+    const std::int32_t top = --pool.count;
+    if (handle != top)
+    {
+        const std::int32_t slot = pool.map[top] * pool.stride + pool.base;
+        const std::int32_t old_mapping = pool.map[handle];
+        const std::int32_t moved_handle = load_i32(pool.handles, slot);
+        pool.map[handle] = pool.map[moved_handle];
+        pool.map[moved_handle] = old_mapping;
+        store_i32(pool.handles, slot, handle);
+    }
+}
+
+// Retail one-bit coverage test used by the phase-2 material selection.  Row addressing here is
+// `(y << shift) + (x >> 3)`, without the extra +y term used by the height sampler below.
+inline bool coverage_bit(const std::uint8_t* bitmap, std::int32_t x, std::int32_t y,
+                         std::uint32_t shift) noexcept
+{
+    const std::uint32_t row = static_cast<std::uint32_t>(y) << (shift & 31U);
+    const std::uint32_t byte_index = row + static_cast<std::uint32_t>(x >> 3);
+    const std::uint8_t value = bitmap[static_cast<std::int32_t>(byte_index)];
+    return ((value >> (x & 7)) & 1U) != 0;
+}
+
+// Height sampler used while building vertices.  The retail index is
+// `(y + (y << shift)) + x`, i.e. rows are `1 + (1 << shift)` bytes apart.  The four samples are
+// signed bytes; the 64.0 subtraction and 256.0 scale are the retail literals at 0x00534AE0 and
+// 0x005342E8.
+inline float sample_height_bilinear(const std::uint8_t* bitmap, std::int32_t x, std::int32_t y,
+                                    double frac_x, double frac_y, std::uint32_t shift) noexcept
+{
+    const std::uint32_t row_shift = 1U << (shift & 31U);
+    const std::int32_t stride = static_cast<std::int32_t>(row_shift + 1U);
+    const std::uint32_t base_u = static_cast<std::uint32_t>(y) +
+                                 (static_cast<std::uint32_t>(y) << (shift & 31U)) +
+                                 static_cast<std::uint32_t>(x);
+    const std::int32_t base = static_cast<std::int32_t>(base_u);
+    const double h00 = static_cast<double>(static_cast<std::int8_t>(bitmap[base]));
+    const double h10 = static_cast<double>(static_cast<std::int8_t>(bitmap[base + 1]));
+    const double h01 = static_cast<double>(static_cast<std::int8_t>(bitmap[base + stride]));
+    const double h11 = static_cast<double>(static_cast<std::int8_t>(bitmap[base + stride + 1]));
+    const double top = (h10 - h00) * frac_x + h00;
+    const double bottom = (h11 - h01) * frac_x + h01;
+    return static_cast<float>(((bottom - top) * frac_y + top - 64.0) * 256.0);
+}
+
+// -------------------------------------------------------------------------------------------------
+// 0x00510010 body.  One 0x30-byte contour record is decoded into a terrain chunk: three world
+// coordinates, an LOD level, a packed material token, four texture-modifier indices, and a cache
+// entry.  The record's node supplies the vertex count and the packed per-vertex position words.
+//
+// There is no opcode dispatch and no command-byte stream in this function: `node + 8 + int16(node+2)`
+// points at an array of `int16(node+4) + int16(node+6)` 32-bit words, each of which packs three
+// signed 6-bit offsets (z = bits 14..19, y = bits 20..25, x = bits 26..31, each biased by 0x18)
+// and a low 6-bit material/height slot.  The vertex words are not a byte-code stream.
+//
+// Retail state written here: g_c31090 += record count; g_b16c9c (descriptor count); g_b12c60 and
+// g_b12c5c descriptor entries; the three free-list pools; and the cache entry at record+0x2C
+// (+0x10 stamp, +0x14 allocation type, +0x18 data).  Unknown table contents (0x00BA2030,
+// 0x00BA5050, 0x00BA80B0, 0x00C28FE4 and 0x00C30080) are represented by candidate storage and are
+// listed in the evidence record as unresolved.
+// -------------------------------------------------------------------------------------------------
+void decode_chunk_record(std::uint8_t* record, std::int32_t& cached_neighbor_token,
+                         std::uint8_t* neighbors)
+{
+    // ---- record header -------------------------------------------------------------------------
+    const std::int32_t level = load_i32(record, 0x18);
+    const std::uint32_t flags = load_u32(record, 0x1C);
+    std::uint8_t* const node = pointer_from_bits(load_u32(record, 0x20));
+    const std::uint32_t token = load_u32(record, 0x24);
+    const std::uint32_t token_index = token & 0xFFFFU;                 // 0xFFFF = no page
+    const std::uint32_t modifier_index = (token >> 16) & 0xFFU;        // byte at record+0x26
+    const std::uint32_t neighbor_token = load_u32(record, 0x28);
+    std::uint8_t* const cache = pointer_from_bits(load_u32(record, 0x2C));
+    const std::uint32_t flag_bit0 = flags & 1U;
+    const std::uint32_t axis_flag = flags & 4U;
+
+    // ---- chunk allocation (0x5100DB..0x510107) -------------------------------------------------
+    std::uint32_t chunk_bits = 0;
+    std::int32_t allocation_type = 0;
+    if (g_b12b68 <= g_b12b6c - 3)
+    {
+        chunk_bits = pool_allocate(pool_a());
+        allocation_type = 0;
+    }
+    else if (g_b12c48 <= g_b12c4c - 3)
+    {
+        chunk_bits = pool_allocate(pool_b());
+        allocation_type = 1;
+    }
+    else if (g_b16cc8 <= g_b16ccc - 3)
+    {
+        chunk_bits = pool_allocate(pool_c());
+        allocation_type = 2;
+    }
+    else
+    {
+        // 0x510107: no pool has room; the cache entry is stamped unused and the record is skipped.
+        store_u32(cache, 0x10, 0xFFFFFFFFU);
+        return;
+    }
+
+    store_u32(cache, 0x18, chunk_bits);
+    store_u32(cache, 0x14, static_cast<std::uint32_t>(allocation_type));
+
+    // ---- descriptor publication (0x5101BF..0x5101E0) ------------------------------------------
+    const std::int32_t descriptor_index = g_b16c9c;
+    g_b12c60[static_cast<std::size_t>(descriptor_index)] = chunk_bits;
+    g_b16c9c = descriptor_index + 1;
+
+    std::uint8_t* chunk = pointer_from_bits(chunk_bits);
+
+    // ---- material page parameters (0x5101E6..0x5101F5) ----------------------------------------
+    bool has_material_page = token_index != 0xFFFFU;
+    float material_scale = 0.0f;
+    float material_offset = 0.0f;
+    float material_origin_x = 0.0f;
+    float material_origin_y = 0.0f;
+    std::int32_t material_page = 0;
+    if (has_material_page)
+    {
+        const std::uint8_t* const page =
+            g_ba80b0_material_pages.data() + static_cast<std::size_t>(token_index) * 0x30U;
+        material_scale = load_f32(page, 0x00) * (1.0f / 256.0f);
+        material_offset = load_f32(page, 0x04) * (1.0f / 256.0f);
+        material_origin_x = static_cast<float>(load_f64(page, 0x08));
+        material_origin_y = static_cast<float>(load_f64(page, 0x10));
+        material_page = load_i32(page, 0x18);
+    }
+
+    // ---- texture-modifier bitmap parameters (0x51020C..0x51025D) ------------------------------
+    const std::int32_t modifier = level < 0xE ? 0 : static_cast<std::int32_t>(modifier_index);
+    float modifier_scale = 0.0f;
+    float modifier_origin_x = 0.0f;
+    float modifier_origin_y = 0.0f;
+    std::uint32_t modifier_shift = 0;
+    const std::uint8_t* modifier_bitmap = nullptr;
+    if (modifier != 0)
+    {
+        const std::uint8_t* const p =
+            g_ba2030_texture_modifiers.data() + static_cast<std::size_t>(modifier) * 0x30U;
+        modifier_scale = load_f32(p, 0x10);
+        modifier_origin_x = static_cast<float>(load_f64(p, 0x18));
+        modifier_origin_y = static_cast<float>(load_f64(p, 0x20));
+        modifier_bitmap = pointer_from_bits(load_u32(p, 0x28));
+        modifier_shift = (load_u32(p, 0x0C) & 0xFFU) + 3U;
+    }
+
+    // ---- neighbouring texture-modifier records (0x510270..0x510341) ---------------------------
+    // The four 0x18-byte records are only rebuilt when the packed token changes.  A zero token byte
+    // clears only the first dword of its record; the remaining 0x14 bytes keep their previous
+    // contents, which is why the buffer persists across records.
+    if (cached_neighbor_token != static_cast<std::int32_t>(neighbor_token))
+    {
+        cached_neighbor_token = static_cast<std::int32_t>(neighbor_token);
+        std::uint32_t packed = neighbor_token;
+        for (std::uint32_t k = 0; k < 4U; ++k)
+        {
+            const std::uint32_t byte = packed & 0xFFU;
+            packed >>= 8;
+            std::uint8_t* const dst = neighbors + static_cast<std::size_t>(k) * 0x18U;
+            if (byte == 0)
+            {
+                store_u32(dst, 0x00, 0);
+            }
+            else
+            {
+                const std::uint8_t* const src =
+                    g_ba5050_neighbor_modifiers.data() + static_cast<std::size_t>(byte) * 0x30U;
+                store_u32(dst, 0x00, load_u32(src, 0x0C)); // line-width shift / present flag
+                store_u32(dst, 0x04, load_u32(src, 0x10)); // local-position scale (float bits)
+                store_f32(dst, 0x08, static_cast<float>(load_f64(src, 0x18))); // origin x
+                store_f32(dst, 0x0C, static_cast<float>(load_f64(src, 0x20))); // origin y
+                store_u32(dst, 0x10, load_u32(src, 0x28)); // bitmap base
+                store_u32(dst, 0x14, load_u32(src, 0x00)); // material index
+            }
+        }
+    }
+
+    // ---- node counts and packed vertex words (0x510341..0x5103C6) -------------------------------
+    const std::int32_t first_vertices = static_cast<std::int16_t>(load_u16(node, 0x04));
+    const std::int32_t extra_vertices = static_cast<std::int16_t>(load_u16(node, 0x06));
+    const std::int32_t total_vertices = first_vertices + extra_vertices;
+    const std::uint32_t vertex_data_bytes = static_cast<std::uint32_t>(total_vertices) * 0x14U -
+                                            (static_cast<std::uint32_t>(first_vertices) << 3);
+    std::memcpy(chunk, record, 0x18);
+    store_u32(chunk, 0x18, (static_cast<std::uint32_t>(first_vertices) << 16) |
+                               static_cast<std::uint32_t>(total_vertices));
+    store_i32(chunk, 0x1C, level);
+
+    const double vertex_scale =
+        static_cast<double>(static_cast<std::int32_t>(1U << ((0x1BU - level) & 31U)));
+    std::uint8_t* vcursor = chunk + 0x20;
+    std::uint8_t* command = node + 8 + static_cast<std::int16_t>(load_u16(node, 0x02));
+
+    // Decode one packed vertex word and apply the retail axis/mirror permutation.
+    const auto orient_offsets = [flags, axis_flag](std::uint32_t packed, std::int32_t& x,
+                                                   std::int32_t& y, std::int32_t& z) {
+        z = static_cast<std::int32_t>((packed >> 0x0E) & 0x3FU) - 0x18;
+        x = static_cast<std::int32_t>((packed >> 0x1A) & 0x3FU) - 0x18;
+        y = static_cast<std::int32_t>((packed >> 0x14) & 0x3FU) - 0x18;
+        if (axis_flag != 0)
+        {
+            x = -x;
+        }
+        if ((flags & 1U) == 0)
+        {
+            if ((flags & 2U) != 0)
+            {
+                x = -x;
+                y = -y;
+            }
+        }
+        else if ((flags & 2U) == 0)
+        {
+            const std::int32_t old_x = x;
+            x = -y;
+            y = old_x;
+        }
+        else
+        {
+            const std::int32_t old_x = x;
+            x = y;
+            y = -old_x;
+        }
+    };
+
+    // ---- vertices 0..first-1: four floats, with the optional modifier height -------------------
+    for (std::int32_t i = 0; i < first_vertices; ++i)
+    {
+        const std::uint32_t packed = load_u32(command, 0);
+        command += 4;
+        std::int32_t x = 0;
+        std::int32_t y = 0;
+        std::int32_t z = 0;
+        orient_offsets(packed, x, y, z);
+        const double world_x =
+            static_cast<double>(x) * vertex_scale / 3.0 + load_f64(record, 0x00);
+        const double world_y =
+            static_cast<double>(y) * vertex_scale / 3.0 + load_f64(record, 0x08);
+        double world_z = static_cast<double>(z) * vertex_scale / 3.0 + load_f64(record, 0x10);
+        float height = 0.0f;
+        if (modifier != 0)
+        {
+            const double sx = (world_x - static_cast<double>(modifier_origin_x)) *
+                              static_cast<double>(modifier_scale);
+            const double sy = (world_y - static_cast<double>(modifier_origin_y)) *
+                              static_cast<double>(modifier_scale);
+            const std::int32_t ix = static_cast<std::int32_t>(static_cast<std::int64_t>(sx));
+            const std::int32_t iy = static_cast<std::int32_t>(static_cast<std::int64_t>(sy));
+            height = sample_height_bilinear(modifier_bitmap, ix, iy,
+                                            sx - static_cast<double>(ix),
+                                            sy - static_cast<double>(iy), modifier_shift);
+            if (level <= 0xE)
+            {
+                // 0x510590: the sampled height becomes the fourth component.
+            }
+            else
+            {
+                // 0x510588: add the height to world z and leave the fourth component zero.
+                world_z += static_cast<double>(height);
+                height = 0.0f;
+            }
+        }
+        store_f32(vcursor, 0x00, static_cast<float>(world_x));
+        store_f32(vcursor, 0x04, static_cast<float>(world_y));
+        store_f32(vcursor, 0x08, static_cast<float>(world_z));
+        store_f32(vcursor, 0x0C, height);
+        vcursor += 0x10;
+    }
+
+    // ---- vertices first..total-1: three floats plus the packed low-6-bit material slot ---------
+    for (std::int32_t i = first_vertices; i < total_vertices; ++i)
+    {
+        const std::uint32_t packed = load_u32(command, 0);
+        command += 4;
+        std::int32_t x = 0;
+        std::int32_t y = 0;
+        std::int32_t z = 0;
+        orient_offsets(packed, x, y, z);
+        const double world_x =
+            static_cast<double>(x) * vertex_scale / 3.0 + load_f64(record, 0x00);
+        const double world_y =
+            static_cast<double>(y) * vertex_scale / 3.0 + load_f64(record, 0x08);
+        double world_z = static_cast<double>(z) * vertex_scale / 3.0 + load_f64(record, 0x10);
+        if (modifier != 0)
+        {
+            const double sx = (world_x - static_cast<double>(modifier_origin_x)) *
+                              static_cast<double>(modifier_scale);
+            const double sy = (world_y - static_cast<double>(modifier_origin_y)) *
+                              static_cast<double>(modifier_scale);
+            const std::int32_t ix = static_cast<std::int32_t>(static_cast<std::int64_t>(sx));
+            const std::int32_t iy = static_cast<std::int32_t>(static_cast<std::int64_t>(sy));
+            const float height = sample_height_bilinear(
+                modifier_bitmap, ix, iy, sx - static_cast<double>(ix),
+                sy - static_cast<double>(iy), modifier_shift);
+            world_z += static_cast<double>(height);
+        }
+        store_f32(vcursor, 0x00, static_cast<float>(world_x));
+        store_f32(vcursor, 0x04, static_cast<float>(world_y));
+        store_f32(vcursor, 0x08, static_cast<float>(world_z));
+        store_f32(vcursor, 0x0C, static_cast<float>(packed & 0x3FU));
+        vcursor += 0x10;
+    }
+
+    std::uint8_t* end_vertices = vcursor;
+
+    // ---- per-vertex material selection / UVs (0x5107BC..0x5109C3) -----------------------------
+    const std::size_t meta_bytes =
+        total_vertices > 0 ? static_cast<std::size_t>(total_vertices) * 0x24U : 0U;
+    std::vector<std::uint8_t> metadata(meta_bytes, 0);
+    std::uint8_t* const meta = metadata.data();
+    std::int32_t material_bits = 0;
+    for (std::int32_t i = 0; i < total_vertices; ++i)
+    {
+        const std::uint8_t* const vertex = chunk + 0x20 + static_cast<std::size_t>(i) * 0x10U;
+        const float world_x = load_f32(vertex, 0x00);
+        const float world_y = load_f32(vertex, 0x04);
+        const float world_z = load_f32(vertex, 0x08);
+        const float vertex_material = load_f32(vertex, 0x0C);
+        std::uint8_t* const m = meta + static_cast<std::size_t>(i) * 0x24U;
+        store_f32(m, 0x1C, (world_x - material_origin_x) * material_scale + material_offset);
+        store_f32(m, 0x20, (world_y - material_origin_y) * material_scale + material_offset);
+
+        std::int32_t coverage = 0;
+        std::int32_t output_material = 0xFF;
+        if (load_u32(neighbors, 0x00) != 0)
+        {
+            bool hit = false;
+            const auto test_entry = [&](const std::uint8_t* entry) {
+                const double sx = static_cast<double>(load_f32(entry, 0x04)) *
+                                  (static_cast<double>(world_x) -
+                                   static_cast<double>(load_f32(entry, 0x08)));
+                const double sy = static_cast<double>(load_f32(entry, 0x04)) *
+                                  (static_cast<double>(world_y) -
+                                   static_cast<double>(load_f32(entry, 0x0C)));
+                const std::int32_t ix = static_cast<std::int32_t>(static_cast<std::int64_t>(sx));
+                const std::int32_t iy = static_cast<std::int32_t>(static_cast<std::int64_t>(sy));
+                return coverage_bit(pointer_from_bits(load_u32(entry, 0x10)), ix, iy,
+                                    load_u32(entry, 0x00));
+            };
+            if (test_entry(neighbors))
+            {
+                coverage = load_i32(neighbors, 0x14);
+                hit = true;
+            }
+            for (std::uint32_t k = 1; k < 4U && !hit; ++k)
+            {
+                const std::uint8_t* const entry = neighbors + static_cast<std::size_t>(k) * 0x18U;
+                if (load_u32(entry, 0x00) == 0)
+                {
+                    break;
+                }
+                if (test_entry(entry))
+                {
+                    coverage = load_i32(entry, 0x14);
+                    hit = true;
+                }
+            }
+            if (!hit)
+            {
+                if (i < first_vertices)
+                {
+                    output_material = 0xFF;
+                }
+                else
+                {
+                    const std::int32_t source_index = static_cast<std::int32_t>(vertex_material);
+                    store_i32(m, 0x00, source_index);
+                    const std::uint32_t packed_source =
+                        load_u32(meta, static_cast<std::size_t>(source_index) * 0x24U + 0x14U);
+                    output_material = static_cast<std::int32_t>(packed_source >> 16);
+                    if (output_material == coverage)
+                    {
+                        output_material = 0xFF;
+                    }
+                }
+            }
+        }
+        else if (i >= first_vertices)
+        {
+            store_i32(m, 0x00, static_cast<std::int32_t>(vertex_material));
+        }
+
+        store_f32(m, 0x04, world_x - load_f32(record, 0x00));
+        store_f32(m, 0x08, world_y - load_f32(record, 0x08));
+        store_f32(m, 0x0C, world_z - load_f32(record, 0x10));
+        material_bits |= static_cast<std::int32_t>(1U << (coverage & 31));
+        store_i32(m, 0x14, static_cast<std::int32_t>((static_cast<std::uint32_t>(coverage) << 16) |
+                                                     static_cast<std::uint32_t>(output_material)));
+    }
+
+    // ---- material page list (bitmask walk) ------------------------------------------------------
+    std::array<std::int32_t, 32> material_list{};
+    std::int32_t material_count = 0;
+    for (std::uint32_t bit = 0, bits = static_cast<std::uint32_t>(material_bits); bits != 0;
+         ++bit, bits >>= 1)
+    {
+        if ((bits & 1) != 0 && material_count < 32)
+        {
+            material_list[static_cast<std::size_t>(material_count)] = bit;
+            ++material_count;
+        }
+    }
+
+    // ---- requested chunk size and optional pool promotion (0x5109C9..0x510BD2) ----------------
+    const std::uint32_t requested_size =
+        vertex_data_bytes +
+        (((vertex_data_bytes + 4U) * static_cast<std::uint32_t>(material_count) +
+          (static_cast<std::uint32_t>(total_vertices) << 3)) << 1) +
+        0x3CU;
+    const std::int32_t size_signed = static_cast<std::int32_t>(requested_size);
+    const std::int32_t old_type = load_i32(cache, 0x14);
+    const std::uint32_t old_bits = chunk_bits;
+    bool build_directly = size_signed < 0x640;
+    if (!build_directly && old_type == 1 && size_signed < 0xC80)
+    {
+        build_directly = true;
+    }
+    if (!build_directly && old_type == 2 && size_signed < 0x1F40)
+    {
+        build_directly = true;
+    }
+
+    bool promoted = false;
+    if (!build_directly)
+    {
+        // 0x510A9D..0x510B52: A -> B when size < 0xC80, otherwise A/B -> C while size < 0x1F40.
+        // A full B pool falls through to the C pool.  Pool C never promotes.
+        const bool attempt_b = old_type == 0 && size_signed < 0xC80;
+        const bool attempt_c = (old_type == 0 || old_type == 1) && size_signed < 0x1F40;
+        std::uint32_t new_bits = old_bits;
+        std::int32_t new_type = old_type;
+        if (attempt_b && g_b12c48 < g_b12c4c - 2)
+        {
+            new_bits = pool_allocate(pool_b());
+            new_type = 1;
+            promoted = true;
+        }
+        else if (attempt_c && g_b16cc8 < g_b16ccc - 2)
+        {
+            new_bits = pool_allocate(pool_c());
+            new_type = 2;
+            promoted = true;
+        }
+
+        if (promoted)
+        {
+            const std::uint32_t used_bytes = static_cast<std::uint32_t>(end_vertices - chunk);
+            std::uint8_t* const new_chunk = pointer_from_bits(new_bits);
+            std::memcpy(new_chunk, chunk, used_bytes);
+            chunk = new_chunk;
+            vcursor = new_chunk + used_bytes;
+            end_vertices = vcursor;
+            store_u32(cache, 0x18, new_bits);
+            store_u32(cache, 0x14, static_cast<std::uint32_t>(new_type));
+            g_b12c5c[static_cast<std::size_t>(g_b16c9c)] = new_bits;
+        }
+
+        // 0x510BD2: the old slot is released whether or not a replacement was found.
+        if (old_type == 0)
+        {
+            pool_release(old_bits, pool_a());
+        }
+        else if (old_type == 1)
+        {
+            pool_release(old_bits, pool_b());
+        }
+        else if (old_type == 2)
+        {
+            pool_release(old_bits, pool_c());
+        }
+
+        if (!promoted)
+        {
+            store_u32(cache, 0x18, 0);
+            store_u32(cache, 0x10, 0xFFFFFFFFU);
+            --g_b16c9c;
+            return;
+        }
+    }
+
+    // ---- per-material page records (0x510D89..0x510F8A) ---------------------------------------
+    struct PageRecord
+    {
+        std::array<float, 8> values{};
+        std::uint32_t slot_a = 0;
+        std::uint32_t slot_b = 0;
+    };
+    std::array<PageRecord, 32> pages{};
+    const std::uint8_t* const material_table =
+        reinterpret_cast<const std::uint8_t*>(g_c28fe0.data()) + 4;
+    const std::uint8_t* const tile_table =
+        reinterpret_cast<const std::uint8_t*>(g_c30080.data());
+    const double page_x = load_f64(record, 0x00) + g_b12ba0;
+    const double page_y = load_f64(record, 0x08) + g_b12ba8;
+    const double page_z = load_f64(record, 0x10) + g_b12bb0;
+    const auto sar = [](std::int32_t value, std::int32_t count) {
+        return value >> (count & 31);
+    };
+    for (std::int32_t k = 0; k < material_count; ++k)
+    {
+        const std::uint32_t material =
+            static_cast<std::uint32_t>(material_list[static_cast<std::size_t>(k)]);
+        const std::uint8_t* const entry =
+            material_table + static_cast<std::size_t>(level) * 0x1CU + material * 0x384U;
+        const float f_tex2 = load_f32(entry, 0x0C);
+        const std::uint32_t tex2_index = load_u32(entry, 0x10);
+        const std::int32_t f_tex1 = load_i32(entry, 0x14);
+        const std::uint32_t tex1_index = load_u32(entry, 0x18);
+        const std::int32_t t1 =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex2) * page_x),
+                0x17 - level) & 0x7FF;
+        const std::int32_t t2 =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex2) * page_y),
+                0x17 - level) & 0x7FF;
+        const std::int32_t t3 =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex1) * page_x),
+                0x16 - level) & 0x7FF;
+        const std::int32_t t4 =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex1) * page_y),
+                0x16 - level) & 0x7FF;
+        const std::int32_t f_tex2_z =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex2) * page_z), 0x17 - level);
+        const std::int32_t f_tex1_z =
+            sar(static_cast<std::int32_t>(static_cast<double>(f_tex1) * page_z), 0x16 - level);
+        const float page_scale = static_cast<float>(0x40000000 >> (level & 31));
+        PageRecord& page = pages[static_cast<std::size_t>(k)];
+        page.values[0] = (static_cast<float>(f_tex1_z) + 1.0f) * (1.0f / 256.0f);
+        page.values[1] = (static_cast<float>(t4) + 1.0f) * (1.0f / 256.0f);
+        page.values[2] = (static_cast<float>(t3 & 0xFF) + 1.0f) * (1.0f / 256.0f);
+        page.values[3] = static_cast<float>(f_tex1) / page_scale;
+        page.values[4] = (static_cast<float>(f_tex2_z) + 1.0f) * (1.0f / 256.0f);
+        page.values[5] = (static_cast<float>(t2 & 0xFF) + 1.0f) * (1.0f / 256.0f);
+        page.values[6] = (static_cast<float>(t1 & 0xFF) + 1.0f) * (1.0f / 256.0f);
+        page.values[7] = f_tex2 * 0.5f / page_scale;
+        page.slot_b = tile_table[(t3 >> 8) + (((t4 >> 8) + tex1_index * 8U) << 3)];
+        page.slot_a = tile_table[(t1 >> 8) + (((t2 >> 8) + tex2_index * 8U) << 3)];
+    }
+
+    // ---- second header + per-material vertex streams (0x510D13..0x5113EE) ----------------------
+    store_u32(end_vertices, 0x00, flags);
+    store_u32(end_vertices, 0x04, pointer_bits(node + 8));
+    store_u32(end_vertices, 0x08, static_cast<std::uint32_t>(material_count));
+    store_u32(end_vertices, 0x0C,
+              static_cast<std::uint32_t>(static_cast<std::int16_t>(load_u16(node, 0x00))));
+    std::uint8_t* stream = end_vertices + 0x10;
+    std::uint8_t* const command_start =
+        node + 8 + static_cast<std::int16_t>(load_u16(node, 0x02));
+
+    for (std::int32_t k = 0; k < material_count; ++k)
+    {
+        const PageRecord& page = pages[static_cast<std::size_t>(k)];
+        std::uint8_t* const block_a = stream;
+        std::uint8_t* const block_b = stream + vertex_data_bytes + 4U;
+        store_u32(block_a, 0x00,
+                  pointer_bits(g_c30060 + static_cast<std::size_t>(page.slot_b) * 0x24U + 0xC));
+        store_u32(block_b, 0x00,
+                  pointer_bits(g_c30060 + static_cast<std::size_t>(page.slot_a) * 0x24U + 0xC));
+        std::uint8_t* a = block_a + 4;
+        std::uint8_t* b = block_b + 4;
+        const std::uint8_t* command_cursor = command_start;
+        for (std::int32_t i = 0; i < total_vertices; ++i)
+        {
+            const std::uint32_t packed_word = load_u32(command_cursor, 0);
+            command_cursor += 4;
+            const std::uint32_t rotation_a = (packed_word >> 8) & 3U;
+            const std::uint32_t rotation_b = (packed_word >> 6) & 3U;
+            const std::uint8_t* const m = meta + static_cast<std::size_t>(i) * 0x24U;
+            std::int32_t index = 0;
+            const std::uint8_t* source = m;
+            if (i < first_vertices)
+            {
+                index = i;
+            }
+            else
+            {
+                index = load_i32(m, 0x00);
+                source = meta + static_cast<std::size_t>(index) * 0x24U;
+            }
+            const float dx = load_f32(m, 0x04);
+            const float dy = load_f32(m, 0x08);
+            const float dz = load_f32(m, 0x0C);
+            const float sx = load_f32(source, 0x04);
+            const float sy = load_f32(source, 0x08);
+            const float sz = load_f32(source, 0x0C);
+            const std::uint32_t packed_meta = load_u32(m, 0x14);
+
+            float x1 = 0.0f;
+            float y_first = 0.0f;
+            float nx = 0.0f;
+            float x2 = 0.0f;
+            if (rotation_a == 0)
+            {
+                y_first = dy * page.values[3] + page.values[1];
+                x1 = dx * page.values[3] + page.values[2];
+                nx = sy * page.values[3] + page.values[1] - y_first;
+                x2 = sx * page.values[3] + page.values[2];
+            }
+            else
+            {
+                float av = 0.0f;
+                float bv = 0.0f;
+                float offset = 0.0f;
+                if (((rotation_a ^ flag_bit0) & 1U) == 0)
+                {
+                    av = dx;
+                    bv = sx;
+                    offset = page.values[2];
+                }
+                else
+                {
+                    av = dy;
+                    bv = sy;
+                    offset = page.values[1];
+                }
+                y_first = dz * page.values[3] + page.values[0];
+                x1 = av * page.values[3] + offset;
+                nx = sz * page.values[3] + page.values[0] - y_first;
+                x2 = bv * page.values[3] + offset;
+            }
+
+            float y1 = 0.0f;
+            float y2 = 0.0f;
+            float ny = 0.0f;
+            float y3 = 0.0f;
+            if (rotation_b == 0)
+            {
+                y1 = dx * page.values[7] + page.values[6];
+                y2 = dy * page.values[7] + page.values[5];
+                ny = sx * page.values[7] + page.values[6] - y1;
+                y3 = sy * page.values[7] + page.values[5];
+            }
+            else
+            {
+                float av = 0.0f;
+                float bv = 0.0f;
+                float offset = 0.0f;
+                if (((rotation_b ^ flag_bit0) & 1U) == 0)
+                {
+                    av = dx;
+                    bv = sx;
+                    offset = page.values[6];
+                }
+                else
+                {
+                    av = dy;
+                    bv = sy;
+                    offset = page.values[5];
+                }
+                y1 = av * page.values[7] + offset;
+                y2 = dz * page.values[7] + page.values[4];
+                ny = bv * page.values[7] + offset - y1;
+                y3 = sz * page.values[7] + page.values[4];
+            }
+
+            const std::int32_t material = material_list[static_cast<std::size_t>(k)];
+            const std::int32_t packed_low = static_cast<std::int32_t>(packed_meta & 0xFFU);
+            const std::int32_t packed_high = static_cast<std::int32_t>(packed_meta >> 16);
+            std::uint32_t marker_flags = 0;
+            if (material == packed_low)
+            {
+                marker_flags = 8;
+            }
+            else if (material == packed_high)
+            {
+                marker_flags = 0x18;
+            }
+            const std::uint32_t marker = (static_cast<std::uint32_t>(index) << 5) |
+                                         marker_flags |
+                                         (static_cast<std::uint32_t>(index) << 16);
+            store_u32(a, 0x00, marker);
+            store_f32(a, 0x04, x1);
+            store_f32(a, 0x08, y_first);
+            store_u32(b, 0x00, marker + 4U);
+            store_f32(b, 0x04, y1);
+            store_f32(b, 0x08, y2);
+            a += 0x0C;
+            b += 0x0C;
+            if (i >= first_vertices)
+            {
+                store_f32(a, 0x00, x2 - x1);
+                store_f32(a, 0x04, nx);
+                store_f32(b, 0x00, ny);
+                store_f32(b, 0x04, y3 - y2);
+                a += 0x08;
+                b += 0x08;
+            }
+        }
+        stream = block_b + vertex_data_bytes + 4U;
+    }
+
+    // ---- trailing descriptor list (0x5113D8..0x5114BD) ----------------------------------------
+    if (!has_material_page)
+    {
+        store_u32(stream, 0x00, 0);
+    }
+    else
+    {
+        store_u32(stream, 0x00, static_cast<std::uint32_t>(material_page));
+        stream += 4;
+        for (std::int32_t i = 0; i < total_vertices; ++i)
+        {
+            const std::uint8_t* const m = meta + static_cast<std::size_t>(i) * 0x24U;
+            const float u = load_f32(m, 0x1C);
+            const float v = load_f32(m, 0x20);
+            const std::int32_t index = i < first_vertices ? i : load_i32(m, 0x00);
+            const std::uint8_t* const source =
+                meta + static_cast<std::size_t>(index) * 0x24U;
+            store_u32(stream, 0x00, (static_cast<std::uint32_t>(index) << 5) |
+                                        (static_cast<std::uint32_t>(index) << 16));
+            store_f32(stream, 0x04, u);
+            store_f32(stream, 0x08, v);
+            stream += 0x0C;
+            if (i >= first_vertices)
+            {
+                store_f32(stream, 0x00, load_f32(source, 0x04) - u);
+                store_f32(stream, 0x04, load_f32(source, 0x08) - v);
+                stream += 0x08;
+            }
+        }
+    }
+}
+
 } // namespace
 
 bool TextureModifier_CoversPoint(const TerrainTextureModifierTask& modifier,
@@ -189,7 +1082,7 @@ bool TextureModifier_CoversPoint(const TerrainTextureModifierTask& modifier,
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE (VA 0x004C6670-0x004C6755); candidate reference scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.cpp.
 // Behavior/CFG: Reads the material index with Script_GetArg(args,0) (0x004B8A20), stores arg1 at 0x00C28FE0 + index*900, then writes 32 LOD entries of 0x1C bytes starting at group+4 (disassembly 0x004C66AA-0x004C671C): int arg[i-1], float args[i], float args[i+1], float args[i+2]*0.5 (constant 0x3F000000 at 0x00533504), int arg[i+3], float args[i+4]*0.5, int arg[i+5], with i stepping by 7 from 3 while i < 0xE3; finally copies the 24-byte {0,0,0,0,0x00567C74,*uninitialized*} block to the context with rep movsd x6.
-// Status/limits: STRUCTURALLY_VERIFIED; retail index arithmetic has no bounds check (negative/oversized indices write outside 0x00C28FE0 in retail), the port clamps into its 32-group store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/terrain_render_diff_runner.py.
+// Status/limits: VERIFIED; retail index arithmetic has no bounds check (negative/oversized indices write outside 0x00C28FE0 in retail), the port clamps into its 32-group store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/native_unicorn_runner.py (8/8 bounded x86 replay fixtures); live game-loop reachability remains unproven.
 void* Terrain_CreateMaterial(void* context, const float* args)
 {
     if (args == nullptr)
@@ -234,7 +1127,7 @@ void* Terrain_CreateMaterial(void* context, const float* args)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 CFG MCP on retail IGI.EXE (VA 0x004C6760-0x004C67D0); candidate reference scripts/GameNatives/create/004C6760-Create_TerrainTileMap.cpp.
 // Behavior/CFG: Reads the group index with Script_GetArg(args,0), stores 64 bytes at 0x00C30080 + group*64 where byte i = (int8)Script_GetArg(args,i+1) for i = 0..0x3F (disassembly 0x004C6781-0x004C6796), then copies the 24-byte {0,0,0,0,0x00567C74,*uninitialized*} block to the context with rep movsd x6.
-// Status/limits: STRUCTURALLY_VERIFIED; retail group arithmetic has no bounds check, the port clamps into its 64-table store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/terrain_render_diff_runner.py.
+// Status/limits: VERIFIED; retail group arithmetic has no bounds check, the port clamps into its 64-table store and documents that deviation; the context block's dwords 1 and 5 are uninitialized stack in retail and are written as zero by the port. Differential execution: scripts/native_unicorn_runner.py (8/8 bounded x86 replay fixtures); live game-loop reachability remains unproven.
 void* Terrain_CreateTileMap(void* context, const float* args)
 {
     if (args == nullptr)
@@ -270,7 +1163,7 @@ void* Terrain_CreateTileMap(void* context, const float* args)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja view_1; RE-Agent radare2 ev_0041b4b3f7b953ab4744f3a74c261506c6a81a78b59bfd384961ac0184b2d01e.
 // Behavior/CFG: Requires [self+0xBC] >= 0 and the source row [[self+0x68]+0xDCC] to hold a non-zero dword at counter*3 (0x00505E4E-0x00505E5E); pushes [self+0xE4] onto the 20-slot stack at 0x00B97DA0 under counter 0x00B97DF8, folds the packed bitmask 0x00BA5060 = (mask << 8) | (scratch+1), sets self[0xDC] = 1 and returns scratch+1; when the stack is full calls Error_Show("Too many items in texture modifier stack!") and halts in the retail self-loop (0x00505E76 jmp $); otherwise self[0xDC] = 0 and returns self.
-// Status/limits: TRANSCRIBED; scripts/texture_modifier_push_diff_runner.py covers mapped nonaliasing x86 contexts; natural runtime integration remains provisional.
+// Status/limits: STRUCTURALLY_VERIFIED; scripts/texture_modifier_push_diff_runner.py cannot link the current translation unit (undefined resource symbols in unrelated host functions), so it produces no behavioral pass; natural runtime integration remains provisional.
 void* TextureModifier_Push(void* self)
 {
     auto* bytes = static_cast<std::uint8_t*>(self);
@@ -315,8 +1208,8 @@ void* TextureModifier_Push(void* self)
 // Native: HeightMap_Enter; retail VA 0x00506F00; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja view_1 0x00506F00; RE-Agent radare2 ev_22f3f96b2b347b99a962a88ea7097bdba7db979f2778c016ff0e252ae2cc0754.
-// Behavior/CFG: Rejects negative/disabled source rows; writes a DWORD flag and pushes the incremented heightmap index.
-// Status/limits: TRANSCRIBED; controlled x86 replay required; game-loop reachability and arbitrary aliasing remain unverified.
+// Behavior/CFG: Rejects negative/disabled source rows; writes the DWORD flag and the active index; the source-level 0x00B97D40 stack push is elided in the production object.
+// Status/limits: STRUCTURALLY_VERIFIED; retail 4-block control flow/returns re-checked; the compiled object dead-store-eliminates the retail 0x00B97D40 stack write, so no behavioral pass is claimed for the compiled candidate.
 void* HeightMap_Enter(void* context)
 {
     auto* bytes = static_cast<std::uint8_t*>(context);
@@ -342,7 +1235,7 @@ void* HeightMap_Enter(void* context)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja and RE-Agent Radare2, docs/fidelity/evidence/lightmap-enter-20261020/; no second decompiler used for this correction.
 // Behavior/CFG: Calls 0x004F1160, tests DWORD +0x108, writes DWORD +0xE0, pushes DWORD +0xD8 and increments 0x00B97D24. Both mode branches retained; no retail stack-cap branch exists here.
-// Status/limits: TRANSCRIBED; nonaliasing valid contexts and existing host stack storage only; overflow/storage layout and natural runtime integration remain unresolved.
+// Status/limits: STRUCTURALLY_VERIFIED; retail CFG structure checked, but no differential runner covers the host flag/stack behaviour; nonaliasing valid contexts and existing host stack storage only; overflow/storage layout and natural runtime integration remain unresolved.
 void* TerrainLightMap_PushEntry(void* self)
 {
     const auto mode = script::Script_GetParseMode();
@@ -373,16 +1266,16 @@ void* TerrainLightMap_PushEntry(void* self)
     return self;
 }
 
-// Native: Terrain_Load; retail VA 0x004C6240; signature/calling convention unknown.
+// Native: Terrain_Load; retail VA 0x004C6240; signature void* __cdecl(void* context, const char* base_path).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on the retail body 0x004C6240-0x004C666C
-// (25 blocks; reads TERRAIN.BIT/HMP/TEX/CMD/CTR, registers CreateTerrainMaterial/
-// CreateTerrainTileMap, then calls 0x004CE3D0).
-// Behavior/CFG: HOST FILE-STAGE BRIDGE. The port passes TerrainLevelData as the
-// context and runs the same file sequence through Terrain_LoadLevel with
-// apply_tasks=false; the QSC task stage is applied later by the phase-0 caller.
-// Status/limits: TRANSCRIBED (host-backed); retail allocation layout, .bit/.hmp
-// pointer bases and the 0x004CE3D0 call graph are not byte-identical.
+// Tools/evidence: Binary Ninja MCP (25 blocks, 1069 bytes), Radare2 CFG (25 nodes/36 edges), angr CFGFast (exact entry, no unresolved jumps), live retail capture 20261023T015650-level1-retail.
+// Behavior/CFG: HOST FILE-STAGE BRIDGE; retail's single exit 0x004C666C returns DynObj_UpdateDynTree_11(context) (0x004CE3D0), i.e. arg1, and the live retail EAX 0x038910B4 equals the context argument.
+// Status/limits: STRUCTURALLY_VERIFIED (host-backed bridge); no byte-identical retail layout, QVM call graph or context+0xDC8 tail write; no paired runtime capture.
+// Note: x86 cdecl, two stack arguments (context [esp+4] moved to EBP at 0x004C62B6, path [esp+8]); BN types
+// the path word int32_t while the code types it const char*. The port passes TerrainLevelData as the context
+// and runs the file sequence through Terrain_LoadLevel(base.parent_path(), {}, false); the QSC task stage is
+// applied later by the phase-0 caller. The clear of context+0xDC8 in the retail tail is not performed because
+// the host object does not mirror that retail offset; the arg1 return value is.
 void* Terrain_Load(void* context, const char* base_path)
 {
     auto* const data = static_cast<TerrainLevelData*>(context);
@@ -396,14 +1289,18 @@ void* Terrain_Load(void* context, const char* base_path)
     return data;
 }
 
-// Native: Terrain_LoadTexturesAndLightmaps; retail VA 0x004C5F00; signature/calling convention unknown.
+// Native: Terrain_LoadTexturesAndLightmaps; retail VA 0x004C5F00; signature int32_t __cdecl(void* context, const char* base_path).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: retail Level_Start 0x00415C31 calls this before 0x004C6240 at
-// 0x00415C44; Ghidra and Binary Ninja on the retail body.
-// Behavior/CFG: HOST FILE-STAGE BRIDGE for TERRAIN.LMP lightmap pages. The
-// phase-0 caller invokes it before Terrain_Load, matching the retail order.
-// Status/limits: TRANSCRIBED (host-backed); retail lightmap stack layout and
-// texture-upload sequencing remain unverified.
+// Tools/evidence: Binary Ninja MCP (20 blocks, 599 bytes), Radare2 CFG (20 nodes/30 edges), angr CFGFast (exact entry, no unresolved jumps), live retail capture 20261023T015650-level1-retail (EAX 0x0000000A).
+// Behavior/CFG: HOST FILE-STAGE BRIDGE; retail returns 0 when App_ContextGetTerrainLightmapsUsed()==0 (0x004C600B) or Resource_FileExists("<path>.lmp")==0 (0x004C6096), otherwise the EAX of Resource_Unload (0x004C6144) survives to the single ret 0x004C6156.
+// Status/limits: STRUCTURALLY_VERIFIED (host file-stage bridge); the .lmp is not registered in the retail-style resource table, so the observed pool-count 0xA is not reproduced; no paired runtime capture.
+// Note: Resource_Unload (0x004B6380) returns the node kind for kinds 1/3, otherwise Resource_FreeNode's EAX:
+// the remaining pool count, or the relocated node address when the freed slot was not last. The observed
+// 0xA is therefore the post-unload pool count (no slot swap), not a success flag. The host bridge returns 0
+// on the two early paths and Resource_Unload's value on the loaded path only when the port resource table
+// holds the .lmp; the host file stage reads TERRAIN.LMP with ifstream and never registers it, so it returns 0.
+// Retail's App_ContextGetTerrainLightmapsUsed gate is omitted because Config_SetResolution_2 (0x004063D1),
+// the setter's caller, is not wired in this branch.
 std::int32_t Terrain_LoadTexturesAndLightmaps(void* context, const char* base_path)
 {
     auto* const data = static_cast<TerrainLevelData*>(context);
@@ -413,47 +1310,63 @@ std::int32_t Terrain_LoadTexturesAndLightmaps(void* context, const char* base_pa
     }
 
     const std::filesystem::path base(base_path);
-    return data->Terrain_LoadLightmaps(base.parent_path()) ? 1 : 0;
+    return data->Terrain_LoadLightmaps(base.parent_path());
 }
 
-// Native: Terrain_TraverseContourQuadtree; retail VA 0x004D14E0; signature/calling convention unknown.
+// Terrain_TraverseContourQuadtree (0x004D14E0) is NOT defined here. The throwing placeholder this
+// unit used to carry was removed when terrain_quadtree.cpp was added to the igi link: that unit
+// defines `std::int32_t Terrain_TraverseContourQuadtree(void*)` with C++ linkage in namespace
+// igi::retail::terrain, exactly the mangled symbol this placeholder produced (same namespace, same
+// name, same parameter type, same return type), so keeping both is a link-time multiple definition.
+// The native transcription is the honest owner, and its declaration is terrain_quadtree.hpp (this
+// loader header no longer redeclares it). Neither form had a caller anywhere in this branch (a
+// repository-wide search for the name finds only declarations, the definition, and documentation),
+// so no consumer depends on the throw.
+
+// Native: Terrain_DecodeChunkCommands; retail VA 0x00510010; signature int32_t __cdecl(void).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/render/004D14E0-Render_ShouldHaveAllocatedD.cpp; CFG 86.7%.
-// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x004D14E0 is 4181 bytes
-// (frustum/quadtree traversal over the CTR structures with x87 math; r2 recovers it as one
-// function with dozens of basic blocks). No behavioral claims are made for this port body.
-// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
-// transcribe 0x004D14E0 before any VERIFIED/STRUCTURALLY_VERIFIED claim (see MVP terrain slice).
-std::int32_t Terrain_TraverseContourQuadtree(void* context)
+// Tools/evidence: Binary Ninja binaryninja_ui_mcp 0.1.0 (143 blocks / 212 edges, 5,348 bytes), radare2 6.2.0 (identical 143 / 212, cdecl, no arguments, no calls), angr 10.0.4.post1 CFGFast (157 nodes, no unresolved jumps).
+// Behavior/CFG: per-frame consumer of the 0x30-byte contour records published by 0x004D14E0 (g_b16ca4); allocates/extends the three terrain chunk pools, decodes packed 6-bit vertex offsets, resolves material pages and neighbour modifiers, emits two vertex streams plus the descriptor lists, and publishes g_b16c9c / g_b12c60 / g_b12c5c.
+// Status/limits: STRUCTURALLY_VERIFIED (retail CFG recovered and stage-by-stage source review; candidate decomposes into a 7-block driver plus decode_chunk_record, so this is not a block-for-block or behavioral equivalence claim); runtime-populated tables (0x00BA2030, 0x00BA5050, 0x00BA80B0, 0x00C28FE4, 0x00C30080) and exact x87 precision remain unverified; no differential execution.
+//
+// Detail retained from the retail analysis: the entry value of g_b16ca4 is returned on every path
+// (the frame's record count), not a command count or opcode result.  The function is a leaf: no call
+// instructions and no indirect jumps; the six "callees" Binary Ninja reports at 0x00C35040 are
+// rep-movs artifacts.  The task premise of a "chunk command byte stream with opcode dispatch" is not
+// what this VA does.  Runtime-populated tables and the pool limits are candidate storage / unresolved;
+// x87 80-bit intermediates are modelled with float/double; the D3D vertex-declaration objects at
+// 0x00C30060 and the exact per-material stream consumption are not executed here.  Live retail
+// observation remains retail-only: 733 calls with EAX 0x1F3, 2, 2, 1
+// (docs/fidelity/evidence/retail-level4-frida.json and the level-1 capture).
+std::int32_t Terrain_DecodeChunkCommands()
 {
-    static_cast<void>(context);
-    throw std::logic_error("Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable.");
+    const std::int32_t count = g_b16ca4;
+    g_c31090 += count;
+    if (count <= 0)
+    {
+        return count;
+    }
+
+    std::uint8_t* record = g_b16ce0.data();
+    std::int32_t cached_neighbor_token = -1;
+    std::array<std::uint8_t, 4 * 0x18> neighbors{};
+    for (std::int32_t i = 0; i < count; ++i)
+    {
+        decode_chunk_record(record, cached_neighbor_token, neighbors.data());
+        record += 0x30;
+    }
+    return count;
 }
 
-// Native: Terrain_DecodeChunkCommands; retail VA 0x00510010; signature/calling convention unknown.
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00510010-Terrain_RenderQuadtree.cpp; CFG 66.7%.
-// Behavior/CFG: Retail performs the operations described in the evidence; this placeholder performs none.
-// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
-std::int32_t Terrain_DecodeChunkCommands(void* context)
-{
-    static_cast<void>(context);
-    throw std::logic_error("Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable.");
-}
-
-// Native: Terrain_Draw; retail VA 0x00512C30; signature/calling convention unknown.
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Ghidra and Binary Ninja on scripts/GameNatives/terrain/00512C30-Terrain_Draw.cpp; CFG 77.8%.
-// Behavior/CFG: HOST STUB - NOT A TRANSCRIPTION. The retail body at 0x00512C30 is 6317 bytes
-// (Direct3D 7 render-state sequencing and terrain chunk submission; r2 recovers it as one
-// function with many basic blocks). No behavioral claims are made for this port body.
-// Status/limits: ANALYZED only; unimplemented placeholder throws std::logic_error. ABI unverified.
-// transcribe 0x00512C30 before any VERIFIED/STRUCTURALLY_VERIFIED claim (see MVP terrain slice).
-std::int32_t Terrain_Draw(void* context)
-{
-    static_cast<void>(context);
-    throw std::logic_error("Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable.");
-}
+// Terrain_Draw (0x00512C30) is NOT defined here. The placeholder this unit used to carry took a
+// `void* context` argument, which contradicts the retail ABI: the only caller (0x005116A2 inside
+// Terrain_UpdateWaterWaves 0x00511500) pushes no argument, the body reads no incoming stack slot,
+// and the frame is allocated by the MSVC 6 __chkstk helper at 0x00512C30. Because the parameter
+// list differs, the placeholder produced a different mangled symbol from the transcription
+// (`Terrain_Draw()` in terrain_draw.cpp), so it was a second, wrong-ABI entry point rather than a
+// link conflict. It had no caller anywhere in this branch, so it was deleted instead of being
+// kept as a second entry point. The declaration lives in terrain_draw.hpp with the retail
+// signature and the transcription in terrain_draw.cpp.
 
 // HOST HELPER: load Level terrain files and QSC tasks.
 // Artifact: igi.exe (retail 1.00); SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
@@ -805,11 +1718,14 @@ bool TerrainLevelData::Terrain_LoadLevel(
 
 // HOST HELPER: load TERRAIN.LMP lightmap pages for Terrain_LoadTexturesAndLightmaps.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: retail Level_Start 0x00415C31 calls 0x004C5F00 before 0x004C6240.
-// Behavior/CFG: The retail loader walks the LMP page list; this host bridge keeps
-// the same file source and square-page layout used by the port renderer.
-// Status/limits: Host file-stage bridge, not a retail memory-layout transcription.
-bool TerrainLevelData::Terrain_LoadLightmaps(const std::filesystem::path& terrain_dir)
+// Tools/evidence: Level_Start 0x00415C31 calls 0x004C5F00 before 0x004C6240; retail tail 0x004C613F-0x004C6156 returns Resource_Unload's EAX.
+// Behavior/CFG: host file-stage bridge using the port LMP page layout; returns 0 when the .lmp is absent, otherwise the port Resource_Unload value when the .lmp is registered, otherwise 0.
+// Status/limits: Host file-stage bridge, not a retail memory-layout transcription; the retail pool count cannot be reconstructed.
+// Note: the retail loader walks the LMP page list; this bridge keeps the same file source and square-page
+// layout used by the port renderer. The retail Resource_FileExists check is modeled by the empty-file early
+// return, and the retail tail's Resource_Unload value is propagated only for a registered resource (see the
+// native above for the full retail return-path evidence).
+std::int32_t TerrainLevelData::Terrain_LoadLightmaps(const std::filesystem::path& terrain_dir)
 {
     lmp_file_bytes = read_binary_file(terrain_dir / "TERRAIN.LMP");
     if (lmp_file_bytes.empty())
@@ -844,7 +1760,24 @@ bool TerrainLevelData::Terrain_LoadLightmaps(const std::filesystem::path& terrai
             }
         }
     }
-    return !lightmap_layers.empty();
+
+    // Retail 0x004C6096: Resource_FileExists("<path>.lmp") == 0 leaves EAX 0.
+    if (lmp_file_bytes.empty())
+    {
+        return 0;
+    }
+
+    // Retail 0x004C6144: the function returns the EAX of Resource_Unload("<path>.lmp").
+    // Resource_Unload (0x004B6380) is the port's transcription of the same native, so its
+    // value is propagated unchanged when the host resource table holds the .lmp. The host
+    // file stage reads the file directly and does not register it; that path returns 0,
+    // which the source record documents as an unreproduced retail value.
+    const std::string lmp_name = (terrain_dir / "terrain.lmp").string();
+    if (resource::Is_ResourceLoaded(lmp_name.c_str(), nullptr) != 0)
+    {
+        return resource::Resource_Unload(lmp_name.c_str());
+    }
+    return 0;
 }
 
 // HOST HELPER: build decoded render mesh for the given camera and origin.

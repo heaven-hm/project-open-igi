@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x00516640",
+  "name": "Terrain_SelectTerrainLOD_3",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4a217bd703538796e5041ec0ba72073a6e832e07c74c90f9b9f846ae8bcd2e68",
+  "implementation_path": "engine/src/retail/terrain/terrain_storage.cpp",
+  "result": "passed",
+  "reviewed": true,
+  "reviewed_by": "codex-smart-workflow subagent (static source/object review; no runtime observation)",
+  "reviewed_at": "2026-10-23T05:30:00Z",
+  "scope": "Retail 0x00516640 and the body of its direct callee 0x004B0B00 against the candidate functions Terrain_SelectTerrainLOD_3 and build_render_chunk_pool in terrain_storage.cpp.",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Entry 0x00516640 is bound to the 119-byte range 0x00516640..0x005166B6 whose sha256 is recorded in both disassembly artifacts; Binary Ninja, radare2 and angr agree on the entry, size and the two calls (indirect [vtbl+0x14] at 0x0051669A, direct 0x004B0B00 at 0x005166AE). The catalog name Terrain_SelectTerrainLOD_3 is contradicted by the body (the function creates the terrain vertex buffer and builds the render-chunk pool); the name is retained only as the address-bound catalog key and the misnomer is recorded in the source comment and here."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Retail is a zero-argument cdecl function whose EAX is discarded by the display callback dispatcher 0x00491CA0 (`call dword [esi+4]`, then the next node is loaded); BN reports int32_t(void) and r2 reports calltype cdecl with nargs 0. Its vtable call receives (this, &desc, &g_a7f890, 0) at [esp+4..esp+0x10], and 0x004B0B00 receives (descriptor, element_size, capacity, alignment) at [esp+4..esp+0x10], confirmed by its prologue reads of [esp+0x10], [esp+8], [esp+0xC] and [esp+0x18] (after the three callee-saved pushes). The candidate reproduces the same argument layout at source level for both calls; the internal helper signature is documented as a candidate-only ABI (six field addresses) in the structural review."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Descriptor values 0x10 (size), 0x10000 or 0x10800 (caps), 0x1C4 (FVF), 0x8000 (vertices) and pool values 0x2EF4 (element size), 0x80 (capacity), 0 (alignment) are exact. The helper arithmetic is reproduced with 32-bit unsigned semantics: alignment = max(4, 0) = 4; stride = (0x2EF4 + 4 + 3) & ~3 = 0x2EF8; bytes = (0x2EF8 + 4) * 0x80 = 0x177E00; index list = base + 0x2EF8 * 0x80 = base + 0x177C00; the seed writes indices 0..0x7F. The 32-bit multiply/add wrap is preserved (uint32_t). No floating-point scaling is involved."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Retail keeps one 0x18-byte descriptor at 0x00A7F878: base +0x00, index list +0x04, used +0x08, capacity +0x0C, stride +0x10, element size +0x14, with the next established global 0x00A7F890 at +0x18 (all dwords, BSS zero). The candidate keeps the six public extern objects, documents that retail owns them contiguously, asserts the retail offsets and the 0x00A7F890 boundary, and writes them through a view bundle in retail order. g_5ca110 (0x005CA110) and g_bcad74 (0x00BCAD74) are 4-byte BSS dwords; the candidate defines them once. The created vertex-buffer pointer is written to g_a7f890 (0x00A7F890), defined in terrain_draw.cpp and declared extern here. No new storage or guessed extent is introduced."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Two calls, in retail order. 0x00516691 loads the interface vtable and 0x0051669A calls slot +0x14 with (this, &desc, &g_a7f890, 0); the epilogue 0x005166B3 `add esp,0x20` balances the 0x10 local descriptor plus the 0x10 still-owned constructor arguments only if the vtable call cleaned its own four arguments, which fixes __stdcall (the candidate declares __stdcall). The HRESULT in EAX is ignored. 0x005166AE calls 0x004B0B00, which allocates 0x177E00 bytes through Mem_Alloc (0x004B0C60), writes the six descriptor fields and seeds 0x80 indices; the candidate performs the same allocation, field writes (source order) and seeding. The display-callback registration and the 0x00A7E080/0x00A7F85B bucket seed at 0x00516621 are side effects of 0x00516600, not of this function, and are not attributed to it."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Retail returns EAX from 0x004B0B00, which is 0x80 for this call (the final index) and 0 when capacity <= 0. There is no error branch, no null check on the Mem_Alloc result and no null check on the 0x005CA110 interface. A null 0x005CA110 faults at `mov ecx,[eax]`; a null allocation yields base 0 and index list 0x177C00, so the seed loop faults as well. The candidate preserves both unguarded paths (null interface dereference; no allocation check) and its compiler-proved constant return 0x80 equals retail EAX. The only Debug_Error path nearby is the callback-list-full path in 0x00495190, which belongs to registration, not to this function."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Neither 0x00516640 nor 0x004B0B00 executes a floating-point instruction or consumes a floating-point value; every constant and field is a 32-bit integer, pointer or address."
+    }
+  ],
+  "findings": [
+    "The catalog/BN name Terrain_SelectTerrainLOD_3 is a misnomer for this address. The body is a vertex-buffer creation plus render-chunk pool initialiser, invoked once from the display callback list. The record keeps the catalog name for address binding and documents the mismatch; it does not claim LOD-selection semantics.",
+    "Retail stores the descriptor fields at 0x00A7F878 contiguously; the candidate cannot merge the public extern objects, so the transcription writes them individually through a view bundle and asserts the retail offsets instead of pretending the objects are adjacent.",
+    "The meaning of 0x00BCAD74 as a renderer mode flag is inferred from the D3DVBCAPS constants selected here and the identical zero-means-system-memory idiom at 0x0049383B..0x0049384B. Its writers are in display enumeration code outside this unit; the flag is read, never written, by this native.",
+    "The helper 0x004B0B00 is shared by 32 retail callers. The candidate transcribes its body once for the terrain call and does not bind it as a second native or claim it as a general constructor replacement."
+  ],
+  "limitations": [
+    "Static review only. The initialiser was not executed in retail or in the candidate, so the allocated block, the created vertex-buffer pointer and the seeded index contents were not observed.",
+    "The candidate translation unit compiles to a COFF i386 object and was partially linked in /tmp, but the full igi target was not relinked and no executable/receipt binds this source to build-clean-win32/igi1.exe.",
+    "The function is compiled but not reachable from the current candidate: registrar 0x00516600 and the display callback list that invoke it are not transcribed, so there is no startup wiring and no call to it yet.",
+    "The 0x005CA110 Direct3D interface layout is reconstructed from this single vtable call; only slot +0x14 is named and the first five slots are deliberately opaque.",
+    "The Mem_Alloc port (0x004B0C60) is treated as given; its failure behaviour is outside this review and no failure path was exercised."
+  ]
+}

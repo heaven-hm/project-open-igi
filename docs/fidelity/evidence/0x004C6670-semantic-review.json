@@ -4,59 +4,72 @@
  "result": "passed",
  "address": "0x004C6670",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+ "implementation_sha256": "66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "DeepSeek agent review in this session (2026-10-23): Binary Ninja binaryninja_ui_mcp 0.1.0 (bn_function_info, bn_function_decompile, bn_function_basic_blocks, bn_function_prototype_get, bn_function_callers, bn_function_callees), radare2 6.2.0 af/afbj, angr 10.0.4.post1 CFGFast via scripts/angr_analyze.py, against retail igi.exe and the current engine/src/retail/terrain/terrain_loaders.cpp",
+ "recorded_at": "2026-10-23T11:03:16+05:30",
+ "scope": "Structural, data-layout and float-scaling review of retail CreateTerrainMaterial (0x004C6670) against the current C++ port. Bounded differential replay scripts/native_unicorn_runner.py passes 8/8 on the current source; live game-loop reachability is not claimed and the runner is emulator/host evidence.",
+ "review_method": {
+  "decompiler": "Binary Ninja binaryninja_ui_mcp 0.1.0 on retail igi.exe (single selected decompiler; no Ghidra run)",
+  "independent_cfg": "radare2 6.2.0 af/afbj on the same retail image and entry",
+  "angr": "scripts/angr_analyze.py CFGFast (10.0.4.post1) exact-entry recovery",
+  "candidate": "static source review of engine/src/retail/terrain/terrain_loaders.cpp and disassembly of build-clean-win32/igi1.exe SHA-256 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6",
+  "object_comparison": "per-symbol COFF comparison: function bytes with relocation fields masked, plus the (offset, type, target) relocation list, between build-win32-no-verify-gate/CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_loaders.cpp.obj (2026-10-22T21:55, the last build before the previous review) and the rebind object 3cd471a3965fbdd5fb03485b98f3c238dd8bacdcd70779ca4f79a2110a812c49 (SHA-256 3cd471a3965fbdd5fb03485b98f3c238dd8bacdcd70779ca4f79a2110a812c49)"
+ },
+ "previous_review": {
+  "evidence_path": "docs/fidelity/evidence/0x004C6670-semantic-review.json",
+  "recorded_at": "2026-10-22T23:03:24+00:00",
+  "implementation_sha256": "7af66a6085cea2df6496a9be2612b586686f2b527b1a38feefd19f744607ba03",
+  "disposition": "rebound to implementation SHA-256 66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399; re-reviewed from the retail evidence"
+ },
+ "code_change_check": {
+  "result": "identical",
+  "detail": "The compiled symbol body and relocation list are byte-identical to the pre-review object, so this function's own code did not change; the file digest moved because other natives and globals were added to the same translation unit."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004C6670 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Binary Ninja and radare2 both recover one function at 0x004C6670 with 3 blocks and 3 edges (0x004C6670 entry, loop head 0x004C66AA, exit 0x004C671E); angr CFGFast recovers the exact entry with no unresolved jumps. The candidate Terrain_CreateMaterial is at 0x00458600 in igi1.exe 35d92a3a, and its compiled body is byte-identical to the pre-review object."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "Binary Ninja's prototype is int32_t(int32_t arg1, float arg2 @ 0xc); arg2 is the script-argument pointer (it is passed to Script_EvalArgInt), so the 'float' word type is a typing artifact. The candidate declares void*(void* context, const float* args), preserving the two 32-bit argument words and order; the record's signature comparison is abi-adapted."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "Retail computes Script_EvalArgInt(args,0)*5 then *0xB4, i.e. a 900-byte record stride from g_c28fe0 (0x00C28FE0); the loop starts at argument index 3 and steps 7 while i < 0xE3 (32 entries of 0x1C bytes). The two 0.5f factors load the constant at 0x00533504 (0x3F000000). The candidate uses the same stride, loop bounds and 0.5f."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "Retail stores the int at record+0 and seven fields at record+4..record+0x1C, then copies a 0x18-byte context block whose dword at +0x10 is 0x00567C74. The candidate writes the same offsets and descriptor. Two declared deviations: the port clamps out-of-range indices into its 32-entry table (retail has no bounds check) and zeroes the context dwords retail leaves uninitialized; both are recorded and the fixtures use in-range indices."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "Retail calls Script_EvalArgInt (0x004B8A20) and its float counterpart once per stored field; the candidate replaces that VM boundary with inline Script_GetArg/Script_GetArgFloat reads of the argument array. The differential harness hooks the retail accessors and supplies equivalent values, so the compared writes are the same global and context locations apart from the adapted accessor boundary."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "Retail's EAX survives the rep-movsd context copy and is arg1; the candidate returns context on that path and adds a host-only null-args guard returning the same pointer. No retail error branch exists."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "passed",
+   "rationale": "Each entry performs two fmul operations against the 0.5f constant at 0x00533504 and stores single-precision results. The candidate multiplies by 0.5f in the same positions; the differential report compares the resulting dwords with a 1e-6 float tolerance and passed 8/8."
   }
+ ],
+ "limitations": [
+  "Bounded differential evidence only: scripts/native_unicorn_runner.py executes the retail bytes for 8 fixtures under unicorn 2.1.4 x86-32 and a host-compiled build of the current source; it is not a live game process and not execution of the x86 candidate binary.",
+  "Retail does not bounds-check the material index; the port clamps into its 32-entry g_c28fe0 table, and the fixtures use only in-range groups.",
+  "Retail context dwords +0x04 and +0x14 come from uninitialized stack in the rep-movsd source; the port writes zero.",
+  "The retail script accessors 0x004B8A20/0x004B8A50 are replaced by inline host helpers; the harness hooks the retail accessors and feeds equivalent values.",
+  "Candidate build identity: igi1.exe 35d92a3a; the translation unit object is byte-identical to the object linked into it (SHA-256 3cd471...).",
+  "CFG similarity 1.0 is Binary Ninja vs Radare2 agreement on the retail image, not candidate equivalence.",
+  "Rebind note: the compiled function body is byte-identical to the 2026-10-22T21:55 object; the file hash moved because of unrelated edits elsewhere in the translation unit."
  ]
 }

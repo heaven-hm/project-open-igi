@@ -1,76 +1,74 @@
 {
-  "schema_version": 1,
-  "kind": "semantic-review-report",
-  "result": "passed",
-  "address": "0x004C6240",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "a043d7b04094ae034871c436d2e9653b1440093b96036c1cf67964bc3ed51d9b",
-  "reviewed": true,
-  "reviewed_by": "Automated static review, 2026-10-23 (Binary Ninja MCP, Radare2 6.2.0, angr 10.0.4.post1 CFGFast) against retail igi.exe and the current terrain_loaders.cpp",
-  "scope": "Structural and return-path review of retail Terrain_Load (0x004C6240) and its host file-stage bridge. The candidate does not reproduce the retail context layout, QVM registration/execution or the context+0xDC8 tail write; behavioral equivalence is not claimed.",
-  "structural_comparison_evidence": "docs/fidelity/evidence/004C6240-structural-comparison.json",
-  "runtime_contract": {
-    "scope": "retail-load-phase-observation-only; no candidate capture",
-    "probe_sha256": "ede626093a3c84272bb7a1ff02f87b16ae377dd37fe7679c67bc41280a1398e8",
-    "required_observables": {
-      "inputs": [
-        "args"
-      ],
-      "outputs": [
-        "returnValue"
-      ],
-      "sideEffects": []
-    },
-    "no_side_effects": false,
-    "note": "The only runtime observation is one retail load-phase call in build/runtime-traces/20261023T015650-level1-retail (EAX 0x038910B4 = the context argument). There is no paired candidate capture; this contract does not authorize runtime acceptance."
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x004C6240",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399",
+ "reviewed": true,
+ "reviewed_by": "DeepSeek agent review in this session (2026-10-23): Binary Ninja binaryninja_ui_mcp 0.1.0 (bn_function_info, bn_function_decompile, bn_function_basic_blocks, bn_function_prototype_get, bn_function_callers, bn_function_callees), radare2 6.2.0 af/afbj, angr 10.0.4.post1 CFGFast via scripts/angr_analyze.py, against retail igi.exe and the current engine/src/retail/terrain/terrain_loaders.cpp",
+ "recorded_at": "2026-10-23T11:03:16+05:30",
+ "scope": "Structural and return-path review of retail Terrain_Load (0x004C6240) and its host file-stage bridge. This is a STRUCTURALLY_VERIFIED host bridge: behavioural equivalence and the retail resource/QVM side effects are not claimed.",
+ "review_method": {
+  "decompiler": "Binary Ninja binaryninja_ui_mcp 0.1.0 on retail igi.exe (single selected decompiler; no Ghidra run)",
+  "independent_cfg": "radare2 6.2.0 af/afbj on the same retail image and entry",
+  "angr": "scripts/angr_analyze.py CFGFast (10.0.4.post1) exact-entry recovery",
+  "candidate": "static source review of engine/src/retail/terrain/terrain_loaders.cpp and disassembly of build-clean-win32/igi1.exe SHA-256 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6",
+  "object_comparison": "per-symbol COFF comparison: function bytes with relocation fields masked, plus the (offset, type, target) relocation list, between build-win32-no-verify-gate/CMakeFiles/igi.dir/engine/src/retail/terrain/terrain_loaders.cpp.obj (2026-10-22T21:55, the last build before the previous review) and the rebind object 3cd471a3965fbdd5fb03485b98f3c238dd8bacdcd70779ca4f79a2110a812c49 (SHA-256 3cd471a3965fbdd5fb03485b98f3c238dd8bacdcd70779ca4f79a2110a812c49)"
+ },
+ "previous_review": {
+  "evidence_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
+  "recorded_at": "2026-10-22T23:03:24+00:00",
+  "implementation_sha256": "7af66a6085cea2df6496a9be2612b586686f2b527b1a38feefd19f744607ba03",
+  "disposition": "rebound to implementation SHA-256 66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399; re-reviewed from the retail evidence"
+ },
+ "code_change_check": {
+  "result": "identical",
+  "detail": "The compiled symbol body and relocation list are byte-identical to the pre-review object, so this function's own code did not change; the file digest moved because other natives and globals were added to the same translation unit."
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja recovers one function 0x004C6240-0x004C666C (1069 bytes, 25 blocks, 36 edges); radare2 recovers the same 25/36 graph; angr CFGFast recovers the exact entry with no unresolved jumps. The candidate entry is igi::retail::terrain::Terrain_Load at 0x0045f3f0 (383 bytes, 12 blocks, 16 edges) in igi1.exe 35d92a3a, delegating to TerrainLevelData::Terrain_LoadLevel."
   },
-  "checks": [
-    {
-      "name": "function_identity",
-      "result": "passed",
-      "rationale": "Binary Ninja and Radare2 both identify one function at 0x004C6240 with identical CFG node/edge sets (25 blocks, 36 edges; body 0x004C6240-0x004C666C, 1069 bytes). angr CFGFast recovers the exact entry with no unresolved jumps. The candidate entry is igi::retail::terrain::Terrain_Load at 0x00459730 in the fresh x86 candidate."
-    },
-    {
-      "name": "argument_mapping",
-      "result": "passed",
-      "rationale": "Retail is x86 cdecl with context at [esp+4] (moved to EBP at 0x004C62B6) and the path pointer at [esp+8]. The candidate takes void* context and const char* base_path in the same order and derives the terrain directory from base_path.parent_path()."
-    },
-    {
-      "name": "constants_and_scaling",
-      "result": "not_applicable",
-      "rationale": "Retail's context offsets (+0x8, +0xC, +0xDC0, +0xDC4, +0xDCC, +0xDD0, +0xDC8) and 0x1000/0x10000 allocations are host-adapted into TerrainLevelData members. No literal constant equivalence is claimed."
-    },
-    {
-      "name": "memory_layout_and_access",
-      "result": "not_applicable",
-      "rationale": "The host object stores typed arrays and vectors instead of the retail context offsets; no byte-identical memory layout or access claim is made."
-    },
-    {
-      "name": "calls_and_side_effects",
-      "result": "not_applicable",
-      "rationale": "Retail calls Render_ComputeNormals_3, Resource_Load/Resource_FileExists for .bit/.hmp/.cmd/.ctr, Game_DefineOptions, Qvm_Load/Execute/Cleanup, Sys_CloseFileStream_23 and Mem_AllocFn. The host bridge runs Terrain_LoadLevel with apply_tasks=false and does not reproduce QVM registration/execution or the DynObj_UpdateDynTree_11 context+0xDC8 write. Those divergences are recorded; call/side-effect equivalence is not part of this structural claim."
-    },
-    {
-      "name": "return_and_error_paths",
-      "result": "passed",
-      "rationale": "Retail has a single ret at 0x004C666C. The only tail call is DynObj_UpdateDynTree_11(context) at 0x004C665A; that native (0x004CE3D0) is `mov eax,[esp+4]; mov [eax+0xDC8],0; ret`, so EAX is arg1 on every path. The live retail call returned 0x038910B4, exactly its context argument. The candidate returns the context pointer after the file stage on every path that corresponds to a retail path, and returns nullptr only on a host-only null guard that retail does not have. It does not perform the context+0xDC8 write because the port object does not mirror that offset."
-    },
-    {
-      "name": "floating_point_semantics",
-      "result": "not_applicable",
-      "rationale": "Neither the retail function nor the candidate load path performs floating-point arithmetic."
-    }
-  ],
-  "review_findings": [
-    "Retail control flow has one exit and the return value is DynObj_UpdateDynTree_11(context) = arg1; the live observation 0x038910B4 equals the context argument.",
-    "The candidate returns the context pointer on all retail-corresponding paths; the host-only null guard returns nullptr.",
-    "The candidate is a host file-stage bridge: 12 blocks / 383 bytes plus Terrain_LoadLevel, versus retail 25 blocks / 1069 bytes. Its CFG is not equivalent.",
-    "Retail context offsets, QVM registration/execution and the context+0xDC8 write are not reproduced.",
-    "No paired candidate runtime capture exists; status is capped at STRUCTURALLY_VERIFIED."
-  ],
-  "limits": [
-    "Host file-stage bridge only; retail .bit/.hmp pointer tables, context offsets, QVM registration/execution and Mem_Alloc calls are not byte-identical.",
-    "The context+0xDC8 clear performed inside DynObj_UpdateDynTree_11 is not performed; the arg1 return value is reproduced.",
-    "No paired candidate runtime capture exists."
-  ]
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "Retail is x86 cdecl with context at [esp+4] and the path pointer at [esp+8]; the candidate takes void* context and const char* base_path in the same order. Retail appends .bit/.hmp/.cmd/.ctr to the supplied string; the host bridge treats base_path as the terrain directory and reads fixed TERRAIN.* names. Documented adaptation, not a byte-identical path contract."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "Retail uses suffixes .bit/.hmp/.cmd/.ctr, a 0xC00-byte .bit header, 0x1000-byte resource grids and context offsets +0xDCC (bit records), +0xDD0 (heightmap) and +0xDC8. The host bridge reads the same files through TerrainLevelData with typed vectors; no literal constant equivalence is claimed beyond the recovered file layout."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "not_applicable",
+   "rationale": "Retail writes byte-addressed context offsets; the host bridge stores typed containers in TerrainLevelData. There is no byte-identical memory layout to compare, so the memory check does not apply to this adapted implementation."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "not_applicable",
+   "rationale": "Retail calls Render_ComputeNormals, Resource_Load/Resource_FileExists, Game_DefineOptions, the QVM task loader/executor/cleanup, Mem_AllocFn and DynObj_UpdateDynTree_11. The host bridge calls Terrain_LoadLevel with apply_tasks=false and does not run the retail resource or script-VM chain, so call and side-effect equivalence is out of scope."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "Retail has a single ret at 0x004C666C; its only tail call is DynObj_UpdateDynTree_11(context) at 0x004C665A, whose EAX is arg1, so EAX equals the context argument (live level-1 capture 0x038910B4). The candidate returns context and adds a host-only null guard that returns nullptr; that guard has no retail counterpart and is declared as a deviation."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "passed",
+   "rationale": "Neither the retail body nor the candidate performs floating-point arithmetic."
+  }
+ ],
+ "limitations": [
+  "Host-bridge scope: Render_ComputeNormals, resource-manager loads, QVM task execution and the final dynamic-object update are not reproduced 1:1.",
+  "The candidate treats base_path as a terrain directory and reads fixed TERRAIN.* names; retail appends .bit/.hmp/.cmd/.ctr to the supplied path string.",
+  "TerrainLevelData stores typed vectors instead of the retail context offsets, so no byte-identical layout is claimed.",
+  "Retail returns the context pointer (EAX 0x038910B4 in the live level-1 capture); the candidate returns context but adds a null-context guard returning nullptr.",
+  "Status is STRUCTURALLY_VERIFIED: CFG similarity 1.0 is retail Binary Ninja vs Radare2 agreement, not candidate equivalence.",
+  "Rebind note: the compiled body is byte-identical to the 2026-10-22T21:55 object; the file hash moved because other natives and globals were added to the translation unit."
+ ]
 }
