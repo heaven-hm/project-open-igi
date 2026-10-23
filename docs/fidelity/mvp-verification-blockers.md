@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 77 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 78 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 77 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 78 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1327,3 +1327,26 @@ With that in place the two blocked records were finished properly rather than wo
 
 Verified count 75 -> 77. The three remaining twin-bound records (`Texture_GetActiveBackendId` 0x004B0F80 and the
 two above) now have a reproducible model to follow; `Texture_GetActiveBackendId` still needs its own runner.
+
+## Round 122: the last twin-bound record is verified
+
+`Texture_GetActiveBackendId` (0x004B0F80) was the third and final record demoted in the round-116 audit for having a
+twin binding that could not be reproduced. With the support-source model from round 121 in place it needed only the
+evidence its contract actually requires, because the retail body is a single load of `g_a94a64`
+(retail 0x00A94A64).
+
+`scripts/texture_backend_id_diff_runner.py` writes eight different values into that slot on each side - zero, one,
+negative one, two, three, seven, one hundred and the maximum signed value - runs both bodies, and compares the
+returned word. The cases deliberately include the three classes the paired capture observed (`null`, `small:-1`,
+`small:1`) plus values the runtime never produced, which is what makes the evidence prove the read comes from the
+slot rather than from a constant or an address left over in a register. All eight pass, and the record's
+`game_natives` now points at the real address-qualified transcription
+(`scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.cpp`, digest-bound) instead of the header that never
+existed.
+
+The record is VERIFIED again: strict gate clean on CFG, semantic review, behavioural tests and Frida probes. The
+compiled implementation is unchanged (`engine/src/retail/texture/texture_loaders.cpp` digest matches its recorded
+evidence), so no neighbouring record on that file had to be re-evidenced.
+
+Verified count 77 -> 78. All three twin-bound records from the round-116 audit are now verified reproducibly in this
+tree (0x00491D40, 0x00497D70, 0x004B0F80).

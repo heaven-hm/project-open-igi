@@ -60208,25 +60208,24 @@
         "signature": "std::int32_t __cdecl Texture_GetActiveBackendId(void);"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.hpp",
-        "sha256": "907f36a2fd52a6c592e5eb95b2c235ba931b409d95390fab02bc370219050702",
+        "path": "scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.cpp",
+        "sha256": "8ed408503681f5ceeb31714d942a12a2ed784d3ab521909b8716798a35a9620b",
         "signature": "std::int32_t __cdecl Texture_GetActiveBackendId(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Retail 0x004B0F80 (Texture_GetActiveBackendId): mov eax,[0xa94a64]; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "The address-qualified GameNatives source is the canonical reference transcription; the compiled implementation is engine/src/retail/texture/texture_loaders.cpp."
         ],
         "behavioral_runner": {
-          "path": "scripts/context_getter_diff_runner.py",
+          "path": "scripts/texture_backend_id_diff_runner.py",
           "args": [
-            "--root",
-            "{root}",
             "--address",
             "{address}",
             "--binary",
@@ -60236,9 +60235,11 @@
             "--implementation",
             "{implementation}",
             "--implementation-sha256",
-            "{implementation_sha256}"
+            "{implementation_sha256}",
+            "--root",
+            "{root}"
           ],
-          "timeout_seconds": 600
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -60264,26 +60265,21 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B0F80-behavioral.json",
-          "evidence_sha256": "b584241bb983ea07bc4a3980b61c7c0e90462cd74a77da7029dc54dd2a01e2b8"
+          "evidence_sha256": "24a601a379f8fdecfda54a7ba33aa97ff1c6c9bdcb5d0c451de4d93ecda30181"
         },
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004B0F80-behavioral.json",
-          "evidence_sha256": "a0e4aea17d6e26491ab0a641312a08af6e411dd18240e14704873b1739788047",
+          "evidence_sha256": "24a601a379f8fdecfda54a7ba33aa97ff1c6c9bdcb5d0c451de4d93ecda30181",
           "oracle": "retail-binary-execution",
-          "tests_passed": 10,
-          "tests_total": 10,
+          "tests_passed": 8,
+          "tests_total": 8,
           "result": "passed"
         },
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0f80-frida-runtime.json",
           "evidence_sha256": "87a3c3ad8bce378a46dfb19db4d7ae1dc6641b7221956033fcdd2976bbd51292"
-        },
-        "imported_claim": {
-          "claimed_status": "VERIFIED",
-          "demoted_by": "lead, round 116 evidence audit",
-          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",

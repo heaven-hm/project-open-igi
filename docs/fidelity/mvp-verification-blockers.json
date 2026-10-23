@@ -1240,6 +1240,7 @@
     "0x004B0BA0",
     "0x004B0C60",
     "0x004B0D40",
+    "0x004B0F80",
     "0x004B1780",
     "0x004B17F0",
     "0x004B1E90",
@@ -1290,5 +1291,5 @@
     "0x005178E0",
     "0x00517940"
   ],
-  "verified_strict_gate_count": 77
+  "verified_strict_gate_count": 78
 }

@@ -1,285 +1,228 @@
 {
- "schema_version": 1,
- "kind": "behavioral-test-report",
- "address": "0x004B0F80",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
- "executed": true,
- "oracle": "retail-binary-execution",
- "method": "Retail was replayed in radare2 ESIL with the target global seeded to each probe value; the candidate was compiled with i686-w64-mingw32-g++ and executed under CrossOver with the same seeded global. Only the returned low byte is observable through the process exit status.",
- "observable_fields": [
-  "return_value",
-  "state_delta",
-  "side_effects"
- ],
- "limitations": [
-  "The getter has no side effects; side_effects is empty and state_delta records that the seed global is unchanged.",
-  "The getter reads one global and has no other input, so the seed is the entire state."
- ],
- "cases": [
-  {
-   "id": "seed-00000000",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "global_value": 0
-   },
-   "reference_output": {
-    "return_value": 0,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004B0F80",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+  "method": "Retail and the compiled candidate return the dword stored in the backend-id slot; the harness writes eight different values into that slot on each side - including zero, negative and the values the runtime observed - and compares the returned word, which proves the read is from the slot and not a constant.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
   },
-  {
-   "id": "seed-00000001",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 1
-   },
-   "reference_output": {
-    "return_value": 1,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 1,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004B0F80",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "7e20f334a6795a63880a8d74cbd4a360b5102b1e71801ecd10835c5d0c7d0400"
   },
-  {
-   "id": "seed-ffffffff",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "global_value": 4294967295
-   },
-   "reference_output": {
-    "return_value": 4294967295,
-    "state_delta": {
-     "global_unchanged": true
+  "cases": [
+    {
+      "id": "backend-slot-0",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 4294967295,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot-1",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-7fffffff",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "global_value": 2147483647
-   },
-   "reference_output": {
-    "return_value": 2147483647,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot--1",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": -1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": -1,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 2147483647,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot-2",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-80000000",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "global_value": 2147483648
-   },
-   "reference_output": {
-    "return_value": 2147483648,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot-3",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 3
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 3,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 3,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 2147483648,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot-7",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 7
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 7,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 7,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-00000100",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 256
-   },
-   "reference_output": {
-    "return_value": 256,
-    "state_delta": {
-     "global_unchanged": true
+    {
+      "id": "backend-slot-100",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 100
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 100,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 100,
+        "state_delta": {},
+        "side_effects": []
+      }
     },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 256,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-0000ffff",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 65535
-   },
-   "reference_output": {
-    "return_value": 65535,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 65535,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-deadbeef",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 3735928559
-   },
-   "reference_output": {
-    "return_value": 3735928559,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 3735928559,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-12345678",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 305419896
-   },
-   "reference_output": {
-    "return_value": 305419896,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 305419896,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
-  },
-  {
-   "id": "seed-a5a5a5a5",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "global_value": 2779096485
-   },
-   "reference_output": {
-    "return_value": 2779096485,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "candidate_output": {
-    "return_value": 2779096485,
-    "state_delta": {
-     "global_unchanged": true
-    },
-    "side_effects": []
-   },
-   "passed": true
+    {
+      "id": "backend-slot-2147483647",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 2147483647
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2147483647,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2147483647,
+        "state_delta": {},
+        "side_effects": []
+      }
+    }
+  ],
+  "runner": {
+    "path": "scripts/texture_backend_id_diff_runner.py",
+    "sha256": "64f069f0855141ffa4695bb4d745838e67a69bc21e4d6528b4bccf4273bb47c4",
+    "command": [
+      "scripts/texture_backend_id_diff_runner.py",
+      "--address",
+      "0x004B0F80",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/texture/texture_loaders.cpp",
+      "--implementation-sha256",
+      "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+      "--root",
+      "."
+    ]
   }
- ],
- "tests_passed": 10,
- "tests_total": 10,
- "tests_failed": 0,
- "result": "passed",
- "runner": {
-  "path": "scripts/context_getter_diff_runner.py",
-  "sha256": "710482ef607a3a1527c52daf7d84686ad7341efee0cd2b1fd88b729cac5ca2aa",
-  "command": [
-   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/context_getter_diff_runner.py",
-   "--root",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow",
-   "--address",
-   "0x004B0F80",
-   "--binary",
-   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-   "--binary-sha256",
-   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-   "--implementation",
-   "engine/src/retail/texture/texture_loaders.cpp",
-   "--implementation-sha256",
-   "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32"
-  ]
- }
 }
