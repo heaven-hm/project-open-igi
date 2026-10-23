@@ -1,62 +1,130 @@
 {
  "schema_version": 1,
  "kind": "semantic-review-report",
- "result": "passed",
  "address": "0x00512C30",
+ "function_name": "Terrain_Draw",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "15c3fbd023829b396b66eb0507b771fdead0e885053054340014c41cbdba1da6",
+ "implementation": "engine/src/retail/terrain/terrain_draw.cpp",
+ "implementation_sha256": "94303de6372baa8fda019b1b5a03b5f0a6763612efe7e87c14fbd8c16c9cfc67",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+ "reviewed_by": "subagent source-to-retail review pass, 2026-10-23",
+ "recorded_at": "2026-10-23T06:26:26Z",
+ "result": "passed",
+ "review_scope": "Static source-to-retail semantic review grounded in the 17-property structural comparison, Binary Ninja disassembly/decompile, radare2 CFG, angr CFGFast at the exact entry and the measured candidate object. It covers transcribed operations, arguments/returns, constants, memory layout, calls and side effects, error paths and floating-point sites. No runtime, memory-observation or rendered/culling comparison exists, so it does not establish behavioral or bit-exact equivalence.",
+ "evidence": {
+  "structural_comparison": {
+   "path": "docs/fidelity/evidence/0x00512C30-structural-comparison.json",
+   "sha256": "101d807ce035df90fbde8775cae99ec0197098cb43590b4dbaa042375c6ee051",
+   "properties": 17,
+   "properties_matched": 16,
+   "properties_partial": 1
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "binary_ninja": {
+   "path": "docs/fidelity/evidence/0x00512C30-binaryninja-20261023.json",
+   "sha256": "ecb78bdf059c86806c1222baf040c71d6375bac54f5db7aa63fa7f5d43519a19"
+  },
+  "radare2": {
+   "path": "docs/fidelity/evidence/0x00512C30-radare2-20261023.json",
+   "sha256": "d5f7169e0f1bfcf4b4a319bc4345f10681985ef8e2371c372a53abd2f2985d55"
+  },
+  "angr": {
+   "path": "docs/fidelity/evidence/0x00512C30-angr-20261023.json",
+   "sha256": "1a2453191e4b12494016b625617931ed115576f04d66c37ee021a134e68d2e96"
+  },
+  "function_bytes": {
+   "length": 6317,
+   "sha256": "f3767d468746b920c6e84b75ec8a0000c05c25b43de73d18205db03c063cabb4"
+  }
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00512C30 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Retail entry 0x00512C30, extent 0x00512C30..0x005144DC (6317 bytes, function bytes sha256 f3767d46...), 1670 instructions, 144 blocks / 215 edges, one retn. Binary Ninja and radare2 node/edge sets are identical; angr CFGFast recovers the exact entry with 225 blocks / 316 edges and no unresolved jumps. The only caller is Terrain_UpdateWaterWaves at 0x005116A2 (push no arguments, add esp,4, discard EAX). The candidate is cut from the same retail body; its object symbol is __ZN3igi6retail7terrain12Terrain_DrawEv and it is linked at 0x00452980 with a 0x3180-byte extent.",
+   "evidence": [
+    "0x00512C30",
+    "0x005144DC",
+    "0x005116A2",
+    "0x00452980"
+   ]
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "No arguments: the caller pushes none and cleans 4 bytes. Binary Ninja's __stdcall/12-argument and radare2's 26-argument renderings are stack-frame artifacts of the 0x14F0 __chkstk frame. The candidate declares std::int32_t Terrain_Draw() and reads no stack parameters. Return in EAX: 0 on the normal drain path; the Lock HRESULT when Lock(0x2020,&0x00A7F89C,0) fails at 0x00512FE0. The task's 'final SetRenderState HRESULT' description is not supported by the disassembly: all state-set HRESULTs are discarded.",
+   "evidence": [
+    "0x005116A2",
+    "0x00512FDA",
+    "0x00512FE0",
+    "0x005144D2"
+   ]
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "Retail float/double constants were read from the image and match their roles: 1.0f at 0x005333E0, 0.0f at 0x005333EC, 0.375f at 0x00533558, 255.0f at 0x005336D4, -255.0f at 0x005342D8, -0.001f at 0x00533824, 1.73f at 0x00534C30, 0.01 double at 0x00533720 and 0.99 double at 0x00534C28. The candidate uses the same values in fog scaling, colour packing, the cull radius, the backface epsilon and the fog-pass thresholds; render-state argument constants (0x461C4000/0x46EA6000 and the small state values) are transcribed literally. Constants are structurally matched, not bit-exact under all rounding modes (TD-D4).",
+   "evidence": [
+    "0x005333E0",
+    "0x00533558",
+    "0x005336D4",
+    "0x00533824",
+    "0x00534C30",
+    "0x00533720",
+    "0x00534C28",
+    "0x005342D8"
+   ]
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "The candidate preserves the memory model: g_b16c9c block count over the g_b12c60 pointer array; per-block vertex count in the low 16 bits of +0x18 and signed first-loop count in the high 16; LOD at +0x1C; block origin doubles at +0; frame arrays for copy flags (+0x1A8), screen flags (+0x200), command types (+0x240), two sets of three 0x40-byte records (+0x280/+0x340), fog (+0x400), 64 projected vertices (+0x500) and the 8-dword colour ramp (+0xD00); chunk offsets +0x2EE8 count, +0x2EEC texture source, +0x2EF0 layer, and list globals 0x00A7F878/7C/80/88/8C. Globals are listed in the structural comparison. The candidate frame is 0x1614 bytes (TD-D6); the array roles and offsets are preserved.",
+   "evidence": [
+    "0x00B12C60",
+    "0x00B16C9C",
+    "0x00A7F878",
+    "0x00A7F89C",
+    "0x00A7E078"
+   ]
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "Terrain-specific calls and order match: Terrain_OutOfTerrainRenderch at the three retail sites, Terrain_BuildMipMaps_2 at 0x00513EF7/0x00514308 with three 0x40-byte records by value plus the 0x14-byte record, Terrain_UnknownBlendmode inside each of the three flush scans, HeapList_Remove per drained element, and the device vtable calls SetTransform/SetViewport/17 SetRenderState/10 SetTextureStageState/Lock/Unlock/SetTexture/DrawIndexedPrimitiveVB. Candidate-added calls (exp2l/llrintl/nearbyintl/memset, logic_error and SJLJ support, host display getters) are documented as compiler/host abstractions. State-set HRESULTs are discarded in both.",
+   "evidence": [
+    "0x00513C7F",
+    "0x00513EF7",
+    "0x00514308",
+    "0x005143C9",
+    "0x005144C1"
+   ]
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "Retail has one retn (0x005144D2). The Lock failure branch at 0x00512FE0 returns EAX (the non-zero HRESULT) immediately through that epilogue; the normal block loop and the <=0 block count both reach Unlock, the three blend scans and the drain, which returns 0 when the remaining count is zero. There is no other error return and no terminal Debug_Error path in this function. The candidate returns the Lock HRESULT on failure and remaining (0) after the drain; missing host device/buffer throws std::logic_error before any retail-equivalent access (TD-D2).",
+   "evidence": [
+    "0x00512FE0",
+    "0x005143B5",
+    "0x0051445D",
+    "0x005144D2"
+   ]
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "passed",
+   "rationale": "The reviewed scope is the modelled x87 sequence, not bit-exact IEEE equivalence. Retail keeps 80-bit intermediates, uses FISTP qword for fog/colour integerisation and the 0.01/0.99 double comparisons; the candidate uses long double, std::nearbyint/std::llrint and std::exp2. All conversion sites and their order are transcribed, and constants were checked at retail addresses. Because no x87/MXCSR rounding-mode capture exists and exp2l/llrintl are not proved identical to F2XM1/FSCALE/FISTP, last-bit differences and boundary flips remain possible and are recorded as TD-D4.",
+   "evidence": [
+    "0x00513292",
+    "0x00513323",
+    "0x00512DAA",
+    "0x00513306"
+   ]
   }
+ ],
+ "limitations": [
+  "Static review only; no runtime, rendered, culling or memory-state observation.",
+  "The candidate machine CFG is not isomorphic to retail (126/183/2629 plus a 26/39/198 helper vs 144/215/1670); the review relies on source-level property correspondence.",
+  "x87 80-bit semantics, FISTP and exp2 are modelled with long double and libm; bit-exactness and every rounding mode are not established (TD-D4).",
+  "Null-block guard order, host device guards, host viewport getters, zero-initialised locals, frame shape and shared-callee internals are documented divergences TD-D1/TD-D2/TD-D3/TD-D5/TD-D6/TD-D8."
  ]
 }

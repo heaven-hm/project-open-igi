@@ -6,7 +6,7 @@
  "oracle": "retail-binary-execution",
  "address": "0x004B5F00",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "2ba7597774cd1a0d188f8fb9f143b936aff74b4631c2628596ee867740b52f20",
+ "implementation_sha256": "a36b966d7650181abd7335d0b3bc4bad0812c759df5287eadf3e758f2dfd5a16",
  "method": "Retail and PE32 candidate native bodies executed with identical modeled resource callees; compared return/self-loop termination, caller arena and callee order/arguments.",
  "observable_fields": [
   "return_value",
@@ -819,22 +819,42 @@
   "engine": "VEX",
   "version": "10.0.4.post1",
   "function_entry": "0x004B5F00",
-  "candidate_sha256": "7cc84c165e882755d3d8de8a08ba22b43dc6499d48775e1f276a1e4220c8d8a7",
+  "candidate_sha256": "de98a53e6569d90e719fb82e1b3439a97879fc1b7ff26e2adcff5d9802df93f1",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
    "-O0",
    "-shared",
-   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-xwhjqos7/entry.cpp",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-vjc83hbz/entry.cpp",
    "engine/src/retail/resource/resource_lifecycle.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-xwhjqos7/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-lifecycle-vjc83hbz/candidate.dll"
   ],
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
  },
  "limitations": [
   "Lookup, unpack, register, free and fatal-error callees are models; their implementations are not verified by these fixtures.",
   "Candidate host callbacks are explicitly installed; unset callbacks, invalid nodes and the live game process are outside this scope."
- ]
+ ],
+ "runner": {
+  "path": "scripts/resource_lifecycle_diff_runner.py",
+  "sha256": "1c8e56dff02c2cefde5df3fdc8887c454062ae9b0c0aa9703cdc2e7464126a5b",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/.venv-angr/bin/python",
+   "scripts/resource_lifecycle_diff_runner.py",
+   "--address",
+   "0x004B5F00",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/resource/resource_lifecycle.cpp",
+   "--implementation-sha256",
+   "a36b966d7650181abd7335d0b3bc4bad0812c759df5287eadf3e758f2dfd5a16",
+   "--root",
+   "."
+  ]
+ }
 }

@@ -6,7 +6,7 @@
  "oracle": "retail-binary-execution",
  "address": "0x004B5AF0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "c1e97e178bd4186786e0ad040cd505579affc83ccf5e5688e228568ad16219e2",
+ "implementation_sha256": "5c98e04fa3760b8956cc8a0c3abc48bd1b2117b4d344f445df7533e0c1c670c3",
  "method": "Concrete angr/VEX execution of retail bytes and freshly compiled Windows x86 candidate; exact return and entire fixture arena compared.",
  "observable_fields": [
   "return_value",
@@ -568,21 +568,41 @@
   "version": "10.0.4.post1",
   "function_entry": "0x004B5AF0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "candidate_sha256": "bf1724c8aa8dc5b2580905b1e16f80145b9068a2e951a722467cdb3f4c6ac1ab",
+  "candidate_sha256": "47a36025c8d42218c0697592dfcc6da52f2dd7151d4f3f15db4d112cabb645ac",
   "candidate_build_command": [
    "/opt/homebrew/bin/i686-w64-mingw32-g++",
    "-std=c++20",
    "-O0",
    "-shared",
-   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-fa_3diw2/entry.cpp",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-38ul26f0/entry.cpp",
    "engine/src/retail/sys/resource_lookup.cpp",
    "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-fa_3diw2/candidate.dll"
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-hash-lookup-38ul26f0/candidate.dll"
   ]
  },
  "limitations": [
   "Valid finite non-empty lists or bounded FORM chunks only; invalid pointers, cycles, malformed sizes and concurrent writes excluded.",
   "Concrete emulation is not an original-game process or universal equivalence proof."
- ]
+ ],
+ "runner": {
+  "path": "scripts/hash_lookup_diff_runner.py",
+  "sha256": "3e7a6e60ef7bdf7f343084bd3ff6b09a21a6c97c42c63969a69b60f879772ecd",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/.venv-angr/bin/python",
+   "scripts/hash_lookup_diff_runner.py",
+   "--address",
+   "0x004B5AF0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/sys/resource_lookup.cpp",
+   "--implementation-sha256",
+   "5c98e04fa3760b8956cc8a0c3abc48bd1b2117b4d344f445df7533e0c1c670c3",
+   "--root",
+   "."
+  ]
+ }
 }

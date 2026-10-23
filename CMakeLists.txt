@@ -30,6 +30,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_0048f0e0.cpp
     engine/src/retail/core/native_0048f0f0.cpp
     engine/src/retail/core/native_0048f970.cpp
+    engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/retail_main.cpp
     engine/src/retail/core/task_types.cpp
     engine/src/retail/diagnostics/log_record.cpp
@@ -72,7 +73,22 @@ add_executable(igi WIN32
     engine/src/retail/script/script_mode.cpp
     engine/src/retail/sys/ilff_navigation.cpp
     engine/src/retail/sys/resource_lookup.cpp
+    # All terrain translation units are in the target. terrain_storage.cpp owns the shared retail
+    # storage (0x005CA114, 0x00A7E068, 0x00BCAB08, 0x00BCAAE0, 0x00A7F878..0x00A7F88C); those
+    # definitions were removed from terrain_draw.cpp so exactly one definition of each exists in
+    # the link. terrain_loaders.cpp no longer carries the throwing Terrain_TraverseContourQuadtree
+    # and Terrain_Draw placeholders: terrain_quadtree.cpp defines the traversal native and
+    # terrain_draw.cpp defines Terrain_Draw() with the retail no-argument ABI.
+    # terrain_draw.cpp's Terrain_BuildMipMaps_2 (0x00514760) call resolves to terrain_mipmaps.cpp,
+    # whose g_a7e070 (0x00A7E070) definition lives in terrain_draw.cpp; no unit is left out.
+    engine/src/retail/terrain/terrain_draw.cpp
     engine/src/retail/terrain/terrain_loaders.cpp
+    engine/src/retail/terrain/terrain_mipmaps.cpp
+    engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp
+    engine/src/retail/terrain/terrain_quadtree.cpp
+    engine/src/retail/terrain/terrain_scene_state.cpp
+    engine/src/retail/terrain/terrain_storage.cpp
+    engine/src/retail/terrain/terrain_unknown_blendmode.cpp
     engine/src/retail/texture/loop_terrain_texture.cpp
     engine/src/retail/texture/model_texture_pixels.cpp
     engine/src/retail/texture/texture_loaders.cpp
