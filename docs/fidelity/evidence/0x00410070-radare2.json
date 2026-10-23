@@ -2,9 +2,18 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "radare2",
+ "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "function_entry": "0x00410070",
  "signature": "not restated",
+ "function_size": 326,
+ "instruction_count": 92,
+ "block_count": 5,
+ "edge_count": 6,
+ "stack_frame": 108,
+ "calltype": "cdecl",
+ "noreturn": false,
  "cfg": {
   "nodes": [
    {
@@ -55,5 +64,33 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "basic_blocks": [
+  {
+   "address": "0x00410070",
+   "size": 213,
+   "instructions": 56
+  },
+  {
+   "address": "0x00410145",
+   "size": 26,
+   "instructions": 11
+  },
+  {
+   "address": "0x0041015F",
+   "size": 5,
+   "instructions": 1
+  },
+  {
+   "address": "0x00410164",
+   "size": 26,
+   "instructions": 10
+  },
+  {
+   "address": "0x0041017E",
+   "size": 56,
+   "instructions": 14
+  }
+ ],
+ "note": "Recorded 2026-10-23 from the retail image with `s <addr>; af; afbj` and `afi`."
 }

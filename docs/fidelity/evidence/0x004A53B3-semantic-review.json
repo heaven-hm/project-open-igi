@@ -3,85 +3,202 @@
  "kind": "semantic-review-report",
  "result": "passed",
  "address": "0x004A53B3",
+ "function_name": "sprintf",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "implementation_path": "engine/src/retail/error/error_show.cpp",
+ "implementation_sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+ "header_path": "engine/include/igi/retail/error/error_show.hpp",
+ "header_sha256": "5ad5f56cf09f539e373f3a28a41a188d7a324f8a7e171af42c9f46fd52e35044",
  "reviewed": true,
- "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
- "reviewed_at": "2026-10-23T07:24:56Z",
- "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
- "review_basis": "The current engine/src/retail/error/error_show.cpp hashes to e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
- "retail_function": {
+ "reviewed_by": "Delegated coding agent; fresh Radare2 6.2.0 and angr 10.0.4.post1 recovery of retail igi.exe, plus the previously captured Binary Ninja 6.0.10601 MCP artifact for the unchanged retail image. The live Binary Ninja MCP endpoint (127.0.0.1:24642) was unavailable in this round (connection refused), so no new decompiler query was made.",
+ "recorded_at": "2026-10-23T17:06:26Z",
+ "scope": "Symbol disambiguation and source-semantic review of retail sprintf (0x004A53B3) against the candidate CRT binding. No paired retail/candidate game-process runtime capture exists; behaviour is not claimed as RUNTIME_TESTED or VERIFIED.",
+ "decompiler": {
+  "selected": "binary_ninja",
+  "tool_version": "binaryninja_ui_mcp 0.1.0 (retail artifact recorded before this round)",
+  "live_availability": "unavailable this round: connection refused at 127.0.0.1:24642",
+  "fallback_used": "none; the retail image is unchanged, so the captured Binary Ninja artifact remains byte-bound, and Radare2 plus angr were re-run live."
+ },
+ "retail_structure": {
   "entry": "0x004A53B3",
-  "name": "sprintf",
-  "signature": "int32_t(char* arg1, char* arg2)",
-  "start": "0x004A53B3",
-  "end": "0x004A5404",
+  "end_inclusive": "0x004A5404",
+  "end_exclusive": "0x004A5405",
   "size_bytes": 82,
+  "bytes_sha256": "903e5756370f8719b677989dccf6159c0e5d23a86e6b57b11d9e7669453b7042",
+  "bytes_hex": "558bec83ec208b4508568945e88945e08d4510c745ec42000000508d45e0ff750cc745e4ffffff7f50e83f23000083c40cff4de48bf078088b45e0802000eb0d8d45e0506a00e80d22000059598bc65ec9c3",
+  "instruction_count": 32,
   "basic_blocks": 4,
   "edges": 4,
-  "cfg_similarity": 1.0,
-  "summary": "0x004A53B3-0x004A5405 (82 bytes), 4 blocks/4 edges; initializes a stack _iobuf over the destination with count 0x7FFFFFFF and flags 0x42, calls the formatting engine at 0x004A7720 with the variadic list, writes the NUL terminator and returns the formatted length."
+  "cfg": {
+   "nodes": [
+    {
+     "address": "0x004A53B3"
+    },
+    {
+     "address": "0x004A53EB"
+    },
+    {
+     "address": "0x004A53F3"
+    },
+    {
+     "address": "0x004A5400"
+    }
+   ],
+   "edges": [
+    {
+     "source": "0x004A53B3",
+     "target": "0x004A53EB",
+     "kind": "conditional"
+    },
+    {
+     "source": "0x004A53B3",
+     "target": "0x004A53F3",
+     "kind": "conditional"
+    },
+    {
+     "source": "0x004A53EB",
+     "target": "0x004A5400",
+     "kind": "unconditional"
+    },
+    {
+     "source": "0x004A53F3",
+     "target": "0x004A5400",
+     "kind": "unconditional"
+    }
+   ]
+  },
+  "abi": {
+   "calling_convention": "cdecl (x86)",
+   "variadic": true,
+   "arguments": [
+    "[esp+4] char* buffer",
+    "[esp+8] const char* format",
+    "[esp+12] and above: variadic substitutions"
+   ],
+   "return_value": "EAX = the formatting engine result in ESI (characters written); the NUL terminator is written at *ptr unless the counter went negative",
+   "stack_cleanup": "caller (484 call sites, e.g. 0x00405B85 add esp,0xC after 0x00405B80; 0x00415B6A add esp,8 after 0x00415B65 for Debug_Error)"
+  },
+  "callees": [
+   "0x004A7720 _output",
+   "0x004A760B _flsbuf"
+  ],
+  "globals_touched": [
+   "none; the _iobuf lives on the stack"
+  ],
+  "caller_count": 484,
+  "semantic_summary": "Statically linked MSVC CRT sprintf. It builds a stack _iobuf over the destination (count 0x7FFFFFFF, flags 0x42 = _IOWRT|_IOSTRG), calls _output(stream, format, &first_variadic_arg) at 0x004A53DC, decrements the count, writes the NUL terminator at the stream pointer when the result is non-negative, or flushes through _flsbuf when the counter went negative, and returns the _output result."
  },
- "candidate_function": {
-  "path": "engine/src/retail/error/error_show.cpp",
-  "sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
-  "summary": "igi::retail::error::sprintf(char*, const char*, ...): forwards to String_VFormat, which calls the host std::vsprintf and NUL-terminates buffer[result]. The retail _iobuf/_output instruction sequence is not reproduced; formatting is delegated to the host CRT.",
-  "status_after_review": "STRUCTURALLY_VERIFIED"
+ "candidate_binding": {
+  "port_owned_body": false,
+  "binding": "engine/include/igi/retail/error/error_show.hpp declares `using ::sprintf;` inside namespace igi::retail::error; calls spelled igi::retail::error::sprintf resolve to the toolchain CRT symbol.",
+  "candidate_symbols_named_sprintf": [
+   {
+    "name": "sprintf",
+    "address": "0x004A25F0",
+    "kind": "CRT definition (T)",
+    "source": "mingw-w64 CRT linked into build-clean-win32/igi1.exe"
+   }
+  ],
+  "toolchain_symbols": [
+   {
+    "name": "__mingw_sprintf",
+    "address": "0x0049B470",
+    "role": "mingw C99 sprintf implementation; the compiler emits calls to this name under the default __USE_MINGW_ANSI_STDIO=1"
+   },
+   {
+    "name": "__mingw_vsprintf",
+    "address": "0x0049B530",
+    "role": "mingw C99 vsprintf implementation"
+   },
+   {
+    "name": "__stdio_common_vsprintf",
+    "address": "0x004A2848",
+    "role": "UCRT formatting core"
+   }
+  ],
+  "duplicate_namespaced_symbol": {
+   "name": "igi::retail::error::sprintf",
+   "present": false,
+   "note": "The interrupted round had already removed the variadic forwarding wrapper from engine/src/retail/error/error_show.cpp and replaced it with `using ::sprintf;`. This round removed the remaining stale evidence binding. The older build-win32-no-verify-gate/igi1.exe (SHA-256 21a23bb13fed860ab421e990b1048ce379ab207fa263e7e618b1e99b5adb27fb) still contains that wrapper at 0x004223D0 and demonstrates the ambiguity being removed."
+  },
+  "implementation_translation_unit_symbols": [
+   "igi::retail::error::String_VFormat(char*, const char*, char*)",
+   "igi::retail::error::Error_GetGlobals()"
+  ],
+  "object_path": "build-clean-win32/CMakeFiles/igi.dir/engine/src/retail/error/error_show.cpp.obj",
+  "object_sha256": "3468ce5f557a7a9e409b23bd5c1489a35f6febd6ffe6ad136dd22e217e788059",
+  "compiled_call_relocation": "___mingw_sprintf (from Debug_Error; the CRT boundary the candidate actually reaches)"
  },
  "checks": [
   {
+   "name": "retail_identity",
+   "result": "passed",
+   "detail": "igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; 82 bytes at 0x004A53B3 match the Binary Ninja artifact digest 903e5756..."
+  },
+  {
    "name": "function_boundary",
    "result": "passed",
-   "detail": "Binary Ninja and Radare2 recover 82 bytes, 4 blocks/4 edges; cfg_similarity 1.0."
+   "detail": "Radare2 and angr recover the same entry 0x004A53B3; Radare2 size 82 bytes, 4 blocks/4 edges; angr 6 blocks/6 edges by splitting at call instructions; no unresolved jumps."
   },
   {
    "name": "abi",
    "result": "passed",
-   "detail": "Both are cdecl variadic char*(char*,const char*,...); the candidate va_list paves the same 32-bit stack arguments."
+   "detail": "cdecl variadic; 484 call sites clean the stack after the call. Radare2 reports three fixed stack arguments but its prototype is not variadic-aware; the call sites and the &arg_10h setup at 0x004A53C3 prove the variadic layout."
   },
   {
-   "name": "host_crt",
-   "result": "passed_with_limitation",
-   "detail": "The candidate does not reproduce the retail _iobuf setup or call 0x004A7720; it delegates to std::vsprintf. Bounded integer/string cases agree, but %n, floating-point, 64-bit and overflow behavior depend on the host CRT and are outside the reviewed equivalence."
+   "name": "return_value",
+   "result": "passed",
+   "detail": "The formatting result stays in ESI across the NUL/flush branch and is moved to EAX at 0x004A5400-0x004A5401; both branches reach the same return."
+  },
+  {
+   "name": "single_candidate_symbol",
+   "result": "passed",
+   "detail": "The candidate image contains exactly one definition named `sprintf` (0x004A25F0) and no symbol named `igi::retail::error::sprintf`. `nm -C` over build-clean-win32/igi1.exe returns the CRT symbol, mingw internals and nothing else for this address."
   },
   {
    "name": "behavioural_differential",
+   "result": "passed_with_limitation",
+   "detail": "scripts/format_diff_runner.py executed the retail bytes in VEX and modeled the candidate CRT boundary (__mingw_sprintf) with host snprintf over 10 bounded integer/string fixtures: 10/10 return values and 512-byte destinations matched. This is emulator/host evidence, not live game-runtime evidence."
+  },
+  {
+   "name": "build",
    "result": "passed",
-   "detail": "scripts/format_diff_runner.py executed retail in VEX and modeled the candidate CRT with bounded integer/string fixtures; 10/10 returned the same length and 512-byte destination."
+   "detail": "The binding translation unit compiles for i686-w64-mingw32 with -O3 -DNDEBUG; the clean candidate build and receipt are recorded in docs/fidelity/evidence/0x004A53B3-build-20261023.json and build-clean-win32/candidate-receipt.json."
   }
  ],
  "signature_comparison": {
   "reviewed": true,
-  "result": "abi-adapted",
-  "rationale": "Retail is variadic cdecl (char*, char*, ...); the candidate is variadic cdecl (char*, const char*, ...). The va_list stack layout is preserved."
+  "result": "exact-c-abi-toolchain-implementation-divergent",
+  "rationale": "Retail and candidate both expose the C cdecl variadic `int sprintf(char*, const char*, ...)`. Retail implements it inside igi.exe as the MSVC CRT; the candidate links the mingw-w64 CRT, whose `sprintf` symbol exists at 0x004A25F0 and whose formatting calls bind to __mingw_sprintf under the default ANSI-stdio setting. The ABI and observable contract match; the implementation is not address- or instruction-identical and is not claimed to be."
  },
  "evidence": {
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004A53B3-radare2-20261023.json",
+   "evidence_sha256": "489a6a16dc728258afc343f6ae9470232297bce49d2ee3c9f432c6be270a957a"
+  },
+  "angr": {
+   "evidence_path": "docs/fidelity/evidence/0x004A53B3-angr-20261023.json",
+   "evidence_sha256": "57d657e9e23154b33383c086b689eb02aac6e604e2db769a9b3a8c7ae7ad524b"
+  },
+  "build": {
+   "evidence_path": "docs/fidelity/evidence/0x004A53B3-build-20261023.json",
+   "evidence_sha256": "301cc5771d25ffc9591af9633d54d5d0dec414f889cfeb7f9704ddc601ccbab7"
+  },
+  "behavioral": {
+   "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral-20261023.json",
+   "evidence_sha256": "41ebc1ad346d60c73fca264b3b0d7bcbe69ea17d1bb67e189eaf6e4ea5283b59"
+  },
   "binary_ninja": {
    "evidence_path": "docs/fidelity/evidence/0x004A53B3-binaryninja.json",
-   "evidence_sha256": "6fc75e649f95fb1e8ae998b40a5341869399b6f157b3e07225c54df7caf8f650",
-   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
-  },
-  "radare2": {
-   "evidence_path": "docs/fidelity/evidence/0x004A53B3-radare2.json",
-   "evidence_sha256": "d42249e70b734401762d9fa9c80377ddfb2fc12fa211fbe81d810c5913ac65de",
-   "tool": "radare2 6.2.0"
-  },
-  "behavioural": {
-   "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
-   "evidence_sha256": "08a6aa4606c26f960392ff35f10ddd979d1114cf43bb35fc80f13eb41e45ef74",
-   "runner": "scripts/format_diff_runner.py",
-   "method": "Retail formatter instructions executed in VEX; candidate PE32 CRT boundary modeled by host libc snprintf with explicit x86 va_list dword reads for bounded integer/string formats. Exact return and 512 destination bytes compared.",
-   "oracle": "retail-binary-execution",
-   "tests_passed": 10,
-   "tests_total": 10
+   "evidence_sha256": "6fc75e649f95fb1e8ae998b40a5341869399b6f157b3e07225c54df7caf8f650"
   }
  },
  "limitations": [
-  "The port delegates to host vsprintf rather than transcribing the retail _iobuf/_output path, so host-CRT differences remain.",
-  "The differential covers bounded integer/string C-locale formats only; no floating point, overflow, invalid pointers or CRT failures.",
-  "No live paired runtime capture exists.",
-  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
+  "No paired retail/candidate game-process runtime capture exists for this address. RUNTIME_TESTED and VERIFIED are not claimed.",
+  "The candidate has no port-owned sprintf body: it uses the host CRT. The retail _iobuf/_output instruction sequence is not reproduced.",
+  "Under the default mingw-w64 ANSI stdio setting the compiled calls bind to __mingw_sprintf (the C99 implementation), while the `sprintf` symbol at 0x004A25F0 is the CRT's non-ANSI entry. Both are CRT-owned; no port-owned symbol exists.",
+  "The differential covers bounded integer/string C-locale formats only; floating point, %n, overflow, invalid pointers and CRT failure paths are not covered.",
+  "The live Binary Ninja MCP endpoint was unavailable this round; the retail Binary Ninja artifact is a previously captured, byte-bound record for the unchanged retail image."
  ]
 }

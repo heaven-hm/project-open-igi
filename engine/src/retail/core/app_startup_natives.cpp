@@ -25,12 +25,12 @@ char const* IGI_RETAIL_CDECL StoreCommandLine(char const* command_line)
     return command_line;
 }
 
-// Native: GetRetailCommandLine; retail VA 0x0048F080.
+// Native: GetCommandLine; retail VA 0x0048F080.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja 6.0.10601 free (UI MCP 0.1.0), Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x0048F080..0x0048F086 (6 bytes, bytes a1c88b5c00c3, 2 instructions, 1 basic block, no edges).
-// Behavior/CFG: mov eax,[0x005C8BC8]; ret. One block, no calls and no arguments: returns the 32-bit command-line pointer that 0x0048F0C0 stores at 0x0048F0C4. The only direct caller is 0x0048F360 at 0x0048F369, which scans that string for its terminator and parses it with the " \t" separators; the global itself is written only at 0x0048F0C4.
+// Behavior/CFG: mov eax,[0x005C8BC8]; ret. One block, no calls and no arguments: returns the 32-bit command-line pointer that 0x0048F0C0 stores at 0x0048F0C4. The only direct caller is 0x0048F360 at 0x0048F369, which scans that string for its terminator and parses it with the " \t" separators; the global itself is written only at 0x0048F0C4. The source identifier GameCommandLine avoids the Win32 GetCommandLine macro while naming the same game command-line pointer.
 // Status/limits: STRUCTURALLY_VERIFIED; the retail load and EAX return are reproduced by a candidate that reads the same candidate global its own StoreCommandLine writes. Paired start-up runtime comparison is still required for acceptance.
-char const* IGI_RETAIL_CDECL GetRetailCommandLine()
+char const* IGI_RETAIL_CDECL GameCommandLine()
 {
     return CommandLine;
 }

@@ -77,57 +77,76 @@ def main():
             raise RuntimeError(built.stderr)
         rebuilt = angr.Project(str(candidate), auto_load_libs=False)
 
+        def model_format(state, out, fmt, ap):
+            cursor = ap
+            def argument():
+                nonlocal cursor
+                value = state.solver.eval(state.memory.load(cursor, 4, endness="Iend_LE"))
+                cursor += 4
+                return value
+            def string_at(pointer):
+                result = bytearray()
+                for offset in range(256):
+                    value = state.solver.eval(state.memory.load(pointer + offset, 1))
+                    if value == 0:
+                        return bytes(result)
+                    result.append(value)
+                raise RuntimeError("unterminated modeled string")
+            format_bytes = string_at(fmt)
+            values = []
+            offset = 0
+            while offset < len(format_bytes):
+                if format_bytes[offset:offset + 1] != b"%":
+                    offset += 1
+                    continue
+                match = re.match(rb"%(?:%|[-+ 0#]*[0-9]*[diuxs])", format_bytes[offset:])
+                if match is None:
+                    raise RuntimeError("unsupported modeled format conversion")
+                conversion = match.group()[-1:]
+                offset += len(match.group())
+                if conversion == b"%":
+                    continue
+                value = argument()
+                values.append(ctypes.c_char_p(string_at(value)) if conversion == b"s" else
+                              ctypes.c_int32(value) if conversion in (b"d", b"i") else ctypes.c_uint32(value))
+            runtime = ctypes.CDLL(None)
+            runtime.snprintf.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_char_p]
+            runtime.snprintf.restype = ctypes.c_int
+            output = ctypes.create_string_buffer(512)
+            length = runtime.snprintf(output, 512, format_bytes, *values)
+            if length < 0 or length >= 512:
+                raise RuntimeError("format output exceeds bounded fixture")
+            state.memory.store(out, output.raw[:length + 1])
+            return length
+
         class CandidateVsprintf(angr.SimProcedure):
             def run(self, out, fmt, ap):
-                cursor = ap
-                def argument():
-                    nonlocal cursor
-                    value = self.state.solver.eval(self.state.memory.load(cursor, 4, endness="Iend_LE"))
-                    cursor += 4
-                    return value
-                def string_at(pointer):
-                    result = bytearray()
-                    for offset in range(256):
-                        value = self.state.solver.eval(self.state.memory.load(pointer + offset, 1))
-                        if value == 0:
-                            return bytes(result)
-                        result.append(value)
-                    raise RuntimeError("unterminated modeled string")
-                format_bytes = string_at(fmt)
-                values = []
-                offset = 0
-                while offset < len(format_bytes):
-                    if format_bytes[offset:offset + 1] != b"%":
-                        offset += 1
-                        continue
-                    match = re.match(rb"%(?:%|[-+ 0#]*[0-9]*[diuxs])", format_bytes[offset:])
-                    if match is None:
-                        raise RuntimeError("unsupported modeled format conversion")
-                    conversion = match.group()[-1:]
-                    offset += len(match.group())
-                    if conversion == b"%":
-                        continue
-                    value = argument()
-                    values.append(ctypes.c_char_p(string_at(value)) if conversion == b"s" else
-                                  ctypes.c_int32(value) if conversion in (b"d", b"i") else ctypes.c_uint32(value))
-                runtime = ctypes.CDLL(None)
-                runtime.snprintf.argtypes = [ctypes.c_void_p, ctypes.c_size_t, ctypes.c_char_p]
-                runtime.snprintf.restype = ctypes.c_int
-                output = ctypes.create_string_buffer(512)
-                length = runtime.snprintf(output, 512, format_bytes, *values)
-                if length < 0 or length >= 512:
-                    raise RuntimeError("format output exceeds bounded fixture")
-                self.state.memory.store(out, output.raw[:length + 1])
-                return length
+                return model_format(self.state, out, fmt, ap)
 
-        # MinGW may emit an inline C++ shim instead of an imported CRT symbol.
-        symbol = next((s for name in ("__Z8vsprintfPcPKcS_", "vsprintf", "___mingw_vsprintf")
-                       for s in rebuilt.loader.symbols if s.name == name), None)
+        class CandidateSprintf(angr.SimProcedure):
+            # __mingw_sprintf is cdecl variadic: at entry [esp]=return address,
+            # [esp+4]=out, [esp+8]=fmt, [esp+12]=first substitution.
+            def run(self, out, fmt):
+                ap = self.state.regs.esp + 12
+                return model_format(self.state, out, fmt, ap)
+
+        # The candidate CRT boundary differs per address: String_VFormat reaches
+        # vsprintf, while the sprintf entry is mingw's __mingw_sprintf (its
+        # __mingw_pformat engine is not the vsprintf boundary).
+        if args.address == "0x004A53B3":
+            symbol = next((s for name in ("__mingw_sprintf", "___mingw_sprintf", "sprintf")
+                           for s in rebuilt.loader.symbols if s.name == name), None)
+            procedure = CandidateSprintf
+        else:
+            # MinGW may emit an inline C++ shim instead of an imported CRT symbol.
+            symbol = next((s for name in ("__Z8vsprintfPcPKcS_", "vsprintf", "___mingw_vsprintf")
+                           for s in rebuilt.loader.symbols if s.name == name), None)
+            procedure = CandidateVsprintf
         entry = rebuilt.loader.find_symbol("NativeEntry")
         if symbol is None or entry is None:
             raise RuntimeError(f"candidate CRT import or entry is missing: "
                                f"{[s.name for s in rebuilt.loader.symbols if 'printf' in s.name or 'NativeEntry' in s.name]}")
-        rebuilt.hook(symbol.rebased_addr, CandidateVsprintf())
+        rebuilt.hook(symbol.rebased_addr, procedure())
         if retail.arch.bits != 32 or rebuilt.arch.bits != 32:
             raise RuntimeError("expected two Windows x86 images")
 

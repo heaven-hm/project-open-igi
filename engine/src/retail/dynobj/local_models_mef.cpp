@@ -1,5 +1,6 @@
 #include "igi/retail/dynobj/local_models_mef.hpp"
 
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/render/backend.hpp"
@@ -159,13 +160,13 @@ void* DynObj_LoadModelMesh(const char* model_name)
 
     float bad_version = 0.0f;
     std::memcpy(&bad_version, data_4, sizeof(float));
-    error::Error_Show("Mesh \"%s\" and source code are incompatible. (Mesh \"%s\" is version %0.2f, source code "
+    Debug_Error("Mesh \"%s\" and source code are incompatible. (Mesh \"%s\" is version %0.2f, source code "
                       "is version %0.2f.)",
                       // Retail pushes qword 0x3FB99999A0000000, the widened float32 0.1 value.
                       model_name, model_name, static_cast<double>(bad_version), 0x1.99999ap-4);
     if constexpr (sizeof(void*) == 4)
     {
-        // Retail incompatible-version path does not return if Error_Show returns.
+        // Retail incompatible-version path does not return if Debug_Error returns.
         for (;;) {}
     }
     return nullptr;

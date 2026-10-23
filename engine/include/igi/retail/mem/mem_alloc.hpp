@@ -131,7 +131,7 @@ inline void* Camera_ApplyHandiCam_20(std::uint32_t size) { return Mem_AllocChunk
 //           the heap list via `Mem_InitHeapState` (0x004B0BA0) when `g_9422fc == 0`, links the
 //           block into `g_a960f0` (`0x00A960F0`) via `Camera_SetFieldOfView_33` (0x004AF8F0),
 //           records `{result, total_bytes, user_bytes}` at header slots `2..4`, and on allocation
-//           failure walks `g_a960f0` summing `i_1[3]` and `i_1[4]` before calling `Error_Show`.
+//           failure walks `g_a960f0` summing `i_1[3]` and `i_1[4]` before calling `Debug_Error` (0x004AF7B0).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B0C60-0x004B0D39, 218 bytes,
 //                 digest 2b9694a3f11f74ab26f0de07cf380ec2a235e63578a53d919529ff80d22ce245;
 //                 CLEAN/mem/004B0C60-Mem_Alloc.c.

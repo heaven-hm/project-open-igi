@@ -1,6 +1,6 @@
 #include "igi/retail/qfile/alias_resolve.hpp"
 
-#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/core/retail_error.hpp"
 
 #include <cstring>
 
@@ -29,7 +29,7 @@ std::int32_t QFile_AliasResolve(char* destination, const char* alias, std::int32
                     char* separator = std::strchr(cursor, ';');
                     if (separator == nullptr)
                     {
-                        error::Error_Show("Error in alias path: %s", alias);
+                        Debug_Error("Error in alias path: %s", alias);
                         return 0;
                     }
                     cursor = separator + 1;

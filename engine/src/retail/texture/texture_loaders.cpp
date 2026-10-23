@@ -1,5 +1,6 @@
 #include "igi/retail/texture/texture_loaders.hpp"
 
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/dynobj/hash_lookup.hpp"
 #include "igi/retail/dynobj/local_models_mef.hpp"
 #include "igi/retail/error/error_show.hpp"
@@ -112,7 +113,7 @@ std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::in
 // Native: Texture_LoadLoopTextureFile; retail VA 0x004B24C0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B24C0-0x004B25AF, 239 bytes, digest 01d287da4b443fddcd7d6be5cdf3c1bc3df57987d4b5a46165182aa4d3b9c79c; CLEAN/sys/004B24C0-Sys_SIsNotAValidTextureF.c.
-// Behavior/CFG: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`), calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and Texture_DisableUpload() (0x004B26B0). On invalid header, calls Error_Show("'%s' is not a valid Texture file.", arg3) (0x004AF7B0). radare2 15 blocks/22 edges; Binary Ninja 15 blocks; 100% structural agreement.
+// Behavior/CFG: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`), calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and Texture_DisableUpload() (0x004B26B0). On invalid header, calls Debug_Error("'%s' is not a valid Texture file.", arg3) (0x004AF7B0). radare2 15 blocks/22 edges; Binary Ninja 15 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v2/v11 field extraction and callee sequence.
 std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const char* arg3)
 {
@@ -191,13 +192,13 @@ std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const c
         }
     }
 
-    return error::Error_Show("'%s' is not a valid Texture file.", arg3);
+    return Debug_Error("'%s' is not a valid Texture file.", arg3);
 }
 
 // Native: Terrain_LoadTexturePackage; retail VA 0x005175A0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Texture_UploadPalettePacket (0x004B7CF0), allocates `header[8] * 0x24 + 0x30` bytes via Mem_Alloc, Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x005175A0-0x005177E2, 578 bytes, digest 450ad796b5382d56bd90a518553df529c860093b5070d3b3d7af6b886a82f530; CLEAN/terrain/005175A0-Terrain_TextureFileNotOfRequ.c.
-// Behavior/CFG: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via Resource_Load(arg1, nullptr) (0x004B5F00) (calling Error_Show("Couldn't load texture file '%s'.") if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`, allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and iterates `header[8]` records (stride `0x28` for v7 at `+0x3C`, stride `0x20` for v9 at `+0x40`) calling Texture_UploadMipmapPacket (0x004B23B0), then calls Texture_DisableUpload() and Resource_Unload(arg1). radare2 29 blocks/42 edges; Binary Ninja 29 blocks; 100% structural agreement.
+// Behavior/CFG: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via Resource_Load(arg1, nullptr) (0x004B5F00) (calling Debug_Error("Couldn't load texture file '%s'.", arg1) if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`, allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and iterates `header[8]` records (stride `0x28` for v7 at `+0x3C`, stride `0x20` for v9 at `+0x40`) calling Texture_UploadMipmapPacket (0x004B23B0), then calls Texture_DisableUpload() and Resource_Unload(arg1). radare2 29 blocks/42 edges; Binary Ninja 29 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v7/v9 record strides, palette upload, and callee order.
 std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 {
@@ -207,7 +208,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 
     if (data_1 == nullptr)
     {
-        error::Error_Show("Couldn't load texture file '%s'.", arg1);
+        Debug_Error("Couldn't load texture file '%s'.", arg1);
         return nullptr;
     }
 
@@ -321,7 +322,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
         }
     }
 
-    error::Error_Show("Texture file not of required type: '%s'.", arg1);
+    Debug_Error("Texture file not of required type: '%s'.", arg1);
     return nullptr;
 }
 

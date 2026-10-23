@@ -569,7 +569,7 @@ struct Scene
             auto package = std::make_unique<Package>();
             const auto bytes =
                 resource::Resource_OpenFile(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::DynObj_LoadModelTexturePackage(bytes->bytes);
+            package->metadata = model::MtpPackage_ParseContainer(bytes->bytes);
             package->meshes =
                 resource::Resource_LoadArchive(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
@@ -992,7 +992,7 @@ struct Scene
                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
                 }
                 parsed_mef = std::make_shared<model::MefModel>(
-                    model::MefModel::DynObj_LoadModelMesh(entry->body));
+                    model::MefModel_ParseContainer(entry->body));
                 write_log("Loaded MEF model=" + mesh_name +
                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
                 if (parsed_mef->render_format == model::MefRenderFormat::skinned)
@@ -1122,7 +1122,7 @@ struct Scene
                     try
                     {
                         child_mef = std::make_shared<model::MefModel>(
-                            model::MefModel::DynObj_LoadModelMesh(child_entry->body));
+                            model::MefModel_ParseContainer(child_entry->body));
                         try
                         {
                             child_geometry = std::make_shared<model::MefRenderData>(

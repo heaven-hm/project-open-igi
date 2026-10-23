@@ -1679,7 +1679,7 @@
   "cppName": "DynObj_LoadModelTexturePackage",
   "enginePath": "engine/src/retail/dynobj/mtp_package_loader.cpp",
   "candidateSymbol": {
-   "vaddr": "0x00411AF0",
+   "vaddr": "0x00421E60",
    "symbol": "__ZN3igi6retail6dynobj30DynObj_LoadModelTexturePackageEPvPKci",
    "demangled": "igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, char const*, int)"
   },
@@ -1718,11 +1718,11 @@
   "cppName": "DynObj_LoadModelMesh",
   "enginePath": "engine/src/retail/dynobj/local_models_mef.cpp",
   "candidateSymbol": {
-   "vaddr": "0x00418C60",
-   "symbol": "__ZN3igi6retail5model8MefModel20DynObj_LoadModelMeshESt4spanIKSt4byteLj4294967295EE",
-   "demangled": "igi::retail::model::MefModel::DynObj_LoadModelMesh(std::span<std::byte const, 4294967295u>)"
+   "vaddr": "0x00421720",
+   "symbol": "__ZN3igi6retail6dynobj20DynObj_LoadModelMeshEPKc",
+   "demangled": "igi::retail::dynobj::DynObj_LoadModelMesh(char const*)"
   },
-  "status": "VERIFIED"
+  "status": "STRUCTURALLY_VERIFIED"
  },
  {
   "address": "0x004CF630",

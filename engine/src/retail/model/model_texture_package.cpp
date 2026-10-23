@@ -168,9 +168,11 @@ struct NativeChunkView
 
 } // namespace
 
-// Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection.
-// The literal retail DynObj_LoadModelTexturePackage (VA 0x004CF080) is in mtp_package_loader.cpp.
-MtpPackage MtpPackage::DynObj_LoadModelTexturePackage(std::span<const std::byte> file_bytes)
+// Host adapter, not a retail native: parses MTP IFF container chunks into a C++ MtpPackage
+// struct for diagnostic inspection. The retail DynObj_LoadModelTexturePackage (0x004CF080) is
+// igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, const char*, std::int32_t) in
+// engine/src/retail/dynobj/mtp_package_loader.cpp, which loads the package resource itself.
+MtpPackage MtpPackage_ParseContainer(std::span<const std::byte> file_bytes)
 {
     MtpPackage package{};
     const std::vector<NativeChunkView> chunks = read_native_chunks(file_bytes, package.root_tag);

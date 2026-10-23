@@ -368,22 +368,25 @@ IlffContainer Ilff_ReadContainer(std::span<const std::byte> bytes)
     return read_container(bytes, 0U);
 }
 
-// DynObj_LoadModelMesh() - 0x004CF390 - REA/Ghidra + Binary Ninja; source CFG 0.991.
-// Former catalog alias: DynObj_LocalModelsSMef. Semantic role verified; full runtime parity pending.
-MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes)
+// Host adapter, not a retail native: parses in-memory OCEM/ILFF bytes into a MefModel for
+// the diagnostic scene harness. The retail DynObj_LoadModelMesh (0x004CF390) is
+// igi::retail::dynobj::DynObj_LoadModelMesh(const char*) in
+// engine/src/retail/dynobj/local_models_mef.cpp, which loads the resource itself.
+// Source export of the same retail body: assets/BinaryNinja/natives/CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.cpp.
+MefModel MefModel_ParseContainer(std::span<const std::byte> file_bytes)
 {
     MefModel model{};
     model.container = Ilff_ReadContainer(file_bytes);
 
-    if (model.container.form_type != form_ocem)
+    if (model.container.form_type != MefModel::form_ocem)
     {
-        throw MefFormatError("Retail DynObj_LoadModelMesh expects an OCEM model container.");
+        throw MefFormatError("MefModel_ParseContainer expects an OCEM model container.");
     }
 
     const IlffChunk* mesh_chunk = model.container.find_first(mef_tag::mesh);
     if (mesh_chunk == nullptr)
     {
-        throw MefFormatError("Retail DynObj_LoadModelMesh could not find its MESH chunk.");
+        throw MefFormatError("MefModel_ParseContainer could not find its MESH chunk.");
     }
 
     if (mesh_chunk->payload.size() < minimum_mesh_header_size)
@@ -394,10 +397,10 @@ MefModel MefModel::DynObj_LoadModelMesh(std::span<const std::byte> file_bytes)
     model.mesh_header = mesh_chunk->payload;
     const std::uint32_t version_bits = Ilff_ReadLittleEndian32(model.mesh_header, mesh_version_offset);
     model.version = std::bit_cast<float>(version_bits);
-    if (version_bits != supported_version_bits)
+    if (version_bits != MefModel::supported_version_bits)
     {
         std::ostringstream error_message;
-        error_message << "Retail MESH version mismatch: got " << model.version << ", expected 0.1.";
+        error_message << "MESH version mismatch: got " << model.version << ", expected 0.1.";
         throw MefFormatError(error_message.str());
     }
     model.render_format = MefModel_ReadRetailRenderFormat(model.mesh_header);

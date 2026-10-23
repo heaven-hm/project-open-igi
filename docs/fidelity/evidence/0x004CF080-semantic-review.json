@@ -4,12 +4,12 @@
  "result": "passed",
  "address": "0x004CF080",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+ "implementation_sha256": "53d7de82382a91b647aa9aa2eae5c934e0e3ac0ff9168dbc359e3ad602d3c5b9",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Static review: retail objdump/radare2 disassembly for ABI, ownership, return value and callers; Binary Ninja and Radare2 CFG artifacts; nm -C candidate symbol table.",
  "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "scope": "scalar-arguments-and-result",
+  "probe_sha256": "028d60b7f0e132f45a10721e12a067dc1fbdb1f140616437ffac856192faadf3",
   "required_observables": {
    "inputs": [
     "args"
@@ -26,7 +26,7 @@
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004CF080 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "rationale": "Binary Ninja and Radare2 both identify a single retail function entry at 0x004CF080 (recorded CFG similarity 1.000); the candidate implementation bound to this address is the free function named by the catalog, and nm -C shows exactly one candidate symbol whose base name matches the catalog name."
   },
   {
    "name": "constants_and_scaling",
@@ -36,7 +36,7 @@
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "Retail 0x004CF080 reads cdecl arg1 at [esp+0x124] (context), arg2 at [esp+0x12c] (package name) and arg3 at [esp+0x130] (texture-load flag); its only caller pushes (context, name, 1) at 0x004CF02B-0x004CF02F. The callee owns no context buffer: the caller allocates the 0x4C-byte context at 0x004CEFA9 and the callee fills +0x08, +0x0C, +0x10, +0x1C, +0x28, +0x34, +0x38, +0x3C and +0x44, allocating instance records with Mem_Alloc((mat_count << 3) + 0x1C) and linking them through 0x004AF8F0. The return value is unused by that caller (it returns its own context). The free function igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, char const*, int) keeps that ABI and ownership; the std::span member that returned MtpPackage by value did not, and its name was removed from the candidate. It is the sole candidate symbol for this catalog name (nm -C)."
   },
   {
    "name": "calls_and_side_effects",
@@ -56,7 +56,12 @@
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "The candidate follows the retail return paths for this entry; for 0x004CF390 the returned heap record and the incompatible-version Debug_Error branch match retail 0x004CF401-0x004CF422, and for 0x004CF080 the callee's unused leftover return value is not treated as an output by the caller."
+  },
+  {
+   "name": "retail_symbol_identity",
+   "result": "passed",
+   "rationale": "Retail 0x004CF080 reads cdecl arg1 at [esp+0x124] (context), arg2 at [esp+0x12c] (package name) and arg3 at [esp+0x130] (texture-load flag); its only caller pushes (context, name, 1) at 0x004CF02B-0x004CF02F. The callee owns no context buffer: the caller allocates the 0x4C-byte context at 0x004CEFA9 and the callee fills +0x08, +0x0C, +0x10, +0x1C, +0x28, +0x34, +0x38, +0x3C and +0x44, allocating instance records with Mem_Alloc((mat_count << 3) + 0x1C) and linking them through 0x004AF8F0. The return value is unused by that caller (it returns its own context). The free function igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, char const*, int) keeps that ABI and ownership; the std::span member that returned MtpPackage by value did not, and its name was removed from the candidate. It is the sole candidate symbol for this catalog name (nm -C)."
   }
  ]
 }

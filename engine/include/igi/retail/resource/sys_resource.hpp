@@ -74,7 +74,7 @@ std::int32_t Resource_FreeNode(void* context);
 //           `CSTR` `0x52545343`, or `PATH` `0x48544150`, with optional `DBUG` `0x47554244` sibling),
 //           allocates a child resource node via Resource_CreateNode (0x004B59F0), and splices `&child[2]`
 //           into the parent container's child list (`arg2 + 0x14`) via HeapList_Insert (0x004AF8F0).
-//           Calls Error_Show("Error in resource file: '%s'", context) on malformed chunk tags.
+//           Calls Debug_Error("Error in resource file: '%s'", context) (0x004AF7B0) on malformed chunk tags.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B60F0-0x004B637F, 655 bytes,
 //                 digest 115d8cda2c658da73d9407d22baf6b6ee0562634c1e8d259034645ca75867cc6;
 //                 CLEAN/sys/004B60F0-Sys_ErrorInResourceFileS.c.

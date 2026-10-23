@@ -27,12 +27,6 @@ namespace igi::retail::dynobj {
 // Usage/tests: retail MEF model loader; exercised by local_models_mef_test.cpp.
 void* DynObj_LoadModelMesh(const char* model_name);
 
-// Backward-compatible alias for existing retail catalog references:
-inline void* DynObj_LocalModelsSMef(const char* model_name)
-{
-    return DynObj_LoadModelMesh(model_name);
-}
-
 // Backend callback signature invoked by DynObj_LoadModelMesh at `0x00A94E84[backend_id]`.
 // Receives a 2-pointer pair `{ mesh_payload, model_container }`.
 using ModelBackendInitFn = void (*)(void** mesh_and_container);

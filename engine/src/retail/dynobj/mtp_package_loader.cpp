@@ -220,7 +220,7 @@ void* DynObj_LoadPackageMeshes(void* context)
 
         do
         {
-            auto** const model_node = static_cast<void**>(DynObj_LocalModelsSMef(source_1));
+            auto** const model_node = static_cast<void**>(DynObj_LoadModelMesh(source_1));
             Camera_SetFieldOfView_33(ctx_bytes + 0x10, model_node);
 
             const char* dest_1 = source_1;

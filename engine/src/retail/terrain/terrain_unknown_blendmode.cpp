@@ -38,7 +38,7 @@
 // fault on a null device and inventing an exception here would change the observable behavior.
 #include "igi/retail/terrain/terrain_unknown_blendmode.hpp"
 
-#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/core/retail_error.hpp"
 
 namespace igi::retail::terrain
 {
@@ -128,7 +128,7 @@ extern "C" std::int32_t Terrain_UnknownBlendmode(std::int32_t blendmode)
     }
 
     // 0x005144F7-0x00514504: fatal error, then an intentional infinite loop; no return path.
-    error::Error_Show("Unknown blendmode"); // retail callee 0x004AF7B0 (Debug_Error)
+    Debug_Error("Unknown blendmode"); // retail callee 0x004AF7B0 (Debug_Error)
     halt_forever();
 }
 } // namespace igi::retail::terrain

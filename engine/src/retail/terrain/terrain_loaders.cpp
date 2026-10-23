@@ -2,7 +2,7 @@
 
 #include "igi/retail/terrain/terrain_quadtree.hpp"
 
-#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/resource/is_resource_loaded.hpp"
 #include "igi/retail/resource/resource_lifecycle.hpp"
@@ -1162,7 +1162,7 @@ void* Terrain_CreateTileMap(void* context, const float* args)
 // Native: TextureModifier_Push; retail VA 0x00505E40; x86 cdecl void*(void*).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja view_1; RE-Agent radare2 ev_0041b4b3f7b953ab4744f3a74c261506c6a81a78b59bfd384961ac0184b2d01e.
-// Behavior/CFG: Requires [self+0xBC] >= 0 and the source row [[self+0x68]+0xDCC] to hold a non-zero dword at counter*3 (0x00505E4E-0x00505E5E); pushes [self+0xE4] onto the 20-slot stack at 0x00B97DA0 under counter 0x00B97DF8, folds the packed bitmask 0x00BA5060 = (mask << 8) | (scratch+1), sets self[0xDC] = 1 and returns scratch+1; when the stack is full calls Error_Show("Too many items in texture modifier stack!") and halts in the retail self-loop (0x00505E76 jmp $); otherwise self[0xDC] = 0 and returns self.
+// Behavior/CFG: Requires [self+0xBC] >= 0 and the source row [[self+0x68]+0xDCC] to hold a non-zero dword at counter*3 (0x00505E4E-0x00505E5E); pushes [self+0xE4] onto the 20-slot stack at 0x00B97DA0 under counter 0x00B97DF8, folds the packed bitmask 0x00BA5060 = (mask << 8) | (scratch+1), sets self[0xDC] = 1 and returns scratch+1; when the stack is full calls Debug_Error("Too many items in texture modifier stack!") (0x004AF7B0) and halts in the retail self-loop (0x00505E76 jmp $); otherwise self[0xDC] = 0 and returns self.
 // Status/limits: STRUCTURALLY_VERIFIED; scripts/texture_modifier_push_diff_runner.py cannot link the current translation unit (undefined resource symbols in unrelated host functions), so it produces no behavioral pass; natural runtime integration remains provisional.
 void* TextureModifier_Push(void* self)
 {
@@ -1193,7 +1193,7 @@ void* TextureModifier_Push(void* self)
                 g_b97df8 = stack_index + 1;
                 return reinterpret_cast<void*>(static_cast<std::uintptr_t>(result));
             }
-            error::Error_Show("Too many items in texture modifier stack!");
+            Debug_Error("Too many items in texture modifier stack!");
             // Retail 0x00505E76: jmp $ — the fatal-error halt.
             for (;;)
             {

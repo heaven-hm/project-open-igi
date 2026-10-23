@@ -72,7 +72,7 @@ std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::in
 //           header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls
 //           Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and
 //           Texture_DisableUpload() (0x004B26B0). On invalid header, calls
-//           Error_Show("'%s' is not a valid Texture file.", arg3) (0x004AF7B0).
+//           Debug_Error("'%s' is not a valid Texture file.", arg3) (0x004AF7B0).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B24C0-0x004B25AF, 239 bytes,
 //                 digest 01d287da4b443fddcd7d6be5cdf3c1bc3df57987d4b5a46165182aa4d3b9c79c;
 //                 CLEAN/sys/004B24C0-Sys_SIsNotAValidTextureF.c.
@@ -88,7 +88,7 @@ inline std::int32_t Sys_SIsNotAValidTextureF(std::int32_t* arg1, void* arg2, con
 
 // Native: Terrain_LoadTexturePackage() - VA 0x005175A0 - complete port.
 // Behavior: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via
-//           Resource_Load(arg1, nullptr) (0x004B5F00) (calling Error_Show("Couldn't load texture file '%s'.")
+//           Resource_Load(arg1, nullptr) (0x004B5F00) (calling Debug_Error("Couldn't load texture file '%s'.", arg1)
 //           if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`,
 //           allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and
 //           Texture_UploadPalettePacket (0x004B7CF0), allocates `header[8] * 0x24 + 0x30` bytes via Mem_Alloc,

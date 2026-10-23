@@ -115,7 +115,7 @@ void load_retail_resource(const std::filesystem::path& resource_path,
     }
 
     const igi::retail::model::MefModel model =
-        igi::retail::model::MefModel::DynObj_LoadModelMesh(selected_entry->body);
+        igi::retail::model::MefModel_ParseContainer(selected_entry->body);
     const igi::retail::model::MefRenderChunks render_chunks = model.render_chunks();
 
     std::ostringstream resource_log;
