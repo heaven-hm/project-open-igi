@@ -1800,8 +1800,9 @@ The front-end run still does not reach the config cluster. The graphic option re
 handlers registered by 0x00402FF0 under names such as
 `Config_GraphicOptionsSetPerformanceFlags`, so retail only calls them when config.qvm invokes those
 names - which is the option screen, not the menu itself. Two attempts failed to open it: the timed
-keyboard timeline (which provably lands, because `Human_TaskViewReset` still observes its call) and a
-5x5 mouse sweep over the client area using `ClientToScreen` + `SendInput`. Both produced exactly the
+keyboard timeline and a
+5x5 mouse sweep over the client area using `ClientToScreen` + `SendInput`. Round 138 withdrew the
+claim that the timeline landed - the driver script never loaded on Frida 17, so no event was sent. Both produced exactly the
 same 53-native observation set, so the clicks either never reached the Wine window on its own macOS
 space or missed every button; confirming which needs a screenshot, and screen recording is waiting on
 a system approval we cannot give ourselves.
@@ -1817,3 +1818,39 @@ Parallel branch: three of my blockers advanced there to BUILD_VERIFIED (`QTask_C
 
 Operational note: a hung frida-server (frida-ps timing out) is recovered by killing the
 `frida-server-x86.exe` wine process and relaunching it against the bottle; enumerate then works again.
+
+## Round 138: case-sensitive evidence paths, and why the input driver never loaded
+
+Evidence paths: seventeen records referenced `0X...` evidence names, twenty-one files were
+double-prefixed (`0x0X...`), and twelve provenance strings pointed at raw `.txt` dumps that were never
+written. All names are now canonical `0x<eight lowercase hex>-<kind>.json` (7,076 files renamed), all
+3,840 references rewritten, the twelve provenance strings repointed at the recorded JSON dumps, 46
+stale six-digit duplicates and 7,033 stale uppercase index entries removed. Every
+`(evidence_path, evidence_sha256)` pair was re-hashed: 4,750 pairs, none stale, and every reference
+resolves exactly on a case-sensitive checkout.
+
+Paired game-process evidence: each of the 92 VERIFIED records carries `frida_runtime` PASS evidence
+whose report contains one capture entry with both `retail_observed_calls` and
+`candidate_observed_calls` non-zero. The label still rests on that single differential, not on a
+behavioural replay inside the retail process, so it should be read as "retail call observed, candidate
+call observed, same return class" rather than full behavioural parity.
+
+Input driver correction: Frida 17 removed `Module.getExportByName`, so every `frida_drive_keys.js`
+build so far threw while loading and the timed key/mouse timeline never sent an event. The round-137
+claim that the timeline provably landed is withdrawn; the one `Human_TaskViewReset` retail call in that
+capture was natural gameplay. The record keeps its VERIFIED status on the retail call plus the
+candidate call, but the input-path evidence has to be re-earned. The driver now uses
+`Module.getGlobalExportByName` and calls `ensureFocus()` before each key and click: the foreground
+window of a windowed retail run is the Wine desktop (`#32769 root - Wine Desktop`, 1680x1050), not
+`Innerloop|IGI`, so unfocused `SendInput` landed on the desktop. `FindWindowA("Innerloop")` +
+`ShowWindow(BringWindowToTop, SetForegroundWindow)` moves the game window to the foreground.
+
+Manual test build: the black screen came from the wrong binary in the game folder. The verification
+build (`build-win32-verify-noinline/igi1.exe`) runs with lightmaps disabled (`lightmaps=0`, unlit
+terrain), while the ungated build (`build-win32-no-verify-gate/igi1.exe`, the capture scripts' default
+candidate) loads `lightmaps=1`, uploads 18 terrain textures and runs 22-27 FPS. `scripts/refresh_igi1.py`
+installs the ungated build, refuses the verification build and any live session, and keeps the
+previous binary as `igi1.exe.prev-<sha8>`.
+
+Register unchanged: 92 verified, 16 retail-unobserved, 5 unlinked, 4 candidate-unreachable,
+3 matched-but-unverified.
