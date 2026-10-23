@@ -1688,3 +1688,44 @@ retail game loop. Attaching to a running image stays the only workable mode, whi
 fourteen must be reached by driving the running game, not by moving the attach point.
 
 Verified unchanged at 91.
+
+## Round 134: driving the running game reaches natives the passive capture never saw
+
+The fourteen natives left to this branch are blocked on observation, not transcription. A passive
+gameplay capture never enters their paths, and a spawned retail run observes nothing at all (round
+133). The missing piece was input: the retail input layer is DirectInput, so posted window messages
+would be ignored, but `SendInput` from inside the game process follows the same path a physical key
+press takes.
+
+`scripts/frida_drive_keys.js` is that driver; `scripts/drive_scenario_keys.py` attaches it as a
+second Frida session so the observation probe stays byte-identical and its recorded hash keeps
+meaning what it says. The sequence sweeps the task/map/help keys, the pause key, movement keys and
+interact keys.
+
+The first key-driven capture already moved five natives from "retail never called it":
+
+| native | retail calls | candidate calls | blocker before |
+| --- | --- | --- | --- |
+| `Terrain_TraverseContourQuadtree` 0x004D14E0 | 1242 | 0 | candidate-unreachable |
+| `Terrain_Draw` 0x00512C30 | 1241 | 0 | candidate-unreachable |
+| `Terrain_DecodeChunkCommands` 0x00510010 | 354 | 0 | candidate-unreachable |
+| `QTask_RegisterClasses` 0x00402930 | 1 | 0 | candidate-unreachable |
+| `Human_TaskViewReset` 0x004659E0 | 1 | 0 | retail-unobserved |
+
+Two things follow. First, the retail side is no longer the blocker for these five - the candidate is.
+The terrain trio and QTask registration are transcribed only in the parallel branch (they stay that
+branch's lane); `Human_TaskViewReset` lives in a file both branches share, so making the candidate
+reach it is this branch's work.
+
+Second, a key-driven run is not a substitute for the canonical capture: it moves the game through
+different states, so records that were already verified against the canonical run show different
+call sets here (for example `Resource_FreeNode` and `Model_GetAttachmentCount`). That is expected;
+those records stay bound to their own capture and only a run with the same scenario may be compared
+against them.
+
+The config cluster (0x00404590, 0x00404F00..0x00405620), `Camera_ResetMatrix`, `Matrix_InvalidateSlot`,
+`Camera_UpdateFogPalette`, `String_VFormat`, `Error_Show` and `Mem_InvokeNewHandler` are still silent
+on the retail side; the next scenario step must open the options/menu path and force an error path
+rather than only sweeping gameplay keys.
+
+Verified unchanged at 91.
