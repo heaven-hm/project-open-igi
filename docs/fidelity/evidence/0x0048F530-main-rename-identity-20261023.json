@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "kind": "native-rename-code-identity",
+  "address": "0x0048F530",
+  "function_name": "Main",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "candidate_sha256": "209f500b18bbbe93f33b2fdd9e228d10b24fe2836d0870be56eb07dbba54fcdb",
+  "candidate_path": "build-clean-win32/igi1.exe",
+  "candidate_receipt_path": "build-clean-win32/candidate-receipt.json",
+  "candidate_receipt_sha256": "8f8551cbb9cbfbd132810bcf56f6dcea3e1802f85ed94a85fde67ca432e5725f",
+  "previous_candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
+  "recorded_at": "2026-10-23T14:45:00Z",
+  "rename": {
+    "from": [
+      "engine/src/retail/core/retail_main.cpp",
+      "engine/include/igi/retail/core/retail_main.hpp",
+      "igi::retail::core::RetailMainConfig"
+    ],
+    "to": [
+      "engine/src/retail/core/main.cpp",
+      "engine/include/igi/retail/core/main.hpp",
+      "igi::retail::core::MainConfig"
+    ],
+    "nature": "Translation-unit filename, commentary/provenance wording and one type name local to this unit. The shared IGI_RETAIL_CDECL macro, the igi::retail namespace, the engine/src/retail directory layer and every other port-layer identifier are unchanged. The extern \"C\" symbol _Main, the argument layout and the body are unchanged.",
+    "native_name": "Main (retail VA 0x0048F530) is unchanged; it is the name the game's own entry point carries in this port and it was already policy-compliant."
+  },
+  "previous_source_sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617",
+  "previous_source_note": "git show HEAD:engine/src/retail/core/retail_main.cpp hashes to this digest, which is the implementation.sha256 recorded in the manifest record for 0x0048F530 and in the pre-rename 0x0048F530-build.json; the pre-rename source is therefore the exact source the 846ce507 image was built from.",
+  "new_source_sha256": "f5043ca45c4f4dde1e0d3e7995f8242d8e80d31126c11f6264b12e817c829dac",
+  "new_header_sha256": "ea3b2742361217d3e7462e6d979a499d185ec94e58efc9b47e840c6ffe64fbee",
+  "object_comparison": {
+    "method": "Both translation units compiled with the target's own flags (-O3 -DNDEBUG) and the same include root; sections extracted with i686-w64-mingw32-objcopy -O binary --only-section and hashed with SHA-256.",
+    "old_compile_command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -I/tmp/mainrename/oldinc -I<root>/engine/include -c /tmp/mainrename/old_retail_main.cpp -o /tmp/mainrename/old_bf.o",
+    "new_compile_command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -I<root>/engine/include -c engine/src/retail/core/main.cpp -o /tmp/mainrename/new_bf.o",
+    "old_object_sha256": "ed422b307c3e1f85c7e76c7717d298cd58ca2ca8064a982b772c7827296c29cd",
+    "new_object_sha256": "022a8f8cbe105eeb072751638392d4ba527cace77c20884785069217b7e3d4ba",
+    "old_text_sha256": "f29c249be9a8e9beece4997514002797e3da9e36b9fc1bf1fc25ea65641a8d81",
+    "new_text_sha256": "f29c249be9a8e9beece4997514002797e3da9e36b9fc1bf1fc25ea65641a8d81",
+    "old_rdata_sha256": "3cb63aeda8c4f5e702481ce3cb05b1d789d4805c0d47f88059975fc86d01b6f0",
+    "new_rdata_sha256": "3cb63aeda8c4f5e702481ce3cb05b1d789d4805c0d47f88059975fc86d01b6f0",
+    "data_sections_identical": true,
+    "symbol_table_identical": true,
+    "symbol_table_note": "i686-w64-mingw32-nm -C output is identical, including the global g_main_window symbol and the _Main definition; the object digests differ only in the COFF .file symbol, which carries the source file name.",
+    "disassembly_identical": true,
+    "disassembly_note": "i686-w64-mingw32-objdump -d -M intel differs only in the file-format heading line that names the object file."
+  },
+  "image_comparison": {
+    "baseline_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
+    "baseline_recovery": {
+      "problem": "The shared build directory build-clean-win32 is used by several agents; a concurrent relink at 2026-10-23T19:48:28+05:30 replaced the pre-rename image 846ce507 before it could be copied.",
+      "method": "The image was reproduced instead of compared from a copy: the rename build's 81 objects were archived in the target's own object order with the pre-rename main-unit object substituted for the renamed one, and linked with the target's own link command under SOURCE_DATE_EPOCH=1792759387.",
+      "timestamp_derivation": "1792759387 is the link second recorded by the pre-rename receipt (created_at 2026-10-23T12:43:07.997508Z, written 0.997 s after the link).",
+      "result": "The reproduced file hashes to 846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4 exactly, so it is byte-for-byte the pre-rename image. This also proves the 80 non-main objects and the link order of the rename build are identical to the pre-rename build.",
+      "link_command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -L/opt/homebrew/opt/llvm/lib -mwindows -static -static-libgcc -static-libstdc++ -Wl,-Bstatic -Wl,--whole-archive objects2.a -Wl,--no-whole-archive -o igi1_baseline2.exe -Wl,--major-image-version,0,--minor-image-version,0 -lddraw -ldxguid -ldinput -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32",
+      "source_unchanged_check": "Before the rename, every one of the 173 source inputs recorded in the pre-rename receipt was re-hashed in the working tree and all matched; no linked source changed between that build and this one."
+    },
+    "sections_identical": true,
+    "sections_sha256": {
+      ".text": "e2f921ca7bb988bfc0aa8d3b7f57b5fadcf6dd67056d472fbb30748bf0318147",
+      ".data": "a3eee325ff53052e9c089c8d7381463f68a1660f27134ffb9acd68c2fa961f6a",
+      ".rdata": "c654daca32f4428e0ecade82e57433aab8bffb46a68d9d1ea5c8c2cde3a38ce7",
+      ".bss": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      ".idata": "fe4cf0e15b7bc7605de9c2ef9ef4994f0141c62301823dd5b882836a354f4aaf",
+      ".tls": "076a27c79e5ace2a3d47f9dd2e83e4ff6ea8872b3c2218f66c92b89b55f36560",
+      ".reloc": "8b3c39393ce2fb48cce91401b083f2ac776e2b95a20368b9f318249625965583",
+      ".debug_aranges": "3c28f3da796e28543029ac29d0ef4c7608a411f5a09f2dbc861bf3c1233be6b8",
+      ".debug_info": "b54e21c3006db4c49a75e2e3783cf094f5010c85a5c48e58e44d9314570713a2",
+      ".debug_abbrev": "d75909b16b3140ef8192cb3b8da4501f74ad8b9a1a6fb821f44aca98aad7ae25",
+      ".debug_line": "f79a3fa179cfb5a9743f1854dcccacb1094a2c61f713e4a01a6644b18c718cc8",
+      ".debug_frame": "492007e6dd6d6fe7acb87b29c7804cbf216b1264dc9feceaf1c3719dd43941d6",
+      ".debug_str": "383900b252ea52c664af17275478f2d4c58654041e4ca96bb7b7b018c70f2207",
+      ".debug_loc": "eb3d3e61f548d168615be2b715e106f913ca9827532d94a49ee19a08ff23f66c",
+      ".debug_ranges": "82d025504ecd852c6ba6a8295143709c724ee20e68d38185e3ee9aef14ef9a08",
+      ".debug_line_str": "d54b8c6152c41908d2ad8f779d25e3e2535e243d949a22839f3f734f24411ad5"
+    },
+    "differing_byte_count": 19,
+    "differing_ranges": [
+      "0x88..0x89 PE COFF header TimeDateStamp (the two links ran at 2026-10-23T12:43:07Z and 2026-10-23T14:24:40Z)",
+      "0xd8..0xd9 PE optional header CheckSum (derived from the timestamp and the section contents)",
+      "0xdb019c..0xdb01aa COFF symbol-table source-file name: retail_main.cpp versus main.cpp"
+    ],
+    "interpretation": "Every allocated and debug section is byte-identical, so every function and every data table is identical. The only differences are the PE link timestamp, the PE checksum derived from it, and the COFF symbol table's source-file name, which necessarily follows the file rename and is not loaded by the Windows loader.",
+    "function_comparison": {
+      "tool": "radare2 6.2.0 (aa; aflj) on both images, plus a direct slice comparison of each function's bytes inside .text",
+      "functions_compared": 3454,
+      "function_bytes_compared": 965786,
+      "function_table_sha256": "9c634c5c6baabf05afe508781afb878f1855e20b9b0906c10e54c4ccce7b4077",
+      "function_table_identical": true,
+      "functions_with_differing_bodies": 0,
+      "basis": "The (address, size, name) table is identical and each of the 3454 function bodies is byte-identical; the whole .text section they index is identical across its 0x19E5DC bytes."
+    },
+    "main_function_anchor": {
+      "candidate_address": "0x0041FCA0",
+      "symbol": "_Main",
+      "size_bytes": 821,
+      "basic_blocks": 22,
+      "edges": 31,
+      "startup_argument_stores": ["0x0041FDB8 (argument 1 for AppContext_SetIsActive at call 0x0041FDD4)", "0x0041FDD9 (argument 1 for AppContext_SetTerrainLightmapsUsed at call 0x0041FDE0)"],
+      "note": "Identical in the pre-rename and post-rename images and matches the measurements recorded in 0048F530-structural-comparison.json."
+    }
+  },
+  "limitations": [
+    "The pre-rename binary file was overwritten in the shared build directory before it could be copied. Every comparison above is against the reproduced image, whose SHA-256 equals the recorded 846ce507 digest; that equality is the proof that the reproduction is the same file, so no comparison depends on an unverified stand-in.",
+    "The PE link timestamp is taken from link time, so the candidate digest changes on every relink even with identical sources. The candidate digest in this record is bound to the receipt captured at 2026-10-23T14:24:41Z and frozen at /tmp/taskA/final/igi1.exe; a later concurrent relink in the shared build directory would invalidate that binding without changing any code.",
+    "This evidence covers code generation only. It does not raise or change the native's verification status; 0x0048F530 remains STRUCTURALLY_VERIFIED with no paired runtime capture."
+  ]
+}

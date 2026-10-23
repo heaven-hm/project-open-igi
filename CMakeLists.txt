@@ -32,7 +32,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_0048f970.cpp
     engine/src/retail/core/qtask_create_task.cpp
     engine/src/retail/core/retail_error.cpp
-    engine/src/retail/core/retail_main.cpp
+    engine/src/retail/core/main.cpp
     engine/src/retail/core/task_types.cpp
     engine/src/retail/diagnostics/log_record.cpp
     engine/src/retail/dynobj/dynamic_cube.cpp
@@ -112,3 +112,14 @@ if(MINGW)
     # The retail renders through DirectDraw 7 (igi.exe imports ddraw.dll).
     target_link_libraries(igi PRIVATE ddraw dxguid dinput)
 endif()
+
+# Qvm_Execute (0x004B85B0) and Qvm_GetFloatArg (0x004B8A50) are transcribed, but their eight
+# retail callees (0x004BD080, 0x004C0200, 0x004BF1C0, 0x004BFC70, 0x004BF1F0, 0x004BFA80,
+# 0x004BF8F0, 0x004BEFC0, 0x004BD010, 0x004B9660) and three shared QVM state words are not
+# ported yet. They are compiled as a separate object target so every build checks this source
+# without introducing undefined symbols into the igi link; move the file into the igi source
+# list once those dependencies exist. The object is compile evidence only, not a linked native.
+add_library(igi_qvm_execute_object OBJECT engine/src/retail/script/qvm_execute.cpp)
+target_include_directories(igi_qvm_execute_object PRIVATE engine/include)
+target_compile_features(igi_qvm_execute_object PRIVATE cxx_std_20)
+add_dependencies(igi igi_qvm_execute_object)

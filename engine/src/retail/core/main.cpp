@@ -1,4 +1,4 @@
-#include "igi/retail/core/retail_main.hpp"
+#include "igi/retail/core/main.hpp"
 
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/core/frame_natives.hpp"
@@ -19,7 +19,7 @@
 
 namespace {
 
-// The retail's main keeps the window handle in its frame; the per-frame loop
+// The game's main keeps the window handle in its frame; the per-frame loop
 // destroys it when the loop status byte is cleared.
 #if defined(_WIN32)
 HWND g_main_window = nullptr;
@@ -29,15 +29,15 @@ HWND g_main_window = nullptr;
 
 extern "C" {
 
-// Native: Main; retail VA 0x0048F530.
-// Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP, Radare2 and angr CFGFast on retail IGI.EXE; mutex VA 0x0048F530..0x0048F578, duplicate path 0x0048F8F0..0x0048F912.
+// Native: Main; VA 0x0048F530.
+// Artifact: original igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
+// Tools/evidence: Binary Ninja MCP, Radare2 and angr CFGFast on IGI.EXE; mutex VA 0x0048F530..0x0048F578, duplicate path 0x0048F8F0..0x0048F912.
 // Behavior/CFG: CreateMutexA(NULL, TRUE, "IGIMUTEX") at 0x0048F53A; a NULL handle or GetLastError ERROR_ALREADY_EXISTS (0xB7) / ERROR_INVALID_HANDLE (6) reaches MessageBoxA(NULL, "IGI is already running.", "Error", MB_ICONERROR) and returns 0. After RegisterClassA at 0x0048F5E6 the startup stores the app-context flags: push 1 / call 0x0048F140 at 0x0048F613/0x0048F615 (AppContext_SetIsActive(1), returns at 0x0048F61A) and push 1 / call 0x0048F260 at 0x0048F63B/0x0048F63D (AppContext_SetTerrainLightmapsUsed(1), returns at 0x0048F642); the success path calls ReleaseMutex at 0x0048F8CA.
-// Status/limits: STRUCTURALLY_VERIFIED; mutex creation, duplicate-instance path and the two app-context startup call sites/arguments checked against retail disassembly, the 26-block Binary Ninja/Radare2 CFG and angr CFGFast; the Win32 window and per-frame loop remain partially transcribed, and the debugged/debug-text/lightmaps calls between 0x0048F622 and 0x0048F636 are not wired.
-int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
+// Status/limits: STRUCTURALLY_VERIFIED; mutex creation, duplicate-instance path and the two app-context startup call sites/arguments checked against the original disassembly, the 26-block Binary Ninja/Radare2 CFG and angr CFGFast; the Win32 window and per-frame loop remain partially transcribed, and the debugged/debug-text/lightmaps calls between 0x0048F622 and 0x0048F636 are not wired.
+int IGI_RETAIL_CDECL Main(const igi::retail::core::MainConfig* config)
 {
 #if defined(_WIN32)
-    // Retail 0x0048F544: CreateMutexA(NULL, TRUE, "IGIMUTEX"). A NULL handle
+    // igi.exe 0x0048F544: CreateMutexA(NULL, TRUE, "IGIMUTEX"). A NULL handle
     // jumps straight to the shared failure box; otherwise GetLastError is
     // sampled for ERROR_ALREADY_EXISTS (0xB7) and, if that misses, sampled
     // again for ERROR_INVALID_HANDLE (6). All three reach the box at
@@ -69,17 +69,17 @@ int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
         return 1;
     }
 
-    // Retail main 0x0048F530 runs the app-context startup setters after the
-    // class registration (0x0048F5E6) and before CreateWindowExA (0x0048F770).
-    // The two calls this startup needs, with the retail's own arguments:
+    // Main 0x0048F530 runs the app-context startup setters after the class
+    // registration (0x0048F5E6) and before CreateWindowExA (0x0048F770).
+    // The two calls this startup needs, with the original's own arguments:
     //   0x0048F613  push 1
     //   0x0048F615  call 0x0048F140   ; AppContext_SetIsActive(1); returns at 0x0048F61A
     //   0x0048F63B  push 1
     //   0x0048F63D  call 0x0048F260   ; AppContext_SetTerrainLightmapsUsed(1); returns at 0x0048F642
-    // Retail makes the debugged (0x0048F622), debug-text (0x0048F62F) and
-    // lightmaps (0x0048F636) calls between them; they are outside this fix.
-    // The is-active store is what makes the per-frame loop below dispatch
-    // instead of taking the 500 ms sleep path.
+    // The original makes the debugged (0x0048F622), debug-text (0x0048F62F)
+    // and lightmaps (0x0048F636) calls between them; they are outside this
+    // fix. The is-active store is what makes the per-frame loop below
+    // dispatch instead of taking the 500 ms sleep path.
     (void)AppContext_SetIsActive(1);
     (void)igi::retail::core::App_ContextSetTerrainLightmapsUsed(1);
 
@@ -93,9 +93,9 @@ int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
     ::ShowWindow(g_main_window, config->show_command);
     ::UpdateWindow(g_main_window);
 
-    // The retail's per-frame loop at 0x0048F80D: the x87 precision setup,
-    // the app context's isActive flag, the frame dispatch or a 500 ms sleep,
-    // the loop status byte and the message pump.
+    // The game's per-frame loop at 0x0048F80D: the x87 precision setup, the
+    // app context's isActive flag, the frame dispatch or a 500 ms sleep, the
+    // loop status byte and the message pump.
     MSG message{};
     bool running = true;
     while (running)
@@ -124,8 +124,8 @@ int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config)
             ::DispatchMessageW(&message);
         }
     }
-    // Retail releases the mutex on the normal teardown path at 0x0048F8CA; its
-    // failure paths branch past that call and never release.
+    // igi.exe releases the mutex on the normal teardown path at 0x0048F8CA;
+    // its failure paths branch past that call and never release.
     ::ReleaseMutex(mutex);
     return 0;
 #else

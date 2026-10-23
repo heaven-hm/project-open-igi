@@ -1,18 +1,18 @@
 #pragma once
 
-// The retail main method.
+// The game's main method.
 //
 // igi.exe starts at 0x0048F530: it takes the IGIMUTEX mutex, initialises
 // COM, registers the window class with the window procedure at 0x0048F970,
 // reads the configuration and the script setup, registers the task classes
 // and then runs the per-frame loop at 0x0048F80D.
 //
-// The retail's main also brings up systems the MVP demo does not model: the
+// The original main also brings up systems the MVP demo does not model: the
 // movie and subtitle playback, the smoke and particle emitters, the debug
 // key handlers and the sound and joystick backends. Their setup calls sit
 // between the script setup and the class registrations, and this
 // transcription skips them, exactly as the MVP scope requires. The order of
-// the calls that remain is the retail's.
+// the calls that remain is the original's.
 
 #include <cstdint>
 
@@ -26,8 +26,9 @@
 
 namespace igi::retail::core {
 
-// The retail's per-frame body, the part of the main loop the MVP demo runs.
-struct RetailMainConfig
+// The inputs the per-frame body needs: the registered instance, the window
+// class, the show command and the level/display selection.
+struct MainConfig
 {
     void* window_class{};
     void* instance{};
@@ -53,7 +54,7 @@ extern "C" {
 //           per-frame loop: the x87 precision setup, the app context's
 //           isActive flag, the frame dispatch or a 500 ms sleep, the loop
 //           status byte and the message pump.
-int IGI_RETAIL_CDECL Main(const igi::retail::core::RetailMainConfig* config);
+int IGI_RETAIL_CDECL Main(const igi::retail::core::MainConfig* config);
 
 } // extern "C"
 
