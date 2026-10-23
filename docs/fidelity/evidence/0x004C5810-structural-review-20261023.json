@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "kind": "native-structural-comparison",
+  "address": "0x004C5810",
+  "function_name": "DynObj_ParseConfigFile_6",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "candidate_sha256": null,
+  "candidate_path": null,
+  "candidate_note": "No candidate executable is bound to this record; the shared build directory changed during the task. Candidate evidence below is a compile check of the named source revision.",
+  "generated_at": "2026-10-23T03:05:00Z",
+  "retail": {
+    "function_entry": "0x004C5810",
+    "signature": "int32_t __cdecl DynObj_ParseConfigFile_6(void)",
+    "calling_convention": "cdecl (x86)",
+    "size_bytes": 28,
+    "bytes_sha256": "4cce5d36a0bae1030c3f8acdf998d5ad5a68c3c5f2ca4d284a2d480b97300c78",
+    "bytes_match_binary_ninja_view": true,
+    "bytes_hex": "33c0a3f47db900a3247db900a3f87db900a35820ba00a36050ba00c3",
+    "basic_blocks": 1,
+    "edges": 0,
+    "instructions": 7,
+    "call_instructions": 0,
+    "rep_instructions": 0,
+    "return_instructions": 1,
+    "abi": {
+      "calling_convention": "cdecl (x86)",
+      "arguments": [],
+      "variadic": false,
+      "return_value": "int32 in EAX, always 0 (xor eax,eax at 0x004C5810)",
+      "stack_cleanup": "none"
+    },
+    "globals": [
+      {
+        "address": "0x00B97DF4",
+        "role": "heightmap stack depth (dword, cleared)",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x00B97D24",
+        "role": "terrain lightmap/token stack depth (dword, cleared)",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x00B97DF8",
+        "role": "texture-modifier stack depth (dword, cleared)",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x00BA2058",
+        "role": "current heightmap index (dword, cleared)",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x00BA5060",
+        "role": "packed texture-modifier/material mask (dword, cleared)",
+        "initial": "0x00000000"
+      }
+    ],
+    "callees": [],
+    "caller_count": 11,
+    "radare2": {
+      "size": 28,
+      "ninstrs": 7,
+      "nargs": 0,
+      "calltype": "cdecl"
+    },
+    "angr_cfgfast": {
+      "function_entry": "0x004C5810",
+      "result": "pass",
+      "nodes": 1,
+      "edges": 0,
+      "has_unresolved_jumps": false,
+      "angr_version": "10.0.4.post1"
+    }
+  },
+  "cfg_agreement": {
+    "binary_ninja_vs_radare2": 1.0,
+    "note": "This is the gate's Binary Ninja-vs-radare2 score over the two retail artifacts. It is retail structural agreement, not candidate equivalence."
+  },
+  "candidate": {
+    "source_path": "engine/src/retail/terrain/terrain_scene_state.cpp",
+    "source_sha256": "64135dedac6471f7e6b64d7156d0ff0c972f128d4fd63b7b2aba4a2dddd48385",
+    "object_path": "/tmp/igi-evidence/obj/terrain_scene_state.o",
+    "object_sha256": "d60d425f8f05dce2d9e5f01ed18602c439ae5c921ba5057e2631e5bee6ed311f",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_scene_state.cpp -o /tmp/igi-evidence/obj/terrain_scene_state.o",
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "compile_result": "PASS (COFF object produced)",
+    "build_or_link_result": "NOT ATTEMPTED (no ./build.sh run; unit is not wired for link where noted)",
+    "function_symbol": "DynObj_ParseConfigFile_6",
+    "function_size_bytes": 64,
+    "function_instructions": 7,
+    "conditional_branches": 0,
+    "unconditional_jumps": 0,
+    "call_instructions": 0,
+    "returns": 1,
+    "structure": "GCC -O3 emits a 0x40-byte function of 7 instructions in a single basic block with no branches and no calls: five dword zero stores (0xB97DF4, 0xB97D24, 0xB97DF8, 0xBA2058, 0xBA5060) and `ret`, with EAX zeroed by `xor eax,eax` scheduled between the first and second store.",
+    "divergences": [
+      "GCC places `xor eax,eax` between the first and second store; retail zeroes EAX first. Store order, width and target set are identical and there are no other side effects.",
+      "The candidate symbol returns int32 while terrain_quadtree.hpp declares it void; the i386 cdecl ABI is identical and every retail caller ignores EAX."
+    ],
+    "unimplemented": [
+      "Nothing is omitted; the function has no calls, no reads and no branches in retail or candidate."
+    ]
+  },
+  "status": {
+    "value": "STRUCTURALLY_VERIFIED",
+    "basis": "Retail is a single basic block with seven instructions and no edges (Binary Ninja and radare2 agree, score 1.0); the candidate compiles to a single basic block with the same five dword stores to the same five globals in the same order and the same return value. Structure and control flow were checked against the binary. No candidate executable, semantic runtime or behavioral evidence is claimed."
+  },
+  "limitations": [
+    "Straight-line reset; candidate object is one basic block and matches retail's block/edge shape.",
+    "Retail-image evidence does not by itself prove candidate equivalence.",
+    "No runtime, semantic-review or behavioral evidence is claimed in this file."
+  ]
+}

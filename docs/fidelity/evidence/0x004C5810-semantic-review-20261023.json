@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004C5810",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "64135dedac6471f7e6b64d7156d0ff0c972f128d4fd63b7b2aba4a2dddd48385",
+  "reviewed": true,
+  "reviewed_by": "Delegated source-semantic review against retail Binary Ninja disassembly and radare2 CFG (task C)",
+  "scope": "source-level semantic review of the five-global reset at retail 0x004C5810 against the candidate at engine/src/retail/terrain/terrain_scene_state.cpp; no runtime execution",
+  "review_basis": {
+    "retail_evidence": [
+      "docs/fidelity/evidence/0x004C5810-binaryninja-20261023.json",
+      "docs/fidelity/evidence/0x004C5810-radare2-20261023.json",
+      "docs/fidelity/evidence/0x004C5810-structural-review-20261023.json"
+    ],
+    "candidate_source": "engine/src/retail/terrain/terrain_scene_state.cpp",
+    "candidate_compile_check": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_scene_state.cpp (PASS; 0x40-byte function, 7 instructions, one basic block)",
+    "instruction_count": "retail 7, candidate 7",
+    "cfg_shape": "retail 1 node / 0 edges; candidate 1 node / 0 edges"
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Binary Ninja and radare2 both recover a single function entry at 0x004C5810 with identical 1-node/0-edge CFGs, and angr CFGFast recovers the same entry with no unresolved jumps. The candidate defines exactly one function of the same name and C linkage."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "not_applicable",
+      "rationale": "The function reads no stack arguments. Retail and candidate both take no parameters and the eleven retail call sites pass none."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "All five stores write the constant zero to 32-bit dwords; there is no scaling, bias or rounding to compare."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Retail writes dword zero to 0x00B97DF4, 0x00B97D24, 0x00B97DF8, 0x00BA2058 and 0x00BA5060 in that order; the candidate writes dword zero to the same five globals in the same order. No other memory is read or written. The candidate compiler schedules xor eax,eax between the first and second store, which does not change the store set, order or values."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Neither retail nor candidate contains a call instruction; the complete side-effect set is the five dword zero stores."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Retail zeroes EAX and executes a single retn; the candidate zeroes EAX and executes a single ret. There is no error path, branch or early return in either."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "The function contains no floating-point instructions and touches no floating-point storage."
+    }
+  ],
+  "limitations": [
+    "Source-level review only: no candidate executable, link, behavioral test or runtime capture is claimed.",
+    "The review covers this 28-byte retail function; it does not extend to the eleven callers or to the runtime meaning of the cleared globals.",
+    "The candidate object was produced by GCC 16.2.0, not the retail MSVC 6 toolchain; instruction scheduling differs though block/edge shape does not."
+  ]
+}
