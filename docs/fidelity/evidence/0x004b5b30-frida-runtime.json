@@ -5,10 +5,10 @@
  "address": "0x004b5b30",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "c1e97e178bd4186786e0ad040cd505579affc83ccf5e5688e228568ad16219e2",
- "candidate_executable_sha256": "0d3d83a9b22a2476e321f42e833d9ad66249ca35d7930d5be9bad3c779f75797",
+ "candidate_executable_sha256": "9ef5f735f99386c8b7209c8240a3e4e8d3909f8b6899a1cd7108f1d796827fd9",
  "retail_observed_calls": 13370,
- "candidate_observed_calls": 24,
- "matched_calls": 24,
+ "candidate_observed_calls": 38,
+ "matched_calls": 38,
  "probe_sha256": "0e20b059058dd39f92db46548a50bc5261f084abffd05a4997b6108b12584d2a",
  "candidate_executable": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-verify-noinline/igi1.exe",
  "candidate_build": {
@@ -51,8 +51,8 @@
   "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-merged5.json",
-  "paired_capture_sha256": "f3b3c0b00dfdcfedec45086590e9427d214ed40095ea62edd3b54ca6a7f7ac5d"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-merged6.json",
+  "paired_capture_sha256": "d8c83488ea5f26f3cd8f544121921177d2efcf027340049c5fa314c46dd092f4"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

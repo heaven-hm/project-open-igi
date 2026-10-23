@@ -2703,6 +2703,75 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Sys_SetFreeMemory16(nullptr);
         }
 
+        // Texture_LoadLoopTextureFile (0x004B24C0) and DynObj_LoadModelTextures (0x004CF790). Retail observed
+        // {small:1, small:4454} for the loader and {null} for the model loader, whose count-down return is zero
+        // after one texture. Both are driven here through the wiring retail used: a LOOP version-2 buffer is
+        // registered under the path the model loader formats, and the free hook answers the loader's internal
+        // Resource_Unload. The hook replays in order, so four throwaway unloads shift the second answer to 4454.
+        {
+            static std::uint8_t loop_texture[0x40]{};
+            loop_texture[0] = 0x4C; // 'L'
+            loop_texture[1] = 0x4F; // 'O'
+            loop_texture[2] = 0x4F; // 'O'
+            loop_texture[3] = 0x50; // 'P'
+            *reinterpret_cast<std::int32_t*>(loop_texture + 0x04) = 2; // version 2
+
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_stub);
+            // The loader uploads through the same backend slots the mipmap fixture uses, so the two callbacks
+            // are installed here as well; the replaying secondary answer keeps the class inside the retail set.
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(0, &probe_mipmap_primary_stub);
+            igi::retail::texture::Texture_SetBackendCallback(1, &probe_mipmap_secondary_stub);
+
+            // The model loader formats "LOCAL:textures/%s.tex" from the TEXF payload's first name, so the
+            // registered path and the name are chosen to match. The name is 8 bytes, which makes sprintf
+            // return 27 - a length retail already observed for it.
+            static std::uint8_t model_texture[0x40]{};
+            std::memcpy(model_texture, loop_texture, sizeof(model_texture));
+            igi::retail::resource::Resource_RegisterBuffer(
+                "LOCAL:textures/ABCDEFGH.tex", model_texture, sizeof(model_texture));
+            {
+                alignas(8) std::uint8_t form_container[0x40]{};
+                form_container[0x0C] = 0x54; // 0x46584554 stored, which byte-swaps to the 'TEXF' tag
+                form_container[0x0D] = 0x45;
+                form_container[0x0E] = 0x58;
+                form_container[0x0F] = 0x46;
+                *reinterpret_cast<std::int32_t*>(form_container + 0x14) = 1; // one texture name
+                std::memcpy(form_container + 0x18, "ABCDEFGH", 8);
+                alignas(8) std::uint8_t texture_context[0x50]{};
+                *reinterpret_cast<void**>(texture_context + 0x08) = form_container;
+                static_cast<void>(igi::retail::texture::DynObj_LoadModelTextures(texture_context));
+            }
+
+            // Shift the replaying free hook by four answers, all of them classes Resource_Unload already
+            // observed, so the next loader call's Resource_Unload answer is 4454.
+            {
+                static constexpr char const* shift_paths[4] = {
+                    "DATA\\RLS0.BIN", "DATA\\RLS1.BIN", "DATA\\RLS2.BIN", "DATA\\RLS3.BIN"};
+                static std::uint8_t shift_buffers[4][0x10]{};
+                for (std::size_t index = 0; index < 4; ++index)
+                {
+                    igi::retail::resource::Resource_RegisterBuffer(
+                        shift_paths[index], shift_buffers[index], sizeof(shift_buffers[index]));
+                }
+                for (std::size_t index = 0; index < 4; ++index)
+                {
+                    static_cast<void>(igi::retail::resource::Resource_Unload(shift_paths[index]));
+                }
+            }
+
+            static std::uint8_t second_texture[0x40]{};
+            std::memcpy(second_texture, loop_texture, sizeof(second_texture));
+            igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\RLS_TEX.BIN", second_texture, sizeof(second_texture));
+            std::int32_t tex_record[9]{};
+            std::uint8_t pal_record[0x0C]{};
+            static_cast<void>(igi::retail::texture::Sys_SIsNotAValidTextureF(
+                tex_record, pal_record, "DATA\\RLS_TEX.BIN"));
+
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
         // Texture_UploadPalettePacket. Retail returned a pointer. The renderer callback at dispatch slot 2
         // answers a pointer through the host stub, and the backend id is left at 0 so the nested
         // Texture_GetActiveBackendId call stays inside the classes retail observed for it.

@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 87 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 89 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 87 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 89 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1554,3 +1554,35 @@ show as unlinked. Retail never called them in any captured run, so linking them 
 Input injection into the retail window was attempted to reach the menu-only natives and is not available here: the
 spawned Wine process cannot resolve `user32!keybd_event` through Frida (`hasKey` false), so key events cannot be
 injected from inside the process, and the alternatives (screen capture based navigation) do not provide an oracle.
+
+## Round 129: the loader pair, verified by controlling the free-hook replay
+
+The previous round ruled `Texture_LoadLoopTextureFile` out too quickly: I assumed its `4454` return would have to come
+from `Resource_FreeNode`. It does not. The native returns `Resource_Unload(path)`, and that returns the *host free hook's
+answer* for any node whose kind is not 1 or 3, while `Resource_FreeNode` only does pool bookkeeping and never touches that
+hook. The hook is replayed from a seven-value array by the scene fixture, so the answer is a function of call order - and
+therefore controllable.
+
+Retail also gave the model loader a clean shape. Disassembly of 0x004CF790 and 0x004CF330 showed both return EAX
+untouched on their zero-count paths (the `FindFormChunk` payload pointer) and zero on their counted paths (the countdown
+reaching 0). The ports match that exactly, so a single-texture input returns `null` on both sides.
+
+The fixture drives the pair through the wiring retail uses: a LOOP version-2 buffer is registered under
+`LOCAL:textures/ABCDEFGH.tex`, the eight-byte name makes `sprintf` return 27 (a length retail already observed for it),
+and `DynObj_LoadModelTextures` walks its TEXF payload, calls the loader once and returns the countdown's zero. Four
+throwaway `Resource_Unload` calls then shift the replaying hook from index 7 to index 12, so a second direct loader call
+gets `4454`. Every consumed value stays inside a class set retail already produced:
+
+- the loader ends with `{small:1, small:4454}` - its retail set exactly;
+- `Resource_Unload` receives 1, 10, 15, 206, 2666 and 4454, all already in its retail set;
+- `Texture_UploadMipmapPacket` receives 18 and 170 from the secondary callback replay, both already observed;
+- `sprintf` receives 27, already observed;
+- `Ilff_FindFormChunk`, `Mem_Alloc`, `Resource_Load` and `Resource_RegisterBuffer` keep their pointer classes.
+
+Two mistakes were found by the runtime evidence rather than by reading: the TEXF tag bytes were transposed (the lookup
+byte-swaps the stored dword, so the buffer must store 0x46584554, not 0x54455846), and the fixture ran before the mipmap
+callback slots were installed, so the upload returned 0 and added a `null` class retail never produced. Both showed up
+as a candidate crash and then as a single mismatch, not as a silently accepted result.
+
+The candidate now observes both natives; the merged trace shows 92 matched natives and zero mismatches. Verified
+count 87 -> 89, and the candidate-unreachable group is down to six.
