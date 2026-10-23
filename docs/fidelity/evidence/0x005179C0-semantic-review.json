@@ -4,7 +4,7 @@
  "result": "passed",
  "address": "0x005179C0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+ "implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
  "reviewed": true,
  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {
@@ -26,7 +26,7 @@
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x005179C0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x005179C0 whose whole body is eax=[esp+4]; eax=[eax+1Ch]; ret. The candidate implementation IffChunk_GetPayload lives in engine/src/retail/model/iff_chunk_tree.cpp and returns the node payload address, which stands for the retail pointer; the earlier review had this record bound to the sys payload getter 0x004B74D0, a different native with a null/complex body."
   },
   {
    "name": "constants_and_scaling",

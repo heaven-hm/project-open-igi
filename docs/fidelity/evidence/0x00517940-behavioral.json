@@ -242,8 +242,7 @@
     "path": "scripts/iff_chunk_tree_diff_runner.py",
     "sha256": "dfe84b683fb6d4ac8a93675faf3914013aec7e83fbccf02e31bacddfbc4405f9",
     "command": [
-      "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/iff_chunk_tree_diff_runner.py",
+      "scripts/iff_chunk_tree_diff_runner.py",
       "--address",
       "0x00517940",
       "--binary",
@@ -255,7 +254,7 @@
       "--implementation-sha256",
       "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
       "--root",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+      "."
     ]
   }
 }

@@ -2928,9 +2928,16 @@ int RunRetailModelScene(HINSTANCE instance,
             static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x20));
             static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x38));
 
-            // GetChunkPayload: a well-formed child yields its payload; a null child yields null.
+            // GetChunkPayload (the sys 0x004B74D0 native): retail observed both a payload pointer and null, so both
+            // inputs are replayed. The model getter (0x005179C0) is a different native whose retail run only ever
+            // returned a payload pointer; it is observed once on a chunk that has payload bytes.
             static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(container + 0x14, container));
             static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(nullptr, container));
+            {
+                igi::retail::model::IffChunkNode payload_node{};
+                payload_node.payload = {std::byte{0x4d}};
+                static_cast<void>(igi::retail::model::IffChunk_GetPayload(&payload_node));
+            }
 
             // ReadContainerHeader: writes the size and alignment out; retail leaves EAX to its callee.
             std::int32_t header_size = 0;

@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 83 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 84 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 83 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 84 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1434,3 +1434,29 @@ it never reached, while the candidate side always comes from the newest image. A
 as evidence because of its documented run-to-run variance.
 
 Verified count 78 -> 83.
+
+## Round 125: a capture alias was manufacturing a match
+
+The paired capture resolves each native's candidate address through `scripts/mvp_candidate_symbol_aliases.json`. The
+entry for 0x005179C0 (`Iff_GetChunkPayload`) named `igi::retail::sys::Ilff_GetChunkPayload` - which is the body of a
+*different* native, 0x004B74D0. The alias existed because the port had no model payload getter at all: the record
+named `engine/src/retail/model/iff_chunk_tree.cpp` as its implementation, but that file only carried a provenance
+comment for the address, not the function. The alias made the capture look at the sys getter, whose startup return class
+happened to equal the retail class, so the native appeared to match while nothing at its own address was observed. The
+same aliasing made a fixture experiment look like a fix for this native while it actually changed the other one's class
+set; the lesson is that a matching class is not evidence of identity.
+
+Two concrete repairs:
+
+- `IffChunk_GetPayload` is now implemented in `engine/src/retail/model/iff_chunk_tree.cpp` beside the other chunk
+  helpers: three instructions, `eax=[esp+4]; eax=[eax+1Ch]; ret`, the payload address standing for the retail's
+  pointer. The candidate image now exports it (`0x0040E120`), and the alias names it.
+- the fixture replays the sys getter's two observed inputs (payload pointer and null) and observes the model getter
+  once on a chunk with payload bytes, so each native keeps exactly the class set retail produced: sys `{null, ptr}`,
+  model `{ptr}`.
+
+The record's implementation binding is corrected to the real file, and its behavioral report (9/9 cases, retail under
+unicorn against the compiled implementation), build report, semantic review and frida report are re-bound to that
+file's digest. The merge now shows 88 matched natives and **zero mismatches**.
+
+Verified count 83 -> 84; matched 87 -> 88; mismatches 1 -> 0.
