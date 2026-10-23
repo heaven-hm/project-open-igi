@@ -149,6 +149,17 @@ std::int32_t probe_seek_stub(std::int32_t device, std::int32_t* context, std::in
     return 0;
 }
 
+// Device_CloseStream dispatches to a void operation. The retail run observed {null} over 350 calls, so the
+// operation it called left EAX at zero; this stub does the same and nothing else.
+void probe_close_stream_stub(std::int32_t device, std::int32_t* context)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+#if defined(__i386__) || defined(__x86_64__)
+    __asm__ volatile("xorl %%eax, %%eax" : : : "eax");
+#endif
+}
+
 // Resource_Unload returns a node's kind for kinds 1 and 3 and otherwise returns whatever the free hook
 // answers. The retail run observed seven such answers, so this stub replays them in order.
 std::int32_t g_probe_free_result_index = 0;
@@ -2624,6 +2635,17 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Device_SetCheckHeap(1, &probe_seek_stub);
             static_cast<void>(
                 igi::retail::resource::Device_SeekStream(stream_context, 0));
+        }
+
+        // Device_CloseStream: retail observed {null} over 350 calls. The backend is host-injected, so the fixture
+        // installs a void operation on an unused device id and takes the dispatch branch; the stub leaves EAX at
+        // zero exactly like the retail operation, which the capture compares as the null return class.
+        {
+            std::int32_t close_context[4]{15, 0x41414141, 0, 0};
+            igi::retail::resource::Device_SetReadFileBlock(
+                15, reinterpret_cast<igi::retail::resource::DispatchReadFileBlockFn>(
+                        &probe_close_stream_stub));
+            igi::retail::resource::Device_CloseStream(close_context);
         }
 
         // Qvm_Load. Retail returned a pointer. The scene leaves the script flags in debug-compile mode,

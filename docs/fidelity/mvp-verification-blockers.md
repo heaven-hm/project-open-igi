@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 85 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 86 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 85 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 86 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1487,3 +1487,32 @@ so this new runner changes no existing record.
 Verified count 84 -> 85; matched 88 with zero mismatches, so three matched natives remain unverified
 (`Flow_RunHandler`, `Terrain_LoadTexturesAndLightmaps`, `Terrain_Load`), all three because their ports are dispatch
 placeholders or host file-stage bridges rather than transcriptions.
+
+## Round 127: a host-injected backend makes a dispatch native verifiable
+
+`Device_CloseStream` (0x004B1690) had 350 retail calls returning `{null}` but zero candidate calls: the port is complete
+and the generic runner already replayed both branches under unicorn, so only a runtime observation was missing. The
+native dispatches through a table the host fills in (`Device_SetReadFileBlock`), and every call it can reach returns
+`ptr` or `null`, so a fixture cannot perturb a verified callee's class set.
+
+The fixture installs a void operation on an unused device id (15) and calls the native once on the dispatch branch. The
+stub deliberately leaves EAX at zero with an explicit `xor` because the capture compares the return *class*, and the
+retail operation left EAX zero over all 350 calls. The special global-stream branch is not replayed at runtime: it
+would leave EAX to the compiler's address calculation, and the behavioural runner already covers that branch on both
+sides, so the runtime fixture stays on the branch whose register state is guaranteed.
+
+The candidate now observes the native (one call, class `null`) and the merged trace shows 89 matched natives with zero
+mismatches. Verified count 85 -> 86.
+
+**What the remaining nine candidate-unreachable natives actually need**, in the order they were ruled out this round:
+
+- `QTask_RegisterClasses`: the port throws on registrars outside MVP scope, so it needs transcription, not a fixture.
+- `Terrain_TraverseContourQuadtree`, `Terrain_DecodeChunkCommands`, `Terrain_Draw`: placeholder ports that throw; the
+  retail bodies are 4KB-6KB of rendering/decoding code.
+- `Resource_RegisterIlffContainer`: a fixture is possible in principle (all callees return only `ptr`), but its
+  malformed-input branch is `jmp $` (an infinite loop), so a layout mistake hangs the candidate capture instead of
+  failing a test; it needs the container layout pinned down before it is worth the risk.
+- `Texture_LoadLoopTextureFile`, `Resource_FreeNode`, `DynObj_LoadPackageMeshes`, `DynObj_LoadModelTextures`: each is
+  reached through a file/asset path, and the natural paths cascade observations into other natives that are themselves
+  unverified (for example the texture-loader count>0 path calls the loop texture loader), so a fixture would trade one
+  verification for a new class-set divergence elsewhere.

@@ -4,8 +4,8 @@
   "capture": "build/runtime-traces/mvp-frida-pair-lovs.json",
   "level": 5,
   "counts": {
-    "end-to-end": 88,
-    "candidate-unreachable": 10,
+    "end-to-end": 89,
+    "candidate-unreachable": 9,
     "retail-unobserved": 17,
     "unlinked": 5
   },
@@ -1247,6 +1247,7 @@
     "0x004B0C60",
     "0x004B0D40",
     "0x004B0F80",
+    "0x004B1690",
     "0x004B1780",
     "0x004B17F0",
     "0x004B1E90",
@@ -1298,5 +1299,5 @@
     "0x00517940",
     "0x005179C0"
   ],
-  "verified_strict_gate_count": 85
+  "verified_strict_gate_count": 86
 }
