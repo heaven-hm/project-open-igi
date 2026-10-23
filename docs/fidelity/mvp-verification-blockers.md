@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 84 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 85 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 84 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 85 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1460,3 +1460,30 @@ unicorn against the compiled implementation), build report, semantic review and 
 file's digest. The merge now shows 88 matched natives and **zero mismatches**.
 
 Verified count 83 -> 84; matched 87 -> 88; mismatches 1 -> 0.
+
+## Round 126: the native with no arguments does have an input
+
+`FP_SetDefaultPrecision` (0x004A7157) was left unpromoted because "it takes no arguments, so an angr differential cannot
+present eight distinct inputs". That reasoning confused *stack arguments* with *inputs*. The function sets the x87
+default precision; its input is the x87 control word in effect when it is called. The paired runtime capture had
+already shown the retail call (one startup call, returning the same class on both images), so the native was reachable -
+only its behavioural evidence was missing.
+
+`scripts/fpu_control_word_diff_runner.py` drives that input instead of inventing stack arguments: retail executes its
+own bytes under unicorn with the control word written before entry, and the compiled implementation runs in a harness
+that loads the same word, calls the function, and reads the resulting word back. Eight control words cover the retail
+default, 24-bit / 53-bit / extended precision, all four rounding modes, an all-unmasked word and an all-ones word. The
+returned flag word and the post-call control word are compared exactly; all eight cases pass.
+
+One honest normalisation is recorded in the report, not hidden: bit 6 (0x40) is reserved in the x87 control word, and
+the Wine x87 implementation under this bottle reports it as set after `FLDCW` while unicorn keeps it clear. The runner
+masks that reserved bit on both sides and says so in `method`; every defined bit is still compared, so a one-bit error
+anywhere in the contract fails the case.
+
+`FP_SetDefaultPrecision` is verified (status VERIFIED, angr CFGFast for the entry, unicorn differential for the
+behaviour, spawn-mode capture for the runtime call). The other four members of the FPU family keep their angr runner,
+so this new runner changes no existing record.
+
+Verified count 84 -> 85; matched 88 with zero mismatches, so three matched natives remain unverified
+(`Flow_RunHandler`, `Terrain_LoadTexturesAndLightmaps`, `Terrain_Load`), all three because their ports are dispatch
+placeholders or host file-stage bridges rather than transcriptions.

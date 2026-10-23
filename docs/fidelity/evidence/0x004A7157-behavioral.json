@@ -1,390 +1,259 @@
 {
- "schema_version": 1,
- "kind": "behavioral-test-report",
- "executed": true,
- "oracle": "retail-binary-execution",
- "result": "passed",
- "address": "0x004A7157",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
- "observable_fields": [
-  "return_value",
-  "state_delta",
-  "side_effects"
- ],
- "tests_total": 8,
- "tests_passed": 8,
- "tests_failed": 0,
- "cases": [
-  {
-   "id": "case-0-control-037f",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "control_word": 895,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004A7157",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+  "method": "The native's only input is the x87 control word, so the runner varies it: retail executes its own bytes under unicorn with the word written before entry, and the compiled candidate executes FP_SetDefaultPrecision after loading the same word. Both sides report the returned flag word and the control word after the call; bit 6 (0x40), reserved in the control word, is masked out because the Wine x87 implementation reports it as set while unicorn does not. Nothing else is normalised.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
   },
-  {
-   "id": "case-1-control-027f",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "control_word": 639,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "unicorn",
+    "engine": "unicorn x86-32",
+    "version": "2.1.4",
+    "function_entry": "0x004A7157",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
   },
-  {
-   "id": "case-2-control-007f",
-   "categories": [
-    "nominal"
-   ],
-   "input": {
-    "control_word": 127,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
+  "cases": [
+    {
+      "id": "fp-default-precision-037f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x037f"
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 589855,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 575
+    {
+      "id": "fp-default-precision-007f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x007f"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
-  },
-  {
-   "id": "case-3-control-077f",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "control_word": 1919,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 590111,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 1599
+    {
+      "id": "fp-default-precision-027f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x027f"
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 589855,
+        "state_delta": {
+          "x87_control_word_after": 575
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 590111,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 1599
+    {
+      "id": "fp-default-precision-0c7f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x0c7f"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 590623,
+        "state_delta": {
+          "x87_control_word_after": 3647
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 590623,
+        "state_delta": {
+          "x87_control_word_after": 3647
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
-  },
-  {
-   "id": "case-4-control-0b7f",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "control_word": 2943,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 590367,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 2623
+    {
+      "id": "fp-default-precision-0e3f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x0e3f"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 590623,
+        "state_delta": {
+          "x87_control_word_after": 3647
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 590623,
+        "state_delta": {
+          "x87_control_word_after": 3647
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 590367,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 2623
+    {
+      "id": "fp-default-precision-063f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x063f"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 590111,
+        "state_delta": {
+          "x87_control_word_after": 1599
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 590111,
+        "state_delta": {
+          "x87_control_word_after": 1599
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
-  },
-  {
-   "id": "case-5-control-0f7f",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "control_word": 3967,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 590623,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 3647
+    {
+      "id": "fp-default-precision-0a3f",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0x0a3f"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 590367,
+        "state_delta": {
+          "x87_control_word_after": 2623
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 590367,
+        "state_delta": {
+          "x87_control_word_after": 2623
+        },
+        "side_effects": []
+      }
     },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
+    {
+      "id": "fp-default-precision-ffff",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "x87_control_word": "0xffff"
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 852767,
+        "state_delta": {
+          "x87_control_word_after": 7743
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 852767,
+        "state_delta": {
+          "x87_control_word_after": 7743
+        },
+        "side_effects": []
+      }
     }
-   },
-   "candidate_output": {
-    "return_value": 590623,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 3647
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
-  },
-  {
-   "id": "case-6-control-067f",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "control_word": 1663,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 590111,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 1599
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 590111,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 1599
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
-  },
-  {
-   "id": "case-7-control-0e7f",
-   "categories": [
-    "boundary"
-   ],
-   "input": {
-    "control_word": 3711,
-    "arguments": [],
-    "eax": 305419896,
-    "flags": 514
-   },
-   "reference_output": {
-    "return_value": 590623,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 3647
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "candidate_output": {
-    "return_value": 590623,
-    "state_delta": {
-     "EBX": 0,
-     "ESI": 0,
-     "EDI": 0,
-     "EBP": 0,
-     "FPSW": 0,
-     "FPCW": 3647
-    },
-    "side_effects": {
-     "saved_control_and_adjacent_bytes": "a5a5a5a5a5a5a5a5"
-    }
-   },
-   "result": "passed"
+  ],
+  "runner": {
+    "path": "scripts/fpu_control_word_diff_runner.py",
+    "sha256": "ac4075fd504406ac2c7d79e1ebbf919e1b260b27362c32d2d4f81cdc415dd06f",
+    "command": [
+      "scripts/fpu_control_word_diff_runner.py",
+      "--address",
+      "0x004A7157",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/core/fpu_state.cpp",
+      "--implementation-sha256",
+      "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
+      "--root",
+      "."
+    ]
   }
- ],
- "runner": {
-  "path": "scripts/fpu_state_diff_runner.py",
-  "sha256": "3e9af28ae90dd961624aece1ead5d7a7f89a58f38230b7d2440827bf4bb2c3e7",
-  "command": [
-   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/fpu_state_diff_runner.py",
-   "--address",
-   "0x004A7157",
-   "--binary",
-   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-   "--binary-sha256",
-   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-   "--implementation",
-   "engine/src/retail/core/fpu_state.cpp",
-   "--implementation-sha256",
-   "efe8d0522c297dd8e82782298af60c76eb86bacedcf07856996dcff342d588a8",
-   "--root",
-   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
-  ]
- },
- "retail_execution": {
-  "tool": "Unicorn",
-  "version": "2.1.4",
-  "candidate_sha256": "abf9d8fbcf1c6a9f61e7451cc72f1c25d9b18e20031c43730ef4b7fba7f836df",
-  "candidate_build_command": [
-   "i686-w64-mingw32-g++",
-   "-std=c++20",
-   "-O2",
-   "-shared",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-kkopdiyg/fpu.cpp",
-   "-Wl,--gc-sections,--image-base,0x10000000",
-   "-o",
-   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-kkopdiyg/fpu.dll"
-  ]
- },
- "limitations": [
-  "Eight hardware-control fixtures, or sixteen scalar conversion fixtures; pending x87 exceptions and unmasked traps excluded.",
-  "No whole-game or all floating-point calculations equivalence claim."
- ]
 }

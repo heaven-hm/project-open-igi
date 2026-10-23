@@ -51487,12 +51487,12 @@
         "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/camera/004A7157-FP_SetDefaultPrecision.hpp",
-        "sha256": "7fbe782823ed0e5f227a33bb603076aa14c9b533e2aa53d6be0d12d5eab7c38b",
-        "signature": "unknown"
+        "path": "scripts/GameNatives/camera/004A7157-FP_SetDefaultPrecision.cpp",
+        "sha256": "7f45c4430f37cd4d368741c65f245eed04cd2ab7f998b28b73e1067046a69b35",
+        "signature": "uint32 __cdecl FP_SetDefaultPrecision(void)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51502,7 +51502,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/fpu_state_diff_runner.py",
+          "path": "scripts/fpu_control_word_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -51543,14 +51543,16 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004A7157-behavioral.json",
-          "evidence_sha256": "5f83a655120020f4e83851ce9dbf36270cd38a68f7459f86853c3e699fcc1eb2"
+          "evidence_sha256": "1bdb4d26260bacd0d2aee8b90c657a4813bfd60b32fd8b2dd0f3c863a9e4babf"
         },
         "runtime_tests": {
+          "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004A7157-behavioral.json",
-          "evidence_sha256": "a97a6d96483d2e24ce8d1f2d5151ca58abb46a59ca71a2a6ba9f9e692a30d294",
-          "result": "passed",
+          "evidence_sha256": "1bdb4d26260bacd0d2aee8b90c657a4813bfd60b32fd8b2dd0f3c863a9e4babf",
+          "oracle": "retail-binary-execution",
           "tests_passed": 8,
-          "tests_total": 8
+          "tests_total": 8,
+          "result": "passed"
         },
         "frida_runtime": {
           "status": "PASS",
