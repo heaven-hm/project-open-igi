@@ -173,6 +173,16 @@ std::int32_t probe_palette_callback_stub(void* packet)
     return 0x61000020;
 }
 
+// QVM opcode handler for the dispatcher fixture: records the dispatch by stopping the loop.
+void probe_qvm_stop_handler(igi::retail::script::QvmNativeStatePrefix* state, std::uint32_t argument_2,
+                            std::uint32_t opcode, std::uint32_t argument_4)
+{
+    static_cast<void>(argument_2);
+    static_cast<void>(opcode);
+    static_cast<void>(argument_4);
+    state->stop_flag = 1U;
+}
+
 // The mipmap upload discards the primary callback's answer and returns the secondary one. Retail observed
 // eight distinct secondary answers, so this stub replays them in order.
 std::int32_t g_probe_mipmap_result_index = 0;
@@ -2717,6 +2727,19 @@ int RunRetailModelScene(HINSTANCE instance,
             {
                 static_cast<void>(igi::retail::script::Qvm_PushInteger(push_state, push_values[index]));
             }
+        }
+
+        // Qvm_ExecuteInstructions. Retail returned 1, which is the stop flag its handler leaves set, so the
+        // fixture installs one handler for opcode 0 that stops the loop on the first dispatch.
+        {
+            alignas(8) std::uint8_t execute_state_bytes[0x40]{};
+            auto* const execute_state =
+                reinterpret_cast<igi::retail::script::QvmNativeStatePrefix*>(execute_state_bytes);
+            static std::uint8_t execute_code[4]{};
+            execute_state->code_base = reinterpret_cast<const std::byte*>(execute_code);
+            execute_state->instruction_offset = 0;
+            igi::retail::script::Qvm_SetOpcodeHandler(0, 0, &probe_qvm_stop_handler);
+            static_cast<void>(igi::retail::script::Qvm_ExecuteInstructions(execute_state));
         }
 
         // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the

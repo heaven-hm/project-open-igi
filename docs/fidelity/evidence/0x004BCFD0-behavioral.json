@@ -1,24 +1,352 @@
 {
- "address": "0x004BCFD0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004BCFD0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
+  "method": "Retail and the compiled candidate execute the dispatcher with the opcode handler modelled by the same probe; the opcode fetch, handler-table index, handler arguments and both exit paths (error_status and stop_flag) are compared, together with the terminating field retail leaves in EAX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004BCFD0",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "1b7d4ed03b9e0204cb8998e7ad7820e50ed5e819cf0802f30511cd20dfd465bf"
+  },
+  "cases": [
+    {
+      "id": "opcode-0x00-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 0,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 0,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[0]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 0,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[0]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x01-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 1,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 1,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[1]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 1,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[1]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x02-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 2,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 2,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 2,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[2]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x03-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 3,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 3,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[3]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 3,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[3]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x10-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 16,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 16,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[16]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 16,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[16]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x21-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 33,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 33,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[33]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 33,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[33]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x30-error-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 48,
+          "instruction_offset": 0,
+          "error_status": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 48,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[48]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "dispatched_opcode": 48,
+          "stop_flag": 1,
+          "error_status": 0
+        },
+        "side_effects": [
+          "call:handler[48]"
+        ]
+      }
+    },
+    {
+      "id": "opcode-0x00-error-7",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "code_byte": 0,
+          "instruction_offset": 0,
+          "error_status": 7
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 7,
+        "state_delta": {
+          "dispatched_opcode": null,
+          "stop_flag": 0,
+          "error_status": 7
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 7,
+        "state_delta": {
+          "dispatched_opcode": null,
+          "stop_flag": 0,
+          "error_status": 7
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate Qvm_ExecuteInstructions reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/qvm_execute_diff_runner.py",
+    "sha256": "2bd86f7aab54f220975d272de2f092338b26910b8932ca15a610f60f4ade77bb",
+    "command": [
+      "scripts/qvm_execute_diff_runner.py",
+      "--address",
+      "0x004BCFD0",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/script/qvm_stack_natives.cpp",
+      "--implementation-sha256",
+      "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
+      "--root",
+      "."
+    ]
   }
- ]
 }

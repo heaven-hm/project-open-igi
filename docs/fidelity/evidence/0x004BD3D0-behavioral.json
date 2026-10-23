@@ -3,7 +3,7 @@
   "kind": "behavioral-test-report",
   "address": "0x004BD3D0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+  "implementation_sha256": "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
   "executed": true,
   "oracle": "retail-binary-execution",
   "method": "Retail bytes execute under unicorn with the opcode-handler table seeded to a sentinel; the candidate is compiled with i686-w64-mingw32-g++ and run under CrossOver. Both sides report the handler stored at 0x00A96108 + (variant + opcode*6) dwords, so the setter is compared by its store.",
@@ -259,7 +259,7 @@
       "--implementation",
       "engine/src/retail/script/qvm_stack_natives.cpp",
       "--implementation-sha256",
-      "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+      "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
       "--root",
       "."
     ]

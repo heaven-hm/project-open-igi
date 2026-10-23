@@ -6,7 +6,7 @@
   "oracle": "retail-binary-execution",
   "address": "0x004BDA00",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+  "implementation_sha256": "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
   "method": "Retail and the compiled candidate execute the push against a state block at the documented offsets; the comparison covers both stack indexes, the type slot, the value slot and EAX.",
   "observable_fields": [
     "return_value",
@@ -26,7 +26,7 @@
     "version": "10.0.4.post1",
     "function_entry": "0x004BDA00",
     "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-    "candidate_sha256": "c3844f0b87b159a1927ed5f69a754522eb0922209ea666b6250899220c90f7de"
+    "candidate_sha256": "1b7d4ed03b9e0204cb8998e7ad7820e50ed5e819cf0802f30511cd20dfd465bf"
   },
   "cases": [
     {
@@ -380,7 +380,7 @@
       "--implementation",
       "engine/src/retail/script/qvm_stack_natives.cpp",
       "--implementation-sha256",
-      "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+      "9e33e58cb8ae9771ffc669868ffd38a8a2633a326a2f78ff645c7d6054e5f560",
       "--root",
       "."
     ]

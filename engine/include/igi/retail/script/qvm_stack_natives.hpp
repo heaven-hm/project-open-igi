@@ -56,6 +56,9 @@ void Qvm_SetOpcodeHandler(std::int32_t opcode, std::int32_t variant, QvmOpcodeHa
 // Confidence: high for loop, offsets and callback arguments; table initialization and all retail opcodes remain incomplete.
 // Signature: x86 cdecl with one state pointer; dispatch callback is cdecl(state, 0, opcode, 0), caller cleans 16 bytes.
 // Usage/tests: called by retail QVM expression execution; dispatch loop and error/stop cases have focused tests.
-void Qvm_ExecuteInstructions(QvmNativeStatePrefix* state);
+// Retail's exit paths load the terminating field into EAX before returning: error_status on the
+// error path and stop_flag on the loop exit. The port returns that value so the post-call register
+// carries the termination reason instead of host-compiler residue.
+[[nodiscard]] std::uint32_t Qvm_ExecuteInstructions(QvmNativeStatePrefix* state);
 
 } // namespace igi::retail::script

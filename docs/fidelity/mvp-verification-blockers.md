@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 68 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 69 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 68 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 69 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1079,3 +1079,38 @@ Practically: a shared implementation file means a change to one native's record 
 editing an implementation file, the records that point at it are part of the blast radius.
 
 Verified count 67 -> 68; paired matches 73 -> 74; candidate-unreachable 18 -> 17; mismatches 0.
+
+## Qvm_ExecuteInstructions: the second return-register divergence, and a cascade run as routine
+
+`Qvm_ExecuteInstructions` (0x004BCFD0) clears stop_flag and loops: non-zero error_status returns immediately,
+otherwise it fetches the opcode byte, dispatches handlers[0] with (state, 0, opcode, 0) and repeats while stop_flag
+is zero. Retail observed `{1}` for its return class set.
+
+The disassembly shows where that comes from: the error exit loads `error_status` into EAX, and the loop exit loads
+`stop_flag` into EAX before the final test. So the observable return is the **termination reason**, not handler
+residue as I first assumed. Same class of defect as Qvm_PushInteger: the port was `void`, so its post-call EAX was
+host-compiler residue. It now returns the terminating field explicitly.
+
+The runner models the dispatch handler with a probe that records the opcode it received and sets stop_flag, so the
+opcode fetch, handler-table index, argument order and both exit paths are all compared; the error case proves no
+dispatch happens. Eight cases, 8/8.
+
+**The cascade was routine this time.** Changing that file again invalidated all three records bound to it
+(PushInteger, SetOpcodeHandler, ExecuteInstructions). Because the blast radius is now a known step rather than a
+surprise, all three had their evidence regenerated, behavioural artifacts re-run and Frida reports re-emitted in
+one pass, and all three re-gated clean. The five-line comment statuses in that file were corrected to VERIFIED in
+the same change, clearing the warnings the gate had been reporting.
+
+Verified count 68 -> 69; paired matches 74 -> 75; candidate-unreachable 17 -> 16; mismatches 0.
+
+### A comment-only edit is still an implementation change
+
+While correcting the five-line comment statuses in `qvm_stack_natives.cpp` in the same change, the staged gate
+rejected all three records again: the evidence binds to the SHA-256 of the whole implementation file, so a
+comment edit invalidates it exactly like a code edit. The fix was to revert the cosmetic lines rather than run a
+second evidence cascade; the digest returned to the value the artifacts were generated against and the staged gate
+passed.
+
+The rule: never edit an implementation file for cosmetics. Either batch the cosmetic change into a real change and
+regenerate the cascade once, or leave the warning. The gate's comment-status warning is cheaper than a stale
+digest, and a stale digest is a false claim about evidence coverage.
