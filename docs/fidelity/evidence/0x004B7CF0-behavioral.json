@@ -1,24 +1,332 @@
 {
- "address": "0x004B7CF0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004B7CF0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+  "method": "Retail and the compiled candidate both execute the native with the renderer callback modelled by the same fold over the three packet slots, so the backend-id write and the slot marshalling are compared through the returned value as well as through the state delta.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004B7CF0",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "586a84bd10757400fdddf0b2c7e08995088b37a63b0c51d6e234d51996a15df8"
+  },
+  "cases": [
+    {
+      "id": "arg3-0x0000",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x0000"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 28672,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28672,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x0001",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x0001"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 28673,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28673,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x0002",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x0002"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 28674,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28674,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x007f",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x007F"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 28799,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28799,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x0080",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x0080"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 28800,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28800,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x00ff",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x00FF"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 28927,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 28927,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0x1000",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0x1000"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 24576,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 24576,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
+    },
+    {
+      "id": "arg3-0xffff",
+      "input": {
+        "args": [
+          "0x3000",
+          "0x4000",
+          "0xFFFF"
+        ],
+        "initial_state": {
+          "backend_id": 42,
+          "dispatch_slot": 2
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 36863,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 36863,
+        "state_delta": {
+          "backend_id": 42
+        },
+        "side_effects": [
+          "call:dispatch[2]"
+        ]
+      }
     }
-   },
-   "note": "The candidate Texture_UploadPalettePacket reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/texture_palette_upload_diff_runner.py",
+    "sha256": "49a01cd50b2d9b336c8048c0ed83ba14ed8380734f783c9d69476bcdec175451",
+    "command": [
+      "scripts/texture_palette_upload_diff_runner.py",
+      "--address",
+      "0x004B7CF0",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/texture/texture_loaders.cpp",
+      "--implementation-sha256",
+      "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+      "--root",
+      "."
+    ]
   }
- ]
 }

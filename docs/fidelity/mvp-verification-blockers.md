@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 65 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 66 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 65 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 66 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1007,3 +1007,23 @@ free-hook stub (answering 1, inside the observed set) around the call and resets
 `Resource_Unload` nor any later native gains a new class.
 
 Verified count 64 -> 65; paired matches 70 -> 71; candidate-unreachable 21 -> 20; mismatches 0.
+
+## Texture_UploadPalettePacket: a runner that exercises the marshalling, not just the return
+
+`Texture_UploadPalettePacket` (0x004B7CF0) was STRUCTURALLY_VERIFIED and unreachable. Its contract is a write
+(the active backend id into `*arg1`), a three-slot packet pack (slot 0 = arg1, slot 1 = arg3, slot 2 = arg2) and a
+dispatch through the renderer callback table at `0x00A94E84[g_a84a48]`.
+
+The runner (`scripts/texture_palette_upload_diff_runner.py`) models the callback identically on both sides with a
+fold over the three packet slots, so a wrong slot order or a mishandled write changes the returned value rather
+than hiding behind a constant. It sets the real globals on each side - retail `0x00A84A48` / `0x00A94E84` /
+`0x00A94A64` and the candidate's own symbols - and compares the return value, the written backend id and the
+dispatch side effect across eight cases. The trailing-parameter symbol trap resurfaced here: demangled names have
+to drop the parameter list while keeping `(anonymous namespace)`, which is why the earlier `split("(")` attempt
+failed and a trailing-only regex succeeded.
+
+The capture fixture sets dispatch slot 2 and answers a pointer through the host stub, reproduces retail's pointer
+class, and leaves the backend id at 0 so the nested `Texture_GetActiveBackendId` call stays inside its
+retail-observed classes.
+
+Verified count 65 -> 66; paired matches 71 -> 72; candidate-unreachable 20 -> 19; mismatches 0.

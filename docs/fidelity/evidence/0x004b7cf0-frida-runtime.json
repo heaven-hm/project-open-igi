@@ -1,0 +1,48 @@
+{
+ "schema_version": 1,
+ "kind": "frida-runtime-report",
+ "result": "passed",
+ "address": "0x004b7cf0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+ "candidate_executable_sha256": "586a84bd10757400fdddf0b2c7e08995088b37a63b0c51d6e234d51996a15df8",
+ "retail_observed_calls": 4,
+ "candidate_observed_calls": 1,
+ "matched_calls": 1,
+ "probe_sha256": "0e20b059058dd39f92db46548a50bc5261f084abffd05a4997b6108b12584d2a",
+ "candidate_executable": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-verify-noinline/igi1.exe",
+ "candidate_build": {
+  "kind": "verification-noinline",
+  "note": "The probe ran against a verification build of the same sources with inlining and interprocedural constant propagation disabled, because the release build inlines most natives and leaves no call site for an entry hook to observe. Inlining is semantics-preserving; the only build difference is that optimisation."
+ },
+ "captureMode": "sequential",
+ "level": 5,
+ "native_name": "Texture_UploadPalettePacket",
+ "addresses": {
+  "retail_va": "0x004B7CF0",
+  "candidate_va": "0x00422800"
+ },
+ "comparison": {
+  "basis": "reachability plus return-value class set",
+  "return_comparison": "classes",
+  "return_comparability_reason": "the body writes EAX (lea eax, [esp]) before returning",
+  "retail_ret_classes": [
+   "ptr"
+  ],
+  "candidate_ret_classes": [
+   "ptr"
+  ],
+  "ret_classes_match": true,
+  "arguments_compared": false,
+  "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared."
+ },
+ "evidence": {
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-palette.json",
+  "paired_capture_sha256": "986a81dfe85d34d3922853108ec2dc56d5af9015e4aad95a44d877393c5863da"
+ },
+ "limitations": [
+  "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",
+  "The probe classifies arguments and return values as null, a small exact value, or a pointer. Values behind pointers are not read, so this does not evaluate the data a native computes.",
+  "This report establishes that the native was reached in both images and returned the same class of value for the configured level run. It does not establish behavioural parity or any side effect."
+ ]
+}

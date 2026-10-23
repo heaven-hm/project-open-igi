@@ -164,6 +164,13 @@ std::int32_t probe_free_memory_one_stub(igi::retail::resource::ResourceHashNode*
     return 1;
 }
 
+// Renderer callback for the palette upload: any pointer-shaped answer reproduces the retail pointer class.
+std::int32_t probe_palette_callback_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return 0x61000020;
+}
+
 // Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
 // enough to take the branch that allocates and returns the loader block.
 void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
@@ -2642,6 +2649,19 @@ int RunRetailModelScene(HINSTANCE instance,
             static_cast<void>(
                 igi::retail::texture::Terrain_LoadTexturePackage(terrain_package_path));
             igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
+        // Texture_UploadPalettePacket. Retail returned a pointer. The renderer callback at dispatch slot 2
+        // answers a pointer through the host stub, and the backend id is left at 0 so the nested
+        // Texture_GetActiveBackendId call stays inside the classes retail observed for it.
+        {
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(
+                2, &probe_palette_callback_stub);
+            std::int32_t palette_packet[4]{};
+            alignas(8) std::uint8_t palette_payload[0x20]{};
+            static_cast<void>(igi::retail::texture::Texture_UploadPalettePacket(
+                palette_packet, palette_payload, 0x40));
         }
 
         // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the
