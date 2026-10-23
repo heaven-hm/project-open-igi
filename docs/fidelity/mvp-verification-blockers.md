@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 71 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 73 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 71 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 73 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1200,3 +1200,27 @@ retail returns the object instead of pushing. The fixture replays seven valid pu
 observed class set `{1..7}` exactly - no override needed. Strict gate passed.
 
 Verified count 70 -> 71; paired matches 76 -> 77; candidate-unreachable 15 -> 14; mismatches 0.
+
+## The two bounded-push natives, and two harness traps worth remembering
+
+`TextureModifier_Push` (0x00505E40) and `HeightMap_Enter` (0x00506F00) share the same shape as the lightmap push
+proven in round 117: validate a source row selected by the counter, store a value from the object onto a host
+stack, set a flag, return an index. Retail returned `{1..8}` and `{1..3}` respectively, which the fixtures reproduce
+exactly with 8 and 3 accepted pushes. Both runners pass 8/8 and both strict gates are clean.
+
+Three traps cost time here and are worth writing down:
+
+1. **The symbol matcher found the wrong function.** The first run of the texture-modifier harness resolved
+   `0x41d610` (`TerrainLightMap_PushEntry`) instead of `0x41d540`, because the copied harness still carried the
+   lightmap symbol names in its wanted set. The candidate then executed a *different native* and returned the state
+   pointer, which looks like a contract mismatch but is a harness bug. Always print the resolved symbol addresses
+   before trusting a failure.
+2. **Demangled anonymous-namespace names break qualified matching.** `g_b97d40` and `g_b97df4` demangle as
+   `igi::retail::terrain::(anonymous namespace)::g_b97d40`, so a qualified name like
+   `igi::retail::terrain::g_b97d40` never matches `endswith`. Match the bare identifier.
+3. **A retail global can be a dead store in the port.** `HeightMap_Enter` writes `g_ba2058` (retail `0x00BA2058`),
+   but nothing in the port reads it, so the compiler eliminated the symbol and the write entirely. The harness
+   therefore compares the returned active index, the stack index, the stored value and the flag, and records that
+   the global is not part of the comparison rather than pretending to check it.
+
+Verified count 71 -> 73; paired matches 77 -> 79; candidate-unreachable 14 -> 12; mismatches 0.

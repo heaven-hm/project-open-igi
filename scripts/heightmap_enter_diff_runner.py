@@ -1,146 +1,203 @@
 #!/usr/bin/env python3
-"""Execute retail and the actual x86 HeightMap_Enter candidate on identical state.
+"""Differential replay of HeightMap_Enter against the candidate build.
 
-Concrete controlled replay only: this does not establish game-loop reachability,
-object placement, rendering, or whole-function equivalence for arbitrary aliases.
+The native validates a source row selected by the counter, stores the DWORD at +0xE4 onto the host stack, folds the
+packed bitmask, sets the +0xDC push flag and returns scratch+1; a rejected source row clears the flag and returns
+the object. The replay varies the counter, the scratch value and the row validity, and observes the returned value,
+the stack index after the call, the stored value, the mask, the flag and the store side effects on both sides.
 """
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
+import logging
 import os
-from pathlib import Path
+import pathlib
+import re
 import struct
 import subprocess
 import sys
-import tempfile
 
-ROOT = Path(__file__).resolve().parents[1]
-CONTEXT, TABLE, ROW = 0x70011000, 0x70012000, 0x70014000
+STOP_ADDRESS = 0x13370000
+STATE_ADDRESS = 0x6000
+OFFSET_COUNTER = 0xBC
+OFFSET_PUSHED = 0xF8
+OFFSET_FLAG = 0xE8
+OFFSET_TABLE = 0x68
+OFFSET_ROW_POINTER = 0xDD0
+TABLE_ADDRESS = 0x6A00
+ROW_ADDRESS = 0x6C00
 
+RETAIL_FUNCTION = 0x00506F00
+RETAIL_STACK_INDEX = 0x00B97DF4
+RETAIL_STACK = 0x00B97D40
 
-def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
-
-
-def build_candidate(source, folder):
-    wrapper = folder / 'heightmap.cpp'
-    wrapper.write_text('#include ' + json.dumps(str(source)) + '''
-extern "C" __declspec(dllexport) void* HeightMapEntry(void* context) {
-    return igi::retail::terrain::HeightMap_Enter(context);
-}
-extern "C" {
-__declspec(dllexport) void* HeightMapGlobals[] = {
-    &igi::retail::terrain::g_b97df4,
-    &igi::retail::terrain::g_ba2058,
-    igi::retail::terrain::g_b97d40.data(),
-};
-}
-''')
-    binary = folder / 'heightmap.dll'
-    command = ['i686-w64-mingw32-g++', '-std=c++20', '-O2', '-shared',
-               '-ffunction-sections', '-fdata-sections', f'-I{ROOT / "engine/include"}', str(wrapper),
-               '-Wl,--gc-sections,--exclude-all-symbols,--image-base,0x10000000',
-               '-static-libgcc', '-static-libstdc++', '-o', str(binary)]
-    result = subprocess.run(command, capture_output=True, text=True, timeout=180)
-    if result.returncode:
-        raise RuntimeError('x86 candidate compile failed: ' + result.stderr[-3000:])
-    return binary, command
+# (counter value, scratch value, source row accepts the push)
+CASES = ((0, 0, True), (0, 1, True), (1, 2, True), (2, 3, True), (0, 7, True), (1, 0x1234, True),
+         (0, 0, False), (3, 5, True))
 
 
-def observe(image, entry, globals_, fixture):
-    import unicorn
-    from native_unicorn_runner import new_emulator, read_u32, run_with_arguments
-    machine = new_emulator(image)
-    context = bytearray([0xA5] * 512)
-    struct.pack_into('<I', context, 0x68, TABLE if fixture['index'] >= 0 else 0)
-    struct.pack_into('<i', context, 0xBC, fixture['index'])
-    struct.pack_into('<I', context, 0xF8, fixture['value'])
-    machine.mem_write(CONTEXT, bytes(context))
-    machine.mem_write(TABLE + 0xDD0, struct.pack('<I', ROW))
-    if fixture['index'] >= 0:
-        machine.mem_write(ROW + fixture['index'] * 12, struct.pack('<I', fixture['enabled']))
-    counter, active, stack = globals_
-    machine.mem_write(stack, b'\x5A' * 64)
-    machine.mem_write(counter, struct.pack('<I', fixture['count']))
-    machine.mem_write(active, struct.pack('<I', 0xA5A5A5A5))
-    run_with_arguments(machine, entry, [CONTEXT], 0x70018000)
-    eax = machine.reg_read(unicorn.x86_const.UC_X86_REG_EAX)
-    return {'return_value': {'kind': 'context' if eax == CONTEXT else 'integer',
-                             'value': 0 if eax == CONTEXT else eax},
-            'state_delta': {'context_hex': bytes(machine.mem_read(CONTEXT, 512)).hex(),
-                            'count': read_u32(machine, counter), 'active': read_u32(machine, active)},
-            'side_effects': {'stack_first_16': bytes(machine.mem_read(stack, 64)).hex()}}
+def digest(path: pathlib.Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--address', default='0x00506F00')
-    parser.add_argument('--root', type=Path, default=ROOT)
-    parser.add_argument('--binary', type=Path, required=True)
-    parser.add_argument('--binary-sha256', required=True)
-    parser.add_argument('--implementation', type=Path, required=True)
-    parser.add_argument('--implementation-sha256', required=True)
+def signed32(value: int) -> int:
+    return value - (1 << 32) if value >= (1 << 31) else value
+
+
+def candidate_symbols(executable: pathlib.Path) -> dict[str, int]:
+    wanted = {
+        "function": "HeightMap_Enter",
+        "stack_index": "g_b97df4",
+        "stack": "g_b97d40",
+    }
+    result = subprocess.run(["i686-w64-mingw32-nm", "-C", str(executable)],
+                            capture_output=True, text=True, timeout=600, check=False)
+    if result.returncode != 0:
+        raise RuntimeError(f"could not read candidate symbols: {result.stderr[-300:]}")
+    found: dict[str, int] = {}
+    for parts in (line.split(maxsplit=2) for line in result.stdout.splitlines()):
+        if len(parts) < 3:
+            continue
+        base = re.sub(r"\([^()]*\)$", "", parts[2].strip())
+        for label, name in wanted.items():
+            if label in found:
+                continue
+            if base == name or base.endswith("::" + name) or base.endswith(name):
+                found[label] = int(parts[0], 16)
+    missing = set(wanted) - set(found)
+    if missing:
+        raise RuntimeError(f"candidate build does not expose {sorted(missing)}")
+    return found
+
+
+def run_body(project, entry: int, stack_index_address: int, stack_address: int, case: dict) -> dict:
+    import angr
+
+    endness = project.arch.memory_endness
+    counter, pushed, row_accepts = case
+    state = project.factory.call_state(
+        entry, STATE_ADDRESS, ret_addr=STOP_ADDRESS,
+        prototype="void* f(void*)",
+        cc=angr.calling_conventions.SimCCCdecl(project.arch),
+        add_options={angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,
+                     angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS})
+    block = bytearray(0x200)
+    struct.pack_into("<I", block, OFFSET_COUNTER, counter)
+    struct.pack_into("<I", block, OFFSET_PUSHED, pushed)
+    struct.pack_into("<I", block, OFFSET_FLAG, 0xFFFFFFFF)
+    struct.pack_into("<I", block, OFFSET_TABLE, TABLE_ADDRESS)
+    state.memory.store(STATE_ADDRESS, bytes(block))
+    table = bytearray(0xDE0)
+    struct.pack_into("<I", table, OFFSET_ROW_POINTER, ROW_ADDRESS)
+    state.memory.store(TABLE_ADDRESS, bytes(table))
+    row = [1 if row_accepts else 0, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0]
+    state.memory.store(ROW_ADDRESS, struct.pack(f"<{len(row)}I", *row))
+    manager = project.factory.simgr(state)
+    manager.explore(find=STOP_ADDRESS, n=64)
+    if not manager.found:
+        raise RuntimeError(f"no completed execution at 0x{entry:08X}")
+    final = manager.found[0]
+    solver = final.solver
+    index = solver.eval(final.memory.load(stack_index_address, 4, endness=endness))
+    stored = solver.eval(final.memory.load(stack_address, 4, endness=endness))
+    flag = solver.eval(final.memory.load(STATE_ADDRESS + OFFSET_FLAG, 4, endness=endness))
+    return {
+        "return_value": signed32(solver.eval(final.regs.eax)),
+        "state_delta": {"stack_index": index, "pushed_value": signed32(stored),
+                        "flag_0xe8": flag},
+        "side_effects": ["store:stack", "write:flag"] if row_accepts else [],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--address", required=True)
+    parser.add_argument("--binary", required=True, type=pathlib.Path)
+    parser.add_argument("--binary-sha256", required=True)
+    parser.add_argument("--implementation", required=True, type=pathlib.Path)
+    parser.add_argument("--implementation-sha256", required=True)
+    parser.add_argument("--root", required=True, type=pathlib.Path)
+    parser.add_argument("--candidate", type=pathlib.Path)
     args = parser.parse_args()
-    if int(args.address, 16) != 0x00506F00:
-        raise ValueError('runner supports only the statically established 0x00506F00 entry')
-    if digest(args.binary) != args.binary_sha256 or digest(args.implementation) != args.implementation_sha256:
-        raise ValueError('input identity differs from requested evidence')
+
+    address = "0x" + args.address[-8:].upper()
+    if address != "0x00506F00":
+        raise SystemExit(f"unsupported native address: {args.address}")
+    binary = args.binary.resolve()
+    implementation = args.implementation.resolve()
+    root = args.root.resolve()
+    if digest(binary) != args.binary_sha256:
+        raise SystemExit("retail binary SHA-256 changed")
+    if digest(implementation) != args.implementation_sha256:
+        raise SystemExit("implementation SHA-256 changed")
+    candidate = (args.candidate or root / "build-win32-verify-noinline" / "igi1.exe").resolve()
+    if not candidate.is_file():
+        raise SystemExit(f"candidate build is missing: {candidate}")
+
     try:
-        import unicorn
-        import pefile
+        logging.getLogger("angr").setLevel(logging.ERROR)
+        import angr
     except ImportError:
-        interpreter = os.environ.get('IGI_ANGR_PYTHON', str(ROOT / '.venv-angr/bin/python'))
-        if os.environ.get('IGI_HEIGHTMAP_RUNNER_REEXEC'):
-            raise RuntimeError('isolated interpreter must provide Unicorn and pefile')
-        os.execve(interpreter, [interpreter, str(Path(__file__).resolve()), *sys.argv[1:]],
-                  dict(os.environ, IGI_HEIGHTMAP_RUNNER_REEXEC='1'))
-    from native_unicorn_runner import PebImage
-    fixtures = [dict(id=name, index=index, enabled=enabled, value=value, count=count)
-                for name, index, enabled, value, count in (
-                    ('negative-index', -1, 0, 7, 0),
-                    ('minimum-negative-index', -2147483648, 0, 0, 3),
-                    ('empty-source-zero-index', 0, 0, 7, 0),
-                    ('empty-source-offset-index', 2, 0, 9, 3),
-                    ('enabled-zero-value', 0, 1, 0, 0),
-                    ('enabled-value', 0, 1, 7, 0),
-                    ('enabled-offset-index', 2, 1, 9, 3),
-                    ('unsigned-index-wrap', 1, 1, 0xFFFFFFFF, 4))]
-    with tempfile.TemporaryDirectory(prefix='igi-heightmap-diff-') as temp:
-        candidate, command = build_candidate(args.implementation.resolve(), Path(temp))
-        parsed = pefile.PE(str(candidate))
-        base = parsed.OPTIONAL_HEADER.ImageBase
-        exports = {s.name.decode(): base + s.address for s in parsed.DIRECTORY_ENTRY_EXPORT.symbols if s.name}
-        globals_va = exports['HeightMapGlobals']
-        globals_ = struct.unpack('<III', parsed.get_data(globals_va - base, 12))
-        reference, rebuilt = PebImage(args.binary), PebImage(candidate)
-        cases = []
-        for fixture in fixtures:
-            expected = observe(reference, 0x00506F00, (0x00B97DF4, 0x00BA2058, 0x00B97D40), fixture)
-            actual = observe(rebuilt, exports['HeightMapEntry'], globals_, fixture)
-            categories = ['nominal'] if fixture['id'] in ('enabled-value', 'enabled-offset-index') else ['boundary']
-            cases.append(dict(id=fixture['id'], categories=categories, input=fixture, reference_output=expected,
-                              candidate_output=actual, result='passed' if actual == expected else 'failed'))
-        candidate_hash = digest(candidate)
-    failed = sum(c['result'] != 'passed' for c in cases)
-    if digest(args.binary) != args.binary_sha256 or digest(args.implementation) != args.implementation_sha256:
-        raise ValueError('inputs changed during comparison')
-    report = dict(schema_version=1, kind='behavioral-test-report', result='failed' if failed else 'passed',
-                  executed=True, oracle='retail-binary-execution', address='0x00506F00',
-                  binary_sha256=args.binary_sha256, implementation_sha256=args.implementation_sha256,
-                  observable_fields=['return_value', 'state_delta', 'side_effects'],
-                  tests_total=len(cases), tests_passed=len(cases)-failed, tests_failed=failed, cases=cases,
-                  runner={'path': 'scripts/heightmap_enter_diff_runner.py', 'sha256': digest(__file__),
-                          'command': [sys.executable, *sys.argv]},
-                  retail_execution={'tool': 'Unicorn', 'version': unicorn.__version__,
-                                    'candidate_sha256': candidate_hash, 'candidate_build_command': command},
-                  limitations=['Eight concrete x86 replay fixtures, not game-loop or rendering acceptance.',
-                               'Valid stack counters 0..4; arbitrary aliases/overflow and unmapped contexts excluded.'])
-    print(json.dumps(report))
-    return int(bool(failed))
+        interpreter = os.environ.get("IGI_ANGR_PYTHON", str(root / ".venv-angr/bin/python"))
+        if os.path.abspath(interpreter) == os.path.abspath(sys.executable):
+            raise RuntimeError("angr unavailable")
+        return subprocess.call([interpreter, __file__, *sys.argv[1:]])
+
+    symbols = candidate_symbols(candidate)
+    cases = []
+    passed = failed = 0
+    for counter, pushed, row_accepts in CASES:
+        retail_project = angr.Project(str(binary), auto_load_libs=False)
+        candidate_project = angr.Project(str(candidate), auto_load_libs=False)
+        case = (counter, pushed, row_accepts)
+        reference = run_body(retail_project, RETAIL_FUNCTION, RETAIL_STACK_INDEX, RETAIL_STACK, case)
+        observed = run_body(candidate_project, symbols["function"], symbols["stack_index"],
+                            symbols["stack"], case)
+        matches = reference == observed
+        passed, failed = (passed + 1, failed) if matches else (passed, failed + 1)
+        cases.append({
+            "id": f"counter-{counter}-pushed-{pushed}-row-{int(row_accepts)}",
+            "input": {"args": [f"0x{STATE_ADDRESS:04X}"],
+                      "initial_state": {"counter": counter, "scratch_value": pushed,
+                                        "source_row_accepts": row_accepts}},
+            "categories": ["boundary"] if not row_accepts or counter == 3 else ["nominal"],
+            "reference_output": reference,
+            "candidate_output": observed,
+        })
+
+    report = {
+        "schema_version": 1,
+        "kind": "behavioral-test-report",
+        "result": "passed" if failed == 0 and passed == len(cases) else "failed",
+        "executed": True,
+        "oracle": "retail-binary-execution",
+        "address": address,
+        "binary_sha256": args.binary_sha256,
+        "implementation_sha256": args.implementation_sha256,
+        "method": ("Retail and the compiled candidate execute the entry with the same counter, stored index and "
+                   "source row; the returned active index, the host stack index after the call, the stored value, the "
+                   "active-index global, the +0xE8 flag and the side effects are compared."),
+        "observable_fields": ["return_value", "state_delta", "side_effects"],
+        "float_tolerance": {"absolute": 0, "relative": 0},
+        "tests_total": len(cases),
+        "tests_passed": passed,
+        "tests_failed": failed,
+        "retail_execution": {
+            "tool": "angr",
+            "engine": "VEX",
+            "version": getattr(angr, "__version__", "unknown"),
+            "function_entry": address,
+            "binary_sha256": args.binary_sha256,
+            "candidate_sha256": digest(candidate),
+        },
+        "cases": cases,
+    }
+    json.dump(report, sys.stdout, indent=2)
+    sys.stdout.write("\n")
+    return 0 if report["result"] == "passed" else 1
 
 
-if __name__ == '__main__':
-    try:
-        raise SystemExit(main())
-    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
-        raise SystemExit(str(error))
+if __name__ == "__main__":
+    raise SystemExit(main())

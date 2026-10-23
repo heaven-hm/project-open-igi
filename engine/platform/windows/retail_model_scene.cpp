@@ -2743,6 +2743,39 @@ int RunRetailModelScene(HINSTANCE instance,
             }
         }
 
+        // TextureModifier_Push. Retail returned scratch+1 for eight accepted pushes, so the fixture replays eight
+        // accepted pushes with scratch values 0..7 and reproduces the observed class set {1..8}.
+        {
+            alignas(8) std::uint8_t modifier_bytes[0x200]{};
+            static std::uint8_t modifier_table[0xDE0]{};
+            static std::uint32_t modifier_row[3] = {1, 0, 0};
+            *reinterpret_cast<std::uint32_t*>(modifier_table + 0xDCC) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(modifier_row));
+            *reinterpret_cast<std::uint32_t*>(modifier_bytes + 0x68) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(modifier_table));
+            for (std::uint32_t index = 0; index < 8; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(modifier_bytes + 0xE4) = index;
+                static_cast<void>(igi::retail::terrain::TextureModifier_Push(modifier_bytes));
+            }
+        }
+
+        // HeightMap_Enter. Retail returned the incremented heightmap index (1..3) across three accepted entries.
+        {
+            alignas(8) std::uint8_t heightmap_bytes[0x200]{};
+            static std::uint8_t heightmap_table[0xDE0]{};
+            static std::uint32_t heightmap_row[3] = {1, 0, 0};
+            *reinterpret_cast<std::uint32_t*>(heightmap_table + 0xDD0) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(heightmap_row));
+            *reinterpret_cast<std::uint32_t*>(heightmap_bytes + 0x68) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(heightmap_table));
+            for (std::uint32_t index = 0; index < 3; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(heightmap_bytes + 0xF8) = index;
+                static_cast<void>(igi::retail::terrain::HeightMap_Enter(heightmap_bytes));
+            }
+        }
+
         // Iff_FindChunkBelowForm. The retail walk returns a form node whose form type matches and null when
         // nothing matches; a two-node sibling list replays both observed classes {ptr, null}.
         {
