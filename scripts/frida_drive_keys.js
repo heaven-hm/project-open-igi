@@ -13,15 +13,25 @@
 // byte-identical and its recorded hash keeps meaning what it says.
 
 const user32 = {
-  sendInput: new NativeFunction(Module.getExportByName('user32.dll', 'SendInput'),
+  sendInput: new NativeFunction(Module.getGlobalExportByName('SendInput'),
     'uint', ['uint', 'pointer', 'int']),
-  foreground: new NativeFunction(Module.getExportByName('user32.dll', 'GetForegroundWindow'),
+  findWindow: new NativeFunction(Module.getGlobalExportByName('FindWindowA'),
+    'pointer', ['pointer', 'pointer']),
+  setForeground: new NativeFunction(Module.getGlobalExportByName('SetForegroundWindow'),
+    'int', ['pointer']),
+  bringToTop: new NativeFunction(Module.getGlobalExportByName('BringWindowToTop'),
+    'int', ['pointer']),
+  showWindow: new NativeFunction(Module.getGlobalExportByName('ShowWindow'),
+    'int', ['pointer', 'int']),
+  className: new NativeFunction(Module.getGlobalExportByName('GetClassNameA'),
+    'int', ['pointer', 'pointer', 'int']),
+  foreground: new NativeFunction(Module.getGlobalExportByName('GetForegroundWindow'),
     'pointer', []),
-  clientRect: new NativeFunction(Module.getExportByName('user32.dll', 'GetClientRect'),
+  clientRect: new NativeFunction(Module.getGlobalExportByName('GetClientRect'),
     'int', ['pointer', 'pointer']),
-  clientToScreen: new NativeFunction(Module.getExportByName('user32.dll', 'ClientToScreen'),
+  clientToScreen: new NativeFunction(Module.getGlobalExportByName('ClientToScreen'),
     'int', ['pointer', 'pointer']),
-  setCursorPos: new NativeFunction(Module.getExportByName('user32.dll', 'SetCursorPos'),
+  setCursorPos: new NativeFunction(Module.getGlobalExportByName('SetCursorPos'),
     'int', ['int', 'int'])
 };
 
@@ -29,6 +39,29 @@ const INPUT_SIZE = 28;          // sizeof(INPUT) on 32-bit Windows
 const KEYUP = 0x0002;
 const MOUSE_LEFT_DOWN = 0x0002;
 const MOUSE_LEFT_UP = 0x0004;
+
+// The image is started windowed but Wine leaves its own desktop window in front, so
+// SendInput would land on the desktop. Grab the game window by its retail class name.
+const GAME_CLASS = Memory.allocUtf8String('Innerloop');
+const SW_SHOW = 5;
+
+function ensureFocus() {
+  const window = user32.foreground();
+  if (!window.isNull()) {
+    const name = Memory.alloc(128);
+    user32.className(window, name, 128);
+    if (name.readUtf8String() === 'Innerloop') {
+      return;
+    }
+  }
+  const game = user32.findWindow(GAME_CLASS, NULL);
+  if (game.isNull()) {
+    return;
+  }
+  user32.showWindow(game, SW_SHOW);
+  user32.bringToTop(game);
+  user32.setForeground(game);
+}
 
 function blank() {
   const buffer = Memory.alloc(INPUT_SIZE);
@@ -39,6 +72,7 @@ function blank() {
 }
 
 function press(virtualKey) {
+  ensureFocus();
   const down = blank();
   down.writeU32(1);                  // INPUT_KEYBOARD
   down.add(4).writeU16(virtualKey);  // KEYBDINPUT.wVk
@@ -67,6 +101,7 @@ function clickMouse() {
 
 // Click at a fraction of the foreground window's client area.
 function clickAt(fractionX, fractionY) {
+  ensureFocus();
   const window = user32.foreground();
   if (window.isNull()) {
     return;
