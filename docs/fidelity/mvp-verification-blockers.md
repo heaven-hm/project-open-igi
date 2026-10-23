@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 90 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 91 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 90 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 91 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1635,3 +1635,24 @@ It is **not** verified yet, and the reason is evidence rather than behaviour: th
 `scripts/resource_sys_diff_runner.py` is the right home for a case like this - it already executes retail bytes and the
 compiled port side by side and can simulate the three callees the loop calls. That case is the next step; until it
 exists the register keeps this native out of the proven set, which is the honest state.
+
+## Round 132: the package-mesh loop gets a differential, so its reachability becomes evidence
+
+Round 131 made `DynObj_LoadPackageMeshes` (0x004CF330) reachable but could not verify it: the record's runner returned
+`unsupported native address`. The loop is now covered by a case in the dual-image harness
+(`scripts/resource_sys_diff_runner.py`), which executes the retail bytes and the freshly compiled port side by side
+under angr with identical modeled boundaries.
+
+What the case models, and why: the loop calls three things - `Ilff_FindFormChunk`, the mesh loader and
+`HeapList_Insert`. The form walker and mesh loader are replaced by the same answers on both sides, so the comparison
+covers the loop's own work: the count test, the NUL-terminated name walk, the per-name call order and the return
+identity. `HeapList_Insert` is deliberately left **native** on both sides, exactly as the container case does, so
+retail's own splice bytes and the port's own splice both run and the anchor chain is compared for real.
+
+Eleven cases: one/two/three/eight models; no models; a single-character name; a 63-character name; a backslash name; an
+empty name; an empty second name; and a negative count. The last four matter because they are the paths where a
+fixture that only exercises "normal" input would agree by accident - the empty-name walk advances by one byte, and a
+non-positive count returns the form payload pointer instead of null.
+
+All eleven cases agree on return class, inserted-node count, anchor chain and modeled call trace. Verified count
+90 -> 91; the candidate-unreachable group is now four.

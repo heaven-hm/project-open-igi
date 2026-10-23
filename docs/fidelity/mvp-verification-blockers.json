@@ -1284,6 +1284,7 @@
     "0x004CEAA0",
     "0x004CF080",
     "0x004CF300",
+    "0x004CF330",
     "0x004CF390",
     "0x004CF630",
     "0x004CF790",
@@ -1303,5 +1304,5 @@
     "0x00517940",
     "0x005179C0"
   ],
-  "verified_strict_gate_count": 90
+  "verified_strict_gate_count": 91
 }

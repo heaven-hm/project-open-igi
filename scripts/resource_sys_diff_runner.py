@@ -35,7 +35,7 @@ import subprocess
 import sys
 import tempfile
 
-SUPPORTED = {"0x004B5C90", "0x004B5F80", "0x004AAD10", "0x004B59F0", "0x004B60F0"}
+SUPPORTED = {"0x004B5C90", "0x004B5F80", "0x004AAD10", "0x004B59F0", "0x004B60F0", "0x004CF330"}
 
 STOP = 0x13370000
 NODE_BASE = 0x05B00000
@@ -57,6 +57,9 @@ RETAIL = {
     "container": 0x004B60F0,
     "match_prefix": 0x004AAD10,
     "insert": 0x004AF8F0,
+    "package_meshes": 0x004CF330,
+    "find_form": 0x004CEAA0,
+    "load_mesh": 0x004CF390,
     "free_data": 0x004B1A30,
     "error_show": 0x004AF7B0,
 }
@@ -65,6 +68,10 @@ CANDIDATE_HOOKS = ("Ilff_GetChunkTag", "Ilff_GetFormType", "Resource_CreateNode"
                    "Resource_RegisterIlffContainer", "Resource_MatchPrefix", "HeapList_Insert")
 
 COUNT_GLOBAL = 0x00943E28
+PACKAGE_PAYLOAD = 0x05C80000
+PACKAGE_CONTEXT = 0x05C81000
+PACKAGE_NODE_BASE = 0x05B40000
+PACKAGE_NODE_STRIDE = 0x100
 
 
 def digest(path: pathlib.Path) -> str:
@@ -155,16 +162,23 @@ __declspec(dllexport) std::int32_t NativeFreeData(void* data) {
     return 1;
 }
 
+#if IGI_HARNESS_NATIVE == 0x004B5F80
 __declspec(dllexport) void* NativeRegisterBuffer(const char* name, void* buffer, std::int32_t size) {
     Sys_SetAllocateMemory5(&NativeAllocate);
     Sys_SetOpenFileStream5(&NativeFreeData);
     return Resource_RegisterBuffer(name, buffer, size);
 }
 
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004AAD10
 __declspec(dllexport) std::int32_t NativeMatchCase(std::int32_t str1, std::int32_t str2, std::int32_t max_len) {
     return Resource_MatchPrefix(reinterpret_cast<const void*>(str1), reinterpret_cast<const void*>(str2), max_len);
 }
 
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004B5F80
 __declspec(dllexport) std::int32_t NativeListWalk(std::int32_t out_base) {
     // Walks the port's global hash list (Resource_GetHashRoot -> next chain) and stores the
     // visited node pointers; returns the count. The zeroed tail sentinel (next == nullptr)
@@ -183,6 +197,9 @@ __declspec(dllexport) std::int32_t NativeListWalk(std::int32_t out_base) {
     return count;
 }
 
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004B59F0
 __declspec(dllexport) std::int32_t NativeCreateCase(std::int32_t spec_count, std::int32_t specs_base) {
     Resource_InitPoolForTest(64);
     NativeNodeCount = 0;
@@ -203,6 +220,9 @@ __declspec(dllexport) std::int32_t NativeCreateCase(std::int32_t spec_count, std
     return NativeNodeCount;
 }
 
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004B60F0
 __declspec(dllexport) std::int32_t NativeContainerCase(std::int32_t name, std::int32_t buffer, std::int32_t meta) {
     Resource_InitPoolForTest(64);
     Sys_SetAllocateMemory5(&NativeAllocate);
@@ -215,6 +235,9 @@ __declspec(dllexport) std::int32_t NativeContainerCase(std::int32_t name, std::i
         reinterpret_cast<void*>(buffer), reinterpret_cast<const std::int32_t*>(meta));
 }
 
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004B5C90
 __declspec(dllexport) std::int32_t NativeFreeCase(std::int32_t node_count, std::int32_t free_index,
                                                   std::int32_t link_children) {
     Resource_InitPoolForTest(64);
@@ -246,6 +269,79 @@ __declspec(dllexport) std::int32_t NativeFreeCase(std::int32_t node_count, std::
     NativeCountAfter = Resource_GetActiveCount();
     return NativeRet;
 }
+
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004CF330
+} // extern "C"
+#endif
+
+#if IGI_HARNESS_NATIVE == 0x004CF330
+// Package-mesh loop callees. The loop calls the mesh loader and the form walker; both are
+// modeled here with the same answers the retail-side hooks give, so both sides execute the
+// same loop against identical boundaries.
+static std::uint32_t g_package_mesh_pool[8][0x40];
+static std::uint32_t g_package_payload = 0;
+static std::uint32_t g_package_mesh_index = 0;
+
+__declspec(dllexport) std::uint32_t NativePackageEvents[64][4];
+__declspec(dllexport) std::uint32_t NativePackageEventCount = 0;
+__declspec(dllexport) std::int32_t NativePackageRet = 0;
+__declspec(dllexport) std::uint32_t NativePackageInsertCount = 0;
+__declspec(dllexport) std::uint32_t NativePackageChain[8];
+
+namespace igi::retail::dynobj {
+void* Ilff_FindFormChunk(void* context, std::int32_t arg2, std::int32_t* arg3);
+void* DynObj_LoadModelMesh(const char* model_name);
+void* DynObj_LoadPackageMeshes(void* context);
+
+void* Ilff_FindFormChunk(void* context, std::int32_t arg2, std::int32_t* arg3) {
+    (void)context; (void)arg3;
+    NativePackageEvents[NativePackageEventCount][0] = 2;  // form lookup
+    NativePackageEvents[NativePackageEventCount][1] = static_cast<std::uint32_t>(arg2);
+    NativePackageEventCount++;
+    return reinterpret_cast<void*>(g_package_payload);
+}
+
+void* DynObj_LoadModelMesh(const char* model_name) {
+    std::uint32_t hash = 2166136261u;
+    for (const char* cursor = model_name; *cursor != '\0'; ++cursor) {
+        hash ^= static_cast<std::uint8_t>(*cursor);
+        hash *= 16777619u;
+    }
+    NativePackageEvents[NativePackageEventCount][0] = 3;  // mesh load
+    NativePackageEvents[NativePackageEventCount][1] = hash;
+    NativePackageEventCount++;
+    return g_package_mesh_pool[g_package_mesh_index++ & 7u];
+}
+} // namespace igi::retail::dynobj
+
+extern "C" {
+__declspec(dllexport) std::int32_t NativePackageCase(std::int32_t payload) {
+    g_package_payload = static_cast<std::uint32_t>(payload);
+    g_package_mesh_index = 0;
+    NativePackageEventCount = 0;
+    NativePackageInsertCount = 0;
+    static std::uint8_t context[0x40];
+    for (std::uint32_t index = 0; index < sizeof(context); ++index) {
+        context[index] = 0;
+    }
+    *reinterpret_cast<std::uint32_t*>(context + 0x08) = 0x12345678u;
+    const std::uint32_t base = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(context));
+    *reinterpret_cast<std::uint32_t*>(context + 0x14) = base + 0x18u;
+    *reinterpret_cast<std::uint32_t*>(context + 0x18) = base + 0x14u;
+    NativePackageRet = static_cast<std::int32_t>(reinterpret_cast<std::intptr_t>(
+        igi::retail::dynobj::DynObj_LoadPackageMeshes(context)));
+    std::uint32_t item = *reinterpret_cast<std::uint32_t*>(base + 0x14u);
+    std::uint32_t guard = 0;
+    while (item != base + 0x14u && item != 0 && guard < 8) {
+        NativePackageChain[NativePackageInsertCount++] = item;
+        item = *reinterpret_cast<std::uint32_t*>(item);
+        guard++;
+    }
+    return 0;
+}
+#endif
 }
 '''
 
@@ -262,6 +358,30 @@ def read_cstring(state, pointer: int, cap: int = 0x120) -> str:
 
 def read_block(state, pointer: int, length: int) -> str:
     return state.solver.eval(state.memory.load(pointer, length), cast_to=bytes).hex()
+
+
+def fnv1a(text: str) -> int:
+    value = 0x811C9DC5
+    for byte in text.encode("latin1"):
+        value = ((value ^ byte) * 0x01000193) & 0xFFFFFFFF
+    return value
+
+
+def package_class(value: int) -> str:
+    value &= 0xFFFFFFFF
+    if value == 0:
+        return "null"
+    if value < 0x10000:
+        return f"small:{value}"
+    return "ptr"
+
+
+def package_payload(fixture: dict) -> bytes:
+    count = fixture.get("count", len(fixture["names"]))
+    blob = bytearray((count & 0xFFFFFFFF).to_bytes(4, "little"))
+    for name in fixture["names"]:
+        blob += name.encode("latin1") + b"\x00"
+    return bytes(blob)
 
 
 def node_snapshot(state, node: int) -> dict:
@@ -294,7 +414,8 @@ def normalize_return(ret: int, count_after: int, node_addresses: list[int]) -> s
     return f"raw:0x{ret & 0xFFFFFFFF:08X}"
 
 
-def build_candidate(root: pathlib.Path, source: pathlib.Path, temp: pathlib.Path) -> tuple[pathlib.Path, list[str]]:
+def build_candidate(root: pathlib.Path, source: pathlib.Path, temp: pathlib.Path,
+                    address: int = 0) -> tuple[pathlib.Path, list[str]]:
     compiler = shutil.which("i686-w64-mingw32-g++")
     if compiler is None:
         raise RuntimeError("i686-w64-mingw32-g++ is required")
@@ -312,6 +433,8 @@ def build_candidate(root: pathlib.Path, source: pathlib.Path, temp: pathlib.Path
     ]
     candidate = temp / "resource_sys_candidate.dll"
     command = [compiler, "-std=c++20", "-O0", "-shared", "-fno-exceptions", "-fno-rtti",
+               "-ffunction-sections", "-fdata-sections", "-Wl,--gc-sections",
+               f"-DIGI_HARNESS_NATIVE=0x{address:08X}",
                "-static-libgcc", f"-I{root / 'engine/include'}", str(wrapper),
                *[str(p) for p in sources], "-o", str(candidate)]
     built = subprocess.run(command, cwd=root, text=True, capture_output=True, timeout=180)
@@ -417,6 +540,21 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
                 ("insert", self.state.solver.eval(anchor), self.state.solver.eval(item)),)
             return anchor
 
+    class FindForm(angr.SimProcedure):
+        def run(self, context, tag, out):
+            events = tuple(self.state.globals.get("events", ()))
+            self.state.globals["events"] = events + (("findform", self.state.solver.eval(tag)),)
+            return PACKAGE_PAYLOAD
+
+    class LoadMesh(angr.SimProcedure):
+        def run(self, name):
+            text = read_cstring(self.state, self.state.solver.eval(name), 0x40)
+            index = self.state.globals.get("mesh_index", 0)
+            self.state.globals["mesh_index"] = index + 1
+            events = tuple(self.state.globals.get("events", ()))
+            self.state.globals["events"] = events + (("loadmesh", fnv1a(text)),)
+            return PACKAGE_NODE_BASE + index * PACKAGE_NODE_STRIDE
+
     class FreeData(angr.SimProcedure):
         def run(self, data):
             events = tuple(self.state.globals.get("events", ()))
@@ -437,6 +575,7 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
         "container": "int f(char*, void*, void*, int*)",
         "matchprefix": "int f(void*, void*, int)", "insert": "void* f(void*, void**)",
         "freedata": "int f(void*)", "error": "int f(char*, char*)",
+        "findform": "void* f(void*, int, int*)", "loadmesh": "void* f(char*)",
     }
 
     def install_hooks(project, reference: bool) -> None:
@@ -450,10 +589,13 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
             "insert": RETAIL["insert"] if reference else None,
             "freedata": RETAIL["free_data"] if reference else None,
             "error": RETAIL["error_show"] if reference else None,
+            "findform": RETAIL["find_form"] if reference else None,
+            "loadmesh": RETAIL["load_mesh"] if reference else None,
         }
         procedures = {"alloc5": Alloc5, "tag": Tag, "form": Form, "create": CreateNodeModel,
                       "container": Container, "matchprefix": MatchPrefix, "insert": Insert,
-                      "freedata": FreeData, "error": ErrorModel}
+                      "freedata": FreeData, "error": ErrorModel, "findform": FindForm,
+                      "loadmesh": LoadMesh}
         active_ops = {
             "0x004B5F80": {"alloc5", "tag", "form", "create", "container", "matchprefix", "insert"},
             "0x004B5C90": {"freedata"},
@@ -464,13 +606,16 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
             "0x004B60F0": {"create", "error"},
             "0x004AAD10": set(),
             "0x004B59F0": set(),
+            # 0x004CF330: the loop's two callees are modeled on both sides; HeapList_Insert stays
+            # native so retail bytes and the port's own splice both run for real.
+            "0x004CF330": {"findform", "loadmesh"},
         }[address]
         for op, proc in procedures.items():
             if op not in active_ops:
                 continue
             target = mapping[op]
             if target is None:
-                if op == "freedata":
+                if op in ("freedata", "findform", "loadmesh"):
                     # The candidate reaches the free-data boundary through the port's own
                     # Sys_SetOpenFileStream5 hook; no image symbol hook is needed.
                     continue
@@ -648,6 +793,77 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
             "side_effects": [],
         }
 
+    def run_package(project, fixture, reference: bool, base_state=None) -> dict:
+        # 0x004CF330 is a loop over NUL-terminated model names: it reads the MODS payload through
+        # Ilff_FindFormChunk, loads each name through the mesh loader and splices the returned
+        # record into the intrusive list at context + 0x10. Both callees are modeled with the same
+        # answers on each side; HeapList_Insert stays native so retail bytes and the port's own
+        # splice both execute for real.
+        install_hooks(project, reference)
+        options = {angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,
+                   angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS}
+        payload = package_payload(fixture)
+        anchor = PACKAGE_CONTEXT + 0x14
+        if reference:
+            state = project.factory.call_state(
+                RETAIL["package_meshes"], PACKAGE_CONTEXT, ret_addr=STOP,
+                prototype="void* f(void*)",
+                cc=angr.calling_conventions.SimCCCdecl(project.arch), add_options=options)
+            state.memory.store(PACKAGE_CONTEXT + 0x08, b"\x78\x56\x34\x12")
+            state.memory.store(anchor, (PACKAGE_CONTEXT + 0x18).to_bytes(4, "little"))
+            state.memory.store(PACKAGE_CONTEXT + 0x18, anchor.to_bytes(4, "little"))
+            state.memory.store(PACKAGE_PAYLOAD, payload)
+            manager = project.factory.simgr(state)
+            manager.explore(find=STOP, num_find=1, n=200000)
+            if not manager.found:
+                raise RuntimeError(
+                    f"package case did not return: {[str(x.error) for x in manager.errored][:2]}")
+            final = manager.found[0]
+            ret = final.solver.eval(final.regs.eax)
+            events = [["findform", f"0x{event[1]:08X}"] if event[0] == "findform"
+                      else ["loadmesh", event[1]]
+                      for event in final.globals.get("events", ())]
+            chain = []
+            item = final.solver.eval(final.memory.load(anchor, 4, endness="Iend_LE"))
+            guard = 0
+            while item != anchor and item != 0 and guard < 8:
+                chain.append(package_class(item))
+                item = final.solver.eval(final.memory.load(item, 4, endness="Iend_LE"))
+                guard += 1
+        else:
+            state = project.factory.call_state(
+                symbol("NativePackageCase"), PACKAGE_PAYLOAD, ret_addr=STOP,
+                prototype="int f(int)", cc=angr.calling_conventions.SimCCCdecl(project.arch),
+                add_options=options)
+            state.memory.store(PACKAGE_PAYLOAD, payload)
+            manager = project.factory.simgr(state)
+            manager.explore(find=STOP, num_find=1, n=200000)
+            if not manager.found:
+                raise RuntimeError(
+                    f"package candidate case did not return: {[str(x.error) for x in manager.errored][:2]}")
+            final = manager.found[0]
+            ret = final.solver.eval(final.memory.load(symbol("NativePackageRet"), 4, endness="Iend_LE"))
+            event_count = final.solver.eval(
+                final.memory.load(symbol("NativePackageEventCount"), 4, endness="Iend_LE"))
+            events = []
+            for index in range(event_count):
+                base = symbol("NativePackageEvents") + index * 16
+                kind = final.solver.eval(final.memory.load(base, 4, endness="Iend_LE"))
+                value = final.solver.eval(final.memory.load(base + 4, 4, endness="Iend_LE"))
+                events.append(["findform", f"0x{value:08X}"] if kind == 2 else ["loadmesh", value])
+            chain_count = final.solver.eval(
+                final.memory.load(symbol("NativePackageInsertCount"), 4, endness="Iend_LE"))
+            chain = []
+            for index in range(chain_count):
+                value = final.solver.eval(final.memory.load(
+                    symbol("NativePackageChain") + index * 4, 4, endness="Iend_LE"))
+                chain.append(package_class(value))
+        return {
+            "return_value": package_class(ret),
+            "state_delta": {"inserted": len(chain), "chain": chain},
+            "side_effects": events,
+        }
+
     def write_spec_memory(state, fixture) -> None:
         for index, spec in enumerate(fixture["specs"]):
             name_bytes = (spec["name"] + "\x00").encode("latin1")
@@ -791,6 +1007,7 @@ def worker(binary: pathlib.Path, candidate: pathlib.Path, address: str) -> dict:
         "0x004AAD10": run_match,
         "0x004B59F0": run_create,
         "0x004B60F0": run_container,
+        "0x004CF330": run_package,
     }
     run_one = runners[address]
     observations = []
@@ -880,6 +1097,29 @@ def build_nested_chunk(tag_text: str, form_type: int, inner_chunks: list[tuple[s
     return tag_text, bytes(body)
 
 
+def build_package_cases() -> list[dict]:
+    def case(case_id: str, names: list[str], categories: tuple, count: int | None = None) -> dict:
+        fixture = {"id": case_id, "names": list(names), "categories": list(categories),
+                   "input": {"count": len(names) if count is None else count, "names": list(names)}}
+        if count is not None:
+            fixture["count"] = count
+        return fixture
+
+    return [
+        case("pkg-one-model", ["guard"], ("nominal",)),
+        case("pkg-two-models", ["guard", "soldier"], ("nominal",)),
+        case("pkg-three-models", ["guard", "soldier", "crate"], ("nominal",)),
+        case("pkg-eight-models", [f"model{i}" for i in range(8)], ("boundary",)),
+        case("pkg-no-models", [], ("boundary",)),
+        case("pkg-single-char-name", ["x"], ("boundary",)),
+        case("pkg-long-name", ["m" * 63], ("boundary",)),
+        case("pkg-backslash-name", ["LEVEL5\\GUARD"], ("boundary",)),
+        case("pkg-empty-name", [""], ("boundary",)),
+        case("pkg-empty-second-name", ["guard", ""], ("boundary",)),
+        case("pkg-negative-count", [], ("boundary",), count=-1),
+    ]
+
+
 def build_cases(address: str) -> list[dict]:
     cases: list[dict] = []
     if address == "0x004AAD10":
@@ -888,6 +1128,8 @@ def build_cases(address: str) -> list[dict]:
         return build_create_cases()
     if address == "0x004B60F0":
         return build_container_cases()
+    if address == "0x004CF330":
+        return build_package_cases()
     if address == "0x004B5F80":
         def add(case_id, *, tag, form, prefix, entries, name="LOCAL:HARNESS/REGISTER.NODE",
                 categories=("nominal",), raw_size=None):
@@ -1110,7 +1352,8 @@ def main() -> int:
 
     runner_hash = digest(pathlib.Path(__file__).resolve())
     with tempfile.TemporaryDirectory(prefix="igi-resource-sys-") as temp:
-        candidate, command = build_candidate(root, implementation, pathlib.Path(temp))
+        candidate, command = build_candidate(root, implementation, pathlib.Path(temp),
+                                            int(address, 16))
         candidate_hash = digest(candidate)
         executed = subprocess.run(
             [str(angr_python), str(pathlib.Path(__file__).resolve()), "--address", address,
