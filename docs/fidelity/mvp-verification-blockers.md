@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 53 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 55 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 53 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 55 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -825,3 +825,31 @@ The same runner also handles `Texture_EnableUpload` (0x004B26A0); the pattern no
 observable contract is "one store, then return".
 
 Verified count 52 -> 53, candidate-unreachable still 28, mismatches 0.
+
+## Two more runners, and two defects the runners caught
+
+`Resource_FileExists` (0x004B5B60) and `Flow_CreateHandler` (0x00402800) were matched for two rounds but pinned
+at STRUCTURALLY_VERIFIED: their behavioural runner was `native_diff_runner.py`, which answers "unsupported native
+address". Both now have real differential runners that execute retail and the compiled candidate binary.
+
+`scripts/resource_exists_diff_runner.py` replaces both callees of 0x004B5B60 - the cache probe at 0x004B5B90 and
+the opcode-7 dispatch at 0x004B1FC0 - with the same constant models on both sides, then compares the returned
+value across eight inputs covering both branches, signed results and an empty path. The candidate side executes
+at its linked symbol and points its `g_sys_dispatch_opcode_7` global at a hooked sentinel, so the dispatch is
+modelled rather than skipped.
+
+`scripts/flow_create_diff_runner.py` does the same for 0x00402800: retail reads the Flow class id from
+0x00567C7C and calls 0x004012A0, the candidate reads its own `QTask_FlowClassId` and calls its own registrar,
+and both registrars return a modelled constant. Eight object/class-id/result combinations are compared,
+including a null object, a high object address and class id 0xFFFF.
+
+Two bugs in the first drafts, both caught before they could produce a false pass:
+
+- angr silently ignores a second hook on the same address ("Not re-hooking") and keeps the first model. The
+  first `Resource_FileExists` run returned 1 for every case because the loaded-model from case one leaked into
+  the rest. Each case now loads fresh projects; the corrected run shows 1, 1, 0, 1, -1, 90, 1, 7 - the two
+  branches and the signed values are all exercised.
+- `claripy` is not a separately importable distribution in the isolated angr interpreter here. The runner now
+  passes integer arguments to `call_state`, which converts them itself.
+
+Verified count 53 -> 55; candidate-unreachable still 28; paired matches 63; mismatches 0.

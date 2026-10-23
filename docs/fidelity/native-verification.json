@@ -50967,7 +50967,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50977,7 +50977,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/flow_create_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -50992,7 +50992,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -51018,7 +51018,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402800-behavioral.json",
-          "evidence_sha256": "399b62636b6cb608c5a459ec8640921d3bb4b63d6738e3b4db6b32eda48155e3"
+          "evidence_sha256": "08b6f16ad348f25551322d7dcbdf3479bdb76861d859f753b04d05f7775fcbcd"
         },
         "frida_runtime": {
           "status": "PASS",
@@ -57572,7 +57572,7 @@
         "signature": "int __cdecl Resource_FileExists(const char* path);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57582,7 +57582,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/resource_exists_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -57597,7 +57597,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -57623,7 +57623,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B5B60-behavioral.json",
-          "evidence_sha256": "62bc40e448c0cc18536547e6b9bcf055b848c713ce5addcf6c56921036741be8"
+          "evidence_sha256": "847bcdbbd0b78a5d932ef256af3ebfb66cfbcf67d588f43bd99e21d0adcc28d9"
         },
         "frida_runtime": {
           "status": "PASS",
