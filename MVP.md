@@ -1,10 +1,12 @@
-# Project Open IGI — Level 1 Gameplay MVP
+# Project Open IGI — Playable Level 1 MVP and decompilation roadmap
 
 ## 1. Goal and authority
 
-Deliver one playable Project I.G.I. Level 1 mission in the reconstructed Windows x86 C++20 executable `igi1.exe`, using the original local assets and DirectDraw 7 / Direct3D 7. The player must load the level, move and interact, fight the required enemies, complete the actual authored objectives, and reach the mission success state. Death/failure and a repeatable restart path must also work.
+**Current MVP: load Level 1 with its original 3D models, terrain and textures, spawn the player, and make the original player camera, controls, movement, physics and required collision/interactions work.** Launch directly into the level through a retail-supported path. Menus, loading bars, loading text, sound, enemies and weapons are not prerequisites for this first playable delivery.
 
-**Keep Level 1 gameplay as the full MVP.** Deliver it through the milestones below. The first gameplay milestone is the player loop; a model viewer or walking demo does not complete the mission MVP. The number of required natives is determined by the Level 1 dependency closure, not by an arbitrary quota or the whole catalog.
+The later roadmap is explicitly ordered: **playable world/player → sound → enemies → weapons → mission completion → main menu, loading presentation and text**. Sound is a later stage, not permanently excluded. Enemies precede weapons: first validate their spawn, patrol, navigation and perception; integrate a complete armed encounter only once the weapon stage is reached. Full mission success/failure remains a later deliverable rather than the acceptance definition of the initial MVP.
+
+This is **decompilation reconstruction of retail IGI1**, following its original game methods and flow. The target is the original algorithms, data layouts, ABI, calculations, quirks, calls and state transitions recovered from the executable. Independent replacement gameplay, guessed FPS physics, convenient rewritten algorithms and source-port behavior are not acceptable evidence of decompilation fidelity. The implementation is Windows x86 C++20 `igi1.exe`, with original local assets and DirectDraw 7 / Direct3D 7.
 
 - Branch: `mvp/level1-integration`.
 - Only implementation checkout: `/Users/haseeb-mir/Documents/Code/project-open-igi`.
@@ -16,24 +18,22 @@ Deliver one playable Project I.G.I. Level 1 mission in the reconstructed Windows
 - Local diagnostic copy: `/Users/haseeb-mir/Downloads/IGI/igi1.exe`.
 - CrossOver is the local execution environment; the product target remains Windows x86.
 
-Read `AGENTS.md` for technical and evidence rules. This owner-requested mission scope supersedes the older inspection-only scope in its sections 10.10–10.12 and historical roadmaps. Its single-decompiler, ABI, evidence, runtime sequencing and source-preservation rules continue to apply. Complete the player milestone before promoting AI/combat into the active implementation slice.
+Read `AGENTS.md` for technical and evidence rules. This owner-requested staged scope supersedes both the earlier immediate-full-mission MVP and the older inspection-only scope in sections 10.10–10.12 and historical roadmaps. Its single-decompiler, ABI, evidence, runtime sequencing and source-preservation rules continue to apply. Complete the player milestone before promoting AI/combat into the active implementation slice.
 
 Execution plan: [tasks/plan.md](tasks/plan.md). Work checklist: [tasks/todo.md](tasks/todo.md). Ready-to-paste captain instructions: [DEEPSEEK_HANDOFF.md](DEEPSEEK_HANDOFF.md). The prior mixed roadmap/audit is preserved in [the historical document](docs/fidelity/MVP-before-captain-plan.md).
 
 ## 2. Scope
 
-| Required for this MVP | Deferred unless a required Level 1 dependency is demonstrated |
-|---|---|
-| Retail-supported startup, configuration, resource loading and simulation lifecycle | Other complete missions and whole-catalog native transcription |
-| Level 1 terrain, buildings, models, materials, original textures and authored placements | Menus, launcher polish, save/load UI and unrelated editor features |
-| Required QVM/task execution, native dispatch and entity state | Movies, cutscenes, decorative smoke and optional effects |
-| Player spawn, camera, controls, walk/run/crouch, jump/landing and required world collision | Audio, music and sound fidelity |
-| Authored doors, ladders, stairs and other interactions used by the actual mission route | Vehicles and optional actor/weapon types absent from the required route |
-| Required weapons, ammunition/reload, hit/damage/health/death, enemy navigation/perception/combat | Additional platforms and renderer modernization |
-| Gameplay animation/event synchronization and required inventory/mission items | Extra tools or upstream integrations without a demonstrated blocker |
-| Authored objectives, success/failure and repeatable restart | Universal behavior-equivalence claims beyond captured scenarios |
+| Stage | What to build | What is not required to accept that stage |
+|---|---|---|
+| **First playable MVP (M0–M2)** | Reliable native verification; retail direct-level startup; Level 1 models, terrain, textures/placements; required scripts/tasks; player spawn/camera, walk/run/crouch, jump/landing, physics/collision, one actual required interaction | Sound, enemies, weapons, mission completion, main menu, loading bar/text and decorative UI |
+| M3 — Sound | Original sound subsystem and currently reachable world/player sound events | Weapon-specific events before the weapon stage |
+| M4 — Enemies | Authored enemy spawn, patrol/navigation, perception and relevant animation/state behavior | A complete armed combat encounter before weapon support exists |
+| M5 — Weapons | Required weapon equip/fire/reload/ammunition, hit/damage/health/death and armed encounters; integrate corresponding sounds/animations | Menus/loading presentation/text |
+| M6 — Mission completion | Authored objective/item/trigger progression to success, failure and repeatable restart | Presentation polish |
+| M7 — Presentation | Original main menu, loading bar, loading text and other required text/UI flow | Additional missions, new platforms or renderer modernization |
 
-A deferred subsystem's name is not permission to skip a required callee. Record its observable effects and prove the chosen exclusion is safe for the declared scenario. Developer free camera remains explicit diagnostic tooling; it cannot substitute for the player's camera or collision.
+Movies, vehicles, decorative smoke, save/load UI and unrelated tools remain outside this roadmap unless an actual required dependency is demonstrated. An omitted presentation feature must be bypassed by the same supported branch of the original flow, not by silently skipping a required native or replacing it with a no-op. Required initialization/state must still be reconstructed even if its optional visual presentation is deferred. Developer free camera is explicit diagnostic tooling and cannot substitute for the player camera.
 
 ## 3. Current baseline and known limits
 
@@ -75,36 +75,51 @@ All milestones start **OPEN**. Close them only with evidence for the current int
 
 | Milestone | Product outcome | Required exit evidence |
 |---|---|---|
-| M0 — Reliable branch and verification workflow | One usable checkout, preserved source variants, canonical noncolliding paths, correct local config, working native verification pipeline | Collision/provenance reconciliation; source-to-native/link map; tool health; current x86 build receipt; one complete native proof pilot; missing/stale/empty inputs demonstrably block acceptance |
-| M1 — Level 1 world and task foundation | Required world/resources/materials load in authored positions through the supported startup/QVM/task lifecycle | Level 1 dependency inventory; object transforms and task state compared to retail; terrain/material checks; known missing calls/assets explicit; actual-window captures |
-| M2 — Player loop | Spawn, correct player camera/input, walk/run/crouch, jump/land, collision and one authored building interaction | Matched scenarios with input, simulation time, position, velocity, stance, grounding/contact and interaction state; no guessed movement replacement or silent motion fallback |
-| M3 — Required combat and actors | Mission-required weapons and guards, equip/fire/reload/ammo, navigation/perception, hit/health/death and synchronized animation | Isolated weapon/damage/AI scenarios followed by one integrated encounter; all required outputs and effects compared to retail; then remaining Level 1-required variants covered |
-| M4 — Playable mission completion | Actual authored objectives and interactions lead to success; failure/death/restart also work | Repeatable start-to-success route; failure/restart route; prior milestone regressions; exact candidate receipt/hashes; remaining limitations; no missing required native or unsupported required behavior |
+| M0 — Verification prerequisites within the first delivery | Preserved source variants, unambiguous active paths, correct local config, current x86 candidate and working native checks | Source/native/link map; independent static evidence; a complete paired native proof pilot; stale/missing/empty inputs block. Bound this work to what is needed for the first playable delivery. |
+| M1 — Level 1 world and flow | Original models, terrain, textures and placements load through the supported direct-level entry/QVM/task path | Startup-to-spawn call-flow map, task/resource/transform/material comparisons and actual-window captures. No menu/loading UI requirement. |
+| M2 — **Accept the first playable MVP here** | Player spawn/camera/controls, walk/run/crouch, jump/land, original physics and required terrain/building collision/interaction | Paired input, tick, position, velocity, stance/contact and interaction observations; every required implemented native has static and focused Frida runtime evidence. Repeat direct launch and the playable route. |
+| M3 — Sound | Original sound behavior for the supported world/player events | Per-native static/runtime checks, event order, sample/resource identity, voice/playback/spatial parameters and supported audio output observations. |
+| M4 — Enemies | Required enemy spawn/task/graph navigation, patrol and perception | Paired entity/graph/state/animation transitions for the selected repeatable encounter. Weapon-dependent behavior stays pending until M5. |
+| M5 — Weapons and combat | Required equip/fire/reload/ammo, hit/damage/health/death and integrated armed encounters | Typed paired observations of weapon/state/events/effects, corresponding sounds and animation callbacks; cover the required variants. |
+| M6 — Mission completion | Actual objectives, items and triggers lead to success; failure/restart works | Cold-to-success route and failure/restart route on one candidate, preserving prior stage checks. |
+| M7 — Menus/loading/text | Original menu and loading presentation/text follow the recovered UI flow | Resource/string identities, screen/state transitions, input actions, draw/progress state and real rendered captures compared with retail. |
 
-M0 is an acceptance dependency. Researchers may investigate later milestones while M0 is open, but the captain must not close gameplay milestones on a broken evidence workflow.
+M0 is verification groundwork inside the first delivery, not permission to implement all future systems before the player works. Researchers may map later dependencies early. Implementation proceeds in the order above; only a demonstrated required native dependency may pull a narrow initialization step forward, and that does not accept its later feature.
 
 ### Gameplay scenario matrix
 
 Derive concrete inputs, spawn/configuration and expected outcomes from retail. The labels below are test intentions, not invented expected values.
 
-| Scenario | Observe in both programs | Milestone |
+| Scenario | Observe in both programs | Stage |
 |---|---|---|
-| S01 cold Level 1 load | Resources/scripts, task order, entity identities, spawn state, relevant failures | M1 |
-| S02 world inspection | Object/terrain transforms, materials/textures, clipping/occlusion and representative building views | M1 |
-| S03 look and locomotion | Input state, camera state, tick/delta, position/velocity, stance and animation state | M2 |
-| S04 ground, jump and collision | Takeoff/landing, ground contact, slopes, wall/building collision and required steps | M2 |
-| S05 authored interaction | Actual trigger/task, player state and the required door/ladder/building transition | M2 |
-| S06 weapon lifecycle | Equip, trigger events, shot result, ammunition, reload state and animation events | M3 |
-| S07 guard encounter | Task/graph state, perception decisions, movement, hits, health, death and side effects | M3 |
-| S08 objective progression | Actual objective prerequisites, item/trigger state, progression order and success event | M4 |
-| S09 failure and restart | Authored failure/death state, resource/task cleanup and repeatable restart | M4 |
-| S10 integrated regression | S01–S09 on one frozen candidate plus representative cross-level regressions | M4 |
+| S01 direct cold Level 1 load | Entry branch, resources/scripts, task/native order, object identities and spawn state | M1 |
+| S02 world inspection | Models/terrain, transforms, original textures/materials, representative buildings | M1 |
+| S03 controls and locomotion | Input/camera, simulation tick/time, position/velocity, stance and animation | M2 |
+| S04 physics and collision | Jump/fall/landing, grounding/slopes, walls/buildings and required steps | M2 |
+| S05 authored interaction/repeat launch | Actual trigger/task/player state and interaction; startup/cleanup/relaunch | M2 |
+| S06 sound | Actual world/player sound events, sample/voice/playback/spatial state and output | M3 |
+| S07 enemy behavior | Authored task/graph movement, patrol, perception and state transitions | M4 |
+| S08 weapon/armed encounter | Equip/fire/reload/ammo, hit/health/death, sound/animation and enemy effects | M5 |
+| S09 mission route | Actual objective prerequisites, item/trigger state, success, failure/restart | M6 |
+| S10 menu/loading/text | Original UI entry branches, strings/resources, progress/draw/state and user actions | M7 |
 
-Use the same scenario, game directory, assets, config, scripts and reviewed probe for retail and candidate. Where paths require different input events, align semantically equivalent events and explain the mapping. Predetermine numeric tolerances from ABI, measurement precision and retail repeat runs; never loosen them after seeing a candidate mismatch. Screenshots assess rendered output; typed observations assess behavior.
+Recover concrete inputs and expected values from retail. Use the same scenario, game directory, assets, config, scripts and focused typed probe for both programs. Align semantically equivalent events; compare deterministic call order and state transitions, not arbitrary wall-clock scheduling. Predetermine numeric tolerances from ABI, precision and retail repeats; do not loosen them after observing a candidate mismatch. Exact integer/state observations must compare exactly; tolerance-based float checks must be explicitly identified rather than described as byte-exact.
 
-For the existing AGENTS.md cross-level requirement, select 3–5 representative supported levels including Level 1 for regressions of shared systems. This is regression sampling, not an expansion to completing those missions. Recover the actual authored Level 1 objective list before naming or implementing objectives.
+For existing AGENTS.md cross-level regression requirements, select 3–5 supported representative levels including Level 1 for the shared subsystem under test. This does not expand the first delivery to implementing those missions. Recover actual Level 1 objectives for M6; do not invent them during M2.
 
-## 5. Native definition of done
+### Original entry-to-exit method flow
+
+Maintain the original game's reachable call graph from the **actual retail entry point**, through startup, configuration/resources, direct-level/task/player initialization, frame/event dispatch and shutdown/error paths. Do not assume the source's host `main` is the retail entry point. Separate platform/compiler startup scaffolding from reconstructed game methods.
+
+For each supported scenario record: retail VA → candidate symbol/RVA, ABI/data layout, ordered calls and returns, branch conditions, indirect dispatch targets, required globals/effects and cleanup. Record parent/child call relationships and simulation/event ordering. Include all required callees and transitively required helpers. Unknown required branches or indirect targets block acceptance. Compare early startup using probes installed before those calls; a late attach cannot prove them.
+
+The direct-level route must correspond to an observed retail route with the same supported launch/config branch. Deferred UI/audio/enemy/weapon branches remain explicitly uncovered until their stages. The final goal is matching the full recovered game flow, but a partial-stage capture cannot be reported as proof that every main-to-last-method path in the whole game matches.
+
+## 5. Every implemented native: static and focused runtime verification
+
+**Coverage requirement: 100% of the declared implemented native set must have both static and original-versus-candidate runtime evidence before that set is described as fully verified.** Publish the denominator and every missing native. This includes implemented helper/native callees, not just high-level entry functions. Keep a registry of all linked native implementations as well as the current supported-path closure; untested off-route linked methods stay visible and provisional. Do not claim the entire implementation is 100% checked while those remain untested, or hide them by changing labels.
+
+Each native gets a small, focused, reviewed **Frida/IGI-Probe typed probe** for its actual inputs, return, affected state/memory and relevant calls/side effects. A shared capture may compose those probes only if every native's individual contract and complete observations remain available. At least one hit or a matching EAX return is insufficient. Exercise the known branches, boundaries, failure cases and stateful behavior supported by static analysis and retail observations; unexercised paths remain an explicit coverage gap. Complete native-set coverage is not mathematical proof of all possible executions.
 
 For every required native in the declared feature closure:
 
@@ -122,6 +137,11 @@ A helper failure, missing ABI, unresolved required method, absent call, dropped 
 Use the strict feature gate on the complete changed feature scope. After a commit, do not treat an empty `--changed` set as regression acceptance: retain the feature's gate report/address closure and rerun its declared scope explicitly. Shared headers/build changes require the affected native closure, not merely one convenient address.
 
 ## 6. Captain, team and shared resources
+
+**Hard limits: three active agents total — one captain plus two worker slots — and at most three simultaneous model calls.** All team members and nested subagents count toward the same limit; rotate the roles below through those slots. Four concurrent agents are not permitted.
+
+**One shared cap of 30 model API request attempts per rolling 60 seconds** covers captain, workers, subagents and retries together. Reserve capacity in a central queue before each attempt, pace aggregate dispatches at least 2.1 seconds apart, enforce the rolling window, and respect Retry-After with central backoff on 429. No per-agent 30 RPM budgets or independent retry loops. The captain must configure or verify these limits in the real harness; instructions in Markdown alone do not enforce them. Native tool calls retain their own safety/resource locks.
+
 
 | Role | Responsibility | Write ownership |
 |---|---|---|
@@ -213,15 +233,18 @@ Retain:
 
 The pre-commit hook normally requires `VERIFIED`. Its explicit `IGI_ALLOW_UNVERIFIED_DIAGNOSTIC_MERGE=1` mode recorded the historical diagnostic integration despite a failed structural gate. That override is never evidence of a native or milestone pass. Do not export it globally or make it the harness's normal acceptance path.
 
-## 8. Full MVP completion checklist
+## 8. First playable MVP completion checklist
 
-- [ ] M0–M4 are accepted on one identified source snapshot and candidate, with each required native's scoped evidence current.
-- [ ] The authored Level 1 success route runs from a cold start to success; failure/death/restart is repeatable.
-- [ ] The M1–M3 scenario suite passes on the integrated candidate; required cross-level shared-system regressions are recorded.
-- [ ] No required QVM opcode/native/task is silently skipped and no required movement/collision/combat behavior is replaced with guessed constants or fallbacks.
-- [ ] Actual rendered output, object transforms and materials have paired observations and captures for the declared route.
-- [ ] Performance is measured on a fixed machine/configuration with retail baseline, candidate frame-time distribution and simulation timing. Investigate the current ~7 FPS scene; target the configured 30 FPS budget for the supported profile and report any unmet budget explicitly.
-- [ ] Evidence records bind the exact source, compiler inputs, retail/candidate images, probes and scenario; the critic has resolved or explicitly recorded every finding.
-- [ ] The completion packet names tested scope and remaining limitations. Native status totals, screenshots alone and infrastructure test counts are not substituted for these criteria.
+- [ ] M0–M2 pass on an identified source snapshot and current x86 candidate; later stage work is not required to close this MVP.
+- [ ] Retail-supported direct Level 1 startup loads the actual 3D models, terrain, original textures/materials and authored placements without requiring menu, loading bar or loading text implementation.
+- [ ] Player spawn, camera, controls, walk/run/crouch, jump/fall/landing and required world/building collision/interactions work through the original game methods, parameters and task/tick flow.
+- [ ] S01–S05 repeat on the same candidate with current paired observations and rendered captures. Required shared-system regressions are recorded.
+- [ ] Every required implemented native/helper has independent static/ABI/semantic review and its focused typed Frida comparison against retail; implemented/linked/observed/accepted denominators and uncovered paths are explicit.
+- [ ] Entry-to-spawn, frame/event and cleanup/error call-flow maps preserve recovered native calls/order/branches/state effects for the supported route. No required method is silently skipped, stubbed or replaced with guessed gameplay.
+- [ ] Build receipts bind source/compiler/image/probe/scenario hashes. The independent critic has reviewed implementations and evidence; failures remain visible.
+- [ ] Frame timing and simulation behavior are measured against retail on a fixed machine/configuration. Investigate the observed ~7 FPS diagnostic scene and report any unmet configured 30 FPS target.
+- [ ] The completion packet clearly says **first playable Level 1 MVP**; sound, enemies, weapons, mission completion and UI each retain their own later-stage status.
 
-The captain may progress autonomously between accepted slices. No separate human gameplay approval gate is added by this plan. Pushes, releases and unrelated external integrations are outside this handoff.
+After accepting this checklist, proceed to M3 sound, M4 enemies, M5 weapons/combat, M6 full authored mission and M7 menus/loading/text in that order. Each later stage repeats the same native evidence and flow requirements. Byte-identical source or executables are not established by decompiler output, recompilation, a CFG score or finite Frida scenarios; do not claim byte matching without an actual binary comparison and a declared matching criterion.
+
+The captain may progress autonomously between accepted slices. No separate human gameplay approval gate is added. Pushes/releases and unrelated external integrations remain outside this handoff.

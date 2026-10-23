@@ -1,4 +1,4 @@
-> **Current complete execution plan:** [tasks/plan.md](tasks/plan.md), [task board](tasks/todo.md), and [MVP.md](MVP.md) govern this branch. The older roadmap below is historical; use [DEEPSEEK_HANDOFF.md](DEEPSEEK_HANDOFF.md) for the captain/team handoff.
+> **Current staged plan:** [MVP.md](MVP.md), [tasks/plan.md](tasks/plan.md), [task board](tasks/todo.md), and [captain handoff](DEEPSEEK_HANDOFF.md) govern this branch. First accept playable Level 1 world/player controls/physics, then sound, enemies, weapons, full mission, and menus/loading/text. Three active agents total and 30 shared model requests/minute. The older roadmap below is historical; do not use it to require all later features for the first MVP.
 
 # Level 1 Playable Demo Plan
 

@@ -1,8 +1,8 @@
-# Execution plan — Level 1 MVP on mvp/level1-integration
+# Execution plan — first playable Level 1, then staged decompilation
 
 ## Operating contract
 
-[MVP.md](../MVP.md) defines product scope, milestones and evidence requirements. This file defines execution order. [todo.md](todo.md) is the live task state. All tasks begin open; baseline source presence is not task completion.
+[MVP.md](../MVP.md) defines product scope, milestones and evidence requirements. This file defines execution order. [todo.md](todo.md) is the live task state. All tasks begin open; baseline source presence is not task completion. **The current playable MVP ends at P17/M2.** P18 onward is the ordered later roadmap, not prerequisites for the first delivery.
 
 Only checkout: `/Users/haseeb-mir/Documents/Code/project-open-igi`. One captain owns Git/index, shared configuration/manifests/build and grants one implementation token. Preserve existing worker changes; create no worktree. Other agents research or review concurrently and return packets. The runtime operator owns the global capture lease. No source/probe/candidate changes during a paired capture.
 
@@ -11,17 +11,19 @@ This is a plan to implement and validate the mission; task completion requires t
 ## Dependency order
 
 ```text
-P00 preservation
-  -> P01 path normalization -> P02 evidence reconciliation
-  -> P03 tool/build/scope alignment -> P04 complete verification pilot
-                                      |
-P05 Level 1 closure research ----------+
+P00 preservation -> P01 path normalization -> P02 evidence reconciliation
+                 -> P03 tool/build/scope alignment -> P04 native proof pilot
+P05 required direct-Level1 closure research -----------+
   -> P06–P10 required QVM/config/player linkage
-  -> P11–P13 scene/task/tick/spawn foundation
-  -> P14–P17 player controls/movement/collision/interaction
-  -> P18–P21 weapon/damage/AI/animation encounter
-  -> P22 authored objectives -> P23 failure/restart
-  -> P24 integrated mission/performance/regressions -> P25 final evidence packet
+  -> P11–P13 models/terrain/textures/task/tick/spawn foundation
+  -> P14–P17 player controls/physics/collision/interaction
+       = FIRST PLAYABLE MVP ACCEPTANCE (M0–M2; P25 evidence packet)
+  -> P18 sound (M3)
+  -> P19–P20 enemies: spawn/patrol/navigation/perception (M4)
+  -> P21–P22 weapons/damage/armed encounter (M5)
+  -> P23 authored mission success/failure/restart (M6)
+  -> P24 main menu/loading bar/loading text (M7)
+P25 = repeat the evidence/completion packet for each accepted stage
 ```
 
 P05 and static research for later tasks may run in parallel with M0. Source implementation follows dependencies. Addresses below are known candidates to investigate, not claims that their bodies or identities are accepted.
@@ -34,10 +36,12 @@ Before editing, the captain creates a packet with:
 task_id: Pxx-slice-N
 owner: assigned-agent
 reviewer: different-agent
-milestone: M0|M1|M2|M3|M4
+milestone: M0|M1|M2|M3|M4|M5|M6|M7
 baseline_commit: actual-current-HEAD
 baseline_worktree_inputs: exact-source-and-manifest-hashes
 behavior: one observable outcome
+retail_call_flow: entry/parent/child/return/branch/cleanup mapping
+implemented_set_and_coverage: explicit-linked-required-static-runtime-counts
 retail_addresses: exact-declared-address-list
 required_dependency_closure: observed-and-statically-justified-dependencies
 allowed_files: explicit-source/header-allowlist
@@ -51,7 +55,7 @@ blocking_dependencies: explicit-list
 
 If a task requires more than about five implementation files or several independent native behaviors, split it before editing. Each packet is one reviewable increment. The captain serializes shared headers and manifest/config edits and calculates their affected closure. Source changes do not become accepted because a later task needs them.
 
-The common verification requirement for native tasks P06–P23 is the native definition of done in MVP.md: static/ABI/semantic/behavioral checks, current linked x86 candidate receipt, typed sequential retail/candidate comparison and independent review. The last column below adds the task-specific observations. Static-only research returns facts/unknowns and remains open for implementation acceptance.
+The common verification requirement for native tasks P06–P24 is the native definition of done in MVP.md: static/ABI/semantic/behavioral checks, current linked x86 candidate receipt, typed sequential retail/candidate comparison and independent review. The last column below adds the task-specific observations. Static-only research returns facts/unknowns and remains open for implementation acceptance.
 
 ## M0 — reliable checkout and verification
 
@@ -71,7 +75,7 @@ P01 must preserve variants before any deletion/rename. It may canonicalize paths
 
 | Task / owner | Work and likely files | Dependencies | Completion / verification |
 |---|---|---|---|
-| P05 / task/asset researcher | Read actual Level 1 task/object scripts, config and `humanplayer/humanplayer.qvm`. Map assets, objectives, entity lifecycle, required native calls, dispatch and unresolved dependencies. Consult converter/editor/OpenIGI references for discovery with revision/license provenance. | P00; research may run early | A reviewed Level 1 closure and actual objective list with source/retail observations. Unknown opcodes/calls explicit. Do not guess objective names or count all catalog entries as required. |
+| P05 / task/asset researcher | Read actual Level 1 task/object scripts, config and `humanplayer/humanplayer.qvm`. First map the minimum retail-supported direct-level world/player route, assets, entity lifecycle, required native calls, dispatch and unknowns. Record later objective/enemy/weapon dependencies as research without making their complete gameplay prerequisites for the first delivery. Consult converter/editor/OpenIGI references for discovery with revision/license provenance. | P00; research may run early | A reviewed first-delivery closure and entry-to-exit/call-order map with source/retail observations; keep later mission-objective research separate. Unknown opcodes/calls explicit. Do not guess objective names or count all catalog entries as required. |
 | P06 / QVM implementer | Resolve `0x004B85B0` QVM execution candidate, its required opcode/callee/state dependencies and linkage. Likely `engine/src/retail/script/qvm_execute.cpp`, its header and explicit CMake link inputs. | P04/P05 | Required script dispatch executes in candidate; instruction/stack/state transitions agree for the selected script path. No silent unsupported-opcode skip. Receipt/link map proves body inclusion. |
 | P07 / QVM implementer | Resolve `0x004B8A50` float-argument candidate and typed argument/return boundary. Likely QVM stack native source/header. | P06 or an independently justified call boundary | Paired relevant argument decoding/stack effects; required source linked. Calling convention and float representation supported. |
 | P08 / configuration implementer | Resolve `0x00405850` Config_Read candidate and actual loader flow. Locate current source from manifest rather than guessing a filename; align required config/global lifecycle. | P05/P06/P07 where required | Actual Level 1 config values and load order reach consumers, with correct failure behavior. Receipt proves this is not a compile-only dependency. |
@@ -94,27 +98,60 @@ P01 must preserve variants before any deletion/rename. It may canonicalize paths
 
 **M2 checkpoint:** cold launch -> player spawn -> look -> walk/run/crouch -> jump/land -> collide -> authored interaction works on one frozen candidate. Repeat the route; capture actual output. Keep combat outside the active implementation slice until this checkpoint passes.
 
-## M3 — the mission's combat dependency closure
+## M3 — sound after the playable MVP
 
 | Task / owner | Work and likely files | Dependencies | Completion / verification |
 |---|---|---|---|
-| P18 / weapon implementer | One mission-required weapon's equip/fire/ammo/reload and observable shot behavior. Locate exact native implementations and ABI using P05 before assigning files. | M2; required inventory/task lifecycle | S06 compares ammo, shot events, reload/equip state and effects. Start with one weapon, then enumerate remaining required Level 1 variants. |
-| P19 / damage implementer | Required hit resolution, health, damage/death state and effects. Separate player/enemy paths where necessary. | P18; collision/entity state | S07 known hit/miss cases and resulting state/side effects agree; no health/ammo log placeholder counts as behavior. |
-| P20 / AI implementer | One required guard's authored task/graph navigation, perception, detection/loss and combat state. Split graph, perception and encounter state into packets. | M2; P19 for integrated encounter | S07 compares authored state/graph decisions and transitions for a repeatable encounter; then cover remaining required actor variants. Rendering guards or decoding a graph alone cannot close this task. |
-| P21 / animation/task implementer | Synchronize required gameplay animation events/root motion with locomotion, weapon, damage/death and task callbacks; complete the first encounter, then remaining required variants. | P18–P20 | S06/S07 event order and entity state match on one candidate; no visual-only animation acceptance or duplicate task events. |
+| P18 / sound implementer | Recover original sound initialization, resource/sample handling, voice lifecycle and reachable world/player audio events. Select source/native addresses from retail; split init, playback and spatial/event slices. | Accepted M2 | S06 compares required per-native arguments, sample identity, play/stop/loop state, spatial parameters and event ordering; retain actual audio observations where supported. No synthetic sound behavior. Weapon sound events are integrated later with P21/P22. |
 
-**M3 checkpoint:** a repeatable guard encounter works with the player's actual controller, required weapon/ammo/damage/death and synchronized task/animation behavior. Required Level 1 actor/weapon variants have a declared tested closure.
-
-## M4 — mission acceptance
+## M4 — enemies after sound
 
 | Task / owner | Work and likely files | Dependencies | Completion / verification |
 |---|---|---|---|
-| P22 / mission-task implementer | Implement actual objective prerequisites, mission items, triggers, progression and success state recovered in P05. Split per authored transition. | M3 and required interaction closure | S08 follows the real mission route and compares objective/task state and success event; no synthetic completion toggle. |
-| P23 / lifecycle implementer | Failure/death and repeatable restart/cleanup using the supported diagnostic launch or authored path; menus remain deferred. | P19/P22 | S09 reproduces failure, releases required task/resources and restarts with correct state. No residual state falsely completes objectives. |
-| P24 / captain + runtime operator + performance researcher | Freeze a candidate and run S01–S10, including cold-to-success and failure/restart; measure frame timings and simulation rates with a fixed retail baseline. Run 3–5 supported representative levels for shared-system regressions. Split profiling from implementation fixes. | P22/P23 | Exact successful mission route plus failure route, integrated native closure, paired evidence/captures and timing measurements. Fix earliest divergence and rerun affected routes. Report unmet configured 30 FPS target. Other level missions need not be implemented. |
-| P25 / captain + independent critic | Assemble accepted source/tree ID, build receipt/image hashes, scenario/probe identities, scope/native matrix, raw artifacts, review outcomes and remaining limitations. Update MVP/task statuses. | P24 | Every MVP checklist item has a current evidence reference; unsupported statuses remain open. Full Level 1 MVP may be declared complete only for the tested scope with the actual authored success/failure paths working. |
+| P19 / enemy implementer | Recover required enemy spawn/task lifecycle and authored patrol/graph navigation. First select exact VAs/ABIs from the actual mission. | P18 | S07 compares spawn/task/entity state, graph choices, positions and movement/event order. A rendered guard or parsed graph alone does not close it. |
+| P20 / enemy implementer | Recover perception, detection/loss/pursuit and associated animation/state transitions. Split independently observable native paths. | P19 | S07 focused probes compare original state decisions and effects. Weapon-dependent firing/damage behavior remains explicitly pending for M5; do not implement the whole weapon system early to close enemy perception. |
+
+## M5 — weapons and combat after enemies
+
+| Task / owner | Work and likely files | Dependencies | Completion / verification |
+|---|---|---|---|
+| P21 / weapon implementer | One mission-required weapon's equip/fire/ammo/reload and original shot behavior; then remaining required variants. Recover the original native flow and animation/sound callbacks. | P20 | S08 compares equip/ammo/reload state, actual shot events and required effects with per-native static/runtime evidence. No guessed replacement shooting algorithm. |
+| P22 / damage/encounter implementer | Recover hit resolution, health/damage/death, remaining enemy armed states, animation/task callbacks and associated sound events. Split by native behavior. | P21 | S08 compares hit/miss/state/effect/event ordering and a repeatable armed encounter on one candidate. Then cover the required actor/weapon variants. |
+
+## M6 — authored mission after combat
+
+| Task / owner | Work and likely files | Dependencies | Completion / verification |
+|---|---|---|---|
+| P23 / mission-task implementer | Recover actual objective/item/trigger prerequisites and success; then authored failure/death/cleanup and repeatable restart. Split per transition. | P22 | S09 follows the actual authored route to success and failure/restart with typed state/call observations. No synthetic mission-completion toggle. No menus needed to accept the supported direct-launch mission route. |
+
+## M7 — main menu, loading presentation and text last
+
+| Task / owner | Work and likely files | Dependencies | Completion / verification |
+|---|---|---|---|
+| P24 / UI decompilation implementer | Recover original main-menu branch/input/state flow, loading progress presentation, font/string/resource lookup and text draw behavior. Split into distinct original-native packets. | P23 | S10 compares original UI state transitions, resources/strings, progress/draw observables and rendered output with focused native probes. No custom replacement menu or invented progress bar. Earlier required initialization was already reconstructed when needed, without claiming this presentation stage complete. |
+
+## P25 — acceptance packet for the current stage
+
+| Task / owner | Work | Dependencies | Completion / verification |
+|---|---|---|---|
+| P25 / captain + independent critic | Freeze the current source/candidate, replay the stage's scenarios, relevant earlier-stage regressions, frame/simulation measurements and representative shared-system cross-level checks. Assemble source/tree/build receipt, image/probe/scenario identities, native/call-flow/coverage matrix, raw evidence and review findings. Split profiling fixes into owned source packets. | **P17 for the first playable MVP**; repeat after P18, P20, P22, P23 and P24 for the later stages | For first delivery, S01–S05 and M0–M2 pass; later systems stay open. For later stages, add only their declared scenarios and regressions. Every claimed implemented native has static and focused paired Frida evidence; untested linked methods and unexercised branches remain explicit. No universal byte-identical claim from finite tests. |
+
+## Mandatory decompilation and flow rules
+
+Preserve the original retail method bodies' recovered semantics, ABI, memory/data layout, integer/float behavior, branches, callees, event/tick order, side effects and error/cleanup paths. This is decompilation reconstruction; existing ports and generated pseudocode are references/hypotheses, never a substitute for the retail machine instructions and observations.
+
+Create a retail VA to candidate symbol/RVA map from actual retail entry through the supported route and exit. Record call parents/children, deterministic order, branch conditions and indirect dispatch. Use early hooks for startup and per-native focused typed Frida probes for actual inputs/returns/changed state/effects. Retain raw traces and compare the first divergence. Every required implemented helper participates, not only named top-level functions.
+
+Publish separate denominators for all linked implementations, current-path required implementations, static-checked, runtime-observed and accepted natives. The 100% requirement is complete static+runtime evidence for the declared implemented set; do not report 100% for the whole implementation while linked native methods remain untested. A CFG threshold or a single successful hit cannot establish exact behavior across all paths.
+
+The original supported direct-Level1 branch should avoid deferred UI presentation if retail does so. Never skip an unavoidable original native call or add a no-op to force that shortcut. If an enemy/audio/weapon-related initialization method is genuinely required before player spawn, reconstruct and verify that narrow dependency now; record why it is required, while its later gameplay stage remains open. This preserves actual call flow without turning the first delivery into every feature.
 
 ## Scheduling and blocker policy
+
+**Hard harness limits:** at most **3 active agents total: 1 captain + 2 worker slots**. Researcher, implementer, reviewer and runtime-operator are roles rotated through those slots, not permission to start one agent for every role. Team members and nested subagents consume the same slots; queue additional work. Maximum simultaneous model requests is 3, never 4.
+
+The provider limit is **30 model API request attempts per rolling 60 seconds shared by the entire harness**, including captain, workers, nested delegation and retries. One shared limiter must reserve capacity immediately before each attempt; never give each agent a separate 30 RPM allowance. Maintain a global request queue and in-flight count. A pacing interval of at least 2.1 seconds between aggregate dispatches stays below the 30 RPM ceiling; also enforce the rolling-window cap. On 429 respect Retry-After and apply central backoff/jitter; retries consume capacity. No worker-local immediate retry loop. Tool requests have their own tool health/locks and do not grant extra model request capacity. This document specifies these limits; the captain must configure or verify them in the actual harness before launching workers.
+
 
 1. Captain grants a task to the implementation writer only when its dependencies and packet are ready. Give other members read-only dependency research, ABI/probe design or review tasks.
 2. Assign the independent critic before implementation starts; it must not be the code author or manufacture missing observations.
@@ -134,10 +171,12 @@ Files and exact native closure changed:
 Retail facts and unresolved assumptions:
 Probe/scenario and candidate receipt/hash:
 Commands + report/raw-artifact paths:
-Static / semantic / behavioral / paired-runtime outcome:
+Static / semantic / behavioral / per-native paired-Frida outcome:
+Implemented/linked/required/static/runtime/accepted counts and missing VAs:
+Entry-to-exit flow/call-order comparison and uncovered branches:
 Earliest mismatch or blocker:
 Accepted scope (or BLOCKED/INCONCLUSIVE):
 Next ready task / unblock condition:
 ```
 
-The captain reports progress by accepted milestones and scenarios, with native counts as supporting provenance. More model calls, a growing status counter or repeated successful compilation are not substitutes for a working mission.
+The captain reports first-delivery progress by accepted M0–M2 scenarios, then later-stage progress in the declared order. Native counts support provenance. More model calls, growing status counters and compilation alone do not complete the playable MVP or any later feature.

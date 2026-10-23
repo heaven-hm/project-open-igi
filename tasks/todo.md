@@ -1,8 +1,12 @@
-# Captain task board — Level 1 MVP
+# Captain task board — first playable Level 1, then later stages
 
 Branch: `mvp/level1-integration`. Only checkout: `/Users/haseeb-mir/Documents/Code/project-open-igi`.
 
 Read [the execution plan](plan.md) and [MVP.md](../MVP.md). The checkboxes below start open. Assign an owner/reviewer and a packet/report before changing state. Use READY / IN_PROGRESS / REVIEW / BLOCKED / ACCEPTED annotations; accepted items need current evidence.
+
+**Hard harness limits:** 3 active agents total (captain + 2 worker slots), maximum 3 concurrent model requests, and a shared 30 model requests per rolling minute including retries. Enforce centrally; nested/team agents consume the same slots and budget.
+
+**Current MVP ends at P17/M2, closed by P25.** Sound, enemies, weapons, full mission objectives and menus/loading/text follow later. Every implemented native needs static and focused original/candidate Frida evidence; publish missing methods and original entry-to-exit flow gaps.
 
 ## M0 — baseline and workflow
 
@@ -31,19 +35,30 @@ Read [the execution plan](plan.md) and [MVP.md](../MVP.md). The checkboxes below
 - [ ] P16 Grounding, jump/landing and required world/building collision.
 - [ ] P17 One actual authored building interaction, then repeat the player route.
 
-## M3 — required combat
+- [ ] P25 First playable acceptance: freeze candidate, replay S01–S05, compare native/call-flow evidence and close only M0–M2.
 
-- [ ] P18 Mission-required weapon equip/fire/ammo/reload, then remaining required variants.
-- [ ] P19 Hit/damage/health/death and effects.
-- [ ] P20 Required guard task/navigation/perception/combat.
-- [ ] P21 Animation/task event synchronization and integrated encounter coverage.
+## M3 — sound after playable MVP
 
-## M4 — playable mission
+- [ ] P18 Original sound lifecycle, samples/voices/spatial playback and current world/player sound events.
 
-- [ ] P22 Actual authored objectives, items/triggers and success transition.
-- [ ] P23 Failure/death/cleanup and repeatable restart.
-- [ ] P24 Full route, regressions and retail/candidate frame-time/simulation measurements.
-- [ ] P25 Independent review of final source/build/scenario/native evidence packet.
+## M4 — enemies after sound
+
+- [ ] P19 Original enemy spawn, task/patrol/graph navigation.
+- [ ] P20 Perception/detection/loss/pursuit and associated state/animation; armed behavior pending M5.
+
+## M5 — weapons after enemies
+
+- [ ] P21 Original equip/fire/ammo/reload and shot behavior, with sound/animation callbacks.
+- [ ] P22 Hit/damage/health/death and integrated enemy armed encounter.
+
+## M6 — full authored mission after combat
+
+- [ ] P23 Actual objectives/items/triggers and success/failure/cleanup/restart.
+
+## M7 — menus/loading/text last
+
+- [ ] P24 Original main menu, loading bar, loading text and UI/resource flow.
+- [ ] Repeat P25 evidence packet for each later stage before accepting it.
 
 ## Current connection observation
 
