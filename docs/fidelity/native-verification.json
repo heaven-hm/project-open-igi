@@ -50684,7 +50684,7 @@
         "signature": "int __cdecl int32_t(int32_t)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "RUNTIME_TESTED",
         "runtime_layout": {
           "retail": {
             "stateVA": "0x005C8BC8"
@@ -50740,11 +50740,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-semantic-review.json",
-          "evidence_sha256": "4af6bb30208d3a2d7ef69c847f8013701ef32f5d7107d58f2db69618fbd88062"
+          "evidence_sha256": "050216bcec68a52ffb0b25f4720e4d7d549026a6e8b17d2fe602f0637f69d445"
         },
         "runtime_contract": {
           "authority": "docs/fidelity/evidence/0x0048F0C0-semantic-review.json",
-          "authority_sha256": "4af6bb30208d3a2d7ef69c847f8013701ef32f5d7107d58f2db69618fbd88062",
+          "authority_sha256": "050216bcec68a52ffb0b25f4720e4d7d549026a6e8b17d2fe602f0637f69d445",
           "scope": "startup-command-line-store",
           "probe_path": "scripts/frida_store_command_line_typed.js",
           "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
@@ -50772,7 +50772,95 @@
           "no_arguments": false,
           "no_return": false,
           "no_side_effects": false,
-          "note": "Digest-bound mirror of the reviewed contract in the semantic-review artifact, which remains authoritative and feeds the gate. The probe/actions digests were recomputed from the files on disk; every required observable name exists in the typedState emitted by that probe. No paired runtime capture exists yet, so this contract authorizes a capture but is not runtime evidence."
+          "note": "Digest-bound mirror of the reviewed contract in the semantic-review artifact, which remains authoritative and feeds the gate. The probe/actions digests were recomputed from the files on disk; every required observable name exists in the typedState emitted by that probe. The contract has since been executed for one startup call per side and matched (see runtime_test); it authorizes only that documented single-call scope, not broader runtime equivalence."
+        },
+        "runtime_test": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F0C0-runtime-comparison.json",
+          "evidence_sha256": "4dcd7be2447f82589f408eda8a55493d9da481eb00368b246f301f15a5faba77",
+          "kind": "igi-paired-native-runtime-comparison",
+          "result": "matched",
+          "supports_status": "RUNTIME_TESTED",
+          "capture_path": "build/runtime-traces/20261023T010502Z-48f0c0-paired/pair.json",
+          "capture_sha256": "72c56a2a6c8932a48c300f57522c84475a5c46a4f0e61fd7c3dc1946bf39b300",
+          "capture_created_utc": "2026-10-23T01:05:04.213270+00:00",
+          "capture_finished_utc": "2026-10-23T01:05:24.895278+00:00",
+          "tested_scope": "Exactly one startup call of retail 0x0048F0C0 StoreCommandLine against the candidate symbol _StoreCommandLine, at retail level 1 in windowed mode (arguments 'window level1'), working directory /Users/haseeb-mir/Downloads/IGI, retail observed first and then the candidate, each spawned suspended with the same reviewed typed probe hooked at the native entry and the typed state VA before the primary thread resumed.",
+          "conditions": {
+            "level": 1,
+            "arguments": [
+              "window",
+              "level1"
+            ],
+            "working_directory": "/Users/haseeb-mir/Downloads/IGI",
+            "sequential_order": "retail first, candidate only after retail's owned process was confirmed gone",
+            "hook_phase": "before-primary-thread-resume on both sides",
+            "hook_installed": {
+              "retail": true,
+              "candidate": true
+            },
+            "call_counts": {
+              "retail": 1,
+              "candidate": 1
+            },
+            "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+            "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+            "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "candidate_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+            "candidate_staged_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+            "candidate_unchanged_during_capture": true,
+            "candidate_receipt_sha256": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d",
+            "candidate_receipt_valid_at_capture_start": true,
+            "candidate_receipt_validated_after_capture": true,
+            "owned_pids_terminated": {
+              "retail": 1596,
+              "candidate": 1508
+            },
+            "residual_processes_after_capture": {
+              "frida": [],
+              "host": []
+            }
+          },
+          "compared_fields": [
+            "command_line_text",
+            "command_line_state",
+            "return_aliases_argument",
+            "return_aliases_argument_state",
+            "return_is_null",
+            "return_matches_stored",
+            "return_text",
+            "previous_command_line_text",
+            "previous_command_line_state",
+            "stored_command_line_text",
+            "stored_command_line_state",
+            "stored_aliases_argument",
+            "stored_aliases_argument_state"
+          ],
+          "all_compared_fields_matched": true,
+          "observed": {
+            "command_line": "window level1",
+            "command_line_state": "text",
+            "return_aliases_argument": true,
+            "return_is_null": false,
+            "return_matches_stored": true,
+            "return_text": "window level1",
+            "previous_command_line": "<null>",
+            "previous_command_line_state": "null",
+            "stored_command_line": "window level1",
+            "stored_command_line_state": "text",
+            "stored_aliases_argument": true
+          },
+          "limitations": [
+            "Single call: exactly one invocation was observed on each side. The retail call site 0x0048F5F4 and the candidate call site 0x00406BF9 are each statically unique, but that is structure, not runtime coverage of any other execution.",
+            "Single scenario: level 1, windowed, command line 'window level1', one game-data working directory. Other levels, display modes, command-line contents and working directories were not captured.",
+            "Surrounding startup order is slightly different from retail: retail registers its window class (RegisterClassA 0x0048F5E6) immediately before the two startup stores, while the candidate performs the stores before its own ANSI argv conversion and registers its class later in the scene path. The two stores stay adjacent, in retail order and before any window creation, but this capture does not compare the enclosing startup sequence.",
+            "The paired capture is not a full parity proof: it is one native, one call and one scenario, and it establishes nothing about other natives, rendering, input, terrain or deferred subsystems.",
+            "The captured candidate image cb178c2f... is no longer present in build-clean-win32 (concurrent work rebuilt that directory after the capture). The image and receipt digests recorded by the capture artifacts still identify the tested bytes, and the receipt file on disk still hashes to 12fcd523..., but the image cannot be re-hashed now and the receipt no longer validates against the current shared tree.",
+            "Observation used the driver's finite window (the first observed call extends observation by 5 s; Escape is delivered at >= 2 s), so this is not continuous coverage. Frida instrumentation overhead applies to both sides equally, and pointers were compared by content and typed relations only, never as raw addresses across processes."
+          ],
+          "verified_decision": {
+            "supports_verified": false,
+            "reason": "One matched single-call capture under one scenario is not sufficient original-binary evidence for VERIFIED. Missing: a repeat capture showing the match is reproducible rather than a one-off; coverage of additional documented scenarios (other levels, display modes, command-line contents); runtime evidence in the gate-consumable report shape bound to a passing strict gate report and reviewed runtime_contract (scripts/check_frida_differential.py input, not only the comparison document); and a candidate image/receipt pair that still validates against the tree at acceptance time. Full startup-sequence equivalence is also unproven."
+          }
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-build.json",
@@ -50783,7 +50871,7 @@
           "evidence_sha256": "62f334105c511062131b97212c4c015ca5681c32c2fe3cf10b4761d82606af14",
           "valid": false,
           "superseded": true,
-          "note": "Superseded chunk-walk record rewritten as a retraction; it is not behavioral evidence for this native. The current differential is the live 0x0048F0C0 case in scripts/native_diff_runner.py (10/10, emulator/host). Paired typed Frida runtime capture is still outstanding."
+          "note": "Superseded chunk-walk record rewritten as a retraction; it is not behavioral evidence for this native. The current differential is the live 0x0048F0C0 case in scripts/native_diff_runner.py (10/10, emulator/host). The single-call paired typed Frida runtime capture is recorded in runtime_test; it does not rehabilitate this retracted artifact."
         },
         "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F0C0); not a candidate-versus-retail CFG score"
       }

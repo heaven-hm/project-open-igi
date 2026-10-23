@@ -111,7 +111,7 @@
     "probe_path": "scripts/frida_store_command_line_typed.js",
     "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
     "actions_path": "scripts/frida_scenario_actions.js",
-    "execution_status": "not_executed; this is a declared observation contract for a future paired retail/candidate capture, not runtime evidence",
+    "execution_status": "executed for exactly one startup call per side. The sequential paired capture at level 1 windowed observed one call on retail and one on the candidate under this contract's scope and probe digest, and all 13 compared typed fields were identical. See runtime_capture below. This records execution of the declared contract only; it is not a broader runtime-equivalence claim.",
     "required_observables": {
       "inputs": [
         "command_line",
@@ -134,7 +134,7 @@
     "no_arguments": false,
     "no_return": false,
     "no_side_effects": false,
-    "note": "The contract requires retail and the staged candidate to be observed through the same probe before their primary thread resumes. Pointer values are process-local, so it compares designated text and typed relations rather than raw addresses. Every name in required_observables was re-checked against the bound probe digest 6ed5dd51... and appears in the typedState it sends; the required set is a subset of the emitted fields and contains nothing the probe does not emit. No paired capture has been run for this record."
+    "note": "The contract requires retail and the staged candidate to be observed through the same probe before their primary thread resumes. Pointer values are process-local, so it compares designated text and typed relations rather than raw addresses. Every name in required_observables was re-checked against the bound probe digest 6ed5dd51... and appears in the typedState it sends; the required set is a subset of the emitted fields and contains nothing the probe does not emit. One paired capture has since been run for this record (runtime_capture below): exactly one call per side, all 13 compared typed fields identical, under this scope and probe digest. The contract still binds only that documented single-call scope."
   },
   "checks": [
     {
@@ -176,10 +176,73 @@
   "limitations": [
     "The reviewed scope is the single observed retail path; the function has no alternate or error path.",
     "The CFG evidence recorded for this native is retail-image structure: Binary Ninja and Radare2 independently recover the same one-block graph from igi.exe. The cfg_similarity value of 1.0 is the agreement of those two retail graphs, not a candidate-versus-retail score.",
-    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the current linked candidate image 29e08351fcdedfd64a658c8cef36461b1f3dcad24bf92ebcb0d171cb8a2479e7, covered by receipt 7b4faab99eaba7ab26dd61760b1c9ee168cb4c491e385948d4a3c7071f50657b for this source, and in the fresh -O3 object) and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py, not on a paired runtime capture. A paired typed Frida capture of retail igi.exe and the staged candidate is still outstanding; this record does not claim runtime equivalence.",
+    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the linked candidate image 29e08351fcdedfd64a658c8cef36461b1f3dcad24bf92ebcb0d171cb8a2479e7 covered by receipt 7b4faab99eaba7ab26dd61760b1c9ee168cb4c491e385948d4a3c7071f50657b, and in the fresh -O3 object) and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py. A paired typed Frida capture of one startup call has since been recorded (runtime_capture above): it matches on all 13 compared typed fields for that single call and scenario only, and this record does not claim runtime equivalence beyond it.",
     "The candidate stores to its own mapped CommandLine global rather than retail 0x005C8BC8. The current linked image 29e08351... places CommandLine at 0x005D8BC0 (AppTitle 0x005D8BB8, InstanceHandle 0x005D8BBC); the manifest runtime_layout maps retail 0x005C8BC8 to the candidate CommandLine symbol, and this review does not establish process-wide memory-layout equivalence.",
     "The behavioral differential executes the retail bytes in the Radare2 ESIL emulator and the candidate as a host-built translation unit; neither game process was launched. It is not a live IGI.exe observation.",
     "This review checks source semantics, not byte identity. The compiled instruction sequence is recorded separately in the build report.",
     "The shared translation unit also implements 0x0048F0B0 and 0x0048F0D0. The 0x0048F0B0 fix added the AppTitle .bss symbol, which changes link-time offsets of the other globals; those siblings have their own records and are not claimed here."
-  ]
+  ],
+  "runtime_capture": {
+    "performed_utc": "2026-10-23T01:05:04.213270+00:00",
+    "finished_utc": "2026-10-23T01:05:24.895278+00:00",
+    "result": "matched",
+    "scope": "one startup call of retail 0x0048F0C0 vs candidate _StoreCommandLine; level 1, windowed ('window level1'), game-data working directory /Users/haseeb-mir/Downloads/IGI, hook installed before primary-thread resume",
+    "evidence_path": "docs/fidelity/evidence/0x0048F0C0-runtime-comparison.json",
+    "evidence_sha256": "4dcd7be2447f82589f408eda8a55493d9da481eb00368b246f301f15a5faba77",
+    "capture_path": "build/runtime-traces/20261023T010502Z-48f0c0-paired/pair.json",
+    "capture_sha256": "72c56a2a6c8932a48c300f57522c84475a5c46a4f0e61fd7c3dc1946bf39b300",
+    "call_counts": {
+      "retail": 1,
+      "candidate": 1
+    },
+    "compared_fields": [
+      "command_line_text",
+      "command_line_state",
+      "return_aliases_argument",
+      "return_aliases_argument_state",
+      "return_is_null",
+      "return_matches_stored",
+      "return_text",
+      "previous_command_line_text",
+      "previous_command_line_state",
+      "stored_command_line_text",
+      "stored_command_line_state",
+      "stored_aliases_argument",
+      "stored_aliases_argument_state"
+    ],
+    "all_compared_fields_matched": true,
+    "observed": {
+      "command_line": "window level1",
+      "return_aliases_argument": true,
+      "return_is_null": false,
+      "return_matches_stored": true,
+      "previous_command_line": "<null>",
+      "stored_command_line": "window level1",
+      "stored_aliases_argument": true,
+      "argument_read_surface": "args[0..3] on both sides (no probe-surface difference)"
+    },
+    "provenance": {
+      "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "candidate_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+      "candidate_receipt_sha256": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d",
+      "candidate_receipt_valid_at_capture_start": true,
+      "candidate_receipt_validated_after_capture": true,
+      "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+      "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+      "candidate_staged_path": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-f3hx45eq.exe",
+      "candidate_staged_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+      "candidate_unchanged_during_capture": true,
+      "owned_pids_terminated": {
+        "retail": 1596,
+        "candidate": 1508
+      }
+    },
+    "limitations": [
+      "Single call: one invocation per side. Retail has exactly one call site (0x0048F5F4) and the candidate one (0x00406BF9), which is static structure, not runtime coverage of any other path.",
+      "Single scenario: level 1, windowed, command line \"window level1\", one working directory. Other levels, display modes, command-line contents and working directories were not compared.",
+      "Surrounding startup order differs slightly: retail registers its window class (RegisterClassA 0x0048F5E6) immediately before the two stores, while the candidate performs the stores before its own ANSI argv conversion and registers its class later in the scene path. The stores stay adjacent, in retail order and before any window creation, but this capture does not compare the enclosing startup sequence.",
+      "The paired capture is not a full parity proof: it covers one native, one call and one scenario, and says nothing about other natives or subsystems.",
+      "The captured candidate image cb178c2f... is no longer present in build-clean-win32 (concurrent work rebuilt that directory after the capture); the recorded digests and the receipt file (still 12fcd523...) remain, but the image bytes cannot be re-hashed now and the receipt no longer validates against the current shared tree."
+    ]
+  }
 }
