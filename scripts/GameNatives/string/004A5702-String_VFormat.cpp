@@ -14,13 +14,13 @@ int String_VFormat(char* context, char* arg2, int arg3)
     char* item_24 = context;
     int item_18 = 0x42;
     int item_20 = 0x7fffffff;
-    int result = Camera_ApplyWideScreen_11(&item_24, arg2);
+    int result = _output(&item_24, arg2);
     int item_20_1 = item_20 - 1;
 
     if (item_20 - 1 < 0)
     {
         int item_30_1 = 0;
-        Camera_ApplyHandiCam_11(&item_24);
+        _flsbuf(&item_24);
     }
     else
         *item_24 = 0;

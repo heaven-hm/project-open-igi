@@ -12,7 +12,7 @@ int DisplayRender_ProcessCouldntwaitforvb()
         return result;
 
     void var_400;
-    Game_DataSymbolLoad(&var_400, "Couldn't wait for vblank");
+    sprintf(&var_400, "Couldn't wait for vblank");
     int var_414 = DDERR_GENERIC(result);
     void* var_418 = &var_400;
     Error_Show("%s\n\nDirectX error message: %s");

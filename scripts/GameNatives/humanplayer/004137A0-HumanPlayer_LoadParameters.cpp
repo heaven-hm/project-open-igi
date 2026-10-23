@@ -1,6 +1,6 @@
 // IGI native provenance: HumanPlayer_LoadParameters - 0x004137A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004137A0-HumanPlayer_LoadParameters.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "HumanPlayer_LoadParameters.hpp"
+#include "004137A0-HumanPlayer_LoadParameters.hpp"
 int HumanPlayer_LoadParameters()
 
 // Sig: void HumanPlayer_LoadParameters(void)
@@ -17,8 +17,8 @@ int HumanPlayer_LoadParameters()
     }
 
     char* item_8_1 = "LOCAL:humanplayer/humanplayer.qsc";
-    Error_Show("HumanPlayer_LoadParameters: Couldn't load script "%s"");
+    Debug_Error("HumanPlayer_LoadParameters: Couldn't load script \"%s\"", item_8_1);
 
     while (true)
-        /* nop */
+        ;
 }

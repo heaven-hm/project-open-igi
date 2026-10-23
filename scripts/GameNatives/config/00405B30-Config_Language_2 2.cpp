@@ -9,7 +9,7 @@ int Config_Language_2()
 
     void* item_104 = &"ENGLISH"[(&g_bc238c)[g_bc2384 * 0x159] * 2];
     void item_100;
-    Game_DataSymbolLoad(&item_100, "LOCAL:language/%s/");
+    sprintf(&item_100, "LOCAL:language/%s/");
     Script_RegisterNamespace("LANGUAGE:", &item_100);
     g_537b90 = 1;
     float item_104_1 = Config_SaveGameOptions_2();

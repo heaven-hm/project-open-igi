@@ -48,7 +48,7 @@ int SoundDefGroup_Process(void* context, int* arg2)
     void* item_414 = context + 0x22;
     char* item_418 = "DefineGroup";
     void item_400;
-    Game_DataSymbolLoad(&item_400, "%s("%s"");
+    sprintf(&item_400, "%s("%s"");
     void* dest_6 = &item_400;
     int i_1 = 0xffffffff;
 

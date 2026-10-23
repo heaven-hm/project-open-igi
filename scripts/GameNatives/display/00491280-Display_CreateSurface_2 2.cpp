@@ -58,7 +58,7 @@ char* Display_CreateSurface_2(char* context, int* arg2)
         char* data_25 = Mem_Alloc(~i_1 + 4, 4);
         *(flagP + data_val * 0x7c + 0x1fc) = data_25;
         int item_24_2 = *arg2;
-        Game_DataSymbolLoad(data_25, "RM: %s");
+        sprintf(data_25, "RM: %s");
     }
     else
     {

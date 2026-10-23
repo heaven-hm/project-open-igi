@@ -18,7 +18,7 @@ int HumanAI_OnEvent(int* context)
     if (Script_EvaluateCondition_4(source_val) != 0xffffffff)
     {
         int item_10_1 = Script_EvaluateCondition_4(source_val);
-        Game_DataSymbolLoad(&source_val[0xedc], "MISSION:AI/%d.qsc");
+        sprintf(&source_val[0xedc], "MISSION:AI/%d.qsc");
         source_val[0xf1c] = Qvm_Load(&source_val[0xedc]);
         source_val[0x237] = 0;
     }

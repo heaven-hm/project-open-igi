@@ -13,13 +13,13 @@ int GuardGenerator_Action(void* context)
         void* item_d0_1 = &item_c0;
         *(context + 0x71) = 0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isOn");
+        sprintf(&item_80, "%s.isOn");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_e0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isSpawned");
+        sprintf(&item_80, "%s.isSpawned");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_f0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.nSpawns");
+        sprintf(&item_80, "%s.nSpawns");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x71) = 0;
     }

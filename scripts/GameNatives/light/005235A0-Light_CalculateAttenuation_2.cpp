@@ -12,7 +12,7 @@ int Light_CalculateAttenuation_2(void* context)
         void* item_114_1 = &g_54f098;
         int dest_1 = 0;
         char item_100[0x100];
-        Game_DataSymbolLoad(&item_100, "%s%05d");
+        sprintf(&item_100, "%s%05d");
         g_a83978 = 0;
         g_a83b24 = &item_100;
         Light_Lightmaps();
@@ -38,7 +38,7 @@ int Light_CalculateAttenuation_2(void* context)
         {
             int item_110_3 = context_val;
             void* item_114_3 = &g_54f098;
-            return Game_DataSymbolLoad(context + 0x78, "%s%05d");
+            return sprintf(context + 0x78, "%s%05d");
         }
 
         context_val += 1;

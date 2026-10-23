@@ -28,6 +28,6 @@ int Menu_MenuK01D(void* context, int arg2, char arg3)
     data_4 = LOWD(arg3);
     int item_4c = ((data_4 ^ temp_val) - temp_val) % 7 + 1;
     void item_40;
-    Game_DataSymbolLoad(&item_40, "menu_k0%.1d");
+    sprintf(&item_40, "menu_k0%.1d");
     return SoundSys_AttachLipsync_8(&item_40, 0, 0);
 }

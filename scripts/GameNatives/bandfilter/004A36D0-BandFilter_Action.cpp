@@ -24,7 +24,7 @@ void* BandFilter_Action(float context)
 
         int item_4c_1 = *(dest_val + 0x60);
         void item_34;
-        Game_DataSymbolLoad(&item_34, "CAMERA %d");
+        sprintf(&item_34, "CAMERA %d");
         void* item_50_1 = &item_34;
         void* item_54_2 = &item_34;
         int** data_2 = Sys_OpenFileStream_18(*(dest_val + 0x70),

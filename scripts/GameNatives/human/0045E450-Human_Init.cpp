@@ -139,7 +139,7 @@ int Human_Init()
     for (int* i = &g_5bdb18; i < &g_5bdc18; )
     {
         int item_d0c_1 = dest_val;
-        Game_DataSymbolLoad(i, "CRITERIA_HUMAN%d");
+        sprintf(i, "CRITERIA_HUMAN%d");
         *context_val = Physics_UnableToRegisterArea(i, sub_460a10);
         i = &i[8];
         dest_val += 1;

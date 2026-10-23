@@ -2,7 +2,7 @@
 // Evidence: 005236C0-WeatherWaterSky_Invoke7_5236C0.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "WeatherWaterSky_Invoke7_5236C0.h"
 
-int __convention("regparm") WeatherWaterSky_Invoke7_5236C0(int arg1, int arg2, int* arg3, void* arg4)
+int WeatherWaterSky_Invoke7_5236C0("regparm") WeatherWaterSky_Invoke7_5236C0(int arg1, int arg2, int* arg3, void* arg4)
 
 {
     int* var_4 = arg3;

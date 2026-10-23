@@ -6,8 +6,8 @@ The goal is to reconstruct native functions from the original retail Project IGI
 
 | Tool                                                   | Responsibility                                                                                                                                                                                                  |
 | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Binary Ninja MCP**                                   | Analyze disassembly, decompiled pseudocode, function boundaries, cross-references, arguments, and data types.                                                                                                   |
-| **Ghidra MCP**                                         | Independently analyze the same function, validate decompilation, inspect references, and identify disagreements with Binary Ninja.                                                                              |
+| **Binary Ninja MCP**                                   | Preferred decompiler; analyze disassembly, pseudocode, function boundaries, cross-references, arguments, and data types when available. Do not also run Ghidra on the same target/function.                         |
+| **Ghidra MCP**                                         | Fallback decompiler only when Binary Ninja is unavailable for a target. Do not also run Binary Ninja on the same target/function.                                                                                 |
 | **Radare2 CFG MCP**                                    | Analyze control-flow graphs, basic blocks, branches, loops, calls, and function structure.                                                                                                                      |
 | **angr** | Independently recover exact retail function entries and CFGs with CFGFast; record image identity, assumptions and unresolved flow. Approximate CFG evidence does not prove behavior. |
 | **IGI-Probe**                                          | Provide Frida-like runtime instrumentation for observing native behavior, function calls, memory values, and execution paths where supported. Do not assume IGI-Probe is Frida or supports every Frida feature. |
@@ -23,11 +23,11 @@ The goal is to reconstruct native functions from the original retail Project IGI
    - Locate the native function in the retail `igi.exe`.
    - Record its address, calling convention, arguments, return value, callers, callees, and relevant memory references where evidence permits.
 
-2. **Analyze independently with Binary Ninja, Ghidra, and angr**
+2. **Analyze with the selected decompiler and angr**
 
-   - Compare the decompilers with angr CFGFast recovery of the same exact entry and image base.
-   - Compare pseudocode, control flow, types, function boundaries, and cross-references.
-   - Investigate disagreements rather than choosing one decompiler automatically.
+   - For each target, select exactly one decompiler: Binary Ninja first, Ghidra only if Binary Ninja is unavailable. Do not analyze that target/function with both.
+   - Compare the selected decompiler's results with Radare2 CFG and angr CFGFast recovery of the same exact entry and image base.
+   - Check pseudocode, control flow, types, function boundaries, and cross-references. Investigate disagreements with CFG, runtime evidence, or another independent method that is not a second decompiler.
 
 3. **Verify the control-flow structure with Radare2 CFG MCP**
 
@@ -62,7 +62,7 @@ The goal is to reconstruct native functions from the original retail Project IGI
 Every reconstructed native should have an evidence record containing, where applicable:
 
 - Original executable identity, version, and function address.
-- Disassembly and decompiler references from Binary Ninja and Ghidra.
+- Disassembly and decompiler references from the single selected decompiler, identified by tool and version.
 - CFG findings from Radare2.
 - Function signatures, calling conventions, argument meanings, return values, and side effects.
 - Runtime observations collected through IGI-Probe, including test conditions.
@@ -77,7 +77,7 @@ Do not invent function signatures, native names, argument meanings, or runtime b
 1. **Preserve behavior, not just appearance.** Match the original branches, loops, calls, return paths, state changes, and side effects.
 2. **Preserve the original interface.** Do not change the calling convention, parameter layout, return type, or memory assumptions without evidence.
 3. **Separate facts from hypotheses.** Label inferred types, guessed names, and uncertain semantics.
-4. **Use independent analysis.** Compare Binary Ninja and Ghidra results, then use CFG and runtime evidence to resolve disagreements.
+4. **Use independent analysis.** Compare the selected decompiler with CFG and runtime evidence. Do not run both Binary Ninja and Ghidra on the same target/function.
 5. **Do not blindly trust generated pseudocode.** Decompilers and AI agents can produce plausible but incorrect interpretations.
 6. **Avoid unsupported simplification.** Do not remove unusual branches, error handling, or apparently redundant instructions until their behavior is understood.
 7. **Review every meaningful change.** Require an independent critic/reviewer pass where available, address findings, and retain unresolved issues in the evidence record.
@@ -111,7 +111,7 @@ A native reconstruction is ready for acceptance when:
 - The verification status accurately describes what was tested.
 - RE-Agent and REA are identified separately, and any claimed integration is supported by the actual repository implementation.
 
-**Core principle:** Binary Ninja, Ghidra, angr, Radare2 CFG MCP, and IGI-Probe provide complementary evidence. RE-Agent coordinates the project-specific reconstruction and review process; REA is a separate upstream project whose capabilities may be evaluated for integration. The original executable and reproducible observations—not AI confidence—determine whether a native is verified.
+**Core principle:** One selected decompiler (Binary Ninja preferred, Ghidra fallback), angr, Radare2 CFG MCP, and IGI-Probe provide complementary evidence. RE-Agent coordinates the project-specific reconstruction and review process; REA is a separate upstream project whose capabilities may be evaluated for integration. The original executable and reproducible observations—not AI confidence—determine whether a native is verified.
 
 ### 10.7. Gate modes and candidate reuse
 
@@ -123,7 +123,19 @@ A native reconstruction is ready for acceptance when:
 - For startup/load-only development checks, `./build.sh --runtime-trace <trace.json>` accepts only a complete `igi-native-runtime-trace` (schema 1) captured by IGI-Probe, bound to the exact retail SHA-256 and containing observed native VAs. It checks that observed subset at `STRUCTURALLY_VERIFIED`, then runs the host build and tests; it never creates a release attestation, deploys an executable, or replaces the changed-native feature acceptance gate.
 - Prefer small native fixes and small commits. Check the changed method, then repeat `./build.sh` as fixes accumulate. Keep current evidence with the code.
 - Candidate methods may come from `scripts/GameNatives`, C# OpenIGI, `project-igi-editor`, or `hjcminus/Project-IGI-Terrain`. Retain source revision and applicable license notices. Copied/adapted code remains a candidate until checked against retail `igi.exe`.
+- Use a hybrid reference-and-evidence workflow: inspect `/Users/haseeb-mir/Documents/Code/project-igi-converter`, `/Users/haseeb-mir/Documents/Code/project-igi-editor`, and `/Users/haseeb-mir/Documents/Code/open-igi` first to identify file layouts, tags, resource paths, task/level behavior, and candidate control/data flow. Do not copy their implementation as a transcription or claim their behavior is retail-equivalent. Verify the exact selected behavior with Binary Ninja (Ghidra fallback), Radare2 CFG, angr, and sequential retail Frida evidence before accepting it. Prefer the converter's parsers for format discovery (for example MTP `BANM` and animation IFF chunks); use the editor for level/task cross-references; use retail runtime instrumentation for values, ordering, and state transitions.
 - External source shape or a CFG score alone cannot prove equivalent calculations, return values or memory effects. Record separate CFG, angr, semantic and behavioral results; incomplete comparisons stay inconclusive.
+
+### 10.8. Required sequential game-runtime workflow
+
+- Use the same retail level argument for both programs, for example `igi.exe window level7` followed by `open-igi.exe window level7`. Run one process at a time: both use the `IGIMUTEX` mutex. Close the first process and confirm it is gone before launching the second. `window` is required for this scene test; omitting it selects OpenIGI's fullscreen path. Launch each program with `/Users/haseeb-mir/Downloads/IGI` as its working directory because retail startup checks `YMBE.AFP` by relative path.
+- For each level comparison, capture retail first, then OpenIGI, with matching game directory, level, display mode, and observation steps. Preserve logs, Frida output, executable hashes, and level-script paths under `build/runtime-traces/` or `docs/fidelity/evidence/`; compare call counts, arguments/returns where the ABI is understood, state changes, load failures, and rendered output. Never infer equivalence from attachment or call counts alone.
+- Use `docs/fidelity/runtime-test-workflow.md` for exact local paths, CrossOver/Frida startup and recovery steps, scripts, and a three-to-five-level matrix selected from 1–14. `scripts/frida_level_probe.js` is the reusable entry/return probe; it must identify unresolved signatures and avoid dereferencing unknown pointers. A Frida attach after launch misses earlier startup calls; record that limitation. Do not use remote spawn unless its working directory is proven to be the game data root.
+- Read `humanplayer/humanplayer.qvm` and `config.qvm` before implementing movement. Record the decoded values and retail observations for input, motion, collision, jump, ground contact, and interaction. Do not treat guessed controller constants as retail facts. Compare the same task script (`OBJECTS.QVM`, loaded through the `.qsc` alias where needed) in each application.
+- Run the two games sequentially for three to five representative levels, including the level under active development and levels with different terrain/object content. If the retail binary cannot load a requested level with this command, record the exact failure and select a level it supports; do not substitute a different script silently.
+- For each native analysis, select one decompiler: Binary Ninja first, Ghidra only when Binary Ninja is unavailable. Do not analyze the same target/function in both. Radare2 CFG, angr, Frida/IGI-Probe, memory/state observations, and build/host regression checks answer separate questions. A CFG pass cannot establish camera, texture, input, collision, or visual correctness. Keep runtime parity provisional until paired observations support it; keep weapon, AI, damage, and sound outside the current movement/interactions scope.
+- The Codex MCP registration and `reverse-engineer-anything` skill from `/Users/haseeb-mir/Documents/Code/re-agent` were refreshed on 2026-10-19. Restart Codex to load that updated MCP server in a fresh session. Treat RE-Agent as an evidence/orchestration layer; do not accept its generated candidate code as retail transcription without static, structural, and runtime evidence. Its health for each requested provider must be reported separately from tools configured by this repository.
+- Do not introduce guessed constants, fallback movement, synthetic interaction, or substitute camera behavior. If the source transcription has unresolved blocks or runtime behavior is unknown, keep the feature failing/provisional and record the gap rather than masking it.
 
 ### 10.9. Mandatory per-native feature acceptance loop
 

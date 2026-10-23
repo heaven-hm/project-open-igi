@@ -63,10 +63,10 @@ WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )
         g_5c8df0 = &g_5c8df4;
         g_5c8df8 = &g_5c8df0;
         g_5c8df4 = 0;
-        FX_FragmentSimulate_27("Window", sub_48f350);
-        FX_FragmentSimulate_27("WinInput", sub_48f920);
-        FX_FragmentSimulate_27("Germany", sub_48f930);
-        FX_FragmentSimulate_27("USA", sub_48f950);
+        AppMain_ParseCmdLineArgs("Window", sub_48f350);
+        AppMain_ParseCmdLineArgs("WinInput", sub_48f920);
+        AppMain_ParseCmdLineArgs("Germany", sub_48f930);
+        AppMain_ParseCmdLineArgs("USA", sub_48f950);
         float item_464;
         HWND hWnd;
         Display_DinputDll(&item_464, &hWnd);
@@ -76,7 +76,7 @@ WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )
         {
             int item_47c_2 = 7;
             void text;
-            Game_DataSymbolLoad(&text,
+            sprintf(&text,
                 "This application requires DirectX version %d.%d or greater to run.");
             MessageBoxA(nullptr, &text, "Error", MB_ICONHAND);
             lpParam = 1;
@@ -111,7 +111,7 @@ WPARAM __stdcall FX_Igimutex(HINSTANCE context, int arg2 )
             short x87control_1;
             data_22 = QTask_CreateTask();
             g_5c8de8 = data_22;
-            FX_FragmentSimulate_27("HardcoreGerman", sub_48f960);
+            AppMain_ParseCmdLineArgs("HardcoreGerman", sub_48f960);
 
             if (g_5c8de8)
             {

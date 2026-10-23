@@ -1,3 +1,8 @@
+// HOST HELPER: timestamped host diagnostic log formatting.
+// Artifact: engine/src/retail/diagnostics/log_record.cpp; port-owned utility, no retail VA.
+// Tools/evidence: engine/tests/core/log_record_test.cpp.
+// Behavior/CFG: formats UTC timestamp, severity, subsystem and message for host logs.
+// Status/limits: HOST HELPER; no retail native equivalence or gameplay behavior claimed.
 #include "igi/retail/diagnostics/log_record.hpp"
 
 #include <chrono>

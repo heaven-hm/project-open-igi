@@ -1,9 +1,9 @@
-// IGI native provenance: Define_TriggerOnce - 0x004E9EC0 - CFG score 98.2% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineTriggerOnce - 0x004E9EC0 - CFG score 98.2% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004E9EC0-Define_TriggerOnce.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "Define_TriggerOnce.h"
-int Define_TriggerOnce(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , int arg8, void* arg9, float arg10)
+int DefineTriggerOnce(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , int arg8, void* arg9, float arg10)
 
-// Sig: void Define_TriggerOnce(...)
+// Sig: void DefineTriggerOnce(...)
 // Note: Defines a fire-once TRIGGER entry inside definition blocks - OpenIGI
 // maps it to SoundDefinitionKind.TriggerOnce. Parser-context only.
 {

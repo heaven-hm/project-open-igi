@@ -13,7 +13,7 @@ int Display_CouldnTReadPixelForm_2(void* context)
 
     if (data_1)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't read pixel format");
+        sprintf(&item_400, "Couldn't read pixel format");
         int item_4a8 = DDERR_GENERIC(data_1);
         void* item_4ac = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -60,7 +60,7 @@ int Display_CouldnTReadPixelForm_2(void* context)
         return (*(*data_13 + 8))(data_13);
     }
 
-    Game_DataSymbolLoad(&item_400, "Couldn't create texture surface");
+    sprintf(&item_400, "Couldn't create texture surface");
     int item_4a8_2 = DDERR_GENERIC(data_8);
     void* item_4ac_1 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

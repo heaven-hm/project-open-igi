@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_SetFieldOfView_15 - 0x004A8B37 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A8B37-Camera_SetFieldOfView_15.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004A8B37-Camera_SetFieldOfView_15.hpp"
-int __fastcall __trandisp2(int context, void* arg2, void* arg3 , long double arg4 , long double arg5 )
+int __fastcall Camera_SetFieldOfView_15(int context, void* arg2, void* arg3 , long double arg4 , long double arg5 )
 
 {
     short context_val;

@@ -9,7 +9,7 @@ int WeatherWaterSky_InvokeLightmapsRes(void* arg1)
     {
         Light_LightmapsRes();
 
-        if (Sys_AllocateMemory_16(0xa83b54))
+        if (Resource_FileExists(0xa83b54))
         {
             void* ecx_1;
             int edx_1;
@@ -37,7 +37,7 @@ int WeatherWaterSky_InvokeLightmapsRes(void* arg1)
     *(arg1 + 0x6e) = 0;
     *(arg1 + 0x72) = 0;
     *(arg1 + 0x73) = 0;
-    Game_DataSymbolLoad(arg1 + 0x78, &g_script_ret_type);
+    sprintf(arg1 + 0x78, &g_script_ret_type);
     int ecx_2 = *(arg1 + 0x14);
     __builtin_memcpy(arg1 + 0x8c,
         "\x00\x00\x80\x3f\x00\x00\x80\x3f\x00\x00\xc8\x42\x00\x00\x80\x3f\x00\x00\x80\x3f\xe8\x03\x00\x"

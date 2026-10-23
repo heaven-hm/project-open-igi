@@ -13,22 +13,22 @@ int Switch_Cleanup_2(void* context)
         void* item_d0_1 = &item_c0;
         *(context + 0x1cc) = 0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isOn");
+        sprintf(&item_80, "%s.isOn");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_e0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isDestroyed");
+        sprintf(&item_80, "%s.isDestroyed");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_f0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isPressed");
+        sprintf(&item_80, "%s.isPressed");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_100_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isLastOn");
+        sprintf(&item_80, "%s.isLastOn");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_cc_2 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isLastDestroyed");
+        sprintf(&item_80, "%s.isLastDestroyed");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_dc_2 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isLastPressed");
+        sprintf(&item_80, "%s.isLastPressed");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x1cc) = 0;
     }

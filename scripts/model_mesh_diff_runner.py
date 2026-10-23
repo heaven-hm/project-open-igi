@@ -51,7 +51,7 @@ __declspec(dllexport) void NativeBackend(void**) {}
 namespace igi::retail::mem { void* Mem_Alloc(int size,int align) {return NativeAllocate(size,align);} }
 namespace igi::retail::resource { void* Resource_Load(const char* path,int* size) {return NativeLoad(path,size);} }
 namespace igi::retail::error {
-int Game_DataSymbolLoad(char* out,const char* format,...) {
+int sprintf(char* out,const char* format,...) {
  std::va_list args; va_start(args,format); const char* name=va_arg(args,const char*); va_end(args);
  return NativeFormat(out,format,name);
 }

@@ -31,7 +31,7 @@ int ListBox_Update(void* context, int arg2)
     {
         void* item_54_3 = context + 0x54;
         void item_40;
-        Game_DataSymbolLoad(&item_40, "%s_1.spr");
+        sprintf(&item_40, "%s_1.spr");
         void* dest_1 = &item_40;
         int i = 0xffffffff;
 
@@ -51,7 +51,7 @@ int ListBox_Update(void* context, int arg2)
         dest_4 = memcpy(*(context + 0xd4) + 0x54, dest_1 - entity_2, entity_2 & 0xfffffffc);
         void* item_60_3 = context + 0x54;
         memcpy(dest_4, source_2, entity_2 & 3);
-        Game_DataSymbolLoad(&item_40, "%s_2.spr");
+        sprintf(&item_40, "%s_2.spr");
         void* dest_5 = &item_40;
         int i_1 = 0xffffffff;
 

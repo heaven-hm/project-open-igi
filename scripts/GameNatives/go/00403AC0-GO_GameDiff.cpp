@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GameDiff - 0x00403AC0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOGameDiff - 0x00403AC0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00403AC0-GO_GameDiff.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403AC0-GO_GameDiff.hpp"
-int GO_GameDiff(int context, float arg2 )
+int GOGameDiff(int context, float arg2 )
 
-// Sig: int GO_GameDiff(int difficulty)
+// Sig: int GOGameDiff(int difficulty)
 // Note: Sets game difficulty for the current profile. Param: difficulty = 0
 // easy, 1 medium, 2 hard (retail order). Use in config scripts. Returns 1.
 {

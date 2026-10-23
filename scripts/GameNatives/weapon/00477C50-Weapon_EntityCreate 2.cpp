@@ -29,7 +29,7 @@ struct status_msg* Weapon_EntityCreate(void* context, short arg2, int* arg3, int
     result->sprite[0x3d] = arg5;
     result->sprite[0x70] = arg2;
     result->sprite[0x71] = *(&arg2 + 1);
-    Game_DataSymbolLoad(&result->sprite[0x50], "%d");
+    sprintf(&result->sprite[0x50], "%d");
     unsigned int data_4 = Script_ParseEnumReal32_8();
     int data_5 = 0;
     data_5 = result->head[7];

@@ -22,7 +22,7 @@ int* Ladder_GetOnTop(void* context, void* arg2)
             int data_1;
             *(arg2 + 0xd8c) = COMBINE(0, data_1 + 1) % 0xc;
             char item_20[0x20];
-            Game_DataSymbolLoad(&item_20, "walk_ladder_%d");
+            sprintf(&item_20, "walk_ladder_%d");
             struct status_msg* data_5 = SoundSys_SetMasterVolume_7(Script_FormatString(), &item_20);
 
             if (data_5)

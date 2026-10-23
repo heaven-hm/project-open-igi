@@ -1,5 +1,10 @@
 # Project Open IGI.
 
+> Active integration: `mvp/level1-integration`, existing main checkout only. [Level 1 gameplay MVP and staged acceptance milestones](MVP.md). No new worktree; one writer/build owner.
+
+> **MVP audit (2026-10-23):** [Missing gameplay systems and Codex/DeepSeek workflow issues](MVP.md#workflow-audit-2026-10-23), including missed-source discovery, worktree integration, stale evidence and serialized runtime capture.
+
+
 Project Open IGI is a native implementation of the original game engine. Engine routines are ported from reverse-engineering evidence taken directly from the retail `igi.exe`, with `retail names`, `virtual addresses`, `calling conventions`, and `evidence references` retained where known.
 
 This repository is the game-engine implementation. It is not an editor, converter, helper library, or gameplay rewrite based on another project. The retail executable is the behavior authority. open-igi may identify candidate implementations, but REA/static/runtime evidence from retail igi.exe must verify behavior used here. Unknown behavior remains explicitly unresolved rather than guessed.

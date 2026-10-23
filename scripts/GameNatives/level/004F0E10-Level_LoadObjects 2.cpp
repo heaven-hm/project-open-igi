@@ -14,6 +14,6 @@ int Level_LoadObjects(int context, int arg2)
 {
     int item_104 = context;
     void item_100;
-    return Task_New_2(&item_100, arg2, Game_DataSymbolLoad(&item_100, "%s/objects.qsc"), &item_100,
+    return Task_New_2(&item_100, arg2, sprintf(&item_100, "%s/objects.qsc"), &item_100,
         arg2);
 }

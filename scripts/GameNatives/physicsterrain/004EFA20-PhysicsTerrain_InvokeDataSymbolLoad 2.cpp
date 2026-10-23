@@ -19,7 +19,7 @@ int PhysicsTerrain_InvokeDataSymbolLoad(float* arg1, void* arg2)
     }
 
     double var_54 = *arg1;
-    Game_DataSymbolLoad(base_val, "%f");
+    sprintf(base_val, "%f");
     void var_40;
     void* dest_ptr = &var_40;
     int i_1 = 0xffffffff;

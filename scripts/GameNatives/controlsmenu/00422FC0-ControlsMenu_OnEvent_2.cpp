@@ -12,5 +12,5 @@ void* ControlsMenu_OnEvent_2(void* self)
     Script_ParseEnumString_6(&local_c0, self);
     void* buf_cc = &local_c0;
     void local_80;
-    return Game_DataSymbolLoad(&local_80, "%s.isOn");
+    return sprintf(&local_80, "%s.isOn");
 }

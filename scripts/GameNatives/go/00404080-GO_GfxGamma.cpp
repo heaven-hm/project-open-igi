@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GfxGamma - 0x00404080 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOGfxGamma - 0x00404080 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00404080-GO_GfxGamma.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00404080-GO_GfxGamma.hpp"
-int GO_GfxGamma(long double context , int arg2, float arg3 )
+int GOGfxGamma(long double context , int arg2, float arg3 )
 
-// Sig: int GO_GfxGamma(float gamma)
+// Sig: int GOGfxGamma(float gamma)
 // Note: Sets gamma for the current profile. Param: gamma = float, retail
 // default 1.0 (range ~0.5-3.0 clamped elsewhere). Use in config scripts.
 // Returns 1.

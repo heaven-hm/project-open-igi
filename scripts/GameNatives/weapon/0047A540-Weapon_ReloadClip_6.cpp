@@ -32,7 +32,7 @@ int Weapon_ReloadClip_6(int* context, float arg2)
 
     int item_60_3 = flagP;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     float source_1 = arg2;
     Sys_FreeMemory_18(*(source_1 + 0x4e0), &item_10);
     long double fpu_val_7_2 = data_val * 0.984375f - 4.0f;

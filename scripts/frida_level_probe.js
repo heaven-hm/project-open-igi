@@ -2,6 +2,16 @@
 // its address list from the manifest's implemented native sources.
 // ABI is intentionally unknown here: record raw argument words and EAX only; do not dereference.
 'use strict';
+// These are runtime comparison anchors.  They remain in the probe even before
+// their OpenIGI counterparts have an address-bound implementation: their job is
+// to observe the retail sequence needed to reconstruct player input and terrain
+// behavior.  The generated list below separately follows implemented sources.
+const runtimeAnchors = [
+  { name: "DefineHumanPlayerGeneral", va: "0x00410070" },
+  { name: "HumanPlayer_LoadParameters", va: "0x004137A0" },
+  { name: "GOInRemap", va: "0x004037C0" },
+  { name: "InputPort_Process", va: "0x004ED5C0" }
+];
 const targets = [
   {
     "name": "QTask_OpenEvent",
@@ -80,7 +90,7 @@ const targets = [
     "va": "0x004A26C0"
   },
   {
-    "name": "Game_DataSymbolLoad",
+    "name": "sprintf",
     "va": "0x004A53B3"
   },
   {
@@ -368,24 +378,27 @@ const targets = [
     "va": "0x005175A0"
   }
 ];
+const probeTargets = [...runtimeAnchors, ...targets].filter((target, index, items) =>
+  items.findIndex(other => other.va === target.va) === index);
 const imageBase = ptr('0x00400000');
-const moduleNames = ['igi.exe', 'open-igi.exe'];
+const moduleNames = ['igi.exe', 'open-igi.exe', 'open-igi-e2e-candidate.exe'];
 const modules = Process.enumerateModules();
 let targetModule = null;
 for (const wanted of moduleNames) {
   targetModule = modules.find(m => m.name.toLowerCase() === wanted);
   if (targetModule) break;
 }
-if (targetModule === null) {
+if (!targetModule) {
   send({type: 'probe_error', error: 'target game module not found', modules: modules.map(m => ({name:m.name, base:m.base.toString(), size:m.size}))});
   throw new Error('target game module not found');
 }
 send({type:'probe_start', module:targetModule.name, base:targetModule.base.toString(), size:targetModule.size,
-      retailAddressMode: targetModule.base.equals(imageBase), targetCount:targets.length});
+      retailAddressMode: targetModule.name.toLowerCase() === 'igi.exe' && targetModule.base.equals(imageBase),
+      targetCount:probeTargets.length});
 const installed=[];
 const failures=[];
 const counts={};
-for (const target of targets) {
+for (const target of probeTargets) {
   const va=ptr(target.va);
   // Retail VAs are only meaningful for original igi.exe at its preferred base.
   if (targetModule.name.toLowerCase() !== 'igi.exe' || !targetModule.base.equals(imageBase)) {

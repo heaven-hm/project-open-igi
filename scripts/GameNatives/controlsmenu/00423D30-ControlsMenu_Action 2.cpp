@@ -12,10 +12,10 @@ int ControlsMenu_Action(void* context)
         Script_ParseEnumString_6(&item_c0, context);
         void* item_d0_1 = &item_c0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.nOffset");
+        sprintf(&item_80, "%s.nOffset");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_e0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isReset");
+        sprintf(&item_80, "%s.isReset");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x358) = 0;
     }

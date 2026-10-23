@@ -7,7 +7,7 @@ int Sys_ResolveSymbol_27(int* context, int arg2, int arg3)
     int item_108 = arg3;
     int item_10c = arg2;
     void item_100;
-    Game_DataSymbolLoad(&item_100, "%f");
+    sprintf(&item_100, "%f");
     void* dest_val = &item_100;
     int i = 0xffffffff;
 

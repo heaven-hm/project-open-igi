@@ -15,7 +15,7 @@ int* DynObj_LoadModelTexturePackage(void* context, int arg2, int arg3)
         char* item_128_1 = &g_a4ed6c;
         int data_2;
         void* entity_1;
-        data_2 = Game_DataSymbolLoad(&item_100, "%stextures/%s.res");
+        data_2 = sprintf(&item_100, "%stextures/%s.res");
         void* item_138_1 = &item_100;
         Resource_Load(data_2, &item_100, entity_1, nullptr);
         DynObj_LoadModelTextures(dest_val);
@@ -27,7 +27,7 @@ int* DynObj_LoadModelTexturePackage(void* context, int arg2, int arg3)
     char* item_128_2 = &g_a4ed6c;
     int data_3;
     void* entity_2;
-    data_3 = Game_DataSymbolLoad(&item_100, "%smodels/%s.res");
+    data_3 = sprintf(&item_100, "%smodels/%s.res");
     void* item_138_2 = &item_100;
     *(dest_val + 0xc) = Resource_Load(data_3, &item_100, entity_2, nullptr);
     DynObj_LoadPackageMeshes(dest_val);

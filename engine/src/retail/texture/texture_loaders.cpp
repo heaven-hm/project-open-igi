@@ -335,7 +335,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 // Native: DynObj_LoadModelTextures; retail VA 0x004CF790; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: allocates `count * 0x24` bytes at `*(context + 0x34)` and `count * 0x0C` bytes at Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF790-0x004CF865, 213 bytes, digest 75a65077e61f7571a67d6370e3eec880541dbaafcea3aed7af6dec07cf49002f; CLEAN/dynobj/004CF790-DynObj_LocalTexturesSTex.c.
-// Behavior/CFG: locates the `'TEXF'` (`0x54455846`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *texf` at `*(context + 0x40)`, `*(context + 0x38)` via Mem_Alloc (0x004B0C60) when `count > 0` (or clears both to 0), and iterates each NUL-terminated texture name formatting `"LOCAL:textures/%s.tex"` into `0x00A4EC6C` via Game_DataSymbolLoad (0x004A53B3) and calling Texture_LoadLoopTextureFile (0x004B24C0). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
+// Behavior/CFG: locates the `'TEXF'` (`0x54455846`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *texf` at `*(context + 0x40)`, `*(context + 0x38)` via Mem_Alloc (0x004B0C60) when `count > 0` (or clears both to 0), and iterates each NUL-terminated texture name formatting `"LOCAL:textures/%s.tex"` into `0x00A4EC6C` via sprintf (0x004A53B3) and calling Texture_LoadLoopTextureFile (0x004B24C0). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact TEXF chunk parsing, allocation sizes, and loop stride (+0x24 / +0x0C).
 // Previous catalog alias: DynObj_LocalTexturesSTex.
 void* DynObj_LoadModelTextures(void* context)
@@ -384,7 +384,7 @@ void* DynObj_LoadModelTextures(void* context)
         do
         {
             *reinterpret_cast<std::int32_t*>(pal_records + flagP + 4U) = 0;
-            error::Game_DataSymbolLoad(path_buf, "LOCAL:textures/%s.tex", source_1);
+            error::sprintf(path_buf, "LOCAL:textures/%s.tex", source_1);
             Sys_SIsNotAValidTextureF(
                 reinterpret_cast<std::int32_t*>(tex_records + tex_offset),
                 pal_records + flagP,

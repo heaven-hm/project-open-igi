@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_ResetMatrix_26 - 0x004AD140 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AD140-Camera_ResetMatrix_26.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004AD140-Camera_ResetMatrix_26.hpp"
-unsigned int __stdcall __aulldiv(int context, unsigned int arg2, int arg3, unsigned int arg4) {
+unsigned int __stdcall Camera_ResetMatrix_26(int context, unsigned int arg2, int arg3, unsigned int arg4) {
     if (!arg4)
         return COMBINE(COMBINE(0, arg2) % arg3, context) / arg3;
 

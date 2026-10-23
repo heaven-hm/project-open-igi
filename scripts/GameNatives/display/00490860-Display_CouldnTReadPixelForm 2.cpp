@@ -194,7 +194,7 @@ void* Display_CouldnTReadPixelForm(void* context)
                     char* item_558_6 = "Couldn't read pixel format";
                     void item_400;
                     hDC_1 = &item_400;
-                    Game_DataSymbolLoad(hDC_1, item_558_6);
+                    sprintf(hDC_1, item_558_6);
                     int item_564_1 = DDERR_GENERIC(data_14);
                     void* item_568 = &item_400;
                     Error_Show("%s\n\nDirectX error message: %s");

@@ -1,9 +1,9 @@
-// IGI native provenance: Define_HumanPlayerAmmoLimit - 0x004102D0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineHumanPlayerAmmoLimit - 0x004102D0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004102D0-Define_HumanPlayerAmmoLimit.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004102D0-Define_HumanPlayerAmmoLimit.hpp"
-int Define_HumanPlayerAmmoLimit(int context, int* arg2 )
+int DefineHumanPlayerAmmoLimit(int context, int* arg2 )
 
-// Sig: void Define_HumanPlayerAmmoLimit(...)
+// Sig: void DefineHumanPlayerAmmoLimit(...)
 // Note: Registers an ammo-limit entry (max carried ammo class) for the human
 // player during a humanplayer definition block (argc unknown - parser context).
 {

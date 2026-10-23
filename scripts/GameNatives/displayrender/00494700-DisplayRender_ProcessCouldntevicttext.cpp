@@ -32,7 +32,7 @@ int* DisplayRender_ProcessCouldntevicttext()
                 (*(*5ca10c_2 + 0x2c))(5ca10c_2, &var_2f8, &var_17c);
                 int var_2b8;
                 int var_714_6 = var_2b8;
-                5ca114_3 = Game_DataSymbolLoad(&var_6f8,
+                5ca114_3 = sprintf(&var_6f8,
                     "Couldn't restore surfaces\nVideo memory free: %d");
             }
             else
@@ -72,7 +72,7 @@ int* DisplayRender_ProcessCouldntevicttext()
 
                     if (esi_3)
                     {
-                        Game_DataSymbolLoad(&var_6f8, "Couldn't update primary surface");
+                        sprintf(&var_6f8, "Couldn't update primary surface");
                         int var_720_5 = DDERR_GENERIC(esi_3);
                         void* var_724_5 = &var_6f8;
                         Error_Show("%s\n\nDirectX error message: %s");
@@ -88,7 +88,7 @@ int* DisplayRender_ProcessCouldntevicttext()
 
                     if (eax_6)
                     {
-                        Game_DataSymbolLoad(&var_6f8, "Couldn't flip");
+                        sprintf(&var_6f8, "Couldn't flip");
                         int var_720_2 = DDERR_GENERIC(eax_6);
                         void* var_724_2 = &var_6f8;
                         Error_Show("%s\n\nDirectX error message: %s");
@@ -103,7 +103,7 @@ int* DisplayRender_ProcessCouldntevicttext()
 
                 if (5ca114_3)
                 {
-                    Game_DataSymbolLoad(&var_6f8, "BeginScene failed.");
+                    sprintf(&var_6f8, "BeginScene failed.");
                     int var_720_6 = DDERR_GENERIC(5ca114_3);
                     void* var_724_6 = &var_6f8;
                     Error_Show("%s\n\nDirectX error message: %s");
@@ -115,7 +115,7 @@ int* DisplayRender_ProcessCouldntevicttext()
         }
         else
         {
-            Game_DataSymbolLoad(&var_6f8, "Couldn't evict textures");
+            sprintf(&var_6f8, "Couldn't evict textures");
             int var_720_1 = DDERR_GENERIC(eax_1);
             void* var_724_1 = &var_6f8;
             Error_Show("%s\n\nDirectX error message: %s");

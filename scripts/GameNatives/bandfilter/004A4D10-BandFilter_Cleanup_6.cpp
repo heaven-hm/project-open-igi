@@ -21,7 +21,7 @@ int BandFilter_Cleanup_6(int context)
     int item_64 = f1;
     int item_68 = f1 / 0x3c;
     void item_34;
-    int entity_2 = Game_DataSymbolLoad(&item_34, "%2.2d : %2.2d : %2.2d : %2.2d");
+    int entity_2 = sprintf(&item_34, "%2.2d : %2.2d : %2.2d : %2.2d");
     int item_60_1 = entity_2;
     int item_64_1 = entity_2;
     int** data_20 = Sys_OpenFileStream_18(*(dest_val + 0x30),

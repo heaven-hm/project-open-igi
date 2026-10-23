@@ -26,7 +26,7 @@ int* RenderLight_InvokeDataSymbolLoad(void* arg1)
     *(arg1 + 0x64) = 0;
     *(arg1 + 0x6c) = 0;
     *(arg1 + 0x70) = 0xa;
-    Game_DataSymbolLoad(arg1 + 0x74, &g_script_ret_type);
+    sprintf(arg1 + 0x74, &g_script_ret_type);
     int* a843ac_1 = g_a843ac;
 
     if (a843ac_1)

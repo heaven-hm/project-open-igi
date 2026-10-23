@@ -81,7 +81,7 @@ int ControlsMenu_LoadParameters(void* context)
                 data_16 = LOWD(Sys_CheckHeap_13(0x57bc48));
                 int item_40_3 = ((data_16 ^ temp_4) - temp_4) % 7 + 1;
                 void item_14;
-                Game_DataSymbolLoad(&item_14, "menu_k0%.1d");
+                sprintf(&item_14, "menu_k0%.1d");
                 SoundSys_AttachLipsync_8(&item_14, 0, 0);
                 item_28 = *(source_val + (context_1 << 2) + 0x254);
                 Menu_UpdateLanguage_12(source_val, context_1, i - 1);

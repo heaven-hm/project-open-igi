@@ -25,7 +25,7 @@ int Ladder_ClimbTick(void* context, void* arg2)
             int item_58_1 = *(((data_3 + 1) << 2) + &g_538c14) + 1;
             *(arg2 + 0xd8c) = COMBINE(0, data_3 + 1) % 0xc;
             char item_20[0x20];
-            Game_DataSymbolLoad(&item_20, "walk_ladder_%d");
+            sprintf(&item_20, "walk_ladder_%d");
             struct status_msg* data_6 = SoundSys_SetMasterVolume_7(Script_FormatString(), &item_20);
 
             if (data_6)

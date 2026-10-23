@@ -6,6 +6,6 @@ int Light_LightmapsRes()
 {
     char* item_4 = "lightmaps.res";
     char* item_8 = "lightmaps";
-    Game_DataSymbolLoad(0xa83b54, "MISSION:%s/%s");
+    sprintf(0xa83b54, "MISSION:%s/%s");
     return 0xa83b54;
 }

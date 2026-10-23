@@ -103,5 +103,5 @@ int PhysicsTerrain_ExecutePipeline_4EFD50(float arg1, float arg2)
     double var_3c = x87_r5_16;
     double var_44 = x87_r6_34;
     double var_4c = x87_r7_6;
-    return Game_DataSymbolLoad(context_val, "%f, %f, %f");
+    return sprintf(context_val, "%f, %f, %f");
 }

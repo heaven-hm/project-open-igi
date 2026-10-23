@@ -11,7 +11,7 @@ int* Door_Process(unsigned int context, char* arg2)
     {
         char* item_114_1 = dest_val;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "Model "%s" not available");
+        sprintf(&item_80, "Model "%s" not available");
         int i = 0xffffffff;
 
         while (i)
@@ -31,7 +31,7 @@ int* Door_Process(unsigned int context, char* arg2)
         dest_2 = memcpy(&item_100, dest_val - entity_1, entity_1 & 0xfffffffc);
         memcpy(dest_2, source_2, entity_1 & 3);
         void* item_120_1 = &item_100;
-        Game_DataSymbolLoad(context + 0x148, "** %s **");
+        sprintf(context + 0x148, "** %s **");
     }
 
     DynObj_CreateMagicObject_5(context, data_val);

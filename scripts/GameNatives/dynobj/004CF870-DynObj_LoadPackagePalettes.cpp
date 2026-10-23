@@ -29,7 +29,7 @@ int* DynObj_LoadPackagePalettes(void* context)
             {
                 void* item_14_1 = source_1;
                 char* item_18_2 = &g_a4ed6c;
-                Game_DataSymbolLoad(0xa4ec6c, "%spalettes/%s.pal");
+                sprintf(0xa4ec6c, "%spalettes/%s.pal");
                 Sys_SIsNotAValidPaletteF(*(flagP + 0x3c) + context_val, 0xa4ec6c);
                 void* dest_1 = source_1;
                 int i = 0xffffffff;

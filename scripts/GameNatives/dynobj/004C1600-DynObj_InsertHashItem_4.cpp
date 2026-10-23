@@ -27,7 +27,7 @@ void* DynObj_InsertHashItem_4(int* context, int* arg2)
         {
             int item_240_1 = *(context[2] + (flagP << 2) + *arg2 + 5);
             void item_220;
-            Game_DataSymbolLoad(&item_220, "@%08X");
+            sprintf(&item_220, "@%08X");
 
             if (flagP >= source_val - 1)
                 item_22c = 0;

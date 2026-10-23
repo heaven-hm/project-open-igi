@@ -23,7 +23,7 @@ int* DynObj_RegisterSymbol_14(int context)
     void item_40;
     int data_3;
     int temp_val;
-    data_3 = Game_DataSymbolLoad(&item_40, "%s%s.mtp");
+    data_3 = sprintf(&item_40, "%s%s.mtp");
     void* item_70 = &item_40;
     result[2] = Resource_Load(data_3, temp_val, &item_40, nullptr);
     DynObj_LoadModelTexturePackage(result, context, 1);

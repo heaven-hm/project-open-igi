@@ -9,10 +9,10 @@ int LevelTimer_OnEvent(void* context)
     void* item_d0 = &item_c0;
     *(context + 0x68) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isRun");
+    sprintf(&item_80, "%s.isRun");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTick");
+    sprintf(&item_80, "%s.nTick");
     int result = Game_DataSymbolRemoveThunk(&item_80);
     *(context + 0x68) = 0;
     return result;

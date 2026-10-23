@@ -1,7 +1,7 @@
 // IGI native provenance: QTask_UnableToAllocateEven - 0x004017C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004017C0-QTask_UnableToAllocateEven.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004017C0-QTask_UnableToAllocateEven.hpp"
-int QTask_UnableToAllocateEvent(short context)
+int QTask_UnableToAllocateEven(short context)
 
 {
     int result = 0x20;

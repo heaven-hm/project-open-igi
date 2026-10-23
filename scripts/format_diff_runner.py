@@ -61,7 +61,7 @@ def main():
             call = "String_VFormat(out, format, arguments)"
         else:
             signature = "char* out, const char* format, unsigned a, unsigned b"
-            call = "Game_DataSymbolLoad(out, format, a, b)"
+            call = "sprintf(out, format, a, b)"
         wrapper.write_text('#include "igi/retail/error/error_show.hpp"\n'
             f'extern "C" __declspec(dllexport) int NativeEntry({signature}) {{\n'
             f'return igi::retail::error::{call}; }}\n')

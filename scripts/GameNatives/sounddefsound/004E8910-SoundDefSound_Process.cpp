@@ -70,7 +70,7 @@ int SoundDefSound_Process(void* context, int* arg2)
     void* item_468 = context + 0xdf;
     char* item_46c = "DefineSound";
     void item_408;
-    Game_DataSymbolLoad(&item_408,
+    sprintf(&item_408,
         "%s("%s", "%s", %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %d, %d, %d, %8.08f, %s");
     void* dest_6 = &item_408;
     int i_1 = 0xffffffff;

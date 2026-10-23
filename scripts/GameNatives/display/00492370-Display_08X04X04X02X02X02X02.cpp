@@ -15,5 +15,5 @@ int Display_08X04X04X02X02X02X02(char* context, int arg2, short arg3, short arg4
     unsigned int item_24 = arg4;
     unsigned int item_28 = arg3;
     int item_2c = arg2;
-    return Game_DataSymbolLoad(context, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}");
+    return sprintf(context, "{%08X-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X}");
 }

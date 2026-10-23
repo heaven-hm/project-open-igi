@@ -77,7 +77,7 @@ int SoundDefTriggerOnce_Update(void* context, int* arg2)
     void* item_470 = context + 0xe3;
     char* item_474 = "DefineTriggerOnce";
     void item_408;
-    Game_DataSymbolLoad(&item_408,
+    sprintf(&item_408,
         "%s("%s", "%s", %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %d, %d, %d, %d, %s, %s");
     void* dest_6 = &item_408;
     int i_1 = 0xffffffff;

@@ -14,6 +14,6 @@ int ScrollListBox_Action(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.nActiveID");
+    sprintf(&item_80, "%s.nActiveID");
     return SymbolRegister_Int32(&item_80, context + 0x12a0);
 }

@@ -15,7 +15,7 @@ int* DisplayRender_ProcessCouldntclearscre()
         if (5ca114_1)
         {
             void var_400;
-            Game_DataSymbolLoad(&var_400, "Couldn't clear screen");
+            sprintf(&var_400, "Couldn't clear screen");
             int var_414 = DDERR_GENERIC(5ca114_1);
             void* var_418 = &var_400;
             Error_Show("%s\n\nDirectX error message: %s");

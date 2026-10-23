@@ -37,7 +37,7 @@ int Sys_UndefinedError(int* context)
             item_c_1 = "Stack underflow";
             item_10 = &context[0x9a];
         label_4bd1be:
-            Game_DataSymbolLoad(item_10, item_c_1);
+            sprintf(item_10, item_c_1);
             Sys_UnknownDataType(context);
             return context[8];
             break;
@@ -72,7 +72,7 @@ int Sys_UndefinedError(int* context)
         case 7:
         {
             void* item_c_2 = &context[0x1a];
-            Game_DataSymbolLoad(&context[0x9a], "Unknown identifier: %s");
+            sprintf(&context[0x9a], "Unknown identifier: %s");
             Sys_UnknownDataType(context);
             return context[8];
             break;
@@ -103,7 +103,7 @@ int Sys_UndefinedError(int* context)
         case 0xd:
         {
             int item_c_4 = *(*context + context[4] + 1);
-            Game_DataSymbolLoad(&context[0x9a], "Function argument overflow: %d arguments.");
+            sprintf(&context[0x9a], "Function argument overflow: %d arguments.");
             Sys_UnknownDataType(context);
             return context[8];
             break;

@@ -1,4 +1,6 @@
 #include "igi/retail/render/trans_context.hpp"
+#include "igi/retail/render/view_block.hpp"
+#include "igi/retail/human/human_view.hpp"
 
 #include <array>
 #include <cmath>
@@ -66,6 +68,32 @@ void test_camera_position_maps_to_offset_0x28()
             "installing a context installs its camera position");
 }
 
+// The default player view is reset by the retail Human_TaskViewReset native, then the
+// retail view-block builder derives the vertical tangent from the active display aspect.
+void test_default_player_view_builds_aspect_correct_fov()
+{
+    std::array<std::uint8_t, 0x1F0> human{};
+    igi::retail::human::Human_TaskViewReset(human.data());
+    float fov_x = 0.0F;
+    std::memcpy(&fov_x, human.data() + igi::retail::human::human_view_tangent_x_offset,
+                sizeof(fov_x));
+    require(std::abs(fov_x - 1.0F) < 1.0e-6F,
+            "Human_TaskViewReset supplies tan(45 degrees) for the normal player view");
+
+    igi::retail::render::Display_HostSetDimensions(1024, 768);
+    igi::retail::render::ScreenBlock_HostInstallRect(0.0F, 0.0F, 1024.0F, 768.0F);
+    std::array<std::uint8_t, 0x28> view{};
+    const std::array<double, 3> camera{0.0, 0.0, 0.0};
+    igi::retail::render::TransContext context{};
+    require(igi::retail::render::Transcontext_BuildViewBlock(context.bytes.data(), view.data(),
+                                                              camera.data(), fov_x) == 1,
+            "Transcontext_BuildViewBlock returns the retail success value");
+    igi::retail::render::Transcontext_SetActiveTransContext(context);
+    const auto fov = igi::retail::render::Transcontext_GetFovTangents();
+    require(std::abs(fov[0] - 1.0F) < 1.0e-6F && std::abs(fov[1] - 0.75F) < 1.0e-6F,
+            "active context stores retail horizontal and 4:3 vertical half-FOV tangents");
+}
+
 } // namespace
 
 int main()
@@ -73,6 +101,7 @@ int main()
     test_setter_copies_the_whole_context();
     test_setter_updates_the_retail_counters();
     test_camera_position_maps_to_offset_0x28();
+    test_default_player_view_builds_aspect_correct_fov();
 
     std::cout << "All retail transform-context tests passed.\n";
     return EXIT_SUCCESS;

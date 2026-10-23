@@ -56,7 +56,7 @@ int WeaponGun_ProcessWEAPONIDM2HB(float arg1)
     *(arg1 + 0x218) = 0xffffffff;
     *(arg1 + 0x21c) = 0;
     *(arg1 + 0x1b0) = 0;
-    int result = Game_DataSymbolLoad(arg1 + 0x1c0, "WEAPON_ID_M2HB");
+    int result = sprintf(arg1 + 0x1c0, "WEAPON_ID_M2HB");
     *(arg1 + 0x1ec) = 0xffffffff;
     *(arg1 + 0x1e0) = 0x41c80000;
     *(arg1 + 0x1e4) = 0xc1c80000;

@@ -7,5 +7,5 @@ int Light_ComputeDirectionalLight_11(void* context, char* arg2)
     int item_4 = *(context + 0x14);
     int item_8 = *(context + 0x10);
     int item_c = *(context + 0xc);
-    return Game_DataSymbolLoad(arg2, "%02d-%02d-%02d");
+    return sprintf(arg2, "%02d-%02d-%02d");
 }

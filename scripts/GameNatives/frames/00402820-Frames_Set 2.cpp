@@ -12,5 +12,5 @@ void Frames_Set(int frames)
     g_frames_ctx->unk38 = 0;
     g_frames_ctx->limit = frames;
     g_frames_ctx->dirty = 1;
-    Timer_SetLimit(frames);
+    SoundSys_SetFrequency(frames);
 }

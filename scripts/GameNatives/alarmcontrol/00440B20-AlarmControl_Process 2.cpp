@@ -15,12 +15,12 @@ int AlarmControl_Process(void* context)
     void* item_d8_1 = &item_c0;
     *(context + 0x2a8) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isTrigger");
+    sprintf(&item_80, "%s.isTrigger");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isAlarm");
+    sprintf(&item_80, "%s.isAlarm");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_f8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTriggerLastTick");
+    sprintf(&item_80, "%s.nTriggerLastTick");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

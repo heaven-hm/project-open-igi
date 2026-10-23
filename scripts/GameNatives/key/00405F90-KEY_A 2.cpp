@@ -8,10 +8,10 @@ int KEY_A(int* context, int arg2)
     char const* const saved_index_1 = "GOInMouInv";
     char* j_2 = "%s(%d);\n";
     void item_100;
-    Sys_CloseFileStream_4(context, &item_100, Game_DataSymbolLoad(&item_100, j_2));
+    Sys_CloseFileStream_4(context, &item_100, sprintf(&item_100, j_2));
     saved_index_1 = (&g_bc28c4)[arg2 * 0x159];
     j_2 = "GOInMouSens";
-    Sys_CloseFileStream_4(context, &item_100, Game_DataSymbolLoad(&item_100, "%s(%f);\n"));
+    Sys_CloseFileStream_4(context, &item_100, sprintf(&item_100, "%s(%f);\n"));
     int i = (&g_bc28bc)[arg2 * 0x159];
     int i_1 = 0;
 
@@ -22,7 +22,7 @@ int KEY_A(int* context, int arg2)
         do
         {
             j_2 = "GOInRemap";
-            int data_7 = Game_DataSymbolLoad(&item_100, "%s(");
+            int data_7 = sprintf(&item_100, "%s(");
             char* j = *context_1;
             int entity_1 = 0;
             int* data_8 = &g_536578;
@@ -53,7 +53,7 @@ int KEY_A(int* context, int arg2)
                 item_120_3 = &saved_target + data_7 + 0x14;
             }
 
-            int data_11 = Game_DataSymbolLoad(item_120_3, item_11c_1);
+            int data_11 = sprintf(item_120_3, item_11c_1);
             char* j_1 = context_1[1];
             int source_2 = data_7 + data_11;
             int entity_3 = 0;
@@ -84,7 +84,7 @@ int KEY_A(int* context, int arg2)
                 item_120_4 = &saved_target + source_2 + 0x14;
             }
 
-            int data_14 = Game_DataSymbolLoad(item_120_4, item_11c_2);
+            int data_14 = sprintf(item_120_4, item_11c_2);
             char* j_3 = context_1[2];
             int source_3 = source_2 + data_14;
             int temp_3 = 0;
@@ -115,7 +115,7 @@ int KEY_A(int* context, int arg2)
                 item_120_5 = &saved_target + source_3 + 0x14;
             }
 
-            j_2 = source_3 + Game_DataSymbolLoad(item_120_5, item_11c_3);
+            j_2 = source_3 + sprintf(item_120_5, item_11c_3);
             Sys_CloseFileStream_4(context, &item_100, j_2);
             i = i_1 + 1;
             context_1 = &context_1[3];

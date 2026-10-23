@@ -14,9 +14,9 @@ int Script_ParseEnumString_14(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x200f5) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isRun");
+    sprintf(&item_80, "%s.isRun");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTick");
+    sprintf(&item_80, "%s.nTick");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

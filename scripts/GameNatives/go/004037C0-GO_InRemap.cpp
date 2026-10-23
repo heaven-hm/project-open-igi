@@ -1,9 +1,9 @@
-// IGI native provenance: GO_InRemap - 0x004037C0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: GOInRemap - 0x004037C0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004037C0-GO_InRemap.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004037C0-GO_InRemap.hpp"
-int GO_InRemap(int context, float arg2 )
+int GOInRemap(int context, float arg2 )
 
-// Sig: int GO_InRemap(int key1, int key2, int action)
+// Sig: int GOInRemap(int key1, int key2, int action)
 // Note: Adds one input binding (key remap) to the current profile. Params: key1
 // = primary key code, key2 = secondary key code, action = in-game action id
 // being bound. Use in input/config scripts, repeat once per binding. Returns 1.

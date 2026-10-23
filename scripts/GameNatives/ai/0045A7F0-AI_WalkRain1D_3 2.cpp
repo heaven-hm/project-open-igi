@@ -37,7 +37,7 @@ void AI_WalkRain1D_3(void* context)
 
     int item_98_5 = context_1 + 1;
     char item_80[0x80];
-    Game_DataSymbolLoad(&item_80, "walk_rain_%1d");
+    sprintf(&item_80, "walk_rain_%1d");
     data_val = SoundSys_SetMasterVolume_7(Script_FormatString(), &item_80);
 
     if (data_val)

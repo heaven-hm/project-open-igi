@@ -9,7 +9,7 @@ int NoiseQTask_OnEvent(void* context)
     void* item_d0 = &item_c0;
     *(context + 0x128) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.vValue");
+    sprintf(&item_80, "%s.vValue");
     int result = Game_DataSymbolRemoveThunk(&item_80);
     *(context + 0x128) = 0;
     return result;

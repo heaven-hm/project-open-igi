@@ -9,5 +9,5 @@ int PhysicsObj_InitLod(void* self)
     *(self + 0x34) = 0;
     *(self + 0x38) = 0;
     *(self + 0x3c) = 0;
-    return Game_DataSymbolLoad(self + 0x20, &g_script_ret_type);
+    return sprintf(self + 0x20, &g_script_ret_type);
 }

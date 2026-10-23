@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_UpdateTransform_27 - 0x004AD1B0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AD1B0-Camera_UpdateTransform_27.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "Camera_UpdateTransform_27.h"
-unsigned int __stdcall __aullrem(int context, unsigned int arg2, int arg3, unsigned int arg4) {
+unsigned int __stdcall Camera_UpdateTransform_27(int context, unsigned int arg2, int arg3, unsigned int arg4) {
     unsigned int result;
 
     if (arg4)

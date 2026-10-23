@@ -14,7 +14,7 @@ int Script_ParseEnumString_6(char* context, void* arg2)
         int saved_index_1 = saved_index_2;
         saved_index_2 = *(arg2 + 0x1c);
         int item_4c_2 = QTask_RegisterEventCallback_2(saved_index_2);
-        return Game_DataSymbolLoad(context, "%s_%d");
+        return sprintf(context, "%s_%d");
     }
 
     unsigned int data_6 = Script_EvaluateCondition_5();

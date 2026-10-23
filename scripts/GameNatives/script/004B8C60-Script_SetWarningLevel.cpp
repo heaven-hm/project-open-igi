@@ -1,9 +1,9 @@
-// IGI native provenance: Script_SetWarningLevel - 0x004B8C60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: _Script_SetWarningLevel - 0x004B8C60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B8C60-Script_SetWarningLevel.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004B8C60-Script_SetWarningLevel.hpp"
-int Script_SetWarningLevel(int context, float arg2 )
+int _Script_SetWarningLevel(int context, float arg2 )
 
-// Sig: void Script_SetWarningLevel(int level)
+// Sig: void _Script_SetWarningLevel(int level)
 // Note: Sets how loudly the script system reports warnings while
 // parsing/running (igi.exe embeds its name WITH leading underscore:
 // '_Script_SetWarningLevel'). Param: level = warning verbosity threshold. Use

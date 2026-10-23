@@ -23,10 +23,10 @@ extern const float g_5333c4;
 extern const float g_56e1f4;
 
 // These catalog aliases are not independently confirmed as retail symbol names.
-extern void AI_UpdatePatrol_24(void *camera_task, float camera_vertical_kick);
+extern void FallLanding(void *camera_task, float camera_vertical_kick);
 extern int FX_FragmentSimulate_14(void *damage_state, int damage_kind);
 extern unsigned char Human_HitDamage(void);
-extern void Game_DataSymbolLoad(char *output_buffer, const char *sound_name);
+extern void sprintf(char *output_buffer, const char *sound_name);
 extern void SoundSys_SetMasterVolume_7(void *camera_task, char *sound_name);
 extern void *DynObj_UpdateDynTree_4(void *player_state);
 extern int AI_EventBroadcast(void *event_parameters);
@@ -131,7 +131,7 @@ void FallLanding(void *human_player)
             }
 
             char sound_event_name[32];
-            Game_DataSymbolLoad(sound_event_name, fall_sound_name);
+            sprintf(sound_event_name, fall_sound_name);
             SoundSys_SetMasterVolume_7(*(void **)(player_state + 0x4ec), sound_event_name);
         }
     }

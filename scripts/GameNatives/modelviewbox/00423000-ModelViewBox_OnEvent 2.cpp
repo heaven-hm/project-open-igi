@@ -12,7 +12,7 @@ int ModelViewBox_OnEvent(void* context)
         Script_ParseEnumString_6(&item_c0, context);
         void* item_d0_1 = &item_c0;
         void item_80;
-        result = Game_DataSymbolLoad(&item_80, "%s.isOn");
+        result = sprintf(&item_80, "%s.isOn");
         *(context + 0x54) = 0;
     }
 

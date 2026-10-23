@@ -12,6 +12,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstdio>
+#include <cstdlib>
 #include <ddraw.h>
 #include <filesystem>
 #include <iomanip>
@@ -37,8 +38,6 @@ constexpr wchar_t window_class_name[] = L"Innerloop";
 constexpr wchar_t window_title[] = L"Innerloop";
 
 // Retail IGI.EXE startup strings.
-constexpr wchar_t already_running_message[] = L"IGI is already running.";          // VA 0x00541DBC
-constexpr char igi_mutex_name[] = "IGIMUTEX";                                      // VA 0x00541ECC
 constexpr char register_winproc_failed[] = "Failed to register WinProc callback."; // VA 0x00541D70
 constexpr char create_device_failed[] = "Failed to create device.";                // VA 0x0054E97C
 constexpr char obtain_interface_failed[] = "Failed to obtain interface.";          // VA 0x0054E998
@@ -340,16 +339,6 @@ LRESULT CALLBACK window_procedure(HWND window_handle,
 
 int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_command)
 {
-    // Retail IGI.EXE creates the "IGIMUTEX" mutex and refuses a second instance with
-    // "IGI is already running." (VA 0x00541ECC / 0x00541DBC).
-    HANDLE single_instance_mutex = CreateMutexA(nullptr, FALSE, igi_mutex_name);
-    if (single_instance_mutex != nullptr && GetLastError() == ERROR_ALREADY_EXISTS)
-    {
-        MessageBoxW(nullptr, already_running_message, window_title, MB_OK | MB_ICONERROR);
-        CloseHandle(single_instance_mutex);
-        return 1;
-    }
-
     int argument_count = 0;
     wchar_t** arguments = CommandLineToArgvW(GetCommandLineW(), &argument_count);
     if (arguments == nullptr)
@@ -360,6 +349,7 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     std::filesystem::path capture_path;
     bool model_scene_requested = false;
     bool dev_mode = false;
+    bool input_demo = false;
     // Fullscreen by default, like the retail executable; "window" selects windowed mode.
     bool windowed = false;
     unsigned int level_number = 1U;
@@ -421,10 +411,6 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
             {
                 LocalFree(arguments);
                 MessageBoxW(nullptr, L"Expected level1 through level14.", window_title, MB_OK | MB_ICONERROR);
-                if (single_instance_mutex != nullptr)
-                {
-                    CloseHandle(single_instance_mutex);
-                }
                 return 1;
             }
             level_number = static_cast<unsigned int>(parsed_level);
@@ -435,6 +421,15 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
         {
             // Port development extension (free camera, developer keys).
             dev_mode = true;
+            model_scene_requested = true;
+            continue;
+        }
+        if (token_equals(token, L"inputdemo"))
+        {
+            // Port development extension: post the retail key sequence to the
+            // scene window so the input port, the human controller and the
+            // camera can be exercised without a physical keyboard.
+            input_demo = true;
             model_scene_requested = true;
             continue;
         }
@@ -465,19 +460,12 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
         const DWORD path_length = GetModuleFileNameW(nullptr, executable_path, 32768U);
         if (path_length == 0U || path_length >= 32768U)
         {
-            if (single_instance_mutex != nullptr)
-            {
-                CloseHandle(single_instance_mutex);
-            }
             return 1;
         }
         const auto game_directory = std::filesystem::path(executable_path).parent_path();
         const int scene_result = RunRetailModelScene(
-            instance_handle, show_command, game_directory, level_number, capture_path, dev_mode, windowed);
-        if (single_instance_mutex != nullptr)
-        {
-            CloseHandle(single_instance_mutex);
-        }
+            instance_handle, show_command, game_directory, level_number, capture_path, dev_mode, windowed,
+            input_demo);
         return scene_result;
     }
 
@@ -494,10 +482,6 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     if (RegisterClassExW(&window_class) == 0)
     {
         log_message(register_winproc_failed);
-        if (single_instance_mutex != nullptr)
-        {
-            CloseHandle(single_instance_mutex);
-        }
         return 1;
     }
 
@@ -519,10 +503,6 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     if (window_handle == nullptr)
     {
         log_message(register_winproc_failed);
-        if (single_instance_mutex != nullptr)
-        {
-            CloseHandle(single_instance_mutex);
-        }
         return 1;
     }
 
@@ -530,10 +510,6 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     {
         release_graphics();
         DestroyWindow(window_handle);
-        if (single_instance_mutex != nullptr)
-        {
-            CloseHandle(single_instance_mutex);
-        }
         return 1;
     }
 
@@ -548,9 +524,5 @@ int WINAPI wWinMain(HINSTANCE instance_handle, HINSTANCE, PWSTR, int show_comman
     }
 
     release_graphics();
-    if (single_instance_mutex != nullptr)
-    {
-        CloseHandle(single_instance_mutex);
-    }
     return static_cast<int>(message.wParam);
 }

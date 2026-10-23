@@ -1,9 +1,9 @@
-// IGI native provenance: Break_Script - 0x004B8C10 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: BreakScript - 0x004B8C10 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004B8C10-Break_Script.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "Break_Script.h"
-int Break_Script(int context)
+int BreakScript(int context)
 
-// Sig: void Break_Script()
+// Sig: void BreakScript()
 // Note: Breaks/aborts the currently-executing script at this point (70-byte
 // function). Takes no args. Use as an early-exit inside .qsc scripts.
 {

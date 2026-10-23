@@ -1,9 +1,9 @@
-// IGI native provenance: Define_Sound - 0x004E8C60 - CFG score 97.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineSound - 0x004E8C60 - CFG score 97.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004E8C60-Define_Sound.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004E8C60-Define_Sound.hpp"
-int Define_Sound(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , int arg8, void* arg9, float arg10)
+int DefineSound(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , int arg8, void* arg9, float arg10)
 
-// Sig: void Define_Sound(...)
+// Sig: void DefineSound(...)
 // Note: Defines a SOUND entry (file + attenuation params) inside sound
 // definition blocks - OpenIGI reimplements it as
 // SoundDefinitionRegistry.Define(SoundDefinitionKind.Sound). Call only from

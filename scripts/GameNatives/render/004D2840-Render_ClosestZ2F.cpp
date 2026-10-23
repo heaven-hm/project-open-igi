@@ -95,7 +95,7 @@ int Render_ClosestZ2F(void* context, char* arg2)
                 (*((Display_CreateSurface_15() << 2) + &g_a94e84))(&item_14);
 
             item_20_1 = item_4_2;
-            return Game_DataSymbolLoad(0xc103a0, "Closest Z: %.2f");
+            return sprintf(0xc103a0, "Closest Z: %.2f");
         }
     }
 

@@ -15,18 +15,18 @@ int GenericTBA_Process(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d8_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isInUse");
+    sprintf(&item_80, "%s.isInUse");
     SymbolRegister_Bool8(&item_80, context + 0x239);
     void* item_ec_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastInUse");
+    sprintf(&item_80, "%s.isLastInUse");
     SymbolRegister_Bool8(&item_80, context + 0x23a);
     void* item_100_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isOn");
+    sprintf(&item_80, "%s.isOn");
     SymbolRegister_Bool8(&item_80, context + 0x240);
     void* item_d4_2 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isFinished");
+    sprintf(&item_80, "%s.isFinished");
     SymbolRegister_Bool8(&item_80, context + 0x241);
     void* item_e8_2 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isFinishedThisTick");
+    sprintf(&item_80, "%s.isFinishedThisTick");
     return SymbolRegister_Bool8(&item_80, context + 0x242);
 }

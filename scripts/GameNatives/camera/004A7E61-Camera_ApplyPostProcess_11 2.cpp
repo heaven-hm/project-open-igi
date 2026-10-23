@@ -11,7 +11,7 @@ int* Camera_ApplyPostProcess_11(int context, int* arg2, int* arg3)
     if (f0 - 1 < 0)
     {
         int item_c_1 = context;
-        data_1 = Camera_ApplyHandiCam_11(arg2);
+        data_1 = _flsbuf(arg2);
     }
     else
     {

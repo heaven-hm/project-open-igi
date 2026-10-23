@@ -12,7 +12,9 @@ import argparse
 import hashlib
 import json
 import pathlib
+import shutil
 import sys
+import tempfile
 from typing import Any
 
 
@@ -42,7 +44,15 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
             "functions": {},
         }
 
-    project = angr.Project(str(binary), auto_load_libs=False)
+    # The analysis needs its own copy of the binary. angr keeps the knowledge
+    # base next to the file it is given, so two runs that share the retail
+    # binary share the knowledge base as well: the second CFGFast replaces the
+    # first one's functions and the first run reports nothing. Each run
+    # therefore analyses a copy in its own directory.
+    work_directory = pathlib.Path(tempfile.mkdtemp(prefix="igi-angr-project-"))
+    working_binary = work_directory / binary.name
+    shutil.copy2(binary, working_binary)
+    project = angr.Project(str(working_binary), auto_load_libs=False)
     cfg = project.analyses.CFGFast(normalize=True, data_references=True)
     auto_functions = {address: cfg.kb.functions.get(address) for address in addresses}
     baseline_unresolved = {
@@ -78,6 +88,20 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
                 initialized_project = angr.Project(str(binary), auto_load_libs=False)
                 initialized_project.loader.memory.store(0x0093626C, target.to_bytes(4, "little"))
                 initialized_cfg = initialized_project.analyses.CFGFast(normalize=True, data_references=True)
+    # The loader's memory is a weakly-referenced object that angr releases once
+    # further analyses run on the project, so the retail image is snapshotted
+    # here, before any CFG analysis, and read from the snapshot afterwards.
+    image_base = int(project.loader.main_object.mapped_base)
+    image_end = max(int(section.vaddr) + int(section.memsize)
+                    for section in project.loader.main_object.sections)
+    try:
+        image_bytes = bytes(project.loader.memory.load(image_base, image_end - image_base))
+    except Exception as error:  # noqa: BLE001 - the snapshot is best effort
+        image_bytes = b""
+        image_snapshot_error = f"{type(error).__name__}: {error}"
+    else:
+        image_snapshot_error = None
+
     seed_addresses = [
         address for address, function in auto_functions.items()
         if function is None or function.addr != address
@@ -87,7 +111,14 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         # The caller supplies addresses from native provenance. These seeds are
         # not accepted as independent boundary proof: native_gate must also
         # validate the address against the independent BN/Radare2 artifacts.
-        seeded_cfg = project.analyses.CFGFast(
+        # A second CFG run on the same project replaces its KnowledgeBase and
+        # invalidates the first analysis's function objects, so the seeded
+        # analysis gets its own project.
+        seeded_directory = pathlib.Path(tempfile.mkdtemp(prefix="igi-angr-seeded-"))
+        seeded_binary = seeded_directory / binary.name
+        shutil.copy2(binary, seeded_binary)
+        seeded_project = angr.Project(str(seeded_binary), auto_load_libs=False)
+        seeded_cfg = seeded_project.analyses.CFGFast(
             normalize=True, data_references=True, function_starts=seed_addresses
         )
     functions: dict[str, Any] = {}
@@ -107,6 +138,7 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
 
         nodes = sorted({int(node.addr) for node in function.graph.nodes() if getattr(node, "addr", None) is not None})
         edges = []
+        implicit_repeat_nodes: set[int] = set()
         for source, target, data in function.graph.edges(data=True):
             source_addr = getattr(source, "addr", None)
             target_addr = getattr(target, "addr", None)
@@ -114,6 +146,25 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
                 continue
             jumpkind = str(data.get("jumpkind", "unknown"))
             edges.append({"source": f"0x{int(source_addr):08X}", "target": f"0x{int(target_addr):08X}", "kind": jumpkind})
+        # CFGFast models the CPU's internal REP iteration as an explicit
+        # self-edge. Other disassemblers treat REP/REPE/REPNE as one
+        # instruction. Preserve the node evidence so the gate can ignore only
+        # this analyzer-specific self-edge while retaining real branch loops.
+        for node in function.graph.nodes():
+            node_address = getattr(node, "addr", None)
+            block_size = getattr(node, "size", None)
+            if node_address is None or not block_size:
+                continue
+            try:
+                offset = int(node_address) - image_base
+                block_bytes = image_bytes[offset:offset + int(block_size)]
+                if len(block_bytes) != int(block_size):
+                    continue
+                instructions = project.arch.capstone.disasm(block_bytes, int(node_address))
+                if any(instruction.mnemonic.lower().startswith("rep") for instruction in instructions):
+                    implicit_repeat_nodes.add(int(node_address))
+            except (KeyError, ValueError, TypeError):
+                continue
         unresolved = bool(function.has_unresolved_jumps)
         function_result = "pass" if nodes and not unresolved else "inconclusive"
         functions[key] = {
@@ -124,6 +175,7 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
             "name": function.name,
             "block_count": len(nodes),
             "nodes": [f"0x{node:08X}" for node in nodes],
+            "implicit_repeat_nodes": [f"0x{node:08X}" for node in sorted(implicit_repeat_nodes)],
             "edges": sorted(edges, key=lambda edge: (edge["source"], edge["target"], edge["kind"])),
             "returning": bool(function.returning),
             "has_unresolved_jumps": unresolved,

@@ -199,7 +199,7 @@ int Physics_InterpolateWaypoint_12(int* context)
 
     if (data_35)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't create texture surface");
+        sprintf(&item_400, "Couldn't create texture surface");
         int item_5b8_7 = DDERR_GENERIC(data_35);
         void* item_5bc_5 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -256,7 +256,7 @@ int Physics_InterpolateWaypoint_12(int* context)
 
                                 if (data_46)
                                 {
-                                    Game_DataSymbolLoad(&item_400, "Couldn't get mipmap");
+                                    sprintf(&item_400, "Couldn't get mipmap");
                                     int item_5b8_10 = DDERR_GENERIC(data_46);
                                     void* item_5bc_8 = &item_400;
                                     Error_Show("%s\n\nDirectX error message: %s");
@@ -316,7 +316,7 @@ int Physics_InterpolateWaypoint_12(int* context)
 
                                     if (data_60)
                                     {
-                                        Game_DataSymbolLoad(&item_400, "Couldn't get mipmap");
+                                        sprintf(&item_400, "Couldn't get mipmap");
                                         int item_5b8_14 = DDERR_GENERIC(data_60);
                                         void* item_5bc_11 = &item_400;
                                         Error_Show("%s\n\nDirectX error message: %s");
@@ -339,7 +339,7 @@ int Physics_InterpolateWaypoint_12(int* context)
                 }
                 else
                 {
-                    Game_DataSymbolLoad(&item_400, "Couldn't get surface description");
+                    sprintf(&item_400, "Couldn't get surface description");
                     int item_5b8_11 = DDERR_GENERIC(data_52);
                     void* item_5bc_9 = &item_400;
                     Error_Show("%s\n\nDirectX error message: %s");
@@ -361,7 +361,7 @@ int Physics_InterpolateWaypoint_12(int* context)
         return result;
     }
 
-    Game_DataSymbolLoad(&item_400, "Couldn't get surface description");
+    sprintf(&item_400, "Couldn't get surface description");
     int item_5b8_8 = DDERR_GENERIC(data_38);
     void* item_5bc_6 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

@@ -14,9 +14,9 @@ int AlarmLight_Action(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x1a2) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isOn");
+    sprintf(&item_80, "%s.isOn");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isDestroyed");
+    sprintf(&item_80, "%s.isDestroyed");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

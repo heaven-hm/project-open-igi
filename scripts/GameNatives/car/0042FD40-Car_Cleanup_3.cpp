@@ -13,7 +13,7 @@ int Car_Cleanup_3(void* context)
         void* item_d0_1 = &item_c0;
         *(context + 0x2ed4) = 0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isExploded");
+        sprintf(&item_80, "%s.isExploded");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x2ed4) = 0;
     }

@@ -18,7 +18,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
     if (result_val)
     {
-        Game_DataSymbolLoad(&var_400, "Couldn't get device caps");
+        sprintf(&var_400, "Couldn't get device caps");
         int var_808 = DDERR_GENERIC(result_val);
         void* var_80c = &var_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -36,11 +36,11 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
     if (!eax_2)
     {
-        Game_DataSymbolLoad(arg1, "Direct3D hardware caps\n----------------------\n\n");
+        sprintf(arg1, "Direct3D hardware caps\n----------------------\n\n");
         char* var_804_3 = arg1;
-        Game_DataSymbolLoad(arg1, "%sRasterization caps\n");
+        sprintf(arg1, "%sRasterization caps\n");
         char* var_810 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  ZBuffer formats:\n");
+        sprintf(arg1, "%s  ZBuffer formats:\n");
         int* 5ca110_1 = g_5ca110;
         (*(*5ca110_1 + 0x18))(5ca110_1, base_val, Display_GetDDErrStr, arg1);
         void* eax_4 = &data_53b688;
@@ -51,7 +51,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_3 = eax_4;
         char* var_800_5 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  WBuffer                %s\n");
+        sprintf(arg1, "%s  WBuffer                %s\n");
         void* eax_6 = &data_53b688;
 
         if (!(*(&var_7a0 + 1) & 0x40))
@@ -59,7 +59,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_4 = eax_6;
         char* var_800_6 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Depth bias             %s\n");
+        sprintf(arg1, "%s  Depth bias             %s\n");
         void* eax_8 = &data_53b688;
 
         if (!(var_7a0 & 0x200000))
@@ -67,7 +67,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_5 = eax_8;
         char* var_800_7 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  ZFog                   %s\n");
+        sprintf(arg1, "%s  ZFog                   %s\n");
         void* eax_10 = &data_53b688;
 
         if (!(var_7a0 & 0x100000))
@@ -75,7 +75,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_6 = eax_10;
         char* var_800_8 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  WFog                   %s\n");
+        sprintf(arg1, "%s  WFog                   %s\n");
         void* eax_12 = &data_53b688;
 
         if (!(var_7a0 & 0x10000))
@@ -83,7 +83,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_7 = eax_12;
         char* var_800_9 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Range fog              %s\n");
+        sprintf(arg1, "%s  Range fog              %s\n");
         void* eax_14 = &data_53b688;
 
         if (!(0x100 & var_7a0))
@@ -91,7 +91,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_8 = eax_14;
         char* var_800_10 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Per-pixel fog          %s\n");
+        sprintf(arg1, "%s  Per-pixel fog          %s\n");
         void* eax_17 = &data_53b688;
 
         if (!(var_7a0 & 0x80))
@@ -99,7 +99,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_9 = eax_17;
         char* var_800_11 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Per-vertex fog         %s\n");
+        sprintf(arg1, "%s  Per-vertex fog         %s\n");
         void* eax_19 = &data_53b688;
 
         if (!(*(&var_7a0 + 1) & 0x80))
@@ -107,7 +107,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_10 = eax_19;
         char* var_800_12 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Scene capture          %s\n");
+        sprintf(arg1, "%s  Scene capture          %s\n");
         void* eax_21 = &data_53b688;
 
         if (!(var_7a0 & 0x80000))
@@ -115,7 +115,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_11 = eax_21;
         char* var_800_13 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Transp. sorting        %s\n");
+        sprintf(arg1, "%s  Transp. sorting        %s\n");
         void* eax_23 = &data_53b688;
 
         if (!(*(&var_7a0 + 1) & 8))
@@ -123,7 +123,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_12 = eax_23;
         char* var_800_14 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Antialiasing           %s\n");
+        sprintf(arg1, "%s  Antialiasing           %s\n");
         void* eax_25 = &data_53b688;
 
         if (!(var_7a0 & 0x20000))
@@ -131,7 +131,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_13 = eax_25;
         char* var_800_15 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Anisotropic filtering  %s\n");
+        sprintf(arg1, "%s  Anisotropic filtering  %s\n");
         void* eax_27 = &data_53b688;
 
         if (!(*(&var_7a0 + 1) & 0x20))
@@ -139,7 +139,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_14 = eax_27;
         char* var_800_16 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Mipmap lod bias        %s\n");
+        sprintf(arg1, "%s  Mipmap lod bias        %s\n");
         void* eax_30 = &data_53b688;
 
         if (!(var_7a0 & 0x20))
@@ -147,9 +147,9 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_15 = eax_30;
         char* var_800_17 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Subpixel rasterizing   %s\n\n");
+        sprintf(arg1, "%s  Subpixel rasterizing   %s\n\n");
         char* var_80c_3 = arg1;
-        Game_DataSymbolLoad(arg1, "%sTexture caps\n");
+        sprintf(arg1, "%sTexture caps\n");
         void* eax_33 = &data_53b688;
         char var_788;
 
@@ -158,7 +158,7 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_16 = eax_33;
         char* var_800_18 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Must have size 2^x     %s\n");
+        sprintf(arg1, "%s  Must have size 2^x     %s\n");
         void* eax_35 = &data_53b688;
 
         if (!(0x100 & var_788))
@@ -166,24 +166,24 @@ int DisplayRender_ProcessCouldntgetdevice(char* arg1)
 
         void* var_7fc_17 = eax_35;
         char* var_800_19 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Can have size not 2^x  %s\n\n");
+        sprintf(arg1, "%s  Can have size not 2^x  %s\n\n");
         char* var_80c_4 = arg1;
-        Game_DataSymbolLoad(arg1, "%sResources in use\n");
+        sprintf(arg1, "%sResources in use\n");
         int 5ca124_1 = g_5ca124;
         char* var_81c = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Textures created       %d\n");
+        sprintf(arg1, "%s  Textures created       %d\n");
         var_800_19 = g_5ca128 * 9.53674316fe-07f;
         char* var_804_5 = arg1;
-        Game_DataSymbolLoad(arg1, "%s  Texture footprint      %.2f mb\n");
+        sprintf(arg1, "%s  Texture footprint      %.2f mb\n");
         int var_7e8 = 0;
         int var_6bc;
         int var_6b8;
         var_800_19 = (var_6bc - var_6b8) * 9.53674316fe-07f;
         char* var_804_6 = arg1;
-        return Game_DataSymbolLoad(arg1, "%s  VRAM usage             %.2f mb\n");
+        return sprintf(arg1, "%s  VRAM usage             %.2f mb\n");
     }
 
-    Game_DataSymbolLoad(&var_400, "Couldn't get driver caps");
+    sprintf(&var_400, "Couldn't get driver caps");
     int var_808_1 = DDERR_GENERIC(eax_2);
     void* var_80c_1 = &var_400;
     Error_Show("%s\n\nDirectX error message: %s");

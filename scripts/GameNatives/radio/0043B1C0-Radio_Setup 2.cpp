@@ -15,6 +15,6 @@ int Radio_Setup(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d8_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isOn");
+    sprintf(&item_80, "%s.isOn");
     return SymbolRegister_Bool8(&item_80, context + 0x240);
 }

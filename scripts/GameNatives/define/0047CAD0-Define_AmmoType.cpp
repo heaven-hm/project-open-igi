@@ -1,9 +1,9 @@
-// IGI native provenance: Define_AmmoType - 0x0047CAD0 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineAmmoType - 0x0047CAD0 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0047CAD0-Define_AmmoType.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "0047CAD0-Define_AmmoType.hpp"
-int Define_AmmoType(long double context , int arg2, float arg3 )
+int DefineAmmoType(long double context , int arg2, float arg3 )
 
-// Sig: void Define_AmmoType(...)
+// Sig: void DefineAmmoType(...)
 // Note: Defines an AMMO TYPE inside an ammo definition block of a .qsc/.cfg
 // script (515-byte parser body; igi.exe embeds str 'DefineAmmoType'). Args
 // follow the Define-ammo grammar (name, damage, range, clip...) - not fully

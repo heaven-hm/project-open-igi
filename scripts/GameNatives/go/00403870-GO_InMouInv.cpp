@@ -1,9 +1,9 @@
-// IGI native provenance: GO_InMouInv - 0x00403870 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOInMouInv - 0x00403870 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00403870-GO_InMouInv.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403870-GO_InMouInv.hpp"
-int GO_InMouInv(int context, float arg2 )
+int GOInMouInv(int context, float arg2 )
 
-// Sig: int GO_InMouInv(int invert)
+// Sig: int GOInMouInv(int invert)
 // Note: Toggles inverted mouse-look for the current profile. Param: invert = 1
 // invert Y axis, 0 normal. Use in config scripts. Returns 1.
 {

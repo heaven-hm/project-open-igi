@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
-/* 00404080 GO_GfxGamma | gate FAIL | openigi False */
-int GO_GfxGamma(long double context, int arg2, float arg3);
+// Native: GOGfxGamma; retail VA 0x00404080; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00404080.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: GOGfxGamma; retail VA 0x00404080; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00404080.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+/* 00404080 GOGfxGamma | gate FAIL | openigi False */
+int GOGfxGamma(long double context, int arg2, float arg3);

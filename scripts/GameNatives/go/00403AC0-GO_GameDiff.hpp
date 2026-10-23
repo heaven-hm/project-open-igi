@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
-/* 00403AC0 GO_GameDiff | gate FAIL | openigi False */
-int GO_GameDiff(int context, float arg2);
+// Native: GOGameDiff; retail VA 0x00403AC0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403AC0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: GOGameDiff; retail VA 0x00403AC0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403AC0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+/* 00403AC0 GOGameDiff | gate FAIL | openigi False */
+int GOGameDiff(int context, float arg2);

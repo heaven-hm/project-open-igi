@@ -432,7 +432,7 @@ float* SplineObj_Update(int* context)
             memcpy(dest_6, source_4, entity_25 & 3);
             float* item_7c_3 = &item_38;
             int data_22;
-            data_22 = Game_DataSymbolLoad(&i_10[0x5e], "*%s");
+            data_22 = sprintf(&i_10[0x5e], "*%s");
         }
         else
             i_10[0x1b] = data_20;

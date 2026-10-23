@@ -13,7 +13,7 @@ int Radio_Process(void* context)
         Script_ParseEnumString_6(&item_c0, context);
         void* item_d8_1 = &item_c0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isOn");
+        sprintf(&item_80, "%s.isOn");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x241) = 0;
     }

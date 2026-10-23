@@ -7,5 +7,5 @@ int Light_SampleLightmap_10(int* context, char* arg2)
     int item_4 = context[2];
     int item_8 = context[1];
     int item_c = *context;
-    return Game_DataSymbolLoad(arg2, "%04d-%02d-%02d");
+    return sprintf(arg2, "%04d-%02d-%02d");
 }

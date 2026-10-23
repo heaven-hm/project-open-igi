@@ -21,7 +21,7 @@ int Display_CouldnTSetClippingWi(void* context)
         return result;
 
     void item_400;
-    Game_DataSymbolLoad(&item_400, "Couldn't set clipping window");
+    sprintf(&item_400, "Couldn't set clipping window");
     int item_438 = DDERR_GENERIC(result);
     void* item_43c = &item_400;
     char* item_440 = "%s\n\nDirectX error message: %s";

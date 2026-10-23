@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
-/* 00403DF0 GO_IsBlood | gate FAIL | openigi False */
-int GO_IsBlood(int context, float arg2);
+// Native: GOIsBlood; retail VA 0x00403DF0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403DF0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: GOIsBlood; retail VA 0x00403DF0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403DF0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+/* 00403DF0 GOIsBlood | gate FAIL | openigi False */
+int GOIsBlood(int context, float arg2);

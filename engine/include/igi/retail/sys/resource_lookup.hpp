@@ -4,7 +4,7 @@
 
 namespace igi::retail::sys {
 
-// Native: String_ToUpperChar() - VA 0x004AD73D - complete port.
+// Native: String_ToUpperChar() - VA 0x004AD73D - partial port (C-locale branch only).
 // Previous catalog alias: Camera_ApplyWideScreen_28.
 // ASCII upper-case conversion taken when global 0x009361E4 is zero (its initial value).
 // The locale-table branch used when that global is set is not ported.

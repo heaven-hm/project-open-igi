@@ -7,7 +7,7 @@ int Qvm_DefaultHandler_4C12E0(int* arg1, int* arg2)
     int result_val = arg1[2];
     int var_2c = result_val + *(*arg2 + result_val + 1) + 5;
     void var_20;
-    Game_DataSymbolLoad(&var_20, "@%08X\r\n");
+    sprintf(&var_20, "@%08X\r\n");
     void* dest_ptr = &var_20;
     int i = 0xffffffff;
 

@@ -15,7 +15,7 @@ int MipMapControl_LoadParameters(void* context)
         if (result)
         {
             void item_400;
-            Game_DataSymbolLoad(&item_400, "Couldn't set texturestagestate");
+            sprintf(&item_400, "Couldn't set texturestagestate");
             int item_414_2 = DDERR_GENERIC(result);
             void* item_418 = &item_400;
             Error_Show("%s\n\nDirectX error message: %s");

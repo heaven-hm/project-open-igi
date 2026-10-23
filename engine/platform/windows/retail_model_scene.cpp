@@ -5,7 +5,11 @@
 
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/config/config_graphic_options.hpp"
+#include "igi/retail/config/retail_config.hpp"
+#include "igi/retail/config/retail_input_bindings.hpp"
+#include "igi/retail/input/input_port.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
+#include "igi/retail/model/mef_bone_rig.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
 #include "igi/retail/model/model_texture_package.hpp"
 #include "igi/retail/render/trans_context.hpp"
@@ -17,6 +21,10 @@
 #include "igi/retail/script/qvm_object_calls.hpp"
 #include "igi/retail/terrain/terrain_loaders.hpp"
 #include "igi/retail/texture/model_texture_pixels.hpp"
+
+#include "player_controller.hpp"
+#include "developer_controls.hpp"
+#include "igi/retail/core/fpu_state.hpp"
 
 
 #include <algorithm>
@@ -38,10 +46,10 @@
 #include <string>
 #include <thread>
 
-#include "developer_controls.hpp"
 
 namespace
 {
+using namespace igi;
 using namespace igi::retail;
 
 template <class Interface> struct ComOwner
@@ -199,9 +207,21 @@ std::array<float, 9> orientation(float alpha, float beta, float gamma)
         for (std::size_t row = 0; row < 3U; ++row)
             for (std::size_t column = 0; column < 3U; ++column)
             {
-                current[row * 3U + column] = left[row * 3U] * right[column] +
-                                             left[row * 3U + 1U] * right[3U + column] +
-                                             left[row * 3U + 2U] * right[6U + column];
+                // Literal 0x004B3904..0x004B391C x87 sequence, repeated for
+                // each element by retail 0x004B38E0. C++ float temporaries
+                // introduce additional rounding under the retail control word.
+#if defined(__i386__) && defined(__GNUC__)
+                __asm__ volatile(
+                    "flds %1\n\tfmuls %2\n\tflds %3\n\tfmuls %4\n\tfaddp\n\t"
+                    "flds %5\n\tfmuls %6\n\tfaddp\n\tfstps %0"
+                    : "=m"(current[row * 3U + column])
+                    : "m"(right[column]), "m"(left[row * 3U]),
+                      "m"(right[6U + column]), "m"(left[row * 3U + 2U]),
+                      "m"(right[3U + column]), "m"(left[row * 3U + 1U])
+                    : "st", "st(1)", "memory");
+#else
+                throw std::logic_error("Retail matrix arithmetic requires the Windows x86 GCC target.");
+#endif
             }
     }
     return current;
@@ -269,6 +289,9 @@ struct Scene
     std::vector<std::unique_ptr<ComOwner<IDirectDrawSurface7>>> texture_surfaces;
     std::map<std::string, IDirectDrawSurface7*> uploaded_textures;
     std::vector<std::unique_ptr<Package>> packages;
+    // The character skeletons, read from the retail animation files the model
+    // packages name. A skinned MEF carries no skeleton of its own.
+    model::IffSkeletonTable skeletons;
     std::vector<PlacedModel> objects;
     terrain::TerrainLevelData terrain_data;
     std::vector<std::unique_ptr<ComOwner<IDirectDrawSurface7>>> terrain_texture_surfaces;
@@ -279,20 +302,84 @@ struct Scene
     // the old elevated diagnostic camera if a malformed level has no player task.
     Vector3 camera_position{0, 0, 0.69F};
     Vector3 camera_target{0, 1, 0.69F};
+    // The retail input port: the action bindings come from config.qvm, and the
+    // player controller implements the retail human movement model.
+    input::InputPort input_port;
+    host::PlayerController player;
+    host::TerrainCollisionGrid collision_grid;
+    // The retail look rate is applied to the mouse counts the platform reports.
+    double look_delta_x = 0.0;
+    double look_delta_y = 0.0;
+    bool player_ready = false;
+    bool player_motion_available = true;
+    bool raw_mouse_enabled = false;
+    bool owns_mouse_clip = false;
+
+    // Windows device adapter: relative counts continue when the cursor reaches an edge.
+    void set_mouse_active(bool active)
+    {
+        if (active && raw_mouse_enabled && window != nullptr)
+        {
+            RECT rectangle{};
+            if (GetClientRect(window, &rectangle))
+            {
+                POINT corners[2]{{rectangle.left, rectangle.top}, {rectangle.right, rectangle.bottom}};
+                if (ClientToScreen(window, &corners[0]) && ClientToScreen(window, &corners[1]))
+                {
+                    rectangle = {corners[0].x, corners[0].y, corners[1].x, corners[1].y};
+                    owns_mouse_clip = ClipCursor(&rectangle) != FALSE;
+                }
+            }
+        }
+        else if (owns_mouse_clip)
+        {
+            ClipCursor(nullptr);
+            owns_mouse_clip = false;
+        }
+        if (!active)
+        {
+            for (std::uint32_t index = 0; index < static_cast<std::uint32_t>(input::Action::count); ++index)
+                for (const auto& binding : input_port.Bindings(static_cast<input::Action>(index)))
+                    if (binding.device == input::Device::keyboard)
+                        input_port.SetKeyDown(binding.code, false);
+                    else
+                        input_port.SetMouseButtonDown(static_cast<int>(binding.code), false);
+            input_port.Run();
+        }
+        cursor_valid = false;
+        static_cast<void>(input_port.TakeMouseDelta());
+    }
+    LONG cursor_x = 0;
+    LONG cursor_y = 0;
+    bool cursor_valid = false;
+    unsigned int key_messages = 0;
+    unsigned int mouse_messages = 0;
+    LONG last_mouse_x = 0;
+    LONG last_mouse_y = 0;
+    struct DemoEvent {
+        unsigned int frame;
+        unsigned int message;
+        WPARAM wparam;
+        LPARAM lparam;
+    };
+    std::array<float, 2> last_look_delta{0.0F, 0.0F};
+    std::vector<DemoEvent> input_demo_events;
+    unsigned int input_demo_frame = 0;
+    unsigned int input_demo_next = 0;
     HWND window = nullptr;
     bool first_frame = true;
-    static constexpr float world_scale = 1.0F / 4096.0F;
-
-    // Host free camera (enabled by the "devmode" command-line argument).
     bool windowed = true;
     bool exclusive = false;
-    bool dev_mode = false;
+    static constexpr float world_scale = 1.0F / 4096.0F;
+
+    // Owner-requested inspection extension restored from a0ff6d94; not a retail native.
     igi::developer::DeveloperControls developer_controls;
-    float dev_yaw = 0.0F;   // radians, around Z
-    float dev_pitch = 0.0F; // radians, up/down
-    float dev_speed = 50.0F;
-    bool dev_look_initialised = false;
-    POINT dev_last_mouse{};
+    bool dev_next_level_requested = false;
+    float dev_yaw = 0.0F;
+    float dev_pitch = 0.0F;
+    float dev_speed = 50.0F; // Existing inspection speed, not HumanPlayer movement data.
+    Vector3 dev_saved_position{};
+    Vector3 dev_saved_target{};
 
     void dev_camera_reset()
     {
@@ -305,25 +392,11 @@ struct Scene
 
     void update_dev_camera(float delta_seconds)
     {
-        const POINT cursor = [this]
-        {
-            POINT position{};
-            GetCursorPos(&position);
-            return position;
-        }();
-
-        if (!dev_look_initialised)
-        {
-            dev_last_mouse = cursor;
-            dev_look_initialised = true;
-        }
-        const float delta_x = static_cast<float>(cursor.x - dev_last_mouse.x);
-        const float delta_y = static_cast<float>(cursor.y - dev_last_mouse.y);
-        dev_last_mouse = cursor;
-
-        constexpr float look_sensitivity = 0.0035F;
-        dev_yaw += delta_x * look_sensitivity;
-        dev_pitch = std::clamp(dev_pitch - delta_y * look_sensitivity, -1.5533F, 1.5533F);
+        input_port.Run();
+        const auto look = input_port.TakeMouseDelta();
+        dev_yaw += look[0] * host::PlayerController::look_radians_per_count;
+        dev_pitch = std::clamp(dev_pitch - look[1] * host::PlayerController::look_radians_per_count,
+                               -1.5533F, 1.5533F);
 
         // Must match dev_camera_reset(): yaw is measured from +Y towards +X, so
         // forward = (sin yaw, cos yaw, 0) and right = forward x up = (cos yaw, -sin yaw, 0).
@@ -334,12 +407,12 @@ struct Scene
         const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
 
         Vector3 move{0, 0, 0};
-        const bool key_w = (GetAsyncKeyState('W') & 0x8000) != 0;
-        const bool key_s = (GetAsyncKeyState('S') & 0x8000) != 0;
-        const bool key_a = (GetAsyncKeyState('A') & 0x8000) != 0;
-        const bool key_d = (GetAsyncKeyState('D') & 0x8000) != 0;
-        const bool key_up = (GetAsyncKeyState(VK_SPACE) & 0x8000) != 0;
-        const bool key_down = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+        const bool key_w = input_port.ActionDown(input::Action::move_up);
+        const bool key_s = input_port.ActionDown(input::Action::move_down);
+        const bool key_a = input_port.ActionDown(input::Action::move_left);
+        const bool key_d = input_port.ActionDown(input::Action::move_right);
+        const bool key_up = input_port.ActionDown(input::Action::jump);
+        const bool key_down = input_port.ActionDown(input::Action::crouch);
 
         if (key_w)
         {
@@ -374,7 +447,7 @@ struct Scene
             move.z -= 1.0F;
         }
 
-        const float speed = (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0 ? dev_speed * 4.0F : dev_speed;
+        const float speed = dev_speed;
         camera_position.x += move.x * speed * delta_seconds;
         camera_position.y += move.y * speed * delta_seconds;
         camera_position.z += move.z * speed * delta_seconds;
@@ -421,6 +494,58 @@ struct Scene
                       " texture_names=" + std::to_string(package->metadata.texture_names.size()));
             packages.push_back(std::move(package));
         }
+        // The retail animation files hold the character skeletons. Each model
+        // package names its animation files in its 'BANM' chunk, and the retail
+        // loads them as "<prefix>anims/<name>.iff".
+        {
+            std::vector<model::IffSkeleton> loaded_skeletons;
+            std::vector<std::string> animation_names;
+            for (const auto& package : packages)
+            {
+                for (const std::string& name : package->metadata.animation_names)
+                {
+                    if (std::find(animation_names.begin(), animation_names.end(), name) ==
+                        animation_names.end())
+                    {
+                        animation_names.push_back(name);
+                    }
+                }
+            }
+            for (const std::string& name : animation_names)
+            {
+                std::optional<model::IffSkeleton> skeleton;
+                for (const std::string& folder : {"common", "COMMON"})
+                {
+                    for (const std::string& extension : {".iff", ".IFF"})
+                    {
+                        const auto path = root / folder / "anims" / (name + extension);
+                        skeleton = model::IffSkeleton_Read(path);
+                        if (skeleton.has_value())
+                        {
+                            break;
+                        }
+                    }
+                    if (skeleton.has_value())
+                    {
+                        break;
+                    }
+                }
+                if (skeleton.has_value())
+                {
+                    loaded_skeletons.push_back(*skeleton);
+                }
+                else
+                {
+                    write_log("Animation skeleton not found: " + name, diagnostics::LogLevel::warning);
+                }
+            }
+            // The retail keeps the skeletons in a table indexed by the object id
+            // the BOSH chunk holds, and a character uses the entry for its type.
+            skeletons = model::IffSkeletonTable_Build(loaded_skeletons);
+            write_log("Character skeletons loaded: " + std::to_string(loaded_skeletons.size()) +
+                      " of " + std::to_string(animation_names.size()) + " animation files; " +
+                      "object ids " + std::to_string(skeletons.by_object_id.size()));
+        }
         const auto script = script::Host_LoadQvmScript(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
         const auto magic_script = script::Host_LoadQvmScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
@@ -448,12 +573,129 @@ struct Scene
                 constexpr float standing_eye_metres = 0.69F;
                 camera_position = {0.0F, 0.0F, standing_eye_metres};
                 camera_target = {0.0F, 1.0F, standing_eye_metres};
+                // The human starts on the ground at the task's feet position.
+                // The retail world is in units (4096 to the metre) and the
+                // level origin is the player's own feet, so both are the same
+                // value in the same units.
+                // Human_Init binds its scalar heading after the position; Human_OnEvent
+                // copies that heading to +0x508 and builds Mat33_RotateZ. Its forward
+                // column is (-sin heading, cos heading, 0), opposite the host yaw sign.
+                const double spawn_heading = number(call->arguments[6]);
+                player.reset({origin[0], origin[1], origin[2]}, -spawn_heading, 0.0,
+                             {origin[0], origin[1], origin[2]},
+                             1.0 / host::PlayerController::units_per_metre);
+                camera_target = {camera_position.x + static_cast<float>(std::sin(player.yaw())),
+                                 camera_position.y + static_cast<float>(std::cos(player.yaw())),
+                                 camera_position.z};
+                write_log("HumanPlayer authored heading=" + std::to_string(spawn_heading) +
+                          " host yaw=" + std::to_string(player.yaw()));
+                player_ready = true;
+                player_motion_available = true;
                 player_origin_found = true;
                 break;
             }
         }
-        write_log(std::string("HumanPlayer spawn camera=") +
-                  (player_origin_found ? "installed" : "fallback"));
+        if (!player_origin_found) throw std::runtime_error("Level has no HumanPlayer spawn; camera is unavailable.");
+        write_log("HumanPlayer spawn camera=installed");
+
+        // The retail input port gets its bindings from config.qvm. The reader decodes
+        // the shipped GOInRemap / GOInMouSens / GOInMouInv rows; an unknown action,
+        // device or control fails here instead of leaving an action silently unbound.
+        config::ScriptProgram config_program;
+        config::InputConfig input_config;
+        std::string input_config_error;
+        if (!config::read_script_file(root / "config.qvm", config_program, input_config_error)
+            || !config::decode_input_config(config_program, input_config, input_config_error)
+            || !config::apply_input_config(input_config, input_port, input_config_error)) {
+            throw std::runtime_error("config.qvm: " + input_config_error);
+        }
+        write_log("config.qvm: applied " + std::to_string(input_config.bindings.size())
+                  + " action bindings");
+
+        // humanplayer.qvm carries the movement parameters the controller applies: the
+        // root-motion scale and the jump / air-control speeds. They are read from the
+        // file; the controller has no built-in speed.
+        config::ScriptProgram humanplayer_program;
+        config::HumanPlayerGeneral general;
+        if (!config::read_script_file(root / "humanplayer" / "humanplayer.qvm",
+                                      humanplayer_program, input_config_error)
+            || !config::decode_human_player_general(humanplayer_program, general,
+                                                    input_config_error)) {
+            throw std::runtime_error("humanplayer.qvm: " + input_config_error);
+        }
+        const auto root_motion_scale = general.root_motion_scale();
+        const auto jump_horizontal = general.jump_horizontal_kmh();
+        const auto jump_vertical = general.jump_vertical_kmh();
+        const auto air_control = general.air_control_kmh();
+        if (!root_motion_scale || !jump_horizontal || !jump_vertical || !air_control) {
+            throw std::runtime_error(
+                "humanplayer.qvm: DefineHumanPlayerGeneral is missing a movement argument");
+        }
+        player.set_parameters({*root_motion_scale, *jump_horizontal, *jump_vertical,
+                               *air_control});
+        write_log("humanplayer.qvm: root-motion scale " + std::to_string(*root_motion_scale)
+                  + ", jump " + std::to_string(*jump_horizontal) + "/"
+                  + std::to_string(*jump_vertical) + " km/h, air control "
+                  + std::to_string(*air_control) + " km/h");
+
+        // The player's skinned 000_01_1 model selects the 000 skeleton (rig object id 0,
+        // listed in the common MTP BANM). Its animation IFF carries the clips the retail
+        // human state table at 0x00538870 indexes. The clip reader walks the IFF by tag
+        // because the FORM sizes in these files are not trustworthy.
+        {
+            bool clips_loaded = false;
+            for (const char* folder : {"COMMON", "common"})
+            {
+                for (const char* anims : {"ANIMS", "anims"})
+                {
+                    for (const char* file : {"000.IFF", "000.iff"})
+                    {
+                        const auto path = root / folder / anims / file;
+                        if (!std::filesystem::exists(path))
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            auto clips = host::read_animation_clips(path);
+                            const auto forward = std::find_if(
+                                clips.begin(), clips.end(),
+                                [](const host::AnimationClip& clip) { return clip.id == 4U; });
+                            if (forward == clips.end() || forward->root_keys.empty())
+                            {
+                                throw std::runtime_error(
+                                    "clip 4 (forward) has no root translation track");
+                            }
+                            write_log("Animation clips: " + path.string() + " clips=" +
+                                      std::to_string(clips.size()) + " forward=" +
+                                      std::to_string(forward->duration_ms) + " ms");
+                            player.set_locomotion_clips(std::move(clips));
+                            clips_loaded = true;
+                        }
+                        catch (const std::exception& exception)
+                        {
+                            write_log(std::string("Animation clips: ") + exception.what(),
+                                      diagnostics::LogLevel::warning);
+                        }
+                        break;
+                    }
+                    if (clips_loaded)
+                    {
+                        break;
+                    }
+                }
+                if (clips_loaded)
+                {
+                    break;
+                }
+            }
+            if (!clips_loaded)
+            {
+                write_log("Animation clips: player clips not loaded; ground movement will fail",
+                          diagnostics::LogLevel::warning);
+            }
+        }
+
         // Load retail level terrain if available (TERRAIN directory)
         const auto terrain_dir_lower = level / "terrain";
         const auto terrain_dir_upper = level / "TERRAIN";
@@ -675,13 +917,23 @@ struct Scene
                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
                 if (parsed_mef->render_format == model::MefRenderFormat::skinned)
                 {
-                    // Retail 0x0049B700 palette evaluation is ported (mef_skinner.cpp); the
-                    // identity palette renders the authored bind pose until the animation
-                    // slice supplies live bone palettes.
+                    // Retail 0x0049B700 palette evaluation is ported (mef_skinner.cpp). The
+                    // palette comes from the retail animation IFF the model package names,
+                    // because the MEF itself carries no skeleton.
                     try
                     {
+                        model::MefBoneRig rig{};
                         geometry = std::make_shared<model::MefRenderData>(
-                            model::Display_DecodeMeshRenderData(*parsed_mef));
+                            model::Display_DecodeMeshRenderData(*parsed_mef, skeletons, &rig));
+                        const model::IffSkeleton* skeleton =
+                            skeletons.Find(rig.object_id);
+                        write_log("Skinned MEF model=" + mesh_name +
+                                  " rig_object_id=" + std::to_string(rig.object_id) +
+                                  " bones=" + std::to_string(skeleton != nullptr
+                                                                 ? skeleton->BoneCount()
+                                                                 : 0U) +
+                                  " influence_agreement=" + std::to_string(rig.disagreement) +
+                                  " units");
                     }
                     catch (const std::exception& exception)
                     {
@@ -695,7 +947,7 @@ struct Scene
                 else
                 {
                     geometry = std::make_shared<model::MefRenderData>(
-                        model::Display_DecodeMeshRenderData(*parsed_mef));
+                        model::Display_DecodeMeshRenderData(*parsed_mef, skeletons));
                 }
             }
             object.geometry = geometry;
@@ -794,7 +1046,7 @@ struct Scene
                         try
                         {
                             child_geometry = std::make_shared<model::MefRenderData>(
-                                model::Display_DecodeMeshRenderData(*child_mef));
+                                model::Display_DecodeMeshRenderData(*child_mef, skeletons));
                         }
                         catch (const std::exception& exception)
                         {
@@ -838,8 +1090,7 @@ struct Scene
         write_log("Loaded placed model poses=" + std::to_string(objects.size()) +
                   "; attached_models=" + std::to_string(attached_models) +
                   "; unresolved_source_models=" + std::to_string(missing) +
-                  "; skinned models and remaining task types not yet rendered.");
-        write_log("HumanPlayer input is unavailable until the retail GOInRemap and InputPort native chain is transcribed and verified.");
+                  "; the skinned models use the retail animation skeleton; the remaining task types are not yet rendered.");
     }
 
     std::uint32_t render_width = 1024U;
@@ -1199,6 +1450,158 @@ struct Scene
         write_log("Direct3D frame saved: " + output_path.string());
     }
 
+    // HOST HELPER: advances the retail input port and the human controller, then
+    // places the camera on the human's eye.
+    void update_player(double delta_seconds)
+    {
+        if (!player_ready)
+        {
+            return;
+        }
+        input_port.Run();
+
+        host::PlayerInputFrame frame{};
+        frame.move_forward = input_port.ActionDown(input::Action::move_up);
+        frame.move_backward = input_port.ActionDown(input::Action::move_down);
+        frame.strafe_left = input_port.ActionDown(input::Action::move_left);
+        frame.strafe_right = input_port.ActionDown(input::Action::move_right);
+        frame.jump = input_port.ActionDown(input::Action::jump);
+        frame.crouch = input_port.ActionDown(input::Action::crouch);
+        frame.walk_toggle = input_port.ActionDown(input::Action::toggle_walk_run);
+        // The look delta is the mouse counts the device collected since the
+        // previous frame, already scaled by the retail mouse sensitivity.
+        const auto look = input_port.TakeMouseDelta();
+        frame.look_delta_x = look[0];
+        frame.look_delta_y = look[1];
+        last_look_delta = {look[0], look[1]};
+
+        player.update_view(frame);
+        const auto before_motion = player;
+        try
+        {
+            if (player_motion_available)
+            {
+                frame.look_delta_x = frame.look_delta_y = 0.0F;
+                player.update(frame, delta_seconds, collision_grid);
+            }
+        }
+        catch (const std::exception& exception)
+        {
+            // The retail ground displacement comes from the animation
+            // root-motion, which the port does not play yet. The controller
+            // reports it, so the scene keeps the human where it is instead of
+            // ending the frame.
+            write_log(std::string("Player update: ") + exception.what(),
+                      diagnostics::LogLevel::warning);
+            player = before_motion;
+            player_motion_available = false;
+        }
+
+        // The camera sits on the human's eye and looks along the human's
+        // facing direction, which the controller keeps as yaw and pitch.
+        const auto eye = player.eye_position();
+        const double yaw = player.yaw();
+        const double pitch = player.pitch();
+        const double scale = 1.0 / host::PlayerController::units_per_metre;
+        camera_position = Vector3{static_cast<float>((eye[0] - origin[0]) * scale),
+                                 static_cast<float>((eye[1] - origin[1]) * scale),
+                                 static_cast<float>((eye[2] - origin[2]) * scale)};
+        const float cos_pitch = static_cast<float>(std::cos(pitch));
+        const Vector3 direction{static_cast<float>(std::sin(yaw) * cos_pitch),
+                                static_cast<float>(std::cos(yaw) * cos_pitch),
+                                static_cast<float>(std::sin(pitch))};
+        camera_target = Vector3{camera_position.x + direction.x,
+                                camera_position.y + direction.y,
+                                camera_position.z + direction.z};
+    }
+
+    // HOST HELPER: posts the retail input sequence to the scene window, so the
+    // input port, the human controller and the camera can be exercised without
+    // a physical keyboard. The messages are the same ones a real device sends.
+    //
+    // The sequence is driven a frame at a time: a key held for a single frame
+    // is released again before the controller samples it, so the press edge
+    // would never be seen.
+    void build_input_demo()
+    {
+        std::vector<DemoEvent> events;
+        unsigned int frame = 2;
+        const auto schedule = [&](input::Action action, unsigned int held_frames)
+        {
+            const auto& bindings = input_port.Bindings(action);
+            const auto found = std::find_if(bindings.begin(), bindings.end(), [](const auto& binding) {
+                return binding.device == input::Device::keyboard || binding.code < 3U;
+            });
+            if (found == bindings.end()) throw std::runtime_error("Input demo action has no supported configured binding.");
+            UINT down = WM_KEYDOWN, up = WM_KEYUP;
+            WPARAM code = found->code;
+            if (found->device == input::Device::mouse)
+            {
+                const UINT downs[]{WM_LBUTTONDOWN, WM_RBUTTONDOWN, WM_MBUTTONDOWN};
+                const UINT ups[]{WM_LBUTTONUP, WM_RBUTTONUP, WM_MBUTTONUP};
+                down = downs[found->code]; up = ups[found->code]; code = 0;
+            }
+            events.push_back({frame++, down, code, 0});
+            events.push_back({frame + held_frames - 1, up, code, 0});
+            frame += held_frames;
+        };
+        schedule(input::Action::move_up, 10);
+        for (int index = 0; index < 10; ++index)
+            events.push_back({frame++, WM_MOUSEMOVE, 0,
+                              MAKELPARAM(400 + index * 12, 300 + index * 4)});
+        schedule(input::Action::jump, 4);
+        schedule(input::Action::crouch, 4);
+        schedule(input::Action::toggle_walk_run, 4);
+        input_demo_events = std::move(events);
+        input_demo_frame = 0;
+        input_demo_next = 0;
+        write_log("Input demo: scheduled configured movement, jump, crouch and walk-toggle bindings with mouse moves.");
+    }
+
+    // HOST HELPER: posts the scheduled demo messages for this frame.
+    void advance_input_demo()
+    {
+        if (input_demo_events.empty())
+        {
+            return;
+        }
+        while (input_demo_next < input_demo_events.size() &&
+               input_demo_events[input_demo_next].frame <= input_demo_frame)
+        {
+            const DemoEvent& event = input_demo_events[input_demo_next];
+            PostMessageW(window, event.message, event.wparam, event.lparam);
+            ++input_demo_next;
+        }
+        ++input_demo_frame;
+    }
+
+    // HOST HELPER: reports the human state so the runtime behaviour is visible
+    // in the scene log.
+    void log_player_state()
+    {
+        if (!player_ready)
+        {
+            return;
+        }
+        const auto feet = player.feet_position();
+        std::ostringstream state;
+        state << std::fixed << std::setprecision(3)
+              << "HumanPlayer feet=" << feet[0] << '/' << feet[1] << '/' << feet[2]
+              << " eye=" << camera_position.x << '/' << camera_position.y << '/'
+              << camera_position.z
+              << " yaw=" << player.yaw() << " pitch=" << player.pitch()
+              << " on_ground=" << (player.on_ground() ? 1 : 0)
+              << " crouched=" << (player.crouched() ? 1 : 0)
+              << " sliding=" << (player.sliding() ? 1 : 0)
+              << " ground=" << player.ground_height()
+              << " key_msgs=" << key_messages
+              << " mouse_msgs=" << mouse_messages
+              << " look_dx=" << last_look_delta[0]
+              << " look_dy=" << last_look_delta[1]
+              << " mouse_xy=" << last_mouse_x << '/' << last_mouse_y;
+        write_log(state.str());
+    }
+
     void draw()
     {
         const Vector3 forward = normalize(subtract(camera_target, camera_position));
@@ -1241,7 +1644,12 @@ struct Scene
             static_cast<double>(camera_position.x),
             static_cast<double>(camera_position.y),
             static_cast<double>(camera_position.z)};
-        render::Transcontext_BuildViewBlock(context.bytes.data(), &view,
+        // Retail consumes nine contiguous floats plus metadata, not a D3DMATRIX
+        // whose rows have four floats. Native camera axes are right/forward/up.
+        const std::array<float, 10> retail_camera_basis{
+            right.x, forward.x, up.x, right.y, forward.y, up.y,
+            right.z, forward.z, up.z, 0.0F};
+        render::Transcontext_BuildViewBlock(context.bytes.data(), retail_camera_basis.data(),
                                              camera_context_position.data(), default_fov_x);
         render::Transcontext_SetActiveTransContext(context);
         const auto fov_tangents = render::Transcontext_GetFovTangents();
@@ -1271,6 +1679,14 @@ struct Scene
                 const float cam_t[3] = {camera_target.x, camera_target.y, camera_target.z};
                 const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
                     origin, world_scale, cam_p, cam_t, fov_tangents[0], fov_tangents[1], 4000.0f);
+
+                // The ground query the human stands on is indexed from the
+                // terrain that is actually drawn this frame, so the human
+                // collides with the surface the player can see.
+                if (!terrain_mesh.vertices.empty())
+                {
+                    collision_grid.rebuild(terrain_mesh, camera_position.x, camera_position.y);
+                }
 
                 if (!terrain_mesh.vertices.empty())
                 {
@@ -1462,10 +1878,174 @@ struct Scene
     }
 };
 
+// The scene the window procedure reports the input to.
+Scene* g_active_scene = nullptr;
+
+// Scoped Windows adapter cleanup, including failures before the event loop starts.
+struct SceneWindowLifetime
+{
+    Scene& scene;
+    HWND owned_window = nullptr;
+    ~SceneWindowLifetime()
+    {
+        scene.set_mouse_active(false);
+        if (scene.raw_mouse_enabled)
+        {
+            const RAWINPUTDEVICE mouse{0x01, 0x02, RIDEV_REMOVE, nullptr};
+            RegisterRawInputDevices(&mouse, 1, sizeof(mouse));
+        }
+        if (g_active_scene == &scene) g_active_scene = nullptr;
+        if (owned_window != nullptr && IsWindow(owned_window)) DestroyWindow(owned_window);
+    }
+};
+
 LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
 {
+    if (message == WM_ACTIVATEAPP)
+        core::Display_ClearSurfaces_16();
+    // The input messages feed the retail input port, which the scene's player
+    // update reads at the start of the frame.
+    if (g_active_scene != nullptr)
+    {
+        switch (message)
+        {
+        case WM_SETFOCUS:
+            g_active_scene->set_mouse_active(true);
+            break;
+        case WM_KILLFOCUS:
+            g_active_scene->set_mouse_active(false);
+            break;
+        case WM_MOVE:
+        case WM_SIZE:
+            if (GetForegroundWindow() == window) g_active_scene->set_mouse_active(true);
+            break;
+        case WM_SETCURSOR:
+            if (g_active_scene->raw_mouse_enabled && LOWORD(detail) == HTCLIENT &&
+                GetForegroundWindow() == window)
+            {
+                SetCursor(nullptr);
+                return TRUE;
+            }
+            break;
+        case WM_INPUT:
+        {
+            RAWINPUT input{};
+            UINT size = sizeof(input);
+            if (g_active_scene->raw_mouse_enabled && GetForegroundWindow() == window &&
+                GetRawInputData(reinterpret_cast<HRAWINPUT>(detail), RID_INPUT, &input, &size,
+                                sizeof(RAWINPUTHEADER)) != static_cast<UINT>(-1) &&
+                input.header.dwType == RIM_TYPEMOUSE &&
+                (input.data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0)
+            {
+                g_active_scene->input_port.AddMouseDelta(input.data.mouse.lLastX, input.data.mouse.lLastY);
+                ++g_active_scene->mouse_messages;
+            }
+            return DefWindowProcW(window, message, parameter, detail);
+        }
+        case WM_KEYDOWN:
+        case WM_SYSKEYDOWN:
+        case WM_KEYUP:
+        case WM_SYSKEYUP:
+        {
+            const bool down = (message == WM_KEYDOWN || message == WM_SYSKEYDOWN);
+            auto& scene = *g_active_scene;
+            if (scene.developer_controls.enabled &&
+                (parameter == VK_F9 || parameter == VK_F10 || parameter == VK_F12))
+            {
+                if (down)
+                {
+                    const auto action = scene.developer_controls.handle_key(
+                        static_cast<unsigned int>(parameter), (detail & (LPARAM{1} << 30)) != 0);
+                    if (action == igi::developer::DeveloperAction::toggle_free_camera)
+                    {
+                        if (scene.developer_controls.free_camera_enabled)
+                        {
+                            scene.dev_saved_position = scene.camera_position;
+                            scene.dev_saved_target = scene.camera_target;
+                            scene.dev_camera_reset();
+                        }
+                        else
+                        {
+                            scene.camera_position = scene.dev_saved_position;
+                            scene.camera_target = scene.dev_saved_target;
+                        }
+                        static_cast<void>(scene.input_port.TakeMouseDelta());
+                        scene.cursor_valid = false;
+                        write_log(std::string("Developer free camera: ") +
+                                  (scene.developer_controls.free_camera_enabled ? "enabled" : "disabled"));
+                    }
+                    else if (action == igi::developer::DeveloperAction::next_level)
+                        scene.dev_next_level_requested = true;
+                    else if (action == igi::developer::DeveloperAction::toggle_player_cheats)
+                        write_log(std::string("Developer F9 cheat request: ") +
+                                  (scene.developer_controls.player_god_mode_requested ? "enabled" : "disabled") +
+                                  "; health/ammunition native integration pending.");
+                }
+                return 0;
+            }
+            // WM_KEY messages collapse sided modifiers; config.qvm names them
+            // separately. Translate the Windows message, without assigning actions.
+            std::uint32_t key = static_cast<std::uint32_t>(parameter);
+            if (key == VK_SHIFT)
+                key = MapVirtualKeyW(static_cast<UINT>((detail >> 16) & 0xFF), MAPVK_VSC_TO_VK_EX);
+            else if (key == VK_CONTROL)
+                key = (detail & (LPARAM{1} << 24)) ? VK_RCONTROL : VK_LCONTROL;
+            else if (key == VK_MENU)
+                key = (detail & (LPARAM{1} << 24)) ? VK_RMENU : VK_LMENU;
+            g_active_scene->input_port.SetKeyDown(key, down);
+            ++g_active_scene->key_messages;
+            return 0;
+        }
+        case WM_MOUSEMOVE:
+        {
+            if (g_active_scene->raw_mouse_enabled) return 0;
+            // The mouse position arrives in lParam, so a posted message counts
+            // the same way a real one does.
+            const auto packed = static_cast<LPARAM>(detail);
+            const LONG x = static_cast<LONG>(static_cast<short>(packed & 0xffff));
+            const LONG y = static_cast<LONG>(static_cast<short>((packed >> 16) & 0xffff));
+            if (g_active_scene->cursor_valid)
+            {
+                g_active_scene->input_port.AddMouseDelta(
+                    static_cast<int>(x - g_active_scene->cursor_x),
+                    static_cast<int>(y - g_active_scene->cursor_y));
+            }
+            g_active_scene->cursor_x = x;
+            g_active_scene->cursor_y = y;
+            g_active_scene->cursor_valid = true;
+            g_active_scene->last_mouse_x = x;
+            g_active_scene->last_mouse_y = y;
+            ++g_active_scene->mouse_messages;
+            return 0;
+        }
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+        case WM_RBUTTONDOWN:
+        case WM_RBUTTONUP:
+        case WM_MBUTTONDOWN:
+        case WM_MBUTTONUP:
+        {
+            int button = 0;
+            if (message == WM_RBUTTONDOWN || message == WM_RBUTTONUP)
+            {
+                button = 1;
+            }
+            else if (message == WM_MBUTTONDOWN || message == WM_MBUTTONUP)
+            {
+                button = 2;
+            }
+            const bool down = (message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN ||
+                               message == WM_MBUTTONDOWN);
+            g_active_scene->input_port.SetMouseButtonDown(button, down);
+            return 0;
+        }
+        default:
+            break;
+        }
+    }
     if (message == WM_DESTROY)
     {
+        if (g_active_scene != nullptr) g_active_scene->set_mouse_active(false);
         PostQuitMessage(0);
         return 0;
     }
@@ -1483,20 +2063,24 @@ int RunRetailModelScene(HINSTANCE instance,
                         unsigned int level_number,
                         const std::filesystem::path& capture_path,
                         bool dev_mode,
-                        bool windowed)
+                        bool windowed,
+                        bool input_demo)
 {
     try
     {
+        // Retail CRT startup 0x004A7157 establishes precision before WinMain;
+        // 0x0048F530 then establishes rounding before the game task loop.
+        static_cast<void>(core::Camera_ApplyBandFilter_10());
+        core::Display_ClearSurfaces_16();
         Scene scene;
+        SceneWindowLifetime lifetime{scene};
+        g_active_scene = &scene;
         scene.load(game_directory, level_number);
-        scene.dev_mode = dev_mode;
         scene.developer_controls.enabled = dev_mode;
-        scene.developer_controls.free_camera_enabled = dev_mode;
         if (dev_mode)
         {
-            scene.dev_camera_reset();
-            write_log("Free camera enabled (devmode): W/A/S/D move, Space up, Shift down, mouse looks, "
-                      "Ctrl boosts. F9 player cheat requests, F10 next level, F12 free-camera toggle.");
+            write_log("Developer controls enabled: F9 cheat request (gameplay integration pending), "
+                      "F10 next level, F12 inspection camera; movement uses config.qvm bindings.");
         }
         WNDCLASSEXW window_class{};
         window_class.cbSize = sizeof(window_class);
@@ -1541,13 +2125,23 @@ int RunRetailModelScene(HINSTANCE instance,
                                       nullptr,
                                       instance,
                                       nullptr);
+        lifetime.owned_window = window;
         if (window == nullptr)
         {
             throw std::runtime_error("Create model-scene window failed.");
         }
         scene.initialize(window, windowed);
+        if (!input_demo)
+        {
+            const RAWINPUTDEVICE mouse{0x01, 0x02, 0, window};
+            if (!RegisterRawInputDevices(&mouse, 1, sizeof(mouse)))
+                throw std::runtime_error("Register relative mouse input failed.");
+            scene.raw_mouse_enabled = true;
+            write_log("Relative mouse input registered; config.qvm sensitivity and inversion remain active.");
+        }
         ShowWindow(window, show_command);
         UpdateWindow(window);
+        scene.set_mouse_active(GetForegroundWindow() == window);
 
         // Apply the highest retail graphics mode. Retail keeps seven performance levels in the
         // dword table at 0x00537B74 (verified by unicorn execution of 0x004055C0); level 6, the
@@ -1582,11 +2176,13 @@ int RunRetailModelScene(HINSTANCE instance,
         // cadence instead of adding a fixed Sleep(16) after variable render work.
         constexpr auto frame_period = std::chrono::nanoseconds(1'000'000'000 / 30);
         auto next_frame_deadline = std::chrono::steady_clock::now();
-        auto previous_frame_start = next_frame_deadline;
+        auto last_frame_time = std::chrono::steady_clock::time_point{};
+        unsigned int player_report_frames = 0U;
+        // The input demo posts the retail key sequence to the scene window.
+        bool input_demo_pending = input_demo;
         auto fps_window_start = next_frame_deadline;
         unsigned int fps_window_frames = 0;
         unsigned int fps_window_overruns = 0;
-        float dev_frame_seconds = std::chrono::duration<float>(frame_period).count();
         while (running)
         {
             while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
@@ -1596,67 +2192,55 @@ int RunRetailModelScene(HINSTANCE instance,
                     running = false;
                     break;
                 }
-                if (message.hwnd == window &&
-                    (message.message == WM_KEYDOWN || message.message == WM_SYSKEYDOWN))
-                {
-                    const auto action = scene.developer_controls.handle_key(
-                        static_cast<unsigned int>(message.wParam),
-                        (static_cast<unsigned long long>(message.lParam) & (1ULL << 30U)) != 0U);
-                    if (action == igi::developer::DeveloperAction::toggle_free_camera)
-                    {
-                        scene.dev_look_initialised = false;
-                        if (scene.developer_controls.free_camera_enabled)
-                        {
-                            scene.dev_camera_reset();
-                        }
-                        write_log(std::string("Developer free camera: ") +
-                                  (scene.developer_controls.free_camera_enabled ? "enabled" : "disabled"));
-                    }
-                    else if (action == igi::developer::DeveloperAction::toggle_player_cheats)
-                    {
-                        write_log(
-                            std::string("Developer player-only god/ammo/clips request: ") +
-                            (scene.developer_controls.player_god_mode_requested ? "enabled" : "disabled") +
-                            "; gameplay health/ammunition integration unavailable in model scene.");
-                    }
-                    else if (action == igi::developer::DeveloperAction::next_level)
-                    {
-                        level_number = level_number == 14U ? 1U : level_number + 1U;
-                        write_log("Developer loading next model scene: level" + std::to_string(level_number));
-                        scene.objects.clear();
-                        scene.packages.clear();
-                        scene.uploaded_textures.clear();
-                        scene.texture_surfaces.clear();
-                        scene.origin = {};
-                        scene.camera_position = {0, 0, 0.69F};
-                        scene.camera_target = {0, 1, 0.69F};
-                        scene.load(game_directory, level_number);
-                        scene.first_frame = true;
-                        scene.dev_look_initialised = false;
-                        scene.dev_camera_reset();
-                    }
-                    if (action != igi::developer::DeveloperAction::none)
-                    {
-                        continue;
-                    }
-                }
                 TranslateMessage(&message);
                 DispatchMessageW(&message);
+            }
+            if (running && scene.dev_next_level_requested)
+            {
+                scene.dev_next_level_requested = false;
+                level_number = level_number == 14U ? 1U : level_number + 1U;
+                scene.objects.clear();
+                scene.uploaded_textures.clear();
+                scene.texture_surfaces.clear();
+                scene.packages.clear();
+                scene.terrain_textures.clear();
+                scene.terrain_texture_surfaces.clear();
+                scene.terrain_data = {};
+                scene.collision_grid = {};
+                scene.input_port = {};
+                scene.player_ready = false;
+                scene.cursor_valid = false;
+                scene.load(game_directory, level_number);
+                scene.dev_saved_position = scene.camera_position;
+                scene.dev_saved_target = scene.camera_target;
+                scene.first_frame = true;
+                scene.dev_camera_reset();
+                write_log("Developer loaded next level: level" + std::to_string(level_number));
+                last_frame_time = {};
             }
             if (running && !IsIconic(window))
             {
                 std::this_thread::sleep_until(next_frame_deadline);
                 const auto frame_start = std::chrono::steady_clock::now();
-                dev_frame_seconds = std::chrono::duration<float>(frame_start - previous_frame_start).count();
-                previous_frame_start = frame_start;
-                if (scene.dev_mode && scene.developer_controls.free_camera_enabled)
+                const auto previous_frame = last_frame_time;
+                last_frame_time = frame_start;
+                const double delta_seconds = previous_frame == std::chrono::steady_clock::time_point{}
+                                                 ? 1.0 / 30.0
+                                                 : std::chrono::duration<double>(frame_start - previous_frame).count();
+                if (input_demo_pending)
                 {
-                    scene.update_dev_camera(dev_frame_seconds);
-                    scene.draw();
+                    input_demo_pending = false;
+                    scene.build_input_demo();
                 }
+                scene.advance_input_demo();
+                if (scene.developer_controls.free_camera_enabled)
+                    scene.update_dev_camera(static_cast<float>(delta_seconds));
                 else
+                    scene.update_player(delta_seconds);
+                scene.draw();
+                if (player_report_frames++ % 30U == 0U)
                 {
-                    scene.draw();
+                    scene.log_player_state();
                 }
                 if (!capture_path.empty())
                 {

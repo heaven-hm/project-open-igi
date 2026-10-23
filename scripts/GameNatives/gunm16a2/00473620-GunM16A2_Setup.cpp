@@ -28,7 +28,7 @@ int GunM16A2_Setup(int context, float arg2)
     Weapon_UpdateRecoil_6(&arg2, &item_14, context, source_val);
     int item_3c = flagP;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     Sys_FreeMemory_18(*(source_val + 0x4e0), &item_10);
     long double fpu7 = Sys_CheckHeap_21(*(source_val + 0x4e0));
     long double fpu_val_7_1 = arg2 - fpu7;

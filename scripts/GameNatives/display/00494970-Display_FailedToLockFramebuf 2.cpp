@@ -11,7 +11,7 @@ int Display_FailedToLockFramebuf(void* context)
 
     if (data_1)
     {
-        Game_DataSymbolLoad(&item_4a4, "Failed to lock framebuffer.");
+        sprintf(&item_4a4, "Failed to lock framebuffer.");
         int item_4c0 = DDERR_GENERIC(data_1);
         void* item_4c4_1 = &item_4a4;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -162,7 +162,7 @@ int Display_FailedToLockFramebuf(void* context)
     if (!result)
         return result;
 
-    Game_DataSymbolLoad(&item_4a4, "Failed to unlock framebuffer.");
+    sprintf(&item_4a4, "Failed to unlock framebuffer.");
     int item_4c0_1 = DDERR_GENERIC(result);
     void* item_4c4_2 = &item_4a4;
     Error_Show("%s\n\nDirectX error message: %s");

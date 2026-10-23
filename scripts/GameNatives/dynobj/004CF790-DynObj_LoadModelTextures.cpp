@@ -37,7 +37,7 @@ int* DynObj_LoadModelTextures(void* context)
             {
                 void* item_18_1 = source_1;
                 *(*(context_val + 0x38) + flagP + 4) = 0;
-                Game_DataSymbolLoad(0xa4ec6c, "LOCAL:textures/%s.tex");
+                sprintf(0xa4ec6c, "LOCAL:textures/%s.tex");
                 Sys_SIsNotAValidTextureF(*(context_val + 0x34) + context, flagP + *(context_val + 0x38), 0xa4ec6c);
                 void* dest_1 = source_1;
                 int i = 0xffffffff;

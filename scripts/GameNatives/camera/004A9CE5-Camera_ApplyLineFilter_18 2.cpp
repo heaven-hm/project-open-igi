@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_ApplyLineFilter_18 - 0x004A9CE5 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A9CE5-Camera_ApplyLineFilter_18.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "Camera_ApplyLineFilter_18.h"
-long double __fastcall __fload_withFB(int context, double* arg2)
+long double __fastcall Camera_ApplyLineFilter_18(int context, double* arg2)
 
 {
     if ((*(arg2 + 4) & 0x7ff00000) != 0x7ff00000)

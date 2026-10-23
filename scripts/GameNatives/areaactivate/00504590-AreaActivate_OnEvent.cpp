@@ -14,6 +14,6 @@ int AreaActivate_OnEvent(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0xb5) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.nActive");
+    sprintf(&item_80, "%s.nActive");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

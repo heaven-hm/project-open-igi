@@ -16,7 +16,7 @@ int Display_CouldnTCreateDynamic()
 
     if (data_6)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't create dynamic vertex buffer");
+        sprintf(&item_400, "Couldn't create dynamic vertex buffer");
         int item_42c_1 = DDERR_GENERIC(data_6);
         void* item_430 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -39,7 +39,7 @@ int Display_CouldnTCreateDynamic()
 
     if (data_9)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't create dynamic vertex buffer");
+        sprintf(&item_400, "Couldn't create dynamic vertex buffer");
         int item_42c_3 = DDERR_GENERIC(data_9);
         void* item_430_1 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -78,7 +78,7 @@ int Display_CouldnTCreateDynamic()
         return (*(*data_19 + 0x10))(data_19);
     }
 
-    Game_DataSymbolLoad(&item_400, "Couldn't create dynamic vertex buffer");
+    sprintf(&item_400, "Couldn't create dynamic vertex buffer");
     int item_42c_5 = DDERR_GENERIC(data_12);
     void* item_430_2 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

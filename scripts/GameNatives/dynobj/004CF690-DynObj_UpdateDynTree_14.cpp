@@ -13,7 +13,7 @@ int* DynObj_UpdateDynTree_14(void* context)
     int data_1;
     void* entity_val;
     int temp_val;
-    data_1 = Game_DataSymbolLoad(0xa4ec6c, "%smodels/%s.mef");
+    data_1 = sprintf(0xa4ec6c, "%smodels/%s.mef");
     int item_38 = 0xa4ec6c;
     int* data_2 = Resource_Load(data_1, temp_val, entity_val, nullptr);
     result[4] = data_2;

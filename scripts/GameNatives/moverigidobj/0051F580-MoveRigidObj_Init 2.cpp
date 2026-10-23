@@ -31,13 +31,13 @@ void* MoveRigidObj_Init()
     for (void* i = nullptr; i < 0x20; )
     {
         int item_21c_1 = dest_val;
-        Game_DataSymbolLoad(i + 0xa83814, "Position %d");
+        sprintf(i + 0xa83814, "Position %d");
         int item_228_1 = dest_val;
-        Game_DataSymbolLoad(i + 0xa837d4, "Alpha %d");
+        sprintf(i + 0xa837d4, "Alpha %d");
         int item_234_1 = dest_val;
-        Game_DataSymbolLoad(i + 0xa837ac, "Beta %d");
+        sprintf(i + 0xa837ac, "Beta %d");
         int item_240_1 = dest_val;
-        Game_DataSymbolLoad(i + 0xa837f4, "Gamma %d");
+        sprintf(i + 0xa837f4, "Gamma %d");
         int data_10 = Script_ParseEnumReal32_4();
         Script_UndefinedParameterTy(g_a837d0, &item_208, flagP, data_10, 7, 0);
         int data_11 = Script_ParseEnumString_2();

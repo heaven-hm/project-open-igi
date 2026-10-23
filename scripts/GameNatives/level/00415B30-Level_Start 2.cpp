@@ -22,7 +22,7 @@ int Level_Start(void* context)
     }
 
     void* item_290_1 = data_1 + 0x144;
-    Game_DataSymbolLoad(0x57b568, "LOCAL:%s/");
+    sprintf(0x57b568, "LOCAL:%s/");
     Script_RegisterNamespace("MISSION:", 0x57b568);
     g_57babc = context;
     AI_UpdateSensors_4();
@@ -37,7 +37,7 @@ int Level_Start(void* context)
     int item_2b4 = *(data_7 + 0x20);
     int item_2b8 = 0x57b568;
     void item_280;
-    Game_DataSymbolLoad(&item_280, "%sterrain/terrain");
+    sprintf(&item_280, "%sterrain/terrain");
     DynObj_ParseConfigFile_7(*(g_57babc + 0x20), &item_280);
     DynObj_Createterrainmateria(*(g_57babc + 0x20), &item_280);
     Sys_ExecuteBytecode_8(0);
@@ -45,14 +45,14 @@ int Level_Start(void* context)
     DynObj_UpdateDynTree_13();
     void* item_29c = data_1 + 0x244;
     void item_200;
-    Game_DataSymbolLoad(&item_200, "LOCAL:%s/");
+    sprintf(&item_200, "LOCAL:%s/");
     DynObj_LookupHashItem_15(&item_200);
     DynObj_CreateMagicObject_15("LOCAL:common/");
     *(g_57babc + 0x24) = DynObj_RegisterSymbol_14(data_1 + 0x444);
     FX_FragmentSimulate_16(data_4, 1);
     void* item_2bc = data_1 + 0x344;
     void item_100;
-    Game_DataSymbolLoad(&item_100, "LOCAL:%s/");
+    sprintf(&item_100, "LOCAL:%s/");
     DynObj_LookupHashItem_15(&item_100);
     Script_CallNativeHandler(DynObj_RegisterSymbol_14(data_1 + 0x464));
     FX_FragmentSimulate_16(data_4, 1);

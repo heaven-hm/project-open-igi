@@ -8,6 +8,9 @@
 // looks. It is host tooling for inspecting the loaded scene and is not a retail feature; the
 // retail debug camera is Human_FindNextCamera (VA 0x004828D0), which needs the retail input and
 // camera state that the port does not have yet.
+//
+// input_demo posts the retail key sequence to the scene window so the input port, the human
+// controller and the camera can be exercised without a physical keyboard. It is host tooling.
 int RunRetailModelScene(HINSTANCE instance, int show_command, const std::filesystem::path &game_directory,
                         unsigned int level_number, const std::filesystem::path &capture_path = {},
-                        bool dev_mode = false, bool windowed = false);
+                        bool dev_mode = false, bool windowed = false, bool input_demo = false);

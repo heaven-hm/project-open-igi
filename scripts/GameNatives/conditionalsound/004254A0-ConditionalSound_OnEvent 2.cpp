@@ -14,15 +14,15 @@ int ConditionalSound_OnEvent(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0xb4) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isRun");
+    sprintf(&item_80, "%s.isRun");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastRun");
+    sprintf(&item_80, "%s.isLastRun");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_f0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isPlaying");
+    sprintf(&item_80, "%s.isPlaying");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_100_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nPlayTick");
+    sprintf(&item_80, "%s.nPlayTick");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

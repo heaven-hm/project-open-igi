@@ -13,7 +13,7 @@ int ConditionalContainer_Cleanup(void* context)
         void* item_d0_1 = &item_c0;
         *(context + 0x111) = 0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isRun");
+        sprintf(&item_80, "%s.isRun");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x111) = 0;
     }

@@ -94,7 +94,7 @@ int GunPickup_Action(void* context, int* arg2)
             *(context + 0x129) = 1;
             void* item_140_2 = &HumanPlayer_CheckCollision_10(data_10)[0x44];
             void message;
-            Game_DataSymbolLoad(&message, "PICKEDUPWEAPON%s");
+            sprintf(&message, "PICKEDUPWEAPON%s");
             return StatusMessage_ShowFull(Script_FormatString(), &message, &g_567c74, &g_567c74);
         }
     }

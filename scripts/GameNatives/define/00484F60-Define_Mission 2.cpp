@@ -1,9 +1,9 @@
-// IGI native provenance: Define_Mission - 0x00484F60 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineMission - 0x00484F60 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00484F60-Define_Mission.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "Define_Mission.h"
-int Define_Mission(int context, float arg2 )
+int DefineMission(int context, float arg2 )
 
-// Sig: void Define_Mission(...)
+// Sig: void DefineMission(...)
 // Note: Defines a MISSION entry during mission-list parsing (480-byte parser).
 // Called by the engine's mission definition grammar; do NOT call from gameplay
 // scripts.

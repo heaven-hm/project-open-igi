@@ -146,7 +146,7 @@ char* FX_RmS(char (** context)[0x16], void* arg2)
         if (~i - 1 >= 0x80 || !data_16)
         {
             int item_3c_5 = *(source_1 + 0xb0);
-            Game_DataSymbolLoad(&context_val[dest_val * 0x40b + 0x13], "RM: %s");
+            sprintf(&context_val[dest_val * 0x40b + 0x13], "RM: %s");
         }
         else
         {

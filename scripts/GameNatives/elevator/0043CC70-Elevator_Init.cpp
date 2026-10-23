@@ -77,7 +77,7 @@ int* Elevator_Init()
     for (char* i = &g_57bf90; i < &g_57c0d0; )
     {
         int item_658_1 = dest_val;
-        Game_DataSymbolLoad(i, "Wanted floor %d");
+        sprintf(i, "Wanted floor %d");
         int data_22 = Script_CallNativeHandler_3();
         Script_UndefinedParameterTy(g_57c0e0, &item_648, context_val, data_22, 7, 0);
         i = &i[0x20];

@@ -38,7 +38,7 @@ struct status_msg* SoundSys_PlaySoundSample_5(void* context, int arg2)
         item_418_1 = &item_400;
     }
 
-    Game_DataSymbolLoad(item_418_1, item_414_1);
+    sprintf(item_418_1, item_414_1);
     SoundSys_Update3DPosition_5(result, &item_400);
     return result;
 }

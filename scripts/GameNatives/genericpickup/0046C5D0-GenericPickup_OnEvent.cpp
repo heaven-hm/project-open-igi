@@ -14,6 +14,6 @@ int GenericPickup_OnEvent(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x118) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isPickedUp");
+    sprintf(&item_80, "%s.isPickedUp");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

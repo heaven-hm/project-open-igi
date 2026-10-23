@@ -31,7 +31,7 @@ int Weapon_ComputeAccuracy_6(int context, float arg2)
 
     int item_30_3 = dest_val;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     float source_2 = arg2;
     Sys_FreeMemory_18(*(source_2 + 0x4e0), &item_10);
     arg2 = data_val * 0.984375f - 4.0f;

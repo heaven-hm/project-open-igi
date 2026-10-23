@@ -5,7 +5,7 @@ int WeaponGun_Invoke5_472E10(void* arg1, int arg2)
 
 {
     (*((Weapon_ComputeAccuracy_5() << 2) + &g_a96ae0))(arg1, arg2);
-    int result = Game_DataSymbolLoad(arg1 + 0x104, "WEAPON_ID_DRAGUNOV");
+    int result = sprintf(arg1 + 0x104, "WEAPON_ID_DRAGUNOV");
     *(arg1 + 0x1b0) = 0;
     return result;
 }

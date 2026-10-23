@@ -14,6 +14,6 @@ int NoiseQTask_Update(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.vValue");
+    sprintf(&item_80, "%s.vValue");
     return SymbolRegister_Real32(&item_80, context + 0x68);
 }

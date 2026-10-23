@@ -36,11 +36,11 @@ void test_game_data_symbol_load_formats_string()
 {
     char buf[128]{};
     const std::int32_t len =
-        igi::retail::error::Game_DataSymbolLoad(buf, "LOCAL:models/%s.mef", "crate");
+        igi::retail::error::sprintf(buf, "LOCAL:models/%s.mef", "crate");
     require(len == static_cast<std::int32_t>(std::strlen("LOCAL:models/crate.mef")),
-            "Game_DataSymbolLoad returns formatted length");
+            "sprintf returns formatted length");
     require(std::strcmp(buf, "LOCAL:models/crate.mef") == 0,
-            "Game_DataSymbolLoad writes NUL-terminated formatted string");
+            "sprintf writes NUL-terminated formatted string");
 }
 
 void test_error_show_when_callbacks_are_null()
@@ -83,6 +83,6 @@ int main()
     test_game_data_symbol_load_formats_string();
     test_error_show_when_callbacks_are_null();
     test_error_show_formats_prefix_and_tailcalls_exit();
-    std::cout << "All retail Error_Show / String_VFormat / Game_DataSymbolLoad tests passed.\n";
+    std::cout << "All retail Error_Show / String_VFormat / sprintf tests passed.\n";
     return EXIT_SUCCESS;
 }

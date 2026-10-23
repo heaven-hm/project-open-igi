@@ -6,7 +6,7 @@ int Sys_PopStack_27(int* context, int arg2)
 {
     int item_108 = arg2;
     void item_100;
-    Game_DataSymbolLoad(&item_100, "%d");
+    sprintf(&item_100, "%d");
     void* dest_val = &item_100;
     int i = 0xffffffff;
 

@@ -14,6 +14,6 @@ void* MenuScreen_Update(void* context)
     Script_ParseEnumString_6(&item_100, context);
     void* item_110_1 = &item_100;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.nUserData");
+    sprintf(&item_80, "%s.nUserData");
     return SymbolRegister_Int32(&item_80, context + 0x19c);
 }

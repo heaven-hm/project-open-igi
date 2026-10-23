@@ -17,7 +17,7 @@ int* DynObj_LoadModelMesh(int context)
     int data_val;
     void* entity_val;
     int temp_val;
-    data_val = Game_DataSymbolLoad(0xa4ec6c, "LOCAL:models/%s.mef");
+    data_val = sprintf(0xa4ec6c, "LOCAL:models/%s.mef");
     int item_30 = 0xa4ec6c;
     int* data_1 = Resource_Load(data_val, temp_val, entity_val, nullptr);
     result[2] = data_1;

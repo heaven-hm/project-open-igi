@@ -9,10 +9,10 @@ int Config_English(int* context, int arg2)
     char* item_114 = "%s(%s);\n";
     void item_100;
     char* item_118 = &item_100;
-    int data_7 = Game_DataSymbolLoad(item_118, item_114);
+    int data_7 = sprintf(item_118, item_114);
     void* item_11c = &g_53337c[(&g_bc2388)[arg2 * 0x159] << 4];
     char const* const item_120 = "GOGameDiff";
-    int dest_1 = data_7 + Game_DataSymbolLoad(&item_118 + data_7 + 0x18, "%s(%s);\n");
+    int dest_1 = data_7 + sprintf(&item_118 + data_7 + 0x18, "%s(%s);\n");
     char* data_11 = "TRUE";
 
     if (!(&g_bc2390)[arg2 * 0x564])
@@ -22,5 +22,5 @@ int Config_English(int* context, int arg2)
     item_110 = "GOIsBlood";
     char* item_114_1 = "%s(%s);\n";
     item_118 = &item_110 + dest_1 + 0x10;
-    return Sys_CloseFileStream_4(context, &item_100, dest_1 + Game_DataSymbolLoad(item_118, item_114_1));
+    return Sys_CloseFileStream_4(context, &item_100, dest_1 + sprintf(item_118, item_114_1));
 }

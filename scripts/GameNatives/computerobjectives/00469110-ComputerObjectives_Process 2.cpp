@@ -64,7 +64,7 @@ void* ComputerObjectives_Process(void* context)
                 void item_100;
                 void* entity_6;
                 int temp_5;
-                entity_6 = Game_DataSymbolLoad(&item_100, "%s %d: ");
+                entity_6 = sprintf(&item_100, "%s %d: ");
                 int data_8 = *(data_3 + 0xc8);
                 char* item_178_1;
                 void item_140;
@@ -96,7 +96,7 @@ void* ComputerObjectives_Process(void* context)
                     item_178_1 = &item_140;
                 }
 
-                Game_DataSymbolLoad(item_178_1, "%s");
+                sprintf(item_178_1, "%s");
                 void* dest_2 = &item_140;
                 int j_1 = 0xffffffff;
 
@@ -141,7 +141,7 @@ void* ComputerObjectives_Process(void* context)
                 if (!data_16)
                 {
                     void* item_168_5 = data_3;
-                    Game_DataSymbolLoad(&item_100, "RM: %s");
+                    sprintf(&item_100, "RM: %s");
                     context_1 = &item_100;
                 }
                 else

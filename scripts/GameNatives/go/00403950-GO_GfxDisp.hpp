@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
-/* 00403950 GO_GfxDisp | gate PASS | openigi False */
-int GO_GfxDisp(int context, float arg2);
+// Native: GOGfxDisp; retail VA 0x00403950; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403950.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: GOGfxDisp; retail VA 0x00403950; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00403950.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+/* 00403950 GOGfxDisp | gate PASS | openigi False */
+int GOGfxDisp(int context, float arg2);

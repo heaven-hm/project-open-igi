@@ -5,5 +5,5 @@ int WeaponGun_Invoke5(void* arg1, int arg2)
 
 {
     (*((Weapon_ComputeAccuracy_5() << 2) + &g_a96ae0))(arg1, arg2);
-    return Game_DataSymbolLoad(arg1 + 0x104, "WEAPON_ID_MEDIPACK");
+    return sprintf(arg1 + 0x104, "WEAPON_ID_MEDIPACK");
 }

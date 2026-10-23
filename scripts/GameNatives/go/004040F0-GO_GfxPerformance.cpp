@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GfxPerformance - 0x004040F0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOGfxPerformance - 0x004040F0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004040F0-GO_GfxPerformance.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004040F0-GO_GfxPerformance.hpp"
-int GO_GfxPerformance(int context, float arg2 )
+int GOGfxPerformance(int context, float arg2 )
 
-// Sig: int GO_GfxPerformance(int flags)
+// Sig: int GOGfxPerformance(int flags)
 // Note: Sets graphics performance/detail flags for the current profile. Param:
 // flags = bitmask from the detail-level mapping (see
 // Config_GraphicOptionsGetPerfFlagsFromLevel). Use in config scripts. Returns

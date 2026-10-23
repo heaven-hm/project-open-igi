@@ -94,7 +94,7 @@ int* DisplayRender_ProcessCouldntsetcooper()
         else
         {
             void var_3fc;
-            Game_DataSymbolLoad(&var_3fc, "Couldn't set cooperative level");
+            sprintf(&var_3fc, "Couldn't set cooperative level");
             int var_414_2 = DDERR_GENERIC(eax_3);
             void* var_418 = &var_3fc;
             Error_Show("%s\n\nDirectX error message: %s");

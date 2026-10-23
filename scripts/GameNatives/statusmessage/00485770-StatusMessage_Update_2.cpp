@@ -14,18 +14,18 @@ int StatusMessage_Update_2(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isSendt");
+    sprintf(&item_80, "%s.isSendt");
     SymbolRegister_Bool8(&item_80, context + 0x1d4);
     void* item_e4_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTickSendt");
+    sprintf(&item_80, "%s.nTickSendt");
     SymbolRegister_Int16(&item_80, context + 0x1c8);
     void* item_f8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isFinishedDisplay");
+    sprintf(&item_80, "%s.isFinishedDisplay");
     SymbolRegister_Bool8(&item_80, context + 0x1d6);
     void* item_c8_2 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nFinishedDisplay");
+    sprintf(&item_80, "%s.nFinishedDisplay");
     SymbolRegister_Int16(&item_80, context + 0x1cc);
     void* item_dc_2 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTicksSinceFinishedDisplay");
+    sprintf(&item_80, "%s.nTicksSinceFinishedDisplay");
     return SymbolRegister_Int16(&item_80, context + 0x1d0);
 }

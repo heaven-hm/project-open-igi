@@ -13,7 +13,7 @@ int Warning_Show(char* context)
     if (!result)
         return result;
 
-    Game_DataSymbolLoad(0xa84640, "Warning:\n\n");
+    sprintf(0xa84640, "Warning:\n\n");
     int dest_1 = 0xa84640;
     int i = 0xffffffff;
 

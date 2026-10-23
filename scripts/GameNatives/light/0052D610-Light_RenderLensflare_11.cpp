@@ -5,5 +5,5 @@ int Light_RenderLensflare_11(void* context, char* arg2)
 
 {
     int item_4 = *(context + 0x18);
-    return Game_DataSymbolLoad(arg2, "%04d");
+    return sprintf(arg2, "%04d");
 }

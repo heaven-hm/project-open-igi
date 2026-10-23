@@ -14,7 +14,7 @@ int MenuFrame_OnEvent(void* context, int arg2)
             int item_54_1 = i + 1;
             void* item_58_1 = context + 0x54;
             char item_40[0x40];
-            Game_DataSymbolLoad(&item_40, "%s_%d.spr");
+            sprintf(&item_40, "%s_%d.spr");
             *dest_1 = Menu_DrawWidget_3(*(context + 0x44), &item_40);
             i += 1;
             dest_1 = &dest_1[1];

@@ -10,7 +10,7 @@ int SimpointObjGenerator_Process(void* context)
     {
         char* item_118_1 = context + 0xf4;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "Model "%s" not available");
+        sprintf(&item_80, "Model "%s" not available");
         char* dest_1 = context + 0xf4;
         int i = 0xffffffff;
 
@@ -31,7 +31,7 @@ int SimpointObjGenerator_Process(void* context)
         dest_3 = memcpy(&item_100, dest_1 - entity_1, entity_1 & 0xfffffffc);
         memcpy(dest_3, source_2, entity_1 & 3);
         void* item_124_1 = &item_100;
-        Game_DataSymbolLoad(context + 0xf4, "** %s **");
+        sprintf(context + 0xf4, "** %s **");
     }
 
     int result = DynObj_CreateMagicObject_5(context, data_val);

@@ -8,11 +8,11 @@ void PatrolPathCommand_Update(void* context)
     void item_400;
 
     if (data_val == 0xffffffff || data_val == 6 || data_val == 7 || data_val == 4)
-        Game_DataSymbolLoad(&item_400, (&g_53dfd8)[data_val * 2]);
+        sprintf(&item_400, (&g_53dfd8)[data_val * 2]);
     else
     {
         int item_408 = *(context + 0x24);
-        Game_DataSymbolLoad(&item_400, (&g_53dfdc)[data_val * 2]);
+        sprintf(&item_400, (&g_53dfdc)[data_val * 2]);
     }
 
     void* item_408_2 = &item_400;

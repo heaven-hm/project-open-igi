@@ -48,6 +48,11 @@ void Transcontext_SetActiveTransContext(const TransContext& context);
 [[nodiscard]] std::array<double, 3> Transcontext_GetCameraPosition();
 void Transcontext_SetCameraPosition(double x, double y, double z);
 
+// HOST INTEGRATION: reads the retail transform-context half-FOV tangents written by
+// Transcontext_BuildViewBlock (0x00497D70).  The Direct3D 7 projection consumes their
+// reciprocal, so its aspect-dependent field of view is derived from the retail context.
+[[nodiscard]] std::array<float, 2> Transcontext_GetFovTangents();
+
 // Retail counters touched by the setter (globals 0x006E5BB0 / 0x006E5BB4).
 [[nodiscard]] std::int32_t Transcontext_GetInstalledFlag();
 [[nodiscard]] std::int32_t Transcontext_GetInstallCount();

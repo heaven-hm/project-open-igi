@@ -1,6 +1,19 @@
 cmake_minimum_required(VERSION 3.20)
 
-project(igi_clean_room_engine LANGUAGES CXX)
+find_package(Python3 COMPONENTS Interpreter REQUIRED)
+
+option(IGI_ENABLE_NATIVE_GATE "Run retail binary verification gate before building" ON)
+option(IGI_FULL_PRODUCTION_GATE "Require strict changed-native gate at VERIFIED (legacy option name)" OFF)
+
+set(IGI_RETAIL_EXE "$ENV{IGI_RETAIL_EXE}" CACHE FILEPATH "Path to retail igi.exe")
+if(NOT IGI_RETAIL_EXE)
+    set(IGI_RETAIL_EXE "/Users/haseeb-mir/Downloads/IGI/igi.exe")
+endif()
+
+get_filename_component(IGI_PROJECT_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/.." ABSOLUTE)
+if(NOT EXISTS "${IGI_PROJECT_ROOT}/scripts/native_gate.py")
+    set(IGI_PROJECT_ROOT "${CMAKE_SOURCE_DIR}")
+endif()
 
 add_library(igi_retail_engine STATIC
     src/retail/audio/sound_key_functions.cpp
@@ -10,21 +23,31 @@ add_library(igi_retail_engine STATIC
     src/retail/audio/sound_attenuation_table.cpp
     src/retail/core/frame_natives.cpp
     src/retail/core/app_context.cpp
+    src/retail/core/fpu_state.cpp
     src/retail/core/debug_command_line.cpp
+    src/retail/input/input_port.cpp
     src/retail/diagnostics/log_record.cpp
     src/retail/error/error_show.cpp
     src/retail/human/human_camera_eye.cpp
     src/retail/human/human_view.cpp
     src/retail/model/mef_render_data.cpp
+    src/retail/model/mef_bone_rig.cpp
+    src/retail/model/iff_chunk_tree.cpp
+    src/retail/model/iff_skeleton.cpp
     src/retail/model/mef_model_loader.cpp
     src/retail/model/model_texture_package.cpp
+    src/retail/model/mef_skinner.cpp
     src/retail/config/config_graphic_options.cpp
+    src/retail/config/retail_config.cpp
+    src/retail/config/retail_input_bindings.cpp
     src/retail/render/trans_context.cpp
+    src/retail/render/view_block.cpp
     src/retail/render/camera_transform.cpp
     src/retail/render/backend.cpp
     src/retail/sys/ilff_navigation.cpp
     src/retail/sys/resource_lookup.cpp
     src/retail/dynobj/hash_lookup.cpp
+    src/retail/dynobj/dynamic_cube.cpp
     src/retail/dynobj/local_models_mef.cpp
     src/retail/dynobj/mtp_package_loader.cpp
     src/retail/qfile/alias_resolve.cpp
@@ -42,6 +65,7 @@ add_library(igi_retail_engine STATIC
     src/retail/script/qvm_native_loader.cpp
     src/retail/script/qvm_object_calls.cpp
     src/retail/script/qvm_stack_natives.cpp
+    src/retail/script/script_mode.cpp
     src/retail/texture/model_texture_pixels.cpp
     src/retail/texture/loop_terrain_texture.cpp
     src/retail/texture/texture_loaders.cpp
@@ -61,12 +85,72 @@ else()
     target_compile_options(igi_retail_engine PRIVATE -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion)
 endif()
 
+if(IGI_ENABLE_NATIVE_GATE)
+    set(IGI_GATE_ARGS --root "${IGI_PROJECT_ROOT}")
+    if(IGI_RETAIL_EXE)
+        list(APPEND IGI_GATE_ARGS --binary "${IGI_RETAIL_EXE}")
+    endif()
+    if(IGI_FULL_PRODUCTION_GATE)
+        list(APPEND IGI_GATE_ARGS --full-production)
+    else()
+        list(APPEND IGI_GATE_ARGS --development)
+    endif()
+
+    file(GLOB_RECURSE IGI_NATIVE_SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/src/retail/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/include/igi/retail/*.hpp"
+    )
+
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/igi_native_verification.stamp"
+        COMMAND ${Python3_EXECUTABLE} "${IGI_PROJECT_ROOT}/scripts/cmake_native_gate.py" ${IGI_GATE_ARGS}
+        COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/igi_native_verification.stamp"
+        WORKING_DIRECTORY "${IGI_PROJECT_ROOT}"
+        DEPENDS
+            ${IGI_NATIVE_SOURCES}
+            "${IGI_PROJECT_ROOT}/docs/fidelity/native-verification.json"
+            "${IGI_PROJECT_ROOT}/docs/fidelity/gate-integrity.sha256"
+            "${IGI_PROJECT_ROOT}/scripts/native_gate.py"
+            "${IGI_PROJECT_ROOT}/scripts/cmake_native_gate.py"
+            "${IGI_PROJECT_ROOT}/scripts/discover_referenced_natives.py"
+        COMMENT "Verifying retail native implementations against igi.exe (CFG/angr/MCP)..."
+        USES_TERMINAL
+    )
+
+    add_custom_target(igi_native_verification
+        DEPENDS "${CMAKE_BINARY_DIR}/igi_native_verification.stamp"
+    )
+
+    add_custom_target(igi_native_verification_force
+        COMMAND ${Python3_EXECUTABLE} "${IGI_PROJECT_ROOT}/scripts/cmake_native_gate.py" ${IGI_GATE_ARGS}
+        COMMAND ${CMAKE_COMMAND} -E touch "${CMAKE_BINARY_DIR}/igi_native_verification.stamp"
+        WORKING_DIRECTORY "${IGI_PROJECT_ROOT}"
+        COMMENT "Force-verifying retail native implementations against igi.exe..."
+        USES_TERMINAL
+    )
+
+    add_dependencies(igi_retail_engine igi_native_verification)
+endif()
+
 include(CTest)
 
 if(BUILD_TESTING)
+    if(IGI_ENABLE_NATIVE_GATE)
+        add_test(
+            NAME igi_native_verification_gate
+            COMMAND ${Python3_EXECUTABLE} "${IGI_PROJECT_ROOT}/scripts/cmake_native_gate.py" ${IGI_GATE_ARGS}
+            WORKING_DIRECTORY "${IGI_PROJECT_ROOT}"
+        )
+    endif()
+
     add_executable(igi_developer_controls_tests tests/core/developer_controls_test.cpp)
     target_compile_features(igi_developer_controls_tests PRIVATE cxx_std_20)
     add_test(NAME igi_developer_controls_tests COMMAND igi_developer_controls_tests)
+    add_executable(igi_retail_iff_skeleton_tests tests/model/iff_skeleton_test.cpp)
+    target_link_libraries(igi_retail_iff_skeleton_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_iff_skeleton_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_iff_skeleton_tests COMMAND igi_retail_iff_skeleton_tests)
+
     add_executable(igi_retail_render_data_tests tests/model/mef_render_data_test.cpp)
     target_link_libraries(igi_retail_render_data_tests PRIVATE igi_retail_engine)
     add_test(NAME igi_retail_render_data_tests COMMAND igi_retail_render_data_tests)
@@ -114,6 +198,32 @@ if(BUILD_TESTING)
     target_link_libraries(igi_retail_core_tests PRIVATE igi_retail_engine)
     target_compile_features(igi_retail_core_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_core_tests COMMAND igi_retail_core_tests)
+
+    add_executable(igi_retail_input_port_tests
+        tests/core/input_port_test.cpp
+    )
+
+    target_link_libraries(igi_retail_input_port_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_input_port_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_input_port_tests COMMAND igi_retail_input_port_tests)
+
+    add_executable(igi_retail_config_tests
+        tests/config/retail_config_test.cpp
+    )
+
+    target_link_libraries(igi_retail_config_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_config_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_config_tests COMMAND igi_retail_config_tests)
+
+    add_executable(igi_retail_player_controller_tests
+        tests/platform/player_controller_test.cpp
+        platform/windows/player_controller.cpp
+        platform/windows/retail_animation.cpp
+    )
+
+    target_link_libraries(igi_retail_player_controller_tests PRIVATE igi_retail_engine)
+    target_compile_features(igi_retail_player_controller_tests PRIVATE cxx_std_20)
+    add_test(NAME igi_retail_player_controller_tests COMMAND igi_retail_player_controller_tests)
 
     add_executable(igi_retail_log_record_tests
         tests/core/log_record_test.cpp
@@ -335,16 +445,6 @@ if(BUILD_TESTING)
     target_compile_features(igi_retail_terrain_loaders_tests PRIVATE cxx_std_20)
     add_test(NAME igi_retail_terrain_loaders_tests COMMAND igi_retail_terrain_loaders_tests)
 
-    # This host-side integration test is deliberately part of CTest: angr/Radare2 establish
-    # retail-native control flow, while this catches regressions in the Windows scene adapter
-    # that connects the verified Human camera native to input and rendered terrain.
-    add_executable(igi_player_controller_tests
-        platform/windows/player_controller.cpp
-        tests/platform/player_controller_test.cpp
-    )
-    target_link_libraries(igi_player_controller_tests PRIVATE igi_retail_engine)
-    target_compile_features(igi_player_controller_tests PRIVATE cxx_std_20)
-    add_test(NAME igi_player_controller_tests COMMAND igi_player_controller_tests)
 endif()
 
 if(WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)

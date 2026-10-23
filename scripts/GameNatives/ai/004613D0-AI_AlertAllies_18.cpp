@@ -5,7 +5,7 @@ int AI_AlertAllies_18(void* context)
 
 {
     *(context + 0x538) = 0xffffffff;
-    Render_ClipMesh_5(context + 0x534, context + 0x68);
+    AnimController_UpdateChannels(context + 0x534, context + 0x68);
     int result = *(context + 0x538);
 
     if (result == 0xffffffff)

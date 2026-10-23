@@ -14,9 +14,9 @@ int SmoothQTask_Update(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.vRealValue");
+    sprintf(&item_80, "%s.vRealValue");
     SymbolRegister_Real32(&item_80, context + 0x68);
     void* item_e4_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.vIdealValue");
+    sprintf(&item_80, "%s.vIdealValue");
     return SymbolRegister_Real32(&item_80, context + 0x68);
 }

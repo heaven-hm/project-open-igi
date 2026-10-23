@@ -1,9 +1,9 @@
-// IGI native provenance: Define_HumanPlayerWeaponCategory - 0x00410240 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineHumanPlayerWeaponCategory - 0x00410240 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00410240-Define_HumanPlayerWeaponCategory.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00410240-Define_HumanPlayerWeaponCategory.hpp"
-int Define_HumanPlayerWeaponCategory(int context, float arg2 )
+int DefineHumanPlayerWeaponCategory(int context, float arg2 )
 
-// Sig: void Define_HumanPlayerWeaponCategory(...)
+// Sig: void DefineHumanPlayerWeaponCategory(...)
 // Note: Registers one weapon-category entry for the human player during a
 // humanplayer definition block (argc unknown - parser context). Pairs with
 // DefineHumanPlayerWeaponCycle/Cycle ordering.

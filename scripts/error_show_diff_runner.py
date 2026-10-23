@@ -111,7 +111,7 @@ __declspec(dllexport) int NativeEntry(const char* format, int value, unsigned fl
                     self.state.globals["events"]=tuple(self.state.globals.get("events",()))+(["exit",exit_code],)
                     return exit_code&0xFFFFFFFF
 
-            hooks=[(0x004A53B3,"Game_DataSymbolLoad",Prefix,"int f(char*,char*)"),
+            hooks=[(0x004A53B3,"sprintf",Prefix,"int f(char*,char*)"),
                    (0x004A5702,"String_VFormat",Format,"int f(char*,char*,char*)"),
                    (0x004988D0,"NativeDisplay",Display,"void f(char*)"),
                    (0x00498930,"NativeExit",Exit,"int f()")]

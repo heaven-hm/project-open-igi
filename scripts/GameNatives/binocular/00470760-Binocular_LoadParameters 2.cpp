@@ -5,7 +5,7 @@ int* Binocular_LoadParameters(void* context, int arg2)
 
 {
     (*((Weapon_ComputeAccuracy_5() << 2) + &g_a96ae0))(context, arg2);
-    Game_DataSymbolLoad(context + 0x104, "WEAPON_ID_BINOCULARS");
+    sprintf(context + 0x104, "WEAPON_ID_BINOCULARS");
     *(context + 0x1b0) = 0;
     *(context + 0x1b4) = 0;
     *(context + 0x1b8) = 0;

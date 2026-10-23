@@ -56,10 +56,10 @@ void* SoundSys_LocalGrab(int context)
             item_818_1 = &item_800;
         }
 
-        Game_DataSymbolLoad(item_818_1, "%s");
+        sprintf(item_818_1, "%s");
         void* item_810_3 = &item_800;
         void item_400;
-        Game_DataSymbolLoad(&item_400, "%s/empty.dat");
+        sprintf(&item_400, "%s/empty.dat");
         int* data_10 = QFile_ReadWrite(&item_400, "w");
 
         if (!data_10)
@@ -75,7 +75,7 @@ void* SoundSys_LocalGrab(int context)
         {
             int item_810_6 = g_a70c64;
             void* item_814_3 = &item_800;
-            Game_DataSymbolLoad(&item_400, "%s/A%07d.tga");
+            sprintf(&item_400, "%s/A%07d.tga");
             i_1 = QFile_ReadWrite(&item_400, "r");
 
             if (!i_1)

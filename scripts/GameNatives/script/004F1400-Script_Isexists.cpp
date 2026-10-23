@@ -111,7 +111,7 @@ int Script_Isexists(int* context, void* arg2)
                     Script_ParseEnumString_6(&item_480, arg2);
                     void* item_5a0_3 = &item_500;
                     void* item_5a4_2 = &item_480;
-                    Game_DataSymbolLoad(&item_580, "%s.%s");
+                    sprintf(&item_580, "%s.%s");
                 }
 
                 if (Camera_UpdateViewCone_6(&item_580, ".isExists"))

@@ -6,5 +6,5 @@ int Sys_ReadFileBlock_27(char* context, int arg2, int arg3)
 {
     int item_4 = arg3;
     int item_8 = arg2;
-    return Game_DataSymbolLoad(context, "%s%p");
+    return sprintf(context, "%s%p");
 }

@@ -85,7 +85,7 @@ int Display_RestoreDevice_6(void* context)
             pUnkOuter = g_5ca10c;
         else
         {
-            Game_DataSymbolLoad(&item_e94, "Couldn't create DirectDraw object");
+            sprintf(&item_e94, "Couldn't create DirectDraw object");
             int item_ee4_2 = DDERR_GENERIC(data_4);
             void* item_ee8_2 = &item_e94;
             Error_Show("%s\n\nDirectX error message: %s");
@@ -117,7 +117,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_9)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't set cooperative level");
+        sprintf(&item_e94, "Couldn't set cooperative level");
         int item_ee4_3 = DDERR_GENERIC(data_9);
         void* item_ee8_3 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -133,7 +133,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_12)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't get the Direct3D interface");
+        sprintf(&item_e94, "Couldn't get the Direct3D interface");
         int item_ee4_4 = DDERR_GENERIC(data_12);
         void* item_ee8_4 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -169,7 +169,7 @@ int Display_RestoreDevice_6(void* context)
 
             if (data_17)
             {
-                Game_DataSymbolLoad(&item_e94, "Couldn't create device");
+                sprintf(&item_e94, "Couldn't create device");
                 int item_ee4_7 = DDERR_GENERIC(data_17);
                 void* item_ee8_6 = &item_e94;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -194,7 +194,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_20)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't get device caps");
+        sprintf(&item_e94, "Couldn't get device caps");
         int item_ee4_8 = DDERR_GENERIC(data_20);
         void* item_ee8_7 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -220,7 +220,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_24)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't set viewport");
+        sprintf(&item_e94, "Couldn't set viewport");
         int item_ee4_9 = DDERR_GENERIC(data_24);
         void* item_ee8_8 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -237,7 +237,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_27)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't create clipper");
+        sprintf(&item_e94, "Couldn't create clipper");
         int item_ee4_11 = DDERR_GENERIC(data_27);
         void* item_ee8_9 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -254,7 +254,7 @@ int Display_RestoreDevice_6(void* context)
 
     if (data_31)
     {
-        Game_DataSymbolLoad(&item_e94, "Couldn't set clipper's hWnd");
+        sprintf(&item_e94, "Couldn't set clipper's hWnd");
         int item_ee4_12 = DDERR_GENERIC(data_31);
         void* item_ee8_10 = &item_e94;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -280,7 +280,7 @@ int Display_RestoreDevice_6(void* context)
 
             if (data_38)
             {
-                Game_DataSymbolLoad(&item_e94, "BeginScene failed.");
+                sprintf(&item_e94, "BeginScene failed.");
                 int item_ee4_14 = DDERR_GENERIC(data_38);
                 void* item_ee8_12 = &item_e94;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -327,7 +327,7 @@ int Display_RestoreDevice_6(void* context)
         return 0xffffffff;
     }
 
-    Game_DataSymbolLoad(&item_e94, "Couldn't set clipper");
+    sprintf(&item_e94, "Couldn't set clipper");
     int item_ee4_13 = DDERR_GENERIC(data_34);
     void* item_ee8_11 = &item_e94;
     Error_Show("%s\n\nDirectX error message: %s");

@@ -40,7 +40,7 @@ int Gun_Cleanup_5(int* context, int* arg2)
     {
         int* item_190_5 = &context_val[0x44];
         void item_104;
-        Game_DataSymbolLoad(&item_104, "weapons/strings/%s");
+        sprintf(&item_104, "weapons/strings/%s");
         int data_4;
         void* entity_1;
         data_4 = Sys_CheckHeap_16(&item_104);

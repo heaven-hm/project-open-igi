@@ -54,7 +54,7 @@ int AI_RmS(int* context)
                 if (!data_10)
                 {
                     int item_12c_4 = context[0xa];
-                    Game_DataSymbolLoad(&item_100, "RM: %s");
+                    sprintf(&item_100, "RM: %s");
                     source_2 = &item_100;
                 }
                 else
@@ -100,7 +100,7 @@ int AI_RmS(int* context)
             if (!data_4)
             {
                 int item_12c_2 = context[9];
-                Game_DataSymbolLoad(&item_100, "RM: %s");
+                sprintf(&item_100, "RM: %s");
                 source_1 = &item_100;
             }
             else

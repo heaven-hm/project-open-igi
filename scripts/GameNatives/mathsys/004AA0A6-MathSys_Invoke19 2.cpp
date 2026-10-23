@@ -2,7 +2,7 @@
 // Evidence: 004AA0A6-MathSys_Invoke19.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "MathSys_Invoke19.h"
 
-void* __convention("regparm") MathSys_Invoke19(int arg1, char* arg2)
+void* MathSys_Invoke19("regparm") MathSys_Invoke19(int arg1, char* arg2)
 
 {
     char* data_val = arg2;

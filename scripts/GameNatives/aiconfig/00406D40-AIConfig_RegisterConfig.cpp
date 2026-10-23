@@ -8,7 +8,7 @@ void AIConfig_RegisterConfig(void* context)
     void* item_114 = Config_SavePlayerProfile_2(*(context + 0x20));
     int item_118 = data_1;
     void item_100;
-    Game_DataSymbolLoad(&item_100, "%s, %s");
+    sprintf(&item_100, "%s, %s");
     void* item_124 = &item_100;
     void* item_128 = context;
 }

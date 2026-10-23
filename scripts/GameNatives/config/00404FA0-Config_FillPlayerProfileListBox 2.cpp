@@ -16,7 +16,7 @@ int Config_FillPlayerProfileListBox(int context)
 
         do
         {
-            Menu_DrawWidget_9(dest_1, i);
+            ListBox_AddItem(dest_1, i);
             i += 1;
             dest_1 = &dest_1[0x159];
         } while (i < g_bc2380);

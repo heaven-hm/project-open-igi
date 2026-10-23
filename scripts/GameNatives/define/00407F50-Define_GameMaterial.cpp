@@ -1,9 +1,9 @@
-// IGI native provenance: Define_GameMaterial - 0x00407F50 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineGameMaterial - 0x00407F50 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00407F50-Define_GameMaterial.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00407F50-Define_GameMaterial.hpp"
-int Define_GameMaterial(long double context , long double arg2 , long double arg3 , long double arg4 , int arg5, float arg6 )
+int DefineGameMaterial(long double context , long double arg2 , long double arg3 , long double arg4 , int arg5, float arg6 )
 
-// Sig: void Define_GameMaterial(...)
+// Sig: void DefineGameMaterial(...)
 // Note: Defines a GameMaterial entry during a game-material definition block
 // (855-byte parser function). Call only from gamematerial .qsc definition
 // contexts; arg layout follows the Define block grammar (registration argc

@@ -12,7 +12,7 @@ int BoneMagicObj_LoadParameters(void* context)
     *(context + 0x124) = item_8 + *(context + 0x124);
     float item_4;
     *(context + 0x128) = item_4 + *(context + 0x128);
-    int result = Render_ClipMesh_5(0, context + 0x68);
+    int result = AnimController_UpdateChannels(0, context + 0x68);
     int* i = *(context + 8);
 
     if (*i && i)

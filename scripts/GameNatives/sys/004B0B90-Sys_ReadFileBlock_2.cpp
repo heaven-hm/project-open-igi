@@ -1,7 +1,7 @@
 // IGI native provenance: Sys_ReadFileBlock_2 - 0x004B0B90 - CFG score 50.0% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004B0B90-Sys_ReadFileBlock_2.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004B0B90-Sys_ReadFileBlock_2.hpp"
-int j_AnimSound_LoadParameters()
+int Sys_ReadFileBlock_2()
 
 {
     /* tailcall */

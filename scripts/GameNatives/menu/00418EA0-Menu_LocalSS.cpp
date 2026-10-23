@@ -7,7 +7,7 @@ int* Menu_LocalSS(void* context, int arg2)
     int saved_frame = arg2;
     void* item_114 = Config_English_2(*(context + 0x27e4));
     char item_100[0x100];
-    Game_DataSymbolLoad(&item_100, "LOCAL:%s/%s");
+    sprintf(&item_100, "LOCAL:%s/%s");
     int data_2;
     void* entity_val;
     int temp_val;
@@ -30,7 +30,7 @@ int* Menu_LocalSS(void* context, int arg2)
     Qhash_Init(1);
     void* data_5 = Mem_Alloc(0x88, 4);
     int item_120_1 = arg2;
-    Game_DataSymbolLoad(data_5 + 0x40, "RM: %s");
+    sprintf(data_5 + 0x40, "RM: %s");
     char (* dest_1)[0x100] = &item_100;
     int i_1 = 0xffffffff;
 

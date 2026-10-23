@@ -15,18 +15,18 @@ int GenericTBA_Update(void* context)
     void* item_d8_1 = &item_c0;
     *(context + 0x248) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isInUse");
+    sprintf(&item_80, "%s.isInUse");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastInUse");
+    sprintf(&item_80, "%s.isLastInUse");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_f8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isOn");
+    sprintf(&item_80, "%s.isOn");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_108_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isFinished");
+    sprintf(&item_80, "%s.isFinished");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_d0_2 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isFinishedThisTick");
+    sprintf(&item_80, "%s.isFinishedThisTick");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

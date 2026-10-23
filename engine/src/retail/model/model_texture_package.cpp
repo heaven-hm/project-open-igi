@@ -12,6 +12,7 @@ constexpr std::uint32_t mods_tag = 0x4D4F4453U;
 constexpr std::uint32_t vnam_tag = 0x564E414DU;
 constexpr std::uint32_t inst_tag = 0x494E5354U;
 constexpr std::uint32_t gtt_tag = 0x47545420U;
+constexpr std::uint32_t banm_tag = 0x42414E4DU;
 constexpr std::size_t root_header_bytes = 12U;
 constexpr std::size_t child_header_bytes = 8U;
 
@@ -178,6 +179,13 @@ MtpPackage MtpPackage::Host_ParseModelTexturePackage(std::span<const std::byte> 
         if (chunk.tag == 0x54455846U)
         {
             package.texture_names = read_string_table(chunk.payload, false);
+        }
+    }
+    for (const auto& chunk : chunks)
+    {
+        if (chunk.tag == banm_tag)
+        {
+            package.animation_names = read_string_table(chunk.payload, false);
         }
     }
     package.model_names = read_string_table(require_chunk(chunks, mods_tag).payload, false);

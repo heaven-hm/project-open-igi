@@ -1,9 +1,9 @@
-// IGI native provenance: GO_SoundFX - 0x00403F80 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: GOSoundFX - 0x00403F80 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403F80-GO_SoundFX.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403F80-GO_SoundFX.hpp"
-int GO_SoundFX(long double context , int arg2, float arg3 )
+int GOSoundFX(long double context , int arg2, float arg3 )
 
-// Sig: int GO_SoundFX(float volume)
+// Sig: int GOSoundFX(float volume)
 // Note: Sets sound-effects volume for the current profile. Param: volume =
 // float 0.0-1.0. Use in config scripts. Returns 1.
 {

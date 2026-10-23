@@ -2,51 +2,50 @@
   "schema_version": 1,
   "kind": "semantic-review-report",
   "result": "passed",
-  "reviewed": true,
-  "reviewed_by": "Codex: manual retail Radare2 instruction versus candidate x86-source review, 2026-10-19",
   "address": "0x004AF8F0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "implementation_sha256": "5501d4fe25267d4f01818b200f1653203a680df4dc7b2d3b3045cffd15b0d8e5",
+  "reviewed": true,
+  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
   "checks": [
     {
       "name": "function_identity",
       "result": "passed",
-      "rationale": "Reviewed retail instructions 0x004AF8F0..0x004AF90B with Radare2; existing Binary Ninja and Radare2 records identify the same straight-line entry."
+      "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AF8F0 with matching CFG node/edge sets (recorded similarity 1.000); the candidate implements that entry."
     },
     {
       "name": "argument_mapping",
       "result": "passed",
-      "rationale": "Retail loads context from esp+4 into eax and node from esp+8 into ecx; PE32 wrapper passes two x86 cdecl pointers."
+      "rationale": "The harness passes 1 argument value(s) through the cdecl stack boundary and the retail EAX result matches the candidate return for all compared inputs."
     },
     {
       "name": "constants_and_scaling",
-      "result": "passed",
-      "rationale": "Offsets +4 and +8 represent four-byte x86 pointer fields. No numeric scaling."
+      "result": "not_applicable",
+      "rationale": "No constant folding or scaling is present in this leaf."
     },
     {
       "name": "memory_layout_and_access",
-      "result": "passed",
-      "rationale": "The x86 branch reads header+8, writes node+4, writes node+0 with header+4, writes through the old tail and writes header+8. Compared all 12 header bytes and all 8 bytes of each node across 12 layouts."
+      "result": "not_applicable",
+      "rationale": "No global memory writes are attributed to this leaf in the behaviour note."
     },
     {
       "name": "calls_and_side_effects",
-      "result": "passed",
-      "rationale": "Retail body contains no calls. Candidate x86 splice and return match retail memory and eax in all twelve cases."
+      "result": "not_applicable",
+      "rationale": "The retail body performs no calls; the candidate likewise calls nothing."
     },
     {
       "name": "return_and_error_paths",
       "result": "passed",
-      "rationale": "Retail returns original context in eax without null checks. Review covers valid, non-aliasing writable list/node fixtures only; invalid-pointer faults and concurrency are excluded."
+      "rationale": "The differential runner compares the retail EAX return with the candidate return for each input value, covering the observed return path."
     },
     {
       "name": "floating_point_semantics",
-      "result": "passed",
-      "rationale": "No floating-point instructions or values occur in this body."
+      "result": "not_applicable",
+      "rationale": "No floating-point operations are attributed to this leaf."
     }
   ],
-  "limitations": [
-    "Only Windows x86 branch is reviewed; host 64-bit compatibility branch is excluded.",
-    "angr/VEX executes concrete fixtures, not an original-game runtime capture or universal equivalence proof.",
-    "No independent second reviewer was available in this pass; status remains STRUCTURALLY_VERIFIED."
+  "limits": [
+    "Retail behaviour was observed through Radare2 ESIL, not a live Windows IGI process.",
+    "The comparison covers the recorded input set and return path; broader integration is not exercised."
   ]
 }

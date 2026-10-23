@@ -20,7 +20,7 @@ int Heli_Update(void* context)
     {
         char* item_118_2 = context + 0x154;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "Model "%s" not available");
+        sprintf(&item_80, "Model "%s" not available");
         char* dest_1 = context + 0x154;
         int i = 0xffffffff;
 
@@ -41,7 +41,7 @@ int Heli_Update(void* context)
         dest_3 = memcpy(&item_100, dest_1 - entity_1, entity_1 & 0xfffffffc);
         memcpy(dest_3, source_2, entity_1 & 3);
         void* item_124_2 = &item_100;
-        Game_DataSymbolLoad(context + 0x154, "** %s **");
+        sprintf(context + 0x154, "** %s **");
     }
 
     *(context + 0x730) = *(context + 0x740);

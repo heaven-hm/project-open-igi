@@ -75,7 +75,7 @@
 
             if (result_val_3)
             {
-                Game_DataSymbolLoad(&arg_52c, "Couldn't create DirectDraw object");
+                sprintf(&arg_52c, "Couldn't create DirectDraw object");
                 int local_20_3 = DDERR_GENERIC(result_val_3);
                 void* local_24_2 = &arg_52c;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -90,7 +90,7 @@
 
                 if (result_val_4)
                 {
-                    Game_DataSymbolLoad(&arg_52c, "Couldn't enumerate display modes.");
+                    sprintf(&arg_52c, "Couldn't enumerate display modes.");
                     int local_20_4 = DDERR_GENERIC(result_val_4);
                     void* local_24_3 = &arg_52c;
                     Error_Show("%s\n\nDirectX error message: %s");

@@ -11,7 +11,7 @@ int Physics_CouldnTGetSurfacedes(int* context, int arg2, int arg3, int* arg4, in
 
     if (data_1)
     {
-        Game_DataSymbolLoad(&item_530, "Couldn't get surfacedesc");
+        sprintf(&item_530, "Couldn't get surfacedesc");
         int item_54c = DDERR_GENERIC(data_1);
         void* item_550 = &item_530;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -39,7 +39,7 @@ int Physics_CouldnTGetSurfacedes(int* context, int arg2, int arg3, int* arg4, in
 
     if (data_4)
     {
-        Game_DataSymbolLoad(&item_530, "Couldn't create surface");
+        sprintf(&item_530, "Couldn't create surface");
         int item_54c_2 = DDERR_GENERIC(data_4);
         void* item_550_1 = &item_530;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -55,7 +55,7 @@ int Physics_CouldnTGetSurfacedes(int* context, int arg2, int arg3, int* arg4, in
 
     if (data_7)
     {
-        Game_DataSymbolLoad(&item_530, "Couldn't lock surface");
+        sprintf(&item_530, "Couldn't lock surface");
         int item_54c_3 = DDERR_GENERIC(data_7);
         void* item_550_3 = &item_530;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -380,7 +380,7 @@ int Physics_CouldnTGetSurfacedes(int* context, int arg2, int arg3, int* arg4, in
             return (*(*data_87 + 8))(data_87);
         }
 
-        Game_DataSymbolLoad(&item_530, "Couldn't blit surface");
+        sprintf(&item_530, "Couldn't blit surface");
         int item_54c_6 = DDERR_GENERIC(data_85);
         void* item_550_5 = &item_530;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -390,7 +390,7 @@ int Physics_CouldnTGetSurfacedes(int* context, int arg2, int arg3, int* arg4, in
     }
     else
     {
-        Game_DataSymbolLoad(&item_530, "Couldn't unlock surface");
+        sprintf(&item_530, "Couldn't unlock surface");
         int item_54c_4 = DDERR_GENERIC(data_82);
         void* item_550_4 = &item_530;
         Error_Show("%s\n\nDirectX error message: %s");

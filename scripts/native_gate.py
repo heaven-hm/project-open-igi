@@ -81,6 +81,24 @@ STATUS_COMMENT = re.compile(r"^\s*//\s*Status/limits:\s*(?P<status>[A-Z_]+)\b")
 GAME_NATIVE_ADDRESS = re.compile(r"(?i)^(?P<address>[0-9a-f]{8})-")
 NATIVE_ROOTS = ("engine/src/retail/", "scripts/GameNatives/")
 NATIVE_SOURCE_SUFFIXES = {".cpp", ".cc", ".cxx", ".c++", ".h", ".hh", ".hpp", ".hxx", ".inl"}
+
+# Host-only sources that live under a native root but do not claim a retail identity:
+# host diagnostics, the developer command line, and the configuration reader that parses
+# the shipped LOOP settings files. They are reviewed as host tooling, not as native
+# transcriptions, so the address-bound identity checks do not apply to them.
+HOST_ONLY_SOURCES = frozenset({
+    "engine/src/retail/diagnostics/log_record.cpp",
+    "engine/src/retail/core/debug_command_line.cpp",
+    "engine/src/retail/config/retail_config.cpp",
+    "engine/src/retail/config/retail_config.hpp",
+    "engine/src/retail/config/retail_input_bindings.cpp",
+    "engine/src/retail/config/retail_input_bindings.hpp",
+    # The rig selection for a skinned MEF model: the retail takes the skeleton
+    # from the character it builds, so no retail native does this. The file is
+    # host glue over the retail animation files and is reviewed as such.
+    "engine/src/retail/model/mef_bone_rig.cpp",
+    "engine/src/retail/model/mef_bone_rig.hpp",
+})
 EVIDENCE_ROOT = "docs/fidelity/evidence/"
 DEFAULT_BINARY = pathlib.Path("/Users/haseeb-mir/Downloads/IGI/igi.exe")
 DEFAULT_MANIFEST = pathlib.Path("docs/fidelity/native-verification.json")
@@ -295,6 +313,61 @@ def changed_paths(
 
     deleted = sorted(_deleted_native_paths(root, include_unstaged=(mode == "changed")))
     return sorted(found), deleted
+
+
+def discover_address_files(
+    root: pathlib.Path,
+    addresses: list[str],
+    manifest_records: dict[str, dict[str, Any]],
+) -> tuple[list[pathlib.Path], list[str]]:
+    """Locate implementation files bound to the requested retail addresses.
+
+    The manifest implementation.path binding is authoritative; address-qualified
+    GameNatives filenames and Native provenance comments provide the fallback.
+    Returns the resolved files and the addresses still unbound.
+    """
+    files: set[pathlib.Path] = set()
+    pending = list(addresses)
+    for address in addresses:
+        record = manifest_records.get(address)
+        relative = record.get("implementation", {}).get("path") if isinstance(record, dict) else None
+        if not isinstance(relative, str) or not relative:
+            continue
+        try:
+            files.add(resolve_repo_path(root, relative))
+        except (GateError, OSError):
+            continue
+        pending.remove(address)
+    if pending:
+        for native_root in NATIVE_ROOTS:
+            if not pending:
+                break
+            base = root / native_root
+            if not base.is_dir():
+                continue
+            for path in base.rglob("*"):
+                if not pending:
+                    break
+                if not path.is_file() or path.suffix.lower() not in NATIVE_SOURCE_SUFFIXES:
+                    continue
+                bound: set[str] = set()
+                name_match = GAME_NATIVE_ADDRESS.match(path.name)
+                if name_match:
+                    try:
+                        bound.add(normalize_address(name_match.group("address")))
+                    except (ValueError, TypeError):
+                        pass
+                if len(bound) < len(pending):
+                    try:
+                        bound |= source_addresses_from_text(
+                            path.read_text(encoding="utf-8", errors="replace"))
+                    except OSError:
+                        pass
+                hits = {address for address in pending if address in bound}
+                if hits:
+                    files.add(path.resolve())
+                    pending = [address for address in pending if address not in hits]
+    return sorted(files), pending
 
 
 def load_runtime_trace(path: pathlib.Path, binary_digest: str) -> set[str]:
@@ -1027,6 +1100,61 @@ def validate_report_artifact(
     return artifact
 
 
+def validate_semantic_runtime_contract(artifact, address, errors):
+    """A prose checklist cannot authorize an unknown runtime comparison."""
+    contract = artifact.get("runtime_contract") if isinstance(artifact, dict) else None
+    if not isinstance(contract, dict):
+        errors.append(f"{address}: semantic review has no authorized runtime_contract")
+        return None
+    if not isinstance(contract.get("scope"), str) or not contract["scope"].strip():
+        errors.append(f"{address}: runtime contract has no declared scope")
+    if not isinstance(contract.get("probe_sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", contract["probe_sha256"]):
+        errors.append(f"{address}: runtime contract has no exact probe SHA-256")
+    requirements = contract.get("required_observables")
+    if not isinstance(requirements, dict):
+        errors.append(f"{address}: runtime contract has no typed required observables")
+        return None
+    for part, absence in (("inputs", "no_arguments"), ("outputs", "no_return"),
+                          ("sideEffects", "no_side_effects")):
+        fields = requirements.get(part)
+        if (not isinstance(fields, list) or any(not isinstance(k, str) or not k for k in fields)
+                or (isinstance(fields, list) and len(fields) != len(set(fields)))
+                or (not fields and contract.get(absence) is not True)):
+            errors.append(f"{address}: runtime contract must review {part} or prove its absence")
+    return contract
+
+
+def validate_live_runtime_contract(report, contract, address, errors):
+    if report.get("probe_sha256") != contract.get("probe_sha256") or report.get("scope") != contract.get("scope"):
+        errors.append(f"{address}: live behavioral comparison differs from the authorized probe/scope")
+    requirements = contract.get("required_observables", {})
+    for case in report.get("cases", []):
+        if not isinstance(case, dict):
+            continue
+        for side in ("reference_output", "candidate_output"):
+            output = case.get(side, {})
+            if not isinstance(output, dict):
+                continue
+            observations = {"inputs": case.get("input"), "outputs": output,
+                            "sideEffects": output.get("side_effects")}
+            for part, fields in requirements.items():
+                observed = observations.get(part)
+                if fields:
+                    if not isinstance(observed, dict) or any(field not in observed or observed[field] is None for field in fields):
+                        errors.append(f"{address}: {case.get('id')} omits reviewed {part} in {side}")
+                else:
+                    # Fixtures can carry initial state and void calls can mutate memory.
+                    # Absence applies to ABI arguments/return, not the whole envelope.
+                    if part == "inputs":
+                        absent = isinstance(observed, dict) and observed.get("args", []) in ({}, [])
+                    elif part == "outputs":
+                        absent = "return_value" in output and output["return_value"] is None
+                    else:
+                        absent = observed in ({}, [])
+                    if not absent:
+                        errors.append(f"{address}: {case.get('id')} contradicts reviewed absence of {part}")
+
+
 def validate_status_evidence(
     root: pathlib.Path,
     record: dict[str, Any],
@@ -1214,43 +1342,96 @@ def run_live_behavioral_runner(
 def run_angr_analysis(
     root: pathlib.Path, binary: pathlib.Path, binary_digest: str, addresses: list[str],
 ) -> dict[str, Any]:
-    """Run the isolated CFG helper once; failures remain explicit gate errors."""
+    """Recover the image CFG once for all addresses; failures remain gate errors."""
     helper = root / "scripts/angr_analyze.py"
     if not addresses:
         return {"functions": {}}
     if not helper.is_file():
         return {"error": "scripts/angr_analyze.py is missing", "functions": {}}
     interpreter = os.environ.get("IGI_ANGR_PYTHON", str(root / ".venv-angr/bin/python"))
-    command = [interpreter, str(helper), "--binary", str(binary.resolve())]
-    for address in addresses:
-        command.extend(["--address", address])
+    selected_addresses = sorted(set(addresses))
+    # CFGFast recovers the whole image, irrespective of the requested address count.
+    # Repeating it per 32 entries multiplies cost without independent evidence.
+    # Keep one bounded helper and validate that every requested result is present.
+    batches = [selected_addresses]
+    combined_functions: dict[str, Any] = {}
+    commands: list[list[str]] = []
+    batch_results: list[dict[str, Any]] = []
+    angr_version: str | None = None
+    helper_digest = sha256(helper)
     try:
-        helper_digest = sha256(helper)
-        process = subprocess.run(command, cwd=root, text=True, capture_output=True,
-                                 check=False, timeout=180)
-        if sha256(helper) != helper_digest:
-            raise ValueError("angr helper changed during analysis")
-        artifact = json.loads(process.stdout)
-        if not isinstance(artifact, dict):
-            raise ValueError("helper output is not an object")
-        if process.returncode not in (0, 2):
-            raise ValueError(artifact.get("reason") or process.stderr[-1000:] or
-                             f"helper exited {process.returncode}")
-        if (artifact.get("schema_version") != 1 or artifact.get("kind") != "angr-analysis"
-                or artifact.get("tool") != "angr" or not artifact.get("angr_version")):
-            raise ValueError("helper did not identify a supported angr evidence report")
-        if artifact.get("binary_sha256") != binary_digest:
-            raise ValueError("helper binary digest differs from selected retail executable")
-        if pathlib.Path(artifact.get("binary_path", "")).resolve() != binary.resolve():
-            raise ValueError("helper loaded a different binary path")
-        if artifact.get("bits") != 32 or int(artifact.get("mapped_base", "0"), 0) != 0x400000:
-            raise ValueError("helper did not load the retail x86 image at 0x00400000")
-        if not isinstance(artifact.get("functions"), dict):
-            raise ValueError("helper function results are missing")
-        artifact["helper_sha256"] = helper_digest
-        artifact["command"] = command
-        artifact["stderr"] = process.stderr[-1000:]
-        return artifact
+        for batch in batches:
+            command = [interpreter, str(helper), "--binary", str(binary.resolve())]
+            for address in batch:
+                command.extend(["--address", address])
+            commands.append(command)
+            process = subprocess.run(command, cwd=root, text=True, capture_output=True,
+                                     check=False, timeout=180)
+            if sha256(helper) != helper_digest:
+                raise ValueError("angr helper changed during analysis")
+            try:
+                artifact = json.loads(process.stdout)
+            except json.JSONDecodeError as error:
+                raise ValueError(
+                    f"angr batch {len(commands)}/{len(batches)} returned invalid JSON "
+                    f"(exit={process.returncode}, stderr={process.stderr[-1000:]!r})"
+                ) from error
+            if not isinstance(artifact, dict):
+                raise ValueError("helper output is not an object")
+            if process.returncode not in (0, 2):
+                raise ValueError(artifact.get("reason") or process.stderr[-1000:] or
+                                 f"helper exited {process.returncode}")
+            if (artifact.get("schema_version") != 1 or artifact.get("kind") != "angr-analysis"
+                    or artifact.get("tool") != "angr" or not artifact.get("angr_version")):
+                raise ValueError("helper did not identify a supported angr evidence report")
+            if artifact.get("binary_sha256") != binary_digest:
+                raise ValueError("helper binary digest differs from selected retail executable")
+            if pathlib.Path(artifact.get("binary_path", "")).resolve() != binary.resolve():
+                raise ValueError("helper loaded a different binary path")
+            if artifact.get("bits") != 32 or int(artifact.get("mapped_base", "0"), 0) != 0x400000:
+                raise ValueError("helper did not load the retail x86 image at 0x00400000")
+            functions = artifact.get("functions")
+            if not isinstance(functions, dict):
+                raise ValueError("helper function results are missing")
+            expected_keys = {normalize_address(address) for address in batch}
+            if set(functions) != expected_keys:
+                missing = sorted(expected_keys - set(functions))
+                extra = sorted(set(functions) - expected_keys)
+                raise ValueError(f"angr batch result address mismatch (missing={missing}, extra={extra})")
+            if angr_version is not None and artifact["angr_version"] != angr_version:
+                raise ValueError("angr version changed between analysis batches")
+            angr_version = artifact["angr_version"]
+            combined_functions.update(functions)
+            batch_results.append({
+                "addresses": batch,
+                "result": artifact.get("result"),
+                "stderr": process.stderr[-1000:],
+            })
+        result_values = [item.get("result") for item in combined_functions.values()]
+        overall = "fail" if "fail" in result_values else (
+            "inconclusive" if "inconclusive" in result_values else "pass"
+        )
+        return {
+            "schema_version": 1,
+            "kind": "angr-analysis",
+            "result": overall,
+            "tool": "angr",
+            "analysis": "CFGFast",
+            "angr_version": angr_version,
+            "binary_path": str(binary.resolve()),
+            "binary_sha256": binary_digest,
+            "bits": 32,
+            "mapped_base": "0x400000",
+            "helper_sha256": helper_digest,
+            "batch_size": len(selected_addresses),
+            "batches": batch_results,
+            "command": commands,
+            "functions": combined_functions,
+            "limitations": [
+                "CFGFast is approximate static analysis",
+                "This result does not prove semantic or behavioral equivalence",
+            ],
+        }
     except (OSError, subprocess.TimeoutExpired, ValueError, TypeError) as error:
         return {"error": str(error), "functions": {}}
 
@@ -1289,6 +1470,9 @@ def verify_record(
         implementation_record = {}
     if implementation_record.get("path") != relative:
         errors.append(f"{address}: implementation path does not match {relative}")
+        # This source is not the candidate authorized by the evidence record.
+        # Preserve the blocker; running its harness would test the wrong code.
+        return errors, details
     implementation_digest = sha256(implementation)
     angr_function = angr_analysis.get("functions", {}).get(address, {})
     if angr_analysis.get("error"):
@@ -1344,16 +1528,10 @@ def verify_record(
         limitation = verification.get("inconclusive", {})
         reason = limitation.get("reason") if isinstance(limitation, dict) else None
         errors.append(f"{address}: INCONCLUSIVE — {reason or 'missing explanation of unverified behavior'}")
-        # This status always blocks; a fresh comparison can gather evidence but
-        # cannot silently promote it or waive the release threshold.
-        if isinstance(verification.get("behavioral_runner"), dict):
-            live = run_live_behavioral_runner(
-                root, verification["behavioral_runner"], address, binary_path,
-                binary_digest, implementation, implementation_digest, errors)
-            if live is not None:
-                details["behavioral_tests"] = {
-                    key: live.get(key) for key in
-                    ("result", "tests_total", "tests_passed", "tests_failed")}
+        # Inconclusive analysis is not authorization to execute an unknown ABI.
+        # Focused diagnostic probes remain separate from this acceptance gate.
+        if require_behavioral:
+            details["behavioral_tests"] = {"result": "not-run", "reason": "analysis is inconclusive"}
         return errors, details
     if not status_meets_threshold(status, minimum_status):
         errors.append(f"{address}: status {status} is below required {minimum_status}")
@@ -1434,11 +1612,20 @@ def verify_record(
         root, record, address, binary_digest, implementation_digest, status,
         require_semantic, require_behavioral, require_mutation, errors,
     )
+    if require_semantic and require_behavioral and semantic_artifact is not None:
+        validate_semantic_runtime_contract(semantic_artifact, address, errors)
     if semantic_artifact and isinstance(semantic_artifact.get("runtime_contract"), dict):
         # This artifact has already been checked against the reviewed source,
         # retail image, native identity and manifest evidence digest.
         details["runtime_contract"] = semantic_artifact["runtime_contract"]
-    if require_behavioral:
+    if require_behavioral and errors:
+        # Feature acceptance is ordered: static identity/CFG, semantic review,
+        # then a live behavioral runner. Never execute an unreviewed ABI or use
+        # a later runtime observation to waive an earlier failed prerequisite.
+        details["behavioral_tests"] = {
+            "result": "not-run", "reason": "static or semantic prerequisites failed",
+        }
+    elif require_behavioral:
         live_report = run_live_behavioral_runner(
             root,
             verification.get("behavioral_runner"),
@@ -1450,6 +1637,8 @@ def verify_record(
             errors,
         )
         if live_report is not None:
+            if "runtime_contract" in details:
+                validate_live_runtime_contract(live_report, details["runtime_contract"], address, errors)
             details["behavioral_tests"] = {
                 "result": live_report.get("result"),
                 "tests_total": live_report.get("tests_total"),
@@ -1512,8 +1701,8 @@ def main() -> int:
             parser.error("--file must identify an existing source file")
         args.tree = args.file
     requested = set(args.address or [])
-    if requested and (args.tree is None or args.production_tree or args.staged or args.changed):
-        parser.error("--address requires --file/--tree and cannot restrict release or staged checks")
+    if requested and (args.production_tree or args.staged or args.changed or args.runtime_trace is not None):
+        parser.error("--address cannot restrict release, staged, changed or runtime-trace checks")
 
     if not math.isfinite(args.cfg_threshold) or not 0.0 <= args.cfg_threshold <= 1.0:
         parser.error("--cfg-threshold must be a finite number between 0.0 and 1.0")
@@ -1535,6 +1724,11 @@ def main() -> int:
         scan_root = None
     elif args.changed:
         mode = "changed"
+        scan_root = None
+    elif requested:
+        # Address-driven verification: the implementation file is discovered
+        # from the manifest/provenance binding below; --file/--tree optional.
+        mode = "address"
         scan_root = None
     else:
         # --staged is the default behavior when no mode is explicitly chosen.
@@ -1560,12 +1754,20 @@ def main() -> int:
         "requested_addresses": sorted(requested),
     }
     try:
-        files, deleted = changed_paths(root, mode, scan_root)
-        if mode in ("tree", "production-tree") and not files:
-            raise GateError("Selected path contains no supported native source files; nothing was verified")
         manifest_path = args.manifest if args.manifest.is_absolute() else root / args.manifest
         manifest = load_manifest(manifest_path)
         manifest_records = index_manifest(manifest)
+        if mode == "address":
+            files, unresolved = discover_address_files(root, sorted(requested), manifest_records)
+            if unresolved:
+                raise GateError(
+                    f"no implementation source is bound to the requested address(es): {unresolved}"
+                )
+            deleted: list[str] = []
+        else:
+            files, deleted = changed_paths(root, mode, scan_root)
+            if mode in ("tree", "production-tree") and not files:
+                raise GateError("Selected path contains no supported native source files; nothing was verified")
         if requested:
             matching_files = []
             found_addresses: set[str] = set()
@@ -1704,12 +1906,12 @@ def main() -> int:
             if any(relative.startswith(prefix) for prefix in NATIVE_ROOTS):
                 if not has_host_helpers:
                     warnings.append(f"{relative}: source/header has no Native or HOST HELPER provenance")
-                if relative not in {"engine/src/retail/diagnostics/log_record.cpp",
-                                    "engine/src/retail/core/debug_command_line.cpp"}:
+                if relative not in HOST_ONLY_SOURCES:
                     failures.append(f"{relative}: no address-bound native identity is available to verify this source's logic")
             continue
         for native in natives:
             checked += 1
+            print(f"native_gate: checking {native['address']} ({relative})", flush=True)
             native_errors, details = verify_record(
                 root,
                 binary_path,
@@ -1727,6 +1929,9 @@ def main() -> int:
                 warnings,
             )
             failures.extend(native_errors)
+            print(f"native_gate: {native['address']} "
+                  f"{'BLOCKED: ' + str(len(native_errors)) + ' issue(s)' if native_errors else 'checks passed'}",
+                  flush=True)
             report["checked_natives"].append(details)
             details_by_key.add((relative, native["address"]))
 

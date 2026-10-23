@@ -1,9 +1,9 @@
-// IGI native provenance: GO_SoundSpeech - 0x00403E60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: GOSoundSpeech - 0x00403E60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403E60-GO_SoundSpeech.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403E60-GO_SoundSpeech.hpp"
-int GO_SoundSpeech(long double context , int arg2, float arg3 )
+int GOSoundSpeech(long double context , int arg2, float arg3 )
 
-// Sig: int GO_SoundSpeech(float volume)
+// Sig: int GOSoundSpeech(float volume)
 // Note: Sets speech volume for the current profile. Param: volume = float
 // 0.0-1.0. Use in config scripts. Returns 1.
 {

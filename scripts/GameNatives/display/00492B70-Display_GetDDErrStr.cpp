@@ -11,7 +11,7 @@ int __stdcall Display_GetDDErrStr(void* self, char* args)
     {
         int status = *(self + 0xc);
         char* result = args;
-        Game_DataSymbolLoad(args, "%s    %d bits z and stencil\n");
+        sprintf(args, "%s    %d bits z and stencil\n");
         return 1;
     }
 
@@ -19,7 +19,7 @@ int __stdcall Display_GetDDErrStr(void* self, char* args)
     {
         int status = *(self + 0xc);
         char* result = args;
-        Game_DataSymbolLoad(args, "%s    %d bits z\n");
+        sprintf(args, "%s    %d bits z\n");
     }
 
     return 1;

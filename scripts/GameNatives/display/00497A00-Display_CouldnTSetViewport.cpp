@@ -32,7 +32,7 @@ int Display_CouldnTSetViewport(void** context)
         }
         else
         {
-            Game_DataSymbolLoad(&item_400, "Couldn't set viewport");
+            sprintf(&item_400, "Couldn't set viewport");
             int item_4bc = DDERR_GENERIC(data_5);
             item_4c0 = &item_400;
             Error_Show("%s\n\nDirectX error message: %s");
@@ -59,7 +59,7 @@ int Display_CouldnTSetViewport(void** context)
         }
         else
         {
-            Game_DataSymbolLoad(&item_400, "Couldn't set viewport");
+            sprintf(&item_400, "Couldn't set viewport");
             int item_4bc_1 = DDERR_GENERIC(data_9);
             item_4c0 = &item_400;
             Error_Show("%s\n\nDirectX error message: %s");
@@ -93,7 +93,7 @@ int Display_CouldnTSetViewport(void** context)
         }
         else
         {
-            Game_DataSymbolLoad(&item_400, "Couldn't set viewport");
+            sprintf(&item_400, "Couldn't set viewport");
             int item_4bc_2 = DDERR_GENERIC(data_13);
             item_4c0 = &item_400;
             Error_Show("%s\n\nDirectX error message: %s");
@@ -116,7 +116,7 @@ int Display_CouldnTSetViewport(void** context)
 
     if (data_17)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't set projection matrix");
+        sprintf(&item_400, "Couldn't set projection matrix");
         int item_4bc_4 = DDERR_GENERIC(data_17);
         item_4c0 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -135,7 +135,7 @@ int Display_CouldnTSetViewport(void** context)
     if (!result)
         return result;
 
-    Game_DataSymbolLoad(&item_400, "Couldn't set view matrix");
+    sprintf(&item_400, "Couldn't set view matrix");
     int item_4bc_5 = DDERR_GENERIC(result);
     item_4c0 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

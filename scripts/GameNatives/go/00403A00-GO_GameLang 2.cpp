@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GameLang - 0x00403A00 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: GOGameLang - 0x00403A00 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403A00-GO_GameLang.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "GO_GameLang.h"
-int GO_GameLang(int context, float arg2 )
+int GOGameLang(int context, float arg2 )
 
-// Sig: int GO_GameLang(int language)
+// Sig: int GOGameLang(int language)
 // Note: Sets game language for the current profile. Param: language = language
 // index (retail ships English=0 and German builds use their own index). Use in
 // config scripts. Returns 1.

@@ -32,20 +32,20 @@ struct AppContextState {
 [[nodiscard]] AppContextState& AppContext_Get();
 
 // 0x0048F1A0:  movsx eax, byte [esp+4] ; mov dword [0x005C8BF8], eax ; retn
-void App_ContextSetDebugged(std::int8_t state);
+std::int32_t App_ContextSetDebugged(std::int8_t state);
 // 0x0048F1B0:  mov eax, dword [0x005C8BF8] ; retn
 [[nodiscard]] std::int32_t App_ContextGetDebugged();
 
 // 0x0048F1E0:  movsx eax, byte [esp+4] ; mov dword [0x005C8BF4], eax ; retn
-void App_ContextSetDebugtextState(std::int8_t state);
+std::int32_t App_ContextSetDebugtextState(std::int8_t state);
 
 // 0x0048F240:  movsx eax, byte [esp+4] ; mov dword [0x005C8BE4], eax ; retn
-void App_ContextSetLightmapsUsed(std::int8_t used);
+std::int32_t App_ContextSetLightmapsUsed(std::int8_t used);
 // 0x0048F230:  mov eax, dword [0x005C8BE4] ; retn
 [[nodiscard]] std::int32_t App_ContextGetLightmapsUsed();
 
 // 0x0048F260:  movsx eax, byte [esp+4] ; mov dword [0x005C8BE8], eax ; retn
-void App_ContextSetTerrainLightmapsUsed(std::int8_t used);
+std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used);
 // 0x0048F250:  mov eax, dword [0x005C8BE8] ; retn
 [[nodiscard]] std::int32_t App_ContextGetTerrainLightmapsUsed();
 

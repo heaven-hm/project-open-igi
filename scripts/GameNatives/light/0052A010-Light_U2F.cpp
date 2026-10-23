@@ -6,28 +6,28 @@ int Light_U2F(int context, int arg2, int arg3, void* arg4)
 {
     int item_4 = arg3;
     item_4 = g_54f494;
-    SoundSys_InitSoundSys_11(0x14, 5);
+    DebugText_SetCursor(0x14, 5);
     void* item_14 = arg4 + 0x1a8;
     SoundSys_Update3DPosition_11("%s");
-    SoundSys_InitSoundSys_11(0x14, 6);
+    DebugText_SetCursor(0x14, 6);
     int item_24 = *(arg4 + 0x1b8);
     SoundSys_Update3DPosition_11("A:%d");
-    SoundSys_InitSoundSys_11(0x14, 7);
+    DebugText_SetCursor(0x14, 7);
     int item_34 = *(arg4 + 0x1bc);
     SoundSys_Update3DPosition_11("B:%d");
-    SoundSys_InitSoundSys_11(0x14, 8);
+    DebugText_SetCursor(0x14, 8);
     SoundSys_Update3DPosition_11("U:%.2f");
-    SoundSys_InitSoundSys_11(0x14, 9);
+    DebugText_SetCursor(0x14, 9);
     SoundSys_Update3DPosition_11("U:%.2f");
     bool data_3 = *(arg4 + 0x215);
     item_4 += *(arg4 + 0x214) * 0xe0;
     bool flag_0 = *(arg4 + 0x216);
     *(&item_4 + 1) += data_3 * 0xe0;
     *(&item_4 + 2) += flag_0 * 0xe0;
-    SoundSys_InitSoundSys_11(0x14, 0xa);
+    DebugText_SetCursor(0x14, 0xa);
     int* item_20 = &item_4;
     SoundSys_Update3DPosition_11("L:%s");
-    int result = SoundSys_InitSoundSys_11(0x14, 0xb);
+    int result = DebugText_SetCursor(0x14, 0xb);
     int source_1 = *(arg4 + 0x218);
 
     if (source_1 > 3)

@@ -13,10 +13,10 @@ int Wire_Action(void* context)
         void* item_d0_1 = &item_c0;
         *(context + 0x132) = 0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.isInUse");
+        sprintf(&item_80, "%s.isInUse");
         Game_DataSymbolRemoveThunk(&item_80);
         void* item_e0_1 = &item_c0;
-        Game_DataSymbolLoad(&item_80, "%s.isLastInUse");
+        sprintf(&item_80, "%s.isLastInUse");
         result = Game_DataSymbolRemoveThunk(&item_80);
         *(context + 0x132) = 0;
     }

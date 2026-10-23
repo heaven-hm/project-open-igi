@@ -26,7 +26,7 @@ int Weapon_CheckAmmo_5(int* context, int arg2)
 
     int item_28_3 = context_val;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     Sys_FreeMemory_18(*(arg2 + 0x4e0), &item_10);
     *(*(arg2 + 0x4e0) + 4) = data_val * 0.984375f - 4.0f - Sys_CheckHeap_21(*(arg2 + 0x4e0));
     *(*(arg2 + 0x4e0) + 8) = entity_val * 0.895833313f + 4.0f;

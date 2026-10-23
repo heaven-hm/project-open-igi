@@ -33,6 +33,10 @@ struct MtpPackage
 {
     std::uint32_t root_tag = 0U;
     std::vector<std::string> model_names;
+    // The 'BANM' chunk names the animation files the package's characters use.
+    // The retail loads each as "<prefix>anims/<name>.iff" (DynObj_LoadPackageAnimations,
+    // 0x004CF910), and each file holds that character's skeleton.
+    std::vector<std::string> animation_names;
     std::vector<std::string> texture_names;
     std::vector<std::string> instance_names;
     std::vector<MtpInstance> instances;

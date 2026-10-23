@@ -27,7 +27,7 @@ int Weapon_UpdateRecoil_6(float* context, float* arg2, int arg3, int arg4)
 
     int item_2c_3 = dest_val;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     Sys_FreeMemory_18(*(arg4 + 0x4e0), &item_10);
     void* data_9 = arg4 + 0x14c;
 

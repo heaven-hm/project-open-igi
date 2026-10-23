@@ -7,5 +7,5 @@ int Config_Gocontentcontrolpw(int* context)
     char* item_104 = &g_bc79c8;
     char const* const item_108 = "GOContentControlPW";
     void item_100;
-    return Sys_CloseFileStream_4(context, &item_100, Game_DataSymbolLoad(&item_100, "%s("%s");\n"));
+    return Sys_CloseFileStream_4(context, &item_100, sprintf(&item_100, "%s("%s");\n"));
 }

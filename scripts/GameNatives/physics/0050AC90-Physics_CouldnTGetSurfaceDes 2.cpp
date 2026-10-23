@@ -17,7 +17,7 @@ int Physics_CouldnTGetSurfaceDes(int* context)
 
             if (data_1)
             {
-                Game_DataSymbolLoad(&item_400, "Couldn't get surface description");
+                sprintf(&item_400, "Couldn't get surface description");
                 int item_4a4 = DDERR_GENERIC(data_1);
                 void* item_4a8 = &item_400;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -44,7 +44,7 @@ int Physics_CouldnTGetSurfaceDes(int* context)
 
                 if (data_7)
                 {
-                    Game_DataSymbolLoad(&item_400, "Couldn't get attached surface");
+                    sprintf(&item_400, "Couldn't get attached surface");
                     int item_4a4_1 = DDERR_GENERIC(data_7);
                     void* item_4a8_1 = &item_400;
                     Error_Show("%s\n\nDirectX error message: %s");

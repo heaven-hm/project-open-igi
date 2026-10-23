@@ -161,6 +161,9 @@ def main() -> int:
 
         angr_python = pathlib.Path(os.environ.get("IGI_ANGR_PYTHON", "")).expanduser()
         if not angr_python.is_file():
+            # The project's own angr environment, the one the gate uses.
+            angr_python = pathlib.Path(__file__).resolve().parent.parent / ".venv-angr/bin/python"
+        if not angr_python.is_file():
             re_agent = pathlib.Path(os.environ.get(
                 "RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/re-agent"))
             angr_python = re_agent / ".venv/bin/python"

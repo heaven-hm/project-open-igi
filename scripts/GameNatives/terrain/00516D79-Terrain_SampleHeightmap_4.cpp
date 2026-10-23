@@ -48,7 +48,7 @@ unsigned int Terrain_SampleHeightmap_4(char* context, int arg2, unsigned int arg
         {
             int item_1c_3 = *context;
 
-            if (Camera_ApplyHandiCam_11(source_1) == 0xffffffff)
+            if (_flsbuf(source_1) == 0xffffffff)
             {
                 data_12 = dest_1;
                 break;

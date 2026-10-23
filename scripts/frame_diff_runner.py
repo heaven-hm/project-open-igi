@@ -135,8 +135,15 @@ def main():
     if digest(binary) != args.binary_sha256 or digest(source) != args.implementation_sha256:
         raise RuntimeError("binary or implementation hash changed")
     runner_hash = digest(pathlib.Path(__file__).resolve())
-    analysis_python = os.environ.get("IGI_ANGR_PYTHON") or str(pathlib.Path(
-        os.environ.get("RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/re-agent")) / ".venv/bin/python")
+    analysis_python = os.environ.get("IGI_ANGR_PYTHON")
+    if not analysis_python or not pathlib.Path(analysis_python).is_file():
+        # The project's own angr environment, the one the gate uses.
+        analysis_python = str(pathlib.Path(__file__).resolve().parent.parent / ".venv-angr/bin/python")
+    if not pathlib.Path(analysis_python).is_file():
+        analysis_python = str(pathlib.Path(
+            os.environ.get("RE_AGENT_ROOT", "/Users/haseeb-mir/Documents/Code/re-agent")) / ".venv/bin/python")
+    if not pathlib.Path(analysis_python).is_file():
+        raise RuntimeError("angr Python is unavailable; configure IGI_ANGR_PYTHON")
     with tempfile.TemporaryDirectory(prefix="igi-frame-diff-") as temp:
         stub, candidate = pathlib.Path(temp) / "unused_dispatch_table.cpp", pathlib.Path(temp) / "candidate.dll"
         stub.write_text('#include "igi/retail/core/frame_natives.hpp"\nextern "C" { igi::retail::core::FrameDispatchCallback DAT_00A970E0[1] = {}; }\n')

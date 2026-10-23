@@ -14,7 +14,7 @@ int Graph_OnEvent(void* context, int* arg2)
     *(context + 0x60) = 0;
     int item_430 = Script_EvaluateCondition_4(context);
     void item_400;
-    Game_DataSymbolLoad(&item_400, "MISSION:graphs/graph%d.dat");
+    sprintf(&item_400, "MISSION:graphs/graph%d.dat");
     void* item_440 = context;
     int result = Graph_Open(&item_400);
     *arg2 = source_val + 3;

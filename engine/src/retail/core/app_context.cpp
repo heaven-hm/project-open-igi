@@ -12,10 +12,12 @@ AppContextState& AppContext_Get()
     return app_context_state;
 }
 
+// Integer return exposes observed retail EAX; original source return type is unknown.
 // 0x0048F1A0  App_ContextSetDebugged
-void App_ContextSetDebugged(std::int8_t state)
+std::int32_t App_ContextSetDebugged(std::int8_t state)
 {
     app_context_state.debugged = static_cast<std::int32_t>(state);
+    return app_context_state.debugged;
 }
 
 // 0x0048F1B0
@@ -25,15 +27,17 @@ std::int32_t App_ContextGetDebugged()
 }
 
 // 0x0048F1E0  App_ContextSetDebugtextState
-void App_ContextSetDebugtextState(std::int8_t state)
+std::int32_t App_ContextSetDebugtextState(std::int8_t state)
 {
     app_context_state.debug_text_state = static_cast<std::int32_t>(state);
+    return app_context_state.debug_text_state;
 }
 
 // 0x0048F240  App_ContextSetLightmapsUsed
-void App_ContextSetLightmapsUsed(std::int8_t used)
+std::int32_t App_ContextSetLightmapsUsed(std::int8_t used)
 {
     app_context_state.lightmaps_used = static_cast<std::int32_t>(used);
+    return app_context_state.lightmaps_used;
 }
 
 // 0x0048F230
@@ -43,9 +47,10 @@ std::int32_t App_ContextGetLightmapsUsed()
 }
 
 // 0x0048F260  App_ContextSetTerrainLightmapsUsed
-void App_ContextSetTerrainLightmapsUsed(std::int8_t used)
+std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)
 {
     app_context_state.terrain_lightmaps_used = static_cast<std::int32_t>(used);
+    return app_context_state.terrain_lightmaps_used;
 }
 
 // 0x0048F250

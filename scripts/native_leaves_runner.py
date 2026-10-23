@@ -28,6 +28,10 @@ CXX = "c++"
 
 GLOBAL_STATE_ADDRESSES = {"0x004B0D40", "0x004B0BA0", "0x004B0F80", "0x004B26A0"}
 
+# Retail natives whose C signature is variadic. The fixed-arity harness
+# templates cannot bind to them, so the harness uses the variadic sequence.
+VARIADIC_ADDRESSES = {"0x004B7E10"}
+
 HARNESS = r'''
 #include <cstdint>
 #include <cstdio>
@@ -73,6 +77,39 @@ long long run(R (*fn)(A...), long long value) {
 template <class R, class... A>
 std::size_t arity(R (*)(A...)) { return sizeof...(A); }
 
+// Variadic retail natives (for example Qvm_ReportError at 0x004B7E10) cannot
+// bind to the fixed-arity templates above. The retail body reads its first
+// argument from the stack and then walks the variadic list, so the harness
+// calls it with one pointer argument and reports a fixed arity of one.
+template <class R, class... A>
+long long run_variadic(R (*fn)(A..., ...), long long value) {
+    if constexpr (std::is_void_v<R>) {
+        fn(make_arg<A>(value)...);
+        return 0;
+    } else if constexpr (std::is_pointer_v<R>) {
+        return static_cast<long long>(
+            reinterpret_cast<std::uintptr_t>(fn(make_arg<A>(value)...)));
+    } else {
+        return static_cast<long long>(fn(make_arg<A>(value)...));
+    }
+}
+
+template <class R, class... A>
+std::size_t variadic_arity(R (*)(A..., ...)) { return sizeof...(A); }
+
+template <class R, class... A>
+void print_variadic_pointer_mask(R (*)(A..., ...)) {
+    const int mask[] = { (std::is_pointer_v<A> ? 1 : 0)... };
+    std::printf("MASK=");
+    for (std::size_t index = 0; index < sizeof...(A); ++index) {
+        std::printf("%s%d", index ? "," : "", mask[index]);
+    }
+    std::printf("\n");
+}
+
+template <class R, class... A>
+int is_void_variadic_fn(R (*)(A..., ...)) { return std::is_void_v<R> ? 1 : 0; }
+
 template <class R, class... A>
 int is_void_fn(R (*)(A...)) { return std::is_void_v<R> ? 1 : 0; }
 
@@ -101,10 +138,7 @@ int main(int argc, char** argv) {
     if (argc != 2) return 2;
     const long long value = std::strtoll(argv[1], nullptr, 0);
 @PRE_CALL@
-    std::printf("ARGS=%zu\n", arity(&@QUALIFIED@));
-    print_pointer_mask(&@QUALIFIED@);
-    const long long result = run(&@QUALIFIED@, value);
-    std::printf("VOID=%d\n", is_void_fn(&@QUALIFIED@));
+    @CALL_MODE@
     std::printf("RET=%lld\n", result);
     print_buffer();
 @POST_CALL@
@@ -318,6 +352,22 @@ def main() -> int:
             extra_header = ""
             pre_call = ""
             post_call = ""
+            # A variadic retail native cannot bind to the fixed-arity harness
+            # templates, so it gets a variadic call sequence instead.
+            if address in VARIADIC_ADDRESSES:
+                call_mode = (
+                    'std::printf("ARGS=%zu\\n", variadic_arity(&{0}));\n'
+                    'print_variadic_pointer_mask(&{0});\n'
+                    'const long long result = run_variadic(&{0}, value);\n'
+                    'std::printf("VOID=%d\\n", is_void_variadic_fn(&{0}));'
+                ).format(qualified)
+            else:
+                call_mode = (
+                    'std::printf("ARGS=%zu\\n", arity(&{0}));\n'
+                    'print_pointer_mask(&{0});\n'
+                    'const long long result = run(&{0}, value);\n'
+                    'std::printf("VOID=%d\\n", is_void_fn(&{0}));'
+                ).format(qualified)
             if address == "0x004B0D40":
                 extra_header = '#include "igi/retail/mem/mem_alloc.hpp"'
                 pre_call = "igi::retail::mem::Mem_ResetGlobalsForTest();\n"
@@ -347,7 +397,7 @@ static std::int32_t native_leaves_test_handler(std::uint32_t size) { return (siz
             harness_path.write_text(
                 HARNESS.replace("@HEADER@", header_include).replace("@QUALIFIED@", qualified)
                 .replace("@EXTRA_HEADER@", extra_header).replace("@PRE_CALL@", pre_call)
-                .replace("@POST_CALL@", post_call),
+                .replace("@POST_CALL@", post_call).replace("@CALL_MODE@", call_mode),
                 encoding="utf-8")
             built = subprocess.run(
                 [CXX, "-std=c++20", "-ffunction-sections", "-fdata-sections",

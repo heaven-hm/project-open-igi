@@ -12,9 +12,9 @@ void* MenuUI_ProcesssvValue(void* arg1)
     Script_ParseEnumString_6(&var_c0, arg1);
     void* var_cc_1 = &var_c0;
     void var_80;
-    Game_DataSymbolLoad(&var_80, "%s.vValue");
+    sprintf(&var_80, "%s.vValue");
     Game_DataSymbolRemoveThunk(&var_80);
     void* var_dc_1 = &var_c0;
-    Game_DataSymbolLoad(&var_80, "%s.nValue");
+    sprintf(&var_80, "%s.nValue");
     return Game_DataSymbolRemoveThunk(&var_80);
 }

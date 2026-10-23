@@ -9,7 +9,7 @@ int Mine_LoadParameters(void* context, int arg2)
     DynObj_QtasklistIsFull(Level_CheckQTaskID_4(), context);
     (*((FX_TrailUpdate() << 2) + &g_a96ae0))(context, arg2);
     FX_FireBallUpdate_2(context, 1.0f, 0x40000000, 0, 0x3f800000, 0, 5, 1, "explo_proxy");
-    int result = Game_DataSymbolLoad(context + 0x170, "136_01_1");
+    int result = sprintf(context + 0x170, "136_01_1");
     *(context + 0x238) = 0;
     *(context + 0x23c) = 0;
     *(context + 0x240) = 0x3f400000;

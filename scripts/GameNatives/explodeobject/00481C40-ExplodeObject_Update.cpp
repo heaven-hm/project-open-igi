@@ -14,7 +14,7 @@ float* ExplodeObject_Update(void* context)
         if (*(context + 0x170) && *(context + 0x171) != 0x2a)
         {
             char* item_11c_1 = context + 0x170;
-            Game_DataSymbolLoad(&item_80, "Model "%s" not available");
+            sprintf(&item_80, "Model "%s" not available");
             char* dest_1 = context + 0x170;
             int i = 0xffffffff;
 
@@ -34,7 +34,7 @@ float* ExplodeObject_Update(void* context)
             dest_3 = memcpy(&item_100, dest_1 - entity_1, entity_1 & 0xfffffffc);
             memcpy(dest_3, source_2, entity_1 & 3);
             void* item_128_1 = &item_100;
-            Game_DataSymbolLoad(context + 0x170, "** %s **");
+            sprintf(context + 0x170, "** %s **");
         }
 
         if (!data_2)
@@ -48,7 +48,7 @@ float* ExplodeObject_Update(void* context)
         if (*(context + 0x180) && *(context + 0x181) != 0x2a)
         {
             void* item_11c_2 = dest_4;
-            Game_DataSymbolLoad(&item_80, "Model "%s" not available");
+            sprintf(&item_80, "Model "%s" not available");
             int i_1 = 0xffffffff;
 
             while (i_1)
@@ -67,7 +67,7 @@ float* ExplodeObject_Update(void* context)
             dest_6 = memcpy(&item_100, dest_4 - entity_5, entity_5 & 0xfffffffc);
             memcpy(dest_6, source_4, entity_5 & 3);
             void* item_128_2 = &item_100;
-            Game_DataSymbolLoad(context + 0x180, "** %s **");
+            sprintf(context + 0x180, "** %s **");
         }
     }
     DynObj_CreateMagicObject_5(context, data_val);

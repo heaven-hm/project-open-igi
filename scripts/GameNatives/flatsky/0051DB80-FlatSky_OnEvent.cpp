@@ -14,6 +14,6 @@ int FlatSky_OnEvent(void* context)
     *(context + 0x260) = 0x3f800000;
     *(context + 0x264) = 0x3f800000;
     *(context + 0x268) = 0x3f800000;
-    Game_DataSymbolLoad(context + 0x48, &g_567c74);
-    return Game_DataSymbolLoad(context + 0x148, &g_567c74);
+    sprintf(context + 0x48, &g_567c74);
+    return sprintf(context + 0x148, &g_567c74);
 }

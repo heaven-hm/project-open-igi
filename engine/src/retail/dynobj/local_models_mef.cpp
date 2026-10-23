@@ -11,7 +11,7 @@
 namespace igi::retail::dynobj {
 namespace {
 
-// Port-owned storage for global path buffer 0x00A4EC6C (66-byte limit in Game_DataSymbolLoad).
+// Port-owned storage for global path buffer 0x00A4EC6C (66-byte limit in sprintf).
 char g_a4ec6c[0x100]{};
 
 // Port-owned storage for backend table 0x00A94E84.
@@ -22,7 +22,7 @@ ModelBackendInitFn g_a94e84[0x10]{};
 // Native: DynObj_LoadModelMesh; retail VA 0x004CF390; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF390-0x004CF623, 659 bytes, digest 3c192ccc9ea19c77aeb0aa4ff7e828e45e4629d29743d3f9f83442360bab6366; CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.c.
-// Behavior/CFG: allocates a 24-byte (6-dword) model record via Mem_Alloc(0x18, 4) (0x004B0C60), clears fields +0x00, +0x04, +0x10, +0x14, formats `"LOCAL:models/%s.mef"` into global buffer 0x00A4EC6C via Game_DataSymbolLoad (0x004A53B3), loads the resource via Resource_Load(0x00A4EC6C, nullptr) (0x004B5F00) into `result[2]` (+0x08), locates the `'MESH'` (0x4D455348) chunk via Sys_ResolveSymbol_19 / Sys_ReadFileBlock_20 / Sys_CheckHeap_19 into `result[3]` (+0x0C), verifies `*(uint32_t*)result[3] == 0x3DCCCCCD` (0.1f), resolves optional chunks `'ATTA'` (0x41545441 -> mesh+0x8C), `'MVTX'` (0x4D565458 -> mesh+0x88), `'PORT'` (0x504F5254 -> mesh+0x98), `'PTFC'` (0x50544643 -> mesh+0x90), `'PTVX'` (0x50545658 -> mesh+0x94), counts and populates any `'NAXT'` (0x4E415854) 20-byte texture animation records (`result[4]` = count, `result[5]` = array), and invokes the active render backend callback at `0x00A94E84[DynObj_InsertHashItem_13()]` with `{result[3], result[2]}`. radare2 15 blocks/23 edges; Binary Ninja 15 blocks; 99.1% structural agreement.
+// Behavior/CFG: allocates a 24-byte (6-dword) model record via Mem_Alloc(0x18, 4) (0x004B0C60), clears fields +0x00, +0x04, +0x10, +0x14, formats `"LOCAL:models/%s.mef"` into global buffer 0x00A4EC6C via sprintf (0x004A53B3), loads the resource via Resource_Load(0x00A4EC6C, nullptr) (0x004B5F00) into `result[2]` (+0x08), locates the `'MESH'` (0x4D455348) chunk via Sys_ResolveSymbol_19 / Sys_ReadFileBlock_20 / Sys_CheckHeap_19 into `result[3]` (+0x0C), verifies `*(uint32_t*)result[3] == 0x3DCCCCCD` (0.1f), resolves optional chunks `'ATTA'` (0x41545441 -> mesh+0x8C), `'MVTX'` (0x4D565458 -> mesh+0x88), `'PORT'` (0x504F5254 -> mesh+0x98), `'PTFC'` (0x50544643 -> mesh+0x90), `'PTVX'` (0x50545658 -> mesh+0x94), counts and populates any `'NAXT'` (0x4E415854) 20-byte texture animation records (`result[4]` = count, `result[5]` = array), and invokes the active render backend callback at `0x00A94E84[DynObj_InsertHashItem_13()]` with `{result[3], result[2]}`. radare2 15 blocks/23 edges; Binary Ninja 15 blocks; 99.1% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact chunk tags, MESH header offsets (+0x88..+0x98), NAXT loop, and backend dispatch.
 // Previous catalog alias: DynObj_LocalModelsSMef.
 void* DynObj_LoadModelMesh(const char* model_name)
@@ -38,7 +38,7 @@ void* DynObj_LoadModelMesh(const char* model_name)
     result[4] = nullptr;
     result[5] = nullptr;
 
-    error::Game_DataSymbolLoad(g_a4ec6c, "LOCAL:models/%s.mef", model_name);
+    error::sprintf(g_a4ec6c, "LOCAL:models/%s.mef", model_name);
     void* const data_1 = resource::Resource_Load(g_a4ec6c, nullptr);
     result[2] = data_1;
 

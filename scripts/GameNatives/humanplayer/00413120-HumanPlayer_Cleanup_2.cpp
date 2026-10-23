@@ -102,12 +102,12 @@ void* HumanPlayer_Cleanup_2(void* context, int arg2)
             void item_20;
 
             if (!item_50)
-                Game_DataSymbolLoad(&item_20, "RANGE: 1000+M\n");
+                sprintf(&item_20, "RANGE: 1000+M\n");
             else
             {
                 double item_48;
                 item_10c_4 = item_48 * 0.000244140625;
-                int temp_12 = Game_DataSymbolLoad(&item_20, "RANGE: %0.2fM\n");
+                int temp_12 = sprintf(&item_20, "RANGE: %0.2fM\n");
 
                 if (item_a8)
                 {

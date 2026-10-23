@@ -78,7 +78,7 @@ int TerrainLightMap_Setup(int* context)
                         void* item_3b8_1 = &item_208;
                         void* item_3bc_1 = &item_188;
                         void item_288;
-                        Game_DataSymbolLoad(&item_288, "%s%slightmap/%s%d.lmp");
+                        sprintf(&item_288, "%s%slightmap/%s%d.lmp");
                         int data_12;
                         int temp_4;
                         data_12 = Resource_FileExists(&item_288);

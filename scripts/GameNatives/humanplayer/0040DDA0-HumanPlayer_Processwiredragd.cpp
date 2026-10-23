@@ -46,7 +46,7 @@ struct status_msg* HumanPlayer_Processwiredragd(void* arg1, void* arg2)
             int var_2c_1 = *((eax_2 << 2) + &data_538c48) + 1;
             *(arg2 + 0xd9c) = (eax_2 - 1) & 1;
             char var_20[0x20];
-            Game_DataSymbolLoad(&var_20, "wire_drag_%d");
+            sprintf(&var_20, "wire_drag_%d");
             return SoundSys_SetMasterVolume_7(arg2, &var_20);
         }
     }

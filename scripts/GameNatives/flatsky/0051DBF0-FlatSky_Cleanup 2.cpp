@@ -73,7 +73,7 @@ int FlatSky_Cleanup(void* context)
     char* item_210 = context + 0x148;
     char* item_214 = &g_567c74;
     void item_200;
-    Game_DataSymbolLoad(&item_200, "LOCAL:%s%s");
+    sprintf(&item_200, "LOCAL:%s%s");
 
     if (*(context + 0x148))
     {
@@ -119,7 +119,7 @@ int FlatSky_Cleanup(void* context)
                 data_5 = Resource_FileExists(&item_200);
 
             if (data_4 || !data_5)
-                Game_DataSymbolLoad(context + 0x148, "File not found");
+                sprintf(context + 0x148, "File not found");
             else
             {
                 if (*(context + 0x44))
@@ -134,5 +134,5 @@ int FlatSky_Cleanup(void* context)
         }
     }
 
-    return Game_DataSymbolLoad(context + 0x48, context + 0x148);
+    return sprintf(context + 0x48, context + 0x148);
 }

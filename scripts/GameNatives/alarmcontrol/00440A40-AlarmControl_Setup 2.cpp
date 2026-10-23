@@ -15,12 +15,12 @@ int AlarmControl_Setup(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d8_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isTrigger");
+    sprintf(&item_80, "%s.isTrigger");
     SymbolRegister_Bool8(&item_80, context + 0x2a0);
     void* item_ec_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isAlarm");
+    sprintf(&item_80, "%s.isAlarm");
     SymbolRegister_Bool8(&item_80, context + 0x2a1);
     void* item_100_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nTriggerLastTick");
+    sprintf(&item_80, "%s.nTriggerLastTick");
     return SymbolRegister_Int16(&item_80, context + 0x2a4);
 }

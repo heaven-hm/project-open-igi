@@ -16,5 +16,5 @@ void* AI_WriteChannel(void* context, int arg2, float arg3)
     void* item_108 = context + 0x3d15;
     int item_10c_1 = Script_EvaluateCondition_4(context);
     void item_100;
-    return Game_DataSymbolLoad(&item_100, "AI(%d) type(%s) channel(%d)");
+    return sprintf(&item_100, "AI(%d) type(%s) channel(%d)");
 }

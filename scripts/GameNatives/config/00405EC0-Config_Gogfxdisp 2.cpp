@@ -10,16 +10,16 @@ int Config_Gogfxdisp(int* context, int arg2)
     char const* const item_214 = *(source_1 + &g_bc2394);
     char const* const item_218 = "GOGfxDisp";
     void item_200;
-    int data_5 = Game_DataSymbolLoad(&item_200, "%s(%d, %d, %d);\n");
+    int data_5 = sprintf(&item_200, "%s(%d, %d, %d);\n");
     char const* const item_224 = source_1 + 0xbc23a7;
     char const* const item_228 = "GOGfxDevice";
-    int dest_1 = data_5 + Game_DataSymbolLoad(&item_228 + data_5 + 0x28, "%s("%s");\n");
+    int dest_1 = data_5 + sprintf(&item_228 + data_5 + 0x28, "%s("%s");\n");
     item_210 = *(source_1 + 0xbc25a8);
     item_214 = "GOGfxGamma";
-    int dest_2 = dest_1 + Game_DataSymbolLoad(&item_214 + dest_1 + 0x14, "%s(%f);\n");
+    int dest_2 = dest_1 + sprintf(&item_214 + dest_1 + 0x14, "%s(%f);\n");
     int item_220_1 = *(source_1 + 0xbc23a0);
     item_224 = "GOGfxPerformance";
     item_228 = "%s(%d);\n";
     return Sys_CloseFileStream_4(context, &item_200,
-        dest_2 + Game_DataSymbolLoad(&item_224 + dest_2 + 0x24, item_228));
+        dest_2 + sprintf(&item_224 + dest_2 + 0x24, item_228));
 }

@@ -111,7 +111,7 @@ int Weapon_WeaponsStringsBinocu(void* context)
         item_18c_1 = &item_80;
     }
 
-    Game_DataSymbolLoad(item_18c_1, item_188_1);
+    sprintf(item_18c_1, item_188_1);
     Sys_FreeMemory_18(*(context + 0x20), &item_80);
     long double fpu_val_7_18 = data_val;
     float item_160 = fpu_val_7_18;

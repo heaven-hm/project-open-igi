@@ -52,7 +52,7 @@ int Weapon_FireBullet_6(void* context, float arg2)
 
     void* item_38_3 = context;
     void item_10;
-    Game_DataSymbolLoad(&item_10, "%-4d");
+    sprintf(&item_10, "%-4d");
     Sys_FreeMemory_18(*(source_1 + 0x4e0), &item_10);
     arg2 = entity_val * 0.984375f - 4.0f;
     *(*(source_1 + 0x4e0) + 4) = arg2 - Sys_CheckHeap_21(*(source_1 + 0x4e0));

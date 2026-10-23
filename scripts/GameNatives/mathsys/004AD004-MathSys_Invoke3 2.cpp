@@ -2,7 +2,7 @@
 // Evidence: 004AD004-MathSys_Invoke3.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "MathSys_Invoke3.h"
 
-int __convention("regparm") MathSys_Invoke3(int arg1, int arg2, int arg3, int* arg4, void* arg5, void* arg6, int arg7)
+int MathSys_Invoke3("regparm") MathSys_Invoke3(int arg1, int arg2, int arg3, int* arg4, void* arg5, void* arg6, int arg7)
 
 {
     *(arg6 + (arg3 << 2) + 0x1c) = *(arg5 + (arg3 << 2) + 0x1c);

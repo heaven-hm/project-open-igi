@@ -7,5 +7,5 @@ int Config_SaveInputOptions(int* context)
     int item_104 = g_bc2384;
     char const* const item_108 = "GOStart";
     void item_100;
-    return Sys_CloseFileStream_4(context, &item_100, Game_DataSymbolLoad(&item_100, "%s(%d);\n"));
+    return Sys_CloseFileStream_4(context, &item_100, sprintf(&item_100, "%s(%d);\n"));
 }

@@ -48,5 +48,5 @@ char* WeatherLightmap_ProcessRainDynCubeObj(void* arg1, void* arg2)
     if (!result)
         return result;
 
-    return Game_DataSymbolLoad(result, "RainDynCubeObj");
+    return sprintf(result, "RainDynCubeObj");
 }

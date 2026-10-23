@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GfxDisp - 0x00403950 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: GOGfxDisp - 0x00403950 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403950-GO_GfxDisp.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403950-GO_GfxDisp.hpp"
-int GO_GfxDisp(int context, float arg2 )
+int GOGfxDisp(int context, float arg2 )
 
-// Sig: int GO_GfxDisp(int displayMode)
+// Sig: int GOGfxDisp(int displayMode)
 // Note: Sets display-mode selection for the current profile. Param: displayMode
 // = mode index from the retail display list (see Display_GetActiveMode/display
 // table). Use in config scripts. igi.exe registers it with argc=3 at its site;

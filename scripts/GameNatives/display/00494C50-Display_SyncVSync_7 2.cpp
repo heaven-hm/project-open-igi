@@ -27,7 +27,7 @@ void* Display_SyncVSync_7(void* context)
 
     if (data_2)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't read pixel format");
+        sprintf(&item_400, "Couldn't read pixel format");
         int item_4d8 = DDERR_GENERIC(data_2);
         void* item_4dc = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -144,7 +144,7 @@ void* Display_SyncVSync_7(void* context)
         return Qhash_Reset();
     }
 
-    Game_DataSymbolLoad(&item_400, "Couldn't create texture surface");
+    sprintf(&item_400, "Couldn't create texture surface");
     int item_4d8_2 = DDERR_GENERIC(data_20);
     void* item_4dc_1 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

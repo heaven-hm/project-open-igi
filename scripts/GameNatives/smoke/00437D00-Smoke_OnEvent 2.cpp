@@ -14,6 +14,6 @@ int Smoke_OnEvent(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x20) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.vGenerateFactor");
+    sprintf(&item_80, "%s.vGenerateFactor");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

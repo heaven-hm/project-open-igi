@@ -25,7 +25,7 @@ int SlideBar_OnEvent(long double context , void* arg2, int arg3)
     {
         void* item_58_2 = context_val + 0x54;
         char item_40[0x40];
-        Game_DataSymbolLoad(&item_40, "%s_1.spr");
+        sprintf(&item_40, "%s_1.spr");
         char (* dest_1)[0x40] = &item_40;
         int i = 0xffffffff;
         void* item_64_1 = context_val + 0x54;
@@ -45,7 +45,7 @@ int SlideBar_OnEvent(long double context , void* arg2, int arg3)
         int dest_4;
         dest_4 = memcpy(*(context_val + 0x98) + 0x54, dest_1 - entity_1, entity_1 & 0xfffffffc);
         memcpy(dest_4, source_2, entity_1 & 3);
-        Game_DataSymbolLoad(&item_40, "%s_2.spr");
+        sprintf(&item_40, "%s_2.spr");
         char (* dest_5)[0x40] = &item_40;
         int i_1 = 0xffffffff;
         void* item_70_1 = context_val + 0x54;
@@ -65,7 +65,7 @@ int SlideBar_OnEvent(long double context , void* arg2, int arg3)
         int dest_8;
         dest_8 = memcpy(*(context_val + 0x9c) + 0x54, dest_5 - entity_5, entity_5 & 0xfffffffc);
         memcpy(dest_8, source_4, entity_5 & 3);
-        Game_DataSymbolLoad(&item_40, "%s_3.spr");
+        sprintf(&item_40, "%s_3.spr");
         *(context_val + 0x94) = Menu_DrawWidget_3(*(context_val + 0x44), &item_40);
     }
 

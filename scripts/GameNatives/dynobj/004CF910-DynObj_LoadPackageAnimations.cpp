@@ -24,7 +24,7 @@ void** DynObj_LoadPackageAnimations(void* context)
                 {
                     void* item_50_2 = source_val;
                     char* item_54_2 = &g_a4edf8;
-                    Game_DataSymbolLoad(&item_40, "%sanims/%s.iff");
+                    sprintf(&item_40, "%sanims/%s.iff");
                     Render_FileSIsNotIffFile(&item_40);
                     void* dest_2 = source_val;
                     int j = 0xffffffff;
@@ -55,7 +55,7 @@ void** DynObj_LoadPackageAnimations(void* context)
             {
                 void* item_50_1 = source_val;
                 char* item_54_1 = &g_a4ed6c;
-                Game_DataSymbolLoad(&item_40, "%sanims/%s.iff");
+                sprintf(&item_40, "%sanims/%s.iff");
                 Render_FileSIsNotIffFile(&item_40);
                 void* dest_1 = source_val;
                 int j_1 = 0xffffffff;

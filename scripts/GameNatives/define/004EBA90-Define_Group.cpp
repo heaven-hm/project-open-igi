@@ -1,9 +1,9 @@
-// IGI native provenance: Define_Group - 0x004EBA90 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineGroup - 0x004EBA90 - CFG score 97.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EBA90-Define_Group.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004EBA90-Define_Group.hpp"
-int Define_Group(int context, void* arg2, float arg3)
+int DefineGroup(int context, void* arg2, float arg3)
 
-// Sig: void Define_Group(...)
+// Sig: void DefineGroup(...)
 // Note: Defines a GROUP entry (sound-group/entity grouping) during definition
 // parsing. Parser-context only.
 {

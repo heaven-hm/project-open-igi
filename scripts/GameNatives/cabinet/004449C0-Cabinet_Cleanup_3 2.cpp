@@ -14,12 +14,12 @@ int Cabinet_Cleanup_3(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isInUse");
+    sprintf(&item_80, "%s.isInUse");
     SymbolRegister_Bool8(&item_80, context + 0x11f);
     void* item_e4_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastInUse");
+    sprintf(&item_80, "%s.isLastInUse");
     SymbolRegister_Bool8(&item_80, context + 0x120);
     void* item_f8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isSearched");
+    sprintf(&item_80, "%s.isSearched");
     return SymbolRegister_Bool8(&item_80, context + 0x128);
 }

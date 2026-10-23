@@ -1,9 +1,9 @@
-// IGI native provenance: GO_GfxDevice - 0x00404010 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOGfxDevice - 0x00404010 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00404010-GO_GfxDevice.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00404010-GO_GfxDevice.hpp"
-int GO_GfxDevice(int context, float arg2 )
+int GOGfxDevice(int context, float arg2 )
 
-// Sig: int GO_GfxDevice(int deviceIndex)
+// Sig: int GOGfxDevice(int deviceIndex)
 // Note: Sets render-device (D3D device/GUID) selection for the current profile.
 // Param: deviceIndex = index into the render-device list filled by
 // Config_FillRenderDeviceListBox. Use in config scripts. Returns 1.

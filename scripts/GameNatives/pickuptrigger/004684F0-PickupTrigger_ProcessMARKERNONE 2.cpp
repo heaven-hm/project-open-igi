@@ -10,9 +10,9 @@ int* PickupTrigger_ProcessMARKERNONE(void* arg1)
     *(arg1 + 0x88) = 0;
     *(arg1 + 0x18c) = 0;
     *(arg1 + 0x290) = 0;
-    Game_DataSymbolLoad(arg1 + 0x294, "MARKER_NONE");
+    sprintf(arg1 + 0x294, "MARKER_NONE");
     *(arg1 + 0x2b4) = 0xffffffff;
-    Game_DataSymbolLoad(arg1 + 0x2b8, "MARKER_COLOR_NONE");
+    sprintf(arg1 + 0x2b8, "MARKER_COLOR_NONE");
     *(arg1 + 0x2d8) = 0xffffffff;
     *(arg1 + 0x2dc) = 0;
     *(arg1 + 0x3dc) = 0;

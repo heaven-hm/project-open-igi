@@ -10,7 +10,7 @@ int __stdcall Display_SetDisplayMode_6(GUID* context, int arg2, int* arg3 )
 
     if (data_val)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't create DirectDraw object");
+        sprintf(&item_400, "Couldn't create DirectDraw object");
         int item_42c_1 = DDERR_GENERIC(data_val);
         void* item_430 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -27,7 +27,7 @@ int __stdcall Display_SetDisplayMode_6(GUID* context, int arg2, int* arg3 )
 
     if (data_2)
     {
-        Game_DataSymbolLoad(&item_400, "Couldn't get the Direct3D interface");
+        sprintf(&item_400, "Couldn't get the Direct3D interface");
         int item_42c_2 = DDERR_GENERIC(data_2);
         void* item_430_1 = &item_400;
         Error_Show("%s\n\nDirectX error message: %s");
@@ -82,7 +82,7 @@ int __stdcall Display_SetDisplayMode_6(GUID* context, int arg2, int* arg3 )
 
             if (data_25)
             {
-                Game_DataSymbolLoad(&item_400, "Couldn't enumerate Direct3D devices");
+                sprintf(&item_400, "Couldn't enumerate Direct3D devices");
                 int item_42c_6 = DDERR_GENERIC(data_25);
                 void* item_430_5 = &item_400;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -100,7 +100,7 @@ int __stdcall Display_SetDisplayMode_6(GUID* context, int arg2, int* arg3 )
 
             if (data_10)
             {
-                Game_DataSymbolLoad(&item_400, "Couldn't enumerate Direct3D devices");
+                sprintf(&item_400, "Couldn't enumerate Direct3D devices");
                 int item_42c_5 = DDERR_GENERIC(data_10);
                 void* item_430_4 = &item_400;
                 Error_Show("%s\n\nDirectX error message: %s");
@@ -226,7 +226,7 @@ int __stdcall Display_SetDisplayMode_6(GUID* context, int arg2, int* arg3 )
         return 1;
     }
 
-    Game_DataSymbolLoad(&item_400, "Couldn't get driver caps");
+    sprintf(&item_400, "Couldn't get driver caps");
     int item_42c_4 = DDERR_GENERIC(data_7);
     void* item_430_3 = &item_400;
     Error_Show("%s\n\nDirectX error message: %s");

@@ -7,7 +7,7 @@ int Qvm_GetContext_4C1210(int* arg1, int* arg2)
 {
     int var_2c = *(*arg2 + arg1[2] + 1);
     void var_20;
-    Game_DataSymbolLoad(&var_20, "%d\r\n");
+    sprintf(&var_20, "%d\r\n");
     void* dest_ptr = &var_20;
     int i = 0xffffffff;
 

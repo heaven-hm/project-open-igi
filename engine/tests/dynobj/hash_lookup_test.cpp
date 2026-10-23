@@ -1,4 +1,5 @@
 #include "igi/retail/dynobj/hash_lookup.hpp"
+#include "igi/retail/dynobj/dynamic_cube.hpp"
 
 #include <cstdint>
 #include <cstdlib>
@@ -40,12 +41,29 @@ void test_single_element_list_returns_null()
             "retail quirk: a one-element list returns null");
 }
 
+// 0x004C67E0
+void test_link_dynamic_cube_span_matches_retail_bit_selection()
+{
+    using igi::retail::dynobj::DynObj_LinkDynamicCube_7;
+    require(DynObj_LinkDynamicCube_7(7U, 9U, 11U, 7U, 9U, 11U) == 0x2000U,
+            "identical bounds use retail minimum span");
+    require(DynObj_LinkDynamicCube_7(0U, 0U, 0U, 0x1FFFU, 0U, 0U) == 0x2000U,
+            "smallest span is clamped to 0x2000");
+    require(DynObj_LinkDynamicCube_7(0U, 0U, 0U, 0x2000U, 0U, 0U) == 0x2000U,
+            "bit 13 selects span 0x2000");
+    require(DynObj_LinkDynamicCube_7(0U, 0U, 0U, 0x4001U, 0U, 0U) == 0x4000U,
+            "bit 14 selects span 0x4000");
+    require(DynObj_LinkDynamicCube_7(0U, 0U, 0U, 0x80000000U, 0U, 0U) == 0x40000000U,
+            "bit 31 shift result is unsigned-clamped to 0x40000000");
+}
+
 } // namespace
 
 int main()
 {
     test_lookup_returns_the_node_at_the_index();
     test_single_element_list_returns_null();
+    test_link_dynamic_cube_span_matches_retail_bit_selection();
 
     std::cout << "All retail DynObj hash-lookup tests passed.\n";
     return EXIT_SUCCESS;

@@ -7,7 +7,7 @@ int DynObj_RemoveSymbol_3(float context, int* arg2)
     int* source_val = context;
     double item_30 = *(*arg2 + source_val[2] + 1);
     void item_20;
-    Game_DataSymbolLoad(&item_20, "%f\r\n");
+    sprintf(&item_20, "%f\r\n");
     void* dest_val = &item_20;
     int i = 0xffffffff;
 

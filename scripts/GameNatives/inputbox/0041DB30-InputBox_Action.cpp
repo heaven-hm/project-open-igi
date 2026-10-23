@@ -12,7 +12,7 @@ int InputBox_Action(void* context)
         Script_ParseEnumString_6(&item_c0, context);
         void* item_d0_1 = &item_c0;
         void item_80;
-        Game_DataSymbolLoad(&item_80, "%s.zData");
+        sprintf(&item_80, "%s.zData");
         result = Sys_PushStack_22(&item_80, context + 0x54, 0x28);
         *(context + 0x194) = 1;
     }

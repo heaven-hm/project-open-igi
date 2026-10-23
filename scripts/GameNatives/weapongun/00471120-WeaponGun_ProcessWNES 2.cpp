@@ -2,7 +2,7 @@
 // Evidence: 00471120-WeaponGun_ProcessWNES.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "WeaponGun_ProcessWNES.h"
 
-int __convention("regparm") WeaponGun_ProcessWNES(int arg1, int arg2, int arg3, void* arg4)
+int WeaponGun_ProcessWNES("regparm") WeaponGun_ProcessWNES(int arg1, int arg2, int arg3, void* arg4)
 
 {
     int var_4 = arg3;

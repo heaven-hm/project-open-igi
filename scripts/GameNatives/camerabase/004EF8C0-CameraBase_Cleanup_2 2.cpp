@@ -26,7 +26,7 @@ int CameraBase_Cleanup_2(float* context, void* arg2)
     {
         double item_38_1 = *item_1c;
         void item_18;
-        Game_DataSymbolLoad(&item_18, "%f");
+        sprintf(&item_18, "%f");
         void* dest_1 = &item_18;
         int j = 0xffffffff;
 

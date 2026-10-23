@@ -21,5 +21,5 @@ int PhysicsTerrain_InvokeDataSymbolLoad_4EFB10(float* arg1, void* arg2)
     double var_8 = arg1[2];
     double var_10 = arg1[1];
     double var_18 = *arg1;
-    return Game_DataSymbolLoad(result_val, "%f, %f, %f");
+    return sprintf(result_val, "%f, %f, %f");
 }

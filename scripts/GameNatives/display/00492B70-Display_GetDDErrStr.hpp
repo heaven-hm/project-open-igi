@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
+// Native: Display_GetDDErrStr; retail VA 0x00492B70; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00492B70.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: Display_GetDDErrStr; retail VA 0x00492B70; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x00492B70.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
 /* 00492B70 Display_GetDDErrStr | gate PASS | openigi True */
-int __stdcall(void* context, char* arg2);
+int Display_GetDDErrStr(void* context, char* arg2);

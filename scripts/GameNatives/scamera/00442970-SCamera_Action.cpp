@@ -14,15 +14,15 @@ int SCamera_Action(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x171) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isDetection");
+    sprintf(&item_80, "%s.isDetection");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastDetection");
+    sprintf(&item_80, "%s.isLastDetection");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_f0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nDetectionTime");
+    sprintf(&item_80, "%s.nDetectionTime");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_100_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isExploded");
+    sprintf(&item_80, "%s.isExploded");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

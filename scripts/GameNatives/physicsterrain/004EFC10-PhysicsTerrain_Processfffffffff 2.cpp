@@ -27,5 +27,5 @@ int PhysicsTerrain_Processfffffffff(float* arg1, void* arg2)
     double var_38 = arg1[2];
     double var_40 = arg1[1];
     double var_48 = *arg1;
-    return Game_DataSymbolLoad(context_val, "%f, %f, %f, %f, %f, %f, %f, %f, %f");
+    return sprintf(context_val, "%f, %f, %f, %f, %f, %f, %f, %f, %f");
 }

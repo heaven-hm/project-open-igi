@@ -1,9 +1,9 @@
-// IGI native provenance: Define_HumanPlayerWeaponCycle - 0x004101C0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: DefineHumanPlayerWeaponCycle - 0x004101C0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004101C0-Define_HumanPlayerWeaponCycle.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004101C0-Define_HumanPlayerWeaponCycle.hpp"
-int Define_HumanPlayerWeaponCycle(int context, int* arg2 )
+int DefineHumanPlayerWeaponCycle(int context, int* arg2 )
 
-// Sig: void Define_HumanPlayerWeaponCycle(...)
+// Sig: void DefineHumanPlayerWeaponCycle(...)
 // Note: Collects the weapon-cycle list for the human player: loops the parsed
 // entries and stores them into the cycle table at 0x56DF1C with count at
 // 0x56DF18 (verified in igi.exe). Call within a humanplayer weapon-cycle

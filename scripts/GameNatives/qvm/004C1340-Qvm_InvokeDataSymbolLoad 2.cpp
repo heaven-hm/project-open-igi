@@ -7,7 +7,7 @@ int Qvm_InvokeDataSymbolLoad(int* arg1, int* arg2)
 {
     int var_2c = *(arg1[2] + *arg2 + 1);
     void var_20;
-    Game_DataSymbolLoad(&var_20, "%d\r\n");
+    sprintf(&var_20, "%d\r\n");
     void* dest_ptr = &var_20;
     int i = 0xffffffff;
 

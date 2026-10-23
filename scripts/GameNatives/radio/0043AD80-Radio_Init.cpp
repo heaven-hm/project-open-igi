@@ -33,7 +33,7 @@ int* Radio_Init()
     for (char* i = &g_57befc; i < 0x57bf38; )
     {
         int item_2f8_1 = dest_val;
-        Game_DataSymbolLoad(i, "Radio sound %d");
+        sprintf(i, "Radio sound %d");
         int data_10 = Script_EvaluateCondition_3();
         Script_UndefinedParameterTy(g_57bef8, &item_2e8, context_val, data_10, 7, 0);
         i = &i[0xf];

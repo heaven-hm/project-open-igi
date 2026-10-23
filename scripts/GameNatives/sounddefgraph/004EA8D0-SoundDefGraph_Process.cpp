@@ -64,7 +64,7 @@ int SoundDefGraph_Process(void* context, int* arg2)
     void* item_468 = context + 0x140;
     char* item_46c = "DefineGraph";
     void item_408;
-    Game_DataSymbolLoad(&item_408,
+    sprintf(&item_408,
         "%s("%s", "%s", %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %8.08f, %d, %d, %d, %d");
     void* dest_6 = &item_408;
     int i_1 = 0xffffffff;
@@ -104,7 +104,7 @@ int SoundDefGraph_Process(void* context, int* arg2)
     do
     {
         item_428 = *item_40c;
-        Game_DataSymbolLoad(&item_408, ", %8.08f");
+        sprintf(&item_408, ", %8.08f");
         void* dest_11 = &item_408;
         int i_3 = 0xffffffff;
 
@@ -147,7 +147,7 @@ int SoundDefGraph_Process(void* context, int* arg2)
     do
     {
         item_428 = *item_40c_1;
-        Game_DataSymbolLoad(&item_408, ", %8.08f");
+        sprintf(&item_408, ", %8.08f");
         void* dest_16 = &item_408;
         int i_5 = 0xffffffff;
 

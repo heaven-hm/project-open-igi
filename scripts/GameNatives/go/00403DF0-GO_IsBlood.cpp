@@ -1,9 +1,9 @@
-// IGI native provenance: GO_IsBlood - 0x00403DF0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
+// IGI native provenance: GOIsBlood - 0x00403DF0 - CFG score 83.3% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00403DF0-GO_IsBlood.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "00403DF0-GO_IsBlood.hpp"
-int GO_IsBlood(int context, float arg2 )
+int GOIsBlood(int context, float arg2 )
 
-// Sig: int GO_IsBlood(int blood)
+// Sig: int GOIsBlood(int blood)
 // Note: Toggles blood effects for the current profile. Param: blood = 1 on, 0
 // off. Use in config scripts. Returns 1.
 {

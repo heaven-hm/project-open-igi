@@ -1,5 +1,14 @@
 # Level 1 Playable Demo Plan
 
+> **Active execution decision (2026-10-23):** Use `mvp/level1-integration` in the existing main checkout; create no worktrees. [MVP.md](MVP.md) now defines M0–M4, with the Level 1 player loop as the next gameplay milestone and complete Level 1 gameplay as the full product goal. One coordinator writes/builds; parallel subagents investigate without competing source or Git changes. The older numbered roadmap below is reference detail, not permission to expand the current slice or require separate human sign-off.
+
+
+> **Audit 2026-10-23:** See [current implementation and workflow findings](MVP.md#workflow-audit-2026-10-23). Older name-only verification, terrain-status and manual-review statements below are historical; current `AGENTS.md` and the acceptance update govern evidence. Models/terrain render diagnostically, but integrated gameplay is not accepted.
+
+
+> Acceptance update (2026-10-21): Paired Frida probes with the same scripted scenario in retail and the newly built x86 candidate provide the runtime checks. A separate human gameplay sign-off is not required. Retain screenshots for visible increments and record coverage gaps; finite probe coverage does not establish whole-game equivalence. This update supersedes older manual-review prerequisites below.
+
+
 This is the execution sequence for MVP.md, in the agreed build order:
 
 1. **Load the 3-D models and their exact positions** (task one).
@@ -29,7 +38,7 @@ Each task is one small, reviewable increment:
 
 ## Native verification rule (every task)
 
-A native counts as verified only when `bn_function_info <address>` (Binary Ninja MCP) returns that exact name from the retail `igi.exe`. The catalog's own gate/score is recorded alongside.
+A Binary Ninja name/address match is an inventory observation only. Native acceptance follows `AGENTS.md` and `docs/fidelity/native-feature-verification.md`: current source/binary binding, signature and semantic evidence, CFG/angr checks, build verification and the scoped behavioral/runtime comparison. Name agreement alone never means `VERIFIED`.
 
 - Machine-readable status for the demo scope: `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md` — **3,050 unique natives, 3,035 name-verified, 15 name conflicts, 0 lookup errors.**
 - **15 name conflicts** are known and must be used by **address only**, never by the catalog label: `0x00413A90`, `0x0043DCF0`, `0x00443840`, `0x00443A00`, `0x00443A10`, `0x004468F0`, `0x00446CE0`, `0x00447A80`, `0x0045DCB0`, `0x00475CC0`, `0x00475D80`, `0x00476EA0`, `0x00476F70`, `0x00482650`, `0x00482700`.
@@ -91,7 +100,7 @@ A native counts as verified only when `bn_function_info <address>` (Binary Ninja
 - [ ] Texture report reconciles (Task 5).
 - [ ] Focused tests and the Windows x86 build pass.
 
-**Gameplay-system work (Tasks 6+) does not start until this checkpoint is signed off.**
+**Gameplay-system work (Tasks 6+) does not advance past this checkpoint until the documented visual/runtime evidence requirements pass; the acceptance update above removes a separate human sign-off prerequisite.**
 
 ## Task 6 — QVM/task runtime and simulation tick
 
@@ -175,6 +184,4 @@ Main menus, movies and cutscenes, subtitles, vehicles, and non-gameplay smoke/pa
 The current Windows x86 diagnostic scene renders textured static MEF models using Direct3D 7,
 with initial transforms read from OBJECTS.QVM. Earlier all-level captures are recorded in
 `docs/TASK1_MODEL_LOADING.md`; they are not proof of complete task execution or gameplay parity.
-Terrain rendering, recursive child-task integration, skinned actors, retail human camera/input,
-and playable simulation remain incomplete. ATTA accessor tests establish only their measured layouts
-and leaf operations. Highest retail graphics selection still needs its consumer chain verified.
+Terrain rendering and character/attachment paths now exist in the diagnostic scene; their presence is not complete retail task/lifecycle or visual parity. Player input and host movement code also exist, but motion may be disabled after a root-motion/update exception. Full world collision/interactions, AI/combat, health/ammunition and mission completion remain unaccepted. ATTA accessor evidence covers only its declared layouts/operations. See the dated audit for current source observations rather than inferring completion from this milestone.

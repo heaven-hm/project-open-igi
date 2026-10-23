@@ -21,8 +21,8 @@ int Config_FillScreenResolutionListBox(int context, float arg2 )
             int item_12c_1 = source_val[1];
             int item_130 = *source_val;
             void item_100;
-            Game_DataSymbolLoad(&item_100, "%word_data%word_data%d");
-            Menu_DrawWidget_9(&item_100, (source_val[2] << 0xd | *source_val) << 0xd | source_val[1]);
+            sprintf(&item_100, "%word_data%word_data%d");
+            ListBox_AddItem(&item_100, (source_val[2] << 0xd | *source_val) << 0xd | source_val[1]);
             source_val = &source_val[3];
             i += 1;
         } while (i < *(dest_3 + &g_568098));

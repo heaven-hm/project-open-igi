@@ -20,6 +20,6 @@ struct status_msg* AI_TakeCover_21(void* context, int arg2, int arg3)
     unsigned int item_30 = Sys_FreeMemory_14(Level_SetMission_5(), arg3);
     int item_34 = arg2;
     char item_20[0x20];
-    Game_DataSymbolLoad(&item_20, "%s%d");
+    sprintf(&item_20, "%s%d");
     return SoundSys_SetMasterVolume_7(context, &item_20);
 }

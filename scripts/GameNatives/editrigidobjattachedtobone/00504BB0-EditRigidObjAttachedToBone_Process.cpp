@@ -37,7 +37,7 @@ int EditRigidObjAttachedToBone_Process(void* context)
         dest_3 = memcpy(&item_10, dest_1 - entity_1, entity_1 & 0xfffffffc);
         memcpy(dest_3, source_2, entity_1 & 3);
         void* item_24_1 = &item_10;
-        data_val = Game_DataSymbolLoad(context + 0x128, "*%s");
+        data_val = sprintf(context + 0x128, "*%s");
     }
 
     void* saved_source_3 = context;

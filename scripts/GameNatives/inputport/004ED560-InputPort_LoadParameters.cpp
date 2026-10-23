@@ -4,9 +4,9 @@
 short* InputPort_LoadParameters(int context)
 
 {
-    Display_CloseDevice();
+    Keyboard_Update();
     FX_FailedGetMouseStateS();
-    Physics_InterpolateWaypoint_10();
+    Joypad_Update();
     int dest_val = 0;
     short* result;
 

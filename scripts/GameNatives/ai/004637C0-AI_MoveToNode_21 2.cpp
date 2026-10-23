@@ -27,7 +27,7 @@ unsigned int AI_MoveToNode_21(void* context, int arg2, int arg3)
         int item_40_1 = Sys_FreeMemory_14(Level_SetMission_5(), arg3) + 1;
         int item_44_1 = arg2;
         char item_20[0x20];
-        Game_DataSymbolLoad(&item_20, "%s%d");
+        sprintf(&item_20, "%s%d");
         result = SoundSys_SetMasterVolume_7(*(context + 0x4ec), &item_20);
 
         if (dest_val)

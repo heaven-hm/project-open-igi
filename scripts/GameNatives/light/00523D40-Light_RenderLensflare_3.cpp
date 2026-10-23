@@ -20,7 +20,7 @@ int* Light_RenderLensflare_3(void* context, int arg2, int arg3 , int arg4, int a
             Light_Lightmaps();
             int item_540 = 0xa83a20;
             void item_200;
-            Game_DataSymbolLoad(&item_200, "%s/%s_%05d.olm");
+            sprintf(&item_200, "%s/%s_%05d.olm");
             int data_3;
             void* entity_1;
             data_3 = Sys_AllocateMemory_16(&item_200);

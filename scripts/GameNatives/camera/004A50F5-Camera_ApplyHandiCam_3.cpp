@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_ApplyHandiCam_3 - 0x004A50F5 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A50F5-Camera_ApplyHandiCam_3.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004A50F5-Camera_ApplyHandiCam_3.hpp"
-int _start()
+int Camera_ApplyHandiCam_3()
 
 {
     int flagP;

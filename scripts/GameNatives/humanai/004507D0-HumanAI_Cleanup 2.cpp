@@ -14,6 +14,6 @@ int HumanAI_Cleanup(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x3ab8) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isDetection");
+    sprintf(&item_80, "%s.isDetection");
     return Game_DataSymbolRemoveThunk(&item_80);
 }

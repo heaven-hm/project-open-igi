@@ -32,7 +32,7 @@ LovsEntryLoaderFn g_lovs_entry_loader = nullptr;
 // Native: DynObj_LoadPackageAnimations; retail VA 0x004CF910; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF910-0x004CF9CA, 186 bytes, digest 9bc4b0a10b59709630cf47788d176a5bcca0360df50b4e8349e0edafa1a0d524; CLEAN/dynobj/004CF910-DynObj_RemoveSymbol_14.c.
-// Behavior/CFG: locates the `'BANM'` (`0x42414E4D`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0); when present and `*banm > 0`, formats `"%sanims/%s.iff"` using either `g_a4edf8` (when `g_a4edf8[0] != 0`) or `g_a4ed6c` via Game_DataSymbolLoad (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0) for each NUL-terminated animation name. radare2 10 blocks/14 edges; Binary Ninja 10 blocks; 100% structural agreement.
+// Behavior/CFG: locates the `'BANM'` (`0x42414E4D`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0); when present and `*banm > 0`, formats `"%sanims/%s.iff"` using either `g_a4edf8` (when `g_a4edf8[0] != 0`) or `g_a4ed6c` via sprintf (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0) for each NUL-terminated animation name. radare2 10 blocks/14 edges; Binary Ninja 10 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact BANM chunk tag, prefix selection (`0x00A4EDF8` vs `0x00A4ED6C`), and loop.
 // Previous catalog alias: DynObj_RemoveSymbol_14.
 void* DynObj_LoadPackageAnimations(void* context)
@@ -59,7 +59,7 @@ void* DynObj_LoadPackageAnimations(void* context)
 
                 do
                 {
-                    error::Game_DataSymbolLoad(item_40, "%sanims/%s.iff", g_a4edf8, source_val);
+                    error::sprintf(item_40, "%sanims/%s.iff", g_a4edf8, source_val);
                     if (g_anim_iff_loader != nullptr)
                     {
                         g_anim_iff_loader(item_40);
@@ -93,7 +93,7 @@ void* DynObj_LoadPackageAnimations(void* context)
 
             do
             {
-                error::Game_DataSymbolLoad(item_40, "%sanims/%s.iff", g_a4ed6c, source_val);
+                error::sprintf(item_40, "%sanims/%s.iff", g_a4ed6c, source_val);
                 if (g_anim_iff_loader != nullptr)
                 {
                     g_anim_iff_loader(item_40);
@@ -127,7 +127,7 @@ void* DynObj_LoadPackageAnimations(void* context)
 // Native: DynObj_LoadPackagePalettes; retail VA 0x004CF870; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: allocates `count * 0x0C` bytes via Mem_Alloc (0x004B0C60) into `*(context + 0x3C)` when Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF870-0x004CF909, 153 bytes, digest 246a42f51d3979bfd848ccefcef6fd53d81b2373c741392b5d719b6b46f29e09; CLEAN/dynobj/004CF870-DynObj_LinkDynamicCube_14.c.
-// Behavior/CFG: locates the `'PALF'` (`0x50414C46`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *palf` at `*(context + 0x44)`, `count > 0` (or clears `*(context + 0x3C) = 0`), and iterates each NUL-terminated palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via Game_DataSymbolLoad and calling Sys_SIsNotAValidPaletteF (0x004B7D30). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
+// Behavior/CFG: locates the `'PALF'` (`0x50414C46`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *palf` at `*(context + 0x44)`, `count > 0` (or clears `*(context + 0x3C) = 0`), and iterates each NUL-terminated palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via sprintf and calling Sys_SIsNotAValidPaletteF (0x004B7D30). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact PALF chunk tag, allocation stride `0x0C`, and callee sequence.
 // Previous catalog alias: DynObj_LinkDynamicCube_14.
 void* DynObj_LoadPackagePalettes(void* context)
@@ -169,7 +169,7 @@ void* DynObj_LoadPackagePalettes(void* context)
 
         do
         {
-            error::Game_DataSymbolLoad(g_a4ec6c, "%spalettes/%s.pal", g_a4ed6c, source_1);
+            error::sprintf(g_a4ec6c, "%spalettes/%s.pal", g_a4ed6c, source_1);
             if (g_palette_loader != nullptr)
             {
                 g_palette_loader(pal_array + offset, g_a4ec6c);
@@ -319,14 +319,14 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
 
     if (arg3 != 0)
     {
-        error::Game_DataSymbolLoad(item_100, "%stextures/%s.res", g_a4ed6c, arg2);
+        error::sprintf(item_100, "%stextures/%s.res", g_a4ed6c, arg2);
         resource::Resource_Load(item_100, nullptr);
         texture::DynObj_LocalTexturesSTex(dest_val);
         DynObj_LinkDynamicCube_14(dest_val);
         resource::Resource_Unload(item_100);
     }
 
-    error::Game_DataSymbolLoad(item_100, "%smodels/%s.res", g_a4ed6c, arg2);
+    error::sprintf(item_100, "%smodels/%s.res", g_a4ed6c, arg2);
     void* const saved_form_ptr = *reinterpret_cast<void**>(dest_val + 0x08);
     void* const saved_model_list = *reinterpret_cast<void**>(dest_val + 0x10);
     *reinterpret_cast<void**>(dest_val + 0x0C) = resource::Resource_Load(item_100, nullptr);

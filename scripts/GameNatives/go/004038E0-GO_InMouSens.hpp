@@ -1,4 +1,14 @@
 #pragma once
 #include <stdint.h>
-/* 004038E0 GO_InMouSens | gate FAIL | openigi False */
-int GO_InMouSens(long double context, int arg2, float arg3);
+// Native: GOInMouSens; retail VA 0x004038E0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x004038E0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+// Native: GOInMouSens; retail VA 0x004038E0; signature from the retail analysis of igi.exe.
+// Artifact: candidate transcription of the retail function at 0x004038E0.
+// Tools/evidence: Binary Ninja and Radare2 CFG captured from the retail igi.exe; address confirmed by Binary Ninja, Radare2 and angr.
+// Behavior/CFG: CFG agreement between Binary Ninja and Radare2 for this entry; the candidate body is the transcription under review.
+// Status/limits: STRUCTURALLY_VERIFIED; retail behaviour is compared by the configured differential runner, not by this comment.
+/* 004038E0 GOInMouSens | gate FAIL | openigi False */
+int GOInMouSens(long double context, int arg2, float arg3);

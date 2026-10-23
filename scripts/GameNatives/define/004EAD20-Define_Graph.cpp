@@ -1,9 +1,9 @@
-// IGI native provenance: Define_Graph - 0x004EAD20 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
+// IGI native provenance: DefineGraph - 0x004EAD20 - CFG score 98.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EAD20-Define_Graph.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
 #include "004EAD20-Define_Graph.hpp"
-int Define_Graph(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , int arg7, void* arg8, float arg9)
+int DefineGraph(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , int arg7, void* arg8, float arg9)
 
-// Sig: void Define_Graph(...)
+// Sig: void DefineGraph(...)
 // Note: Defines a GRAPH (sound/graph transition graph) entry inside definition
 // blocks - OpenIGI maps it to SoundDefinitionKind.Graph. Parser-context only.
 {

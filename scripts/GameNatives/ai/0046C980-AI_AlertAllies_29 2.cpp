@@ -12,7 +12,7 @@ struct status_msg* AI_AlertAllies_29(void* context, int arg2, float* arg3, int a
     struct status_msg* result = QTask_HandleInput(context, kind, 0);
     int item_d8 = arg4;
     memcpy(&result->sprite[0x3c], arg2, 0x18);
-    Game_DataSymbolLoad(&result->sprite[0x7c], "%d");
+    sprintf(&result->sprite[0x7c], "%d");
     unsigned int data_2 = Script_ParseEnumReal32_8();
     int temp_1 = 0;
     temp_1 = result->head[7];

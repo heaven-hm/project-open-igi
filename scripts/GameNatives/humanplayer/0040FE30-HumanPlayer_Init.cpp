@@ -57,5 +57,5 @@ void* HumanPlayer_Init()
     Game_DefineOptions("DefineHumanPlayerWeaponCategory", Define_HumanPlayerWeaponCategory, 0,
         0xffffffff);
     Game_DefineOptions("DefineHumanPlayerAmmoLimit", Define_HumanPlayerAmmoLimit, 0, 0xffffffff);
-    return FX_FragmentSimulate_27("UnlimitedAmmo", sub_410360);
+    return AppMain_ParseCmdLineArgs("UnlimitedAmmo", sub_410360);
 }

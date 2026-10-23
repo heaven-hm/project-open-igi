@@ -54,7 +54,7 @@ int* GlobalLight_Init()
         if (i)
         {
             int i_1 = i;
-            Game_DataSymbolLoad(&item_1d8, "object category %d");
+            sprintf(&item_1d8, "object category %d");
         }
         else
         {
@@ -64,19 +64,19 @@ int* GlobalLight_Init()
 
         int source_2 = i << 5;
         int* item_1e4_2 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa83e00, "Ambient color %s");
+        sprintf(source_2 + 0xa83e00, "Ambient color %s");
         int* item_1f0_6 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa842d4, "Fog color %s");
+        sprintf(source_2 + 0xa842d4, "Fog color %s");
         int* item_1fc_1 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa83fe8, "Fog density %s");
+        sprintf(source_2 + 0xa83fe8, "Fog density %s");
         int* item_208_1 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa83ea4, "Scale R %s");
+        sprintf(source_2 + 0xa83ea4, "Scale R %s");
         int* item_214_1 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa83f48, "Scale G %s");
+        sprintf(source_2 + 0xa83f48, "Scale G %s");
         int* item_220_1 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa84090, "Scale B %s");
+        sprintf(source_2 + 0xa84090, "Scale B %s");
         int* item_1e4_3 = &item_1d8;
-        Game_DataSymbolLoad(source_2 + 0xa83d60, "Link setting %s");
+        sprintf(source_2 + 0xa83d60, "Link setting %s");
         int source_6 = i * 0x44;
         int data_21 = Script_CallNativeHandler_2();
         Script_UndefinedParameterTy(g_a83f44, 0xa84130, source_6 + 0xa8417c, data_21, 7, 0);

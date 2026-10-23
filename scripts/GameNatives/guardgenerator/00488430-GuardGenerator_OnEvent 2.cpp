@@ -14,12 +14,12 @@ int GuardGenerator_OnEvent(void* context)
     Script_ParseEnumString_6(&item_c0, context);
     void* item_d0_1 = &item_c0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isOn");
+    sprintf(&item_80, "%s.isOn");
     SymbolRegister_Bool8(&item_80, context + 0x70);
     void* item_e4_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isSpawned");
+    sprintf(&item_80, "%s.isSpawned");
     SymbolRegister_Bool8(&item_80, context + 0x72);
     void* item_f8_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.nSpawns");
+    sprintf(&item_80, "%s.nSpawns");
     return SymbolRegister_Int32(&item_80, context + 0x74);
 }

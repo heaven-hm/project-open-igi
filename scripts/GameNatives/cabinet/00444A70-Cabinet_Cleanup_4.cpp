@@ -14,12 +14,12 @@ int Cabinet_Cleanup_4(void* context)
     void* item_d0_1 = &item_c0;
     *(context + 0x129) = 0;
     void item_80;
-    Game_DataSymbolLoad(&item_80, "%s.isInUse");
+    sprintf(&item_80, "%s.isInUse");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_e0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isLastInUse");
+    sprintf(&item_80, "%s.isLastInUse");
     Game_DataSymbolRemoveThunk(&item_80);
     void* item_f0_1 = &item_c0;
-    Game_DataSymbolLoad(&item_80, "%s.isSearched");
+    sprintf(&item_80, "%s.isSearched");
     return Game_DataSymbolRemoveThunk(&item_80);
 }
