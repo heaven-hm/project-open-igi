@@ -44,7 +44,10 @@ extern "C" {
 // Behavior: creates the IGIMUTEX mutex with the initial owner and leaves when
 //           the mutex already exists or the handle is invalid, initialises
 //           COM, registers the window class with the window procedure at
-//           0x0048F970, reads the configuration and the script setup,
+//           0x0048F970, sets the startup app-context flags
+//           (AppContext_SetIsActive(1) at 0x0048F615 and
+//           AppContext_SetTerrainLightmapsUsed(1) at 0x0048F63D), reads the
+//           configuration and the script setup,
 //           registers the Window, WinInput, Germany and USA task classes
 //           through the class registration helper at 0x0048F360, and runs the
 //           per-frame loop: the x87 precision setup, the app context's

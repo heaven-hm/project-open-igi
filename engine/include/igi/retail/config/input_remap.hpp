@@ -8,6 +8,7 @@
 // applies the bindings, so the port follows the retail's flow only when the
 // table holds the same entries the retail fills.
 
+#include <cstddef>
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -40,6 +41,14 @@ struct QvmFrameView
 // The retail remap table stride: 0x00BC25BC + slot * 3 dwords.
 inline constexpr std::uint32_t remap_table_stride = 3U;
 
+// The six-dword script value block the native copies to the caller's result
+// buffer (retail 0x0040382E..0x00403858). Retail builds it on the stack and
+// stamps the script type descriptor at dword 4 (byte +0x10), the same
+// 0x00567C74 handle the config value-block natives use for a real. Retail never
+// writes dwords 1 and 5, so they are stack residue there.
+inline constexpr std::uint32_t remap_result_dword_count = 6U;
+inline constexpr std::uint32_t remap_result_type_descriptor = 0x00567C74U;
+
 // The retail action table at 0x00BC2358. Each action owns 345 dwords and the
 // first of them is the remap slot the native writes. The retail region runs
 // from 0x00BC2358 to about 0x00BD8000 for the actions the retail registers.
@@ -68,15 +77,27 @@ extern std::uint32_t InputRemap_ActionTable[igi::retail::config::action_table_si
 // The retail remap table at 0x00BC25BC.
 extern std::uint32_t InputRemap_Table[igi::retail::config::remap_table_size];
 
-// Native: GOInRemap() - VA 0x004037C0 - complete port.
-// Behavior: reads the action count at 0x00BC2380, takes the action's slot
-//           number from the action table at 0x00BC2358, and computes the remap
-//           slot as (count - 1) * 115 + slot. It then reads the three script
-//           arguments with the frame reader at 0x004B8A20, stores them in the
-//           remap table at 0x00BC25BC, and returns the third argument masked
-//           to the low 30 bits.
-std::uint32_t IGI_RETAIL_CDECL GOInRemap(void* qvm_context);
+// GOInRemap, retail cdecl shape: the QVM hands the native the six-dword result
+// buffer (arg1), an unused middle word (arg2) and the script frame (arg3). The
+// native writes the three binding words, increments the action slot and copies
+// the six-dword value block to arg1, returning arg1 in EAX.
+//
+// The engine's configuration decoder calls the single-argument adapter below;
+// the decoder discards the result block, so the adapter supplies a host-side
+// destination. That substitution is an engine-boundary adaptation, not a retail
+// fact: retail's destination is the caller's QVM buffer.
+std::uint32_t* IGI_RETAIL_CDECL GOInRemap(std::uint32_t* result, std::int32_t unused,
+                                          void* qvm_context);
 
 } // extern "C"
+
+// Engine-facing adapter for the retail three-argument native. The engine's
+// config decoder has no QVM result buffer, so this overload provides one and
+// forwards to the retail-shaped entry above.
+inline std::uint32_t* GOInRemap(void* qvm_context)
+{
+    static std::uint32_t result[igi::retail::config::remap_result_dword_count]{};
+    return GOInRemap(result, 0, qvm_context);
+}
 
 #undef IGI_RETAIL_CDECL
