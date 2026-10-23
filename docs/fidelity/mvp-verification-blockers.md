@@ -1613,3 +1613,25 @@ Also worth recording because it constrains how the evidence should be read: the 
 distinct return classes per native (`MAX_CLASSES = 8`). Retail produced more than eight classes for the pool natives,
 so the recorded sets are a prefix of the real behaviour, and a candidate fixture must reproduce that prefix - which is
 what the engineered sequence above does.
+
+## Round 131: DynObj_LoadPackageMeshes made reachable, verification still gated on its runner
+
+`DynObj_LoadPackageMeshes` (0x004CF330) had one retail call and none from the candidate. It is an 81-byte loop, so
+reachability was the whole problem: it reads a `MODS` form from the context, walks NUL-terminated model names, loads
+each one through the mesh loader and appends the record to an intrusive list at `context + 0x10`.
+
+A retail MEF file settled the file layout instead of guessing: the `MESH` chunk tag is stored byte-reversed
+(`0x4D455348`, i.e. the bytes `HSEM`) because the reader compares the raw dword, and the payload begins at chunk + 0x24
+with `0x3DCCCCCD` (0.1f) as its version word. The fixture registers a synthetic local mesh under
+`LOCAL:models/MODELNAME1.mef`, builds a package form whose `MODS` payload names it, initialises the intrusive list
+anchor, and calls the loader. The ten-byte model name keeps the mesh loader's `sprintf` result at 27, a length retail
+already observed.
+
+Result: the native is now observed on both sides with a matching class (`null`), the merged trace holds at 94 matched
+with zero mismatches, and the candidate-unreachable group is down to four.
+
+It is **not** verified yet, and the reason is evidence rather than behaviour: the record's registered behavioural runner
+(`scripts/native_diff_runner.py`) returns `unsupported native address: 0x004CF330`. The dual-image unicorn harness in
+`scripts/resource_sys_diff_runner.py` is the right home for a case like this - it already executes retail bytes and the
+compiled port side by side and can simulate the three callees the loop calls. That case is the next step; until it
+exists the register keeps this native out of the proven set, which is the honest state.

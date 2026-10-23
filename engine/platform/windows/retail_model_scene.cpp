@@ -2772,6 +2772,39 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Sys_SetFreeMemory16(nullptr);
         }
 
+        // DynObj_LoadPackageMeshes. Retail observed a null return. Its loop only has an effect when the MODS
+        // chunk names a model whose mesh asset resolves, so the fixture registers a synthetic local model mesh -
+        // a real MEF header (byte-reversed 'MESH' tag, 0.1f version word) - and hands the loader a package form
+        // whose MODS payload names it. The name is ten bytes, which makes sprintf return 27, a length retail
+        // already observed for the same format.
+        {
+            alignas(8) std::uint8_t mesh_image[0x100]{};
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x04) = 0x100;  // declared size
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x08) = 4;      // alignment
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x14) = 0x4D455348; // 'MESH', stored as retail files do
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x18) = 0x9C;   // chunk size
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x1C) = 4;      // chunk alignment
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x20) = 0;      // no sibling
+            *reinterpret_cast<std::uint32_t*>(mesh_image + 0x24) = 0x3DCCCCCDU; // 0.1f version
+            igi::retail::resource::Resource_RegisterBuffer(
+                "LOCAL:models/MODELNAME1.mef", mesh_image, sizeof(mesh_image));
+            {
+                alignas(8) std::uint8_t package_form[0x40]{};
+                package_form[0x0C] = 0x4D; // 'MODS'
+                package_form[0x0D] = 0x4F;
+                package_form[0x0E] = 0x44;
+                package_form[0x0F] = 0x53;
+                *reinterpret_cast<std::int32_t*>(package_form + 0x14) = 1; // one model name
+                std::memcpy(package_form + 0x18, "MODELNAME1", 10);
+                alignas(8) std::uint8_t package_context[0x40]{};
+                *reinterpret_cast<void**>(package_context + 0x08) = package_form;
+                // The mesh list at +0x10 is an intrusive list; give it the anchor its insert expects.
+                *reinterpret_cast<void**>(package_context + 0x14) = package_context + 0x18;
+                *reinterpret_cast<void**>(package_context + 0x18) = package_context + 0x14;
+                static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageMeshes(package_context));
+            }
+        }
+
         // Resource_FreeNode. Retail observed {ptr, small:1, small:10, small:11, small:12, small:14, small:15,
         // small:152} over 1153 calls: the return is the new active count when the freed node was the last active
         // slot, and the relocated node's address otherwise. Node creation and freeing are the native's own, so the

@@ -4,8 +4,8 @@
   "capture": "build/runtime-traces/mvp-frida-pair-lovs.json",
   "level": 5,
   "counts": {
-    "end-to-end": 93,
-    "candidate-unreachable": 5,
+    "end-to-end": 94,
+    "candidate-unreachable": 4,
     "retail-unobserved": 17,
     "unlinked": 5
   },
