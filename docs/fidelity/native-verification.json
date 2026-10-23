@@ -56366,17 +56366,18 @@
         "signature": "x86 cdecl int32_t(void*, const void*, const void*, float)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "The address-qualified GameNatives source is the canonical reference transcription for this record; the implementation the candidate compiles is engine/src/retail/render/view_block.cpp."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_unicorn_runner.py",
+          "path": "scripts/view_block_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56416,13 +56417,13 @@
           "evidence_sha256": "a5d5961f0577c750092703961f6b08cc662ea6334ee1ac738c70d480883c9e59"
         },
         "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00497D70-behavioral.json",
-          "evidence_sha256": "8b9f52cc64455f9967d9704cb500c7883f142effd5ae84c8e884935e672f90fc"
+          "evidence_path": "docs/fidelity/evidence/0X00497D70-behavioral.json",
+          "evidence_sha256": "24c636a63a2c63261ffa5be7cc4656f5ebcb0d9adb89c6a351c2b2582240f1ba"
         },
         "runtime_tests": {
           "status": "PASS",
-          "evidence_path": "docs/fidelity/evidence/0x00497D70-behavioral.json",
-          "evidence_sha256": "f383ded64e6e87df6fe5c721001d04f3df23fb13d32990397f1861ad2f9a7ceb",
+          "evidence_path": "docs/fidelity/evidence/0X00497D70-behavioral.json",
+          "evidence_sha256": "24c636a63a2c63261ffa5be7cc4656f5ebcb0d9adb89c6a351c2b2582240f1ba",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56432,19 +56433,14 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00497d70-frida-runtime.json",
           "evidence_sha256": "cc83135c8effa31290ff5678c6de35e7d793e030faaf4ea468741f0d2375e161"
-        },
-        "imported_claim": {
-          "claimed_status": "VERIFIED",
-          "demoted_by": "lead, round 116 evidence audit",
-          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",
       "notes": "The record carried a game_natives reference to 'scripts/GameNatives/display/00497D70-Transcontext_BuildViewBlock.hpp', a header that was never staged and does not exist. The implementation is the engine unit named in implementation.path, so the stale twin reference was removed rather than fabricated.",
       "game_natives": {
         "path": "scripts/GameNatives/display/00497D70-Transcontext_BuildViewBlock.cpp",
-        "sha256": "742a2c1c938a1ca7dac6cd57895975c776cc86520ce4f2d32cbbb39a980e9b3a",
-        "signature": "int __cdecl Transcontext_BuildViewBlock(void* context, const void* view_source, const void* camera_source, float fov_x);"
+        "sha256": "c445c08f990b41f87a6fa9901df792896356a7c33e2fdaf0b285e916f6481c25",
+        "signature": "int __cdecl Transcontext_BuildViewBlock(void* context, const void* view_source, const void* camera_source, float fov_x)"
       }
     },
     {
@@ -56457,17 +56453,18 @@
         "signature": "x86 cdecl double()"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "The address-qualified GameNatives source is the canonical reference transcription for this record; the implementation the candidate compiles is engine/src/retail/render/view_block.cpp."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_unicorn_runner.py",
+          "path": "scripts/view_block_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -56507,13 +56504,13 @@
           "evidence_sha256": "b48d18092475d166eaa85ff28bddd083e96a1e9aab19a714f064dd01548adc69"
         },
         "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00491D40-behavioral.json",
-          "evidence_sha256": "e197cf3d5fb3d7d606c57d896ea06a7901f08343da1c96feabd3d2b3f907f99c"
+          "evidence_path": "docs/fidelity/evidence/0X00491D40-behavioral.json",
+          "evidence_sha256": "7a31c2422e1d3e9b0c5f73ff22c1685bd24f79adb1be3d292acf5c997e09a002"
         },
         "runtime_tests": {
           "status": "PASS",
-          "evidence_path": "docs/fidelity/evidence/0x00491D40-behavioral.json",
-          "evidence_sha256": "d6fa7083767658657b04872f9269e9dbd2e5251ff1386b36b533e5407c8ffc2a",
+          "evidence_path": "docs/fidelity/evidence/0X00491D40-behavioral.json",
+          "evidence_sha256": "7a31c2422e1d3e9b0c5f73ff22c1685bd24f79adb1be3d292acf5c997e09a002",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -56523,19 +56520,14 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00491d40-frida-runtime.json",
           "evidence_sha256": "e619d4f61eca195832b15263f58ae167bbf020804b994cf0f2d04ee84acaf6c7"
-        },
-        "imported_claim": {
-          "claimed_status": "VERIFIED",
-          "demoted_by": "lead, round 116 evidence audit",
-          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",
       "notes": "The record carried a game_natives reference to 'scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect.hpp', a header that was never staged and does not exist. The implementation is the engine unit named in implementation.path, so the stale twin reference was removed rather than fabricated.",
       "game_natives": {
         "path": "scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect.cpp",
-        "sha256": "5cb721764eface937586681f85bcf7fe4e190c8be515b27b4c4b3dbe9ee36fb3",
-        "signature": "double __cdecl Display_ComputeScreenAspect(void);"
+        "sha256": "71b94c79361f17b11c2980a6273fe781ce8bfb5a338eca617844b0859b8bc403",
+        "signature": "double __cdecl Display_ComputeScreenAspect(void)"
       }
     },
     {

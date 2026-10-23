@@ -422,6 +422,59 @@ def removed_native_addresses(root: pathlib.Path, path: pathlib.Path, relative: s
     return old - new
 
 
+def verify_canonical_source(
+    root: pathlib.Path,
+    native: dict[str, Any],
+    record: dict[str, Any],
+    relative: str,
+    minimum_status: str,
+    warnings: list[str],
+) -> list[str]:
+    """Validate a canonical GameNatives transcription that is not the record's implementation.
+
+    Engine-backed records point their implementation at the C++ source the candidate compiles, and keep a
+    GameNatives transcription as the canonical reference source. The staged sweep must not demand that the
+    reference source *be* the implementation: that would force the record onto an uncompilable translation
+    unit. Instead the reference source is held to its own contract - it is the record's recorded canonical
+    path, its digest matches, its filename is address-qualified with the record's address, it carries a
+    signature, and the record it references is verified at or above the requested threshold.
+    """
+    address = native["address"]
+    errors: list[str] = []
+    reference = record.get("game_natives")
+    if not isinstance(reference, dict):
+        errors.append(f"{relative}:{native['line']} {address}: canonical source has no game_natives record")
+        return errors
+    if reference.get("path") != relative:
+        errors.append(
+            f"{relative}:{native['line']} {address}: canonical source is not the record's game_natives path "
+            f"({reference.get('path')!r})")
+        return errors
+    source, _ = check_file_hash(
+        root, relative, reference.get("sha256"), f"{relative} canonical GameNatives source",
+        errors, required_prefix="scripts/GameNatives/",
+    )
+    if source is not None:
+        ref_match = GAME_NATIVE_ADDRESS.match(source.name)
+        if not ref_match:
+            errors.append(f"{address}: canonical GameNatives filename is not address-qualified")
+        elif normalize_address(ref_match.group("address")) != normalize_address(address):
+            errors.append(f"{address}: canonical GameNatives filename address does not match the record")
+        signature = reference.get("signature")
+        if not (isinstance(signature, str) and signature.strip()):
+            errors.append(f"{address}: missing GameNatives function signature")
+    implementation = record.get("implementation")
+    implementation_path = implementation.get("path") if isinstance(implementation, dict) else ""
+    status = (record.get("verification") or {}).get("status")
+    if status not in STATUS_RANK or STATUS_RANK[status] < STATUS_RANK[minimum_status]:
+        errors.append(
+            f"{address}: canonical reference source {relative} binds a record at status {status!r}, "
+            f"below the requested {minimum_status}")
+    warnings.append(
+        f"{relative}: canonical reference source for {address}; the record implementation is {implementation_path}")
+    return errors
+
+
 def check_provenance_comment(native: dict[str, Any], relative: str) -> list[str]:
     if native.get("is_canonical_source"):
         return []
@@ -1741,6 +1794,23 @@ def main() -> int:
                     failures.append(f"{relative}: no address-bound native identity is available to verify this source's logic")
             continue
         for native in natives:
+            record = manifest_records.get(native["address"])
+            implementation_record = record.get("implementation") if isinstance(record, dict) else None
+            implementation_path = implementation_record.get("path") if isinstance(implementation_record, dict) else None
+            reference = record.get("game_natives") if isinstance(record, dict) else None
+            if (relative.startswith("scripts/GameNatives/")
+                    and isinstance(implementation_path, str)
+                    and implementation_path != relative
+                    and isinstance(reference, dict)
+                    and reference.get("path") == relative):
+                checked += 1
+                canonical_errors = verify_canonical_source(
+                    root, native, record, relative, args.threshold, warnings)
+                failures.extend(canonical_errors)
+                report.setdefault("canonical_support_sources", []).append(
+                    {"path": relative, "address": native["address"],
+                     "implementation": implementation_path})
+                continue
             checked += 1
             native_errors, details = verify_record(
                 root,

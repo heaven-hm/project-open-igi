@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 75 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 77 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 75 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 77 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1294,3 +1294,36 @@ value of the round is that the walls are now documented instead of being redisco
 
 Verified count stays at 75; the paired-match and candidate-unreachable counts below are from the canonical trace, not
 from the diagnostic level-4 or fresh-retail runs.
+
+## Round 121: the twin model is resolved as a support-source relationship
+
+The prerequisite recorded in round 117 ("either the runner gains a twin compile mode, or the gate learns about
+support sources") is now resolved in favour of the second option, which is the honest reading of what the two
+fields mean: `implementation` is the translation unit the candidate compiles, and `game_natives` is the canonical
+address-qualified retail transcription. They are different artefacts with different jobs, so requiring them to be
+the same path was the defect.
+
+`scripts/native_gate.py` now recognises that relationship. When `--staged` encounters a `scripts/GameNatives/`
+source whose record's implementation is a *different* file and whose recorded `game_natives.path` is the staged
+file, it validates the source on its own contract instead of demanding that it be the implementation: the recorded
+path must match, the digest must match, the filename must be address-qualified with the record's address, a
+signature must be present, and the record must be at or above the requested threshold. It reports
+`canonical support_sources` in the report and emits one warning per file naming the implementation it supports.
+Staged `engine/` sources are unchanged: they must still be the record's implementation.
+
+With that in place the two blocked records were finished properly rather than worked around:
+
+* `Display_ComputeScreenAspect` (0x00491D40) and `Transcontext_BuildViewBlock` (0x00497D70) each gained a
+  canonical transcription at `scripts/GameNatives/display/<address>-<name>.cpp`, written from the retail
+  disassembly and the recorded CFG evidence, and explicitly marked as a reference source that is not compiled
+  into the candidate.
+* Each record gained an angr differential runner (`scripts/view_block_diff_runner.py`) that hooks retail's
+  `Display_GetActiveMode` to the retail display object, installs the equivalent host mirrors on the candidate
+  side, and compares the raw IEEE bit patterns of every value the bodies produce or write: the aspect factor in
+  x87 `st0`, the transposed block words, the three camera doubles, fovX, both derived screen FOVs, the two
+  origins and the two flag words. Both runners pass 8/8 with no tolerance.
+* Both strict gates pass (CFG 1.0, semantic review, behavioural tests, Frida probes), so both are back to
+  VERIFIED - this time reproducibly, because the twin sources and the runners are in this tree.
+
+Verified count 75 -> 77. The three remaining twin-bound records (`Texture_GetActiveBackendId` 0x004B0F80 and the
+two above) now have a reproducible model to follow; `Texture_GetActiveBackendId` still needs its own runner.
