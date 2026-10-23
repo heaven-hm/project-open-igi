@@ -4,9 +4,9 @@
   "capture": "build/runtime-traces/mvp-frida-pair-lovs.json",
   "level": 5,
   "counts": {
-    "end-to-end": 94,
+    "end-to-end": 95,
     "candidate-unreachable": 4,
-    "retail-unobserved": 17,
+    "retail-unobserved": 16,
     "unlinked": 5
   },
   "natives": [
@@ -47,8 +47,8 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
+      "next_action": "pull the parallel-branch QTask lane; candidate registration path not wired",
+      "detail": "retail observed once under the key-driven scenario; candidate silent"
     },
     {
       "address": "0x00402800",
@@ -226,9 +226,9 @@
       "subsystem": "humanplayer.qvm",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
-      "detail": "neither side called it"
+      "blocker": "end-to-end",
+      "next_action": "none",
+      "detail": "retail observed once under the key-driven scenario; candidate reaches it through the task-view host fixture; classes ptr/ptr"
     },
     {
       "address": "0x004ED5C0",
@@ -857,8 +857,8 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 420 time(s); the candidate never executes this subsystem"
+      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
       "address": "0x004F82B0",
@@ -887,8 +887,8 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 386 time(s); the candidate never executes this subsystem"
+      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
       "address": "0x00512C30",
@@ -897,8 +897,8 @@
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": true,
       "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
-      "detail": "retail called it 419 time(s); the candidate never executes this subsystem"
+      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
       "address": "0x005175A0",
@@ -1219,6 +1219,7 @@
     "0x004037C0",
     "0x00463180",
     "0x00465820",
+    "0x004659E0",
     "0x0048F140",
     "0x0048F170",
     "0x0048F1D0",
@@ -1304,5 +1305,5 @@
     "0x00517940",
     "0x005179C0"
   ],
-  "verified_strict_gate_count": 91
+  "verified_strict_gate_count": 92
 }

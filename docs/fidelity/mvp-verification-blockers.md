@@ -1729,3 +1729,36 @@ on the retail side; the next scenario step must open the options/menu path and f
 rather than only sweeping gameplay keys.
 
 Verified unchanged at 91.
+
+## Round 135: Human_TaskViewReset verified end to end (92/120)
+
+`Human_TaskViewReset` (0x004659E0) carried the whole evidence set except a probe pair: an executed
+8/8 unicorn behavioral runner (Angr VEX and Radare2 ESIL do not model the x87 `fptan` in its two
+tangent stores), a semantic review, and a live Angr CFG pass. The key-driven scenario from round 134
+supplied the retail side (1 call, class `ptr`); the candidate side needed reachability. `RunRetailModelScene`
+already called the native from the demo scene's `draw()`, which a level capture never runs, so the
+fixture block that hosts the other host-injected calls now gives it an aligned 0x200 record once at
+startup. The next capture saw the candidate call it exactly once with the same `ptr` class.
+
+The merge needed care. Feeding the key-driven capture as `--startup` while the canonical run had no
+retail observation for `AppContext_SetIsActive` replaced that native's good retail class
+(`small:1`, class-compatible with the candidate) with the key scenario's unrelated `small:31985`,
+which produced the only mismatch in the first merge. Merging with the *previous merged* capture as
+the canonical retail ground truth, keeping the key capture for natives it alone observed, and taking
+the candidate side from a fresh plain candidate capture resolved it: 95 matched, 0 mismatched.
+
+`native_gate.py --file engine/src/retail/human/human_view.cpp --address 0x004659E0 --threshold VERIFIED
+--cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests --require-frida-probes`
+now reports OK. The record's stale limitation text (copied from a flow native) was replaced with the
+real scope: one basic block, no calls, two narrowed `fptan` tangents plus a zeroed dword, unicorn as
+the oracle.
+
+Register: 92 verified. Remaining 28: 4 candidate-unreachable (the terrain trio and
+`QTask_RegisterClasses` - retail now observes all four under the key scenario, but the candidate
+render/registration paths are the parallel branch's transcription lane), 16 retail-unobserved
+(config cluster, camera/matrix/fog, `String_VFormat`, `Error_Show`, `Mem_InvokeNewHandler`, ...),
+5 unlinked, and 3 matched-but-unverified (one partial flow transcription, two terrain loaders).
+
+Evidence rebind: every frida-runtime report was re-emitted from the new merged capture so the
+candidate digest in each record matches the rebuilt image; two spot checks (`frame_natives.cpp`
+0x0048F140, `sys_resource.cpp` 0x004B5C90) still pass the full strict gate.

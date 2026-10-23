@@ -2621,6 +2621,15 @@ int RunRetailModelScene(HINSTANCE instance,
             static_cast<void>(igi::retail::script::Qvm_Cleanup(qvm_block));
         }
 
+        // Human_TaskViewReset. Retail returned the human pointer (class ptr) and wrote the two
+        // fptan tangents at +0x1E4/+0x1E8 plus a zeroed dword at +0x1EC. The function is a leaf
+        // with no calls, so a host record is enough to execute the same stores here; the capture
+        // compares the returned class, and the unicorn runner pins the stored values exactly.
+        {
+            alignas(8) std::uint8_t task_view_human[0x200]{};
+            static_cast<void>(igi::retail::human::Human_TaskViewReset(task_view_human));
+        }
+
         // Device stream helpers: retail returned {ptr,255,259,270,313,314,319,354} for
         // Device_GetStreamPosition and {null} for Device_SeekStream. The backend is host-injected,
         // so what runs here is the record load, the argument marshalling and the returned value.
