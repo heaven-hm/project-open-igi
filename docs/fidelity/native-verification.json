@@ -1677,7 +1677,7 @@
       "implementation": {
         "path": "engine/src/retail/core/app_context.cpp",
         "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
-        "signature": "void __cdecl AppContext_SetTerrainLightmapsUsed(std::int8_t value);"
+        "signature": "std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F260-AppContext_SetTerrainLightmapsUsed.cpp",
@@ -1689,11 +1689,19 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
+          "rationale": "Retail is int32_t(char); the candidate is std::int32_t(std::int8_t). One byte argument on the cdecl stack and a 32-bit EAX return are preserved.",
+          "retail_signature": "int32_t(char arg1)",
+          "candidate_signature": "std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)"
         },
         "limitations": [
-          "Transcribed instruction for instruction from retail. No Frida run yet.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x0048F260-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable and statically reachable: 2 direct call sites in the debug command-line path (Main_ParseNoTerrainLightmapCB / Main_ParseDebugFeatPatchCmds).",
+          "The retail absolute global 0x005C8BE8 is represented as a field of the port's AppContextState.",
+          "The only bound differential is unicorn x86-32 emulation of the retail bytes plus the compiled candidate; it is retained as supplementary evidence and does not establish RUNTIME_TESTED or VERIFIED.",
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here.",
+          "assets/candidate_symbol_map.json still records this address as implemented:false with no candidate symbol, so scripts/native_iff_diff_runner.py and the paired Frida path keep refusing it even though the symbol is present at 0x0041E7C0. That map is outside this task's owned files; the record now carries the correct candidate_symbol/candidate_address, and the one-line map correction is recorded in docs/fidelity/evidence/iff-appcontext-addressability-20261023.json.",
+          "No format/argument on the retail signature line is restated by the decompiler artifacts; both artifact signatures read \"not restated\", which is why no decompiler signature change is recorded for this address."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -1729,15 +1737,31 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-semantic-review.json",
-          "evidence_sha256": "8006a1491457d13958f7f2f774e89386f42df173e6cdbb95f01d0547c9d04193"
+          "evidence_sha256": "583d6e6ef8d740f705f20c9d1b236c0f595923fef815581e2e3653af814d6b4d"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-build.json",
-          "evidence_sha256": "e1868149a2e96bcf7d57eba2d0728685893cfc31dadab851addbb498a98219f0"
+          "evidence_sha256": "892cf9be0948879dcb1b612ad543b5d97abc26477bbcf0737409623b2258a481"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
           "evidence_sha256": "2158884d67bc1f8066449275cd7d79c48ef5e8f11c4f5197e390d55800d3e253"
+        },
+        "recorded_at": "2026-10-23T10:19:43Z",
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail4core34App_ContextSetTerrainLightmapsUsedEa",
+        "candidate_address": "0x0041E7C0",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x0041E7C0",
+          "call_sites_in_image": 2,
+          "reachable_statically": true,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
       },
       "status": "STRUCTURALLY_VERIFIED",
@@ -52135,19 +52159,26 @@
         "signature": "int __cdecl int32_t(int32_t)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "RUNTIME_TESTED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Binary Ninja, radare2 and angr CFGFast agree on the entry at 0x0048F0D0: one basic block of 10 bytes, 8b442404 a3c08b5c00 c3, loads the 32-bit cdecl argument, stores it at the 0x005C8BC0 global and returns the same bits in EAX. The candidate now keeps the same load, the same store and the same return; the earlier candidate returned 0, which the retail bytes cannot produce for a non-zero argument."
         },
         "limitations": [
-          "Static, build and emulator/host differential evidence only: Binary Ninja, Radare2, angr CFGFast, an x86 compile and the 10-case differential. No paired retail/candidate runtime observation of the start-up call has been captured.",
-          "The retail caller main 0x0048F530 discards EAX after the call at 0x0048F5FA (the next instruction pushes the literal address of \"filesys.cfg\"), so the corrected return value is contract-correct but not consumed by that caller.",
-          "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
-          "Candidate structural equivalence rests on the identical one-block load/store/return shape, confirmed in the fresh -O3 object (e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883) and the 10-case differential re-run on the current revision (337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a); the current revision was not relinked, so no linked-image claim is made.",
-          "The candidate shares engine/src/retail/core/app_startup_natives.cpp with 0x0048F080, 0x0048F0B0 and 0x0048F0C0, so this implementation digest binds those siblings as well.",
-          "The earlier sibling defect at 0x0048F0B0 (it returned the 0x005C8BC0 instance handle while retail reads 0x005C8BD4) is now corrected by a separate AppTitle global and has its own record; the remaining gap is that the retail writer 0x0048F100 is not yet part of the engine build. That sibling gap is documented there and not claimed here."
+          "The reviewed scope is the single observed retail path; the function has no alternate or error path.",
+          "The CFG evidence recorded for this native is retail-image structure: Binary Ninja and Radare2 independently recover the same one-block graph from igi.exe. The cfg_similarity value of 1.0 is the agreement of those two retail graphs, not a candidate-versus-retail score.",
+          "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the fresh -O3 object and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py) and on the paired typed Frida capture for one startup call: all 31 compared fields matched, including the argument class, return alias, previous-null store delta and the created-window HINSTANCE relation. That capture is single-call and single-scenario; it does not prove other paths or runtime equivalence generally.",
+          "The retail caller at 0x0048F5FA discards EAX, so the corrected return value cannot be observed in the current start-up trace even though it is part of the function contract.",
+          "The candidate stores to its own mapped InstanceHandle global rather than retail 0x005C8BC0. The current tested image f9f3b9ee... places it at 0x005E1BBC, and the manifest runtime_layout maps retail 0x005C8BC0 to the candidate InstanceHandle symbol. The historical image 596d15c4... placed it at 0x005D5BB8; that offset is not current. This review compares the single store relation, not process-wide memory-layout equivalence.",
+          "The behavioural differential executes the retail bytes in the Radare2 ESIL emulator and the candidate as a host-built translation unit; neither game process was launched. It is not a live IGI.exe observation.",
+          "Neighbouring native 0x0048F0B0 has its own record. The earlier wrong-global defect was corrected: retail 0x0048F0B0 loads 0x005C8BD4, and the candidate now reads a separate AppTitle global instead of InstanceHandle. That sibling's candidate AppTitle has no writer yet because retail 0x0048F100 (SetAppTitle) is only an unlinked GameNatives transcription; this is documented in the 0x0048F0B0 record and is not claimed here.",
+          "The candidate and 0x0048F080, 0x0048F0B0 and 0x0048F0C0 share one translation unit, so this implementation digest also binds those siblings' source; the 0x0048F0B0 correction changes the shared .bss layout but not the body reviewed here.",
+          "Runtime scope is one call per side, level 1, windowed, command line \"window level1\", one game-data working directory. Argument consistency is true over one observed call; the retail call site 0x0048F5FA is statically unique but a second call was not exercised.",
+          "The accepted candidate image f9f3b9ee... was rebuilt by concurrent work in the shared worktree at 2026-10-23T10:11:34Z; the task-context image 11f93920... is no longer present. Attempt 1 observed 24/24 primary fields matching on 11f93920... but lacked the candidate window relation. A later concurrent rebuild would supersede the tested image/receipt pair.",
+          "The candidate window class is \"IGI.Retail.ModelScene\" while retail uses \"Innerloop\"; class names are per-side identification and are not compared. The HINSTANCE relation is read at CreateWindowExA/W return via GWL_HINSTANCE; window visibility, style, title and class equivalence are outside scope.",
+          "The paired capture used a 30 s post-call observation bound (precedent default 5 s) to avoid the startup/window-creation race; the bound and the action probe were identical on both sides, and the observed window relations arrived at 2.405 s (retail) and 0.206 s (candidate).",
+          "Attempt 4 was disturbed by a foreign retail igi.exe launched by concurrent work in the same worktree; it was never attached to, signalled or terminated. The final preflight was clear on the decisive Frida list, and no game/probe process remained after the accepted capture."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -52183,7 +52214,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-semantic-review.json",
-          "evidence_sha256": "027154aeb7935f083544e89c94afef7f9c9a82d6ed880ec90152001733d6705b"
+          "evidence_sha256": "f6332847a585263b1a164e5bb811b7bd60113c62fe8d51e00a676031ff76c20d"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0D0-build.json",
@@ -52194,7 +52225,7 @@
           "evidence_sha256": "eb8e8c0a75d9484b986adfedf0ac01cfd4146c763ef5724463b0062159aaf8e9",
           "valid": false,
           "superseded": true,
-          "note": "Superseded false chunk-walk record rewritten as a retraction; it is not behavioral evidence. The current differential is the live 0x0048F0D0 case in scripts/native_diff_runner.py (10/10, emulator/host). Paired typed Frida runtime capture is still outstanding."
+          "note": "The paired typed Frida runtime capture for this native has since been completed (2026-10-23T10:21:28Z-10:22:32Z) and matched 31/31 compared fields; see verification.runtime_test. This behavioral record remains the superseded false chunk-walk retraction. The current differential is the live 0x0048F0D0 case in scripts/native_diff_runner.py (10/10, emulator/host)."
         },
         "cfg_evidence_scope": "retail-image structure only (Binary Ninja vs Radare2 recovery of igi.exe 0x0048F0D0); not a candidate-versus-retail CFG score",
         "runtime_layout": {
@@ -52205,7 +52236,209 @@
             "stateVA": "_InstanceHandle"
           }
         },
-        "candidate_symbol": "_StoreInstanceHandle"
+        "candidate_symbol": "_StoreInstanceHandle",
+        "runtime_contract": {
+          "authority": "docs/fidelity/evidence/0x0048F0D0-semantic-review.json",
+          "authority_sha256": "f6332847a585263b1a164e5bb811b7bd60113c62fe8d51e00a676031ff76c20d",
+          "scope": "startup-instance-handle-store",
+          "probe_path": "scripts/frida_store_instance_handle_typed.js",
+          "probe_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+          "actions_path": "scripts/frida_scenario_actions.js",
+          "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+          "required_observables": {
+            "inputs": [
+              "instance_handle",
+              "instance_handle_state",
+              "argument_is_null",
+              "argument_non_null",
+              "argument_equals_module_base",
+              "argument_module_base_state",
+              "argument_is_process_instance_handle",
+              "argument_consistent_with_first",
+              "argument_consistency_state"
+            ],
+            "outputs": [
+              "return_aliases_argument",
+              "return_aliases_argument_state",
+              "return_is_null",
+              "return_aliases_stored",
+              "return_aliases_stored_state"
+            ],
+            "sideEffects": [
+              "previous_instance_handle",
+              "previous_instance_handle_state",
+              "previous_is_null",
+              "stored_instance_handle",
+              "stored_instance_handle_state",
+              "stored_is_null",
+              "stored_aliases_argument",
+              "stored_aliases_argument_state",
+              "store_changed",
+              "stored_equals_return"
+            ]
+          },
+          "post_return_observations": [
+            "found",
+            "instance_handle_state",
+            "instance_is_null",
+            "instance_equals_argument",
+            "instance_equals_stored",
+            "instance_equals_module_base",
+            "stored_now_equals_argument"
+          ],
+          "post_return_comparison_fields": [
+            "window_found",
+            "window_instance_handle_state",
+            "window_instance_is_null",
+            "window_instance_equals_argument",
+            "window_instance_equals_stored",
+            "window_instance_equals_module_base",
+            "window_stored_now_equals_argument"
+          ],
+          "no_arguments": false,
+          "no_return": false,
+          "no_side_effects": false,
+          "note": "required_observables is the typedState subset consumed by the existing gate validator. The post_return_observations are a second, separately emitted typed surface (message type window_instance_observation) and are required by this review for the instance-handle class claim: the argument must equal the HINSTANCE of the game window created by the process. The probe emits explicit unavailable markers if the window is not observed. Pointer values are process-local and are never compared across processes; the contract compares classes and within-process aliasing relations."
+        },
+        "runtime_test": {
+          "evidence_path": "docs/fidelity/evidence/0x0048F0D0-runtime-comparison.json",
+          "evidence_sha256": "7a7e6b30048274be5bb5317667ee60231f7ab70b2e186548bc665efcb023677b",
+          "kind": "igi-paired-native-runtime-comparison",
+          "result": "matched",
+          "supports_status": "RUNTIME_TESTED",
+          "capture_path": "build/runtime-traces/20261023T100539Z-48f0d0-paired/pair.json",
+          "capture_sha256": "394391f2bf13ce23df01c7d920d341b33a24082fd26ce5f6908736828baf36a1",
+          "capture_created_utc": "2026-10-23T10:21:28.235104+00:00",
+          "capture_finished_utc": "2026-10-23T10:22:32.811763+00:00",
+          "tested_scope": "One startup invocation of retail 0x0048F0D0 StoreInstanceHandle against the candidate symbol _StoreInstanceHandle in a single paired scenario: retail level 1, windowed mode (arguments 'window level1'), working directory /Users/haseeb-mir/Downloads/IGI, the same reviewed typed probe hooked at the native entry and the typed state VA before the primary thread resumed, retail observed first and the candidate only after retail was confirmed gone.",
+          "conditions": {
+            "level": 1,
+            "arguments": [
+              "window",
+              "level1"
+            ],
+            "working_directory": "/Users/haseeb-mir/Downloads/IGI",
+            "display_mode": "windowed",
+            "sequential_order": "retail first, candidate only after retail's owned process was confirmed gone",
+            "hook_phase": "before-primary-thread-resume on both sides",
+            "hook_installed": {
+              "retail": true,
+              "candidate": true
+            },
+            "call_counts": {
+              "retail": 1,
+              "candidate": 1
+            },
+            "window_observation_counts": {
+              "retail": 1,
+              "candidate": 1
+            },
+            "probe_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+            "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+            "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+            "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+            "candidate_staged_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+            "candidate_unchanged_during_capture": true,
+            "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+            "candidate_receipt_valid_at_capture_start": true,
+            "candidate_receipt_validated_after_capture": true,
+            "owned_pids_terminated": {
+              "retail": 1912,
+              "candidate": 1688
+            },
+            "residual_processes_after_capture": {
+              "frida": [],
+              "host_game_or_probe": [],
+              "host_advisory_analysis_commands": [
+                "56446 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --address 0x00517890 --address 0x005178E0 --address 0x00517940 --address 0x005179C0",
+                "56310 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/resource_sys_diff_runner.py --address 0x004B5C90 --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --binary-sha256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01 --implementation /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/resource/sys_resource.cpp --implementation-sha256 79828f8249015f48208a5b6ec70c11dec9277e06b85d9a05674cd3f6a7060e1d --root /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow",
+                "56333 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/resource_sys_diff_runner.py --address 0x004B5C90 --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --worker-candidate /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-sys-dw4nnxp1/resource_sys_candidate.dll"
+              ]
+            }
+          },
+          "compared_fields": [
+            "instance_handle",
+            "instance_handle_state",
+            "argument_is_null",
+            "argument_non_null",
+            "argument_equals_module_base",
+            "argument_module_base_state",
+            "argument_is_process_instance_handle",
+            "argument_consistent_with_first",
+            "argument_consistency_state",
+            "return_aliases_argument",
+            "return_aliases_argument_state",
+            "return_is_null",
+            "return_aliases_stored",
+            "return_aliases_stored_state",
+            "previous_instance_handle",
+            "previous_instance_handle_state",
+            "previous_is_null",
+            "stored_instance_handle",
+            "stored_instance_handle_state",
+            "stored_is_null",
+            "stored_aliases_argument",
+            "stored_aliases_argument_state",
+            "store_changed",
+            "stored_equals_return",
+            "window_found",
+            "window_instance_handle_state",
+            "window_instance_is_null",
+            "window_instance_equals_argument",
+            "window_instance_equals_stored",
+            "window_instance_equals_module_base",
+            "window_stored_now_equals_argument"
+          ],
+          "all_compared_fields_matched": true,
+          "observed": {
+            "instance_handle": "process-instance-handle",
+            "instance_handle_state": "known",
+            "argument_is_null": false,
+            "argument_non_null": true,
+            "argument_equals_module_base": true,
+            "argument_module_base_state": "known",
+            "argument_is_process_instance_handle": true,
+            "argument_consistent_with_first": true,
+            "argument_consistency_state": "first-observation",
+            "return_aliases_argument": true,
+            "return_aliases_argument_state": "known",
+            "return_is_null": false,
+            "return_aliases_stored": true,
+            "return_aliases_stored_state": "known",
+            "previous_instance_handle": "null",
+            "previous_instance_handle_state": "known",
+            "previous_is_null": true,
+            "stored_instance_handle": "process-instance-handle",
+            "stored_instance_handle_state": "known",
+            "stored_is_null": false,
+            "stored_aliases_argument": true,
+            "stored_aliases_argument_state": "known",
+            "store_changed": true,
+            "stored_equals_return": true,
+            "window_found": true,
+            "window_instance_handle_state": "known",
+            "window_instance_is_null": false,
+            "window_instance_equals_argument": true,
+            "window_instance_equals_stored": true,
+            "window_instance_equals_module_base": true,
+            "window_stored_now_equals_argument": true
+          },
+          "limitations": [
+            "Single call: exactly one invocation was observed on each side. The retail call site 0x0048F5FA and the candidate call site 0x00406C04 are each statically unique, but that is structure, not runtime coverage of another execution.",
+            "Single scenario: level 1, windowed, command line \"window level1\", one game-data working directory. Other levels, display modes, command-line contents and working directories were not captured.",
+            "The accepted candidate image f9f3b9ee... (receipt 158f189c...) was rebuilt by concurrent work at 2026-10-23T10:11:34Z. The task-context image 11f93920... is no longer present; attempt 1 observed 24/24 primary fields matching on it but lacked the candidate window relation. A later concurrent rebuild would supersede this image/receipt pair.",
+            "The candidate window class is \"IGI.Retail.ModelScene\" while retail uses \"Innerloop\"; class names are per-side identification and are not compared. The HINSTANCE relation is read at CreateWindowExA/W return via GWL_HINSTANCE; window visibility, style, title and class equivalence are outside scope.",
+            "The observation bound was 30 s after the first call (settle 45 s), not the precedent 5 s, to avoid the startup/window-creation race. The bound and action probe were identical on both sides; the observed window relations arrived at 2.405 s (retail) and 0.206 s (candidate).",
+            "Pointer values are process-local and were never compared as raw addresses; only classes and within-process aliasing relations (argument, stored word, return, module base, window HINSTANCE) are compared.",
+            "Attempt 4 was disturbed by a foreign retail igi.exe launched by concurrent work in the shared worktree; it was never attached to, signalled or terminated. The final preflight was clear on the decisive Frida list, and no game/probe process remained after the accepted capture.",
+            "One matched single-call capture is not a full parity proof: it covers one native and one scenario and does not promote VERIFIED or establish the surrounding startup sequence."
+          ],
+          "verified_decision": {
+            "supports_runtime_tested": true,
+            "supports_verified": false,
+            "reason": "One matched single-call capture under one scenario is sufficient to record RUNTIME_TESTED for that documented scope, not VERIFIED. Missing for VERIFIED: a repeat capture showing reproducibility; coverage of additional documented scenarios (other levels, display modes, command lines); runtime evidence in the strict gate-consumable report shape bound to a passing strict gate report; a candidate image/receipt pair stable through acceptance; and full startup-sequence equivalence."
+          }
+        }
       }
     },
     {
@@ -56732,7 +56965,7 @@
       "implementation": {
         "path": "engine/src/retail/model/iff_chunk_tree.cpp",
         "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-        "signature": "void* __cdecl Iff_FindFormChunk(void* node, std::uint32_t id);"
+        "signature": "IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/terrain/00517890-Iff_FindFormChunk.cpp",
@@ -56744,41 +56977,39 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail uses void** raw node pointers; the candidate uses typed IffChunkNode pointers with the same 32-bit pointer ABI and argument order."
+          "rationale": "Retail is void**(void**, int32_t) over raw links; the candidate is IffChunkNode*(IffChunkNode*, std::uint32_t). Two cdecl arguments and a 32-bit pointer return are preserved; only pointer typing and tag signedness differ.",
+          "retail_signature": "void**(void** arg1, int32_t arg2)",
+          "candidate_signature": "IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)"
         },
         "limitations": [
-          "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
-          "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
-          "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced.",
-          "The differential uses generated graphs, not original game assets.",
-          "No live paired runtime capture exists.",
-          "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-          "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-          "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x00517890-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
-          "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (bf2f280e225b1739e48351df9696aadaa26efdd67f6d215b5ed815259a681f56) does not match the artifact currently on disk (f480dabee53106e480cebf0d7f43e8f9e529309b5bc231a41542260675d56823). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path."
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable and statically reachable: 4 direct call sites in the linked image (2 in IffSkeleton_Read, 1 self-recursive, 1 in IffChunk_FindBelowForm).",
+          "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced, and the differential that exists uses generated graphs rather than original game assets.",
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here.",
+          "The earlier limitation text that reported a stale behavioral-evidence hash is superseded: the current artifact on disk matches the digest bound here. It is not evidence of runtime acceptance."
         ],
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-radare2.json",
           "evidence_sha256": "623e70f8965a537b253fbfdc9efbe244b404dcc48b3bb29aedebdad43ccdb152",
           "evidence_id": "r2:live:0x00517890",
-          "signature": "not restated"
+          "signature": "fcn.00517890 (int32_t arg_8h, int32_t arg_10h);"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-binaryninja.json",
           "evidence_sha256": "ee0b2ba382a23832a5e4ae3f2e14c671648fec8e1c615caed16a70ddcdde3662",
           "evidence_id": "bn:live:0x00517890",
-          "signature": "not restated"
+          "signature": "void**(void** arg1, int32_t arg2)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-semantic-review.json",
-          "evidence_sha256": "d469916115a370460c2684889418a348cc1dcbd54a77043b51e4382d4a54d0cb"
+          "evidence_sha256": "39b4b9b8295d4f88bf3f039a2505f785251caae7e83dcfdea3030cdbd68e4f6c"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-build.json",
-          "evidence_sha256": "5af78c08d27591a8261f5b9109d8e216b71c497b584e53e29182001f9a25639a"
+          "evidence_sha256": "0f7699ec7e1d91f76fad9e72f8a66ff7305af04635ef5a002804bd71d2654fa1"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00517890-behavioral.json",
@@ -56807,7 +57038,7 @@
           ],
           "timeout_seconds": 600
         },
-        "recorded_at": "2026-10-23T07:45:22Z",
+        "recorded_at": "2026-10-23T10:19:43Z",
         "rebind": {
           "recorded_at": "2026-10-23T07:45:22Z",
           "previous_implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
@@ -56818,6 +57049,21 @@
           "behavioral_tests": "9/9",
           "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
           "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+        },
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+        "candidate_address": "0x004232A0",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004232A0",
+          "call_sites_in_image": 4,
+          "reachable_statically": true,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
@@ -56829,7 +57075,7 @@
       "implementation": {
         "path": "engine/src/retail/model/iff_chunk_tree.cpp",
         "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-        "signature": "void* __cdecl Iff_FindChunk(void* form, std::uint32_t id);"
+        "signature": "IffChunkNode* IffChunk_FindChildByTag(IffChunkNode* form, std::uint32_t tag)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/terrain/00517940-Iff_FindChunk.cpp",
@@ -56841,17 +57087,17 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail uses void** raw node pointers; the candidate uses typed IffChunkNode pointers with the same 32-bit pointer ABI and argument order."
+          "rationale": "Retail is void**(void*, int32_t); the candidate is IffChunkNode*(IffChunkNode*, std::uint32_t). The layout is preserved; the retail void*/void** difference is the decompiler's rendering of the same 32-bit pointer.",
+          "retail_signature": "void**(void* arg1, int32_t arg2)",
+          "candidate_signature": "IffChunkNode* IffChunk_FindChildByTag(IffChunkNode* form, std::uint32_t tag)"
         },
         "limitations": [
-          "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
-          "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
-          "Port tree representation differs as above; generated graphs only; no live paired runtime capture.",
-          "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-          "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-          "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x00517940-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
-          "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (0b9877b03a199277e039f79c16626f24adc598386ca9c1c34462658695bf42e5) does not match the artifact currently on disk (5bd52f507e3db8122a37bd93a0355e00b57d19f4cfae47e9292480fe0556b10b). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path."
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable and statically reachable: 4 direct call sites in the linked image, all in IffSkeleton_Read.",
+          "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced.",
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here.",
+          "The earlier limitation text that reported a stale behavioral-evidence hash is superseded: the current artifact on disk matches the digest bound here. It is not evidence of runtime acceptance."
         ],
         "behavioral_runner": {
           "path": "scripts/iff_chunk_tree_diff_runner.py",
@@ -56876,22 +57122,22 @@
           "evidence_path": "docs/fidelity/evidence/0x00517940-radare2.json",
           "evidence_sha256": "5f40534c937191721564b0a03b76b3f283a7fd78b1fe097555fa9897ffaf290d",
           "evidence_id": "r2:live:0x00517940",
-          "signature": "not restated"
+          "signature": "fcn.00517940 (int32_t arg_4h, int32_t arg_10h);"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x00517940-binaryninja.json",
           "evidence_sha256": "5d6e8d9aef6cc62cde9536579212b3fa062eb58073819a038e398ea29636beef",
           "evidence_id": "bn:live:0x00517940",
-          "signature": "not restated"
+          "signature": "void**(void* arg1, int32_t arg2)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x00517940-semantic-review.json",
-          "evidence_sha256": "1084a6c4001b407ea26e01cecdd2150a42d9fa3145ae0b2f1fc098515eeefe33"
+          "evidence_sha256": "daeb25319e29d99de58158028564b937f31d27b588ba12a6e21d80ca6087d6ed"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x00517940-build.json",
-          "evidence_sha256": "781ac5687680489cac0f834a54888c4474661ff949154e1d3deb2565c2c5e678"
+          "evidence_sha256": "52488019515bb7d68bb968d13ebc700067812ec5a1b0096ee5b26837f6c6230b"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00517940-behavioral.json",
@@ -56902,7 +57148,7 @@
           "tests_total": 9,
           "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected."
         },
-        "recorded_at": "2026-10-23T07:45:22Z",
+        "recorded_at": "2026-10-23T10:19:43Z",
         "rebind": {
           "recorded_at": "2026-10-23T07:45:22Z",
           "previous_implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
@@ -56913,6 +57159,21 @@
           "behavioral_tests": "9/9",
           "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
           "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+        },
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail5model23IffChunk_FindChildByTagEPNS1_12IffChunkNodeEj",
+        "candidate_address": "0x004235B0",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004235B0",
+          "call_sites_in_image": 4,
+          "reachable_statically": true,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
@@ -56924,7 +57185,7 @@
       "implementation": {
         "path": "engine/src/retail/model/iff_chunk_tree.cpp",
         "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-        "signature": "std::uint32_t __cdecl Iff_GetChunkPayload(void* chunk);"
+        "signature": "const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/terrain/005179C0-Iff_GetChunkPayload.cpp",
@@ -56936,18 +57197,17 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail takes void* and returns the raw dword at +0x1C; the candidate takes const IffChunkNode* and returns the payload data pointer. The 32-bit pointer width and cdecl are preserved."
+          "rationale": "Retail returns the raw +0x1C dword as int32_t; the candidate returns a const std::byte*. Both are 32-bit values in EAX under cdecl, and the candidate adds an empty-payload null case.",
+          "retail_signature": "int32_t(void* arg1)",
+          "candidate_signature": "const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk)"
         },
         "limitations": [
-          "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
-          "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
-          "The port returns nullptr for empty payloads instead of a raw retail pointer value.",
-          "Generated graphs only; no live paired runtime capture.",
-          "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-          "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-          "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x005179C0-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
-          "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (0558c4e1666f3cd732470052cb7c01a10d8133abd3bbff316581b4a1a572317e) does not match the artifact currently on disk (5d96a767bb00be758da42fc26d020aaa708b445a883bb9bd2bf452d4f0dad7ea). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path."
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable and statically reachable: 3 direct call sites in the linked image, all in IffSkeleton_Read.",
+          "The port returns nullptr for an empty payload where retail returns the raw dword at +0x1C; this is a documented behavioural divergence, not an addressability defect.",
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here.",
+          "The earlier limitation text that reported a stale behavioral-evidence hash is superseded: the current artifact on disk matches the digest bound here. It is not evidence of runtime acceptance."
         ],
         "behavioral_runner": {
           "path": "scripts/iff_chunk_tree_diff_runner.py",
@@ -56972,22 +57232,22 @@
           "evidence_path": "docs/fidelity/evidence/0x005179C0-radare2.json",
           "evidence_sha256": "9fe22c39eae912b2344e87ccb9c1a82ce30b92b19521f3d36913584294abd6d8",
           "evidence_id": "r2:live:0x005179C0",
-          "signature": "not restated"
+          "signature": "fcn.005179c0 (int32_t arg_4h);"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x005179C0-binaryninja.json",
           "evidence_sha256": "0607041b9546b0089587809ae16bc63f5fe6f326d6cbd9d90eecb8b0c1efb560",
           "evidence_id": "bn:live:0x005179C0",
-          "signature": "not restated"
+          "signature": "int32_t(void* arg1)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x005179C0-semantic-review.json",
-          "evidence_sha256": "69d4de455d186bcbd5919ab918fcadaa1a9d653f6ba83c8524c54537a7505ad5"
+          "evidence_sha256": "78ee1fa2011e7383d8cfef8c57c5fbe7782904f648f9bcec429d48d18df14bc2"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x005179C0-build.json",
-          "evidence_sha256": "d6ac79c4d625e69092c154df8585e6a538c67065e496e5db8dd5ca0ccfd7464d"
+          "evidence_sha256": "6709f6180311227c191e8cf79d0f15f6ac1a6c5556a9bd24825f590973ef9814"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x005179C0-behavioral.json",
@@ -56998,7 +57258,7 @@
           "tests_total": 9,
           "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected."
         },
-        "recorded_at": "2026-10-23T07:45:22Z",
+        "recorded_at": "2026-10-23T10:19:43Z",
         "rebind": {
           "recorded_at": "2026-10-23T07:45:22Z",
           "previous_implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
@@ -57009,6 +57269,21 @@
           "behavioral_tests": "9/9",
           "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
           "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+        },
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+        "candidate_address": "0x00423880",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00423880",
+          "call_sites_in_image": 3,
+          "reachable_statically": true,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
@@ -57020,7 +57295,7 @@
       "implementation": {
         "path": "engine/src/retail/model/iff_chunk_tree.cpp",
         "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-        "signature": "void* __cdecl Iff_FindChunkBelowForm(void* node, std::uint32_t id);"
+        "signature": "IffChunkNode* IffChunk_FindBelowForm(IffChunkNode* node, std::uint32_t tag)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/terrain/005178E0-Iff_FindChunkBelowForm.cpp",
@@ -57032,41 +57307,39 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail uses void** raw node pointers; the candidate uses typed IffChunkNode pointers with the same 32-bit pointer ABI and argument order."
+          "rationale": "Retail is void**(void**, int32_t); the candidate is IffChunkNode*(IffChunkNode*, std::uint32_t). The two-argument cdecl layout and pointer return are preserved.",
+          "retail_signature": "void**(void** arg1, int32_t arg2)",
+          "candidate_signature": "IffChunkNode* IffChunk_FindBelowForm(IffChunkNode* node, std::uint32_t tag)"
         },
         "limitations": [
-          "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
-          "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable but NOT statically reachable: the linked image has 0 call sites and no source caller exists. Addressability is satisfied; observability in a runtime capture is not, and wiring a caller would change behaviour, so it is left as a documented gap.",
           "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced.",
-          "The differential uses generated graphs, not original game assets.",
-          "No live paired runtime capture exists.",
-          "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-          "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-          "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x005178E0-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
-          "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (f137711b708ab5665b07fb9df5eb3813d6586e9f8d50b98ae2bd4215b4785d01) does not match the artifact currently on disk (53fd1212f8c9fdbe2b52186d45df6227f33a6d38fd9ae2a8f9f9eeb732a3eac3). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path."
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here.",
+          "The earlier limitation text that reported a stale behavioral-evidence hash is superseded: the current artifact on disk matches the digest bound here. It is not evidence of runtime acceptance."
         ],
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-radare2.json",
           "evidence_sha256": "5dbf08c76187a73f478fcb5094a27861958deff746529e3d463467fac99fc352",
           "evidence_id": "r2:live:0x005178E0",
-          "signature": "not restated"
+          "signature": "fcn.005178e0 (int32_t arg_8h, int32_t arg_10h);"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-binaryninja.json",
           "evidence_sha256": "0908be0099177b7c455198cd89d9a714065207edc66dcf74cbf8a1519f5a03a6",
           "evidence_id": "bn:live:0x005178E0",
-          "signature": "not restated"
+          "signature": "void**(void** arg1, int32_t arg2)"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-semantic-review.json",
-          "evidence_sha256": "d5396d04f799800efbe7ec44ba4c91e969b8f173e6e14eb7c77d34c80098cb42"
+          "evidence_sha256": "386e61a0f006eab0a7883b27a7347c1de7fa468438e291e8fa253c6a2e328079"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-build.json",
-          "evidence_sha256": "1d3584abb3276dc9f57d494bcf697e24e1740922d38ea3bc280652742adcd4ce"
+          "evidence_sha256": "927a97493d56ac4d3de92f0008d0fccf8a452ad22d0d900712f88a278940f631"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x005178E0-behavioral.json",
@@ -57095,7 +57368,7 @@
           ],
           "timeout_seconds": 600
         },
-        "recorded_at": "2026-10-23T07:45:22Z",
+        "recorded_at": "2026-10-23T10:19:43Z",
         "rebind": {
           "recorded_at": "2026-10-23T07:45:22Z",
           "previous_implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
@@ -57106,6 +57379,21 @@
           "behavioral_tests": "9/9",
           "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
           "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+        },
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
+        "candidate_address": "0x004238A0",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x004238A0",
+          "call_sites_in_image": 0,
+          "reachable_statically": false,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
@@ -57117,7 +57405,7 @@
       "implementation": {
         "path": "engine/src/retail/model/iff_skeleton.cpp",
         "sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
-        "signature": "int Render_FileSIsNotIffFile(int* context)"
+        "signature": "std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/render/004D67A0-AnimIff_LoadAnimationFile.hpp",
@@ -57129,10 +57417,18 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Retail is int32_t(int32_t*) with a loaded-file context; the candidate is std::optional<IffSkeleton>(const std::filesystem::path&). This is a host ABI adaptation, not an exact ABI match; the review binds the chunk-walk semantics inside the function.",
+          "retail_signature": "int32_t(int32_t* arg1)",
+          "candidate_signature": "std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)"
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "2026-10-23 Task B addressability rebind: the task brief's statement that these symbols are absent from the candidate was a name-lookup artifact. All six are emitted with external linkage (nm type T) in both the translation-unit object and build-clean-win32/igi1.exe; the linked image uses -Wl,--whole-archive with no LTO and no section garbage collection, so external definitions cannot be dropped. The port names them IffChunk_* / IffSkeleton_Read / App_ContextSetTerrainLightmapsUsed, so looking up the retail names in the brief finds nothing. No linkage or noinline change was made: bodies are unchanged and the rebuilt candidate differs from the previous one only in the PE TimeDateStamp/CheckSum bytes.",
+          "Addressable and statically reachable: 1 direct call site from the model-load path in engine/platform/windows/retail_model_scene.cpp.",
+          "STRUCTURALLY_VERIFIED covers only the BOBJ/BOBH/BOSH/PLST/TLST skeleton-read subgraph. The retail's animation-clip parse (BOAL/BALH/BOAN/BOAH/BOTH/BOTD) and its 0xA538F0 animation table, and the retail 0xA542F0 skeleton-table writes, are not reproduced.",
+          "The candidate ABI is host-adapted (std::filesystem::path argument, std::optional<IffSkeleton> return) and is not the retail int32_t(int32_t*) ABI.",
+          "The strict gate currently remains blocked for this address by its live behavioral runner: scripts/native_iff_diff_runner.py returns a single failing chunk-walk case, and its report shape is below the gate's required observables/case count. That is a behavioural-evidence gap and is not resolved or masked here.",
+          "No live paired retail/candidate game-process capture exists for this address; runtime_tests remains absent and RUNTIME_TESTED/VERIFIED is not claimed. STRUCTURALLY_VERIFIED is the maximum status the evidence supports.",
+          "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score (0.35*node_jaccard + 0.65*edge_jaccard), not a candidate-vs-retail measurement; no candidate machine CFG is bound here."
         ],
         "behavioral_runner": {
           "path": "scripts/native_iff_diff_runner.py",
@@ -57168,17 +57464,35 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004D67A0-semantic-review.json",
-          "evidence_sha256": "d7de55f187676cf27604c537b0a5af2002feadb0046d425ffd5dd1ef366ef2c4"
+          "evidence_sha256": "017a193d6162e972ffec0239405c3bd44a55cb0e919fc561de562bb52d576791"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004D67A0-build.json",
-          "evidence_sha256": "c57b64170239aad0a0b005192a1ce121af88551c09c0367862586a7561127023"
+          "evidence_sha256": "fdc1b99d6745858af181e553fdeebe5df067afe9e8d3aa108aac21f43c9d9a1a"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004D67A0-behavioral.json",
           "evidence_sha256": "c2ded10677b83192baf87013cc96ee842b30ddd4310b3c5a1c4f16c4bbeb5606"
+        },
+        "recorded_at": "2026-10-23T10:19:43Z",
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+        "candidate_symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+        "candidate_address": "0x00424620",
+        "addressability": {
+          "linkage": "external",
+          "object_emitted": true,
+          "linked_image_emitted": true,
+          "linked_image_vaddr": "0x00424620",
+          "call_sites_in_image": 1,
+          "reachable_statically": true,
+          "evidence_path": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+          "evidence_sha256": "d80e963fe7e1c77ae1cf15398f522007f827d607c6de53b7d74f89e4bc6fd379",
+          "note": "Addressability is proven by nm on the TU object and the linked candidate; no source linkage change was required."
         }
-      }
+      },
+      "status": "STRUCTURALLY_VERIFIED",
+      "cfg_similarity": 1.0
     },
     {
       "address": "0x004D0CF0",
@@ -58759,7 +59073,7 @@
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
         "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "unresolved"
+        "signature": "void __cdecl DefineHumanPlayerGeneral(void* qvm_context, const float* arguments, unsigned int argument_count)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/misc/00410070-DefineHumanPlayerGeneral.cpp",
@@ -58767,14 +59081,18 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "result": "mismatch",
+          "rationale": "Retail 0x00410070 fetches each script argument through the accessor 0x004B8A50, writes eight named values plus two tables, converts index 6 to an integer, and copies a six-dword result block into its first stack argument. The candidate takes a flat float array plus a count, returns void, never calls 0x004B8A50, and applies only the 1/108000 factor."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to ANALYZED. The source body does not implement the retail behavior and the translation unit is not linked; DefineHumanPlayerGeneral is absent from build-clean-win32/igi1.exe.",
+          "Divergences from retail: no call to the script accessor 0x004B8A50; only the odd array elements are scaled and only by 1/108000 (the 4096000.0f factor is computed into a discarded long double); no index-6 integer conversion; no table A/table B fills; no six-dword result block; returns void.",
+          "The previous behavioral and semantic_review references were deleted: both describe a chunk walk that this function does not perform, and the semantic review states 'no float arithmetic', which is false here.",
+          "Linking would additionally require 0x004B8A50, which is also absent from the target.",
+          "No paired retail/candidate runtime capture exists for this address."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -58808,17 +59126,19 @@
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x00410070-semantic-review.json",
-          "evidence_sha256": "c4427d9d872cd9dbb3729d3e2ca7fefe40b59530c2d76c3cb1ee8a366ac11eec"
-        },
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x00410070-build.json",
-          "evidence_sha256": "136f38bb623d0f4e98b39095eacfd7f9d8b6315e7c4ff778b0c71dd1ba76fb56"
+          "evidence_path": "docs/fidelity/evidence/0x00410070-build-20261023.json",
+          "evidence_sha256": "436692a39b8d1bd82d723d56c78a7c44822390c4c611f51c30a3994b92081646"
         },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00410070-behavioral.json",
-          "evidence_sha256": "f887eb524074ac62cbb292487dd8be2e9f376c9f9babf7aebf291b1e86d910df"
+        "recorded_at": "2026-10-23T15:45:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only; no candidate CFG is measured because the source does not implement the retail body and is not linked.",
+        "source_audit": {
+          "evidence_path": "docs/fidelity/evidence/0x00410070-source-audit-20261023.json",
+          "evidence_sha256": "be57edd4883e3685fbe9cd69e6690393b4e112e63e37f9c22142e5c6cecc3782"
+        },
+        "link_blockers": {
+          "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
+          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
         }
       }
     },
@@ -58829,7 +59149,7 @@
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
         "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "unresolved"
+        "signature": "void __cdecl HumanPlayer_LoadParameters(void)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/004137A0-HumanPlayer_LoadParameters.cpp",
@@ -58837,14 +59157,18 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
           "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "result": "mismatch",
+          "rationale": "Retail 0x004137A0 is int32_t __cdecl with no arguments: Qvm_Load on LOCAL:humanplayer/humanplayer.qsc, then Qvm_Execute and Qvm_Cleanup and return of the cleanup result, or Debug_Error followed by a non-returning self-loop. The candidate is void(void) and probes the filesystem instead of loading the QVM script."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to ANALYZED. The source body does not implement the retail behavior and the translation unit is not linked; HumanPlayer_LoadParameters is absent from build-clean-win32/igi1.exe.",
+          "Divergences from retail: no Qvm_Load on LOCAL:humanplayer/humanplayer.qsc; the candidate probes COMMON/humanplayer/humanplayer.qsc with std::filesystem::exists and calls Resource_OpenFile; it never calls Qvm_Execute or Qvm_Cleanup, never reports through Debug_Error, and returns void instead of int32_t.",
+          "The previous behavioral and semantic_review references were deleted: both describe a chunk walk that this function does not perform.",
+          "A retail-faithful body needs Qvm_Load, Qvm_Execute, Qvm_Cleanup and Debug_Error; only Qvm_Execute is missing from the target.",
+          "No paired retail/candidate runtime capture exists for this address."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -58878,17 +59202,19 @@
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004137A0-semantic-review.json",
-          "evidence_sha256": "ad906c6eada53d7d84af8630ab30bc33c00854261ff29f0582acf02078e0a107"
-        },
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004137A0-build.json",
-          "evidence_sha256": "9f5d97e171196d05ab5e5e1febd5d0aa6f29aad7f99b174570bdb2bc6e707d02"
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-build-20261023.json",
+          "evidence_sha256": "f2be135e9f06d0009e2ef87e20db682afc60af145b195d542b22b93e170738c5"
         },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004137A0-behavioral.json",
-          "evidence_sha256": "9448652ae82a7050bd8668980bbc27dc4ffad7e935fae1d5888e2686f10575f4"
+        "recorded_at": "2026-10-23T15:45:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only; no candidate CFG is measured because the source does not implement the retail body and is not linked.",
+        "source_audit": {
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-source-audit-20261023.json",
+          "evidence_sha256": "7743a0741663ce73528d9305179a7da8c8b3c8cfbd8678d7c6b408d3bc2baf96"
+        },
+        "link_blockers": {
+          "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
+          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
         }
       }
     },
@@ -58899,7 +59225,7 @@
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
         "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "unresolved"
+        "signature": "std::int32_t __cdecl Config_Read(void* path)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/config/00405850-Config_Read.cpp",
@@ -58907,14 +59233,17 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "BUILD_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Address-bound leaf instructions map the retail chunk walk onto the port's C++ helpers."
+          "rationale": "Retail is int32_t __cdecl with one stack argument passed unchanged to Qvm_Load. The candidate is extern \"C\" __cdecl std::int32_t Config_Read(void* path); the single argument and the 32-bit return are preserved, and the pointee type (a NUL-terminated path) is inferred from Qvm_Load's string use."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to BUILD_VERIFIED. The translation unit is not in the CMake igi target and the target link fails on Qvm_Execute (0x004B85B0), Config_SaveGraphicOptions (0x00405300), Config_SaveSoundOptions (0x004058A0), Config_NoD3DDriversWithHard (0x00405980) and Config_Language_2 (0x00405B30); Config_Read is absent from build-clean-win32/igi1.exe.",
+          "The previous behavioral and semantic_review references were deleted: both describe a chunk walk that Config_Read does not perform. No genuine semantic review or paired runtime capture exists for this address.",
+          "The wrapper's call order and branch selection do match the retail disassembly (Binary Ninja bn_function_callees at 0x00405850); the five callees' internals are outside this audit.",
+          "The candidate behavior comment mislabels 0x004B80B0/0x004B85B0/0x004B83D0 as file natives; they are Qvm_Load, Qvm_Execute and Qvm_Cleanup."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -58948,17 +59277,19 @@
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x00405850-semantic-review.json",
-          "evidence_sha256": "f4ef47ac6ccaab08b298b0a0fda7736423adf0f564014485ed05c8555742509b"
-        },
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x00405850-build.json",
-          "evidence_sha256": "230a155f9de3627254eb4c50081eb5f9b709fda601d51a898f860d2aa77061aa"
+          "evidence_path": "docs/fidelity/evidence/0x00405850-build-20261023.json",
+          "evidence_sha256": "e5ca1084db4d5e9fe583d334abcee2e57f2296fa878c505569a24a7143cc1ca1"
         },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x00405850-behavioral.json",
-          "evidence_sha256": "9ebc4f5d6a53b7274371e122a2dca726df59fee7d584f7551fc4b13f861b6971"
+        "recorded_at": "2026-10-23T15:45:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only (0.35*node_jaccard + 0.65*edge_jaccard); it is not candidate equivalence, and no candidate CFG is measured because the translation unit is not linked.",
+        "source_audit": {
+          "evidence_path": "docs/fidelity/evidence/0x00405850-source-audit-20261023.json",
+          "evidence_sha256": "5c210a56ac5f1c5cfd7baa6c88d9aacee578f0d2bf97968d71dba1c012411a1f"
+        },
+        "link_blockers": {
+          "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
+          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
         }
       }
     },

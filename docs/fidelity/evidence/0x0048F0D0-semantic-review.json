@@ -94,9 +94,16 @@
       "definition": "void* InstanceHandle = nullptr;",
       "width_bytes": 4,
       "candidate_image": "build-clean-win32/igi1.exe",
-      "candidate_image_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
-      "candidate_va": "0x005D5BB8",
-      "candidate_image_note": "Previous linked candidate image; it predates the AppTitle global added by the 0x0048F0B0 fix, so its .bss offsets are historical and the current source has not been relinked."
+      "candidate_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "candidate_va": "0x005E1BBC",
+      "candidate_image_note": "Current linked candidate tested by the paired runtime capture; built at 2026-10-23T10:11:34Z by concurrent work in the shared worktree. The receipt 158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934 validates against the current tree and this translation unit. Historical: image 596d15c4... placed InstanceHandle at 0x005D5BB8 before the AppTitle global was added; that offset is not current.",
+      "historical_linked_images": [
+        {
+          "sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
+          "instance_handle_va": "0x005D5BB8",
+          "note": "pre-AppTitle historical image; superseded by the tested f9f3b9ee image"
+        }
+      ]
     },
     "correction": "The earlier candidate returned the constant 0. The retail bytes cannot produce 0 for a non-zero argument (Radare2 ESIL returned the argument bits for every tested input), so the candidate was corrected to return its argument; the current source digest above contains that correction."
   },
@@ -119,7 +126,7 @@
     {
       "name": "memory_layout_and_access",
       "result": "passed",
-      "rationale": "Retail performs exactly one 4-byte store to 0x005C8BC0 and reads no global. The current candidate performs exactly one 4-byte store of the argument to the 4-byte global InstanceHandle; the fresh -O3 object encodes the store as mov %eax,<dir32 .bss+4> (InstanceHandle, at .bss+4 after AppTitle was added at .bss+0). The previous linked image 596d15c4... placed InstanceHandle at 0x005D5BB8, but it predates the AppTitle global and the current source has not been relinked, so no current link-time VA is claimed. Access width and kind match and no other memory is touched."
+      "rationale": "Retail performs exactly one 4-byte store to 0x005C8BC0 and reads no global. The candidate performs exactly one 4-byte store of the argument to the 4-byte global InstanceHandle; the fresh -O3 object encodes the store as mov %eax,<dir32 .bss+4> (InstanceHandle, at .bss+4 after AppTitle was added at .bss+0). The current linked image f9f3b9ee... places InstanceHandle at 0x005E1BBC (nm) and the captured candidate store resolves there; the receipt 158f189c... validates against the current tree. The previous linked image 596d15c4... placed InstanceHandle at 0x005D5BB8 before AppTitle was added; that offset is historical. Access width and kind match and no other memory is touched."
     },
     {
       "name": "calls_and_side_effects",
@@ -140,11 +147,167 @@
   "limitations": [
     "The reviewed scope is the single observed retail path; the function has no alternate or error path.",
     "The CFG evidence recorded for this native is retail-image structure: Binary Ninja and Radare2 independently recover the same one-block graph from igi.exe. The cfg_similarity value of 1.0 is the agreement of those two retail graphs, not a candidate-versus-retail score.",
-    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the fresh -O3 object and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py) and not on a paired runtime capture. A paired typed Frida capture of retail igi.exe and the staged candidate is still outstanding; this record does not claim runtime equivalence.",
+    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the fresh -O3 object and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py) and on the paired typed Frida capture for one startup call: all 31 compared fields matched, including the argument class, return alias, previous-null store delta and the created-window HINSTANCE relation. That capture is single-call and single-scenario; it does not prove other paths or runtime equivalence generally.",
     "The retail caller at 0x0048F5FA discards EAX, so the corrected return value cannot be observed in the current start-up trace even though it is part of the function contract.",
-    "The candidate stores to its own mapped InstanceHandle global rather than retail 0x005C8BC0. The previous linked image 596d15c4... placed it at 0x005D5BB8, but the current source (which now also defines AppTitle) has not been relinked; the manifest runtime_layout maps retail 0x005C8BC0 to the candidate InstanceHandle symbol, and this review does not establish process-wide memory-layout equivalence.",
+    "The candidate stores to its own mapped InstanceHandle global rather than retail 0x005C8BC0. The current tested image f9f3b9ee... places it at 0x005E1BBC, and the manifest runtime_layout maps retail 0x005C8BC0 to the candidate InstanceHandle symbol. The historical image 596d15c4... placed it at 0x005D5BB8; that offset is not current. This review compares the single store relation, not process-wide memory-layout equivalence.",
     "The behavioural differential executes the retail bytes in the Radare2 ESIL emulator and the candidate as a host-built translation unit; neither game process was launched. It is not a live IGI.exe observation.",
     "Neighbouring native 0x0048F0B0 has its own record. The earlier wrong-global defect was corrected: retail 0x0048F0B0 loads 0x005C8BD4, and the candidate now reads a separate AppTitle global instead of InstanceHandle. That sibling's candidate AppTitle has no writer yet because retail 0x0048F100 (SetAppTitle) is only an unlinked GameNatives transcription; this is documented in the 0x0048F0B0 record and is not claimed here.",
-    "The candidate and 0x0048F080, 0x0048F0B0 and 0x0048F0C0 share one translation unit, so this implementation digest also binds those siblings' source; the 0x0048F0B0 correction changes the shared .bss layout but not the body reviewed here."
-  ]
+    "The candidate and 0x0048F080, 0x0048F0B0 and 0x0048F0C0 share one translation unit, so this implementation digest also binds those siblings' source; the 0x0048F0B0 correction changes the shared .bss layout but not the body reviewed here.",
+    "Runtime scope is one call per side, level 1, windowed, command line \"window level1\", one game-data working directory. Argument consistency is true over one observed call; the retail call site 0x0048F5FA is statically unique but a second call was not exercised.",
+    "The accepted candidate image f9f3b9ee... was rebuilt by concurrent work in the shared worktree at 2026-10-23T10:11:34Z; the task-context image 11f93920... is no longer present. Attempt 1 observed 24/24 primary fields matching on 11f93920... but lacked the candidate window relation. A later concurrent rebuild would supersede the tested image/receipt pair.",
+    "The candidate window class is \"IGI.Retail.ModelScene\" while retail uses \"Innerloop\"; class names are per-side identification and are not compared. The HINSTANCE relation is read at CreateWindowExA/W return via GWL_HINSTANCE; window visibility, style, title and class equivalence are outside scope.",
+    "The paired capture used a 30 s post-call observation bound (precedent default 5 s) to avoid the startup/window-creation race; the bound and the action probe were identical on both sides, and the observed window relations arrived at 2.405 s (retail) and 0.206 s (candidate).",
+    "Attempt 4 was disturbed by a foreign retail igi.exe launched by concurrent work in the same worktree; it was never attached to, signalled or terminated. The final preflight was clear on the decisive Frida list, and no game/probe process remained after the accepted capture."
+  ],
+  "runtime_contract_reviewed_at": "2026-10-23T15:55:00+05:30",
+  "runtime_contract": {
+    "scope": "startup-instance-handle-store",
+    "probe_path": "scripts/frida_store_instance_handle_typed.js",
+    "probe_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+    "actions_path": "scripts/frida_scenario_actions.js",
+    "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+    "execution_status": "executed: exactly one call observed per side; 31/31 compared fields matched; the game-window HINSTANCE relation was observed on both sides; the candidate receipt validated at capture start and after capture.",
+    "required_observables": {
+      "inputs": [
+        "instance_handle",
+        "instance_handle_state",
+        "argument_is_null",
+        "argument_non_null",
+        "argument_equals_module_base",
+        "argument_module_base_state",
+        "argument_is_process_instance_handle",
+        "argument_consistent_with_first",
+        "argument_consistency_state"
+      ],
+      "outputs": [
+        "return_aliases_argument",
+        "return_aliases_argument_state",
+        "return_is_null",
+        "return_aliases_stored",
+        "return_aliases_stored_state"
+      ],
+      "sideEffects": [
+        "previous_instance_handle",
+        "previous_instance_handle_state",
+        "previous_is_null",
+        "stored_instance_handle",
+        "stored_instance_handle_state",
+        "stored_is_null",
+        "stored_aliases_argument",
+        "stored_aliases_argument_state",
+        "store_changed",
+        "stored_equals_return"
+      ]
+    },
+    "post_return_observations": [
+      "found",
+      "instance_handle_state",
+      "instance_is_null",
+      "instance_equals_argument",
+      "instance_equals_stored",
+      "instance_equals_module_base",
+      "stored_now_equals_argument"
+    ],
+    "no_arguments": false,
+    "no_return": false,
+    "no_side_effects": false,
+    "note": "required_observables is the typedState subset consumed by the existing gate validator. The post_return_observations are a second, separately emitted typed surface (message type window_instance_observation) and are required by this review for the instance-handle class claim: the argument must equal the HINSTANCE of the game window created by the process. The probe emits explicit unavailable markers if the window is not observed. Pointer values are process-local and are never compared across processes; the contract compares classes and within-process aliasing relations.",
+    "post_return_comparison_fields": [
+      "window_found",
+      "window_instance_handle_state",
+      "window_instance_is_null",
+      "window_instance_equals_argument",
+      "window_instance_equals_stored",
+      "window_instance_equals_module_base",
+      "window_stored_now_equals_argument"
+    ]
+  },
+  "runtime_capture": {
+    "performed_utc": "2026-10-23T10:21:28.235104+00:00",
+    "finished_utc": "2026-10-23T10:22:32.811763+00:00",
+    "result": "matched",
+    "scope": "one startup call of retail 0x0048F0D0 vs candidate _StoreInstanceHandle; level 1, windowed ('window level1'), working directory /Users/haseeb-mir/Downloads/IGI, hook installed before primary-thread resume, retail first then candidate",
+    "evidence_path": "docs/fidelity/evidence/0x0048F0D0-runtime-comparison.json",
+    "evidence_sha256": "7a7e6b30048274be5bb5317667ee60231f7ab70b2e186548bc665efcb023677b",
+    "capture_path": "build/runtime-traces/20261023T100539Z-48f0d0-paired/pair.json",
+    "capture_sha256": "394391f2bf13ce23df01c7d920d341b33a24082fd26ce5f6908736828baf36a1",
+    "call_counts": {
+      "retail": 1,
+      "candidate": 1
+    },
+    "window_observation_counts": {
+      "retail": 1,
+      "candidate": 1
+    },
+    "compared_fields": [
+      "instance_handle",
+      "instance_handle_state",
+      "argument_is_null",
+      "argument_non_null",
+      "argument_equals_module_base",
+      "argument_module_base_state",
+      "argument_is_process_instance_handle",
+      "argument_consistent_with_first",
+      "argument_consistency_state",
+      "return_aliases_argument",
+      "return_aliases_argument_state",
+      "return_is_null",
+      "return_aliases_stored",
+      "return_aliases_stored_state",
+      "previous_instance_handle",
+      "previous_instance_handle_state",
+      "previous_is_null",
+      "stored_instance_handle",
+      "stored_instance_handle_state",
+      "stored_is_null",
+      "stored_aliases_argument",
+      "stored_aliases_argument_state",
+      "store_changed",
+      "stored_equals_return",
+      "window_found",
+      "window_instance_handle_state",
+      "window_instance_is_null",
+      "window_instance_equals_argument",
+      "window_instance_equals_stored",
+      "window_instance_equals_module_base",
+      "window_stored_now_equals_argument"
+    ],
+    "all_compared_fields_matched": true,
+    "observed": {
+      "instance_handle": "process-instance-handle",
+      "argument_is_null": false,
+      "argument_equals_module_base": true,
+      "argument_is_process_instance_handle": true,
+      "window_instance_equals_argument": true,
+      "return_aliases_argument": true,
+      "previous_instance_handle": "null",
+      "stored_instance_handle": "process-instance-handle",
+      "stored_aliases_argument": true,
+      "store_changed": true,
+      "argument_read_surface": "args[0..3] on both sides (no probe-surface difference)"
+    },
+    "provenance": {
+      "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "candidate_receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+      "candidate_receipt_valid_at_capture_start": true,
+      "candidate_receipt_validated_after_capture": true,
+      "probe_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+      "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+      "candidate_staged_path": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-cqzk11o0.exe",
+      "candidate_staged_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "candidate_unchanged_during_capture": true,
+      "owned_pids_terminated": {
+        "retail": 1912,
+        "candidate": 1688
+      }
+    },
+    "limitations": [
+      "Single call: one invocation per side. Retail has one static call site (0x0048F5FA) and the candidate one (0x00406C04); this is static structure, not runtime coverage of another path.",
+      "Single scenario: level 1, windowed, command line \"window level1\", one working directory. Other levels, display modes, command lines and directories were not compared.",
+      "The tested candidate image f9f3b9ee... was rebuilt concurrently; the earlier task-context image 11f93920... is no longer present. The source digest 337c5d57... and native body are unchanged, and the receipt 158f189c... validated before and after capture.",
+      "The candidate window class \"IGI.Retail.ModelScene\" differs from retail \"Innerloop\"; class names are per-side identification, not compared. Only the HINSTANCE relations are in contract.",
+      "The capture is one native and one call; it is not a full parity proof and does not promote VERIFIED."
+    ]
+  }
 }

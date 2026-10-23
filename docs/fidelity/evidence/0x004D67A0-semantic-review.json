@@ -6,57 +6,124 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "Delegated Task B coding agent: source-semantic review against the live Binary Ninja 6.0.10601 MCP view of retail igi.exe (entry 0x004A50F5) and the bound Radare2 artifacts; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T10:20:53Z",
+ "source_revision": "1227f2e7",
+ "review_basis": "The current engine/src/retail/model/iff_skeleton.cpp hashes to 653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9. The retail entry was re-read through the live Binary Ninja view (decompile and block/edge sets) for this review, and the bound Radare2 artifact is unchanged. The candidate object and its linked-image symbol were then compared to that reconstruction. This review supersedes the earlier report that did not use the seven required semantic check names or that described the retail child link offset incorrectly.",
+ "retail_function": {
+  "entry": "0x004D67A0",
+  "name": "Render_FileSIsNotIffFile",
+  "signature": "int32_t(int32_t* arg1)",
+  "start": "0x004D67A0",
+  "end": "0x004D6D39",
+  "size_bytes": 1434,
+  "blocks": 31,
+  "edges": 40,
+  "cfg_similarity": 1.0
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/model/iff_skeleton.cpp",
+  "sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
+  "symbol": "igi::retail::model::IffSkeleton_Read(std::filesystem::path const&)",
+  "signature": "std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)",
+  "linked_image_vaddr": "0x00424620",
+  "summary": "IffSkeleton_Read: parses the file into the port tree, finds BOBJ, BOBH and the BOSH/PLST/TLST children, then builds object id, parent indices, rest translations and accumulated world positions.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004D67A0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "detail": "Retail 0x004D67A0 (Binary Ninja Render_FileSIsNotIffFile) is the animation IFF loader: it loads the file, walks to BOBJ then BOBH, reads BOSH/PLST/TLST into the global skeleton table at 0xA542F0, then walks BOAL/BOBH/BALH and each BOAN clip into the animation table at 0xA538F0. The candidate IffSkeleton_Read is the host-adapted skeleton-read subgraph: it performs the same BOBJ -> BOBH -> BOSH/PLST/TLST chunk walk and builds the same per-bone parent and rest-offset data, but does not write either retail global table and does not parse clips."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "detail": "Retail takes an int32_t* context (the loaded-file context) and returns an int32_t status. The candidate takes a std::filesystem::path and returns std::optional<IffSkeleton>; this is a deliberate host-level ABI adaptation for the port's loader, not the retail ABI. The chunk-walk arguments inside the function (tree root and tag) are preserved."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "detail": "Chunk tags BOBJ 0x424F424A, BOBH 0x424F4248, BOSH 0x424F5348, PLST 0x504C5354, TLST 0x544C5354 are reproduced. The retail's clip tags BOAL 0x424F414C, BALH 0x42414C48, BOAN 0x424F414E, BOAH 0x424F4148, BOTH 0x424F5448, BOTD 0x424F5444 are identified but not consumed by the candidate's skeleton-only scope. The retail global table strides (12 bytes at 0xA542F0, 40 bytes at 0xA538F0) are not reproduced because the candidate has no global tables."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "detail": "The candidate reads the same chunk fields through the port's tree, then reads BOSH as object id + bone count, PLST as int32 parent indices and TLST as float3 rest offsets. It allocates its own vectors instead of the retail's 0xA542F0 table allocations."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "detail": "Retail calls Resource_Load, the chunk parser, the chunk-navigation helpers, Mem_AllocFn and memcpy, and writes two global tables. The candidate calls IffChunkTree_Parse, IffChunk_FindByTag, IffChunk_FindChildByTag and IffChunk_GetPayload and allocates port vectors; it writes no global table and parses no clip. This difference is the documented scope limit, not an addressability defect."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "detail": "Retail returns a warning/status path through Warning_Show on a non-IFF file or wrong form type, otherwise finishes the load. The candidate returns std::nullopt on any missing form/chunk and a populated IffSkeleton on success. Error signalling is host-adapted; the success path's chunk acceptance matches the retail walk."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "passed",
+   "detail": "The skeleton's TLST rest offsets are read as raw 32-bit floats and copied, with no arithmetic in this function; the candidate performs the same bit-preserving float read (std::memcpy), so no FP rounding decision is made here."
+  },
+  {
+   "name": "addressability",
+   "result": "passed",
+   "detail": "Present with external linkage (nm type T) at 0x00424620 in build-clean-win32/igi1.exe, called from the model-load path."
+  },
+  {
+   "name": "port_only_divergence",
+   "result": "passed",
+   "detail": "Port-only divergence: host ABI (filesystem path, optional<IffSkeleton>) and skeleton-only scope. The retail clip parse and the 0xA542F0/0xA538F0 global writes are not reproduced. No codegen change was made for addressability."
+  }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail is int32_t(int32_t*) with a loaded-file context; the candidate is std::optional<IffSkeleton>(const std::filesystem::path&). This is a host ABI adaptation, not an exact ABI match; the chunk-walk semantics inside the function are what this review binds."
+ },
+ "addressability": {
+  "linkage": "external",
+  "object_symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+  "linked_image_vaddr": "0x00424620",
+  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "call_sites_in_image": 1,
+  "callers_in_image": [
+   "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0"
+  ],
+  "reachable_statically": true
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004D67A0-binaryninja.json",
+   "evidence_sha256": "59c7af9e84a10f021caab4e686a066a626947303b12ba5b81cb8e23302b0f2ef",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004D67A0-radare2.json",
+   "evidence_sha256": "fa1f24ec7452efc03e8364123f0fbc5569fc32191169ea2ed2d5d8219ef1489a",
+   "tool": "radare2 6.2.0"
+  }
+ },
+ "limitations": [
+  "STRUCTURALLY_VERIFIED covers only the BOBJ/BOBH/BOSH/PLST/TLST skeleton-read subgraph.",
+  "The retail's animation-clip parse (BOAL/BALH/BOAN/BOAH/BOTH/BOTD) and its 0xA538F0 animation table are not reproduced.",
+  "The retail's 0xA542F0 skeleton table writes are replaced by port-owned vectors.",
+  "The candidate ABI is host-adapted (filesystem path, optional<IffSkeleton>) and is not the retail ABI.",
+  "No live paired retail/candidate game-process capture exists for this address; the strict gate's behavioral runner currently reports a failing chunk-walk comparison, which is not resolved here."
+ ],
+ "port_only_divergences": [
+  {
+   "kind": "symbol-naming",
+   "detail": "retail symbol name AnimIff_LoadAnimationFile -> candidate mangled IffSkeleton_Read; codegen unchanged."
+  },
+  {
+   "kind": "abi",
+   "detail": "host ABI (filesystem path, optional<IffSkeleton>) replaces the retail context/int status ABI."
+  },
+  {
+   "kind": "scope",
+   "detail": "skeleton-read subgraph only; clip parsing and global tables omitted."
   }
  ]
 }

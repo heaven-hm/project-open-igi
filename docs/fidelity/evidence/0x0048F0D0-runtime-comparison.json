@@ -1,0 +1,764 @@
+{
+  "schema_version": 1,
+  "kind": "igi-paired-native-runtime-comparison",
+  "address": "0x0048F0D0",
+  "name": "StoreInstanceHandle",
+  "generated_utc": "2026-10-23T10:31:25.912701+00:00",
+  "result": "matched",
+  "verdict": "runtime_match",
+  "status_promotion": "RUNTIME_TESTED for the single documented startup call and scenario below; not VERIFIED, and not a claim about other levels, modes or the surrounding startup sequence. The Lead applies the manifest patch.",
+  "scope": "One startup invocation of retail 0x0048F0D0 StoreInstanceHandle against the candidate symbol _StoreInstanceHandle in a single paired scenario: retail level 1, windowed mode (arguments 'window level1'), working directory /Users/haseeb-mir/Downloads/IGI, the same reviewed typed probe hooked at the native entry and the typed state VA before the primary thread resumed, retail observed first and the candidate only after retail was confirmed gone.",
+  "reason": "The candidate entry point calls _StoreCommandLine with WinMain's lpCmdLine and then _StoreInstanceHandle with WinMain's hInstance, in retail order and before window creation. The sequential paired capture observed exactly one call on each side under the same conditions, and all 31 compared typed fields are identical: the argument is non-null, is the process module base (the process instance handle class), is consistent with the first observation, and equals the HINSTANCE of the game window the process created; the return aliases the argument and the stored word; the previous stored word was null on both sides; and the stored word aliases the argument and the return. The captured candidate image (f9f3b9ee..., receipt 158f189c...) validated against the current tree and engine/src/retail/core/app_startup_natives.cpp at capture start and after capture. This is runtime parity for the single documented startup call, not a VERIFIED claim.",
+  "retail_call_site": {
+    "entry_va": "0x0048F0D0",
+    "name": "StoreInstanceHandle",
+    "bytes": "8b 44 24 04 a3 c0 8b 5c 00 c3",
+    "instructions": [
+      "0x0048F0D0  mov eax, dword [esp+4]",
+      "0x0048F0D4  mov dword [0x005C8BC0], eax",
+      "0x0048F0D9  ret"
+    ],
+    "basic_blocks": 1,
+    "calling_convention": "cdecl",
+    "arguments": [
+      {
+        "index": 0,
+        "location": "[esp+4]",
+        "type": "HINSTANCE",
+        "meaning": "WinMain's first argument (hInstance). main 0x0048F530 loads it into EBP at 0x0048F585 from [esp+0x478] and pushes EBP at 0x0048F5F9 before the call at 0x0048F5FA."
+      }
+    ],
+    "return_value": "EAX keeps the loaded 32-bit argument on the only path",
+    "store": {
+      "va": "0x005C8BC0",
+      "width_bytes": 4,
+      "instruction_va": "0x0048F0D4"
+    },
+    "caller": {
+      "entry": "0x0048F530",
+      "retail_symbol": "main",
+      "range": "0x0048F530-0x0048F912",
+      "call_site": "0x0048F5FA",
+      "argument_source": "EBP = [esp+0x478] loaded at 0x0048F585 (WinMain hInstance)",
+      "order": "immediately after the 0x0048F0C0 StoreCommandLine call at 0x0048F5F4; the two stores are adjacent and precede the first CreateWindowExA"
+    },
+    "artifact": {
+      "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "preferred_image_base": "0x00400000",
+      "architecture": "x86 PE32"
+    },
+    "static_evidence": {
+      "note": "The existing semantic review for this address records the Binary Ninja 6.0.10601, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast results; this runtime task re-checked the raw retail bytes and call site with i686-w64-mingw32-objdump rather than re-running a second decompiler.",
+      "semantic_review_path": "docs/fidelity/evidence/0x0048F0D0-semantic-review.json",
+      "objdump_commands": [
+        "i686-w64-mingw32-objdump -d --start-address=0x48f0d0 --stop-address=0x48f0db /Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "i686-w64-mingw32-objdump -d --start-address=0x48f5e6 --stop-address=0x48f605 /Users/haseeb-mir/Downloads/IGI/igi.exe"
+      ]
+    }
+  },
+  "candidate_wiring": {
+    "image": {
+      "path": "build-clean-win32/igi1.exe",
+      "sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "built_at": "2026-10-23T10:11:34.119510+00:00",
+      "note": "This is the current linked candidate, rebuilt by concurrent work in this shared worktree after the task-context image 11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581. The source digest engine/src/retail/core/app_startup_natives.cpp = 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a is unchanged, and the StoreInstanceHandle body is identical."
+    },
+    "receipt": {
+      "path": "build-clean-win32/candidate-receipt.json",
+      "sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+      "valid_for_current_tree_and_native_source_at_start": true,
+      "valid_for_current_tree_and_native_source_after_capture": true
+    },
+    "entry_point": {
+      "symbol": "_WinMain@16",
+      "va": "0x00406B50"
+    },
+    "calls": [
+      {
+        "va": "0x00406BF9",
+        "target": "_StoreCommandLine",
+        "argument": "WinMain lpCmdLine from [ebp+0x10]"
+      },
+      {
+        "va": "0x00406C04",
+        "target": "_StoreInstanceHandle",
+        "argument": "WinMain hInstance from [ebp+8]"
+      }
+    ],
+    "native": {
+      "symbol": "_StoreInstanceHandle",
+      "va": "0x0041E850",
+      "bytes": "8b 44 24 04 a3 bc 1b 5e 00 c3",
+      "state_symbol": "_InstanceHandle",
+      "state_va": "0x005E1BBC",
+      "store_instruction_va": "0x0041E854",
+      "body_note": "loads the same cdecl word from [esp+4], stores it to the candidate InstanceHandle global and returns it in EAX; one basic block."
+    },
+    "window": {
+      "class": "IGI.Retail.ModelScene",
+      "source": "engine/platform/windows/retail_model_scene.cpp:2260",
+      "note": "The current diagnostic model-scene shell creates this class. The retail window class is \"Innerloop\". The class name is per-side window identification, not a compared native behaviour."
+    },
+    "source": {
+      "path": "engine/src/retail/core/app_startup_natives.cpp",
+      "sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a"
+    },
+    "static_check_commands": [
+      "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe",
+      "i686-w64-mingw32-objdump -d --start-address=0x406bf3 --stop-address=0x406c0a build-clean-win32/igi1.exe",
+      "i686-w64-mingw32-objdump -d --start-address=0x41e850 --stop-address=0x41e85b build-clean-win32/igi1.exe"
+    ]
+  },
+  "paired_capture": {
+    "capture_directory": "build/runtime-traces/20261023T100539Z-48f0d0-paired",
+    "capture_file": "build/runtime-traces/20261023T100539Z-48f0d0-paired/pair.json",
+    "capture_sha256": "394391f2bf13ce23df01c7d920d341b33a24082fd26ce5f6908736828baf36a1",
+    "created_utc": "2026-10-23T10:21:28.235104+00:00",
+    "finished_utc": "2026-10-23T10:22:32.811763+00:00",
+    "order": "retail first, candidate only after retail's owned process was confirmed gone",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "working_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "windows_working_directory": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "display_mode": "windowed",
+    "frida_host": "127.0.0.1:27042",
+    "frida_client_version": "17.24.0",
+    "spawn": "Frida device.spawn of the executable with arguments [window, level1] and cwd Z:\\Users\\haseeb-mir\\Downloads\\IGI; the probe was loaded and its hook confirmed installed before device.resume(pid).",
+    "observation_bounds": {
+      "settle_seconds": 45.0,
+      "post_call_observe_seconds": 30.0,
+      "escape_action_delay_seconds": 2,
+      "note": "The post-call observation bound was extended from the precedent default of 5 s to 30 s because startup to window creation can approach the 5 s boundary. The scenario, inputs and action probe are unchanged; the final capture observed the window relation 2.405 s after the retail call and 0.206 s after the candidate call, so the larger bound did not alter the observed relations."
+    },
+    "owned_pids": {
+      "retail": 1912,
+      "candidate": 1688
+    },
+    "owned_processes_terminated": {
+      "retail": true,
+      "candidate": true
+    },
+    "probe": {
+      "path": "scripts/frida_store_instance_handle_typed.js",
+      "sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+      "reviewed_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+      "sha256_matches_reviewed": true
+    },
+    "driver": {
+      "path": "scripts/frida_scoped_capture.py",
+      "sha256": "1119bd16344112c7f622e25372cf7441cff1c2d08b4540a01432346b66933ed6",
+      "note": "capture() reused directly; main() gate precondition unsatisfied"
+    },
+    "actions": {
+      "path": "scripts/frida_scenario_actions.js",
+      "sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7"
+    },
+    "harness": {
+      "path": "build/runtime-traces/20261023T100539Z-48f0d0-paired/run_capture.py",
+      "sha256": "e34e593f8fd8820dd8b4ae7713ec2397fb1b2bc07c1af51ab5706aa8fc8f9c3b",
+      "note": "local harness; reuses scripts/frida_scoped_capture.py capture() unchanged"
+    },
+    "binaries": {
+      "retail": {
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+      },
+      "candidate": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
+        "sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+      },
+      "candidate_staged": {
+        "path": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-cqzk11o0.exe",
+        "sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+      }
+    },
+    "observations": {
+      "retail": {
+        "call_count": 1,
+        "typed_state": {
+          "scope": "startup-instance-handle-store",
+          "inputs": {
+            "instance_handle": "process-instance-handle",
+            "instance_handle_state": "known",
+            "argument_is_null": false,
+            "argument_non_null": true,
+            "argument_equals_module_base": true,
+            "argument_module_base_state": "known",
+            "argument_is_process_instance_handle": true,
+            "argument_consistent_with_first": true,
+            "argument_consistency_state": "first-observation",
+            "argument_reads": [
+              {
+                "index": 0,
+                "state": "value",
+                "source": "args[0]"
+              },
+              {
+                "index": 1,
+                "state": "value",
+                "source": "args[1]"
+              },
+              {
+                "index": 2,
+                "state": "value",
+                "source": "args[2]"
+              },
+              {
+                "index": 3,
+                "state": "value",
+                "source": "args[3]"
+              }
+            ]
+          },
+          "outputs": {
+            "return_aliases_argument": true,
+            "return_aliases_argument_state": "known",
+            "return_is_null": false,
+            "return_aliases_stored": true,
+            "return_aliases_stored_state": "known"
+          },
+          "sideEffects": {
+            "previous_instance_handle": "null",
+            "previous_instance_handle_state": "known",
+            "previous_is_null": true,
+            "stored_instance_handle": "process-instance-handle",
+            "stored_instance_handle_state": "known",
+            "stored_is_null": false,
+            "stored_aliases_argument": true,
+            "stored_aliases_argument_state": "known",
+            "store_changed": true,
+            "stored_equals_return": true
+          }
+        },
+        "window_instance_observation": {
+          "found": true,
+          "class_name": "Innerloop",
+          "phase": "at-creation",
+          "instance_handle_state": "known",
+          "instance_is_null": false,
+          "instance_equals_argument": true,
+          "instance_equals_stored": true,
+          "instance_equals_module_base": true,
+          "stored_now_equals_argument": true,
+          "stored_now_state": "known",
+          "observed_after_ms": 2405
+        },
+        "escape_action": {
+          "sent": true,
+          "processId": 1912,
+          "window": "0xf00d2"
+        }
+      },
+      "candidate": {
+        "call_count": 1,
+        "typed_state": {
+          "scope": "startup-instance-handle-store",
+          "inputs": {
+            "instance_handle": "process-instance-handle",
+            "instance_handle_state": "known",
+            "argument_is_null": false,
+            "argument_non_null": true,
+            "argument_equals_module_base": true,
+            "argument_module_base_state": "known",
+            "argument_is_process_instance_handle": true,
+            "argument_consistent_with_first": true,
+            "argument_consistency_state": "first-observation",
+            "argument_reads": [
+              {
+                "index": 0,
+                "state": "value",
+                "source": "args[0]"
+              },
+              {
+                "index": 1,
+                "state": "value",
+                "source": "args[1]"
+              },
+              {
+                "index": 2,
+                "state": "value",
+                "source": "args[2]"
+              },
+              {
+                "index": 3,
+                "state": "value",
+                "source": "args[3]"
+              }
+            ]
+          },
+          "outputs": {
+            "return_aliases_argument": true,
+            "return_aliases_argument_state": "known",
+            "return_is_null": false,
+            "return_aliases_stored": true,
+            "return_aliases_stored_state": "known"
+          },
+          "sideEffects": {
+            "previous_instance_handle": "null",
+            "previous_instance_handle_state": "known",
+            "previous_is_null": true,
+            "stored_instance_handle": "process-instance-handle",
+            "stored_instance_handle_state": "known",
+            "stored_is_null": false,
+            "stored_aliases_argument": true,
+            "stored_aliases_argument_state": "known",
+            "store_changed": true,
+            "stored_equals_return": true
+          }
+        },
+        "window_instance_observation": {
+          "found": true,
+          "class_name": "IGI.Retail.ModelScene",
+          "phase": "at-creation",
+          "instance_handle_state": "known",
+          "instance_is_null": false,
+          "instance_equals_argument": true,
+          "instance_equals_stored": true,
+          "instance_equals_module_base": true,
+          "stored_now_equals_argument": true,
+          "stored_now_state": "known",
+          "observed_after_ms": 206
+        },
+        "escape_action": {
+          "sent": true,
+          "processId": 1688,
+          "window": "0x1100d8"
+        }
+      }
+    },
+    "candidate_static_check": {
+      "symbols": {
+        "entryVA": "0x0041E850",
+        "stateVA": "0x005E1BBC"
+      },
+      "layout": {
+        "entryVA": "0x0041E850",
+        "stateVA": "0x005E1BBC",
+        "windowClass": "IGI.Retail.ModelScene"
+      },
+      "receipt_validation": {
+        "valid_for_current_tree_and_native_source": true
+      },
+      "receipt_validation_after_capture": {
+        "valid_for_current_tree_and_native_source": true
+      },
+      "candidate_sha256_after_capture": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "candidate_unchanged_during_capture": true
+    },
+    "conditions_equivalent": {
+      "level": true,
+      "display_mode": true,
+      "working_directory": true,
+      "probe": true,
+      "sequential_order": true,
+      "driver": true,
+      "same_arguments": true,
+      "note": "Both sides: window level1, cwd Z:\\\\Users\\\\haseeb-mir\\\\Downloads\\\\IGI, the same probe file, the same action probe and driver, retail first then candidate, spawn suspended with the hook installed before resume.",
+      "all_true": true
+    },
+    "runtime_state_after": {
+      "frida_processes_after": [],
+      "host_game_processes_after_advisory": [
+        "56446 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --address 0x00517890 --address 0x005178E0 --address 0x00517940 --address 0x005179C0",
+        "56310 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/resource_sys_diff_runner.py --address 0x004B5C90 --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --binary-sha256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01 --implementation /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/resource/sys_resource.cpp --implementation-sha256 79828f8249015f48208a5b6ec70c11dec9277e06b85d9a05674cd3f6a7060e1d --root /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow",
+        "56333 /Library/Frameworks/Python.framework/Versions/3.12/Resources/Python.app/Contents/MacOS/Python /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/resource_sys_diff_runner.py --address 0x004B5C90 --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --worker-candidate /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-sys-dw4nnxp1/resource_sys_candidate.dll"
+      ],
+      "host_note": "The host advisory lines are other agents' analysis commands whose command lines mention igi.exe; they are not game processes. The decisive Frida endpoint list is empty and no owned or foreign game/probe process remained.",
+      "candidate_sha256_after": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+      "receipt_sha256_after": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
+      "staged_candidate_remaining": false
+    }
+  },
+  "window_instance_contract": {
+    "definition": "The \"instance handle the window was created with\" is read from GWL_HINSTANCE (-6) of the game window created by the instrumented process, identified by the per-side window class: retail \"Innerloop\", candidate \"IGI.Retail.ModelScene\". The probe hooks CreateWindowExW and CreateWindowExA and reads the created HWND on return, with a visible-window poll over the same class as a fallback.",
+    "not_compared_across_processes": "The window class name and the raw HINSTANCE address differ between processes and are not compared. The compared facts are: a window of the declared class exists, its HINSTANCE is non-null, and it equals the argument, the stored word and the module base in that process.",
+    "retail": {
+      "class_name": "Innerloop",
+      "phase": "at-creation",
+      "observed_after_ms": 2405,
+      "instance_handle_state": "known",
+      "instance_is_null": false,
+      "instance_equals_argument": true,
+      "instance_equals_stored": true,
+      "instance_equals_module_base": true,
+      "stored_now_equals_argument": true
+    },
+    "candidate": {
+      "class_name": "IGI.Retail.ModelScene",
+      "phase": "at-creation",
+      "observed_after_ms": 206,
+      "instance_handle_state": "known",
+      "instance_is_null": false,
+      "instance_equals_argument": true,
+      "instance_equals_stored": true,
+      "instance_equals_module_base": true,
+      "stored_now_equals_argument": true
+    },
+    "diagnostic_evidence": {
+      "path": "build/runtime-traces/20261023T100539Z-48f0d0-paired/diagnose/windows.json",
+      "sha256": "10cd26463579d783119a81dded76540eb07f3d70aee7183796a63767ee60bda8",
+      "note": "A post-launch diagnostic enumeration (not part of the acceptance probe) found the candidate game window class IGI.Retail.ModelScene, visible, plus hidden Wine IME windows; this identified the per-side class before the final capture."
+    }
+  },
+  "per_field_comparison": {
+    "calls_compared": 1,
+    "fields_compared": 31,
+    "fields_matched": 31,
+    "all_fields_matched": true,
+    "behaviorally_equal": true,
+    "probe_surface_differences": null,
+    "fields": [
+      {
+        "field": "instance_handle",
+        "retail": "process-instance-handle",
+        "candidate": "process-instance-handle",
+        "match": true
+      },
+      {
+        "field": "instance_handle_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "argument_is_null",
+        "retail": false,
+        "candidate": false,
+        "match": true
+      },
+      {
+        "field": "argument_non_null",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "argument_equals_module_base",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "argument_module_base_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "argument_is_process_instance_handle",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "argument_consistent_with_first",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "argument_consistency_state",
+        "retail": "first-observation",
+        "candidate": "first-observation",
+        "match": true
+      },
+      {
+        "field": "return_aliases_argument",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "return_aliases_argument_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "return_is_null",
+        "retail": false,
+        "candidate": false,
+        "match": true
+      },
+      {
+        "field": "return_aliases_stored",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "return_aliases_stored_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "previous_instance_handle",
+        "retail": "null",
+        "candidate": "null",
+        "match": true
+      },
+      {
+        "field": "previous_instance_handle_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "previous_is_null",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "stored_instance_handle",
+        "retail": "process-instance-handle",
+        "candidate": "process-instance-handle",
+        "match": true
+      },
+      {
+        "field": "stored_instance_handle_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "stored_is_null",
+        "retail": false,
+        "candidate": false,
+        "match": true
+      },
+      {
+        "field": "stored_aliases_argument",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "stored_aliases_argument_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "store_changed",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "stored_equals_return",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "window_found",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "window_instance_handle_state",
+        "retail": "known",
+        "candidate": "known",
+        "match": true
+      },
+      {
+        "field": "window_instance_is_null",
+        "retail": false,
+        "candidate": false,
+        "match": true
+      },
+      {
+        "field": "window_instance_equals_argument",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "window_instance_equals_stored",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "window_instance_equals_module_base",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      },
+      {
+        "field": "window_stored_now_equals_argument",
+        "retail": true,
+        "candidate": true,
+        "match": true
+      }
+    ],
+    "window_fields": [
+      "window_found",
+      "window_instance_handle_state",
+      "window_instance_is_null",
+      "window_instance_equals_argument",
+      "window_instance_equals_stored",
+      "window_instance_equals_module_base",
+      "window_stored_now_equals_argument"
+    ],
+    "window_excluded_fields": {
+      "class_name": "per-side window identification; retail \"Innerloop\" vs candidate \"IGI.Retail.ModelScene\"; never compared across processes",
+      "phase": "both at-creation; probe provenance, recorded in window_instance_contract",
+      "stored_now_state": "both known; state marker, recorded in window_instance_contract; the relation stored_now_equals_argument is compared",
+      "observed_after_ms": "timing only (retail 2405 ms, candidate 206 ms); not a behaviour"
+    },
+    "field_set_note": "The 31 compared fields are every typed field in the reviewed native contract (24 primary typedState fields plus the 7 window HINSTANCE relation fields). class_name, phase, stored_now_state and observed_after_ms are recorded as provenance/timing and are not compared across processes.",
+    "observed_values": {
+      "instance_handle": "process-instance-handle",
+      "instance_handle_state": "known",
+      "argument_is_null": false,
+      "argument_non_null": true,
+      "argument_equals_module_base": true,
+      "argument_module_base_state": "known",
+      "argument_is_process_instance_handle": true,
+      "argument_consistent_with_first": true,
+      "argument_consistency_state": "first-observation",
+      "return_aliases_argument": true,
+      "return_aliases_argument_state": "known",
+      "return_is_null": false,
+      "return_aliases_stored": true,
+      "return_aliases_stored_state": "known",
+      "previous_instance_handle": "null",
+      "previous_instance_handle_state": "known",
+      "previous_is_null": true,
+      "stored_instance_handle": "process-instance-handle",
+      "stored_instance_handle_state": "known",
+      "stored_is_null": false,
+      "stored_aliases_argument": true,
+      "stored_aliases_argument_state": "known",
+      "store_changed": true,
+      "stored_equals_return": true,
+      "window_found": true,
+      "window_instance_handle_state": "known",
+      "window_instance_is_null": false,
+      "window_instance_equals_argument": true,
+      "window_instance_equals_stored": true,
+      "window_instance_equals_module_base": true,
+      "window_stored_now_equals_argument": true
+    }
+  },
+  "attempt_history": {
+    "note": "Earlier attempts are retained so the final capture is not mistaken for a first try. None was promoted; only the final capture satisfies the call-plus-window contract.",
+    "attempts": [
+      {
+        "attempt": 1,
+        "directory": "build/runtime-traces/20261023T100539Z-48f0d0-paired/attempt-1",
+        "capture_sha256": "8e704839f841813386ad5b9542fbb3e9f3d740ea30f97bdf09fad7b6924faf4a",
+        "result": "captured",
+        "error": null,
+        "candidate_sha256": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
+        "probe_sha256": "0eb14f197f13e515de98471f9ce16d38620b81a33176ae218126ef86e985bc04",
+        "retail_observation_count": 1,
+        "candidate_observation_count": 1,
+        "retail_window_observation_count": 1,
+        "candidate_window_observation_count": 0,
+        "fields_matched": 24,
+        "fields_compared": 24,
+        "behaviorally_equal": false
+      },
+      {
+        "attempt": 2,
+        "directory": "build/runtime-traces/20261023T100539Z-48f0d0-paired/attempt-2",
+        "capture_sha256": "5285d6732652fea0aae0c9c222af12f0a5fa67164fa2d783bd1880fb17e47983",
+        "result": "captured",
+        "error": null,
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "probe_sha256": "6d267b295949c866ba725986aa28f6feffc21aa181c5053c32cb6f3580d81e69",
+        "retail_observation_count": 1,
+        "candidate_observation_count": 1,
+        "retail_window_observation_count": 1,
+        "candidate_window_observation_count": 0,
+        "fields_matched": 24,
+        "fields_compared": 24,
+        "behaviorally_equal": false
+      },
+      {
+        "attempt": 3,
+        "directory": "build/runtime-traces/20261023T100539Z-48f0d0-paired/attempt-3",
+        "capture_sha256": "0b5f2d9adccec97a4305cb4bf3ef19ba6994b78fd89ebada103db16727a8761f",
+        "result": "captured",
+        "error": null,
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "probe_sha256": "6d267b295949c866ba725986aa28f6feffc21aa181c5053c32cb6f3580d81e69",
+        "retail_observation_count": 1,
+        "candidate_observation_count": 1,
+        "retail_window_observation_count": 1,
+        "candidate_window_observation_count": 1,
+        "fields_matched": 24,
+        "fields_compared": 32,
+        "behaviorally_equal": false
+      },
+      {
+        "attempt": 4,
+        "directory": "build/runtime-traces/20261023T100539Z-48f0d0-paired/attempt-4",
+        "capture_sha256": "c8933e9e4a9c39c7ded4d932861bd54857e151ca20862d09e50557db92395fe5",
+        "result": "failed",
+        "error": "game/probe process remained after capture",
+        "candidate_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+        "probe_sha256": "07f179ec5c76bd517ba29d9e2dbf2957c88ad5a84d85f19c9261bfb58ae4dcaf",
+        "retail_observation_count": 1,
+        "candidate_observation_count": 0,
+        "retail_window_observation_count": 1,
+        "candidate_window_observation_count": 0,
+        "fields_matched": 0,
+        "fields_compared": 0,
+        "behaviorally_equal": null
+      }
+    ],
+    "details": [
+      "Attempt 1 (10:08:31-10:08:49 UTC): probe 0eb14f19, candidate 11f93920 (the task-context image), no window-creation hook and retail-class-only poll. Both sides observed the call and all 24 primary typed fields matched, but the candidate window relation was absent; not accepted.",
+      "Attempt 2 (10:11:56-10:12:57 UTC): probe 6d267b29, candidate f9f3b9ee, default 5 s post-call observation. Preflight waited 42.82 s for a foreign open-igi-probe process. Retail observed its window relation only at 4.995 s and the candidate window creation missed the deadline; 24 primary fields matched but the candidate window relation was absent; not accepted.",
+      "Attempt 3 (10:15:23-10:16:52 UTC): same probe, 30 s observation. Both calls observed, but the probe still expected the retail class \"Innerloop\" and the candidate window class is \"IGI.Retail.ModelScene\"; 24/32 fields matched; not accepted.",
+      "Attempt 4 (10:19:57-10:20:35 UTC): per-side window classes, but concurrent work in the same worktree launched a foreign retail igi.exe window level4 during the capture; the candidate side exited before the native call while that foreign retail process was running. The capture failed, and the foreign process was never attached to, signalled or terminated; not accepted.",
+      "Final attempt (10:21:28-10:22:32 UTC): preflight clear, both sides observed exactly one call and one window relation, 31/31 compared fields identical, candidate receipt valid before and after, candidate image unchanged, no process remained; accepted."
+    ]
+  },
+  "conditions_equivalent": {
+    "level": true,
+    "display_mode": true,
+    "working_directory": true,
+    "probe": true,
+    "sequential_order": true,
+    "driver": true,
+    "same_arguments": true,
+    "note": "Both sides: window level1, cwd Z:\\\\Users\\\\haseeb-mir\\\\Downloads\\\\IGI, the same probe file, the same action probe and driver, retail first then candidate, spawn suspended with the hook installed before resume.",
+    "all_true": true
+  },
+  "limitations": [
+    "Single call and single scenario: exactly one invocation was observed per side at level 1, windowed, command line \"window level1\", one game-data working directory. The argument consistency field is therefore true over one call; the retail call site 0x0048F5FA is statically unique, but this capture does not exercise a second call or another path.",
+    "The accepted candidate image is f9f3b9ee... (receipt 158f189c...), built by concurrent work at 10:11:34 UTC. The task-context image 11f93920... is no longer present; attempt 1 tested it and observed the same 24 primary typed fields matching but lacked the candidate window relation. The current source digest 337c5d57... is unchanged and the native body is identical. A later concurrent rebuild would supersede this image/receipt pair.",
+    "The candidate window class is \"IGI.Retail.ModelScene\" (diagnostic model-scene shell), while retail uses \"Innerloop\". The class names are per-side identification and are not compared; only the HINSTANCE relations are part of the native contract. The candidate class is not claimed to be retail-equivalent.",
+    "The window relation is read at CreateWindowExA/W return via GWL_HINSTANCE; the final capture used the at-creation hook on both sides. The visible-window poll fallback was not needed. Visibility, window style, title and class equivalence are outside the compared contract.",
+    "The driver observation bound was 30 s after the first observed call (settle 45 s), not the precedent 5 s. This is a timing parameter, identical on both sides; the observed window relations arrived within 2.405 s (retail) and 0.206 s (candidate) of the call. Escape was still delivered at >= 2 s by the unchanged action probe.",
+    "The retail caller main 0x0048F530 discards EAX after 0x0048F5FA, so the returned alias is observed through the Interceptor return value, not through a retail consumer.",
+    "Pointer values are process-local and were never compared as raw addresses. The compared facts are classes and within-process aliasing relations (argument, stored word, return, main module base, created window HINSTANCE).",
+    "Attempts 1-4 are retained as failed/partial evidence; only the final capture is the acceptance capture. Attempt 4 was disturbed by concurrent work in this shared worktree, and attempt 2 preflight waited for a foreign probe. The final preflight was clear on the decisive Frida process list; the host advisory after capture lists other agents' analysis commands, not games.",
+    "This is runtime evidence for one native call. It says nothing about other natives, rendering, input, terrain, AI or any deferred subsystem, and it does not promote VERIFIED."
+  ],
+  "establishes": [
+    "Retail 0x0048F0D0 executes exactly once in the level 1 windowed startup and stores the WinMain hInstance word to 0x005C8BC0, returning the argument in EAX.",
+    "The current candidate _StoreInstanceHandle executes exactly once at the same point in its WinMain, stores the hInstance word to its InstanceHandle global and returns the argument.",
+    "On both sides the argument is non-null, is the process instance handle (equal to the main module base), is consistent with the first observation, and equals the HINSTANCE of the game window the process created.",
+    "On both sides the return aliases the argument and the stored word; the previous stored word was null; the store changed the word and the stored word aliases the argument.",
+    "The paired capture ran retail first, then the candidate after retail was gone, with both executables spawned suspended and the same probe installed before resume; both binary digests and the candidate receipt were recorded and validated."
+  ],
+  "does_not_establish": [
+    "Runtime parity beyond the single documented call, level and mode; multiple calls, other levels, fullscreen mode, other command lines or other working directories were not captured.",
+    "Equivalence of the surrounding startup sequence, window class, window style/title/visibility, rendering, input, terrain or any other native.",
+    "A VERIFIED status for 0x0048F0D0 or for the game. The capture is single-call runtime evidence.",
+    "That a later candidate rebuild is equivalent; the tested image and receipt digests bind only the captured bytes."
+  ],
+  "recommended_next_step": "The Lead should apply build/manifest-patches/0x0048F0D0-runtime.json, which records the reviewed runtime contract and the runtime_test binding for this capture, and keep the capture directory and candidate image/receipt together. If reproducibility is required, repeat the same procedure on a stable tree; revalidate the receipt immediately before capture because the shared worktree is edited concurrently."
+}

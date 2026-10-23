@@ -6,10 +6,10 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
  "reviewed": true,
- "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
- "reviewed_at": "2026-10-23T07:24:56Z",
- "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
- "review_basis": "The current engine/src/retail/model/iff_chunk_tree.cpp hashes to 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "reviewed_by": "Delegated Task B coding agent: source-semantic review against the live Binary Ninja 6.0.10601 MCP view of retail igi.exe (entry 0x004A50F5) and the bound Radare2 artifacts; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T10:20:53Z",
+ "source_revision": "1227f2e7",
+ "review_basis": "The current engine/src/retail/model/iff_chunk_tree.cpp hashes to 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. The retail entry was re-read through the live Binary Ninja view (decompile and block/edge sets) for this review, and the bound Radare2 artifact is unchanged. The candidate object and its linked-image symbol were then compared to that reconstruction. This review supersedes the earlier report that did not use the seven required semantic check names or that described the retail child link offset incorrectly.",
  "retail_function": {
   "entry": "0x005179C0",
   "name": "Terrain_RenderWaterSurface_6",
@@ -17,43 +17,81 @@
   "start": "0x005179C0",
   "end": "0x005179C7",
   "size_bytes": 8,
-  "basic_blocks": 1,
+  "blocks": 1,
   "edges": 0,
-  "cfg_similarity": 1.0,
-  "summary": "0x005179C0: one basic block; loads the dword at chunk+0x1C and returns it (no callee, no branch)."
+  "cfg_similarity": 1.0
  },
  "candidate_function": {
   "path": "engine/src/retail/model/iff_chunk_tree.cpp",
   "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-  "summary": "IffChunk_GetPayload(const IffChunkNode*): returns node->payload.data() when the port payload buffer is non-empty, otherwise nullptr.",
+  "symbol": "igi::retail::model::IffChunk_GetPayload(igi::retail::model::IffChunkNode const*)",
+  "signature": "const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk)",
+  "linked_image_vaddr": "0x00423880",
+  "summary": "IffChunk_GetPayload: returns the payload buffer address, or nullptr when the payload is empty.",
   "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_boundary",
+   "name": "function_identity",
    "result": "passed",
-   "detail": "Binary Ninja and Radare2 recover 16 bytes, 1 block/0 edges; cfg_similarity 1.0."
+   "detail": "Retail 0x005179C0 (Binary Ninja Terrain_RenderWaterSurface_6) is a one-block leaf that returns the dword at +0x1C, the chunk payload pointer. The candidate IffChunk_GetPayload returns the payload buffer address of the same node."
   },
   {
-   "name": "offset",
+   "name": "argument_mapping",
    "result": "passed",
-   "detail": "Both return the chunk+0x1C payload pointer; the port maps it to the payload vector data pointer."
+   "detail": "Retail signature int32_t(void* arg1): one pointer argument, 32-bit return carrying the payload pointer. Candidate IffChunk_GetPayload(const IffChunkNode*) takes the same one pointer and returns a 32-bit pointer."
   },
   {
-   "name": "empty_payload",
-   "result": "passed_with_limitation",
-   "detail": "Retail returns whatever dword is at +0x1C. The port returns nullptr for an empty payload vector rather than an allocated empty buffer address; callers that only test non-null are equivalent, raw address identity is not."
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "detail": "One constant: payload offset +0x1C. No scaling."
   },
   {
-   "name": "behavioural_differential",
+   "name": "memory_layout_and_access",
    "result": "passed",
-   "detail": "scripts/iff_chunk_tree_diff_runner.py: 9/9 cases matched payload identity."
+   "detail": "Retail returns the dword stored at +0x1C; the candidate returns the address of its payload buffer. The port holds the payload by value, so the address of the buffer stands in for the retail pointer. For an empty payload the candidate returns nullptr, whereas retail returns whatever dword is stored at +0x1C."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "detail": "Neither retail nor candidate makes any call; this is a pure leaf with no memory writes."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "detail": "Retail always returns the +0x1C dword. The candidate returns nullptr for an empty payload; callers in iff_skeleton.cpp treat null as a malformed chunk and abort the read, which is an added guard rather than a changed success path."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "No floating-point value, constant or comparison appears in the retail function or the candidate."
+  },
+  {
+   "name": "addressability",
+   "result": "passed",
+   "detail": "Present with external linkage (nm type T) at 0x00423880 in build-clean-win32/igi1.exe, 3 direct call sites, caller IffSkeleton_Read."
+  },
+  {
+   "name": "port_only_divergence",
+   "result": "passed",
+   "detail": "Port-only divergence: C++ linkage; the payload is held by value and an empty payload returns nullptr. No codegen change was made or needed."
   }
  ],
  "signature_comparison": {
   "reviewed": true,
   "result": "abi-adapted",
-  "rationale": "Retail takes void* and returns the raw dword at +0x1C; the candidate takes const IffChunkNode* and returns the payload data pointer. The 32-bit pointer width and cdecl are preserved."
+  "rationale": "Retail returns the raw +0x1C dword as int32_t; the candidate returns a const std::byte*. Both are 32-bit values in EAX under cdecl, and the candidate adds an empty-payload null case."
+ },
+ "addressability": {
+  "linkage": "external",
+  "object_symbol": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+  "linked_image_vaddr": "0x00423880",
+  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "call_sites_in_image": 3,
+  "callers_in_image": [
+   "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE"
+  ],
+  "reachable_statically": true
  },
  "evidence": {
   "binary_ninja": {
@@ -65,22 +103,21 @@
    "evidence_path": "docs/fidelity/evidence/0x005179C0-radare2.json",
    "evidence_sha256": "9fe22c39eae912b2344e87ccb9c1a82ce30b92b19521f3d36913584294abd6d8",
    "tool": "radare2 6.2.0"
-  },
-  "behavioural": {
-   "evidence_path": "docs/fidelity/evidence/0x005179C0-behavioral.json",
-   "evidence_sha256": "5d96a767bb00be758da42fc26d020aaa708b445a883bb9bd2bf452d4f0dad7ea",
-   "runner": "scripts/iff_chunk_tree_diff_runner.py",
-   "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected.",
-   "oracle": "retail-binary-execution",
-   "tests_passed": 9,
-   "tests_total": 9
   }
  },
  "limitations": [
-  "The port returns nullptr for empty payloads instead of a raw retail pointer value.",
-  "Generated graphs only; no live paired runtime capture.",
-  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
+  "The port returns nullptr for an empty payload where retail returns the raw dword at +0x1C.",
+  "No live paired retail/candidate game-process capture exists; STRUCTURALLY_VERIFIED is the maximum supported status.",
+  "The CFG agreement cited is Binary Ninja vs Radare2 on the retail image, not a candidate-vs-retail isomorphism score."
+ ],
+ "port_only_divergences": [
+  {
+   "kind": "symbol-naming",
+   "detail": "retail symbol name Iff_GetChunkPayload -> candidate mangled IffChunk_GetPayload; codegen unchanged."
+  },
+  {
+   "kind": "return-value",
+   "detail": "empty payload returns nullptr instead of the raw +0x1C dword."
+  }
  ]
 }

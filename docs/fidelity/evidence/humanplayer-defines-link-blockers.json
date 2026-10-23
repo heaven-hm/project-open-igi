@@ -61,5 +61,35 @@
  ],
  "limitations": [
   "The scratch link was run outside CMake against the current objects.a to enumerate the unresolved references; it did not modify the target or produce a candidate image."
- ]
+ ],
+ "reproduced_20261023": {
+  "executed_at": "2026-10-23T15:34:00+05:30",
+  "candidate_sha256_verified": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
+  "candidate_sha256_note": "The digest stated in the 2026-10-23 task (11f939200afd865bf728b1e38a22e750b8ba1b7f07f2b58bc09a58c4d6e2ffd0) does not match build-clean-win32/igi1.exe; the value above is the verified file digest.",
+  "compile": {
+   "command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -std=c++20 -I engine/include -c engine/src/retail/script/humanplayer_defines.cpp -o /tmp/hp-standalone.o",
+   "exit_code": 0,
+   "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7",
+   "reproduced": true
+  },
+  "link": {
+   "exit_code": 1,
+   "undefined_reference_diagnostics": 8,
+   "distinct_undefined_symbols": 5,
+   "nm_over_objects_and_exe": "No definition of Qvm_Execute, Config_SaveGraphicOptions, Config_SaveSoundOptions, Config_NoD3DDriversWithHard or Config_Language_2 exists in build-clean-win32/CMakeFiles/igi.dir/objects.a or build-clean-win32/igi1.exe; only the unrelated Qvm_ExecuteInstructions (0x004BCFD0) is present.",
+   "result": "blocked"
+  },
+  "per_address_audit": {
+   "0x00405850": "docs/fidelity/evidence/0x00405850-source-audit-20261023.json",
+   "0x00410070": "docs/fidelity/evidence/0x00410070-source-audit-20261023.json",
+   "0x004137A0": "docs/fidelity/evidence/0x004137A0-source-audit-20261023.json"
+  }
+ },
+ "source_divergence_20261023": {
+  "summary": "Two of the three natives are not retail-faithful in addition to being absent from the image; linking them would not make them correct.",
+  "0x00405850": "The candidate wrapper matches the retail call order and branch selection (Binary Ninja bn_function_callees at 0x00405850).",
+  "0x00410070": "The candidate reads a flat float array and never calls the retail script accessor 0x004B8A50; the retail fetches each argument through 0x004B8A50 and writes eight named values plus two tables, and it scales indices 1-3 by 4096000.0f and 9.259259e-06f. The candidate applies only 1/108000 and discards its wide-scale value.",
+  "0x004137A0": "The candidate probes the filesystem for COMMON/humanplayer/humanplayer.qsc and opens it as a resource; the retail calls Qvm_Load on LOCAL:humanplayer/humanplayer.qsc, then Qvm_Execute and Qvm_Cleanup, and on failure calls Debug_Error and never returns. The retail result type is int32_t, not void.",
+  "missing_after_correction": "A retail-faithful DefineHumanPlayerGeneral also needs 0x004B8A50 (script float-argument getter), which is likewise absent from the target."
+ }
 }
