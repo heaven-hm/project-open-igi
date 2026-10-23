@@ -146,6 +146,17 @@ std::int32_t probe_seek_stub(std::int32_t device, std::int32_t* context, std::in
     return 0;
 }
 
+// Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
+// enough to take the branch that allocates and returns the loader block.
+void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
+{
+    static_cast<void>(path);
+    static_cast<void>(first);
+    static_cast<void>(second);
+    static void* slot = nullptr;
+    return &slot;
+}
+
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
 {
     const auto record = diagnostics::Log_FormatTimestampedRecord(
@@ -2558,6 +2569,19 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Device_SetCheckHeap(1, &probe_seek_stub);
             static_cast<void>(
                 igi::retail::resource::Device_SeekStream(stream_context, 0));
+        }
+
+        // Qvm_Load. Retail returned a pointer. The scene leaves the script flags in debug-compile mode,
+        // which is also what the flag natives observed, so the fixture takes the precompiled path: the
+        // scene registers the '.QVM' name that path probes and models the symbol resolver it consults.
+        // Resetting the flags instead would add a zero return to Script_GetDebugCompileState, a class
+        // retail never produced.
+        {
+            static std::uint8_t qvm_buffer[0x10]{};
+            igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\LEVEL5.QVM", qvm_buffer, sizeof(qvm_buffer));
+            igi::retail::script::Sys_SetResolveSymbol28(&retail_qvm_resolve_stub);
+            static_cast<void>(igi::retail::script::Qvm_Load("DATA\\LEVEL5.FF"));
         }
 
         // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the
