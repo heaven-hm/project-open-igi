@@ -2,6 +2,7 @@
 #define UNICODE
 #define _UNICODE
 #include "igi/retail/core/app_context.hpp"
+#include "igi/retail/core/app_startup_natives.hpp"
 #include "igi/retail/core/debug_command_line.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/model/mef_model_loader.hpp"
@@ -335,7 +336,7 @@ LRESULT CALLBACK window_procedure(HWND window_handle,
 
 } // namespace
 
-int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command)
+int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR command_line, int show_command)
 {
 
     // Retail IGI.EXE creates the single-instance mutex at 0x0048F544 with
@@ -359,6 +360,25 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command
         MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
         return 0;
     }
+
+    // Retail IGI.EXE main 0x0048F530 stores the startup command line and then the
+    // instance handle, in that order, after the single-instance mutex check and
+    // before any window is created (CreateWindowExA is at 0x0048F770):
+    //   0x0048F585  mov ebp, [esp+0x478]      ; WinMain hInstance (entry [esp+4])
+    //   0x0048F5EC  mov ecx, [esp+0x480]      ; WinMain lpCmdLine (entry [esp+0xc])
+    //   0x0048F5F3  push ecx
+    //   0x0048F5F4  call 0x0048F0C0           ; StoreCommandLine(lpCmdLine)
+    //   0x0048F5F9  push ebp
+    //   0x0048F5FA  call 0x0048F0D0           ; StoreInstanceHandle(hInstance)
+    // Both return values are left in EAX and never read by main. The same real
+    // WinMain arguments are forwarded here: no substitute command line is invented
+    // when lpCmdLine is empty or null, so the native sees exactly what the CRT
+    // startup passed. The retail registers its window class just before these two
+    // calls; this shell registers the class in the scene/shell paths that follow,
+    // so the two stores are kept adjacent and ahead of both argument parsing and
+    // window creation.
+    StoreCommandLine(command_line);
+    StoreInstanceHandle(instance_handle);
 
     int argument_count = 0;
     wchar_t** arguments = CommandLineToArgvW(GetCommandLineW(), &argument_count);
