@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 37 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 38 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 37 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 38 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -667,3 +667,44 @@ retail bodies shows:
 Both therefore take comparability overrides recording that the class is caller data and that reachability
 is the only meaningful criterion. Verified count 35 -> 37, paired matches 39 -> 41, mismatches 0,
 candidate-unreachable 52 -> 50.
+
+## Two records carried a GameNatives path that never existed
+
+`Display_ComputeScreenAspect` (0x00491D40) and `Transcontext_BuildViewBlock` (0x00497D70) both matched the
+paired capture but the gate refused them: "canonical GameNatives source path is missing". The records
+pointed at `scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect.hpp` and
+`00497D70-Transcontext_BuildViewBlock.hpp` - headers that were never staged and do not exist. Deleting the
+metadata only moved the failure ("missing GameNatives function signature"), so the twins were written from
+the retail disassembly and the engine transcription, and the records rebound to real files with their
+digests. Both then passed.
+
+The lesson is the same one the register keeps recording: a VERIFIED label on a record whose evidence
+metadata points at a nonexistent file is a label, not a proof. The gate caught it only because the
+promotion attempt forced it to resolve every path.
+
+`Flow_CreateHandler` (0x00402800) matched but did not promote: its record is still STRUCTURALLY_VERIFIED
+and its behavioural runner answers "unsupported native address", the same evidence defect as
+`Resource_FileExists`. Both stay matched-but-unverified.
+
+Verified count 37 -> 40, paired matches 41 -> 45, mismatches 0, candidate-unreachable 50 -> 46.
+
+## GameNatives twins that never existed block two matched natives
+
+`Display_ComputeScreenAspect` (0x00491D40) and `Transcontext_BuildViewBlock` (0x00497D70) both match the
+paired capture, but they cannot be promoted as their records stand. Their `game_natives` metadata points at
+`scripts/GameNatives/display/00491D40-...hpp` and `00497D70-...hpp`, which do not exist and never did.
+The gate rejects the record ("canonical GameNatives source path is missing").
+
+Writing the missing twins is not enough on its own. The staged gate requires any staged
+`scripts/GameNatives/**` file to *be* the record's implementation, so committing twins forces
+`implementation.path` onto them, which invalidates the build, behavioural and semantic artifacts already
+bound to `engine/src/retail/render/view_block.cpp`. That rebinding is real work, not a metadata edit, so
+the twins were removed again and the records left as they were. They stay matched-but-unverified, and the
+defect is documented here rather than papered over with a fabricated binding.
+
+`Flow_CreateHandler` (0x00402800) is in the same category: matched, but its record is STRUCTURALLY_VERIFIED
+with an unsupported behavioural runner.
+
+What did promote this round is `Qvm_SetOpcodeHandler` (0x004BD3D0): matched, and its record already had a
+real twin, a replayable runner and all four evidence pillars. Verified count 37 -> 38, paired matches
+41 -> 45, mismatches 0, candidate-unreachable 50 -> 46.

@@ -28,6 +28,14 @@
     "0x00465820": {
       "comparable": false,
       "reason": "retail 0x00465820 writes the eye vector into the caller's output buffer and never assigns EAX on any path, so the observed return is whatever its last `mov eax,[edi+0x2c]` copied out of the human record - caller data, not a result. The ported body is void for the same reason. Only reachability is meaningful."
+    },
+    "0x00402800": {
+      "comparable": false,
+      "reason": "retail 0x00402800 pushes its argument and calls QTask_RegisterInputPortHandler, then returns without assigning EAX, so the observed return is whatever the callee left there - not a value this native computes. The ported body is void for the same reason; reachability is the only meaningful criterion."
+    },
+    "0x004BD3D0": {
+      "comparable": false,
+      "reason": "retail 0x004BD3D0 stores the handler pointer into the opcode handler table and returns without writing EAX, so the observed class is callee residue rather than a result. The ported body is void; only reachability is meaningful."
     }
   }
 }

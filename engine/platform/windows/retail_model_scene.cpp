@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/script/qvm_stack_natives.hpp"
 #include "igi/retail/human/human_camera_eye.hpp"
 #include "igi/retail/resource/sys_resource.hpp"
 #include "igi/retail/script/script_mode.hpp"
@@ -2435,6 +2436,21 @@ int RunRetailModelScene(HINSTANCE instance,
         static_cast<void>(igi::retail::script::Script_GetParseMode());
         static_cast<void>(igi::retail::resource::Resource_CreateNode(
             "DATA\\LEVEL5.FF", nullptr, nullptr, 0, 1, nullptr));
+
+        // The flow handler registration takes a flow pointer; retail leaves EAX to its callee, so only
+        // reachability is comparable and the pass registers a null handler rather than a bogus one.
+        Flow_CreateHandler(nullptr);
+        // The opcode handler table is written directly and retail never assigns EAX.
+        igi::retail::script::Qvm_SetOpcodeHandler(0, 0, nullptr);
+        // View-block construction copies a 40-byte source block, transposes it, and writes the screen
+        // origin into the caller's context, which must be at least 0x64 bytes.
+        {
+            alignas(16) std::uint8_t view_context[0x100]{};
+            alignas(16) std::uint8_t view_source[0x40]{};
+            alignas(16) std::uint8_t camera_source[0x100]{};
+            static_cast<void>(igi::retail::render::Transcontext_BuildViewBlock(
+                view_context, view_source, camera_source, 1.0F));
+        }
 
         // The human eye natives read and write fixed offsets inside the human record. Run them on a
         // zeroed record of the documented size so the ported bodies execute against a real layout;
