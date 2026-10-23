@@ -2,31 +2,10 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "radare2",
- "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
  "function_entry": "0x004B7570",
- "symbol": "fcn.004b7570",
- "signature": "fcn.004b7570 (int32_t arg_4h);",
- "analyzed_at": "2026-10-23T06:59:32Z",
- "commands": [
-  "af-*; s 0x004B7570; af; afij",
-  "af-*; s 0x004B7570; af; afbj",
-  "p8 15 @ 0x004B7570",
-  "s 0x004B7570; af-*; af @ 0x004B7570; pdf"
- ],
- "function": {
-  "size_bytes": 15,
-  "basic_block_count": 3,
-  "instruction_count": 7,
-  "call_convention": "cdecl",
-  "edge_count": 2,
-  "argument_count": 1
- },
- "bytes_hex": "8b44240485c074048b4010c333c0c3",
- "disassembly": [],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x004B7570",
   "nodes": [
    {
     "address": "0x004B7570"
@@ -50,9 +29,5 @@
     "kind": "conditional"
    }
   ]
- },
- "cfg_scope": "Retail-image CFG from Radare2 only; compared with Binary Ninja recovery of the same retail entry, not candidate code.",
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence."
- ]
+ }
 }

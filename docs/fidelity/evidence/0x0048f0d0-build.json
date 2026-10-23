@@ -1,99 +1,12 @@
 {
-  "schema_version": 1,
-  "kind": "build-report",
-  "result": "passed",
-  "address": "0x0048F0D0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a",
-  "implementation_header": {
-    "path": "engine/include/igi/retail/core/app_startup_natives.hpp",
-    "sha256": "790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50"
-  },
-  "executed": true,
-  "performed_at": "2026-10-22T22:36:00Z",
-  "source_revision": "f674b36b3441561549e9db680c26373f00556f15",
-  "command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/core/app_startup_natives.cpp -o /tmp/igi-app-startup-taskb/app_startup_natives-O3.o",
-  "target": "Windows x86, Intel 80386 relocatable object from the i686 MinGW toolchain (objdump: file format pe-i386)",
-  "scope": "Build verification only. This report records that the bound translation unit (337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a) and header (790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50) compiled for the retail x86 target and that the fresh compile produced object e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883. This revision was not relinked into build-clean-win32/igi1.exe, so no current linked-image claim is made. It is not runtime, behavioural or equivalence evidence.",
-  "result_meaning": "The compile exited 0; no runtime path was executed by this build report.",
-  "toolchain": {
-    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
-    "path": "/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-g++",
-    "flags": "-std=gnu++20 -O3 -DNDEBUG",
-    "flags_note": "The candidate build-clean-win32/CMakeFiles/igi.dir/flags.make records CXX_FLAGS = -O3 -DNDEBUG; this report adds the explicitly requested -std=gnu++20."
-  },
-  "object": {
-    "path": "/tmp/igi-app-startup-taskb/app_startup_natives-O3.o",
-    "sha256": "e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883",
-    "size_bytes": 845,
-    "format": "pe-i386 relocatable object; .text size 0x40, .bss size 0xc",
-    "symbol": "StoreInstanceHandle",
-    "object_symbol": "_StoreInstanceHandle",
-    "function_offset": 32,
-    "function_size_bytes": 10,
-    "bytes": "8b442404 a304000000 c3",
-    "relocation": {
-      "offset": 37,
-      "type": "dir32",
-      "section": ".bss",
-      "meaning": "The absolute store operand is fixed at link time to the candidate global's address."
-    },
-    "symbol_table": "nm shows StoreCommandLine at .text 0x0, GetRetailCommandLine at 0x10, StoreInstanceHandle at 0x20, GetAppTitle at 0x30; .bss holds AppTitle at +0x0, InstanceHandle at +0x4 and CommandLine at +0x8."
-  },
-  "linked_candidate": {
-    "status": "not_relinked_for_this_revision",
-    "note": "The current source has not been relinked; ./build.sh was not run. build-clean-win32/igi1.exe (596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc) predates the AppTitle global and binds the previous 281a6628... revision.",
-    "previous_revision_observation": {
-      "path": "build-clean-win32/igi1.exe",
-      "sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
-      "entry_va": "0x0041E850",
-      "function_size_bytes": 10,
-      "bytes": "8b442404 a3b85b5d00 c3",
-      "store_target_va": "0x005D5BB8",
-      "note": "Historical observation for the previous source revision only; it is not evidence for the current object."
-    }
-  },
-  "previous_full_build_binding": {
-    "receipt_path": "build-clean-win32/candidate-receipt.json",
-    "receipt_sha256": "61c35e99bd11fd717803bd6560ebe422bafbf77efad6d00786160ad535347708",
-    "receipt_kind": "diagnostic-candidate-build",
-    "receipt_result": "built",
-    "candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
-    "source_entry": "engine/src/retail/core/app_startup_natives.cpp = 281a66284c78490b987462530fa6e7b37d94ca9eb9a32daf3150c81b60dac8ed",
-    "note": "This receipt belongs to the previous revision and image. It is retained for lineage only and is not bound to the current implementation digest."
-  },
-  "checks": [
-    {
-      "name": "source_digest_binding",
-      "result": "passed",
-      "detail": "The compiled source hashed 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and its header hashed 790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50; both match the current working tree."
-    },
-    {
-      "name": "x86_object_compile",
-      "result": "passed",
-      "detail": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -c exited 0 and produced an 845-byte pe-i386 relocatable object with SHA-256 e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883."
-    },
-    {
-      "name": "compiled_sequence",
-      "result": "passed",
-      "detail": "The object's StoreInstanceHandle is exactly mov 0x4(%esp),%eax; mov %eax,<relocated InstanceHandle .bss+4>; ret (10 bytes, relocation dir32 at .text offset 0x25)."
-    },
-    {
-      "name": "linked_candidate_not_rebuilt",
-      "result": "passed",
-      "detail": "No linked-image claim is made for this revision. The previous image's StoreInstanceHandle observation is preserved separately and labelled historical."
-    },
-    {
-      "name": "sibling_block",
-      "result": "passed",
-      "detail": "The same object contains the other three start-up natives: StoreCommandLine (10-byte store .bss+8), GetRetailCommandLine (6-byte load .bss+8) and GetAppTitle (6-byte load .bss+0)."
-    }
-  ],
-  "limitations": [
-    "A successful compile does not prove behavioural equivalence; no game process was launched for this report.",
-    "The object path is a temporary local path; durable identity is the object SHA-256, which is reproducible from the bound source and flags.",
-    "Retail and candidate store absolute addresses differ by design; the semantic review and manifest runtime_layout map them. Link-time VAs for this revision are not recorded because it was not relinked.",
-    "A default -O0 object keeps a frame pointer and reloads the argument, so it is behaviourally equivalent but not byte-identical. This report records the -O3 object that matches the candidate build optimisation flags.",
-    "The previous revision's linked-image observation and receipt are retained as historical lineage only and do not bind the current implementation digest."
-  ]
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x0048F0D0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "ab6f5b8b8be17a2ab634f43288af823675a50f64ca38b6ab033c54d4ed127598",
+ "executed": true,
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/core/app_startup_natives.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
 }

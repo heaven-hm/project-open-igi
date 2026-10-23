@@ -1,43 +1,16 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "radare2",
-  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "function_entry": "0x0048F120",
-  "symbol": "fcn.0048f120",
-  "signature": "fcn.0048f120 (int8_t arg_4h);",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "analysis": {
-    "commands": "s 0x0048F120; af-*; af; afij; afbj",
-    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
-  },
-  "function": {
-    "size_bytes": 11,
-    "basic_block_count": 1,
-    "instruction_count": 3,
-    "call_convention": "cdecl",
-    "edge_count": 0,
-    "argument_count": 1,
-    "is_linear": true
-  },
-  "bytes_hex": "0fbe442404a3008c5c00c39090909090",
-  "bytes_sha256": "6ac0a54c2aa6ce65a6c9177b211628d7d1930c624f360182d00e24facd5bd424",
-  "cfg": {
-    "entry": "0x0048F120",
-    "nodes": [
-      {
-        "address": "0x0048f120",
-        "size": 11,
-        "instructions": 3
-      }
-    ],
-    "edges": []
-  },
-  "disassembly": "\u250c 11: fcn.0048f120 (int8_t arg_4h);\n\u2502 `- args(sp[0x4..0x4])\n\u2502           0x0048f120      0fbe442404     movsx eax, byte [arg_4h]\n\u2502           0x0048f125      a3008c5c00     mov dword [0x5c8c00], eax   ; [0x5c8c00:4]=0\n\u2514           0x0048f12a      c3             ret",
-  "limitations": [
-    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
-    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
-  ]
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x0048F120",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x0048F120"
+   }
+  ],
+  "edges": []
+ }
 }

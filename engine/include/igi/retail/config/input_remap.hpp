@@ -45,11 +45,6 @@ inline constexpr std::uint32_t remap_table_stride = 3U;
 // from 0x00BC2358 to about 0x00BD8000 for the actions the retail registers.
 inline constexpr std::uint32_t action_table_size = 0x6000U;
 
-// Retail 0x004037C0 performs no capacity check, so the host side needs its own
-// limit. The shipped config.qvm declares 72 remap entries; 128 leaves headroom
-// while still bounding the index against action_table_size.
-inline constexpr std::uint32_t action_table_capacity = 128U;
-
 // The retail remap table at 0x00BC25BC. Each slot holds the three arguments
 // the native reads from the script frame.
 inline constexpr std::uint32_t remap_table_size = 0x2000U;
@@ -58,9 +53,9 @@ inline constexpr std::uint32_t remap_table_size = 0x2000U;
 
 extern "C" {
 
-// The retail action count at 0x00BC2380. The native reads it to find the
-// action it binds.
-extern std::uint32_t InputRemap_ActionCount;
+// The profile count at 0x00BC2380 (see config_profile.hpp). GO_InRemap reads it
+// to find the action counter and the entry page of the record being defined.
+extern std::uint32_t& InputRemap_ActionCount;
 
 // The retail action table at 0x00BC2358.
 extern std::uint32_t InputRemap_ActionTable[igi::retail::config::action_table_size];

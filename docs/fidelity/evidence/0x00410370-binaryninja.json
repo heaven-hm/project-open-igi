@@ -1,87 +1,51 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x00410370",
-  "symbol": "HumanPlayer_LoadParameters_11",
-  "signature": "int32_t(int32_t* arg1, int32_t arg2)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x00410370",
-    "end": "0x4105bf",
-    "size_bytes": 592,
-    "basic_blocks": 4,
-    "instruction_count": 146
-  },
-  "bytes_hex": "83ec1853555657c744241000000000c7",
-  "bytes_sha256": "0b268e8e658ccc316c0e136b5dfea989bae1fc3db9c1b2c13753f675771f9c8d",
-  "cfg": {
-    "entry": "0x00410370",
-    "nodes": [
-      {
-        "address": "0x00410370",
-        "start": "0x410370",
-        "end": "0x41046b",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410493",
-        "start": "0x410493",
-        "end": "0x4105c0",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041046b",
-        "start": "0x41046b",
-        "end": "0x410470",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410470",
-        "start": "0x410470",
-        "end": "0x410493",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x00410370",
-        "target": "0x0041046b",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00410370",
-        "target": "0x00410493",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041046b",
-        "target": "0x00410470",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00410470",
-        "target": "0x00410470",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00410470",
-        "target": "0x00410493",
-        "kind": "conditional"
-      }
-    ]
-  },
-  "disassembly": "`asm\n  int32_t HumanPlayer_LoadParameters_11(int32_t* arg1, int32_t arg2)\n\n0x410370  sub     esp, 0x18\n0x410373  push    ebx\n0x410374  push    ebp\n0x410375  push    esi\n0x410376  push    edi\n0x410377  mov     dword [esp+0x10], 0x0\n0x41037f  mov     dword [esp+0x14], 0x0\n0x410387  mov     dword [esp+0x18], 0x0\n0x41038f  mov     dword [esp+0x1c], 0x0\n0x410397  mov     dword [esp+0x20], 0x0\n0x41039f  mov     dword [esp+0x24], 0x0\n0x4103a7  call    AI_UpdateOrders_17\n0x4103ac  mov     ecx, dword [esp+0x30]\n0x4103b0  mov     ebp, dword [esp+0x2c]\n0x4103b4  and     eax, 0xffff\n0x4103b9  push    ecx\n0x4103ba  push    ebp\n0x4103bb  mov     eax, dword [eax*4+0xa96ae0]\n0x4103c2  call    eax\n0x4103c4  mov     edx, dword [0x56e210]\n0x4103ca  push    ebp\n0x4103cb  push    edx\n0x4103cc  call    QTaskList_Register\n0x4103d1  add     esp, 0x10\n0x4103d4  xor     ebx, ebx\n0x4103d6  mov     byte [ebp+0x695], 0x1\n0x4103dd  mov     byte [ebp+0x696], 0x1\n0x4103e4  push    ebx\n0x4103e5  push    ebx\n0x4103e6  mov     byte [ebp+0x697], 0x1\n0x4103ed  push    ebp\n0x4103ee  mov     byte [ebp+0x698], 0x1\n0x4103f5  call    Level_StartMission_4\n0x4103fa  push    eax\n0x4103fb  call    Render_DrawBoneMesh_12\n0x410400  push    ebx\n0x410401  push    ebx\n0x410402  push    0x2\n0x410404  push    ebp\n0x410405  mov     dword [ebp+0xcc], 0x2\n0x41040f  call    FX_DebrisSpawn_14\n0x410414  lea     eax, [ebp+0x68]\n0x410417  lea     ecx, [ebp+0x78]\n0x41041a  push    eax\n0x41041b  push    ecx\n0x41041c  call    Render_DrawBoneMesh_7\n0x410421  mov     esi, dword [ebp+0x70]\n0x410424  lea     edi, [ebp+0x650]\n0x41042a  add     esi, 0x4c\n0x41042d  mov     ecx, 0x5\n0x410432  add     esp, 0x28\n0x410435  lea     eax, [esp+0x10]\n0x410439  rep movsd dword [edi], [esi]\n0x41043b  mov     edx, dword [ebp+0xa0]\n0x410441  push    0x2\n0x410443  push    edx\n0x410444  push    eax\n0x410445  push    ebp\n0x410446  call    Level_StartMission_4\n0x41044b  push    eax\n0x41044c  call    DynObj_LinkDynamicCube_8\n0x410451  mov     ecx, dword [ebp+0x4ec]\n0x410457  push    ecx\n0x410458  call    AI_005011\n0x41045d  mov     eax, dword [0x56df98]\n0x410462  add     esp, 0x18\n0x410465  xor     edi, edi\n0x410467  cmp     eax, ebx\n0x410469  jle     0x410493\n\n0x41046b  mov     esi, 0x56df9c\n\n0x410470  mov     edx, dword [esi+0x4]\n0x410473  mov     eax, dword [esi]\n0x410475  push    edx\n0x410476  push    eax\n0x410477  lea     eax, [ebp+0x340]\n0x41047d  push    eax\n0x41047e  call    Weapon_UpdateRecoil_8\n0x410483  mov     eax, dword [0x56df98]\n0x410488  add     esp, 0xc\n0x41048b  inc     edi\n0x41048c  add     esi, 0x8\n0x41048f  cmp     edi, eax\n0x410491  jl      0x410470\n\n0x410493  push    0x538710\n0x410498  push    0x2\n0x41049a  push    ebx\n0x41049b  push    0x5385b4\n0x4104a0  lea     ecx, [ebp+0x2ec]\n0x4104a6  push    0x4105c0\n0x4104ab  push    ecx\n0x4104ac  call    SoundSys_PlaySoundSample_16\n0x4104b1  push    0x5389f8\n0x4104b6  push    ebp\n0x4104b7  mov     dword [ebp+0x338], 0x538870\n0x4104c1  call    FX_FireBallUpdate_14\n0x4104c6  mov     edx, dword [0x56e204]\n0x4104cc  push    ebx\n0x4104cd  push    ebx\n0x4104ce  push    0x1\n0x4104d0  push    0x538678\n0x4104d5  lea     eax, [ebp+0xcf8]\n0x4104db  push    0x410700\n0x4104e0  push    eax\n0x4104e1  mov     dword [ebp+0x258], edx\n0x4104e7  call    SoundSys_PlaySoundSample_16\n0x4104ec  add     esp, 0x38\n0x4104ef  or      eax, 0xffffffff\n0x4104f2  mov     byte [ebp+0xd44], bl\n0x4104f8  mov     byte [ebp+0xd45], bl\n0x4104fe  pop     edi\n0x4104ff  mov     dword [ebp+0xd48], eax\n0x410505  mov     dword [ebp+0xd4c], eax\n0x41050b  mov     dword [ebp+0xd50], eax\n0x410511  mov     dword [ebp+0xd54], ebx\n0x410517  mov     dword [ebp+0xd58], ebx\n0x41051d  mov     dword [ebp+0xd5c], ebx\n0x410523  mov     byte [ebp+0xd68], bl\n0x410529  mov     byte [ebp+0xd78], bl\n0x41052f  mov     byte [ebp+0xd79], bl\n0x410535  mov     byte [ebp+0xd7a], bl\n0x41053b  mov     dword [ebp+0xd8c], ebx\n0x410541  mov     byte [ebp+0xd90], bl\n0x410547  mov     byte [ebp+0xd91], bl\n0x41054d  mov     byte [ebp+0xd92], bl\n0x410553  mov     byte [ebp+0xd93], bl\n0x410559  mov     byte [ebp+0xd94], bl\n0x41055f  mov     dword [ebp+0xd9c], ebx\n0x410565  mov     byte [ebp+0xda0], bl\n0x41056b  mov     byte [ebp+0xda1], bl\n0x410571  mov     dword [ebp+0xdbc], ebx\n0x410577  mov     dword [ebp+0xdc0], ebx\n0x41057d  mov     dword [ebp+0xdc4], ebx\n0x410583  mov     dword [ebp+0xdc8], ebx\n0x410589  mov     dword [ebp+0xdcc], ebx\n0x41058f  mov     dword [ebp+0xdd0], ebx\n0x410595  mov     dword [ebp+0xdd4], ebx\n0x41059b  mov     dword [ebp+0xdd8], ebx\n0x4105a1  mov     dword [ebp+0xddc], ebx\n0x4105a7  mov     dword [ebp+0xde0], ebx\n0x4105ad  mov     dword [ebp+0xde4], ebx\n0x4105b3  mov     dword [ebp+0xde8], ebx\n0x4105b9  pop     esi\n0x4105ba  pop     ebp\n0x4105bb  pop     ebx\n0x4105bc  add     esp, 0x18\n0x4105bf  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t HumanPlayer_LoadParameters_11(int32_t* arg1, int32_t arg2)\n\n{\n    int32_t var_18;\n    __builtin_memset(&var_18, 0, 0x18);\n    (*((AI_UpdateOrders_17() << 2) + &g_a96ae0))(arg1, arg2);\n    QTaskList_Register(g_HumanPlayerCtx, arg1);\n    *(arg1 + 0x695) = 1;\n    *(arg1 + 0x696) = 1;\n    *(arg1 + 0x697) = 1;\n    arg1[0x1a6] = 1;\n    int32_t var_38_1 = Level_StartMission_4();\n    Render_DrawBoneMesh_12(arg1, 0, nullptr);\n    arg1[0x33] = 2;\n    FX_DebrisSpawn_14(arg1, 2, 0, 0f);\n    Render_DrawBoneMesh_7(&arg1[0x1e], &arg1[0x1a]);\n    __builtin_memcpy(&arg1[0x194], arg1[0x1c] + 0x4c, 0x14);\n    DynObj_LinkDynamicCube_8(Level_StartMission_4(), arg1, &var_18, arg1[0x28], 2);\n    AI_005011(arg1[0x13b]);\n    int32_t i = 0;\n\n    if (g_56df98 > 0)\n    {\n        int32_t* esi_2 = &g_56df9c;\n\n        do\n        {\n            Weapon_UpdateRecoil_8(&arg1[0xd0], *esi_2, esi_2[1]);\n            i += 1;\n            esi_2 = &esi_2[2];\n        } while (i < g_56df98);\n    }\n\n    SoundSys_PlaySoundSample_16(&arg1[0xbb], HumanPlayer_ExecutePipeline_4105C0, &g_5385b4, 0, 2,\n        0x538710);\n    arg1[0xce] = 0x538870;\n    FX_FireBallUpdate_14(arg1, &g_human_gen_tab_a);\n    arg1[0x96] = g_human_gen_8;\n    SoundSys_PlaySoundSample_16(&arg1[0x33e], HumanPlayer_ExecutePipeline_410700, &g_538678, 1, 0,\n        0);\n    arg1[0x351] = 0;\n    *(arg1 + 0xd45) = 0;\n    arg1[0x352] = 0xffffffff;\n    arg1[0x353] = 0xffffffff;\n    arg1[0x354] = 0xffffffff;\n    arg1[0x355] = 0;\n    arg1[0x356] = 0;\n    arg1[0x357] = 0;\n    arg1[0x35a] = 0;\n    arg1[0x35e] = 0;\n    *(arg1 + 0xd79) = 0;\n    *(arg1 + 0xd7a) = 0;\n    arg1[0x363] = 0;\n    arg1[0x364] = 0;\n    *(arg1 + 0xd91) = 0;\n    *(arg1 + 0xd92) = 0;\n    *(arg1 + 0xd93) = 0;\n    arg1[0x365] = 0;\n    arg1[0x367] = 0;\n    arg1[0x368] = 0;\n    *(arg1 + 0xda1) = 0;\n    __builtin_memset(&arg1[0x36f], 0, 0x30);\n    return 0xffffffff;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x410370\"\narch: \"x86\"\nname: \"HumanPlayer_LoadParameters_11\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 16\ntotal: 16\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x410377 | x86 | 0xc35044 |  |\n| 0x4103a7 | x86 | 0x460be0 | AI_UpdateOrders_17 (0x460be0 (x86)) |\n| 0x4103cc | x86 | 0x4c1790 | QTaskList_Register (0x4c1790 (x86)) |\n| 0x4103f5 | x86 | 0x416920 | Level_StartMission_4 (0x416920 (x86)) |\n| 0x4103fb | x86 | 0x4d9620 | Render_DrawBoneMesh_12 (0x4d9620 (x86)) |\n| 0x41040f | x86 | 0x489ea0 | FX_DebrisSpawn_14 (0x489ea0 (x86)) |\n| 0x41041c | x86 | 0x4d38c0 | Render_DrawBoneMesh_7 (0x4d38c0 (x86)) |\n| 0x410439 | x86 | 0xc35040 |  |\n| 0x410446 | x86 | 0x416920 | Level_StartMission_4 (0x416920 (x86)) |\n| 0x41044c | x86 | 0x4c7140 | DynObj_LinkDynamicCube_8 (0x4c7140 (x86)) |\n| 0x410458 | x86 | 0x464660 | AI_005011 (0x464660 (x86)) |\n| 0x41047e | x86 | 0x47ce70 | Weapon_UpdateRecoil_8 (0x47ce70 (x86)) |\n| 0x4104ac | x86 | 0x4ec190 | SoundSys_PlaySoundSample_16 (0x4ec190 (x86)) |\n| 0x4104c1 | x86 | 0x489c30 | FX_FireBallUpdate_14 (0x489c30 (x86)) |\n| 0x4104e7 | x86 | 0x4ec190 | SoundSys_PlaySoundSample_16 (0x4ec190 (x86)) |\n| 0x410571 | x86 | 0xc35044 |  |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x410370\"\narch: \"x86\"\nname: \"HumanPlayer_LoadParameters_11\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00410370",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00410370"
+   },
+   {
+    "address": "0x00410493"
+   },
+   {
+    "address": "0x0041046B"
+   },
+   {
+    "address": "0x00410470"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00410370",
+    "target": "0x00410493",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00410370",
+    "target": "0x0041046B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041046B",
+    "target": "0x00410470",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00410470",
+    "target": "0x00410470",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00410470",
+    "target": "0x00410493",
+    "kind": "conditional"
+   }
   ]
+ }
 }

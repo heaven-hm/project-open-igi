@@ -2,118 +2,19 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
- "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
- "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x00401000",
- "symbol": "QTask_CreateTask",
- "signature": "int32_t()",
- "calling_convention": "cdecl",
- "analyzed_at": "2026-10-23T09:21:32Z",
- "function": {
-  "start": "0x00401000",
-  "end": "0x00401042",
-  "size_bytes": 67,
-  "basic_blocks": 3,
-  "edge_count": 2,
-  "instruction_count": 21,
-  "argument_count": 0,
-  "return_type": "int32_t"
- },
- "bytes_hex": "6844615300e8f6e008006a01e81fe30800e81a1900006a00e8e317000083c40ce8fbe1080085c0750d6a04e87018000083c404b001c36a02e86318000083c404b001c3",
- "function_digest_sha256": "b9fdce9df415fa31eb63c1758db66ed3dcf2677c5028e67fe78526833302c281",
- "disassembly": [
-  "int32_t QTask_CreateTask()",
-  "",
-  "0x401000  push    g_536144 {var_4}",
-  "0x401005  call    FX_ExplosionSpawn_23",
-  "0x40100a  push    0x1 {var_8}",
-  "0x40100c  call    FX_ExplosionSpawn_27",
-  "0x401011  call    Flow_RunHandler",
-  "0x401016  push    0x0 {var_c}",
-  "0x401018  call    Flow_CreateHandler",
-  "0x40101d  add     esp, 0xc",
-  "0x401020  call    FX_ExplosionSpawn_25",
-  "0x401025  test    eax, eax",
-  "0x401027  jne     0x401036",
-  "",
-  "0x401029  push    0x4 {var_4}",
-  "0x40102b  call    Flow_SetState",
-  "0x401030  add     esp, 0x4",
-  "0x401033  mov     al, 0x1",
-  "0x401035  retn     {__return_addr}",
-  "",
-  "0x401036  push    0x2 {var_4}",
-  "0x401038  call    Flow_SetState",
-  "0x40103d  add     esp, 0x4",
-  "0x401040  mov     al, 0x1",
-  "0x401042  retn     {__return_addr}"
- ],
- "pseudocode": "int32_t QTask_CreateTask()\n\n{\n    FX_ExplosionSpawn_23(&g_536144);\n    FX_ExplosionSpawn_27(1);\n    Flow_RunHandler();\n    Flow_CreateHandler(nullptr);\n\n    if (FX_ExplosionSpawn_25())\n    {\n        int32_t eax_2 = Flow_SetState(2);\n        eax_2 = 1;\n        return eax_2;\n    }\n\n    int32_t eax_1 = Flow_SetState(4);\n    eax_1 = 1;\n    return eax_1;\n}",
- "callers": [
-  {
-   "callsite": "0x48f7aa",
-   "architecture": "x86",
-   "binary_ninja_label": "FX_Igimutex",
-   "caller_address": "0x48f530"
-  }
- ],
- "callees": [
-  {
-   "callsite": "0x401005",
-   "architecture": "x86",
-   "callee_address": "0x48f100",
-   "binary_ninja_label": "FX_ExplosionSpawn_23"
-  },
-  {
-   "callsite": "0x40100c",
-   "architecture": "x86",
-   "callee_address": "0x48f330",
-   "binary_ninja_label": "FX_ExplosionSpawn_27"
-  },
-  {
-   "callsite": "0x401011",
-   "architecture": "x86",
-   "callee_address": "0x402930",
-   "binary_ninja_label": "Flow_RunHandler"
-  },
-  {
-   "callsite": "0x401018",
-   "architecture": "x86",
-   "callee_address": "0x402800",
-   "binary_ninja_label": "Flow_CreateHandler"
-  },
-  {
-   "callsite": "0x401020",
-   "architecture": "x86",
-   "callee_address": "0x48f220",
-   "binary_ninja_label": "FX_ExplosionSpawn_25"
-  },
-  {
-   "callsite": "0x40102b",
-   "architecture": "x86",
-   "callee_address": "0x4028a0",
-   "binary_ninja_label": "Flow_SetState"
-  },
-  {
-   "callsite": "0x401038",
-   "architecture": "x86",
-   "callee_address": "0x4028a0",
-   "binary_ninja_label": "Flow_SetState"
-  }
- ],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x00401000",
   "nodes": [
    {
     "address": "0x00401000"
    },
    {
-    "address": "0x00401029"
+    "address": "0x00401036"
    },
    {
-    "address": "0x00401036"
+    "address": "0x00401029"
    }
   ],
   "edges": [
@@ -128,27 +29,5 @@
     "kind": "conditional"
    }
   ]
- },
- "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 and angr CFGFast recovery of the same retail entry, not candidate code.",
- "symbol_note": "The Binary Ninja view carries stale auto-applied labels on the callees (FX_ExplosionSpawn_23 at 0x0048F100, FX_ExplosionSpawn_27 at 0x0048F330, Flow_RunHandler at 0x00402930, FX_ExplosionSpawn_25 at 0x0048F220, FX_Igimutex at 0x0048F530). Those labels are not semantic evidence; the addresses and instructions are. Address identity is established by the instruction bodies recorded in 0x0048F100/0x0048F220/0x0048F330 evidence and by the caller at 0x0048F7AA.",
- "globals": [
-  {
-   "address": "0x00536144",
-   "value": "char[5] \"IGI\"",
-   "use": "argument to 0x0048F100 at 0x00401000"
-  },
-  {
-   "address": "0x005C8BF0",
-   "use": "32-bit force-precompiled flag written by 0x0048F330, read by 0x0048F340"
-  },
-  {
-   "address": "0x005C8C08",
-   "use": "32-bit startup-mode flag read by 0x0048F220"
-  }
- ],
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence.",
-  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name.",
-  "The view is not the metadata database; labels above 0x0048F000 are inherited and were not used to name the callees."
- ]
+ }
 }

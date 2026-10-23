@@ -1,43 +1,16 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x00404010",
-  "symbol": "GOGfxDevice",
-  "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x00404010",
-    "end": "0x40407b",
-    "size_bytes": 108,
-    "basic_blocks": 1,
-    "instruction_count": 34
-  },
-  "bytes_hex": "83ec188b0d8023bc008b54242456578d",
-  "bytes_sha256": "d6b93688b8d6d09959ec07fe2ecbba941a3a775dd348ce10e0d94eeea1c2fc33",
-  "cfg": {
-    "entry": "0x00404010",
-    "nodes": [
-      {
-        "address": "0x00404010",
-        "start": "0x404010",
-        "end": "0x40407c",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": []
-  },
-  "disassembly": "`asm\n  int32_t GOGfxDevice(int32_t arg1, float arg2 @ 0xc)\n\n0x404010  // Sig: int GO_GfxDevice(int deviceIndex)\n0x404010  // Note: Sets render-device (D3D device/GUID) selection for the current profile.\n0x404010  // Param: deviceIndex = index into the render-device list filled by\n0x404010  // Config_FillRenderDeviceListBox. Use in config scripts. Returns 1.\n0x404010  sub     esp, 0x18\n0x404013  mov     ecx, dword [0xbc2380]\n0x404019  mov     edx, dword [esp+0x24]\n0x40401d  push    esi\n0x40401e  push    edi\n0x40401f  lea     eax, [ecx+ecx*2]\n0x404022  push    0x100\n0x404027  shl     eax, 0x3\n0x40402a  sub     eax, ecx\n0x40402c  lea     eax, [eax+eax*2]\n0x40402f  lea     eax, [eax+eax*4]\n0x404032  lea     ecx, [eax*4+0xbc1e43]\n0x404039  push    ecx\n0x40403a  push    0x0\n0x40403c  push    edx\n0x40403d  call    Sys_ResolveSymbol_23\n0x404042  mov     eax, dword [esp+0x34]\n0x404046  mov     ecx, 0x6\n0x40404b  lea     esi, [esp+0x18]\n0x40404f  mov     edi, eax\n0x404051  add     esp, 0x10\n0x404054  mov     dword [esp+0x8], 0x0\n0x40405c  mov     dword [esp+0x10], 0x0\n0x404064  mov     dword [esp+0x14], 0x0\n0x40406c  mov     dword [esp+0x18], 0x567c74\n0x404074  rep movsd dword [edi], [esi]\n0x404076  pop     edi\n0x404077  pop     esi\n0x404078  add     esp, 0x18\n0x40407b  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t GOGfxDevice(int32_t arg1, float arg2 @ 0xc)\n\n// Sig: int GO_GfxDevice(int deviceIndex)\n// Note: Sets render-device (D3D device/GUID) selection for the current profile.\n// Param: deviceIndex = index into the render-device list filled by\n// Config_FillRenderDeviceListBox. Use in config scripts. Returns 1.\n{\n    char* var_24 = 0x100;\n    int32_t eax_3 = g_bc2380 * 0x45;\n    int32_t var_2c = 0;\n    float var_30 = arg2;\n    Sys_ResolveSymbol_23(var_30, var_2c, eax_3 * 0x14 + &g_bc1e43, var_24);\n    int32_t var_18 = 0;\n    int32_t var_10 = 0;\n    int32_t var_c = 0;\n    char* var_8 = &g_script_ret_type;\n    __builtin_memcpy(arg1, &var_18, 0x18);\n    return arg1;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x404010\"\narch: \"x86\"\nname: \"GOGfxDevice\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x40403d | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x404074 | x86 | 0xc35040 |  |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x404010\"\narch: \"x86\"\nname: \"GOGfxDevice\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
-  ]
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00404010",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00404010"
+   }
+  ],
+  "edges": []
+ }
 }

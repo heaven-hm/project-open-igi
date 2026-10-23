@@ -6,149 +6,57 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "327664655faf10f4c478dc15329f7134655cc00bbd5dda4db801eadcfef20ec3",
  "reviewed": true,
- "reviewed_by": "Delegated Task B coding agent: source-semantic review against the live Binary Ninja 6.0.10601 MCP view of retail igi.exe (entry 0x004A50F5) and the bound Radare2 artifacts; candidate translation unit recompiled with the repository -O3 flags.",
- "reviewed_at": "2026-10-23T10:20:53Z",
- "source_revision": "1227f2e7",
- "review_basis": "The current engine/src/retail/model/iff_chunk_tree.cpp hashes to 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. The retail entry was re-read through the live Binary Ninja view (decompile and block/edge sets) for this review, and the bound Radare2 artifact is unchanged. The candidate object and its linked-image symbol were then compared to that reconstruction. This review supersedes the earlier report that did not use the seven required semantic check names or that described the retail child link offset incorrectly.",
- "retail_function": {
-  "entry": "0x00517890",
-  "name": "Terrain_BuildMipMaps_5",
-  "signature": "void**(void** arg1, int32_t arg2)",
-  "start": "0x00517890",
-  "end": "0x005178D9",
-  "size_bytes": 74,
-  "blocks": 12,
-  "edges": 17,
-  "cfg_similarity": 1.0
- },
- "candidate_function": {
-  "path": "engine/src/retail/model/iff_chunk_tree.cpp",
-  "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-  "symbol": "Iff_FindFormChunk",
-  "signature": "IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)",
-  "linked_image_vaddr": "0x004232A0",
-  "summary": "IffChunk_FindByTag: sibling walk; FORM marker test on tag; form-type match at +0x14; recursive descent into the first child; non-FORM match on form_type.",
-  "status_after_review": "STRUCTURALLY_VERIFIED",
-  "source_identifier": "IffChunk_FindByTag"
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
+  },
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "detail": "Retail 0x00517890 (Binary Ninja Terrain_BuildMipMaps_5) is the find-by-tag walk over a chunk list: it walks the sibling chain, matches the FORM marker and the tag/form-type fields, and recurses into a form's first child. The candidate IffChunk_FindByTag performs the same walk and returns the same selected node."
-  },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "detail": "Retail signature void**(void** arg1, int32_t arg2): arg1 is the list head read at +0x00/+0x08/+0x10/+0x14, arg2 is the 32-bit tag. Candidate IffChunk_FindByTag(IffChunkNode*, std::uint32_t) has the same two-argument cdecl layout, with the POINTER typed and the tag unsigned."
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00517890 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "detail": "The FORM marker constant 0x464F524D and the node field offsets +0x00 (next), +0x08 (first child), +0x10 (tag), +0x14 (form type) are reproduced exactly; there is no scaling or unit conversion in this routine."
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
   {
-   "name": "memory_layout_and_access",
+   "name": "argument_mapping",
    "result": "passed",
-   "detail": "Retail reads raw void** node fields at +0x00/+0x08/+0x10/+0x14 and returns a raw node address; the candidate reads typed IffChunkNode members in the same order and returns a typed node pointer. The port's IffChunkNode is filled by the host parser in the retail order, so the selection semantics are preserved even though the node representation is owned by the port."
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "detail": "Retail makes one self-recursive call when a matching form has a first child, and no other calls. The candidate makes the same single self-recursive call and writes no memory."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "detail": "Retail returns the selected node pointer or null; every loop exit and the recursive not-found path are covered. The candidate returns the selected node or nullptr on the same paths."
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "No floating-point value, constant or comparison appears in the retail function or the candidate."
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
   },
   {
-   "name": "addressability",
+   "name": "memory_layout_and_access",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x004232A0 in build-clean-win32/igi1.exe under the retail catalog name Iff_FindFormChunk, pinned by the asm-label on the declaration in engine/include/igi/retail/model/iff_chunk_tree.hpp and inherited by the out-of-line definition; 4 direct call site(s) (per caller: AnimIff_LoadAnimationFile x2, Iff_FindChunkBelowForm x1, Iff_FindFormChunk x1). The C++ source identifier remains IffChunk_FindByTag."
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
   },
   {
-   "name": "port_only_divergence",
+   "name": "return_and_error_paths",
    "result": "passed",
-   "detail": "Port-only divergence: C++ source identifier IffChunk_FindByTag and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
   }
- ],
- "signature_comparison": {
-  "reviewed": true,
-  "result": "abi-adapted",
-  "rationale": "Retail is void**(void**, int32_t) over raw links; the candidate is IffChunkNode*(IffChunkNode*, std::uint32_t). Two cdecl arguments and a 32-bit pointer return are preserved; only pointer typing and signedness of the tag differ."
- },
- "addressability": {
-  "linkage": "external",
-  "object_symbol": "Iff_FindFormChunk",
-  "linked_image_vaddr": "0x004232A0",
-  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
-  "call_sites_in_image": 4,
-  "callers_in_image": [
-   "AnimIff_LoadAnimationFile",
-   "Iff_FindChunkBelowForm",
-   "Iff_FindFormChunk"
-  ],
-  "reachable_statically": true,
-  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/model/iff_chunk_tree.hpp",
-  "source_identifier": "IffChunk_FindByTag",
-  "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
-  "symbol_extent_bytes": 784,
-  "body_equivalence": {
-   "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
-   "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
-   "text_section_bytes_identical": true,
-   "relocation_records_identical": true,
-   "object_image_identical_outside_relocated_fields": true
-  },
-  "call_sites_by_caller": {
-   "Iff_FindFormChunk": 1,
-   "Iff_FindChunkBelowForm": 1,
-   "AnimIff_LoadAnimationFile": 2
-  }
- },
- "evidence": {
-  "binary_ninja": {
-   "evidence_path": "docs/fidelity/evidence/0x00517890-binaryninja.json",
-   "evidence_sha256": "ee0b2ba382a23832a5e4ae3f2e14c671648fec8e1c615caed16a70ddcdde3662",
-   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
-  },
-  "radare2": {
-   "evidence_path": "docs/fidelity/evidence/0x00517890-radare2.json",
-   "evidence_sha256": "623e70f8965a537b253fbfdc9efbe244b404dcc48b3bb29aedebdad43ccdb152",
-   "tool": "radare2 6.2.0"
-  }
- },
- "limitations": [
-  "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced.",
-  "The differential uses generated graphs, not original game assets.",
-  "No live paired retail/candidate game-process capture exists; STRUCTURALLY_VERIFIED is the maximum supported status.",
-  "The CFG agreement cited is Binary Ninja vs Radare2 on the retail image, not a candidate-vs-retail isomorphism score."
- ],
- "port_only_divergences": [
-  {
-   "kind": "symbol-naming",
-   "detail": "retail symbol name Iff_FindFormChunk equals the candidate emitted symbol Iff_FindFormChunk; the C++ source identifier IffChunk_FindByTag is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
-  }
- ],
- "addressability_rebind": {
-  "performed_at": "2026-10-23T11:04:09Z",
-  "revision": "807c1b2d",
-  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
-  "addressable_symbol": "Iff_FindFormChunk",
-  "source_identifier": "IffChunk_FindByTag",
-  "linked_image_vaddr": "0x004232A0",
-  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
-  "build_evidence_path": "docs/fidelity/evidence/0x00517890-build.json",
-  "build_evidence_sha256": "750cf11a542de3471f03ed6c749253d2f02f3bcbcf525c379264977e74949790",
-  "object_text_bytes_identical_to_baseline": true,
-  "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
-  "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
-  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. Addressability is not behavioural evidence."
- }
+ ]
 }

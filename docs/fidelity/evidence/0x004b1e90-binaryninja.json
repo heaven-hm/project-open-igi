@@ -2,96 +2,10 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
- "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
- "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x004B1E90",
- "symbol": "String_FindExtension",
- "signature": "char*(char* arg1, int32_t arg2, int32_t arg3)",
- "analyzed_at": "2026-10-23T06:59:32Z",
- "function": {
-  "start": "0x004B1E90",
-  "end": "0x004B1EDA",
-  "size_bytes": 75,
-  "basic_blocks": 6,
-  "instruction_count": 36
- },
- "disassembly": [
-  "char* String_FindExtension(char* arg1, int32_t arg2, int32_t arg3)",
-  "0x4b1e90  mov     edx, dword [esp+0xc]",
-  "0x4b1e94  push    esi",
-  "0x4b1e95  push    edi",
-  "0x4b1e96  mov     edi, edx",
-  "0x4b1e98  or      ecx, 0xffffffff",
-  "0x4b1e9b  xor     eax, eax",
-  "0x4b1e9d  repne scasb byte [edi]",
-  "0x4b1e9f  not     ecx",
-  "0x4b1ea1  dec     ecx",
-  "0x4b1ea2  je      0x4b1ead",
-  "0x4b1ea4  cmp     byte [ecx+edx], 0x2e",
-  "0x4b1ea8  je      0x4b1ead",
-  "0x4b1eaa  dec     ecx",
-  "0x4b1eab  jne     0x4b1ea4",
-  "0x4b1ead  mov     edi, dword [esp+0xc]",
-  "0x4b1eb1  lea     esi, [ecx+edx]",
-  "0x4b1eb4  test    edi, edi",
-  "0x4b1eb6  je      0x4b1ed6",
-  "0x4b1eb8  push    ebx",
-  "0x4b1eb9  mov     ebx, dword [esp+0x14]",
-  "0x4b1ebd  lea     eax, [ebx-0x1]",
-  "0x4b1ec0  push    eax",
-  "0x4b1ec1  push    esi",
-  "0x4b1ec2  push    edi",
-  "0x4b1ec3  call    Camera_ApplyLineFilter_5",
-  "0x4b1ec8  add     esp, 0xc",
-  "0x4b1ecb  mov     byte [edi+ebx-0x1], 0x0",
-  "0x4b1ed0  mov     eax, esi",
-  "0x4b1ed2  pop     ebx",
-  "0x4b1ed3  pop     edi",
-  "0x4b1ed4  pop     esi",
-  "0x4b1ed5  retn",
-  "0x4b1ed6  mov     eax, esi",
-  "0x4b1ed8  pop     edi",
-  "0x4b1ed9  pop     esi",
-  "0x4b1eda  retn"
- ],
- "pseudocode": "  char* String_FindExtension(char* arg1, int32_t arg2, int32_t arg3)\n\n{\n    int32_t edi = arg3;\n    int32_t i = 0xffffffff;\n\n    while (i)\n    {\n        bool cond:0_1 = 0 != *edi;\n        edi += 1;\n        i -= 1;\n\n        if (!cond:0_1)\n            break;\n    }\n\n    int32_t ecx = ~i;\n    char* ecx_1 = ecx - 1;\n\n    if (ecx != 1)\n    {\n        while (ecx_1[arg3] != 0x2e)\n        {\n            char* temp1_1 = ecx_1;\n            ecx_1 -= 1;\n\n            if (temp1_1 == 1)\n                break;\n        }\n    }\n\n    char* result = &ecx_1[arg3];\n\n    if (!arg1)\n        return result;\n\n    Camera_ApplyLineFilter_5(arg1, result, arg2 - 1);\n    arg1[arg2 - 1] = 0;\n    return result;\n}",
- "callers": [
-  {
-   "callsite": "0x4b8102",
-   "caller": "Qvm_Load (0x4b80b0 (x86))"
-  },
-  {
-   "callsite": "0x4b828d",
-   "caller": "Qvm_Load (0x4b80b0 (x86))"
-  },
-  {
-   "callsite": "0x4b84bb",
-   "caller": "Qsc_Compile (0x4b8410 (x86))"
-  },
-  {
-   "callsite": "0x4b84fd",
-   "caller": "Qsc_Compile (0x4b8410 (x86))"
-  },
-  {
-   "callsite": "0x4e690f",
-   "caller": "SoundSys_AttachLipsync_6 (0x4e68f0 (x86))"
-  },
-  {
-   "callsite": "0x4e69ff",
-   "caller": "SoundSys_PlaySoundSample_7 (0x4e69e0 (x86))"
-  }
- ],
- "callees": [
-  {
-   "callsite": "0x4b1ec3",
-   "callee_address": "0x4a5500",
-   "callee": "Camera_ApplyLineFilter_5 (0x4a5500 (x86))"
-  }
- ],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x004B1E90",
   "nodes": [
    {
     "address": "0x004B1E90"
@@ -154,10 +68,5 @@
     "kind": "conditional"
    }
   ]
- },
- "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence.",
-  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
- ]
+ }
 }

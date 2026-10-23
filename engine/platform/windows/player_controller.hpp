@@ -185,6 +185,9 @@ class PlayerController
     std::array<double, 3> position_{};   // feet, retail units
     std::array<double, 3> velocity_{};   // retail units per tick
     std::array<double, 3> slide_{};      // slope-slide accumulator, retail units per tick
+    // Retail human+0x520/+0x524: the world animation delta of the current tick, which the
+    // jump at 0x0040BA70 normalizes into its horizontal take-off direction.
+    std::array<double, 2> last_ground_delta_{};
     std::array<double, 3> level_origin_{};
     double world_scale_ = 1.0 / units_per_metre;
     double yaw_ = 0.0;

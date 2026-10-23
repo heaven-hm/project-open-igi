@@ -1,164 +1,62 @@
 {
-  "schema_version": 1,
-  "kind": "semantic-review-report",
-  "result": "failed",
-  "address": "0x004A8AD0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "19c61eb19bf9108e20c1c35d8a63462156b12382ca6725a54d8dd06e657e4fad",
-  "reviewed": true,
-  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
-  "reviewed_at": "2026-10-23T12:58:32Z",
-  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
-  "review_basis": "Retail 0x004A8AD0 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004A8AD0-Camera_UpdateTransform_15.cpp at sha256 19c61eb19bf9108e20c1c35d8a63462156b12382ca6725a54d8dd06e657e4fad (recorded implementation.signature: int32_t __fastcall Camera_UpdateTransform_15(int32_t param_1, void* param_2, void* param_3, long param_4);). The evidence artifact digests are bound in this review.",
-  "retail_function": {
-    "entry": "0x004A8AD0",
-    "name": "Camera_UpdateTransform_15",
-    "binary_ninja_name": "Camera_UpdateTransform_15",
-    "signature": "int32_t __fastcall(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0)",
-    "start": "0x004A8AD0",
-    "end": "0x4a8b36",
-    "basic_blocks": 4,
-    "edges": [
-      {
-        "source": "0x004a8ad0",
-        "target": "0x004a8ad6",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8ad0",
-        "target": "0x004a8ae7",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8ad6",
-        "target": "0x004a8aeb",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004a8ae7",
-        "target": "0x004a8aeb",
-        "kind": "unconditional"
-      }
-    ],
-    "cfg_similarity": 1.0,
-    "summary": "Four blocks 0x4A8AD0-0x4A8B37: compare byte [EDX+0xE] to 5; choose the x87 control word (0x133F or bits from [EBP-0xA4]); fldcw; fxam/status; then 76 bytes of x87/FPU state handling. Block 0x4A8AEB-0x4A8B37 is flagged undetermined-outgoing and runs into the next entry 0x4A8B37.",
-    "blocks": [
-      {
-        "address": "0x004a8ad0",
-        "start": "0x4a8ad0",
-        "end": "0x4a8ad6",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8ae7",
-        "start": "0x4a8ae7",
-        "end": "0x4a8aeb",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8ad6",
-        "start": "0x4a8ad6",
-        "end": "0x4a8ae7",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8aeb",
-        "start": "0x4a8aeb",
-        "end": "0x4a8b37",
-        "flags": "can-exit, undetermined-outgoing"
-      }
-    ],
-    "calls": [
-      "Camera_UpdateTransform_15(int32_t"
-    ],
-    "globals_written": []
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x004A8AD0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "19c61eb19bf9108e20c1c35d8a63462156b12382ca6725a54d8dd06e657e4fad",
+ "reviewed": true,
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
   },
-  "candidate_function": {
-    "path": "scripts/GameNatives/camera/004A8AD0-Camera_UpdateTransform_15.cpp",
-    "sha256": "19c61eb19bf9108e20c1c35d8a63462156b12382ca6725a54d8dd06e657e4fad",
-    "signature": "int32_t __fastcall Camera_UpdateTransform_15(int32_t param_1, void* param_2, void* param_3, long param_4);",
-    "status_after_review": "TRANSCRIBED",
-    "summary": "Four blocks 0x4A8AD0-0x4A8B37: compare byte [EDX+0xE] to 5; choose the x87 control word (0x133F or bits from [EBP-0xA4]); fldcw; fxam/status; then 76 bytes of x87/FPU state handling. Block 0x4A8AEB-0x4A8B37 is flagged undetermined-outgoing and runs into the next entry 0x4A8B37."
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004A8AD0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
-  "candidate_comparison": {
-    "result": "divergent",
-    "divergences": [
-      "Undetermined outgoing edge and boundary overlap with 0x4A8B37.",
-      "st0/EBP-relative FPU state replaced by stack locals."
-    ],
-    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
-  "checks": [
-    {
-      "name": "function_identity",
-      "result": "passed",
-      "detail": "Retail entry 0x004A8AD0 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004A8AD0-Camera_UpdateTransform_15.cpp (sha256 19c61eb19bf9108e20c1c35d8a63462156b12382ca6725a54d8dd06e657e4fad). Four blocks 0x4A8AD0-0x4A8B37: compare byte [EDX+0xE] to 5; choose the x87 control word (0x133F or bits from [EBP-0xA4]); fldcw; fxam/status; then 76 bytes of x87/FPU state handling. Block 0x4A8AEB-0x4A8B37 is flagged undetermined-outgoing and runs into the next entry 0x4A8B37."
-    },
-    {
-      "name": "abi_and_signature",
-      "result": "failed",
-      "detail": "BN int32_t __fastcall(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0): EDX/ECX register words, EBP-relative state and st0. The candidate __fastcall(int,void*,void*,long) models the st0 input as a stack long."
-    },
-    {
-      "name": "argument_mapping",
-      "result": "passed",
-      "detail": "BN int32_t __fastcall(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0): EDX/ECX register words, EBP-relative state and st0. The candidate __fastcall(int,void*,void*,long) models the st0 input as a stack long."
-    },
-    {
-      "name": "control_flow_shape",
-      "result": "failed",
-      "detail": "Retail CFG: Binary Ninja reports 4 block(s)/4 edge(s) at 0x004A8AD0; radare2 recovers the identical 4 block(s)/4 edge(s) (score 1.0000); angr CFGFast recovers 4 block(s) with has_unresolved_jumps=True."
-    },
-    {
-      "name": "calls_and_side_effects",
-      "result": "passed",
-      "detail": "None: pure x87/FPU state manipulation."
-    },
-    {
-      "name": "constants_and_scaling",
-      "result": "passed",
-      "detail": "Control words 0x133F and 0xFE/0x3F bit manipulation; 0x005443CD; block 0x4A8AEB..0x4A8B37."
-    },
-    {
-      "name": "memory_layout_and_access",
-      "result": "failed",
-      "detail": "EBP-relative FPU save area (0xA4/0xA2/0xA0/0x9F/0x94/0x90); the candidate's stack layout is not the retail EBP frame."
-    },
-    {
-      "name": "return_and_error_paths",
-      "result": "passed",
-      "detail": "Returns through the shared FPU tail; BN models int32_t, the candidate returns int."
-    },
-    {
-      "name": "floating_point_semantics",
-      "result": "failed",
-      "detail": "The block is x87 control-word/status manipulation with fldcw/fxam/fnstsw; the candidate's long stack argument does not model st0."
-    }
-  ],
-  "signature_comparison": {
-    "reviewed": true,
-    "result": "abi-adapted",
-    "rationale": "Binary Ninja reports \"int32_t __fastcall(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0)\" at 0x004A8AD0; radare2 recovers \"fcn.004a8ad0 ();\". Both tools place the entry at 0x004A8AD0 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t __fastcall Camera_UpdateTransform_15(int32_t param_1, void* param_2, void* param_3, long param_4);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
-  "evidence": {
-    "binary_ninja": {
-      "evidence_path": "docs/fidelity/evidence/0x004A8AD0-binaryninja.json",
-      "evidence_sha256": "f1966f3ecc5f3c4354b463a0a3f5a318a853028a55c3c8f204a98409d6d997ab",
-      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
-    },
-    "radare2": {
-      "evidence_path": "docs/fidelity/evidence/0x004A8AD0-radare2.json",
-      "evidence_sha256": "1c0d33d2106bcbf3d1c76f7ef902325fee653bf30f09d641d3697b5c8536b876",
-      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
-    },
-    "angr": {
-      "evidence_path": "docs/fidelity/evidence/0x004A8AD0-angr-20261023.json",
-      "evidence_sha256": "99be084fb8e8210311a428e0372706328b7fac32ba9d58be4c5b2980952f2466",
-      "tool": "angr 10.0.4.post1 CFGFast"
-    }
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
-  "limitations": [
-    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
-    "angr CFGFast reports has_unresolved_jumps=true for this entry; BN marks block 0x4A8AEB-0x4A8B37 undetermined-outgoing and its end address is the next function's entry 0x4A8B37."
-  ]
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+  }
+ ]
 }

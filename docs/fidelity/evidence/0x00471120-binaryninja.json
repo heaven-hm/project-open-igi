@@ -1,71 +1,38 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x00471120",
-  "symbol": "WeaponGun_ProcessWNES",
-  "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, void* arg4)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x00471120",
-    "end": "0x47127d",
-    "size_bytes": 350,
-    "basic_blocks": 3,
-    "instruction_count": 113
-  },
-  "bytes_hex": "515355568b74241433db57885c241288",
-  "bytes_sha256": "0597a9f2a9f921ec086ae6d173523f3d1ceeefe75eb13bdc4c81c609405bef47",
-  "cfg": {
-    "entry": "0x00471120",
-    "nodes": [
-      {
-        "address": "0x00471120",
-        "start": "0x471120",
-        "end": "0x47113e",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0047113e",
-        "start": "0x47113e",
-        "end": "0x471154",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00471154",
-        "start": "0x471154",
-        "end": "0x47127e",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x00471120",
-        "target": "0x0047113e",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x0047113e",
-        "target": "0x0047113e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0047113e",
-        "target": "0x00471154",
-        "kind": "conditional"
-      }
-    ]
-  },
-  "disassembly": "`asm\n  int32_t __convention(\"regparm\") WeaponGun_ProcessWNES(int32_t arg1, int32_t arg2, int32_t arg3, void* arg4)\n\n0x471120  push    ecx\n0x471121  push    ebx\n0x471122  push    ebp\n0x471123  push    esi\n0x471124  mov     esi, dword [esp+0x14]\n0x471128  xor     ebx, ebx\n0x47112a  push    edi\n0x47112b  mov     byte [esp+0x12], bl\n0x47112f  mov     byte [esp+0x13], bl\n0x471133  lea     edi, [esi+0x2b54]\n0x471139  mov     ebp, 0xc\n\n0x47113e  push    0x3ca3d70a\n0x471143  push    0x1e\n0x471145  push    edi\n0x471146  call    Weapon_UpdateZoom\n0x47114b  add     esp, 0xc\n0x47114e  add     edi, 0x14\n0x471151  dec     ebp\n0x471152  jne     0x47113e\n\n0x471154  push    0x567c74\n0x471159  push    ebx\n0x47115a  push    ebx\n0x47115b  call    AI_MoveToNode_28\n0x471160  mov     eax, dword [eax+0x10]\n0x471163  push    eax\n0x471164  call    Sys_OpenFileStream_18\n0x471169  add     esp, 0x10\n0x47116c  mov     dword [esi+0x20], eax\n0x47116f  push    0x567c74\n0x471174  push    ebx\n0x471175  push    ebx\n0x471176  call    AI_MoveToNode_28\n0x47117b  mov     ecx, dword [eax+0x10]\n0x47117e  push    ecx\n0x47117f  call    Sys_OpenFileStream_18\n0x471184  add     esp, 0x10\n0x471187  mov     dword [esi+0x34], eax\n0x47118a  mov     dl, byte [0x5402a8]  {\"WNES\"}\n0x471190  lea     eax, [esp+0x12]\n0x471194  push    eax\n0x471195  push    ebx\n0x471196  push    ebx\n0x471197  mov     byte [esp+0x1e], dl\n0x47119b  call    AI_MoveToNode_28\n0x4711a0  mov     ecx, dword [eax+0x10]\n0x4711a3  push    ecx\n0x4711a4  call    Sys_OpenFileStream_18\n0x4711a9  add     esp, 0x10\n0x4711ac  mov     dword [esi+0x24], eax\n0x4711af  mov     dl, byte [0x5402a9]  {\"NES\"}\n0x4711b5  lea     eax, [esp+0x12]\n0x4711b9  push    eax\n0x4711ba  push    ebx\n0x4711bb  push    ebx\n0x4711bc  mov     byte [esp+0x1e], dl\n0x4711c0  call    AI_MoveToNode_28\n0x4711c5  mov     ecx, dword [eax+0x10]\n0x4711c8  push    ecx\n0x4711c9  call    Sys_OpenFileStream_18\n0x4711ce  add     esp, 0x10\n0x4711d1  mov     dword [esi+0x28], eax\n0x4711d4  mov     dl, byte [0x5402aa]  {\"ES\"}\n0x4711da  lea     eax, [esp+0x12]\n0x4711de  push    eax\n0x4711df  push    ebx\n0x4711e0  push    ebx\n0x4711e1  mov     byte [esp+0x1e], dl\n0x4711e5  call    AI_MoveToNode_28\n0x4711ea  mov     ecx, dword [eax+0x10]\n0x4711ed  push    ecx\n0x4711ee  call    Sys_OpenFileStream_18\n0x4711f3  add     esp, 0x10\n0x4711f6  mov     dword [esi+0x2c], eax\n0x4711f9  mov     dl, byte [0x5402ab]  {\"S\"}\n0x4711ff  lea     eax, [esp+0x12]\n0x471203  push    eax\n0x471204  push    ebx\n0x471205  push    ebx\n0x471206  mov     byte [esp+0x1e], dl\n0x47120a  call    AI_MoveToNode_28\n0x47120f  mov     ecx, dword [eax+0x10]\n0x471212  push    ecx\n0x471213  call    Sys_OpenFileStream_18\n0x471218  lea     edx, [esi+0x138]\n0x47121e  mov     dword [esi+0x60], ebx\n0x471221  mov     dword [esi+0x68], ebx\n0x471224  mov     dword [esi+0x70], ebx\n0x471227  push    edx\n0x471228  mov     dword [esi+0x30], eax\n0x47122b  mov     dword [esi+0x64], ebx\n0x47122e  mov     dword [esi+0x6c], ebx\n0x471231  mov     dword [esi+0x74], ebx\n0x471234  mov     dword [esi+0x7c], 0x3f800000\n0x47123b  mov     dword [esi+0x80], ebx\n0x471241  mov     dword [esi+0x84], ebx\n0x471247  call    Sys_ResolveSymbol_13\n0x47124c  lea     eax, [esi+0x14c]\n0x471252  push    0x18\n0x471254  push    eax\n0x471255  call    Weapon_EjectMagazine\n0x47125a  add     esp, 0x1c\n0x47125d  mov     ecx, 0x6e\n0x471262  xor     eax, eax\n0x471264  lea     edi, [esi+0x2c44]\n0x47126a  mov     dword [esi+0x148], ebx\n0x471270  mov     dword [esi+0x144], ebx\n0x471276  rep stosd dword [edi]\n0x471278  pop     edi\n0x471279  pop     esi\n0x47127a  pop     ebp\n0x47127b  pop     ebx\n0x47127c  pop     ecx\n0x47127d  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t __convention(\"regparm\") WeaponGun_ProcessWNES(int32_t arg1, int32_t arg2, int32_t arg3, void* arg4)\n\n{\n    int32_t var_4 = arg3;\n    *(&var_4 + 2) = 0;\n    *(&var_4 + 3) = 0;\n    void* edi = arg4 + 0x2b54;\n    int32_t i_1 = 0xc;\n    int32_t i;\n\n    do\n    {\n        Weapon_UpdateZoom(edi, 0x1e, 0x3ca3d70a);\n        edi += 0x14;\n        i = i_1;\n        i_1 -= 1;\n    } while (i != 1);\n    *(arg4 + 0x20) = Sys_OpenFileStream_18(g_5bddc0, 0, 0, &g_script_ret_type);\n    *(arg4 + 0x34) = Sys_OpenFileStream_18(g_5bddc0, 0, 0, &g_script_ret_type);\n    *(&var_4 + 2) = data_5402a8[0];\n    *(arg4 + 0x24) = Sys_OpenFileStream_18(g_5bddc0, 0, 0, (&var_4 + 2));\n    *(&var_4 + 2) = data_5402a8[1][0];\n    *(arg4 + 0x28) = Sys_OpenFileStream_18(g_5bddc0, 0, 0, (&var_4 + 2));\n    *(&var_4 + 2) = data_5402a8[2][0];\n    *(arg4 + 0x2c) = Sys_OpenFileStream_18(g_5bddc0, 0, 0, (&var_4 + 2));\n    *(&var_4 + 2) = data_5402a8[3][0];\n    int32_t** eax_6 = Sys_OpenFileStream_18(g_5bddc0, 0, 0, (&var_4 + 2));\n    *(arg4 + 0x60) = 0;\n    *(arg4 + 0x68) = 0;\n    *(arg4 + 0x70) = 0;\n    *(arg4 + 0x30) = eax_6;\n    *(arg4 + 0x64) = 0;\n    *(arg4 + 0x6c) = 0;\n    *(arg4 + 0x74) = 0;\n    *(arg4 + 0x7c) = 0x3f800000;\n    *(arg4 + 0x80) = 0;\n    *(arg4 + 0x84) = 0;\n    Sys_ResolveSymbol_13(arg4 + 0x138);\n    Weapon_EjectMagazine(arg4 + 0x14c, 0x18);\n    *(arg4 + 0x148) = 0;\n    *(arg4 + 0x144) = 0;\n    __builtin_memset(arg4 + 0x2c44, 0, 0x1b8);\n    return 0;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x471120\"\narch: \"x86\"\nname: \"WeaponGun_ProcessWNES\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 16\ntotal: 16\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x471146 | x86 | 0x4712e0 | Weapon_UpdateZoom (0x4712e0 (x86)) |\n| 0x47115b | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x471164 | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x471176 | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x47117f | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x47119b | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x4711a4 | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x4711c0 | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x4711c9 | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x4711e5 | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x4711ee | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x47120a | x86 | 0x46b4d0 | AI_MoveToNode_28 (0x46b4d0 (x86)) |\n| 0x471213 | x86 | 0x4b6ec0 | Sys_OpenFileStream_18 (0x4b6ec0 (x86)) |\n| 0x471247 | x86 | 0x4b4720 | Sys_ResolveSymbol_13 (0x4b4720 (x86)) |\n| 0x471255 | x86 | 0x471280 | Weapon_EjectMagazine (0x471280 (x86)) |\n| 0x471276 | x86 | 0xc35044 |  |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x471120\"\narch: \"x86\"\nname: \"WeaponGun_ProcessWNES\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00471120",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00471120"
+   },
+   {
+    "address": "0x0047113E"
+   },
+   {
+    "address": "0x00471154"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00471120",
+    "target": "0x0047113E",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0047113E",
+    "target": "0x0047113E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0047113E",
+    "target": "0x00471154",
+    "kind": "conditional"
+   }
   ]
+ }
 }

@@ -1,335 +1,245 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x00411F20",
-  "symbol": "HumanPlayer_WireSlide",
-  "signature": "int32_t(float* arg1)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x00411F20",
-    "end": "0x4123e6",
-    "size_bytes": 1223,
-    "basic_blocks": 22,
-    "instruction_count": 339
-  },
-  "bytes_hex": "558bec83e4f881ecb4000000538b5d08",
-  "bytes_sha256": "f09f9ca9ef8b77577cdbe1a1fbf34524d40c00e6fc255da123ee2b8f0c8f1d56",
-  "cfg": {
-    "entry": "0x00411F20",
-    "nodes": [
-      {
-        "address": "0x00411f20",
-        "start": "0x411f20",
-        "end": "0x411f4f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041223f",
-        "start": "0x41223f",
-        "end": "0x4122bc",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00411f4f",
-        "start": "0x411f4f",
-        "end": "0x41200f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004122d4",
-        "start": "0x4122d4",
-        "end": "0x4122d8",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004122bc",
-        "start": "0x4122bc",
-        "end": "0x4122d4",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041202f",
-        "start": "0x41202f",
-        "end": "0x412143",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041200f",
-        "start": "0x41200f",
-        "end": "0x412029",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004122dc",
-        "start": "0x4122dc",
-        "end": "0x4122f4",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004122d8",
-        "start": "0x4122d8",
-        "end": "0x4122dc",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041216f",
-        "start": "0x41216f",
-        "end": "0x41223f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00412143",
-        "start": "0x412143",
-        "end": "0x41216f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00412029",
-        "start": "0x412029",
-        "end": "0x41202f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00412307",
-        "start": "0x412307",
-        "end": "0x41230b",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004122f4",
-        "start": "0x4122f4",
-        "end": "0x412307",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004123cd",
-        "start": "0x4123cd",
-        "end": "0x4123e0",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00412317",
-        "start": "0x412317",
-        "end": "0x41235d",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041230b",
-        "start": "0x41230b",
-        "end": "0x412317",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00412370",
-        "start": "0x412370",
-        "end": "0x41238a",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041235d",
-        "start": "0x41235d",
-        "end": "0x412370",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004123e0",
-        "start": "0x4123e0",
-        "end": "0x4123e7",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004123ae",
-        "start": "0x4123ae",
-        "end": "0x4123cd",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041238a",
-        "start": "0x41238a",
-        "end": "0x4123ae",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x00411f20",
-        "target": "0x00411f4f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00411f20",
-        "target": "0x0041223f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00411f4f",
-        "target": "0x0041200f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00411f4f",
-        "target": "0x0041202f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041200f",
-        "target": "0x00412029",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041200f",
-        "target": "0x0041202f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412029",
-        "target": "0x0041202f",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x0041202f",
-        "target": "0x00412143",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041202f",
-        "target": "0x0041216f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412143",
-        "target": "0x0041216f",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x0041216f",
-        "target": "0x004123cd",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x0041223f",
-        "target": "0x004122bc",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041223f",
-        "target": "0x004122d4",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122bc",
-        "target": "0x004122d4",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122bc",
-        "target": "0x004122d8",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122d4",
-        "target": "0x004122dc",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004122d8",
-        "target": "0x004122dc",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004122dc",
-        "target": "0x004122f4",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122dc",
-        "target": "0x00412307",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122f4",
-        "target": "0x00412307",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004122f4",
-        "target": "0x00412317",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412307",
-        "target": "0x0041230b",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412307",
-        "target": "0x00412317",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041230b",
-        "target": "0x00412317",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041230b",
-        "target": "0x004123e0",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412317",
-        "target": "0x0041235d",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412317",
-        "target": "0x00412370",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041235d",
-        "target": "0x00412370",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00412370",
-        "target": "0x0041238a",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00412370",
-        "target": "0x004123ae",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041238a",
-        "target": "0x004123cd",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004123ae",
-        "target": "0x004123cd",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004123cd",
-        "target": "0x004123e0",
-        "kind": "unconditional"
-      }
-    ]
-  },
-  "disassembly": "`asm\n  int32_t HumanPlayer_WireSlide(float* arg1)\n\n0x411f20  push    ebp\n0x411f21  mov     ebp, esp\n0x411f23  and     esp, 0xfffffff8\n0x411f26  sub     esp, 0xb4\n0x411f2c  push    ebx\n0x411f2d  mov     ebx, dword [ebp+0x8]\n0x411f30  push    esi\n0x411f31  push    edi\n0x411f32  push    ebx\n0x411f33  call    AI_CombatTarget_21\n0x411f38  mov     esi, eax\n0x411f3a  mov     al, byte [ebx+0xda0]\n0x411f40  add     esp, 0x4\n0x411f43  mov     dword [esp+0x2c], esi\n0x411f47  test    al, al\n0x411f49  je      0x41223f\n\n0x411f4f  lea     eax, [esp+0x30]\n0x411f53  push    esi\n0x411f54  push    eax\n0x411f55  call    Vehicle_DeployGear_10\n0x411f5a  fld     st0, qword [ebx+0x20]\n0x411f5d  fsub    st0, qword [esi+0x20]\n0x411f60  fld     st0, qword [ebx+0x28]\n0x411f63  fsub    st0, qword [esi+0x28]\n0x411f66  mov     ecx, 0x6\n0x411f6b  lea     edi, [esp+0x60]\n0x411f6f  push    0x0\n0x411f71  fst     qword [esp+0x6c], st0\n0x411f75  fld     st0, qword [ebx+0x30]\n0x411f78  fsub    st0, qword [esi+0x30]\n0x411f7b  fld     st0, dword [esp+0x54]\n0x411f7f  lea     esi, [esp+0x1c]\n0x411f83  fmul    st0, st1\n0x411f85  fld     st0, dword [esp+0x48]\n0x411f89  fmul    st0, st3\n0x411f8b  faddp   st1, st0\n0x411f8d  fld     st0, dword [esp+0x3c]\n0x411f91  fmul    st0, st4\n0x411f93  faddp   st1, st0\n0x411f95  fstp    qword [esp+0x1c], st0\n0x411f99  fld     st0, dword [esp+0x58]\n0x411f9d  fmul    st0, st1\n0x411f9f  fld     st0, dword [esp+0x4c]\n0x411fa3  fmul    st0, st3\n0x411fa5  faddp   st1, st0\n0x411fa7  fld     st0, dword [esp+0x40]\n0x411fab  fmul    st0, st4\n0x411fad  faddp   st1, st0\n0x411faf  fstp    qword [esp+0x24], st0\n0x411fb3  fld     st0, dword [esp+0x5c]\n0x411fb7  fmul    st0, st1\n0x411fb9  fld     st0, dword [esp+0x50]\n0x411fbd  fmul    st0, st3\n0x411fbf  faddp   st1, st0\n0x411fc1  fld     st0, dword [esp+0x44]\n0x411fc5  fmul    st0, st4\n0x411fc7  faddp   st1, st0\n0x411fc9  fstp    qword [esp+0x2c], st0\n0x411fcd  rep movsd dword [edi], [esi]\n0x411fcf  fstp    st0, st0\n0x411fd1  fstp    st0, st0\n0x411fd3  fstp    st0, st0\n0x411fd5  mov     esi, dword [esp+0x38]\n0x411fd9  lea     ecx, [esp+0x7c]\n0x411fdd  push    esi\n0x411fde  push    ecx\n0x411fdf  call    WeaponType_RegisterType_2\n0x411fe4  push    0x1\n0x411fe6  lea     edx, [esp+0x94]\n0x411fed  push    esi\n0x411fee  push    edx\n0x411fef  call    WeaponType_RegisterType_2\n0x411ff4  fld     st0, dword [esp+0x94]\n0x411ffb  fadd    dword [0x5334f0]\n0x412001  add     esp, 0x20\n0x412004  fcom    st0, qword [esp+0x18]\n0x412008  fnstsw  ax\n0x41200a  test    ah, 0x41\n0x41200d  je      0x41202f\n\n0x41200f  fstp    st0, st0\n0x412011  fld     st0, dword [esp+0x80]\n0x412018  fsub    st0, dword [0x5334f0]\n0x41201e  fcom    st0, qword [esp+0x18]\n0x412022  fnstsw  ax\n0x412024  test    ah, 0x1\n0x412027  jne     0x41202f\n\n0x412029  fstp    st0, st0\n0x41202b  fld     st0, qword [esp+0x60]\n\n0x41202f  fld     st0, dword [esp+0x34]\n0x412033  fmul    st0, st1\n0x412035  fld     st0, dword [esp+0x38]\n0x412039  fmul    st0, qword [0x5334f8]\n0x41203f  mov     ecx, 0x6\n0x412044  lea     esi, [esp+0x10]\n0x412048  lea     edi, [esp+0x88]\n0x41204f  lea     eax, [esp+0x88]\n0x412056  fsubp   st1, st0\n0x412058  push    eax\n0x412059  push    ebx\n0x41205a  fstp    qword [esp+0x18], st0\n0x41205e  fld     st0, dword [esp+0x48]\n0x412062  fmul    st0, st1\n0x412064  fld     st0, dword [esp+0x4c]\n0x412068  fmul    st0, qword [0x5334f8]\n0x41206e  fsubp   st1, st0\n0x412070  fstp    qword [esp+0x20], st0\n0x412074  fld     st0, dword [esp+0x54]\n0x412078  fmul    st0, st1\n0x41207a  fld     st0, dword [esp+0x58]\n0x41207e  fmul    st0, qword [0x5334f8]\n0x412084  fsubp   st1, st0\n0x412086  fstp    qword [esp+0x28], st0\n0x41208a  rep movsd dword [edi], [esi]\n0x41208c  fstp    st0, st0\n0x41208e  fld     st0, qword [esp+0x18]\n0x412092  mov     esi, dword [esp+0x34]\n0x412096  fadd    qword [esi+0x20]\n0x412099  fstp    qword [esp+0x90], st0\n0x4120a0  fld     st0, qword [esp+0x98]\n0x4120a7  fadd    qword [esi+0x28]\n0x4120aa  fstp    qword [esp+0x98], st0\n0x4120b1  fld     st0, qword [esp+0xa0]\n0x4120b8  fadd    qword [esi+0x30]\n0x4120bb  fstp    qword [esp+0xa0], st0\n0x4120c2  call    AI_UpdateOrders_19\n0x4120c7  lea     ecx, [esp+0x30]\n0x4120cb  lea     edx, [esp+0xac]\n0x4120d2  push    ecx\n0x4120d3  lea     eax, [esp+0xac]\n0x4120da  push    edx\n0x4120db  lea     ecx, [esp+0x40]\n0x4120df  push    eax\n0x4120e0  push    ecx\n0x4120e1  call    Mat33_ToEulerAngles\n0x4120e6  push    0x0\n0x4120e8  lea     edx, [esp+0x74]\n0x4120ec  push    esi\n0x4120ed  push    edx\n0x4120ee  call    WeaponType_UpdateAnim\n0x4120f3  push    0x1\n0x4120f5  lea     eax, [esp+0xd0]\n0x4120fc  push    esi\n0x4120fd  push    eax\n0x4120fe  call    WeaponType_UpdateAnim\n0x412103  fld     st0, qword [esp+0xd8]\n0x41210a  fsub    st0, qword [esp+0x88]\n0x412111  add     esp, 0x30\n0x412114  fstp    qword [esp+0x10], st0\n0x412118  fld     st0, qword [esp+0xb0]\n0x41211f  fsub    st0, qword [esp+0x60]\n0x412123  fstp    qword [esp+0x18], st0\n0x412127  fld     st0, qword [esp+0xb8]\n0x41212e  fsub    st0, qword [esp+0x68]\n0x412132  fst     qword [esp+0x20], st0\n0x412136  fcomp   st0, qword [0x5333b0]\n0x41213c  fnstsw  ax\n0x41213e  test    ah, 0x41\n0x412141  jne     0x41216f\n\n0x412143  fld     st0, qword [esp+0x10]\n0x412147  fchs\n0x412149  fstp    qword [esp+0x10], st0\n0x41214d  fld     st0, qword [esp+0x18]\n0x412151  fchs\n0x412153  fstp    qword [esp+0x18], st0\n0x412157  fld     st0, qword [esp+0x20]\n0x41215b  fchs\n0x41215d  fstp    qword [esp+0x20], st0\n0x412161  fld     st0, dword [esp+0x28]\n0x412165  fadd    dword [0x533400]\n0x41216b  fstp    dword [esp+0x28], st0\n\n0x41216f  lea     ecx, [esp+0x10]\n0x412173  push    ecx\n0x412174  call    Vec3_Normalize\n0x412179  fld     st0, qword [esp+0x14]\n0x41217d  mov     edx, dword [esp+0x2c]\n0x412181  mov     dword [ebx+0xdb0], 0x0\n0x41218b  fstp    dword [ebx+0xda4], st0\n0x412191  fld     st0, qword [esp+0x1c]\n0x412195  push    edx\n0x412196  push    ebx\n0x412197  fstp    dword [ebx+0xda8], st0\n0x41219d  fld     st0, qword [esp+0x2c]\n0x4121a1  fstp    dword [ebx+0xdac], st0\n0x4121a7  call    AI_AlertAllies_19\n0x4121ac  push    ebx\n0x4121ad  mov     byte [ebx+0xda0], 0x0\n0x4121b4  mov     byte [ebx+0xda1], 0x1\n0x4121bb  call    AI_AlertAllies_20\n0x4121c0  push    ebx\n0x4121c1  call    AI_TakeCover_20\n0x4121c6  mov     eax, dword [ebx+0x4ec]\n0x4121cc  push    eax\n0x4121cd  call    AI_MoveToNode_22\n0x4121d2  mov     ecx, dword [ebx+0x4ec]\n0x4121d8  push    ecx\n0x4121d9  call    AI_UpdateOrders_22\n0x4121de  push    ebx\n0x4121df  call    AI_UpdatePatrol_20\n0x4121e4  push    ebx\n0x4121e5  call    AI_CheckVisibility_20\n0x4121ea  push    ebx\n0x4121eb  call    AI_UpdateSensors_19\n0x4121f0  push    0x3\n0x4121f2  push    ebx\n0x4121f3  call    Human_ViewCam\n0x4121f8  push    ebx\n0x4121f9  call    HumanPlayer_UpdateAnimation_4\n0x4121fe  push    0x538dc4  {\"wire_slide_1\"}\n0x412203  push    ebx\n0x412204  call    SoundSys_SetMasterVolume_7\n0x412209  push    ebx\n0x41220a  mov     dword [ebx+0xdb4], eax\n0x412210  call    AI_SelectTarget_21\n0x412215  mov     edx, dword [ebx+0x2fc]\n0x41221b  mov     eax, dword [ebx+0x2f0]\n0x412221  mov     dword [ebx+0x2f8], edx\n0x412227  mov     dword [ebx+0x2fc], 0x2b\n0x412231  mov     eax, dword [eax+0xac]\n0x412237  add     esp, 0x40\n0x41223a  jmp     0x4123cd\n\n0x41223f  lea     ecx, [esp+0x30]\n0x412243  push    esi\n0x412244  push    ecx\n0x412245  mov     byte [esp+0x17], 0x0\n0x41224a  call    Vehicle_DeployGear_10\n0x41224f  fld     st0, qword [ebx+0x20]\n0x412252  fsub    st0, qword [esi+0x20]\n0x412255  fld     st0, qword [ebx+0x28]\n0x412258  fsub    st0, qword [esi+0x28]\n0x41225b  fld     st0, qword [ebx+0x30]\n0x41225e  fsub    st0, qword [esi+0x30]\n0x412261  fld     st0, dword [esp+0x54]\n0x412265  push    0x0\n0x412267  lea     edx, [esp+0x7c]\n0x41226b  fmul    st0, st1\n0x41226d  fld     st0, dword [esp+0x4c]\n0x412271  fmul    st0, st3\n0x412273  push    esi\n0x412274  push    edx\n0x412275  faddp   st1, st0\n0x412277  fld     st0, dword [esp+0x48]\n0x41227b  fmul    st0, st4\n0x41227d  faddp   st1, st0\n0x41227f  fstp    qword [esp+0x74], st0\n0x412283  fstp    st0, st0\n0x412285  fstp    st0, st0\n0x412287  fstp    st0, st0\n0x412289  call    WeaponType_RegisterType_2\n0x41228e  push    0x1\n0x412290  lea     eax, [esp+0x94]\n0x412297  push    esi\n0x412298  push    eax\n0x412299  call    WeaponType_RegisterType_2\n0x41229e  fld     st0, dword [esp+0x94]\n0x4122a5  fadd    dword [0x5334f0]\n0x4122ab  fcomp   st0, qword [esp+0x80]\n0x4122b2  add     esp, 0x20\n0x4122b5  fnstsw  ax\n0x4122b7  test    ah, 0x41\n0x4122ba  je      0x4122d4\n\n0x4122bc  fld     st0, dword [esp+0x80]\n0x4122c3  fsub    st0, dword [0x5334f0]\n0x4122c9  fcomp   st0, qword [esp+0x60]\n0x4122cd  fnstsw  ax\n0x4122cf  test    ah, 0x1\n0x4122d2  je      0x4122d8\n\n0x4122d4  mov     cl, 0x1\n0x4122d6  jmp     0x4122dc\n\n0x4122d8  mov     cl, byte [esp+0xf]\n\n0x4122dc  fld     st0, dword [ebx+0x1d4]\n0x4122e2  fcomp   st0, dword [0x5333ec]\n0x4122e8  mov     edi, 0x20000\n0x4122ed  fnstsw  ax\n0x4122ef  test    ah, 0x40\n0x4122f2  jne     0x412307\n\n0x4122f4  fld     st0, dword [ebx+0x134]\n0x4122fa  fcomp   st0, dword [0x5333ec]\n0x412300  fnstsw  ax\n0x412302  test    ah, 0x40\n0x412305  jne     0x412317\n\n0x412307  test    cl, cl\n0x412309  jne     0x412317\n\n0x41230b  test    dword [ebx+0x2f4], edi\n0x412311  je      0x4123e0\n\n0x412317  push    ebx\n0x412318  mov     byte [ebx+0xda1], 0x0\n0x41231f  call    AI_SelectTarget_20\n0x412324  push    ebx\n0x412325  call    AI_UpdateOrders_20\n0x41232a  mov     ecx, dword [ebx+0x4ec]\n0x412330  push    ecx\n0x412331  call    AI_TakeCover_22\n0x412336  push    ebx\n0x412337  call    AI_CombatTarget_20\n0x41233c  push    ebx\n0x41233d  call    AI_CheckHearing_20\n0x412342  push    0x1\n0x412344  push    ebx\n0x412345  call    Human_ViewCam\n0x41234a  push    ebx\n0x41234b  call    HumanPlayer_LoadParameters_6\n0x412350  mov     eax, dword [ebx+0xdb4]\n0x412356  add     esp, 0x20\n0x412359  test    eax, eax\n0x41235b  je      0x412370\n\n0x41235d  push    eax\n0x41235e  call    SoundSys_SetFrequency_7\n0x412363  add     esp, 0x4\n0x412366  mov     dword [ebx+0xdb4], 0x0\n\n0x412370  push    ebx\n0x412371  call    AI_UpdateSensors_21\n0x412376  mov     byte [esi+0x130], 0x0\n0x41237d  mov     eax, dword [ebx+0x2f4]\n0x412383  add     esp, 0x4\n0x412386  test    edi, eax\n0x412388  je      0x4123ae\n\n0x41238a  mov     edx, dword [ebx+0x2fc]\n0x412390  mov     eax, dword [ebx+0x2f0]\n0x412396  mov     dword [ebx+0x2f8], edx\n0x41239c  mov     dword [ebx+0x2fc], 0x2f\n0x4123a6  mov     eax, dword [eax+0xbc]\n0x4123ac  jmp     0x4123cd\n\n0x4123ae  mov     ecx, dword [ebx+0x2fc]\n0x4123b4  mov     edx, dword [ebx+0x2f0]\n0x4123ba  mov     dword [ebx+0x2f8], ecx\n0x4123c0  mov     dword [ebx+0x2fc], 0x1d\n0x4123ca  mov     eax, dword [edx+0x74]\n\n0x4123cd  mov     dword [ebx+0x300], eax\n0x4123d3  push    ebx\n0x4123d4  add     ebx, 0x2ec\n0x4123da  push    ebx\n0x4123db  call    eax\n0x4123dd  add     esp, 0x8\n\n0x4123e0  pop     edi\n0x4123e1  pop     esi\n0x4123e2  pop     ebx\n0x4123e3  mov     esp, ebp\n0x4123e5  pop     ebp\n0x4123e6  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t HumanPlayer_WireSlide(float* arg1)\n\n{\n    double* eax = AI_CombatTarget_21(arg1);\n    float* var_d0;\n    int32_t eax_9;\n    float var_98;\n    float var_94;\n    float var_88;\n    float var_7c;\n    void* var_58;\n    float var_54;\n    void* var_4c;\n    float var_48;\n\n    if (!arg1[0x368])\n    {\n        var_d0 = &var_98;\n        char var_b9_1 = 0;\n        Vehicle_DeployGear_10(var_d0, eax);\n        long double x87_r4_15 = var_7c * (*(arg1 + 0x30) - eax[6])\n            + var_88 * (*(arg1 + 0x28) - eax[5]) + var_94 * (*(arg1 + 0x20) - eax[4]);\n        double var_68_1 = x87_r4_15;\n        WeaponType_RegisterType_2(&var_58, eax, 0);\n        WeaponType_RegisterType_2(&var_4c, eax, 1);\n        long double x87_r7_36 = var_54 + 3072f;\n        long double temp0_1 = var_68_1;\n        x87_r7_36 - temp0_1;\n        long double x87_r7_38;\n        long double temp1_1;\n\n        if (*(&((x87_r7_36 < temp0_1 ? 1 : 0) << 8 | (FCMP_UO(x87_r7_36, temp0_1) ? 1 : 0) << 0xa\n            | (x87_r7_36 == temp0_1 ? 1 : 0) << 0xe) + 1) & 0x41)\n        {\n            x87_r7_38 = var_48 - 3072f;\n            temp1_1 = var_68_1;\n            x87_r7_38 - temp1_1;\n        }\n\n        char ecx_2;\n\n        ecx_2 = *(&((x87_r7_36 < temp0_1 ? 1 : 0) << 8\n            | (FCMP_UO(x87_r7_36, temp0_1) ? 1 : 0) << 0xa | (x87_r7_36 == temp0_1 ? 1 : 0) << 0xe)\n            + 1) & 0x41 && !(*(&((x87_r7_38 < temp1_1 ? 1 : 0) << 8\n            | (FCMP_UO(x87_r7_38, temp1_1) ? 1 : 0) << 0xa | (x87_r7_38 == temp1_1 ? 1 : 0) << 0xe)\n            + 1) & 1) ? var_b9_1 : 1;\n\n        long double x87_r7_39 = arg1[0x75];\n        long double temp2_1 = 0f;\n        x87_r7_39 - temp2_1;\n        int16_t result = (x87_r7_39 < temp2_1 ? 1 : 0) << 8\n            | (FCMP_UO(x87_r7_39, temp2_1) ? 1 : 0) << 0xa | (x87_r7_39 == temp2_1 ? 1 : 0) << 0xe;\n\n        if (*(&result + 1) & 0x40)\n        {\n        label_412307:\n\n            if (!ecx_2 && !(arg1[0xbd] & 0x20000))\n                return result;\n        }\n        else\n        {\n            long double x87_r7_40 = arg1[0x4d];\n            long double temp4_1 = 0f;\n            x87_r7_40 - temp4_1;\n            result = (x87_r7_40 < temp4_1 ? 1 : 0) << 8\n                | (FCMP_UO(x87_r7_40, temp4_1) ? 1 : 0) << 0xa\n                | (x87_r7_40 == temp4_1 ? 1 : 0) << 0xe;\n\n            if (!(*(&result + 1) & 0x40))\n                goto label_412307;\n        }\n\n        *(arg1 + 0xda1) = 0;\n        AI_SelectTarget_20(arg1);\n        var_d0 = arg1;\n        AI_UpdateOrders_20(var_d0);\n        AI_TakeCover_22(arg1[0x13b]);\n        AI_CombatTarget_20(arg1);\n        AI_CheckHearing_20(arg1);\n        Human_ViewCam(arg1, 1);\n        HumanPlayer_LoadParameters_6(arg1);\n        void* eax_10 = arg1[0x36d];\n\n        if (eax_10)\n        {\n            SoundSys_SetFrequency_7(eax_10);\n            arg1[0x36d] = 0;\n        }\n\n        AI_UpdateSensors_21(arg1);\n        eax[0x26] = 0;\n\n        if (!(0x20000 & arg1[0xbd]))\n        {\n            void* edx_4 = arg1[0xbc];\n            arg1[0xbe] = arg1[0xbf];\n            arg1[0xbf] = 0x1d;\n            eax_9 = *(edx_4 + 0x74);\n        }\n        else\n        {\n            void* eax_12 = arg1[0xbc];\n            arg1[0xbe] = arg1[0xbf];\n            arg1[0xbf] = 0x2f;\n            eax_9 = *(eax_12 + 0xbc);\n        }\n    }\n    else\n    {\n        var_d0 = &var_98;\n        Vehicle_DeployGear_10(var_d0, eax);\n        long double x87_r7_1 = *(arg1 + 0x20) - eax[4];\n        long double x87_r6_1 = *(arg1 + 0x28) - eax[5];\n        double var_68 = x87_r6_1;\n        long double x87_r5_1 = *(arg1 + 0x30) - eax[6];\n        float var_8c;\n        float var_80;\n        double var_b8 = var_80 * x87_r5_1 + var_8c * x87_r6_1 + var_98 * x87_r7_1;\n        double var_b0_1 = var_7c * x87_r5_1 + var_88 * x87_r6_1 + var_94 * x87_r7_1;\n        float var_90;\n        float var_84;\n        float var_78;\n        double var_a8_1 = var_78 * x87_r5_1 + var_84 * x87_r6_1 + var_90 * x87_r7_1;\n        double var_70;\n        __builtin_memcpy(&var_70, &var_b8, 0x18);\n        WeaponType_RegisterType_2(&var_58, eax, 0);\n        WeaponType_RegisterType_2(&var_4c, eax, 1);\n        long double x87_r7_4 = var_54 + 3072f;\n        long double temp3_1 = var_b0_1;\n        x87_r7_4 - temp3_1;\n\n        if (*(&((x87_r7_4 < temp3_1 ? 1 : 0) << 8 | (FCMP_UO(x87_r7_4, temp3_1) ? 1 : 0) << 0xa\n            | (x87_r7_4 == temp3_1 ? 1 : 0) << 0xe | 0x3800) + 1) & 0x41)\n        {\n            x87_r7_4 = var_48 - 3072f;\n            long double temp5_1 = var_b0_1;\n            x87_r7_4 - temp5_1;\n\n            if (!(*(&((x87_r7_4 < temp5_1 ? 1 : 0) << 8\n                    | (FCMP_UO(x87_r7_4, temp5_1) ? 1 : 0) << 0xa\n                    | (x87_r7_4 == temp5_1 ? 1 : 0) << 0xe | 0x3800) + 1) & 1))\n                x87_r7_4 = var_68;\n        }\n\n        double var_40;\n        int64_t* var_cc_2 = &var_40;\n        var_d0 = arg1;\n        var_b8 = var_94 * x87_r7_4 - var_90 * 3686.4000000000001;\n        double var_b0_2 = var_88 * x87_r7_4 - var_84 * 3686.4000000000001;\n        double var_a8_2 = var_7c * x87_r7_4 - var_78 * 3686.4000000000001;\n        __builtin_memcpy(&var_40, &var_b8, 0x18);\n        var_40 = var_b8 + eax[4];\n        double var_38;\n        double var_38_1 = var_38 + eax[5];\n        double var_30;\n        double var_30_1 = var_30 + eax[6];\n        AI_UpdateOrders_19(var_d0, var_cc_2);\n        float var_a0;\n        float var_28;\n        float var_24;\n        Mat33_ToEulerAngles(&var_98, &var_28, &var_24, &var_a0);\n        WeaponType_UpdateAnim(&var_70, eax, 0);\n        double var_20;\n        WeaponType_UpdateAnim(&var_20, eax, 1);\n        var_b8 = var_20 - var_70;\n        double var_18;\n        double var_b0_3 = var_18 - var_68;\n        double var_60;\n        double var_10;\n        long double x87_r7_20 = var_10 - var_60;\n        double var_a8_3 = x87_r7_20;\n        long double temp6_1 = 0.0;\n        x87_r7_20 - temp6_1;\n\n        if (!(*(&((x87_r7_20 < temp6_1 ? 1 : 0) << 8 | (FCMP_UO(x87_r7_20, temp6_1) ? 1 : 0) << 0xa\n            | (x87_r7_20 == temp6_1 ? 1 : 0) << 0xe) + 1) & 0x41))\n        {\n            var_b8 = -(var_b8);\n            var_b0_3 = -(var_b0_3);\n            var_a8_3 = -(var_a8_3);\n            var_a0 = var_a0 + 3.14159274f;\n        }\n\n        Vec3_Normalize(&var_b8);\n        long double x87_r7_29 = var_b8;\n        float edx_1 = var_a0;\n        arg1[0x36c] = 0;\n        arg1[0x369] = x87_r7_29;\n        var_d0 = edx_1;\n        arg1[0x36a] = var_b0_3;\n        arg1[0x36b] = var_a8_3;\n        AI_AlertAllies_19(arg1, var_d0);\n        arg1[0x368] = 0;\n        *(arg1 + 0xda1) = 1;\n        AI_AlertAllies_20(arg1);\n        AI_TakeCover_20(arg1);\n        AI_MoveToNode_22(arg1[0x13b]);\n        AI_UpdateOrders_22(arg1[0x13b]);\n        AI_UpdatePatrol_20(arg1);\n        AI_CheckVisibility_20(arg1);\n        AI_UpdateSensors_19(arg1);\n        Human_ViewCam(arg1, 3);\n        HumanPlayer_UpdateAnimation_4(arg1);\n        arg1[0x36d] = SoundSys_SetMasterVolume_7(arg1, \"wire_slide_1\");\n        AI_SelectTarget_21(arg1);\n        void* eax_8 = arg1[0xbc];\n        arg1[0xbe] = arg1[0xbf];\n        arg1[0xbf] = 0x2b;\n        eax_9 = *(eax_8 + 0xac);\n    }\n    arg1[0xc0] = eax_9;\n    var_d0 = &arg1[0xbb];\n    return eax_9(var_d0, arg1);\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x411f20\"\narch: \"x86\"\nname: \"HumanPlayer_WireSlide\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 35\ntotal: 35\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x411f33 | x86 | 0x4636e0 | AI_CombatTarget_21 (0x4636e0 (x86)) |\n| 0x411f55 | x86 | 0x43f820 | Vehicle_DeployGear_10 (0x43f820 (x86)) |\n| 0x411fcd | x86 | 0xc35040 |  |\n| 0x411fdf | x86 | 0x414ed0 | WeaponType_RegisterType_2 (0x414ed0 (x86)) |\n| 0x411fef | x86 | 0x414ed0 | WeaponType_RegisterType_2 (0x414ed0 (x86)) |\n| 0x41208a | x86 | 0xc35040 |  |\n| 0x4120c2 | x86 | 0x4631a0 | AI_UpdateOrders_19 (0x4631a0 (x86)) |\n| 0x4120e1 | x86 | 0x4b3c50 | Mat33_ToEulerAngles (0x4b3c50 (x86)) |\n| 0x4120ee | x86 | 0x414e20 | WeaponType_UpdateAnim (0x414e20 (x86)) |\n| 0x4120fe | x86 | 0x414e20 | WeaponType_UpdateAnim (0x414e20 (x86)) |\n| 0x412174 | x86 | 0x4b3100 | Vec3_Normalize (0x4b3100 (x86)) |\n| 0x4121a7 | x86 | 0x463220 | AI_AlertAllies_19 (0x463220 (x86)) |\n| 0x4121bb | x86 | 0x463610 | AI_AlertAllies_20 (0x463610 (x86)) |\n| 0x4121c1 | x86 | 0x4635f0 | AI_TakeCover_20 (0x4635f0 (x86)) |\n| 0x4121cd | x86 | 0x464700 | AI_MoveToNode_22 (0x464700 (x86)) |\n| 0x4121d9 | x86 | 0x464720 | AI_UpdateOrders_22 (0x464720 (x86)) |\n| 0x4121df | x86 | 0x463570 | AI_UpdatePatrol_20 (0x463570 (x86)) |\n| 0x4121e5 | x86 | 0x463590 | AI_CheckVisibility_20 (0x463590 (x86)) |\n| 0x4121eb | x86 | 0x4632d0 | AI_UpdateSensors_19 (0x4632d0 (x86)) |\n| 0x4121f3 | x86 | 0x463760 | Human_ViewCam (0x463760 (x86)) |\n| 0x4121f9 | x86 | 0x40c140 | HumanPlayer_UpdateAnimation_4 (0x40c140 (x86)) |\n| 0x412204 | x86 | 0x4e6b00 | SoundSys_SetMasterVolume_7 (0x4e6b00 (x86)) |\n| 0x412210 | x86 | 0x464230 | AI_SelectTarget_21 (0x464230 (x86)) |\n| 0x41224a | x86 | 0x43f820 | Vehicle_DeployGear_10 (0x43f820 (x86)) |\n| 0x412289 | x86 | 0x414ed0 | WeaponType_RegisterType_2 (0x414ed0 (x86)) |\n| 0x412299 | x86 | 0x414ed0 | WeaponType_RegisterType_2 (0x414ed0 (x86)) |\n| 0x41231f | x86 | 0x463620 | AI_SelectTarget_20 (0x463620 (x86)) |\n| 0x412325 | x86 | 0x463600 | AI_UpdateOrders_20 (0x463600 (x86)) |\n| 0x412331 | x86 | 0x464710 | AI_TakeCover_22 (0x464710 (x86)) |\n| 0x412337 | x86 | 0x463580 | AI_CombatTarget_20 (0x463580 (x86)) |\n| 0x41233d | x86 | 0x4635a0 | AI_CheckHearing_20 (0x4635a0 (x86)) |\n| 0x412345 | x86 | 0x463760 | Human_ViewCam (0x463760 (x86)) |\n| 0x41234b | x86 | 0x40c2d0 | HumanPlayer_LoadParameters_6 (0x40c2d0 (x86)) |\n| 0x41235e | x86 | 0x4e6c00 | SoundSys_SetFrequency_7 (0x4e6c00 (x86)) |\n| 0x412371 | x86 | 0x464240 | AI_UpdateSensors_21 (0x464240 (x86)) |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x411f20\"\narch: \"x86\"\nname: \"HumanPlayer_WireSlide\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x410b3f | x86 | Human_RunUpdate (0x4109a0 (x86)) |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00411F20",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00411F20"
+   },
+   {
+    "address": "0x0041223F"
+   },
+   {
+    "address": "0x00411F4F"
+   },
+   {
+    "address": "0x004122D4"
+   },
+   {
+    "address": "0x004122BC"
+   },
+   {
+    "address": "0x0041202F"
+   },
+   {
+    "address": "0x0041200F"
+   },
+   {
+    "address": "0x004122DC"
+   },
+   {
+    "address": "0x004122D8"
+   },
+   {
+    "address": "0x0041216F"
+   },
+   {
+    "address": "0x00412143"
+   },
+   {
+    "address": "0x00412029"
+   },
+   {
+    "address": "0x00412307"
+   },
+   {
+    "address": "0x004122F4"
+   },
+   {
+    "address": "0x004123CD"
+   },
+   {
+    "address": "0x00412317"
+   },
+   {
+    "address": "0x0041230B"
+   },
+   {
+    "address": "0x00412370"
+   },
+   {
+    "address": "0x0041235D"
+   },
+   {
+    "address": "0x004123E0"
+   },
+   {
+    "address": "0x004123AE"
+   },
+   {
+    "address": "0x0041238A"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00411F20",
+    "target": "0x0041223F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00411F20",
+    "target": "0x00411F4F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041223F",
+    "target": "0x004122D4",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041223F",
+    "target": "0x004122BC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00411F4F",
+    "target": "0x0041202F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00411F4F",
+    "target": "0x0041200F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122D4",
+    "target": "0x004122DC",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004122BC",
+    "target": "0x004122D8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122BC",
+    "target": "0x004122D4",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041202F",
+    "target": "0x0041216F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041202F",
+    "target": "0x00412143",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041200F",
+    "target": "0x0041202F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041200F",
+    "target": "0x00412029",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122DC",
+    "target": "0x00412307",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122DC",
+    "target": "0x004122F4",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122D8",
+    "target": "0x004122DC",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0041216F",
+    "target": "0x004123CD",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00412143",
+    "target": "0x0041216F",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00412029",
+    "target": "0x0041202F",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00412307",
+    "target": "0x00412317",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00412307",
+    "target": "0x0041230B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122F4",
+    "target": "0x00412317",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004122F4",
+    "target": "0x00412307",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004123CD",
+    "target": "0x004123E0",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00412317",
+    "target": "0x00412370",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00412317",
+    "target": "0x0041235D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041230B",
+    "target": "0x004123E0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041230B",
+    "target": "0x00412317",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00412370",
+    "target": "0x004123AE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00412370",
+    "target": "0x0041238A",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041235D",
+    "target": "0x00412370",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004123AE",
+    "target": "0x004123CD",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0041238A",
+    "target": "0x004123CD",
+    "kind": "unconditional"
+   }
   ]
+ }
 }

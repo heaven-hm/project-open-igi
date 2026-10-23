@@ -1,43 +1,16 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x004A23D0",
-  "symbol": "Camera_ApplyHandiCam",
-  "signature": "uint32_t()",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x004A23D0",
-    "end": "0x4a23d4",
-    "size_bytes": 5,
-    "basic_blocks": 1,
-    "instruction_count": 1
-  },
-  "bytes_hex": "e94b2402009090909090909090909090",
-  "bytes_sha256": "e424796cdeba93d87c4f74ae589b0a53e23710b98e984664bd8e13fa880a47af",
-  "cfg": {
-    "entry": "0x004A23D0",
-    "nodes": [
-      {
-        "address": "0x004a23d0",
-        "start": "0x4a23d0",
-        "end": "0x4a23d5",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": []
-  },
-  "disassembly": "`asm\n  uint32_t Camera_ApplyHandiCam()\n\n0x4a23d0  jmp     DynObj_FindSymbol_5",
-  "pseudocode": "`bn-pseudoc\n  uint32_t Camera_ApplyHandiCam()\n\n{\n    /* tailcall */\n    return DynObj_FindSymbol_5();\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a23d0\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4a23d0 | x86 | 0x4c4820 | DynObj_FindSymbol_5 (0x4c4820 (x86)) |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a23d0\"\narch: \"x86\"\nname: \"Camera_ApplyHandiCam\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x5315f6 | x86 | Particle_Render3DSprites_4 (0x5315b0 (x86)) |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
-  ]
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004A23D0",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004A23D0"
+   }
+  ],
+  "edges": []
+ }
 }

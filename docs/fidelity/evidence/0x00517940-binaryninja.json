@@ -2,106 +2,10 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
- "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
- "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x00517940",
- "symbol": "Terrain_SelectTerrainLOD_6",
- "signature": "void**(void* arg1, int32_t arg2)",
- "analyzed_at": "2026-10-23T06:59:32Z",
- "function": {
-  "start": "0x00517940",
-  "end": "0x0051797E",
-  "size_bytes": 63,
-  "basic_blocks": 10,
-  "instruction_count": 30
- },
- "disassembly": [
-  "void** Terrain_SelectTerrainLOD_6(void* arg1, int32_t arg2)",
-  "0x517940  mov     eax, dword [esp+0x4]",
-  "0x517944  push    esi",
-  "0x517945  push    edi",
-  "0x517946  mov     esi, dword [eax+0x8]",
-  "0x517949  test    esi, esi",
-  "0x51794b  je      0x517975",
-  "0x51794d  mov     edi, dword [esp+0x10]",
-  "0x517951  mov     eax, dword [esi+0x10]",
-  "0x517954  cmp     eax, 0x464f524d",
-  "0x517959  je      0x517961",
-  "0x51795b  cmp     eax, edi",
-  "0x51795d  je      0x51797a",
-  "0x51795f  jmp     0x51796f",
-  "0x517961  push    edi",
-  "0x517962  push    esi",
-  "0x517963  call    Terrain_SelectTerrainLOD_6",
-  "0x517968  add     esp, 0x8",
-  "0x51796b  test    eax, eax",
-  "0x51796d  jne     0x517977",
-  "0x51796f  mov     esi, dword [esi]",
-  "0x517971  test    esi, esi",
-  "0x517973  jne     0x517951",
-  "0x517975  xor     eax, eax",
-  "0x517977  pop     edi",
-  "0x517978  pop     esi",
-  "0x517979  retn",
-  "0x51797a  mov     eax, esi",
-  "0x51797c  pop     edi",
-  "0x51797d  pop     esi",
-  "0x51797e  retn"
- ],
- "pseudocode": "  void** Terrain_SelectTerrainLOD_6(void* arg1, int32_t arg2)\n\n{\n    for (void** i = *(arg1 + 8); i; i = *i)\n    {\n        int32_t eax = i[4];\n\n        if (eax == 0x464f524d)\n        {\n            void** eax_1 = Terrain_SelectTerrainLOD_6(i, arg2);\n\n            if (eax_1)\n                return eax_1;\n        }\n        else if (eax == arg2)\n            return i;\n    }\n\n    return nullptr;\n}",
- "callers": [
-  {
-   "callsite": "0x4d6817",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6876",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6883",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d68f7",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6996",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6a1f",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6a4f",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6c5f",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x4d6cbd",
-   "caller": "Render_FileSIsNotIffFile (0x4d67a0 (x86))"
-  },
-  {
-   "callsite": "0x517963",
-   "caller": "Terrain_SelectTerrainLOD_6 (0x517940 (x86))"
-  }
- ],
- "callees": [
-  {
-   "callsite": "0x517963",
-   "callee_address": "0x517940",
-   "callee": "Terrain_SelectTerrainLOD_6 (0x517940 (x86))"
-  }
- ],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x00517940",
   "nodes": [
    {
     "address": "0x00517940"
@@ -201,10 +105,5 @@
     "kind": "conditional"
    }
   ]
- },
- "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence.",
-  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
- ]
+ }
 }

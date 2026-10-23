@@ -18,16 +18,38 @@ using FrameDispatchCallback = void (IGI_RETAIL_CDECL *)(void*);
 // The optional handler the retail calls from AppContext_SetIsActive (0x0048F140).
 using FrameFlagHandler = std::int32_t (IGI_RETAIL_CDECL *)(std::int32_t, std::int32_t);
 
+// The retail Flow object at 0x00567C8C. The class registers a 0x54 byte object
+// through 0x00401900, and Flow_RunHandler (0x00402260) reads the fields from
+// +0x08 through +0x50, so the port carries the retail's whole object.
 struct FrameDispatchRecordView {
-    std::byte unknown_0x00[0x1C];
-    std::uint16_t dispatch_table_index;
-    std::byte unknown_0x1E[0x0E];
-    std::uint32_t unknown_0x2C;
+    std::byte unknown_0x00[0x08];
+    // +0x08: the flow object's task list. 0x004012A0 links records here through
+    // 0x004AF8F0: +0x08 holds the first node, +0x0C the list's first slot and
+    // +0x10 the last node. Flow_RunHandler starts its walk at [object + 0x08].
+    std::uint32_t task_first;
+    std::uint32_t task_list_first;
+    std::uint32_t task_list_last;
+    std::byte unknown_0x14[0x08];
+    std::uint16_t dispatch_table_index; // +0x1C, the class id
+    std::byte unknown_0x1E[0x0A];       // +0x1E..+0x27
+    std::uint32_t state;                // +0x28, the running flow state
+    std::uint32_t unknown_0x2C;         // +0x2C, the pending flow state
+    std::uint32_t base_low;             // +0x30
+    std::uint32_t counter;              // +0x34
+    std::uint32_t phase_counter;        // +0x38
+    std::uint32_t divisor;              // +0x3C
+    std::uint32_t frame_counter;        // +0x40
+    std::uint8_t unknown_0x44;          // +0x44
+    std::byte unknown_0x45[0x03];
+    std::uint32_t port_record;          // +0x48, the input port record
+    std::uint32_t step;                 // +0x4C
+    std::uint32_t base_high;            // +0x50
 };
 
 static_assert(offsetof(FrameDispatchRecordView, dispatch_table_index) == 0x1C);
 static_assert(offsetof(FrameDispatchRecordView, unknown_0x2C) == 0x2C);
-static_assert(sizeof(FrameDispatchRecordView) == 0x30);
+static_assert(offsetof(FrameDispatchRecordView, base_high) == 0x50);
+static_assert(sizeof(FrameDispatchRecordView) == 0x54);
 
 } // namespace igi::retail::core
 

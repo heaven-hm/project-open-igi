@@ -1,82 +1,46 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x004A8A91",
-  "symbol": "Camera_ResetMatrix_14",
-  "signature": "long double(double arg1, int16_t arg2 @ 0xa) __pure",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x004A8A91",
-    "end": "0x4a8acc",
-    "size_bytes": 60,
-    "basic_blocks": 4,
-    "instruction_count": 22
-  },
-  "bytes_hex": "558bec83c4f453668b450e668bd86625",
-  "bytes_sha256": "6975f6e7ac833bfe3c71da156e86ebaac24a3f70e50e7d960e52782d311c2b90",
-  "cfg": {
-    "entry": "0x004A8A91",
-    "nodes": [
-      {
-        "address": "0x004a8a91",
-        "start": "0x4a8a91",
-        "end": "0x4a8aa9",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8ac7",
-        "start": "0x4a8ac7",
-        "end": "0x4a8aca",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8aa9",
-        "start": "0x4a8aa9",
-        "end": "0x4a8ac7",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004a8aca",
-        "start": "0x4a8aca",
-        "end": "0x4a8acd",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x004a8a91",
-        "target": "0x004a8aa9",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8a91",
-        "target": "0x004a8ac7",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8aa9",
-        "target": "0x004a8aca",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004a8ac7",
-        "target": "0x004a8aca",
-        "kind": "unconditional"
-      }
-    ]
-  },
-  "disassembly": "`asm\n\ud83c\udf10  long double Camera_ResetMatrix_14(double arg1, int16_t arg2 @ 0xa) __pure\n\n0x4a8a91  push    ebp\n0x4a8a92  mov     ebp, esp\n0x4a8a94  add     esp, 0xfffffff4\n0x4a8a97  push    ebx\n0x4a8a98  mov     ax, word [ebp+0xe]\n0x4a8a9c  mov     bx, ax\n0x4a8a9f  and     ax, 0x7ff0\n0x4a8aa3  cmp     ax, 0x7ff0\n0x4a8aa7  jne     0x4a8ac7\n\n0x4a8aa9  or      bx, 0x7fff\n0x4a8aae  mov     word [ebp-0x2], bx\n0x4a8ab2  mov     eax, dword [ebp+0xc]\n0x4a8ab5  mov     ebx, dword [ebp+0x8]\n0x4a8ab8  shld    eax, ebx, 0xb\n0x4a8abc  mov     dword [ebp-0x6], eax\n0x4a8abf  mov     dword [ebp-0xa], ebx\n0x4a8ac2  fld     st0, tword [ebp-0xa]\n0x4a8ac5  jmp     0x4a8aca\n\n0x4a8ac7  fld     st0, qword [ebp+0x8]\n\n0x4a8aca  pop     ebx\n0x4a8acb  leave\n0x4a8acc  retn",
-  "pseudocode": "`bn-pseudoc\n\ud83c\udf10  long double Camera_ResetMatrix_14(double arg1, int16_t arg2 @ 0xa) __pure\n\n{\n    if ((arg2 & 0x7ff0) != 0x7ff0)\n        return arg1;\n\n    int16_t var_6_1 = arg2 | 0x7fff;\n    int32_t ebx_1 = arg1;\n    int32_t var_a_1 = *(&arg1 + 4) << 0xb | ebx_1 >> 0x15;\n    return ebx_1;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a8a91\"\narch: \"x86\"\nname: \"Camera_ResetMatrix_14\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a8a91\"\narch: \"x86\"\nname: \"Camera_ResetMatrix_14\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 3\ntotal: 3\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4a8904 | x86 | Camera_ApplyHandiCam_14 (0x4a88f4 (x86)) |\n| 0x4a8912 | x86 | Camera_ApplyHandiCam_14 (0x4a88f4 (x86)) |\n| 0x4a8a75 | x86 | Camera_UpdateViewCone_14 (0x4a8a65 (x86)) |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004A8A91",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004A8A91"
+   },
+   {
+    "address": "0x004A8AC7"
+   },
+   {
+    "address": "0x004A8AA9"
+   },
+   {
+    "address": "0x004A8ACA"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004A8A91",
+    "target": "0x004A8AC7",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004A8A91",
+    "target": "0x004A8AA9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004A8AC7",
+    "target": "0x004A8ACA",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004A8AA9",
+    "target": "0x004A8ACA",
+    "kind": "unconditional"
+   }
   ]
+ }
 }

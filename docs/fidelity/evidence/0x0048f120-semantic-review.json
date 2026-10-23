@@ -1,122 +1,62 @@
 {
-  "schema_version": 1,
-  "kind": "semantic-review-report",
-  "result": "passed",
-  "address": "0x0048F120",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "65fec34526dd57d52c8ceb42d1f852749af375e41ffa480ed2f0bc8120a60324",
-  "reviewed": true,
-  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
-  "reviewed_at": "2026-10-23T12:58:32Z",
-  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
-  "review_basis": "Retail 0x0048F120 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/fx/0048F120-SetScreenMode.cpp at sha256 65fec34526dd57d52c8ceb42d1f852749af375e41ffa480ed2f0bc8120a60324 (recorded implementation.signature: int __cdecl FX_FireBallUpdate_23(int context);). The evidence artifact digests are bound in this review.",
-  "retail_function": {
-    "entry": "0x0048F120",
-    "name": "SetScreenMode",
-    "binary_ninja_name": "FX_FireBallUpdate_23",
-    "signature": "int32_t(char arg1)",
-    "start": "0x0048F120",
-    "end": "0x48f12a",
-    "basic_blocks": 1,
-    "edges": [],
-    "cfg_similarity": 1.0,
-    "summary": "One block 0x48F120-0x48F12A: movsx EAX, byte [E+4]; dword [0x005C8C00]=EAX; ret. Stores the sign-extended low byte and returns that dword.",
-    "blocks": [
-      {
-        "address": "0x0048f120",
-        "start": "0x48f120",
-        "end": "0x48f12b",
-        "flags": "can-exit"
-      }
-    ],
-    "calls": [],
-    "globals_written": [
-      "0x5c8c00"
-    ]
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x0048F120",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "65fec34526dd57d52c8ceb42d1f852749af375e41ffa480ed2f0bc8120a60324",
+ "reviewed": true,
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
   },
-  "candidate_function": {
-    "path": "scripts/GameNatives/fx/0048F120-SetScreenMode.cpp",
-    "sha256": "65fec34526dd57d52c8ceb42d1f852749af375e41ffa480ed2f0bc8120a60324",
-    "signature": "int __cdecl FX_FireBallUpdate_23(int context);",
-    "status_after_review": "STRUCTURALLY_VERIFIED",
-    "summary": "One block 0x48F120-0x48F12A: movsx EAX, byte [E+4]; dword [0x005C8C00]=EAX; ret. Stores the sign-extended low byte and returns that dword."
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
   },
-  "candidate_comparison": {
-    "result": "match",
-    "divergences": [],
-    "statement": "No candidate divergence found in the checked dimensions."
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
   },
-  "checks": [
-    {
-      "name": "function_identity",
-      "result": "passed",
-      "detail": "Retail entry 0x0048F120 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/fx/0048F120-SetScreenMode.cpp (sha256 65fec34526dd57d52c8ceb42d1f852749af375e41ffa480ed2f0bc8120a60324). One block 0x48F120-0x48F12A: movsx EAX, byte [E+4]; dword [0x005C8C00]=EAX; ret. Stores the sign-extended low byte and returns that dword."
-    },
-    {
-      "name": "abi_and_signature",
-      "result": "passed",
-      "detail": "cdecl with one 4-byte stack argument at [E+4]; BN int32_t(char arg1); candidate int __cdecl FX_FireBallUpdate_23(int context) with (signed char)context \u2014 same slot, same cdecl and the same EAX return."
-    },
-    {
-      "name": "argument_mapping",
-      "result": "passed",
-      "detail": "cdecl with one 4-byte stack argument at [E+4]; BN int32_t(char arg1); candidate int __cdecl FX_FireBallUpdate_23(int context) with (signed char)context \u2014 same slot, same cdecl and the same EAX return."
-    },
-    {
-      "name": "control_flow_shape",
-      "result": "passed",
-      "detail": "Retail CFG: Binary Ninja reports 1 block(s)/0 edge(s) at 0x0048F120; radare2 recovers the identical 1 block(s)/0 edge(s) (score 1.0000); angr CFGFast recovers 1 block(s) with has_unresolved_jumps=False."
-    },
-    {
-      "name": "calls_and_side_effects",
-      "result": "passed",
-      "detail": "None: the block contains no call and no indirect transfer."
-    },
-    {
-      "name": "constants_and_scaling",
-      "result": "passed",
-      "detail": "movsx from the low byte; the stored and returned value is the sign-extended dword; global 0x005C8C00."
-    },
-    {
-      "name": "memory_layout_and_access",
-      "result": "passed",
-      "detail": "One dword write to 0x005C8C00; no locals."
-    },
-    {
-      "name": "return_and_error_paths",
-      "result": "passed",
-      "detail": "EAX is the sign-extended byte and is also the value stored, so the stored and returned dwords are identical on every input."
-    },
-    {
-      "name": "floating_point_semantics",
-      "result": "not_applicable",
-      "detail": "The function sign-extends an integer byte; there is no floating-point instruction or operand.",
-      "rationale": "The function sign-extends an integer byte; there is no floating-point instruction or operand."
-    }
-  ],
-  "signature_comparison": {
-    "reviewed": true,
-    "result": "abi-adapted",
-    "rationale": "Binary Ninja reports \"int32_t(char arg1)\" at 0x0048F120; radare2 recovers \"fcn.0048f120 (int8_t arg_4h);\". Both tools place the entry at 0x0048F120 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int __cdecl FX_FireBallUpdate_23(int context);."
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
   },
-  "evidence": {
-    "binary_ninja": {
-      "evidence_path": "docs/fidelity/evidence/0x0048F120-binaryninja.json",
-      "evidence_sha256": "b289e5113c37cda01005dd4370356fe6c6d5e9c47ae764603855d0644f9bedb8",
-      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
-    },
-    "radare2": {
-      "evidence_path": "docs/fidelity/evidence/0x0048F120-radare2.json",
-      "evidence_sha256": "ebc5bf729c99f4f12e11413ea88d0b5bb228953b9bce5560a367fc715f5ce8b4",
-      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
-    },
-    "angr": {
-      "evidence_path": "docs/fidelity/evidence/0x0048F120-angr-20261023.json",
-      "evidence_sha256": "dfe99f45a1133a6c3b314e9c8382d6c5c822cd8874685f8e007a466683da845c",
-      "tool": "angr 10.0.4.post1 CFGFast"
-    }
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
   },
-  "limitations": [
-    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
-  ]
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "Not applicable: no floating point in 0x0048F120."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "Retail 0x0048F120 (FX_FireBallUpdate_23): movsx eax,byte [esp+4]; mov [g_5c8c00],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run: this runs once during startup before a probe can attach."
+  }
+ ]
 }

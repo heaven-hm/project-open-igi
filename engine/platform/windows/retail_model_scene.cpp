@@ -657,7 +657,39 @@ struct Scene
             throw std::runtime_error("config.qvm: " + input_config_error);
         }
         write_log("Flow stage config.qvm: applied " +
-                  std::to_string(input_config.bindings.size()) + " action bindings");
+                  std::to_string(input_config.bindings.size()) + " action bindings from profile " +
+                  std::to_string(input_config.active_profile) + " '" +
+                  input_config.player_name.value_or(std::string{}) + "'");
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            // Retail reads only the record GOStart selects (0x00BC2384 -> the getters at
+            // 0x004061C0/0x004061E0/0x00406200). Print every record so the selected one can
+            // be compared with the others of the same file.
+            for (std::size_t profile_index = 0; profile_index < input_config.profiles.size();
+                 ++profile_index)
+            {
+                const config::InputProfile& profile = input_config.profiles[profile_index];
+                std::ostringstream summary;
+                summary << "ConfigDiag profile=" << profile_index << " name='" << profile.name
+                        << "' active=" << (profile_index == input_config.active_profile ? 1 : 0)
+                        << " bindings=" << profile.bindings.size()
+                        << " invert=" << profile.mouse_inverted.value_or(-1)
+                        << " sens=" << std::fixed << std::setprecision(3)
+                        << profile.mouse_sensitivity.value_or(0.0F);
+                write_log(summary.str());
+                std::ostringstream table;
+                table << "ConfigDiag profile=" << profile_index << " table=";
+                for (const config::InputBinding& binding : profile.bindings)
+                {
+                    const char* device = binding.device == "INPUTPORT_DEVICE_KEYBOARD"
+                                             ? "kb"
+                                             : (binding.device == "INPUTPORT_DEVICE_MOUSE" ? "ms"
+                                                                                           : "other");
+                    table << binding.action << ':' << device << ':' << binding.control << ' ';
+                }
+                write_log(table.str());
+            }
+        }
     }
 
     void load(const std::filesystem::path& root, unsigned int level_number)
@@ -949,6 +981,20 @@ struct Scene
             const bool switch_task = (type == "Switch");
             const bool scamera_task = (type == "SCamera");
             const bool vehicle_task = (type == "Car" || type == "Heli");
+            // STOPGAP - NOT the accepted fix.  Retail stores the human heading (the task
+            // real32 event argument at ctx+0xf8) to object+0x508 (Human_OnEvent 0x0045F890,
+            // store at 0x0045F8E4) and builds the body matrix at object+0x78 with
+            // Mat33_FromEulerAngles 0x004B38E0, called from AI_UpdateOrders 0x004610C0 at
+            // 0x004613B4 with x = [+0x4f8], y = [+0x500], z = [+0x508]; the heading is the
+            // Z angle.  This host branch only mirrors that Z-slot mapping so the demo shows
+            // the right body shape.  Delete it once the retail spawn chain
+            // (Script_SpawnNewTask 0x004F9B80 -> Task_New 0x004F0780/0x004F0D40 -> human
+            // class setup -> Human_OnEvent 0x0045F890 -> AI_UpdateOrders 0x004610C0) is
+            // transcribed and the placement calls that path instead.
+            const bool human_task = (type == "HumanPlayer" || type == "HumanSoldier" ||
+                                     type == "HumanSoldierFemale" ||
+                                     type == "HumanSoldierPistol" ||
+                                     type == "HumanSoldierRPG");
             // Every positioned Task_New participates in the generic model resolver.  The
             // specialised branches below preserve retail argument layouts where known;
             // unknown task types use the standard layout and then scan their arguments for a
@@ -1017,6 +1063,17 @@ struct Scene
                                               safe_number(arguments[7]),
                                               safe_number(arguments[8]));
                 model_name = safe_text(arguments[10]);
+            }
+            else if (human_task) // STOPGAP: Human pos@3..5, heading@6, model@9 (see above)
+            {
+                if (arguments.size() < 10U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                const float heading = safe_number(arguments[6]);
+                object.rotation = orientation(0.0f, 0.0f, heading);
+                model_name = safe_text(arguments[9]);
             }
             else if (vehicle_task) // Car / Heli: pos@3..5, heading@8, model@13
             {
@@ -1715,6 +1772,14 @@ struct Scene
 
     void update_player(double delta_seconds)
     {
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            static unsigned int ticks = 0;
+            if (ticks++ % 60U == 0U)
+                write_log(std::string("FrameDiag update_player ready=") + (player_ready ? "1" : "0")
+                          + " motion=" + (player_motion_available ? "1" : "0")
+                          + " keys=" + std::to_string(key_messages));
+        }
         if (!player_ready)
         {
             return;
@@ -1737,6 +1802,31 @@ struct Scene
         last_look_delta = {look[0], look[1]};
 
         player.update_view(frame);
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            static unsigned int last_key_messages = 0;
+            if (key_messages != last_key_messages)
+            {
+                last_key_messages = key_messages;
+                std::ostringstream diag;
+                diag << "InputDiag key_msgs=" << key_messages
+                     << " fwd=" << frame.move_forward << " back=" << frame.move_backward
+                     << " left=" << frame.strafe_left << " right=" << frame.strafe_right
+                     << " jump=" << frame.jump
+                     << " raw_W=" << input_port.KeyDown(0x57U)
+                     << " raw_A=" << input_port.KeyDown(0x41U)
+                     << " raw_S=" << input_port.KeyDown(0x53U)
+                     << " raw_D=" << input_port.KeyDown(0x44U)
+                     << " ready=" << player_ready
+                     << " motion=" << player_motion_available << " moveup_bindings=";
+                for (const auto& binding : input_port.Bindings(input::Action::move_up))
+                    diag << (binding.device == input::Device::keyboard ? "k" : "m") << binding.code << ",";
+                diag << " movedown_bindings=";
+                for (const auto& binding : input_port.Bindings(input::Action::move_down))
+                    diag << (binding.device == input::Device::keyboard ? "k" : "m") << binding.code << ",";
+                write_log(diag.str());
+            }
+        }
         const auto before_motion = player;
         try
         {
@@ -1756,6 +1846,26 @@ struct Scene
                       diagnostics::LogLevel::warning);
             player = before_motion;
             player_motion_available = false;
+        }
+
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            // Gated motion trace: one line per air frame plus the ground transitions, so a
+            // jump shows its vertical rise against its horizontal take-off.
+            static bool diag_last_on_ground = true;
+            const bool on_ground = player.on_ground();
+            if (!on_ground || on_ground != diag_last_on_ground)
+            {
+                const auto feet = player.feet_position();
+                const auto velocity = player.velocity();
+                std::ostringstream diag;
+                diag << std::fixed << std::setprecision(3) << "JumpDiag feet=" << feet[0] << '/'
+                     << feet[1] << '/' << feet[2] << " vel=" << velocity[0] << '/' << velocity[1]
+                     << '/' << velocity[2] << " ground=" << player.ground_height()
+                     << " on_ground=" << (on_ground ? 1 : 0);
+                write_log(diag.str());
+            }
+            diag_last_on_ground = on_ground;
         }
 
         // The camera sits on the human's eye and looks along the human's

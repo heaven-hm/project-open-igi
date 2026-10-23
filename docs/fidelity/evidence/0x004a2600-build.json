@@ -6,48 +6,7 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "d8bee270d895a13cd458afaf549bfc15b5d1bf8a02ab59d64d0fb4625fa280a7",
  "executed": true,
- "performed_at": "2026-10-23T07:06:09Z",
- "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/render/camera_transform.cpp -o /tmp/taskb-build/camera_transform.o",
- "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
- "toolchain": {
-  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
-  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
-  "flags": "-O3 -DNDEBUG",
-  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS and the engine/include include path."
- },
- "object": {
-  "path": "/tmp/taskb-build/camera_transform.o",
-  "sha256": "6ce5b1ca74b1b0e38aca778ee3086342b2e9c0966743718654c89f2cb956c916",
-  "size_bytes": 2181,
-  "format": "pe-i386 relocatable object",
-  "symbol": "igi::retail::render::Camera_ResetMatrix(igi::retail::render::CameraColorContext const*)",
-  "symbol_offset": 304,
-  "symbol_size_bytes": 336,
-  "function_bytes_hex": "83ec1c31d2895c24108b5c242085db0f8426010000d94364d9050800000089742414897c2418d8c9d9c9d95c240cd91c24e800000000d94368d90508000000c1e00889c6d8c9d9c9d95c2408d91c24e800000000d9436c01c6c1e608d9c0d95c2404d80d0c000000d91c24e800000000d944240cd80d0000000029f089c3d91c24e800000000d9442408d80d00000000c1e00889c6d91c24e800000000d9442404d80d0400000001c6c1e608d91c24e800000000b92000000029f0be4000000089c28d41e08d76002e8db42600000000891c85000c000083c002891c85fc0b000039c175eb89f729cf83e70174228d4101891485fc0b000039f074298d7426002e8db426000000002e8db42600000000891485000c000083c002891485fc0b000039f075eb83c14083c64081f920010000758f8b7424148b7c24188b5c241089d083c41cc38d76002e8db42600000000",
-  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding.",
-  "function_bytes_length": 336
- },
- "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
- "checks": [
-  {
-   "name": "source_digest_binding",
-   "result": "passed",
-   "detail": "The compiled source hashed d8bee270d895a13cd458afaf549bfc15b5d1bf8a02ab59d64d0fb4625fa280a7, matching the implementation digest this report is bound to."
-  },
-  {
-   "name": "x86_object_compile",
-   "result": "passed",
-   "detail": "The compile command exited 0 and produced a pe-i386 object."
-  },
-  {
-   "name": "compiled_sequence",
-   "result": "passed",
-   "detail": "The object label for igi::retail::render::Camera_ResetMatrix(igi::retail::render::CameraColorContext const*) spans 336 bytes at offset 0x130; 336 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
-  }
- ],
- "limitations": [
-  "A successful compile does not prove behavioural equivalence.",
-  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
-  "No runtime path was executed by this build report."
- ]
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/render/camera_transform.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
 }

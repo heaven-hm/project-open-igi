@@ -96,8 +96,28 @@ struct InputBinding
     std::string control;
 };
 
+// One player profile record of config.qvm.
+//
+// Retail stores one record per profile: GOPlayer (0x004036B0) increments the profile
+// count at 0x00BC2380 and zeroes the record's remap action counter, GOInRemap
+// (0x004037C0) appends the profile's bindings, and GOInMouInv/GOInMouSens
+// (0x00403870/0x004038F0) write its invert flag and sensitivity. The runtime reads only
+// the record named by the active profile index at 0x00BC2384, which GOStart
+// (0x00403660) stores from its argument; the getters 0x004061C0/0x004061E0/0x00406200/
+// 0x00406220 use that value directly as the record index. The first GOPlayer defines
+// record 0.
+struct InputProfile
+{
+    std::string name;
+    std::vector<InputBinding> bindings;
+    std::optional<float> mouse_sensitivity;
+    std::optional<std::int32_t> mouse_inverted;
+    std::optional<std::int32_t> active_mission;
+};
+
 // config.qvm. The values are the ones the shipped file sets; a value the file does not
-// set stays empty instead of receiving a port default.
+// set stays empty instead of receiving a port default. The top-level fields are the ones
+// of the active profile, which is the record the retail input port reads.
 struct InputConfig
 {
     std::vector<InputBinding> bindings;
@@ -107,6 +127,10 @@ struct InputConfig
     std::optional<std::int32_t> active_mission;
     std::optional<std::string> content_control_password;
     std::optional<std::int32_t> start_state;
+
+    // The record index GOStart selects, and every record the file defines in file order.
+    std::uint32_t active_profile{0U};
+    std::vector<InputProfile> profiles;
 };
 
 [[nodiscard]] bool decode_input_config(const ScriptProgram& program, InputConfig& out,

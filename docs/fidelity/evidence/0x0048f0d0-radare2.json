@@ -1,74 +1,16 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "radare2",
-  "tool_version": "radare2 6.2.0 +0 abi:132 (git 6.2.0, 2026-08-07)",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "function_entry": "0x0048F0D0",
-  "symbol": "fcn.0048f0d0",
-  "signature": "int32_t __cdecl(int32_t)",
-  "signature_raw": "fcn.0048f0d0 (int32_t arg_4h);",
-  "analyzed_at": "2026-10-22T22:12:00Z",
-  "commands": [
-    "aa",
-    "af @ 0x48f0d0",
-    "afij @ 0x48f0d0",
-    "afbj @ 0x48f0d0",
-    "p8 10 @ 0x48f0d0",
-    "axt @ 0x48f0d0",
-    "axt @ 0x5c8bc0"
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x0048F0D0",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x0048F0D0"
+   }
   ],
-  "disassembly": [
-    "0x0048f0d0  8b442404  mov eax, dword [arg_4h]",
-    "0x0048f0d4  a3c08b5c00  mov dword [0x5c8bc0], eax",
-    "0x0048f0d9  c3  ret"
-  ],
-  "bytes_hex": "8b442404a3c08b5c00c3",
-  "function": {
-    "size_bytes": 10,
-    "basic_block_count": 1,
-    "instruction_count": 3,
-    "call_convention": "cdecl",
-    "argument_count": 1,
-    "edge_count": 0,
-    "indegree": 1,
-    "outdegree": 0
-  },
-  "cfg": {
-    "entry": "0x0048F0D0",
-    "nodes": [
-      {
-        "address": "0x0048F0D0",
-        "size": 10,
-        "opaddr": 4780240,
-        "ninstr": 3,
-        "instrs": [
-          4780240,
-          4780244,
-          4780249
-        ]
-      }
-    ],
-    "edges": []
-  },
-  "xrefs_to_entry": [
-    {
-      "from": "0x48f5fa",
-      "type": "CALL",
-      "caller_function": "main"
-    }
-  ],
-  "xrefs_to_global": [
-    {
-      "from": "0x48f0d4",
-      "type": "DATA write",
-      "text": "mov dword [0x5c8bc0], eax"
-    }
-  ],
-  "cfg_scope": "Retail-image CFG from Radare2 only. The gate compares node/edge identity with Binary Ninja's retail graph; this is not a candidate CFG.",
-  "limitations": [
-    "This artifact is retail-image CFG/disassembly structure only; it is not candidate code and does not by itself establish candidate equivalence.",
-    "The candidate's start-up runtime path was not executed for this artifact; no paired retail/candidate process capture is recorded here."
-  ]
+  "edges": []
+ }
 }

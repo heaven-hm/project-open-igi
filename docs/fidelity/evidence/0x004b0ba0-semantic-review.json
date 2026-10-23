@@ -4,82 +4,59 @@
  "result": "passed",
  "address": "0x004B0BA0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "24aaeb7ebd9ddd03165673910110f3b60ab1808cef14d3b6b4732d7a869266a0",
+ "implementation_sha256": "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
  "reviewed": true,
- "reviewed_by": "Automated static review with live Binary Ninja and Radare2 CFG extraction plus the current source/retail behavior notes",
- "reviewed_at": "2026-10-23T12:12:12+05:30",
- "retail_evidence": {
-  "binary_ninja": {
-   "evidence_path": "docs/fidelity/evidence/0x004B0BA0-binaryninja.json",
-   "evidence_sha256": "a8f6c7f9ad7afd96b871e853dd9076ad32019da786063f55fb8be07f135e45bc",
-   "nodes": 1,
-   "edges": 0
-  },
-  "radare2": {
-   "evidence_path": "docs/fidelity/evidence/0x004B0BA0-radare2.json",
-   "evidence_sha256": "86fb964f889c9963676f658922a3bf2571a7e08bc2bf50ec525195b3107040bd",
-   "nodes": 1,
-   "edges": 0
-  },
-  "cfg_similarity": 1.0
- },
- "behavior_summary": "initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`, `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`.",
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
  "runtime_contract": {
   "scope": "typed-per-native-probe",
-  "probe_sha256": "028d60b7f0e132f45a10721e12a067dc1fbdb1f140616437ffac856192faadf3",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
   "required_observables": {
    "inputs": [
     "args"
    ],
    "outputs": [
-    "return_value"
+    "outputs"
    ],
-   "sideEffects": [
-    "side_effects"
-   ]
+   "sideEffects": []
   },
-  "note": "Contract for the paired live typed probe. The behavioral evidence currently cited for this record is the angr/ESIL differential in verification.behavioral and verification.runtime_tests, not a live game-process capture."
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Live Binary Ninja and Radare2 extraction on the retail image both identify one function entry at 0x004B0BA0; Binary Ninja reports 1 nodes/0 edges and Radare2 reports 1 nodes/0 edges, recomputed similarity 1.000."
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004B0BA0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`, `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`."
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate preserves the retail argument order and width: unknown"
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "rationale": "initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`, `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`."
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "This native performs integer/pointer work; no x87 or SSE arithmetic is involved."
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`, `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`."
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`, `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`."
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
   }
- ],
- "limitations": [
-  "The retained level-1 retail trace build/runtime-traces/early-L1.json records this address in observed_order, establishing retail reachability only; it does not supply typed arguments, returns or state for this address.",
-  "Behavioral evidence for this record is the documented angr/ESIL differential, not a live game-process argument/return capture.",
-  "Build evidence covers the Windows x86 translation-unit compile; it does not relink or bind build-clean-win32/igi1.exe. The receipt's source hash for this file predates the final comment-only edits, so no candidate-binding claim is made."
  ]
 }

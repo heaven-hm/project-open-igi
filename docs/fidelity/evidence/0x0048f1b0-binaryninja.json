@@ -2,46 +2,15 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
- "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
- "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x0048F1B0",
- "symbol": "App_ContextGetDebugged",
- "signature": "int32_t()",
- "analyzed_at": "2026-10-23T06:59:32Z",
- "function": {
-  "start": "0x0048F1B0",
-  "end": "0x0048F1B5",
-  "size_bytes": 6,
-  "basic_blocks": 1,
-  "instruction_count": 2
- },
- "disassembly": [
-  "int32_t App_ContextGetDebugged()",
-  "0x48f1b0  mov     eax, dword [g_5c8bf8]",
-  "0x48f1b5  retn     {__return_addr}"
- ],
- "pseudocode": "  int32_t App_ContextGetDebugged()\n\n{\n    return g_5c8bf8;\n}",
- "callers": [
-  {
-   "callsite": "0x498930",
-   "caller": "DisplayRender_Invoke24 (0x498930 (x86))"
-  }
- ],
- "callees": [],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x0048F1B0",
   "nodes": [
    {
     "address": "0x0048F1B0"
    }
   ],
   "edges": []
- },
- "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence.",
-  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
- ]
+ }
 }

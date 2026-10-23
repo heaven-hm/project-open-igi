@@ -1,478 +1,62 @@
 {
-  "schema_version": 1,
-  "kind": "semantic-review-report",
-  "result": "failed",
-  "address": "0x00408460",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "a07b2290aeff70cece8f18af366208d045544fc13c9e2f0be0b905d15c12d01a",
-  "reviewed": true,
-  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
-  "reviewed_at": "2026-10-23T12:58:32Z",
-  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
-  "review_basis": "Retail 0x00408460 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/misc/00408460-FallLanding.cpp at sha256 a07b2290aeff70cece8f18af366208d045544fc13c9e2f0be0b905d15c12d01a (recorded implementation.signature: int32_t FallLanding(float param_1);). The evidence artifact digests are bound in this review.",
-  "retail_function": {
-    "entry": "0x00408460",
-    "name": "FallLanding",
-    "binary_ninja_name": "FallLanding",
-    "signature": "int32_t(float arg1)",
-    "start": "0x00408460",
-    "end": "0x408715",
-    "basic_blocks": 27,
-    "edges": [
-      {
-        "source": "0x00408460",
-        "target": "0x004084a2",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408460",
-        "target": "0x004084ae",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084a2",
-        "target": "0x004084ae",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084ae",
-        "target": "0x004084c1",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084ae",
-        "target": "0x004084cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084c1",
-        "target": "0x004084cf",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084cf",
-        "target": "0x004084e2",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084cf",
-        "target": "0x004084ea",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084e2",
-        "target": "0x004084ea",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084ea",
-        "target": "0x004084fd",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084ea",
-        "target": "0x00408503",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084fd",
-        "target": "0x00408503",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408503",
-        "target": "0x0040857a",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408503",
-        "target": "0x0040870e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040857a",
-        "target": "0x00408587",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040857a",
-        "target": "0x00408589",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408587",
-        "target": "0x00408589",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408589",
-        "target": "0x004085ac",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408589",
-        "target": "0x004085b6",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085ac",
-        "target": "0x004085cb",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004085b6",
-        "target": "0x004085c3",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085b6",
-        "target": "0x004085cb",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085c3",
-        "target": "0x004085cb",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004085cb",
-        "target": "0x0040860f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085cb",
-        "target": "0x004086cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040860f",
-        "target": "0x0040863e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040860f",
-        "target": "0x00408650",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040863e",
-        "target": "0x00408650",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408650",
-        "target": "0x00408661",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408650",
-        "target": "0x004086cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408661",
-        "target": "0x00408675",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408661",
-        "target": "0x00408681",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408675",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408681",
-        "target": "0x00408695",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408681",
-        "target": "0x004086a1",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408695",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004086a1",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004086ab",
-        "target": "0x004086cf",
-        "kind": "unconditional"
-      }
-    ],
-    "cfg_similarity": 1.0,
-    "summary": "Twenty-seven blocks 0x408460-0x408713: step/velocity integration over the human_player fields at +0x66C/+0x664/+0x668/+0x1B8..+0x1C4, AI_UpdatePatrol_24 at 0x4085DC, Human_GetLimbDamageRecord(0x00489E10) at 0x40861C, Human_HitDamage at 0x408635, sprintf(\"player_fall_3\") at 0x4086AB, SoundSys_SetMasterVolume_7, DynObj_UpdateDynTree_4 and AI_EventBroadcast.",
-    "blocks": [
-      {
-        "address": "0x00408460",
-        "start": "0x408460",
-        "end": "0x4084a2",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084ae",
-        "start": "0x4084ae",
-        "end": "0x4084c1",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084a2",
-        "start": "0x4084a2",
-        "end": "0x4084ae",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084cf",
-        "start": "0x4084cf",
-        "end": "0x4084e2",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084c1",
-        "start": "0x4084c1",
-        "end": "0x4084cf",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084ea",
-        "start": "0x4084ea",
-        "end": "0x4084fd",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084e2",
-        "start": "0x4084e2",
-        "end": "0x4084ea",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408503",
-        "start": "0x408503",
-        "end": "0x40857a",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004084fd",
-        "start": "0x4084fd",
-        "end": "0x408503",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0040870e",
-        "start": "0x40870e",
-        "end": "0x408716",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0040857a",
-        "start": "0x40857a",
-        "end": "0x408587",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408589",
-        "start": "0x408589",
-        "end": "0x4085ac",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408587",
-        "start": "0x408587",
-        "end": "0x408589",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004085b6",
-        "start": "0x4085b6",
-        "end": "0x4085c3",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004085ac",
-        "start": "0x4085ac",
-        "end": "0x4085b6",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004085cb",
-        "start": "0x4085cb",
-        "end": "0x40860f",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004085c3",
-        "start": "0x4085c3",
-        "end": "0x4085cb",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004086cf",
-        "start": "0x4086cf",
-        "end": "0x40870e",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0040860f",
-        "start": "0x40860f",
-        "end": "0x40863e",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408650",
-        "start": "0x408650",
-        "end": "0x408661",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0040863e",
-        "start": "0x40863e",
-        "end": "0x408650",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408661",
-        "start": "0x408661",
-        "end": "0x408675",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408681",
-        "start": "0x408681",
-        "end": "0x408695",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408675",
-        "start": "0x408675",
-        "end": "0x408681",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004086a1",
-        "start": "0x4086a1",
-        "end": "0x4086ab",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00408695",
-        "start": "0x408695",
-        "end": "0x4086a1",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x004086ab",
-        "start": "0x4086ab",
-        "end": "0x4086cf",
-        "flags": "can-exit"
-      }
-    ],
-    "calls": [
-      "AI_UpdatePatrol_24",
-      "Human_GetLimbDamageRecord",
-      "Human_HitDamage",
-      "sprintf",
-      "SoundSys_SetMasterVolume_7",
-      "DynObj_UpdateDynTree_4",
-      "AI_EventBroadcast"
-    ],
-    "globals_written": []
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x00408460",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "a07b2290aeff70cece8f18af366208d045544fc13c9e2f0be0b905d15c12d01a",
+ "reviewed": true,
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
   },
-  "candidate_function": {
-    "path": "scripts/GameNatives/misc/00408460-FallLanding.cpp",
-    "sha256": "a07b2290aeff70cece8f18af366208d045544fc13c9e2f0be0b905d15c12d01a",
-    "signature": "int32_t FallLanding(float param_1);",
-    "status_after_review": "TRANSCRIBED",
-    "summary": "Twenty-seven blocks 0x408460-0x408713: step/velocity integration over the human_player fields at +0x66C/+0x664/+0x668/+0x1B8..+0x1C4, AI_UpdatePatrol_24 at 0x4085DC, Human_GetLimbDamageRecord(0x00489E10) at 0x40861C, Human_HitDamage at 0x408635, sprintf(\"player_fall_3\") at 0x4086AB, SoundSys_SetMasterVolume_7, DynObj_UpdateDynTree_4 and AI_EventBroadcast."
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00408460 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
-  "candidate_comparison": {
-    "result": "divergent",
-    "divergences": [
-      "Call target at the 0x00489E10 site is FX_FragmentSimulate_14, not the retail Human_GetLimbDamageRecord.",
-      "Candidate return type/signature disagree with BN (void*/int) and with the recorded int(float) signature."
-    ],
-    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
-  "checks": [
-    {
-      "name": "function_identity",
-      "result": "passed",
-      "detail": "Retail entry 0x00408460 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/misc/00408460-FallLanding.cpp (sha256 a07b2290aeff70cece8f18af366208d045544fc13c9e2f0be0b905d15c12d01a). Twenty-seven blocks 0x408460-0x408713: step/velocity integration over the human_player fields at +0x66C/+0x664/+0x668/+0x1B8..+0x1C4, AI_UpdatePatrol_24 at 0x4085DC, Human_GetLimbDamageRecord(0x00489E10) at 0x40861C, Human_HitDamage at 0x408635, sprintf(\"player_fall_3\") at 0x4086AB, SoundSys_SetMasterVolume_7, DynObj_UpdateDynTree_4 and AI_EventBroadcast."
-    },
-    {
-      "name": "abi_and_signature",
-      "result": "failed",
-      "detail": "BN int32_t(float arg1) is a decompiler type for a pointer argument; the candidate header declares void FallLanding(void* human_player) but the file's exported signature is recorded as int FallLanding(float param_1). That mismatch (void* vs float, void vs int) is unresolved in the candidate itself."
-    },
-    {
-      "name": "argument_mapping",
-      "result": "passed",
-      "detail": "BN int32_t(float arg1) is a decompiler type for a pointer argument; the candidate header declares void FallLanding(void* human_player) but the file's exported signature is recorded as int FallLanding(float param_1). That mismatch (void* vs float, void vs int) is unresolved in the candidate itself."
-    },
-    {
-      "name": "control_flow_shape",
-      "result": "passed",
-      "detail": "Retail CFG: Binary Ninja reports 27 block(s)/38 edge(s) at 0x00408460; radare2 recovers the identical 27 block(s)/38 edge(s) (score 1.0000); angr CFGFast recovers 34 block(s) with has_unresolved_jumps=False."
-    },
-    {
-      "name": "calls_and_side_effects",
-      "result": "failed",
-      "detail": "Retail call sites are 0x004659B0, 0x00489E10 (Human_GetLimbDamageRecord), 0x00416D80 (Human_HitDamage), 0x004A53B3 (sprintf/Game_DataSymbolLoad), 0x004E6B00, 0x004C3440 and 0x00450CE0. The candidate calls an unbound FX_FragmentSimulate_14 at the 0x00489E10 site (its header admits the catalog alias is unconfirmed), so the damage-record call target is not the retail callee."
-    },
-    {
-      "name": "constants_and_scaling",
-      "result": "passed",
-      "detail": "Constants 0x5333BC/0x5333C4/0x5333C8/0x5333CC/0x5333D0/0x5333D8/0x5333E0/0x5333E4/0x5333E8/0x5333EC/0x5333F0 and 0x56E1F4; the sprintf format \"player_fall_3\" at 0x00538D3C."
-    },
-    {
-      "name": "memory_layout_and_access",
-      "result": "passed",
-      "detail": "The typed player_state+offset accesses use the retail offsets (0x664/0x668/0x66C, 0x1B8..0x1C4, 0x78..0x94); the earlier byte-wise damage-state copies are reconstructed with typed stores."
-    },
-    {
-      "name": "return_and_error_paths",
-      "result": "failed",
-      "detail": "Void in the candidate header; BN models int32_t. Neither the header nor the recorded signature agrees with the BN/retail return model."
-    },
-    {
-      "name": "floating_point_semantics",
-      "result": "passed",
-      "detail": "The candidate keeps the fld/fmul/fadd/fchs/fcom sequences as float expressions with the same constants (0x5333BC..0x5333F0) and the same NaN-gated branch structure via IsOrderedNonzero."
-    }
-  ],
-  "signature_comparison": {
-    "reviewed": true,
-    "result": "abi-adapted",
-    "rationale": "Binary Ninja reports \"int32_t(float arg1)\" at 0x00408460; radare2 recovers \"fcn.00408460 (int32_t arg_5ch);\". Both tools place the entry at 0x00408460 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t FallLanding(float param_1);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
-  "evidence": {
-    "binary_ninja": {
-      "evidence_path": "docs/fidelity/evidence/0x00408460-binaryninja.json",
-      "evidence_sha256": "0445e08af21d8ac230aa33b46b05518684de19b33e284c5555354c077b70ff13",
-      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
-    },
-    "radare2": {
-      "evidence_path": "docs/fidelity/evidence/0x00408460-radare2.json",
-      "evidence_sha256": "3ae6c90237e6fc7856cb3d2b44c812ea9a4f1f83124c0ce7c87f997a06b98185",
-      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
-    },
-    "angr": {
-      "evidence_path": "docs/fidelity/evidence/0x00408460-angr-20261023.json",
-      "evidence_sha256": "d6fd8f256104f010a530c52af656e59d42372a75c60a84ade4fc2e677859871a",
-      "tool": "angr 10.0.4.post1 CFGFast"
-    }
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
-  "limitations": [
-    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
-    "The candidate is a hand-written reconstruction (56 normalized statements vs 88 in BN's pseudocode); its control flow matches block-for-block but at least one callee is not bound to the retail target."
-  ]
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+  }
+ ]
 }

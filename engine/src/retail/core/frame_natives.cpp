@@ -16,6 +16,7 @@ extern "C" {
 std::jmp_buf QTask_SetjmpFrame{};
 // Retail 0x005C8C00 loop status byte, written by Loop_SetStatusByte (0x0048F480).
 // frame_natives.hpp declares it extern, so it needs exactly one definition here.
+std::uint8_t Loop_StatusByte = 0U;
 std::int32_t AppContext_IsActive = 0;
 igi::retail::core::FrameFlagHandler AppContext_OptionalHandler = nullptr;
 std::int32_t AppContext_OptionalHandlerContext = 0;

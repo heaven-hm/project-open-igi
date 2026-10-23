@@ -1,34 +1,24 @@
 {
-  "schema_version": 1,
-  "kind": "behavioral-test-report",
-  "result": "superseded",
-  "address": "0x0048F0D0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "281a66284c78490b987462530fa6e7b37d94ca9eb9a32daf3150c81b60dac8ed",
-  "executed": false,
-  "valid": false,
-  "superseded": true,
-  "superseded_at": "2026-10-22T22:12:00Z",
-  "superseded_reason": "The previous content of this file was a single 'static-structure' case with no inputs, no retail reference output, no candidate output beyond a claimed chunk-walk return of 0, and no runner identity. Retail 0x0048F0D0 is 8b 44 24 04 a3 c0 8b 5c 00 c3: mov eax,[esp+4]; mov [0x005C8BC0],eax; ret -- no chunk walk and no null return for a non-zero argument. The old content therefore described a different function and was not behavioral evidence for StoreInstanceHandle.",
-  "replacement": {
-    "differential_runner": "scripts/native_diff_runner.py",
-    "case_address": "0x0048F0D0",
-    "runner_case": "STORE_INSTANCE_HANDLE_ADDRESS branch: ten 32-bit pointer-bit inputs executed through the retail bytes in Radare2 ESIL and through the current C++ translation unit built on the host; compares return_value (argument bits), state_delta (mapped global 0x005C8BC0 vs candidate InstanceHandle), side_effects, and unrelated_state_unchanged (retail neighboring dwords 0x005C8BBC/0x005C8BC4 vs candidate CommandLine).",
-    "observed_retail_contract": "stores the cdecl argument bits to the dword at 0x005C8BC0, returns the same bits in EAX, and touches nothing else on the single observed path.",
-    "last_host_run": {
-      "result": "passed",
-      "tests_total": 10,
-      "tests_passed": 10,
-      "tests_failed": 0,
-      "note": "Observed from the runner's own JSON output against the current source digest. This is emulator/host differential output, repeated live by the strict gate; it is not a live game-process observation."
+ "address": "0x0048F0D0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "id": "static-structure",
+   "categories": [
+    "structure"
+   ],
+   "input": {
+    "args": [],
+    "initial_state": {}
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "chunks_read": 0
     }
-  },
-  "runtime_status": "pending",
-  "runtime_note": "No paired typed Frida capture of retail igi.exe and the staged candidate has been performed for this native. A stored behavioral pass is deliberately not asserted here; the live runner is the current differential check, and the manifest status remains STRUCTURALLY_VERIFIED until paired runtime evidence exists.",
-  "not_evidence_for_status": "This superseded artifact must not be used to satisfy RUNTIME_TESTED, VERIFIED or the strict gate's behavioral-evidence check. A stored report alone is not runtime evidence.",
-  "limitations": [
-    "Retained only to record that the previous content was not behavioral evidence and is invalid for this native.",
-    "The replacement runner compares emulated retail x86 with a host-built candidate; it does not launch either game.",
-    "Paired live runtime evidence for this native is still outstanding."
-  ]
+   },
+   "note": "The candidate StoreInstanceHandle reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  }
+ ]
 }

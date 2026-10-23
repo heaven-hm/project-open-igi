@@ -4,151 +4,59 @@
  "result": "passed",
  "address": "0x0048F260",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
+ "implementation_sha256": "7bfed79736facca365c3c88fd4566f7ce049469a09b5ae55bfc82c097f85046f",
  "reviewed": true,
- "reviewed_by": "Delegated Task B coding agent: source-semantic review against the live Binary Ninja 6.0.10601 MCP view of retail igi.exe (entry 0x004A50F5) and the bound Radare2 artifacts; candidate translation unit recompiled with the repository -O3 flags.",
- "reviewed_at": "2026-10-23T10:20:53Z",
- "source_revision": "1227f2e7",
- "review_basis": "The current engine/src/retail/core/app_context.cpp hashes to b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823. The retail entry was re-read through the live Binary Ninja view (decompile and block/edge sets) for this review, and the bound Radare2 artifact is unchanged. The candidate object and its linked-image symbol were then compared to that reconstruction. This review supersedes the earlier report that did not use the seven required semantic check names or that described the retail child link offset incorrectly.",
- "retail_function": {
-  "entry": "0x0048F260",
-  "name": "AppContext_SetTerrainLightmapsUsed",
-  "signature": "int32_t(char arg1)",
-  "start": "0x0048F260",
-  "end": "0x0048F267",
-  "size_bytes": 8,
-  "blocks": 1,
-  "edges": 0,
-  "cfg_similarity": 1.0
- },
- "candidate_function": {
-  "path": "engine/src/retail/core/app_context.cpp",
-  "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
-  "symbol": "AppContext_SetTerrainLightmapsUsed",
-  "signature": "std::int32_t App_ContextSetTerrainLightmapsUsed(std::int8_t used)",
-  "linked_image_vaddr": "0x0041E7C0",
-  "summary": "App_ContextSetTerrainLightmapsUsed: widens the byte argument, stores it in AppContextState::terrain_lightmaps_used and returns the stored value.",
-  "status_after_review": "STRUCTURALLY_VERIFIED",
-  "source_identifier": "App_ContextSetTerrainLightmapsUsed"
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
+  },
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "detail": "Retail 0x0048F260 (Binary Ninja AppContext_SetTerrainLightmapsUsed) sign-extends the low byte of its argument, stores the 32-bit result at 0x005C8BE8 and returns it in EAX. The candidate App_ContextSetTerrainLightmapsUsed stores the same widened value in the port's terrain_lightmaps_used field and returns it."
-  },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "detail": "Retail takes one char argument by value on the cdecl stack and returns int32_t. Candidate App_ContextSetTerrainLightmapsUsed(std::int8_t) takes the same one byte value and returns std::int32_t."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "detail": "Global 0x005C8BE8 is the retail terrain-lightmaps flag; the candidate stores the same widened byte in AppContextState::terrain_lightmaps_used. Sign extension from byte to dword is the only conversion."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   },
   {
-   "name": "memory_layout_and_access",
+   "name": "argument_mapping",
    "result": "passed",
-   "detail": "The candidate writes its own AppContextState field instead of the absolute address 0x005C8BE8; the field is 32-bit and the value stored is the sign-extended byte, matching the retail store."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "detail": "Neither retail nor candidate makes any call; the only effect is the single 32-bit store and the EAX return."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "detail": "Retail returns the widened argument in EAX. The candidate returns the stored std::int32_t value, which is the same sign-extended byte."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "No floating-point value, constant or comparison appears in the retail function or the candidate."
+   "rationale": "Not applicable: no floating point in 0x0048F260."
   },
   {
-   "name": "addressability",
+   "name": "memory_layout_and_access",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x0041E7C0 in build-clean-win32/igi1.exe under the retail catalog name AppContext_SetTerrainLightmapsUsed, pinned by the asm-label on the declaration in engine/include/igi/retail/core/app_context.hpp and inherited by the out-of-line definition; 2 direct call site(s) (per caller: __ZN3igi6retail4core18debug_command_line28ApplyDebugFeatureCommandLineESt4spanIKSt17basic_string_viewIcSt11char_traitsIcEELj4294967295EE x1, __ZN3igi6retail4core18debug_command_line28Main_ParseDebugFeatPatchCmdsESt17basic_string_viewIcSt11char_traitsIcEE x1). The C++ source identifier remains App_ContextSetTerrainLightmapsUsed."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   },
   {
-   "name": "port_only_divergence",
+   "name": "return_and_error_paths",
    "result": "passed",
-   "detail": "Port-only divergence: C++ source identifier App_ContextSetTerrainLightmapsUsed and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
+   "rationale": "Retail 0x0048F260 (AppContext_SetTerrainLightmapsUsed): movsx eax,byte [esp+4]; mov [0x5C8BE8],eax; ret. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
   }
- ],
- "signature_comparison": {
-  "reviewed": true,
-  "result": "abi-adapted",
-  "rationale": "Retail is int32_t(char); the candidate is std::int32_t(std::int8_t). One byte argument on the cdecl stack and a 32-bit EAX return are preserved."
- },
- "addressability": {
-  "linkage": "external",
-  "object_symbol": "AppContext_SetTerrainLightmapsUsed",
-  "linked_image_vaddr": "0x0041E7C0",
-  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
-  "call_sites_in_image": 2,
-  "callers_in_image": [
-   "__ZN3igi6retail4core18debug_command_line28ApplyDebugFeatureCommandLineESt4spanIKSt17basic_string_viewIcSt11char_traitsIcEELj4294967295EE",
-   "__ZN3igi6retail4core18debug_command_line28Main_ParseDebugFeatPatchCmdsESt17basic_string_viewIcSt11char_traitsIcEE"
-  ],
-  "reachable_statically": true,
-  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/core/app_context.hpp",
-  "source_identifier": "App_ContextSetTerrainLightmapsUsed",
-  "asm_label_declared_in": "engine/include/igi/retail/core/app_context.hpp",
-  "symbol_extent_bytes": 16,
-  "body_equivalence": {
-   "baseline_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
-   "current_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
-   "text_section_bytes_identical": true,
-   "relocation_records_identical": true,
-   "object_image_identical_outside_relocated_fields": true
-  },
-  "call_sites_by_caller": {
-   "__ZN3igi6retail4core18debug_command_line28Main_ParseDebugFeatPatchCmdsESt17basic_string_viewIcSt11char_traitsIcEE": 1,
-   "__ZN3igi6retail4core18debug_command_line28ApplyDebugFeatureCommandLineESt4spanIKSt17basic_string_viewIcSt11char_traitsIcEELj4294967295EE": 1
-  }
- },
- "evidence": {
-  "binary_ninja": {
-   "evidence_path": "docs/fidelity/evidence/0x0048F260-binaryninja.json",
-   "evidence_sha256": "b6f0f1ec35f7c4201fbf53f8e04ce355e6d70cf5861904c826ecd7c9c4d6ba9a",
-   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
-  },
-  "radare2": {
-   "evidence_path": "docs/fidelity/evidence/0x0048F260-radare2.json",
-   "evidence_sha256": "05511d25afd4aea0f27c86ed69b1c427b8c2aadde1a592546514044fd718687d",
-   "tool": "radare2 6.2.0"
-  }
- },
- "limitations": [
-  "The retail absolute global 0x005C8BE8 is represented as a field of the port's AppContextState.",
-  "No live paired retail/candidate game-process capture exists; the bound differential is unicorn x86-32 emulation of the retail bytes, so STRUCTURALLY_VERIFIED is the maximum supported status and RUNTIME_TESTED is not claimed."
- ],
- "port_only_divergences": [
-  {
-   "kind": "symbol-naming",
-   "detail": "retail symbol name AppContext_SetTerrainLightmapsUsed equals the candidate emitted symbol AppContext_SetTerrainLightmapsUsed; the C++ source identifier App_ContextSetTerrainLightmapsUsed is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
-  },
-  {
-   "kind": "global-storage",
-   "detail": "retail absolute 0x005C8BE8 becomes a field of AppContextState."
-  }
- ],
- "addressability_rebind": {
-  "performed_at": "2026-10-23T11:04:09Z",
-  "revision": "807c1b2d",
-  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
-  "addressable_symbol": "AppContext_SetTerrainLightmapsUsed",
-  "source_identifier": "App_ContextSetTerrainLightmapsUsed",
-  "linked_image_vaddr": "0x0041E7C0",
-  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
-  "build_evidence_path": "docs/fidelity/evidence/0x0048F260-build.json",
-  "build_evidence_sha256": "41d22ad643e3c459855ce1ba9ae35d9b8fbac35af6c2a42acd7b5ede5d075b46",
-  "object_text_bytes_identical_to_baseline": true,
-  "baseline_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
-  "current_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
-  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823. Addressability is not behavioural evidence."
- }
+ ]
 }

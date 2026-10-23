@@ -28,15 +28,20 @@
 namespace igi::retail::core {
 
 // The Flow class's per-frame state dispatch, the level path's arithmetic.
-// The retail computes it on the x87 stack: it divides the scale by the
-// object's counter, multiplies by the object's factor, adds the object's
-// base and stores the result as an integer. The port keeps the 80-bit
-// intermediates with long double, which is the x87 type on the x86 target.
-inline long double Flow_LevelScale(std::int32_t counter, float factor, std::int32_t base) noexcept
+// The retail computes it on the x87 stack at 0x0040229B..0x004022C6:
+//   fild  dword [flow + 0x3C]        the object's counter
+//   fdivr qword [0x00533230]         1000.0 / counter
+//   fimul dword [flow + 0x34]        times the object's factor (an integer)
+//   fild  dword [base]               the object's base at +0x50 plus +0x30
+//   faddp                            adds the base
+//   fistp qword [esp + 0x10]         the total, as an integer
+// The port keeps the 80-bit intermediates with long double, which is the x87
+// type on the x86 target.
+inline std::int64_t Flow_LevelScale(std::int32_t counter, std::int32_t factor, std::int32_t base) noexcept
 {
     const long double scaled = (1000.0L / static_cast<long double>(counter)) *
                                static_cast<long double>(factor);
-    return scaled + static_cast<long double>(base - 1);
+    return static_cast<std::int64_t>(scaled + static_cast<long double>(base));
 }
 
 } // namespace igi::retail::core

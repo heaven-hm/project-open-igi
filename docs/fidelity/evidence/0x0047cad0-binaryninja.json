@@ -1,43 +1,16 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x0047CAD0",
-  "symbol": "Define_AmmoType",
-  "signature": "int32_t(long double arg1 @ st0, int32_t arg2, float arg3 @ 0xc)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x0047CAD0",
-    "end": "0x47ccd2",
-    "size_bytes": 515,
-    "basic_blocks": 1,
-    "instruction_count": 145
-  },
-  "bytes_hex": "81ec98000000568bb424a8000000576a",
-  "bytes_sha256": "e2264f18c5e96b6ec099ed49cc9b93592f6de03b67cb699d034ece779b9d178c",
-  "cfg": {
-    "entry": "0x0047CAD0",
-    "nodes": [
-      {
-        "address": "0x0047cad0",
-        "start": "0x47cad0",
-        "end": "0x47ccd3",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": []
-  },
-  "disassembly": "`asm\n  int32_t Define_AmmoType(long double arg1 @ st0, int32_t arg2, float arg3 @ 0xc)\n\n0x47cad0  // Sig: void Define_AmmoType(...)\n0x47cad0  // Note: Defines an AMMO TYPE inside an ammo definition block of a .qsc/.cfg\n0x47cad0  // script (515-byte parser body; igi.exe embeds str 'DefineAmmoType'). Args\n0x47cad0  // follow the Define-ammo grammar (name, damage, range, clip...) - not fully\n0x47cad0  // mapped, treat as parser-internal. Do NOT call outside its define block.\n0x47cad0  sub     esp, 0x98\n0x47cad6  push    esi\n0x47cad7  mov     esi, dword [esp+0xa8]\n0x47cade  push    edi\n0x47cadf  push    0x0\n0x47cae1  push    esi\n0x47cae2  call    Script_EvalArgInt\n0x47cae7  mov     ecx, dword [0x5c10e4]\n0x47caed  lea     edx, [esp+0x28]\n0x47caf1  push    0x80\n0x47caf6  push    edx\n0x47caf7  lea     ecx, [ecx+ecx*4]\n0x47cafa  push    0x1\n0x47cafc  push    esi\n0x47cafd  lea     ecx, [ecx+ecx*8]\n0x47cb00  mov     dword [ecx*8+0x5be3e0], eax\n0x47cb07  call    Sys_ResolveSymbol_23\n0x47cb0c  mov     eax, dword [0x5c10e4]\n0x47cb11  lea     edx, [esp+0x38]\n0x47cb15  lea     eax, [eax+eax*4]\n0x47cb18  lea     eax, [eax+eax*8]\n0x47cb1b  mov     ecx, dword [eax*8+0x5be3e0]\n0x47cb22  push    ecx\n0x47cb23  push    edx\n0x47cb24  call    TaskType_Set\n0x47cb29  mov     eax, dword [0x5c10e4]\n0x47cb2e  push    0x20\n0x47cb30  lea     eax, [eax+eax*4]\n0x47cb33  lea     eax, [eax+eax*8]\n0x47cb36  lea     ecx, [eax*8+0x5be408]\n0x47cb3d  push    ecx\n0x47cb3e  push    0x2\n0x47cb40  push    esi\n0x47cb41  call    Sys_ResolveSymbol_23\n0x47cb46  mov     eax, dword [0x5c10e4]\n0x47cb4b  push    0x100\n0x47cb50  lea     eax, [eax+eax*4]\n0x47cb53  lea     edx, [eax+eax*8]\n0x47cb56  lea     eax, [edx*8+0x5be428]\n0x47cb5d  push    eax\n0x47cb5e  push    0x3\n0x47cb60  push    esi\n0x47cb61  call    Sys_ResolveSymbol_23\n0x47cb66  add     esp, 0x40\n0x47cb69  push    0x4\n0x47cb6b  push    esi\n0x47cb6c  call    Script_EvalArgInt\n0x47cb71  mov     ecx, dword [0x5c10e4]\n0x47cb77  push    0x5\n0x47cb79  push    esi\n0x47cb7a  lea     ecx, [ecx+ecx*4]\n0x47cb7d  lea     ecx, [ecx+ecx*8]\n0x47cb80  mov     dword [ecx*8+0x5be3e4], eax\n0x47cb87  call    Profile_ValueSet\n0x47cb8c  mov     eax, dword [0x5c10e4]\n0x47cb91  push    0x6\n0x47cb93  push    esi\n0x47cb94  lea     eax, [eax+eax*4]\n0x47cb97  lea     edx, [eax+eax*8]\n0x47cb9a  fstp    dword [edx*8+0x5be404], st0\n0x47cba1  call    Script_EvalArgInt\n0x47cba6  mov     ecx, dword [0x5c10e4]\n0x47cbac  push    0x7\n0x47cbae  push    esi\n0x47cbaf  lea     ecx, [ecx+ecx*4]\n0x47cbb2  lea     ecx, [ecx+ecx*8]\n0x47cbb5  mov     dword [ecx*8+0x5be3e8], eax\n0x47cbbc  call    Script_EvalArgInt\n0x47cbc1  mov     ecx, dword [0x5c10e4]\n0x47cbc7  push    0x8\n0x47cbc9  push    esi\n0x47cbca  lea     ecx, [ecx+ecx*4]\n0x47cbcd  lea     edx, [ecx+ecx*8]\n0x47cbd0  mov     dword [edx*8+0x5be3ec], eax\n0x47cbd7  call    Script_EvalArgInt\n0x47cbdc  mov     ecx, dword [0x5c10e4]\n0x47cbe2  push    0x9\n0x47cbe4  push    esi\n0x47cbe5  lea     ecx, [ecx+ecx*4]\n0x47cbe8  lea     ecx, [ecx+ecx*8]\n0x47cbeb  mov     dword [ecx*8+0x5be3f0], eax\n0x47cbf2  call    Script_EvalArgInt\n0x47cbf7  mov     ecx, dword [0x5c10e4]\n0x47cbfd  push    0xa\n0x47cbff  push    esi\n0x47cc00  lea     ecx, [ecx+ecx*4]\n0x47cc03  lea     edx, [ecx+ecx*8]\n0x47cc06  mov     dword [edx*8+0x5be3f4], eax\n0x47cc0d  call    Script_EvalArgInt\n0x47cc12  mov     ecx, dword [0x5c10e4]\n0x47cc18  push    0xb\n0x47cc1a  push    esi\n0x47cc1b  lea     ecx, [ecx+ecx*4]\n0x47cc1e  lea     ecx, [ecx+ecx*8]\n0x47cc21  mov     dword [ecx*8+0x5be3f8], eax\n0x47cc28  call    Script_EvalArgInt\n0x47cc2d  mov     ecx, dword [0x5c10e4]\n0x47cc33  add     esp, 0x40\n0x47cc36  lea     edx, [ecx+ecx*4]\n0x47cc39  push    0xc\n0x47cc3b  push    esi\n0x47cc3c  lea     edx, [edx+edx*8]\n0x47cc3f  mov     dword [edx*8+0x5be3fc], eax\n0x47cc46  lea     eax, [ecx+ecx*4]\n0x47cc49  lea     edi, [eax+eax*8]\n0x47cc4c  shl     edi, 0x3\n0x47cc4f  call    Script_EvalArgInt\n0x47cc54  mov     dword [edi+0x5be400], eax\n0x47cc5a  lea     eax, [edi+0x5be528]\n0x47cc60  push    0x10\n0x47cc62  push    eax\n0x47cc63  push    0xd\n0x47cc65  push    esi\n0x47cc66  call    Sys_ResolveSymbol_23\n0x47cc6b  mov     eax, dword [0x5c10e4]\n0x47cc70  push    0x10\n0x47cc72  lea     eax, [eax+eax*4]\n0x47cc75  lea     ecx, [eax+eax*8]\n0x47cc78  lea     edx, [ecx*8+0x5be538]\n0x47cc7f  push    edx\n0x47cc80  push    0xe\n0x47cc82  push    esi\n0x47cc83  call    Sys_ResolveSymbol_23\n0x47cc88  mov     eax, dword [0x5c10e4]\n0x47cc8d  add     esp, 0x28\n0x47cc90  inc     eax\n0x47cc91  mov     ecx, 0x6\n0x47cc96  mov     dword [0x5c10e4], eax\n0x47cc9b  mov     eax, dword [esp+0xa4]\n0x47cca2  lea     esi, [esp+0x8]\n0x47cca6  mov     edi, eax\n0x47cca8  mov     dword [esp+0x8], 0x1\n0x47ccb0  mov     dword [esp+0x10], 0x0\n0x47ccb8  mov     dword [esp+0x14], 0x3ff00000\n0x47ccc0  mov     dword [esp+0x18], 0x567c74\n0x47ccc8  rep movsd dword [edi], [esi]\n0x47ccca  pop     edi\n0x47cccb  pop     esi\n0x47cccc  add     esp, 0x98\n0x47ccd2  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t Define_AmmoType(long double arg1 @ st0, int32_t arg2, float arg3 @ 0xc)\n\n// Sig: void Define_AmmoType(...)\n// Note: Defines an AMMO TYPE inside an ammo definition block of a .qsc/.cfg\n// script (515-byte parser body; igi.exe embeds str 'DefineAmmoType'). Args\n// follow the Define-ammo grammar (name, damage, range, clip...) - not fully\n// mapped, treat as parser-internal. Do NOT call outside its define block.\n{\n    int32_t eax = Script_EvalArgInt(arg3, 0);\n    int32_t 5c10e4_1 = g_5c10e4;\n    char* var_ac = 0x80;\n    void var_80;\n    char* var_b0 = &var_80;\n    *(5c10e4_1 * 0x168 + &g_5be3e0) = eax;\n    Sys_ResolveSymbol_23(arg3, 1, var_b0, var_ac);\n    TaskType_Set(&var_80, *(g_5c10e4 * 0x168 + &g_5be3e0));\n    Sys_ResolveSymbol_23(arg3, 2, g_5c10e4 * 0x168 + &g_5be408, 0x20);\n    Sys_ResolveSymbol_23(arg3, 3, g_5c10e4 * 0x168 + &g_5be428, 0x100);\n    int32_t eax_10 = Script_EvalArgInt(arg3, 4);\n    int32_t 5c10e4_2 = g_5c10e4;\n    float var_ac_1 = 7.00649232e-45f;\n    var_b0 = arg3;\n    *(5c10e4_2 * 0x168 + &g_5be3e4) = eax_10;\n    Profile_ValueSet(var_b0, var_ac_1);\n    *(g_5c10e4 * 0x168 + &g_5be404) = arg1;\n    *(g_5c10e4 * 0x168 + &g_5be3e8) = Script_EvalArgInt(arg3, 6);\n    *(g_5c10e4 * 0x168 + &g_5be3ec) = Script_EvalArgInt(arg3, 7);\n    *(g_5c10e4 * 0x168 + &g_5be3f0) = Script_EvalArgInt(arg3, 8);\n    *(g_5c10e4 * 0x168 + &g_5be3f4) = Script_EvalArgInt(arg3, 9);\n    *(g_5c10e4 * 0x168 + &g_5be3f8) = Script_EvalArgInt(arg3, 0xa);\n    int32_t eax_18 = Script_EvalArgInt(arg3, 0xb);\n    int32_t 5c10e4_3 = g_5c10e4;\n    int32_t var_a4_2 = 0xc;\n    *(5c10e4_3 * 0x168 + &g_5be3fc) = eax_18;\n    int32_t edi_1 = 5c10e4_3 * 0x168;\n    *(edi_1 + 0x5be400) = Script_EvalArgInt(arg3, var_a4_2);\n    char* var_ac_2 = 0x10;\n    var_b0 = edi_1 + 0x5be528;\n    Sys_ResolveSymbol_23(arg3, 0xd, var_b0, var_ac_2);\n    Sys_ResolveSymbol_23(arg3, 0xe, g_5c10e4 * 0x168 + &g_5be538, 0x10);\n    g_5c10e4 += 1;\n    int32_t var_98 = 1;\n    int32_t var_90 = 0;\n    int32_t var_8c = 0x3ff00000;\n    char* var_88 = &g_script_ret_type;\n    __builtin_memcpy(arg2, &var_98, 0x18);\n    return arg2;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x47cad0\"\narch: \"x86\"\nname: \"Define_AmmoType\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 17\ntotal: 17\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x47cae2 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cb07 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x47cb24 | x86 | 0x4b8810 | TaskType_Set (0x4b8810 (x86)) |\n| 0x47cb41 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x47cb61 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x47cb6c | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cb87 | x86 | 0x4b8a50 | Profile_ValueSet (0x4b8a50 (x86)) |\n| 0x47cba1 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cbbc | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cbd7 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cbf2 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cc0d | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cc28 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cc4f | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x47cc66 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x47cc83 | x86 | 0x4b8a80 | Sys_ResolveSymbol_23 (0x4b8a80 (x86)) |\n| 0x47ccc8 | x86 | 0xc35040 |  |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x47cad0\"\narch: \"x86\"\nname: \"Define_AmmoType\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
-  ]
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x0047CAD0",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x0047CAD0"
+   }
+  ],
+  "edges": []
+ }
 }

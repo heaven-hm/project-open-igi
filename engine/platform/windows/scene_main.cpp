@@ -351,7 +351,9 @@ int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR command_line, int
     // reaches the shared MessageBoxA at 0x0048F8F0: MessageBoxA(NULL,
     // "IGI is already running.", "Error", MB_ICONERROR), then returns 0. The
     // retail does not release or close the handle on that path.
-    HANDLE const single_instance_mutex = CreateMutexA(nullptr, TRUE, "IGIMUTEX");
+    // The port takes IGI1MUTEX instead of IGIMUTEX so retail igi.exe and the
+    // reconstruction can run side by side for paired observation.
+    HANDLE const single_instance_mutex = CreateMutexA(nullptr, TRUE, "IGI1MUTEX");
     bool refuse_second_instance = single_instance_mutex == nullptr;
     if (!refuse_second_instance && GetLastError() == ERROR_ALREADY_EXISTS)
     {

@@ -16,6 +16,7 @@ add_executable(igi WIN32
     engine/src/retail/audio/sound_ilsf_stream_reader.cpp
     engine/src/retail/audio/sound_key_functions.cpp
     engine/src/retail/config/config_graphic_options.cpp
+    engine/src/retail/config/config_profile.cpp
     engine/src/retail/config/input_remap.cpp
     engine/src/retail/config/retail_config.cpp
     engine/src/retail/config/retail_input_bindings.cpp

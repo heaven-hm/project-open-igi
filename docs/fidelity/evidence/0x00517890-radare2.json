@@ -2,31 +2,10 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "radare2",
- "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
  "function_entry": "0x00517890",
- "symbol": "fcn.00517890",
- "signature": "fcn.00517890 (int32_t arg_8h, int32_t arg_10h);",
- "analyzed_at": "2026-10-23T06:59:32Z",
- "commands": [
-  "af-*; s 0x00517890; af; afij",
-  "af-*; s 0x00517890; af; afbj",
-  "p8 74 @ 0x00517890",
-  "s 0x00517890; af-*; af @ 0x00517890; pdf"
- ],
- "function": {
-  "size_bytes": 74,
-  "basic_block_count": 12,
-  "instruction_count": 35,
-  "call_convention": "cdecl",
-  "edge_count": 17,
-  "argument_count": 2
- },
- "bytes_hex": "568b74240885f65774368b7c24108b46103d4d524f468b461474063bc77426eb193bc774208b460885c0740e5750e8cdffffff83c40885c075088b3685f675ce33c05f5ec38bc65f5ec3",
- "disassembly": [],
+ "signature": "not restated",
  "cfg": {
-  "entry": "0x00517890",
   "nodes": [
    {
     "address": "0x00517890"
@@ -152,9 +131,5 @@
     "kind": "unconditional"
    }
   ]
- },
- "cfg_scope": "Retail-image CFG from Radare2 only; compared with Binary Ninja recovery of the same retail entry, not candidate code.",
- "limitations": [
-  "Retail-image structure only; not candidate code and not runtime evidence."
- ]
+ }
 }

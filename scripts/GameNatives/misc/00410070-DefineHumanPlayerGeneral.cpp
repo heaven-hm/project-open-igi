@@ -1,5 +1,6 @@
 // IGI native provenance: DefineHumanPlayerGeneral - 0x00410070 - CFG score 97.2% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00410070-DefineHumanPlayerGeneral.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include <cstring>
 #include "00410070-DefineHumanPlayerGeneral.hpp"
 int DefineHumanPlayerGeneral(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , long double arg8 , int arg9, float arg10 )
 

@@ -1,79 +1,46 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "radare2",
-  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "function_entry": "0x004A8B37",
-  "symbol": "fcn.004a8b37",
-  "signature": "fcn.004a8b37 ();",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "analysis": {
-    "commands": "s 0x004A8B37; af-*; af; afij; afbj",
-    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
-  },
-  "function": {
-    "size_bytes": 140,
-    "basic_block_count": 4,
-    "instruction_count": 45,
-    "call_convention": "cdecl",
-    "edge_count": 4,
-    "argument_count": 0,
-    "is_linear": true
-  },
-  "bytes_hex": "807a0e057511668b9d5cffffff80cf02",
-  "bytes_sha256": "99416f844a2830566ea8872ae04346673faea35c2a7924852e9ade9fe26c3515",
-  "cfg": {
-    "entry": "0x004A8B37",
-    "nodes": [
-      {
-        "address": "0x004a8b37",
-        "size": 6,
-        "instructions": 2
-      },
-      {
-        "address": "0x004a8b3d",
-        "size": 17,
-        "instructions": 5
-      },
-      {
-        "address": "0x004a8b4e",
-        "size": 4,
-        "instructions": 1
-      },
-      {
-        "address": "0x004a8b52",
-        "size": 113,
-        "instructions": 37
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x004a8b37",
-        "target": "0x004a8b3d",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8b37",
-        "target": "0x004a8b4e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004a8b3d",
-        "target": "0x004a8b52",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004a8b4e",
-        "target": "0x004a8b52",
-        "kind": "unconditional"
-      }
-    ]
-  },
-  "disassembly": "\u250c 140: fcn.004a8b37 ();\n\u2502 afv: vars(5:sp[0x90..0xa4])\n\u2502           0x004a8b37      807a0e05       cmp byte [edx + 0xe], 5\n\u2502       \u250c\u2500< 0x004a8b3b      7511           jne 0x4a8b4e\n\u2502       \u2502   0x004a8b3d      668b9d5cff..   mov bx, word [var_a4h]\n\u2502       \u2502   0x004a8b44      80cf02         or bh, 2\n\u2502       \u2502   0x004a8b47      80e7fe         and bh, 0xfe                ; 254\n\u2502       \u2502   0x004a8b4a      b33f           mov bl, 0x3f                ; '?' ; 63\n\u2502      \u250c\u2500\u2500< 0x004a8b4c      eb04           jmp 0x4a8b52\n\u2502      \u2502\u2514\u2500> 0x004a8b4e      66bb3f13       mov bx, 0x133f              ; '?\\x13'\n\u2502      \u2502    ; CODE XREF from fcn.004a8b37 @ 0x4a8b4c(x)\n\u2502      \u2514\u2500\u2500> 0x004a8b52      66899d5eff..   mov word [var_a2h], bx\n\u2502           0x004a8b59      d9ad5effffff   fldcw word [ebp - 0xa2]\n\u2502           0x004a8b5f      bbcd435400     mov ebx, 0x5443cd\n\u2502           0x004a8b64      d9e5           fxam\n\u2502           0x004a8b66      89956cffffff   mov dword [var_94h], edx\n\u2502           0x004a8b6c      9b             wait\n\u2502           0x004a8b6d      ddbd60ffffff   fnstsw word [ebp - 0xa0]\n\u2502           0x004a8b73      c68570ffff..   mov byte [var_90h], 0\n\u2502           0x004a8b7a      d9c9           fxch st(1)\n\u2502           0x004a8b7c      8a8d61ffffff   mov cl, byte [var_9fh]\n\u2502           0x004a8b82      d9e5           fxam\n\u2502           0x004a8b84      9b             wait\n\u2502           0x004a8b85      ddbd60ffffff   fnstsw word [ebp - 0xa0]\n\u2502           0x004a8b8b      d9c9           fxch st(1)\n\u2502           0x004a8b8d      8aad61ffffff   mov ch, byte [var_9fh]\n\u2502           0x004a8b93      d0e5           shl ch, 1\n\u2502           0x004a8b95      d0fd           sar ch, 1\n\u2502           0x004a8b97      d0c5           rol ch, 1\n\u2502           0x004a8b99      8ac5           mov al, ch\n\u2502           0x004a8b9b      240f           and al, 0xf                 ; 15\n\u2502           0x004a8b9d      d7             xlatb\n\u2502           0x004a8b9e      8ae0           mov ah, al\n\u2502           0x004a8ba0      d0e1           shl cl, 1\n\u2502           0x004a8ba2      d0f9           sar cl, 1\n\u2502           0x004a8ba4      d0c1           rol cl, 1\n\u2502           0x004a8ba6      8ac1           mov al, cl\n\u2502           0x004a8ba8      240f           and al, 0xf                 ; 15\n\u2502           0x004a8baa      d7             xlatb\n\u2502           0x004a8bab      d0e4           shl ah, 1\n\u2502           0x004a8bad      d0e4           shl ah, 1\n\u2502           0x004a8baf      0ac4           or al, ah\n\u2502           0x004a8bb1      0fbec0         movsx eax, al\n\u2502           0x004a8bb4      81e104040000   and ecx, 0x404              ; 1028\n\u2502           0x004a8bba      8bda           mov ebx, edx\n\u2502           0x004a8bbc      03d8           add ebx, eax\n\u2502           0x004a8bbe      83c310         add ebx, 0x10               ; 16\n\u2514           0x004a8bc1      ff23           jmp dword [ebx]",
-  "limitations": [
-    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
-    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004A8B37",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004A8B37"
+   },
+   {
+    "address": "0x004A8B3D"
+   },
+   {
+    "address": "0x004A8B4E"
+   },
+   {
+    "address": "0x004A8B52"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004A8B37",
+    "target": "0x004A8B4E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004A8B37",
+    "target": "0x004A8B3D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004A8B3D",
+    "target": "0x004A8B52",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004A8B4E",
+    "target": "0x004A8B52",
+    "kind": "unconditional"
+   }
   ]
+ }
 }

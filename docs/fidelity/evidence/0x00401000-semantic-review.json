@@ -4,112 +4,59 @@
  "result": "passed",
  "address": "0x00401000",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "ce59536fe7f614756430a1b987452ad42fba586cf2a07571747778b4bab1d6ae",
- "implementation_path": "engine/src/retail/core/qtask_create_task.cpp",
+ "implementation_sha256": "de1bf9476c0f234b3262794c4d8a5ede00f66b94f89c9cdf0d2c290625cc4765",
  "reviewed": true,
- "reviewed_by": "Delegated coding agent source-semantic review against the live Binary Ninja 6.0.10601 MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate translation unit compiled and linked by the repository CMake target.",
- "reviewed_at": "2026-10-23T09:27:23Z",
- "source_revision": "fe7ab7fb with uncommitted work in this worktree",
- "review_basis": "The retail entry 0x00401000 was disassembled, decompiled, CFG-recovered with Binary Ninja and radare2, and independently recovered with angr CFGFast. The three recoveries agree on the entry, the 67-byte extent, the two-way branch at 0x00401027 and the three direct calls before it. The candidate was then read against the retail instruction stream and its linked machine code was inspected.",
- "retail_function": {
-  "entry": "0x00401000",
-  "name": "QTask_CreateTask",
-  "signature": "int32_t()",
-  "calling_convention": "cdecl",
-  "start": "0x00401000",
-  "end": "0x00401042",
-  "size_bytes": 67,
-  "basic_blocks": 3,
-  "edges": 2,
-  "function_digest_sha256": "b9fdce9df415fa31eb63c1758db66ed3dcf2677c5028e67fe78526833302c281",
-  "cfg_similarity": 1.0,
-  "summary": "Calls 0x0048F100(\"IGI\"), 0x0048F330(1), 0x00402930 and 0x00402800(0), reads 0x005C8C08 through 0x0048F220, calls 0x004028A0 with 2 when the flag is non-zero or 4 when it is zero, replaces AL with 1 and returns. No arguments; int32 result 1 on both paths."
- },
- "candidate_function": {
-  "path": "engine/src/retail/core/qtask_create_task.cpp",
-  "sha256": "ce59536fe7f614756430a1b987452ad42fba586cf2a07571747778b4bab1d6ae",
-  "summary": "QTask_CreateTask() calls an internal SetAppTitle(\"IGI\") that stores AppTitle (retail 0x005C8BD4), calls Script_SetForcePrecompiledFlag(1) (retail 0x0048F330 -> 0x005C8BF0), calls QTask_RegisterClasses, calls Flow_CreateHandler(nullptr), reads AppContext_StartupMode (retail 0x005C8C08) and calls Flow_SetState(2 or 4), then returns (state_result & 0xFFFFFF00) | 1.",
-  "status_after_review": "BUILD_VERIFIED"
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
+  },
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "detail": "Binary Ninja and radare2 both recover the entry at 0x00401000, extent 0x00401000-0x00401042 (67 bytes), 3 basic blocks and the same two conditional edges; angr CFGFast recovers the exact entry with no unresolved jumps. The retail symbol name at the entry is QTask_CreateTask. The candidate defines the same extern \"C\" __cdecl entry named QTask_CreateTask in engine/src/retail/core/qtask_create_task.cpp."
-  },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "detail": "Retail is int32_t(void): no register or stack arguments; the three pushes are outgoing call arguments (the \"IGI\" pointer, 1, then 0, and 2 or 4 for Flow_SetState). The candidate takes no arguments and passes the same values in the same order."
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00401000 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "detail": "The retail constants are the char[5] \"IGI\" at 0x00536144, the force-precompiled value 1, the null handler, the startup state 2 for non-zero and 4 for zero, and the low-byte mask 0xFFFFFF00 with bit 0 set. The candidate uses the same string, 1, nullptr, 2U or 4U and (state_result & 0xFFFFFF00U) | 1U; there is no scaling or unit conversion in this function."
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
   {
-   "name": "memory_layout_and_access",
+   "name": "argument_mapping",
    "result": "passed",
-   "detail": "The retail accesses 32-bit dwords at 0x005C8BF0 (force-precompiled), 0x005C8C08 (startup mode) and 0x005C8BD4 (window text), and the string at 0x00536144. The port maps these to the existing AppTitle and force-precompiled globals and a new extern \"C\" 32-bit AppContext_StartupMode; all reads/writes are 32-bit and the string is a static literal."
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "detail": "Retail call order is 0x0048F100(\"IGI\"), 0x0048F330(1), 0x00402930(), 0x00402800(0), 0x0048F220(), 0x004028A0(2 or 4). The candidate keeps that order and the same argument values. 0x00402930, 0x00402800 and 0x004028A0 bind to the existing in-tree transcriptions; 0x0048F330 binds to Script_SetForcePrecompiledFlag, which writes the same port flag; 0x0048F220 is represented by a local read of AppContext_StartupMode. Side effects reproduced: AppTitle store, force-precompiled flag write, handler creation, flow-state transition. Documented difference: the retail SetWindowTextA call is not made because the candidate has no writer for the retail HWND global; the unconditional title store is still performed."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "detail": "Both retail paths execute mov al,1 and return, so the observed int32 result is 1 regardless of the startup flag; there is no separate error path. The candidate applies the same low-byte replacement and returns 1 on both paths. QTask_RegisterClasses throwing before the flow calls is a documented reachability limitation of the incomplete registrar, not a different return path in 0x00401000."
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "The function is integer-only: it moves pointers and 32-bit integers and calls integer/void functions; it performs no floating-point loads, arithmetic, comparisons, conversions or MXCSR changes."
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
   },
   {
-   "name": "branch_paths",
+   "name": "memory_layout_and_access",
    "result": "passed",
-   "detail": "The retail tests the dword at 0x005C8C08 and calls Flow_SetState(2) when non-zero, else Flow_SetState(4). The candidate tests AppContext_StartupMode with the same polarity, and the linked machine code retains test/je and both calls (0x41FB8A test eax,eax; 0x41FB91 je 0x41FBB0)."
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
   },
   {
-   "name": "documented_differences",
+   "name": "return_and_error_paths",
    "result": "passed",
-   "detail": "Window-text update omitted (no candidate HWND writer); 0x0048F220 represented by a local read; startup mode initialized to the evidenced post-main value 1; QTask_RegisterClasses throws before the flow calls; candidate main does not call 0x00401000. These are recorded in the limitations and do not alter the reviewed instruction-level semantics of 0x00401000 within its declared scope."
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
   }
- ],
- "signature_comparison": {
-  "reviewed": true,
-  "result": "abi-adapted",
-  "rationale": "Retail is cdecl int32_t(void) with no arguments and a 32-bit int result; the candidate is extern \"C\" __cdecl int QTask_CreateTask() with no arguments and the same 32-bit result. The port-owned startup flag is read through the same non-zero/zero polarity as 0x005C8C08."
- },
- "deviations": [
-  "0x0048F220 is represented by an internal read of AppContext_StartupMode, not a linked transcription of the retail getter.",
-  "The window handle at 0x005C8BC4 has no candidate writer, so SetWindowTextA is not called.",
-  "AppContext_StartupMode is initialized to 1 because the candidate has no transcription of the retail writer 0x0048F210 that main calls at 0x0048F656.",
-  "QTask_RegisterClasses throws before the flow calls, so the later calls are not reachable in the current candidate."
- ],
- "evidence": {
-  "binary_ninja": {
-   "evidence_path": "docs/fidelity/evidence/0x00401000-binaryninja.json",
-   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
-  },
-  "radare2": {
-   "evidence_path": "docs/fidelity/evidence/0x00401000-radare2.json",
-   "tool": "radare2 6.2.0"
-  },
-  "angr": {
-   "evidence_path": "docs/fidelity/evidence/0x00401000-angr.json",
-   "tool": "angr 10.0.4.post1 CFGFast"
-  },
-  "build": {
-   "evidence_path": "docs/fidelity/evidence/0x00401000-build.json"
-  }
- },
- "limitations": [
-  "No paired retail/candidate game-process runtime capture exists for this address; no RUNTIME_TESTED or VERIFIED claim is made.",
-  "The CFG agreement is Binary Ninja vs radare2 vs angr on the retail image; the candidate machine CFG was not proven isomorphic to the retail CFG.",
-  "QTask_RegisterClasses is itself incomplete and throws, so the candidate function is not observable through its full retail path.",
-  "The candidate symbol is linked but not called from the candidate main."
  ]
 }

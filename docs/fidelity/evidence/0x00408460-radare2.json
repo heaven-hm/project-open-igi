@@ -1,364 +1,285 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "radare2",
-  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "function_entry": "0x00408460",
-  "symbol": "fcn.00408460",
-  "signature": "fcn.00408460 (int32_t arg_5ch);",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "analysis": {
-    "commands": "s 0x00408460; af-*; af; afij; afbj",
-    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
-  },
-  "function": {
-    "size_bytes": 694,
-    "basic_block_count": 27,
-    "instruction_count": 183,
-    "call_convention": "cdecl",
-    "edge_count": 38,
-    "argument_count": 1,
-    "is_linear": true
-  },
-  "bytes_hex": "83ec54568b74245c57c7442408000000",
-  "bytes_sha256": "4a8b9f2a661e859cb144fbf2eea0affee8cfb4fee40d155e2c863577ada71928",
-  "cfg": {
-    "entry": "0x00408460",
-    "nodes": [
-      {
-        "address": "0x00408460",
-        "size": 66,
-        "instructions": 15
-      },
-      {
-        "address": "0x004084a2",
-        "size": 12,
-        "instructions": 3
-      },
-      {
-        "address": "0x004084ae",
-        "size": 19,
-        "instructions": 5
-      },
-      {
-        "address": "0x004084c1",
-        "size": 14,
-        "instructions": 3
-      },
-      {
-        "address": "0x004084cf",
-        "size": 19,
-        "instructions": 5
-      },
-      {
-        "address": "0x004084e2",
-        "size": 8,
-        "instructions": 2
-      },
-      {
-        "address": "0x004084ea",
-        "size": 19,
-        "instructions": 5
-      },
-      {
-        "address": "0x004084fd",
-        "size": 6,
-        "instructions": 1
-      },
-      {
-        "address": "0x00408503",
-        "size": 119,
-        "instructions": 29
-      },
-      {
-        "address": "0x0040857a",
-        "size": 13,
-        "instructions": 4
-      },
-      {
-        "address": "0x00408587",
-        "size": 2,
-        "instructions": 1
-      },
-      {
-        "address": "0x00408589",
-        "size": 35,
-        "instructions": 8
-      },
-      {
-        "address": "0x004085ac",
-        "size": 10,
-        "instructions": 3
-      },
-      {
-        "address": "0x004085b6",
-        "size": 13,
-        "instructions": 4
-      },
-      {
-        "address": "0x004085c3",
-        "size": 8,
-        "instructions": 2
-      },
-      {
-        "address": "0x004085cb",
-        "size": 68,
-        "instructions": 16
-      },
-      {
-        "address": "0x0040860f",
-        "size": 47,
-        "instructions": 12
-      },
-      {
-        "address": "0x0040863e",
-        "size": 18,
-        "instructions": 6
-      },
-      {
-        "address": "0x00408650",
-        "size": 17,
-        "instructions": 5
-      },
-      {
-        "address": "0x00408661",
-        "size": 20,
-        "instructions": 6
-      },
-      {
-        "address": "0x00408675",
-        "size": 12,
-        "instructions": 4
-      },
-      {
-        "address": "0x00408681",
-        "size": 20,
-        "instructions": 6
-      },
-      {
-        "address": "0x00408695",
-        "size": 12,
-        "instructions": 4
-      },
-      {
-        "address": "0x004086a1",
-        "size": 10,
-        "instructions": 3
-      },
-      {
-        "address": "0x004086ab",
-        "size": 36,
-        "instructions": 9
-      },
-      {
-        "address": "0x004086cf",
-        "size": 63,
-        "instructions": 17
-      },
-      {
-        "address": "0x0040870e",
-        "size": 8,
-        "instructions": 5
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x00408460",
-        "target": "0x004084a2",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408460",
-        "target": "0x004084ae",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084a2",
-        "target": "0x004084ae",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084ae",
-        "target": "0x004084c1",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084ae",
-        "target": "0x004084cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084c1",
-        "target": "0x004084cf",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084cf",
-        "target": "0x004084e2",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084cf",
-        "target": "0x004084ea",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084e2",
-        "target": "0x004084ea",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004084ea",
-        "target": "0x004084fd",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084ea",
-        "target": "0x00408503",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004084fd",
-        "target": "0x00408503",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408503",
-        "target": "0x0040857a",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408503",
-        "target": "0x0040870e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040857a",
-        "target": "0x00408587",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040857a",
-        "target": "0x00408589",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408587",
-        "target": "0x00408589",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408589",
-        "target": "0x004085ac",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408589",
-        "target": "0x004085b6",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085ac",
-        "target": "0x004085cb",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004085b6",
-        "target": "0x004085c3",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085b6",
-        "target": "0x004085cb",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085c3",
-        "target": "0x004085cb",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004085cb",
-        "target": "0x0040860f",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x004085cb",
-        "target": "0x004086cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040860f",
-        "target": "0x0040863e",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040860f",
-        "target": "0x00408650",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0040863e",
-        "target": "0x00408650",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408650",
-        "target": "0x00408661",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408650",
-        "target": "0x004086cf",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408661",
-        "target": "0x00408675",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408661",
-        "target": "0x00408681",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408675",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00408681",
-        "target": "0x00408695",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408681",
-        "target": "0x004086a1",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00408695",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004086a1",
-        "target": "0x004086ab",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x004086ab",
-        "target": "0x004086cf",
-        "kind": "unconditional"
-      }
-    ]
-  },
-  "disassembly": "\u250c 694: fcn.00408460 (int32_t arg_5ch);\n\u2502 `- args(sp[0x4..0x4]) vars(9:sp[0x20..0x54])\n\u2502           0x00408460      83ec54         sub esp, 0x54\n\u2502           0x00408463      56             push esi\n\u2502           0x00408464      8b74245c       mov esi, dword [arg_5ch]\n\u2502           0x00408468      57             push edi\n\u2502           0x00408469      c744240800..   mov dword [var_8h], 0\n\u2502           0x00408471      d9866c060000   fld dword [esi + 0x66c]\n\u2502           0x00408477      d825f0335300   fsub dword [0x5333f0]       ; [0x5333f0:4]=0x42a97bbf\n\u2502           0x0040847d      8dbe54020000   lea edi, [esi + 0x254]\n\u2502           0x00408483      d9966c060000   fst dword [esi + 0x66c]     ; [0x66c:4]=-1 ; 1644\n\u2502           0x00408489      d905ec335300   fld dword [0x5333ec]\n\u2502           0x0040848f      d986b8010000   fld dword [esi + 0x1b8]\n\u2502           0x00408495      d81dec335300   fcomp dword [0x5333ec]\n\u2502           0x0040849b      dfe0           fnstsw ax\n\u2502           0x0040849d      f6c440         test ah, 0x40               ; 64\n\u2502       \u250c\u2500< 0x004084a0      750c           jne 0x4084ae\n\u2502       \u2502   0x004084a2      d905f4e15600   fld dword [0x56e1f4]\n\u2502       \u2502   0x004084a8      d9e0           fchs\n\u2502       \u2502   0x004084aa      d95c2408       fstp dword [esp + 8]\n\u2502       \u2514\u2500> 0x004084ae      d986bc010000   fld dword [esi + 0x1bc]\n\u2502           0x004084b4      d81dec335300   fcomp dword [0x5333ec]\n\u2502           0x004084ba      dfe0           fnstsw ax\n\u2502           0x004084bc      f6c440         test ah, 0x40               ; 64\n\u2502       \u250c\u2500< 0x004084bf      750e           jne 0x4084cf\n\u2502       \u2502   0x004084c1      d905f4e15600   fld dword [0x56e1f4]\n\u2502       \u2502   0x004084c7      d8442408       fadd dword [var_8h]\n\u2502       \u2502   0x004084cb      d95c2408       fstp dword [esp + 8]\n\u2502       \u2514\u2500> 0x004084cf      d986c0010000   fld dword [esi + 0x1c0]\n\u2502           0x004084d5      d81dec335300   fcomp dword [0x5333ec]\n\u2502           0x004084db      dfe0           fnstsw ax\n\u2502           0x004084dd      f6c440         test ah, 0x40               ; 64\n\u2502       \u250c\u2500< 0x004084e0      7508           jne 0x4084ea\n\u2502       \u2502   0x004084e2      ddd8           fstp st(0)\n\u2502       \u2502   0x004084e4      d905f4e15600   fld dword [0x56e1f4]\n\u2502       \u2514\u2500> 0x004084ea      d986c4010000   fld dword [esi + 0x1c4]\n\u2502           0x004084f0      d81dec335300   fcomp dword [0x5333ec]\n\u2502           0x004084f6      dfe0           fnstsw ax\n\u2502           0x004084f8      f6c440         test ah, 0x40               ; 64\n\u2502       \u250c\u2500< 0x004084fb      7506           jne 0x408503\n\u2502       \u2502   0x004084fd      d825f4e15600   fsub dword [0x56e1f4]       ; [0x56e1f4:4]=0\n\u2502       \u2514\u2500> 0x00408503      d9c0           fld st(0)\n\u2502           0x00408505      d84e7c         fmul dword [esi + 0x7c]\n\u2502           0x00408508      d9442408       fld dword [esp + 8]\n\u2502           0x0040850c      d84e78         fmul dword [esi + 0x78]\n\u2502           0x0040850f      f686f40200..   test byte [esi + 0x2f4], 4\n\u2502           0x00408516      dec1           faddp st(1)\n\u2502           0x00408518      d95c2414       fstp dword [esp + 0x14]\n\u2502           0x0040851c      d9c0           fld st(0)\n\u2502           0x0040851e      d88e88000000   fmul dword [esi + 0x88]\n\u2502           0x00408524      d9442408       fld dword [esp + 8]\n\u2502           0x00408528      d88e84000000   fmul dword [esi + 0x84]\n\u2502           0x0040852e      dec1           faddp st(1)\n\u2502           0x00408530      d95c2418       fstp dword [esp + 0x18]\n\u2502           0x00408534      d88e94000000   fmul dword [esi + 0x94]\n\u2502           0x0040853a      d9442408       fld dword [esp + 8]\n\u2502           0x0040853e      d88e90000000   fmul dword [esi + 0x90]\n\u2502           0x00408544      dec1           faddp st(1)\n\u2502           0x00408546      d9442414       fld dword [esp + 0x14]\n\u2502           0x0040854a      d88664060000   fadd dword [esi + 0x664]\n\u2502           0x00408550      d99e64060000   fstp dword [esi + 0x664]    ; [0x664:4]=-1 ; 1636\n\u2502           0x00408556      d9442418       fld dword [esp + 0x18]\n\u2502           0x0040855a      d88668060000   fadd dword [esi + 0x668]\n\u2502           0x00408560      d99e68060000   fstp dword [esi + 0x668]    ; [0x668:4]=-1 ; 1640\n\u2502           0x00408566      d9c9           fxch st(1)\n\u2502           0x00408568      d8c1           fadd st(1)\n\u2502           0x0040856a      d9c9           fxch st(1)\n\u2502           0x0040856c      ddd8           fstp st(0)\n\u2502           0x0040856e      d9966c060000   fst dword [esi + 0x66c]     ; [0x66c:4]=-1 ; 1644\n\u2502       \u250c\u2500< 0x00408574      0f8494010000   je 0x40870e\n\u2502       \u2502   0x0040857a      d815ec335300   fcom dword [0x5333ec]\n\u2502       \u2502   0x00408580      dfe0           fnstsw ax\n\u2502       \u2502   0x00408582      f6c401         test ah, 1                  ; 1\n\u2502      \u250c\u2500\u2500< 0x00408585      7402           je 0x408589\n\u2502      \u2502\u2502   0x00408587      d9e0           fchs\n\u2502      \u2514\u2500\u2500> 0x00408589      d80de8335300   fmul dword [0x5333e8]       ; [0x5333e8:4]=0x39800000\n\u2502       \u2502   0x0040858f      d80dbc335300   fmul dword [0x5333bc]       ; [0x5333bc:4]=0x41f00000\n\u2502       \u2502   0x00408595      d9542460       fst dword [esp + 0x60]\n\u2502       \u2502   0x00408599      d80de4335300   fmul dword [0x5333e4]       ; [0x5333e4:4]=0x3e000000\n\u2502       \u2502   0x0040859f      d815ec335300   fcom dword [0x5333ec]\n\u2502       \u2502   0x004085a5      dfe0           fnstsw ax\n\u2502       \u2502   0x004085a7      f6c401         test ah, 1                  ; 1\n\u2502      \u250c\u2500\u2500< 0x004085aa      740a           je 0x4085b6\n\u2502      \u2502\u2502   0x004085ac      ddd8           fstp st(0)\n\u2502      \u2502\u2502   0x004085ae      d905ec335300   fld dword [0x5333ec]\n\u2502     \u250c\u2500\u2500\u2500< 0x004085b4      eb15           jmp 0x4085cb\n\u2502     \u2502\u2514\u2500\u2500> 0x004085b6      d815e0335300   fcom dword [0x5333e0]\n\u2502     \u2502 \u2502   0x004085bc      dfe0           fnstsw ax\n\u2502     \u2502 \u2502   0x004085be      f6c441         test ah, 0x41               ; 65\n\u2502     \u2502\u250c\u2500\u2500< 0x004085c1      7508           jne 0x4085cb\n\u2502     \u2502\u2502\u2502   0x004085c3      ddd8           fstp st(0)\n\u2502     \u2502\u2502\u2502   0x004085c5      d905e0335300   fld dword [0x5333e0]\n\u2502     \u2502\u2502\u2502   ; CODE XREF from fcn.00408460 @ 0x4085b4(x)\n\u2502     \u2514\u2514\u2500\u2500> 0x004085cb      dc0dd8335300   fmul qword [0x5333d8]       ; [0x5333d8:8]=0xc090000000000000\n\u2502       \u2502   0x004085d1      8b86ec040000   mov eax, dword [esi + 0x4ec]\n\u2502       \u2502   0x004085d7      51             push ecx\n\u2502       \u2502   0x004085d8      d91c24         fstp dword [esp]\n\u2502       \u2502   0x004085db      50             push eax\n\u2502       \u2502   0x004085dc      e8cfd30500     call 0x4659b0\n\u2502       \u2502   0x004085e1      d9442468       fld dword [esp + 0x68]\n\u2502       \u2502   0x004085e5      d825d0335300   fsub dword [0x5333d0]       ; [0x5333d0:4]=0x41600000\n\u2502       \u2502   0x004085eb      83c408         add esp, 8\n\u2502       \u2502   0x004085ee      c744242c00..   mov dword [var_2ch], 0x46a00000 ; [0x46a00000:4]=-1\n\u2502       \u2502   0x004085f6      d95c2460       fstp dword [esp + 0x60]\n\u2502       \u2502   0x004085fa      d9442460       fld dword [esp + 0x60]\n\u2502       \u2502   0x004085fe      d81dec335300   fcomp dword [0x5333ec]\n\u2502       \u2502   0x00408604      dfe0           fnstsw ax\n\u2502       \u2502   0x00408606      f6c441         test ah, 0x41               ; 65\n\u2502      \u250c\u2500\u2500< 0x00408609      0f85c0000000   jne 0x4086cf\n\u2502      \u2502\u2502   0x0040860f      6a0d           push 0xd                    ; 13\n\u2502      \u2502\u2502   0x00408611      57             push edi\n\u2502      \u2502\u2502   0x00408612      c787940000..   mov dword [edi + 0x94], 0xd ; [0xd:4]=-1 ; 13\n\u2502      \u2502\u2502   0x0040861c      e8ef170800     call 0x489e10\n\u2502      \u2502\u2502   0x00408621      d9442468       fld dword [esp + 0x68]\n\u2502      \u2502\u2502   0x00408625      d80dcc335300   fmul dword [0x5333cc]       ; [0x5333cc:4]=0x3d9d89d9\n\u2502      \u2502\u2502   0x0040862b      83c408         add esp, 8\n\u2502      \u2502\u2502   0x0040862e      d84f04         fmul dword [edi + 4]\n\u2502      \u2502\u2502   0x00408631      d95c2460       fstp dword [esp + 0x60]\n\u2502      \u2502\u2502   0x00408635      e846e70000     call 0x416d80\n\u2502      \u2502\u2502   0x0040863a      84c0           test al, al\n\u2502     \u250c\u2500\u2500\u2500< 0x0040863c      7512           jne 0x408650\n\u2502     \u2502\u2502\u2502   0x0040863e      d9442460       fld dword [esp + 0x60]\n\u2502     \u2502\u2502\u2502   0x00408642      d84774         fadd dword [edi + 0x74]\n\u2502     \u2502\u2502\u2502   0x00408645      d95f74         fstp dword [edi + 0x74]\n\u2502     \u2502\u2502\u2502   0x00408648      d9442460       fld dword [esp + 0x60]\n\u2502     \u2502\u2502\u2502   0x0040864c      d807           fadd dword [edi]\n\u2502     \u2502\u2502\u2502   0x0040864e      d91f           fstp dword [edi]\n\u2502     \u2514\u2500\u2500\u2500> 0x00408650      d9442460       fld dword [esp + 0x60]\n\u2502      \u2502\u2502   0x00408654      d81dec335300   fcomp dword [0x5333ec]\n\u2502      \u2502\u2502   0x0040865a      dfe0           fnstsw ax\n\u2502      \u2502\u2502   0x0040865c      f6c440         test ah, 0x40               ; 64\n\u2502     \u250c\u2500\u2500\u2500< 0x0040865f      756e           jne 0x4086cf\n\u2502     \u2502\u2502\u2502   0x00408661      d94704         fld dword [edi + 4]\n\u2502     \u2502\u2502\u2502   0x00408664      d80dc8335300   fmul dword [0x5333c8]       ; [0x5333c8:4]=0x3dcccccd\n\u2502     \u2502\u2502\u2502   0x0040866a      d85c2460       fcomp dword [esp + 0x60]\n\u2502     \u2502\u2502\u2502   0x0040866e      dfe0           fnstsw ax\n\u2502     \u2502\u2502\u2502   0x00408670      f6c441         test ah, 0x41               ; 65\n\u2502    \u250c\u2500\u2500\u2500\u2500< 0x00408673      750c           jne 0x408681\n\u2502    \u2502\u2502\u2502\u2502   0x00408675      8d4c243c       lea ecx, [var_3ch_2]\n\u2502    \u2502\u2502\u2502\u2502   0x00408679      685c8d5300     push str.player_fall_1      ; 0x538d5c ; \"player_fall_1\"\n\u2502    \u2502\u2502\u2502\u2502   0x0040867e      51             push ecx\n\u2502   \u250c\u2500\u2500\u2500\u2500\u2500< 0x0040867f      eb2a           jmp 0x4086ab\n\u2502   \u2502\u2514\u2500\u2500\u2500\u2500> 0x00408681      d94704         fld dword [edi + 4]\n\u2502   \u2502 \u2502\u2502\u2502   0x00408684      d80dc4335300   fmul dword [0x5333c4]       ; [0x5333c4:4]=0x3e4ccccd\n\u2502   \u2502 \u2502\u2502\u2502   0x0040868a      d85c2460       fcomp dword [esp + 0x60]\n\u2502   \u2502 \u2502\u2502\u2502   0x0040868e      dfe0           fnstsw ax\n\u2502   \u2502 \u2502\u2502\u2502   0x00408690      f6c441         test ah, 0x41               ; 65\n\u2502   \u2502\u250c\u2500\u2500\u2500\u2500< 0x00408693      750c           jne 0x4086a1\n\u2502   \u2502\u2502\u2502\u2502\u2502   0x00408695      8d54243c       lea edx, [var_3ch_2]\n\u2502   \u2502\u2502\u2502\u2502\u2502   0x00408699      684c8d5300     push str.player_fall_2      ; 0x538d4c ; \"player_fall_2\"\n\u2502   \u2502\u2502\u2502\u2502\u2502   0x0040869e      52             push edx\n\u2502  \u250c\u2500\u2500\u2500\u2500\u2500\u2500< 0x0040869f      eb0a           jmp 0x4086ab\n\u2502  \u2502\u2502\u2514\u2500\u2500\u2500\u2500> 0x004086a1      8d44243c       lea eax, [var_3ch_2]\n\u2502  \u2502\u2502 \u2502\u2502\u2502   0x004086a5      683c8d5300     push str.player_fall_3      ; 0x538d3c ; \"player_fall_3\"\n\u2502  \u2502\u2502 \u2502\u2502\u2502   0x004086aa      50             push eax\n\u2502  \u2502\u2502 \u2502\u2502\u2502   ; CODE XREFS from fcn.00408460 @ 0x40867f(x), 0x40869f(x)\n\u2502  \u2514\u2514\u2500\u2500\u2500\u2500\u2500> 0x004086ab      e803cd0900     call 0x4a53b3\n\u2502     \u2502\u2502\u2502   0x004086b0      8b96ec040000   mov edx, dword [esi + 0x4ec]\n\u2502     \u2502\u2502\u2502   0x004086b6      83c408         add esp, 8\n\u2502     \u2502\u2502\u2502   0x004086b9      8d4c243c       lea ecx, [var_3ch_2]\n\u2502     \u2502\u2502\u2502   0x004086bd      51             push ecx\n\u2502     \u2502\u2502\u2502   0x004086be      52             push edx\n\u2502     \u2502\u2502\u2502   0x004086bf      e83ce40d00     call 0x4e6b00\n\u2502     \u2502\u2502\u2502   0x004086c4      83c408         add esp, 8\n\u2502     \u2502\u2502\u2502   0x004086c7      c744242c00..   mov dword [var_2ch], 0x47200000 ; [0x47200000:4]=-1\n\u2502     \u2514\u2514\u2500\u2500> 0x004086cf      8b86fc000000   mov eax, dword [esi + 0xfc]\n\u2502       \u2502   0x004086d5      56             push esi\n\u2502       \u2502   0x004086d6      c74424240b..   mov dword [var_24h], 0xb    ; [0xb:4]=-1 ; 11\n\u2502       \u2502   0x004086de      89442428       mov dword [var_28h], eax\n\u2502       \u2502   0x004086e2      c744242c46..   mov dword [var_2ch_2], 0x46 ; 'F'\n\u2502       \u2502                                                              ; [0x46:4]=-1 ; 70\n\u2502       \u2502   0x004086ea      e851ad0b00     call 0x4c3440\n\u2502       \u2502   0x004086ef      8d4c2424       lea ecx, [var_24h]\n\u2502       \u2502   0x004086f3      89442434       mov dword [var_34h], eax\n\u2502       \u2502   0x004086f7      51             push ecx\n\u2502       \u2502   0x004086f8      8974243c       mov dword [var_3ch], esi\n\u2502       \u2502   0x004086fc      89742440       mov dword [var_40h], esi\n\u2502       \u2502   0x00408700      e8db850400     call 0x450ce0\n\u2502       \u2502   0x00408705      83c408         add esp, 8\n\u2502       \u2502   0x00408708      5f             pop edi\n\u2502       \u2502   0x00408709      5e             pop esi\n\u2502       \u2502   0x0040870a      83c454         add esp, 0x54\n\u2502       \u2502   0x0040870d      c3             ret\n\u2502       \u2514\u2500> 0x0040870e      5f             pop edi\n\u2502           0x0040870f      5e             pop esi\n\u2502           0x00408710      ddd8           fstp st(0)\n\u2502           0x00408712      83c454         add esp, 0x54\n\u2514           0x00408715      c3             ret",
-  "limitations": [
-    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
-    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00408460",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00408460"
+   },
+   {
+    "address": "0x004084A2"
+   },
+   {
+    "address": "0x004084AE"
+   },
+   {
+    "address": "0x004084C1"
+   },
+   {
+    "address": "0x004084CF"
+   },
+   {
+    "address": "0x004084E2"
+   },
+   {
+    "address": "0x004084EA"
+   },
+   {
+    "address": "0x004084FD"
+   },
+   {
+    "address": "0x00408503"
+   },
+   {
+    "address": "0x0040857A"
+   },
+   {
+    "address": "0x00408587"
+   },
+   {
+    "address": "0x00408589"
+   },
+   {
+    "address": "0x004085AC"
+   },
+   {
+    "address": "0x004085B6"
+   },
+   {
+    "address": "0x004085C3"
+   },
+   {
+    "address": "0x004085CB"
+   },
+   {
+    "address": "0x0040860F"
+   },
+   {
+    "address": "0x0040863E"
+   },
+   {
+    "address": "0x00408650"
+   },
+   {
+    "address": "0x00408661"
+   },
+   {
+    "address": "0x00408675"
+   },
+   {
+    "address": "0x00408681"
+   },
+   {
+    "address": "0x00408695"
+   },
+   {
+    "address": "0x004086A1"
+   },
+   {
+    "address": "0x004086AB"
+   },
+   {
+    "address": "0x004086CF"
+   },
+   {
+    "address": "0x0040870E"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00408460",
+    "target": "0x004084AE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408460",
+    "target": "0x004084A2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084A2",
+    "target": "0x004084AE",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004084AE",
+    "target": "0x004084CF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084AE",
+    "target": "0x004084C1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084C1",
+    "target": "0x004084CF",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004084CF",
+    "target": "0x004084EA",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084CF",
+    "target": "0x004084E2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084E2",
+    "target": "0x004084EA",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004084EA",
+    "target": "0x00408503",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084EA",
+    "target": "0x004084FD",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004084FD",
+    "target": "0x00408503",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00408503",
+    "target": "0x0040870E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408503",
+    "target": "0x0040857A",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040857A",
+    "target": "0x00408589",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040857A",
+    "target": "0x00408587",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408587",
+    "target": "0x00408589",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00408589",
+    "target": "0x004085B6",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408589",
+    "target": "0x004085AC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004085AC",
+    "target": "0x004085CB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004085B6",
+    "target": "0x004085CB",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004085B6",
+    "target": "0x004085C3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004085C3",
+    "target": "0x004085CB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004085CB",
+    "target": "0x004086CF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004085CB",
+    "target": "0x0040860F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040860F",
+    "target": "0x00408650",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040860F",
+    "target": "0x0040863E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040863E",
+    "target": "0x00408650",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00408650",
+    "target": "0x004086CF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408650",
+    "target": "0x00408661",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408661",
+    "target": "0x00408681",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408661",
+    "target": "0x00408675",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408675",
+    "target": "0x004086AB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00408681",
+    "target": "0x004086A1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408681",
+    "target": "0x00408695",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00408695",
+    "target": "0x004086AB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004086A1",
+    "target": "0x004086AB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004086AB",
+    "target": "0x004086CF",
+    "kind": "unconditional"
+   }
   ]
+ }
 }

@@ -1,125 +1,80 @@
 {
-  "schema_version": 1,
-  "kind": "native-disassembly",
-  "tool": "binary_ninja",
-  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "view": "view_1",
-  "function_entry": "0x00410240",
-  "symbol": "Define_HumanPlayerWeaponCategory",
-  "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
-  "analyzed_at": "2026-10-23T12:58:32Z",
-  "function": {
-    "start": "0x00410240",
-    "end": "0x4102cc",
-    "size_bytes": 141,
-    "basic_blocks": 7,
-    "instruction_count": 53
-  },
-  "bytes_hex": "83ec1c53558b6c24305657bfa4e05600",
-  "bytes_sha256": "52aee37ebcf11d89364b85145e5abd633a41fef5fc7cad7a056a904fbb9a79e3",
-  "cfg": {
-    "entry": "0x00410240",
-    "nodes": [
-      {
-        "address": "0x00410240",
-        "start": "0x410240",
-        "end": "0x410256",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410285",
-        "start": "0x410285",
-        "end": "0x410294",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041026a",
-        "start": "0x41026a",
-        "end": "0x41026c",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410256",
-        "start": "0x410256",
-        "end": "0x41026a",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410294",
-        "start": "0x410294",
-        "end": "0x4102cd",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x0041026c",
-        "start": "0x41026c",
-        "end": "0x410281",
-        "flags": "can-exit"
-      },
-      {
-        "address": "0x00410281",
-        "start": "0x410281",
-        "end": "0x410285",
-        "flags": "can-exit"
-      }
-    ],
-    "edges": [
-      {
-        "source": "0x00410240",
-        "target": "0x00410256",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00410256",
-        "target": "0x0041026a",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00410256",
-        "target": "0x00410285",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041026a",
-        "target": "0x0041026c",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x0041026c",
-        "target": "0x0041026c",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x0041026c",
-        "target": "0x00410281",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00410281",
-        "target": "0x00410285",
-        "kind": "unconditional"
-      },
-      {
-        "source": "0x00410285",
-        "target": "0x00410256",
-        "kind": "conditional"
-      },
-      {
-        "source": "0x00410285",
-        "target": "0x00410294",
-        "kind": "conditional"
-      }
-    ]
-  },
-  "disassembly": "`asm\n  int32_t Define_HumanPlayerWeaponCategory(int32_t arg1, float arg2 @ 0xc)\n\n0x410240  // Sig: void Define_HumanPlayerWeaponCategory(...)\n0x410240  // Note: Registers one weapon-category entry for the human player during a\n0x410240  // humanplayer definition block (argc unknown - parser context). Pairs with\n0x410240  // DefineHumanPlayerWeaponCycle/Cycle ordering.\n0x410240  sub     esp, 0x1c\n0x410243  push    ebx\n0x410244  push    ebp\n0x410245  mov     ebp, dword [esp+0x30]\n0x410249  push    esi\n0x41024a  push    edi\n0x41024b  mov     edi, 0x56e0a4\n0x410250  xor     esi, esi\n0x410252  mov     dword [esp+0x10], edi\n\n0x410256  mov     eax, esi\n0x410258  inc     esi\n0x410259  push    eax\n0x41025a  push    ebp\n0x41025b  call    Script_EvalArgInt\n0x410260  add     esp, 0x8\n0x410263  mov     dword [edi-0x4], eax\n0x410266  test    eax, eax\n0x410268  jle     0x410285\n\n0x41026a  mov     ebx, eax\n\n0x41026c  mov     eax, esi\n0x41026e  inc     esi\n0x41026f  push    eax\n0x410270  push    ebp\n0x410271  call    Script_EvalArgInt\n0x410276  mov     dword [edi], eax\n0x410278  add     esp, 0x8\n0x41027b  add     edi, 0x4\n0x41027e  dec     ebx\n0x41027f  jne     0x41026c\n\n0x410281  mov     edi, dword [esp+0x10]\n\n0x410285  add     edi, 0x24\n0x410288  cmp     edi, 0x56e1e8\n0x41028e  mov     dword [esp+0x10], edi\n0x410292  jl      0x410256\n\n0x410294  mov     eax, dword [esp+0x30]\n0x410298  mov     ecx, 0x6\n0x41029d  lea     esi, [esp+0x14]\n0x4102a1  mov     edi, eax\n0x4102a3  mov     dword [esp+0x14], 0x1\n0x4102ab  mov     dword [esp+0x1c], 0x0\n0x4102b3  mov     dword [esp+0x20], 0x3ff00000\n0x4102bb  mov     dword [esp+0x24], 0x567c74\n0x4102c3  rep movsd dword [edi], [esi]\n0x4102c5  pop     edi\n0x4102c6  pop     esi\n0x4102c7  pop     ebp\n0x4102c8  pop     ebx\n0x4102c9  add     esp, 0x1c\n0x4102cc  retn",
-  "pseudocode": "`bn-pseudoc\n  int32_t Define_HumanPlayerWeaponCategory(int32_t arg1, float arg2 @ 0xc)\n\n// Sig: void Define_HumanPlayerWeaponCategory(...)\n// Note: Registers one weapon-category entry for the human player during a\n// humanplayer definition block (argc unknown - parser context). Pairs with\n// DefineHumanPlayerWeaponCycle/Cycle ordering.\n{\n    int32_t* i = &g_56e0a4;\n    int32_t esi = 0;\n    int32_t* i_1 = &g_56e0a4;\n\n    do\n    {\n        int32_t eax_1 = esi;\n        esi += 1;\n        int32_t var_30 = eax_1;\n        int32_t j_2 = Script_EvalArgInt(arg2, var_30);\n        i[-1] = j_2;\n\n        if (j_2 > 0)\n        {\n            int32_t j_1 = j_2;\n            int32_t j;\n\n            do\n            {\n                int32_t eax_2 = esi;\n                esi += 1;\n                var_30 = eax_2;\n                *i = Script_EvalArgInt(arg2, var_30);\n                i = &i[1];\n                j = j_1;\n                j_1 -= 1;\n            } while (j != 1);\n            i = i_1;\n        }\n\n        i = &i[9];\n        i_1 = i;\n    } while (i < &g_human_gen_1);\n\n    int32_t var_18 = 1;\n    int32_t var_10 = 0;\n    int32_t var_c = 0x3ff00000;\n    char* var_8 = &g_script_ret_type;\n    __builtin_memcpy(arg1, &var_18, 0x18);\n    return arg1;\n}",
-  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x410240\"\narch: \"x86\"\nname: \"Define_HumanPlayerWeaponCategory\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 3\ntotal: 3\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x41025b | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x410271 | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4102c3 | x86 | 0xc35040 |  |\n",
-  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x410240\"\narch: \"x86\"\nname: \"Define_HumanPlayerWeaponCategory\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
-  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
-  "limitations": [
-    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
-    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00410240",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00410240"
+   },
+   {
+    "address": "0x00410285"
+   },
+   {
+    "address": "0x0041026A"
+   },
+   {
+    "address": "0x00410256"
+   },
+   {
+    "address": "0x00410294"
+   },
+   {
+    "address": "0x0041026C"
+   },
+   {
+    "address": "0x00410281"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00410240",
+    "target": "0x00410256",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00410285",
+    "target": "0x00410256",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00410285",
+    "target": "0x00410294",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041026A",
+    "target": "0x0041026C",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00410256",
+    "target": "0x00410285",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00410256",
+    "target": "0x0041026A",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041026C",
+    "target": "0x0041026C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0041026C",
+    "target": "0x00410281",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00410281",
+    "target": "0x00410285",
+    "kind": "unconditional"
+   }
   ]
+ }
 }

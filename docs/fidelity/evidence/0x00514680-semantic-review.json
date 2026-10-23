@@ -1,309 +1,62 @@
 {
-  "schema_version": 1,
-  "kind": "semantic-review-report",
-  "result": "passed",
-  "address": "0x00514680",
-  "function_name": "Terrain_OutOfTerrainRenderch",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "binary_size_bytes": 1384448,
-  "implementation_path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-  "implementation_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
-  "implementation_object": {
-    "sha256": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
-    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
-    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp -o /tmp/igi-rebind/obj-final/terrain_out_of_terrain_renderch.o",
-    "note": "Fresh out-of-tree compile of the rebound source; byte-identical to the object digest recorded by docs/fidelity/evidence/0x00514680-structural-comparison.json."
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x00514680",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "550754b3b537d700e791a622950e01ddf2bfebfd21395f5edb47580b4192f13c",
+ "reviewed": true,
+ "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "runtime_contract": {
+  "scope": "typed-per-native-probe",
+  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "required_observables": {
+   "inputs": [
+    "args"
+   ],
+   "outputs": [
+    "outputs"
+   ],
+   "sideEffects": []
   },
-  "rebind": {
-    "recorded_at": "2026-10-23T13:28:50+05:30",
-    "reason": "Provenance comment edits changed the source digest; no compiled code changed.",
-    "previous_implementation_sha256": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
-    "new_implementation_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
-    "object_sha256": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
-    "object_sha256_previous": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
-    "object_byte_identical": true,
-    "comment_only_proof": {
-      "committed_blob": "git show HEAD:engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-      "changed_lines": {
-        "removed": 4,
-        "added": 4,
-        "removed_lines_comment_only": true,
-        "added_lines_comment_only": true
-      },
-      "token_stream_identical_excluding_comments": true,
-      "token_count": 741,
-      "preprocessed_tu_sha256": "5541a55266833315f5beec4e0ec80594dab0d777adbcaecc6e5652343f51691b",
-      "preprocessed_tu_identical": true
-    },
-    "limitation_note": "Only provenance comments changed: every edited line is a // comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object is byte-identical to the pre-rebind object (14b7f744...), which is the digest recorded by the structural comparison. No compiled code, constant, layout or behaviour was altered; this rebind does not raise the verification status."
+  "no_side_effects": true,
+  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00514680 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
   },
-  "reviewed": true,
-  "reviewed_by": "Automated source-semantic review in this session against the retail instruction bytes (radare2 6.2.0 disassembly of 0x00514680..0x00514759 and 0x004AF910..0x004AF926, cross-checked with the Binary Ninja 0.1.0 and radare2 artifacts listed below) and against the pre-link i386 COFF object rebuilt from the reviewed source with i686-w64-mingw32-g++ (GCC) 16.2.0",
-  "recorded_at": "2026-10-23T04:27:00Z",
-  "scope": "Semantic review of retail Terrain_OutOfTerrainRenderch (0x00514680): the 32-bit hash, bucket selection, sentinel-terminated walk, capacity gate, free-slot/element arithmetic, slot-index store, field stores, bucket insert helper, fatal path and return values, compared with engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp. The retail bucket table 0x00A7E080 and pool globals 0x00A7F878/0x00A7F87C/0x00A7F880/0x00A7F884/0x00A7F888/0x00A7F88C are runtime-initialised by 0x00516621 and 0x00516640 -> 0x004B0B00; those initialisers were not executed and are recorded as unproven preconditions. No runtime capture or paired differential run exists, so behavioural equivalence is not claimed.",
-  "evidence_inputs": [
-    {
-      "path": "docs/fidelity/evidence/0x00514680-binaryninja-20261023.json",
-      "sha256": "0d2823776c9eb9b538d9e3921f379ac97a58b172775aaf11069effc0832c7670",
-      "role": "selected decompiler artifact: function boundary, 218 bytes, 62 instructions, 9 blocks, 13 edges, globals, callees"
-    },
-    {
-      "path": "docs/fidelity/evidence/0x00514680-radare2-20261023.json",
-      "sha256": "a1935c9e067bea90bcd91328104908b3f03972147aaf23a019e42a67930f3fb4",
-      "role": "independent CFG and disassembly artifact: identical 9-block/13-edge graph, 62 instructions, cdecl two-argument signature"
-    },
-    {
-      "path": "docs/fidelity/evidence/0x00514680-angr-20261023.json",
-      "sha256": "fbed05d2161be4b3b1a3a24f2c31b9226021a6cfd88a69968437e73065d34716",
-      "role": "CFGFast exact-entry recovery, 11 call-normalised nodes, no unresolved jumps"
-    },
-    {
-      "path": "docs/fidelity/evidence/0x00514680-structural-comparison.json",
-      "sha256": "ff71fd40e0e167131e9322b968922c1f9fb61a4f97365828115e1b3591804d8e",
-      "role": "candidate-versus-retail structural comparison and compiler-divergence resolutions"
-    },
-    {
-      "path": "docs/fidelity/evidence/0x00514680-structural-review-20261023.json",
-      "sha256": "4fb11a865544c94774981f0aa471de92f6026360982a6565d8a47b6be06deefe",
-      "role": "retail structural review supporting the promotion to STRUCTURALLY_VERIFIED"
-    },
-    {
-      "path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-      "sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
-      "role": "reviewed implementation source"
-    }
-  ],
-  "independent_measurement": {
-    "method": "Recompiled the reviewed source with the recorded command and inspected the COFF object with i686-w64-mingw32-objdump -dr --no-show-raw-insn and i686-w64-mingw32-nm.",
-    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp -o /tmp/igi-rebind/obj-final/terrain_out_of_terrain_renderch.o",
-    "source_sha256_recomputed": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
-    "object_sha256_recomputed": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
-    "object_matches_recorded_candidate_object": true,
-    "object_instruction_count": 81,
-    "object_call_sites": 1,
-    "object_return_sites": 2,
-    "object_symbols": {
-      "Terrain_OutOfTerrainRenderch": "T",
-      "g_a7e080": "B at .bss+0x20",
-      "g_a7f884": "B at .bss+0x00",
-      "g_a7f878": "U (defined outside this translation unit)",
-      "g_a7f87c": "U",
-      "g_a7f880": "U",
-      "g_a7f888": "U",
-      "g_a7f88c": "U"
-    },
-    "note": "The recomputed object digest equals the digest recorded by the structural comparison, so the call-site, traversal and store observations below describe the exact artifact the comparison measured."
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
   },
-  "retail_semantics": {
-    "entry": "0x00514680",
-    "end_inclusive": "0x00514759",
-    "size_bytes": 218,
-    "bytes_sha256": "afbeb6a73e331d67e932d78c6c7c8e296b017279eccd24b722e3ab7ac4b5c7f2",
-    "calling_convention": "cdecl (x86)",
-    "abi": {
-      "arguments": [
-        {
-          "index": 0,
-          "location": "[esp+4]",
-          "type": "const void* / 32-bit key",
-          "meaning": "texture-owner key; the retail function only hashes and compares its 32-bit value and never dereferences it"
-        },
-        {
-          "index": 1,
-          "location": "[esp+8]",
-          "type": "int32",
-          "meaning": "pass key; blended into the bucket hash and compared against the chunk's pass field"
-        }
-      ],
-      "return_value": "TerrainRenderChunk* in EAX: the matching chunk on the walk path, or the newly linked element on the allocation path; the capacity-exhausted fatal path never returns",
-      "stack_cleanup": "caller; the three callers are in Terrain_Draw 0x00512C30 at 0x00513C7F (pass 0), 0x00513C9E (pass 1) and 0x005140B8 (pass 2)"
-    },
-    "hash": {
-      "formula": "hash = (uint32_t)(pass * 0xB5AFu + texture_owner * 0x9Du) % 0x1FDu",
-      "unsigned_32_bit_wrap": true,
-      "decomposition": "0x9D = 157 = ((owner * 5) << 4 - owner) << 1 - owner; retail emits lea/shl/sub for this multiply",
-      "evidence": "0x0051468B imul eax,ebx,0xB5AF; 0x00514696 xor edx,edx; 0x00514693-0x005146A1 compute owner*0x9D; 0x005146A1 add; 0x005146A3 mov ecx,0x1FD; 0x005146A8 div ecx; remainder in edx"
-    },
-    "bucket_selection": "hash is multiplied by 3, then scaled by 4, so the byte offset is hash * 12 from the table base 0x00A7E080. The bucket record is {head at +0x00, sentinel_next at +0x04, sentinel_prev at +0x08}.",
-    "traversal": {
-      "order": [
-        "0x005146AD eax = [0x00A7E080 + hash*12] (bucket head)",
-        "0x005146BB ecx = [eax] (next link is at node + 0x00)",
-        "0x005146BF test ecx,ecx; je 0x005146DD (empty bucket or sentinel reached)",
-        "0x005146C1 cmp [eax+0x2EEC],owner; jne 0x005146D5",
-        "0x005146C9 cmp [eax+0x2EF0],pass; je 0x00514756 (return eax)",
-        "0x005146D5 eax = ecx; ecx = [ecx]; test ecx,ecx; jne 0x005146C1",
-        "fall through to 0x005146DD (allocate)"
-      ],
-      "sentinel_handling": "The initialiser sets bucket.head = bucket + 4, and bucket.sentinel_next at bucket+4 is zero. An empty bucket therefore takes the first test and allocates. A non-empty chain's last real node has next = bucket+4 (nonzero), so the last node is compared; advancing to the sentinel then reads zero and stops. The sentinel is never compared as a chunk.",
-      "content_checks": "The walk compares only the 32-bit owner at node+0x2EEC and the 32-bit pass at node+0x2EF0. It does not dereference the texture-owner pointer."
-    },
-    "capacity_gate": {
-      "sequence": "0x005146DD eax = [0x00A7F880] (used count); 0x005146E2 ecx = [0x00A7F884] (capacity); 0x005146E8 cmp eax,ecx; 0x005146EA jne 0x005146FB; else 0x005146EC push literal 0x0054EC04 (\"Out of terrain renderchunks\"); 0x005146F1 call 0x004AF7B0; 0x005146F6 add esp,4; 0x005146F9 jmp 0x005146F9",
-      "comparison": "equality, not greater-or-equal; a count above capacity would follow the allocation path in retail",
-      "no_return": true
-    },
-    "allocation": {
-      "slot": "0x005146FB ecx = [0x00A7F87C]; 0x00514701 esi = [ecx + count*4] (free-slot index array)",
-      "element": "0x00514704 ecx = [0x00A7F878] (pool base); 0x0051470A imul esi,[0x00A7F888] (stride); 0x00514711 add esi,ecx (element address)",
-      "slot_index_store": "0x00514713 ecx = [0x00A7F88C] (0x2EF4 offset after the pool initialiser); 0x0051471B mov [ecx+esi],eax, storing the used count as the element's own slot index",
-      "count_store": "0x0051471E eax = [0x00A7F880]; 0x00514723 inc eax; 0x00514724 [0x00A7F880] = eax",
-      "field_stores": [
-        "0x00514729 [element+0x2EE8] = 0 (triangle_count)",
-        "0x00514733 [element+0x2EEC] = owner",
-        "0x00514739 [element+0x2EF0] = pass",
-        "0x0051473F [element+0x0004] = 0 (prev link)",
-        "0x00514746 [element+0x0000] = 0 (next link)"
-      ],
-      "bucket_insert": "0x004AF910(bucket,element) is called at 0x0051474C with the two pointers pushed at 0x00514719/0x0051471A. The helper body is: old = [bucket]; [element+4] = bucket; [element] = old; [old+4] = element; [bucket] = element; return bucket (return ignored).",
-      "return": "0x00514754 eax = esi (element); the shared epilogue at 0x00514756 pops edi/esi/ebx and returns at 0x00514759"
-    },
-    "fatal_path": "0x005146F1 calls 0x004AF7B0 (the project's Error_Show port) with the literal \"Out of terrain renderchunks\", then 0x005146F9 jumps to itself. Retail does not return from this path.",
-    "initialisers_not_executed": {
-      "buckets": "0x00516621 initialises 509 bucket records from 0x00A7E080: [rec] = rec + 4 (head points at sentinel_next), [rec+8] = rec (sentinel_prev), [rec+4] = 0 (sentinel_next).",
-      "pool": "0x00516640 calls 0x004B0B00(&g_a7f878, 0x2EF4, 0x80, 0), which sets g_a7f888 = align(0x2EF4,4) = 0x2EF8, g_a7f87C = base + stride*capacity, g_a7f880 = 0, g_a7f884 = 0x80 and g_a7f88C = 0x2EF4.",
-      "status": "Not executed by the review or by the candidate. The file image is zero-filled; the traversal/allocation code is therefore reviewed against the post-initialiser state, not a live pool."
-    }
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
   },
-  "candidate_semantics": {
-    "entry": "Terrain_OutOfTerrainRenderch (extern \"C\")",
-    "source_path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-    "source_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
-    "hash": "const std::uint32_t hash = (pass_value * 0xB5AFU + key * 0x9DU) % 0x1FDU; with key = the 32-bit value of texture_owner and pass_value = the 32-bit bits of pass.",
-    "bucket_selection": "TerrainRenderChunkBucket& bucket = g_a7e080[hash]; the struct is 12 bytes with head/sentinel_next/sentinel_prev at +0x00/+0x04/+0x08 (static_asserts verify sizeof and offsets).",
-    "traversal": "Address node = to_address(bucket.head); for (;;) { const Address next = load_u32(node + chunk_offset_next); if (next == 0) break; if (load_u32(node + chunk_offset_texture_owner) == key) { if (load_u32(node + chunk_offset_pass) == pass_value) return to_chunk(node); } node = next; } with chunk_offset_next = 0x0000, chunk_offset_texture_owner = 0x2EEC and chunk_offset_pass = 0x2EF0.",
-    "capacity_gate": "const std::uint32_t count = g_a7f880; if (count == g_a7f884) { error::Error_Show(\"Out of terrain renderchunks\"); halt_forever(); } - equality only.",
-    "allocation": "slot = g_a7f87c[count]; element = g_a7f878 + slot * g_a7f888; store_u32(element + g_a7f88c, count); ++g_a7f880; then store_u32(element + 0x2EE8, 0), store_u32(element + 0x2EEC, key), store_u32(element + 0x2EF0, pass_value), store_u32(element + 0x0004, 0), store_u32(element + 0x0000, 0); insert_at_bucket_head(bucket, element); return to_chunk(element).",
-    "insert_helper": "insert_at_bucket_head is the inlined 0x004AF910 body: old_head = bucket.head; store_u32(node+4, &bucket); store_u32(node+0, old_head); store_u32(old_head+4, node); bucket.head = node. The helper's bucket return is unused, matching retail.",
-    "fatal_path": "error::Error_Show(\"Out of terrain renderchunks\") followed by an explicit non-returning for(;;) loop. Error_Show is the port of retail 0x004AF7B0 and may return; the loop preserves the retail jmp $ hang.",
-    "initial_state": "g_a7e080 is defined in this translation unit as a zero-filled array of 509 buckets; g_a7f884 is defined here as std::uint32_t 0. The remaining pool globals (g_a7f878, g_a7f87c, g_a7f880, g_a7f888, g_a7f88c) are extern and defined in terrain_storage.cpp. The retail initialisers 0x00516621 and 0x004B0B00 are not run by this candidate."
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
   },
-  "comparison": {
-    "hash": "exact at the source level; the object replaces the unsigned divide by 0x1FD with GCC's reciprocal multiply at object offsets 0x1D-0x31 (magic 0x80C121B3, high-word shift by 8, multiply back by 0x1FD, subtract).",
-    "modulo_strength_reduction_check": {
-      "method": "Emulated the object's exact instruction sequence (full 32-bit product, high dword, >> 8, * 0x1FD, 32-bit subtract) in Python and compared it with x % 0x1FD.",
-      "inputs": "0..199,999; 500,000 uniform random 32-bit values; 0x00000000, 0x00000001, 0x000001FC, 0x000001FD, 0x000001FE, 0x7FFFFFFF, 0x80000000, 0xFFFFFFFE, 0xFFFFFFFF",
-      "sample_count": 700009,
-      "mismatches": 0,
-      "scope": "sampled, not exhaustive; the source-level operation is C++ unsigned modulo, which is exact, and GCC's transform is the standard identity for this divisor"
-    },
-    "bucket_walk": "exact order after decoding the actual bytes: read next at node+0x00, stop on zero, test owner at +0x2EEC, test pass at +0x2EF0, advance to next. The candidate object reads [head] at offset 0, tests it, compares owner/pass on the current node, then advances; this is the same read-before-test order as retail.",
-    "capacity_gate": "exact equality test against g_a7f884, same literal, same fatal callee and same halt. The candidate object compares g_a7f880 with the local .bss symbol g_a7f884.",
-    "slot_and_element": "exact: g_a7f87c[count], slot * g_a7f888 added to g_a7f878, and the slot-index store at element + g_a7f88c.",
-    "field_stores": "exact final state: +0x2EE8 = 0, +0x2EEC = owner, +0x2EF0 = pass, +0x0004 = 0, +0x0000 = 0, plus the slot-index dword at +g_a7f88c. The candidate object schedules the +0x0004/+0x0000 zero stores before the +0x2EE8/+0x2EEC/+0x2EF0 stores; retail emits +0x2EE8/+0x2EEC/+0x2EF0 before +0x0004/+0x0000. The element is not linked into the bucket until the final insert, so no observer can see intermediate state.",
-    "insert_helper": "exact four stores and head update. Retail calls 0x004AF910 and discards its return; the candidate inlines the same body and discards the same value.",
-    "return_values": "exact: a matched node is returned from the walk; a new element is returned after the insert. Retail has one shared ret at 0x00514759; the candidate object has two ret instructions (object offsets 0x83 and 0x106) with the same values.",
-    "compiler_artifacts": [
-      "GCC strength-reduces the modulo by 0x1FD (RC-D1); exact for all 32-bit inputs by the standard reciprocal-multiply identity, and sampled here with 700,009 inputs.",
-      "The 23-byte helper 0x004AF910 is inlined (RC-D2); the four stores and the head update are preserved.",
-      "The candidate object reorders the two zero pointer stores before the triangle_count/owner/pass stores (RC-D3). The final memory state is identical and the element is unreachable until the insert, so no semantic difference is observable.",
-      "The used count is loaded once for the capacity gate, slot lookup and slot-index store, then incremented with a read-modify-write (RC-D4). Retail loads it at 0x005146DD, uses it at 0x005146FB/0x0051471B, and reloads it only for the increment at 0x0051471E. Same value in the single-threaded model.",
-      "The candidate duplicates the return epilogue (RC-D6); only block layout differs.",
-      "The fatal call is Error_Show rather than the decompiler name Debug_Error (RC-D5); the target VA is the same and the halt is explicit."
-    ],
-    "semantic_conclusion": "Within the reviewed scope the candidate computes the retail hash, bucket walk, capacity gate, slot/element arithmetic, all field stores, the bucket insert and both return values correctly, using the post-initialiser pool layout as an unexecuted precondition. No unresolved semantic divergence was found in the function body."
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
   },
-  "checks": [
-    {
-      "name": "function_identity",
-      "result": "passed",
-      "rationale": "Binary Ninja and radare2 independently identify the single entry 0x00514680 with the same 218-byte extent, 62 instructions, 9 basic blocks and 13 edges (recorded graph score 1.000); angr CFGFast recovers the exact entry with no unresolved jumps. The candidate defines the same entry with C linkage and two 32-bit stack arguments."
-    },
-    {
-      "name": "argument_mapping",
-      "result": "passed",
-      "rationale": "Retail reads [esp+4] as the texture-owner key and [esp+8] as the pass key; it uses only their 32-bit values and never dereferences the owner. The candidate takes const void* texture_owner and std::int32_t pass in the same order, converts the pointer to its 32-bit address value and compares/stores both as 32-bit words. The three Terrain_Draw call sites pass pass 0/1/2."
-    },
-    {
-      "name": "constants_and_scaling",
-      "result": "passed",
-      "rationale": "The hash constants 0xB5AF, 0x9D and modulus 0x1FD, the bucket size 12, the field offsets 0x2EE8/0x2EEC/0x2EF0, the link offsets 0x0000/0x0004, the slot-offset field g_a7f88c and the 0x2EF8 post-initialiser stride all match the retail instructions and the static_asserts in the candidate. The candidate does not substitute a different bucket count or stride."
-    },
-    {
-      "name": "memory_layout_and_access",
-      "result": "passed",
-      "rationale": "The candidate's TerrainRenderChunk is 0x2EF4 bytes with next at +0, prev at +4, triangle_count at +0x2EE8, texture_owner at +0x2EEC and pass at +0x2EF0, verified by static_asserts and matching the retail loads/stores. The bucket struct is 12 bytes with head/sentinel_next/sentinel_prev at +0/+4/+8. The slot-index dword is addressed through the g_a7f88c offset read at runtime, not hard-coded. The bucket table and pool globals are not in their post-initialiser state in this build; that is a recorded precondition, not a layout mismatch."
-    },
-    {
-      "name": "calls_and_side_effects",
-      "result": "passed",
-      "rationale": "Retail has exactly two direct calls: Debug_Error at 0x005146F1 on the capacity-exhausted path and the 0x004AF910 bucket-insert helper at 0x0051474C. The candidate calls the Error_Show port on the same fatal condition and inlines the same four-store insert helper; it adds no third call or device/RenderChunk side effect. The walk itself performs no writes. This is a source/object-level call-semantics finding; no live memory observation was made."
-    },
-    {
-      "name": "return_and_error_paths",
-      "result": "passed",
-      "rationale": "Retail returns the matched node from 0x00514756 or the newly linked element from 0x00514754 through one shared ret at 0x00514759. The candidate returns the matched raw address on the walk path and the new element address on the allocation path, with the same pointer bits. The capacity-exhausted path calls the same retail callee and then halts; the candidate's explicit loop preserves the retail jmp $ when Error_Show returns."
-    },
-    {
-      "name": "floating_point_semantics",
-      "result": "not_applicable",
-      "rationale": "Neither the retail body nor the candidate performs floating-point arithmetic; all values are 32-bit integers, pointers or byte offsets."
-    }
-  ],
-  "review_findings": [
-    "The retail hash is exactly (pass*0xB5AF + owner*0x9D) modulo 0x1FD in unsigned 32-bit arithmetic; the candidate's source matches and the object's reciprocal multiply matches over 700,009 sampled inputs with zero mismatches.",
-    "The bucket offset is hash*12 from 0x00A7E080; the candidate's 12-byte struct and g_a7e080[hash] indexing reproduce it.",
-    "The traversal reads the next link at node+0x00, tests it before comparing owner/pass, and stops at the zero sentinel. The candidate object performs the same read-before-test order. The candidate correctly avoids comparing the sentinel as a chunk.",
-    "The capacity gate is an equality test against g_a7f884, with the exact retail literal and target. It is not >=, and the candidate preserves that.",
-    "The slot/element arithmetic, the slot-index store at element+g_a7f88c, the used-count increment and all five field stores are present and match the retail instructions.",
-    "The bucket insert is the exact 0x004AF910 body: old head captured, node.prev = bucket, node.next = old head, old_head.prev = node, bucket.head = node; the helper's bucket return is unused in both.",
-    "The matched-node and new-element return paths are both present. The candidate has two ret instructions where retail has one shared epilogue; the returned values are identical.",
-    "The fatal path calls the Error_Show port with the same literal and halts. Retail's Debug_Error non-return is not statically proven, so the explicit loop is the faithful observable.",
-    "The candidate does not execute 0x00516621 (bucket sentinel initialiser) or 0x00516640 -> 0x004B0B00 (pool initialiser). Its g_a7e080 is zero-filled and g_a7f884 is 0 in the file image. The traversal/allocation paths are therefore reviewed against the documented post-initialiser layout, not exercised against a live pool.",
-    "The candidate's g_a7f88c is std::uint32_t (an offset), consistent with terrain_storage.cpp and both retail readers; the older structural-review note that it was typed as a pointer is stale."
-  ],
-  "evidence_quality_findings": [
-    {
-      "artifact": "docs/fidelity/evidence/0x00514680-structural-comparison.json",
-      "field": "retail.traversal.loop",
-      "recorded": "next = [node+0x04]",
-      "actual_from_bytes": "0x005146BB is mov ecx,[eax], so next is at node+0x00; node+0x04 is the prev link, written by the insert helper. The candidate also uses +0x00.",
-      "effect": "The prose line is wrong, but the comparison's conclusion (same read-test-advance order) remains true after decoding the bytes. The candidate matches the bytes."
-    },
-    {
-      "artifact": "docs/fidelity/evidence/0x00514680-structural-comparison.json",
-      "field": "retail.allocation.field_stores",
-      "recorded": "element+0x00 = count; element+0x04 = owner; element+0x08 = pass; element+0x0C = 0; element+0x10 = 0; element+0x2EE8 = 0; element+0x2EEC = 0; element+0x2EF0 = 0",
-      "actual_from_bytes": "0x00514729 [element+0x2EE8]=0; 0x00514733 [element+0x2EEC]=owner; 0x00514739 [element+0x2EF0]=pass; 0x0051473F [element+0x0004]=0; 0x00514746 [element+0x0000]=0; plus the slot store at element+[0x00A7F88C]. There are no +0x0C/+0x10 stores in this function.",
-      "effect": "The prose list is garbled, but the comparison's conclusion (final field state matches) remains true after decoding. The candidate stores exactly the five fields listed in actual_from_bytes plus the slot index."
-    },
-    {
-      "artifact": "docs/fidelity/evidence/0x00514680-structural-comparison.json",
-      "field": "divergences[RC-D3].candidate",
-      "recorded": "+0x10, +0xC, +0x2EE8, +0x2EEC, +0x2EF0, +0, +4, +8",
-      "actual_from_object": "slot store; ++g_a7f880; +4=0; +0=0; +0x2EE8=0; +0x2EEC=owner; +0x2EF0=pass; inline insert. The object does not store +0x0C, +0x10 or +8 in this function.",
-      "effect": "The stated write order is not the measured object, but the conclusion (same final state, no observer between stores) is still correct. This semantic review replaces the recorded order with the measured object order."
-    }
-  ],
-  "limitations": [
-    "Static source/object review only. No retail runtime capture, no memory/state observation and no rendered-output comparison was performed.",
-    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp (current source sha256 7b66375f..., object sha256 14b7f744...). The linked build-clean-win32/igi1.exe on disk is sha256 936c8f7f7bc16c12800dc4aa781ed009815602a0c904f663240fc3eb7c6af72e (observed 2026-10-23T13:28:50+05:30) and its symbol table places Terrain_OutOfTerrainRenderch at 0x00462F80; the prior 35d92a3a.../0x00462f40 observation is superseded. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
-    "The retail bucket table 0x00A7E080 and pool globals 0x00A7F878/0x00A7F87C/0x00A7F880/0x00A7F884/0x00A7F888/0x00A7F88C are populated by runtime initialisers 0x00516621 and 0x00516640 -> 0x004B0B00, which this review did not execute. The traversal and allocation paths cannot be exercised against the file-image zero state; the review covers the function body and its use of the documented post-initialiser layout, not a live pool.",
-    "The candidate stores the zero-filled file-image bucket table and g_a7f884 = 0, and does not run the retail initialisers. Calling it before 0x00516621 would dereference a null bucket head, exactly as retail would with the same file-image state; that is not a valid runtime scenario and is outside the compared scope.",
-    "The hash is an unsigned 32-bit modulo. The candidate's reciprocal-multiply form was checked on 700,009 sampled inputs with zero mismatches, not exhaustively over all 2^32 values; the source-level operator is exact and the compiler transform is standard.",
-    "The field-store order differs between retail and the candidate object. The final state is identical and the chunk is not linked until the insert, so no observer can see the intermediate values in the single-threaded model; a concurrent reader is outside the compared scope.",
-    "The candidate loads the used count once and reuses it for the gate, slot lookup and slot-index store, while retail reloads it only for the increment. This is value-preserving absent a concurrent writer; the function is not reentrant in retail either.",
-    "Error_Show (retail 0x004AF7B0) is variadic and may return; the candidate's explicit halt preserves the retail jmp $ observable, but the retail callee's non-return is not statically proven.",
-    "g_a7f88c is typed std::uint32_t consistently in the header and both readers. The surrounding pool globals are now defined in terrain_storage.cpp, and all three terrain TUs are listed in the current CMakeLists; this review did not build or bind a build receipt for them.",
-    "The provenance comment now records STRUCTURALLY_VERIFIED, matching the manifest. This rebind moves the bound implementation digest to the comment-bearing source; every edited line is a comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object remains byte-identical (14b7f744...). No compiled code changed, so the gate's comment/status binding is satisfied without altering the reviewed semantics.",
-    "No live differential harness exists for 0x00514680. A host harness is technically feasible (execute/emulate 0x00516621 and 0x004B0B00 to build the post-initialiser bucket/pool fixture on the retail side, install the same fixture in the candidate's globals, then compare matched-node, new-element, bucket links, count, slot index and field state), but it was not built: this task owns only the two semantic-review files and the two manifest records, no existing repository runner dispatches this address, and a fabricated or placeholder runner was deliberately not installed. The strict behavioral requirement therefore remains unmet.",
-    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 936c8f7f executable is observed but not bound by a build receipt."
-  ],
-  "behavioral_evidence": {
-    "status": "not_performed",
-    "oracle": "none",
-    "reason": "No live retail-versus-candidate differential runner covers 0x00514680. The strict gate executes verification.behavioral_runner on every run and no such runner exists for this translation unit.",
-    "feasibility": "A host-level differential is feasible in principle but needs more fixture work than the blend-mode native: the retail side must execute or emulate the bucket initialiser 0x00516621 and the pool initialiser 0x004B0B00, and the candidate side must have the same post-initialiser bucket/pool state installed in its own globals (its g_a7e080 is zero-filled and the pool globals are defined in another excluded TU). A harness could then compare the matched-node return, the new-element return, the bucket head/sentinel links, the used count, the slot-index dword and the field stores for match, allocate, bucket-collision and capacity-exhausted cases. That would be host/fixture evidence, not retail runtime evidence.",
-    "not_built_reason": "Building it would require a new repository runner script and a fixture that installs pool state in both processes, which is outside this task's file ownership. No existing runner in scripts/ dispatches 0x00514680 (the address-dispatched runners reject it as unsupported). A fabricated or placeholder runner was deliberately not installed.",
-    "strict_gate_effect": "verification.behavioral_runner is absent, so a strict invocation reports the missing-runner error for this native."
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
   },
-  "status_rationale": "The semantic review passes for the reviewed scope: the candidate preserves the retail hash, bucket walk, capacity gate, slot/element arithmetic, field stores, inlined insert helper, fatal halt and both return values. The status remains STRUCTURALLY_VERIFIED because the pool initialisers were not executed and no runtime or behavioural evidence exists; this report does not support a higher status.",
-  "strict_gate_projection": {
-    "status": "STRUCTURALLY_VERIFIED",
-    "project_default_threshold": "VERIFIED",
-    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is present and rebound to implementation sha256 7b66375f...; the bound object remains 14b7f744..., so this rebind changes no compiled code.",
-    "at_threshold_verified": "The status is also below the required VERIFIED threshold, and the missing behavioral runner still blocks. No status promotion is claimed.",
-    "cfg_similarity_scope": "The recorded 1.0 is the retail Binary Ninja-versus-radare2 graph score only; it is not candidate equivalence."
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
   }
+ ]
 }
