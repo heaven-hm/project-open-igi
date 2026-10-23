@@ -16,6 +16,7 @@
 #include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/render/backend.hpp"
+#include "igi/retail/dynobj/mtp_package_loader.hpp"
 #include "igi/retail/render/lod_settings.hpp"
 #include "igi/retail/resource/device_dispatch.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
@@ -2557,6 +2558,25 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Device_SetCheckHeap(1, &probe_seek_stub);
             static_cast<void>(
                 igi::retail::resource::Device_SeekStream(stream_context, 0));
+        }
+
+        // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the
+        // body produces when the MANM form exists but its count is zero: the lookup succeeds (so
+        // Ilff_FindFormChunk keeps its retail-observed class) and the count is returned as the null
+        // pointer. A missing form would instead add a null class to the FindFormChunk observation,
+        // a lookup shape retail never performed.
+        {
+            alignas(8) std::uint8_t form_container[0x40]{};
+            // Ilff_FindFormChunk compares bswap32(stored dword) against 0x42414E4D, so the container
+            // stores 0x4D4E4142 - bytes 42 41 4E 4D - not the ASCII spelling of the tag.
+            form_container[0x0C] = 0x42;
+            form_container[0x0D] = 0x41;
+            form_container[0x0E] = 0x4E;
+            form_container[0x0F] = 0x4D;
+            // Payload starts at +0x14 and stays zero: the animation count is zero.
+            alignas(8) std::uint8_t anim_context[0x40]{};
+            *reinterpret_cast<void**>(anim_context + 0x08) = form_container;
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageAnimations(anim_context));
         }
 
         // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.

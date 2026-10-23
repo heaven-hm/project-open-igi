@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 61 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 62 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 61 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 62 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -936,3 +936,28 @@ with the wrong signature. Manufacturing that observation would be a fabricated p
 so it stays unwired and unverified.
 
 Verified count 59 -> 61; paired matches 65 -> 67; candidate-unreachable 26 -> 24; mismatches 0.
+
+## A shaped ILFF fixture, and the regression it caused first
+
+`DynObj_LoadPackageAnimations` (0x004CF910) returns null when the 'MANM' form exists with a zero count,
+or when the lookup misses. Two mistakes had to be fixed before it could be wired honestly.
+
+**The fixture perturbed a different verified native.** The first container carried only a 'TEXF' chunk, so the
+'MANM' lookup missed and the native returned null - which is the retail class. But `Ilff_FindFormChunk`
+(0x004CEAA0) is itself a verified native, and retail's 618 calls had only ever returned pointers. The probe
+recorded a null return for that shared native and the capture reported **1 mismatch**: candidate class set
+`{null, ptr}` against retail `{ptr}`. A fixture that makes one native match while breaking another's observation
+is not a verification. The fix keeps the lookup successful - a MANM form is present - and reaches the null return
+through the zero count instead, so both natives observe only retail-shaped classes.
+
+**The form tag bytes are not the ASCII spelling.** `Ilff_FindFormChunk` compares `bswap32(stored dword)` against
+the tag constant. For 'MANM' the retail constant is 0x42414E4D, so the container must store 0x4D4E4142 - bytes
+`42 41 4E 4D` - not `4D 41 4E 4D`. Writing the ASCII spelling made the lookup miss, which is what produced the
+mismatch above. Both the scene comment and this note record the byte-order requirement.
+
+The behavioural runner (`scripts/dynobj_animations_diff_runner.py`) models the form lookup on both sides and
+compares the count-to-pointer conversion across non-positive counts (0 returns null, -1 returns -1), eight cases.
+The positive-count path is explicitly out of scope: it allocates through the retail allocator and walks global
+script/texture state, which the runner does not model.
+
+Verified count 61 -> 62; paired matches 67 -> 68; candidate-unreachable 24 -> 23; mismatches 0.
