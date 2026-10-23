@@ -17,6 +17,7 @@
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/render/backend.hpp"
 #include "igi/retail/render/lod_settings.hpp"
+#include "igi/retail/resource/device_dispatch.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
 #include "igi/retail/sys/ilff_navigation.hpp"
 #include "igi/retail/sys/resource_lookup.hpp"
@@ -122,6 +123,26 @@ std::int32_t retail_qvm_block_release_stub(void* context)
 {
     static_cast<void>(context);
     return 1;
+}
+
+// The device backend behind the stream helpers is host-injected, so these stubs stand in for it and
+// replay the positions the retail run produced, plus a pointer-shaped value for its pointer class.
+std::int32_t g_probe_position_index = 0;
+const std::int32_t g_probe_positions[8] = {255, 259, 270, 313, 314, 319, 354, 0x00943A00};
+
+std::int32_t probe_stream_position_stub(std::int32_t device, std::int32_t* context)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+    return g_probe_positions[g_probe_position_index++ & 7];
+}
+
+std::int32_t probe_seek_stub(std::int32_t device, std::int32_t* context, std::int32_t argument)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+    static_cast<void>(argument);
+    return 0;
 }
 
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
@@ -2520,6 +2541,22 @@ int RunRetailModelScene(HINSTANCE instance,
             alignas(16) std::uint8_t qvm_block[0x100]{};
             *reinterpret_cast<std::int32_t*>(qvm_block + 0x8C) = 1;
             static_cast<void>(igi::retail::script::Qvm_Cleanup(qvm_block));
+        }
+
+        // Device stream helpers: retail returned {ptr,255,259,270,313,314,319,354} for
+        // Device_GetStreamPosition and {null} for Device_SeekStream. The backend is host-injected,
+        // so what runs here is the record load, the argument marshalling and the returned value.
+        {
+            std::int32_t stream_context[2]{1, 0};
+            igi::retail::resource::Device_SetPushStack(1, &probe_stream_position_stub);
+            for (int index = 0; index < 8; ++index)
+            {
+                static_cast<void>(
+                    igi::retail::resource::Device_GetStreamPosition(stream_context));
+            }
+            igi::retail::resource::Device_SetCheckHeap(1, &probe_seek_stub);
+            static_cast<void>(
+                igi::retail::resource::Device_SeekStream(stream_context, 0));
         }
 
         // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.

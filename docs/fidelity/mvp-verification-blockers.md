@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 59 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 61 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 59 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 61 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -916,3 +916,23 @@ standalone-release path, and an injected release stub answers 1 - exactly the re
 now runs in the scene rather than being skipped.
 
 Verified count 57 -> 59; paired matches 63 -> 65; candidate-unreachable 28 -> 26; mismatches 0.
+
+## Device stream helpers, with the backend modelled instead of guessed
+
+`Device_GetStreamPosition` (0x004B1780) and `Device_SeekStream` (0x004B17F0) were already VERIFIED with build,
+semantic and behavioural evidence; they only needed a runtime observation. Both are pure dispatch wrappers: load
+a record from a per-device table, then call the device backend with the device id and the caller's context.
+
+The port exposes those tables through `Device_SetPushStack` / `Device_SetCheckHeap`, so the backend is
+host-injected and the fixture replays what retail observed: eight calls returning 255, 259, 270, 313, 314, 319,
+354 and a pointer-shaped value reproduce retail's class set exactly, and a seek stub returning 0 reproduces
+retail's `{null}`. What actually runs is the native's own record load, argument marshalling and return, which is
+its whole contract; the backend is a constant model, exactly as the behavioural runners model their callees.
+
+`Device_CloseStream` (0x004B1690) is deliberately **not** wired. It is `void` in the port, so the candidate's
+return register is whatever the callee left in EAX - not a value this native controls. Retail's `{null}` came
+from 350 real calls; reproducing it would require the stub to leave EAX at zero, which means casting a callback
+with the wrong signature. Manufacturing that observation would be a fabricated pass rather than a verified one,
+so it stays unwired and unverified.
+
+Verified count 59 -> 61; paired matches 65 -> 67; candidate-unreachable 26 -> 24; mismatches 0.
