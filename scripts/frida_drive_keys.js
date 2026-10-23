@@ -42,7 +42,7 @@ const MOUSE_LEFT_UP = 0x0004;
 
 // The image is started windowed but Wine leaves its own desktop window in front, so
 // SendInput would land on the desktop. Grab the game window by its retail class name.
-const GAME_CLASS = Memory.allocUtf8String('Innerloop');
+const GAME_CLASSES = ['Innerloop', 'IGI.Retail.ModelScene'];
 const SW_SHOW = 5;
 
 function ensureFocus() {
@@ -50,17 +50,20 @@ function ensureFocus() {
   if (!window.isNull()) {
     const name = Memory.alloc(128);
     user32.className(window, name, 128);
-    if (name.readUtf8String() === 'Innerloop') {
+    if (GAME_CLASSES.indexOf(name.readUtf8String()) !== -1) {
       return;
     }
   }
-  const game = user32.findWindow(GAME_CLASS, NULL);
-  if (game.isNull()) {
+  for (let index = 0; index < GAME_CLASSES.length; index += 1) {
+    const game = user32.findWindow(Memory.allocUtf8String(GAME_CLASSES[index]), NULL);
+    if (game.isNull()) {
+      continue;
+    }
+    user32.showWindow(game, SW_SHOW);
+    user32.bringToTop(game);
+    user32.setForeground(game);
     return;
   }
-  user32.showWindow(game, SW_SHOW);
-  user32.bringToTop(game);
-  user32.setForeground(game);
 }
 
 function blank() {

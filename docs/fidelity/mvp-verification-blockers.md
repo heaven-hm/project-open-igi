@@ -1842,8 +1842,12 @@ capture was natural gameplay. The record keeps its VERIFIED status on the retail
 candidate call, but the input-path evidence has to be re-earned. The driver now uses
 `Module.getGlobalExportByName` and calls `ensureFocus()` before each key and click: the foreground
 window of a windowed retail run is the Wine desktop (`#32769 root - Wine Desktop`, 1680x1050), not
-`Innerloop|IGI`, so unfocused `SendInput` landed on the desktop. `FindWindowA("Innerloop")` +
-`ShowWindow(BringWindowToTop, SetForegroundWindow)` moves the game window to the foreground.
+`Innerloop|IGI`, so unfocused `SendInput` landed on the desktop. `FindWindowA` +
+`ShowWindow(BringWindowToTop, SetForegroundWindow)` moves the game window to the foreground; the
+helper accepts both `Innerloop` (retail) and `IGI.Retail.ModelScene` (port). The fix is confirmed
+against the running ungated build: sending W, A, S and D moved its own counter from `key_msgs=0` to
+`key_msgs=8`, so synthetic input now genuinely arrives. The round-137 front-end attempt can be re-run
+with a driver that actually sends events.
 
 Manual test build: the black screen came from the wrong binary in the game folder. The verification
 build (`build-win32-verify-noinline/igi1.exe`) runs with lightmaps disabled (`lightmaps=0`, unlit
