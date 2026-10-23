@@ -1,62 +1,388 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x005144E0",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "8fddd345131c700a1581e2c3d562a3aab54ee3c2e912ac97fb774f39bce829c2",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "scalar-arguments-and-result",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x005144E0",
+  "function_name": "Terrain_UnknownBlendmode",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "binary_size_bytes": 1384448,
+  "implementation_path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+  "implementation_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+  "reviewed": true,
+  "reviewed_by": "Automated source-semantic review in this session against the retail instruction bytes (radare2 6.2.0 disassembly of 0x005144E0..0x00514675, cross-checked with the Binary Ninja 0.1.0 and radare2 artifacts listed below) and against the pre-link i386 COFF object rebuilt from the reviewed source with i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "recorded_at": "2026-10-23T04:25:00Z",
+  "scope": "Semantic review of the three accepted blend-mode paths and the fatal default path of retail Terrain_UnknownBlendmode (0x005144E0) versus engine/src/retail/terrain/terrain_unknown_blendmode.cpp. Render-state ids and values are checked call by call, including argument order, global operands, the device-pointer reload, the returned EAX and the no-return path. The Direct3D 7 device is modelled by the project's host Device7 abstraction; the host vtable offsets are mapped by call shape, not by address. No runtime capture, device-state observation or paired differential run exists, so behavioural equivalence is not claimed.",
+  "evidence_inputs": [
+    {
+      "path": "docs/fidelity/evidence/0x005144E0-binaryninja-20261023.json",
+      "sha256": "352b96bc238bd8a3a094ac71d27bd762b42c73947fc05a331716926cdf561c72",
+      "role": "selected decompiler artifact: function boundary, 406 bytes, 153 instructions, 8 blocks, 8 edges, globals, callees"
+    },
+    {
+      "path": "docs/fidelity/evidence/0x005144E0-radare2-20261023.json",
+      "sha256": "b241318895ad5ed1e3e495c4107dd2b78c2db185febd535712951a3239cd7ffd",
+      "role": "independent CFG and disassembly artifact: identical 8-block/8-edge graph, 153 instructions, cdecl one-argument signature"
+    },
+    {
+      "path": "docs/fidelity/evidence/0x005144E0-angr-20261023.json",
+      "sha256": "04bbe7ae090e75eef33dfde716f3ece7de104fd58b1f72debe6b649cd5bb17fc",
+      "role": "CFGFast exact-entry recovery, 31 call-normalised nodes, no unresolved jumps"
+    },
+    {
+      "path": "docs/fidelity/evidence/0x005144E0-structural-comparison.json",
+      "sha256": "5ecdbcaf70d4275d2afeee434a0ab442c37330d13f0554a79987d47614663be1",
+      "role": "candidate-versus-retail structural comparison and compiler-divergence resolutions"
+    },
+    {
+      "path": "docs/fidelity/evidence/0x005144E0-structural-review-20261023.json",
+      "sha256": "62c439091bd086d6633838425dfe98b9d4e8022018e71de08904579fac93e813",
+      "role": "retail structural review supporting the promotion to STRUCTURALLY_VERIFIED"
+    },
+    {
+      "path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+      "sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+      "role": "reviewed implementation source"
+    }
+  ],
+  "independent_measurement": {
+    "method": "Recompiled the reviewed source with the recorded command and inspected the COFF object with i686-w64-mingw32-objdump -dr --no-show-raw-insn.",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o /tmp/igi-semantic/blend.o",
+    "source_sha256_recomputed": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "object_sha256_recomputed": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
+    "object_matches_recorded_candidate_object": true,
+    "object_instruction_count": 161,
+    "object_call_sites": 20,
+    "object_return_sites": 2,
+    "note": "The recomputed object digest equals the digest recorded by the structural comparison, so the call-site observations below describe the exact artifact the comparison measured."
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x005144E0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "retail_semantics": {
+    "entry": "0x005144E0",
+    "end_inclusive": "0x00514675",
+    "size_bytes": 406,
+    "bytes_sha256": "c36e2ca4fa190e8230821b61701966ab183cacd0a6883cf2fe55e348b4709107",
+    "calling_convention": "cdecl (x86)",
+    "abi": {
+      "arguments": [
+        {
+          "index": 0,
+          "location": "[esp+4]",
+          "type": "int32",
+          "meaning": "blend-mode selector: 0, 1 or 2; every other 32-bit value takes the fatal path"
+        }
+      ],
+      "return_value": "int32 in EAX: the HRESULT of the last SetRenderState call on the executed accepted path; the default path never returns",
+      "stack_cleanup": "caller; the only caller Terrain_Draw 0x005143C9 pushes one dword and executes add esp,4"
+    },
+    "dispatch": [
+      {
+        "instruction": "0x005144E0 mov eax,[esp+4]; 0x005144E4 sub eax,0; 0x005144E7 je 0x0051460C",
+        "condition": "blendmode == 0",
+        "target": "0x0051460C"
+      },
+      {
+        "instruction": "0x005144ED dec eax; 0x005144EE je 0x00514589",
+        "condition": "blendmode == 1",
+        "target": "0x00514589"
+      },
+      {
+        "instruction": "0x005144F4 dec eax; 0x005144F5 je 0x00514506",
+        "condition": "blendmode == 2",
+        "target": "0x00514506"
+      },
+      {
+        "instruction": "0x005144F7 push \"Unknown blendmode\"; 0x005144FC call 0x004AF7B0; 0x00514501 add esp,4; 0x00514504 jmp 0x00514504",
+        "condition": "every other value",
+        "target": "fatal, no return"
+      }
+    ],
+    "device_call_shape": {
+      "device_global": "0x005CA114 (IDirect3DDevice7*)",
+      "render_state_slot": "[device_vtable + 0x50]",
+      "texture_stage_slot": "[device_vtable + 0x94]",
+      "render_state_arguments": "(device, state, value), pushed right-to-left as value, state, device",
+      "texture_stage_arguments": "(device, stage, type, value), pushed right-to-left as value, type, stage, device",
+      "cleanup_evidence": "no call site executes add esp after an indirect device call, so the callee cleans the argument words; the host Device7Vtbl declares these members __stdcall for the same shape",
+      "reload_evidence": "every indirect call is preceded by mov eax,[0x005CA114] and a fresh mov ecx/edx,[eax]; no hoisted device pointer exists"
+    },
+    "render_state_sequence": {
+      "mode_0": [
+        {
+          "slot": "+0x50",
+          "state": "0x1B",
+          "state_name": "D3DRS_ALPHABLENDENABLE",
+          "value": "0"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x22",
+          "state_name": "D3DRS_FOGCOLOR",
+          "value": "g_a7e068 (0x00A7E068, 32-bit bits)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x1C",
+          "state_name": "D3DRS_FOGENABLE",
+          "value": "g_5470b4 (0x005470B4, file image 1)"
+        },
+        {
+          "slot": "+0x94",
+          "stage": "0",
+          "type": "1 (D3DTSS_COLOROP)",
+          "value": "4 (D3DTOP_MODULATE)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x17",
+          "state_name": "D3DRS_ZFUNC",
+          "value": "2 (D3DCMP_LESS)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x0E",
+          "state_name": "D3DRS_ZWRITEENABLE",
+          "value": "1",
+          "note": "last call; its EAX is the function result"
+        }
+      ],
+      "mode_1": [
+        {
+          "slot": "+0x50",
+          "state": "0x1B",
+          "state_name": "D3DRS_ALPHABLENDENABLE",
+          "value": "1"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x13",
+          "state_name": "D3DRS_SRCBLEND",
+          "value": "2 (D3DBLEND_ONE)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x14",
+          "state_name": "D3DRS_DESTBLEND",
+          "value": "2 (D3DBLEND_ONE)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x22",
+          "state_name": "D3DRS_FOGCOLOR",
+          "value": "0"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x1C",
+          "state_name": "D3DRS_FOGENABLE",
+          "value": "g_5470b4"
+        },
+        {
+          "slot": "+0x94",
+          "stage": "0",
+          "type": "1 (D3DTSS_COLOROP)",
+          "value": "4 (D3DTOP_MODULATE)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x17",
+          "state_name": "D3DRS_ZFUNC",
+          "value": "4 (D3DCMP_LESSEQUAL)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x0E",
+          "state_name": "D3DRS_ZWRITEENABLE",
+          "value": "0",
+          "note": "last call; its EAX is the function result"
+        }
+      ],
+      "mode_2": [
+        {
+          "slot": "+0x50",
+          "state": "0x1B",
+          "state_name": "D3DRS_ALPHABLENDENABLE",
+          "value": "1"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x13",
+          "state_name": "D3DRS_SRCBLEND",
+          "value": "1 (D3DBLEND_ZERO)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x22",
+          "state_name": "D3DRS_FOGCOLOR",
+          "value": "0xFFFFFFFF"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x14",
+          "state_name": "D3DRS_DESTBLEND",
+          "value": "3 (D3DBLEND_SRCCOLOR)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x1C",
+          "state_name": "D3DRS_FOGENABLE",
+          "value": "g_5470b4"
+        },
+        {
+          "slot": "+0x94",
+          "stage": "0",
+          "type": "1 (D3DTSS_COLOROP)",
+          "value": "2 (D3DTOP_SELECTARG1)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x17",
+          "state_name": "D3DRS_ZFUNC",
+          "value": "4 (D3DCMP_LESSEQUAL)"
+        },
+        {
+          "slot": "+0x50",
+          "state": "0x0E",
+          "state_name": "D3DRS_ZWRITEENABLE",
+          "value": "0",
+          "note": "last call; its EAX is the function result"
+        }
+      ]
+    },
+    "fatal_path": "0x005144F7 pushes the literal at 0x0054EBF0 (\"Unknown blendmode\"), calls 0x004AF7B0, executes add esp,4 and then jumps to itself at 0x00514504. The call target is the project's Error_Show (0x004AF7B0); retail does not return from this path.",
+    "constant_note": "The D3D7 names above come from the mingw-w64 d3dtypes.h enumerants that match the state/type/value patterns; the retail instructions contain only immediates. The human labels opaque/additive/multiplicative are an inference from the state combinations, not retail symbols."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_semantics": {
+    "entry": "Terrain_UnknownBlendmode (extern \"C\")",
+    "source_path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+    "source_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "dispatch": "if (blendmode == 0) mode 0; if (blendmode == 1) mode 1; if (blendmode == 2) mode 2; otherwise error::Error_Show(\"Unknown blendmode\"); halt_forever(). The comparison order is 0, 1, 2, default, matching the retail sub/dec/dec chain.",
+    "device_abstraction": {
+      "global": "igi::retail::terrain::g_5ca114 (Device7*)",
+      "host_vtable": "Device7Vtbl with SetRenderState at +0x08 and SetTextureStageState at +0x14",
+      "host_offsets_are_not_retail": true,
+      "call_shape": "set_render_state(state,value) calls device->vtbl->SetRenderState(device,state,value); set_texture_stage_state(stage,type,value) calls device->vtbl->SetTextureStageState(device,stage,type,value) and discards the result",
+      "reload": "each helper loads g_5ca114 into a local immediately before the call; the compiled object reloads the global before every indirect call"
+    },
+    "render_state_sequence": {
+      "mode_0": [
+        "+0x08 0x1B 0",
+        "+0x08 0x22 g_a7e068",
+        "+0x08 0x1C g_5470b4",
+        "+0x14 0 1 4",
+        "+0x08 0x17 2",
+        "+0x08 0x0E 1"
+      ],
+      "mode_1": [
+        "+0x08 0x1B 1",
+        "+0x08 0x13 2",
+        "+0x08 0x14 2",
+        "+0x08 0x22 0",
+        "+0x08 0x1C g_5470b4",
+        "+0x14 0 1 4",
+        "+0x08 0x17 4",
+        "+0x08 0x0E 0"
+      ],
+      "mode_2": [
+        "+0x08 0x1B 1",
+        "+0x08 0x13 1",
+        "+0x08 0x22 0xFFFFFFFF",
+        "+0x08 0x14 3",
+        "+0x08 0x1C g_5470b4",
+        "+0x14 0 1 2",
+        "+0x08 0x17 4",
+        "+0x08 0x0E 0"
+      ]
+    },
+    "return_value": "The candidate returns the int32 EAX of the final SetRenderState call: state 0x0E value 1 in mode 0, state 0x0E value 0 in modes 1 and 2. The compiler leaves the indirect call's EAX in place through the epilogue; it does not substitute a literal.",
+    "fatal_path": "error::Error_Show(\"Unknown blendmode\") is the project declaration/port of retail 0x004AF7B0, followed by an explicit non-returning for(;;) loop. Error_Show is variadic and may return; the loop preserves the retail jmp $ hang.",
+    "null_device": "The candidate does not check g_5ca114; retail does not check it either, so both dereference a null/uninstalled device."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "comparison": {
+    "mode_0_call_sequence": "exact: six calls, same order, same state/type/value operands and same global reads",
+    "mode_1_call_sequence": "exact: eight calls, same order and operands; GCC routes the final three calls through the mode-2 tail at object offset 0x1A3",
+    "mode_2_call_sequence": "exact: eight calls, same order and operands",
+    "default_path": "same retail callee target (Error_Show is the port of 0x004AF7B0), same variadic argument string, same non-returning halt",
+    "return_value": "same last-call EAX on every accepted path; the candidate's epilogue does not overwrite EAX after the final indirect call",
+    "device_pointer_reload": "object-level match: each of the 19 candidate device calls is preceded by a fresh load of g_5ca114; g_a7e068 and g_5470b4 are also reloaded at each site where they are operands",
+    "host_vtable_mapping": "host +0x08 maps to retail +0x50 (SetRenderState) and host +0x14 maps to retail +0x94 (SetTextureStageState) by argument count/order and call shape; no claim is made that the host vtable address layout equals DX7",
+    "null_device_behaviour": "both fault; the candidate deliberately adds no invented guard",
+    "compiler_artifacts": [
+      "Retail has 23 call instructions (22 device calls plus Debug_Error) and 3 returns; the candidate object has 20 call instructions (19 device calls plus Error_Show) and 2 returns because GCC tail-merges the mode-1 ending into the mode-2 ending and folds one return site.",
+      "Static block counts differ (retail 8/8 vs object 10/11) for the same reason; the executed per-mode call sequence is unchanged.",
+      "The candidate object uses host vtable offsets +0x08/+0x14 instead of retail +0x50/+0x94; this is the documented host ABI abstraction, not a retail layout claim."
+    ],
+    "semantic_conclusion": "Within the reviewed scope the candidate computes the retail render-state sequence, argument values, dispatch order, return value and fatal path correctly. No unresolved semantic divergence was found in the three accepted modes or the default path."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Binary Ninja and radare2 independently identify the single entry 0x005144E0 with the same 406-byte extent, 153 instructions, 8 basic blocks and 8 edges (recorded graph score 1.000); angr CFGFast recovers the exact entry with no unresolved jumps. The candidate defines the same entry with C linkage and one int32 argument."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Retail reads only [esp+4] as a 32-bit selector and its only caller 0x005143C9 pushes one dword and cleans 4 bytes. The candidate takes a single std::int32_t blendmode in the same position and uses it only as the 0/1/2 selector; the host vtable passes the device as the explicit first argument with the same stack order."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "All render-state ids (0x1B, 0x22, 0x1C, 0x17, 0x0E, 0x13, 0x14), texture-stage type/value operands (0,1,4; 0,1,2) and comparison/blend values (2,4,1,3) match the retail immediates exactly. g_a7e068 and g_5470b4 are read as 32-bit bits and passed through without scaling. D3D enumerant names are labels, not runtime constants."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "The only retail memory reads are the argument slot, the device pointer at 0x005CA114, the fog colour at 0x00A7E068 and the fog-enable dword at 0x005470B4; the candidate reads the same host globals through the same 32-bit accesses. There is no retail structure layout or pointer arithmetic in this function, so no further layout claim is needed."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "The candidate performs the retail's 19 device calls with the same per-mode order, slot mapping, state/type/value arguments and device-first argument order, plus the same Error_Show call on the default path. The indirect calls are the entire observable side effect; the candidate adds no other device call, store or guard. No live device-state observation exists, so this is a source/object-level call-semantics finding, not runtime evidence."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Every accepted retail path ends with SetRenderState(0x0E, 1 or 0) immediately before ret, so EAX is that call's HRESULT. The candidate returns the same final call's EAX and does not overwrite it in the epilogue. The default path calls the same retail callee and halts; retail's Debug_Error non-return is not statically proven, so the candidate's explicit infinite loop is the faithful observable."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Neither the retail body nor the candidate performs floating-point arithmetic or reads a floating-point value; every operand is a 32-bit integer bit pattern."
+    }
+  ],
+  "review_findings": [
+    "The retail dispatch is exactly sub/dec/dec over the int32 selector, accepting 0, 1 and 2 in that order and sending every other 32-bit value to Debug_Error plus jmp $.",
+    "The three render-state sequences were decoded instruction by instruction and compared call by call; all 22 retail device calls map to the candidate's 19 static call sites with the same executed sequences after GCC tail merging.",
+    "The candidate's object reloads g_5ca114 before every indirect call (relocation shown at each site in the object disassembly), matching retail's per-call reload and contradicting neither the source comment nor the structural comparison.",
+    "Mode 0 returns the SetRenderState(0x0E,1) HRESULT; modes 1 and 2 return the SetRenderState(0x0E,0) HRESULT. The candidate leaves EAX untouched after the final call.",
+    "The candidate's host vtable uses +0x08/+0x14 rather than retail +0x50/+0x94. This is an abstraction boundary, not a semantic difference: argument count, order, callee-cleanup shape and per-call reload are preserved.",
+    "The fatal path calls Error_Show (the port of 0x004AF7B0) with the same literal and then halts forever. The non-return of retail Debug_Error is not proven statically; the candidate's loop is the correct observable choice.",
+    "Neither implementation checks g_5ca114 for null; both fault when the device is uninstalled, so the candidate does not invent a behaviour change.",
+    "The provenance comment in the reviewed source still says TRANSCRIBED while the manifest says STRUCTURALLY_VERIFIED; this review leaves the source digest untouched, so the gate's comment/status warning remains non-blocking."
+  ],
+  "limitations": [
+    "Static source/object review only. No retail runtime capture, no device-state observation and no rendered-frame comparison was performed.",
+    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_unknown_blendmode.cpp (source sha256 457ff29a..., object sha256 df7f35e3...). The current build-clean-win32/igi1.exe (sha256 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6, mtime 2026-10-23T10:00:01+0530, observed 2026-10-23T10:05:29+0530) contains Terrain_UnknownBlendmode at 0x00465180, and objdump of that address shows the same dispatch and device-call sequence as the reviewed object. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
+    "The Direct3D 7 device and its vtable are host abstractions. The mapping +0x08/+0x14 to +0x50/+0x94 is by call shape; this review makes no claim that the host object layout or vtable addresses equal retail DX7 memory.",
+    "The host function pointers are declared __stdcall, matching the callee-cleanup shape observed at the retail indirect call sites; no runtime ABI test was performed.",
+    "Error_Show (retail 0x004AF7B0) is variadic and may return when its exit callback is null; the candidate's explicit halt preserves the retail jmp $ observable, but the retail callee's non-return is not statically proven.",
+    "No live differential harness exists for 0x005144E0. A host harness is technically feasible (angr can execute the retail bytes with a synthetic device/vtable and record the +0x50/+0x94 arguments, while a compiled candidate stub records the same calls), but it was not built: this task owns only the two semantic-review files and the two manifest records, no existing repository runner dispatches this address, and pointing verification.behavioral_runner at a non-existent or placeholder script would fabricate evidence. The strict behavioral requirement therefore remains unmet.",
+    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 35d92a3 executable is observed but not bound by a build receipt."
+  ],
+  "behavioral_evidence": {
+    "status": "not_performed",
+    "oracle": "none",
+    "reason": "No live retail-versus-candidate differential runner covers 0x005144E0. The strict gate executes verification.behavioral_runner on every run and no such runner exists for this translation unit.",
+    "feasibility": "A host-level differential is feasible in principle: the retail 406-byte body can be executed under angr with a synthetic Device7 object/vtable and SimProcedures at the two vtable targets, recording ordered (slot,state,value) observations and the final EAX; the candidate can be compiled against a recording Device7 stub and run over the same three modes plus the default path. That would be real observation of both implementations, but it would be host/emulation evidence, not retail runtime evidence, and it would need to be labelled as such.",
+    "not_built_reason": "Building it would require a new repository runner script, which is outside this task's file ownership. No existing runner in scripts/ dispatches 0x005144E0 (the address-dispatched runners reject it as unsupported). A fabricated or placeholder runner was deliberately not installed.",
+    "strict_gate_effect": "verification.behavioral_runner is absent, so a strict invocation reports the missing-runner error for this native."
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+  "status_rationale": "The semantic review passes for the reviewed scope: the candidate preserves the retail dispatch, all three render-state call sequences and operands, the device reload, the final-HRESULT return and the fatal halt. The status remains STRUCTURALLY_VERIFIED because no runtime or behavioural evidence exists; this report does not support a higher status.",
+  "strict_gate_projection": {
+    "status": "STRUCTURALLY_VERIFIED",
+    "project_default_threshold": "VERIFIED",
+    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is now present and bound to implementation sha256 457ff29a...",
+    "at_threshold_verified": "The status is also below the required VERIFIED threshold, and the missing behavioral runner still blocks. No status promotion is claimed.",
+    "cfg_similarity_scope": "The recorded 1.0 is the retail Binary Ninja-versus-radare2 graph score only; it is not candidate equivalence."
   }
- ]
 }
