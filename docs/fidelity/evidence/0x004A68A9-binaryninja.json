@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004A68A9",
+  "symbol": "Camera_UpdateViewCone_8",
+  "signature": "void* __stdcall(int32_t* arg1)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x004A68A9",
+    "end": "0x4a68c3",
+    "size_bytes": 27,
+    "basic_blocks": 1,
+    "instruction_count": 11
+  },
+  "bytes_hex": "558b4c24088b298b411c508b411850e8",
+  "bytes_sha256": "1c62853c2a01ca98e6d4cf250fa114945e585a1f34efe3200cf827d2ff914025",
+  "cfg": {
+    "entry": "0x004A68A9",
+    "nodes": [
+      {
+        "address": "0x004a68a9",
+        "start": "0x4a68a9",
+        "end": "0x4a68c4",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "`asm\n\ud83c\udf10  void* __stdcall Camera_UpdateViewCone_8(int32_t* arg1)\n\n0x4a68a9  push    ebp\n0x4a68aa  mov     ecx, dword [esp+0x8]\n0x4a68ae  mov     ebp, dword [ecx]\n0x4a68b0  mov     eax, dword [ecx+0x1c]\n0x4a68b3  push    eax\n0x4a68b4  mov     eax, dword [ecx+0x18]\n0x4a68b7  push    eax\n0x4a68b8  call    Camera_SetFieldOfView_7\n0x4a68bd  add     esp, 0x8\n0x4a68c0  pop     ebp\n0x4a68c1  retn    0x4",
+  "pseudocode": "`bn-pseudoc\n\ud83c\udf10  void* __stdcall Camera_UpdateViewCone_8(int32_t* arg1)\n\n{\n    *arg1;\n    return Camera_SetFieldOfView_7(arg1[6], arg1[7]);\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a68a9\"\narch: \"x86\"\nname: \"Camera_UpdateViewCone_8\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4a68b8 | x86 | 0x4a5d42 | Camera_SetFieldOfView_7 (0x4a5d42 (x86)) |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a68a9\"\narch: \"x86\"\nname: \"Camera_UpdateViewCone_8\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+  ]
+}

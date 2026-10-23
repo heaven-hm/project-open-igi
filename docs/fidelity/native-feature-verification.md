@@ -58,6 +58,31 @@ the default scenario. Expand to the documented three-to-five-level matrix for
 shared terrain, camera, player or world changes. See
 [runtime-test-workflow.md](runtime-test-workflow.md) for local tools and recovery.
 
+## Strict new-native intake: static analysis then runtime analysis, then add
+
+For every new native implementation increment, the autonomous workflow may add the
+implementation to the codebase only after BOTH analyses pass, in order:
+
+1. **Static analysis**: `python3 scripts/igi_workflow.py static <VA>` (native gate:
+   selected decompiler + Radare2 CFG + angr, source-semantic review, behavioral
+   tests, threshold `VERIFIED`, CFG threshold `0.85`).
+2. **Runtime analysis**: `python3 scripts/igi_workflow.py verify <VA> --probe <reviewed-probe> --level <N>`
+   or the strict wrapper `python3 scripts/igi_workflow.py intake <VA> --probe <reviewed-probe> --level <N>`.
+   The intake runs the static gate, then the paired Frida capture and the typed
+   runtime comparison through `smart_end_to_end_verification.py`, and accepts
+   (report `result: passed`, `verified: true`, exit 0) only when every phase passes.
+
+If any phase fails, the native is **rejected**: no implementation is added to the
+codebase, no status is promoted, and the failure is retained in the report.
+
+`--static-only` is diagnostic-only and is now **fail closed**: it exits blocked and
+cannot be used to accept a native. Static-only evidence is analysis evidence, not
+acceptance.
+
+The default `./build.sh` chain (`native_gate.py --changed` + paired runtime +
+typed comparison via `accept_changed_feature.py`) remains the strict acceptance
+entry point.
+
 ## Fail closed and report the actual scope
 
 Missing methods, missing symbols, missing observations, failed tools, unknown

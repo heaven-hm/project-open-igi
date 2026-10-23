@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "ghidra",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004B1E90",
+  "signature": "x86 cdecl char*(char* dst, int32_t max_len, char* path)",
+  "signature_provenance": "Normalized from Ghidra pseudocode char*(char*, int, char*) and three 32-bit stack parameters; int is 32-bit on this PE32 x86 target.",
+  "rea_evidence_id": "ev_efc7fd53f5d4d8cd709ec8454d69fbb028a7f01283964b0877bf137dfd5482a4",
+  "rea_evidence_path": "docs/fidelity/evidence/0x004b1e90-ghidra-rea.json",
+  "rea_evidence_sha256": "0aa1a4937a5bfa28322bd7a9f486ad0073f92f8fe0a2938c66219f22c046fc7d",
+  "body_ranges": [
+    {
+      "start": "0x4b1e90",
+      "end": "0x4b1eda"
+    }
+  ],
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004B1E90"
+      },
+      {
+        "address": "0x004B1EA4"
+      },
+      {
+        "address": "0x004B1EAA"
+      },
+      {
+        "address": "0x004B1EAD"
+      },
+      {
+        "address": "0x004B1EB8"
+      },
+      {
+        "address": "0x004B1ED6"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004B1E90",
+        "target": "0x004B1EA4",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1E90",
+        "target": "0x004B1EAD",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EA4",
+        "target": "0x004B1EAA",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EA4",
+        "target": "0x004B1EAD",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EAA",
+        "target": "0x004B1EA4",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EAA",
+        "target": "0x004B1EAD",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EAD",
+        "target": "0x004B1EB8",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004B1EAD",
+        "target": "0x004B1ED6",
+        "kind": "branch"
+      }
+    ]
+  },
+  "disassembly": [
+    "0x4b1e90: MOV EDX, dword ptr [ESP + 0xc]",
+    "0x4b1e94: PUSH ESI",
+    "0x4b1e95: PUSH EDI",
+    "0x4b1e96: MOV EDI, EDX",
+    "0x4b1e98: OR ECX, 0xffffffff",
+    "0x4b1e9b: XOR EAX, EAX",
+    "0x4b1e9d: SCASB.REPNE ES:EDI",
+    "0x4b1e9f: NOT ECX",
+    "0x4b1ea1: DEC ECX",
+    "0x4b1ea2: JZ 0x004b1ead",
+    "0x4b1ea4: CMP byte ptr [ECX + EDX*0x1], 0x2e",
+    "0x4b1ea8: JZ 0x004b1ead",
+    "0x4b1eaa: DEC ECX",
+    "0x4b1eab: JNZ 0x004b1ea4",
+    "0x4b1ead: MOV EDI, dword ptr [ESP + 0xc]",
+    "0x4b1eb1: LEA ESI, [ECX + EDX*0x1]",
+    "0x4b1eb4: TEST EDI, EDI",
+    "0x4b1eb6: JZ 0x004b1ed6",
+    "0x4b1eb8: PUSH EBX",
+    "0x4b1eb9: MOV EBX, dword ptr [ESP + 0x14]",
+    "0x4b1ebd: LEA EAX, [EBX + -0x1]",
+    "0x4b1ec0: PUSH EAX",
+    "0x4b1ec1: PUSH ESI",
+    "0x4b1ec2: PUSH EDI",
+    "0x4b1ec3: CALL 0x004a5500",
+    "0x4b1ec8: ADD ESP, 0xc",
+    "0x4b1ecb: MOV byte ptr [EDI + EBX*0x1 + -0x1], 0x0",
+    "0x4b1ed0: MOV EAX, ESI",
+    "0x4b1ed2: POP EBX",
+    "0x4b1ed3: POP EDI",
+    "0x4b1ed4: POP ESI",
+    "0x4b1ed5: RET",
+    "0x4b1ed6: MOV EAX, ESI",
+    "0x4b1ed8: POP EDI",
+    "0x4b1ed9: POP ESI",
+    "0x4b1eda: RET"
+  ],
+  "pseudocode": "\nchar * FUN_004b1e90(char *param_1,int param_2,char *param_3)\n\n{\n  char cVar1;\n  uint uVar2;\n  char *pcVar3;\n  \n  uVar2 = 0xffffffff;\n  pcVar3 = param_3;\n  do {\n    if (uVar2 == 0) break;\n    uVar2 = uVar2 - 1;\n    cVar1 = *pcVar3;\n    pcVar3 = pcVar3 + 1;\n  } while (cVar1 != '\\0');\n  uVar2 = ~uVar2;\n  do {\n    uVar2 = uVar2 - 1;\n    if (uVar2 == 0) break;\n  } while (param_3[uVar2] != '.');\n  param_3 = param_3 + uVar2;\n  if (param_1 != (char *)0x0) {\n    _strncpy(param_1,param_3,param_2 - 1);\n    param_1[param_2 + -1] = '\\0';\n    return param_3;\n  }\n  return param_3;\n}\n\n",
+  "limitations": [
+    "Unresolved computed or indirect flows without target addresses are not represented as reference edges.",
+    "Thunk and external classifications are Ghidra FunctionManager observations; they do not resolve targetless calls.",
+    "Pseudocode and assembly are Ghidra-specific representations, not original source or Hopper-equivalent text.",
+    "Synthetic Ghidra entry-point references without actionable memory sources are omitted."
+  ]
+}

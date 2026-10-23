@@ -1,6 +1,6 @@
 // IGI native provenance: Config_FillMissionSelectionBox - 0x00405660 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00405660-Config_FillMissionSelectionBox.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405660-Config_FillMissionSelectionBox.hpp"
+#include "Config_FillMissionSelectionBox.h"
 int Config_FillMissionSelectionBox(int context)
 
 // Sig: void Config_FillMissionSelectionBox()

@@ -31,14 +31,14 @@ public:
     [[nodiscard]] std::size_t size() const noexcept;
 
 private:
-    friend ResourceHandle Host_LoadResourceFile(
+    friend ResourceHandle Resource_OpenFile(
         ResourceCache& resource_cache,
         const std::filesystem::path& resource_path,
         std::uint32_t* out_byte_count);
-    friend ResourceHandle Host_FindCachedResource(
+    friend ResourceHandle Resource_FindCached(
         const ResourceCache& resource_cache,
         const std::filesystem::path& resource_path);
-    friend bool Host_UnloadResourceFile(
+    friend bool Resource_CloseFile(
         ResourceCache& resource_cache,
         const std::filesystem::path& resource_path);
 
@@ -53,7 +53,7 @@ private:
 // Confidence: partial cache adapter for host diagnostic harness.
 // Signature: Retail flag/out-entry interface is adapted to a C++ ResourceHandle lookup.
 // Usage/tests: Used by resource cache tests/API; cache fixtures passed.
-[[nodiscard]] ResourceHandle Host_FindCachedResource(
+[[nodiscard]] ResourceHandle Resource_FindCached(
     const ResourceCache& resource_cache,
     const std::filesystem::path& resource_path);
 
@@ -66,7 +66,7 @@ private:
 // Signature: C++ ResourceHandle/ResourceArchive signatures adapt the retail raw-pointer API.
 // Usage/tests: Used by model/QVM loading; resource fixtures and model-scene runtime passed.
 // Host adapter: path-based cached file read. Not the retail Resource_Load (VA 0x004B5F00).
-[[nodiscard]] ResourceHandle Host_LoadResourceFile(
+[[nodiscard]] ResourceHandle Resource_OpenFile(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,
     std::uint32_t* out_byte_count = nullptr);
@@ -80,7 +80,7 @@ private:
 // Confidence: partial adapter; host false-on-missing differs from the native fatal-error path.
 // Signature: Retail void/path API is adapted to bool/cache/path; native ABI is not preserved yet.
 // Usage/tests: Used by resource lifecycle fixtures; handle lifetime passed; retail unload replay pending.
-[[nodiscard]] bool Host_UnloadResourceFile(
+[[nodiscard]] bool Resource_CloseFile(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path);
 

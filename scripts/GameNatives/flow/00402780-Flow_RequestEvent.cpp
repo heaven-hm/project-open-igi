@@ -1,6 +1,6 @@
 // IGI native provenance: Flow_RequestEvent - 0x00402780 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00402780-Flow_RequestEvent.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Flow_RequestEvent.hpp"
+#include "Flow_RequestEvent.h"
 int Flow_RequestEvent(int context, float arg2 )
 
 // Sig: void Flow_RequestEvent(int eventId)

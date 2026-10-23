@@ -53,7 +53,17 @@ struct IffSkeleton
 
 // Reads the skeleton from a retail animation IFF. Returns nothing when the
 // file carries no BOBH form.
-[[nodiscard]] std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path);
+//
+// The definition in iff_skeleton.cpp already has external linkage; its emitted
+// name was the port's descriptive C++ identifier, so the retail catalog name
+// could not be resolved in the candidate. The declaration pins the assembler
+// name to the retail catalog name with a GCC asm-label, making the out-of-line
+// definition itself addressable under the name the symbol map and the paired
+// probes resolve. The ABI is the port's host-adapted one either way: the
+// std::filesystem::path argument, the std::optional<IffSkeleton> return and
+// the body are unchanged.
+[[nodiscard]] std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)
+    asm("AnimIff_LoadAnimationFile");
 
 // The retail's skeleton table.
 //

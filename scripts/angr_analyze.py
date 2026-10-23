@@ -59,6 +59,29 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         address: bool(function.has_unresolved_jumps) if function is not None else None
         for address, function in auto_functions.items()
     }
+    # Snapshot the first graph's structure now. A second CFGFast run on the same
+    # project releases the first graph's blocks, and angr's function objects
+    # only hold a weak reference to them, so reading the graph afterwards
+    # raises "weakly-referenced object no longer exists".
+    def snapshot(function) -> dict[str, Any] | None:
+        if function is None or function.addr is None:
+            return None
+        nodes = sorted({int(node.addr) for node in function.graph.nodes()
+                        if getattr(node, "addr", None) is not None})
+        edges = []
+        for source, target, data in function.graph.edges(data=True):
+            source_addr = getattr(source, "addr", None)
+            target_addr = getattr(target, "addr", None)
+            if source_addr is None or target_addr is None:
+                continue
+            edges.append({
+                "source": f"0x{int(source_addr):08X}",
+                "target": f"0x{int(target_addr):08X}",
+                "kind": str(data.get("jumpkind", "unknown")),
+            })
+        return {"nodes": nodes, "edges": edges, "unresolved": bool(function.has_unresolved_jumps)}
+
+    auto_snapshots = {address: snapshot(function) for address, function in auto_functions.items()}
     initialized_cfg = None
     initialization_model = None
     if 0x004AF7B0 in addresses and baseline_unresolved.get(0x004AF7B0):
@@ -136,16 +159,25 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
             functions[key] = {"result": "inconclusive", "reason": "CFGFast did not recover an exact function entry"}
             continue
 
-        nodes = sorted({int(node.addr) for node in function.graph.nodes() if getattr(node, "addr", None) is not None})
-        edges = []
+        snapshot_data = auto_snapshots.get(address) if recovery_mode == "automatic" else None
+        if snapshot_data is not None:
+            nodes = snapshot_data["nodes"]
+            edges = snapshot_data["edges"]
+            unresolved = snapshot_data["unresolved"]
+        else:
+            nodes = sorted({int(node.addr) for node in function.graph.nodes()
+                            if getattr(node, "addr", None) is not None})
+            edges = []
+            for source, target, data in function.graph.edges(data=True):
+                source_addr = getattr(source, "addr", None)
+                target_addr = getattr(target, "addr", None)
+                if source_addr is None or target_addr is None:
+                    continue
+                edges.append({"source": f"0x{int(source_addr):08X}",
+                              "target": f"0x{int(target_addr):08X}",
+                              "kind": str(data.get("jumpkind", "unknown"))})
+            unresolved = bool(function.has_unresolved_jumps)
         implicit_repeat_nodes: set[int] = set()
-        for source, target, data in function.graph.edges(data=True):
-            source_addr = getattr(source, "addr", None)
-            target_addr = getattr(target, "addr", None)
-            if source_addr is None or target_addr is None:
-                continue
-            jumpkind = str(data.get("jumpkind", "unknown"))
-            edges.append({"source": f"0x{int(source_addr):08X}", "target": f"0x{int(target_addr):08X}", "kind": jumpkind})
         # CFGFast models the CPU's internal REP iteration as an explicit
         # self-edge. Other disassemblers treat REP/REPE/REPNE as one
         # instruction. Preserve the node evidence so the gate can ignore only
@@ -165,7 +197,6 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
                     implicit_repeat_nodes.add(int(node_address))
             except (KeyError, ValueError, TypeError):
                 continue
-        unresolved = bool(function.has_unresolved_jumps)
         function_result = "pass" if nodes and not unresolved else "inconclusive"
         functions[key] = {
             "result": function_result,
@@ -185,7 +216,7 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
 
     results = [item.get("result") for item in functions.values()]
     overall = "fail" if "fail" in results else "inconclusive" if "inconclusive" in results else "pass"
-    return {
+    artifact = {
         "schema_version": 1,
         "kind": "angr-analysis",
         "result": overall,
@@ -206,6 +237,14 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         "functions": functions,
         "limitations": ["CFGFast is approximate static analysis", "This result does not prove semantic or behavioral equivalence"],
     }
+    # When one address is analyzed, its function's facts are also reported at
+    # the top level, so a caller does not have to reach into the function map.
+    if len(functions) == 1:
+        only = next(iter(functions.values()))
+        artifact["function_entry"] = only.get("function_entry")
+        artifact["has_unresolved_jumps"] = only.get("has_unresolved_jumps")
+        artifact["reason"] = only.get("reason")
+    return artifact
 
 
 def main() -> int:

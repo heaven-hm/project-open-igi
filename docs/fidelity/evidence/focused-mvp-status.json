@@ -1,0 +1,445 @@
+{
+ "kind": "focused-mvp-status",
+ "targets": 69,
+ "status_counts": {
+  "VERIFIED": 46,
+  "STRUCTURALLY_VERIFIED": 18,
+  "TRANSCRIBED": 2,
+  "ANALYZED": 3
+ },
+ "rows": [
+  {
+   "address": "0x00404590",
+   "name": "Config_GetActiveGraphicOptions",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00404F00",
+   "name": "Config_GraphicOptionsSetPerformanceFlags",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00404F60",
+   "name": "Config_GraphicOptionsGetPerformanceFlags",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00405530",
+   "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004055C0",
+   "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00405620",
+   "name": "Config_GraphicOptionsNumPerfLevels",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00405850",
+   "name": "Config_Read",
+   "category": "QVM",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004037C0",
+   "name": "GOInRemap",
+   "category": "Player",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x00410070",
+   "name": "DefineHumanPlayerGeneral",
+   "category": "Player",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004137A0",
+   "name": "HumanPlayer_LoadParameters",
+   "category": "Player",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x00463180",
+   "name": "Human_IsCrouched",
+   "category": "Player",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00465820",
+   "name": "Human_CameraEyePosition",
+   "category": "Player",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004659E0",
+   "name": "Human_TaskViewReset",
+   "category": "Player",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004ED5C0",
+   "name": "InputPort_Process",
+   "category": "Player",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x0048F1D0",
+   "name": "Script_GetDebugCompileState",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x0048F340",
+   "name": "Script_GetForcePrecompiledState",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B1E90",
+   "name": "String_FindExtension",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B5B60",
+   "name": "Resource_FileExists",
+   "category": "QVM",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004B7E10",
+   "name": "Qvm_ReportError",
+   "category": "QVM",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004B80B0",
+   "name": "Qvm_Load",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B83D0",
+   "name": "Qvm_Cleanup",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B8A10",
+   "name": "Qvm_SetGlobalState",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004BCFD0",
+   "name": "Qvm_ExecuteInstructions",
+   "category": "QVM",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004BD3D0",
+   "name": "Qvm_SetOpcodeHandler",
+   "category": "QVM",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004BDA00",
+   "name": "Qvm_PushInteger",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7470",
+   "name": "Ilff_GetNextChunk",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7490",
+   "name": "Ilff_GetFirstChunk",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B74D0",
+   "name": "Ilff_GetChunkPayload",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7540",
+   "name": "Ilff_ReadContainerHeader",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7570",
+   "name": "Ilff_GetFormType",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7580",
+   "name": "Ilff_GetChunkTag",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B7590",
+   "name": "Ilff_FindChunk",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CEAA0",
+   "name": "Ilff_FindFormChunk",
+   "category": "IFF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CF300",
+   "name": "DynObj_LookupHashItem",
+   "category": "3D Models & MEF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CF330",
+   "name": "DynObj_LoadPackageMeshes",
+   "category": "3D Models & MEF",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004CF390",
+   "name": "DynObj_LoadModelMesh",
+   "category": "3D Models & MEF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CF630",
+   "name": "DynObj_LoadPackageLovs",
+   "category": "3D Models & MEF",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004CF910",
+   "name": "DynObj_LoadPackageAnimations",
+   "category": "3D Models & MEF",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004D0CF0",
+   "name": "Model_GetAttachment",
+   "category": "3D Models & MEF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004D0D10",
+   "name": "Model_GetAttachmentCount",
+   "category": "3D Models & MEF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004EDB60",
+   "name": "LODSettings_LoadParameters",
+   "category": "3D Models & MEF",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CF080",
+   "name": "DynObj_LoadModelTexturePackage",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004A26C0",
+   "name": "Camera_UpdateFogPalette",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B0F80",
+   "name": "Texture_GetActiveBackendId",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B23B0",
+   "name": "Texture_UploadMipmapPacket",
+   "category": "Texture",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004B24C0",
+   "name": "Texture_LoadLoopTextureFile",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B26A0",
+   "name": "Texture_EnableUpload",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004B26B0",
+   "name": "Texture_DisableUpload",
+   "category": "Texture",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004B7CF0",
+   "name": "Texture_UploadPalettePacket",
+   "category": "Texture",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x004CF790",
+   "name": "DynObj_LoadModelTextures",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CF870",
+   "name": "DynObj_LoadPackagePalettes",
+   "category": "Texture",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x00505E40",
+   "name": "TextureModifier_Push",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004C5F00",
+   "name": "Terrain_LoadTexturesAndLightmaps",
+   "category": "Terrain",
+   "status": "TRANSCRIBED"
+  },
+  {
+   "address": "0x004C6240",
+   "name": "Terrain_Load",
+   "category": "Terrain",
+   "status": "TRANSCRIBED"
+  },
+  {
+   "address": "0x004C6670",
+   "name": "Terrain_CreateMaterial",
+   "category": "Terrain",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004C6760",
+   "name": "Terrain_CreateTileMap",
+   "category": "Terrain",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004CEA80",
+   "name": "Render_GetActiveBackendId",
+   "category": "Terrain",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004D14E0",
+   "name": "Terrain_TraverseContourQuadtree",
+   "category": "Terrain",
+   "status": "ANALYZED"
+  },
+  {
+   "address": "0x004F82B0",
+   "name": "TerrainLightMap_Init_2",
+   "category": "Terrain",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x00506F00",
+   "name": "HeightMap_Enter",
+   "category": "Terrain",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00510010",
+   "name": "Terrain_DecodeChunkCommands",
+   "category": "Terrain",
+   "status": "ANALYZED"
+  },
+  {
+   "address": "0x00512C30",
+   "name": "Terrain_Draw",
+   "category": "Terrain",
+   "status": "ANALYZED"
+  },
+  {
+   "address": "0x005175A0",
+   "name": "Terrain_LoadTexturePackage",
+   "category": "Terrain",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004F1160",
+   "name": "Script_ParseEnumReal32_5",
+   "category": "QVM",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x004D67A0",
+   "name": "AnimIff_LoadAnimationFile",
+   "category": "Texture",
+   "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+   "address": "0x00517890",
+   "name": "Iff_FindFormChunk",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x005178E0",
+   "name": "Iff_FindChunkBelowForm",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x00517940",
+   "name": "Iff_FindChunk",
+   "category": "Texture",
+   "status": "VERIFIED"
+  },
+  {
+   "address": "0x005179C0",
+   "name": "Iff_GetChunkPayload",
+   "category": "Texture",
+   "status": "VERIFIED"
+  }
+ ],
+ "structural_evidence": {
+  "angr_recovered": 69,
+  "angr_missing": 0,
+  "evidence_clean": 69
+ },
+ "flow": {
+  "ordered_from_main": 31,
+  "direct": 17,
+  "cross_reference": 14
+ },
+ "runtime": {
+  "observed": 61,
+  "unobserved": 8
+ },
+ "limitations": [
+  "Strict per-native gate serial sweep is too slow because it reruns whole-binary angr per native.",
+  "Five focus natives remain below STRUCTURALLY_VERIFIED because their current implementations/runners are incomplete or unsupported.",
+  "Runtime observation is late-attach ordering evidence, not typed paired behavioral acceptance."
+ ]
+}

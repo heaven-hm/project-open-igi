@@ -9,7 +9,7 @@
 //                 the record's +0x20 float kept on the x87 stack and multiplied after the transform,
 //                 normals rotated by the same 3x3 without translation or scale, UV dwords copied
 //                 verbatim, and the fatal "Bone model too large. Model %s has %d vertices." path at
-//                 0x00543D04 through Error_Show 0x004AF7B0 with the self-loop at 0x0049B72A.
+//                 0x00543D04 through Debug_Error 0x004AF7B0 with the self-loop at 0x0049B72A.
 //                 Cross-checked with the C# transcription (open-igi MefSkinner.cs / MefSkinInfluence.cs,
 //                 docs/re-notes/animation.md §7-8) and REA evidence ev_7b50c35acc556348073cf6b485533b219fa3e483f5f98028979a4228a713c446.
 // Behavior: the skinned vertex stream is base_vertex_count + extra_influence_count 40-byte records

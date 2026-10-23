@@ -1,6 +1,6 @@
 // IGI native provenance: Qhash_Init - 0x004B0D60 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B0D60-Qhash_Init.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B0D60-Qhash_Init.hpp"
+#include "Qhash_Init.h"
 void* Qhash_Init(char context)
 
 // Sig: void Qhash_Init(char hash_val)

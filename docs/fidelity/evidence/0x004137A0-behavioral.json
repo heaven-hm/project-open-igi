@@ -1,0 +1,11 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-report",
+ "address": "0x004137A0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "performed": false,
+ "result": "not_run",
+ "reason": "No paired retail/candidate runtime capture was made for this address in this task. The unit is not part of the linked candidate image, so there is no candidate function to observe, and the task's verification scope is static analysis plus a Frida probe that cannot attach to an unlinked native.",
+ "prior_record": "The previous <address>-behavioral.json in this directory asserted retail chunk-walk behavior for these addresses; it recorded no probe, no scenario and no observed values, and its claims do not match the retail instruction sequence. It is superseded by this record.",
+ "next_step": "After the QVM closure is transcribed so the unit links, capture a Frida/IGI-Probe differential of the 43 Qvm_GetFloatArg arguments, the nine dword stores, the two tables and the 24-byte return block."
+}

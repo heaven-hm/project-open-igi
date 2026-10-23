@@ -1,0 +1,88 @@
+{
+ "schema_version": 1,
+ "kind": "structural-comparison",
+ "address": "0x004137A0",
+ "native": "HumanPlayer_LoadParameters",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+ "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+ "retail": {
+  "blocks": 4,
+  "edges": 4,
+  "instruction_count": 19,
+  "size_bytes": 57,
+  "nodes": [
+   {
+    "address": "0x004137A0",
+    "size": 20,
+    "role": "push the path literal, call Qvm_Load, test EAX, jne to the success block"
+   },
+   {
+    "address": "0x004137B4",
+    "size": 17,
+    "role": "success: push qvm, call Qvm_Execute, push qvm, call Qvm_Cleanup, add esp,8, pop esi, ret (EAX = Qvm_Cleanup result)"
+   },
+   {
+    "address": "0x004137C5",
+    "size": 18,
+    "role": "failure: push the path, push the format 0x00539150, call Debug_Error, add esp,8"
+   },
+   {
+    "address": "0x004137D7",
+    "size": 2,
+    "role": "jmp 0x004137D7 self-loop, so the failure path never returns"
+   }
+  ]
+ },
+ "candidate": {
+  "blocks": 4,
+  "edges": 4,
+  "object_offset": "0x00000220",
+  "nodes": [
+   {
+    "address": "0x000001D0",
+    "role": "Qvm_Load + test"
+   },
+   {
+    "address": "0x000001E4",
+    "role": "Qvm_Execute, Qvm_Cleanup, add esp,8, pop ebx, ret"
+   },
+   {
+    "address": "0x000001FB",
+    "role": "Debug_Error(format, path)"
+   },
+   {
+    "address": "0x00000210",
+    "role": "jmp 0x00000210 self-loop"
+   }
+  ]
+ },
+ "mapping": [
+  {
+   "retail": "0x004137A0",
+   "candidate": "0x000001D0",
+   "result": "match"
+  },
+  {
+   "retail": "0x004137B4",
+   "candidate": "0x000001E4",
+   "result": "match"
+  },
+  {
+   "retail": "0x004137C5",
+   "candidate": "0x000001FB",
+   "result": "match"
+  },
+  {
+   "retail": "0x004137D7",
+   "candidate": "0x00000210",
+   "result": "match"
+  }
+ ],
+ "result": "match",
+ "differences": [
+  "The candidate keeps the qvm pointer in a callee-saved register and restores it before the ret; retail re-pushes the esi copy. No value or call order differs.",
+  "The candidate's self-loop is the same single `jmp` to itself; the compiler adds no check and no return path."
+ ],
+ "note": "Retail CFG from radare2 6.2.0 afbj and angr CFGFast (docs/fidelity/evidence/0x004137A0-radare2.json, 0x004137A0-angr.json) against the compiled candidate object (i686-w64-mingw32-objdump)."
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsSetReverseStereo - 0x00404E50 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404E50-Config_SoundOptionsSetReverseStereo.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404E50-Config_SoundOptionsSetReverseStereo.hpp"
+#include "Config_SoundOptionsSetReverseStereo.h"
 int Config_SoundOptionsSetReverseStereo(int context, float arg2 )
 
 // Sig: void Config_SoundOptionsSetReverseStereo(int onOff)

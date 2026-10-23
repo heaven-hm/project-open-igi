@@ -1,0 +1,67 @@
+{
+ "kind": "focused-terrain-blockers",
+ "count": 5,
+ "natives": [
+  {
+   "address": "0x004C5F00",
+   "name": "Terrain_LoadTexturesAndLightmaps",
+   "status": "TRANSCRIBED",
+   "cfg_similarity": 1.0,
+   "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+   "behavioral_runner": "scripts/native_diff_runner.py",
+   "limitation": [
+    "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+    "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
+   ]
+  },
+  {
+   "address": "0x004C6240",
+   "name": "Terrain_Load",
+   "status": "TRANSCRIBED",
+   "cfg_similarity": 1.0,
+   "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+   "behavioral_runner": "scripts/native_diff_runner.py",
+   "limitation": [
+    "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+    "Host stub: implementation throws std::logic_error and is not a transcription; not behaviourally verifiable."
+   ]
+  },
+  {
+   "address": "0x004D14E0",
+   "name": "Terrain_TraverseContourQuadtree",
+   "status": "ANALYZED",
+   "cfg_similarity": 1.0,
+   "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "limitation": [
+    "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+    "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
+   ]
+  },
+  {
+   "address": "0x00510010",
+   "name": "Terrain_DecodeChunkCommands",
+   "status": "ANALYZED",
+   "cfg_similarity": 1.0,
+   "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "limitation": [
+    "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+    "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
+   ]
+  },
+  {
+   "address": "0x00512C30",
+   "name": "Terrain_Draw",
+   "status": "ANALYZED",
+   "cfg_similarity": 1.0,
+   "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "limitation": [
+    "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+    "Host stub: the implementation throws std::logic_error and is not a transcription. The retail body is thousands of bytes; this candidate cannot be behaviourally verified."
+   ]
+  }
+ ],
+ "reason": "No reviewed executable behavioral runner exists for these terrain methods; existing attempts explicitly reject unsupported/untranscribed behavior. Static CFG evidence alone does not permit promotion."
+}

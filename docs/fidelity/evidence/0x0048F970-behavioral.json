@@ -1,0 +1,465 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "address": "0x0048F970",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "982ee5366cebfcffa29dcc94ad8eaac2cf7343b4847a6b5bec961210cda07d12",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "runner": {
+    "path": "scripts/native_unicorn_runner.py",
+    "sha256": "d3868d28bd0d047efb4c43d1e5659f943e24b43b3dfe503a73872921c62cde41",
+    "command": [
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
+      "--address",
+      "0x0048F970",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/core/native_0048f970.cpp",
+      "--implementation-sha256",
+      "982ee5366cebfcffa29dcc94ad8eaac2cf7343b4847a6b5bec961210cda07d12",
+      "--root",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+    ]
+  },
+  "result": "passed",
+  "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 1e-06,
+    "relative": 1e-06
+  },
+  "limits": "",
+  "tests_total": 11,
+  "tests_passed": 11,
+  "tests_failed": 0,
+  "cases": [
+    {
+      "id": "activate-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          0,
+          0,
+          28,
+          0,
+          1
+        ],
+        "initial_state": {
+          "seed": 0
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "create-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          0,
+          0,
+          1,
+          1,
+          0
+        ],
+        "initial_state": {
+          "seed": 1
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "destroy-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          1,
+          0,
+          2,
+          2,
+          0
+        ],
+        "initial_state": {
+          "seed": 2
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "keyup-f12-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          1,
+          0,
+          0,
+          261,
+          3,
+          18
+        ],
+        "initial_state": {
+          "seed": 3
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "keyup-other-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          1,
+          0,
+          0,
+          261,
+          4,
+          115
+        ],
+        "initial_state": {
+          "seed": 4
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "keydown-s-nominal",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          false,
+          1,
+          0,
+          0,
+          260,
+          5,
+          115
+        ],
+        "initial_state": {
+          "seed": 5
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "keydown-s-no-flag",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          0,
+          0,
+          260,
+          6,
+          115
+        ],
+        "initial_state": {
+          "seed": 6
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "keydown-f12-sets-flag",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          0,
+          0,
+          260,
+          7,
+          18
+        ],
+        "initial_state": {
+          "seed": 7
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 1,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "chain-consumes",
+      "categories": [
+        "nominal"
+      ],
+      "input": {
+        "args": [
+          true,
+          0,
+          0,
+          1,
+          0,
+          260,
+          8,
+          65
+        ],
+        "initial_state": {
+          "seed": 8
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "chain-passes-through",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          true,
+          7,
+          0,
+          1,
+          0,
+          15,
+          9,
+          0
+        ],
+        "initial_state": {
+          "seed": 9
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 1,
+          "debug_key_flag": 0,
+          "chain_calls": 1
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "default-passes",
+      "categories": [
+        "boundary"
+      ],
+      "input": {
+        "args": [
+          false,
+          0,
+          0,
+          0,
+          16,
+          10,
+          0
+        ],
+        "initial_state": {
+          "seed": 10
+        }
+      },
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {
+          "loop_status": 0,
+          "debug_key_flag": 0,
+          "chain_calls": 0
+        },
+        "side_effects": []
+      }
+    }
+  ]
+}

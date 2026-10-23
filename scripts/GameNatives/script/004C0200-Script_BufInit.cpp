@@ -1,6 +1,6 @@
 // IGI native provenance: Script_BufInit - 0x004C0200 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004C0200-Script_BufInit.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004C0200-Script_BufInit.hpp"
+#include "Script_BufInit.h"
 int* Script_BufInit(int* context, int arg2, int arg3, int arg4)
 
 // Sig: void Script_BufInit(int* outBuf1, int buf2, int buf3, int bufSize)

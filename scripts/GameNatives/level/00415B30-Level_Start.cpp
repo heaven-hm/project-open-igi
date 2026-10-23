@@ -1,6 +1,6 @@
 // IGI native provenance: Level_Start - 0x00415B30 - CFG score 99.6% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00415B30-Level_Start.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Level_Start.hpp"
+#include "Level_Start.h"
 int Level_Start(void* context)
 
 // Sig: void Level_Start(int p1)

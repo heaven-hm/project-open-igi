@@ -3,7 +3,7 @@
 // Scope: Level prefix and simulation rate 30 observed; formats objects.qsc before calling 0x004F0D40.
 // IGI native provenance: Level_LoadObjects - 0x004F0E10 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F0E10-Level_LoadObjects.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Level_LoadObjects.hpp"
+#include "Level_LoadObjects.h"
 int Level_LoadObjects(int context, int arg2)
 
 // Sig: void Level_LoadObjects(int level_path,int level_len)

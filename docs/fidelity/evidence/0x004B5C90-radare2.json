@@ -1,0 +1,133 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004B5C90",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004B5C90"
+   },
+   {
+    "address": "0x004B5CA3"
+   },
+   {
+    "address": "0x004B5CAA"
+   },
+   {
+    "address": "0x004B5CB5"
+   },
+   {
+    "address": "0x004B5CBE"
+   },
+   {
+    "address": "0x004B5CD2"
+   },
+   {
+    "address": "0x004B5CE3"
+   },
+   {
+    "address": "0x004B5CEC"
+   },
+   {
+    "address": "0x004B5CF2"
+   },
+   {
+    "address": "0x004B5D0D"
+   },
+   {
+    "address": "0x004B5D0F"
+   },
+   {
+    "address": "0x004B5D30"
+   },
+   {
+    "address": "0x004B5D66"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004B5C90",
+    "target": "0x004B5D66",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5C90",
+    "target": "0x004B5CA3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CAA",
+    "target": "0x004B5CEC",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B5CB5",
+    "target": "0x004B5CD2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CB5",
+    "target": "0x004B5CBE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CBE",
+    "target": "0x004B5CBE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CBE",
+    "target": "0x004B5CD2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CD2",
+    "target": "0x004B5CF2",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B5CE3",
+    "target": "0x004B5CEC",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B5CEC",
+    "target": "0x004B5CF2",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B5CF2",
+    "target": "0x004B5D66",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5CF2",
+    "target": "0x004B5D0D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5D0D",
+    "target": "0x004B5D30",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B5D0F",
+    "target": "0x004B5D66",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5D0F",
+    "target": "0x004B5D30",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B5D30",
+    "target": "0x004B5D66",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

@@ -1,0 +1,441 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "address": "0x004037C0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "70794b7d8af573367f8af700a951bfc6f6dec8047665ddd69ae938119df75da6",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/goinremap_diff_runner.py",
+  "sha256": "77e84a923c970e605e2cea9b7296573e0803e71a6785aa72b36d850d358b6443",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "scripts/goinremap_diff_runner.py",
+   "--address",
+   "0x004037C0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/config/input_remap.cpp",
+   "--implementation-sha256",
+   "70794b7d8af573367f8af700a951bfc6f6dec8047665ddd69ae938119df75da6",
+   "--root",
+   "."
+  ]
+ },
+ "result": "passed",
+ "method": "Retail instruction bytes for 0x004037C0 were executed under Unicorn with the true PE image mapped and a synthetic cdecl stack; the candidate C++ translation unit was compiled and executed natively with the same table and frame fixtures. The frame reader 0x004B8A20 is replaced by a hook that returns the fixture argument, and the caller's destination slot is supplied at [esp+0x28], which is where the retail reads it.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "cases": [
+  {
+   "id": "goinremap-0",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "id": "goinremap-0",
+    "categories": [
+     "nominal"
+    ],
+    "count": 1,
+    "action": 0,
+    "v0": 1,
+    "v1": 2,
+    "v2": 3
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      1,
+      2,
+      3
+     ],
+     "action_slot_after": 1,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      1,
+      2,
+      3
+     ],
+     "action_slot_after": 1,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-1",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "id": "goinremap-1",
+    "categories": [
+     "nominal"
+    ],
+    "count": 2,
+    "action": 3,
+    "v0": 16,
+    "v1": 32,
+    "v2": 48
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      16,
+      32,
+      48
+     ],
+     "action_slot_after": 4,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      16,
+      32,
+      48
+     ],
+     "action_slot_after": 4,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-2",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "id": "goinremap-2",
+    "categories": [
+     "nominal"
+    ],
+    "count": 3,
+    "action": 5,
+    "v0": 4294967295,
+    "v1": 2147483648,
+    "v2": 4294967295
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      4294967295,
+      2147483648,
+      1073741823
+     ],
+     "action_slot_after": 6,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      4294967295,
+      2147483648,
+      1073741823
+     ],
+     "action_slot_after": 6,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-3",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "id": "goinremap-3",
+    "categories": [
+     "boundary"
+    ],
+    "count": 4,
+    "action": 0,
+    "v0": 0,
+    "v1": 0,
+    "v2": 1073741824
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 1,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 1,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-4",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "id": "goinremap-4",
+    "categories": [
+     "boundary"
+    ],
+    "count": 5,
+    "action": 115,
+    "v0": 2147483647,
+    "v1": 305419896,
+    "v2": 3221225471
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      2147483647,
+      305419896,
+      1073741823
+     ],
+     "action_slot_after": 116,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      2147483647,
+      305419896,
+      1073741823
+     ],
+     "action_slot_after": 116,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-5",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "id": "goinremap-5",
+    "categories": [
+     "boundary"
+    ],
+    "count": 8,
+    "action": 7,
+    "v0": 4,
+    "v1": 8,
+    "v2": 12
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      4,
+      8,
+      12
+     ],
+     "action_slot_after": 8,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      4,
+      8,
+      12
+     ],
+     "action_slot_after": 8,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-6",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "id": "goinremap-6",
+    "categories": [
+     "boundary"
+    ],
+    "count": 16,
+    "action": 2,
+    "v0": 305419896,
+    "v1": 2596069104,
+    "v2": 65535
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      305419896,
+      2596069104,
+      65535
+     ],
+     "action_slot_after": 3,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      305419896,
+      2596069104,
+      65535
+     ],
+     "action_slot_after": 3,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  },
+  {
+   "id": "goinremap-7",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "id": "goinremap-7",
+    "categories": [
+     "boundary"
+    ],
+    "count": 32,
+    "action": 1,
+    "v0": 3735928559,
+    "v1": 3405691582,
+    "v2": 1073741823
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      3735928559,
+      3405691582,
+      1073741823
+     ],
+     "action_slot_after": 2,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "remap_entry": [
+      3735928559,
+      3405691582,
+      1073741823
+     ],
+     "action_slot_after": 2,
+     "block_dword0": 0,
+     "block_dword2": 0,
+     "block_dword3": 0,
+     "block_descriptor": 5667956
+    },
+    "side_effects": []
+   },
+   "result": "passed"
+  }
+ ]
+}

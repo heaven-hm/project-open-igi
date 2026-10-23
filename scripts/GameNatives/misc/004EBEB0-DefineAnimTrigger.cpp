@@ -1,6 +1,6 @@
 // IGI native provenance: DefineAnimTrigger - 0x004EBEB0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EBEB0-DefineAnimTrigger.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004EBEB0-DefineAnimTrigger.hpp"
+#include "DefineAnimTrigger.h"
 int DefineAnimTrigger(int context, float arg2 )
 
 // Sig: unknown DefineAnimTrigger(unknown param1, unknown param2)

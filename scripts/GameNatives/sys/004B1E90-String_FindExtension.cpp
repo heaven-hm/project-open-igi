@@ -1,43 +1,26 @@
-// IGI native provenance: String_FindExtension - 0x004B1E90 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004B1E90-String_FindExtension.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B1E90-String_FindExtension.hpp"
-char* String_FindExtension(char* context, int arg2, int arg3)
+// IGI native String_FindExtension - 0x004B1E90 - transcribed from retail igi.exe.
+// Retail: cdecl (out, size, path). Scans backwards from the terminating zero for a dot, copies size-1 bytes of the extension to out when out is set and returns a pointer to it in path.
+#include <cstdint>
+#include <cstring>
 
+char* __cdecl Camera_ApplyLineFilter_5(char* dst, const char* src, int count); // 0x004A5500
+
+char* __cdecl String_FindExtension(char* out, int size, const char* path)
 {
-    int dest_val = arg3;
-    int i = 0xffffffff;
-
-    while (i)
+    int index = static_cast<int>(std::strlen(path));
+    if (index != 0)
     {
-        bool flag_0_1 = 0 != *dest_val;
-        dest_val += 1;
-        i -= 1;
-
-        if (!flag_0_1)
-            break;
-    }
-
-    int entity_val = ~i;
-    char* entity_1 = entity_val - 1;
-
-    if (entity_val != 1)
-    {
-        while (entity_1[arg3] != 0x2e)
+        do
         {
-            char* f1_1 = entity_1;
-            entity_1 -= 1;
-
-            if (f1_1 == 1)
+            if (path[index] == '.')
                 break;
-        }
+            index--;
+        } while (index != 0);
     }
-
-    char* result = &entity_1[arg3];
-
-    if (!context)
-        return result;
-
-    Camera_ApplyLineFilter_5(context, result, arg2 - 1);
-    context[arg2 - 1] = 0;
-    return result;
+    const char* extension = path + index;
+    if (out == nullptr)
+        return const_cast<char*>(extension);
+    Camera_ApplyLineFilter_5(out, extension, size - 1);
+    out[size - 1] = 0;
+    return const_cast<char*>(extension);
 }

@@ -12,7 +12,7 @@ of those (unported) allocator chains.
 Candidate side: the current C++ implementation is compiled with a harness that
 installs equivalent sentinel stubs (Resource_Unload is linked directly;
 0x004BD380 / 0x004B0D10 arrive via the implementation's injectable host
-boundaries Host_SetQvmStandaloneRelease / Host_SetQvmBlockRelease).
+boundaries Sys_SetQvmStandaloneRelease / Sys_SetQvmBlockRelease).
 """
 
 from __future__ import annotations
@@ -166,8 +166,8 @@ int main(int argc, char** argv) {
     if (!has_standalone) {
         std::memset(buffer + 0x8C, 0, 4);
     }
-    igi::retail::script::Host_SetQvmStandaloneRelease(&standalone_release);
-    igi::retail::script::Host_SetQvmBlockRelease(&block_release);
+    igi::retail::script::Sys_SetQvmStandaloneRelease(&standalone_release);
+    igi::retail::script::Sys_SetQvmBlockRelease(&block_release);
     const std::int32_t result = igi::retail::script::Qvm_Cleanup(buffer);
     std::printf("RET=%d\n", result);
     std::printf("EVENTS=");
@@ -285,7 +285,7 @@ def main() -> int:
             "The retail byte range of 0x004B83D0 was executed under Unicorn with the three "
             "callees (0x004B6380, 0x004BD380, 0x004B0D10) hooked as sentinel-returning stubs; "
             "the current C++ implementation was compiled with equivalent sentinel stubs "
-            "(Resource_Unload linked, 0x004BD380/0x004B0D10 via Host_SetQvm*Release). For each "
+            "(Resource_Unload linked, 0x004BD380/0x004B0D10 via the QVM release hook). For each "
             "case the returned value, the callee call sequence, and the untouched 0x100-byte "
             "qvm body were compared. Emulation is used because this ARM64 macOS host cannot "
             "launch the Windows x86 retail process."

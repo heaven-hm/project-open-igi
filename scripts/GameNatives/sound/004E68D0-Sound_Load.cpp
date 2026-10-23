@@ -1,6 +1,6 @@
 // IGI native provenance: Sound_Load - 0x004E68D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004E68D0-Sound_Load.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Sound_Load.hpp"
+#include "Sound_Load.h"
 int Sound_Load(void* context)
 
 // Sig: void Sound_Load(char *sound_dir)

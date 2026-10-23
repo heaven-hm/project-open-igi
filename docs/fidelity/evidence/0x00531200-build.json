@@ -1,0 +1,12 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x00531200",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "12093bb8efac8a3389027b8230d5911f1a4b547ad28249a454c4fab9ea875987",
+ "executed": true,
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c scripts/GameNatives/renderlight/00531200-RenderLight_Invoke13.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+}

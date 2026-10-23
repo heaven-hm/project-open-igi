@@ -1,6 +1,6 @@
 // IGI native provenance: MovieSubtitle_RegisterText - 0x00415260 - CFG score 97.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00415260-MovieSubtitle_RegisterText.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00415260-MovieSubtitle_RegisterText.hpp"
+#include "MovieSubtitle_RegisterText.h"
 int MovieSubtitle_RegisterText(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , int arg7, char* arg8, float arg9)
 
 // Sig: void MovieSubtitle_RegisterText(...)

@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_RunToNode - 0x0044D510 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D510-AIAction_RunToNode.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D510-AIAction_RunToNode.hpp"
+#include "AIAction_RunToNode.h"
 int AIAction_RunToNode(int context, float arg2 )
 
 // Sig: void AIAction_RunToNode(int nodeId, int flags)

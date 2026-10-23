@@ -1,6 +1,6 @@
 // IGI native provenance: Human_DamageApply - 0x00412440 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00412440-Human_DamageApply.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Human_DamageApply.hpp"
+#include "Human_DamageApply.h"
 float Human_DamageApply(float context, int* arg2) // Sig: void Human_DamageApply(HumanPlayer* human)
 // Note: Applies DAMAGE/knockback to the human player: reads enable flag byte
 // +0xCF6 and patrol sub-struct +0x254 of the human struct. IGI-MP disables

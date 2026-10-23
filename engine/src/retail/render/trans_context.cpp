@@ -24,12 +24,16 @@ std::int32_t trans_context_install_count = 0;
 // increments the install counter. The render method is selected through the render-method
 // table indexed by the id returned when "SetActiveTransContext" was registered; the port has
 // no render-method table yet, so that dispatch is the outstanding dependency.
-// Status/limits: STRUCTURALLY_VERIFIED for the copy, the installed flag and the install counter; the render-method dispatch is not implemented.
-void Transcontext_SetActiveTransContext(const TransContext& context)
+// Returns: the incremented install counter, as the retail body does (0x00497EA6-0x00497EB6 reads
+// 0x006E5BB4, sets 0x006E5BB0 to 1, increments and returns the new value through EAX).
+// Status/limits: STRUCTURALLY_VERIFIED for the copy, the installed flag, the install counter and the return
+// value; the render-method dispatch through the table at 0x00A94E84 is not implemented.
+std::int32_t Transcontext_SetActiveTransContext(const TransContext& context)
 {
     std::memcpy(active_trans_context.bytes.data(), context.bytes.data(), trans_context_size);
     trans_context_installed = 1;
     ++trans_context_install_count;
+    return trans_context_install_count;
 }
 
 TransContext& Transcontext_GetActiveTransContext()

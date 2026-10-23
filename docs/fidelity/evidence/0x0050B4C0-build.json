@@ -1,0 +1,12 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x0050B4C0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "3a19a0773bc4c1c5106db4c1f92e15a1333c1832fe762fc20d54278fcc653bca",
+ "executed": true,
+ "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c scripts/GameNatives/physics/0050B4C0-Physics_EvaluateAreaCriteria_12.cpp -o /tmp/native-x86.o",
+ "target": "Windows x86 (Intel 80386 COFF object)",
+ "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+}

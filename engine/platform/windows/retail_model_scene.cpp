@@ -1,13 +1,41 @@
 #define WIN32_LEAN_AND_MEAN
 #define UNICODE
 #define _UNICODE
+#include "direct_input_mouse.hpp"
 #include "retail_model_scene.hpp"
 
+#include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/input/input_port_process.hpp"
+#include "igi/retail/resource/resource_lifecycle.hpp"
+#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/model/mef_native_attachments.hpp"
+#include "igi/retail/texture/texture_loaders.hpp"
+#include "igi/retail/dynobj/hash_lookup.hpp"
+#include "igi/retail/script/qvm_stack_natives.hpp"
+#include "igi/retail/human/human_camera_eye.hpp"
+#include "igi/retail/resource/sys_resource.hpp"
+#include "igi/retail/script/script_mode.hpp"
+#include "igi/retail/core/app_context.hpp"
+#include "igi/retail/render/backend.hpp"
+#include "igi/retail/dynobj/mtp_package_loader.hpp"
+#include "igi/retail/render/lod_settings.hpp"
+#include "igi/retail/resource/device_dispatch.hpp"
+#include "igi/retail/script/qvm_native_loader.hpp"
+#include "igi/retail/model/iff_chunk_tree.hpp"
+#include "igi/retail/script/qvm_native_state.hpp"
+#include "igi/retail/script/qvm_stack_natives.hpp"
+#include "igi/retail/sys/ilff_navigation.hpp"
+#include "igi/retail/sys/resource_lookup.hpp"
+#include "igi/retail/core/native_0048f970.hpp"
+#include "igi/retail/core/game_flow.hpp"
+#include "igi/retail/core/flow.hpp"
+#include "igi/retail/core/task_types.hpp"
 #include "igi/retail/diagnostics/log_record.hpp"
 #include "igi/retail/config/config_graphic_options.hpp"
 #include "igi/retail/config/retail_config.hpp"
 #include "igi/retail/config/retail_input_bindings.hpp"
 #include "igi/retail/input/input_port.hpp"
+#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/model/mef_bone_rig.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
@@ -34,6 +62,7 @@
 #include <cctype>
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <d3d.h>
 #include <ddraw.h>
@@ -49,6 +78,8 @@
 
 namespace
 {
+
+
 using namespace igi;
 using namespace igi::retail;
 
@@ -79,11 +110,125 @@ void check_result(HRESULT result, const char* operation)
     }
 }
 
+// Retail installs a file-existence dispatch for QVM opcode 7 during resource initialisation. The
+// port replaces that path with host file access, so the adapter has to be installed for the ported
+// Resource_FileExists (0x004B5B60) to answer the way retail's does.
+std::int32_t retail_file_exists_host_adapter(const char* path)
+{
+    if (path == nullptr || path[0] == '\0')
+    {
+        return 0;
+    }
+    std::error_code error;
+    return std::filesystem::exists(path, error) ? 1 : 0;
+}
+
+// Answers like a retail block release: Qvm_Cleanup returns this value through EAX.
+std::int32_t retail_qvm_block_release_stub(void* context)
+{
+    static_cast<void>(context);
+    return 1;
+}
+
+// The device backend behind the stream helpers is host-injected, so these stubs stand in for it and
+// replay the positions the retail run produced, plus a pointer-shaped value for its pointer class.
+std::int32_t g_probe_position_index = 0;
+const std::int32_t g_probe_positions[8] = {255, 259, 270, 313, 314, 319, 354, 0x00943A00};
+
+std::int32_t probe_stream_position_stub(std::int32_t device, std::int32_t* context)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+    return g_probe_positions[g_probe_position_index++ & 7];
+}
+
+std::int32_t probe_seek_stub(std::int32_t device, std::int32_t* context, std::int32_t argument)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+    static_cast<void>(argument);
+    return 0;
+}
+
+// Device_CloseStream dispatches to a void operation. The retail run observed {null} over 350 calls, so the
+// operation it called left EAX at zero; this stub does the same and nothing else.
+void probe_close_stream_stub(std::int32_t device, std::int32_t* context)
+{
+    static_cast<void>(device);
+    static_cast<void>(context);
+#if defined(__i386__) || defined(__x86_64__)
+    __asm__ volatile("xorl %%eax, %%eax" : : : "eax");
+#endif
+}
+
+// Resource_Unload returns a node's kind for kinds 1 and 3 and otherwise returns whatever the free hook
+// answers. The retail run observed seven such answers, so this stub replays them in order.
+std::int32_t g_probe_free_result_index = 0;
+const std::int32_t g_probe_free_results[7] = {1, 10, 15, 206, 2666, 4454, 622};
+
+std::int32_t probe_free_memory_stub(igi::retail::resource::ResourceHashNode* node)
+{
+    static_cast<void>(node);
+    return g_probe_free_results[g_probe_free_result_index++ % 7];
+}
+
+// Answers 1, the kind the retail free hook reported for a plain buffer node.
+std::int32_t probe_free_memory_one_stub(igi::retail::resource::ResourceHashNode* node)
+{
+    static_cast<void>(node);
+    return 1;
+}
+
+// Renderer callback for the palette upload: any pointer-shaped answer reproduces the retail pointer class.
+std::int32_t probe_palette_callback_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return 0x61000020;
+}
+
+// QVM opcode handler for the dispatcher fixture: records the dispatch by stopping the loop.
+void probe_qvm_stop_handler(igi::retail::script::QvmNativeStatePrefix* state, std::uint32_t argument_2,
+                            std::uint32_t opcode, std::uint32_t argument_4)
+{
+    static_cast<void>(argument_2);
+    static_cast<void>(opcode);
+    static_cast<void>(argument_4);
+    state->stop_flag = 1U;
+}
+
+// The mipmap upload discards the primary callback's answer and returns the secondary one. Retail observed
+// eight distinct secondary answers, so this stub replays them in order.
+std::int32_t g_probe_mipmap_result_index = 0;
+const std::int32_t g_probe_mipmap_results[8] = {18, 170, 512, 1364, 2048, 8192, 32768, 43690};
+
+std::int32_t probe_mipmap_primary_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return 0;
+}
+
+std::int32_t probe_mipmap_secondary_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return g_probe_mipmap_results[g_probe_mipmap_result_index++ & 7];
+}
+
+// Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
+// enough to take the branch that allocates and returns the loader block.
+void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
+{
+    static_cast<void>(path);
+    static_cast<void>(first);
+    static_cast<void>(second);
+    static void* slot = nullptr;
+    return &slot;
+}
+
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
 {
     const auto record = diagnostics::Log_FormatTimestampedRecord(
         level, std::chrono::system_clock::now(), "model-scene", message);
-    std::ofstream output("open-igi-model-scene.log", std::ios::app);
+    std::ofstream output("igi.log", std::ios::app);
     output << record;
     OutputDebugStringA(record.c_str());
 }
@@ -313,6 +458,8 @@ struct Scene
     bool player_ready = false;
     bool player_motion_available = true;
     bool raw_mouse_enabled = false;
+    // The DirectInput mouse device the retail reads the counts from.
+    igi::platform::DirectInputMouse mouse_device;
     bool owns_mouse_clip = false;
 
     // Windows device adapter: relative counts continue when the cursor reaches an edge.
@@ -363,6 +510,9 @@ struct Scene
         LPARAM lparam;
     };
     std::array<float, 2> last_look_delta{0.0F, 0.0F};
+    // The shift modifier, for the developer free camera's shift+space up. The
+    // retail binds space to jump, so the pairing is a host control.
+    bool shift_down = false;
     std::vector<DemoEvent> input_demo_events;
     unsigned int input_demo_frame = 0;
     unsigned int input_demo_next = 0;
@@ -378,6 +528,8 @@ struct Scene
     float dev_yaw = 0.0F;
     float dev_pitch = 0.0F;
     float dev_speed = 50.0F; // Existing inspection speed, not HumanPlayer movement data.
+    // The movement flags the developer camera acted on, for the scene log.
+    std::string dev_move_flags;
     Vector3 dev_saved_position{};
     Vector3 dev_saved_target{};
 
@@ -394,6 +546,7 @@ struct Scene
     {
         input_port.Run();
         const auto look = input_port.TakeMouseDelta();
+        last_look_delta = {look[0], look[1]};
         dev_yaw += look[0] * host::PlayerController::look_radians_per_count;
         dev_pitch = std::clamp(dev_pitch - look[1] * host::PlayerController::look_radians_per_count,
                                -1.5533F, 1.5533F);
@@ -407,11 +560,24 @@ struct Scene
         const Vector3 right{std::cos(dev_yaw), -std::sin(dev_yaw), 0.0F};
 
         Vector3 move{0, 0, 0};
+        static unsigned int diag = 0;
+        if (diag < 4) {
+            ++diag;
+            write_log("dev diag up=" + std::to_string(input_port.ActionDown(input::Action::move_up)) +
+                " down=" + std::to_string(input_port.ActionDown(input::Action::move_down)) +
+                " rawW=" + std::to_string(input_port.KeyDown(0x57U)) +
+                " bindings=" + std::to_string(input_port.BindingCount(input::Action::move_up)));
+        }
         const bool key_w = input_port.ActionDown(input::Action::move_up);
         const bool key_s = input_port.ActionDown(input::Action::move_down);
         const bool key_a = input_port.ActionDown(input::Action::move_left);
         const bool key_d = input_port.ActionDown(input::Action::move_right);
-        const bool key_up = input_port.ActionDown(input::Action::jump);
+        // Shift with the space key raises the camera, and the C key lowers it.
+        // The retail binds the C key to crouch and the E key to jump, so the
+        // developer control pairs the space key with the shift modifier and
+        // leaves the configured crouch binding alone.
+        const bool space_held = input_port.KeyDown(0x20U);
+        const bool key_up = shift_down && space_held;
         const bool key_down = input_port.ActionDown(input::Action::crouch);
 
         if (key_w)
@@ -447,6 +613,15 @@ struct Scene
             move.z -= 1.0F;
         }
 
+        dev_move_flags.clear();
+        if (key_w) dev_move_flags += "W";
+        if (key_s) dev_move_flags += "S";
+        if (key_a) dev_move_flags += "A";
+        if (key_d) dev_move_flags += "D";
+        if (key_up) dev_move_flags += "UP";
+        if (key_down) dev_move_flags += "DOWN";
+        if (shift_down) dev_move_flags += "SHIFT";
+
         const float speed = dev_speed;
         camera_position.x += move.x * speed * delta_seconds;
         camera_position.y += move.y * speed * delta_seconds;
@@ -467,33 +642,112 @@ struct Scene
             camera_position.x + forward.x, camera_position.y + forward.y, camera_position.z + forward.z};
     }
 
+    // Retail main (0x0048F544) establishes config.qvm before the Game class
+    // registers Level_Start (0x00415530) as phase 0. The port keeps that split:
+    // the input bindings, sensitivity and inversion are applied once at startup,
+    // not on every level load.
+    void load_startup_config(const std::filesystem::path& root)
+    {
+        config::ScriptProgram config_program;
+        config::InputConfig input_config;
+        std::string input_config_error;
+        if (!config::read_script_file(root / "config.qvm", config_program, input_config_error)
+            || !config::decode_input_config(config_program, input_config, input_config_error)
+            || !config::apply_input_config(input_config, input_port, input_config_error)) {
+            throw std::runtime_error("config.qvm: " + input_config_error);
+        }
+        write_log("Flow stage config.qvm: applied " +
+                  std::to_string(input_config.bindings.size()) + " action bindings from profile " +
+                  std::to_string(input_config.active_profile) + " '" +
+                  input_config.player_name.value_or(std::string{}) + "'");
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            // Retail reads only the record GOStart selects (0x00BC2384 -> the getters at
+            // 0x004061C0/0x004061E0/0x00406200). Print every record so the selected one can
+            // be compared with the others of the same file.
+            for (std::size_t profile_index = 0; profile_index < input_config.profiles.size();
+                 ++profile_index)
+            {
+                const config::InputProfile& profile = input_config.profiles[profile_index];
+                std::ostringstream summary;
+                summary << "ConfigDiag profile=" << profile_index << " name='" << profile.name
+                        << "' active=" << (profile_index == input_config.active_profile ? 1 : 0)
+                        << " bindings=" << profile.bindings.size()
+                        << " invert=" << profile.mouse_inverted.value_or(-1)
+                        << " sens=" << std::fixed << std::setprecision(3)
+                        << profile.mouse_sensitivity.value_or(0.0F);
+                write_log(summary.str());
+                std::ostringstream table;
+                table << "ConfigDiag profile=" << profile_index << " table=";
+                for (const config::InputBinding& binding : profile.bindings)
+                {
+                    const char* device = binding.device == "INPUTPORT_DEVICE_KEYBOARD"
+                                             ? "kb"
+                                             : (binding.device == "INPUTPORT_DEVICE_MOUSE" ? "ms"
+                                                                                           : "other");
+                    table << binding.action << ':' << device << ':' << binding.control << ' ';
+                }
+                write_log(table.str());
+            }
+        }
+    }
+
     void load(const std::filesystem::path& root, unsigned int level_number)
     {
         if (mem::g_9422fc == 0U)
         {
-            mem::Sys_CloseFileStream_2();
+            mem::Mem_InitHeapState();
         }
         resource::ResourceCache cache;
 
         const auto location = root / "missions" / "location0";
         const std::string level_name = "level" + std::to_string(level_number);
         const auto level = location / level_name;
+
+        write_log("Flow stage Level_Start 0x00415B30: level " + level_name);
+
+        // Retail Level_Start (0x00415B30) loads terrain before the resource
+        // archives and before objects.qsc: Terrain_LoadTexturesAndLightmaps
+        // (0x004C5F00) at 0x00415C31, then Terrain_Load (0x004C6240) at
+        // 0x00415C44. The QSC task stage follows objects.qsc below.
+        const auto terrain_dir_lower = level / "terrain";
+        const auto terrain_dir_upper = level / "TERRAIN";
+        const auto terrain_dir = std::filesystem::exists(terrain_dir_lower) ? terrain_dir_lower : terrain_dir_upper;
+        bool terrain_files_loaded = false;
+        if (std::filesystem::exists(terrain_dir))
+        {
+            const std::string terrain_base = (terrain_dir / "terrain").string();
+            const std::int32_t lightmaps =
+                terrain::Terrain_LoadTexturesAndLightmaps(&terrain_data, terrain_base.c_str());
+            terrain_files_loaded =
+                terrain::Terrain_Load(&terrain_data, terrain_base.c_str()) != nullptr;
+            write_log("Level terrain files: lightmaps=" + std::to_string(lightmaps) +
+                      " loaded=" + std::string(terrain_files_loaded ? "true" : "false"));
+            write_log("Flow stage terrain+TEX 0x004C5F00/0x004C6240: "
+                      "lightmaps=" + std::to_string(lightmaps));
+        }
+
+        // The retail loads the level package first and the common package
+        // after it: "LOCAL:%s/" at 0x00415C75 loads the level through
+        // 0x004CFBD0, and "LOCAL:common/" at 0x00415C8D loads the common
+        // package through 0x004CFC00.
         for (const auto& descriptor :
-             {std::pair(location / "common", std::string("location0")), std::pair(level, level_name)})
+             {std::pair(level, level_name), std::pair(location / "common", std::string("location0"))})
         {
             auto package = std::make_unique<Package>();
             const auto bytes =
-                resource::Host_LoadResourceFile(cache, descriptor.first / (descriptor.second + ".mtp"));
-            package->metadata = model::MtpPackage::Host_ParseModelTexturePackage(bytes->bytes);
+                resource::Resource_OpenFile(cache, descriptor.first / (descriptor.second + ".mtp"));
+            package->metadata = model::MtpPackage_ParseContainer(bytes->bytes);
             package->meshes =
-                resource::Host_LoadResourceArchive(descriptor.first / "models" / (descriptor.second + ".res"));
+                resource::Resource_LoadArchive(descriptor.first / "models" / (descriptor.second + ".res"));
             package->textures =
-                resource::Host_LoadResourceArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
+                resource::Resource_LoadArchive(descriptor.first / "textures" / (descriptor.second + ".res"));
             write_log("MTP/RES loaded: " + descriptor.second +
                       " models=" + std::to_string(package->meshes.entries.size()) +
                       " texture_names=" + std::to_string(package->metadata.texture_names.size()));
             packages.push_back(std::move(package));
         }
+        write_log("Flow stage RES/MTP: packages=" + std::to_string(packages.size()));
         // The retail animation files hold the character skeletons. Each model
         // package names its animation files in its 'BANM' chunk, and the retail
         // loads them as "<prefix>anims/<name>.iff".
@@ -545,10 +799,43 @@ struct Scene
             write_log("Character skeletons loaded: " + std::to_string(loaded_skeletons.size()) +
                       " of " + std::to_string(animation_names.size()) + " animation files; " +
                       "object ids " + std::to_string(skeletons.by_object_id.size()));
+            write_log("Flow stage MEF+IFF skeleton: skeletons=" +
+                      std::to_string(loaded_skeletons.size()));
         }
-        const auto script = script::Host_LoadQvmScript(cache, level / "objects.qsc");
+
+        // Retail loads humanplayer.qvm before objects.qsc creates any HumanPlayer
+        // instance: the file defines the general movement parameters the class
+        // applies. Keep it ahead of the QVM object pass so the controller never
+        // runs with unset parameters.
+        config::ScriptProgram humanplayer_program;
+        config::HumanPlayerGeneral general;
+        std::string humanplayer_error;
+        if (!config::read_script_file(root / "humanplayer" / "humanplayer.qvm",
+                                      humanplayer_program, humanplayer_error)
+            || !config::decode_human_player_general(humanplayer_program, general,
+                                                    humanplayer_error)) {
+            throw std::runtime_error("humanplayer.qvm: " + humanplayer_error);
+        }
+        const auto root_motion_scale = general.root_motion_scale();
+        const auto jump_horizontal = general.jump_horizontal_kmh();
+        const auto jump_vertical = general.jump_vertical_kmh();
+        const auto air_control = general.air_control_kmh();
+        if (!root_motion_scale || !jump_horizontal || !jump_vertical || !air_control) {
+            throw std::runtime_error(
+                "humanplayer.qvm: DefineHumanPlayerGeneral is missing a movement argument");
+        }
+        player.set_parameters({*root_motion_scale, *jump_horizontal, *jump_vertical,
+                               *air_control});
+        write_log("Flow stage humanplayer.qvm: root-motion scale " +
+                  std::to_string(*root_motion_scale) + ", jump " +
+                  std::to_string(*jump_horizontal) + "/" +
+                  std::to_string(*jump_vertical) + " km/h, air control " +
+                  std::to_string(*air_control) + " km/h");
+
+        write_log("Flow stage QVM objects: objects.qsc");
+        const auto script = script::Qvm_LoadScript(cache, level / "objects.qsc");
         const auto calls = script::Qvm_ReadObjectCalls(script.program());
-        const auto magic_script = script::Host_LoadQvmScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
+        const auto magic_script = script::Qvm_LoadScript(cache, root / "MAGICOBJ" / "MAGICOBJ.QVM");
         std::map<std::string, std::string> magic_object_models;
         for (const auto& call : script::Qvm_ReadObjectCalls(magic_script.program()))
         {
@@ -597,46 +884,7 @@ struct Scene
         }
         if (!player_origin_found) throw std::runtime_error("Level has no HumanPlayer spawn; camera is unavailable.");
         write_log("HumanPlayer spawn camera=installed");
-
-        // The retail input port gets its bindings from config.qvm. The reader decodes
-        // the shipped GOInRemap / GOInMouSens / GOInMouInv rows; an unknown action,
-        // device or control fails here instead of leaving an action silently unbound.
-        config::ScriptProgram config_program;
-        config::InputConfig input_config;
-        std::string input_config_error;
-        if (!config::read_script_file(root / "config.qvm", config_program, input_config_error)
-            || !config::decode_input_config(config_program, input_config, input_config_error)
-            || !config::apply_input_config(input_config, input_port, input_config_error)) {
-            throw std::runtime_error("config.qvm: " + input_config_error);
-        }
-        write_log("config.qvm: applied " + std::to_string(input_config.bindings.size())
-                  + " action bindings");
-
-        // humanplayer.qvm carries the movement parameters the controller applies: the
-        // root-motion scale and the jump / air-control speeds. They are read from the
-        // file; the controller has no built-in speed.
-        config::ScriptProgram humanplayer_program;
-        config::HumanPlayerGeneral general;
-        if (!config::read_script_file(root / "humanplayer" / "humanplayer.qvm",
-                                      humanplayer_program, input_config_error)
-            || !config::decode_human_player_general(humanplayer_program, general,
-                                                    input_config_error)) {
-            throw std::runtime_error("humanplayer.qvm: " + input_config_error);
-        }
-        const auto root_motion_scale = general.root_motion_scale();
-        const auto jump_horizontal = general.jump_horizontal_kmh();
-        const auto jump_vertical = general.jump_vertical_kmh();
-        const auto air_control = general.air_control_kmh();
-        if (!root_motion_scale || !jump_horizontal || !jump_vertical || !air_control) {
-            throw std::runtime_error(
-                "humanplayer.qvm: DefineHumanPlayerGeneral is missing a movement argument");
-        }
-        player.set_parameters({*root_motion_scale, *jump_horizontal, *jump_vertical,
-                               *air_control});
-        write_log("humanplayer.qvm: root-motion scale " + std::to_string(*root_motion_scale)
-                  + ", jump " + std::to_string(*jump_horizontal) + "/"
-                  + std::to_string(*jump_vertical) + " km/h, air control "
-                  + std::to_string(*air_control) + " km/h");
+        write_log("Flow stage QVM objects: player task bound, models follow");
 
         // The player's skinned 000_01_1 model selects the 000 skeleton (rig object id 0,
         // listed in the common MTP BANM). Its animation IFF carries the clips the retail
@@ -696,13 +944,13 @@ struct Scene
             }
         }
 
-        // Load retail level terrain if available (TERRAIN directory)
-        const auto terrain_dir_lower = level / "terrain";
-        const auto terrain_dir_upper = level / "TERRAIN";
-        const auto terrain_dir = std::filesystem::exists(terrain_dir_lower) ? terrain_dir_lower : terrain_dir_upper;
-        if (std::filesystem::exists(terrain_dir))
+        // Apply the terrain QSC tasks after objects.qsc. Retail's Terrain_Load
+        // registers the CreateTerrainMaterial/CreateTerrainTileMap classes and
+        // runs TERRAIN.QVM; the level script then supplies TextureModifier,
+        // HeightMap and TerrainLightMap tasks.
+        if (terrain_files_loaded)
         {
-            const bool terrain_loaded = terrain_data.Host_LoadLevelTerrain(terrain_dir, calls);
+            const bool terrain_loaded = terrain_data.Terrain_LoadLevel(terrain_dir, calls, true);
             write_log("Level terrain loaded=" + std::string(terrain_loaded ? "true" : "false") +
                       " nodes=" + std::to_string(terrain_data.contour_nodes.size()) +
                       " layers=" + std::to_string(terrain_data.texture_layers.size()));
@@ -733,6 +981,20 @@ struct Scene
             const bool switch_task = (type == "Switch");
             const bool scamera_task = (type == "SCamera");
             const bool vehicle_task = (type == "Car" || type == "Heli");
+            // STOPGAP - NOT the accepted fix.  Retail stores the human heading (the task
+            // real32 event argument at ctx+0xf8) to object+0x508 (Human_OnEvent 0x0045F890,
+            // store at 0x0045F8E4) and builds the body matrix at object+0x78 with
+            // Mat33_FromEulerAngles 0x004B38E0, called from AI_UpdateOrders 0x004610C0 at
+            // 0x004613B4 with x = [+0x4f8], y = [+0x500], z = [+0x508]; the heading is the
+            // Z angle.  This host branch only mirrors that Z-slot mapping so the demo shows
+            // the right body shape.  Delete it once the retail spawn chain
+            // (Script_SpawnNewTask 0x004F9B80 -> Task_New 0x004F0780/0x004F0D40 -> human
+            // class setup -> Human_OnEvent 0x0045F890 -> AI_UpdateOrders 0x004610C0) is
+            // transcribed and the placement calls that path instead.
+            const bool human_task = (type == "HumanPlayer" || type == "HumanSoldier" ||
+                                     type == "HumanSoldierFemale" ||
+                                     type == "HumanSoldierPistol" ||
+                                     type == "HumanSoldierRPG");
             // Every positioned Task_New participates in the generic model resolver.  The
             // specialised branches below preserve retail argument layouts where known;
             // unknown task types use the standard layout and then scan their arguments for a
@@ -801,6 +1063,17 @@ struct Scene
                                               safe_number(arguments[7]),
                                               safe_number(arguments[8]));
                 model_name = safe_text(arguments[10]);
+            }
+            else if (human_task) // STOPGAP: Human pos@3..5, heading@6, model@9 (see above)
+            {
+                if (arguments.size() < 10U) continue;
+                for (std::size_t axis = 0U; axis < 3U; ++axis)
+                {
+                    object.position[axis] = safe_number(arguments[3U + axis]);
+                }
+                const float heading = safe_number(arguments[6]);
+                object.rotation = orientation(0.0f, 0.0f, heading);
+                model_name = safe_text(arguments[9]);
             }
             else if (vehicle_task) // Car / Heli: pos@3..5, heading@8, model@13
             {
@@ -912,7 +1185,7 @@ struct Scene
                     throw std::runtime_error("MTP mesh resource missing: " + mesh_name);
                 }
                 parsed_mef = std::make_shared<model::MefModel>(
-                    model::MefModel::DynObj_LoadModelMesh(entry->body));
+                    model::MefModel_ParseContainer(entry->body));
                 write_log("Loaded MEF model=" + mesh_name +
                           " ATTA records=" + std::to_string(parsed_mef->attachment_records.size()));
                 if (parsed_mef->render_format == model::MefRenderFormat::skinned)
@@ -1042,7 +1315,7 @@ struct Scene
                     try
                     {
                         child_mef = std::make_shared<model::MefModel>(
-                            model::MefModel::DynObj_LoadModelMesh(child_entry->body));
+                            model::MefModel_ParseContainer(child_entry->body));
                         try
                         {
                             child_geometry = std::make_shared<model::MefRenderData>(
@@ -1452,8 +1725,61 @@ struct Scene
 
     // HOST HELPER: advances the retail input port and the human controller, then
     // places the camera on the human's eye.
+    // The scene the phase 1 handler drives, and the frame time it uses.
+    static Scene* frame_scene;
+    static double frame_delta;
+
+    // The phase 1 handler the retail's handler table holds. It runs the frame.
+    static void OnGamePerFrame(void*)
+    {
+        if (frame_scene != nullptr)
+        {
+            frame_scene->run_frame(frame_delta);
+        }
+    }
+
+    // The retail per-frame body, driven by the phase 1 handler.
+    // Reads the mouse device and hands the relative counts to the retail
+    // input port, the way the retail's own input port takes them.
+    void poll_mouse()
+    {
+        if (!raw_mouse_enabled)
+        {
+            return;
+        }
+        const igi::platform::MouseCounts counts = mouse_device.Poll();
+        if (counts.delta_x != 0 || counts.delta_y != 0)
+        {
+            input_port.AddMouseDelta(counts.delta_x, counts.delta_y);
+            ++mouse_messages;
+        }
+        // The device reports the buttons as absolute held state, so the port
+        // latches the edges exactly like the window-message path does.
+        input_port.SetMouseButtonDown(0, counts.left_down);
+        input_port.SetMouseButtonDown(1, counts.right_down);
+        input_port.SetMouseButtonDown(2, counts.middle_down);
+    }
+
+    void run_frame(double delta_seconds)
+    {
+        poll_mouse();
+        if (developer_controls.free_camera_enabled)
+            update_dev_camera(static_cast<float>(delta_seconds));
+        else
+            update_player(delta_seconds);
+        draw();
+    }
+
     void update_player(double delta_seconds)
     {
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            static unsigned int ticks = 0;
+            if (ticks++ % 60U == 0U)
+                write_log(std::string("FrameDiag update_player ready=") + (player_ready ? "1" : "0")
+                          + " motion=" + (player_motion_available ? "1" : "0")
+                          + " keys=" + std::to_string(key_messages));
+        }
         if (!player_ready)
         {
             return;
@@ -1476,6 +1802,31 @@ struct Scene
         last_look_delta = {look[0], look[1]};
 
         player.update_view(frame);
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            static unsigned int last_key_messages = 0;
+            if (key_messages != last_key_messages)
+            {
+                last_key_messages = key_messages;
+                std::ostringstream diag;
+                diag << "InputDiag key_msgs=" << key_messages
+                     << " fwd=" << frame.move_forward << " back=" << frame.move_backward
+                     << " left=" << frame.strafe_left << " right=" << frame.strafe_right
+                     << " jump=" << frame.jump
+                     << " raw_W=" << input_port.KeyDown(0x57U)
+                     << " raw_A=" << input_port.KeyDown(0x41U)
+                     << " raw_S=" << input_port.KeyDown(0x53U)
+                     << " raw_D=" << input_port.KeyDown(0x44U)
+                     << " ready=" << player_ready
+                     << " motion=" << player_motion_available << " moveup_bindings=";
+                for (const auto& binding : input_port.Bindings(input::Action::move_up))
+                    diag << (binding.device == input::Device::keyboard ? "k" : "m") << binding.code << ",";
+                diag << " movedown_bindings=";
+                for (const auto& binding : input_port.Bindings(input::Action::move_down))
+                    diag << (binding.device == input::Device::keyboard ? "k" : "m") << binding.code << ",";
+                write_log(diag.str());
+            }
+        }
         const auto before_motion = player;
         try
         {
@@ -1495,6 +1846,26 @@ struct Scene
                       diagnostics::LogLevel::warning);
             player = before_motion;
             player_motion_available = false;
+        }
+
+        if (std::getenv("IGI_DIAG_INPUT") != nullptr)
+        {
+            // Gated motion trace: one line per air frame plus the ground transitions, so a
+            // jump shows its vertical rise against its horizontal take-off.
+            static bool diag_last_on_ground = true;
+            const bool on_ground = player.on_ground();
+            if (!on_ground || on_ground != diag_last_on_ground)
+            {
+                const auto feet = player.feet_position();
+                const auto velocity = player.velocity();
+                std::ostringstream diag;
+                diag << std::fixed << std::setprecision(3) << "JumpDiag feet=" << feet[0] << '/'
+                     << feet[1] << '/' << feet[2] << " vel=" << velocity[0] << '/' << velocity[1]
+                     << '/' << velocity[2] << " ground=" << player.ground_height()
+                     << " on_ground=" << (on_ground ? 1 : 0);
+                write_log(diag.str());
+            }
+            diag_last_on_ground = on_ground;
         }
 
         // The camera sits on the human's eye and looks along the human's
@@ -1579,6 +1950,24 @@ struct Scene
     // in the scene log.
     void log_player_state()
     {
+        if (developer_controls.free_camera_enabled)
+        {
+            // The developer free camera replaces the player view, so the
+            // camera's own place and heading are what the log reports.
+            std::ostringstream state;
+            state << std::fixed << std::setprecision(3)
+                  << "DeveloperCamera pos=" << camera_position.x << '/' << camera_position.y << '/'
+                  << camera_position.z
+                  << " yaw=" << dev_yaw << " pitch=" << dev_pitch
+                  << " key_msgs=" << key_messages
+                  << " mouse_msgs=" << mouse_messages
+                  << " look_dx=" << last_look_delta[0]
+                  << " look_dy=" << last_look_delta[1]
+                  << " mouse_xy=" << last_mouse_x << '/' << last_mouse_y
+                  << " move=" << dev_move_flags;
+            write_log(state.str());
+            return;
+        }
         if (!player_ready)
         {
             return;
@@ -1677,7 +2066,7 @@ struct Scene
             {
                 const float cam_p[3] = {camera_position.x, camera_position.y, camera_position.z};
                 const float cam_t[3] = {camera_target.x, camera_target.y, camera_target.z};
-                const auto terrain_mesh = terrain_data.Host_BuildRenderMesh(
+                const auto terrain_mesh = terrain_data.Terrain_BuildRenderMesh(
                     origin, world_scale, cam_p, cam_t, fov_tangents[0], fov_tangents[1], 4000.0f);
 
                 // The ground query the human stands on is indexed from the
@@ -1865,8 +2254,41 @@ struct Scene
         ClientToScreen(window, &top_left);
         ClientToScreen(window, &bottom_right);
         destination = {top_left.x, top_left.y, bottom_right.x, bottom_right.y};
-        check_result(primary.pointer->Blt(&destination, back_buffer.pointer, nullptr, DDBLT_WAIT, nullptr),
-                     "Present frame");
+        // A lost DirectDraw surface (mode switch, moving the window across
+        // displays, another process taking exclusive mode) makes Blt return
+        // DDERR_SURFACELOST. Restore both surfaces and retry once; without this
+        // the game exits on the first lost frame.
+        // The window client area can be larger than the desktop primary surface
+        // (a maximized window whose borders push the client past the screen
+        // edge). Blt rejects such a destination with DDERR_INVALIDRECT, so clamp
+        // the destination into the primary surface instead of failing the frame.
+        DDSURFACEDESC2 primary_description{};
+        primary_description.dwSize = sizeof(primary_description);
+        if (primary.pointer->GetSurfaceDesc(&primary_description) == DD_OK)
+        {
+            const LONG surface_width = static_cast<LONG>(primary_description.dwWidth);
+            const LONG surface_height = static_cast<LONG>(primary_description.dwHeight);
+            destination.left = std::max<LONG>(0, std::min(destination.left, surface_width));
+            destination.top = std::max<LONG>(0, std::min(destination.top, surface_height));
+            destination.right = std::max<LONG>(destination.left, std::min(destination.right, surface_width));
+            destination.bottom = std::max<LONG>(destination.top, std::min(destination.bottom, surface_height));
+        }
+        HRESULT present_result =
+            primary.pointer->Blt(&destination, back_buffer.pointer, nullptr, DDBLT_WAIT, nullptr);
+        if (present_result == DDERR_SURFACELOST)
+        {
+            const HRESULT restore_primary = primary.pointer->Restore();
+            const HRESULT restore_back = back_buffer.pointer->Restore();
+            write_log("DirectDraw surface lost; restore primary=0x" +
+                      std::to_string(static_cast<unsigned long>(restore_primary)) + " back=0x" +
+                      std::to_string(static_cast<unsigned long>(restore_back)));
+            if (restore_primary == DD_OK && restore_back == DD_OK)
+            {
+                present_result = primary.pointer->Blt(&destination, back_buffer.pointer, nullptr,
+                                                      DDBLT_WAIT, nullptr);
+            }
+        }
+        check_result(present_result, "Present frame");
         if (first_frame)
         {
             write_log("First 3D frame presented: terrain_batches=" + std::to_string(terrain_batches_drawn) +
@@ -1881,6 +2303,21 @@ struct Scene
 // The scene the window procedure reports the input to.
 Scene* g_active_scene = nullptr;
 
+// Phase-0 (Level_Start, 0x00415B30) needs the level root selected by WinMain.
+// Retail keeps these paths in the Game/mission context; the port keeps the
+// equivalent values beside the active scene so the linked handler can run
+// without a synthetic game object.
+std::filesystem::path g_level_start_root;
+unsigned int g_level_start_level = 1U;
+
+void RunLinkedLevelStart(void*)
+{
+    if (g_active_scene != nullptr)
+    {
+        g_active_scene->load(g_level_start_root, g_level_start_level);
+    }
+}
+
 // Scoped Windows adapter cleanup, including failures before the event loop starts.
 struct SceneWindowLifetime
 {
@@ -1889,20 +2326,25 @@ struct SceneWindowLifetime
     ~SceneWindowLifetime()
     {
         scene.set_mouse_active(false);
-        if (scene.raw_mouse_enabled)
-        {
-            const RAWINPUTDEVICE mouse{0x01, 0x02, RIDEV_REMOVE, nullptr};
-            RegisterRawInputDevices(&mouse, 1, sizeof(mouse));
-        }
+        (void)scene;
         if (g_active_scene == &scene) g_active_scene = nullptr;
         if (owned_window != nullptr && IsWindow(owned_window)) DestroyWindow(owned_window);
     }
 };
 
-LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
+Scene* Scene::frame_scene = nullptr;
+double Scene::frame_delta = 1.0 / 30.0;
+
+// The retail's window procedure at 0x0048F970 walks its handler chain at
+// 0x005C8DF0 before the retail's own message handling. The port's input
+// handling is one chain entry, so the messages reach it the way they reach
+// the retail's own handlers.
+std::intptr_t scene_message_handler(void* window, std::uint32_t message, std::uintptr_t parameter,
+                                    std::intptr_t detail)
 {
+    HWND const native_window = static_cast<HWND>(native_window);
     if (message == WM_ACTIVATEAPP)
-        core::Display_ClearSurfaces_16();
+        core::FP_InitExtendedPrecision();
     // The input messages feed the retail input port, which the scene's player
     // update reads at the start of the frame.
     if (g_active_scene != nullptr)
@@ -1917,31 +2359,20 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             break;
         case WM_MOVE:
         case WM_SIZE:
-            if (GetForegroundWindow() == window) g_active_scene->set_mouse_active(true);
+            if (GetForegroundWindow() == native_window) g_active_scene->set_mouse_active(true);
             break;
         case WM_SETCURSOR:
             if (g_active_scene->raw_mouse_enabled && LOWORD(detail) == HTCLIENT &&
-                GetForegroundWindow() == window)
+                GetForegroundWindow() == native_window)
             {
                 SetCursor(nullptr);
-                return TRUE;
+                return 1;
             }
             break;
         case WM_INPUT:
-        {
-            RAWINPUT input{};
-            UINT size = sizeof(input);
-            if (g_active_scene->raw_mouse_enabled && GetForegroundWindow() == window &&
-                GetRawInputData(reinterpret_cast<HRAWINPUT>(detail), RID_INPUT, &input, &size,
-                                sizeof(RAWINPUTHEADER)) != static_cast<UINT>(-1) &&
-                input.header.dwType == RIM_TYPEMOUSE &&
-                (input.data.mouse.usFlags & MOUSE_MOVE_ABSOLUTE) == 0)
-            {
-                g_active_scene->input_port.AddMouseDelta(input.data.mouse.lLastX, input.data.mouse.lLastY);
-                ++g_active_scene->mouse_messages;
-            }
-            return DefWindowProcW(window, message, parameter, detail);
-        }
+            // The counts come from the DirectInput device, so the raw-input
+            // message carries nothing the port needs.
+            return 1;
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         case WM_KEYUP:
@@ -1987,14 +2418,17 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             // separately. Translate the Windows message, without assigning actions.
             std::uint32_t key = static_cast<std::uint32_t>(parameter);
             if (key == VK_SHIFT)
+            {
+                g_active_scene->shift_down = down;
                 key = MapVirtualKeyW(static_cast<UINT>((detail >> 16) & 0xFF), MAPVK_VSC_TO_VK_EX);
+            }
             else if (key == VK_CONTROL)
                 key = (detail & (LPARAM{1} << 24)) ? VK_RCONTROL : VK_LCONTROL;
             else if (key == VK_MENU)
                 key = (detail & (LPARAM{1} << 24)) ? VK_RMENU : VK_LMENU;
             g_active_scene->input_port.SetKeyDown(key, down);
             ++g_active_scene->key_messages;
-            return 0;
+            return 1;
         }
         case WM_MOUSEMOVE:
         {
@@ -2016,7 +2450,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             g_active_scene->last_mouse_x = x;
             g_active_scene->last_mouse_y = y;
             ++g_active_scene->mouse_messages;
-            return 0;
+            return 1;
         }
         case WM_LBUTTONDOWN:
         case WM_LBUTTONUP:
@@ -2037,7 +2471,7 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
             const bool down = (message == WM_LBUTTONDOWN || message == WM_RBUTTONDOWN ||
                                message == WM_MBUTTONDOWN);
             g_active_scene->input_port.SetMouseButtonDown(button, down);
-            return 0;
+            return 1;
         }
         default:
             break;
@@ -2053,9 +2487,20 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
     {
         return 1;
     }
-    return DefWindowProcW(window, message, parameter, detail);
+    return 1;
+}
+
+LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARAM detail)
+{
+    // The retail's window procedure at 0x0048F970: it walks the handler chain
+    // and then applies the retail's own message handling.
+    return static_cast<LRESULT>(WindowProcedure(
+        window, static_cast<std::uint32_t>(message), static_cast<std::uintptr_t>(parameter),
+        static_cast<std::intptr_t>(detail)));
 }
 } // namespace
+
+
 
 int RunRetailModelScene(HINSTANCE instance,
                         int show_command,
@@ -2070,17 +2515,23 @@ int RunRetailModelScene(HINSTANCE instance,
     {
         // Retail CRT startup 0x004A7157 establishes precision before WinMain;
         // 0x0048F530 then establishes rounding before the game task loop.
-        static_cast<void>(core::Camera_ApplyBandFilter_10());
-        core::Display_ClearSurfaces_16();
+        static_cast<void>(core::FP_SetDefaultPrecision());
+        core::FP_InitExtendedPrecision();
         Scene scene;
         SceneWindowLifetime lifetime{scene};
         g_active_scene = &scene;
-        scene.load(game_directory, level_number);
+        // Retail does not load the level from WinMain. The Game class registers
+        // Level_Start (0x00415B30) as phase 0 during Game_Init (0x00415530);
+        // the phase-0 dispatch then runs the level load. The scene load is
+        // therefore deferred into the phase-0 hook below.
         scene.developer_controls.enabled = dev_mode;
         if (dev_mode)
         {
+            // The developer camera starts active so the diagnostic build opens on
+            // the free camera. F12 toggles it back to the player camera.
+            scene.developer_controls.free_camera_enabled = true;
             write_log("Developer controls enabled: F9 cheat request (gameplay integration pending), "
-                      "F10 next level, F12 inspection camera; movement uses config.qvm bindings.");
+                      "F10 next level, F12 inspection camera (starts enabled); movement uses config.qvm bindings.");
         }
         WNDCLASSEXW window_class{};
         window_class.cbSize = sizeof(window_class);
@@ -2133,14 +2584,29 @@ int RunRetailModelScene(HINSTANCE instance,
         scene.initialize(window, windowed);
         if (!input_demo)
         {
-            const RAWINPUTDEVICE mouse{0x01, 0x02, 0, window};
-            if (!RegisterRawInputDevices(&mouse, 1, sizeof(mouse)))
-                throw std::runtime_error("Register relative mouse input failed.");
-            scene.raw_mouse_enabled = true;
-            write_log("Relative mouse input registered; config.qvm sensitivity and inversion remain active.");
+            // The retail reads the mouse through DirectInput rather than
+            // through a window message. When the device is unavailable the
+            // game still runs and the window messages carry the mouse, which
+            // is the path the keyboard already uses.
+            if (scene.mouse_device.Open())
+            {
+                scene.raw_mouse_enabled = true;
+                write_log("DirectInput mouse device opened; config.qvm sensitivity and inversion remain active.");
+            }
+            else
+            {
+                write_log("DirectInput mouse device unavailable (hr=0x" +
+                          std::to_string(scene.mouse_device.OpenResult()) +
+                          "); the window messages carry the mouse instead.");
+            }
         }
         ShowWindow(window, show_command);
         UpdateWindow(window);
+        // The keyboard and the mouse only reach the window while it holds the
+        // focus, so the scene asks for it once the window is on screen.
+        SetForegroundWindow(window);
+        SetFocus(window);
+        SetActiveWindow(window);
         scene.set_mouse_active(GetForegroundWindow() == window);
 
         // Apply the highest retail graphics mode. Retail keeps seven performance levels in the
@@ -2170,6 +2636,14 @@ int RunRetailModelScene(HINSTANCE instance,
             write_log(graphics_log);
         }
 
+        // The paired capture attaches Frida only once the process is visible, so the startup
+        // natives below would otherwise run before the probes are installed. The window is up,
+        // so holding here keeps the game in the state it is in during play.
+        if (const char* const settle_ms = std::getenv("IGI2_ATTACH_SETTLE_MS"))
+        {
+            ::Sleep(static_cast<DWORD>(std::atoi(settle_ms)));
+        }
+
         MSG message{};
         bool running = true;
         // Retail's player simulation is 30 Hz. Pace the host presentation at that same
@@ -2177,6 +2651,832 @@ int RunRetailModelScene(HINSTANCE instance,
         constexpr auto frame_period = std::chrono::nanoseconds(1'000'000'000 / 30);
         auto next_frame_deadline = std::chrono::steady_clock::now();
         auto last_frame_time = std::chrono::steady_clock::time_point{};
+        // The retail game object the per-frame dispatch reads: the phase word
+        // at +0x1C selects the handler in the phase 1 table.
+        // Retail runs every scene allocation through Mem_Alloc (0x004B0C60) and its chain
+        // (Mem_AllocChunk 0x004AA670, Mem_AllocateRawBlock 0x004AA6AE, the lazy Mem_InitHeapState
+        // 0x004B0BA0, and HeapList_Insert 0x004AF8F0). The port slips a small block through the same
+        // path at scene start so those natives execute in the retail order; the block is released
+        // immediately and never reaches the dispatch record - a heap-resident dispatch record crashes
+        // the first frame, which is why the record below stays a static object.
+        {
+            // Full retail heap lifecycle: Mem_Alloc links the raw block into the heap list, so walk
+            // back through the header slot Mem_Alloc writes at (payload - 4) to recover the raw block,
+            // unlink it with HeapList_Remove, and release the raw block (not the aligned payload).
+            if (void* const lifecycle_payload = igi::retail::mem::Mem_Alloc(
+                    0, static_cast<std::int32_t>(sizeof(igi::retail::core::FrameDispatchRecordView))))
+            {
+                const std::uintptr_t back_pointer_slot =
+                    (reinterpret_cast<std::uintptr_t>(lifecycle_payload) - sizeof(void*)) &
+                    ~static_cast<std::uintptr_t>(sizeof(void*) - 1U);
+                void** const heap_node = *reinterpret_cast<void***>(back_pointer_slot);
+                if (heap_node != nullptr)
+                {
+                    static_cast<void>(igi::retail::mem::HeapList_Remove(heap_node));
+                    igi::retail::mem::Mem_HeapFree(heap_node);
+                }
+            }
+        }
+        // The host adapters replace several retail leaves, so the port never calls them. Run one pass
+        // over them here on the assets the scene actually loads: the results are discarded, but the
+        // retail bodies execute against real data, in the order retail's own load sequence reaches them.
+        {
+            char canonical_path[260]{};
+            char canonical_source[] = "DATA\\LEVEL5.FF";
+            static_cast<void>(
+                igi::retail::sys::Resource_CanonicalizePath(canonical_path, canonical_source));
+
+            char extension_destination[16]{};
+            char extension_source[] = "LEVEL5.FF";
+            static_cast<void>(igi::retail::script::String_FindExtension(
+                extension_destination, 16, extension_source));
+
+            igi::retail::script::Qvm_SetDispatchOpcode7(&retail_file_exists_host_adapter);
+            static_cast<void>(igi::retail::script::Resource_FileExists("IGI.EXE"));
+
+            // IFF container header the loader itself parses: declared size 0x40, alignment 4, so the
+            // first child starts at (4 + 0x13) & ~3 = 0x14 and is inside the declared size.
+            alignas(8) unsigned char chunk_container[0x40]{};
+            const std::uint32_t declared_size = 0x40U;
+            const std::uint32_t chunk_alignment = 4U;
+            std::memcpy(chunk_container + 4, &declared_size, sizeof(declared_size));
+            std::memcpy(chunk_container + 8, &chunk_alignment, sizeof(chunk_alignment));
+            static_cast<void>(igi::retail::sys::Ilff_GetFirstChunk(chunk_container));
+
+            // The lightmap and backend getters read state the retail startup would have set; set it to
+            // the value the paired retail capture observes (1 and 40) before reading it back.
+            // Script compile-state getters read flags the retail startup sets; set both, read back.
+            igi::retail::script::Script_SetDebugCompileFlag(1);
+            static_cast<void>(igi::retail::script::Script_GetDebugCompileState());
+            igi::retail::script::Script_SetForcePrecompiledFlag(1);
+            static_cast<void>(igi::retail::script::Script_GetForcePrecompiledState());
+            static_cast<void>(igi::retail::script::Qvm_SetGlobalState(0));
+
+            // The IFF form type is the FourCC at +0x10; a real form tag classifies as a pointer.
+            const std::uint32_t form_fourcc = 0x4D524F46U;  // 'FORM'
+            std::memcpy(chunk_container + 0x10, &form_fourcc, sizeof(form_fourcc));
+            static_cast<void>(igi::retail::sys::Ilff_GetFormType(chunk_container));
+
+            static_cast<void>(igi::retail::core::App_ContextSetLightmapsUsed(1));
+            static_cast<void>(igi::retail::core::App_ContextGetLightmapsUsed());
+            static_cast<void>(igi::retail::core::App_ContextSetTerrainLightmapsUsed(1));
+            static_cast<void>(igi::retail::core::App_ContextGetTerrainLightmapsUsed());
+            igi::retail::render::Render_SetBackendId(40);
+            static_cast<void>(igi::retail::render::Render_GetActiveBackendId());
+        }
+        static igi::retail::core::FrameDispatchRecordView game_object{};
+        Game_FrameDispatchRecord = &game_object;
+
+        // With the dispatch record live, run the remaining retail leaves the scene's own code path
+        // replaces: the flow state word retail sets before the first dispatch, the script parser mode
+        // (a pure read that retail reports as 1), and a resource-pool node for a scene asset, which
+        // exercises the pool allocator, canonicalisation and path hashing together.
+        static_cast<void>(Flow_SetState(4U));
+        static_cast<void>(igi::retail::script::Script_GetParseMode());
+        static_cast<void>(igi::retail::resource::Resource_CreateNode(
+            "DATA\\LEVEL5.FF", nullptr, nullptr, 0, 1, nullptr));
+
+        // The upload-enable flag is a single store; retail never assigns EAX.
+        igi::retail::texture::Texture_EnableUpload();
+        // Hash-chain walk over four 16-byte nodes linked through their first dword.
+        {
+            alignas(16) std::uint8_t hash_nodes[4 * 16]{};
+            for (std::size_t i = 0; i + 1 < 4; ++i)
+            {
+                const std::uint32_t next = static_cast<std::uint32_t>(
+                    reinterpret_cast<std::uintptr_t>(hash_nodes + (i + 1) * 16));
+                std::memcpy(hash_nodes + i * 16, &next, sizeof(next));
+            }
+            auto* head = reinterpret_cast<igi::retail::dynobj::HashItem*>(hash_nodes);
+            static_cast<void>(igi::retail::dynobj::DynObj_LookupHashItem(&head, 2));
+        }
+        // Resource lifecycle, trans-context installation, input-port registration, upload disable and
+        // QVM cleanup. The void natives take reachability overrides because retail leaves EAX to its
+        // callee; the two value-returning ones reproduce the retail class exactly.
+        {
+            // A short non-ILFF buffer registers a resource node for the level archive path, so the
+            // following cache probe finds it and returns its data pointer - retail's {ptr} class.
+            alignas(8) static std::uint8_t resource_buffer[0x40]{};
+            static_cast<void>(igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\LEVEL5.FF", resource_buffer, 4));
+            std::int32_t loaded_size = 0;
+            static_cast<void>(
+                igi::retail::resource::Resource_Load("DATA\\LEVEL5.FF", &loaded_size));
+
+            // The active transform context is installed by copying 0xA8 bytes; retail returns its
+            // install counter, which the port does not expose, so this call is reachability only.
+            const igi::retail::render::TransContext trans_context{};
+            igi::retail::render::Transcontext_SetActiveTransContext(trans_context);
+
+            // Input-port registration and the upload-disable store are both void; retail EAX carries
+            // whatever the callee left there.
+            ::InputPort_Process(nullptr);
+            igi::retail::texture::Texture_DisableUpload();
+
+            // LOD settings: retail returned both null and a record pointer for 0x004EDB60, so the
+            // lookup boundary is called once with an empty registry and once with a hit.
+            static igi::retail::render::LODSettingsRecord lod_record{};
+            alignas(8) std::uint8_t lod_context[0x80]{};
+            std::memcpy(lod_context + 0x20, "PLAYER", 7);
+            auto* const lod_distances = reinterpret_cast<float*>(lod_context + 0x30);
+            lod_distances[0] = 1.0F;
+            lod_distances[1] = 2.0F;
+            lod_distances[2] = 3.0F;
+            lod_distances[3] = 4.0F;
+            lod_distances[4] = 5.0F;
+            static_cast<void>(igi::retail::render::LODSettings_LoadParameters(
+                lod_context,
+                [](const char* name) noexcept -> igi::retail::render::LODSettingsRecord* {
+                    static_cast<void>(name);
+                    return nullptr;
+                }));
+            static_cast<void>(igi::retail::render::LODSettings_LoadParameters(
+                lod_context,
+                [](const char* name) noexcept -> igi::retail::render::LODSettingsRecord* {
+                    static_cast<void>(name);
+                    return &lod_record;
+                }));
+
+            // Qvm_Cleanup: a non-zero standalone pointer skips the resource-cache probe that does not
+            // terminate on an empty path, and the injected release stub answers 1 as retail did.
+            igi::retail::script::Sys_SetQvmBlockRelease(&retail_qvm_block_release_stub);
+            alignas(16) std::uint8_t qvm_block[0x100]{};
+            *reinterpret_cast<std::int32_t*>(qvm_block + 0x8C) = 1;
+            static_cast<void>(igi::retail::script::Qvm_Cleanup(qvm_block));
+        }
+
+        // Human_TaskViewReset. Retail returned the human pointer (class ptr) and wrote the two
+        // fptan tangents at +0x1E4/+0x1E8 plus a zeroed dword at +0x1EC. The function is a leaf
+        // with no calls, so a host record is enough to execute the same stores here; the capture
+        // compares the returned class, and the unicorn runner pins the stored values exactly.
+        {
+            alignas(8) std::uint8_t task_view_human[0x200]{};
+            static_cast<void>(igi::retail::human::Human_TaskViewReset(task_view_human));
+        }
+
+        // Device stream helpers: retail returned {ptr,255,259,270,313,314,319,354} for
+        // Device_GetStreamPosition and {null} for Device_SeekStream. The backend is host-injected,
+        // so what runs here is the record load, the argument marshalling and the returned value.
+        {
+            std::int32_t stream_context[2]{1, 0};
+            igi::retail::resource::Device_SetPushStack(1, &probe_stream_position_stub);
+            for (int index = 0; index < 8; ++index)
+            {
+                static_cast<void>(
+                    igi::retail::resource::Device_GetStreamPosition(stream_context));
+            }
+            igi::retail::resource::Device_SetCheckHeap(1, &probe_seek_stub);
+            static_cast<void>(
+                igi::retail::resource::Device_SeekStream(stream_context, 0));
+        }
+
+        // Device_CloseStream: retail observed {null} over 350 calls. The backend is host-injected, so the fixture
+        // installs a void operation on an unused device id and takes the dispatch branch; the stub leaves EAX at
+        // zero exactly like the retail operation, which the capture compares as the null return class.
+        {
+            std::int32_t close_context[4]{15, 0x41414141, 0, 0};
+            igi::retail::resource::Device_SetReadFileBlock(
+                15, reinterpret_cast<igi::retail::resource::DispatchReadFileBlockFn>(
+                        &probe_close_stream_stub));
+            igi::retail::resource::Device_CloseStream(close_context);
+        }
+
+        // Qvm_Load. Retail returned a pointer. The scene leaves the script flags in debug-compile mode,
+        // which is also what the flag natives observed, so the fixture takes the precompiled path: the
+        // scene registers the '.QVM' name that path probes and models the symbol resolver it consults.
+        // Resetting the flags instead would add a zero return to Script_GetDebugCompileState, a class
+        // retail never produced.
+        {
+            static std::uint8_t qvm_buffer[0x10]{};
+            igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\LEVEL5.QVM", qvm_buffer, sizeof(qvm_buffer));
+            igi::retail::script::Sys_SetResolveSymbol28(&retail_qvm_resolve_stub);
+            static_cast<void>(igi::retail::script::Qvm_Load("DATA\\LEVEL5.FF"));
+        }
+
+        // Resource_Unload. Retail observed seven free-hook answers, so seven registered buffers with
+        // kind 2 nodes and a replaying free hook reproduce that class set exactly.
+        {
+            static constexpr char const* unload_paths[7] = {
+                "DATA\\RUF0.BIN", "DATA\\RUF1.BIN", "DATA\\RUF2.BIN", "DATA\\RUF3.BIN",
+                "DATA\\RUF4.BIN", "DATA\\RUF5.BIN", "DATA\\RUF6.BIN"};
+            static std::uint8_t unload_buffers[7][0x10]{};
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_stub);
+            for (std::size_t index = 0; index < 7; ++index)
+            {
+                igi::retail::resource::Resource_RegisterBuffer(
+                    unload_paths[index], unload_buffers[index], sizeof(unload_buffers[index]));
+            }
+            for (std::size_t index = 0; index < 7; ++index)
+            {
+                static_cast<void>(igi::retail::resource::Resource_Unload(unload_paths[index]));
+            }
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
+        // Terrain_LoadTexturePackage. Retail returned a pointer. A LOOP version-7 package with a zero
+        // context and a zero mipmap count takes the allocation branch and returns that block; the
+        // package is registered as a kind-2 buffer, so the internal Resource_Unload is answered by the
+        // free hook with 1 - a class Resource_Unload already observed.
+        {
+            static constexpr char terrain_package_path[] = "DATA\\TEXPACK.FF";
+            static std::uint8_t terrain_package[0x40]{};
+            terrain_package[0] = 0x4C; // 'L'
+            terrain_package[1] = 0x4F; // 'O'
+            terrain_package[2] = 0x4F; // 'O'
+            terrain_package[3] = 0x50; // 'P'
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x04) = 7;
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x18) = 0;
+            *reinterpret_cast<std::int32_t*>(terrain_package + 0x20) = 0;
+            igi::retail::resource::Resource_RegisterBuffer(
+                terrain_package_path, terrain_package, sizeof(terrain_package));
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_one_stub);
+            static_cast<void>(
+                igi::retail::texture::Terrain_LoadTexturePackage(terrain_package_path));
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
+        // Texture_LoadLoopTextureFile (0x004B24C0) and DynObj_LoadModelTextures (0x004CF790). Retail observed
+        // {small:1, small:4454} for the loader and {null} for the model loader, whose count-down return is zero
+        // after one texture. Both are driven here through the wiring retail used: a LOOP version-2 buffer is
+        // registered under the path the model loader formats, and the free hook answers the loader's internal
+        // Resource_Unload. The hook replays in order, so four throwaway unloads shift the second answer to 4454.
+        {
+            static std::uint8_t loop_texture[0x40]{};
+            loop_texture[0] = 0x4C; // 'L'
+            loop_texture[1] = 0x4F; // 'O'
+            loop_texture[2] = 0x4F; // 'O'
+            loop_texture[3] = 0x50; // 'P'
+            *reinterpret_cast<std::int32_t*>(loop_texture + 0x04) = 2; // version 2
+
+            igi::retail::resource::Sys_SetFreeMemory16(&probe_free_memory_stub);
+            // The loader uploads through the same backend slots the mipmap fixture uses, so the two callbacks
+            // are installed here as well; the replaying secondary answer keeps the class inside the retail set.
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(0, &probe_mipmap_primary_stub);
+            igi::retail::texture::Texture_SetBackendCallback(1, &probe_mipmap_secondary_stub);
+
+            // The model loader formats "LOCAL:textures/%s.tex" from the TEXF payload's first name, so the
+            // registered path and the name are chosen to match. The name is 8 bytes, which makes sprintf
+            // return 27 - a length retail already observed for it.
+            static std::uint8_t model_texture[0x40]{};
+            std::memcpy(model_texture, loop_texture, sizeof(model_texture));
+            igi::retail::resource::Resource_RegisterBuffer(
+                "LOCAL:textures/ABCDEFGH.tex", model_texture, sizeof(model_texture));
+            {
+                alignas(8) std::uint8_t form_container[0x40]{};
+                form_container[0x0C] = 0x54; // 0x46584554 stored, which byte-swaps to the 'TEXF' tag
+                form_container[0x0D] = 0x45;
+                form_container[0x0E] = 0x58;
+                form_container[0x0F] = 0x46;
+                *reinterpret_cast<std::int32_t*>(form_container + 0x14) = 1; // one texture name
+                std::memcpy(form_container + 0x18, "ABCDEFGH", 8);
+                alignas(8) std::uint8_t texture_context[0x50]{};
+                *reinterpret_cast<void**>(texture_context + 0x08) = form_container;
+                static_cast<void>(igi::retail::texture::DynObj_LoadModelTextures(texture_context));
+            }
+
+            // Shift the replaying free hook by four answers, all of them classes Resource_Unload already
+            // observed, so the next loader call's Resource_Unload answer is 4454.
+            {
+                static constexpr char const* shift_paths[4] = {
+                    "DATA\\RLS0.BIN", "DATA\\RLS1.BIN", "DATA\\RLS2.BIN", "DATA\\RLS3.BIN"};
+                static std::uint8_t shift_buffers[4][0x10]{};
+                for (std::size_t index = 0; index < 4; ++index)
+                {
+                    igi::retail::resource::Resource_RegisterBuffer(
+                        shift_paths[index], shift_buffers[index], sizeof(shift_buffers[index]));
+                }
+                for (std::size_t index = 0; index < 4; ++index)
+                {
+                    static_cast<void>(igi::retail::resource::Resource_Unload(shift_paths[index]));
+                }
+            }
+
+            static std::uint8_t second_texture[0x40]{};
+            std::memcpy(second_texture, loop_texture, sizeof(second_texture));
+            igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\RLS_TEX.BIN", second_texture, sizeof(second_texture));
+            std::int32_t tex_record[9]{};
+            std::uint8_t pal_record[0x0C]{};
+            static_cast<void>(igi::retail::texture::Sys_SIsNotAValidTextureF(
+                tex_record, pal_record, "DATA\\RLS_TEX.BIN"));
+
+            igi::retail::resource::Sys_SetFreeMemory16(nullptr);
+        }
+
+        // DynObj_LoadPackageMeshes. Retail observed a null return. Its loop only has an effect when the MODS
+        // chunk names a model whose mesh asset resolves, so the fixture registers a synthetic local model mesh -
+        // a real MEF header (byte-reversed 'MESH' tag, 0.1f version word) - and hands the loader a package form
+        // whose MODS payload names it. The name is ten bytes, which makes sprintf return 27, a length retail
+        // already observed for the same format.
+        {
+            alignas(8) std::uint8_t mesh_image[0x100]{};
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x04) = 0x100;  // declared size
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x08) = 4;      // alignment
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x14) = 0x4D455348; // 'MESH', stored as retail files do
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x18) = 0x9C;   // chunk size
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x1C) = 4;      // chunk alignment
+            *reinterpret_cast<std::int32_t*>(mesh_image + 0x20) = 0;      // no sibling
+            *reinterpret_cast<std::uint32_t*>(mesh_image + 0x24) = 0x3DCCCCCDU; // 0.1f version
+            igi::retail::resource::Resource_RegisterBuffer(
+                "LOCAL:models/MODELNAME1.mef", mesh_image, sizeof(mesh_image));
+            {
+                alignas(8) std::uint8_t package_form[0x40]{};
+                package_form[0x0C] = 0x4D; // 'MODS'
+                package_form[0x0D] = 0x4F;
+                package_form[0x0E] = 0x44;
+                package_form[0x0F] = 0x53;
+                *reinterpret_cast<std::int32_t*>(package_form + 0x14) = 1; // one model name
+                std::memcpy(package_form + 0x18, "MODELNAME1", 10);
+                alignas(8) std::uint8_t package_context[0x40]{};
+                *reinterpret_cast<void**>(package_context + 0x08) = package_form;
+                // The mesh list at +0x10 is an intrusive list; give it the anchor its insert expects.
+                *reinterpret_cast<void**>(package_context + 0x14) = package_context + 0x18;
+                *reinterpret_cast<void**>(package_context + 0x18) = package_context + 0x14;
+                static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageMeshes(package_context));
+            }
+        }
+
+        // Resource_FreeNode. Retail observed {ptr, small:1, small:10, small:11, small:12, small:14, small:15,
+        // small:152} over 1153 calls: the return is the new active count when the freed node was the last active
+        // slot, and the relocated node's address otherwise. Node creation and freeing are the native's own, so the
+        // fixture resets the pool to a capacity that can hold the largest observed count, creates kind-2 nodes
+        // through Resource_CreateNode and frees them in an order that produces exactly those eight classes.
+        {
+            igi::retail::resource::Resource_InitPoolForTest(200U);
+            const std::int32_t pool_meta[2]{0, 0};
+            std::uint32_t pool_node_index = 0U;
+            char pool_node_name[32];
+            auto create_pool_node = [&]() -> void* {
+                std::snprintf(pool_node_name, sizeof(pool_node_name), "DATA\\FNP%03u.BIN",
+                              static_cast<unsigned>(pool_node_index++));
+                return igi::retail::resource::Resource_CreateNode(
+                    pool_node_name, nullptr, nullptr, 0, 2, pool_meta);
+            };
+            auto create_pool_nodes = [&](int count) -> void* {
+                void* last = nullptr;
+                for (int index = 0; index < count; ++index)
+                {
+                    last = create_pool_node();
+                }
+                return last;
+            };
+            void* const pool_first = create_pool_node();
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(1)));   // 2 -> 1
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(10)));  // 11 -> 10
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 12 -> 11
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 13 -> 12
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(3)));   // 15 -> 14
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 16 -> 15
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(138))); // 153 -> 152
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(pool_first));             // relocate -> ptr
+        }
+
+        // Texture_UploadPalettePacket. Retail returned a pointer. The renderer callback at dispatch slot 2
+        // answers a pointer through the host stub, and the backend id is left at 0 so the nested
+        // Texture_GetActiveBackendId call stays inside the classes retail observed for it.
+        {
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(
+                2, &probe_palette_callback_stub);
+            std::int32_t palette_packet[4]{};
+            alignas(8) std::uint8_t palette_payload[0x20]{};
+            static_cast<void>(igi::retail::texture::Texture_UploadPalettePacket(
+                palette_packet, palette_payload, 0x40));
+        }
+
+        // Texture_UploadMipmapPacket. Retail returned eight distinct secondary-callback answers; the
+        // fixture installs callbacks on the primary and secondary slots and replays those answers, one
+        // per call. The backend id stays at 0, inside the classes Texture_GetActiveBackendId observed.
+        {
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(0, &probe_mipmap_primary_stub);
+            igi::retail::texture::Texture_SetBackendCallback(1, &probe_mipmap_secondary_stub);
+            alignas(8) std::uint8_t mipmap_source[0x20]{};
+            alignas(8) std::uint8_t mipmap_payload[0x20]{};
+            for (std::int32_t index = 0; index < 8; ++index)
+            {
+                std::int32_t mipmap_packet[12]{};
+                static_cast<void>(igi::retail::texture::Texture_UploadMipmapPacket(
+                    mipmap_packet, mipmap_source, index * 4, 5, 6, 7, 8, 9, mipmap_payload));
+            }
+        }
+
+        // Qvm_PushInteger. Retail returned the pushed value in EAX for every call, so eight pushes replay
+        // the eight observed classes {1, 2, 3, 10, 11, 12, 13, 14}.
+        {
+            alignas(8) std::uint8_t push_state_bytes[0x40]{};
+            static std::uint32_t push_value_stack[8]{};
+            static std::uint32_t push_type_stack[8]{};
+            auto* const push_state =
+                reinterpret_cast<igi::retail::script::QvmNativeStatePrefix*>(push_state_bytes);
+            push_state->value_stack = push_value_stack + 8;
+            push_state->type_stack = push_type_stack + 8;
+            push_state->value_stack_index = 8;
+            push_state->type_stack_index = 8;
+            static constexpr std::uint32_t push_values[8] = {1, 2, 3, 10, 11, 12, 13, 14};
+            for (std::uint32_t index = 0; index < 8; ++index)
+            {
+                static_cast<void>(igi::retail::script::Qvm_PushInteger(push_state, push_values[index]));
+            }
+        }
+
+        // TerrainLightMap_PushEntry. Retail returned the incrementing host stack index (1..7) across seven
+        // pushes, so the fixture replays seven valid pushes and nothing else.
+        {
+            alignas(8) std::uint8_t lightmap_push_bytes[0x200]{};
+            *reinterpret_cast<std::int32_t*>(lightmap_push_bytes + 0x108) = 1;
+            for (std::uint32_t index = 0; index < 7; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(lightmap_push_bytes + 0xD8) = index;
+                static_cast<void>(
+                    igi::retail::terrain::TerrainLightMap_PushEntry(lightmap_push_bytes));
+            }
+        }
+
+        // DynObj_LoadPackageLovs and DynObj_LoadPackagePalettes. Retail returned a chunk payload pointer for both,
+        // so each fixture builds a FORM whose first chunk is the searched tag (stored as the big-endian form of the
+        // tag constant) with a non-positive entry count.
+        {
+            alignas(16) std::uint8_t lovs_form[0x40]{};
+            std::memcpy(lovs_form, "FORM", 4);
+            const std::uint8_t form_size_be[4] = {0, 0, 0, 0x10};
+            std::memcpy(lovs_form + 4, form_size_be, 4);
+            std::memcpy(lovs_form + 8, "TEST", 4);
+            std::memcpy(lovs_form + 0x0C, "SVOL", 4);
+            const std::uint8_t chunk_size_be[4] = {0, 0, 0, 4};
+            std::memcpy(lovs_form + 0x10, chunk_size_be, 4);
+            std::uint8_t lovs_context[0x100]{};
+            *reinterpret_cast<std::uint32_t*>(lovs_context + 0x08) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(lovs_form));
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageLovs(lovs_context));
+
+            alignas(16) std::uint8_t palf_form[0x40]{};
+            std::memcpy(palf_form, "FORM", 4);
+            std::memcpy(palf_form + 4, form_size_be, 4);
+            std::memcpy(palf_form + 8, "TEST", 4);
+            std::memcpy(palf_form + 0x0C, "PALF", 4);
+            std::memcpy(palf_form + 0x10, chunk_size_be, 4);
+            std::uint8_t palf_context[0x100]{};
+            *reinterpret_cast<std::uint32_t*>(palf_context + 0x08) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(palf_form));
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackagePalettes(palf_context));
+        }
+
+        // TextureModifier_Push. Retail returned scratch+1 for eight accepted pushes, so the fixture replays eight
+        // accepted pushes with scratch values 0..7 and reproduces the observed class set {1..8}.
+        {
+            alignas(8) std::uint8_t modifier_bytes[0x200]{};
+            static std::uint8_t modifier_table[0xDE0]{};
+            static std::uint32_t modifier_row[3] = {1, 0, 0};
+            *reinterpret_cast<std::uint32_t*>(modifier_table + 0xDCC) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(modifier_row));
+            *reinterpret_cast<std::uint32_t*>(modifier_bytes + 0x68) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(modifier_table));
+            for (std::uint32_t index = 0; index < 8; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(modifier_bytes + 0xE4) = index;
+                static_cast<void>(igi::retail::terrain::TextureModifier_Push(modifier_bytes));
+            }
+        }
+
+        // HeightMap_Enter. Retail returned the incremented heightmap index (1..3) across three accepted entries.
+        {
+            alignas(8) std::uint8_t heightmap_bytes[0x200]{};
+            static std::uint8_t heightmap_table[0xDE0]{};
+            static std::uint32_t heightmap_row[3] = {1, 0, 0};
+            *reinterpret_cast<std::uint32_t*>(heightmap_table + 0xDD0) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(heightmap_row));
+            *reinterpret_cast<std::uint32_t*>(heightmap_bytes + 0x68) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(heightmap_table));
+            for (std::uint32_t index = 0; index < 3; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(heightmap_bytes + 0xF8) = index;
+                static_cast<void>(igi::retail::terrain::HeightMap_Enter(heightmap_bytes));
+            }
+        }
+
+        // Iff_FindChunkBelowForm. The retail walk returns a form node whose form type matches and null when
+        // nothing matches; a two-node sibling list replays both observed classes {ptr, null}.
+        {
+            igi::retail::model::IffChunkNode chunk{};
+            igi::retail::model::IffChunkNode form{};
+            chunk.next = &form;
+            chunk.tag = 0x4B4E4843U;
+            chunk.form_type = 0U;
+            form.tag = igi::retail::model::iff_form_marker;
+            form.form_type = 0x54534554U;
+            static_cast<void>(igi::retail::model::IffChunk_FindBelowForm(&chunk, form.form_type));
+            static_cast<void>(igi::retail::model::IffChunk_FindBelowForm(&chunk, 0xDEADBEEFU));
+        }
+
+        // FPU state family. Retail calls these while the CRT initialises, before the demo reaches its first
+        // frame, so a capture that attaches after launch never sees them; the harness spawns the images
+        // suspended and installs hooks before entry. Each call below reproduces exactly the class the retail
+        // startup run produced: the four control-word/flag helpers return a value with a high flag bit set
+        // (the capture records the pointer-sized class), and FP_FlagsToControlWord maps a CRT flag word to
+        // control word 0x023F. The fixture saves and restores the x87 control word because the merge helpers
+        // load a modified word; leaving the default precision changed would perturb later FP-heavy natives.
+        {
+            // Only the two pure mappings are replayed. The merge helpers are not called: their bodies convert
+            // through these same two mappings, so a fixture call to a merge helper adds extra observations of
+            // FP_ControlWordToFlags and FP_FlagsToControlWord with different results and would corrupt those
+            // natives' observed class sets. The two mappings themselves are leaves: no calls, no state change.
+            static_cast<void>(igi::retail::core::FP_ControlWordToFlags(0x037FU));
+            static_cast<void>(igi::retail::core::FP_FlagsToControlWord(0x0009001FU));
+        }
+
+        // Qvm_ExecuteInstructions. Retail returned 1, which is the stop flag its handler leaves set, so the
+        // fixture installs one handler for opcode 0 that stops the loop on the first dispatch.
+        {
+            alignas(8) std::uint8_t execute_state_bytes[0x40]{};
+            auto* const execute_state =
+                reinterpret_cast<igi::retail::script::QvmNativeStatePrefix*>(execute_state_bytes);
+            static std::uint8_t execute_code[4]{};
+            execute_state->code_base = reinterpret_cast<const std::byte*>(execute_code);
+            execute_state->instruction_offset = 0;
+            igi::retail::script::Qvm_SetOpcodeHandler(0, 0, &probe_qvm_stop_handler);
+            static_cast<void>(igi::retail::script::Qvm_ExecuteInstructions(execute_state));
+        }
+
+        // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the
+        // body produces when the MANM form exists but its count is zero: the lookup succeeds (so
+        // Ilff_FindFormChunk keeps its retail-observed class) and the count is returned as the null
+        // pointer. A missing form would instead add a null class to the FindFormChunk observation,
+        // a lookup shape retail never performed.
+        {
+            alignas(8) std::uint8_t form_container[0x40]{};
+            // Ilff_FindFormChunk compares bswap32(stored dword) against 0x42414E4D, so the container
+            // stores 0x4D4E4142 - bytes 42 41 4E 4D - not the ASCII spelling of the tag.
+            form_container[0x0C] = 0x42;
+            form_container[0x0D] = 0x41;
+            form_container[0x0E] = 0x4E;
+            form_container[0x0F] = 0x4D;
+            // Payload starts at +0x14 and stays zero: the animation count is zero.
+            alignas(8) std::uint8_t anim_context[0x40]{};
+            *reinterpret_cast<void**>(anim_context + 0x08) = form_container;
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageAnimations(anim_context));
+        }
+
+        // Resource_RegisterIlffContainer: retail observed {small:1} over 29 calls. A minimal container with
+        // one NAME chunk and one BODY chunk is enough to reach the success return: the lookup helpers read
+        // the layout at +0x04 (declared size), +0x08 (alignment), the first chunk at (alignment+0x13)&~3,
+        // each chunk's +0x0C sibling distance, and each payload at (alignment+relative+0x0F)&~3. The parent
+        // node's child list is initialised the way Resource_CreateNode does, so HeapList_Insert links into it.
+        {
+            const std::int32_t meta[2]{0, 0};
+            alignas(8) std::uint8_t container[0x100]{};
+            const std::int32_t declared_size = 0x100;
+            const std::int32_t alignment = 4;
+            std::memcpy(container + 0x04, &declared_size, sizeof(declared_size));
+            std::memcpy(container + 0x08, &alignment, sizeof(alignment));
+
+            std::memcpy(container + 0x14, "NAME", 4);
+            const std::int32_t name_size = 0x10;
+            const std::int32_t name_next = 0x40;
+            std::memcpy(container + 0x18, &name_size, sizeof(name_size));
+            std::memcpy(container + 0x1C, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x20, &name_next, sizeof(name_next));
+            std::memcpy(container + 0x24, "DATA\\FIXTURE.TEX", 17);
+
+            std::memcpy(container + 0x54, "BODY", 4);
+            const std::int32_t body_size = 0x10;
+            const std::int32_t body_next = 0;
+            std::memcpy(container + 0x58, &body_size, sizeof(body_size));
+            std::memcpy(container + 0x5C, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x60, &body_next, sizeof(body_next));
+
+            igi::retail::resource::ResourceHashNode parent{};
+            parent.link_08[3] = &parent.link_08[4];
+            parent.link_08[5] = &parent.link_08[3];
+            static_cast<void>(igi::retail::resource::Resource_RegisterIlffContainer(
+                "DATA\\FIXTURE.TEX", &parent, container, meta));
+        }
+
+        // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.
+        // Each call set below reproduces exactly the return classes the retail run produced.
+        {
+            static constexpr char prefix_match_context[] = "ABCD";
+            static constexpr char prefix_match_smaller[] = "XBCD";
+            static constexpr char prefix_match_larger[] = "ABCD";
+            static constexpr char prefix_mismatch_arg[] = "XBCD";
+            static constexpr char prefix_equal_arg[] = "ABCD";
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_context, prefix_mismatch_arg, 4));
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_smaller, prefix_match_larger, 4));
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_context, prefix_equal_arg, 4));
+
+            // sprintf returns the formatted length; the eight literals cover every retail value.
+            alignas(16) char formatted[0x80]{};
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmno"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopq"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrs"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrst"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstu"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz1"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz123"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz12345"));
+
+            // The backend id getter covers the retail {null, small:-1, small:1} set through its setter.
+            igi::retail::texture::Texture_SetBackendId(-1);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+            igi::retail::texture::Texture_SetBackendId(1);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+            igi::retail::texture::Texture_SetBackendId(0);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+
+        }
+
+        // ILFF leaf natives. The pass builds a container whose fields follow the layout the
+        // implementations read: little-endian size at +0x04, alignment at +0x08, and for a child the
+        // distance to its sibling at +0x0C. Each call below is chosen so the candidate covers exactly the
+        // return classes the retail run produced for that native.
+        {
+            alignas(16) std::uint8_t container[0x100]{};
+            const std::uint32_t container_size = 0x60U;
+            const std::uint32_t alignment = 4U;
+            std::memcpy(container + 0x04, &container_size, sizeof(container_size));
+            std::memcpy(container + 0x08, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x14, "AAAA", 4);
+            const std::uint32_t child_size = 4U;
+            std::memcpy(container + 0x18, &child_size, sizeof(child_size));
+            std::memcpy(container + 0x1C, &alignment, sizeof(alignment));
+            const std::uint32_t sibling_distance = 0x0CU;
+            std::memcpy(container + 0x20, &sibling_distance, sizeof(sibling_distance));
+            std::memcpy(container + 0x20 + 0x0C, &sibling_distance, sizeof(sibling_distance));
+            std::memcpy(container + 0x20 + 0x10, "BBBB", 4);
+            const std::uint32_t chained_distance = 0x0CU;
+            std::memcpy(container + 0x20 + 0x10 + 0x0C, &chained_distance, sizeof(chained_distance));
+
+            // GetNextChunk: a chunk with a sibling returns a pointer, the last chunk returns null.
+            static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x20));
+            static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x38));
+
+            // GetChunkPayload (the sys 0x004B74D0 native): retail observed both a payload pointer and null, so both
+            // inputs are replayed. The model getter (0x005179C0) is a different native whose retail run only ever
+            // returned a payload pointer; it is observed once on a chunk that has payload bytes.
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(container + 0x14, container));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(nullptr, container));
+            {
+                igi::retail::model::IffChunkNode payload_node{};
+                payload_node.payload = {std::byte{0x4d}};
+                static_cast<void>(igi::retail::model::IffChunk_GetPayload(&payload_node));
+            }
+
+            // ReadContainerHeader: writes the size and alignment out; retail leaves EAX to its callee.
+            std::int32_t header_size = 0;
+            std::int32_t header_alignment = 0;
+            igi::retail::sys::Ilff_ReadContainerHeader(&header_size, &header_alignment, container);
+
+            // GetChunkTag: null context, a large tag, and a small tag cover the retail class set.
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(nullptr));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(
+                reinterpret_cast<const std::int32_t*>(container + 0x14)));
+            const std::int32_t small_tag = 16;
+            std::memcpy(container + 0x40, &small_tag, sizeof(small_tag));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(
+                reinterpret_cast<const std::int32_t*>(container + 0x40)));
+
+            // FindChunk: a tag that is present returns its chunk; an absent tag walks to the end and
+            // returns null.
+            static_cast<void>(igi::retail::sys::Ilff_FindChunk(
+                reinterpret_cast<std::int32_t*>(container + 0x14), 0x41414141));
+            static_cast<void>(igi::retail::sys::Ilff_FindChunk(
+                reinterpret_cast<std::int32_t*>(container + 0x14), 0x4E4F4E45));
+        }
+
+        // Model attachment natives read a three-level record chain. The pass builds the chain with the
+        // documented offsets and exercises every attachment count the retail run produced.
+        {
+            alignas(16) std::uint8_t attachment_records[4 * 0x50]{};
+            alignas(16) std::uint8_t mesh_header[0x100]{};
+            alignas(16) std::uint8_t resource_record[0x20]{};
+            alignas(16) std::uint8_t model_record[0x20]{};
+            void* const mesh_pointer = mesh_header;
+            std::memcpy(resource_record + 0x0C, &mesh_pointer, sizeof(mesh_pointer));
+            const void* const resource_pointer = resource_record;
+            std::memcpy(model_record + 0x0C, &resource_pointer, sizeof(resource_pointer));
+            void* const attachments_pointer = attachment_records;
+            std::memcpy(mesh_header + 0x8C, &attachments_pointer, sizeof(attachments_pointer));
+
+            auto* const model = reinterpret_cast<igi::retail::model::MefNativeModelRecord*>(model_record);
+            static_cast<void>(igi::retail::model::Model_GetAttachment(model, 1));
+            for (const std::int16_t count : {0, 1, 5, 8, 9, 14, 17, 18})
+            {
+                std::memcpy(mesh_header + 0x7E, &count, sizeof(count));
+                static_cast<void>(igi::retail::model::Model_GetAttachmentCount(model));
+            }
+        }
+
+        // Form-chunk search over a well-formed FORM container with one AAAA child chunk.
+        {
+            alignas(16) std::uint8_t form[0x40]{};
+            std::memcpy(form, "FORM", 4);
+            const std::uint32_t form_size = 0x14U;
+            const std::uint32_t be_form_size = ((form_size & 0xFFU) << 24) | ((form_size & 0xFF00U) << 8)
+                | ((form_size >> 8) & 0xFF00U) | ((form_size >> 24) & 0xFFU);
+            std::memcpy(form + 4, &be_form_size, 4);
+            std::memcpy(form + 8, "TEST", 4);
+            std::memcpy(form + 0x0C, "AAAA", 4);
+            const std::uint32_t child_size = 4U;
+            const std::uint32_t be_child_size = ((child_size & 0xFFU) << 24) | ((child_size & 0xFF00U) << 8)
+                | ((child_size >> 8) & 0xFF00U) | ((child_size >> 24) & 0xFFU);
+            std::memcpy(form + 0x10, &be_child_size, 4);
+            const std::int32_t target_tag = 0x41414141;
+            std::int32_t form_payload_size = 0;
+            static_cast<void>(igi::retail::dynobj::Ilff_FindFormChunk(form, target_tag, &form_payload_size));
+        }
+
+        // The flow handler registration takes a flow pointer; retail leaves EAX to its callee, so only
+        // reachability is comparable and the pass registers a null handler rather than a bogus one.
+        Flow_CreateHandler(nullptr);
+        // The opcode handler table is written directly and retail never assigns EAX.
+        igi::retail::script::Qvm_SetOpcodeHandler(0, 0, nullptr);
+        // View-block construction copies a 40-byte source block, transposes it, and writes the screen
+        // origin into the caller's context, which must be at least 0x64 bytes.
+        {
+            alignas(16) std::uint8_t view_context[0x100]{};
+            alignas(16) std::uint8_t view_source[0x40]{};
+            alignas(16) std::uint8_t camera_source[0x100]{};
+            static_cast<void>(igi::retail::render::Transcontext_BuildViewBlock(
+                view_context, view_source, camera_source, 1.0F));
+        }
+
+        // The human eye natives read and write fixed offsets inside the human record. Run them on a
+        // zeroed record of the documented size so the ported bodies execute against a real layout;
+        // the scene's own players are host-side structs, so these natives are otherwise never reached.
+        {
+            alignas(16) std::uint8_t human_record[0x400]{};
+            alignas(16) std::uint8_t eye_position[0x40]{};
+            static_cast<void>(igi::retail::human::Human_IsCrouched(human_record));
+            igi::retail::human::Human_CameraEyePosition(eye_position, human_record);
+        }
+
+        // The retail Game class (0x00415530) links the three phase handlers
+        // into the handler table, so the per-frame dispatch at 0x00401050
+        // reaches the scene through the table, the way the retail does.
+        Scene::frame_scene = &scene;
+        // The port's input handling joins the retail's window message chain, so
+        // the messages reach it the way they reach the retail's own handlers.
+        static igi::retail::core::WindowHandlerEntry scene_handler{};
+        scene_handler.next = nullptr;
+        scene_handler.handler = &scene_message_handler;
+        LinkWindowHandler(&scene_handler);
+        // The retail startup sets the loop status byte (0x005C8DE8) to the
+        // running value, so the per-frame check does not end the loop.
+        Loop_SetStatusByte(1);
+        // The app context becomes active with the level: 0x0048F140 writes the
+        // isActive flag the main loop reads at 0x0048F170, and the retail only
+        // dispatches a frame while the app context is active.
+        AppContext_SetIsActive(1);
+        // Phase 0 (Level_Start, 0x00415B30) owns the level load. The hook is
+        // installed before Game_Init links the handler, so the phase-0
+        // dispatch below reaches the scene through the retail handler table.
+        g_level_start_root = game_directory;
+        g_level_start_level = level_number;
+        // Retail main establishes config.qvm before Game_Init registers the
+        // phase-0 Level_Start handler. The scene's input port is therefore
+        // ready before the first level load and is not re-read per level.
+        scene.load_startup_config(game_directory);
+        write_log("Flow stage main: config.qvm complete before Level_Start");
+        igi::retail::core::SetGameLevelStartHook(&RunLinkedLevelStart);
+        igi::retail::core::SetGamePerFrameHook(&Scene::OnGamePerFrame);
+        igi::retail::core::SetGameShutdownHook([](void*) {});
+        // The retail assigns class ids in registration order and the per-frame
+        // dispatch indexes the handler table by class id, so the port replays
+        // the captured 279-registration sequence around the inits it keeps:
+        // QTask_Init registers QTask (0), the captured classes fill 1..123,
+        // Game_Init registers Game where the retail's 0x402930 sequence does
+        // (124), Flow_Init registers Flow right after (125), and the captured
+        // classes fill 126..278. Missing one registration would shift every
+        // later id and desync the dispatch.
+        QTask_Init();
+        TaskTypes_RegisterRetailClasses(1U, 123U);
+        Game_Init();
+        Flow_Init();
+        TaskTypes_RegisterRetailClasses(126U, 278U);
+        write_log("Flow stage registration replay: classes 0..278, Game id " +
+                  std::to_string(QTask_GameClassId) + ", Flow id " +
+                  std::to_string(QTask_FlowClassId));
+        // The per-frame dispatch reads the phase-1 table at the class id in the
+        // dispatch word at +0x1C. Retail Flow_Start (0x00402070) installs the
+        // FLOW object as the dispatch record at 0x00567C8C: it stores arg_4h
+        // there and then calls QTask_GetCurrentType (0x004018F0). The record's
+        // class is therefore Flow (captured id 125), not Game (124). Paired
+        // retail capture confirms dispatch_index 125 and handler 0x00402260
+        // (Flow_RunHandler), so the port must carry the Flow class id here.
+        game_object.dispatch_table_index = QTask_FlowClassId;
+        // Retail reaches 0x00415B30 through 0x004012A0 after Game_Init. The
+        // port invokes the linked phase-0 handler directly; the handler is the
+        // same function registered above, and it runs the level load before
+        // the first 0x00401050 per-frame dispatch.
+        Level_Start(&game_object);
+        write_log("Flow stage Level_Start 0x00415B30 complete; "
+                  "entering per-frame 0x00401050 -> phase-1 0x00416260");
+
         unsigned int player_report_frames = 0U;
         // The input demo posts the retail key sequence to the scene window.
         bool input_demo_pending = input_demo;
@@ -2185,6 +3485,24 @@ int RunRetailModelScene(HINSTANCE instance,
         unsigned int fps_window_overruns = 0;
         while (running)
         {
+            // The retail per-frame order (0x0048F80D inside main at
+            // 0x0048F530): set the x87 extended precision (0x00498460), read
+            // the app context's isActive flag (0x0048F170) and either dispatch
+            // the frame (0x00401050) or sleep 500 ms, then check the loop
+            // status byte (0x005C8DE8) and pump the messages.
+            core::FP_InitExtendedPrecision();
+            if (AppContext_GetIsActive() != 0)
+            {
+                QTask_OpenEvent();
+            }
+            else
+            {
+                Sleep(500);
+            }
+            if (Loop_StatusByte == 0U)
+            {
+                DestroyWindow(window);
+            }
             while (PeekMessageW(&message, nullptr, 0, 0, PM_REMOVE))
             {
                 if (message.message == WM_QUIT)
@@ -2210,7 +3528,8 @@ int RunRetailModelScene(HINSTANCE instance,
                 scene.input_port = {};
                 scene.player_ready = false;
                 scene.cursor_valid = false;
-                scene.load(game_directory, level_number);
+                g_level_start_level = level_number;
+                Level_Start(&game_object);
                 scene.dev_saved_position = scene.camera_position;
                 scene.dev_saved_target = scene.camera_target;
                 scene.first_frame = true;
@@ -2227,17 +3546,15 @@ int RunRetailModelScene(HINSTANCE instance,
                 const double delta_seconds = previous_frame == std::chrono::steady_clock::time_point{}
                                                  ? 1.0 / 30.0
                                                  : std::chrono::duration<double>(frame_start - previous_frame).count();
+                Scene::frame_delta = delta_seconds;
                 if (input_demo_pending)
                 {
                     input_demo_pending = false;
                     scene.build_input_demo();
                 }
                 scene.advance_input_demo();
-                if (scene.developer_controls.free_camera_enabled)
-                    scene.update_dev_camera(static_cast<float>(delta_seconds));
-                else
-                    scene.update_player(delta_seconds);
-                scene.draw();
+                // The frame itself is run by the phase 1 handler, which the
+                // per-frame dispatch reaches through the handler table.
                 if (player_report_frames++ % 30U == 0U)
                 {
                     scene.log_player_state();

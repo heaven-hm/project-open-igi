@@ -1,0 +1,182 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00403A00",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "8973061e39cd217b50301b295e6157a679b9196d892fcffc11df6532e8f0debf",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00403A00 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/go/00403A00-GOGameLang.cpp at sha256 8973061e39cd217b50301b295e6157a679b9196d892fcffc11df6532e8f0debf (recorded implementation.signature: int32_t GOGameLang(int32_t param_1, float param_2);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00403A00",
+    "name": "GOGameLang",
+    "binary_ninja_name": "GO_GameLang",
+    "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+    "start": "0x00403A00",
+    "end": "0x403abf",
+    "basic_blocks": 5,
+    "edges": [
+      {
+        "source": "0x00403a00",
+        "target": "0x00403a1e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00403a00",
+        "target": "0x00403a3f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00403a1e",
+        "target": "0x00403a8d",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00403a3f",
+        "target": "0x00403a86",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00403a3f",
+        "target": "0x00403a8d",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00403a86",
+        "target": "0x00403a8d",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Five blocks 0x403A00-0x403ABF. Branch 0x403A00: Camera_UpdateTransform_6(&g_5c8c20,...,\"USA\"); if true, g_bc1e28[profile]=Script_EvalArgInt(frame,0) and a value of 5 is folded to 0; else g_bc1e28[profile]=5. Then memcpy([E+4],{0,0,0,&g_script_ret_type},0x18) and return arg1.",
+    "blocks": [
+      {
+        "address": "0x00403a00",
+        "start": "0x403a00",
+        "end": "0x403a1e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00403a3f",
+        "start": "0x403a3f",
+        "end": "0x403a86",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00403a1e",
+        "start": "0x403a1e",
+        "end": "0x403a3f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00403a8d",
+        "start": "0x403a8d",
+        "end": "0x403ac0",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00403a86",
+        "start": "0x403a86",
+        "end": "0x403a8d",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "FX_DebrisSpawn_26",
+      "Camera_UpdateTransform_6",
+      "Script_EvalArgInt"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/go/00403A00-GOGameLang.cpp",
+    "sha256": "8973061e39cd217b50301b295e6157a679b9196d892fcffc11df6532e8f0debf",
+    "signature": "int32_t GOGameLang(int32_t param_1, float param_2);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Five blocks 0x403A00-0x403ABF. Branch 0x403A00: Camera_UpdateTransform_6(&g_5c8c20,...,\"USA\"); if true, g_bc1e28[profile]=Script_EvalArgInt(frame,0) and a value of 5 is folded to 0; else g_bc1e28[profile]=5. Then memcpy([E+4],{0,0,0,&g_script_ret_type},0x18) and return arg1."
+  },
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Frame pointer read from [E+8] instead of [E+0xc].",
+      "Missing 0x0048F2F0 call present in retail block 0x403A00."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00403A00 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/go/00403A00-GOGameLang.cpp (sha256 8973061e39cd217b50301b295e6157a679b9196d892fcffc11df6532e8f0debf). Five blocks 0x403A00-0x403ABF. Branch 0x403A00: Camera_UpdateTransform_6(&g_5c8c20,...,\"USA\"); if true, g_bc1e28[profile]=Script_EvalArgInt(frame,0) and a value of 5 is folded to 0; else g_bc1e28[profile]=5. Then memcpy([E+4],{0,0,0,&g_script_ret_type},0x18) and return arg1."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "Retail frame slot [E+0xc]; BN (int32_t arg1, float arg2 @ 0xc); candidate's param_2 is [E+8].The retail frame slot is [E+0xc] (BN already models it as arg2/arg3 with an explicit @ 0xc offset). The candidate declaration puts its second (or third) parameter at [E+8], the registered argc slot, so the same source compiled into the QVM call site would read the wrong stack word."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "Retail frame slot [E+0xc]; BN (int32_t arg1, float arg2 @ 0xc); candidate's param_2 is [E+8].The retail frame slot is [E+0xc] (BN already models it as arg2/arg3 with an explicit @ 0xc offset). The candidate declaration puts its second (or third) parameter at [E+8], the registered argc slot, so the same source compiled into the QVM call site would read the wrong stack word."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 5 block(s)/6 edge(s) at 0x00403A00; radare2 recovers the identical 5 block(s)/6 edge(s) (score 1.0000); angr CFGFast recovers 10 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail calls 0x0048F2F0 (FX_DebrisSpawn_26), 0x004A5980 (Camera_UpdateTransform_6) and 0x004B8A20 (Script_EvalArgInt). The candidate keeps Camera_UpdateTransform_6 and Script_GetArg but omits the 0x0048F2F0 call; its lang store therefore lacks that call's side effect."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "\"USA\" literal at 0x005382C8; value 5 folds to 0; profile stride 0x564; global 0x00BC1E28; 0x18-byte zero record."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "Profile store correct; result record at [E+4] correct; frame read from [E+8] wrong."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Both branches return arg1; candidate returns context."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point arithmetic in any of the five blocks.",
+      "rationale": "No floating-point arithmetic in any of the five blocks."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(int32_t arg1, float arg2 @ 0xc)\" at 0x00403A00; radare2 recovers \"fcn.00403a00 (int32_t arg_24h, int32_t arg_2ch);\". Both tools place the entry at 0x00403A00 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t GOGameLang(int32_t param_1, float param_2);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00403A00-binaryninja.json",
+      "evidence_sha256": "532bafcc379ba160d427520259199cc3e5b8807e08c8c6fac1c0b9715c8d2523",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00403A00-radare2.json",
+      "evidence_sha256": "de0a8b0372176977b0df644a7220227dbed18969f1f0e89311ec9d5df938717a",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00403A00-angr-20261023.json",
+      "evidence_sha256": "22fb40a2a637f49358e492a9adb3bb6b19e03925493262189b5d6aeafe87db8a",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
+}

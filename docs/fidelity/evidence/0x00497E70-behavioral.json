@@ -1,0 +1,396 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x00497E70",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f5284830f6f0259537a8f23cb15134c1fd976d65a633adc3524dc1186f4ba5d3",
+  "method": "Retail and the compiled candidate both execute the setter with the optional render dispatch disabled; the 0xA8-byte context copy, the installed flag, the incremented install counter and the value returned through EAX are compared across eight seeded inputs.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x00497E70",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "4aec7df79d08a92a338f366f3fd6c7cf4efea18936c1a0c39d2139b62f535f56"
+  },
+  "cases": [
+    {
+      "id": "pattern-00-count-0-installed-0",
+      "input": {
+        "args": [
+          "context-pattern-0x00"
+        ],
+        "initial_state": {
+          "install_count": 0,
+          "installed_flag": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "7f7193dd3c6c273cdd66488f8aa5dbe3542a22bf0fcda7d6fb93235178c4589e",
+          "source_context_sha256": "7f7193dd3c6c273cdd66488f8aa5dbe3542a22bf0fcda7d6fb93235178c4589e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "7f7193dd3c6c273cdd66488f8aa5dbe3542a22bf0fcda7d6fb93235178c4589e",
+          "source_context_sha256": "7f7193dd3c6c273cdd66488f8aa5dbe3542a22bf0fcda7d6fb93235178c4589e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-01-count-0-installed-0",
+      "input": {
+        "args": [
+          "context-pattern-0x01"
+        ],
+        "initial_state": {
+          "install_count": 0,
+          "installed_flag": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "33ea5f675e0a02f3d33961f633c4a8c923a57ab690603a67706531baeb060ae9",
+          "source_context_sha256": "33ea5f675e0a02f3d33961f633c4a8c923a57ab690603a67706531baeb060ae9"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "33ea5f675e0a02f3d33961f633c4a8c923a57ab690603a67706531baeb060ae9",
+          "source_context_sha256": "33ea5f675e0a02f3d33961f633c4a8c923a57ab690603a67706531baeb060ae9"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-7f-count-1-installed-0",
+      "input": {
+        "args": [
+          "context-pattern-0x7F"
+        ],
+        "initial_state": {
+          "install_count": 1,
+          "installed_flag": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 33554432,
+          "active_context_sha256": "f5f5ba46fe814fb45a944c52e3cc87674c06ee23c1b1a87b89228d966b4876c9",
+          "source_context_sha256": "f5f5ba46fe814fb45a944c52e3cc87674c06ee23c1b1a87b89228d966b4876c9"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 33554432,
+          "active_context_sha256": "f5f5ba46fe814fb45a944c52e3cc87674c06ee23c1b1a87b89228d966b4876c9",
+          "source_context_sha256": "f5f5ba46fe814fb45a944c52e3cc87674c06ee23c1b1a87b89228d966b4876c9"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-80-count-1-installed-1",
+      "input": {
+        "args": [
+          "context-pattern-0x80"
+        ],
+        "initial_state": {
+          "install_count": 1,
+          "installed_flag": 1
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 33554432,
+          "active_context_sha256": "c039baf134331df229779c70f1712f5eb7e15f08c470de4d857389aaa85f129e",
+          "source_context_sha256": "c039baf134331df229779c70f1712f5eb7e15f08c470de4d857389aaa85f129e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 33554432,
+          "active_context_sha256": "c039baf134331df229779c70f1712f5eb7e15f08c470de4d857389aaa85f129e",
+          "source_context_sha256": "c039baf134331df229779c70f1712f5eb7e15f08c470de4d857389aaa85f129e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-aa-count-0-installed-1",
+      "input": {
+        "args": [
+          "context-pattern-0xAA"
+        ],
+        "initial_state": {
+          "install_count": 0,
+          "installed_flag": 1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "e45d074adde4f66819799b02d0ebcc70d1c775744edba95e04550665cdaa2127",
+          "source_context_sha256": "e45d074adde4f66819799b02d0ebcc70d1c775744edba95e04550665cdaa2127"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 16777216,
+          "active_context_sha256": "e45d074adde4f66819799b02d0ebcc70d1c775744edba95e04550665cdaa2127",
+          "source_context_sha256": "e45d074adde4f66819799b02d0ebcc70d1c775744edba95e04550665cdaa2127"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-55-count-5-installed-0",
+      "input": {
+        "args": [
+          "context-pattern-0x55"
+        ],
+        "initial_state": {
+          "install_count": 5,
+          "installed_flag": 0
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 6,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 100663296,
+          "active_context_sha256": "20749412b66d9d1dbff6b5c9264fab6f65766f76ba2e60fe16159f60e3b09a1e",
+          "source_context_sha256": "20749412b66d9d1dbff6b5c9264fab6f65766f76ba2e60fe16159f60e3b09a1e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 6,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 100663296,
+          "active_context_sha256": "20749412b66d9d1dbff6b5c9264fab6f65766f76ba2e60fe16159f60e3b09a1e",
+          "source_context_sha256": "20749412b66d9d1dbff6b5c9264fab6f65766f76ba2e60fe16159f60e3b09a1e"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-ff-count-5-installed-1",
+      "input": {
+        "args": [
+          "context-pattern-0xFF"
+        ],
+        "initial_state": {
+          "install_count": 5,
+          "installed_flag": 1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 6,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 100663296,
+          "active_context_sha256": "089eba6612ecaa3423589a5bde302cc7dc48e2f1db880c71c24cd5d3f51708f7",
+          "source_context_sha256": "089eba6612ecaa3423589a5bde302cc7dc48e2f1db880c71c24cd5d3f51708f7"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 6,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 100663296,
+          "active_context_sha256": "089eba6612ecaa3423589a5bde302cc7dc48e2f1db880c71c24cd5d3f51708f7",
+          "source_context_sha256": "089eba6612ecaa3423589a5bde302cc7dc48e2f1db880c71c24cd5d3f51708f7"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    },
+    {
+      "id": "pattern-3c-count-2147483647-installed-0",
+      "input": {
+        "args": [
+          "context-pattern-0x3C"
+        ],
+        "initial_state": {
+          "install_count": 2147483647,
+          "installed_flag": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 128,
+          "active_context_sha256": "9086553f58bcf10d7c8de7c79389f94023f76fd9f55a3302b52fbc48ccc4b0d3",
+          "source_context_sha256": "9086553f58bcf10d7c8de7c79389f94023f76fd9f55a3302b52fbc48ccc4b0d3"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      },
+      "candidate_output": {
+        "return_value": -2147483648,
+        "state_delta": {
+          "installed_flag": 16777216,
+          "install_count": 128,
+          "active_context_sha256": "9086553f58bcf10d7c8de7c79389f94023f76fd9f55a3302b52fbc48ccc4b0d3",
+          "source_context_sha256": "9086553f58bcf10d7c8de7c79389f94023f76fd9f55a3302b52fbc48ccc4b0d3"
+        },
+        "side_effects": [
+          "write:active_trans_context",
+          "write:installed_flag",
+          "write:install_count"
+        ]
+      }
+    }
+  ],
+  "runner": {
+    "path": "scripts/transcontext_diff_runner.py",
+    "sha256": "769bf49a4ebf8e6777d6e789fbdc8f7ab5f6833bfbae4cde6f13dd5b1d7ec3e9",
+    "command": [
+      "scripts/transcontext_diff_runner.py",
+      "--address",
+      "0x00497E70",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/render/trans_context.cpp",
+      "--implementation-sha256",
+      "f5284830f6f0259537a8f23cb15134c1fd976d65a633adc3524dc1186f4ba5d3",
+      "--root",
+      "."
+    ]
+  }
+}

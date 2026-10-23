@@ -42,7 +42,7 @@ std::int32_t Is_ResourceLoaded(const char* resource_path, ResourceHashNode** out
     do
     {
         depth = qfile::QFile_AliasResolve(alias_buffer, resource_path, depth);
-        sys::Sys_ResolveSymbol_15(name_buffer, alias_buffer);
+        sys::Resource_CanonicalizePath(name_buffer, alias_buffer);
 
         if (name_buffer[0] != 0)
         {
@@ -61,7 +61,7 @@ std::int32_t Is_ResourceLoaded(const char* resource_path, ResourceHashNode** out
             } while (character != 0);
         }
 
-        const auto hash = static_cast<std::int32_t>(sys::Sys_CheckHeap_15(name_buffer));
+        const auto hash = static_cast<std::int32_t>(sys::Resource_CalculatePathHash(name_buffer));
         ResourceHashNode* bucket = &hash_root;
         ResourceHashNode* node = hash_root.next;
 

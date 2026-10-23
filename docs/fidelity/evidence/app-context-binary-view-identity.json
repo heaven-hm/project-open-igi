@@ -1,0 +1,9 @@
+{
+  "kind": "binary-view-identity",
+  "binary_ninja_view": "view_2",
+  "database": "/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/igi.exe.bndb",
+  "bytes_read": 1384448,
+  "database_raw_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "identical": true
+}

@@ -1,0 +1,80 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x004F1160",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "5e9c5f3afd9aa309fb3875631cf93bac0006a6b08c2b488e6208ec650b87211b",
+ "reviewed": true,
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/script/script_mode.cpp hashes to 5e9c5f3afd9aa309fb3875631cf93bac0006a6b08c2b488e6208ec650b87211b. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x004F1160",
+  "name": "Script_ParseEnumReal32_5",
+  "signature": "int32_t()",
+  "start": "0x004F1160",
+  "end": "0x004F117A",
+  "size_bytes": 27,
+  "basic_blocks": 4,
+  "edges": 4,
+  "cfg_similarity": 1.0,
+  "summary": "0x004F1160-0x004F117A (27 bytes), 4 blocks/4 edges; returns 0 only when byte 0x00A758BE == 0 and byte 0x00A758BD != 0; otherwise returns 1."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/script/script_mode.cpp",
+  "sha256": "5e9c5f3afd9aa309fb3875631cf93bac0006a6b08c2b488e6208ec650b87211b",
+  "summary": "Script_GetParseMode(): returns 0 under exactly the same condition on g_a758be/g_a758bd, otherwise 1.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
+ },
+ "checks": [
+  {
+   "name": "function_boundary",
+   "result": "passed",
+   "detail": "Binary Ninja and Radare2 recover 27 bytes, 4 blocks/4 edges; cfg_similarity 1.0."
+  },
+  {
+   "name": "branch_condition",
+   "result": "passed",
+   "detail": "The byte loads, the be!=0 path, the bd==0 path and the two return constants match exactly."
+  },
+  {
+   "name": "naming",
+   "result": "passed_with_limitation",
+   "detail": "The manifest/catalog name is Script_ParseEnumReal32_5 while the source comment and candidate use Script_GetParseMode. The body is verified; the semantic name is not established by this function (it reads two parse-mode bytes, not enum/real data)."
+  },
+  {
+   "name": "behavioural_differential",
+   "result": "not_run",
+   "detail": "No runner executes 0x004F1160 as its subject."
+  }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "The body matches exactly; the catalog name Script_ParseEnumReal32_5 is not supported by the two parse-mode byte reads, while the candidate/source name Script_GetParseMode is retained. cdecl and the no-argument int32_t return are preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004F1160-binaryninja.json",
+   "evidence_sha256": "d822b01d3298a411a868f0a4af458bc932f7c5ac4df9cc963cf68cf678bd05d2",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004F1160-radare2.json",
+   "evidence_sha256": "6c239e0d4e75b6afa12d22d8d0ca8e66e470e9676af127d1af0799b9c48bbb0f",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": null,
+   "note": "No runner executes this address as its subject; the absence is recorded rather than binding another native's artifact."
+  }
+ },
+ "limitations": [
+  "The catalog name Script_ParseEnumReal32_5 is not supported by the body; the source name Script_GetParseMode is retained and the mismatch is recorded.",
+  "No behavioural runner and no live paired runtime capture exist for this address.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
+ ]
+}

@@ -14,7 +14,6 @@ CameraMatrixState camera_matrix_state{};
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: Clears the 32-bit slot at matrix + slot_index * 4 + 0x14 and returns slot_index. Named "PushStack" by the catalog, but the body is a slot invalidation, not a stack push.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_PushStack_19.
 std::int32_t Matrix_InvalidateSlot(std::int32_t* matrix, std::int32_t slot_index)
 {
     auto* const slot = reinterpret_cast<std::int32_t*>(
@@ -45,7 +44,6 @@ void Camera_UpdateTransform()
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004A26C0-0x004A2716, 86 bytes, digest f7a98c1e60c3d681dd99aabe724a45e4633a27e832b6cc7226ad1526e4111b0e.
 // Behavior/CFG: scales float RGB by -255.0f (R, G) and 255.0f (B), computes packed color, fills 256-dword palette buffer at 0x00935C10 with stosd, returns packed color DWORD. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact arithmetic and palette store; full render loop integration pending.
-// Previous catalog alias: Camera_UpdateTransform_2.
 std::int32_t Camera_UpdateFogPalette(const CameraColorContext* context)
 {
     if (context == nullptr) {

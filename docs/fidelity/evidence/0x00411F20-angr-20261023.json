@@ -1,0 +1,450 @@
+{
+  "schema_version": 1,
+  "kind": "angr-analysis",
+  "tool": "angr",
+  "angr_version": "10.0.4.post1",
+  "analysis": "CFGFast",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00411F20",
+  "result": "pass",
+  "has_unresolved_jumps": false,
+  "block_count": 60,
+  "nodes": [
+    "0x00411F20",
+    "0x00411F38",
+    "0x00411F4F",
+    "0x00411F5A",
+    "0x00411FCD",
+    "0x00411FCF",
+    "0x00411FE4",
+    "0x00411FF4",
+    "0x0041200F",
+    "0x00412029",
+    "0x0041202F",
+    "0x0041208A",
+    "0x0041208C",
+    "0x004120C7",
+    "0x004120E6",
+    "0x004120F3",
+    "0x00412103",
+    "0x00412143",
+    "0x0041216F",
+    "0x00412179",
+    "0x004121AC",
+    "0x004121C0",
+    "0x004121C6",
+    "0x004121D2",
+    "0x004121DE",
+    "0x004121E4",
+    "0x004121EA",
+    "0x004121F0",
+    "0x004121F8",
+    "0x004121FE",
+    "0x00412209",
+    "0x00412215",
+    "0x0041223F",
+    "0x0041224F",
+    "0x0041228E",
+    "0x0041229E",
+    "0x004122BC",
+    "0x004122D4",
+    "0x004122D8",
+    "0x004122DC",
+    "0x004122F4",
+    "0x00412307",
+    "0x0041230B",
+    "0x00412317",
+    "0x00412324",
+    "0x0041232A",
+    "0x00412336",
+    "0x0041233C",
+    "0x00412342",
+    "0x0041234A",
+    "0x00412350",
+    "0x0041235D",
+    "0x00412363",
+    "0x00412370",
+    "0x00412376",
+    "0x0041238A",
+    "0x004123AE",
+    "0x004123CD",
+    "0x004123DD",
+    "0x004123E0"
+  ],
+  "edges": [
+    {
+      "kind": "unknown",
+      "source": "0x00411F20",
+      "target": "0x00411F38"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411F38",
+      "target": "0x00411F4F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411F38",
+      "target": "0x0041223F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411F4F",
+      "target": "0x00411F5A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411F5A",
+      "target": "0x00411FCD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FCD",
+      "target": "0x00411FCD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FCD",
+      "target": "0x00411FCF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FCF",
+      "target": "0x00411FE4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FE4",
+      "target": "0x00411FF4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FF4",
+      "target": "0x0041200F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00411FF4",
+      "target": "0x0041202F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041200F",
+      "target": "0x00412029"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041200F",
+      "target": "0x0041202F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412029",
+      "target": "0x0041202F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041202F",
+      "target": "0x0041208A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041208A",
+      "target": "0x0041208A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041208A",
+      "target": "0x0041208C"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041208C",
+      "target": "0x004120C7"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004120C7",
+      "target": "0x004120E6"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004120E6",
+      "target": "0x004120F3"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004120F3",
+      "target": "0x00412103"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412103",
+      "target": "0x00412143"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412103",
+      "target": "0x0041216F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412143",
+      "target": "0x0041216F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041216F",
+      "target": "0x00412179"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412179",
+      "target": "0x004121AC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121AC",
+      "target": "0x004121C0"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121C0",
+      "target": "0x004121C6"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121C6",
+      "target": "0x004121D2"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121D2",
+      "target": "0x004121DE"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121DE",
+      "target": "0x004121E4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121E4",
+      "target": "0x004121EA"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121EA",
+      "target": "0x004121F0"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121F0",
+      "target": "0x004121F8"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121F8",
+      "target": "0x004121FE"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004121FE",
+      "target": "0x00412209"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412209",
+      "target": "0x00412215"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412215",
+      "target": "0x004123CD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041223F",
+      "target": "0x0041224F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041224F",
+      "target": "0x0041228E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041228E",
+      "target": "0x0041229E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041229E",
+      "target": "0x004122BC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041229E",
+      "target": "0x004122D4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122BC",
+      "target": "0x004122D4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122BC",
+      "target": "0x004122D8"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122D4",
+      "target": "0x004122DC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122D8",
+      "target": "0x004122DC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122DC",
+      "target": "0x004122F4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122DC",
+      "target": "0x00412307"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122F4",
+      "target": "0x00412307"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004122F4",
+      "target": "0x00412317"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412307",
+      "target": "0x0041230B"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412307",
+      "target": "0x00412317"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041230B",
+      "target": "0x00412317"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041230B",
+      "target": "0x004123E0"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412317",
+      "target": "0x00412324"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412324",
+      "target": "0x0041232A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041232A",
+      "target": "0x00412336"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412336",
+      "target": "0x0041233C"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041233C",
+      "target": "0x00412342"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412342",
+      "target": "0x0041234A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041234A",
+      "target": "0x00412350"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412350",
+      "target": "0x0041235D"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412350",
+      "target": "0x00412370"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041235D",
+      "target": "0x00412363"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412363",
+      "target": "0x00412370"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412370",
+      "target": "0x00412376"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412376",
+      "target": "0x0041238A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00412376",
+      "target": "0x004123AE"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041238A",
+      "target": "0x004123CD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004123AE",
+      "target": "0x004123CD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004123CD",
+      "target": "0x004123DD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004123DD",
+      "target": "0x004123E0"
+    }
+  ],
+  "recovery_mode": "automatic",
+  "reason": null,
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "limitations": [
+    "CFGFast is approximate static analysis",
+    "This result does not prove semantic or behavioral equivalence",
+    "CFGFast is approximate static analysis and does not prove semantic or behavioral equivalence."
+  ]
+}

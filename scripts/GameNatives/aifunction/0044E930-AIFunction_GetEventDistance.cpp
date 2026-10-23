@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetEventDistance - 0x0044E930 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E930-AIFunction_GetEventDistance.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E930-AIFunction_GetEventDistance.hpp"
+#include "AIFunction_GetEventDistance.h"
 int AIFunction_GetEventDistance(int context)
 
 // Sig: float AIFunction_GetEventDistance()

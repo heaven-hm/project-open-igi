@@ -1,0 +1,2528 @@
+{
+  "retail": "igi.exe",
+  "candidate": "open-igi.exe",
+  "level": 4,
+  "threshold": "STRUCTURALLY_VERIFIED",
+  "results": [
+    {
+      "address": "0x0048F530",
+      "name": "main",
+      "cppName": "Main",
+      "implementation": "engine/src/retail/core/retail_main.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "cppName": "QTask_CreateTask",
+      "implementation": "scripts/GameNatives/qtask/00401000-QTask_CreateTask.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00401050",
+      "name": "QTask_OpenEvent",
+      "cppName": "QTask_OpenEvent",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "cppName": "QTask_RegisterClasses",
+      "implementation": "engine/src/retail/core/class_registration.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00402800",
+      "name": "Flow_CreateHandler",
+      "cppName": "Flow_CreateHandler",
+      "implementation": "engine/src/retail/core/flow.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "cppName": "Flow_RunHandler",
+      "implementation": "engine/src/retail/core/flow.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00402880",
+      "name": "Game_GetContext",
+      "cppName": "Game_GetContext",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: WARNING: 0x00402880: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004028A0",
+      "name": "Flow_SetState",
+      "cppName": "Flow_SetState",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: WARNING: 0x004028A0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F480",
+      "name": "Loop_SetStatusByte",
+      "cppName": "Loop_SetStatusByte",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00404590",
+      "name": "Config_GetActiveGraphicOptions",
+      "cppName": "Config_GetActiveGraphicOptions",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00404F00",
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "cppName": "Config_GraphicOptionsSetPerformanceFlags",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00404F60",
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "cppName": "Config_GraphicOptionsGetPerformanceFlags",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00405530",
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "cppName": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004055C0",
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "cppName": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00405620",
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "cppName": "Config_GraphicOptionsNumPerfLevels",
+      "implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "cppName": "Config_Read",
+      "implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/script/humanplayer_defines.cpp:104 0x00405850: missing Status/limits: line",
+          "native_gate: WARNING: 0x00405850: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004037C0",
+      "name": "GOInRemap",
+      "cppName": "GOInRemap",
+      "implementation": "engine/src/retail/config/input_remap.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/config/input_remap.cpp:17 0x004037C0: missing Status/limits: line",
+          "native_gate: WARNING: 0x004037C0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "cppName": "DefineHumanPlayerGeneral",
+      "implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004137A0",
+      "name": "HumanPlayer_LoadParameters",
+      "cppName": "HumanPlayer_LoadParameters",
+      "implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00463180",
+      "name": "Human_IsCrouched",
+      "cppName": "Human_IsCrouched",
+      "implementation": "engine/src/retail/human/human_camera_eye.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00465820",
+      "name": "Human_CameraEyePosition",
+      "cppName": "Human_CameraEyePosition",
+      "implementation": "engine/src/retail/human/human_camera_eye.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004659E0",
+      "name": "Human_TaskViewReset",
+      "cppName": "Human_TaskViewReset",
+      "implementation": "engine/src/retail/human/human_view.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "cppName": "InputPort_Process",
+      "implementation": "engine/src/retail/input/input_port_process.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/input/input_port_process.cpp:69 0x004ED5C0: missing Status/limits: line",
+          "native_gate: WARNING: 0x004ED5C0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F1D0",
+      "name": "Script_GetDebugCompileState",
+      "cppName": "Script_GetDebugCompileState",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F340",
+      "name": "Script_GetForcePrecompiledState",
+      "cppName": "Script_GetForcePrecompiledState",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B1E90",
+      "name": "String_FindExtension",
+      "cppName": "String_FindExtension",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "cppName": "Resource_FileExists",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "cppName": "Qvm_ReportError",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B80B0",
+      "name": "Qvm_Load",
+      "cppName": "Qvm_Load",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - 0x004B80B0: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B83D0",
+      "name": "Qvm_Cleanup",
+      "cppName": "Qvm_Cleanup",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B8A10",
+      "name": "Qvm_SetGlobalState",
+      "cppName": "Qvm_SetGlobalState",
+      "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "cppName": "Qvm_ExecuteInstructions",
+      "implementation": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004BD3D0",
+      "name": "Qvm_SetOpcodeHandler",
+      "cppName": "Qvm_SetOpcodeHandler",
+      "implementation": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004BDA00",
+      "name": "Qvm_PushInteger",
+      "cppName": "Qvm_PushInteger",
+      "implementation": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00491D40",
+      "name": "Display_ComputeScreenAspect",
+      "cppName": "Display_ComputeScreenAspect",
+      "implementation": "engine/src/retail/render/view_block.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00497D70",
+      "name": "Transcontext_BuildViewBlock",
+      "cppName": "Transcontext_BuildViewBlock",
+      "implementation": "engine/src/retail/render/view_block.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004A2600",
+      "name": "Camera_ResetMatrix",
+      "cppName": "Camera_ResetMatrix",
+      "implementation": "engine/src/retail/render/camera_transform.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7450",
+      "name": "Matrix_InvalidateSlot",
+      "cppName": "Matrix_InvalidateSlot",
+      "implementation": "engine/src/retail/render/camera_transform.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7470",
+      "name": "Ilff_GetNextChunk",
+      "cppName": "Ilff_GetNextChunk",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7490",
+      "name": "Ilff_GetFirstChunk",
+      "cppName": "Ilff_GetFirstChunk",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B74D0",
+      "name": "Ilff_GetChunkPayload",
+      "cppName": "Ilff_GetChunkPayload",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7540",
+      "name": "Ilff_ReadContainerHeader",
+      "cppName": "Ilff_ReadContainerHeader",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7570",
+      "name": "Ilff_GetFormType",
+      "cppName": "Ilff_GetFormType",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7580",
+      "name": "Ilff_GetChunkTag",
+      "cppName": "Ilff_GetChunkTag",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7590",
+      "name": "Ilff_FindChunk",
+      "cppName": "Ilff_FindChunk",
+      "implementation": "engine/src/retail/sys/ilff_navigation.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CEAA0",
+      "name": "Ilff_FindFormChunk",
+      "cppName": "Ilff_FindFormChunk",
+      "implementation": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AAD10",
+      "name": "Resource_MatchPrefix",
+      "cppName": "Resource_MatchPrefix",
+      "implementation": "engine/src/retail/resource/sys_resource.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AD73D",
+      "name": "String_ToUpperChar",
+      "cppName": "String_ToUpperChar",
+      "implementation": "engine/src/retail/sys/resource_lookup.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/sys/resource_lookup.cpp:5 0x004AD73D: missing Status/limits: line",
+          "native_gate: WARNING: 0x004AD73D: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B0D40",
+      "name": "QHash_ValueSet",
+      "cppName": "QHash_ValueSet",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B1690",
+      "name": "Device_CloseStream",
+      "cppName": "Device_CloseStream",
+      "implementation": "engine/src/retail/resource/device_dispatch.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B1780",
+      "name": "Device_GetStreamPosition",
+      "cppName": "Device_GetStreamPosition",
+      "implementation": "engine/src/retail/resource/device_dispatch.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B17F0",
+      "name": "Device_SeekStream",
+      "cppName": "Device_SeekStream",
+      "implementation": "engine/src/retail/resource/device_dispatch.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B59F0",
+      "name": "Resource_CreateNode",
+      "cppName": "Resource_CreateNode",
+      "implementation": "engine/src/retail/resource/sys_resource.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5AF0",
+      "name": "Resource_CanonicalizePath",
+      "cppName": "Resource_CanonicalizePath",
+      "implementation": "engine/src/retail/sys/resource_lookup.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5B30",
+      "name": "Resource_CalculatePathHash",
+      "cppName": "Resource_CalculatePathHash",
+      "implementation": "engine/src/retail/sys/resource_lookup.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5C90",
+      "name": "Resource_FreeNode",
+      "cppName": "Resource_FreeNode",
+      "implementation": "engine/src/retail/resource/sys_resource.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/resource/sys_resource.cpp:215 0x004B5C90: missing Status/limits: line",
+          "native_gate: WARNING: 0x004B5C90: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5F00",
+      "name": "Resource_Load",
+      "cppName": "Resource_Load",
+      "implementation": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B5F80",
+      "name": "Resource_RegisterBuffer",
+      "cppName": "Resource_RegisterBuffer",
+      "implementation": "engine/src/retail/resource/sys_resource.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B60F0",
+      "name": "Resource_RegisterIlffContainer",
+      "cppName": "Resource_RegisterIlffContainer",
+      "implementation": "engine/src/retail/resource/sys_resource.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B6380",
+      "name": "Resource_Unload",
+      "cppName": "Resource_Unload",
+      "implementation": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF300",
+      "name": "DynObj_LookupHashItem",
+      "cppName": "DynObj_LookupHashItem",
+      "implementation": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF330",
+      "name": "DynObj_LoadPackageMeshes",
+      "cppName": "DynObj_LoadPackageMeshes",
+      "implementation": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF390",
+      "name": "DynObj_LoadModelMesh",
+      "cppName": "DynObj_LoadModelMesh",
+      "implementation": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF630",
+      "name": "DynObj_LoadPackageLovs",
+      "cppName": "DynObj_LoadPackageLovs",
+      "implementation": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF910",
+      "name": "DynObj_LoadPackageAnimations",
+      "cppName": "DynObj_LoadPackageAnimations",
+      "implementation": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004D0CF0",
+      "name": "Model_GetAttachment",
+      "cppName": "Model_GetAttachment",
+      "implementation": "engine/src/retail/model/mef_native_attachments.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: 0x004D0CF0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004D0D10",
+      "name": "Model_GetAttachmentCount",
+      "cppName": "Model_GetAttachmentCount",
+      "implementation": "engine/src/retail/model/mef_native_attachments.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: 0x004D0D10: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004EDB60",
+      "name": "LODSettings_LoadParameters",
+      "cppName": "LODSettings_LoadParameters",
+      "implementation": "engine/src/retail/render/lod_settings.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF080",
+      "name": "DynObj_LoadModelTexturePackage",
+      "cppName": "DynObj_LoadModelTexturePackage",
+      "implementation": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "cppName": "Camera_UpdateFogPalette",
+      "implementation": "engine/src/retail/render/camera_transform.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B0F80",
+      "name": "Texture_GetActiveBackendId",
+      "cppName": "Texture_GetActiveBackendId",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B23B0",
+      "name": "Texture_UploadMipmapPacket",
+      "cppName": "Texture_UploadMipmapPacket",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B24C0",
+      "name": "Texture_LoadLoopTextureFile",
+      "cppName": "Texture_LoadLoopTextureFile",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B26A0",
+      "name": "Texture_EnableUpload",
+      "cppName": "Texture_EnableUpload",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "cppName": "Texture_DisableUpload",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "cppName": "Texture_UploadPalettePacket",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF790",
+      "name": "DynObj_LoadModelTextures",
+      "cppName": "DynObj_LoadModelTextures",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CF870",
+      "name": "DynObj_LoadPackagePalettes",
+      "cppName": "DynObj_LoadPackagePalettes",
+      "implementation": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "cppName": "TextureModifier_Push",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: WARNING: 0x00505E40: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004C5F00",
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "cppName": "Terrain_LoadTexturesAndLightmaps",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:399 0x004C5F00: missing Status/limits: line",
+          "native_gate: WARNING: 0x004C5F00: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004C6240",
+      "name": "Terrain_Load",
+      "cppName": "Terrain_Load",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:376 0x004C6240: missing Status/limits: line",
+          "native_gate: WARNING: 0x004C6240: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004C6670",
+      "name": "Terrain_CreateMaterial",
+      "cppName": "Terrain_CreateMaterial",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:806: host helper comment is missing Status/limits:",
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004C6760",
+      "name": "Terrain_CreateTileMap",
+      "cppName": "Terrain_CreateTileMap",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:806: host helper comment is missing Status/limits:",
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004CEA80",
+      "name": "Render_GetActiveBackendId",
+      "cppName": "Render_GetActiveBackendId",
+      "implementation": "engine/src/retail/render/backend.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004D14E0",
+      "name": "Terrain_TraverseContourQuadtree",
+      "cppName": "Terrain_TraverseContourQuadtree",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:419 0x004D14E0: missing Status/limits: line",
+          "native_gate: WARNING: 0x004D14E0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "cppName": "TerrainLightMap_PushEntry",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: WARNING: 0x004F82B0: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00506F00",
+      "name": "HeightMap_Enter",
+      "cppName": "HeightMap_Enter",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: WARNING: 0x00506F00: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00510010",
+      "name": "Terrain_DecodeChunkCommands",
+      "cppName": "Terrain_DecodeChunkCommands",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:1163: host helper needs five consecutive provenance lines",
+          "native_gate: WARNING: 0x00510010: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00512C30",
+      "name": "Terrain_Draw",
+      "cppName": "Terrain_Draw",
+      "implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/terrain/terrain_loaders.cpp:444 0x00512C30: missing Status/limits: line",
+          "native_gate: WARNING: 0x00512C30: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x005175A0",
+      "name": "Terrain_LoadTexturePackage",
+      "cppName": "Terrain_LoadTexturePackage",
+      "implementation": "engine/src/retail/texture/texture_loaders.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004A53B3",
+      "name": "sprintf",
+      "cppName": "sprintf",
+      "implementation": "engine/src/retail/error/error_show.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004A5702",
+      "name": "String_VFormat",
+      "cppName": "String_VFormat",
+      "implementation": "engine/src/retail/error/error_show.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AA670",
+      "name": "Mem_AllocChunk",
+      "cppName": "Mem_AllocChunk",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AA682",
+      "name": "Mem_AllocWithRetry",
+      "cppName": "Mem_AllocWithRetry",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AA6AE",
+      "name": "Mem_AllocateRawBlock",
+      "cppName": "Mem_AllocateRawBlock",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AD722",
+      "name": "Mem_InvokeNewHandler",
+      "cppName": "Mem_InvokeNewHandler",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AF7B0",
+      "name": "Error_Show",
+      "cppName": "Error_Show",
+      "implementation": "engine/src/retail/error/error_show.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - assets/IGINatives_v4.json: 004AF7B0 is named Debug_Error but scripts/GameNatives uses ['Error_Show']",
+          "  - 0x004AF7B0: angr analysis failed: Expecting value: line 1 column 1 (char 0)",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AF8F0",
+      "name": "HeapList_Insert",
+      "cppName": "HeapList_Insert",
+      "implementation": "engine/src/retail/mem/heap_list.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AF960",
+      "name": "HeapList_Remove",
+      "cppName": "HeapList_Remove",
+      "implementation": "engine/src/retail/mem/heap_list.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B0BA0",
+      "name": "Mem_InitHeapState",
+      "cppName": "Mem_InitHeapState",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - 0x004B0BA0: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004B0C60",
+      "name": "Mem_Alloc",
+      "cppName": "Mem_Alloc",
+      "implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - assets/IGINatives_v4.json: 004B0C60 is named Mem_AllocFn but scripts/GameNatives uses ['Mem_Alloc']",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F140",
+      "name": "AppContext_SetIsActive",
+      "cppName": "AppContext_SetIsActive",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F170",
+      "name": "AppContext_GetIsActive",
+      "cppName": "AppContext_GetIsActive",
+      "implementation": "engine/src/retail/core/frame_natives.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F1B0",
+      "name": "App_ContextGetDebugged",
+      "cppName": "App_ContextGetDebugged",
+      "implementation": "engine/src/retail/core/app_context.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - 0x0048F1B0: angr analysis failed: Expecting value: line 1 column 1 (char 0)",
+          "  - 0x0048F1B0: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F230",
+      "name": "App_ContextGetLightmapsUsed",
+      "cppName": "App_ContextGetLightmapsUsed",
+      "implementation": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - 0x0048F230: angr analysis failed: Expecting value: line 1 column 1 (char 0)",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F250",
+      "name": "App_ContextGetTerrainLightmapsUsed",
+      "cppName": "App_ContextGetTerrainLightmapsUsed",
+      "implementation": "scripts/GameNatives/fx/0048F250-App_ContextGetTerrainLightmapsUsed.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x0048F260",
+      "name": "AppContext_SetTerrainLightmapsUsed",
+      "cppName": "AppContext_SetTerrainLightmapsUsed",
+      "implementation": "scripts/GameNatives/fx/0048F260-AppContext_SetTerrainLightmapsUsed.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 1 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00498460",
+      "name": "Display_ClearSurfaces_16",
+      "cppName": "FP_InitExtendedPrecision",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - 0x00498460: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00497E70",
+      "name": "TransContext_SetActiveTransContext",
+      "cppName": "Transcontext_SetActiveTransContext",
+      "implementation": "engine/src/retail/render/trans_context.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: WARNING: engine/src/retail/render/trans_context.cpp:19 0x00497E70: missing Status/limits: line",
+          "native_gate: WARNING: 0x00497E70: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004A7157",
+      "name": "Camera_ApplyBandFilter_10",
+      "cppName": "FP_SetDefaultPrecision",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - 0x004A7157: angr analysis failed: Expecting value: line 1 column 1 (char 0)",
+          "  - 0x004A7157: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AC620",
+      "name": "Camera_SetFieldOfView_24",
+      "cppName": "FP_MergeControlWord",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - 0x004AC620: angr analysis failed: angr helper returned invalid JSON (exit code -9); stderr=''; stdout_tail=''",
+          "  - 0x004AC620: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AC655",
+      "name": "Camera_ApplyLineFilter_24",
+      "cppName": "FP_MergeControlWordNoDenormal",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "native_gate: BLOCKED 1 changed native(s) (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)",
+          "  - 0x004AC655: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AC66B",
+      "name": "Camera_ApplyBandFilter_24",
+      "cppName": "FP_ControlWordToFlags",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - 0x004AC66B: angr analysis failed: angr helper returned invalid JSON (exit code -9); stderr=''; stdout_tail=''",
+          "  - 0x004AC66B: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004AC6FD",
+      "name": "Camera_ApplyWideScreen_24",
+      "cppName": "FP_FlagsToControlWord",
+      "implementation": "engine/src/retail/core/fpu_state.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": false,
+        "exitCode": 1,
+        "tail": [
+          "  - 0x004AC6FD: angr analysis failed: angr helper returned invalid JSON (exit code -9); stderr=''; stdout_tail=''",
+          "  - 0x004AC6FD: missing behavioral tests report reference",
+          "Comments and manifest status labels alone do not authorize compilation."
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004F1160",
+      "name": "Script_ParseEnumReal32_5",
+      "cppName": "Script_GetParseMode",
+      "implementation": "engine/src/retail/script/script_mode.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: 0x004F1160: five-line comment status does not match manifest status STRUCTURALLY_VERIFIED",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x004D67A0",
+      "name": "AnimIff_LoadAnimationFile",
+      "cppName": "AnimIff_LoadAnimationFile",
+      "implementation": "engine/src/retail/model/iff_skeleton.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: angr CFGFast 1/1 exact entries recovered (structural evidence only)",
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00517890",
+      "name": "Iff_FindFormChunk",
+      "cppName": "Iff_FindFormChunk",
+      "implementation": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: engine/src/retail/model/iff_chunk_tree.cpp:54: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x005178E0",
+      "name": "Iff_FindChunkBelowForm",
+      "cppName": "Iff_FindChunkBelowForm",
+      "implementation": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: engine/src/retail/model/iff_chunk_tree.cpp:54: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x00517940",
+      "name": "Iff_FindChunk",
+      "cppName": "Iff_FindChunk",
+      "implementation": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: engine/src/retail/model/iff_chunk_tree.cpp:54: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    },
+    {
+      "address": "0x005179C0",
+      "name": "Iff_GetChunkPayload",
+      "cppName": "Iff_GetChunkPayload",
+      "implementation": "engine/src/retail/model/iff_chunk_tree.cpp",
+      "status": "STRUCTURALLY_VERIFIED",
+      "static": {
+        "ok": true,
+        "exitCode": 0,
+        "tail": [
+          "native_gate: v4 catalog consistency checked for 0 selected entries",
+          "native_gate: WARNING: engine/src/retail/model/iff_chunk_tree.cpp:54: host helper needs five consecutive provenance lines",
+          "native_gate: OK \u2014 1 changed native(s) passed required binary/source/evidence checks (status>=STRUCTURALLY_VERIFIED, CFG>=0.85, behavioral-tests=disabled)"
+        ]
+      },
+      "retailCalled": false,
+      "candidateCalled": false,
+      "reachabilityObserved": false,
+      "verified": false,
+      "verification": "diagnostic_only_no_matching_input_output_state_comparison"
+    }
+  ]
+}

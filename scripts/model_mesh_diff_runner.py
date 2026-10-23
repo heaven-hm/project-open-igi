@@ -47,6 +47,7 @@ __declspec(dllexport) void* NativeAllocate(int,int) {return nullptr;}
 __declspec(dllexport) void* NativeLoad(const char*,int*) {return nullptr;}
 __declspec(dllexport) int NativeFormat(char*,const char*,const char*) {return 0;}
 __declspec(dllexport) void NativeBackend(void**) {}
+__declspec(dllexport) int NativeCallbackEnabled = 1;
 }
 namespace igi::retail::mem { void* Mem_Alloc(int size,int align) {return NativeAllocate(size,align);} }
 namespace igi::retail::resource { void* Resource_Load(const char* path,int* size) {return NativeLoad(path,size);} }
@@ -58,13 +59,16 @@ int sprintf(char* out,const char* format,...) {
 int Error_Show(const char*,...) {return 0;}
 }
 extern "C" __declspec(dllexport) void* NativeEntry(const char* name) {
- igi::retail::render::Host_SetRenderBackendId(0);
- igi::retail::dynobj::Host_SetModelBackendInit(0,NativeBackend);
+ igi::retail::render::Render_SetBackendId(0);
+ igi::retail::dynobj::Model_SetBackendInit(0,NativeCallbackEnabled ? NativeBackend : nullptr);
  return igi::retail::dynobj::DynObj_LoadModelMesh(name);
 }
 '''
     base,heap,name_address,callback=0x50000000,0x50008000,0x50004000,0x13371000
-    fixtures=[(0,0),(1,0),(2,1),(4,2),(8,0),(16,1),(31,0),(31,3),(0,-1)]
+    fixtures=[(mask,animations,True) for mask,animations in
+              [(0,0),(1,0),(2,1),(4,2),(8,0),(16,1),(31,0),(31,3),(0,-1)]]
+    # Retail 0x004CF604 skips dispatch for a null backend callback.
+    fixtures += [(0,0,False),(31,3,False)]
     retail=angr.Project(str(binary),auto_load_libs=False); observations=[]
     with tempfile.TemporaryDirectory(prefix="igi-model-mesh-") as temp:
         wrapper=pathlib.Path(temp)/"entry.cpp"; candidate=pathlib.Path(temp)/"candidate.dll"
@@ -93,7 +97,7 @@ extern "C" __declspec(dllexport) void* NativeEntry(const char* name) {
             data[16:20]=b"MEF "
             return bytes(data)
 
-        def run(project,reference,data):
+        def run(project,reference,data,backend_enabled):
             def text(state,pointer):
                 result=bytearray()
                 for offset in range(256):
@@ -145,27 +149,70 @@ extern "C" __declspec(dllexport) void* NativeEntry(const char* name) {
                     address=found.rebased_addr
                 project.hook(address,procedure(prototype=prototype,cc=angr.calling_conventions.SimCCCdecl(project.arch)),replace=True)
             address=int(args.address,16) if reference else rebuilt.loader.find_symbol("NativeEntry").rebased_addr
+            if reference:
+                native_entry = address
+            else:
+                entries = [symbol for symbol in rebuilt.loader.symbols
+                           if "DynObj_LoadModelMesh" in symbol.name]
+                if len(entries) != 1:
+                    raise RuntimeError("candidate native symbol is missing or ambiguous")
+                native_entry = entries[0].rebased_addr
+            # Retail 0x004CF5F5 and 0x004CF606 read the backend separately.
+            # Observe the actual getter entry without replacing its body: fixed
+            # backend-zero fixtures must still detect a dropped native call.
+            if reference:
+                backend_getter = 0x004CEA80
+            else:
+                getters = [symbol for symbol in rebuilt.loader.symbols
+                           if "Render_GetActiveBackendId" in symbol.name]
+                if len(getters) != 1:
+                    raise RuntimeError("candidate backend getter symbol is missing or ambiguous")
+                backend_getter = getters[0].rebased_addr
             state=project.factory.call_state(address,name_address,ret_addr=0x13370000,prototype="void* f(char*)",
                 cc=angr.calling_conventions.SimCCCdecl(project.arch),
                 add_options={angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS})
             state.memory.store(base,data); state.memory.store(name_address,b"fixture\x00")
+            for index,register in enumerate(("ebx","esi","edi","ebp")):
+                setattr(state.regs,register,0x11223300+index)
             if reference:
                 state.memory.store(0x00548208,(0).to_bytes(4,"little"))
-                state.memory.store(0x00A94E84,callback.to_bytes(4,"little"))
+                state.memory.store(0x00A94E84,(callback if backend_enabled else 0).to_bytes(4,"little"))
+            else:
+                enabled = rebuilt.loader.find_symbol("NativeCallbackEnabled")
+                if enabled is None:
+                    raise RuntimeError("candidate backend fixture control is missing")
+                state.memory.store(enabled.rebased_addr,int(backend_enabled).to_bytes(4,"little"))
             manager=project.factory.simgr(state)
             final,termination=None,None
+            entry_abi,return_site,abi=None,None,None
             for _ in range(12000):
                 if len(manager.active)!=1 or manager.errored:
                     raise RuntimeError(f"model execution failed: {[str(x.error) for x in manager.errored]}")
                 active=manager.active[0]
+                # Observe the native boundary itself: a wrapper could otherwise
+                # restore registers and hide a callee ABI violation.
+                if active.addr == native_entry and entry_abi is None:
+                    entry_abi = {register:active.solver.eval(getattr(active.regs,register))
+                                 for register in ("esp","ebx","esi","edi","ebp")}
+                    return_site = active.solver.eval(active.memory.load(entry_abi["esp"],4,endness="Iend_LE"))
+                elif entry_abi is not None and active.addr == return_site and abi is None:
+                    abi = {"stack_delta":active.solver.eval(active.regs.esp)-entry_abi["esp"],
+                           "callee_saved":{register:active.solver.eval(getattr(active.regs,register))==entry_abi[register]
+                                           for register in ("ebx","esi","edi","ebp")}}
+                    if abi["stack_delta"] != 4 or not all(abi["callee_saved"].values()):
+                        raise RuntimeError(f"native cdecl ABI violation: {abi}")
+                if active.addr == backend_getter:
+                    event(active, ["backend-id-read"])
                 if active.addr==0x13370000:
                     final,termination=active,"returned"; break
                 if active.solver.eval(active.memory.load(active.addr,2),cast_to=bytes)==b"\xeb\xfe":
                     final,termination=active,"fatal-self-loop"; break
                 manager.step()
             if final is None: raise RuntimeError("model execution exceeded fixture bound")
+            if termination == "returned" and abi is None:
+                raise RuntimeError("native return ABI was not observed")
             count=int(final.globals.get("allocation_count",0))
-            memory={"termination":termination,"container":final.solver.eval(final.memory.load(base,len(data)),cast_to=bytes).hex()}
+            memory={"termination":termination,"native_abi":abi,"container":final.solver.eval(final.memory.load(base,len(data)),cast_to=bytes).hex()}
             # Compare every byte of each requested allocation, not host addresses.
             allocation_events=[item for item in final.globals.get("events",()) if item[0]=="allocate"]
             for index in range(count):
@@ -173,22 +220,30 @@ extern "C" __declspec(dllexport) void* NativeEntry(const char* name) {
             return {"return_value":final.solver.eval(final.regs.eax) if termination=="returned" else None,"state_delta":memory,
                     "side_effects":list(final.globals.get("events",()))}
 
-        for mask,animations in fixtures:
+        for mask,animations,backend_enabled in fixtures:
             data=make_container(mask,animations)
-            observations.append({"id":f"mask-{mask}-animations-{animations}","input":{"optional_mask":mask,"animations":animations},
+            observations.append({"id":f"mask-{mask}-animations-{animations}-backend-{int(backend_enabled)}","input":{"optional_mask":mask,"animations":animations,"backend_enabled":backend_enabled},
                 "categories":["boundary" if mask==0 or animations==0 else "nominal"],
-                "reference_output":run(retail,True,data),"candidate_output":run(rebuilt,False,data)})
+                "reference_output":run(retail,True,data,backend_enabled),"candidate_output":run(rebuilt,False,data,backend_enabled)})
         candidate_hash=digest(candidate)
     failed=sum(case["reference_output"]!=case["candidate_output"] for case in observations)
+    runner_path=pathlib.Path(__file__).resolve()
     report={"schema_version":1,"kind":"behavioral-test-report","result":"failed" if failed else "passed",
         "executed":True,"oracle":"retail-binary-execution","address":args.address,
+        "runner":{"path":runner_path.relative_to(pathlib.Path(args.root).resolve()).as_posix(),
+                  "sha256":digest(runner_path),
+                  "command":[str(runner_path),"--address",args.address,"--binary",str(args.binary),
+                              "--binary-sha256",args.binary_sha256,
+                              "--implementation",str(args.implementation),
+                              "--implementation-sha256",args.implementation_sha256,
+                              "--root",str(args.root)]},
         "binary_sha256":args.binary_sha256,"implementation_sha256":args.implementation_sha256,
         "method":"Retail and compiled x86 loader bodies execute their actual ILFF navigation; compare optional-chunk relocations, NAXT arrays, allocated records and backend dispatch under identical boundary models.",
         "observable_fields":["return_value","state_delta","side_effects"],"float_tolerance":{"absolute":0,"relative":0},
         "tests_total":len(observations),"tests_passed":len(observations)-failed,"tests_failed":failed,"cases":observations,
         "retail_execution":{"tool":"angr","engine":"VEX","version":angr.__version__,"function_entry":args.address,
             "candidate_sha256":candidate_hash,"candidate_build_command":command,"binary_sha256":args.binary_sha256},
-        "limitations":["Valid version-0.1 meshes and one incompatible-version fixture with backend zero; malformed containers and absent backend are excluded.",
+        "limitations":["Valid version-0.1 meshes, null/present callbacks and one incompatible-version fixture with backend ID zero; malformed containers and changing/out-of-range backend IDs are excluded.",
             "Allocator, VFS, path formatter and backend implementations are modeled and not verified by this fixture.",
             "Generated ILFF records test loader semantics, not compatibility with every original asset or a live game run."]}
     print(json.dumps(report)); return int(bool(failed))

@@ -13,13 +13,12 @@ std::int32_t render_backend_id = -1;
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: DynObj_InsertHashItem_13.
 std::int32_t Render_GetActiveBackendId()
 {
     return render_backend_id;
 }
 
-void Host_SetRenderBackendId(std::int32_t backend_id)
+void Render_SetBackendId(std::int32_t backend_id)
 {
     render_backend_id = backend_id;
 }

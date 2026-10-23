@@ -1,6 +1,6 @@
 // IGI native provenance: Mine_ProximityCreate - 0x00476040 - CFG score 85.2% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00476040-Mine_ProximityCreate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Mine_ProximityCreate.hpp"
+#include "Mine_ProximityCreate.h"
 struct status_msg* Mine_ProximityCreate(void* context, int arg2, int arg3, int arg4, int arg5, int arg6, int arg7, int arg8, char arg9)
 
 // Sig: void Mine_ProximityCreate(void)

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsSetSpeech - 0x00404CF0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404CF0-Config_SoundOptionsSetSpeech.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404CF0-Config_SoundOptionsSetSpeech.hpp"
+#include "Config_SoundOptionsSetSpeech.h"
 int Config_SoundOptionsSetSpeech(int context, float arg2 )
 
 // Sig: void Config_SoundOptionsSetSpeech(int onOff)

@@ -1,0 +1,224 @@
+{
+ "schema_version": 1,
+ "kind": "angr-analysis",
+ "tool": "angr",
+ "angr_version": "10.0.4.post1",
+ "analysis": "CFGFast",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x004AA0A6",
+ "result": "pass",
+ "has_unresolved_jumps": false,
+ "block_count": 25,
+ "nodes": [
+  "0x004AA090",
+  "0x004AA0A6",
+  "0x004AA0B8",
+  "0x004AA0BF",
+  "0x004AA0C3",
+  "0x004AA0CB",
+  "0x004AA0D6",
+  "0x004AA0FC",
+  "0x004AA103",
+  "0x004AA10A",
+  "0x004AA112",
+  "0x004AA114",
+  "0x004AA118",
+  "0x004AA11F",
+  "0x004AA123",
+  "0x004AA127",
+  "0x004AA12B",
+  "0x004AA132",
+  "0x004AA136",
+  "0x004AA13A",
+  "0x004AA13E",
+  "0x004AA140",
+  "0x004AA147",
+  "0x004AA14E",
+  "0x004AA155"
+ ],
+ "edges": [
+  {
+   "kind": "unknown",
+   "source": "0x004AA0A6",
+   "target": "0x004AA0B8"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0A6",
+   "target": "0x004AA0CB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0B8",
+   "target": "0x004AA090"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0B8",
+   "target": "0x004AA0BF"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0BF",
+   "target": "0x004AA0C3"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0BF",
+   "target": "0x004AA114"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0C3",
+   "target": "0x004AA0B8"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0C3",
+   "target": "0x004AA0CB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0CB",
+   "target": "0x004AA0D6"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0D6",
+   "target": "0x004AA0FC"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0D6",
+   "target": "0x004AA118"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0FC",
+   "target": "0x004AA0D6"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA0FC",
+   "target": "0x004AA103"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA103",
+   "target": "0x004AA10A"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA103",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA10A",
+   "target": "0x004AA0D6"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA10A",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA112",
+   "target": "0x004AA114"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA118",
+   "target": "0x004AA11F"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA118",
+   "target": "0x004AA155"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA11F",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA11F",
+   "target": "0x004AA123"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA123",
+   "target": "0x004AA127"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA123",
+   "target": "0x004AA14E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA127",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA127",
+   "target": "0x004AA12B"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA12B",
+   "target": "0x004AA132"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA12B",
+   "target": "0x004AA147"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA132",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA132",
+   "target": "0x004AA136"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA136",
+   "target": "0x004AA13A"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA136",
+   "target": "0x004AA140"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA13A",
+   "target": "0x004AA112"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA13A",
+   "target": "0x004AA13E"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x004AA13E",
+   "target": "0x004AA0D6"
+  }
+ ],
+ "recovery_mode": "seeded_from_native_address",
+ "reason": null,
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence"
+ ]
+}

@@ -1,0 +1,142 @@
+{
+ "schema_version": 1,
+ "kind": "link-blocker-audit",
+ "result": "blocked",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "audited_at": "2026-10-23T11:12:18Z",
+ "subject": {
+  "addresses": [
+   "0x004B85B0",
+   "0x004B8A50"
+  ],
+  "implementation": "engine/src/retail/script/qvm_execute.cpp",
+  "implementation_sha256": "17d7ef30330e93850f8187f7abb139cef4162d6964cd530536fed0d7a799d5cf",
+  "object": "build/qvm-execute/cmake-build/CMakeFiles/igi_qvm_execute_object.dir/engine/src/retail/script/qvm_execute.cpp.obj",
+  "object_sha256": "e99c151a15de28954d1983ba68318c91d315ec52e0489ca7b6a2b5a9af98ab0d",
+  "object_target": "igi_qvm_execute_object (compile-only CMake OBJECT target; not linked into igi)"
+ },
+ "undefined_symbols": [
+  {
+   "symbol": "Qvm_RunProgram_4BD080",
+   "retail_va": "0x004BD080",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "runs the resolved precompiled program; drives Qvm_ExecuteInstructions 0x004BCFD0"
+  },
+  {
+   "symbol": "Qvm_SourceBufferInit_4C0200",
+   "retail_va": "0x004C0200",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "initialises the script-source buffer"
+  },
+  {
+   "symbol": "Qvm_SourceReaderInit_4BF1C0",
+   "retail_va": "0x004BF1C0",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "attaches the loaded resource bytes to the source reader"
+  },
+  {
+   "symbol": "Qvm_ReadNextBlock_4BFC70",
+   "retail_va": "0x004BFC70",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "reads the next source block"
+  },
+  {
+   "symbol": "Qvm_ParseBlock_4BF1F0",
+   "retail_va": "0x004BF1F0",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "parses one source block"
+  },
+  {
+   "symbol": "Qvm_ReleaseBlockTree_4BFA80",
+   "retail_va": "0x004BFA80",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "recursively releases a parsed block tree"
+  },
+  {
+   "symbol": "Qvm_ReleaseBlock_4BF8F0",
+   "retail_va": "0x004BF8F0",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "releases one parsed block"
+  },
+  {
+   "symbol": "Qvm_ReleaseSourceReader_4BEFC0",
+   "retail_va": "0x004BEFC0",
+   "used_by": "0x004B85B0",
+   "current_status": "not transcribed",
+   "role": "releases the source reader and supplies the return value of that path"
+  },
+  {
+   "symbol": "Qvm_ReadIndexedArgument_4BD010",
+   "retail_va": "0x004BD010",
+   "used_by": "0x004B8A50",
+   "current_status": "not transcribed",
+   "role": "reads frame argument `index` through 0x004BCAE0 and loads the 4-byte result as a real"
+  },
+  {
+   "symbol": "Qvm_EvaluateArgumentValue_4B9660",
+   "retail_va": "0x004B9660",
+   "used_by": "0x004B8A50",
+   "current_status": "not transcribed",
+   "role": "evaluates one argument expression node and leaves its real value in ST0"
+  },
+  {
+   "symbol": "igi::retail::script::g_a965a0",
+   "retail_va": "0x00A965A0",
+   "used_by": "0x004B85B0",
+   "current_status": "internal linkage (anonymous namespace) in engine/src/retail/script/qvm_native_loader.cpp"
+  },
+  {
+   "symbol": "igi::retail::script::g_a965a8",
+   "retail_va": "0x00A965A8",
+   "used_by": "0x004B85B0",
+   "current_status": "internal linkage (anonymous namespace) in engine/src/retail/script/qvm_native_loader.cpp"
+  },
+  {
+   "symbol": "igi::retail::script::g_a96598",
+   "retail_va": "0x00A96598",
+   "used_by": "0x004B85B0",
+   "current_status": "internal linkage (anonymous namespace) in engine/src/retail/script/qvm_native_loader.cpp"
+  }
+ ],
+ "downstream": [
+  {
+   "address": "0x004137A0",
+   "name": "HumanPlayer_LoadParameters",
+   "current_record": "BUILD_VERIFIED in build/manifest-patches/humanplayer-link.json",
+   "remaining_blockers": [
+    "Qvm_Execute (0x004B85B0) now exists but cannot link until the eleven undefined symbols it consumes are resolved: its eight execution callees and the three shared state words (0x00A965A0/0x00A965A8/0x00A96598), which are not callees and need external linkage rather than transcription.",
+    "Retail calls Qvm_Load at 0x004137A8, Qvm_Execute at 0x004137B5 and Qvm_Cleanup at 0x004137BA. Qvm_Load and Qvm_Cleanup are ported; Qvm_Execute is the only new source dependency of this function.",
+    "Separately from these two natives, the candidate's Qvm_Load does not resolve a precompiled program: the force-precompiled/debug-compile setters (0x0048F330/0x0048F1C0) are never called, g_5c8bec/g_5c8bf0 stay 0, and the injectable 0x004BD220 resolver (g_sys_resolve_symbol_28) defaults to null. Retail startup sets both flags to 1 (0x0040100A, 0x0048F627) and resolves humanplayer.qvm into qvm+0x8C. Without that, Qvm_Load takes its resource path for the .qsc name and returns null, and the loader spins in its failure path."
+   ]
+  },
+  {
+   "address": "0x00410070",
+   "name": "DefineHumanPlayerGeneral",
+   "current_record": "ANALYZED with signature mismatch in build/manifest-patches/humanplayer-link.json",
+   "remaining_blockers": [
+    "The body must be rewritten to fetch its arguments through Qvm_GetFloatArg (0x004B8A50) at the retail call sites 0x41007D, 0x41008B, 0x4100A5, 0x4100BF, 0x4100D9, 0x4100ED, 0x410101, 0x41011C, 0x410132, 0x41014A and 0x410169, instead of taking a flat float array.",
+    "Qvm_GetFloatArg now exists but cannot link until 0x004BD010 and 0x004B9660 are transcribed.",
+    "The argument frame it reads (+0x04 flag, +0x08 value table) is produced by the native-call path of the interpreter (Qvm_ExecuteInstructions 0x004BCFD0); that handler table is still empty in the candidate (Qvm_SetOpcodeHandler is only transmitted), so no candidate code builds the frame.",
+    "The retail body's x87 scaling and the index-6 integer conversion are outside these two natives and remain for the DefineHumanPlayerGeneral owner."
+   ]
+  }
+ ],
+ "how_to_unblock": [
+  "Move g_a965a0, g_a965a8 and g_a96598 out of the anonymous namespace in qvm_native_loader.cpp (or add accessors) so this unit shares the retail words instead of duplicating them.",
+  "Transcribe the eight 0x004B85B0 callees and add the file to the igi target source list; then link the executable and re-run the build gate.",
+  "Transcribe 0x004BD010 and 0x004B9660 before DefineHumanPlayerGeneral can be rewritten against Qvm_GetFloatArg.",
+  "Port the 0x004BD220 program installer and the startup calls to 0x0048F330(1)/0x0048F1C0(1) so Qvm_Load produces the branch-A object the retail executes."
+ ],
+ "limitations": [
+  "This audit is static: it lists unresolved symbols in the compiled object and the known record states; it is not a runtime test and does not claim any downstream function is verified.",
+  "The object also has an undefined reference to Qvm_ReportError; it is already implemented in qvm_native_loader.cpp, so it is not a blocker and links as soon as that unit is in the igi target. The other fourteen undefined symbols above are the blockers.",
+  "The two QVM state words 0x00A965A4 and 0x00A96598 have writers (BreakScript 0x004B8C10, Sys_ExecuteBytecode_23 0x004B8970) that are not ported, so even after linking the branches exist but are never armed by candidate code."
+ ]
+}

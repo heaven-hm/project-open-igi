@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_AddAnimationEntry - 0x0044EBB0 - CFG score 90.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044EBB0-AIFunction_AddAnimationEntry.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044EBB0-AIFunction_AddAnimationEntry.hpp"
+#include "AIFunction_AddAnimationEntry.h"
 int AIFunction_AddAnimationEntry(long double context , int arg2, float arg3 )
 
 // Sig: void AIFunction_AddAnimationEntry(int animationId, int data)

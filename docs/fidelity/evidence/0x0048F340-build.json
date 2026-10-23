@@ -1,0 +1,78 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x0048F340",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
+ "executed": true,
+ "performed_at": "2026-10-23T09:14:26Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/script/qvm_native_loader.cpp -o /tmp/qvm-rebind/final/qvm_native_loader.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS (-O3 -DNDEBUG) and the engine/include include path."
+ },
+ "object": {
+  "path": "/tmp/qvm-rebind/final/qvm_native_loader.o",
+  "sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "size_bytes": 5377,
+  "format": "pe-i386 relocatable object",
+  "symbol": "igi::retail::script::Script_GetForcePrecompiledState",
+  "symbol_offset": 16,
+  "symbol_size_bytes": 16,
+  "function_bytes_hex": "a11c000000c366902e8db42600000000",
+  "function_bytes_length": 16,
+  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding."
+ },
+ "object_body_comparison": {
+  "previous_object_sha256": "3388b99084d4d18265f3a1ea2b6a50af0374208bcb9f9baaa2bc96f2cd41c40a",
+  "current_object_sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "previous_symbol_offset": 16,
+  "current_symbol_offset": 16,
+  "previous_function_bytes_sha256": "07d9413e60df02f6137358bff55bea996357c09b5681776613673336252bd7e9",
+  "current_function_bytes_sha256": "76e5fe7074313566f0d352968e67776769e54cf963fc2024b374c3281e47274a",
+  "raw_bytes_identical": false,
+  "relocation_normalized_instruction_stream_identical": true,
+  "instruction_count": 5,
+  "relocation_sites": [
+   {
+    "offset": 1,
+    "kind": "reloc",
+    "target": "__ZN3igi6retail6script12_GLOBAL__N_1L8g_5c8bf0E"
+   }
+  ],
+  "note": "The symbol body is instruction-for-instruction identical to the body recorded for the previous source digest; only relocation addends that name port-owned globals moved when the error-state globals were made volatile. No instruction, operand, branch or call target changed."
+ },
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_sequence",
+   "result": "passed",
+   "detail": "The object label for igi::retail::script::Script_GetForcePrecompiledState spans 16 bytes at offset 0x10; 16 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
+  },
+  {
+   "name": "sibling_body_identity",
+   "result": "passed",
+   "detail": "Raw body bytes differ from source 655494c9... only at relocation addends that resolve to the same globals; after relocation resolution the instruction stream is identical."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
+  "No runtime path was executed by this build report.",
+  "This build evidence was regenerated because the translation unit digest moved when Qvm_ReportError was corrected; the sibling symbol body comparison is recorded under object_body_comparison and in build/qvm-siblings-rebind/body-comparison.json."
+ ]
+}

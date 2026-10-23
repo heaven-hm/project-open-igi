@@ -1,0 +1,701 @@
+{
+  "schema_version": 1,
+  "kind": "retail-flow-order",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "entry": "0x0048F530",
+  "targets": 120,
+  "reachable": 70,
+  "unreachable": 50,
+  "reachable_functions": 1079,
+  "runtime_observed": 0,
+  "ordered": [
+    {
+      "order": 1,
+      "address": "0x0048F530",
+      "name": "main",
+      "depth": 0,
+      "parent": null,
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 2,
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 3,
+      "address": "0x00401050",
+      "name": "QTask_OpenEvent",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 4,
+      "address": "0x0048F140",
+      "name": "AppContext_SetIsActive",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 5,
+      "address": "0x0048F170",
+      "name": "AppContext_GetIsActive",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 6,
+      "address": "0x0048F260",
+      "name": "AppContext_SetTerrainLightmapsUsed",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 7,
+      "address": "0x00498460",
+      "name": "Display_ClearSurfaces_16",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 8,
+      "address": "0x004A53B3",
+      "name": "sprintf",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 9,
+      "address": "0x004AF7B0",
+      "name": "Error_Show",
+      "depth": 1,
+      "parent": "0x0048F530",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 10,
+      "address": "0x00402800",
+      "name": "Flow_CreateHandler",
+      "depth": 2,
+      "parent": "0x00401000",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 11,
+      "address": "0x00402880",
+      "name": "Game_GetContext",
+      "depth": 2,
+      "parent": "0x00401050",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 12,
+      "address": "0x004028A0",
+      "name": "Flow_SetState",
+      "depth": 2,
+      "parent": "0x00401000",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 13,
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "depth": 2,
+      "parent": "0x00401000",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 14,
+      "address": "0x0048F480",
+      "name": "Loop_SetStatusByte",
+      "depth": 2,
+      "parent": "0x00401050",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 15,
+      "address": "0x004A5702",
+      "name": "String_VFormat",
+      "depth": 2,
+      "parent": "0x004AF7B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 16,
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 17,
+      "address": "0x00404590",
+      "name": "Config_GetActiveGraphicOptions",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 18,
+      "address": "0x00404F00",
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 19,
+      "address": "0x00404F60",
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 20,
+      "address": "0x00405530",
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 21,
+      "address": "0x004055C0",
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "depth": 4,
+      "parent": "0x00402FF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 22,
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "depth": 4,
+      "parent": "0x0040FE30",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 23,
+      "address": "0x004AA670",
+      "name": "Mem_AllocChunk",
+      "depth": 4,
+      "parent": "0x004AC323",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 24,
+      "address": "0x004AF8F0",
+      "name": "HeapList_Insert",
+      "depth": 4,
+      "parent": "0x004012A0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 25,
+      "address": "0x004B80B0",
+      "name": "Qvm_Load",
+      "depth": 4,
+      "parent": "0x0044C8D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 26,
+      "address": "0x0048F1D0",
+      "name": "Script_GetDebugCompileState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 27,
+      "address": "0x0048F340",
+      "name": "Script_GetForcePrecompiledState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 28,
+      "address": "0x004AA682",
+      "name": "Mem_AllocWithRetry",
+      "depth": 5,
+      "parent": "0x004AA670",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 29,
+      "address": "0x004AF960",
+      "name": "HeapList_Remove",
+      "depth": 5,
+      "parent": "0x004F9DF0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 30,
+      "address": "0x004B0C60",
+      "name": "Mem_Alloc",
+      "depth": 5,
+      "parent": "0x004012F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 31,
+      "address": "0x004B1E90",
+      "name": "String_FindExtension",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 32,
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 33,
+      "address": "0x004B5F00",
+      "name": "Resource_Load",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 34,
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 35,
+      "address": "0x004B83D0",
+      "name": "Qvm_Cleanup",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 36,
+      "address": "0x004B8A10",
+      "name": "Qvm_SetGlobalState",
+      "depth": 5,
+      "parent": "0x004B80B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 37,
+      "address": "0x004AA6AE",
+      "name": "Mem_AllocateRawBlock",
+      "depth": 6,
+      "parent": "0x004AA682",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 38,
+      "address": "0x004AAD10",
+      "name": "Resource_MatchPrefix",
+      "depth": 6,
+      "parent": "0x004B11A0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 39,
+      "address": "0x004AD722",
+      "name": "Mem_InvokeNewHandler",
+      "depth": 6,
+      "parent": "0x004AA682",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 40,
+      "address": "0x004AD73D",
+      "name": "String_ToUpperChar",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 41,
+      "address": "0x004B0BA0",
+      "name": "Mem_InitHeapState",
+      "depth": 6,
+      "parent": "0x004B0C60",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 42,
+      "address": "0x004B1690",
+      "name": "Device_CloseStream",
+      "depth": 6,
+      "parent": "0x004BB270",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 43,
+      "address": "0x004B5F80",
+      "name": "Resource_RegisterBuffer",
+      "depth": 6,
+      "parent": "0x004B5F00",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 44,
+      "address": "0x004B6380",
+      "name": "Resource_Unload",
+      "depth": 6,
+      "parent": "0x004BD220",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 45,
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "depth": 6,
+      "parent": "0x004ED6B0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 46,
+      "address": "0x004F1160",
+      "name": "Script_ParseEnumReal32_5",
+      "depth": 6,
+      "parent": "0x004F8340",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 47,
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "depth": 6,
+      "parent": "0x00505F60",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 48,
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "depth": 6,
+      "parent": "0x00506FA0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 49,
+      "address": "0x004B0D40",
+      "name": "QHash_ValueSet",
+      "depth": 7,
+      "parent": "0x004B0BA0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 50,
+      "address": "0x004B1780",
+      "name": "Device_GetStreamPosition",
+      "depth": 7,
+      "parent": "0x004B18B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 51,
+      "address": "0x004B17F0",
+      "name": "Device_SeekStream",
+      "depth": 7,
+      "parent": "0x004B18B0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 52,
+      "address": "0x004B59F0",
+      "name": "Resource_CreateNode",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 53,
+      "address": "0x004B5AF0",
+      "name": "Resource_CanonicalizePath",
+      "depth": 7,
+      "parent": "0x004B5B90",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 54,
+      "address": "0x004B5B30",
+      "name": "Resource_CalculatePathHash",
+      "depth": 7,
+      "parent": "0x004B5B90",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 55,
+      "address": "0x004B5C90",
+      "name": "Resource_FreeNode",
+      "depth": 7,
+      "parent": "0x004B63D0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 56,
+      "address": "0x004B60F0",
+      "name": "Resource_RegisterIlffContainer",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 57,
+      "address": "0x004B7570",
+      "name": "Ilff_GetFormType",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 58,
+      "address": "0x004B7580",
+      "name": "Ilff_GetChunkTag",
+      "depth": 7,
+      "parent": "0x004B5F80",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 59,
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "depth": 7,
+      "parent": "0x004BD080",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 60,
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "depth": 7,
+      "parent": "0x004BD080",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 61,
+      "address": "0x004AC6FD",
+      "name": "Camera_ApplyWideScreen_24",
+      "depth": 8,
+      "parent": "0x004B7CF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 62,
+      "address": "0x004B0F80",
+      "name": "Texture_GetActiveBackendId",
+      "depth": 8,
+      "parent": "0x004B7CF0",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 63,
+      "address": "0x004B7470",
+      "name": "Ilff_GetNextChunk",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 64,
+      "address": "0x004B7490",
+      "name": "Ilff_GetFirstChunk",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 65,
+      "address": "0x004B74D0",
+      "name": "Ilff_GetChunkPayload",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 66,
+      "address": "0x004B7540",
+      "name": "Ilff_ReadContainerHeader",
+      "depth": 8,
+      "parent": "0x004B60F0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 67,
+      "address": "0x004CEA80",
+      "name": "Render_GetActiveBackendId",
+      "depth": 8,
+      "parent": "0x005311E0",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 68,
+      "address": "0x004BD3D0",
+      "name": "Qvm_SetOpcodeHandler",
+      "depth": 11,
+      "parent": "0x004BD430",
+      "edge": "direct",
+      "runtime_order": null
+    },
+    {
+      "order": 69,
+      "address": "0x004659E0",
+      "name": "Human_TaskViewReset",
+      "depth": 12,
+      "parent": "0x00498950",
+      "edge": "cross-reference",
+      "runtime_order": null
+    },
+    {
+      "order": 70,
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "depth": 12,
+      "parent": "0x004B2180",
+      "edge": "direct",
+      "runtime_order": null
+    }
+  ],
+  "unreachable_addresses": [
+    "0x004037C0",
+    "0x00405620",
+    "0x00410070",
+    "0x004137A0",
+    "0x00463180",
+    "0x00465820",
+    "0x0048F1B0",
+    "0x0048F230",
+    "0x0048F250",
+    "0x00491D40",
+    "0x00497D70",
+    "0x00497E70",
+    "0x004A2600",
+    "0x004A26C0",
+    "0x004A7157",
+    "0x004AC620",
+    "0x004AC655",
+    "0x004AC66B",
+    "0x004B23B0",
+    "0x004B24C0",
+    "0x004B26A0",
+    "0x004B7450",
+    "0x004B7590",
+    "0x004BDA00",
+    "0x004C5F00",
+    "0x004C6240",
+    "0x004C6670",
+    "0x004C6760",
+    "0x004CEAA0",
+    "0x004CF080",
+    "0x004CF300",
+    "0x004CF330",
+    "0x004CF390",
+    "0x004CF630",
+    "0x004CF790",
+    "0x004CF870",
+    "0x004CF910",
+    "0x004D0CF0",
+    "0x004D0D10",
+    "0x004D14E0",
+    "0x004D67A0",
+    "0x004EDB60",
+    "0x00506F00",
+    "0x00510010",
+    "0x00512C30",
+    "0x005175A0",
+    "0x00517890",
+    "0x005178E0",
+    "0x00517940",
+    "0x005179C0"
+  ],
+  "runtime_capture": null,
+  "limitations": [
+    "Cross-reference edges record that a function references the entry (dispatch table, vtable or indirect call site); they order the entry but do not prove the call occurs.",
+    "Entries with no direct or referencing caller remain unordered and are listed separately.",
+    "The order is a graph traversal from retail main, not an execution trace."
+  ]
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: Game_DataSymbolRemoveThunk - 0x004B80A0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B80A0-Game_DataSymbolRemoveThunk.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B80A0-Game_DataSymbolRemoveThunk.hpp"
+#include "Game_DataSymbolRemoveThunk.h"
 int Game_DataSymbolRemoveThunk(char* context)
 
 // Sig: void* Game_DataSymbolRemoveThunk(char* symBuf)

@@ -17,7 +17,7 @@ static_assert(sizeof(QvmOpcodeHandlerRecord) == 0x18U);
 // Tools/evidence: REA/Ghidra ev_fc8c4a96e5363fb9ba98aad334c2607004b6ee4cd58f1894cf78e5d43a93a525; bytes verified against IGI.EXE.
 // Behavior/CFG: stores tag 1 at type_stack[--type_stack_index] and the supplied DWORD at value_stack[--value_stack_index]. radare2 1 block/0 edges; Binary Ninja 1 block; source CFG agreement 100% (not C++ semantic accuracy).
 // Status/limits: STRUCTURALLY_VERIFIED; high for this leaf's writes; caller state allocation and complete VM integration are not ported.
-void Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value)
+std::uint32_t Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value)
 {
     const std::int32_t next_type_stack_index = state->type_stack_index - 1;
     const std::int32_t next_value_stack_index = state->value_stack_index - 1;
@@ -26,6 +26,10 @@ void Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value)
     state->type_stack_index = next_type_stack_index;
     state->type_stack[next_type_stack_index] = 1U;
     state->value_stack[next_value_stack_index] = value;
+
+    // Retail's closing store leaves the pushed value in EAX; return it so the post-call register matches
+    // the retail binary for every caller instead of being whatever the host compiler left behind.
+    return value;
 }
 
 // Native: Qvm_SetOpcodeHandler; retail VA 0x004BD3D0; signature/calling convention unknown.
@@ -43,19 +47,23 @@ void Qvm_SetOpcodeHandler(std::int32_t opcode, std::int32_t variant, QvmOpcodeHa
 // Tools/evidence: REA/Ghidra ev_7b5b04f8089dae45a2e6a5b52cdcec6c771948bcf7b02c21d635a76164439de4; Radare2 confirms all branches.
 // Behavior/CFG: clears the stop flag, exits on nonzero +0x20 status, dispatches opcode variant zero, and loops while +0x2C is zero. radare2 4 blocks/5 edges; Binary Ninja 4 blocks; source CFG agreement 100% (not C++ semantic accuracy).
 // Status/limits: STRUCTURALLY_VERIFIED; high for offsets and callback argument values; QVM table initialization and opcode closure are incomplete.
-void Qvm_ExecuteInstructions(QvmNativeStatePrefix* state)
+std::uint32_t Qvm_ExecuteInstructions(QvmNativeStatePrefix* state)
 {
     state->stop_flag = 0U;
 
     do {
         if (state->error_status != 0U) {
-            return;
+            // Retail leaves this value in EAX when it takes the error exit.
+            return state->error_status;
         }
 
         const std::uint32_t opcode = std::to_integer<std::uint8_t>(
             state->code_base[state->instruction_offset]);
         QvmOpcodeHandlerTable[opcode].handlers[0U](state, 0U, opcode, 0U);
     } while (state->stop_flag == 0U);
+
+    // Retail reloads stop_flag into EAX before the final test, so the loop exit returns it.
+    return state->stop_flag;
 }
 
 } // namespace igi::retail::script

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_Read - 0x00405850 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00405850-Config_Read.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405850-Config_Read.hpp"
+#include "Config_Read.h"
 int Config_Read(void* context)
 
 // Sig: int Config_Read(char* cfg_file)

@@ -1,7 +1,8 @@
 // IGI native provenance: MathSys_Invoke7_4A67E4 - 0x004A67E4 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A67E4-MathSys_Invoke7_4A67E4.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A67E4-MathSys_Invoke7_4A67E4.hpp"
-int MathSys_Invoke7_4A67E4("regparm") MathSys_Invoke7_4A67E4(char* arg1, short arg2, void* arg3, void* arg4, int arg5)
+#include "MathSys_Invoke7_4A67E4.h"
+
+int __convention("regparm") MathSys_Invoke7_4A67E4(char* arg1, short arg2, void* arg3, void* arg4, int arg5)
 
 {
     char* source_ptr;

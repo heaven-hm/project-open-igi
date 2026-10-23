@@ -1,16 +1,17 @@
-// IGI native provenance: Config_GraphicOptionsNumPerfLevels - 0x00405620 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
-// Evidence: 00405620-Config_GraphicOptionsNumPerfLevels.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405620-Config_GraphicOptionsNumPerfLevels.hpp"
-int Config_GraphicOptionsNumPerfLevels(int context)
+// IGI native Config_GraphicOptionsNumPerfLevels - 0x00405620 - transcribed from retail igi.exe.
+// Retail: cdecl (result, unused, vm). Result block {7, ?, 0, 0x401C0000, 0x567C74, ?}.
+#include <cstdint>
+#include <cstring>
 
-// Sig: int Config_GraphicOptionsNumPerfLevels()
-// Note: RETURNS the number of graphics detail levels the engine supports
-// (constant). Use to build the detail-level slider/list.
+
+void __cdecl Config_GraphicOptionsNumPerfLevels(std::uint32_t* result, int unused, void* vm)
 {
-    int item_18 = 7;
-    int item_10 = 0;
-    int item_c = 0x401c0000;
-    char* item_8 = &g_567c74;
-    memcpy(context, &item_18, 0x18);
-    return context;
+    (void)unused;
+    (void)vm;
+    std::uint32_t block[6];
+    block[0] = 7;
+    block[2] = 0;
+    block[3] = 0x401C0000;
+    block[4] = 0x567C74;
+    std::memcpy(result, block, sizeof(block));
 }

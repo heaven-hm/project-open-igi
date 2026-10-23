@@ -1,0 +1,122 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00505850",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00505850"
+   },
+   {
+    "address": "0x005058CF"
+   },
+   {
+    "address": "0x0050585D"
+   },
+   {
+    "address": "0x00505861"
+   },
+   {
+    "address": "0x0050587C"
+   },
+   {
+    "address": "0x00505872"
+   },
+   {
+    "address": "0x005058B6"
+   },
+   {
+    "address": "0x005058AF"
+   },
+   {
+    "address": "0x0050587E"
+   },
+   {
+    "address": "0x0050586C"
+   },
+   {
+    "address": "0x005058CE"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00505850",
+    "target": "0x005058CF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505850",
+    "target": "0x0050585D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0050585D",
+    "target": "0x005058CF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0050585D",
+    "target": "0x00505861",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505861",
+    "target": "0x0050586C",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0050587C",
+    "target": "0x0050587E",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00505872",
+    "target": "0x0050587E",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x005058B6",
+    "target": "0x0050586C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005058B6",
+    "target": "0x005058CE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005058AF",
+    "target": "0x005058B6",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0050587E",
+    "target": "0x005058B6",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0050587E",
+    "target": "0x005058AF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0050586C",
+    "target": "0x0050587C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0050586C",
+    "target": "0x00505872",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x005058CE",
+    "target": "0x005058CF",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

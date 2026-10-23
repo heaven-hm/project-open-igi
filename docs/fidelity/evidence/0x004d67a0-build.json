@@ -1,0 +1,112 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x004D67A0",
+ "retail_name": "AnimIff_LoadAnimationFile",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
+ "executed": true,
+ "performed_at": "2026-10-23T11:00:56Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -I /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include -c /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/model/iff_skeleton.cpp -o /tmp/iffa/evidence/iff_skeleton.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG -I engine/include",
+  "flags_note": "The exact flags from build-clean-win32/CMakeFiles/igi.dir/flags.make (CXX_FLAGS = -O3 -DNDEBUG) and includes_CXX.rsp. This compile reproduces the object with -I <root>/engine/include, the same include the configured build passes."
+ },
+ "object": {
+  "path": "/tmp/iffa/evidence/iff_skeleton.o",
+  "sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+  "size_bytes": 7757,
+  "format": "pe-i386 relocatable object",
+  "symbol": "AnimIff_LoadAnimationFile",
+  "symbol_offset": 64,
+  "symbol_extent_bytes": 1664,
+  "function_bytes_sha256": "3dca569afc3487b9f0fdd043a8ac3bb87a0a3cc9f80a903944931895335e72da",
+  "text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "text_size_bytes": 4160,
+  "note": "The extent runs from the symbol to the next symbol in .text and includes alignment padding.",
+  "last_instruction_end_offset": "0x00000680",
+  "alignment_padding_bytes": 0
+ },
+ "linked_image": {
+  "path": "build-clean-win32/igi1.exe",
+  "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+  "receipt_path": "build-clean-win32/candidate-receipt.json",
+  "receipt_sha256": "c144995432d7ee8f0a61e57a0b2a9dbe180cf11aa17a8a5b8b5901b81faf399b",
+  "symbol": "AnimIff_LoadAnimationFile",
+  "linkage": "external (nm type T)",
+  "vaddr": "0x00424620",
+  "symbol_extent_bytes": 1664,
+  "function_bytes_sha256": "86362cfb138259475faae0193ca345e8ba8e5cd29326077235c8a311bd15b7bb",
+  "present": true,
+  "proof": "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | awk '$3==\"AnimIff_LoadAnimationFile\"' -> 00424620 T",
+  "alignment_padding_bytes": 0
+ },
+ "addressability": {
+  "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+  "linkage": "external",
+  "emitted_in_object": true,
+  "emitted_in_linked_image": true,
+  "object_symbol": "AnimIff_LoadAnimationFile",
+  "source_identifier": "IffSkeleton_Read",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_skeleton.hpp",
+  "object_bytes_equal_linked_bytes": true,
+  "object_image_byte_note": "The object and linked extents are identical outside the 4-byte fields the linker relocates; the remaining differences are linker-applied relocation values and padding, not body changes.",
+  "call_sites_in_image": 1,
+  "callers_in_image": [
+   "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0"
+  ],
+  "reachable_statically": true,
+  "relocation_fields_in_extent": 49,
+  "call_sites_by_caller": {
+   "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0": 1
+  }
+ },
+ "body_equivalence": {
+  "baseline_object_sha256": "3acd7537d8c56fe3708c2a3f95a0f801720bc96518919698f233b0d01c9a51ee",
+  "current_object_sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+  "baseline_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "current_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "text_section_bytes_identical": true,
+  "relocation_records_identical": true,
+  "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+  "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+  "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+ },
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "object_symbol_external",
+   "result": "passed",
+   "detail": "AnimIff_LoadAnimationFile is type T at object offset 0x00000040, extent 1664 bytes."
+  },
+  {
+   "name": "linked_image_presence",
+   "result": "passed",
+   "detail": "AnimIff_LoadAnimationFile is type T at 0x00424620 in build-clean-win32/igi1.exe, whose candidate-receipt.json binds SHA-256 7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a."
+  },
+  {
+   "name": "body_unchanged",
+   "result": "passed",
+   "detail": ".text is byte-identical to the pre-change object (SHA-256 005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3); relocation records match after symbol-name mapping; the linker applies only relocation values to the linked extent."
+  }
+ ],
+ "scope": "Build and linked-image addressability only. The symbol is present under the retail catalog name with external linkage at the stated VA; no runtime execution, behaviour comparison or game-process call is claimed by this report.",
+ "limitations": [
+  "A successful compile and link does not prove behavioural equivalence.",
+  "Presence in the image proves addressability, not reachability on any level.",
+  "Reachability here is static: 1 direct call site(s) found in the linked image."
+ ]
+}

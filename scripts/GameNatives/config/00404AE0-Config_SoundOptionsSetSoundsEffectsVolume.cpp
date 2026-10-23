@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsSetSoundsEffectsVolume - 0x00404AE0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404AE0-Config_SoundOptionsSetSoundsEffectsVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404AE0-Config_SoundOptionsSetSoundsEffectsVolume.hpp"
+#include "Config_SoundOptionsSetSoundsEffectsVolume.h"
 int Config_SoundOptionsSetSoundsEffectsVolume(long double context , int arg2, float arg3 )
 
 // Sig: void Config_SoundOptionsSetSoundsEffectsVolume(float volume)

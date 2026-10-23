@@ -1,0 +1,278 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004A67E4",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "58baa384eb5c90518238aeb13f9ffaa85edb8aef8360cc0ca65001afc5631542",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x004A67E4 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.cpp at sha256 58baa384eb5c90518238aeb13f9ffaa85edb8aef8360cc0ca65001afc5631542 (recorded implementation.signature: int32_t __convention MathSys_Invoke7_4A67E4(\"regparm\")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004A67E4",
+    "name": "MathSys_Invoke7_4A67E4",
+    "binary_ninja_name": "MathSys_Invoke7_4A67E4",
+    "signature": "int32_t __convention(\"regparm\")(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc)",
+    "start": "0x004A67E4",
+    "end": "0x4a68a8",
+    "basic_blocks": 12,
+    "edges": [
+      {
+        "source": "0x004a67e4",
+        "target": "0x004a680a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a67e4",
+        "target": "0x004a688c",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a680a",
+        "target": "0x004a681f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a681f",
+        "target": "0x004a6824",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a681f",
+        "target": "0x004a6885",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6824",
+        "target": "0x004a682e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6824",
+        "target": "0x004a6873",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a682e",
+        "target": "0x004a6840",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a682e",
+        "target": "0x004a6873",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6840",
+        "target": "0x004a6842",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6840",
+        "target": "0x004a687e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6842",
+        "target": "0x004a6873",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a6873",
+        "target": "0x004a681f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a687e",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a6885",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a688c",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Twelve blocks 0x4A67E4-0x4A68A6: an unusual 8-byte pre-prologue at 0x4A67E4 (push esi; inc ebx; xor dh,[eax]; pop eax; inc ebx; xor [eax],dh) before the real frame at 0x4A67EC; then a dispatch loop over the descriptor at arg3 (walks +0xC/+0x8, calls [edi+ecx*4+4] with (ebp,i,&frame)), Camera_UpdateTransform_7, Camera_SetFieldOfView_7 and Camera_ApplyLineFilter_7.",
+    "blocks": [
+      {
+        "address": "0x004a67e4",
+        "start": "0x4a67e4",
+        "end": "0x4a680a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a688c",
+        "start": "0x4a688c",
+        "end": "0x4a68a1",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a680a",
+        "start": "0x4a680a",
+        "end": "0x4a681f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6885",
+        "start": "0x4a6885",
+        "end": "0x4a688c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6824",
+        "start": "0x4a6824",
+        "end": "0x4a682e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a68a1",
+        "start": "0x4a68a1",
+        "end": "0x4a68a9",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6873",
+        "start": "0x4a6873",
+        "end": "0x4a687e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a682e",
+        "start": "0x4a682e",
+        "end": "0x4a6840",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a681f",
+        "start": "0x4a681f",
+        "end": "0x4a6824",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6840",
+        "start": "0x4a6840",
+        "end": "0x4a6842",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a687e",
+        "start": "0x4a687e",
+        "end": "0x4a6885",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6842",
+        "start": "0x4a6842",
+        "end": "0x4a6873",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "dword",
+      "Camera_UpdateTransform_7",
+      "Camera_SetFieldOfView_7",
+      "Camera_ApplyLineFilter_7",
+      "dword",
+      "Camera_SetFieldOfView_7"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.cpp",
+    "sha256": "58baa384eb5c90518238aeb13f9ffaa85edb8aef8360cc0ca65001afc5631542",
+    "signature": "int32_t __convention MathSys_Invoke7_4A67E4(\"regparm\")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Twelve blocks 0x4A67E4-0x4A68A6: an unusual 8-byte pre-prologue at 0x4A67E4 (push esi; inc ebx; xor dh,[eax]; pop eax; inc ebx; xor [eax],dh) before the real frame at 0x4A67EC; then a dispatch loop over the descriptor at arg3 (walks +0xC/+0x8, calls [edi+ecx*4+4] with (ebp,i,&frame)), Camera_UpdateTransform_7, Camera_SetFieldOfView_7 and Camera_ApplyLineFilter_7."
+  },
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Entry boundary ambiguity: the first 8 bytes at 0x4A67E4 are a mid-instruction-looking pre-prologue and the real frame starts at 0x4A67EC.",
+      "Uninitialized locals model the entry registers."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "failed",
+      "detail": "Retail entry 0x004A67E4 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.cpp (sha256 58baa384eb5c90518238aeb13f9ffaa85edb8aef8360cc0ca65001afc5631542). Twelve blocks 0x4A67E4-0x4A68A6: an unusual 8-byte pre-prologue at 0x4A67E4 (push esi; inc ebx; xor dh,[eax]; pop eax; inc ebx; xor [eax],dh) before the real frame at 0x4A67EC; then a dispatch loop over the descriptor at arg3 (walks +0xC/+0x8, calls [edi+ecx*4+4] with (ebp,i,&frame)), Camera_UpdateTransform_7, Camera_SetFieldOfView_7 and Camera_ApplyLineFilter_7."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "BN int32_t __convention(regparm)(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc): EAX/EDX/ECX register words plus stack words. The candidate has the same regparm declaration, but its body begins with uninitialized locals derived from the odd entry bytes."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "BN int32_t __convention(regparm)(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc): EAX/EDX/ECX register words plus stack words. The candidate has the same regparm declaration, but its body begins with uninitialized locals derived from the odd entry bytes."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "failed",
+      "detail": "Retail CFG: Binary Ninja reports 12 block(s)/16 edge(s) at 0x004A67E4; radare2 recovers the identical 12 block(s)/16 edge(s) (score 1.0000); angr CFGFast recovers 17 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Retail calls Camera_SetFieldOfView_7, Camera_UpdateTransform_7, Camera_ApplyLineFilter_7 and two indirect descriptor slots; the candidate keeps the same named callees but reads the entry registers through uninitialized locals."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Descriptor strides 0xC and 0x4; sentinel 0xFFFFFFFF; constants at 0x4A6873/0x4A687E/0x4A6885/0x4A688C/0x4A68A1."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The descriptor walks use the retail offsets, but the candidate's `char* var_4 = source_ptr;`/`frame_ptr` reads uninitialized stack values before the real frame at 0x4A67EC, so the pre-prologue bytes are not modeled."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns 0/1/other through the dispatch loop; the candidate's returns follow the BN pseudo but the entry state is undefined."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "The block contains no x87 instruction.",
+      "rationale": "The block contains no x87 instruction."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t __convention(\"regparm\")(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc)\" at 0x004A67E4; radare2 recovers \"fcn.004a67e4 ();\". Both tools place the entry at 0x004A67E4 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t __convention MathSys_Invoke7_4A67E4(\"regparm\")(char* param_1, int16_t param_2, void* param_3, void* param_4, int32_t param_5);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x004A67E4-binaryninja.json",
+      "evidence_sha256": "481e430896c93702e6b3a94b9ceedb103e94346c31b4121591e00a7eeed5f26d",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x004A67E4-radare2.json",
+      "evidence_sha256": "bfdd54412c2ad6cb89115920771f5d254c1446ee93881db991c673714b5f17a3",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x004A67E4-angr-20261023.json",
+      "evidence_sha256": "f8730620aa7c9770234bdc00f95639adf87ef0d988dd1db75afa58bccbba1343",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "BN and r2 agree on 12 blocks/16 edges at the recorded entry, but the first 8 bytes are not a plausible function prologue; the true entry may be 0x4A67EC."
+  ]
+}

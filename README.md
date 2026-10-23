@@ -1,4 +1,4 @@
-# Project Open IGI.
+# Project Open IGI: clean retail-flow branch
 
 > Active integration: `mvp/level1-integration`, existing main checkout only. [Level 1 gameplay MVP and staged acceptance milestones](MVP.md). No new worktree; one writer/build owner.
 
@@ -7,127 +7,39 @@
 
 Project Open IGI is a native implementation of the original game engine. Engine routines are ported from reverse-engineering evidence taken directly from the retail `igi.exe`, with `retail names`, `virtual addresses`, `calling conventions`, and `evidence references` retained where known.
 
-This repository is the game-engine implementation. It is not an editor, converter, helper library, or gameplay rewrite based on another project. The retail executable is the behavior authority. open-igi may identify candidate implementations, but REA/static/runtime evidence from retail igi.exe must verify behavior used here. Unknown behavior remains explicitly unresolved rather than guessed.
+The committed engine from `game-engine-flow` was removed only from this branch. The tracked `scripts/` and `docs/` trees remain as research and verification references. Local untracked assets are not included in this branch. Their historical manifests, candidate paths, build receipts, screenshots, and status labels describe the earlier branch; they do not verify this new baseline. The previous README and build script are retained as `docs/fidelity/README-legacy-game-engine-flow.md` and `scripts/legacy-game-engine-flow-build.sh`.
 
-## Current status
+## Diagnostic build
 
-The active Level 1 MVP is documented in MVP.md, with its required implementation sequence in plan.md: build the Windows x86 baseline; render models at transforms from OBJECTS.QVM; render terrain and textures; verify all visual assets and placements; then implement the playable simulation, player, physics/interactions, AI/navigation, health/damage, weapons, gameplay animation/effects, QVM flow, with audio deferred.
+Run `./build.sh --diagnostic` with CMake and `i686-w64-mingw32-g++` installed. The diagnostic command builds `build-clean-win32/igi1.exe`, a PE32 diagnostic shell, and does not deploy it or attest any native. The existing `run.sh` and legacy verification flows refer to the earlier engine and must be adapted before use on this branch.
 
-### Current milestone: level loading, 3D models and terrain
+## Next work
 
-The Windows 32-bit executable loads level scenes with textured 3D models and terrain
-through DirectDraw 7 / Direct3D 7. These are diagnostic loading scenes. Playable
-missions, combat, AI, collision and complete player simulation are not implemented.
-Retail camera, placement, material and texture parity remain under verification.
+Identify the retail entry and MVP call flow using Binary Ninja (Ghidra only as fallback), Radare2 and angr; reconstruct one required native at a time. Bind the new implementation and candidate to fresh semantic, build, and paired retail/OpenIGI runtime evidence before accepting it. An empty changed set or a successful placeholder build is not verification. See `AGENTS.md` and `docs/fidelity/native-feature-verification.md` for the evidence requirements.
 
-```console
-open-igi.exe window level1
-open-igi.exe window devmode level1
-```
+## Workflow commands
 
-Place the executable in your original game directory. The screenshots below are
-existing scene captures, not evidence of playable gameplay or complete retail parity.
-Visible vegetation, placement and terrain/material artifacts still need correction.
+- `python3 scripts/igi_workflow.py doctor` lists local tools and reference paths; it does not test MCP connections.
+- `python3 scripts/igi_workflow.py native 0x00405850` finds historical records and GameNatives candidates.
+- `python3 scripts/igi_workflow.py static 0x00405850` runs the strict per-address native gate.
+- `python3 scripts/igi_workflow.py verify 0x00405850 --level 1` invokes the existing paired-verification workflow. Its old candidate paths may need adaptation; missing data is a blocker.
 
-#### Level 1: models and terrain from four inspection views
+The debugger logger uses Windows `OutputDebugStringW`; it is diagnostic infrastructure, not retail behavior. The MVP is the retail startup flow required to load 3D models, MEF/ILFF, textures, terrain, QVM configuration, player movement and collision. Follow `AGENTS.md` for the tool selection and per-native evidence requirements.
 
-![Level 1 diagnostic scene with textured 3D models and terrain, four camera views](screenshots/level1_terrain_4grid.png)
+## Current inspection increment
 
-#### Additional level-loading views
+The requested first scene is Level 1 positioned 3D models with original textures and the previous developer free camera/mouse look, named `igi1.exe`. Terrain rendering and human physics are later increments. The executable currently remains a diagnostic window; the model scene is not implemented on this branch.
 
-![Diagnostic model and terrain loading captures from several levels](screenshots/terrain_4grid.png)
+Run `python3 scripts/igi_workflow.py doctor --check` for actual tool checks, `python3 scripts/igi_workflow.py analyze 0x0048F530` to collect the retail main entry analysis, and `python3 scripts/igi_workflow.py self-check` for verification-system regression checks. The latter uses labeled validator fixtures, never game observations. Configure local paths in `scripts/igi-workflow.json`; `IGI_ANGR_PYTHON` and `FRIDA_HOST` override their settings.
 
-The earlier model-only loading record remains available in
-[Task 1 evidence](docs/TASK1_MODEL_LOADING.md). These newer terrain views show the
-current visual milestone; they do not mark Tasks 1–2 as behaviorally verified.
+`verify` builds and binds the current x86 candidate before the strict VERIFIED native gate and typed paired runtime comparison. A reviewed typed gameplay probe is required via the manifest's `verification.runtime_probe.path` or the underlying verifier's `--probe`. Missing implementations and evidence block acceptance. `--static-only` remains partial and never prints `True`.
 
-Primary native anchors: `Qvm_Load` (`0x004B80B0`), `Resource_Load` (`0x004B5F00`),
-`DynObj_LoadModelTexturePackage` (`0x004CF080`), `DynObj_LoadModelMesh` (`0x004CF390`) and
-`DisplayRender_DrawModel` (`0x0049DF60`). Names and addresses identify the research sources;
-complete retail behavioral parity is not established by compilation or these screenshots.
+The v4 catalog was copied as historical inventory from the existing scope-gate worktree; it does not confer verification status. RE-Agent's optional Frida 17.23.2 JavaScript module was installed in the shared local `/Users/haseeb-mir/Documents/Code/project-open-igi/.tools/re-agent-frida-17.23.2` tooling directory and linked into its `node_modules/frida` without source/lockfile changes. RE-Agent and upstream REA remain distinct. The repair was confirmed through an actual MCP process-list call.
 
-Movies/cutscenes, vehicles, smoke effects, and the main menu are outside this playable-demo scope unless a Level 1 dependency is proven.
+Default `./build.sh [--probe path --level N]` builds a diagnostic candidate first, binds its compiler inputs, then runs `native_gate.py --changed --threshold VERIFIED --cfg-threshold 0.85 --require-semantic-evidence --require-behavioral-tests` and the scoped paired runtime checker. It blocks empty scopes. It never deploys. `./build.sh --diagnostic` is the explicit shell-only build command.
 
-## Build
+`python3 scripts/igi_workflow.py smoke` spawns the diagnostic candidate suspended, injects a small architecture/module probe, and terminates only that owned process before main resumes. This checks runtime plumbing without executing game code or disturbing another agent’s session. It never verifies a native.
 
-The target is a 32-bit Windows executable using the original DirectX 7 / DirectDraw platform APIs.
-The game target rejects non-Windows and 64-bit toolchains. `./run.sh` launches
-`open-igi.exe` after the production verification gate; `./run.sh --status` only
-reports paths. Wine/CrossOver may run the Windows executable for local testing;
-there is no macOS application target or `.app` deployment.
-Launch also checks the executable hash against its verified build receipt and
-recorded sources/compiler configuration. Missing or stale receipts block launch.
+## Automated native analysis and runtime checks
 
-Requirements: CMake 3.20+, a C++20 compiler, and the Windows SDK or MinGW toolchain with DirectDraw 7 headers and libraries.
-
-Use `./build.sh` for the enforced build. It checks every production native at
-`VERIFIED`, requires CFG similarity of at least `0.85`, runs fresh angr analysis
-and configured behavioral comparisons, then builds and tests. A blocked gate
-does not authorize deployment, even if a separate host build passes.
-
-For one method during development:
-
-```sh
-python3 scripts/native_gate.py --root "$PWD" \
-  --file engine/src/retail/model/mef_native_attachments.cpp \
-  --address 0x004D0D10 --threshold VERIFIED --cfg-threshold 0.85 \
-  --report build/native-method-004D0D10.json
-```
-
-Comment formatting produces warnings; missing or stale binary-bound evidence,
-logic disagreements and behavioral mismatches block verification. A method pass
-does not qualify the whole application for release. The following commands run
-host compilation and unit tests only:
-
-    cmake -S . -B build
-    cmake --build build
-    ctest --test-dir build --output-on-failure
-
-## Reverse-engineering workflow
-
-All behavioral implementation claims must trace back to `igi.exe`. `Static analysis`, `dynamic analysis` and `memory inspection` confirm behavior where possible; focused tests record verified conditions and known limits. A catalog entry or clean decompilation alone is not runtime proof.
-
-Tools used for analysis and verification:
-
-- `Ghidra` — disassembly, decompilation, and data-structure analysis.
-- `Binary Ninja` — independent disassembly, decompilation, and control-flow analysis.
-- `radare2` — independent disassembly, control-flow, and binary inspection.
-- `angr` — independent CFG recovery and bounded symbolic analysis; supplementary evidence.
-- `IGI-Probe` — runtime instrumentation where supported; availability and coverage must be recorded.
-- `RE-Agent` — orchestration of reverse-engineering analysis against the retail executable.
-
-Per-routine evidence and implementation limits stay attached to native source and its analysis records. Tool output is evidence; it is not a substitute for the native engine implementation.
-
-## Source layout
-
-- engine/include/igi/retail/ — declarations for integrated retail routines.
-- engine/src/retail/ — routine implementations, named and annotated with their retail addresses.
-- engine/tests/ — focused tests for individual implementation slices.
-- engine/REVERSE_ENGINEERING.md — provenance, evidence, and unresolved behavior.
-
-## Windows runtime
-
-The retail executable and this project target 32-bit Windows x86 and DirectX 7 / DirectDraw. The game is intended to run as a normal Windows game with its original assets. Keep Windows APIs in the Windows platform layer; shared engine routines retain retail behavior established from igi.exe.
-
-## Developer inspection controls
-
-Run `open-igi.exe window devmode level1`. F12 toggles the diagnostic free camera; F10 loads
-the next level (Level 14 wraps to Level 1). F9 toggles **player-only cheat requests** for god mode,
-unlimited ammunition and clips. This model scene has no playable health/inventory integration yet,
-so F9 logs that limitation and does not grant functional gameplay cheats. All three shortcuts are
-inactive without `devmode`; key auto-repeat is ignored. These are host tools, not retail-native claims.
-
-The model-and-terrain grids above record the current loading milestone.
-Gameplay screenshots from the retired SDL/OpenGL prototypes are not used here. See [AGENTS.md](AGENTS.md) for the evidence/review rules.
-
-Current development checkpoint: Windows x86 model-and-terrain loading (not a playable or stable gameplay release).
-[Windows test record](docs/DEVELOPER_CONTROLS_TEST.md) · [Terrain/ATTA evidence](docs/RETAIL_TERRAIN_ATTACHMENT_STATUS.md) · [Retail byte identities](docs/native-source-identity.json).
-
-Evidence-backed names and historical aliases: [native naming record](docs/RETAIL_NATIVE_NAMING.md).
-
-## License
-
-Project-authored source is distributed under the [MIT license](LICENSE), copyright
-2026 Heaven HM. Existing third-party notices remain applicable. The retail game,
-its executable and its assets are not licensed by this repository. See
-[license scope](LICENSE_SCOPE.md), including the status of screenshots.
+The current candidate is `igi1.exe`. The integration build is diagnostic; native acceptance remains separate. See [the active MVP verification commands](MVP.md#automated-checks-on-this-branch) for CTest per-native static collection, a shared candidate receipt fixture and typed paired-runtime checks. Missing tools/probes/stale evidence block rather than pass. Reconfigure CMake after source changes so its pinned native scope stays current.

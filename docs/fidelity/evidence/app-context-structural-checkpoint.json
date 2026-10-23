@@ -1,0 +1,106 @@
+{
+  "kind": "native-structural-checkpoint",
+  "date": "2026-10-19",
+  "status": "passed",
+  "gate_report": "build/gate-repair/app-context/structural-gate.json",
+  "gate_report_sha256": "d634e751b85f429f62fc52b5b7496c32f13b2f17ce03ba5efcbb833893e5a4ab",
+  "checked_natives": 7,
+  "failures": [],
+  "methods": [
+    {
+      "address": "0x0048F1A0",
+      "selected_decompiler": "ghidra",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 256,
+        "tests_total": 256
+      }
+    },
+    {
+      "address": "0x0048F1B0",
+      "selected_decompiler": "binary_ninja",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 12,
+        "tests_total": 12
+      }
+    },
+    {
+      "address": "0x0048F1E0",
+      "selected_decompiler": "ghidra",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 256,
+        "tests_total": 256
+      }
+    },
+    {
+      "address": "0x0048F230",
+      "selected_decompiler": "binary_ninja",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 12,
+        "tests_total": 12
+      }
+    },
+    {
+      "address": "0x0048F240",
+      "selected_decompiler": "ghidra",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 256,
+        "tests_total": 256
+      }
+    },
+    {
+      "address": "0x0048F250",
+      "selected_decompiler": "binary_ninja",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 12,
+        "tests_total": 12
+      }
+    },
+    {
+      "address": "0x0048F260",
+      "selected_decompiler": "ghidra",
+      "cfg_similarity": 1.0,
+      "status": "STRUCTURALLY_VERIFIED",
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/native_diff_runner.py",
+        "tests_failed": 0,
+        "tests_passed": 256,
+        "tests_total": 256
+      }
+    }
+  ],
+  "limitations": [
+    "Focused structural checkpoint only; full release gate remains blocking.",
+    "Live consumer parity and concurrency are not established."
+  ]
+}

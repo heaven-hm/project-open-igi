@@ -1,0 +1,228 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004B0F80",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+  "method": "Retail and the compiled candidate return the dword stored in the backend-id slot; the harness writes eight different values into that slot on each side - including zero, negative and the values the runtime observed - and compares the returned word, which proves the read is from the slot and not a constant.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004B0F80",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "7e20f334a6795a63880a8d74cbd4a360b5102b1e71801ecd10835c5d0c7d0400"
+  },
+  "cases": [
+    {
+      "id": "backend-slot-0",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 0
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 0,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-1",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot--1",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": -1
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": -1,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": -1,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-2",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 2
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-3",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 3
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 3,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 3,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-7",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 7
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 7,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 7,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-100",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 100
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 100,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 100,
+        "state_delta": {},
+        "side_effects": []
+      }
+    },
+    {
+      "id": "backend-slot-2147483647",
+      "input": {
+        "args": [],
+        "initial_state": {
+          "backend_slot": 2147483647
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2147483647,
+        "state_delta": {},
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 2147483647,
+        "state_delta": {},
+        "side_effects": []
+      }
+    }
+  ],
+  "runner": {
+    "path": "scripts/texture_backend_id_diff_runner.py",
+    "sha256": "64f069f0855141ffa4695bb4d745838e67a69bc21e4d6528b4bccf4273bb47c4",
+    "command": [
+      "scripts/texture_backend_id_diff_runner.py",
+      "--address",
+      "0x004B0F80",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/texture/texture_loaders.cpp",
+      "--implementation-sha256",
+      "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+      "--root",
+      "."
+    ]
+  }
+}

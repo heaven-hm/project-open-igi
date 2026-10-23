@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsSetTransparency - 0x00404960 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404960-Config_GraphicOptionsSetTransparency.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404960-Config_GraphicOptionsSetTransparency.hpp"
+#include "Config_GraphicOptionsSetTransparency.h"
 int Config_GraphicOptionsSetTransparency(int context, float arg2 )
 
 // Sig: void Config_GraphicOptionsSetTransparency(int onOff)

@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x00505E40",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
+  "method": "Retail and the compiled candidate execute the push with the same counter, scratch value and source row; the returned value, the host stack index after the call, the stored value, the packed mask, the +0xDC push flag and the side effects are compared.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x00505E40",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "1d8e65b6bae760b2de297dfd1dfcaa62a665bc27694568b4f249f0e757b8d336"
+  },
+  "cases": [
+    {
+      "id": "counter-0-pushed-0-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 0,
+          "scratch_value": 0,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 0,
+          "mask": 1,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 0,
+          "mask": 1,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-0-pushed-1-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 0,
+          "scratch_value": 1,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 1,
+          "mask": 2,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 1,
+          "mask": 2,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-1-pushed-2-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 1,
+          "scratch_value": 2,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 3,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 2,
+          "mask": 3,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 3,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 2,
+          "mask": 3,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-2-pushed-3-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 2,
+          "scratch_value": 3,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 4,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 3,
+          "mask": 4,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 4,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 3,
+          "mask": 4,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-0-pushed-7-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 0,
+          "scratch_value": 7,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 8,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 7,
+          "mask": 8,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 8,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 7,
+          "mask": 8,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-1-pushed-4660-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 1,
+          "scratch_value": 4660,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 4661,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 4660,
+          "mask": 4661,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 4661,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 4660,
+          "mask": 4661,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    },
+    {
+      "id": "counter-0-pushed-0-row-0",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 0,
+          "scratch_value": 0,
+          "source_row_accepts": false
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 24576,
+        "state_delta": {
+          "stack_index": 0,
+          "pushed_value": 0,
+          "mask": 0,
+          "flag_0xdc": 0
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": 24576,
+        "state_delta": {
+          "stack_index": 0,
+          "pushed_value": 0,
+          "mask": 0,
+          "flag_0xdc": 0
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "counter-3-pushed-5-row-1",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "counter": 3,
+          "scratch_value": 5,
+          "source_row_accepts": true
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 6,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 5,
+          "mask": 6,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 6,
+        "state_delta": {
+          "stack_index": 1,
+          "pushed_value": 5,
+          "mask": 6,
+          "flag_0xdc": 1
+        },
+        "side_effects": [
+          "store:stack",
+          "write:flag"
+        ]
+      }
+    }
+  ],
+  "runner": {
+    "path": "scripts/texturemodifier_push_diff_runner.py",
+    "sha256": "1f1d99cbdd82e839ec92b1fe127fb007c0f1051ac8756e06497183b38f9266b6",
+    "command": [
+      "scripts/texturemodifier_push_diff_runner.py",
+      "--address",
+      "0x00505E40",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/terrain/terrain_loaders.cpp",
+      "--implementation-sha256",
+      "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
+      "--root",
+      "."
+    ]
+  }
+}

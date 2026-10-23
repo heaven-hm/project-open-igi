@@ -1,6 +1,6 @@
 // IGI native provenance: Rigid_DyncubeObjRead - 0x004C48E0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004C48E0-Rigid_DyncubeObjRead.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004C48E0-Rigid_DyncubeObjRead.hpp"
+#include "Rigid_DyncubeObjRead.h"
 char* Rigid_DyncubeObjRead(char* context)
 
 // Sig: void Rigid_DyncubeObjRead(unsigned int *cfg_file)

@@ -1,0 +1,17 @@
+{
+ "kind": "mvp-structural-coverage",
+ "schema_version": 1,
+ "retail_binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "mvp_targets": 120,
+ "manifest_records": 120,
+ "evidence_consistent": 120,
+ "angr_entries_recovered": 120,
+ "angr_missing": 0,
+ "flow_ordered_from_main": 70,
+ "flow_direct_edges": 54,
+ "flow_cross_reference_edges": 16,
+ "flow_indirect_only": 50,
+ "runtime_capture": "blocked",
+ "runtime_blocker": "Frida device.spawn against the CrossOver/Wine retail image hangs indefinitely on this host; no paired runtime trace could be captured in this session.",
+ "verification_status": "STRUCTURALLY_VERIFIED only; runtime parity not established"
+}

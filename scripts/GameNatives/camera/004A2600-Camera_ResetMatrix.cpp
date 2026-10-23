@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_ResetMatrix - 0x004A2600 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A2600-Camera_ResetMatrix.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A2600-Camera_ResetMatrix.hpp"
+#include "Camera_ResetMatrix.h"
 int Camera_ResetMatrix(void* context)
 
 {

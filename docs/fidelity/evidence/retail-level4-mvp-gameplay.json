@@ -1,0 +1,720 @@
+{
+  "tool": "frida",
+  "probe": "scripts/frida_level_probe.js",
+  "log": "build/runtime-traces/20261019-level4-retail/frida-mvp.log",
+  "module": "igi.exe",
+  "base": "0x400000",
+  "retailAddressMode": true,
+  "targetCount": 22,
+  "hooksInstalled": 22,
+  "hooksFailed": 0,
+  "observed": {
+    "Camera_FirstPerson_Update": {
+      "va": "0x00482A40",
+      "hits": 806,
+      "firstCalls": [
+        {
+          "args": [
+            "0x8fdb53c",
+            "0x8fdb53c",
+            "0x5b29224",
+            "0x5b29230",
+            "0x0",
+            "0x4e7ce2"
+          ],
+          "returnValue": "0x3f800000"
+        },
+        {
+          "args": [
+            "0x8fdb53c",
+            "0x8fdb53c",
+            "0x5b29224",
+            "0x5b29230",
+            "0x0",
+            "0x4e7ce2"
+          ],
+          "returnValue": "0x3f800000"
+        },
+        {
+          "args": [
+            "0x8fdb53c",
+            "0x8fdb53c",
+            "0x5b29224",
+            "0x5b29230",
+            "0x0",
+            "0x4e7ce2"
+          ],
+          "returnValue": "0x3f800000"
+        },
+        {
+          "args": [
+            "0x8fdb53c",
+            "0x8fdb53c",
+            "0x5b29224",
+            "0x5b29230",
+            "0x0",
+            "0x4e7ce2"
+          ],
+          "returnValue": "0x3f800000"
+        }
+      ]
+    },
+    "DynObj_LoadModelMesh": {
+      "va": "0x004CF390",
+      "hits": 489,
+      "firstCalls": [
+        {
+          "args": [
+            "0x36d11f8",
+            "0x35af1cc",
+            "0x35b9bb4",
+            "0x5c3f14",
+            "0x0",
+            "0x4cf118"
+          ],
+          "returnValue": "0x5af7c94"
+        },
+        {
+          "args": [
+            "0x36d11ff",
+            "0x35af1cc",
+            "0x35b9bb4",
+            "0x5c3f14",
+            "0x0",
+            "0x4cf118"
+          ],
+          "returnValue": "0x5af7ce4"
+        },
+        {
+          "args": [
+            "0x36d1208",
+            "0x35af1cc",
+            "0x35b9bb4",
+            "0x5c3f14",
+            "0x0",
+            "0x4cf118"
+          ],
+          "returnValue": "0x5af7d34"
+        },
+        {
+          "args": [
+            "0x36d1211",
+            "0x35af1cc",
+            "0x35b9bb4",
+            "0x5c3f14",
+            "0x0",
+            "0x4cf118"
+          ],
+          "returnValue": "0x5af7d84"
+        }
+      ]
+    },
+    "Game_GetContext": {
+      "va": "0x00402880",
+      "hits": 921996,
+      "firstCalls": [
+        {
+          "args": [
+            "0x7b7571b0",
+            "0x400000",
+            "0x42f220f",
+            "0x0",
+            "0x0",
+            "0x22ff40"
+          ],
+          "returnValue": "0x35851a4"
+        },
+        {
+          "args": [
+            "0x7b7571b0",
+            "0x400000",
+            "0x42f220f",
+            "0x0",
+            "0x0",
+            "0x22ff40"
+          ],
+          "returnValue": "0x35851a4"
+        },
+        {
+          "args": [
+            "0x7b7571b0",
+            "0x400000",
+            "0x42f220f",
+            "0x0",
+            "0x0",
+            "0x22ff40"
+          ],
+          "returnValue": "0x35851a4"
+        },
+        {
+          "args": [
+            "0x7b7571b0",
+            "0x400000",
+            "0x42f220f",
+            "0x0",
+            "0x0",
+            "0x22ff40"
+          ],
+          "returnValue": "0x35851a4"
+        }
+      ]
+    },
+    "Human_AttachedMovement": {
+      "va": "0x00462CF0",
+      "hits": 806,
+      "firstCalls": [
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x0",
+            "0x5cd70cc",
+            "0x5cd70cc",
+            "0x0",
+            "0x0"
+          ],
+          "returnValue": "0x5cd70cc"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x0",
+            "0x5cd70cc",
+            "0x5cd70cc",
+            "0x0",
+            "0x0"
+          ],
+          "returnValue": "0x4022"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x0",
+            "0x5cd70cc",
+            "0x5cd70cc",
+            "0x0",
+            "0x0"
+          ],
+          "returnValue": "0x4022"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x0",
+            "0x5cd70cc",
+            "0x5cd70cc",
+            "0x0",
+            "0x0"
+          ],
+          "returnValue": "0x4022"
+        }
+      ]
+    },
+    "Human_CameraEyePosition": {
+      "va": "0x00465820",
+      "hits": 10053,
+      "firstCalls": [
+        {
+          "args": [
+            "0x22f7d8",
+            "0x5cd70cc",
+            "0x5cf9b9c",
+            "0x0",
+            "0x0",
+            "0xbfc90fd8"
+          ],
+          "returnValue": "0x407b09de"
+        },
+        {
+          "args": [
+            "0x22f7d8",
+            "0x5cd70cc",
+            "0x5cf9b9c",
+            "0x0",
+            "0x0",
+            "0x4096cbe4"
+          ],
+          "returnValue": "0x407b09de"
+        },
+        {
+          "args": [
+            "0x22f7d8",
+            "0x5cd70cc",
+            "0x5cf9b9c",
+            "0x0",
+            "0x0",
+            "0x4096cbe4"
+          ],
+          "returnValue": "0x407b09de"
+        },
+        {
+          "args": [
+            "0x22f7d8",
+            "0x5cd70cc",
+            "0x5cf9b9c",
+            "0x0",
+            "0x0",
+            "0x4096cbe4"
+          ],
+          "returnValue": "0x407b09de"
+        }
+      ]
+    },
+    "Human_IsCrouched": {
+      "va": "0x00463180",
+      "hits": 10053,
+      "firstCalls": [
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x5cd75ec",
+            "0x5cd70cc",
+            "0x42f120f",
+            "0x22f7d8",
+            "0x5cd70cc"
+          ],
+          "returnValue": "0x5cd7000"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x5cd75ec",
+            "0x5cd70cc",
+            "0x42f120f",
+            "0x22f7d8",
+            "0x5cd70cc"
+          ],
+          "returnValue": "0x5cd7000"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x5cd75ec",
+            "0x5cd70cc",
+            "0x42f120f",
+            "0x22f7d8",
+            "0x5cd70cc"
+          ],
+          "returnValue": "0x5cd7000"
+        },
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x5cd75ec",
+            "0x5cd70cc",
+            "0x42f120f",
+            "0x22f7d8",
+            "0x5cd70cc"
+          ],
+          "returnValue": "0x5cd7000"
+        }
+      ]
+    },
+    "Human_MovementIntegrator": {
+      "va": "0x004614B0",
+      "hits": 1,
+      "firstCalls": [
+        {
+          "args": [
+            "0x5cd70cc",
+            "0x0",
+            "0x5cd70cc",
+            "0x5cd70cc",
+            "0x0",
+            "0x0"
+          ],
+          "returnValue": "0x5e31d00"
+        }
+      ]
+    },
+    "Input_InitKeyboard": {
+      "va": "0x0048FED0",
+      "hits": 4,
+      "firstCalls": [
+        {
+          "args": [
+            "0x20006c",
+            "0x84",
+            "0x0",
+            "0x34a03cd",
+            "0x0",
+            "0x34a03cd"
+          ],
+          "returnValue": "0x1"
+        },
+        {
+          "args": [
+            "0x20006c",
+            "0x84",
+            "0x0",
+            "0x34a03cd",
+            "0x0",
+            "0x34a03cd"
+          ],
+          "returnValue": "0x1"
+        },
+        {
+          "args": [
+            "0x20006c",
+            "0x20",
+            "0x20006c",
+            "0x2000001",
+            "0x0",
+            "0x2000001"
+          ],
+          "returnValue": "0x1"
+        },
+        {
+          "args": [
+            "0x20006c",
+            "0x200",
+            "0x0",
+            "0x27d0285",
+            "0x0",
+            "0x27d0285"
+          ],
+          "returnValue": "0x1"
+        }
+      ]
+    },
+    "Input_Run": {
+      "va": "0x00507EC0",
+      "hits": 806,
+      "firstCalls": [
+        {
+          "args": [
+            "0xbc20f0",
+            "0x3587c5c",
+            "0x0",
+            "0x3587cac",
+            "0x0",
+            "0x402367"
+          ],
+          "returnValue": "0xbc2150"
+        },
+        {
+          "args": [
+            "0xbc20f0",
+            "0x3587c5c",
+            "0x1",
+            "0x3587cac",
+            "0x0",
+            "0x402367"
+          ],
+          "returnValue": "0xbc2150"
+        },
+        {
+          "args": [
+            "0xbc20f0",
+            "0x3587c5c",
+            "0x2",
+            "0x3587cac",
+            "0x0",
+            "0x402367"
+          ],
+          "returnValue": "0xbc2150"
+        },
+        {
+          "args": [
+            "0xbc20f0",
+            "0x3587c5c",
+            "0x3",
+            "0x3587cac",
+            "0x0",
+            "0x402367"
+          ],
+          "returnValue": "0xbc2150"
+        }
+      ]
+    },
+    "Model_GetAttachment": {
+      "va": "0x004D0CF0",
+      "hits": 588,
+      "firstCalls": [
+        {
+          "args": [
+            "0x5af9614",
+            "0x0",
+            "0x5d",
+            "0x595f3ec",
+            "0x595f3ec",
+            "0x22f574"
+          ],
+          "returnValue": "0x624fdbc"
+        },
+        {
+          "args": [
+            "0x5af9614",
+            "0x1",
+            "0x5d",
+            "0x595f3ec",
+            "0x595f3ec",
+            "0x22f574"
+          ],
+          "returnValue": "0x624fe00"
+        },
+        {
+          "args": [
+            "0x5af9614",
+            "0x2",
+            "0x5d",
+            "0x595f3ec",
+            "0x595f3ec",
+            "0x22f574"
+          ],
+          "returnValue": "0x624fe44"
+        },
+        {
+          "args": [
+            "0x5af9614",
+            "0x3",
+            "0x5d",
+            "0x595f3ec",
+            "0x595f3ec",
+            "0x22f574"
+          ],
+          "returnValue": "0x624fe88"
+        }
+      ]
+    },
+    "Model_GetAttachmentCount": {
+      "va": "0x004D0D10",
+      "hits": 711,
+      "firstCalls": [
+        {
+          "args": [
+            "0x5b0ac84",
+            "0x595923c",
+            "0x5959294",
+            "0x35af1cc",
+            "0x59591a4",
+            "0x90cb3bc"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x5b0ad44",
+            "0x595940c",
+            "0x5959464",
+            "0x35af1cc",
+            "0x5959374",
+            "0x90cb3bc"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x5b0ad44",
+            "0x59595dc",
+            "0x5959634",
+            "0x35af1cc",
+            "0x5959544",
+            "0x90cb3bc"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x5b0ac84",
+            "0x59597ac",
+            "0x5959804",
+            "0x35af1cc",
+            "0x5959714",
+            "0x90cb3bc"
+          ],
+          "returnValue": "0x0"
+        }
+      ]
+    },
+    "QTask_OpenEvent": {
+      "va": "0x00401050",
+      "hits": 460998,
+      "firstCalls": [
+        {
+          "args": [
+            "0x0",
+            "0x0",
+            "0x22ff40",
+            "0x7ffd1000",
+            "0xbfe00000",
+            "0x0"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x0",
+            "0x0",
+            "0x22ff40",
+            "0x7ffd1000",
+            "0xbfe00000",
+            "0x0"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x0",
+            "0x0",
+            "0x22ff40",
+            "0x7ffd1000",
+            "0xbfe00000",
+            "0x0"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x0",
+            "0x0",
+            "0x22ff40",
+            "0x7ffd1000",
+            "0xbfe00000",
+            "0x0"
+          ],
+          "returnValue": "0x0"
+        }
+      ]
+    },
+    "Terrain_Draw": {
+      "va": "0x00512C30",
+      "hits": 203,
+      "firstCalls": [
+        {
+          "args": [
+            "0x1",
+            "0x22f8c0",
+            "0x4c55aeeb",
+            "0xccd7464d",
+            "0x4d2812d8",
+            "0x34a8885a"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x1",
+            "0x22f8c0",
+            "0x4c55aeeb",
+            "0xccd7464d",
+            "0x4d2812d8",
+            "0x34a8885a"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x1",
+            "0x22f8c0",
+            "0x4c55aeeb",
+            "0xccd7464d",
+            "0x4d2812d8",
+            "0x34a8885a"
+          ],
+          "returnValue": "0x0"
+        },
+        {
+          "args": [
+            "0x1",
+            "0x22f8c0",
+            "0x4c55aeeb",
+            "0xccd7464d",
+            "0x4d2812d8",
+            "0x34a8885a"
+          ],
+          "returnValue": "0x0"
+        }
+      ]
+    },
+    "Terrain_Load": {
+      "va": "0x004C6240",
+      "hits": 1,
+      "firstCalls": [
+        {
+          "args": [
+            "0x3591134",
+            "0x22f76c",
+            "0x3591134",
+            "0x22f76c",
+            "0x22f76c",
+            "0x53975c"
+          ],
+          "returnValue": "0x3591134"
+        }
+      ]
+    },
+    "Terrain_LoadTexturesAndLightmaps": {
+      "va": "0x004C5F00",
+      "hits": 1,
+      "firstCalls": [
+        {
+          "args": [
+            "0x3591134",
+            "0x22f76c",
+            "0x22f76c",
+            "0x53975c",
+            "0x57b568",
+            "0x3591134"
+          ],
+          "returnValue": "0xa"
+        }
+      ]
+    },
+    "Texture_UploadMipmapPacket": {
+      "va": "0x004B23B0",
+      "hits": 1387,
+      "firstCalls": [
+        {
+          "args": [
+            "0x35cc898",
+            "0x0",
+            "0x100",
+            "0x40",
+            "0x20",
+            "0x3"
+          ],
+          "returnValue": "0x12"
+        },
+        {
+          "args": [
+            "0x35cc8bc",
+            "0x0",
+            "0x100",
+            "0x40",
+            "0x20",
+            "0x3"
+          ],
+          "returnValue": "0x12"
+        },
+        {
+          "args": [
+            "0x35cc8e0",
+            "0x0",
+            "0x100",
+            "0x40",
+            "0x20",
+            "0x3"
+          ],
+          "returnValue": "0x12"
+        },
+        {
+          "args": [
+            "0x35cc904",
+            "0x0",
+            "0x100",
+            "0x40",
+            "0x20",
+            "0x3"
+          ],
+          "returnValue": "0x12"
+        }
+      ]
+    }
+  },
+  "observedCount": 16,
+  "limitations": [
+    "Frida attached after the process started, so startup and QVM-load calls are not observed",
+    "argument words and EAX are recorded without dereferencing; the ABI of each native is not assumed",
+    "hit counts and return values are runtime observations of the retail binary only; they are not a comparison against the reconstruction"
+  ]
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: Warning_Show - 0x004AF810 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AF810-Warning_Show.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AF810-Warning_Show.hpp"
+#include "Warning_Show.h"
 int Warning_Show(char* context)
 
 // Sig: void Warning_Show(char* format, ...)

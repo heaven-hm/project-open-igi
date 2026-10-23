@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004A8AD0",
+  "symbol": "Camera_UpdateTransform_15",
+  "signature": "int32_t __fastcall(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x004A8AD0",
+    "end": "0x4a8b36",
+    "size_bytes": 103,
+    "basic_blocks": 4,
+    "instruction_count": 30
+  },
+  "bytes_hex": "807a0e057511668b9d5cffffff80cf02",
+  "bytes_sha256": "99416f844a2830566ea8872ae04346673faea35c2a7924852e9ade9fe26c3515",
+  "cfg": {
+    "entry": "0x004A8AD0",
+    "nodes": [
+      {
+        "address": "0x004a8ad0",
+        "start": "0x4a8ad0",
+        "end": "0x4a8ad6",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a8ae7",
+        "start": "0x4a8ae7",
+        "end": "0x4a8aeb",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a8ad6",
+        "start": "0x4a8ad6",
+        "end": "0x4a8ae7",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a8aeb",
+        "start": "0x4a8aeb",
+        "end": "0x4a8b37",
+        "flags": "can-exit, undetermined-outgoing"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004a8ad0",
+        "target": "0x004a8ad6",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a8ad0",
+        "target": "0x004a8ae7",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a8ad6",
+        "target": "0x004a8aeb",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a8ae7",
+        "target": "0x004a8aeb",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "`asm\n\ud83c\udf10  int32_t __fastcall Camera_UpdateTransform_15(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0)\n\n0x4a8ad0  cmp     byte [edx+0xe], 0x5\n0x4a8ad4  jne     0x4a8ae7\n\n0x4a8ad6  mov     bx, word [ebp-0xa4]\n0x4a8add  or      bh, 0x2\n0x4a8ae0  and     bh, 0xfe\n0x4a8ae3  mov     bl, 0x3f\n0x4a8ae5  jmp     0x4a8aeb\n\n0x4a8ae7  mov     bx, 0x133f\n\n0x4a8aeb  mov     word [ebp-0xa2], bx\n0x4a8af2  fldcw   word [ebp-0xa2]\n0x4a8af8  mov     ebx, 0x5443cd\n0x4a8afd  fxam\n0x4a8aff  mov     dword [ebp-0x94], edx\n0x4a8b05  fwait\n0x4a8b06  fnstsw  word [ebp-0xa0]\n0x4a8b0c  mov     byte [ebp-0x90], 0x0\n0x4a8b13  fwait\n0x4a8b14  mov     cl, byte [ebp-0x9f]\n0x4a8b1a  shl     cl, 0x1\n0x4a8b1c  sar     cl, 0x1\n0x4a8b1e  rol     cl, 0x1\n0x4a8b20  mov     al, cl\n0x4a8b22  and     al, 0xf\n0x4a8b24  xlat\n0x4a8b25  movsx   eax, al\n0x4a8b28  and     ecx, 0x404\n0x4a8b2e  mov     ebx, edx\n0x4a8b30  add     ebx, eax\n0x4a8b32  add     ebx, 0x10\n0x4a8b35  \u2753jmp     dword [ebx]",
+  "pseudocode": "`bn-pseudoc\n\ud83c\udf10  int32_t __fastcall Camera_UpdateTransform_15(int32_t arg1, void* arg2, void* arg3 @ ebp, long double arg4 @ st0)\n\n{\n    int16_t ebx;\n\n    if (*(arg2 + 0xe) != 5)\n        ebx = 0x133f;\n    else\n    {\n        ebx = *(arg3 - 0xa4);\n        *(&ebx + 1) |= 2;\n        *(&ebx + 1) &= 0xfe;\n        ebx = 0x3f;\n    }\n\n    *(arg3 - 0xa2) = ebx;\n    int16_t x87control;\n    int16_t x87status;\n    x87control = __fldcw_memmem16(*(arg3 - 0xa2));\n    bool c0;\n    bool c1;\n    bool c2;\n    bool c3;\n    c0 = __fxam(arg4);\n    *(arg3 - 0x94) = arg2;\n    *(arg3 - 0xa0) =\n        (c0 ? 1 : 0) << 8 | (c1 ? 1 : 0) << 9 | (c2 ? 1 : 0) << 0xa | (c3 ? 1 : 0) << 0xe;\n    *(arg3 - 0x90) = 0;\n    arg1 = *(arg3 - 0x9f);\n    arg1 <<= 1;\n    arg1 s>>= 1;\n    arg1 = ROLB(arg1, 1);\n    int32_t eax;\n    eax = arg1;\n    eax &= 0xf;\n\u2753    /* jump -> *(arg2 + *(&g_5443cd + eax) + 0x10) */\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a8ad0\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_15\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a8ad0\"\narch: \"x86\"\nname: \"Camera_UpdateTransform_15\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4a88d8 | x86 | Camera_ApplyBandFilter_14 (0x4a88be (x86)) |\n| 0x4a8a84 | x86 | Camera_UpdateViewCone_14 (0x4a8a65 (x86)) |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+  ]
+}

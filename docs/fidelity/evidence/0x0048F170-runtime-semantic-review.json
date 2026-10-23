@@ -1,0 +1,158 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x0048F170",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
+ "implementation_header": "engine/include/igi/retail/core/frame_natives.hpp",
+ "reviewed": true,
+ "reviewed_by": "Source-semantic review by the Task C capture author (2026-10-23) against Binary Ninja 6.0.10601 (view_1, retail PE32 base 0x00400000), the raw retail bytes, and the linked candidate build-clean-win32/igi1.exe sha256 8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885 rebuilt 2026-10-23T11:39:06Z.",
+ "reviewed_at": "2026-10-23T11:45:00Z",
+ "review_basis": "Binary Ninja function definition, byte-level objdump re-read of the retail image, the current candidate disassembly, and the source in engine/src/retail/core/frame_natives.cpp. This review is static; the paired runtime observation is a separate record and is only valid together with the paired 0x0048F140 store.",
+ "signature": {
+  "calling_convention": "cdecl",
+  "arguments": [],
+  "return": "int32_t: the dword loaded from 0x005C8BFC"
+ },
+ "observed_semantics": {
+  "entry_va": "0x0048F170",
+  "bytes": "a1 fc 8b 5c 00 c3",
+  "instructions": [
+   "0x0048F170  a1 fc8b5c00     mov eax, dword [0x005C8BFC]",
+   "0x0048F175  c3              ret"
+  ],
+  "basic_blocks": 1,
+  "callees": [],
+  "state_load": {
+   "va": "0x005C8BFC",
+   "width_bytes": 4,
+   "instruction_va": "0x0048F171"
+  },
+  "paired_writer": {
+   "address": "0x0048F140",
+   "instruction_va": "0x0048F147",
+   "note": "the retail .text contains exactly two references to 0x005C8BFC: the 0x0048F149 store and this 0x0048F171 load"
+  },
+  "callers": [
+   {
+    "entry": "0x0048F530",
+    "symbol": "main (catalog name FX_Igimutex)",
+    "call_site": "0x0048F812",
+    "return_address": "0x0048F817",
+    "order": "top of the per-frame loop, immediately after the frame clear at 0x0048F80D"
+   },
+   {
+    "entry": "0x00494F50",
+    "symbol": "display window handler (catalog name Display_SwapBuffers_7)",
+    "call_site": "0x00495010",
+    "in_scope": false
+   },
+   {
+    "entry": "0x00494F50",
+    "symbol": "display window handler",
+    "call_site": "0x0049503B",
+    "in_scope": false
+   }
+  ]
+ },
+ "candidate_semantics": {
+  "path": "engine/src/retail/core/frame_natives.cpp",
+  "symbol": "AppContext_GetIsActive",
+  "entry_va": "0x0041F7F0",
+  "bytes": "a1 ec 1b 5e 00 c3",
+  "state_symbol": "AppContext_IsActive (0x005E1BEC)",
+  "call_site": "0x00482D4F in RunRetailModelScene, return address 0x00482D54, the same position between the frame clear and the QTask_OpenEvent/Sleep(500) branch",
+  "note": "a single absolute load of the same logical flag followed by ret"
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja identifies one analyzed function at 0x0048F170 (the catalog name FX_DebrisSpawn_23 is an inherited FX-namespace misnomer; identity is the VA), definition int32_t(void), range 0x0048F170-0x0048F176 (6 bytes), one basic block and no callees. The raw retail bytes are a1 fc 8b 5c 00 c3 with nop padding after the ret; the candidate body at 0x0041F7F0 is a1 ec 1b 5e 00 c3, the same one-block load-and-return."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "The retail function takes no arguments and never reads the stack; the candidate AppContext_GetIsActive() also takes none and reads only the flag. The typed runtime contract therefore records no_arguments true, and the reviewed input observables are pre-call state (the flag value and the paired setter relation), not ABI parameters."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "There is no arithmetic, scaling or literal constant. The function is a pure 4-byte load of the flag dword and returns it unchanged; the observed values in the paired capture are 1 at the reviewed startup load and 1 as the final flag value, matching the paired setter store of 1."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The only memory access is the absolute 4-byte load from 0x005C8BFC at 0x0048F171 (a1 fc 8b 5c 00). That is the same dword the paired setter 0x0048F140 stores sign_extend_8(argument[7:0]) into at 0x0048F147, it lies in the zero-filled tail of .data, and the retail .text contains exactly two references to that VA: the store and this load. The candidate loads its equivalent global AppContext_IsActive (0x005E1BEC) with the same absolute addressing mode."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The function has no callees, no branches and no writes: EAX is loaded from the flag and returned, so the only observable effect is the read. The paired capture confirms flag_unchanged_during_call true and getter_wrote_nothing true on both sides. The reviewed invocation is the frame-loop call at 0x0048F812 (retail) and 0x00482D4F (candidate); the display window handler calls the same native on WM_ACTIVATE and those invocations are out of the paired scope."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "EAX receives the dword and is returned unchanged; there is no branch, no error path and no fallback value. The compared relation is return == flag at entry and return == the dword the paired setter wrote, which the runtime record confirms as return_equals_flag_before true and return_equals_setter_stored true."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The function only loads and returns a 32-bit integer flag; it contains no x87, SSE or other floating-point instruction and no floating-point state is read or written. The candidate implementation likewise performs only an integer load."
+  }
+ ],
+ "limitations": [
+  "The getter is reviewed and promoted only together with the paired setter 0x0048F140; the claim is the store-then-load relation, not a standalone getter observation.",
+  "Per-frame call counts depend on frame pacing and are recorded as provenance only; the compared getter surface is the first reviewed-callsite load plus the cumulative relations over every observed call.",
+  "The display window handler 0x00494F50 also calls this native on WM_ACTIVATE; those invocations are out of the reviewed scope.",
+  "The catalog function name is a misnomer; the review deliberately relies on the address and bytes, not the name."
+ ],
+ "runtime_contract_reviewed_at": "2026-10-23T11:45:00Z",
+ "runtime_contract": {
+  "scope": "startup-app-context-active-flag",
+  "probe_path": "scripts/frida_app_context_isactive_typed.js",
+  "probe_sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1",
+  "actions_path": "scripts/frida_scenario_actions.js",
+  "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+  "execution_status": "executed: the first reviewed-callsite getter invocation observed per side returned the dword the paired setter stored (1) with no write; the cumulative aggregate covered every observed call (retail 4888, candidate 168) with distinct returns [1], all returns equal to the flag at entry, the flag unchanged during every call, and final flag 1 on both sides.",
+  "required_observables": {
+   "inputs": [
+    "caller_class",
+    "is_primary_frame_loop_call",
+    "flag_before_state",
+    "flag_before_value",
+    "flag_before_is_zero",
+    "primary_setter_observed_before",
+    "setter_stored_state",
+    "setter_stored_value",
+    "flag_before_equals_setter_stored"
+   ],
+   "outputs": [
+    "return_state",
+    "return_bits",
+    "return_equals_flag_before",
+    "return_is_zero",
+    "return_equals_setter_stored"
+   ],
+   "sideEffects": [
+    "flag_after_state",
+    "flag_after_value",
+    "flag_unchanged_during_call",
+    "getter_wrote_nothing"
+   ]
+  },
+  "no_arguments": true,
+  "no_return": false,
+  "no_side_effects": false,
+  "note": "required_observables is the typedState subset (18 fields) this review authorizes for 0x0048F170. no_arguments describes the ABI (the native takes no arguments); the required inputs are pre-call observations, not parameters. no_side_effects is false because the contract asserts the absence of a write (flag_unchanged_during_call / getter_wrote_nothing) against the reviewed flag VA. The single paired record is the first frame-loop invocation at the per-side reviewed callsite (retail 0x0048F817, candidate 0x00482D54); every later invocation is accounted for in a cumulative getter_sequence aggregate (call counts, distinct returns, all-returns-equal-flag relation, final flag value) that the comparison evidence also requires. No address is compared across processes; the compared getter values are the scalar flag (0/1) and its relations.",
+  "capture_path": "build/runtime-traces/20261023T113721Z-48f140-paired/pair.json"
+ },
+ "runtime_capture": {
+  "probe_path": "scripts/frida_app_context_isactive_typed.js",
+  "probe_sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1",
+  "actions_path": "scripts/frida_scenario_actions.js",
+  "capture_directory": "build/runtime-traces/20261023T113721Z-48f140-paired",
+  "note": "Sequential retail-then-candidate capture, level 1 windowed, cwd /Users/haseeb-mir/Downloads/IGI, spawn suspended with the hooks installed before resume. The comparison evidence is docs/fidelity/evidence/0x0048F170-runtime-comparison.json."
+ }
+}

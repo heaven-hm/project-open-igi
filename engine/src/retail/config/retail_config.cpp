@@ -1,4 +1,6 @@
 #include "igi/retail/config/retail_config.hpp"
+#include "igi/retail/config/config_profile.hpp"
+#include "igi/retail/config/input_remap.hpp"
 
 #include "igi/retail/script/qvm_compiled_program.hpp"
 
@@ -478,68 +480,141 @@ bool read_script_file(const std::filesystem::path& path, ScriptProgram& out, std
     return read_script_program(buffer, out, error);
 }
 
+namespace {
+
+// Reads the host mirror of one profile record back through the retail strides
+// (0x00BC2358 block base, 0x00BC25BC entry base, 0x564-byte records) so the
+// diagnostics can print every record the script defined. This is a host read-back
+// of the store the natives write, not a native body.
+InputProfile read_profile_record(const ScriptProgram& program, std::uint32_t index)
+{
+    using namespace igi::retail::config;
+    const std::uint32_t count = index + 1U;
+    const std::uint32_t* const block = InputRemap_ActionTable + count * action_table_stride;
+    InputProfile profile;
+    const char* const name = reinterpret_cast<const char*>(block + record_name_offset);
+    std::size_t name_length = 0U;
+    while (name_length < profile_name_capacity && name[name_length] != '\0') {
+        ++name_length;
+    }
+    profile.name.assign(name, name_length);
+    profile.mouse_inverted = static_cast<std::int32_t>(block[record_mouse_invert_offset]);
+    float sensitivity = 0.0F;
+    std::memcpy(&sensitivity, &block[record_mouse_sensitivity_offset], sizeof(sensitivity));
+    profile.mouse_sensitivity = sensitivity;
+    profile.active_mission = static_cast<std::int32_t>(block[record_active_mission_offset]);
+
+    const std::uint32_t binding_count = block[record_action_count_offset];
+    for (std::uint32_t binding_index = 0U; binding_index < binding_count; ++binding_index) {
+        const std::uint32_t slot = (index * 115U) + binding_index;
+        const std::uint32_t* const entry = InputRemap_Table + slot * remap_table_stride;
+        InputBinding binding;
+        if (entry[0] < program.constants.symbols.size()
+            && entry[1] < program.constants.symbols.size()
+            && entry[2] < program.constants.symbols.size()) {
+            binding.action = program.constants.symbols[entry[0]];
+            binding.device = program.constants.symbols[entry[1]];
+            binding.control = program.constants.symbols[entry[2]];
+        }
+        profile.bindings.push_back(std::move(binding));
+    }
+    return profile;
+}
+
+} // namespace
+
 bool decode_input_config(const ScriptProgram& program, InputConfig& out, std::string& error)
 {
     out = InputConfig{};
+
+    // The script runs through the transcribed natives, exactly like the retail executes
+    // config.qvm: GOStart writes the active index at 0x00BC2384, each GOPlayer starts a
+    // record at 0x00BC2380 and the GO_* settings fill that record. The host frame carries
+    // the argument values already resolved (retail reads them through 0x004B8A20).
     for (const ScriptCall& call : program.calls) {
+        std::uint32_t values[3]{};
+        igi::retail::config::QvmFrameView frame{};
+        frame.argument_values = values;
         if (call.callee == "GOInRemap") {
             if (call.arguments.size() != 3U) {
                 error = "GOInRemap expects three arguments";
                 return false;
             }
-            InputBinding binding;
-            binding.action = std::string(program.symbol_argument(call.arguments[0]));
-            binding.device = std::string(program.symbol_argument(call.arguments[1]));
-            binding.control = std::string(program.symbol_argument(call.arguments[2]));
-            if (binding.action.empty() || binding.device.empty() || binding.control.empty()) {
-                error = "GOInRemap references an identifier outside the symbol table";
-                return false;
+            for (std::size_t index = 0; index < 3U; ++index) {
+                const ScriptArgument& argument = call.arguments[index];
+                if (argument.kind != ScriptArgumentKind::integer || argument.integer < 0) {
+                    error = "GOInRemap expects three identifiers";
+                    return false;
+                }
+                values[index] = static_cast<std::uint32_t>(argument.integer);
             }
-            out.bindings.push_back(std::move(binding));
-        } else if (call.callee == "GOInMouSens") {
-            if (call.arguments.size() != 1U) {
-                error = "GOInMouSens expects one argument";
-                return false;
-            }
-            out.mouse_sensitivity = static_cast<float>(
-                double_of(call.arguments[0], "GOInMouSens", error));
-            if (!error.empty()) {
-                return false;
-            }
-        } else if (call.callee == "GOInMouInv") {
-            if (call.arguments.size() != 1U
-                || call.arguments[0].kind != ScriptArgumentKind::integer) {
-                error = "GOInMouInv expects one integer argument";
-                return false;
-            }
-            out.mouse_inverted = static_cast<std::int32_t>(call.arguments[0].integer);
-        } else if (call.callee == "GOPlayer") {
+            GOInRemap(&frame);
+            continue;
+        }
+        if (call.callee == "GOPlayer") {
             if (call.arguments.size() != 1U) {
                 error = "GOPlayer expects one argument";
                 return false;
             }
-            out.player_name = std::string(program.string_argument(call.arguments[0]));
-        } else if (call.callee == "GOActiveMission") {
-            if (call.arguments.size() != 1U
-                || call.arguments[0].kind != ScriptArgumentKind::integer) {
-                error = "GOActiveMission expects one integer argument";
-                return false;
-            }
-            out.active_mission = static_cast<std::int32_t>(call.arguments[0].integer);
-        } else if (call.callee == "GOContentControlPW") {
+            const std::string name(program.string_argument(call.arguments[0]));
+            GOPlayer(&frame, name.c_str());
+            continue;
+        }
+        if (call.callee == "GOContentControlPW") {
             if (call.arguments.size() != 1U) {
                 error = "GOContentControlPW expects one argument";
                 return false;
             }
-            out.content_control_password = std::string(program.string_argument(call.arguments[0]));
-        } else if (call.callee == "GOStart") {
-            if (call.arguments.size() != 1U
-                || call.arguments[0].kind != ScriptArgumentKind::integer) {
-                error = "GOStart expects one integer argument";
-                return false;
-            }
-            out.start_state = static_cast<std::int32_t>(call.arguments[0].integer);
+            const std::string password(program.string_argument(call.arguments[0]));
+            GOContentControlPW(&frame, password.c_str());
+            continue;
         }
+        if (call.callee != "GOStart" && call.callee != "GOActiveMission" &&
+            call.callee != "GOInMouInv" && call.callee != "GOInMouSens") {
+            continue;
+        }
+        if (call.arguments.size() != 1U) {
+            error = call.callee + " expects one argument";
+            return false;
+        }
+        const ScriptArgument& argument = call.arguments[0];
+        if (argument.kind == ScriptArgumentKind::real) {
+            const float real = static_cast<float>(argument.real);
+            std::uint32_t bits = 0U;
+            std::memcpy(&bits, &real, sizeof(bits));
+            values[0] = bits;
+        } else if (argument.kind == ScriptArgumentKind::integer) {
+            values[0] = static_cast<std::uint32_t>(argument.integer);
+        } else {
+            error = call.callee + " expects one numeric argument";
+            return false;
+        }
+        if (call.callee == "GOStart") {
+            GOStart(&frame);
+        } else if (call.callee == "GOActiveMission") {
+            GOActiveMission(&frame);
+        } else if (call.callee == "GOInMouInv") {
+            GOInMouInv(&frame);
+        } else {
+            GOInMouSens(&frame);
+        }
+    }
+
+    // Read the store back through the retail accessors and strides. The retail input port
+    // reads only the record named by 0x00BC2384, so only that record reaches the bindings.
+    out.active_profile = Config_ActiveProfileIndex;
+    out.start_state = static_cast<std::int32_t>(Config_ActiveProfileIndex);
+    out.content_control_password = std::string(Config_ContentControlPassword);
+    for (std::uint32_t index = 0U; index < Config_ProfileCount; ++index) {
+        out.profiles.push_back(read_profile_record(program, index));
+    }
+    if (out.active_profile < out.profiles.size()) {
+        const InputProfile& active = out.profiles[out.active_profile];
+        out.bindings = active.bindings;
+        out.mouse_sensitivity = active.mouse_sensitivity;
+        out.mouse_inverted = active.mouse_inverted;
+        out.player_name = active.name;
+        out.active_mission = active.active_mission;
     }
     return true;
 }

@@ -31,16 +31,15 @@ LovsEntryLoaderFn g_lovs_entry_loader = nullptr;
 
 // Native: DynObj_LoadPackageAnimations; retail VA 0x004CF910; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF910-0x004CF9CA, 186 bytes, digest 9bc4b0a10b59709630cf47788d176a5bcca0360df50b4e8349e0edafa1a0d524; CLEAN/dynobj/004CF910-DynObj_RemoveSymbol_14.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF910-0x004CF9CA, 186 bytes, digest 9bc4b0a10b59709630cf47788d176a5bcca0360df50b4e8349e0edafa1a0d524; CLEAN/dynobj/004CF910-DynObj_LoadPackageAnimations.c.
 // Behavior/CFG: locates the `'BANM'` (`0x42414E4D`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0); when present and `*banm > 0`, formats `"%sanims/%s.iff"` using either `g_a4edf8` (when `g_a4edf8[0] != 0`) or `g_a4ed6c` via sprintf (0x004A53B3) and calls Render_FileSIsNotIffFile (0x004D67A0) for each NUL-terminated animation name. radare2 10 blocks/14 edges; Binary Ninja 10 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact BANM chunk tag, prefix selection (`0x00A4EDF8` vs `0x00A4ED6C`), and loop.
-// Previous catalog alias: DynObj_RemoveSymbol_14.
 void* DynObj_LoadPackageAnimations(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);
     void* const form_ptr = *reinterpret_cast<void**>(ctx_bytes + 0x08);
     auto* const result_1 =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x42414E4D, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x42414E4D, nullptr));
     void* result = result_1;
 
     if (result_1 != nullptr)
@@ -126,17 +125,16 @@ void* DynObj_LoadPackageAnimations(void* context)
 
 // Native: DynObj_LoadPackagePalettes; retail VA 0x004CF870; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: allocates `count * 0x0C` bytes via Mem_Alloc (0x004B0C60) into `*(context + 0x3C)` when Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF870-0x004CF909, 153 bytes, digest 246a42f51d3979bfd848ccefcef6fd53d81b2373c741392b5d719b6b46f29e09; CLEAN/dynobj/004CF870-DynObj_LinkDynamicCube_14.c.
+// Tools/evidence: allocates `count * 0x0C` bytes via Mem_Alloc (0x004B0C60) into `*(context + 0x3C)` when Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF870-0x004CF909, 153 bytes, digest 246a42f51d3979bfd848ccefcef6fd53d81b2373c741392b5d719b6b46f29e09; CLEAN/dynobj/004CF870-DynObj_LoadPackagePalettes.c.
 // Behavior/CFG: locates the `'PALF'` (`0x50414C46`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *palf` at `*(context + 0x44)`, `count > 0` (or clears `*(context + 0x3C) = 0`), and iterates each NUL-terminated palette name formatting `"%spalettes/%s.pal"` into `0x00A4EC6C` via sprintf and calling Sys_SIsNotAValidPaletteF (0x004B7D30). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact PALF chunk tag, allocation stride `0x0C`, and callee sequence.
-// Previous catalog alias: DynObj_LinkDynamicCube_14.
 void* DynObj_LoadPackagePalettes(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);
     std::size_t offset = 0U;
     void* const form_ptr = *reinterpret_cast<void**>(ctx_bytes + 0x08);
     auto* data_1 =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x50414C46, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x50414C46, nullptr));
     std::int32_t* const esi = data_1;
     const std::int32_t count = *esi;
     *reinterpret_cast<std::int32_t*>(ctx_bytes + 0x44) = count;
@@ -204,16 +202,15 @@ void* DynObj_LoadPackagePalettes(void* context)
 
 // Native: DynObj_LoadPackageMeshes; retail VA 0x004CF330; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF330-0x004CF381, 81 bytes, digest 1f15034786839dfd674728a70a7502c4ea2ab4ff265eefdbd0012b2948a9460a; CLEAN/dynobj/004CF330-DynObj_CreateMagicObject_14.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF330-0x004CF381, 81 bytes, digest 1f15034786839dfd674728a70a7502c4ea2ab4ff265eefdbd0012b2948a9460a; CLEAN/dynobj/004CF330-DynObj_LoadPackageMeshes.c.
 // Behavior/CFG: locates the `'MODS'` (`0x4D4F4453`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0) and iterates `*mods` NUL-terminated model names, calling DynObj_LoadModelMesh (0x004CF390) and appending each returned record to the list at `context + 0x10` via HeapList_Insert (0x004B0E60). radare2 5 blocks/6 edges; Binary Ninja 5 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact MODS tag, DynObj_LoadModelMesh call, and list insertion at `+0x10`.
-// Previous catalog alias: DynObj_CreateMagicObject_14.
 void* DynObj_LoadPackageMeshes(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);
     void* const form_ptr = *reinterpret_cast<void**>(ctx_bytes + 0x08);
     auto* result =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x4D4F4453, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x4D4F4453, nullptr));
     std::int32_t i_1 = *result;
     const char* source_1 = reinterpret_cast<const char*>(&result[1]);
 
@@ -223,7 +220,7 @@ void* DynObj_LoadPackageMeshes(void* context)
 
         do
         {
-            auto** const model_node = static_cast<void**>(DynObj_LocalModelsSMef(source_1));
+            auto** const model_node = static_cast<void**>(DynObj_LoadModelMesh(source_1));
             Camera_SetFieldOfView_33(ctx_bytes + 0x10, model_node);
 
             const char* dest_1 = source_1;
@@ -252,16 +249,15 @@ void* DynObj_LoadPackageMeshes(void* context)
 
 // Native: DynObj_LoadPackageLovs; retail VA 0x004CF630; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF630-0x004CF685, 85 bytes, digest e7cb705e985c39decbb0b12edbef88c179529f6dab08e9c9b276e7256ac30c9b; CLEAN/dynobj/004CF630-DynObj_ParseConfigFile_14.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF630-0x004CF685, 85 bytes, digest e7cb705e985c39decbb0b12edbef88c179529f6dab08e9c9b276e7256ac30c9b; CLEAN/dynobj/004CF630-DynObj_LoadPackageLovs.c.
 // Behavior/CFG: locates the optional `'LOVS'` (`0x53564F4C`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0); when present, iterates `*lovs` NUL-terminated names calling DynObj_UpdateDynTree_14 (0x004CF690) and appending each returned node to the list at `context + 0x1C` via HeapList_Insert (0x004B0E60). radare2 6 blocks/8 edges; Binary Ninja 6 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOVS tag, null-chunk guard, and list insertion at `+0x1C`.
-// Previous catalog alias: DynObj_ParseConfigFile_14.
 void* DynObj_LoadPackageLovs(void* context)
 {
     auto* const ctx_bytes = static_cast<std::uint8_t*>(context);
     void* const form_ptr = *reinterpret_cast<void**>(ctx_bytes + 0x08);
     auto* result =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x53564F4C, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x53564F4C, nullptr));
 
     if (result != nullptr)
     {
@@ -306,15 +302,14 @@ void* DynObj_LoadPackageLovs(void* context)
 
 // Native: DynObj_LoadModelTexturePackage; retail VA 0x004CF080; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: instance record (`(mat_count << 3) + 0x1C` bytes) via Mem_Alloc (0x004B0C60), links it Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF080-0x004CF2F3, 627 bytes, digest 2cf87f358150e1e4f5d5b5d2b7fbdf9597d8faddeaa1e0cb25e06f434d1e50e5; CLEAN/dynobj/004CF080-DynObj_InsertHashItem_14.c.
+// Tools/evidence: instance record (`(mat_count << 3) + 0x1C` bytes) via Mem_Alloc (0x004B0C60), links it Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF080-0x004CF2F3, 627 bytes, digest 2cf87f358150e1e4f5d5b5d2b7fbdf9597d8faddeaa1e0cb25e06f434d1e50e5; CLEAN/dynobj/004CF080-DynObj_LoadModelTexturePackage.c.
 // Behavior/CFG: loads an MTP package into `context`: calls DynObj_LoadPackageAnimations(context) (0x004CF910); when `load_textures != 0` (`arg3`), loads `"%stextures/%s.res"` via Resource_Load, calls DynObj_LoadModelTextures(context) (0x004CF790), DynObj_LoadPackagePalettes(context) (0x004CF870), and Resource_Unload; loads `"%smodels/%s.res"` into `*(context + 0x0C)`, calls DynObj_LoadPackageMeshes(context) (0x004CF330) and DynObj_LoadPackageLovs(context) (0x004CF630); resolves `'VNAM'` (`0x564E414D`), `'INST'` (`0x494E5354`), and `'GTT '` (`0x47545420`) chunks via Ilff_FindFormChunk (0x004CEAA0), allocates each into `context + 0x28` via HeapList_Insert (0x004B0E60), resolves local/shared model (`< 0x2000` vs `>= 0x2000` in `g_a4ec60`) via DynObj_LookupHashItem (0x004CFA30), and populates the instance texture/palette pointer tables. radare2 28 blocks/43 edges; Binary Ninja 28 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact VNAM/INST/GTT chunk tags, 0x2000 shared-package threshold, and offsets.
-// Previous catalog alias: DynObj_InsertHashItem_14.
 void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32_t arg3)
 {
     auto* const data_val = static_cast<std::uint8_t*>(g_a4ec60);
     auto* dest_val = static_cast<std::uint8_t*>(context);
-    DynObj_RemoveSymbol_14(dest_val);
+    DynObj_LoadPackageAnimations(dest_val);
     char item_100[0x100]{};
 
     if (arg3 != 0)
@@ -322,7 +317,7 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
         error::sprintf(item_100, "%stextures/%s.res", g_a4ed6c, arg2);
         resource::Resource_Load(item_100, nullptr);
         texture::DynObj_LocalTexturesSTex(dest_val);
-        DynObj_LinkDynamicCube_14(dest_val);
+        DynObj_LoadPackagePalettes(dest_val);
         resource::Resource_Unload(item_100);
     }
 
@@ -335,16 +330,16 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
         *reinterpret_cast<void**>(dest_val + 0x08) = saved_form_ptr;
         *reinterpret_cast<void**>(dest_val + 0x10) = saved_model_list;
     }
-    DynObj_CreateMagicObject_14(dest_val);
-    DynObj_ParseConfigFile_14(dest_val);
+    DynObj_LoadPackageMeshes(dest_val);
+    DynObj_LoadPackageLovs(dest_val);
 
     void* const form_ptr = *reinterpret_cast<void**>(dest_val + 0x08);
     auto* const data_6 =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x564E414D, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x564E414D, nullptr));
     const std::int32_t result_3 = *data_6;
     const char* item_104 = reinterpret_cast<const char*>(&data_6[result_3 + 1]);
     auto* const inst_ptr =
-        static_cast<std::int32_t*>(DynObj_CreateMagicObject_13(form_ptr, 0x494E5354, nullptr));
+        static_cast<std::int32_t*>(Ilff_FindFormChunk(form_ptr, 0x494E5354, nullptr));
     const std::int32_t* result_2 = inst_ptr;
     void* result = inst_ptr;
 
@@ -370,7 +365,7 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
             }
 
 
-            HashItem* const data_11 = DynObj_LookupHashItem_14(item_12c_1, item_128_3);
+            HashItem* const data_11 = DynObj_LookupHashItem(item_12c_1, item_128_3);
             const std::int32_t context_1 = result_2[1];
             result_2 = &result_2[2];
 
@@ -405,7 +400,7 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
 
             item_104 = item_104 + (~i);
             auto* const gtt_chunk = static_cast<std::uint8_t*>(
-                DynObj_CreateMagicObject_13(*reinterpret_cast<void**>(static_cast<std::uint8_t*>(context) + 0x08),
+                Ilff_FindFormChunk(*reinterpret_cast<void**>(static_cast<std::uint8_t*>(context) + 0x08),
                                             0x47545420, nullptr));
             const std::uint8_t* const data_17 = gtt_chunk + 4U;
             std::int32_t item_110_1 = 0;
@@ -480,12 +475,12 @@ void* DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32
     return result;
 }
 
-void Host_SetSharedPackageContext(void* shared_pkg) noexcept
+void DynObj_SetSharedPackageContext(void* shared_pkg) noexcept
 {
     g_a4ec60 = shared_pkg;
 }
 
-void Host_SetPackagePrefix(const char* prefix) noexcept
+void DynObj_SetPackagePrefix(const char* prefix) noexcept
 {
     if (prefix != nullptr)
     {
@@ -494,7 +489,7 @@ void Host_SetPackagePrefix(const char* prefix) noexcept
     }
 }
 
-void Host_SetAnimOverridePrefix(const char* prefix) noexcept
+void DynObj_SetAnimOverridePrefix(const char* prefix) noexcept
 {
     if (prefix != nullptr)
     {
@@ -507,17 +502,17 @@ void Host_SetAnimOverridePrefix(const char* prefix) noexcept
     }
 }
 
-void Host_SetPaletteLoader(PaletteLoaderFn fn) noexcept
+void DynObj_SetPaletteLoader(PaletteLoaderFn fn) noexcept
 {
     g_palette_loader = fn;
 }
 
-void Host_SetAnimIffLoader(AnimIffLoaderFn fn) noexcept
+void DynObj_SetAnimIffLoader(AnimIffLoaderFn fn) noexcept
 {
     g_anim_iff_loader = fn;
 }
 
-void Host_SetLovsEntryLoader(LovsEntryLoaderFn fn) noexcept
+void DynObj_SetLovsEntryLoader(LovsEntryLoaderFn fn) noexcept
 {
     g_lovs_entry_loader = fn;
 }

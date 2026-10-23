@@ -180,7 +180,7 @@ const ResourceEntry* ResourceArchive::find(std::string_view resource_name) const
 // Confidence: partial archive adapter for host diagnostics/scene harness.
 // Signature: C++ span/name -> ResourceArchive differs from the retail registry/buffer interface.
 // Usage/tests: Used to mount model/texture RES archives in host diagnostic tools; archive fixtures passed.
-ResourceArchive Host_ParseResourceArchive(
+ResourceArchive Resource_ParseArchive(
     std::span<const std::byte> resource_bytes,
     std::string_view source_name)
 {
@@ -206,8 +206,8 @@ ResourceArchive Host_ParseResourceArchive(
     throw ResourceFormatError("Error in resource file: '" + std::string(source_name) + "'");
 }
 
-// HOST HELPER: Host_LoadResourceArchive. Host archive-file reader; this is not the retail two-argument Resource_Load native.
-ResourceArchive Host_LoadResourceArchive(const std::filesystem::path& resource_path)
+// HOST HELPER: Resource_LoadArchive. Host archive-file reader; this is not the retail two-argument Resource_Load native.
+ResourceArchive Resource_LoadArchive(const std::filesystem::path& resource_path)
 {
     std::ifstream resource_stream(resource_path, std::ios::binary | std::ios::ate);
     if (!resource_stream) {
@@ -235,7 +235,7 @@ ResourceArchive Host_LoadResourceArchive(const std::filesystem::path& resource_p
             return static_cast<std::byte>(static_cast<unsigned char>(value));
         });
 
-    return Host_ParseResourceArchive(resource_bytes, resource_path.string());
+    return Resource_ParseArchive(resource_bytes, resource_path.string());
 }
 
 } // namespace igi::retail::resource

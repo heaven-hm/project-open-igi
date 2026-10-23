@@ -1,0 +1,55 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x00405850",
+ "native": "Config_Read",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+ "recorded_at": "2026-10-23T17:20:00Z",
+ "reviewed": true,
+ "reviewed_by": "Static review of the retail instruction sequence against the corrected candidate source",
+ "reviewed_scope": "engine/src/retail/script/humanplayer_defines.cpp Config_Read and its header declaration",
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Radare2 (3 blocks/2 edges, 74 bytes, cdecl), the existing Binary Ninja record and angr CFGFast agree on entry 0x00405850; the candidate implements that entry."
+  },
+  {
+   "name": "abi_and_return",
+   "result": "passed",
+   "rationale": "The only argument at [esp+4] is the path passed straight to Qvm_Load; the function is cdecl. Its EAX is the final Config_Language_2 result on both paths, which the candidate returns as int32_t; the only retail caller (0x004020C9) discards it."
+  },
+  {
+   "name": "branch_split",
+   "result": "passed",
+   "rationale": "Retail tests the Qvm_Load result at 0x00405862 and enters the success block at 0x00405864 when it is non-null, otherwise the failed-load block at 0x00405884. The candidate's `if (qvm == nullptr)` inverts the test the same way: the failure block is the null branch."
+  },
+  {
+   "name": "success_call_order",
+   "result": "passed",
+   "rationale": "Success calls Qvm_Execute(qvm) at 0x00405865, Qvm_Cleanup(qvm) at 0x0040586B, cleans 8 bytes at 0x00405870, then calls 0x004058A0, 0x00405980 and 0x00405B30 in that order. The candidate calls the same functions in the same order and does not call 0x00405300 on this path."
+  },
+  {
+   "name": "failure_call_order",
+   "result": "passed",
+   "rationale": "The failed-load block calls 0x00405300 at 0x00405889, 0x004058A0 at 0x0040588E, 0x00405980 at 0x00405893 and 0x00405B30 at 0x00405898. The candidate calls Config_SaveGraphicOptions, Config_SaveSoundOptions, Config_NoD3DDriversWithHard and Config_Language_2 in exactly that order, so the graphic-options save is failure-only."
+  },
+  {
+   "name": "callee_declarations",
+   "result": "passed",
+   "rationale": "The four callees are declared with the retail cdecl signatures; Config_Language_2 is int32_t because its EAX becomes Config_Read's result, while the other three are declared void because every call site discards their EAX."
+  },
+  {
+   "name": "link_status",
+   "result": "blocked_outside_this_native",
+   "rationale": "The four callees are separate untranscribed retail natives, so this unit does not link. See docs/fidelity/evidence/humanplayer-defines-link-blockers.json."
+  }
+ ],
+ "differences": [
+  "The tail call to Config_Language_2 replaces retail's call-plus-ret; the value returned is the same."
+ ],
+ "status": "STRUCTURALLY_VERIFIED",
+ "status_limits": "Static and structural evidence only; the four callees cannot run yet and no runtime capture was made."
+}

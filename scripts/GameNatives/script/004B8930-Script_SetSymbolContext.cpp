@@ -1,6 +1,6 @@
 // IGI native provenance: Script_SetSymbolContext - 0x004B8930 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B8930-Script_SetSymbolContext.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B8930-Script_SetSymbolContext.hpp"
+#include "Script_SetSymbolContext.h"
 int Script_SetSymbolContext(char* context, int arg2)
 
 // Sig: void Script_SetSymbolContext(byte *symbol_name,int** symbol_buf)

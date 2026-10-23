@@ -1,6 +1,6 @@
 // IGI native provenance: HumanPlayer_LoadParameters_8 - 0x0040E620 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0040E620-HumanPlayer_LoadParameters_8.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "HumanPlayer_LoadParameters_8.hpp"
+#include "HumanPlayer_LoadParameters_8.h"
 char HumanPlayer_LoadParameters_8(void* context, float arg2)
 
 {

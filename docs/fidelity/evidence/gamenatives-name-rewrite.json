@@ -1,0 +1,2616 @@
+{
+  "applied": true,
+  "fixed": [
+    {
+      "path": "scripts/GameNatives/ai/00460C80-Human_printf 2.hpp",
+      "address": "0x00460C80",
+      "from": "AI_CheckHearing_18",
+      "to": "Human_printf",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00460C80-Human_printf.hpp",
+      "address": "0x00460C80",
+      "from": "AI_CheckHearing_18",
+      "to": "Human_printf",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463150-Human_IsActivePlayer 2.hpp",
+      "address": "0x00463150",
+      "from": "AI_CheckHearing_19",
+      "to": "Human_IsActivePlayer",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463150-Human_IsActivePlayer.hpp",
+      "address": "0x00463150",
+      "from": "AI_CheckHearing_19",
+      "to": "Human_IsActivePlayer",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463180-Human_IsCrouched 2.cpp",
+      "address": "0x00463180",
+      "from": "AI_MoveToNode_19",
+      "to": "Human_IsCrouched",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463180-Human_IsCrouched.cpp",
+      "address": "0x00463180",
+      "from": "AI_MoveToNode_19",
+      "to": "Human_IsCrouched",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00463180-Human_IsCrouched.hpp",
+      "address": "0x00463180",
+      "from": "AI_MoveToNode_19",
+      "to": "Human_IsCrouched",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00464800-HumanView_UpdateView.hpp",
+      "address": "0x00464800",
+      "from": "AI_UpdatePatrol_23",
+      "to": "HumanView_UpdateView",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00464BD0-HumanView_UpdateBody.hpp",
+      "address": "0x00464BD0",
+      "from": "AI_CombatTarget_23",
+      "to": "HumanView_UpdateBody",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00465820-Human_CameraEyePosition 2.cpp",
+      "address": "0x00465820",
+      "from": "AI_MoveToNode_23",
+      "to": "Human_CameraEyePosition",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00465820-Human_CameraEyePosition.cpp",
+      "address": "0x00465820",
+      "from": "AI_MoveToNode_23",
+      "to": "Human_CameraEyePosition",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00465820-Human_CameraEyePosition.hpp",
+      "address": "0x00465820",
+      "from": "AI_MoveToNode_23",
+      "to": "Human_CameraEyePosition",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/004675B0-ComputerObject_ProjectRotatedPos.hpp",
+      "address": "0x004675B0",
+      "from": "AI_UpdateSensors_24",
+      "to": "ComputerObject_ProjectRotatedPos",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/ai/00467620-ComputerObject_ProjectWorldPos.hpp",
+      "address": "0x00467620",
+      "from": "AI_CheckSector_24",
+      "to": "ComputerObject_ProjectWorldPos",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/binocularoverlay/00471440-BinocularOverlay_StatusDisplayHandler.hpp",
+      "address": "0x00471440",
+      "from": "BinocularOverlay_Process",
+      "to": "BinocularOverlay_StatusDisplayHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A23D0-Camera_ApplyHandiCam 2.cpp",
+      "address": "0x004A23D0",
+      "from": "j_DynObj_FindSymbol_5",
+      "to": "Camera_ApplyHandiCam",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A23D0-Camera_ApplyHandiCam.cpp",
+      "address": "0x004A23D0",
+      "from": "j_DynObj_FindSymbol_5",
+      "to": "Camera_ApplyHandiCam",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A26C0-Camera_UpdateFogPalette 2.cpp",
+      "address": "0x004A26C0",
+      "from": "Camera_UpdateTransform_2",
+      "to": "Camera_UpdateFogPalette",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A26C0-Camera_UpdateFogPalette.cpp",
+      "address": "0x004A26C0",
+      "from": "Camera_UpdateTransform_2",
+      "to": "Camera_UpdateFogPalette",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A26C0-Camera_UpdateFogPalette.hpp",
+      "address": "0x004A26C0",
+      "from": "Camera_UpdateTransform_2",
+      "to": "Camera_UpdateFogPalette",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A50F5-Camera_ApplyHandiCam_3 2.cpp",
+      "address": "0x004A50F5",
+      "from": "_start",
+      "to": "Camera_ApplyHandiCam_3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A50F5-Camera_ApplyHandiCam_3.cpp",
+      "address": "0x004A50F5",
+      "from": "_start",
+      "to": "Camera_ApplyHandiCam_3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5955-Camera_ResetMatrix_5 2.cpp",
+      "address": "0x004A5955",
+      "from": "_test_whether_TOS_is_int",
+      "to": "Camera_ResetMatrix_5",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A5955-Camera_ResetMatrix_5.cpp",
+      "address": "0x004A5955",
+      "from": "_test_whether_TOS_is_int",
+      "to": "Camera_ResetMatrix_5",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A68A9-Camera_UpdateViewCone_8 2.cpp",
+      "address": "0x004A68A9",
+      "from": "__seh_longjmp_unwind",
+      "to": "Camera_UpdateViewCone_8",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A68A9-Camera_UpdateViewCone_8.cpp",
+      "address": "0x004A68A9",
+      "from": "__seh_longjmp_unwind",
+      "to": "Camera_UpdateViewCone_8",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8A91-Camera_ResetMatrix_14 2.cpp",
+      "address": "0x004A8A91",
+      "from": "__fload",
+      "to": "Camera_ResetMatrix_14",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8A91-Camera_ResetMatrix_14.cpp",
+      "address": "0x004A8A91",
+      "from": "__fload",
+      "to": "Camera_ResetMatrix_14",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8AD0-Camera_UpdateTransform_15 2.cpp",
+      "address": "0x004A8AD0",
+      "from": "__trandisp1",
+      "to": "Camera_UpdateTransform_15",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8AD0-Camera_UpdateTransform_15.cpp",
+      "address": "0x004A8AD0",
+      "from": "__trandisp1",
+      "to": "Camera_UpdateTransform_15",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8B37-Camera_SetFieldOfView_15 2.cpp",
+      "address": "0x004A8B37",
+      "from": "__trandisp2",
+      "to": "Camera_SetFieldOfView_15",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A8B37-Camera_SetFieldOfView_15.cpp",
+      "address": "0x004A8B37",
+      "from": "__trandisp2",
+      "to": "Camera_SetFieldOfView_15",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9BD1-Camera_ApplyWideScreen_17 2.cpp",
+      "address": "0x004A9BD1",
+      "from": "_isintTOS",
+      "to": "Camera_ApplyWideScreen_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9BD1-Camera_ApplyWideScreen_17.cpp",
+      "address": "0x004A9BD1",
+      "from": "_isintTOS",
+      "to": "Camera_ApplyWideScreen_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9C40-Camera_ApplyPostProcess_17 2.cpp",
+      "address": "0x004A9C40",
+      "from": "__startTwoArgErrorHandling",
+      "to": "Camera_ApplyPostProcess_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9C40-Camera_ApplyPostProcess_17.cpp",
+      "address": "0x004A9C40",
+      "from": "__startTwoArgErrorHandling",
+      "to": "Camera_ApplyPostProcess_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9C57-Camera_UpdateViewCone_17 2.cpp",
+      "address": "0x004A9C57",
+      "from": "__startOneArgErrorHandling",
+      "to": "Camera_UpdateViewCone_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9C57-Camera_UpdateViewCone_17.cpp",
+      "address": "0x004A9C57",
+      "from": "__startOneArgErrorHandling",
+      "to": "Camera_UpdateViewCone_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CA0-Camera_ResetMatrix_17 2.cpp",
+      "address": "0x004A9CA0",
+      "from": "__twoToTOS",
+      "to": "Camera_ResetMatrix_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CA0-Camera_ResetMatrix_17.cpp",
+      "address": "0x004A9CA0",
+      "from": "__twoToTOS",
+      "to": "Camera_ResetMatrix_17",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CB5-Camera_UpdateTransform_18 2.cpp",
+      "address": "0x004A9CB5",
+      "from": "__load_CW",
+      "to": "Camera_UpdateTransform_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CB5-Camera_UpdateTransform_18.cpp",
+      "address": "0x004A9CB5",
+      "from": "__load_CW",
+      "to": "Camera_UpdateTransform_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CCC-Camera_SetFieldOfView_18 2.cpp",
+      "address": "0x004A9CCC",
+      "from": "__convertTOStoQNaN",
+      "to": "Camera_SetFieldOfView_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CCC-Camera_SetFieldOfView_18.cpp",
+      "address": "0x004A9CCC",
+      "from": "__convertTOStoQNaN",
+      "to": "Camera_SetFieldOfView_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CE5-Camera_ApplyLineFilter_18 2.cpp",
+      "address": "0x004A9CE5",
+      "from": "__fload_withFB",
+      "to": "Camera_ApplyLineFilter_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9CE5-Camera_ApplyLineFilter_18.cpp",
+      "address": "0x004A9CE5",
+      "from": "__fload_withFB",
+      "to": "Camera_ApplyLineFilter_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9D28-Camera_ApplyBandFilter_18 2.cpp",
+      "address": "0x004A9D28",
+      "from": "__checkTOS_withFB",
+      "to": "Camera_ApplyBandFilter_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004A9D28-Camera_ApplyBandFilter_18.cpp",
+      "address": "0x004A9D28",
+      "from": "__checkTOS_withFB",
+      "to": "Camera_ApplyBandFilter_18",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD140-Camera_ResetMatrix_26 2.cpp",
+      "address": "0x004AD140",
+      "from": "__aulldiv",
+      "to": "Camera_ResetMatrix_26",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD140-Camera_ResetMatrix_26.cpp",
+      "address": "0x004AD140",
+      "from": "__aulldiv",
+      "to": "Camera_ResetMatrix_26",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD1B0-Camera_UpdateTransform_27 2.cpp",
+      "address": "0x004AD1B0",
+      "from": "__aullrem",
+      "to": "Camera_UpdateTransform_27",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD1B0-Camera_UpdateTransform_27.cpp",
+      "address": "0x004AD1B0",
+      "from": "__aullrem",
+      "to": "Camera_UpdateTransform_27",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD73D-String_ToUpperChar 2.cpp",
+      "address": "0x004AD73D",
+      "from": "Camera_ApplyWideScreen_28",
+      "to": "String_ToUpperChar",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD73D-String_ToUpperChar.cpp",
+      "address": "0x004AD73D",
+      "from": "Camera_ApplyWideScreen_28",
+      "to": "String_ToUpperChar",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AD73D-String_ToUpperChar.hpp",
+      "address": "0x004AD73D",
+      "from": "Camera_ApplyWideScreen_28",
+      "to": "String_ToUpperChar",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AE670-Camera_ResetMatrix_29 2.cpp",
+      "address": "0x004AE670",
+      "from": "RtlUnwind",
+      "to": "Camera_ResetMatrix_29",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AE670-Camera_ResetMatrix_29.cpp",
+      "address": "0x004AE670",
+      "from": "RtlUnwind",
+      "to": "Camera_ResetMatrix_29",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AE730-Camera_SetFieldOfView_30 2.cpp",
+      "address": "0x004AE730",
+      "from": "DirectInputCreateEx",
+      "to": "Camera_SetFieldOfView_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AE730-Camera_SetFieldOfView_30.cpp",
+      "address": "0x004AE730",
+      "from": "DirectInputCreateEx",
+      "to": "Camera_SetFieldOfView_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF740-Camera_ApplyBandFilter_30 2.cpp",
+      "address": "0x004AF740",
+      "from": "DirectInputCreateA",
+      "to": "Camera_ApplyBandFilter_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF740-Camera_ApplyBandFilter_30.cpp",
+      "address": "0x004AF740",
+      "from": "DirectInputCreateA",
+      "to": "Camera_ApplyBandFilter_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF746-Camera_ApplyHandiCam_30 2.cpp",
+      "address": "0x004AF746",
+      "from": "Ordinal_DSOUND_1",
+      "to": "Camera_ApplyHandiCam_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF746-Camera_ApplyHandiCam_30.cpp",
+      "address": "0x004AF746",
+      "from": "Ordinal_DSOUND_1",
+      "to": "Camera_ApplyHandiCam_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF74C-Camera_ApplyWideScreen_30 2.cpp",
+      "address": "0x004AF74C",
+      "from": "DirectDrawEnumerateExA",
+      "to": "Camera_ApplyWideScreen_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF74C-Camera_ApplyWideScreen_30.cpp",
+      "address": "0x004AF74C",
+      "from": "DirectDrawEnumerateExA",
+      "to": "Camera_ApplyWideScreen_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF752-Camera_ApplyPostProcess_30 2.cpp",
+      "address": "0x004AF752",
+      "from": "DirectDrawCreateEx",
+      "to": "Camera_ApplyPostProcess_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF752-Camera_ApplyPostProcess_30.cpp",
+      "address": "0x004AF752",
+      "from": "DirectDrawCreateEx",
+      "to": "Camera_ApplyPostProcess_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF758-Camera_UpdateViewCone_30 2.cpp",
+      "address": "0x004AF758",
+      "from": "AVIFileInit",
+      "to": "Camera_UpdateViewCone_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF758-Camera_UpdateViewCone_30.cpp",
+      "address": "0x004AF758",
+      "from": "AVIFileInit",
+      "to": "Camera_UpdateViewCone_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF75E-Camera_ResetMatrix_30 2.cpp",
+      "address": "0x004AF75E",
+      "from": "AVIFileExit",
+      "to": "Camera_ResetMatrix_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF75E-Camera_ResetMatrix_30.cpp",
+      "address": "0x004AF75E",
+      "from": "AVIFileExit",
+      "to": "Camera_ResetMatrix_30",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF764-Camera_UpdateTransform_31 2.cpp",
+      "address": "0x004AF764",
+      "from": "AVIFileRelease",
+      "to": "Camera_UpdateTransform_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF764-Camera_UpdateTransform_31.cpp",
+      "address": "0x004AF764",
+      "from": "AVIFileRelease",
+      "to": "Camera_UpdateTransform_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF76A-Camera_SetFieldOfView_31 2.cpp",
+      "address": "0x004AF76A",
+      "from": "AVIStreamRelease",
+      "to": "Camera_SetFieldOfView_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF76A-Camera_SetFieldOfView_31.cpp",
+      "address": "0x004AF76A",
+      "from": "AVIStreamRelease",
+      "to": "Camera_SetFieldOfView_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF770-Camera_ApplyLineFilter_31 2.cpp",
+      "address": "0x004AF770",
+      "from": "ICClose",
+      "to": "Camera_ApplyLineFilter_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF770-Camera_ApplyLineFilter_31.cpp",
+      "address": "0x004AF770",
+      "from": "ICClose",
+      "to": "Camera_ApplyLineFilter_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF776-Camera_ApplyBandFilter_31 2.cpp",
+      "address": "0x004AF776",
+      "from": "ICSendMessage",
+      "to": "Camera_ApplyBandFilter_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF776-Camera_ApplyBandFilter_31.cpp",
+      "address": "0x004AF776",
+      "from": "ICSendMessage",
+      "to": "Camera_ApplyBandFilter_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF77C-Camera_ApplyHandiCam_31 2.cpp",
+      "address": "0x004AF77C",
+      "from": "AVIStreamReadFormat",
+      "to": "Camera_ApplyHandiCam_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF77C-Camera_ApplyHandiCam_31.cpp",
+      "address": "0x004AF77C",
+      "from": "AVIStreamReadFormat",
+      "to": "Camera_ApplyHandiCam_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF782-Camera_ApplyWideScreen_31 2.cpp",
+      "address": "0x004AF782",
+      "from": "AVIStreamInfoA",
+      "to": "Camera_ApplyWideScreen_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF782-Camera_ApplyWideScreen_31.cpp",
+      "address": "0x004AF782",
+      "from": "AVIStreamInfoA",
+      "to": "Camera_ApplyWideScreen_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF788-Camera_ApplyPostProcess_31 2.cpp",
+      "address": "0x004AF788",
+      "from": "AVIFileGetStream",
+      "to": "Camera_ApplyPostProcess_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF788-Camera_ApplyPostProcess_31.cpp",
+      "address": "0x004AF788",
+      "from": "AVIFileGetStream",
+      "to": "Camera_ApplyPostProcess_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF78E-Camera_UpdateViewCone_31 2.cpp",
+      "address": "0x004AF78E",
+      "from": "AVIFileInfoA",
+      "to": "Camera_UpdateViewCone_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF78E-Camera_UpdateViewCone_31.cpp",
+      "address": "0x004AF78E",
+      "from": "AVIFileInfoA",
+      "to": "Camera_UpdateViewCone_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF794-Camera_ResetMatrix_31 2.cpp",
+      "address": "0x004AF794",
+      "from": "AVIFileOpenA",
+      "to": "Camera_ResetMatrix_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF794-Camera_ResetMatrix_31.cpp",
+      "address": "0x004AF794",
+      "from": "AVIFileOpenA",
+      "to": "Camera_ResetMatrix_31",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF79A-Camera_UpdateTransform_32 2.cpp",
+      "address": "0x004AF79A",
+      "from": "ICLocate",
+      "to": "Camera_UpdateTransform_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF79A-Camera_UpdateTransform_32.cpp",
+      "address": "0x004AF79A",
+      "from": "ICLocate",
+      "to": "Camera_UpdateTransform_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF7A0-Camera_SetFieldOfView_32 2.cpp",
+      "address": "0x004AF7A0",
+      "from": "ICDecompress",
+      "to": "Camera_SetFieldOfView_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF7A0-Camera_SetFieldOfView_32.cpp",
+      "address": "0x004AF7A0",
+      "from": "ICDecompress",
+      "to": "Camera_SetFieldOfView_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF7A6-Camera_ApplyLineFilter_32 2.cpp",
+      "address": "0x004AF7A6",
+      "from": "AVIStreamRead",
+      "to": "Camera_ApplyLineFilter_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/camera/004AF7A6-Camera_ApplyLineFilter_32.cpp",
+      "address": "0x004AF7A6",
+      "from": "AVIStreamRead",
+      "to": "Camera_ApplyLineFilter_32",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/create/004C6760-Terrain_CreateTileMap.cpp",
+      "address": "0x004C6760",
+      "from": "Create_TerrainTileMap",
+      "to": "Terrain_CreateTileMap",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/create/004C6760-Terrain_CreateTileMap.hpp",
+      "address": "0x004C6760",
+      "from": "Create_TerrainTileMap",
+      "to": "Terrain_CreateTileMap",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/cursor/00424CE0-Cursor_RunHandler.hpp",
+      "address": "0x00424CE0",
+      "from": "Cursor_LoadParameters",
+      "to": "Cursor_RunHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00490360-Timer_Open.hpp",
+      "address": "0x00490360",
+      "from": "Display_ClearSurfaces",
+      "to": "Timer_Open",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00490370-Timer_Read 2.cpp",
+      "address": "0x00490370",
+      "from": "Timer_Now",
+      "to": "Timer_Read",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00490370-Timer_Read 2.hpp",
+      "address": "0x00490370",
+      "from": "Display_RestoreDevice",
+      "to": "Timer_Read",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00490370-Timer_Read.cpp",
+      "address": "0x00490370",
+      "from": "Timer_Now",
+      "to": "Timer_Read",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00490370-Timer_Read.hpp",
+      "address": "0x00490370",
+      "from": "Display_RestoreDevice",
+      "to": "Timer_Read",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/004903A0-Display_SetGammaRamp 2.cpp",
+      "address": "0x004903A0",
+      "from": "j_AVIFileExit",
+      "to": "Display_SetGammaRamp",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/004903A0-Display_SetGammaRamp.cpp",
+      "address": "0x004903A0",
+      "from": "j_AVIFileExit",
+      "to": "Display_SetGammaRamp",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect 2.cpp",
+      "address": "0x00491D40",
+      "from": "Display_ClearSurfaces_4",
+      "to": "Display_ComputeScreenAspect",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect.cpp",
+      "address": "0x00491D40",
+      "from": "Display_ClearSurfaces_4",
+      "to": "Display_ComputeScreenAspect",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00491D40-Display_ComputeScreenAspect.hpp",
+      "address": "0x00491D40",
+      "from": "Display_ClearSurfaces_4",
+      "to": "Display_ComputeScreenAspect",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/004924D0-Display_InitDirectDraw.hpp",
+      "address": "0x004924D0",
+      "from": "__stdcall",
+      "to": "Display_InitDirectDraw",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00492B70-Display_GetDDErrStr.hpp",
+      "address": "0x00492B70",
+      "from": "__stdcall",
+      "to": "Display_GetDDErrStr",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00495CC0-Timer_Commit 2.hpp",
+      "address": "0x00495CC0",
+      "from": "Display_SetGammaRamp_9",
+      "to": "Timer_Commit",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00495CC0-Timer_Commit.hpp",
+      "address": "0x00495CC0",
+      "from": "Display_SetGammaRamp_9",
+      "to": "Timer_Commit",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00497D70-Transcontext_BuildViewBlock 2.cpp",
+      "address": "0x00497D70",
+      "from": "Display_CloseDevice_15",
+      "to": "Transcontext_BuildViewBlock",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00497D70-Transcontext_BuildViewBlock.cpp",
+      "address": "0x00497D70",
+      "from": "Display_CloseDevice_15",
+      "to": "Transcontext_BuildViewBlock",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/display/00497D70-Transcontext_BuildViewBlock.hpp",
+      "address": "0x00497D70",
+      "from": "Display_CloseDevice_15",
+      "to": "Transcontext_BuildViewBlock",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C0250-DynObj_ParseConfigFile 2.cpp",
+      "address": "0x004C0250",
+      "from": "j_DynObj_UpdateDynTree_3",
+      "to": "DynObj_ParseConfigFile",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C0250-DynObj_ParseConfigFile.cpp",
+      "address": "0x004C0250",
+      "from": "j_DynObj_UpdateDynTree_3",
+      "to": "DynObj_ParseConfigFile",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1790-QTaskList_Register.hpp",
+      "address": "0x004C1790",
+      "from": "DynObj_QtasklistIsFull",
+      "to": "QTaskList_Register",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C17C0-QTaskList_Remove.hpp",
+      "address": "0x004C17C0",
+      "from": "DynObj_TryingToRemoveUnrigi",
+      "to": "QTaskList_Remove",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1800-QTaskList_New 2.cpp",
+      "address": "0x004C1800",
+      "from": "Mem_Alloc8",
+      "to": "QTaskList_New",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1800-QTaskList_New 2.hpp",
+      "address": "0x004C1800",
+      "from": "DynObj_LookupHashItem_4",
+      "to": "QTaskList_New",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1800-QTaskList_New.cpp",
+      "address": "0x004C1800",
+      "from": "Mem_Alloc8",
+      "to": "QTaskList_New",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1800-QTaskList_New.hpp",
+      "address": "0x004C1800",
+      "from": "DynObj_LookupHashItem_4",
+      "to": "QTaskList_New",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C1830-QTaskList_Delete.hpp",
+      "address": "0x004C1830",
+      "from": "DynObj_CreateMagicObject_4",
+      "to": "QTaskList_Delete",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C5F00-Terrain_LoadTexturesAndLightmaps 2.cpp",
+      "address": "0x004C5F00",
+      "from": "DynObj_ParseConfigFile_7",
+      "to": "Terrain_LoadTexturesAndLightmaps",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C5F00-Terrain_LoadTexturesAndLightmaps.cpp",
+      "address": "0x004C5F00",
+      "from": "DynObj_ParseConfigFile_7",
+      "to": "Terrain_LoadTexturesAndLightmaps",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C5F00-Terrain_LoadTexturesAndLightmaps.hpp",
+      "address": "0x004C5F00",
+      "from": "DynObj_ParseConfigFile_7",
+      "to": "Terrain_LoadTexturesAndLightmaps",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C6240-Terrain_Load 2.cpp",
+      "address": "0x004C6240",
+      "from": "DynObj_Createterrainmateria",
+      "to": "Terrain_Load",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C6240-Terrain_Load.cpp",
+      "address": "0x004C6240",
+      "from": "DynObj_Createterrainmateria",
+      "to": "Terrain_Load",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/dynobj/004C6240-Terrain_Load.hpp",
+      "address": "0x004C6240",
+      "from": "DynObj_Createterrainmateria",
+      "to": "Terrain_Load",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/flow/004027E0-Flow_Close.hpp",
+      "address": "0x004027E0",
+      "from": "Flow_InitEvents",
+      "to": "Flow_Close",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00482A40-Camera_FirstPerson_Update 2.hpp",
+      "address": "0x00482A40",
+      "from": "FX_ExplosionSpawn_3",
+      "to": "Camera_FirstPerson_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00482A40-Camera_FirstPerson_Update.hpp",
+      "address": "0x00482A40",
+      "from": "FX_ExplosionSpawn_3",
+      "to": "Camera_FirstPerson_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00482C30-Camera_ThirdPerson_Update 2.hpp",
+      "address": "0x00482C30",
+      "from": "FX_FragmentSimulate_3",
+      "to": "Camera_ThirdPerson_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00482C30-Camera_ThirdPerson_Update.hpp",
+      "address": "0x00482C30",
+      "from": "FX_FragmentSimulate_3",
+      "to": "Camera_ThirdPerson_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00483390-Camera_Sniper_Update 2.hpp",
+      "address": "0x00483390",
+      "from": "FX_ExplosionSpawn_4",
+      "to": "Camera_Sniper_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00483390-Camera_Sniper_Update.hpp",
+      "address": "0x00483390",
+      "from": "FX_ExplosionSpawn_4",
+      "to": "Camera_Sniper_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00483D80-Camera_Binocular_Update 2.hpp",
+      "address": "0x00483D80",
+      "from": "FX_DebrisSpawn_4",
+      "to": "Camera_Binocular_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00483D80-Camera_Binocular_Update.hpp",
+      "address": "0x00483D80",
+      "from": "FX_DebrisSpawn_4",
+      "to": "Camera_Binocular_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00484450-Camera_Binocular_DrawOverlay 2.hpp",
+      "address": "0x00484450",
+      "from": "FX_ExplosionSpawn_5",
+      "to": "Camera_Binocular_DrawOverlay",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00484450-Camera_Binocular_DrawOverlay.hpp",
+      "address": "0x00484450",
+      "from": "FX_ExplosionSpawn_5",
+      "to": "Camera_Binocular_DrawOverlay",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/004868D0-StatusList_Clear 2.hpp",
+      "address": "0x004868D0",
+      "from": "FX_TrailUpdate_7",
+      "to": "StatusList_Clear",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/004868D0-StatusList_Clear.hpp",
+      "address": "0x004868D0",
+      "from": "FX_TrailUpdate_7",
+      "to": "StatusList_Clear",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00487180-StatusScreen_Get 2.hpp",
+      "address": "0x00487180",
+      "from": "FX_SmokeEmit_8",
+      "to": "StatusScreen_Get",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00487180-StatusScreen_Get.hpp",
+      "address": "0x00487180",
+      "from": "FX_SmokeEmit_8",
+      "to": "StatusScreen_Get",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489C60-Human_ResolveHitZone 2.hpp",
+      "address": "0x00489C60",
+      "from": "FX_000011",
+      "to": "Human_ResolveHitZone",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489C60-Human_ResolveHitZone.hpp",
+      "address": "0x00489C60",
+      "from": "FX_000011",
+      "to": "Human_ResolveHitZone",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489E10-Human_GetLimbDamageRecord 2.hpp",
+      "address": "0x00489E10",
+      "from": "FX_FragmentSimulate_14",
+      "to": "Human_GetLimbDamageRecord",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489E10-Human_GetLimbDamageRecord.hpp",
+      "address": "0x00489E10",
+      "from": "FX_FragmentSimulate_14",
+      "to": "Human_GetLimbDamageRecord",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489F00-Collision_Reset 2.hpp",
+      "address": "0x00489F00",
+      "from": "FX_ExplosionSpawn_15",
+      "to": "Collision_Reset",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/00489F00-Collision_Reset.hpp",
+      "address": "0x00489F00",
+      "from": "FX_ExplosionSpawn_15",
+      "to": "Collision_Reset",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048A340-Human_TransformBoneToWorld 2.hpp",
+      "address": "0x0048A340",
+      "from": "FX_ExplosionSpawn_16",
+      "to": "Human_TransformBoneToWorld",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048A340-Human_TransformBoneToWorld.hpp",
+      "address": "0x0048A340",
+      "from": "FX_ExplosionSpawn_16",
+      "to": "Human_TransformBoneToWorld",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F0A0-AppContext_GethWnd.hpp",
+      "address": "0x0048F0A0",
+      "from": "FX_ExplosionSpawn_22",
+      "to": "AppContext_GethWnd",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F1B0-App_ContextGetDebugged 2.cpp",
+      "address": "0x0048F1B0",
+      "from": "FX_ExplosionSpawn_24",
+      "to": "App_ContextGetDebugged",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F1B0-App_ContextGetDebugged.cpp",
+      "address": "0x0048F1B0",
+      "from": "FX_ExplosionSpawn_24",
+      "to": "App_ContextGetDebugged",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F1B0-App_ContextGetDebugged.hpp",
+      "address": "0x0048F1B0",
+      "from": "FX_ExplosionSpawn_24",
+      "to": "App_ContextGetDebugged",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed 2.cpp",
+      "address": "0x0048F230",
+      "from": "FX_FireBallUpdate_25",
+      "to": "App_ContextGetLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.cpp",
+      "address": "0x0048F230",
+      "from": "FX_FireBallUpdate_25",
+      "to": "App_ContextGetLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F230-App_ContextGetLightmapsUsed.hpp",
+      "address": "0x0048F230",
+      "from": "FX_FireBallUpdate_25",
+      "to": "App_ContextGetLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F250-App_ContextGetTerrainLightmapsUsed 2.cpp",
+      "address": "0x0048F250",
+      "from": "FX_FragmentSimulate_25",
+      "to": "App_ContextGetTerrainLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F250-App_ContextGetTerrainLightmapsUsed.cpp",
+      "address": "0x0048F250",
+      "from": "FX_FragmentSimulate_25",
+      "to": "App_ContextGetTerrainLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048F250-App_ContextGetTerrainLightmapsUsed.hpp",
+      "address": "0x0048F250",
+      "from": "FX_FragmentSimulate_25",
+      "to": "App_ContextGetTerrainLightmapsUsed",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/fx/0048FC20-Mouse_Update.hpp",
+      "address": "0x0048FC20",
+      "from": "FX_FailedGetMouseStateS",
+      "to": "Mouse_Update",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/go/00403C10-Config_SetContentControlPassword 2.hpp",
+      "address": "0x00403C10",
+      "from": "GO_ContentControlPW",
+      "to": "Config_SetContentControlPassword",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/go/00403C10-Config_SetContentControlPassword.hpp",
+      "address": "0x00403C10",
+      "from": "GO_ContentControlPW",
+      "to": "Config_SetContentControlPassword",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/gun/004798C0-Gun_Reload 2.hpp",
+      "address": "0x004798C0",
+      "from": "Gun_MagFill",
+      "to": "Gun_Reload",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/gun/004798C0-Gun_Reload.hpp",
+      "address": "0x004798C0",
+      "from": "Gun_MagFill",
+      "to": "Gun_Reload",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/004108C0-HumanPlayer_Invoke8_4108C0.cpp",
+      "address": "0x004108C0",
+      "from": "HumanPlayer_Process",
+      "to": "HumanPlayer_Invoke8_4108C0",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/004108C0-HumanPlayer_Invoke8_4108C0.hpp",
+      "address": "0x004108C0",
+      "from": "HumanPlayer_Process",
+      "to": "HumanPlayer_Invoke8_4108C0",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/00411F20-HumanPlayer_WireSlide 2.hpp",
+      "address": "0x00411F20",
+      "from": "HumanPlayer_WireSlide1_2",
+      "to": "HumanPlayer_WireSlide",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/00411F20-HumanPlayer_WireSlide.hpp",
+      "address": "0x00411F20",
+      "from": "HumanPlayer_WireSlide1_2",
+      "to": "HumanPlayer_WireSlide",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/humanview/00464470-HumanView_DeleteHandler.hpp",
+      "address": "0x00464470",
+      "from": "HumanView_LoadParameters",
+      "to": "HumanView_DeleteHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/input/0048F970-Input_GetDIErrStr.hpp",
+      "address": "0x0048F970",
+      "from": "__stdcall",
+      "to": "Input_GetDIErrStr",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4 2.cpp",
+      "address": "0x004A67E4",
+      "from": "__convention",
+      "to": "MathSys_Invoke7_4A67E4",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.cpp",
+      "address": "0x004A67E4",
+      "from": "__convention",
+      "to": "MathSys_Invoke7_4A67E4",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.hpp",
+      "address": "0x004A67E4",
+      "from": "__convention",
+      "to": "MathSys_Invoke7_4A67E4",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19 2.cpp",
+      "address": "0x004AA0A6",
+      "from": "__convention",
+      "to": "MathSys_Invoke19",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.cpp",
+      "address": "0x004AA0A6",
+      "from": "__convention",
+      "to": "MathSys_Invoke19",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.hpp",
+      "address": "0x004AA0A6",
+      "from": "__convention",
+      "to": "MathSys_Invoke19",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21 2.cpp",
+      "address": "0x004AAA44",
+      "from": "__convention",
+      "to": "MathSys_Invoke21",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.cpp",
+      "address": "0x004AAA44",
+      "from": "__convention",
+      "to": "MathSys_Invoke21",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.hpp",
+      "address": "0x004AAA44",
+      "from": "__convention",
+      "to": "MathSys_Invoke21",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AD004-MathSys_Invoke3 2.cpp",
+      "address": "0x004AD004",
+      "from": "__convention",
+      "to": "MathSys_Invoke3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AD004-MathSys_Invoke3.cpp",
+      "address": "0x004AD004",
+      "from": "__convention",
+      "to": "MathSys_Invoke3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AD004-MathSys_Invoke3.hpp",
+      "address": "0x004AD004",
+      "from": "__convention",
+      "to": "MathSys_Invoke3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mine/00475DF0-Mine_Arm 2.hpp",
+      "address": "0x00475DF0",
+      "from": "Mine_Update",
+      "to": "Mine_Arm",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/mine/00475DF0-Mine_Arm.hpp",
+      "address": "0x00475DF0",
+      "from": "Mine_Update",
+      "to": "Mine_Arm",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/misc/00408460-FallLanding 2.cpp",
+      "address": "0x00408460",
+      "from": "AI_UpdatePatrol_24",
+      "to": "FallLanding",
+      "sharedName": true
+    },
+    {
+      "path": "scripts/GameNatives/misc/00408460-FallLanding.cpp",
+      "address": "0x00408460",
+      "from": "AI_UpdatePatrol_24",
+      "to": "FallLanding",
+      "sharedName": true
+    },
+    {
+      "path": "scripts/GameNatives/misc/004C6670-Terrain_CreateMaterial 2.cpp",
+      "address": "0x004C6670",
+      "from": "CreateTerrainMaterial",
+      "to": "Terrain_CreateMaterial",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/misc/004C6670-Terrain_CreateMaterial.cpp",
+      "address": "0x004C6670",
+      "from": "CreateTerrainMaterial",
+      "to": "Terrain_CreateMaterial",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/misc/004C6670-Terrain_CreateMaterial.hpp",
+      "address": "0x004C6670",
+      "from": "CreateTerrainMaterial",
+      "to": "Terrain_CreateMaterial",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/physics/00507EC0-Input_Run.hpp",
+      "address": "0x00507EC0",
+      "from": "Physics_UpdateForces_6",
+      "to": "Input_Run",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/qtask/004017C0-QTask_UnableToAllocateEven 2.cpp",
+      "address": "0x004017C0",
+      "from": "QTask_UnableToAllocateEvent",
+      "to": "QTask_UnableToAllocateEven",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/qtask/004017C0-QTask_UnableToAllocateEven.cpp",
+      "address": "0x004017C0",
+      "from": "QTask_UnableToAllocateEvent",
+      "to": "QTask_UnableToAllocateEven",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D14E0-Terrain_TraverseContourQuadtree 2.cpp",
+      "address": "0x004D14E0",
+      "from": "Render_ShouldHaveAllocatedD",
+      "to": "Terrain_TraverseContourQuadtree",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D14E0-Terrain_TraverseContourQuadtree 2.hpp",
+      "address": "0x004D14E0",
+      "from": "Render_ShouldHaveAllocatedD",
+      "to": "Terrain_TraverseContourQuadtree",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D14E0-Terrain_TraverseContourQuadtree.cpp",
+      "address": "0x004D14E0",
+      "from": "Render_ShouldHaveAllocatedD",
+      "to": "Terrain_TraverseContourQuadtree",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D14E0-Terrain_TraverseContourQuadtree.hpp",
+      "address": "0x004D14E0",
+      "from": "Render_ShouldHaveAllocatedD",
+      "to": "Terrain_TraverseContourQuadtree",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D7020-Bone_GetNode 2.hpp",
+      "address": "0x004D7020",
+      "from": "Render_SkinBones_11",
+      "to": "Bone_GetNode",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D7020-Bone_GetNode.hpp",
+      "address": "0x004D7020",
+      "from": "Render_SkinBones_11",
+      "to": "Bone_GetNode",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/render/004D9610-BoneDynCubeObj_GetQTaskType.hpp",
+      "address": "0x004D9610",
+      "from": "Render_DrawRigidMesh_12",
+      "to": "BoneDynCubeObj_GetQTaskType",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/screen/004E7530-StatusScreen_GetEvent 2.hpp",
+      "address": "0x004E7530",
+      "from": "Screen_OnEvent",
+      "to": "StatusScreen_GetEvent",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/screen/004E7530-StatusScreen_GetEvent.hpp",
+      "address": "0x004E7530",
+      "from": "Screen_OnEvent",
+      "to": "StatusScreen_GetEvent",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/script/004F2060-Table_GetAt 2.hpp",
+      "address": "0x004F2060",
+      "from": "Script_ParseEnumString_12",
+      "to": "Table_GetAt",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/script/004F2060-Table_GetAt.hpp",
+      "address": "0x004F2060",
+      "from": "Script_ParseEnumString_12",
+      "to": "Table_GetAt",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E6030-Timer_SetLimit 2.hpp",
+      "address": "0x004E6030",
+      "from": "SoundSys_SetMasterVolume_4",
+      "to": "Timer_SetLimit",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E6030-Timer_SetLimit.hpp",
+      "address": "0x004E6030",
+      "from": "SoundSys_SetMasterVolume_4",
+      "to": "Timer_SetLimit",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E76E0-Console_VPrint 2.hpp",
+      "address": "0x004E76E0",
+      "from": "SoundSys_Update3DPosition_10",
+      "to": "Console_VPrint",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E76E0-Console_VPrint.hpp",
+      "address": "0x004E76E0",
+      "from": "SoundSys_Update3DPosition_10",
+      "to": "Console_VPrint",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7710-Console_AppendText 2.hpp",
+      "address": "0x004E7710",
+      "from": "SoundSys_SetMasterVolume_10",
+      "to": "Console_AppendText",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7710-Console_AppendText.hpp",
+      "address": "0x004E7710",
+      "from": "SoundSys_SetMasterVolume_10",
+      "to": "Console_AppendText",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7C00-Console_Print 2.hpp",
+      "address": "0x004E7C00",
+      "from": "SoundSys_SetMasterVolume_11",
+      "to": "Console_Print",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/soundsys/004E7C00-Console_Print.hpp",
+      "address": "0x004E7C00",
+      "from": "SoundSys_SetMasterVolume_11",
+      "to": "Console_Print",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusmessage/00485750-StatusMessage_Enqueue 2.hpp",
+      "address": "0x00485750",
+      "from": "StatusMessage_Process",
+      "to": "StatusMessage_Enqueue",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusmessage/00485750-StatusMessage_Enqueue.hpp",
+      "address": "0x00485750",
+      "from": "StatusMessage_Process",
+      "to": "StatusMessage_Enqueue",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusscreen/004869B0-StatusScreen_OnLoad 2.hpp",
+      "address": "0x004869B0",
+      "from": "StatusScreen_LoadParameters",
+      "to": "StatusScreen_OnLoad",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusscreen/004869B0-StatusScreen_OnLoad.hpp",
+      "address": "0x004869B0",
+      "from": "StatusScreen_LoadParameters",
+      "to": "StatusScreen_OnLoad",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusscreen/00486F30-StatusScreen_OnEvent3 2.hpp",
+      "address": "0x00486F30",
+      "from": "StatusScreen_Setup",
+      "to": "StatusScreen_OnEvent3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/statusscreen/00486F30-StatusScreen_OnEvent3.hpp",
+      "address": "0x00486F30",
+      "from": "StatusScreen_Setup",
+      "to": "StatusScreen_OnEvent3",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0B90-Sys_ReadFileBlock_2 2.cpp",
+      "address": "0x004B0B90",
+      "from": "j_AnimSound_LoadParameters",
+      "to": "Sys_ReadFileBlock_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0B90-Sys_ReadFileBlock_2.cpp",
+      "address": "0x004B0B90",
+      "from": "j_AnimSound_LoadParameters",
+      "to": "Sys_ReadFileBlock_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0D10-Mem_DeAllocFn.hpp",
+      "address": "0x004B0D10",
+      "from": "Sys_ExecuteBytecode_2",
+      "to": "Mem_DeAllocFn",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId 2.cpp",
+      "address": "0x004B0F80",
+      "from": "Sys_ReadFileBlock_3",
+      "to": "Texture_GetActiveBackendId",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.cpp",
+      "address": "0x004B0F80",
+      "from": "Sys_ReadFileBlock_3",
+      "to": "Texture_GetActiveBackendId",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.hpp",
+      "address": "0x004B0F80",
+      "from": "Sys_ReadFileBlock_3",
+      "to": "Texture_GetActiveBackendId",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B0F90-RenderMode_PopRenderMode.hpp",
+      "address": "0x004B0F90",
+      "from": "Sys_CloseFileStream_3",
+      "to": "RenderMode_PopRenderMode",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B12F0-Script_RegisterNamespace 2.hpp",
+      "address": "0x004B12F0",
+      "from": "Sys_FreeMemory_4",
+      "to": "Script_RegisterNamespace",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B12F0-Script_RegisterNamespace.hpp",
+      "address": "0x004B12F0",
+      "from": "Sys_FreeMemory_4",
+      "to": "Script_RegisterNamespace",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B22F0-Struct_Clear36 2.hpp",
+      "address": "0x004B22F0",
+      "from": "Sys_CheckHeap_7",
+      "to": "Struct_Clear36",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B22F0-Struct_Clear36.hpp",
+      "address": "0x004B22F0",
+      "from": "Sys_CheckHeap_7",
+      "to": "Struct_Clear36",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B24C0-Texture_LoadLoopTextureFile 2.cpp",
+      "address": "0x004B24C0",
+      "from": "Sys_SIsNotAValidTextureF",
+      "to": "Texture_LoadLoopTextureFile",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B24C0-Texture_LoadLoopTextureFile.cpp",
+      "address": "0x004B24C0",
+      "from": "Sys_SIsNotAValidTextureF",
+      "to": "Texture_LoadLoopTextureFile",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B24C0-Texture_LoadLoopTextureFile.hpp",
+      "address": "0x004B24C0",
+      "from": "Sys_SIsNotAValidTextureF",
+      "to": "Texture_LoadLoopTextureFile",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B2C70-Vec3_ProjectRayPlane 2.hpp",
+      "address": "0x004B2C70",
+      "from": "Sys_PopStack_10",
+      "to": "Vec3_ProjectRayPlane",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B2C70-Vec3_ProjectRayPlane.hpp",
+      "address": "0x004B2C70",
+      "from": "Sys_PopStack_10",
+      "to": "Vec3_ProjectRayPlane",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3100-Vec3_Normalize 2.hpp",
+      "address": "0x004B3100",
+      "from": "Sys_FreeMemory_11",
+      "to": "Vec3_Normalize",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3100-Vec3_Normalize.hpp",
+      "address": "0x004B3100",
+      "from": "Sys_FreeMemory_11",
+      "to": "Vec3_Normalize",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3130-Vec3_Length 2.hpp",
+      "address": "0x004B3130",
+      "from": "Sys_OpenFileStream_11",
+      "to": "Vec3_Length",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3130-Vec3_Length.hpp",
+      "address": "0x004B3130",
+      "from": "Sys_OpenFileStream_11",
+      "to": "Vec3_Length",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B32B0-Vec3_Distance.hpp",
+      "address": "0x004B32B0",
+      "from": "Sys_DispatchOpcode_11",
+      "to": "Vec3_Distance",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B32F0-Vec3_DistanceSq.hpp",
+      "address": "0x004B32F0",
+      "from": "Sys_PushStack_11",
+      "to": "Vec3_DistanceSq",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3320-Vec3_IsZero.hpp",
+      "address": "0x004B3320",
+      "from": "Sys_PopStack_11",
+      "to": "Vec3_IsZero",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B34F0-Mat33_PostRotateX 2.hpp",
+      "address": "0x004B34F0",
+      "from": "Sys_AllocateMemory_12",
+      "to": "Mat33_PostRotateX",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B34F0-Mat33_PostRotateX.hpp",
+      "address": "0x004B34F0",
+      "from": "Sys_AllocateMemory_12",
+      "to": "Mat33_PostRotateX",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3640-Mat33_PostRotateY 2.hpp",
+      "address": "0x004B3640",
+      "from": "Sys_FreeMemory_12",
+      "to": "Mat33_PostRotateY",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3640-Mat33_PostRotateY.hpp",
+      "address": "0x004B3640",
+      "from": "Sys_FreeMemory_12",
+      "to": "Mat33_PostRotateY",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3790-Mat33_PostRotateZ.hpp",
+      "address": "0x004B3790",
+      "from": "Sys_OpenFileStream_12",
+      "to": "Mat33_PostRotateZ",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B38E0-Mat33_FromEulerAngles 2.hpp",
+      "address": "0x004B38E0",
+      "from": "Sys_ReadFileBlock_12",
+      "to": "Mat33_FromEulerAngles",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B38E0-Mat33_FromEulerAngles.hpp",
+      "address": "0x004B38E0",
+      "from": "Sys_ReadFileBlock_12",
+      "to": "Mat33_FromEulerAngles",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3B60-Mat33_RotateX 2.hpp",
+      "address": "0x004B3B60",
+      "from": "Sys_CloseFileStream_12",
+      "to": "Mat33_RotateX",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3B60-Mat33_RotateX.hpp",
+      "address": "0x004B3B60",
+      "from": "Sys_CloseFileStream_12",
+      "to": "Mat33_RotateX",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3BA0-Mat33_RotateY 2.hpp",
+      "address": "0x004B3BA0",
+      "from": "Sys_ExecuteBytecode_12",
+      "to": "Mat33_RotateY",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3BA0-Mat33_RotateY.hpp",
+      "address": "0x004B3BA0",
+      "from": "Sys_ExecuteBytecode_12",
+      "to": "Mat33_RotateY",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3BE0-Mat33_RotateZ 2.hpp",
+      "address": "0x004B3BE0",
+      "from": "Sys_DispatchOpcode_12",
+      "to": "Mat33_RotateZ",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3BE0-Mat33_RotateZ.hpp",
+      "address": "0x004B3BE0",
+      "from": "Sys_DispatchOpcode_12",
+      "to": "Mat33_RotateZ",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3C20-Mat33_Scale.hpp",
+      "address": "0x004B3C20",
+      "from": "Sys_PushStack_12",
+      "to": "Mat33_Scale",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3C50-Mat33_ToEulerAngles 2.hpp",
+      "address": "0x004B3C50",
+      "from": "Sys_Atan2UndefinedInOrig",
+      "to": "Mat33_ToEulerAngles",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3C50-Mat33_ToEulerAngles.hpp",
+      "address": "0x004B3C50",
+      "from": "Sys_Atan2UndefinedInOrig",
+      "to": "Mat33_ToEulerAngles",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3EF0-Mat33_FromAxisAngle 2.hpp",
+      "address": "0x004B3EF0",
+      "from": "Sys_PopStack_12",
+      "to": "Mat33_FromAxisAngle",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B3EF0-Mat33_FromAxisAngle.hpp",
+      "address": "0x004B3EF0",
+      "from": "Sys_PopStack_12",
+      "to": "Mat33_FromAxisAngle",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B60F0-Resource_RegisterIlffContainer 2.cpp",
+      "address": "0x004B60F0",
+      "from": "Sys_ErrorInResourceFileS",
+      "to": "Resource_RegisterIlffContainer",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B60F0-Resource_RegisterIlffContainer.cpp",
+      "address": "0x004B60F0",
+      "from": "Sys_ErrorInResourceFileS",
+      "to": "Resource_RegisterIlffContainer",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B60F0-Resource_RegisterIlffContainer.hpp",
+      "address": "0x004B60F0",
+      "from": "Sys_ErrorInResourceFileS",
+      "to": "Resource_RegisterIlffContainer",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B6E60-Picture_Register.hpp",
+      "address": "0x004B6E60",
+      "from": "Sys_AllocateMemory_18",
+      "to": "Picture_Register",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7030-Heap_FreeEntry 2.hpp",
+      "address": "0x004B7030",
+      "from": "Sys_PushStack_18",
+      "to": "Heap_FreeEntry",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7030-Heap_FreeEntry.hpp",
+      "address": "0x004B7030",
+      "from": "Sys_PushStack_18",
+      "to": "Heap_FreeEntry",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7470-Ilff_GetNextChunk 2.cpp",
+      "address": "0x004B7470",
+      "from": "Matrix_InvalidateSlot",
+      "to": "Ilff_GetNextChunk",
+      "sharedName": true
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7470-Ilff_GetNextChunk.cpp",
+      "address": "0x004B7470",
+      "from": "Matrix_InvalidateSlot",
+      "to": "Ilff_GetNextChunk",
+      "sharedName": true
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7470-Ilff_GetNextChunk.hpp",
+      "address": "0x004B7470",
+      "from": "Matrix_InvalidateSlot",
+      "to": "Ilff_GetNextChunk",
+      "sharedName": true
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7490-Ilff_GetFirstChunk 2.cpp",
+      "address": "0x004B7490",
+      "from": "Sys_ResolveSymbol_19",
+      "to": "Ilff_GetFirstChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7490-Ilff_GetFirstChunk.cpp",
+      "address": "0x004B7490",
+      "from": "Sys_ResolveSymbol_19",
+      "to": "Ilff_GetFirstChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7490-Ilff_GetFirstChunk.hpp",
+      "address": "0x004B7490",
+      "from": "Sys_ResolveSymbol_19",
+      "to": "Ilff_GetFirstChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B74D0-Ilff_GetChunkPayload 2.cpp",
+      "address": "0x004B74D0",
+      "from": "Sys_CheckHeap_19",
+      "to": "Ilff_GetChunkPayload",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B74D0-Ilff_GetChunkPayload.cpp",
+      "address": "0x004B74D0",
+      "from": "Sys_CheckHeap_19",
+      "to": "Ilff_GetChunkPayload",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B74D0-Ilff_GetChunkPayload.hpp",
+      "address": "0x004B74D0",
+      "from": "Sys_CheckHeap_19",
+      "to": "Ilff_GetChunkPayload",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7540-Ilff_ReadContainerHeader 2.cpp",
+      "address": "0x004B7540",
+      "from": "Sys_AllocateMemory_20",
+      "to": "Ilff_ReadContainerHeader",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7540-Ilff_ReadContainerHeader.cpp",
+      "address": "0x004B7540",
+      "from": "Sys_AllocateMemory_20",
+      "to": "Ilff_ReadContainerHeader",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7540-Ilff_ReadContainerHeader.hpp",
+      "address": "0x004B7540",
+      "from": "Sys_AllocateMemory_20",
+      "to": "Ilff_ReadContainerHeader",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7570-Ilff_GetFormType 2.cpp",
+      "address": "0x004B7570",
+      "from": "Sys_FreeMemory_20",
+      "to": "Ilff_GetFormType",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7570-Ilff_GetFormType.cpp",
+      "address": "0x004B7570",
+      "from": "Sys_FreeMemory_20",
+      "to": "Ilff_GetFormType",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7570-Ilff_GetFormType.hpp",
+      "address": "0x004B7570",
+      "from": "Sys_FreeMemory_20",
+      "to": "Ilff_GetFormType",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7580-Ilff_GetChunkTag 2.cpp",
+      "address": "0x004B7580",
+      "from": "Sys_OpenFileStream_20",
+      "to": "Ilff_GetChunkTag",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7580-Ilff_GetChunkTag.cpp",
+      "address": "0x004B7580",
+      "from": "Sys_OpenFileStream_20",
+      "to": "Ilff_GetChunkTag",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7580-Ilff_GetChunkTag.hpp",
+      "address": "0x004B7580",
+      "from": "Sys_OpenFileStream_20",
+      "to": "Ilff_GetChunkTag",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7590-Ilff_FindChunk 2.cpp",
+      "address": "0x004B7590",
+      "from": "Sys_ReadFileBlock_20",
+      "to": "Ilff_FindChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7590-Ilff_FindChunk.cpp",
+      "address": "0x004B7590",
+      "from": "Sys_ReadFileBlock_20",
+      "to": "Ilff_FindChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7590-Ilff_FindChunk.hpp",
+      "address": "0x004B7590",
+      "from": "Sys_ReadFileBlock_20",
+      "to": "Ilff_FindChunk",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7E10-Qvm_ReportError 2.cpp",
+      "address": "0x004B7E10",
+      "from": "Sys_FreeMemory_22",
+      "to": "Qvm_ReportError",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7E10-Qvm_ReportError.cpp",
+      "address": "0x004B7E10",
+      "from": "Sys_FreeMemory_22",
+      "to": "Qvm_ReportError",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B7E10-Qvm_ReportError.hpp",
+      "address": "0x004B7E10",
+      "from": "Sys_FreeMemory_22",
+      "to": "Qvm_ReportError",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B8A10-Qvm_SetGlobalState 2.cpp",
+      "address": "0x004B8A10",
+      "from": "Sys_PopStack_23",
+      "to": "Qvm_SetGlobalState",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B8A10-Qvm_SetGlobalState.cpp",
+      "address": "0x004B8A10",
+      "from": "Sys_PopStack_23",
+      "to": "Qvm_SetGlobalState",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004B8A10-Qvm_SetGlobalState.hpp",
+      "address": "0x004B8A10",
+      "from": "Sys_PopStack_23",
+      "to": "Qvm_SetGlobalState",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BCFD0-Qvm_ExecuteInstructions 2.cpp",
+      "address": "0x004BCFD0",
+      "from": "Sys_ExecuteBytecode_28",
+      "to": "Qvm_ExecuteInstructions",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BCFD0-Qvm_ExecuteInstructions.cpp",
+      "address": "0x004BCFD0",
+      "from": "Sys_ExecuteBytecode_28",
+      "to": "Qvm_ExecuteInstructions",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BCFD0-Qvm_ExecuteInstructions.hpp",
+      "address": "0x004BCFD0",
+      "from": "Sys_ExecuteBytecode_28",
+      "to": "Qvm_ExecuteInstructions",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BD3D0-Qvm_SetOpcodeHandler 2.cpp",
+      "address": "0x004BD3D0",
+      "from": "Sys_AllocateMemory_29",
+      "to": "Qvm_SetOpcodeHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BD3D0-Qvm_SetOpcodeHandler.cpp",
+      "address": "0x004BD3D0",
+      "from": "Sys_AllocateMemory_29",
+      "to": "Qvm_SetOpcodeHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BD3D0-Qvm_SetOpcodeHandler.hpp",
+      "address": "0x004BD3D0",
+      "from": "Sys_AllocateMemory_29",
+      "to": "Qvm_SetOpcodeHandler",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BDA00-Qvm_PushInteger 2.cpp",
+      "address": "0x004BDA00",
+      "from": "Sys_PushStack_29",
+      "to": "Qvm_PushInteger",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BDA00-Qvm_PushInteger.cpp",
+      "address": "0x004BDA00",
+      "from": "Sys_PushStack_29",
+      "to": "Qvm_PushInteger",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/sys/004BDA00-Qvm_PushInteger.hpp",
+      "address": "0x004BDA00",
+      "from": "Sys_PushStack_29",
+      "to": "Qvm_PushInteger",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/00510010-Terrain_DecodeChunkCommands 2.cpp",
+      "address": "0x00510010",
+      "from": "Terrain_RenderQuadtree",
+      "to": "Terrain_DecodeChunkCommands",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/00510010-Terrain_DecodeChunkCommands.cpp",
+      "address": "0x00510010",
+      "from": "Terrain_RenderQuadtree",
+      "to": "Terrain_DecodeChunkCommands",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/00510010-Terrain_DecodeChunkCommands.hpp",
+      "address": "0x00510010",
+      "from": "Terrain_RenderQuadtree",
+      "to": "Terrain_DecodeChunkCommands",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005127D0-Terrain_SelectTerrainLOD_2 2.cpp",
+      "address": "0x005127D0",
+      "from": "j_Render_ClipMesh_11",
+      "to": "Terrain_SelectTerrainLOD_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005127D0-Terrain_SelectTerrainLOD_2.cpp",
+      "address": "0x005127D0",
+      "from": "j_Render_ClipMesh_11",
+      "to": "Terrain_SelectTerrainLOD_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005175A0-Terrain_LoadTexturePackage 2.cpp",
+      "address": "0x005175A0",
+      "from": "Terrain_TextureFileNotOfRequ",
+      "to": "Terrain_LoadTexturePackage",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005175A0-Terrain_LoadTexturePackage.cpp",
+      "address": "0x005175A0",
+      "from": "Terrain_TextureFileNotOfRequ",
+      "to": "Terrain_LoadTexturePackage",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/terrain/005175A0-Terrain_LoadTexturePackage.hpp",
+      "address": "0x005175A0",
+      "from": "Terrain_TextureFileNotOfRequ",
+      "to": "Terrain_LoadTexturePackage",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2 2.cpp",
+      "address": "0x00413A90",
+      "from": "void",
+      "to": "WeaponType_Open_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2 2.hpp",
+      "address": "0x00413A90",
+      "from": "_Static_assert",
+      "to": "WeaponType_Open_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2 3.cpp",
+      "address": "0x00413A90",
+      "from": "void",
+      "to": "WeaponType_Open_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2.cpp",
+      "address": "0x00413A90",
+      "from": "void",
+      "to": "WeaponType_Open_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapon/00413A90-WeaponType_Open_2.hpp",
+      "address": "0x00413A90",
+      "from": "_Static_assert",
+      "to": "WeaponType_Open_2",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES 2.cpp",
+      "address": "0x00471120",
+      "from": "__convention",
+      "to": "WeaponGun_ProcessWNES",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.cpp",
+      "address": "0x00471120",
+      "from": "__convention",
+      "to": "WeaponGun_ProcessWNES",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.hpp",
+      "address": "0x00471120",
+      "from": "__convention",
+      "to": "WeaponGun_ProcessWNES",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0 2.cpp",
+      "address": "0x005236C0",
+      "from": "__convention",
+      "to": "WeatherWaterSky_Invoke7_5236C0",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.cpp",
+      "address": "0x005236C0",
+      "from": "__convention",
+      "to": "WeatherWaterSky_Invoke7_5236C0",
+      "sharedName": false
+    },
+    {
+      "path": "scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.hpp",
+      "address": "0x005236C0",
+      "from": "__convention",
+      "to": "WeatherWaterSky_Invoke7_5236C0",
+      "sharedName": false
+    }
+  ],
+  "skipped": [
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004C4520-Define_MagicObj.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance.hpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel 2.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel.cpp",
+      "reason": "nothing to rewrite"
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel.hpp",
+      "reason": "nothing to rewrite"
+    }
+  ]
+}

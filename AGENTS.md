@@ -146,3 +146,29 @@ A native reconstruction is ready for acceptance when:
 - Runtime tests must target the newly compiled x86 candidate, with symbols resolved from that binary. Building a candidate is necessary to test changed code; seal/deploy only after runtime acceptance. Never test an old installed `open-igi.exe` and use it to approve new source.
 - Inspect the earliest divergence, correct the native from retail evidence, rerun its static/semantic/behavioral/runtime checks, and only then move to the next increment. Retain raw traces, image/source/probe hashes, scenario and limitations. Generic raw-word/EAX probes establish observations only; side effects require a typed comparator. A matching return alone cannot pass.
 - `--development` and `--runtime-trace` remain diagnostic builds only; they do not accept a feature. Do not promote a diagnostic pass, a CFG pass, an empty changed set or a reduced observation set to full verification. Record exact tested scope rather than claiming universal 100% equivalence.
+
+### 10.10. Clean-branch starting point
+
+This branch starts with a diagnostic Win32 shell, not the retail entry point or a playable game. Treat its window and debugger logging as infrastructure only. Do not infer native fidelity from them. Follow the MVP call flow from the retail entry point, implementing only the required 3D models, MEF/ILFF, textures, terrain, QVM/configuration, human player movement and collision. Keep AI, weapons, damage and sound outside that scope.
+
+Consult `scripts/GameNatives`, `docs/fidelity/native-verification.json`, and the historical `game-engine-flow` branch for candidates and evidence. Historical status applies to the prior source and tested binary only; inspect the exact implementation, source/image hashes, scope and evidence before reuse. A copied candidate requires fresh checks against retail and the new candidate. Do not invent game logic, constants, bindings, names, signatures or behavior; keep unknown functionality blocked. Standard diagnostic/platform scaffolding must remain explicitly separate from game natives.
+
+Use `python3 scripts/igi_workflow.py --help` for available discovery and verification commands. Use `./build.sh --diagnostic` to build the shell without feature acceptance. Default `./build.sh` requires the strict changed-native gate and paired typed runtime acceptance; an empty native scope blocks it. The inherited verification scripts may depend on paths from the older branch and must fail or report unavailable rather than claim a pass. Do not add invented test cases; use evidence-backed comparisons and existing probes. Never report CFG or an empty gate result as behavioral parity.
+
+### 10.11. First task for this worktree
+
+Before implementing game natives, complete and validate the smart verification workflow. Start with `python3 scripts/igi_workflow.py doctor`; configure an angr interpreter and locate the historical v4 catalog without misrepresenting missing tools as available. Adapt the inherited paired Frida workflow to this worktree's freshly built x86 candidate, retaining the sequential retail/candidate procedure and evidence requirements in sections 10.8–10.9. Existing historical records and scripts are references, not proof for this clean branch. Report unavailable dependencies and incomplete comparisons as blockers; never mark a native verified merely to make a gate pass.
+
+Once the workflow is operational, follow the retail MVP call flow from the entry point one native at a time, maintaining the original ABI, calls, state and behavior supported by evidence. Use small local commits and do not push unless the user explicitly requests it. Keep existing agents' worktrees and changes intact.
+
+### 10.12. Current ordered work: inspection demo
+
+The immediate user-requested increment is `igi1.exe`: Level 1 3D models, original model textures, mouse look, and the previous developer free camera as explicitly authorized diagnostic tooling. Complete tool health and fail-closed workflow checks first. Follow the required retail entry/call flow for scene natives, excluding only proven non-MVP dependencies. Names such as FX or sound in the decompiler are not proof that a method can be skipped. Do not restore the old model scene wholesale: its placement heuristics, player fallbacks and status labels need fresh examination. Terrain and human physics follow this inspection increment; AI, weapons, damage and sound remain deferred.
+
+Commands: `python3 scripts/igi_workflow.py doctor --check`; `python3 scripts/igi_workflow.py self-check`; `python3 scripts/igi_workflow.py analyze <retail-VA>`; `python3 scripts/igi_workflow.py verify <retail-VA> --level 1`; for new native increments the mandatory strict path is `python3 scripts/igi_workflow.py intake <retail-VA> --probe <reviewed-probe> --level <N>` (static gate + paired runtime + typed comparison; accept only on full pass, otherwise reject). Local tool paths are in `scripts/igi-workflow.json`. Analysis capture does not change native statuses. Do not claim all tools healthy from file presence, or native parity from the validator's artificial infrastructure fixtures. Keep paired runtime captures sequential and preserve other agents' active game sessions.
+
+## Agent skills
+
+Issue tracker: 'GitHub Issues are the tracker. See `docs/agents/issue-tracker.md`.'
+
+Domain docs: 'This is a single-context layout. See `docs/agents/domain.md`.'

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsGetMusicVolume - 0x00404CA0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404CA0-Config_SoundOptionsGetMusicVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404CA0-Config_SoundOptionsGetMusicVolume.hpp"
+#include "Config_SoundOptionsGetMusicVolume.h"
 int Config_SoundOptionsGetMusicVolume(int context)
 
 // Sig: float Config_SoundOptionsGetMusicVolume()

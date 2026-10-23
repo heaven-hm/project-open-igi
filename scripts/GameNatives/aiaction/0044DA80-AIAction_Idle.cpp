@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Idle - 0x0044DA80 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044DA80-AIAction_Idle.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044DA80-AIAction_Idle.hpp"
+#include "AIAction_Idle.h"
 int AIAction_Idle(int context, float arg2 )
 
 // Sig: void AIAction_Idle(int args)

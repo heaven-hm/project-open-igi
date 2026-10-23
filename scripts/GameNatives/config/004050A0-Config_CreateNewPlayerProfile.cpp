@@ -1,6 +1,6 @@
 // IGI native provenance: Config_CreateNewPlayerProfile - 0x004050A0 - CFG score 85.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004050A0-Config_CreateNewPlayerProfile.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004050A0-Config_CreateNewPlayerProfile.hpp"
+#include "Config_CreateNewPlayerProfile.h"
 int Config_CreateNewPlayerProfile(int context, float arg2 )
 
 // Sig: int Config_CreateNewPlayerProfile(char* name, int sourceIndex)

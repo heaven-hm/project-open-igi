@@ -1,6 +1,6 @@
 // IGI native provenance: MenuManager_PopScreen - 0x00417710 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00417710-MenuManager_PopScreen.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "MenuManager_PopScreen.hpp"
+#include "MenuManager_PopScreen.h"
 int MenuManager_PopScreen(int context, void* arg2, float arg3)
 
 // Sig: void MenuManager_PopScreen(int args)

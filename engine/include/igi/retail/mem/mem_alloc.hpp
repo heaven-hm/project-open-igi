@@ -52,29 +52,26 @@ extern std::uint32_t& g_5466d4;
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for single byte store.
 // Signature: x86 cdecl int(void); ported as int QHash_ValueSet().
-// Usage/tests: called by Sys_CloseFileStream_2 during heap initialization; exercised by mem_alloc_test.cpp.
+// Usage/tests: called by Mem_InitHeapState during heap initialization; exercised by mem_alloc_test.cpp.
 int QHash_ValueSet();
 
 // Native: Mem_InitHeapState() - VA 0x004B0BA0 - complete port.
-// Previous catalog alias: Sys_CloseFileStream_2.
 // Behavior: initializes the heap free-list header triplet (`g_a960f0 = &g_a960f4`,
 //           `g_a960f8 = &g_a960f0`, `g_a960f4 = 0`), sets `g_9422fc = 1`, calls
 //           `QHash_ValueSet()`, and sets `g_a960e0 = 0x10`.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B0BA0-0x004B0BD5, 54 bytes;
-//                 CLEAN/sys/004B0BA0-Sys_CloseFileStream_2.c.
+//                 CLEAN/sys/004B0BA0-Mem_InitHeapState.c.
 // CFG: radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Confidence: high for exact global stores and callee order.
 // Signature: x86 cdecl int(void); ported as int Mem_InitHeapState().
 // Usage/tests: called lazily on first Mem_Alloc when `g_9422fc == 0`; exercised by mem_alloc_test.cpp.
 int Mem_InitHeapState();
-inline int Sys_CloseFileStream_2() { return Mem_InitHeapState(); }
 
 // Host primitive backing the retail HeapAlloc(g_c32428, 0, dwBytes) tail of Mem_AllocateRawBlock.
-void* Host_HeapAlloc(std::uint32_t num_bytes);
-void Host_HeapFree(void* pointer);
+void* Mem_HeapAlloc(std::uint32_t num_bytes);
+void Mem_HeapFree(void* pointer);
 
 // Native: Mem_InvokeNewHandler() - VA 0x004AD722 - complete port.
-// Previous catalog alias: Camera_ApplyHandiCam_28.
 // Behavior: invokes the optional CRT new-handler callback at `g_936254` (`0x00936254`) with
 //           `size`; returns `1` if the callback is non-null and returns non-zero, else `0`.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AD722-0x004AD73F, 30 bytes;
@@ -87,7 +84,6 @@ int Mem_InvokeNewHandler(std::uint32_t size);
 inline int Camera_ApplyHandiCam_28(std::uint32_t size) { return Mem_InvokeNewHandler(size); }
 
 // Native: Mem_AllocateRawBlock() - VA 0x004AA6AE - complete port.
-// Previous catalog alias: Camera_ApplyPostProcess_20.
 // Behavior: dispatches heap allocation by mode `g_c3242c` (`0x00C3242C`): tries small-block pool
 //           in mode 3 (when `size <= g_c321fc`), tries bucket pool in mode 2
 //           (when 16-byte rounded size `<= g_5466d4`), and otherwise rounds `max(size, 1)` up to a
@@ -102,7 +98,6 @@ void* Mem_AllocateRawBlock(std::uint32_t size);
 inline void* Camera_ApplyPostProcess_20(std::uint32_t size) { return Mem_AllocateRawBlock(size); }
 
 // Native: Mem_AllocWithRetry() - VA 0x004AA682 - complete port.
-// Previous catalog alias: Camera_ApplyWideScreen_20.
 // Behavior: rejects `size > 0xFFFFFFE0`; otherwise loops calling `Mem_AllocateRawBlock(size)`
 //           until a non-null pointer (or `sentinel` match) is returned or `Mem_InvokeNewHandler(size)`
 //           returns `0`.
@@ -119,7 +114,6 @@ inline void* Camera_ApplyWideScreen_20(std::uint32_t size, std::uint32_t sentine
 }
 
 // Native: Mem_AllocChunk() - VA 0x004AA670 - complete port.
-// Previous catalog alias: Camera_ApplyHandiCam_20.
 // Behavior: forwards `(size, g_936250)` (`0x00936250`) to `Mem_AllocWithRetry`.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AA670-0x004AA681, 18 bytes;
 //                 CLEAN/camera/004AA670-Camera_ApplyHandiCam_20.c.
@@ -134,17 +128,17 @@ inline void* Camera_ApplyHandiCam_20(std::uint32_t size) { return Mem_AllocChunk
 // Behavior: increments `g_942300` (`0x00942300`), allocates `context + arg2 + 0x1C` bytes via
 //           `Camera_ApplyHandiCam_20` (0x004AA670), aligns the returned payload pointer to `arg2`,
 //           stores the raw block header pointer at `(result - 4) & 0xFFFFFFFC`, lazily initializes
-//           the heap list via `Sys_CloseFileStream_2` (0x004B0BA0) when `g_9422fc == 0`, links the
+//           the heap list via `Mem_InitHeapState` (0x004B0BA0) when `g_9422fc == 0`, links the
 //           block into `g_a960f0` (`0x00A960F0`) via `Camera_SetFieldOfView_33` (0x004AF8F0),
 //           records `{result, total_bytes, user_bytes}` at header slots `2..4`, and on allocation
-//           failure walks `g_a960f0` summing `i_1[3]` and `i_1[4]` before calling `Error_Show`.
+//           failure walks `g_a960f0` summing `i_1[3]` and `i_1[4]` before calling `Debug_Error` (0x004AF7B0).
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B0C60-0x004B0D39, 218 bytes,
 //                 digest 2b9694a3f11f74ab26f0de07cf380ec2a235e63578a53d919529ff80d22ce245;
 //                 CLEAN/mem/004B0C60-Mem_Alloc.c.
 // CFG: radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Confidence: high for header layout, alignment formula, lazy init, list insert, and OOM walk.
 // Signature: x86 cdecl void*(int context, int arg2); ported as void* Mem_Alloc(std::int32_t context, std::int32_t arg2).
-// Usage/tests: retail engine heap allocator used by DynObj_LocalModelsSMef, DynObj_InsertHashItem_14,
+// Usage/tests: retail engine heap allocator used by DynObj_LocalModelsSMef, DynObj_LoadModelTexturePackage,
 //              Terrain_TextureFileNotOfRequ, DynObj_LocalTexturesSTex, and Qvm_Load; exercised by mem_alloc_test.cpp.
 void* Mem_Alloc(std::int32_t context, std::int32_t arg2);
 

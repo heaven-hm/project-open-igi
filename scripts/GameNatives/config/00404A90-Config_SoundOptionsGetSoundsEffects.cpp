@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsGetSoundsEffects - 0x00404A90 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404A90-Config_SoundOptionsGetSoundsEffects.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404A90-Config_SoundOptionsGetSoundsEffects.hpp"
+#include "Config_SoundOptionsGetSoundsEffects.h"
 int Config_SoundOptionsGetSoundsEffects(int context)
 
 // Sig: int Config_SoundOptionsGetSoundsEffects()

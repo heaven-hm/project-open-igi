@@ -1,0 +1,27 @@
+{
+  "recorded_utc": "2026-10-23T17:54:44.344520+00:00",
+  "branch": "mvp/level1-integration",
+  "checkout": "/Users/haseeb-mir/Documents/Code/project-open-igi",
+  "merge_commit": "blocked_by_existing_native_acceptance_hook; source prepared and staged",
+  "unresolved_index_entries": 0,
+  "candidate": "build-win32-no-verify-gate/igi1.exe",
+  "deployed": "/Users/haseeb-mir/Downloads/IGI/igi1.exe",
+  "candidate_sha256": "de2f8e81edaa52c37c09c4941014cfb4a6991a5950d2ef0a177456decdb8fb33",
+  "native_verified": false,
+  "bridge_regression_tests_passed": 31,
+  "mapped_linked_natives": 144,
+  "compile_only_natives": 5,
+  "unbound_compiled_sources": 28,
+  "static_trial": "radare2 and angr succeeded; Binary Ninja HTTP connection refused; overall BLOCKED",
+  "paired_runtime": "not accepted; missing reviewed probes/current bindings; compile-only sources block runtime",
+  "newest_codex_snapshot": "c44a258209ead57a644e329781f253101cc61fa3",
+  "recovery_refs": {
+    "main": "refs/safety/mvp-integration/20261023-223625/main",
+    "codex": "refs/safety/mvp-integration/20261023-223625/codex",
+    "deepseek": "refs/safety/mvp-integration/20261023-223625/deepseek",
+    "original_index": "refs/safety/mvp-integration/20261023-223625/original-index"
+  },
+  "original_stash": "cc4f27f300082d3bbc822dbed3c5c1fe04884099",
+  "references_restored": 41,
+  "game_launch": "igi1.exe window level1; fresh igi.log frame records; observed roughly 7 FPS"
+}

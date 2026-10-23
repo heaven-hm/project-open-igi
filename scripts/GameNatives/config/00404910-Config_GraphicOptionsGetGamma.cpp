@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsGetGamma - 0x00404910 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404910-Config_GraphicOptionsGetGamma.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404910-Config_GraphicOptionsGetGamma.hpp"
+#include "Config_GraphicOptionsGetGamma.h"
 int Config_GraphicOptionsGetGamma(int context)
 
 // Sig: float Config_GraphicOptionsGetGamma()

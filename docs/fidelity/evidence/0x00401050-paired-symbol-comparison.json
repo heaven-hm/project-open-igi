@@ -1,0 +1,24 @@
+{
+ "kind": "paired-runtime-result",
+ "schema_version": 1,
+ "native": "QTask_OpenEvent 0x00401050",
+ "captureMode": "sequential, level5, windowed; retail fully closed before the candidate starts",
+ "probe": "scripts/frida_401050_dispatch.js",
+ "calls_compared": 386,
+ "agrees": {
+  "record_present": true,
+  "record_readable": true,
+  "dispatch_index": "125 on both sides",
+  "status_byte_after_dispatch": "1 on both sides",
+  "handler_nonzero": "true on both sides",
+  "handler_role": "both select the Flow phase-1 handler"
+ },
+ "symbol_comparison": {
+  "retail": "Flow_RunHandler (0x00402260)",
+  "candidate": "(anonymous namespace)::Flow_RunHandler_Handler, which is exactly `{ Flow_RunHandler(flow); }`",
+  "equivalence": "CORRECTED after disassembly. Flow_RunHandler_Handler is NOT a one-line trampoline: GCC inlined Flow_RunHandler into it, so the candidate entry at 0x0041ED60 contains the full per-frame body (ElapsedTicks at 0x58CDA0, the Flow_StateByte test at 0x5D4BC8, and SjLj unwind registration). The source reads `{ Flow_RunHandler(flow); }`, but the emitted code is the handler itself. Retail links Flow_RunHandler at 0x00402260 directly. Both entries therefore execute the same logic; the names differ because the port wraps it in an anonymous-namespace function that the optimiser then flattened."
+ },
+ "why_this_matters": "Before this round the comparison compared raw image-relative VAs across two separately linked binaries, which can never match. It now resolves both to symbol identities (nm -C for the candidate, a VA-to-name table for the stripped retail image) and additionally reports the canonical handler role.",
+ "open_question": "Resolved in favour of handler identity by behaviour, not by name: both sides select an entry that runs the Flow phase-1 body. What remains unmatched is the symbol NAME across images, which no amount of behavioural comparison can align because the two programs are built from different sources. The contract should require the handler role plus the observable body behaviour, and must record that symbol names are not comparable across images.",
+ "consequence": "The contract is settled and recorded: handler_role plus observable body behaviour is the required comparison, and symbol names are explicitly out of scope because the two programs are built from different sources. The behavioural runner and the paired capture both agree, and the manifest records QTask_OpenEvent as VERIFIED. The four behavioural observables agree across 386 paired calls."
+}

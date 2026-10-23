@@ -32,7 +32,6 @@ std::int32_t ilff_error_flag = 0;
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_PopStack_19.
 void* Ilff_GetNextChunk(void* context)
 {
     if (context != nullptr)
@@ -52,7 +51,6 @@ void* Ilff_GetNextChunk(void* context)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_ResolveSymbol_19.
 void* Ilff_GetFirstChunk(void* context)
 {
     if (context != nullptr)
@@ -84,7 +82,6 @@ void* Ilff_GetFirstChunk(void* context)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_CheckHeap_19.
 void* Ilff_GetChunkPayload(void* context, void* arg2)
 {
     if (arg2 != nullptr && context != nullptr)
@@ -128,7 +125,6 @@ void* Ilff_GetChunkPayload(void* context, void* arg2)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7540-0x004B7563, 35 bytes, digest 05157574f9770289393bb031702b9357e0efd4fbb7abd48d65be942ffd27e94f.
 // Behavior/CFG: if `context` is non-null, writes chunk field +0x04 to `*out_size` (when non-null) and chunk field +0x08 to `*out_alignment` (when non-null). radare2 6 blocks/8 edges; Binary Ninja 6 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact field offsets and null guards.
-// Previous catalog alias: Sys_AllocateMemory_20.
 void Ilff_ReadContainerHeader(std::int32_t* out_size, std::int32_t* out_alignment, const void* context)
 {
     if (context == nullptr)
@@ -152,7 +148,6 @@ void Ilff_ReadContainerHeader(std::int32_t* out_size, std::int32_t* out_alignmen
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7570-0x004B757F, 15 bytes, digest df8f7845ad39f9850ed36bbb4fc492c99e7163622d8ecf2d9561e1a5f6fc46dd.
 // Behavior/CFG: returns the 32-bit form FourCC at `context + 0x10` when `context` is non-null, otherwise 0. radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact instruction behavior.
-// Previous catalog alias: Sys_FreeMemory_20.
 std::int32_t Ilff_GetFormType(const void* context)
 {
     if (context == nullptr)
@@ -167,7 +162,6 @@ std::int32_t Ilff_GetFormType(const void* context)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7580-0x004B758E, 14 bytes, digest 26690bbe535ad6119bdd37bf2f477a8f95d7f34860c3b971e777e17e835fc784.
 // Behavior/CFG: returns the 32-bit chunk tag FourCC at `context + 0x00` when `context` is non-null, otherwise 0. radare2 3 blocks/2 edges; Binary Ninja 3 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact instruction behavior.
-// Previous catalog alias: Sys_OpenFileStream_20.
 std::int32_t Ilff_GetChunkTag(const std::int32_t* context)
 {
     if (context == nullptr)
@@ -182,7 +176,6 @@ std::int32_t Ilff_GetChunkTag(const std::int32_t* context)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_ReadFileBlock_20.
 std::int32_t* Ilff_FindChunk(std::int32_t* context, std::int32_t tag)
 {
     for (auto* chunk = context; chunk != nullptr;

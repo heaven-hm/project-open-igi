@@ -1,6 +1,6 @@
 // IGI native provenance: Game_UpdateVolume - 0x004158E0 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004158E0-Game_UpdateVolume.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004158E0-Game_UpdateVolume.hpp"
+#include "Game_UpdateVolume.h"
 int Game_UpdateVolume(int context)
 
 // Sig: void Game_UpdateVolume(void)

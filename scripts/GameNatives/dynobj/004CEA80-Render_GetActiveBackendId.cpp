@@ -1,8 +1,11 @@
-// IGI native provenance: Render_GetActiveBackendId - 0x004CEA80 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004CEA80-Render_GetActiveBackendId.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004CEA80-Render_GetActiveBackendId.hpp"
-int Render_GetActiveBackendId()
+// IGI native Render_GetActiveBackendId - 0x004CEA80 - transcribed from retail igi.exe.
+// Retail: cdecl, no arguments. Returns g_548208.
+#include <cstdint>
+#include <cstring>
 
+extern std::int32_t g_548208;
+
+std::int32_t __cdecl Render_GetActiveBackendId(void)
 {
     return g_548208;
 }

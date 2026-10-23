@@ -37,7 +37,6 @@ void store_operation(std::uint8_t* table, std::int32_t device, Function operatio
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_PushStack_4.
 std::int32_t Device_GetStreamPosition(std::int32_t* context)
 {
     const std::int32_t device = *context;
@@ -50,7 +49,6 @@ std::int32_t Device_GetStreamPosition(std::int32_t* context)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_CheckHeap_4.
 std::int32_t Device_SeekStream(std::int32_t* context, std::int32_t argument)
 {
     const std::int32_t device = *context;
@@ -63,7 +61,6 @@ std::int32_t Device_SeekStream(std::int32_t* context, std::int32_t argument)
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail igi.exe.
 // Behavior/CFG: not restated here.
 // Status/limits: STRUCTURALLY_VERIFIED; see verification record for scope and port limits.
-// Previous catalog alias: Sys_ReadFileBlock_4.
 void Device_CloseStream(std::int32_t* context)
 {
     if (context == global_stream)
@@ -88,17 +85,17 @@ std::int32_t Resource_GetGlobalStreamFlag()
     return global_stream_flag;
 }
 
-void Host_SetPushStack(std::int32_t device, DispatchPushStackFn operation)
+void Device_SetPushStack(std::int32_t device, DispatchPushStackFn operation)
 {
     store_operation(push_stack_table, device, operation);
 }
 
-void Host_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation)
+void Device_SetCheckHeap(std::int32_t device, DispatchCheckHeapFn operation)
 {
     store_operation(check_heap_table, device, operation);
 }
 
-void Host_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation)
+void Device_SetReadFileBlock(std::int32_t device, DispatchReadFileBlockFn operation)
 {
     store_operation(read_file_block_table, device, operation);
 }

@@ -68,7 +68,7 @@ std::size_t ResourceCache::size() const noexcept
 // Confidence: partial cache adapter for host diagnostic harness.
 // Signature: Retail flag/out-entry interface is adapted to a C++ ResourceHandle lookup.
 // Usage/tests: Used by resource cache tests/API; cache fixtures passed.
-ResourceHandle Host_FindCachedResource(
+ResourceHandle Resource_FindCached(
     const ResourceCache& resource_cache,
     const std::filesystem::path& resource_path)
 {
@@ -79,8 +79,8 @@ ResourceHandle Host_FindCachedResource(
         : resource_iterator->second;
 }
 
-// HOST HELPER: Host_LoadResourceFile. Host filesystem/cache adapter; retail VFS and allocation behavior are not transcribed here.
-ResourceHandle Host_LoadResourceFile(
+// HOST HELPER: Resource_OpenFile. Host filesystem/cache adapter; retail VFS and allocation behavior are not transcribed here.
+ResourceHandle Resource_OpenFile(
     ResourceCache& resource_cache,
     const std::filesystem::path& resource_path,
     std::uint32_t* out_byte_count)
@@ -115,7 +115,7 @@ ResourceHandle Host_LoadResourceFile(
 // Confidence: partial adapter; host false-on-missing differs from the native fatal-error path.
 // Signature: Retail void/path API is adapted to bool/cache/path; native ABI is not preserved yet.
 // Usage/tests: Used by resource lifecycle fixtures; handle lifetime passed; retail unload replay pending.
-bool Host_UnloadResourceFile(ResourceCache& resource_cache, const std::filesystem::path& resource_path)
+bool Resource_CloseFile(ResourceCache& resource_cache, const std::filesystem::path& resource_path)
 {
     const std::string normalized_path = normalize_resource_path(resource_path);
     return resource_cache.loaded_resources_.erase(normalized_path) != 0U;

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x004036B0",
+  "symbol": "fcn.004036b0",
+  "signature": "fcn.004036b0 (int32_t arg_34h, int32_t arg_30h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x004036B0; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 160,
+    "basic_block_count": 1,
+    "instruction_count": 48,
+    "call_convention": "cdecl",
+    "edge_count": 0,
+    "argument_count": 2,
+    "is_linear": true
+  },
+  "bytes_hex": "83ec188b0d8023bc00564133f657890d",
+  "bytes_sha256": "0733d0fde1b3f9230299878a97114e39fcc886a139732f4de21fbb2247eb5589",
+  "cfg": {
+    "entry": "0x004036B0",
+    "nodes": [
+      {
+        "address": "0x004036b0",
+        "size": 160,
+        "instructions": 48
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "\u250c 160: fcn.004036b0 (int32_t arg_34h, int32_t arg_30h);\n\u2502 `- args(sp[0x4..0xc]) vars(4:sp[0x8..0x18])\n\u2502           0x004036b0      83ec18         sub esp, 0x18\n\u2502           0x004036b3      8b0d8023bc00   mov ecx, dword [0xbc2380]   ; [0xbc2380:4]=0\n\u2502           0x004036b9      56             push esi\n\u2502           0x004036ba      41             inc ecx\n\u2502           0x004036bb      33f6           xor esi, esi\n\u2502           0x004036bd      57             push edi\n\u2502           0x004036be      890d8023bc00   mov dword [0xbc2380], ecx   ; [0xbc2380:4]=0\n\u2502           0x004036c4      8d0449         lea eax, [ecx + ecx*2]\n\u2502           0x004036c7      c1e003         shl eax, 3\n\u2502           0x004036ca      2bc1           sub eax, ecx\n\u2502           0x004036cc      8d0440         lea eax, [eax + eax*2]\n\u2502           0x004036cf      8d0480         lea eax, [eax + eax*4]\n\u2502           0x004036d2      8934855823..   mov dword [eax*4 + 0xbc2358], esi ; [0xbc2358:4]=0\n\u2502           0x004036d9      e8b2390100     call fcn.00417090\n\u2502           0x004036de      8b158023bc00   mov edx, dword [0xbc2380]   ; [0xbc2380:4]=0\n\u2502           0x004036e4      6a20           push 0x20                   ; 32\n\u2502           0x004036e6      8d0c52         lea ecx, [edx + edx*2]\n\u2502           0x004036e9      c1e103         shl ecx, 3\n\u2502           0x004036ec      2bca           sub ecx, edx\n\u2502           0x004036ee      8d0c49         lea ecx, [ecx + ecx*2]\n\u2502           0x004036f1      8d0c89         lea ecx, [ecx + ecx*4]\n\u2502           0x004036f4      89048d8423..   mov dword [ecx*4 + 0xbc2384], eax ; [0xbc2384:4]=0\n\u2502           0x004036fb      8b0d8023bc00   mov ecx, dword [0xbc2380]   ; [0xbc2380:4]=0\n\u2502           0x00403701      8d0449         lea eax, [ecx + ecx*2]\n\u2502           0x00403704      c1e003         shl eax, 3\n\u2502           0x00403707      2bc1           sub eax, ecx\n\u2502           0x00403709      8b4c2430       mov ecx, dword [arg_30h]\n\u2502           0x0040370d      8d0440         lea eax, [eax + eax*2]\n\u2502           0x00403710      8d1480         lea edx, [eax + eax*4]\n\u2502           0x00403713      8d04956423..   lea eax, [edx*4 + 0xbc2364]\n\u2502           0x0040371a      50             push eax\n\u2502           0x0040371b      56             push esi\n\u2502           0x0040371c      51             push ecx\n\u2502           0x0040371d      e85e530b00     call fcn.004b8a80\n\u2502           0x00403722      8b442434       mov eax, dword [arg_34h]\n\u2502           0x00403726      89742418       mov dword [var_18h], esi\n\u2502           0x0040372a      89742420       mov dword [var_20h], esi\n\u2502           0x0040372e      89742424       mov dword [var_24h], esi\n\u2502           0x00403732      b906000000     mov ecx, 6\n\u2502           0x00403737      8d742418       lea esi, [var_18h]\n\u2502           0x0040373b      8bf8           mov edi, eax\n\u2502           0x0040373d      83c410         add esp, 0x10\n\u2502           0x00403740      c744241874..   mov dword [var_18h_2], 0x567c74 ; 't|V'\n\u2502                                                                      ; [0x567c74:4]=0\n\u2502           0x00403748      f3a5           rep movsd dword es:[edi], dword [esi]\n\u2502           0x0040374a      5f             pop edi\n\u2502           0x0040374b      5e             pop esi\n\u2502           0x0040374c      83c418         add esp, 0x18\n\u2514           0x0040374f      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
+  ]
+}

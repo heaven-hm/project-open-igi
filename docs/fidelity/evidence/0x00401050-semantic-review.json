@@ -1,0 +1,68 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "reviewed": true,
+ "reviewed_by": "deepseek-smart-workflow (paired-capture-assisted static review)",
+ "address": "0x00401050",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "7f9e768cf7a81fb22956a042f9ce40212a51b5d1d91838c647cf56e18af978da",
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "passed",
+   "note": "Reviewed against retail 0x00401050 disassembly (0x00401050-0x00401094) and the paired sequential capture: dispatch index 125, Flow phase-1 handler, loop status byte 1."
+  }
+ ],
+ "runtime_contract": {
+  "scope": "qtask-open-event-dispatch-v1: per-frame Flow dispatch entry",
+  "probe_sha256": "a6fbcc2ab15519a8d12552cde9d2fda16c408f87067b9d72b14975e1ad92a57b",
+  "required_observables": {
+   "inputs": [
+    "record_present",
+    "record_readable",
+    "dispatch_index"
+   ],
+   "outputs": [
+    "handler_nonzero",
+    "handler_role"
+   ],
+   "sideEffects": [
+    "status_byte_after"
+   ]
+  },
+  "no_side_effects": false,
+  "note": "Compared over the common call prefix of a sequential retail-then-candidate capture at the same level and windowed mode. handler_role is the phase-1 handler the dispatch class resolves to (Flow), not a symbol string: the two programs are built from different sources, so symbol names cannot be equal across images even when the emitted code is the same function. Disassembly confirms both entries execute the Flow phase-1 body.",
+  "handler_role_rule": "An implementation satisfies the handler observable when the entry it selects runs the Flow phase-1 handler body, evidenced by the probe observing a non-null code pointer into that function's code range in each image. Raw VAs and symbol names are explicitly not compared."
+ }
+}

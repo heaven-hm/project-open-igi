@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "kind": "superseded-evidence-index",
+  "generated_at": "2026-10-22T23:00:53+00:00",
+  "note": "Archived copies of evidence files that were stale, non-executable or fabricated for the 0x004C6670/0x004C6760/0x00505E40/0x00506F00/0x004F82B0/0x004C5F00/0x004C6240/0x004D14E0/0x00510010/0x00512C30 records. Originals were replaced in place; these copies are history and are not current evidence.",
+  "entries": [
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6670-behavioral.json",
+      "original_sha256": "dc978dd8b0bc2cbb996137573510dc65a54a49fdc3459ecb30f9f47f57149442",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6670-behavioral-dc978dd8b0bc.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6670-semantic-review.json",
+      "original_sha256": "80ef5233d97ab81afa4dbe02d2c78243758c3361b03eda7086b389dfca6c5787",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6670-semantic-review-80ef5233d97a.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6760-behavioral.json",
+      "original_sha256": "fbd10b0639f7551a9e694b17aae9bc20e180933792f8e06a035d6a7de585befd",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6760-behavioral-fbd10b0639f7.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6760-semantic-review.json",
+      "original_sha256": "e9515c3fe076d640809b31c623ac959549ebcad482772d1adb6caf533c308ae1",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6760-semantic-review-e9515c3fe076.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00505E40-behavioral.json",
+      "original_sha256": "09d4ab9285b39b541434e04339f8b5586c4060c6ed4b9411581310be5df08bd8",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00505E40-behavioral-09d4ab9285b3.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00505E40-semantic-review.json",
+      "original_sha256": "9ca77eece4bcede2b64382f0a076cf21c47c4e03aaf3458eabcc1dda7b394b00",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00505E40-semantic-review-9ca77eece4bc.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00506F00-behavioral.json",
+      "original_sha256": "e5a863f564818d80d0f21891e70219dccd4a53c7eebd6818149a494940256bf1",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00506F00-behavioral-e5a863f56481.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00506F00-semantic-review.json",
+      "original_sha256": "6875823ea984a44b92c60d97098d8e189ad6b95ce4c86d0cee9a7868031788fb",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00506F00-semantic-review-6875823ea984.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004F82B0-behavioral.json",
+      "original_sha256": "ef60b8a0ad49c5174547a0758c32e88dff771bd1cd3e8ff3e687c6a5f4728fcc",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004F82B0-behavioral-ef60b8a0ad49.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004F82B0-semantic-review.json",
+      "original_sha256": "7bba751bb79b2cfd7f12e0e0edd4d7eca371c97da25ff727ce97321608053b83",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004F82B0-semantic-review-7bba751bb79b.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C5F00-behavioral.json",
+      "original_sha256": "6837e0bb240565c3b3ac63a4cd1d7e6ffa8c56cc4423f00e2f5fa1b23f5407eb",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C5F00-behavioral-6837e0bb2405.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C5F00-semantic-review.json",
+      "original_sha256": "aea926edcf3ae8e88847285c5f11b93b02b07142af4942c87ce19bb1f4982057",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C5F00-semantic-review-aea926edcf3a.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
+      "original_sha256": "26b4d978907ecb2eb5a27357664b6de063955268db2474a50ec3a8eca3357bcb",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6240-behavioral-26b4d978907e.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
+      "original_sha256": "ed28675ba349fe0e59ab204a89809f630134b1c0a266acc8ac9dd84c3562e75c",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004C6240-semantic-review-ed28675ba349.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004D14E0-behavioral.json",
+      "original_sha256": "cc7cb56111ea12b87f1efb01882123efd6158b8d5068561d8fcce22141b0aa09",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004D14E0-behavioral-cc7cb56111ea.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004D14E0-semantic-review.json",
+      "original_sha256": "48f7701f4552baf44d0ad3bb33791b6ed2896479ce31092b79dda407aef14bee",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004D14E0-semantic-review-48f7701f4552.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00510010-behavioral.json",
+      "original_sha256": "0c180415c4e684fd9517c8cf2bdd4dac1d1b080d4fca56d859fe3281db505fb6",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00510010-behavioral-0c180415c4e6.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00510010-semantic-review.json",
+      "original_sha256": "a032d67ea314a7d45031c6eed35da308710d5dcb9e9ea51904b46139b1443314",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00510010-semantic-review-a032d67ea314.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00512C30-behavioral.json",
+      "original_sha256": "265312d51c3e943c2a72705c70838e9631d567e94a1014a57cfd59d3622d7a7f",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00512C30-behavioral-265312d51c3e.json",
+      "kind": "behavioral",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x00512C30-semantic-review.json",
+      "original_sha256": "80a1419e2e549fa1dc1e55e9a3f7e5838dacbb4d9f9c0713c815da5621355609",
+      "archived_path": "docs/fidelity/evidence/superseded/0x00512C30-semantic-review-80a1419e2e54.json",
+      "kind": "semantic-review",
+      "reason": "stale implementation binding and/or non-executable or fabricated behavioral claims; replaced by current evidence"
+    },
+    {
+      "original_path": "docs/fidelity/evidence/0x004F82B0-frida-paired-20261021.json",
+      "original_sha256": "dc976680f6a8c325d7eae87027479abcc987da8369d8a3c604a7b00636938064",
+      "archived_path": "docs/fidelity/evidence/superseded/0x004F82B0-frida-paired-20261021-dc976680f6a8.json",
+      "kind": "frida-paired",
+      "reason": "paired capture is bound to an older implementation and candidate build (133d9d... / 185c61...), not the current source; not cited as evidence"
+    }
+  ]
+}

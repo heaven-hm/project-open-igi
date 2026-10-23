@@ -3,6 +3,7 @@
 ## Active branch and checkout
 
 - Integration branch: `mvp/level1-integration`.
+- Current executable: `igi1.exe`; the retail reference remains `igi.exe`. The older `open-igi.exe` is a separate diagnostic output.
 - Work only in `/Users/haseeb-mir/Documents/Code/project-open-igi` for this plan. Do not create another worktree.
 - Preserve and integrate the existing Codex and DeepSeek work, including captured uncommitted changes. Existing worktrees are retained for recovery; they are not additional execution lanes under this plan.
 - One coordinator owns writes, Git staging/commits, shared manifests and the candidate build. Subagents may investigate independently, but only one implementation writer may modify this checkout at a time. Runtime capture is serialized through the shared lease. Do not let separate harnesses switch branches, overwrite the executable, or edit the same files concurrently.
@@ -67,6 +68,43 @@ The owner requested `./build_no_verify.sh` for the integration build. It disable
 On 2026-10-23, Codex's checkout had 885 manifest records and five referenced paired-runtime comparison files whose hashes matched the manifest. DeepSeek's checkout had 881 records and 95 referenced runtime reports whose hashes matched, all reporting observed retail and candidate calls. Only 56 of those 95 reports' implementation hashes matched the then-current source files. This is partial coverage, not verification of every native; all counts are pre-integration snapshots and require rechecking after merge.
 
 The automatic pipeline also has known missed-path discovery, optional fresh-intake and empty-scope concerns recorded below. Do not confuse the existence of automation with evidence that every required native was successfully tested.
+
+## Automated checks on this branch
+
+CMake now exposes `verify-native-static` and `verify-native-runtime`. With `BUILD_TESTING=ON`, CTest registers a scope fixture, one candidate-build receipt fixture and separate static/runtime tests for every selected native. The default Windows test scope comes from the configured `igi` target sources, with static coverage for compile-only object dependencies too; this is not all catalog entries. Compile-only natives explicitly block runtime acceptance until linked. Explicit addresses select a declared smaller investigation.
+
+For example, configure host-side checks for two startup natives (these are not gameplay coverage):
+
+```sh
+cmake -S . -B build-native-checks \
+  -DIGI_VERIFICATION_ONLY=ON -DBUILD_TESTING=ON \
+  '-DIGI_NATIVE_TEST_ADDRESSES=0x0048F0C0;0x0048F0D0'
+ctest --test-dir build-native-checks -L infrastructure --output-on-failure
+ctest --test-dir build-native-checks -L static --output-on-failure
+```
+
+For paired runtime, configure `IGI_NATIVE_TEST_PROBE` with a reviewed typed probe, or `IGI_NATIVE_TEST_PROBE_MAP` with a JSON address-to-probe-path mapping. Explicit `verification.runtime_probe.path` entries in the manifest are also supported. A probe's hash must match that native's reviewed semantic contract; no generic raw-word probe is substituted. Set `IGI_NATIVE_TEST_LEVEL` to the scenario's level, then run:
+
+```sh
+ctest --test-dir build-native-checks -L runtime --output-on-failure
+```
+
+CTest builds/binds one candidate receipt fixture and reuses it with per-native `--skip-build` checks. Runtime remains serialized and uses the existing cross-process lease. The bridge checks for active games before any behavioral backend and blocks known live Frida runners without their own lease; it never kills another game. Missing probes, tools, receipts, observations or matching identities fail the tests rather than becoming passes.
+
+Static collection means Binary Ninja/Radare2/angr observations were gathered; it does not mean semantic equivalence or native acceptance. Full runtime acceptance still goes through the existing strict source-semantic/behavioral gate, fresh paired capture and typed comparator. A pinned test-scope/source/manifest fingerprint prevents CTest silently missing new changes: rerun CMake after edits. `changed` scope blocks shared-header/build changes unless the complete affected closure is explicitly supplied; prefer compiled scope for those.
+
+Infrastructure checks are generated validator fixtures, never retail observations. Their passing count is not a count of accepted natives. The diagnostic script still uses `BUILD_TESTING=OFF`; verification is a separate, explicit action, not a hidden claim made by `build_no_verify.sh`.
+
+### Integration and check status (2026-10-23)
+
+- Source from the captured main/Codex/DeepSeek snapshots is combined in this checkout; three subsequent Codex source changes and their four updated native records were also included. Recovery refs and the original staged/unstaged stash are retained. No worktree was created.
+- `Qvm_Execute` / QVM argument helpers and the human-player/config definitions are compile-only objects, not linked gameplay. Their unresolved retail callees/state remain a player-loop blocker; static compilation cannot approve their runtime wiring.
+- The combined `igi1.exe` built successfully with `build_no_verify.sh` and was copied to `/Users/haseeb-mir/Downloads/IGI/igi1.exe`. This is **UNVERIFIED DIAGNOSTIC** output.
+- Thirty-one CTest-bridge infrastructure regressions pass. The configured scope fixture passed for the two startup example addresses.
+- An actual static CTest ran Radare2 and angr successfully but blocked because the configured Binary Ninja HTTP service at `127.0.0.1:24642` refused the calls. This is not a static-pass claim.
+- The newly launched combined diagnostic writes `igi.log` and showed roughly 7 FPS in the observed interval against its 30 FPS target; playable performance remains open.
+- The initial runtime fixture blocked without a configured reviewed typed probe. No new paired-runtime acceptance is claimed. An older diagnostic game session was present during setup; it was not terminated by the test bridge.
+- The normal merge-commit hook requires `VERIFIED` and blocks on incomplete/stale native evidence. For this integration only, `IGI_ALLOW_UNVERIFIED_DIAGNOSTIC_MERGE=1` runs the structural-only gate and explicitly allows the diagnostic integration commit even when that gate blocks. It saves the machine-readable report and full log under `build/native-gate-diagnostic-report.json` and `build/native-gate-diagnostic.log`, prints the failure, and never labels the result verified. This exception records integration progress only; it does not verify native behavior or gameplay.
 
 ## Full MVP acceptance
 

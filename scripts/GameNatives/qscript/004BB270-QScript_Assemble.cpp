@@ -1,6 +1,6 @@
 // IGI native provenance: QScript_Assemble - 0x004BB270 - CFG score 98.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004BB270-QScript_Assemble.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004BB270-QScript_Assemble.hpp"
+#include "QScript_Assemble.h"
 int QScript_Assemble(void* context, void* arg2)
 
 // Sig: int QScript_Assemble(char* srcText, int srcLen2)

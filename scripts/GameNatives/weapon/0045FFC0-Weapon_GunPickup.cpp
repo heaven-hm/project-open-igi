@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_GunPickup - 0x0045FFC0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0045FFC0-Weapon_GunPickup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0045FFC0-Weapon_GunPickup.hpp"
+#include "Weapon_GunPickup.h"
 int Weapon_GunPickup(void* context, int* arg2)
 
 // Sig: void Weapon_GunPickup(void* player, void* pickupEntity)

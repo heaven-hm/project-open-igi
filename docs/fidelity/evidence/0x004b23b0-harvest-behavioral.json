@@ -1,0 +1,425 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "result": "passed",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "address": "0x004B23B0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+ "method": "Retail and the compiled candidate both execute the native with both renderer callbacks modelled by the same fold over the twelve packet slots; the primary fold is recorded so the dispatch order is compared, and the secondary fold is the compared return value.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "retail_execution": {
+  "tool": "angr",
+  "engine": "VEX",
+  "version": "10.0.4.post1",
+  "function_entry": "0x004B23B0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_sha256": "8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885"
+ },
+ "cases": [
+  {
+   "id": "arg3-0x0000",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x0000",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 49188,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49188
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 49188,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49188
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x0001",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x0001",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 49189,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49189
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 49189,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49189
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x007f",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x007F",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 49315,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49315
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 49315,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49315
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x0080",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x0080",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 49316,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49316
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 49316,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49316
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x00ff",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x00FF",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 49443,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49443
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 49443,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 49443
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x1000",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x1000",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 53284,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 53284
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 53284,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 53284
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0x1234",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0x1234",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 53848,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 53848
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 53848,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 53848
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  },
+  {
+   "id": "arg3-0xffff",
+   "input": {
+    "args": [
+     "0x3000",
+     "0x4000",
+     "0xFFFF",
+     "5",
+     "6",
+     "7",
+     "8",
+     "9",
+     "0x5000"
+    ],
+    "initial_state": {
+     "backend_id": 42,
+     "upload_flag": 1,
+     "dispatch_slots": [
+      0,
+      1
+     ]
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 114723,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 114723
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 114723,
+    "state_delta": {
+     "backend_id": 42,
+     "primary_packet_fold": 114723
+    },
+    "side_effects": [
+     "call:primary[0]",
+     "call:secondary[1]"
+    ]
+   }
+  }
+ ]
+}

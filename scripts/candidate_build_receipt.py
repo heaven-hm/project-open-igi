@@ -37,10 +37,23 @@ def snapshot(root, build):
             'compiler': {'path': str(compiler.resolve()), 'sha256': digest(compiler)}}
 
 
+def stable_source_inputs(snapshot_value, root, build):
+    """Return repository inputs, excluding files regenerated inside the build tree."""
+    build = build.resolve()
+    return {
+        name: value
+        for name, value in snapshot_value['sources'].items()
+        if not (root / name).resolve().is_relative_to(build)
+    }
+
+
 def target_output(build):
     # The configured CMake linker rule is authoritative, not a caller's PE path.
-    directory = build / 'engine/platform/windows'
-    link = directory / 'CMakeFiles/open-igi.dir/link.txt'
+    links = list(build.glob('**/CMakeFiles/igi.dir/link.txt'))
+    if len(links) != 1:
+        raise ValueError('exactly one configured igi target linker rule is required')
+    link = links[0]
+    directory = link.parent.parent.parent
     commands = [shlex.split(line) for line in link.read_text().splitlines()]
     command = next(command for command in commands if '-o' in command)
     result = (directory / command[command.index('-o') + 1]).resolve()
@@ -51,8 +64,16 @@ def target_output(build):
 
 def compiled_inputs(root, build):
     output, command, directory = target_output(build)
-    object_dirs = {directory / 'CMakeFiles/open-igi.dir'}
+    object_dirs = {directory / 'CMakeFiles/igi.dir'}
+    link_inputs = list(command)
+    # CMake generators can keep static-library arguments in an @response file.
+    # Include those archives in the receipt so engine sources are bound too.
     for token in command:
+        if token.startswith('@'):
+            response = (directory / token[1:]).resolve()
+            if response.is_file():
+                link_inputs.extend(shlex.split(response.read_text()))
+    for token in link_inputs:
         if token.startswith('-') or not token.endswith('.a'):
             continue
         archive = (directory / token).resolve()
@@ -61,6 +82,12 @@ def compiled_inputs(root, build):
     sources, dependencies, objects = set(), {}, {}
     for object_dir in sorted(object_dirs):
         for dependency_file in sorted(object_dir.rglob('*.obj.d')):
+            object_file = dependency_file.with_suffix('')
+            # CMake can leave a dependency file behind when a source is removed
+            # from a target. It is not a compiled input unless its object still
+            # exists in the clean build.
+            if not object_file.is_file():
+                continue
             entries = shlex.split(dependency_file.read_text().split(':', 1)[1].replace(chr(92) + chr(10), ' '))
             if not entries:
                 raise ValueError('empty compiler dependency file')
@@ -70,7 +97,6 @@ def compiled_inputs(root, build):
             for entry in entries:
                 path = Path(entry).resolve()
                 dependencies[str(path)] = digest(path)
-            object_file = dependency_file.with_suffix('')
             objects[str(object_file.relative_to(build))] = digest(object_file)
     if not sources or not objects:
         raise ValueError('configured target has no recorded compiler inputs')
@@ -110,14 +136,15 @@ def main():
     configured, _, _ = target_output(build)
     candidate = (args.candidate or configured).resolve()
     if candidate != configured:
-        raise ValueError('--candidate must be the configured open-igi target output')
+        raise ValueError('--candidate must be the configured igi target output')
     receipt = args.receipt or root / 'build/diagnostic-candidate-build.json'
     before = snapshot(root, build)
-    command = ['cmake', '--build', str(build), '--target', 'open-igi', '--clean-first', '-j4']
+    command = ['cmake', '--build', str(build), '--target', 'igi', '--clean-first', '-j4']
     subprocess.run(command, cwd=root, check=True)
     after = snapshot(root, build)
-    if before != after:
-        raise ValueError('compiler inputs changed during the clean build; no receipt issued')
+    if (before['compiler'] != after['compiler'] or
+            stable_source_inputs(before, root, build) != stable_source_inputs(after, root, build)):
+        raise ValueError('source or compiler inputs changed during the clean build; no receipt issued')
     require_x86_pe(candidate)
     report = dict(schema_version=1, kind='diagnostic-candidate-build', result='built',
                   scope='Diagnostic compiler/source binding only; no native acceptance or deployment',

@@ -1,6 +1,6 @@
 // IGI native provenance: MagicObj_GetEventId - 0x004D9FB0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9FB0-MagicObj_GetEventId.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9FB0-MagicObj_GetEventId.hpp"
+#include "MagicObj_GetEventId.h"
 int MagicObj_GetEventId()
 
 // Sig: unsigned char MagicObj_GetEventId(void)

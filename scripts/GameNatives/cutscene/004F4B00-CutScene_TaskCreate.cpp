@@ -1,6 +1,6 @@
 // IGI native provenance: CutScene_TaskCreate - 0x004F4B00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F4B00-CutScene_TaskCreate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "CutScene_TaskCreate.hpp"
+#include "CutScene_TaskCreate.h"
 int* CutScene_TaskCreate()
 
 // Sig: void* CutScene_TaskCreate(void)

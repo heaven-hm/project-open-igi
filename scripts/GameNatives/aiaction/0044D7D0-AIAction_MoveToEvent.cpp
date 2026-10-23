@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_MoveToEvent - 0x0044D7D0 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D7D0-AIAction_MoveToEvent.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D7D0-AIAction_MoveToEvent.hpp"
+#include "AIAction_MoveToEvent.h"
 int AIAction_MoveToEvent(int context, float arg2 )
 
 // Sig: void AIAction_MoveToEvent(int eventId, int flags)

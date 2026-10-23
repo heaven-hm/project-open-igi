@@ -1,6 +1,6 @@
 // IGI native provenance: MovieSubtitle_RegisterFont - 0x004151E0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004151E0-MovieSubtitle_RegisterFont.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004151E0-MovieSubtitle_RegisterFont.hpp"
+#include "MovieSubtitle_RegisterFont.h"
 int MovieSubtitle_RegisterFont(int context, int arg2, float arg3)
 
 // Sig: void MovieSubtitle_RegisterFont(...)

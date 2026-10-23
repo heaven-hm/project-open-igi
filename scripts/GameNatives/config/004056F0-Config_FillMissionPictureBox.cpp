@@ -1,6 +1,6 @@
 // IGI native provenance: Config_FillMissionPictureBox - 0x004056F0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004056F0-Config_FillMissionPictureBox.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004056F0-Config_FillMissionPictureBox.hpp"
+#include "Config_FillMissionPictureBox.h"
 int Config_FillMissionPictureBox(int context)
 
 // Sig: void Config_FillMissionPictureBox()

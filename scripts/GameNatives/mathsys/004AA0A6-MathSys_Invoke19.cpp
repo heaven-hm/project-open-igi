@@ -1,7 +1,8 @@
 // IGI native provenance: MathSys_Invoke19 - 0x004AA0A6 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004AA0A6-MathSys_Invoke19.md; Binary Ninja/Radare2 CFG record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AA0A6-MathSys_Invoke19.hpp"
-void* MathSys_Invoke19("regparm") MathSys_Invoke19(int arg1, char* arg2)
+#include "MathSys_Invoke19.h"
+
+void* __convention("regparm") MathSys_Invoke19(int arg1, char* arg2)
 
 {
     char* data_val = arg2;

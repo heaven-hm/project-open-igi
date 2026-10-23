@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_ResetMatrix_5 - 0x004A5955 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A5955-Camera_ResetMatrix_5.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A5955-Camera_ResetMatrix_5.hpp"
-int Camera_ResetMatrix_5(long double context )
+#include "Camera_ResetMatrix_5.h"
+int _test_whether_TOS_is_int(long double context )
 
 {
     long double fpu7 = roundl(context);

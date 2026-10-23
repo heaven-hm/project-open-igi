@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x0040DA40",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f28fadce4c6f8ddfaf422e66ca7ecf12d120ab175f08dc72e16912ef8da1d98d",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x0040DA40 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/humanplayer/0040DA40-HumanPlayer_LoadParameters_7.cpp at sha256 f28fadce4c6f8ddfaf422e66ca7ecf12d120ab175f08dc72e16912ef8da1d98d (recorded implementation.signature: unresolved). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x0040DA40",
+    "name": "HumanPlayer_LoadParameters_7",
+    "binary_ninja_name": "HumanPlayer_LoadParameters_7",
+    "signature": "void*(void* arg1, struct human_player* arg2)",
+    "start": "0x0040DA40",
+    "end": "0x40da71",
+    "basic_blocks": 1,
+    "edges": [],
+    "cfg_similarity": 1.0,
+    "summary": "One block 0x40DA40-0x40DA71 (50 bytes): byte [arg2+0x33D]=0; Human_StateAnimation(arg2,[arg1+0x10],0); HumanPlayer_CheckCollision_9(arg2,0) returns EAX; dword [arg1+0x14]=0x0040DA80 (HumanPlayer_UpdateMotion_6); return CheckCollision's EAX. add esp,0x14 cleans 3+2 argument words.",
+    "blocks": [
+      {
+        "address": "0x0040da40",
+        "start": "0x40da40",
+        "end": "0x40da72",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Human_StateAnimation",
+      "HumanPlayer_CheckCollision_9"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/humanplayer/0040DA40-HumanPlayer_LoadParameters_7.cpp",
+    "sha256": "f28fadce4c6f8ddfaf422e66ca7ecf12d120ab175f08dc72e16912ef8da1d98d",
+    "signature": "unresolved",
+    "status_after_review": "STRUCTURALLY_VERIFIED",
+    "summary": "One block 0x40DA40-0x40DA71 (50 bytes): byte [arg2+0x33D]=0; Human_StateAnimation(arg2,[arg1+0x10],0); HumanPlayer_CheckCollision_9(arg2,0) returns EAX; dword [arg1+0x14]=0x0040DA80 (HumanPlayer_UpdateMotion_6); return CheckCollision's EAX. add esp,0x14 cleans 3+2 argument words."
+  },
+  "candidate_comparison": {
+    "result": "match",
+    "divergences": [],
+    "statement": "No candidate divergence found in the checked dimensions."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x0040DA40 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/humanplayer/0040DA40-HumanPlayer_LoadParameters_7.cpp (sha256 f28fadce4c6f8ddfaf422e66ca7ecf12d120ab175f08dc72e16912ef8da1d98d). One block 0x40DA40-0x40DA71 (50 bytes): byte [arg2+0x33D]=0; Human_StateAnimation(arg2,[arg1+0x10],0); HumanPlayer_CheckCollision_9(arg2,0) returns EAX; dword [arg1+0x14]=0x0040DA80 (HumanPlayer_UpdateMotion_6); return CheckCollision's EAX. add esp,0x14 cleans 3+2 argument words."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "Retail reads arg2 from [E+8] (push esi \u2192 mov esi,[esp+0xc]) and arg1 from [E+4] (push edi \u2192 mov edi,[esp+0xc]); it is plain cdecl with two 4-byte pointer arguments and no callee cleanup. BN records void*(void* arg1, struct human_player* arg2); the candidate declares void** HumanPlayer_LoadParameters_7(void* context, void* arg2) \u2014 same convention, same two stack slots, same EAX return register; only the pointee type of the returned pointer is spelled void** instead of void*."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "Retail reads arg2 from [E+8] (push esi \u2192 mov esi,[esp+0xc]) and arg1 from [E+4] (push edi \u2192 mov edi,[esp+0xc]); it is plain cdecl with two 4-byte pointer arguments and no callee cleanup. BN records void*(void* arg1, struct human_player* arg2); the candidate declares void** HumanPlayer_LoadParameters_7(void* context, void* arg2) \u2014 same convention, same two stack slots, same EAX return register; only the pointee type of the returned pointer is spelled void** instead of void*."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 1 block(s)/0 edge(s) at 0x0040DA40; radare2 recovers the identical 1 block(s)/0 edge(s) (score 1.0000); angr CFGFast recovers 3 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Retail calls 0x00489E70 Human_StateAnimation(arg2,[arg1+0x10],0) and 0x004137E0 HumanPlayer_CheckCollision_9(arg2,0), in that order, then add esp,0x14. The candidate calls the same two symbols with the same arguments and returns the second call's value."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Byte store 0 at +0x33D; context field +0x10; function-pointer slot +0x14 = 0x0040DA80; the zero float words are the same zero words pushed retail (push 0x0)."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "Byte write [arg2+0x33D] (retail mov byte), dword read [arg1+0x10], dword function-pointer write [arg1+0x14]; no locals, no other accesses."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "The single block has no branch; EAX is HumanPlayer_CheckCollision_9's return and is returned unchanged. The function-pointer store cannot fault before the returns."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "The only floating-point-looking operands are the two constant 0.0f arguments; retail pushes integer zero words and the block contains no x87 instruction, so there is no floating-point arithmetic to check.",
+      "rationale": "The only floating-point-looking operands are the two constant 0.0f arguments; retail pushes integer zero words and the block contains no x87 instruction, so there is no floating-point arithmetic to check."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"void*(void* arg1, struct human_player* arg2)\" at 0x0040DA40; radare2 recovers \"fcn.0040da40 (int32_t arg_ch_2, int32_t arg_ch);\". Both tools place the entry at 0x0040DA40 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: unresolved."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x0040DA40-binaryninja.json",
+      "evidence_sha256": "87a80e845ff0f8913474ed6c425de8c2107092bbe65dd623106da488d5df42cd",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x0040DA40-radare2.json",
+      "evidence_sha256": "45504f937af2b35eb0f4647a19ce45d4baced0c9706bdea4e981f67187c73a5a",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x0040DA40-angr-20261023.json",
+      "evidence_sha256": "9bdea8f45ecc4869ca48f8550144c34607e2691987b04f122c6322d93961b1c4",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate return type is void** where BN records void*; the 32-bit return register and value are unchanged."
+  ]
+}

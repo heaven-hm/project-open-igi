@@ -46,7 +46,7 @@ struct LoopTerrainTextureFile
     // Signature: std::span<const std::byte> -> LoopTerrainTextureFile differs from retail void*(int32_t, int32_t, const char*).
     // Usage/tests: Used by host LOOP texture inspection tests.
     [[nodiscard]] static LoopTerrainTextureFile
-    Host_ParseTerrainTextureFile(std::span<const std::byte> file_bytes);
+    Terrain_ParseTextureFile(std::span<const std::byte> file_bytes);
 };
 
 struct LoopModelTextureFile
@@ -65,7 +65,7 @@ struct LoopModelTextureFile
     // Confidence: partial host parser adapter; literal native dispatch is in texture_loaders.cpp.
     // Signature: std::span<const std::byte> -> LoopModelTextureFile differs from retail int32_t(int32_t, int32_t, const char*).
     // Usage/tests: Used by host LOOP texture pixel decoder and inspection tests.
-    [[nodiscard]] static LoopModelTextureFile Host_ParseModelTextureFile(std::span<const std::byte> file_bytes);
+    [[nodiscard]] static LoopModelTextureFile DynObj_ParseModelTextureFile(std::span<const std::byte> file_bytes);
 };
 
 } // namespace igi::retail::texture

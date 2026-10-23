@@ -1,6 +1,6 @@
 // IGI native provenance: HumanPlayer_LoadParameters_11 - 0x00410370 - CFG score 93.8% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00410370-HumanPlayer_LoadParameters_11.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "HumanPlayer_LoadParameters_11.hpp"
+#include "HumanPlayer_LoadParameters_11.h"
 int HumanPlayer_LoadParameters_11(int* context, int arg2)
 
 {

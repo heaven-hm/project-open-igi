@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_Combat - 0x0044D160 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D160-AIAction_Combat.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D160-AIAction_Combat.hpp"
+#include "AIAction_Combat.h"
 int AIAction_Combat(int context, float arg2 )
 
 // Sig: void AIAction_Combat(int args)

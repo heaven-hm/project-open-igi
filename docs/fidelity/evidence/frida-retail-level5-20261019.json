@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "kind": "frida-retail-native-entry-observation",
+  "captured_at_utc": "2026-10-18T21:09:24Z",
+  "binary": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "loaded_module_path": "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi.exe",
+    "loaded_module_base": "0x00400000"
+  },
+  "launch": {
+    "working_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "arguments": [
+      "window",
+      "level5"
+    ],
+    "crossover_bottle": "open-igi",
+    "display_mode": "window"
+  },
+  "instrumentation": {
+    "tool": "Frida",
+    "version": "17.24.0",
+    "remote": "127.0.0.1:27042",
+    "attach_target": "igi.exe",
+    "observation_seconds": 25,
+    "hooks_attempted": 23,
+    "hooks_installed": 23,
+    "hook_install_failures": [],
+    "hook_addresses": "absolute retail VAs; loaded module base confirmed as 0x00400000"
+  },
+  "addresses": [
+    {
+      "address": "0x004A53B3",
+      "name": "Game_DataSymbolLoad",
+      "entry_count": 11896
+    },
+    {
+      "address": "0x004A5702",
+      "name": "String_VFormat",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004AF7B0",
+      "name": "Error_Show",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004AF8F0",
+      "name": "HeapList_Insert",
+      "entry_count": 12731
+    },
+    {
+      "address": "0x004B0C60",
+      "name": "Mem_Alloc",
+      "entry_count": 3308
+    },
+    {
+      "address": "0x004B24C0",
+      "name": "Texture_LoadLoopTextureFile",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B5AF0",
+      "name": "Resource_CanonicalizePath",
+      "entry_count": 4567
+    },
+    {
+      "address": "0x004B5B30",
+      "name": "Resource_CalculatePathHash",
+      "entry_count": 4567
+    },
+    {
+      "address": "0x004B5C90",
+      "name": "Resource_FreeNode",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B5F00",
+      "name": "Resource_Load",
+      "entry_count": 2858
+    },
+    {
+      "address": "0x004B5F80",
+      "name": "Resource_RegisterBuffer",
+      "entry_count": 5
+    },
+    {
+      "address": "0x004B6380",
+      "name": "Resource_Unload",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B7470",
+      "name": "Ilff_GetNextChunk",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B7490",
+      "name": "Ilff_GetFirstChunk",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B74D0",
+      "name": "Ilff_GetChunkPayload",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B7590",
+      "name": "Ilff_FindChunk",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004B80B0",
+      "name": "Qvm_Load",
+      "entry_count": 5
+    },
+    {
+      "address": "0x004CEAA0",
+      "name": "Ilff_FindFormChunk",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004CF080",
+      "name": "DynObj_LoadModelTexturePackage",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004CF300",
+      "name": "DynObj_LookupHashItem",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004CF390",
+      "name": "DynObj_LoadModelMesh",
+      "entry_count": 0
+    },
+    {
+      "address": "0x004CF790",
+      "name": "DynObj_LoadModelTextures",
+      "entry_count": 0
+    },
+    {
+      "address": "0x005175A0",
+      "name": "Terrain_LoadTexturePackage",
+      "entry_count": 0
+    }
+  ],
+  "limitations": [
+    "This is entry-count instrumentation only; arguments, return values, memory effects and path coverage were not captured.",
+    "A zero count means no hit during this 25-second Level 5 observation window, not that the game never uses the native.",
+    "This is not an IGI-Probe schema-1 load-phase trace and must not be used as the build gate runtime-trace input.",
+    "The observation does not establish behavioral equivalence of the reconstruction or promote any verification status."
+  ]
+}

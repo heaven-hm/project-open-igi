@@ -1,0 +1,351 @@
+{
+ "schema_version": 1,
+ "kind": "link-blocker-report",
+ "recorded_at": "2026-10-23T17:25:00Z",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "scope": "engine/src/retail/script/humanplayer_defines.cpp (0x00410070 DefineHumanPlayerGeneral, 0x004137A0 HumanPlayer_LoadParameters, 0x00405850 Config_Read)",
+ "unit": {
+  "source": "engine/src/retail/script/humanplayer_defines.cpp",
+  "source_sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+  "header": "engine/include/igi/retail/script/humanplayer_defines.hpp",
+  "header_sha256": "e98081a9b3ec4dd9b30fd06b45edc0a4b3508d1fd43a3ed6d6e2795136fe7eef",
+  "object": "build-clean-win32/CMakeFiles/igi_humanplayer_defines_object.dir/engine/src/retail/script/humanplayer_defines.cpp.obj",
+  "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+  "cmake_target": "igi_humanplayer_defines_object (OBJECT library, compile evidence only)",
+  "linked_into_igi": false
+ },
+ "candidate_executable": {
+  "path": "build-clean-win32/igi1.exe",
+  "sha256": "14ae511a32c0b5a78dd3faccb03934557945eed70b8c4be1ab4c4890bc782451"
+ },
+ "symbols_defined_in_the_object": [
+  {
+   "symbol": "_DefineHumanPlayerGeneral",
+   "nm_value": "0x00000000",
+   "type": "T",
+   "retail_va": "0x00410070"
+  },
+  {
+   "symbol": "_HumanPlayer_LoadParameters",
+   "nm_value": "0x000001D0",
+   "type": "T",
+   "retail_va": "0x004137A0"
+  },
+  {
+   "symbol": "_Config_Read",
+   "nm_value": "0x00000220",
+   "type": "T",
+   "retail_va": "0x00405850"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameters",
+   "nm_value": "0x00000240",
+   "type": "B",
+   "retail_va": "0x0056E1E8"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameterTableA",
+   "nm_value": "0x00000120",
+   "type": "B",
+   "retail_va": "0x005389F8"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameterTableB",
+   "nm_value": "0x00000000",
+   "type": "B",
+   "retail_va": "0x00538B08"
+  }
+ ],
+ "trial_link": {
+  "performed": true,
+  "result": "failed",
+  "method": "The igi link command from build-clean-win32/CMakeFiles/igi.dir/link.txt, with the igi_qvm_execute_object and igi_humanplayer_defines_object objects appended (i.e. exactly the link that moving both units into the igi source list produces).",
+  "exit_code": 1,
+  "undefined_symbol_count": 17,
+  "undefined_symbols": [
+   {
+    "symbol": "Config_SaveGraphicOptions",
+    "retail_address": "0x00405300",
+    "group": "config-natives"
+   },
+   {
+    "symbol": "Config_SaveSoundOptions",
+    "retail_address": "0x004058A0",
+    "group": "config-natives"
+   },
+   {
+    "symbol": "Config_NoD3DDriversWithHard",
+    "retail_address": "0x00405980",
+    "group": "config-natives"
+   },
+   {
+    "symbol": "Config_Language_2",
+    "retail_address": "0x00405B30",
+    "group": "config-natives"
+   },
+   {
+    "symbol": "Qvm_RunProgram_4BD080",
+    "retail_address": "0x004BD080",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_SourceBufferInit_4C0200",
+    "retail_address": "0x004C0200",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_SourceReaderInit_4BF1C0",
+    "retail_address": "0x004BF1C0",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ReadNextBlock_4BFC70",
+    "retail_address": "0x004BFC70",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ParseBlock_4BF1F0",
+    "retail_address": "0x004BF1F0",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ReleaseBlockTree_4BFA80",
+    "retail_address": "0x004BFA80",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ReleaseBlock_4BF8F0",
+    "retail_address": "0x004BF8F0",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ReleaseSourceReader_4BEFC0",
+    "retail_address": "0x004BEFC0",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_ReadIndexedArgument_4BD010",
+    "retail_address": "0x004BD010",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "Qvm_EvaluateArgumentValue_4B9660",
+    "retail_address": "0x004B9660",
+    "group": "qvm-execute"
+   },
+   {
+    "symbol": "igi::retail::script::g_a96598",
+    "retail_address": "0x00A96598",
+    "group": "qvm-state"
+   },
+   {
+    "symbol": "igi::retail::script::g_a965a0",
+    "retail_address": "0x00A965A0",
+    "group": "qvm-state"
+   },
+   {
+    "symbol": "igi::retail::script::g_a965a8",
+    "retail_address": "0x00A965A8",
+    "group": "qvm-state"
+   }
+  ]
+ },
+ "groups": [
+  {
+   "name": "config-natives",
+   "why": "Config_Read calls four separate retail config natives. They are not transcribed on this branch and have no other definition in the tree.",
+   "roots": [
+    "0x00405300",
+    "0x004058A0",
+    "0x00405980",
+    "0x00405B30"
+   ],
+   "closure_size": 13,
+   "closure_method": "Transitive `call` targets recovered by radare2 `af; pdf` over the four roots, bounded at 200 functions (13 reached). Indirect calls and tail jumps through registers are not followed, so the closure is a lower bound.",
+   "closure": [
+    {
+     "address": "0x00405300",
+     "name": "Config_SaveGraphicOptions",
+     "kind": "root",
+     "size_bytes": 248
+    },
+    {
+     "address": "0x004058A0",
+     "name": "Config_SaveSoundOptions",
+     "kind": "root",
+     "size_bytes": 209
+    },
+    {
+     "address": "0x00405980",
+     "name": "Config_NoD3DDriversWithHard",
+     "kind": "root",
+     "size_bytes": 417
+    },
+    {
+     "address": "0x00405B30",
+     "name": "Config_Language_2",
+     "kind": "root",
+     "size_bytes": 152
+    },
+    {
+     "address": "0x004062C0",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x004B12F0",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x004062D0",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x004A53B3",
+     "name": "sprintf (CRT; the port uses the C library)",
+     "kind": "CRT",
+     "size_bytes": null
+    },
+    {
+     "address": "0x004B13A0",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x00495E70",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x00495F30",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x00406220",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    },
+    {
+     "address": "0x004B11A0",
+     "name": "callee",
+     "kind": "callee",
+     "size_bytes": null
+    }
+   ],
+   "note": "0x004A53B3 is the CRT sprintf the four natives call; the port already links a C library, so it needs a mapping rather than a transcription. The nine remaining game functions are small setters/getters and are the cheapest part of the gap."
+  },
+  {
+   "name": "qvm-execute",
+   "why": "HumanPlayer_LoadParameters and Config_Read need Qvm_Execute (0x004B85B0), and DefineHumanPlayerGeneral needs Qvm_GetFloatArg (0x004B8A50). Both are transcribed in engine/src/retail/script/qvm_execute.cpp, which itself cannot link because its ten retail callees are not ported.",
+   "roots": [
+    "0x004BD080",
+    "0x004C0200",
+    "0x004BF1C0",
+    "0x004BFC70",
+    "0x004BF1F0",
+    "0x004BFA80",
+    "0x004BF8F0",
+    "0x004BEFC0",
+    "0x004BD010",
+    "0x004B9660"
+   ],
+   "closure_size": 45,
+   "closure_method": "The same bounded transitive `call` walk from the ten roots (45 reached, including the six already-ported functions listed below).",
+   "missing_count": 39,
+   "already_ported": [
+    {
+     "address": "0x004bcfd0",
+     "unit": "Qvm_ExecuteInstructions (qvm_stack_natives.cpp)"
+    },
+    {
+     "address": "0x004b0d10",
+     "unit": "qvm_native_loader.cpp"
+    },
+    {
+     "address": "0x004b0c60",
+     "unit": "input_port_process.cpp"
+    },
+    {
+     "address": "0x004b7e10",
+     "unit": "qvm_native_loader.cpp"
+    },
+    {
+     "address": "0x004af8f0",
+     "unit": "native_0048f970.cpp"
+    },
+    {
+     "address": "0x004af7b0",
+     "unit": "Debug_Error (retail_error.cpp)"
+    }
+   ],
+   "missing": [
+    "0x004bd080",
+    "0x004c0200",
+    "0x004bf1c0",
+    "0x004bfc70",
+    "0x004bf1f0",
+    "0x004bfa80",
+    "0x004bf8f0",
+    "0x004befc0",
+    "0x004bd010",
+    "0x004b9660",
+    "0x004bc960",
+    "0x004a53b3",
+    "0x004bef60",
+    "0x004bf1e0",
+    "0x004c01d0",
+    "0x004af960",
+    "0x00517260",
+    "0x004c0170",
+    "0x00517510",
+    "0x00517570",
+    "0x004bf390",
+    "0x004bf580",
+    "0x004bf3a0",
+    "0x004b9cd0",
+    "0x004b9120",
+    "0x004b9be0",
+    "0x004bcae0",
+    "0x004babb0",
+    "0x004b9040",
+    "0x004a54a0",
+    "0x00516ad3",
+    "0x004a6a50",
+    "0x004bf620",
+    "0x004bf850",
+    "0x004a5702",
+    "0x004b8ce0",
+    "0x004a5500",
+    "0x004b9ca0",
+    "0x005169b0"
+   ],
+   "note": "This group contains the QVM expression evaluator (0x004B9660), the block parser (0x004BF1F0), the source reader (0x004BF1C0/0x004BFC70), the block-tree teardown (0x004BFA80/0x004BF8F0) and the helper set they share; it is roughly 12 KB of retail code and is the real blocker for linking the human player natives."
+  },
+  {
+   "name": "qvm-state",
+   "why": "qvm_execute.cpp needs three QVM state words that qvm_native_loader.cpp currently keeps in an anonymous namespace, so they are internal there and have no external definition.",
+   "missing": [
+    "igi::retail::script::g_a96598 (0x00A96598)",
+    "igi::retail::script::g_a965a0 (0x00A965A0)",
+    "igi::retail::script::g_a965a8 (0x00A965A8)"
+   ],
+   "note": "Giving these three words external linkage is a definition change in an existing unit, not a new native; it was not made here because the ten QVM functions still block the link."
+  }
+ ],
+ "conclusion": "The three natives are transcribed and compile, and their 17 remaining link dependencies are exactly the four untranscribed config natives and the QVM execute closure plus three state words. The premise that five symbols (Qvm_Execute plus the four config natives) would be enough is incomplete: Qvm_Execute's own unit pulls in a 45-function QVM closure. The unit therefore stays on its OBJECT target and is absent from build-clean-win32/igi1.exe.",
+ "limitations": [
+  "Closure lists come from a bounded static `call` walk; indirect calls, register tail-jumps and callbacks are not followed, so both lists are lower bounds.",
+  "The trial link reports 17 undefined symbols; linking would additionally need whatever the 39 missing QVM functions call.",
+  "No runtime capture exists for any of the three natives."
+ ]
+}

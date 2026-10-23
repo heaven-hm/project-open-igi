@@ -1,0 +1,53 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x004B7570",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd",
+ "executed": true,
+ "performed_at": "2026-10-23T07:06:09Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/sys/ilff_navigation.cpp -o /tmp/taskb-build/ilff_navigation.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS and the engine/include include path."
+ },
+ "object": {
+  "path": "/tmp/taskb-build/ilff_navigation.o",
+  "sha256": "2fcfe850e8cad0803d68314c492776d61439a95b57676dfa09a392b8ba85b2a2",
+  "size_bytes": 1811,
+  "format": "pe-i386 relocatable object",
+  "symbol": "igi::retail::sys::Ilff_GetFormType(void const*)",
+  "symbol_offset": 400,
+  "symbol_size_bytes": 32,
+  "function_bytes_hex": "8b44240485c074088b4010c38d74260031c0c32e8d7426002e8db42600000000",
+  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding.",
+  "function_bytes_length": 32
+ },
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 1e1ef698d1e7ec74b247f9f9bf8cb28ec12d7f1a38cf1532d50d3cd981ebe0bd, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_sequence",
+   "result": "passed",
+   "detail": "The object label for igi::retail::sys::Ilff_GetFormType(void const*) spans 32 bytes at offset 0x190; 32 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
+  "No runtime path was executed by this build report."
+ ]
+}

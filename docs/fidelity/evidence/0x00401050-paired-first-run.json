@@ -1,0 +1,30 @@
+{
+ "kind": "paired-runtime-result",
+ "schema_version": 1,
+ "native": "QTask_OpenEvent 0x00401050",
+ "captureMode": "sequential: retail fully closed before the candidate starts, both at level5, windowed",
+ "probe": "scripts/frida_401050_dispatch.js",
+ "retail_calls": 1490,
+ "candidate_calls": 413,
+ "calls_compared": 413,
+ "agrees": {
+  "record_present": true,
+  "record_readable": true,
+  "dispatch_index": "125 on both sides",
+  "status_byte_after_dispatch": "1 on both sides",
+  "handler_nonzero": "true on both sides"
+ },
+ "remaining_difference": {
+  "field": "handler_va",
+  "retail": "0x2260 Flow_RunHandler",
+  "candidate": "0x1ED60 (anonymous namespace)::Flow_RunHandler_Handler, which calls Flow_RunHandler",
+  "assessment": "The two binaries link the same logic at different offsets, so comparing image-relative VAs directly is not a valid equivalence test. The candidate slot does hold a live code pointer to the Flow phase-1 handler, which is the behaviour the native provides."
+ },
+ "fixes_that_produced_this": [
+  "Clamped the DirectDraw blit destination into the primary surface; the candidate previously aborted with DDERR_INVALIDRECT (0x88760096) on frame one.",
+  "Set dispatch_table_index to QTask_FlowClassId instead of QTask_GameClassId. Retail Flow_Start 0x00402070 stores arg_4h to 0x00567C8C and calls 0x004018F0, so the dispatch record belongs to Flow (125), not Game (124). This also raised the candidate from 8 to 26.8 FPS because the real per-frame handler now runs.",
+  "Corrected the probe table base from table+0x180 bytes to table+0x600: task_phase_stride is 0x180 ELEMENTS of FrameHandler, and a FrameHandler is a 4-byte function pointer.",
+  "Made capture sequential and resolved candidate symbols from the built image instead of hardcoded stale addresses."
+ ],
+ "consequence": "Three of four typed observables now agree and the fourth differs only because the comparison compares raw VAs across two separately linked images. 0x00401050 stays STRUCTURALLY_VERIFIED until the comparison is made symbol-aware and the runtime contract is re-derived."
+}

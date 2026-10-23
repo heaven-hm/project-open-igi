@@ -1,6 +1,6 @@
 // IGI native provenance: Config_FillMissionTextBox - 0x00405760 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00405760-Config_FillMissionTextBox.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405760-Config_FillMissionTextBox.hpp"
+#include "Config_FillMissionTextBox.h"
 int Config_FillMissionTextBox(int context)
 
 // Sig: void Config_FillMissionTextBox()

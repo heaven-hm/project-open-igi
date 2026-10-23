@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x0048F1C0",
+  "symbol": "FX_FireBallUpdate_24",
+  "signature": "int32_t(char arg1)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x0048F1C0",
+    "end": "0x48f1ca",
+    "size_bytes": 11,
+    "basic_blocks": 1,
+    "instruction_count": 3
+  },
+  "bytes_hex": "0fbe442404a3ec8b5c00c39090909090",
+  "bytes_sha256": "03995a9be14a48b221fd32761e4ad5a0dfed9867643af72ec2bc9c5f41e8124c",
+  "cfg": {
+    "entry": "0x0048F1C0",
+    "nodes": [
+      {
+        "address": "0x0048f1c0",
+        "start": "0x48f1c0",
+        "end": "0x48f1cb",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "`asm\n  int32_t FX_FireBallUpdate_24(char arg1)\n\n0x48f1c0  movsx   eax, byte [esp+0x4]\n0x48f1c5  mov     dword [0x5c8bec], eax\n0x48f1ca  retn",
+  "pseudocode": "`bn-pseudoc\n  int32_t FX_FireBallUpdate_24(char arg1)\n\n{\n    int32_t result = arg1;\n    g_5c8bec = result;\n    return result;\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x48f1c0\"\narch: \"x86\"\nname: \"FX_FireBallUpdate_24\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x48f1c0\"\narch: \"x86\"\nname: \"FX_FireBallUpdate_24\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x48f629 | x86 | FX_Igimutex (0x48f530 (x86)) |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+  ]
+}

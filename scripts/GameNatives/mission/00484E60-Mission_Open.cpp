@@ -1,6 +1,6 @@
 // IGI native provenance: Mission_Open - 0x00484E60 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00484E60-Mission_Open.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00484E60-Mission_Open.hpp"
+#include "Mission_Open.h"
 int Mission_Open(int* context)
 
 // Sig: void Mission_Open(char **ptr_file)

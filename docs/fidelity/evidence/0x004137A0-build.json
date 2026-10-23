@@ -1,0 +1,60 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x004137A0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+ "header_sha256": "e98081a9b3ec4dd9b30fd06b45edc0a4b3508d1fd43a3ed6d6e2795136fe7eef",
+ "executed": true,
+ "command": "cmake --build build-clean-win32 -j8",
+ "target": "igi_humanplayer_defines_object (OBJECT library; compile evidence, not linked into igi)",
+ "compiler": "i686-w64-mingw32-g++ (MinGW-w64, Release, cxx_std_20)",
+ "target_platform": "Windows x86 (Intel 80386 COFF object)",
+ "object_path": "build-clean-win32/CMakeFiles/igi_humanplayer_defines_object.dir/engine/src/retail/script/humanplayer_defines.cpp.obj",
+ "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+ "candidate_executable": {
+  "path": "build-clean-win32/igi1.exe",
+  "sha256": "14ae511a32c0b5a78dd3faccb03934557945eed70b8c4be1ab4c4890bc782451"
+ },
+ "nm": [
+  {
+   "symbol": "_DefineHumanPlayerGeneral",
+   "value": "0x00000000",
+   "type": "T"
+  },
+  {
+   "symbol": "_HumanPlayer_LoadParameters",
+   "value": "0x000001D0",
+   "type": "T"
+  },
+  {
+   "symbol": "_Config_Read",
+   "value": "0x00000220",
+   "type": "T"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameters",
+   "value": "0x00000240",
+   "type": "B"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameterTableA",
+   "value": "0x00000120",
+   "type": "B"
+  },
+  {
+   "symbol": "_HumanPlayer_GeneralParameterTableB",
+   "value": "0x00000000",
+   "type": "B"
+  }
+ ],
+ "linked_into_igi": false,
+ "link": {
+  "attempted": true,
+  "result": "failed",
+  "undefined_symbol_count": 17,
+  "report": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json"
+ },
+ "note": "The whole tree builds and the unit compiles into its object target. The three symbols exist in the object at the nm values above; they are not in igi1.exe because the transcription cannot link yet."
+}

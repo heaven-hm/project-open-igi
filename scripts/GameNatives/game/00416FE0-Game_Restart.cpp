@@ -1,6 +1,6 @@
 // IGI native provenance: Game_Restart - 0x00416FE0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00416FE0-Game_Restart.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00416FE0-Game_Restart.hpp"
+#include "Game_Restart.h"
 int Game_Restart()
 
 // Sig: void Game_Restart(void)

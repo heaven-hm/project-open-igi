@@ -1,6 +1,6 @@
 // IGI native provenance: Throwable_Create - 0x00477040 - CFG score 98.5% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00477040-Throwable_Create.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00477040-Throwable_Create.hpp"
+#include "Throwable_Create.h"
 struct status_msg* Throwable_Create(float context, void* arg2, double* arg3, int arg4, int* arg5, void* arg6, int arg7)
 
 // Sig: void Throwable_Create(void)

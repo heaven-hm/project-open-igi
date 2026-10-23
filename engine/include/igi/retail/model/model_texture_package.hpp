@@ -42,16 +42,20 @@ struct MtpPackage
     std::vector<MtpInstance> instances;
     std::vector<MtpMaterialReference> material_references;
 
-    // Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic inspection.
-    // The literal retail DynObj_InsertHashItem_14 (VA 0x004CF080) is in mtp_package_loader.hpp.
-    // Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
-    // Evidence: REA ev_b115c5dcf8484fa999611be81df70c28a1e3299552c8cf4c96817bd6883cc409;
-    // RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF080, CFG 1.000, 5/6).
-    // CFG: radare2 41 blocks/65 edges; Binary Ninja 41 blocks; 100% structural agreement.
-    // Confidence: partial host parser adapter; literal native loader is in mtp_package_loader.cpp.
-    // Signature: std::span<const std::byte> -> MtpPackage differs from retail void*(void*, const char*, int32_t).
-    // Usage/tests: Used by host MTP inspection tests and diagnostic scene harness.
-    [[nodiscard]] static MtpPackage Host_ParseModelTexturePackage(std::span<const std::byte> file_bytes);
 };
+
+// Host adapter: parses MTP IFF container chunks into a C++ MtpPackage struct for diagnostic
+// inspection. It is NOT the retail native and carries no retail symbol: the native
+// DynObj_LoadModelTexturePackage (0x004CF080) is
+// igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, const char*, std::int32_t) in
+// mtp_package_loader.hpp, which loads the package resource and populates the retail context.
+// Tools: Ghidra/REA and Binary Ninja; runtime parity is not verified.
+// Evidence: REA ev_b115c5dcf8484fa999611be81df70c28a1e3299552c8cf4c96817bd6883cc409;
+// RE-Agent catalog assets/RE_AGENT_VERIFIED_NATIVES.md (0x004CF080, CFG 1.000, 5/6).
+// CFG: radare2 41 blocks/65 edges; Binary Ninja 41 blocks; 100% structural agreement.
+// Confidence: partial host parser adapter; literal native loader is in mtp_package_loader.cpp.
+// Signature: std::span<const std::byte> -> MtpPackage differs from retail void*(void*, const char*, int32_t).
+// Usage/tests: Used by host MTP inspection tests and diagnostic scene harness.
+[[nodiscard]] MtpPackage MtpPackage_ParseContainer(std::span<const std::byte> file_bytes);
 
 } // namespace igi::retail::model

@@ -1,0 +1,95 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x0048F230",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
+ "reviewed": true,
+ "reviewed_by": "Delegated coding agent source-semantic review against the live Binary Ninja 6.0.10601 MCP view of retail igi.exe (entry 0x004A50F5) and Radare2 6.2.0; the retail bytes were read directly and the candidate translation unit was read at its recorded digest.",
+ "reviewed_at": "2026-10-23T11:50:00Z",
+ "source_revision": "worktree branch 3a26bb23; implementation bound by engine/src/retail/core/app_context.cpp sha256 b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
+ "review_basis": "The retail entry was re-read through the live Binary Ninja MCP view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree on nodes and edges. The candidate body was then compared against the retail instructions and the recorded retail bytes.",
+ "retail_function": {
+  "entry": "0x0048F230",
+  "name": "App_ContextGetLightmapsUsed",
+  "signature": "int32_t()",
+  "start": "0x0048F230",
+  "end": "0x0048F235",
+  "size_bytes": 6,
+  "basic_blocks": 1,
+  "edges": 0,
+  "bytes_hex": "a1e48b5c00c3",
+  "summary": "App_ContextGetLightmapsUsed(): returns the 32-bit lightmaps-used field of the port app-context state, written by App_ContextSetLightmapsUsed (0x0048F240)."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/core/app_context.cpp",
+  "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
+  "symbol": "App_ContextGetLightmapsUsed",
+  "summary": "App_ContextGetLightmapsUsed(): returns the 32-bit lightmaps-used field of the port app-context state, written by App_ContextSetLightmapsUsed (0x0048F240).",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
+ },
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail takes no arguments (cdecl, nargs=0) and returns the 32-bit flag in EAX. The candidate takes no arguments, returns the same 32-bit field from the port state and preserves cdecl."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x0048F230-binaryninja.json",
+   "evidence_sha256": "44b90da31c8335e87e88eab2856eca961dba46f87ef6ebca4049288fe0fe4a63",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x0048F230-radare2.json",
+   "evidence_sha256": "116157a698a376b52bc4b8e1ac230f84ee36bc5b85cdabfcf11548c5c6944ed8",
+   "tool": "radare2 6.2.0"
+  }
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "detail": "Binary Ninja (live MCP view of retail igi.exe) and Radare2 6.2.0 both recover the exact entry 0x0048F230 as one 6-byte basic block with 0 edges (CFG node/edge sets identical, recorded score 1.000); the candidate defines App_ContextGetLightmapsUsed as the body implementing that entry."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "detail": "Retail is cdecl with no stack arguments (Radare2 nargs=0). The candidate takes no arguments and preserves cdecl; there is no argument slot to mis-map."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "detail": "The only constant is the retail global address 0x005C8BE4, mapped to the named port field app_context_state.lightmaps_used. There is no scaling, size or derived constant in the 6-byte body or in the candidate."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "detail": "Retail bytes a1 e4 8b 5c 00 c3 are `mov eax, dword [0x5c8be4]; retn`: a 32-bit load from the lightmaps-used flag. The candidate performs a 32-bit load of the same field in port-owned storage. The absolute address is relocated by the port; the access width, access kind and value flow are preserved."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "detail": "The retail body contains no call and no store: its only effect is the EAX result. The candidate likewise calls nothing and stores nothing. The matching store side of this flag lives in the setter 0x0048F240, not here."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "detail": "One return path: EAX is the 32-bit flag. The candidate returns the same field with no branch and no error path; neither body can fail."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "Neither the 6-byte retail body nor the candidate contains an x87 instruction or any floating-point value."
+  }
+ ],
+ "runtime_contract": null,
+ "limitations": [
+  "No live paired runtime capture exists; the differential is Unicorn plus the compiled candidate.",
+  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
+  "2026-10-23 Task B regeneration: this review and the two disassembly artifacts were regenerated against the live retail image and the current implementation digest; the previous check names did not match the gate's required set (function_identity, argument_mapping, constants_and_scaling, memory_layout_and_access, calls_and_side_effects, return_and_error_paths, floating_point_semantics). The verdict and the implementation digest are unchanged and no status was raised.",
+  "No paired retail/candidate game-process runtime capture exists for this address; the behavioural differential is emulator/host execution and does not establish RUNTIME_TESTED or VERIFIED."
+ ]
+}

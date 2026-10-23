@@ -1,0 +1,151 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00404710",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00404710"
+   },
+   {
+    "address": "0x00404726"
+   },
+   {
+    "address": "0x0040472B"
+   },
+   {
+    "address": "0x00404735"
+   },
+   {
+    "address": "0x0040473F"
+   },
+   {
+    "address": "0x00404743"
+   },
+   {
+    "address": "0x0040474F"
+   },
+   {
+    "address": "0x00404759"
+   },
+   {
+    "address": "0x0040475D"
+   },
+   {
+    "address": "0x00404762"
+   },
+   {
+    "address": "0x00404766"
+   },
+   {
+    "address": "0x00404776"
+   },
+   {
+    "address": "0x0040477A"
+   },
+   {
+    "address": "0x004047B3"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00404710",
+    "target": "0x0040477A",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404710",
+    "target": "0x00404726",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404726",
+    "target": "0x0040472B",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0040472B",
+    "target": "0x00404735",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00404735",
+    "target": "0x0040475D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404735",
+    "target": "0x0040473F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040473F",
+    "target": "0x00404759",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040473F",
+    "target": "0x00404743",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404743",
+    "target": "0x0040475D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404743",
+    "target": "0x0040474F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040474F",
+    "target": "0x00404735",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x0040474F",
+    "target": "0x00404759",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404759",
+    "target": "0x00404762",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x0040475D",
+    "target": "0x00404762",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00404762",
+    "target": "0x004047B3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404762",
+    "target": "0x00404766",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404766",
+    "target": "0x0040472B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404766",
+    "target": "0x00404776",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00404776",
+    "target": "0x0040477A",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

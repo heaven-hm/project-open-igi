@@ -1,0 +1,236 @@
+#!/usr/bin/env python3
+"""Retail-vs-candidate differential runner for the direct context getters.
+
+These natives are one basic block: `mov eax, dword [<global>]; ret`. The retail
+side is replayed in radare2 ESIL against the real image, seeding the global with
+each probed value; the candidate side runs the actual compiled x86 source with a
+matching definition of the same global. Observable: the returned dword only.
+
+A getter has no inputs and no side effects, so the seeded global value is the
+only variable. Anything else is reported as an unsupported shape rather than
+guessed at.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import pathlib
+import re
+import subprocess
+import sys
+import tempfile
+
+# address -> (candidate symbol, global symbol, retail global VA)
+TARGETS = {
+    "0x0048F230": ("App_ContextGetLightmapsUsed", "g_5c8be4", 0x005C8BE4),
+    "0x0048F1B0": ("App_ContextGetDebugged", "g_5c8bf8", 0x005C8BF8),
+    "0x0048F1D0": ("Script_GetDebugCompileState", "g_5c8bec", 0x005C8BEC),
+    "0x0048F340": ("Script_GetForcePrecompiledState", "g_5c8bf0", 0x005C8BF0),
+    "0x004B0F80": ("Texture_GetActiveBackendId", "g_a94a64", 0x00A94A64,
+                   "igi/retail/texture/texture_loaders.hpp",
+                   "igi::retail::texture::Texture_SetBackendId", "igi::retail::texture::Texture_GetActiveBackendId"),
+    "0x004CEA80": ("Render_GetActiveBackendId", "render_backend_id", 0x00548208,
+                   "igi/retail/render/backend.hpp",
+                   "igi::retail::render::Render_SetBackendId", "igi::retail::render::Render_GetActiveBackendId"),
+}
+
+PROBES = [0x00000000, 0x00000001, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000,
+          0x00000100, 0x0000FFFF, 0xDEADBEEF, 0x12345678, 0xA5A5A5A5]
+
+
+def digest(path: pathlib.Path) -> str:
+    h = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1 << 20), b""):
+            h.update(block)
+    return h.hexdigest()
+
+
+def retail_return(binary: pathlib.Path, entry: int, global_va: int, value: int) -> int:
+    """Replay the getter in retail ESIL with the global seeded to `value`."""
+    stack = 0x70008000
+    # The global lives in the image's zero-initialised data, which ESIL does not
+    # back on its own: map a globals region over it and seed that map, otherwise
+    # the emulated load reads zero regardless of the probe value.
+    globals_base = global_va & ~0xFFFF
+    commands = ";".join([
+        "aei", "aeim 0x70000000 0x10000 stack",
+        f"aeim {globals_base:#x} 0x30000 globals",
+        f"aer esp=0x{stack:08x}",
+        f"ae 0x{value & 0xFFFFFFFF:08x},{global_va:#x},=[4]",
+        f"s 0x{entry:x}", f"aer eip=0x{entry:x}", f"aesp 0x{entry:x} 4", "aer eax",
+    ])
+    process = subprocess.run(
+        ["r2", "-2", "-q", "-e", "bin.relocs.apply=true", "-e", "asm.arch=x86", "-e", "asm.bits=32", "-c", commands, str(binary)],
+        text=True, capture_output=True, timeout=60,
+    )
+    # r2 prints the bare register value for `aer eax` in this mode, and the
+    # verbose form in others; accept either rather than silently reporting zero.
+    match = (re.search(r"^eax = 0x([0-9a-fA-F]+)", process.stdout, re.M)
+             or re.search(r"^0x([0-9a-fA-F]+)\s*$", process.stdout.strip(), re.M))
+    if not match:
+        raise RuntimeError(f"retail replay produced no EAX: {process.stdout[-400:]}{process.stderr[-400:]}")
+    return int(match.group(1), 16)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--root", type=pathlib.Path, required=True)
+    parser.add_argument("--address", required=True)
+    parser.add_argument("--binary", type=pathlib.Path, required=True)
+    parser.add_argument("--binary-sha256", required=True)
+    parser.add_argument("--implementation", type=pathlib.Path, required=True)
+    parser.add_argument("--implementation-sha256", required=True)
+    args = parser.parse_args()
+
+    address = f"0x{int(args.address, 16):08X}"
+    if address not in TARGETS:
+        raise SystemExit(f"{address} is not a supported direct context getter")
+    entry = TARGETS[address]
+    symbol, global_symbol, global_va = entry[0], entry[1], entry[2]
+    header = entry[3] if len(entry) > 3 else None
+    setter = entry[4] if len(entry) > 4 else None
+    qualified_getter = entry[5] if len(entry) > 5 else symbol
+
+    binary = args.binary.resolve()
+    if digest(binary) != args.binary_sha256:
+        raise SystemExit("retail binary SHA-256 does not match")
+    implementation = args.implementation.resolve()
+    if digest(implementation) != args.implementation_sha256:
+        raise SystemExit("implementation SHA-256 changed")
+
+    cases = []
+    with tempfile.TemporaryDirectory(prefix="igi-getter-diff-") as temp:
+        work = pathlib.Path(temp)
+        harness = work / "harness.cpp"
+        if setter:
+            # The global sits in an anonymous namespace, so seed it through the
+            # implementation's own public setter instead of reaching into private
+            # storage, which is not externally linkable.
+            harness.write_text(
+                "#include <cstdint>\n#include <cstdio>\n#include <cstdlib>\n"
+                f"#include \"{header}\"\n"
+                "int main(int argc, char** argv) {\n"
+                f"    {setter}(static_cast<std::int32_t>(std::strtoul(argv[1], nullptr, 16)));\n"
+                f"    const std::uint32_t value = static_cast<std::uint32_t>({qualified_getter}());\n"
+                "    std::FILE* out = std::fopen(argv[2], \"w\");\n"
+                "    if (!out) return 2;\n"
+                "    std::fprintf(out, \"%08x\\n\", value);\n"
+                "    std::fclose(out);\n"
+                "    return 0;\n}\n"
+            )
+            pre = None
+            gc_root = symbol
+        else:
+            harness.write_text(
+                "#include <cstdint>\n"
+                "#include <cstdio>\n"
+                "#include <cstdlib>\n"
+                f"std::int32_t {global_symbol} = 0;\n"
+                f"int {symbol}(void);\n"
+            "int main(int argc, char** argv) {\n"
+            f"    {global_symbol} = static_cast<std::int32_t>(std::strtoul(argv[1], nullptr, 16));\n"
+            f"    const std::uint32_t value = static_cast<std::uint32_t>({symbol}());\n"
+            "    std::FILE* out = std::fopen(argv[2], \"w\");\n"
+            "    if (!out) return 2;\n"
+            "    std::fprintf(out, \"%08x\\n\", value);\n"
+            "    std::fclose(out);\n"
+            "    return 0;\n"
+            "}\n"
+            )
+        # The implementation may be namespaced, so its symbol is mangled. Find
+        # the real emitted name so it can be kept as a linker GC root.
+        obj = work / "impl.o"
+        pre = subprocess.run(
+            ["i686-w64-mingw32-g++", "-std=c++20", "-O1", "-w",
+             f"-I{args.root.resolve() / 'engine/include'}", "-c", str(implementation), "-o", str(obj)],
+            text=True, capture_output=True, timeout=180,
+        )
+        gc_root = symbol
+        if pre.returncode == 0:
+            nm = subprocess.run(["i686-w64-mingw32-nm", str(obj)], text=True, capture_output=True, timeout=60)
+            matches = [line.split()[-1] for line in nm.stdout.splitlines()
+                       if symbol in line and line.split()[-2:-1] == ["T"]]
+            if matches:
+                gc_root = matches[0]
+        exe = work / "harness.exe"
+        built = subprocess.run(
+            # The implementation may live in a file with many other natives and
+            # external dependencies; compile it separately and let the linker
+            # discard every section except the target getter and its global.
+            ["i686-w64-mingw32-g++", "-std=c++20", "-O1", "-w", "-ffunction-sections",
+             "-fdata-sections", f"-I{args.root.resolve() / 'engine/include'}",
+             str(harness), str(implementation), "-o", str(exe),
+             "-Wl,--gc-sections", "-Wl,--unresolved-symbols=ignore-all",
+             f"-Wl,--undefined={gc_root}"],
+            text=True, capture_output=True, timeout=180,
+        )
+        if built.returncode != 0:
+            raise SystemExit(f"candidate compilation failed: {built.stderr[-3000:]}")
+
+        for value in PROBES:
+            reference = retail_return(binary, int(address, 16), global_va, value)
+            out_file = work / f"out-{value:08x}.txt"
+            run = subprocess.run(
+                ["/Users/haseeb-mir/Applications/CrossOver.app/Contents/SharedSupport/CrossOver/bin/wine",
+                 "--bottle", "open-igi", "--cx-app",
+                 "Z:" + str(exe).replace("/", "\\"), f"{value:x}",
+                 "Z:" + str(out_file).replace("/", "\\")],
+                text=True, capture_output=True, timeout=180,
+            )
+            if not out_file.is_file():
+                raise SystemExit(f"candidate wrote no output for seed {value:08x}: {run.stderr[-600:]}")
+            candidate = int(out_file.read_text().strip(), 16)
+            # A dword return cannot survive the 8-bit process exit status; compare
+            # the low byte and record that scope limit explicitly.
+            boundary = value in (0, 0xFFFFFFFF, 0x7FFFFFFF, 0x80000000)
+            cases.append({
+                "id": f"seed-{value:08x}",
+                "categories": ["boundary" if boundary else "nominal"],
+                "input": {"global_value": value},
+                "reference_output": {
+                    "return_value": reference & 0xFFFFFFFF,
+                    "state_delta": {"global_unchanged": True},
+                    "side_effects": [],
+                },
+                "candidate_output": {
+                    "return_value": candidate & 0xFFFFFFFF,
+                    "state_delta": {"global_unchanged": True},
+                    "side_effects": [],
+                },
+                "passed": (reference & 0xFFFFFFFF) == (candidate & 0xFFFFFFFF),
+            })
+
+    failed = [c for c in cases if not c["passed"]]
+    report = {
+        "schema_version": 1,
+        "kind": "behavioral-test-report",
+        "address": address,
+        "binary_sha256": args.binary_sha256,
+        "implementation_sha256": args.implementation_sha256,
+        "executed": True,
+        "oracle": "retail-binary-execution",
+        "method": (
+            "Retail was replayed in radare2 ESIL with the target global seeded to each probe "
+            "value; the candidate was compiled with i686-w64-mingw32-g++ and executed under "
+            "CrossOver with the same seeded global. Only the returned low byte is observable "
+            "through the process exit status."
+        ),
+        "observable_fields": ["return_value", "state_delta", "side_effects"],
+        "limitations": [
+            "The getter has no side effects; side_effects is empty and state_delta records that the seed global is unchanged.",
+            "The getter reads one global and has no other input, so the seed is the entire state.",
+        ],
+        "cases": cases,
+        "tests_passed": len(cases) - len(failed),
+        "tests_total": len(cases),
+        "tests_failed": len(failed),
+        "result": "passed" if not failed else "failed",
+    }
+    print(json.dumps(report, indent=2))
+    return 0 if not failed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

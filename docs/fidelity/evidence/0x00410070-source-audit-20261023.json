@@ -1,0 +1,292 @@
+{
+ "schema_version": 1,
+ "kind": "native-source-audit",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "recorded_at": "2026-10-23T17:30:00Z",
+ "candidate_executable": {
+  "path": "build-clean-win32/igi1.exe",
+  "sha256": "14ae511a32c0b5a78dd3faccb03934557945eed70b8c4be1ab4c4890bc782451",
+  "symbol_present": false
+ },
+ "selected_decompiler": "binary_ninja",
+ "tool_availability": "Binary Ninja MCP was not reachable at 127.0.0.1:24642 during this session (connection refused; the application starts without an MCP listener). The Binary Ninja records already in this directory (0x00410070-binaryninja.json, 0x004137A0-binaryninja.json, 0x00405850-binaryninja.json) were reused; the new CFG, angr and byte evidence in this task came from radare2 6.2.0, angr 10.0.4.post1 and direct memory reads of the retail image. No new Binary Ninja run is claimed.",
+ "candidate_source": {
+  "path": "engine/src/retail/script/humanplayer_defines.cpp",
+  "sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+  "header_path": "engine/include/igi/retail/script/humanplayer_defines.hpp",
+  "header_sha256": "e98081a9b3ec4dd9b30fd06b45edc0a4b3508d1fd43a3ed6d6e2795136fe7eef",
+  "object_path": "build-clean-win32/CMakeFiles/igi_humanplayer_defines_object.dir/engine/src/retail/script/humanplayer_defines.cpp.obj",
+  "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+  "linked_into_target": false
+ },
+ "build": {
+  "executed": true,
+  "result": "passed",
+  "command": "cmake --build build-clean-win32 -j8",
+  "target": "igi_humanplayer_defines_object",
+  "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243"
+ },
+ "link": {
+  "attempted": true,
+  "result": "failed",
+  "undefined_symbol_count": 17,
+  "report": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json"
+ },
+ "supersedes": "This file previously recorded the audit of the earlier invented body (source sha256 020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9). That body and its findings are replaced; the corrected source is audited here.",
+ "address": "0x00410070",
+ "name": "DefineHumanPlayerGeneral",
+ "retail": {
+  "function_entry": "0x00410070",
+  "range": "0x00410070-0x004101B5",
+  "size_bytes": 326,
+  "basic_blocks": 5,
+  "edges": 6,
+  "instruction_count": 92,
+  "calling_convention": "cdecl",
+  "prototype_evidence": "Binary Ninja reports an x87-confused prototype; the observed stack use is a first argument that receives a six-dword result block (rep movsd, ecx=6, at 0x004101AD) and a frame argument read as [esp+0x34] at 0x00410075. The script VM's native-call site 0x004BD8F3-0x004BD8FE pushes exactly three dwords (the VM value-block slot, the symbol record's +0x18 dword, the argument frame) and copies six dwords from the returned EAX, which fixes the layout as (void* context, int32_t unused, void* frame) returning context.",
+  "registrar": "Registered at 0x0041001B through 0x004B8890 as DefineHumanPlayerGeneral with argc bounds (0, -1); it has no static callers and is invoked from the script VM.",
+  "callees": [
+   {
+    "callsite": "0x0041007D",
+    "callee": "0x004B8A50",
+    "name": "Qvm_GetFloatArg"
+   },
+   {
+    "callsite": "0x0041008B",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x004100A5",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x004100BF",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x004100D9",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x004100ED",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x00410101",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x0041011C",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x00410132",
+    "callee": "0x004B8A50"
+   },
+   {
+    "callsite": "0x0041014A",
+    "callee": "0x004B8A50",
+    "note": "table A walk, 17 iterations"
+   },
+   {
+    "callsite": "0x00410169",
+    "callee": "0x004B8A50",
+    "note": "table B walk, 17 iterations"
+   }
+  ],
+  "scale_constants": [
+   {
+    "address": "0x005334A4",
+    "type": "float",
+    "bits": "0x4A7A0000",
+    "value": 4096000.0,
+    "use": "indices 1, 2, 3"
+   },
+   {
+    "address": "0x005334A0",
+    "type": "float",
+    "bits": "0x371B5837",
+    "value": 9.259259059035685e-06,
+    "use": "indices 1, 2, 3 (the float nearest 1/108000)"
+   },
+   {
+    "address": "0x00533498",
+    "type": "double",
+    "bits": "0x40B0000000000000",
+    "value": 4096.0,
+    "use": "indices 4, 5"
+   },
+   {
+    "address": "0x00533488",
+    "type": "double",
+    "bits": "0x403E000000000000",
+    "value": 30.0,
+    "use": "index 6, then fistp qword"
+   }
+  ],
+  "stores": [
+   {
+    "address": "0x0056E1E8",
+    "callsite": "0x00410082",
+    "source": "index 0 raw"
+   },
+   {
+    "address": "0x0056E1EC",
+    "callsite": "0x0041009F",
+    "source": "index 1 scaled"
+   },
+   {
+    "address": "0x0056E1F0",
+    "callsite": "0x004100B9",
+    "source": "index 2 scaled"
+   },
+   {
+    "address": "0x0056E1F4",
+    "callsite": "0x004100D3",
+    "source": "index 3 scaled"
+   },
+   {
+    "address": "0x0056E1F8",
+    "callsite": "0x004100E4",
+    "source": "index 4 * 4096.0"
+   },
+   {
+    "address": "0x0056E1FC",
+    "callsite": "0x004100F8",
+    "source": "index 5 * 4096.0"
+   },
+   {
+    "address": "0x0056E200",
+    "callsite": "0x00410117",
+    "source": "index 6 * 30.0, fistp qword, low dword"
+   },
+   {
+    "address": "0x0056E204",
+    "callsite": "0x00410129",
+    "source": "index 7 raw"
+   },
+   {
+    "address": "0x0056E208",
+    "callsite": "0x00410137",
+    "source": "index 8 raw"
+   }
+  ],
+  "tables": [
+   {
+    "address": "0x005389F8",
+    "entries": 17,
+    "stride": 16,
+    "arguments": "9..25",
+    "written_dword": "+0x00 float"
+   },
+   {
+    "address": "0x00538B08",
+    "end": "0x00538C18",
+    "entries": 17,
+    "stride": 16,
+    "arguments": "26..42",
+    "written_dword": "+0x00 float"
+   }
+  ],
+  "return_block": {
+   "address": "stack, copied at 0x004101AD",
+   "bytes": 24,
+   "dwords": [
+    "+0x00 = 1",
+    "+0x04 = not written",
+    "+0x08 = 0, +0x0C = 0x3FF00000 (float64 1.0)",
+    "+0x10 = 0x00567C74 type descriptor",
+    "+0x14 = not written"
+   ],
+   "copy": "rep movsd x6 to the first argument",
+   "return_value": "EAX = the first argument"
+  },
+  "behavior": "Nine script arguments are read through 0x004B8A50 and stored with the retail scaling at 0x0056E1E8..0x0056E208; the next 34 arguments fill the first dword of two 17-entry 0x10-stride tables; the 0x18-byte value block is copied to the caller's context, which is returned.",
+  "multiply_sites": [
+   {
+    "callsite": "0x00410090",
+    "constant": "0x005334A4",
+    "form": "fmul dword",
+    "index": 1
+   },
+   {
+    "callsite": "0x00410099",
+    "constant": "0x005334A0",
+    "form": "fmul dword",
+    "index": 1
+   },
+   {
+    "callsite": "0x004100AA",
+    "constant": "0x005334A4",
+    "form": "fmul dword",
+    "index": 2
+   },
+   {
+    "callsite": "0x004100B3",
+    "constant": "0x005334A0",
+    "form": "fmul dword",
+    "index": 2
+   },
+   {
+    "callsite": "0x004100C4",
+    "constant": "0x005334A4",
+    "form": "fmul dword",
+    "index": 3
+   },
+   {
+    "callsite": "0x004100CD",
+    "constant": "0x005334A0",
+    "form": "fmul dword",
+    "index": 3
+   },
+   {
+    "callsite": "0x004100DE",
+    "constant": "0x00533498",
+    "form": "fmul qword",
+    "index": 4
+   },
+   {
+    "callsite": "0x004100F2",
+    "constant": "0x00533498",
+    "form": "fmul qword",
+    "index": 5
+   },
+   {
+    "callsite": "0x00410106",
+    "constant": "0x00533488",
+    "form": "fmul qword",
+    "index": 6
+   },
+   {
+    "callsite": "0x0041010F",
+    "constant": null,
+    "form": "fistp qword [esp+0x4c]",
+    "index": 6
+   }
+  ]
+ },
+ "previous_audit_errors": [
+  "The earlier audit said index 0 is also stored at 0x0056E208. The store at 0x00410137 is index 8 (push 8 at 0x0041012F); 0x0056E204 is index 7 and 0x0056E208 is index 8, so the block holds nine distinct values and there is no second copy of index 0.",
+  "The earlier audit described the old candidate, which took a float array and a count and never called 0x004B8A50."
+ ],
+ "comparison": {
+  "result": "match",
+  "findings": [
+   "The corrected candidate reads the same 43 argument indices in the same order through Qvm_GetFloatArg.",
+   "It applies the same four constants in the same x87 precision and the same store order, and writes the same nine dwords and two tables.",
+   "It builds the same 24-byte return block and returns the context argument.",
+   "The second stack argument is unused in retail and in the candidate."
+  ],
+  "documented_differences": [
+   "+0x04 of the returned block is zero in the candidate and stack residue in retail.",
+   "std::rintl supplies fistp's rounding under the current control word, which makes the compiler add a control-word save, frndint and a restore around the conversion.",
+   "Retail's table-B base set-up block is folded into the candidate's table-B loop."
+  ]
+ },
+ "status": "STRUCTURALLY_VERIFIED",
+ "limitations": [
+  "No paired retail/candidate runtime capture exists for this address.",
+  "The unit is not in the linked candidate image (see the link-blocker report), so nm on igi1.exe cannot show the symbol; nm on its object does.",
+  "Binary Ninja was unavailable for new evidence this session; its existing records were reused."
+ ]
+}

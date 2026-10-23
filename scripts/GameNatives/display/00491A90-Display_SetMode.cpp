@@ -1,6 +1,6 @@
 // IGI native provenance: Display_SetMode - 0x00491A90 - CFG score 89.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00491A90-Display_SetMode.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Display_SetMode.hpp"
+#include "Display_SetMode.h"
 int Display_SetMode(void* context)
 
 // Sig: int Display_SetMode(void* modeStruct)

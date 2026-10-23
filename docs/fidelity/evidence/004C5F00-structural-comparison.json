@@ -1,0 +1,74 @@
+{
+ "schema_version": 1,
+ "kind": "native-structural-comparison",
+ "address": "0x004C5F00",
+ "function_name": "Terrain_LoadTexturesAndLightmaps",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "candidate_sha256": "35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6",
+ "candidate_path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
+ "candidate_build_receipt": "build-clean-win32/candidate-receipt.json",
+ "generated_at": "2026-10-23T11:03:16+05:30",
+ "retail": {
+  "function_entry": "0x004C5F00",
+  "signature": "int32_t(void* arg1, int32_t arg2)",
+  "calling_convention": "cdecl",
+  "size_bytes": 599,
+  "basic_blocks": 20,
+  "edges": 30,
+  "binary_ninja": "bn_function_basic_blocks; decompile and disassembly inspected",
+  "radare2": "afij/afbj; same node and edge sets as Binary Ninja",
+  "angr": "CFGFast exact entry recovered; has_unresolved_jumps=false; approximate block partition (not compared block-for-block)"
+ },
+ "candidate": {
+  "functions": [
+   {
+    "address": "0x00460910",
+    "name": "method.igi::retail::terrain.Terrain_LoadTexturesAndLightmaps_void__char_const_",
+    "size": 335,
+    "blocks": 12,
+    "edges": 16
+   },
+   {
+    "address": "0x0045f5f0",
+    "name": "method.igi::retail::terrain::TerrainLevelData.Terrain_LoadLightmaps_std::filesystem::__cxx11::path_const_",
+    "size": 4896,
+    "blocks": 182,
+    "edges": 268
+   }
+  ],
+  "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+  "source_sha256": "66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399",
+  "measured_on_candidate_sha256": "35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6"
+ },
+ "cfg_comparison": {
+  "bn_vs_r2_retail": 1.0,
+  "bn_vs_r2_scope": "retail image only; this is the only numeric CFG score recorded in the manifest",
+  "candidate_vs_retail": "not address-comparable. Candidate block/edge counts above differ from retail; the compared structural properties are listed under compared_properties."
+ },
+ "compared_properties": [
+  "cdecl two-argument boundary and strcpy of path",
+  "early return 0 when App_ContextGetTerrainLightmapsUsed() == 0 (0x004C600B)",
+  "early return 0 when Resource_FileExists(\"<path>.lmp\") == 0 (0x004C6096)",
+  "loaded path reaches Resource_Unload at 0x004C6144; no EAX write follows before ret at 0x004C6156",
+  "Resource_Unload returns kind for 1/3, otherwise Resource_FreeNode result (remaining pool count or relocated node address)",
+  "live retail: one call, EAX 0x0000000A (post-unload pool count, no slot swap)"
+ ],
+ "divergences": [
+  "Candidate Terrain_LoadTexturesAndLightmaps is a 12-block wrapper (335 bytes) that calls Terrain_LoadLightmaps (193 blocks, 5231 bytes); retail is one 20-block, 599-byte function.",
+  "Retail .tex texture-list load, 256-entry palette upload and per-page Texture_UploadMipmapPacket uploads into g_b81b20 are host-adapted; the candidate reads TERRAIN.LMP with ifstream and does not register it in the resource table.",
+  "Because the .lmp is unregistered, the candidate returns 0 instead of the observed retail 0xA on the loaded path.",
+  "Retail App_ContextGetTerrainLightmapsUsed() gate is omitted in the host bridge.",
+  "Candidate has host-only null guards; retail dereferences its arguments."
+ ],
+ "limitations": [
+  "Binary Ninja and radare2 CFG scores are retail-image structure only. They do not measure candidate equivalence.",
+  "angr CFGFast is approximate and splits blocks differently; only the exact entry and unresolved-jump result are used as evidence.",
+  "No paired retail/candidate runtime capture exists for this native, so no behavioral equivalence is claimed."
+ ],
+ "candidate_receipt_sha256": "61c35e99bd11fd717803bd6560ebe422bafbf77efad6d00786160ad535347708",
+ "candidate_receipt_created_at": "2026-10-22T22:09:28.154970+00:00",
+ "candidate_rebound_at": "2026-10-22T22:18:42+00:00",
+ "refreshed_at": "2026-10-23T11:03:16+05:30",
+ "refresh_note": "Refreshed after the 2026-10-23 native rebind: candidate measurements and the source digest now refer to igi1.exe 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6 built from source 66c863e7f051982d907b6f7e1c8857e81d431a2edc09351f61c6aa32f150e399."
+}

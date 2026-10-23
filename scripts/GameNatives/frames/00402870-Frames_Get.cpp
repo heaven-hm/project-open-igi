@@ -1,6 +1,6 @@
 // IGI native provenance: Frames_Get - 0x00402870 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00402870-Frames_Get.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00402870-Frames_Get.hpp"
+#include "Frames_Get.h"
 int Frames_Get()
 
 // Sig: int Frames_Get(void)

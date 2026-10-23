@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "kind": "build-report",
+  "result": "passed",
+  "address": "0x00405850",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
+  "executed": true,
+  "command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -std=c++20 -I engine/include -c engine/src/retail/script/humanplayer_defines.cpp -o /tmp/hp-standalone.o",
+  "target": "Windows x86 (Intel 80386 COFF object)",
+  "object_path": "/tmp/hp-standalone.o",
+  "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7",
+  "linked_into_target": false,
+  "link_result": "failed: the target link needs Qvm_Execute (0x004B85B0), Config_SaveGraphicOptions (0x00405300), Config_SaveSoundOptions (0x004058A0), Config_NoD3DDriversWithHard (0x00405980) and Config_Language_2 (0x00405B30), none of which is defined in the igi target.",
+  "note": "Genuine standalone x86 compile with the target's flags and include path; the translation unit is not part of the igi target, so this is a build of the candidate object only, not a candidate image."
+}

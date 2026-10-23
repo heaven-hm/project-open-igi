@@ -1,6 +1,6 @@
 // IGI native provenance: File_Open - 0x004A5350 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004A5350-File_Open.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004A5350-File_Open.hpp"
+#include "File_Open.h"
 int* File_Open(PSTR context, char* arg2)
 
 // Sig: void* File_Open(char* path, char* mode)

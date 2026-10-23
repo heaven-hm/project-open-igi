@@ -217,6 +217,7 @@ void PlayerController::reset(const std::array<double, 3>& feet_position, double 
     pitch_ = std::clamp(pitch, -kPitchLimit, kPitchLimit);
     velocity_ = {};
     slide_ = {};
+    last_ground_delta_ = {};
     ground_height_ = feet_position[2];
     tick_accumulator_ = 0.0;
     ground_found_ = true;
@@ -399,30 +400,6 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
     const double forward_y = std::cos(yaw_);
     const double right_x = std::cos(yaw_);
     const double right_y = -std::sin(yaw_);
-
-    double wish_x = 0.0;
-    double wish_y = 0.0;
-    if (input.move_forward)
-    {
-        wish_x += forward_x;
-        wish_y += forward_y;
-    }
-    if (input.move_backward)
-    {
-        wish_x -= forward_x;
-        wish_y -= forward_y;
-    }
-    if (input.strafe_left)
-    {
-        wish_x -= right_x;
-        wish_y -= right_y;
-    }
-    if (input.strafe_right)
-    {
-        wish_x += right_x;
-        wish_y += right_y;
-    }
-    const double wish_length = std::sqrt((wish_x * wish_x) + (wish_y * wish_y));
     const int locomotion_state = select_locomotion_state(input);
 
     if (on_ground_)
@@ -455,14 +432,22 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
             const double sine_yaw = std::sin(yaw_);
             // Host yaw basis: forward = (sin, cos), right = (cos, -sin).  The clip's
             // local +Y is forward and +X is right (clip 4 +Y, clip 11 +X, clip 10 -X).
-            position_[0] += (cosine_yaw * local_x) + (sine_yaw * local_y);
-            position_[1] += (-sine_yaw * local_x) + (cosine_yaw * local_y);
+            const double world_x = (cosine_yaw * local_x) + (sine_yaw * local_y);
+            const double world_y = (-sine_yaw * local_x) + (cosine_yaw * local_y);
+            position_[0] += world_x;
+            position_[1] += world_y;
             position_[2] += local_z;
             velocity_ = {};
+            // Retail keeps the world animation delta of the current tick at human+0x520
+            // and +0x524; the jump at 0x0040BA70 normalizes that delta into its take-off
+            // direction, so the last ground motion is what the jump inherits.
+            last_ground_delta_[0] = world_x;
+            last_ground_delta_[1] = world_y;
         }
         else
         {
             active_locomotion_state_ = 0;
+            last_ground_delta_ = {};
         }
         // Slope slide displacement (retail 0x004614B0 bands).
         position_[0] += slide_[0];
@@ -506,14 +491,28 @@ void PlayerController::tick_step(const PlayerInputFrame& input, bool jump_presse
 
         if (jump_pressed)
         {
-            // Jump (humanplayer.qvm general arguments 1 and 2): 27 km/h up, and the
-            // horizontal take-off carries 17.5 km/h along the direction being travelled,
-            // or the facing direction when standing still.
+            // Jump (humanplayer.qvm general arguments 1 and 2). Retail 0x0040BA70
+            // normalizes the world animation delta of the current tick and scales it by
+            // argument 1, so the take-off direction is the last ground motion: a jump
+            // from standstill has no horizontal take-off at all, and a running jump keeps
+            // the running heading. The vertical speed is argument 2 with no
+            // standstill special case.
             velocity_[2] = parameters_.jump_vertical_kmh * units_per_tick_per_kmh;
-            const double take_off_x = wish_length > 0.0 ? wish_x / wish_length : forward_x;
-            const double take_off_y = wish_length > 0.0 ? wish_y / wish_length : forward_y;
-            velocity_[0] = take_off_x * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
-            velocity_[1] = take_off_y * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
+            const double delta_x = last_ground_delta_[0];
+            const double delta_y = last_ground_delta_[1];
+            const double delta_length = std::sqrt((delta_x * delta_x) + (delta_y * delta_y));
+            if (delta_length > 0.0)
+            {
+                velocity_[0] =
+                    (delta_x / delta_length) * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
+                velocity_[1] =
+                    (delta_y / delta_length) * parameters_.jump_horizontal_kmh * units_per_tick_per_kmh;
+            }
+            else
+            {
+                velocity_[0] = 0.0;
+                velocity_[1] = 0.0;
+            }
             on_ground_ = false;
             sliding_ = false;
         }

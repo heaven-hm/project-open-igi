@@ -1,6 +1,6 @@
 // IGI native provenance: PhysicsObjType_ParseConfigFile - 0x004EDFE0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EDFE0-PhysicsObjType_ParseConfigFile.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004EDFE0-PhysicsObjType_ParseConfigFile.hpp"
+#include "PhysicsObjType_ParseConfigFile.h"
 char* PhysicsObjType_ParseConfigFile(char* context)
 
 // Sig: void PhysicsObjType_ParseConfigFile(char* cfg_file)

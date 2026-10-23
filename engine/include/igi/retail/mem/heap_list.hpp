@@ -3,7 +3,6 @@
 namespace igi::retail::mem {
 
 // Native: HeapList_Insert() - VA 0x004AF8F0 - complete port.
-// Previous catalog alias: Camera_SetFieldOfView_33.
 // Behavior: inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at
 //           `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes
 //           `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`,
@@ -18,7 +17,6 @@ void* HeapList_Insert(void* context, void** arg2);
 inline void* Camera_SetFieldOfView_33(void* context, void** arg2) { return HeapList_Insert(context, arg2); }
 
 // Native: HeapList_Remove() - VA 0x004AF960 - complete port.
-// Previous catalog alias: Camera_ApplyHandiCam_33.
 // Behavior: unlinks `context` from an intrusive doubly-linked list by writing
 //           `*context[1] = *context`, `*(static_cast<void**>(*context) + 1) = context[1]`,
 //           clearing `context[1] = nullptr` and `context[0] = nullptr`, and returning `context`.

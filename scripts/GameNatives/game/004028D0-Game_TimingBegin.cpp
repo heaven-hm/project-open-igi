@@ -1,6 +1,6 @@
 // IGI native provenance: Game_TimingBegin - 0x004028D0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004028D0-Game_TimingBegin.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004028D0-Game_TimingBegin.hpp"
+#include "Game_TimingBegin.h"
 int Game_TimingBegin()
 
 // Sig: void Game_TimingBegin(void)

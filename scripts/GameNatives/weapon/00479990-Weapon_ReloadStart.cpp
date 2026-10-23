@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_ReloadStart - 0x00479990 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00479990-Weapon_ReloadStart.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00479990-Weapon_ReloadStart.hpp"
+#include "Weapon_ReloadStart.h"
 void** Weapon_ReloadStart(void* context, int* arg2)
 
 // Sig: void Weapon_ReloadStart(void* soldierCtx)

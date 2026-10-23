@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004A9BD1",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4748e02182acb84b9080145cd969b1e4434980670f1927ff3be718bc65ccb27b",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x004A9BD1 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004A9BD1-Camera_ApplyWideScreen_17.cpp at sha256 4748e02182acb84b9080145cd969b1e4434980670f1927ff3be718bc65ccb27b (recorded implementation.signature: int32_t Camera_ApplyWideScreen_17(long param_1);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004A9BD1",
+    "name": "Camera_ApplyWideScreen_17",
+    "binary_ninja_name": "Camera_ApplyWideScreen_17",
+    "signature": "int32_t(long double arg1 @ st0)",
+    "start": "0x004A9BD1",
+    "end": "0x4a9c04",
+    "basic_blocks": 6,
+    "edges": [
+      {
+        "source": "0x004a9bd1",
+        "target": "0x004a9bdd",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bd1",
+        "target": "0x004a9bf7",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bdd",
+        "target": "0x004a9bf1",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bdd",
+        "target": "0x004a9bfe",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bf1",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a9bf7",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a9bfe",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Six blocks 0x4A9BD1-0x4A9C0x: x87 comparisons of st0 against the constants at 0x00544572 and 0x005445xx, frndint/fcompp/fnstsw flag handling and conditional clamps; the function consumes st0 and returns an int.",
+    "blocks": [
+      {
+        "address": "0x004a9bd1",
+        "start": "0x4a9bd1",
+        "end": "0x4a9bdd",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9bf7",
+        "start": "0x4a9bf7",
+        "end": "0x4a9bfe",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9bdd",
+        "start": "0x4a9bdd",
+        "end": "0x4a9bf1",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9bf6",
+        "start": "0x4a9bf6",
+        "end": "0x4a9bf7",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9bfe",
+        "start": "0x4a9bfe",
+        "end": "0x4a9c05",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9bf1",
+        "start": "0x4a9bf1",
+        "end": "0x4a9bf6",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004A9BD1-Camera_ApplyWideScreen_17.cpp",
+    "sha256": "4748e02182acb84b9080145cd969b1e4434980670f1927ff3be718bc65ccb27b",
+    "signature": "int32_t Camera_ApplyWideScreen_17(long param_1);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Six blocks 0x4A9BD1-0x4A9C0x: x87 comparisons of st0 against the constants at 0x00544572 and 0x005445xx, frndint/fcompp/fnstsw flag handling and conditional clamps; the function consumes st0 and returns an int."
+  },
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "st0 input replaced by a stack long double.",
+      "Return value is the packed status word, not the clamp result."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004A9BD1 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004A9BD1-Camera_ApplyWideScreen_17.cpp (sha256 4748e02182acb84b9080145cd969b1e4434980670f1927ff3be718bc65ccb27b). Six blocks 0x4A9BD1-0x4A9C0x: x87 comparisons of st0 against the constants at 0x00544572 and 0x005445xx, frndint/fcompp/fnstsw flag handling and conditional clamps; the function consumes st0 and returns an int."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN int32_t(long double arg1 @ st0): one x87 input, no stack arguments. The candidate int _isintTOS(long double context) takes a stack long double and returns the status word \u2014 different entry class and return value."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "BN int32_t(long double arg1 @ st0): one x87 input, no stack arguments. The candidate int _isintTOS(long double context) takes a stack long double and returns the status word \u2014 different entry class and return value."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 6 block(s)/7 edge(s) at 0x004A9BD1; radare2 recovers the identical 6 block(s)/7 edge(s) (score 1.0000); angr CFGFast recovers 6 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "None."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Constants at 0x00544572 (and the block's 0x4A9BF6/0x4A9BF7/0x4A9BFE targets); frndint/fcompp/fcomp flag bits."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "One global read near 0x00544572; no writes."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Returns an integer flag result; the candidate returns the packed comparison status, not the retail clamp result."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "The function is pure x87 comparison/clamp on st0; the candidate's roundl()/status-word model on a stack long double does not reproduce it."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0)\" at 0x004A9BD1; radare2 recovers \"fcn.004a9bd1 ();\". Both tools place the entry at 0x004A9BD1 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t Camera_ApplyWideScreen_17(long param_1);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x004A9BD1-binaryninja.json",
+      "evidence_sha256": "1293c8d9a8d2499294c785da152ac93c5e52dc9a92c0824c02514671743bdb15",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x004A9BD1-radare2.json",
+      "evidence_sha256": "148774d90257ec3ccfeee46530ff10fc096bd04e397a5f4081e9f11c9ebfb1f7",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x004A9BD1-angr-20261023.json",
+      "evidence_sha256": "8726e7744949cc2c6d47848e45d672e4ddf1bd13ec57d85a2249fb9dca1eb83d",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
+}

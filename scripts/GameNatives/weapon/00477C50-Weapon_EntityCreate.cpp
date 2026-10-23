@@ -1,6 +1,6 @@
 // IGI native provenance: Weapon_EntityCreate - 0x00477C50 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00477C50-Weapon_EntityCreate.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00477C50-Weapon_EntityCreate.hpp"
+#include "Weapon_EntityCreate.h"
 struct status_msg* Weapon_EntityCreate(void* context, short arg2, int* arg3, int arg4, char arg5)
 
 // Sig: WeaponEntityView* Weapon_EntityCreate(unsigned int p1, unsigned short objectType,

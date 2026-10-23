@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x00405850",
+  "signature": "int32_t Config_Read(void* context)",
+  "calling_convention": "cdecl",
+  "cfg": {
+    "nodes": [
+      "0x00405850",
+      "0x00405864",
+      "0x00405884"
+    ],
+    "edges": [
+      {
+        "source": "0x00405850",
+        "target": "0x00405884",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00405850",
+        "target": "0x00405864",
+        "kind": "branch"
+      }
+    ]
+  },
+  "function_bytes": "8b4424045650e855280b008bf083c40485f6742056e8462d0b0056e8602b0b0083c408e828000000e803010000e8ae0200005ec3e877faffffe812000000e8ed000000e8980200005ec3",
+  "scope": "Static retail/source candidate analysis. No compiled engine implementation or runtime acceptance.",
+  "raw_evidence": "docs/fidelity/evidence/0x00405850-config-read-radare2-raw.json"
+}

@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "command": "r2 -q -2 -e bin.relocs.apply=true -c 'af @ 0x00514680; agfj @ 0x00514680' /Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00514680",
+  "function_name": "Terrain_OutOfTerrainRenderch",
+  "signature": "int32_t* __cdecl Terrain_OutOfTerrainRenderch(const void* texture_owner, int32_t pass)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x00514680"
+      },
+      {
+        "address": "0x005146DD"
+      },
+      {
+        "address": "0x005146C1"
+      },
+      {
+        "address": "0x005146FB"
+      },
+      {
+        "address": "0x005146EC"
+      },
+      {
+        "address": "0x005146D5"
+      },
+      {
+        "address": "0x005146C9"
+      },
+      {
+        "address": "0x005146F9"
+      },
+      {
+        "address": "0x00514756"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x00514680",
+        "target": "0x005146C1",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00514680",
+        "target": "0x005146DD",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146C1",
+        "target": "0x005146C9",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146C1",
+        "target": "0x005146D5",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146C9",
+        "target": "0x005146D5",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146C9",
+        "target": "0x00514756",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146D5",
+        "target": "0x005146C1",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146D5",
+        "target": "0x005146DD",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146DD",
+        "target": "0x005146EC",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146DD",
+        "target": "0x005146FB",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x005146EC",
+        "target": "0x005146F9",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x005146F9",
+        "target": "0x005146F9",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x005146FB",
+        "target": "0x00514756",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "function": {
+    "entry": "0x00514680",
+    "end": "0x0051475A",
+    "size_bytes": 218,
+    "bytes_sha256": "afbeb6a73e331d67e932d78c6c7c8e296b017279eccd24b722e3ab7ac4b5c7f2",
+    "bytes_hex": "538b5c240c56578b7c24108bc369c0afb500008d0cbf33d2c1e1042bcfd1e12bcf03c1b9fd010000f7f18d14528b049580e0a7008d149580e0a7008b0885c9741c39b8ec2e0000750c3998f02e00000f84810000008bc18b0985c975e4a180f8a7008b0d84f8a7003bc1750f6804ec5400e8bab0f9ff83c404ebfe8b0d7cf8a7008b34818b0d78f8a7000faf3588f8a70003f18b0d8cf8a7005652890431a180f8a70040a380f8a700c786e82e00000000000089beec2e0000899ef02e0000c7460400000000c70600000000e8bfb1f9ff83c4088bc65f5e5bc3",
+    "instruction_count": 62,
+    "basic_blocks": 9,
+    "edges": 13,
+    "call_instructions": 2,
+    "rep_instructions": 0,
+    "retn_count": 1,
+    "call_targets": {
+      "Debug_Error": 1,
+      "Camera_ApplyLineFilter_33": 1
+    },
+    "binary_ninja_name": "Terrain_OutOfTerrainRenderch",
+    "byte_binding": "Binary Ninja bn_memory_read of the whole range equals the retail file bytes at the same VAs (see bytes_sha256)"
+  },
+  "abi": {
+    "calling_convention": "cdecl (x86)",
+    "arguments": [
+      "[esp+4] const void* texture_owner (key part 1)",
+      "[esp+8] int32 pass (key part 2)"
+    ],
+    "variadic": false,
+    "return_value": "int32* in EAX: the existing or newly linked 0x2EF4-byte render chunk; no return on the capacity-exhausted fatal path",
+    "stack_cleanup": "caller"
+  },
+  "globals": [
+    {
+      "address": "0x00A7E080",
+      "role": "509 x 12-byte bucket table; zero-filled in the file image, initialised at 0x00516621",
+      "initial": "zero-filled"
+    },
+    {
+      "address": "0x00A7F878",
+      "role": "pool base",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x00A7F87C",
+      "role": "free-slot index array",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x00A7F880",
+      "role": "used slot count",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x00A7F884",
+      "role": "pool capacity (0x80 at runtime; zero in the file image)",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x00A7F888",
+      "role": "pool stride (0x2EF8 at runtime)",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x00A7F88C",
+      "role": "slot-index offset inside an element (0x2EF4)",
+      "initial": "0x00000000"
+    },
+    {
+      "address": "0x0054EC04",
+      "role": "literal \"Out of terrain renderchunks\""
+    }
+  ],
+  "callees": [
+    {
+      "site": "0x005146F1",
+      "target": "0x004AF7B0",
+      "name": "Debug_Error (fatal, followed by jmp $ at 0x005146F9)"
+    },
+    {
+      "site": "0x0051474C",
+      "target": "0x004AF910",
+      "name": "Camera_ApplyLineFilter_33 (23-byte leaf, inlined by the candidate)"
+    }
+  ],
+  "callers": {
+    "count": 3,
+    "evidence": "axt / bn_function_callers cross-check"
+  },
+  "afij": {
+    "size": 218,
+    "ninstrs": 62,
+    "nargs": 2,
+    "nlocals": 0,
+    "calltype": "cdecl",
+    "noreturn": false
+  },
+  "limitations": [
+    "Retail-image structural evidence only; it does not by itself prove candidate equivalence."
+  ],
+  "reported_prototype": {
+    "nargs": 2,
+    "calltype": "cdecl",
+    "note": "This is what radare2 recovers for the retail entry; the reviewed signature in this artifact is the one the record binds."
+  }
+}

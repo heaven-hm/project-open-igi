@@ -1,0 +1,696 @@
+{
+  "schema_version": 1,
+  "kind": "igi-paired-native-runtime-comparison",
+  "address": "0x0048F0C0",
+  "name": "StoreCommandLine",
+  "generated_utc": "2026-10-23T01:07:20.567601+00:00",
+  "result": "matched",
+  "verdict": "runtime_match",
+  "scope": "One startup invocation of retail 0x0048F0C0 vs the candidate symbol _StoreCommandLine in a single paired scenario (level 1, window mode, game-data working directory, same reviewed typed probe, spawn suspended before primary-thread resume).",
+  "reason": "The compiled candidate entry point now calls StoreCommandLine with the real WinMain lpCmdLine and then calls StoreInstanceHandle with hInstance, reproducing the retail call site's argument and order. The sequential paired capture produced exactly one typed startup observation on each side under identical conditions, and every compared typed field is identical: the command line is the text \"window level1\", the return aliases the argument, is non-null and matches the stored word, the stored word aliases the argument, and the previous stored word was null on both sides. The captured candidate image (cb178c2f..., receipt 12fcd523...) validated against the current tree and the native source at capture start and after capture. This is runtime parity for the single documented startup call, not a verification-status promotion.",
+  "status_promotion": "none; producing this capture does not promote a verification status. The Lead decides.",
+  "retail_call_site": {
+    "schema_version": 1,
+    "kind": "igi-retail-call-site-truth",
+    "address": "0x0048F0C0",
+    "name": "StoreCommandLine",
+    "caller": {
+      "entry": "0x0048F530",
+      "retail_symbol": "main",
+      "range": "0x0048F530-0x0048F912",
+      "size_bytes": 994,
+      "basic_blocks": 26,
+      "note": "Binary Ninja calls this function FX_Igimutex and gives it a wrong __stdcall prototype; radare2 names it main. The raw instruction stream and the stack offsets below are the evidence."
+    },
+    "callee": {
+      "entry": "0x0048F0C0",
+      "bytes": "8b 44 24 04 a3 c8 8b 5c 00 c3",
+      "instructions": [
+        "0x0048F0C0  mov eax, dword [esp+4]",
+        "0x0048F0C4  mov dword [0x005C8BC8], eax",
+        "0x0048F0C9  ret"
+      ],
+      "basic_blocks": 1
+    },
+    "next_callee": {
+      "entry": "0x0048F0D0",
+      "name": "StoreInstanceHandle",
+      "bytes": "8b 44 24 04 a3 c0 8b 5c 00 c3",
+      "instructions": [
+        "0x0048F0D0  mov eax, dword [esp+4]",
+        "0x0048F0D4  mov dword [0x005C8BC0], eax",
+        "0x0048F0D9  ret"
+      ]
+    },
+    "artifact": {
+      "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "sha256_matches_expected": true,
+      "preferred_image_base": "0x00400000",
+      "architecture": "x86 PE32"
+    },
+    "tools": {
+      "binary_ninja_mcp": {
+        "url": "http://127.0.0.1:24642/mcp",
+        "tools": [
+          "bn_function_disassembly",
+          "bn_function_callers",
+          "bn_function_xrefs_to"
+        ],
+        "result": "exactly one caller, main 0x0048F530; one call site at 0x0048F5F4; callee range 0x0048F0C0-0x0048F0CA"
+      },
+      "radare2": {
+        "version": "6.2.0",
+        "commands": [
+          "af @ 0x48f530; axt 0x48f0c0",
+          "af @ 0x48f530; axt 0x48f0d0",
+          "pd at 0x0048f5ec"
+        ],
+        "result": "main 0x48f5f4 CALL:--x call 0x48f0c0; main 0x48f5fa CALL:--x call 0x48f0d0"
+      }
+    },
+    "stack_offset_derivation": [
+      "WinMain entry: [esp]=return address, [esp+4]=hInstance, [esp+8]=hPrevInstance, [esp+0xc]=lpCmdLine, [esp+0x10]=nCmdShow.",
+      "Prologue: sub esp,0x464 plus push ebx/ebp/esi/edi (0x10 bytes) = 0x474.",
+      "After prologue: [esp+0x478]=hInstance, [esp+0x480]=lpCmdLine.",
+      "0x0048F585 mov ebp,[esp+0x478] loads hInstance; 0x0048F5EC mov ecx,[esp+0x480] loads lpCmdLine."
+    ],
+    "call_site_instructions": [
+      {
+        "address": "0x0048F5E6",
+        "bytes": "ff 15 ac 31 53 00",
+        "text": "call dword [RegisterClassA]",
+        "role": "window class registered before the two stores"
+      },
+      {
+        "address": "0x0048F5EC",
+        "bytes": "8b 8c 24 80 04 00 00",
+        "text": "mov ecx, dword [esp+0x480]",
+        "role": "load WinMain lpCmdLine"
+      },
+      {
+        "address": "0x0048F5F3",
+        "bytes": "51",
+        "text": "push ecx",
+        "role": "cdecl argument"
+      },
+      {
+        "address": "0x0048F5F4",
+        "bytes": "e8 c7 fa ff ff",
+        "text": "call 0x0048F0C0",
+        "role": "StoreCommandLine(lpCmdLine)"
+      },
+      {
+        "address": "0x0048F5F9",
+        "bytes": "55",
+        "text": "push ebp",
+        "role": "hInstance loaded at 0x0048F585"
+      },
+      {
+        "address": "0x0048F5FA",
+        "bytes": "e8 d1 fa ff ff",
+        "text": "call 0x0048F0D0",
+        "role": "StoreInstanceHandle(hInstance)"
+      },
+      {
+        "address": "0x0048F5FF",
+        "bytes": "68 c0 1e 54 00",
+        "text": "push \"filesys.cfg\"",
+        "role": "next start-up call after the two stores"
+      },
+      {
+        "address": "0x0048F770",
+        "bytes": "ff 15 b4 31 53 00",
+        "text": "call dword [CreateWindowExA]",
+        "role": "window creation, after the two stores"
+      }
+    ],
+    "result_and_use": {
+      "store_command_line_ecx": "lpCmdLine",
+      "store_command_line_return": "EAX holds the same pointer (callee returns its argument); main does not read it: the next instruction pushes ebp and the next call overwrites EAX.",
+      "store_instance_handle_argument": "hInstance (EBP saved at 0x0048F585 from [esp+0x478])",
+      "store_instance_handle_return": "EAX holds hInstance; main does not read it before the next start-up call.",
+      "ordering": "after the IGIMUTEX duplicate check and RegisterClassA; immediately before StoreInstanceHandle; before the remaining start-up setters and before CreateWindowExA."
+    },
+    "source_refs": [
+      "retail-main-r2.txt",
+      "retail-main-bn.txt",
+      "candidate-callsite-objdump.txt"
+    ],
+    "candidate_wiring": {
+      "source": "engine/platform/windows/scene_main.cpp",
+      "compiled_entry_symbol": "_WinMain@16",
+      "compiled_entry_va": "0x00406B50",
+      "store_command_line_call": "0x00406BF9 call 0x0041E830",
+      "store_instance_handle_call": "0x00406C04 call 0x0041E850",
+      "argument_forwarding": [
+        "0x00406BF3 mov 0x10(%ebp),%eax  ; lpCmdLine",
+        "0x00406BF6 mov %eax,(%esp)",
+        "0x00406BF9 call _StoreCommandLine",
+        "0x00406BFE mov 0x8(%ebp),%eax  ; hInstance",
+        "0x00406C01 mov %eax,(%esp)",
+        "0x00406C04 call _StoreInstanceHandle"
+      ],
+      "candidate_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+      "receipt_sha256": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d"
+    },
+    "limitations": [
+      "Binary Ninja's function name FX_Igimutex and real image VA range prediction is a mis-symbolication; the call graph and instruction stream are the evidence.",
+      "The retail main was not symbolized as WinMain; lpCmdLine is identified from the WinMain ABI stack offsets, not from a symbol.",
+      "No decompiler pseudocode was used for the call ordering; the ordered instruction stream from two independent tools (Binary Ninja MCP and radare2 6.2.0) was used.",
+      "The candidate places the two stores after the IGIMUTEX check and before its own ANSI-argv conversion; retail registers the window class before these stores, while the candidate registers its class later in the scene/shell path. The two stores stay adjacent and before any window creation, matching the retail relative order that this native participates in."
+    ]
+  },
+  "candidate_wiring": {
+    "source": "engine/platform/windows/scene_main.cpp",
+    "compiled_entry_symbol": "_WinMain@16",
+    "compiled_entry_va": "0x00406B50",
+    "store_command_line_call": "0x00406BF9 call 0x0041E830",
+    "store_instance_handle_call": "0x00406C04 call 0x0041E850",
+    "argument_forwarding": [
+      "0x00406BF3 mov 0x10(%ebp),%eax  ; lpCmdLine",
+      "0x00406BF6 mov %eax,(%esp)",
+      "0x00406BF9 call _StoreCommandLine",
+      "0x00406BFE mov 0x8(%ebp),%eax  ; hInstance",
+      "0x00406C01 mov %eax,(%esp)",
+      "0x00406C04 call _StoreInstanceHandle"
+    ],
+    "candidate_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+    "receipt_sha256": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d"
+  },
+  "attempt_history": {
+    "note": "Attempts 1-4 are retained from the previous revision of this record; their raw artifacts remain under build/runtime-traces/20261022T225110Z-48f0c0-paired/. That revision used reviewed probe sha256 13e12c15..., whose args.length read threw on this Frida 17.24.0 x86 endpoint; the probe was subsequently repaired under review into sha256 6ed5dd51.... Attempts 7-11 are this revision's work on the compiled entry point. Raw artifacts for each attempt remain under the listed build/runtime-traces directory.",
+    "attempts": [
+      {
+        "attempt": 1,
+        "utc": "2026-10-22T22:51:10Z",
+        "side": "preflight",
+        "outcome": "refused",
+        "detail": "A foreign staged candidate, open-igi-probe-sl70_qtw.exe (window level5), was active. Nothing was spawned, attached to, or terminated.",
+        "raw_evidence": "build/runtime-traces/20261022T225110Z-48f0c0-paired/preflight.txt"
+      },
+      {
+        "attempt": 2,
+        "utc": "2026-10-22T22:54:21Z",
+        "side": "retail",
+        "outcome": "instrumentation-failed",
+        "detail": "Retail was spawned suspended with cwd and window level1; the hook installed at 0x0048F0C0 / 0x005C8BC8. The reviewed probe's onEnter threw 'RangeError: invalid array index' at its args.length read, so no call was recorded. The owned process (PID 696) was terminated and confirmed gone; the candidate was not attempted.",
+        "raw_evidence": [
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/retail.jsonl",
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/pair.json"
+        ]
+      },
+      {
+        "attempt": 3,
+        "utc": "2026-10-22T22:56:51Z",
+        "side": "diagnostic",
+        "outcome": "root-cause-confirmed",
+        "detail": "A diagnostic copy of the probe reproduced the failure at its own args.length read with stack 'RangeError: invalid array index at onEnter'. The reviewed probe file was not modified during this diagnosis.",
+        "raw_evidence": [
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/diagnose.jsonl",
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/diagnose_probe.js",
+          "build/runtime-traces/20261022T225110Z-48f0c0-paired/diagnose_spawn.py"
+        ]
+      },
+      {
+        "attempt": 4,
+        "utc": "2026-10-22T22:57:30Z",
+        "side": "preflight",
+        "outcome": "refused",
+        "detail": "A second foreign staged candidate, open-igi-probe-d1ooj42n.exe (window level5, owner worktree deepseek-smart-workflow), was active. No further runtime work was attempted.",
+        "raw_evidence": "build/runtime-traces/20261022T225110Z-48f0c0-paired/preflight.txt"
+      },
+      {
+        "attempt": 5,
+        "utc": "2026-10-23T00:20:29Z",
+        "side": "preflight",
+        "outcome": "refused-by-harness",
+        "detail": "The first invocation of this revision's harness refused to start because its host-side advisory process scan matched a concurrent r2 analysis command line that mentioned igi.exe; the decisive Frida process list was empty. No game process was spawned, attached to, or terminated. The harness was corrected so the Frida list is the blocking preflight, and the run was repeated.",
+        "raw_evidence": "build/runtime-traces/20261023T001700Z-48f0c0-paired/harness.log (later run overwrote the earlier log; this detail is an operator-recorded fact, not a retained artifact)"
+      },
+      {
+        "attempt": 6,
+        "utc": "2026-10-23T00:21:18Z",
+        "side": "retail-then-candidate",
+        "outcome": "retail-captured-candidate-unobserved",
+        "detail": "See paired_capture below. Retail was observed once with the typed probe; the candidate process started, installed the hook and delivered Escape, but its startup path never called the hooked entry, so its call list is empty.",
+        "raw_evidence": [
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/pair.json",
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/retail.jsonl",
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/candidate.json",
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/candidate.jsonl",
+          "build/runtime-traces/20261023T001700Z-48f0c0-paired/preflight.txt"
+        ]
+      },
+      {
+        "attempt": 7,
+        "utc": "2026-10-23T00:53:26Z",
+        "side": "preflight/retail",
+        "outcome": "blocked-by-foreign-process",
+        "detail": "Preflight was clear (Frida game list empty). Retail was spawned suspended, hooked and observed once (PID 1088, command line \"window level1\"); while its observation window was open a foreign staged candidate, open-igi-probe-ibf3vxpw.exe window level5 (owner worktree deepseek-smart-workflow), appeared on the shared Frida endpoint. The harness refused to start the candidate side and did not attach to, signal or terminate the foreign process. The owned retail PID 1088 was terminated and confirmed gone.",
+        "raw_evidence": [
+          "build/runtime-traces/20261023T005132Z-48f0c0-paired/pair.json",
+          "build/runtime-traces/20261023T005132Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261023T005132Z-48f0c0-paired/retail.jsonl",
+          "build/runtime-traces/20261023T005132Z-48f0c0-paired/preflight.txt"
+        ]
+      },
+      {
+        "attempt": 8,
+        "utc": "2026-10-23T00:55:57Z",
+        "side": "retail-then-candidate",
+        "outcome": "captured-but-receipt-stale",
+        "detail": "A full sequential capture produced one typed observation per side with identical values (candidate image 4de0c95d..., PIDs 1208 and 1344, both terminated). The candidate_receipt_validation recorded false: the receipt (0cf25386..., issued 00:50:54Z) bound the tree at build time, but another agent added terrain sources to the shared worktree afterwards. The runtime values were not used as the final record because the image provenance no longer validated; no status was claimed.",
+        "raw_evidence": [
+          "build/runtime-traces/20261023T005531Z-48f0c0-paired/pair.json",
+          "build/runtime-traces/20261023T005531Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261023T005531Z-48f0c0-paired/candidate.json"
+        ]
+      },
+      {
+        "attempt": 9,
+        "utc": "2026-10-23T01:00Z",
+        "side": "build",
+        "outcome": "receipt-refused",
+        "detail": "A clean receipt build was run while the shared tree was being edited; candidate_build_receipt.py refused to issue a receipt because source inputs changed during the build. No capture was attempted. Timestamp is approximate; the refusal was printed to the task console and no artifact file was retained.",
+        "raw_evidence": []
+      },
+      {
+        "attempt": 10,
+        "utc": "2026-10-23T01:03:24Z",
+        "side": "retail",
+        "outcome": "retail-driver-timeout",
+        "detail": "With the newly rebuilt receipt-valid image cb178c2f..., retail was spawned and observed once (PID 1496), but the scenario action probe could not find an owned visible window within the driver observation window (escape reason \"owned visible window not ready\"), so the driver marked the retail capture failed and did not attempt the candidate. This is a timing failure of the action tooling under system load, not a behavioral difference; the owned PID was terminated and confirmed gone.",
+        "raw_evidence": [
+          "build/runtime-traces/20261023T010324Z-48f0c0-paired/pair.json",
+          "build/runtime-traces/20261023T010324Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261023T010324Z-48f0c0-paired/retail.jsonl"
+        ]
+      },
+      {
+        "attempt": 11,
+        "utc": "2026-10-23T01:05:04Z",
+        "side": "retail-then-candidate",
+        "outcome": "captured-matched",
+        "detail": "Final sequential capture on the receipt-valid image cb178c2f... (receipt 12fcd523...). One typed observation per side, identical field by field; both owned PIDs terminated; no game/probe process or staged probe file remained. See paired_capture.",
+        "raw_evidence": [
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/pair.json",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/retail.json",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/retail.jsonl",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/candidate.json",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/candidate.jsonl",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/preflight.txt",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/retail-call-site.json",
+          "build/runtime-traces/20261023T010502Z-48f0c0-paired/candidate-callsite-objdump.txt"
+        ]
+      }
+    ]
+  },
+  "paired_capture": {
+    "capture_directory": "build/runtime-traces/20261023T010502Z-48f0c0-paired",
+    "created_utc": "2026-10-23T01:05:04.213270+00:00",
+    "finished_utc": "2026-10-23T01:05:24.895278+00:00",
+    "order": "retail first, then candidate, sequentially; the candidate was started only after retail's owned process was confirmed gone",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "working_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "windows_working_directory": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "frida_host": "127.0.0.1:27042",
+    "frida_client_version": "17.24.0",
+    "frida_server": "frida-server-x86.exe (CrossOver wine)",
+    "spawn_mode": "Device.spawn([...], cwd=game) suspended through the Frida Python API; hook installed before primary-thread resume",
+    "commands": {
+      "retail": {
+        "argv": [
+          "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+          "window",
+          "level1"
+        ],
+        "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI"
+      },
+      "candidate": {
+        "staged_from": "build-clean-win32/igi1.exe",
+        "argv": [
+          "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-f3hx45eq.exe",
+          "window",
+          "level1"
+        ],
+        "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI"
+      }
+    },
+    "pids": {
+      "retail": 1596,
+      "candidate": 1508,
+      "note": "Only these task-owned PIDs were terminated; each termination is recorded in the side records and the Frida process list was empty afterwards."
+    },
+    "probe": {
+      "path": "scripts/frida_store_command_line_typed.js",
+      "sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+      "reviewed_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+      "sha256_matches_reviewed": true
+    },
+    "driver": {
+      "path": "scripts/frida_scoped_capture.py",
+      "sha256": "1119bd16344112c7f622e25372cf7441cff1c2d08b4540a01432346b66933ed6",
+      "note": "capture() reused directly; main() gate precondition unsatisfied"
+    },
+    "actions": {
+      "path": "scripts/frida_scenario_actions.js",
+      "sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7"
+    },
+    "harness": {
+      "path": "build/runtime-traces/20261023T010502Z-48f0c0-paired/run_capture.py",
+      "sha256": "69027f2d0d82d983183a22925a4c40d8a97ec1b206c16813a87cd9eedca3c466",
+      "note": "Local capture harness; imports and calls the reviewed driver's capture() unchanged."
+    },
+    "binaries": {
+      "retail": {
+        "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "sha256_matches_expected": true,
+        "preferred_image_base": "0x00400000",
+        "resolved_entry": "0x0048F0C0",
+        "resolved_state": "0x005C8BC8",
+        "entry_bytes": "8b 44 24 04 a3 c8 8b 5c 00 c3"
+      },
+      "candidate": {
+        "path": "build-clean-win32/igi1.exe",
+        "sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+        "sha256_unchanged_during_capture": true,
+        "build_utc": "2026-10-23T01:03:23.674977+00:00",
+        "symbols": {
+          "entry": "_StoreCommandLine",
+          "entry_va": "0x0041E830",
+          "state": "_CommandLine",
+          "state_va": "0x005D8BC0"
+        },
+        "receipt": {
+          "path": "build-clean-win32/candidate-receipt.json",
+          "sha256": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d",
+          "created_at": "2026-10-23T01:03:23.674977+00:00",
+          "build_command": [
+            "cmake",
+            "--build",
+            "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32",
+            "--target",
+            "igi",
+            "--clean-first",
+            "-j4"
+          ],
+          "valid_for_current_tree_and_native_source": true,
+          "note": "validate_receipt() returned true at capture start (recorded in pair.json), true immediately after the capture (tree quiet for 164 s), and false at the final check because a concurrent terrain edit landed at 01:06:10Z. The runtime observations are bound to the recorded image digest; the receipt is bound to the tree state at build time.",
+          "validated_after_capture": true,
+          "post_capture_check_utc": "2026-10-23T01:05:52Z",
+          "final_check_utc": "2026-10-23T01:07:49Z",
+          "final_check_valid": false,
+          "final_check_reason": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp was edited at 2026-10-23T01:06:10Z, after the capture and after the post-capture check. The captured image digest cb178c2f... is unchanged; only the whole-tree receipt binding is stale against the now-newer tree."
+        },
+        "entry_bytes": "8b 44 24 04 a3 c0 8b 5d 00 c3",
+        "entry_bytes_note": "Static provenance only: the captured image contains the retail-shaped load/store/return at the listed entry and state symbols. It is not a runtime observation."
+      }
+    },
+    "observations": {
+      "retail": {
+        "count": 1,
+        "executable": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "executable_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "owned_pid": 1596,
+        "owned_process_terminated": true,
+        "hook_installed": true,
+        "module_name": "igi.exe",
+        "resolved_entry": "0x48f0c0",
+        "resolved_state": "0x5c8bc8",
+        "hook_phase": "before-primary-thread-resume",
+        "escape_delivered": true,
+        "calls": [
+          {
+            "type": "observed",
+            "address": "0x0048F0C0",
+            "typedState": {
+              "scope": "startup-command-line-store",
+              "inputs": {
+                "command_line": "window level1",
+                "command_line_state": "text",
+                "argument_reads": [
+                  {
+                    "index": 0,
+                    "state": "value",
+                    "source": "args[0]"
+                  },
+                  {
+                    "index": 1,
+                    "state": "value",
+                    "source": "args[1]"
+                  },
+                  {
+                    "index": 2,
+                    "state": "value",
+                    "source": "args[2]"
+                  },
+                  {
+                    "index": 3,
+                    "state": "value",
+                    "source": "args[3]"
+                  }
+                ]
+              },
+              "outputs": {
+                "return_aliases_argument": true,
+                "return_aliases_argument_state": "known",
+                "return_is_null": false,
+                "return_matches_stored": true,
+                "return_text": "window level1"
+              },
+              "sideEffects": {
+                "previous_command_line": "<null>",
+                "previous_command_line_state": "null",
+                "stored_command_line": "window level1",
+                "stored_command_line_state": "text",
+                "stored_aliases_argument": true,
+                "stored_aliases_argument_state": "known"
+              }
+            }
+          }
+        ]
+      },
+      "candidate": {
+        "count": 1,
+        "staged_path": "/Users/haseeb-mir/Downloads/IGI/open-igi-probe-f3hx45eq.exe",
+        "staged_sha256": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+        "owned_pid": 1508,
+        "owned_process_terminated": true,
+        "hook_installed": true,
+        "module_name": "open-igi-probe-f3hx45eq.exe",
+        "resolved_entry": "0x41e830",
+        "resolved_state": "0x5d8bc0",
+        "hook_phase": "before-primary-thread-resume",
+        "escape_delivered": true,
+        "calls": [
+          {
+            "type": "observed",
+            "address": "0x0048F0C0",
+            "typedState": {
+              "scope": "startup-command-line-store",
+              "inputs": {
+                "command_line": "window level1",
+                "command_line_state": "text",
+                "argument_reads": [
+                  {
+                    "index": 0,
+                    "state": "value",
+                    "source": "args[0]"
+                  },
+                  {
+                    "index": 1,
+                    "state": "value",
+                    "source": "args[1]"
+                  },
+                  {
+                    "index": 2,
+                    "state": "value",
+                    "source": "args[2]"
+                  },
+                  {
+                    "index": 3,
+                    "state": "value",
+                    "source": "args[3]"
+                  }
+                ]
+              },
+              "outputs": {
+                "return_aliases_argument": true,
+                "return_aliases_argument_state": "known",
+                "return_is_null": false,
+                "return_matches_stored": true,
+                "return_text": "window level1"
+              },
+              "sideEffects": {
+                "previous_command_line": "<null>",
+                "previous_command_line_state": "null",
+                "stored_command_line": "window level1",
+                "stored_command_line_state": "text",
+                "stored_aliases_argument": true,
+                "stored_aliases_argument_state": "known"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "candidate_static_check": {
+      "question": "Does the compiled candidate entry point execute the native at startup with the retail argument and order?",
+      "findings": [
+        "CMakeLists.txt builds target igi from engine/platform/windows/scene_main.cpp; engine/main.cpp (which already called StoreCommandLine) is still not compiled into this target.",
+        "scene_main.cpp WinMain now receives the real LPSTR lpCmdLine, calls StoreCommandLine(command_line) and immediately StoreInstanceHandle(instance_handle), after the single-instance mutex check and before its own argument parsing and any window creation.",
+        "objdump of the captured image: exactly one call to 0x0041E830 (_StoreCommandLine) and one to 0x0041E850 (_StoreInstanceHandle), both inside _WinMain@16 at 0x00406B50, at 0x00406BF9 and 0x00406C04.",
+        "Argument forwarding: 0x00406BF3 mov 0x10(%ebp),%eax (WinMain lpCmdLine) then call; 0x00406BFE mov 0x8(%ebp),%eax (WinMain hInstance) then call. The two calls are adjacent and precede 0x00406C13 (GetCommandLineW) and all window creation.",
+        "The candidate image contains the retail-shaped bodies: 0x0041E830 mov eax,[esp+4]; mov [0x005D8BC0],eax; ret and 0x0041E850 mov eax,[esp+4]; mov [0x005D8BBC],eax; ret."
+      ],
+      "commands": [
+        "i686-w64-mingw32-objdump -d build-clean-win32/igi1.exe | grep -E \"call[[:space:]]+41e8(30|50)\"",
+        "i686-w64-mingw32-objdump -d --start-address=0x406bf3 --stop-address=0x406c09 build-clean-win32/igi1.exe",
+        "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | grep -E \"_(StoreCommandLine|StoreInstanceHandle|CommandLine|InstanceHandle)$|_WinMain@16\"",
+        "python3 scripts/candidate_build_receipt.py --root . --build-dir build-clean-win32 --candidate build-clean-win32/igi1.exe --receipt build-clean-win32/candidate-receipt.json",
+        "validate_receipt(build-clean-win32/candidate-receipt.json, root, build-clean-win32/igi1.exe, [engine/src/retail/core/app_startup_natives.cpp]) -> OK"
+      ]
+    },
+    "per_field_comparison": {
+      "calls_compared": 1,
+      "retail_call_count": 1,
+      "candidate_call_count": 1,
+      "comparison_possible": true,
+      "behaviorally_equal": true,
+      "probe_surface_differences": null,
+      "summary": "Both sides produced one startup observation. All thirteen compared fields match exactly: command-line text and state, return aliasing/null/matches-stored/text, previous stored-word text/state, stored-word text/state, and stored-word aliasing plus its known state. Argument acquisition used the same explicit args[i] surface on both sides.",
+      "fields": [
+        {
+          "field": "command_line_text",
+          "retail": "window level1",
+          "candidate": "window level1",
+          "match": true
+        },
+        {
+          "field": "command_line_state",
+          "retail": "text",
+          "candidate": "text",
+          "match": true
+        },
+        {
+          "field": "return_aliases_argument",
+          "retail": true,
+          "candidate": true,
+          "match": true
+        },
+        {
+          "field": "return_aliases_argument_state",
+          "retail": "known",
+          "candidate": "known",
+          "match": true
+        },
+        {
+          "field": "return_is_null",
+          "retail": false,
+          "candidate": false,
+          "match": true
+        },
+        {
+          "field": "return_matches_stored",
+          "retail": true,
+          "candidate": true,
+          "match": true
+        },
+        {
+          "field": "return_text",
+          "retail": "window level1",
+          "candidate": "window level1",
+          "match": true
+        },
+        {
+          "field": "previous_command_line_text",
+          "retail": "<null>",
+          "candidate": "<null>",
+          "match": true
+        },
+        {
+          "field": "previous_command_line_state",
+          "retail": "null",
+          "candidate": "null",
+          "match": true
+        },
+        {
+          "field": "stored_command_line_text",
+          "retail": "window level1",
+          "candidate": "window level1",
+          "match": true
+        },
+        {
+          "field": "stored_command_line_state",
+          "retail": "text",
+          "candidate": "text",
+          "match": true
+        },
+        {
+          "field": "stored_aliases_argument",
+          "retail": true,
+          "candidate": true,
+          "match": true
+        },
+        {
+          "field": "stored_aliases_argument_state",
+          "retail": "known",
+          "candidate": "known",
+          "match": true
+        }
+      ]
+    },
+    "conditions_equivalent": {
+      "level": true,
+      "display_mode": true,
+      "working_directory": true,
+      "probe": true,
+      "sequential_order": true,
+      "driver": true,
+      "note": "Both sides: window level1, cwd Z:\\Users\\haseeb-mir\\Downloads\\IGI, same probe file (6ed5dd51...), same action probe and driver, retail first then candidate, spawn suspended with the hook installed before resume."
+    },
+    "runtime_state_after": {
+      "checked_utc": "2026-10-23T01:05:24.895278+00:00",
+      "frida_game_processes": [],
+      "host_game_processes": [],
+      "staged_probe_files_remaining": [],
+      "candidate_sha256_after": "cb178c2f0b4837203cc2afdcacb22fcdcc027f6208be41ec7d96e03429167ae2",
+      "candidate_unchanged": true,
+      "receipt_sha256_after": "12fcd5230352a3301f88320d8f98c295ac1b4583434644d0f1640d4a1fcda56d",
+      "receipt_unchanged": true
+    }
+  },
+  "limitations": [
+    "Scope is one startup invocation under one scenario (level 1, window mode, \"window level1\", game-data cwd). Other levels, display modes and command-line contents were not compared.",
+    "The observation window is the driver's finite default: the first observed call extends observation by 5 s, with the documented Escape action delivered at >=2 s. It is not continuous coverage, and one earlier retail attempt failed because the owned window was not visible inside that window.",
+    "The worktree is shared with concurrent agents. Another agent added and edited terrain sources between the first valid-receipt build and the final one, invalidating the earlier whole-tree receipt (attempt 8). The final image cb178c2f... and receipt 12fcd523... validated at capture start (01:05:04Z) and immediately after capture (01:05:52Z), but a further terrain edit at 01:06:10Z made the receipt stale again by the final check at 01:07:49Z. The captured image digest remains recorded and unchanged; only the whole-tree receipt binding is superseded. Re-validate or re-issue the receipt before reusing it as current-tree provenance.",
+    "Frida instrumentation overhead applies; both sides were observed with the same reviewed probe, action probe and driver.",
+    "Raw pointer addresses are never compared across processes: the comparison is limited to content and typed relations (command-line text, aliasing booleans, stored-word state).",
+    "Binary Ninja names 0x0048F530 FX_Igimutex and gives it a wrong __stdcall two-argument prototype; the call-site facts come from the raw instruction stream and the WinMain ABI stack offsets, corroborated by radare2 6.2.0 (which names it main and reports the same two call sites).",
+    "The candidate places the two stores before its own ANSI argv conversion and before the scene path registers its window class; retail registers the class immediately before the stores. The stores remain adjacent, in retail order, and before any window creation, but the surrounding class-registration position differs.",
+    "engine/main.cpp already contained the retail-ordered calls but is not part of the compiled target; it was left unchanged. The verified compiled entry is scene_main.cpp.",
+    "The driver's main() still requires a passing static/semantic gate scope and reviewed runtime_contract, which do not exist for this address (manifest status STRUCTURALLY_VERIFIED); its capture() was reused unchanged by a local harness rather than fabricating a gate report or contract.",
+    "No verification status was changed. RUNTIME_TESTED for this single call is supportable from this record; it is not evidence of whole-game or whole-native equivalence."
+  ],
+  "establishes": [
+    "Retail call-site truth: 0x0048F530 is the only caller of 0x0048F0C0. At 0x0048F5EC it loads WinMain lpCmdLine from [esp+0x480] (entry [esp+0xc]), pushes it at 0x0048F5F3, and calls 0x0048F0C0 at 0x0048F5F4. It does not read the return value. At 0x0048F5F9/0x0048F5FA it pushes the hInstance saved in EBP at 0x0048F585 and calls StoreInstanceHandle 0x0048F0D0. Both stores happen after RegisterClassA (0x0048F5E6) and before CreateWindowExA (0x0048F770).",
+    "The compiled candidate entry point reproduces that argument and order: _WinMain@16 at 0x00406B50 loads lpCmdLine from [ebp+0x10] and calls _StoreCommandLine at 0x00406BF9, then loads hInstance from [ebp+0x8] and calls _StoreInstanceHandle at 0x00406C04, before GetCommandLineW and before any window creation.",
+    "A sequential paired typed capture observed exactly one startup call on each side with identical values: command_line \"window level1\" (text), return aliases the argument, non-null, matches the stored word, return_text \"window level1\", previous stored word null, stored word \"window level1\" (text), stored word aliases the argument.",
+    "The captured candidate image cb178c2f... has receipt 12fcd523... that validates against the current tree and engine/src/retail/core/app_startup_natives.cpp at capture start and after capture; the image was unchanged during the capture.",
+    "Both task-owned PIDs (retail 1596, candidate 1508) were terminated and confirmed gone; no game/probe process or staged probe file remained. The foreign process observed in attempt 7 was never attached to, signalled or terminated."
+  ],
+  "does_not_establish": [
+    "Behavior outside the single start-up call and scenario above, or equivalence of the surrounding startup sequence (for example class-registration position).",
+    "RUNTIME_TESTED/VERIFIED status promotion for the native or the game; the manifest was not edited and the Lead decides acceptance.",
+    "Correctness of the concurrent terrain work by other agents that is present in the shared tree and receipt binding but outside this task."
+  ],
+  "recommended_next_step": "Record this runtime match for the Lead's acceptance decision and keep the captured image/receipt pair together. If acceptance requires broader coverage, repeat the same typed comparison for other supported levels, display modes and command-line contents, and re-issue the receipt immediately before each capture because the shared worktree is edited concurrently."
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_PlayAnimation - 0x0044D6E0 - CFG score 93.3% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D6E0-AIAction_PlayAnimation.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D6E0-AIAction_PlayAnimation.hpp"
+#include "AIAction_PlayAnimation.h"
 int AIAction_PlayAnimation(int context, float arg2 )
 
 // Sig: void AIAction_PlayAnimation(int animationId, int flags)

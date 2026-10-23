@@ -1,6 +1,6 @@
 // IGI native provenance: Config_ResetGraphicOptions - 0x00403B70 - CFG score 97.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00403B70-Config_ResetGraphicOptions.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00403B70-Config_ResetGraphicOptions.hpp"
+#include "Config_ResetGraphicOptions.h"
 int Config_ResetGraphicOptions(int context)
 
 // Sig: void Config_ResetGraphicOptions()

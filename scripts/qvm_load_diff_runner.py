@@ -74,8 +74,8 @@ static std::int32_t exists(const char*) { return file_exists ? 1 : 0; }
 int main(int argc,char**argv) {
  if(argc!=5) return 2; int index=std::atoi(argv[1]); file_exists=std::atoi(argv[2]); load_succeeds=std::atoi(argv[3]);
  const char* path=argv[4]; std::memset(qvm_data,0x5a,sizeof(qvm_data));
- igi::retail::script::Host_SetQvmDebugCompileFlag(0);
- igi::retail::script::Host_SetSysDispatchOpcode7(&exists);
+ igi::retail::script::Script_SetDebugCompileFlag(0);
+ igi::retail::script::Qvm_SetDispatchOpcode7(&exists);
  auto* out=static_cast<std::uint8_t*>(igi::retail::script::Qvm_Load(path));
  bool path_ok=out && std::strcmp(reinterpret_cast<char*>(out),path)==0;
  bool data_ok=out && *reinterpret_cast<void**>(out+0x80)==qvm_data;

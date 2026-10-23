@@ -1,5 +1,6 @@
 #include "igi/retail/texture/texture_loaders.hpp"
 
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/dynobj/hash_lookup.hpp"
 #include "igi/retail/dynobj/local_models_mef.hpp"
 #include "igi/retail/error/error_show.hpp"
@@ -30,7 +31,6 @@ TextureBackendDispatchFn g_a94e84[0x10]{};
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004B0F80-0x004B0F86, 6 bytes, digest 29ebd30649f3b57e6ec4d50668338cbb32243052c21fe58371cadd573f365c23.
 // Behavior/CFG: returns the active render backend identifier stored in `0x00A94A64` (`mov eax, [0x00A94A64]; ret`). radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact global getter semantics.
-// Previous catalog alias: Sys_ReadFileBlock_3.
 std::int32_t Texture_GetActiveBackendId()
 {
     return g_a94a64;
@@ -41,7 +41,6 @@ std::int32_t Texture_GetActiveBackendId()
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B26A0-0x004B26A8, 8 bytes, digest 8209abbcb1723ad9145b7bfe97647edb07b2acc47ff1b02f71fa78fd9ab559e1.
 // Behavior/CFG: sets the texture upload state byte `0x00943B3C` to `1` (`mov byte ptr [0x00943B3C], 1; ret`). radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact byte store.
-// Previous catalog alias: Sys_PopStack_8.
 void Texture_EnableUpload()
 {
     g_943b3c = 1;
@@ -52,7 +51,6 @@ void Texture_EnableUpload()
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B26B0-0x004B26B8, 8 bytes, digest 4893ff3f0d5654223486e4c269627dbfc9c121aa464471eedbf09c918c805d04.
 // Behavior/CFG: clears the texture upload state byte `0x00943B3C` to `0` (`mov byte ptr [0x00943B3C], 0; ret`). radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact byte clear.
-// Previous catalog alias: Sys_ResolveSymbol_8.
 void Texture_DisableUpload()
 {
     g_943b3c = 0;
@@ -60,10 +58,9 @@ void Texture_DisableUpload()
 
 // Native: Texture_UploadMipmapPacket; retail VA 0x004B23B0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B23B0-0x004B2446, 150 bytes, digest 65ce08ad0b3bfb6914e1cd899467c3bcc788ddb0bd6a4c1a2b476295dfe1c109; CLEAN/sys/004B23B0-Sys_FreeMemory_8.c.
+// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B23B0-0x004B2446, 150 bytes, digest 65ce08ad0b3bfb6914e1cd899467c3bcc788ddb0bd6a4c1a2b476295dfe1c109; CLEAN/sys/004B23B0-Texture_UploadMipmapPacket.c.
 // Behavior/CFG: writes `Texture_GetActiveBackendId()` into `*arg1`, zero-initializes a 12-slot dispatch packet (`slot[0]=arg1`, `slot[1]=arg2`, `slot[2]=arg7`, `slot[3]=arg3`, `slot[6]=arg4`, `slot[7]=arg5`, `slot[8]=arg6`, `slot[9]=arg8`, `slot[10]=(int8_t)g_943b3c`, `slot[11]=arg9`), and calls the two renderer callbacks at `0x00A94E84[g_546fa8]` and `0x00A94E84[g_546fb0]` with the packet pointer. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact 12-slot packet layout and dual backend dispatch.
-// Previous catalog alias: Sys_FreeMemory_8.
 std::int32_t Texture_UploadMipmapPacket(std::int32_t* arg1, void* arg2, std::int32_t arg3, std::int32_t arg4,
                                         std::int32_t arg5, std::int32_t arg6, std::int32_t arg7,
                                         std::int32_t arg8, void* arg9)
@@ -97,7 +94,6 @@ std::int32_t Texture_UploadMipmapPacket(std::int32_t* arg1, void* arg2, std::int
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7CF0-0x004B7D28, 56 bytes, digest 91d6a4b0ea6acca264ed1285d7d516332e1293e63e09487c7fad2bcb3febac92.
 // Behavior/CFG: writes `Texture_GetActiveBackendId()` into `*arg1`, builds a 3-slot palette packet (`slot[0]=arg1`, `slot[1]=arg3`, `slot[2]=arg2`), and calls the renderer callback at `0x00A94E84[g_a84a48]` with the packet pointer. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact 3-slot packet layout and backend dispatch.
-// Previous catalog alias: Sys_PushStack_21.
 std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::int32_t arg3)
 {
     const std::int32_t eax = Texture_GetActiveBackendId();
@@ -117,9 +113,8 @@ std::int32_t Texture_UploadPalettePacket(std::int32_t* arg1, void* arg2, std::in
 // Native: Texture_LoadLoopTextureFile; retail VA 0x004B24C0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B24C0-0x004B25AF, 239 bytes, digest 01d287da4b443fddcd7d6be5cdf3c1bc3df57987d4b5a46165182aa4d3b9c79c; CLEAN/sys/004B24C0-Sys_SIsNotAValidTextureF.c.
-// Behavior/CFG: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`), calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and Texture_DisableUpload() (0x004B26B0). On invalid header, calls Error_Show("'%s' is not a valid Texture file.", arg3) (0x004AF7B0). radare2 15 blocks/22 edges; Binary Ninja 15 blocks; 100% structural agreement.
+// Behavior/CFG: loads `resource_path` (`arg3`) via Resource_Load(arg3, nullptr) (0x004B5F00), checks the `'LOOP'` header (`0x4C, 0x4F, 0x4F, 0x50`) and version at `+0x04` (`2` or `11`), calls Texture_EnableUpload() (0x004B26A0), extracts the version-specific 16-bit/32-bit header fields and pixel payload pointer (`+0x18` for v2, `+0x20` for v11), calls Texture_UploadMipmapPacket(...) (0x004B23B0), Resource_Unload(arg3) (0x004B6380), and Texture_DisableUpload() (0x004B26B0). On invalid header, calls Debug_Error("'%s' is not a valid Texture file.", arg3) (0x004AF7B0). radare2 15 blocks/22 edges; Binary Ninja 15 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v2/v11 field extraction and callee sequence.
-// Previous catalog alias: Sys_SIsNotAValidTextureF.
 std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const char* arg3)
 {
     auto* const data_1 = static_cast<std::int32_t*>(resource::Resource_Load(arg3, nullptr));
@@ -140,7 +135,7 @@ std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const c
 
         if (bytes[1] == 0x4FU && bytes[2] == 0x4FU && bytes[3] == 0x50U && data_1[1] == 2)
         {
-            Sys_PopStack_8();
+            Texture_EnableUpload();
             {
                 const std::int32_t entity_3 =
                     static_cast<std::int32_t>(*reinterpret_cast<const std::uint16_t*>(bytes + 0x08));
@@ -163,17 +158,17 @@ std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const c
                 item_2c = arg1;
             }
         label_4b252e:
-            Sys_FreeMemory_8(item_2c, item_28, item_24, item_20, item_1c, item_18, item_14,
+            Texture_UploadMipmapPacket(item_2c, item_28, item_24, item_20, item_1c, item_18, item_14,
                              item_10_1, item_c);
             const std::int32_t result = resource::Resource_Unload(arg3);
-            Sys_ResolveSymbol_8();
+            Texture_DisableUpload();
             return result;
         }
 
         if (data_2 == 0x4CU && bytes[1] == 0x4FU && bytes[2] == 0x4FU && bytes[3] == 0x50U
             && data_1[1] == 0x0B)
         {
-            Sys_PopStack_8();
+            Texture_EnableUpload();
             item_c = &data_1[8];
             item_10_1 = data_1[3];
             const std::int32_t entity_6 =
@@ -197,15 +192,14 @@ std::int32_t Texture_LoadLoopTextureFile(std::int32_t* arg1, void* arg2, const c
         }
     }
 
-    return error::Error_Show("'%s' is not a valid Texture file.", arg3);
+    return Debug_Error("'%s' is not a valid Texture file.", arg3);
 }
 
 // Native: Terrain_LoadTexturePackage; retail VA 0x005175A0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Texture_UploadPalettePacket (0x004B7CF0), allocates `header[8] * 0x24 + 0x30` bytes via Mem_Alloc, Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x005175A0-0x005177E2, 578 bytes, digest 450ad796b5382d56bd90a518553df529c860093b5070d3b3d7af6b886a82f530; CLEAN/terrain/005175A0-Terrain_TextureFileNotOfRequ.c.
-// Behavior/CFG: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via Resource_Load(arg1, nullptr) (0x004B5F00) (calling Error_Show("Couldn't load texture file '%s'.") if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`, allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and iterates `header[8]` records (stride `0x28` for v7 at `+0x3C`, stride `0x20` for v9 at `+0x40`) calling Texture_UploadMipmapPacket (0x004B23B0), then calls Texture_DisableUpload() and Resource_Unload(arg1). radare2 29 blocks/42 edges; Binary Ninja 29 blocks; 100% structural agreement.
+// Behavior/CFG: calls Texture_EnableUpload() (0x004B26A0), loads `resource_path` (`arg1`) via Resource_Load(arg1, nullptr) (0x004B5F00) (calling Debug_Error("Couldn't load texture file '%s'.", arg1) if null), checks `'LOOP'` (`0x4C, 0x4F, 0x4F, 0x50`) and version `7` or `9` at `+0x04`, allocates and uploads optional palette at `header[6]` via Mem_Alloc(0x0C, 4) and iterates `header[8]` records (stride `0x28` for v7 at `+0x3C`, stride `0x20` for v9 at `+0x40`) calling Texture_UploadMipmapPacket (0x004B23B0), then calls Texture_DisableUpload() and Resource_Unload(arg1). radare2 29 blocks/42 edges; Binary Ninja 29 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact LOOP v7/v9 record strides, palette upload, and callee order.
-// Previous catalog alias: Terrain_TextureFileNotOfRequ.
 std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 {
     Texture_EnableUpload();
@@ -214,7 +208,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 
     if (data_1 == nullptr)
     {
-        error::Error_Show("Couldn't load texture file '%s'.", arg1);
+        Debug_Error("Couldn't load texture file '%s'.", arg1);
         return nullptr;
     }
 
@@ -240,7 +234,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                 dest_1 = *reinterpret_cast<const std::int32_t*>(bytes + context_val + 0x0C);
                 flagP = data_3;
                 item_8 = dest_1;
-                Sys_PushStack_21(flagP, bytes + context_val + 0x10, dest_1);
+                Texture_UploadPalettePacket(flagP, bytes + context_val + 0x10, dest_1);
             }
 
             auto* const data_6 =
@@ -259,7 +253,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                 {
                     const std::int32_t shared_param =
                         static_cast<std::int32_t>(*reinterpret_cast<const std::int16_t*>(bytes + 0x12));
-                    Sys_FreeMemory_8(item_4_1, flagP, dest_2[-1], dest_2[0], dest_2[1], item_8,
+                    Texture_UploadMipmapPacket(item_4_1, flagP, dest_2[-1], dest_2[0], dest_2[1], item_8,
                                      shared_param, 0, bytes + dest_2[-2]);
                     i += 1;
                     dest_2 = &dest_2[0x0A];
@@ -267,7 +261,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                 } while (i < data_1[8]);
             }
 
-            Sys_ResolveSymbol_8();
+            Texture_DisableUpload();
             resource::Resource_Unload(arg1);
             return data_6;
         }
@@ -287,7 +281,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                 auto* const data_14 = static_cast<std::int32_t*>(mem::Mem_Alloc(0x0C, 4));
                 dest_3 = *reinterpret_cast<const std::int32_t*>(bytes + context_2 + 0x0C);
                 flagP = data_14;
-                Sys_PushStack_21(flagP, bytes + context_2 + 0x10, dest_3);
+                Texture_UploadPalettePacket(flagP, bytes + context_2 + 0x10, dest_3);
             }
 
             auto* const data_17 =
@@ -314,7 +308,7 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                         *reinterpret_cast<const std::int32_t*>(rec_bytes - 0x0C);
                     const std::int32_t shared_param =
                         static_cast<std::int32_t>(*reinterpret_cast<const std::int16_t*>(bytes + 0x12));
-                    Sys_FreeMemory_8(item_4_2, flagP, entity_15, data_20, temp_10, arg6_val,
+                    Texture_UploadMipmapPacket(item_4_2, flagP, entity_15, data_20, temp_10, arg6_val,
                                      shared_param, 0, bytes + data_off);
                     i_1 += 1;
                     dest_4 = &dest_4[0x10];
@@ -322,13 +316,13 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
                 } while (i_1 < data_1[8]);
             }
 
-            Sys_ResolveSymbol_8();
+            Texture_DisableUpload();
             resource::Resource_Unload(arg1);
             return data_17;
         }
     }
 
-    error::Error_Show("Texture file not of required type: '%s'.", arg1);
+    Debug_Error("Texture file not of required type: '%s'.", arg1);
     return nullptr;
 }
 
@@ -337,14 +331,13 @@ std::int32_t* Terrain_LoadTexturePackage(const char* arg1)
 // Tools/evidence: allocates `count * 0x24` bytes at `*(context + 0x34)` and `count * 0x0C` bytes at Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004CF790-0x004CF865, 213 bytes, digest 75a65077e61f7571a67d6370e3eec880541dbaafcea3aed7af6dec07cf49002f; CLEAN/dynobj/004CF790-DynObj_LocalTexturesSTex.c.
 // Behavior/CFG: locates the `'TEXF'` (`0x54455846`) chunk inside `*(context + 0x08)` via Ilff_FindFormChunk (0x004CEAA0), stores `count = *texf` at `*(context + 0x40)`, `*(context + 0x38)` via Mem_Alloc (0x004B0C60) when `count > 0` (or clears both to 0), and iterates each NUL-terminated texture name formatting `"LOCAL:textures/%s.tex"` into `0x00A4EC6C` via sprintf (0x004A53B3) and calling Texture_LoadLoopTextureFile (0x004B24C0). radare2 7 blocks/8 edges; Binary Ninja 7 blocks; 100% structural agreement.
 // Status/limits: STRUCTURALLY_VERIFIED; high for exact TEXF chunk parsing, allocation sizes, and loop stride (+0x24 / +0x0C).
-// Previous catalog alias: DynObj_LocalTexturesSTex.
 void* DynObj_LoadModelTextures(void* context)
 {
     auto* const context_bytes = static_cast<std::uint8_t*>(context);
     std::size_t flagP = 0U;
     void* const form_ptr = *reinterpret_cast<void**>(context_bytes + 0x08);
     auto* data_1 = static_cast<std::int32_t*>(
-        dynobj::DynObj_CreateMagicObject_13(form_ptr, 0x54455846, nullptr));
+        dynobj::Ilff_FindFormChunk(form_ptr, 0x54455846, nullptr));
     std::int32_t* const source_val = data_1;
     const std::int32_t saved_count_2 = *source_val;
     *reinterpret_cast<std::int32_t*>(context_bytes + 0x40) = saved_count_2;
@@ -422,12 +415,12 @@ std::int8_t Texture_GetUploadFlag() noexcept
     return g_943b3c;
 }
 
-void Host_SetTextureBackendId(std::int32_t id) noexcept
+void Texture_SetBackendId(std::int32_t id) noexcept
 {
     g_a94a64 = id;
 }
 
-void Host_SetTextureCallbackSlots(std::int32_t slot_primary, std::int32_t slot_secondary,
+void Texture_SetCallbackSlots(std::int32_t slot_primary, std::int32_t slot_secondary,
                                   std::int32_t slot_palette) noexcept
 {
     g_546fa8 = slot_primary;
@@ -435,7 +428,7 @@ void Host_SetTextureCallbackSlots(std::int32_t slot_primary, std::int32_t slot_s
     g_a84a48 = slot_palette;
 }
 
-void Host_SetTextureBackendCallback(std::int32_t slot, TextureBackendDispatchFn fn) noexcept
+void Texture_SetBackendCallback(std::int32_t slot, TextureBackendDispatchFn fn) noexcept
 {
     if (slot >= 0 && slot < 0x10)
     {

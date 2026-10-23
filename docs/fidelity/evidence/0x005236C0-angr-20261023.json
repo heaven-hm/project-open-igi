@@ -1,0 +1,203 @@
+{
+ "schema_version": 1,
+ "kind": "angr-analysis",
+ "tool": "angr",
+ "angr_version": "10.0.4.post1",
+ "analysis": "CFGFast",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x005236C0",
+ "result": "pass",
+ "has_unresolved_jumps": false,
+ "block_count": 24,
+ "nodes": [
+  "0x005236C0",
+  "0x005236DE",
+  "0x005236EB",
+  "0x005236F1",
+  "0x005236FA",
+  "0x00523705",
+  "0x00523709",
+  "0x0052370C",
+  "0x00523712",
+  "0x00523718",
+  "0x00523721",
+  "0x0052372B",
+  "0x00523734",
+  "0x0052375A",
+  "0x0052375D",
+  "0x00523778",
+  "0x005237B3",
+  "0x005237BB",
+  "0x005237C0",
+  "0x005237C6",
+  "0x005237CD",
+  "0x005237D2",
+  "0x005237D8",
+  "0x005237DB"
+ ],
+ "edges": [
+  {
+   "kind": "unknown",
+   "source": "0x005236C0",
+   "target": "0x005236DE"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236DE",
+   "target": "0x005236EB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236DE",
+   "target": "0x005236FA"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236EB",
+   "target": "0x005236F1"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236F1",
+   "target": "0x005236FA"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236FA",
+   "target": "0x00523705"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005236FA",
+   "target": "0x0052375D"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523705",
+   "target": "0x00523709"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523705",
+   "target": "0x0052372B"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523709",
+   "target": "0x0052370C"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052370C",
+   "target": "0x00523712"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052370C",
+   "target": "0x00523721"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523712",
+   "target": "0x00523718"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523718",
+   "target": "0x00523721"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523721",
+   "target": "0x0052370C"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523721",
+   "target": "0x0052372B"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052372B",
+   "target": "0x00523734"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523734",
+   "target": "0x0052375A"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052375A",
+   "target": "0x0052375D"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052375D",
+   "target": "0x00523778"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x0052375D",
+   "target": "0x005237B3"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x00523778",
+   "target": "0x005237B3"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237B3",
+   "target": "0x005237BB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237B3",
+   "target": "0x005237DB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237BB",
+   "target": "0x005237C0"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237C0",
+   "target": "0x005237C6"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237C6",
+   "target": "0x005237CD"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237C6",
+   "target": "0x005237DB"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237CD",
+   "target": "0x005237D2"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237D2",
+   "target": "0x005237D8"
+  },
+  {
+   "kind": "unknown",
+   "source": "0x005237D8",
+   "target": "0x005237DB"
+  }
+ ],
+ "recovery_mode": "automatic",
+ "reason": null,
+ "analyzed_at": "2026-10-23T13:47:40Z",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence"
+ ]
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: Menu_Manager - 0x00418B00 - CFG score 91.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00418B00-Menu_Manager.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Menu_Manager.hpp"
+#include "Menu_Manager.h"
 int* Menu_Manager(void* context, void* arg2, char arg3, char arg4, char arg5)
 
 // Sig: int* Menu_Manager(int p1,char *menu_str,char p3,char p4,int p5)

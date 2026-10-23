@@ -1,0 +1,1211 @@
+{
+  "schema_version": 1,
+  "kind": "retail-static-analysis",
+  "tool": "Binary Ninja MCP (binaryninja_ui_mcp 0.1.0, MCP initialize serverInfo.version) + radare2 6.2.0 + angr 10.0.4.post1 + capstone 5.0.7 + objdump (Apple LLVM 16.0.0)",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004010B0",
+  "record_id": "0x004010B0-static-analysis",
+  "title": "Retail static analysis of 0x004010B0: 28-byte zero-stack-argument dispatcher that conditionally calls two functions and tail-jumps to 0x00402C40",
+  "analysis_scope": "static analysis of the retail Project IGI 1 executable only; no runtime, candidate, build or paired evidence",
+  "status": {
+    "value": "ANALYZED",
+    "basis": "AGENTS.md 10.5: static analysis has been performed and recorded. No build, structural-verification, runtime-tested or verified status is claimed.",
+    "static_analysis_only": true,
+    "runtime_or_paired_verification_claimed": false,
+    "analysis_result": "STATIC_ANALYSIS_RECORDED",
+    "runtime_result": "NOT_TESTED"
+  },
+  "binary_identity": {
+    "role": "retail",
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "md5": "9d8ebb7f28a1be56a8626dd5948826e4",
+    "size_bytes": 1384448,
+    "format": "PE32",
+    "machine": "x86 (IMAGE_FILE_MACHINE_I386, 0x014C)",
+    "preferred_image_base": "0x00400000",
+    "subsystem": "Windows GUI",
+    "text_section": {
+      "va": "0x00401000",
+      "virtual_size": "0x00132000",
+      "file_offset": "0x00001000"
+    },
+    "identity_check": {
+      "command": "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "stdout": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01  /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "outcome": "sha256 matches the retail identity required by the task"
+    }
+  },
+  "address": {
+    "va": "0x004010B0",
+    "first_byte": "0x004010B0",
+    "last_byte": "0x004010CB",
+    "end_exclusive": "0x004010CC",
+    "size_bytes": 28,
+    "raw_bytes": "e8ab09000085c0740ee8c217000050e82c05000083c404e9741b0000",
+    "trailing_padding": "0x004010CC is 0x90 padding and is not part of the function",
+    "tail_target": "0x00402C40",
+    "first_tail_block_0x00402C40": {
+      "range": "0x00402C40-0x00402F46",
+      "end_exclusive": "0x00402F47",
+      "size_bytes": 775,
+      "last_instruction": "0x00402F42 jmp 0x00508F90"
+    },
+    "tail_chain_terminal_ret": "0x004C1780 (single-byte C3 ret)",
+    "note": "The entry function is 28 bytes. The tail-reached region beyond 0x00402C40 is analysed separately below and is not part of the entry function's body."
+  },
+  "entry_function": {
+    "entry_va": "0x004010B0",
+    "size_bytes": 28,
+    "basic_blocks": 3,
+    "block_starts": [
+      "0x004010B0",
+      "0x004010B9",
+      "0x004010C7"
+    ],
+    "branches": 1,
+    "direct_callees": [
+      "0x00401A60",
+      "0x00402880",
+      "0x004015F0"
+    ],
+    "tail_call_target": "0x00402C40",
+    "instructions": [
+      {
+        "va": "0x004010B0",
+        "bytes": "e8ab090000",
+        "disassembly": "call 0x00401A60"
+      },
+      {
+        "va": "0x004010B5",
+        "bytes": "85c0",
+        "disassembly": "test eax, eax"
+      },
+      {
+        "va": "0x004010B7",
+        "bytes": "740e",
+        "disassembly": "je 0x004010C7"
+      },
+      {
+        "va": "0x004010B9",
+        "bytes": "e8c2170000",
+        "disassembly": "call 0x00402880"
+      },
+      {
+        "va": "0x004010BE",
+        "bytes": "50",
+        "disassembly": "push eax"
+      },
+      {
+        "va": "0x004010BF",
+        "bytes": "e82c050000",
+        "disassembly": "call 0x004015F0"
+      },
+      {
+        "va": "0x004010C4",
+        "bytes": "83c404",
+        "disassembly": "add esp, 4"
+      },
+      {
+        "va": "0x004010C7",
+        "bytes": "e9741b0000",
+        "disassembly": "jmp 0x00402C40"
+      }
+    ],
+    "shape": "call 0x00401A60; if (EAX != 0) { EAX = call 0x00402880; push EAX; call 0x004015F0; add esp,4; } jmp 0x00402C40. The retail code uses a tail jump, so 0x004010B0 has no ret and no cleanup of its own.",
+    "abi": {
+      "frame": "standard 32-bit x86 call/ret at entry; the function ends in an unconditional jmp, not a ret",
+      "arguments": [],
+      "argument_reads": "none: no ESP- or EBP-relative memory operand in the entry body",
+      "stack_effect": "push eax at 0x004010BE is balanced by add esp,4 at 0x004010C4",
+      "return_value": "not established by the entry body; EAX at the eventual return comes from the tail-reached region. The direct caller at 0x0048F9D4 discards EAX.",
+      "return_type": "no source-level type is proven; Binary Ninja's int32_t prototype is a decompiler inference",
+      "calling_convention": "cdecl (Binary Ninja prototype; radare2 default label)",
+      "binary_ninja_view": {
+        "calling_convention": "cdecl",
+        "parameter_count": 0,
+        "return_type": "int32_t (decompiler inference)",
+        "decompiled": "int32_t QTask_DispatchEvent()\n{\n    if (QTask_DispatchEvent_2())\n        QTask_FindType(Game_GetContext());\n\n    /* tailcall */\n    return Flow_DeleteHandler();\n}",
+        "basic_blocks": 3,
+        "size_bytes": 28
+      },
+      "radare2_view": {
+        "calling_convention": "cdecl (radare2 default)",
+        "arguments": 0,
+        "note": "With aaaa and af at 0x004010b0, radare2 merges the whole tail chain: realsz 1463, 12 blocks, 295 instructions, out-degree 281. These are reachable-chain metrics, not the 28-byte entry body."
+      },
+      "angr_view": {
+        "function": "sub_4010b0",
+        "size": "0x5b7 (1463 bytes, the chain without the 1-byte terminal ret)",
+        "blocks": 293,
+        "note": "angr's 293 blocks are call-delimited (every call ends a block), not conventional basic blocks; 0x00402C40 is not separately recovered"
+      },
+      "prior_pass_ghidra_view": {
+        "status": "superseded; not used for any conclusion in this record",
+        "calling_convention": "unknown (no parameters)",
+        "parameter_count": 0,
+        "return_type": "void",
+        "size_bytes": 28,
+        "basic_blocks": 3,
+        "decompiled": "void FUN_004010b0(void)\n{\n  int iVar1;\n  undefined4 uVar2;\n  \n  iVar1 = FUN_00401a60();\n  if (iVar1 != 0) {\n    uVar2 = FUN_00402880();\n    FUN_004015f0(uVar2);\n  }\n  FUN_00402c40();\n  return;\n}"
+      }
+    }
+  },
+  "callers_of_0x004010B0": {
+    "direct_call_count": 1,
+    "direct_call_addresses": [
+      "0x0048F9D4"
+    ],
+    "fallthrough_predecessor": {
+      "address": "0x004010AF",
+      "source_function": "0x004010A0 (QTask_CloseEvent, Binary Ninja database annotation)",
+      "description": "0x004010A0 calls Camera_ApplyBandFilter_3(0x54F8E0,1) at 0x004010A7 and then falls through NOPs at 0x004010AC-0x004010AF into 0x004010B0. Binary Ninja reports this as a caller/fallthrough edge; radare2 axt reports only the direct call at 0x0048F9D4."
+    },
+    "encoding": "direct call is E8 rel32; no E9/EB jumps and no stored dword literal equal to 0x004010B0 anywhere in the file",
+    "binary_ninja_callers": [
+      {
+        "callsite": "0x004010AF",
+        "caller": "QTask_CloseEvent (0x4010a0)",
+        "kind": "fallthrough"
+      },
+      {
+        "callsite": "0x0048F9D4",
+        "caller": "Input_GetDIErrStr (0x48f970)",
+        "kind": "call"
+      }
+    ],
+    "radare2_callers": [
+      "0x0048F9D4"
+    ],
+    "prior_pass_ghidra_reference_manager": [
+      "0x0048F9D4 UNCONDITIONAL_CALL"
+    ]
+  },
+  "wm_destroy_sequence": {
+    "window_procedure": "0x0048F970, Binary Ninja range 0x48f970-0x48fa72 (258 bytes), 21 basic blocks",
+    "branch_context": "param == 2 (WM_DESTROY) inside the param <= 0x1C dispatch: after cmp edi,0x1C; ja 0x48f9f8; je 0x48f9ea; the code at 0x48f9b9 does mov eax,edi; dec eax; je 0x48fa69 (param == 1); dec eax; jne 0x48fa04; then falls into the param == 2 path.",
+    "steps": [
+      {
+        "order": 1,
+        "va": "0x0048F9C5",
+        "instruction": "push 1",
+        "effect": "argument for ShowCursor"
+      },
+      {
+        "order": 2,
+        "va": "0x0048F9C7",
+        "instruction": "mov byte [0x005C8DE8], 0",
+        "effect": "store 0 to the loop/status byte at 0x005C8DE8 (name inferred)"
+      },
+      {
+        "order": 3,
+        "va": "0x0048F9CE",
+        "instruction": "call [USER32!ShowCursor]",
+        "effect": "ShowCursor(TRUE); the push at 0x0048F9C5 is its argument"
+      },
+      {
+        "order": 4,
+        "va": "0x0048F9D4",
+        "instruction": "call 0x004010B0",
+        "effect": "enter the dispatcher; EAX is discarded"
+      },
+      {
+        "order": 5,
+        "va": "0x0048F9D9 then 0x0048F9DB",
+        "instruction": "push 0; call [USER32!PostQuitMessage]",
+        "effect": "PostQuitMessage(0)"
+      },
+      {
+        "order": 6,
+        "va": "0x0048F9E1-0x0048F9E7",
+        "instruction": "pop edi; pop esi; pop ebp; xor eax,eax; pop ebx; ret 0x10",
+        "effect": "return 0 from the window procedure"
+      }
+    ],
+    "reconstructed_shape": "*(uint8_t*)0x005C8DE8 = 0; ShowCursor(TRUE); sub_4010B0(); PostQuitMessage(0); return 0;",
+    "note": "The teardown call's return value is discarded; the window procedure returns 0 on this path. The branch and ordering are confirmed by Binary Ninja decompilation/disassembly and radare2 disassembly."
+  },
+  "tooling": [
+    {
+      "id": "T1",
+      "name": "Binary Ninja MCP",
+      "version": "binaryninja_ui_mcp 0.1.0 (MCP initialize serverInfo.version); UI application 6.0.10601_free (informational)",
+      "mode": "JSON-RPC 2.0 over HTTP at http://127.0.0.1:24642/mcp; tools/call to bn_function_info, bn_function_decompile, bn_function_disassembly, bn_function_basic_blocks, bn_function_complexity, bn_function_stack_layout, bn_function_callers, bn_function_callees and bn_function_prototype_get",
+      "role": "the single decompiler used for this corrected pass",
+      "selected_decompiler": true
+    },
+    {
+      "id": "T2",
+      "name": "radare2",
+      "version": "6.2.0 (commit 6.2.0, darwin-arm_64, cs:5 cl:2)",
+      "role": "independent function boundaries, CFG metrics and call-site census"
+    },
+    {
+      "id": "T3",
+      "name": "angr",
+      "version": "10.0.4.post1",
+      "role": "independent CFGFast entry and size recovery at image base 0x00400000"
+    },
+    {
+      "id": "T4",
+      "name": "objdump",
+      "version": "Apple LLVM version 16.0.0 (Xcode command-line tools objdump; reports file format coff-i386)",
+      "role": "linear disassembly and byte-range checks"
+    },
+    {
+      "id": "T5",
+      "name": "capstone",
+      "version": "5.0.7",
+      "role": "byte-exact reachable-address walk and call census"
+    },
+    {
+      "id": "T6",
+      "name": "Ghidra (prior pass only)",
+      "version": "12.1.2 PUBLIC / OpenJDK 23.0.2",
+      "role": "superseded earlier decompiler; retained only for audit history and not used for any conclusion in this corrected record"
+    }
+  ],
+  "commands": [
+    {
+      "id": "C1",
+      "purpose": "verify retail image identity",
+      "command": "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe; md5 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01  /Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "MD5 (igi.exe) = 9d8ebb7f28a1be56a8626dd5948826e4"
+      ]
+    },
+    {
+      "id": "C2",
+      "purpose": "read the exact retail bytes and following padding",
+      "command": "python3 - <<'PY'\ndata=open('/Users/haseeb-mir/Downloads/IGI/igi.exe','rb').read()\noff=0x4010b0-0x400000\nprint(data[off:off+32].hex())\nPY",
+      "output": [
+        "e8ab09000085c0740ee8c217000050e82c05000083c404e9741b000090909090"
+      ]
+    },
+    {
+      "id": "C3",
+      "purpose": "Binary Ninja MCP initialize, active-view selection and entry-function recovery",
+      "transport": "POST http://127.0.0.1:24642/mcp with Content-Type: application/json and Accept: application/json, text/event-stream; MCP-Session-Id returned by initialize",
+      "initialize": {
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-11-25",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "dsh",
+            "version": "1.0"
+          }
+        }
+      },
+      "server_info": {
+        "name": "binaryninja_ui_mcp",
+        "version": "0.1.0"
+      },
+      "calls": [
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_binary_view_list",
+            "arguments": {}
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_decompile",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_basic_blocks",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_complexity",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_stack_layout",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_callers",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_callees",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_prototype_get",
+            "arguments": {
+              "function": "0x004010B0"
+            }
+          }
+        }
+      ],
+      "output": [
+        "active view: view_1, PE, x86, windows-x86, base 0x00400000",
+        "bn_function_info: 0x4010b0-0x4010cc (28 bytes), 3 basic blocks, int32_t()",
+        "bn_function_complexity: blocks 3, edges 3, calls 4, total bytes 28",
+        "bn_function_callers: 0x4010af (fallthrough) and 0x48f9d4 (call)",
+        "bn_function_callees: 0x401a60, 0x402880, 0x4015f0, 0x402c40 (tail)"
+      ]
+    },
+    {
+      "id": "C4",
+      "purpose": "Binary Ninja recovery of the tail target 0x00402C40 and each tail-jump block",
+      "transport": "same MCP session",
+      "calls": [
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00402C40"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x00402C40"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_complexity",
+            "arguments": {
+              "function": "0x00402C40"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_callees",
+            "arguments": {
+              "function": "0x00402C40"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00508F90"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00518550"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x005302A0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00530A20"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x005311F0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x005323D0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x005323F0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00532490"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x004C1780"
+            }
+          }
+        }
+      ],
+      "output": [
+        "0x402c40: 0x402c40-0x402f47 (775 bytes), 1 basic block, complexity calls 155, 155 callee rows",
+        "0x402c40 disassembly tail: 0x402f42 jmp Physics_UpdateForces_7 (0x508f90)",
+        "0x508f90: 10 bytes, 1 block, 2 callee rows",
+        "0x518550: 365 bytes, 1 block, 73 callee rows",
+        "0x5302a0: 35 bytes, 1 block, 7 callee rows",
+        "0x530a20: 95 bytes, 1 block, 19 callee rows",
+        "0x5311f0: 10 bytes, 1 block, 2 callee rows",
+        "0x5323d0: 15 bytes, 1 block, 3 callee rows",
+        "0x5323f0: 10 bytes, 1 block, 2 callee rows",
+        "0x532490: 120 bytes, 1 block, 24 callee rows, tail jmp 0x4c1780",
+        "0x4c1780: 1 byte, 1 block, ret"
+      ],
+      "call_pattern": "For each address in the address list, four MCP calls were issued with arguments {\"function\":\"<address>\"}: bn_function_info, bn_function_disassembly, bn_function_complexity, bn_function_callees.",
+      "addresses": [
+        "0x00402C40",
+        "0x00508F90",
+        "0x00518550",
+        "0x005302A0",
+        "0x00530A20",
+        "0x005311F0",
+        "0x005323D0",
+        "0x005323F0",
+        "0x00532490",
+        "0x004C1780"
+      ]
+    },
+    {
+      "id": "C5",
+      "purpose": "Binary Ninja recovery of the caller at 0x004010A0 and the WM_DESTROY window procedure",
+      "transport": "same MCP session",
+      "calls": [
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x004010A0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x004010A0"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_decompile",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_basic_blocks",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        }
+      ],
+      "output": [
+        "0x4010a0: 16 bytes, 1 block; calls Camera_ApplyBandFilter_3(0x54F8E0,1) then falls through NOPs into 0x4010b0",
+        "0x48f970: 258 bytes, 21 blocks",
+        "0x48f9c5 push 1; 0x48f9c7 mov byte [0x5c8de8],0; 0x48f9ce call [ShowCursor]; 0x48f9d4 call 0x4010b0; 0x48f9db call [PostQuitMessage]"
+      ]
+    },
+    {
+      "id": "C6",
+      "purpose": "radare2 independent metrics and direct-call census",
+      "command": "r2 -q -e bin.relocs.apply=true -c \"aaaa; af @ 0x004010b0; afi @ 0x004010b0; axt @ 0x004010b0\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "realsz: 1463",
+        "size: 1250392 (analysis artefact; not used)",
+        "num-bbs: 12",
+        "num-instrs: 295",
+        "out-degree: 281",
+        "in-degree: 1",
+        "axt: 0x48f9d4 [CALL] call fcn.004010b0"
+      ]
+    },
+    {
+      "id": "C7",
+      "purpose": "radare2 independent confirmation of the WM_DESTROY branch",
+      "command": "r2 -q -e bin.relocs.apply=true -c \"aaaa; af @ 0x48f970; afi @ 0x48f970; s 0x48f9b2; pd 24\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "size: 258",
+        "realsz: 258",
+        "num-bbs: 21",
+        "num-instrs: 105",
+        "0x48f9b2 cmp edi,0x1c",
+        "0x48f9b5 ja 0x48f9f8",
+        "0x48f9b7 je 0x48f9ea",
+        "0x48f9c5 push 1",
+        "0x48f9c7 mov byte [0x5c8de8],0",
+        "0x48f9ce call [USER32!ShowCursor]",
+        "0x48f9d4 call fcn.004010b0",
+        "0x48f9db call [USER32!PostQuitMessage]"
+      ]
+    },
+    {
+      "id": "C8",
+      "purpose": "independent CFG entry recovery (angr 10.0.4.post1 CFGFast)",
+      "command": "cd /tmp && /Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python - <<'PY'\nimport angr\np=angr.Project('/Users/haseeb-mir/Downloads/IGI/igi.exe', auto_load_libs=False, main_opts={'base_addr':0x400000})\ncfg=p.analyses.CFGFast(normalize=True, data_references=True, force_complete_scan=False)\nfor va in (0x4010B0,0x402C40,0x48F970):\n    f=cfg.kb.functions.get(va)\n    print(hex(va), 'NOT RECOVERED' if not f else (f.name, hex(f.size), len(list(f.blocks)), f.returning))\nPY",
+      "output": [
+        "angr 10.0.4.post1",
+        "0x4010b0 ('sub_4010b0', '0x5b7', 293, True)",
+        "0x402c40 NOT RECOVERED",
+        "0x48f970 ('sub_48f970', '0x102', 29, True)"
+      ]
+    },
+    {
+      "id": "C9",
+      "purpose": "linear disassembly of the exact entry and tail ranges",
+      "command": "objdump -d --start-address=0x4010B0 --stop-address=0x4010CC /Users/haseeb-mir/Downloads/IGI/igi.exe; objdump -d --start-address=0x402F30 --stop-address=0x402F50 /Users/haseeb-mir/Downloads/IGI/igi.exe; objdump -d --start-address=0x4C1780 --stop-address=0x4C1781 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "4010b0: e8 ab 09 00 00 call 0x401a60",
+        "4010b5: 85 c0 test %eax,%eax",
+        "4010b7: 74 0e je 0x4010c7",
+        "4010b9: e8 c2 17 00 00 call 0x402880",
+        "4010be: 50 push %eax",
+        "4010bf: e8 2c 05 00 00 call 0x4015f0",
+        "4010c4: 83 c4 04 add $0x4,%esp",
+        "4010c7: e9 74 1b 00 00 jmp 0x402c40",
+        "402f42: e9 49 60 10 00 jmp 0x508f90",
+        "402f47: 90 nop",
+        "4c1780: c3 ret"
+      ]
+    },
+    {
+      "id": "C10",
+      "purpose": "byte-exact reachable-address walk and call census",
+      "command": "python3 /tmp/walk_4010b0.py  (script below; run from the repository or /tmp)",
+      "output": [
+        "conventional_blocks 13",
+        "block_ranges [('0x4010b0','0x4010b9'),('0x4010b9','0x4010c7'),('0x4010c7','0x4010cc'),('0x402c40','0x402f47'),('0x4c1780','0x4c1781'),('0x508f90','0x508f9a'),('0x518550','0x5186bd'),('0x5302a0','0x5302c3'),('0x530a20','0x530a7f'),('0x5311f0','0x5311fa'),('0x5323d0','0x5323df'),('0x5323f0','0x5323fa'),('0x532490','0x532508')]",
+        "instructions 296",
+        "bytes 1464",
+        "direct_calls 281",
+        "unique_direct_call_targets 261",
+        "unique_cascade_call_targets 258",
+        "tail_targets ['0x402c40','0x4c1780','0x508f90','0x518550','0x5302a0','0x530a20','0x5311f0','0x5323d0','0x5323f0','0x532490']",
+        "terminal_rets ['0x4c1780']"
+      ],
+      "script": "from capstone import *\nPATH='/Users/haseeb-mir/Downloads/IGI/igi.exe'\ndata=open(PATH,'rb').read()\nmd=Cs(CS_ARCH_X86, CS_MODE_32); md.skipdata=True\nins={i.address:i for i in md.disasm(data[0x1000:0x133000],0x401000) if i.mnemonic!='(data)'}\n\ndef is_jmp(i): return i.mnemonic=='jmp' and i.op_str.startswith('0x')\ndef is_jcc(i): return i.mnemonic.startswith('j') and i.mnemonic!='jmp' and i.op_str.startswith('0x')\n\nreach=set(); calls=[]; tails=set(); leaders={0x4010B0}\nwork=[0x4010B0]\nwhile work:\n    a=work.pop()\n    while a in ins and a not in reach:\n        i=ins[a]; reach.add(a)\n        if i.mnemonic.startswith('ret'): break\n        if is_jmp(i):\n            t=int(i.op_str,16); tails.add(t); leaders.add(t); work.append(t); break\n        if is_jcc(i):\n            t=int(i.op_str,16); leaders.add(t); work.append(t)\n            nxt=i.address+i.size; leaders.add(nxt); a=nxt; continue\n        if i.mnemonic=='call' and i.op_str.startswith('0x'):\n            calls.append((a,int(i.op_str,16)))\n        a=i.address+i.size\nstarts=sorted(x for x in leaders if x in reach)\nblocks=[]\nfor idx,s in enumerate(starts):\n    nxt=starts[idx+1] if idx+1<len(starts) else None\n    end=s; last=None\n    while end in reach:\n        i=ins[end]; last=i; end=i.address+i.size\n        if i.mnemonic.startswith('ret') or is_jmp(i) or is_jcc(i): break\n        if nxt is not None and end==nxt: break\n    blocks.append((s,end))\nprint('conventional_blocks',len(blocks))\nprint('block_ranges',[(hex(s),hex(e)) for s,e in blocks])\nprint('instructions',len(reach))\nprint('bytes',sum(ins[a].size for a in reach))\nprint('direct_calls',len(calls))\nprint('unique_direct_call_targets',len(set(t for _,t in calls)))\nprint('unique_cascade_call_targets',len(set(t for a,t in calls if a>=0x402C40)))\nprint('tail_targets',[hex(x) for x in sorted(tails)])\nprint('terminal_rets',[hex(a) for a in reach if ins[a].mnemonic.startswith('ret')])\n"
+    }
+  ],
+  "independent_reanalysis": {
+    "performed": true,
+    "detail": "The retail image was re-read byte-exactly with objdump and capstone, then re-analysed with Binary Ninja MCP, radare2 6.2.0 and angr 10.0.4.post1. Binary Ninja is the only decompiler used in this corrected pass. The prior Ghidra pass is retained only as superseded historical evidence."
+  },
+  "observed_facts": [
+    {
+      "id": "F1",
+      "fact": "The hashed image is PE32, machine i386, preferred image base 0x00400000, Windows GUI subsystem, .text at VA 0x00401000 with virtual size 0x00132000. SHA-256 is dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01 and MD5 is 9d8ebb7f28a1be56a8626dd5948826e4.",
+      "evidence": "C1, binary_identity"
+    },
+    {
+      "id": "F2",
+      "fact": "The function at 0x004010B0 is 28 bytes, 0x004010B0-0x004010CB, with raw bytes e8ab09000085c0740ee8c217000050e82c05000083c404e9741b0000. The next byte at 0x004010CC is 0x90 padding. Binary Ninja reports 3 basic blocks and 28 bytes; radare2 confirms the entry's 8 instructions.",
+      "evidence": "C2, C3, C9; F3"
+    },
+    {
+      "id": "F3",
+      "fact": "The entry body is: call 0x00401A60; test eax,eax; je 0x004010C7; call 0x00402880; push eax; call 0x004015F0; add esp,4; jmp 0x00402C40. The conditional branch skips the 0x00402880/0x004015F0 pair when 0x00401A60 returns 0; 0x00402C40 runs either way. The function ends in an unconditional jmp, not a ret.",
+      "evidence": "C3, C6, C9, C10"
+    },
+    {
+      "id": "F4",
+      "fact": "Binary Ninja partitions the entry into blocks 0x004010B0-0x004010B9 (9 bytes), 0x004010B9-0x004010C7 (14 bytes) and 0x004010C7-0x004010CC (5 bytes). Complexity is 3 blocks, 3 edges and 4 call edges including the tail jump; total bytes 28.",
+      "evidence": "C3; binary_ninja_confirmation"
+    },
+    {
+      "id": "F5",
+      "fact": "The entry reads no stack arguments (no ESP/EBP-relative memory operand) and has one balanced push/add esp pair. It has no ret: it tail-jumps to 0x00402C40, so the value the caller sees in EAX comes from the tail chain. The direct caller at 0x0048F9D4 discards EAX; no source-level return type is proven.",
+      "evidence": "C3, C6, C9"
+    },
+    {
+      "id": "F6",
+      "fact": "There is exactly one direct E8 call to 0x004010B0, at 0x0048F9D4 in the WM_DESTROY branch of 0x0048F970. There are no E9/EB jumps and no stored dword literal equal to 0x004010B0. Binary Ninja additionally reports a fallthrough predecessor at 0x004010AF from 0x004010A0, which calls Camera_ApplyBandFilter_3(0x54F8E0,1) and then falls through NOPs into 0x004010B0; radare2 axt reports only the direct call.",
+      "evidence": "C3, C5, C6, C9"
+    },
+    {
+      "id": "F7",
+      "fact": "The tail target 0x00402C40 is a single 775-byte basic block, 0x00402C40-0x00402F46, with 154 direct call instructions and a final jmp 0x00508F90 at 0x00402F42. Binary Ninja reports 1 block, 155 callee rows (154 calls + 1 tail jump), total bytes 775. It is not a 306-byte or 5-block function.",
+      "evidence": "C4, C9; binary_ninja_confirmation tail_block"
+    },
+    {
+      "id": "F8",
+      "fact": "The tail chain continues through 0x00508F90 (10 bytes, 1 block, 1 direct call + jmp), 0x00518550 (365 bytes, 1 block, 72 direct calls + jmp), 0x005302A0 (35 bytes, 1 block, 6 direct calls + jmp), 0x00530A20 (95 bytes, 1 block, 18 direct calls + jmp), 0x005311F0 (10 bytes, 1 block, 1 direct call + jmp), 0x005323D0 (15 bytes, 1 block, 2 direct calls + jmp), 0x005323F0 (10 bytes, 1 block, 1 direct call + jmp), 0x00532490 (120 bytes, 1 block, 23 direct calls + jmp) and ends at the single-byte plain C3 ret at 0x004C1780.",
+      "evidence": "C4, C10; binary_ninja_confirmation"
+    },
+    {
+      "id": "F9",
+      "fact": "Across the entry and the tail chain, the conventional partition has 13 blocks (3 entry + 10 tail-reached), 296 instructions, 1464 bytes (entry 28, tail-reached 1436), 281 direct call instructions, 261 unique direct call targets and 258 unique cascade call targets (excluding the entry's three calls). The 258 figure is unique targets, not call instructions.",
+      "evidence": "C10; BN per-block callee rows; r2 out-degree 281"
+    },
+    {
+      "id": "F10",
+      "fact": "There are no ESP- or EBP-relative memory operands anywhere in the reachable chain, no pops, one push (0x004010BE push eax) balanced by add esp,4, and a terminal plain c3 ret at 0x004C1780. No ret imm exists on the reachable path.",
+      "evidence": "C10"
+    },
+    {
+      "id": "F11",
+      "fact": "The chain has a single conditional branch (the entry's je at 0x004010B7); after the entry, control proceeds by unconditional tail jumps only. No loop back-edge was found.",
+      "evidence": "C10"
+    },
+    {
+      "id": "F12",
+      "fact": "Fresh radare2 6.2.0 recovery of 0x004010B0 merges the tail chain: realsz 1463, 12 blocks, 295 instructions, out-degree 281, in-degree 1; its size field 1250392 is an analysis artifact and is not used. The missing 1 byte/block/instruction relative to the capstone total is the terminal ret at 0x004C1780. angr recovers 0x004010B0 as 0x5b7 bytes and 293 call-delimited blocks; it does not recover 0x00402C40 separately.",
+      "evidence": "C6, C8, C10"
+    },
+    {
+      "id": "F13",
+      "fact": "In the WM_DESTROY branch of 0x0048F970 the observed order is: push 1 at 0x0048F9C5; store 0 to 0x005C8DE8 at 0x0048F9C7; call USER32!ShowCursor at 0x0048F9CE; call 0x004010B0 at 0x0048F9D4 with EAX discarded; push 0 at 0x0048F9D9 and call USER32!PostQuitMessage at 0x0048F9DB; pop registers, xor eax,eax, ret 0x10 at 0x0048F9E1-0x0048F9E7.",
+      "evidence": "C3, C5, C7, C9"
+    },
+    {
+      "id": "F14",
+      "fact": "Binary Ninja's names QTask_DispatchEvent (0x004010B0), Flow_DeleteHandler (0x00402C40) and the tail-block names are database annotations, not retail PE symbols. They are not used as behavior evidence.",
+      "evidence": "C3, C4; binary_ninja_confirmation"
+    },
+    {
+      "id": "F15",
+      "fact": "The earlier record's address-level tail_reached_cascade label conflated the 0x00402C40 775-byte block with the whole tail chain. The corrected separation is: 28-byte entry at 0x004010B0; 775-byte first tail block at 0x00402C40; 1464-byte reachable region ending at 0x004C1780.",
+      "evidence": "F2, F7, F9"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "hypothesis": "0x004010B0 is a shutdown/dispatch entry that optionally runs two cleanup calls and then always enters the common tail region at 0x00402C40.",
+      "basis": "The branch skips only the 0x00402880/0x004015F0 pair, while the tail jump is unconditional.",
+      "status": "strongly suggested by control flow; the meaning of the three directly called functions is unknown"
+    },
+    {
+      "id": "H2",
+      "hypothesis": "0x00402C40 and its tail chain tear down engine subsystems.",
+      "basis": "The large ordered call cascade and its invocation from the WM_DESTROY branch.",
+      "status": "descriptive only; subsystem identity is unresolved"
+    },
+    {
+      "id": "H3",
+      "hypothesis": "'engine teardown native' is a descriptive label for 0x004010B0 plus this chain, not a recovered symbol.",
+      "basis": "No retail symbol or string establishes a name; the BN names are annotations.",
+      "status": "hypothesis"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "U1",
+      "item": "Which subsystems the cascade tears down is unresolved. The 281 direct calls were counted but not classified; no DirectDraw, Direct3D, sound or timer attribution is made."
+    },
+    {
+      "id": "U2",
+      "item": "The semantics of 0x00401A60, 0x00402880 and 0x004015F0 are unknown, so the condition and the two skipped calls are not interpreted."
+    },
+    {
+      "id": "U3",
+      "item": "The return value and source-level return type of 0x004010B0 are not established; the direct caller discards EAX and the entry ends in a tail jump."
+    },
+    {
+      "id": "U4",
+      "item": "Register-based arguments supplied to the cascade calls (if any) were not analysed; only stack arguments were ruled out."
+    },
+    {
+      "id": "U5",
+      "item": "The earlier supplied figures of 306 bytes, 5 basic blocks and a plain ret inside a 306-byte function are not reproduced at 0x004010B0. Binary Ninja also shows that 0x00402C40 is 775 bytes and 1 block, so the 306/5 figures do not describe 0x00402C40 either. Their origin remains unresolved and they are not asserted."
+    },
+    {
+      "id": "U6",
+      "item": "The relationship between 0x004010A0's fallthrough into 0x004010B0 and the direct call from 0x0048F9D4 is not fully classified; why 0x004010A0 has no ret of its own was not analysed."
+    },
+    {
+      "id": "U7",
+      "item": "The meaning of the 258 unique cascade call targets is unresolved; the names shown by Binary Ninja are database annotations."
+    }
+  ],
+  "limitations": [
+    "Static analysis only. No runtime, behavioural or paired retail/candidate evidence exists for this record, and none is implied.",
+    "Binary Ninja MCP was reachable for this corrected pass and is the single decompiler used here. The earlier pass used Ghidra 12.1.2 only because the BN endpoint had returned no_active_binary_view at that time; that Ghidra output is retained only as superseded history and is not used for any conclusion.",
+    "The earlier record wrongly attributed 306 bytes, 5 basic blocks, roughly 258 calls and a plain ret to 0x004010B0. The corrected facts are: 28 bytes, 3 basic blocks, 3 direct calls plus one tail jmp at 0x004010B0; the tail target 0x00402C40 is 775 bytes and 1 basic block with 154 direct calls plus one tail jmp; the full reachable chain is 1464 bytes, 13 conventional blocks, 296 instructions and 281 direct call instructions, with the terminal plain ret at 0x004C1780. The 306/5 figures remain unresolved and are not asserted anywhere in this record.",
+    "The 258 figure is the number of unique direct call targets in the cascade, not the number of call instructions (281), and it is not a property of the 28-byte entry function.",
+    "The tail chain is followed structurally through its unconditional jumps. The 281 calls were counted but not semantically classified; no subsystem attribution is made.",
+    "Binary Ninja's function and callee names are database annotations, not retail symbols; they are not used as behavior evidence.",
+    "radare2's function recovery merges the tail chain and excludes the terminal 1-byte ret; its size field 1250392 is an analysis artifact. The exact reachable totals come from the capstone walk and BN per-block counts, with radare2's out-degree 281 as an independent call-count check.",
+    "angr's 293 blocks are call-delimited, not conventional basic blocks; angr does not recover 0x00402C40 separately. angr is used only as an independent size/reachability check.",
+    "No candidate source was reviewed or compared, and no CFG-similarity score or structural-verification claim is made.",
+    "The function name is descriptive only; the retail PE provides no source-level name for this address.",
+    "No decompilation of the 281 callees was performed; the cascade is described structurally (calls only), not semantically.",
+    "No runtime execution, Frida/IGI-Probe capture, candidate build or paired comparison was performed."
+  ],
+  "supplied_finding_cross_check": {
+    "source": "findings supplied with the earlier Task B brief, re-checked against the retail bytes and Binary Ninja",
+    "items": [
+      {
+        "claim": "Entry 0x004010B0; zero-argument, void, ABI-neutral, no stack-argument reads",
+        "outcome": "reproduced statically for zero arguments and ABI neutrality; the return type is not proven",
+        "observed": "no stack argument reads; one balanced push/add esp pair; no ret in the entry; EAX at the eventual return comes from the tail chain",
+        "evidence": "F3, F5, F10"
+      },
+      {
+        "claim": "306 bytes across 5 basic blocks",
+        "outcome": "not reproduced; those figures do not describe 0x004010B0, and Binary Ninja does not match them at 0x00402C40 either",
+        "observed": "0x004010B0 is 28 bytes / 3 blocks; 0x00402C40 is 775 bytes / 1 block; the full reachable chain is 1464 bytes / 13 conventional blocks / 296 instructions",
+        "evidence": "F2, F4, F7, F9, F12"
+      },
+      {
+        "claim": "terminating in a plain ret with no stack cleanup",
+        "outcome": "partially reproduced; the entry itself ends in a tail jmp",
+        "observed": "0x004010B0 ends in jmp 0x00402C40; the chain terminates at a plain C3 ret at 0x004C1780 with no stack cleanup",
+        "evidence": "F3, F8, F10"
+      },
+      {
+        "claim": "body is a cascade of roughly 258 calls to other engine natives",
+        "outcome": "partially reproduced; 258 is unique cascade targets, not call instructions, and it is not a property of the entry",
+        "observed": "281 direct call instructions; 261 unique direct call targets; 258 unique cascade call targets excluding the entry's three calls",
+        "evidence": "F9, F7"
+      },
+      {
+        "claim": "which subsystems it tears down is unresolved",
+        "outcome": "reproduced as an explicit gap",
+        "evidence": "F7, U1"
+      },
+      {
+        "claim": "WM_DESTROY order: store 0 to 0x005C8DE8, ShowCursor(TRUE), call 0x004010B0, PostQuitMessage(0), return 0",
+        "outcome": "reproduced statically; the push 1 for ShowCursor precedes the store in address order but executes as its argument",
+        "evidence": "F13, wm_destroy_sequence"
+      },
+      {
+        "claim": "no runtime instrumentation was used",
+        "outcome": "reproduced: this record uses static analysis only",
+        "evidence": "runtime_and_paired_evidence"
+      }
+    ],
+    "summary": "The entry address, zero-stack-argument ABI, tail-jump structure, WM_DESTROY ordering and unresolved subsystem classification are reproduced statically. The 306-byte/5-block/plain-ret attribution to 0x004010B0 is not reproduced and is removed; the entry is 28 bytes/3 blocks. The 258 figure is retained only as the count of unique cascade call targets, not as a call count for the entry."
+  },
+  "runtime_and_paired_evidence": {
+    "runtime_evidence_exists": false,
+    "paired_retail_candidate_evidence_exists": false,
+    "statement": "No runtime instrumentation, game execution, Frida/IGI-Probe capture, candidate build, differential run or paired retail/candidate comparison was performed for this record. The task forbids running the game, Wine/CrossOver/Frida, deploying executables and running the strict build gate. Every statement here is static-analysis evidence only."
+  },
+  "authoring": {
+    "authored_by": "delegated AI agent (correction pass, documentation only)",
+    "authored_at": "2026-10-23",
+    "code_changes": false,
+    "manifest_changes": false,
+    "supersedes": "the earlier 306-byte/5-block revision of this same record; the earlier revision remains described in superseded_pass_correction for audit"
+  },
+  "decompiler": {
+    "selected": "Binary Ninja",
+    "single_decompiler_for_this_pass": true,
+    "version_from_mcp_server": "binaryninja_ui_mcp 0.1.0 (MCP initialize serverInfo.version)",
+    "ui_application_version_informational": "6.0.10601_free (local Binary Ninja bundle; not part of the MCP serverInfo)",
+    "binary_view": {
+      "handle": "view_1",
+      "open_item": "item_1",
+      "view_type": "PE",
+      "architecture": "x86",
+      "platform": "windows-x86",
+      "image_base": "0x00400000",
+      "entry_point": "0x004a50f5"
+    },
+    "note": "Ghidra was used only in the superseded earlier pass and is not used for any conclusion in this corrected record."
+  },
+  "binary_ninja_confirmation": {
+    "entry_function_info": "0x4010b0, name QTask_DispatchEvent (database annotation), 3 basic blocks, range 0x4010b0-0x4010cc (28 bytes), definition int32_t()",
+    "entry_disassembly": [
+      "0x4010b0  call    QTask_DispatchEvent_2 (0x401a60)",
+      "0x4010b5  test    eax, eax",
+      "0x4010b7  je      0x4010c7",
+      "0x4010b9  call    Game_GetContext (0x402880)",
+      "0x4010be  push    eax",
+      "0x4010bf  call    QTask_FindType (0x4015f0)",
+      "0x4010c4  add     esp, 0x4",
+      "0x4010c7  jmp     Flow_DeleteHandler (0x402c40)"
+    ],
+    "entry_decompile": "int32_t QTask_DispatchEvent()\n{\n    if (QTask_DispatchEvent_2())\n        QTask_FindType(Game_GetContext());\n\n    /* tailcall */\n    return Flow_DeleteHandler();\n}",
+    "entry_blocks": [
+      {
+        "start": "0x4010b0",
+        "end_exclusive": "0x4010b9",
+        "bytes": 9,
+        "instructions": 3
+      },
+      {
+        "start": "0x4010b9",
+        "end_exclusive": "0x4010c7",
+        "bytes": 14,
+        "instructions": 4
+      },
+      {
+        "start": "0x4010c7",
+        "end_exclusive": "0x4010cc",
+        "bytes": 5,
+        "instructions": 1
+      }
+    ],
+    "entry_complexity": {
+      "blocks": 3,
+      "edges": 3,
+      "calls": 4,
+      "variables": 8,
+      "total_bytes": 28
+    },
+    "entry_callees": [
+      {
+        "callsite": "0x4010b0",
+        "callee": "0x401a60"
+      },
+      {
+        "callsite": "0x4010b9",
+        "callee": "0x402880"
+      },
+      {
+        "callsite": "0x4010bf",
+        "callee": "0x4015f0"
+      },
+      {
+        "callsite": "0x4010c7",
+        "callee": "0x402c40",
+        "kind": "tail jmp"
+      }
+    ],
+    "entry_stack_layout": "var_4 at -4 is the pushed EAX argument slot; __return_addr at 0. The body reads no ESP/EBP-relative memory operand.",
+    "tail_block_0x00402C40": {
+      "range": "0x402c40-0x402f47",
+      "size_bytes": 775,
+      "basic_blocks": 1,
+      "callee_rows": 155,
+      "direct_call_instructions": 154,
+      "tail_jmp": "0x402f42 jmp 0x508f90",
+      "complexity": {
+        "blocks": 1,
+        "calls": 155,
+        "total_bytes": 775
+      }
+    },
+    "tail_chain_terminal_0x004C1780": {
+      "range": "0x4c1780-0x4c1781",
+      "size_bytes": 1,
+      "instruction": "ret"
+    }
+  },
+  "tail_reached_region_0x00402C40": {
+    "description": "0x004010B0 tail-jumps to 0x00402C40. Binary Ninja recovers 0x00402C40 as a 775-byte single basic block, 0x00402C40-0x00402F46, containing 154 direct call instructions and ending with jmp 0x00508F90 at 0x00402F42. The cascade then continues through unconditionally tail-jumped single blocks until the terminal single-byte C3 ret at 0x004C1780. This region is beyond the 28-byte entry function and is not part of Binary Ninja's function body for 0x004010B0.",
+    "binary_ninja_0x00402C40": {
+      "function_info": "0x402c40, name Flow_DeleteHandler (database annotation), 1 basic block, range 0x402c40-0x402f47 (775 bytes), definition int32_t()",
+      "complexity": {
+        "blocks": 1,
+        "edges": 0,
+        "calls": 155,
+        "total_bytes": 775
+      },
+      "callee_rows": 155,
+      "direct_call_instructions": 154,
+      "tail_jmp": "0x00402F42 jmp 0x00508F90",
+      "decompile_note": "BN's Pseudo C is a 155-row sequence of calls followed by a tailcall to 0x00508F90; the symbol names are database annotations, not retail symbols. The disassembly is authoritative for the call count."
+    },
+    "blocks": [
+      {
+        "start": "0x004010B0",
+        "last_instruction": "0x004010B7",
+        "end_exclusive": "0x004010B9",
+        "bytes": 9,
+        "instructions": 3,
+        "call_instructions": 1,
+        "terminator": "je 0x004010C7",
+        "role": "entry: call 0x401A60; test; je"
+      },
+      {
+        "start": "0x004010B9",
+        "last_instruction": "0x004010C4",
+        "end_exclusive": "0x004010C7",
+        "bytes": 14,
+        "instructions": 4,
+        "call_instructions": 2,
+        "terminator": "fallthrough to 0x004010C7",
+        "role": "entry: call 0x402880; push; call 0x4015F0; add esp,4"
+      },
+      {
+        "start": "0x004010C7",
+        "last_instruction": "0x004010C7",
+        "end_exclusive": "0x004010CC",
+        "bytes": 5,
+        "instructions": 1,
+        "call_instructions": 0,
+        "terminator": "jmp 0x00402C40",
+        "role": "entry: tail jump"
+      },
+      {
+        "start": "0x00402C40",
+        "last_instruction": "0x00402F42",
+        "end_exclusive": "0x00402F47",
+        "bytes": 775,
+        "instructions": 155,
+        "call_instructions": 154,
+        "terminator": "jmp 0x00508F90",
+        "role": "first tail-reached block; 154 direct calls"
+      },
+      {
+        "start": "0x00508F90",
+        "last_instruction": "0x00508F95",
+        "end_exclusive": "0x00508F9A",
+        "bytes": 10,
+        "instructions": 2,
+        "call_instructions": 1,
+        "terminator": "jmp 0x00518550",
+        "role": "continuation"
+      },
+      {
+        "start": "0x00518550",
+        "last_instruction": "0x005186B8",
+        "end_exclusive": "0x005186BD",
+        "bytes": 365,
+        "instructions": 73,
+        "call_instructions": 72,
+        "terminator": "jmp 0x005302A0",
+        "role": "continuation"
+      },
+      {
+        "start": "0x005302A0",
+        "last_instruction": "0x005302BE",
+        "end_exclusive": "0x005302C3",
+        "bytes": 35,
+        "instructions": 7,
+        "call_instructions": 6,
+        "terminator": "jmp 0x00530A20",
+        "role": "continuation"
+      },
+      {
+        "start": "0x00530A20",
+        "last_instruction": "0x00530A7A",
+        "end_exclusive": "0x00530A7F",
+        "bytes": 95,
+        "instructions": 19,
+        "call_instructions": 18,
+        "terminator": "jmp 0x005311F0",
+        "role": "continuation"
+      },
+      {
+        "start": "0x005311F0",
+        "last_instruction": "0x005311F5",
+        "end_exclusive": "0x005311FA",
+        "bytes": 10,
+        "instructions": 2,
+        "call_instructions": 1,
+        "terminator": "jmp 0x005323D0",
+        "role": "continuation"
+      },
+      {
+        "start": "0x005323D0",
+        "last_instruction": "0x005323DA",
+        "end_exclusive": "0x005323DF",
+        "bytes": 15,
+        "instructions": 3,
+        "call_instructions": 2,
+        "terminator": "jmp 0x005323F0",
+        "role": "continuation"
+      },
+      {
+        "start": "0x005323F0",
+        "last_instruction": "0x005323F5",
+        "end_exclusive": "0x005323FA",
+        "bytes": 10,
+        "instructions": 2,
+        "call_instructions": 1,
+        "terminator": "jmp 0x00532490",
+        "role": "continuation"
+      },
+      {
+        "start": "0x00532490",
+        "last_instruction": "0x00532503",
+        "end_exclusive": "0x00532508",
+        "bytes": 120,
+        "instructions": 24,
+        "call_instructions": 23,
+        "terminator": "jmp 0x004C1780",
+        "role": "continuation"
+      },
+      {
+        "start": "0x004C1780",
+        "last_instruction": "0x004C1780",
+        "end_exclusive": "0x004C1781",
+        "bytes": 1,
+        "instructions": 1,
+        "call_instructions": 0,
+        "terminator": "ret (plain C3)",
+        "role": "terminal ret"
+      }
+    ],
+    "totals": {
+      "conventional_blocks": 13,
+      "entry_blocks": 3,
+      "tail_reached_blocks": 10,
+      "instructions": 296,
+      "bytes": 1464,
+      "entry_bytes": 28,
+      "tail_reached_bytes": 1436,
+      "direct_call_instructions": 281,
+      "direct_call_instructions_entry": 3,
+      "direct_call_instructions_cascade": 278,
+      "unique_direct_call_targets": 261,
+      "unique_cascade_call_targets": 258,
+      "conditional_branches": 1,
+      "conditional_branch": "0x004010B7 je",
+      "hot_path_after_entry": "unconditional tail jumps only",
+      "note": "The 258 figure is the number of unique direct call targets in the cascade at and after 0x00402C40, excluding the entry's three calls (0x401A60, 0x402880, 0x4015F0). It is not the number of call instructions (281) and it is not a property of the 28-byte entry alone.",
+      "tail_jump_instructions": 10,
+      "tail_jump_instructions_within_cascade": 9
+    },
+    "block_count_note": "A capstone reachable-address walk merges the entry's je fallthrough into one 28-byte row and reports 12 block starts; the conventional partition splits the entry into 0x004010B0, 0x004010B9 and 0x004010C7 and reports 13 blocks. The instruction, byte and call totals are identical under both partitions.",
+    "call_census_agreement": {
+      "binary_ninja_0x00402C40": "155 callee rows = 154 direct calls + 1 tail jmp; complexity Calls 155; Total Bytes 775",
+      "binary_ninja_tail_blocks": "0x508f90 2 rows; 0x518550 73; 0x5302a0 7; 0x530a20 19; 0x5311f0 2; 0x5323d0 3; 0x5323f0 2; 0x532490 24; 0x4c1780 0",
+      "radare2_0x004010B0": "fresh aaaa; af @ 0x004010b0; afi: realsz 1463, num-bbs 12, num-instrs 295, out-degree 281, in-degree 1. The missing 1 byte/block/instruction is the terminal ret at 0x004C1780, which radare2 does not include in the merged function.",
+      "angr_0x004010B0": "size 0x5b7 (1463 bytes), 293 call-delimited blocks, returning True; 0x00402C40 not separately recovered",
+      "capstone_walk": "1464 bytes, 296 instructions, 13 conventional blocks, 281 direct call instructions, 261 unique direct call targets, 258 unique cascade targets"
+    },
+    "stack_and_abi_census": {
+      "esp_or_ebp_relative_memory_operands": 0,
+      "stack_argument_reads": 0,
+      "push_instructions": 1,
+      "push_detail": "0x004010BE push eax (argument transfer for the 0x004010BF call)",
+      "esp_adjustments": [
+        "0x004010C4 add esp, 4"
+      ],
+      "pop_instructions": 0,
+      "ret_forms": [
+        "0x004C1780 c3 (plain ret; no ret imm)"
+      ],
+      "conclusion": "Across the reachable chain's own instructions there are no ESP/EBP-relative memory operands, no pops and no stack-argument reads; the only push is the balanced 0x004010BE push eax. 0x004010B0 itself reads no incoming stack arguments and is ABI-neutral at the observed direct call site. This census does not describe the stack expectations of the 281 callees."
+    },
+    "subsystem_classification": "UNRESOLVED. The 281 direct calls were counted but not classified. This record does not attribute DirectDraw, Direct3D, sound, timer or any other subsystem to any call, and does not claim which subsystems the cascade tears down. The symbol names shown by Binary Ninja are database annotations and are not used as subsystem evidence.",
+    "blocks_note": "The table includes the three entry blocks so the whole reachable region is visible in one place. The tail-reached region proper begins at 0x00402C40; the entry contributes the first three rows."
+  },
+  "superseded_pass_correction": {
+    "earlier_pass": "The earlier record described 0x004010B0 as a 306-byte, 5-basic-block function containing roughly 258 calls and ending in a plain ret. It also carried a large 'tail_reached_cascade' description that conflated the 0x00402C40 block with the whole chain.",
+    "what_was_wrong": [
+      "306 bytes attributed to 0x004010B0 (wrong; the entry is 28 bytes)",
+      "5 basic blocks attributed to 0x004010B0 (wrong; the entry has 3)",
+      "roughly 258 calls attributed to 0x004010B0 (wrong as a call count; 281 direct call instructions in the reachable chain, 258 unique cascade targets)",
+      "plain ret attributed to 0x004010B0 (wrong; the entry ends in jmp 0x00402C40)",
+      "the tail-reached cascade was not separated from the entry and its first block was labelled with the whole chain"
+    ],
+    "corrected_facts": [
+      "28 bytes, 0x004010B0-0x004010CB",
+      "3 basic blocks: 0x004010B0, 0x004010B9, 0x004010C7",
+      "3 direct calls (0x00401A60, 0x00402880, 0x004015F0) plus tail jmp 0x00402C40",
+      "0x00402C40 is 775 bytes, 1 block, 154 direct calls plus a tail jmp at 0x00402F42",
+      "the full reachable chain is 1464 bytes, 13 conventional blocks, 296 instructions, 281 direct calls, 261 unique direct call targets and 258 unique cascade targets, ending at the plain ret at 0x004C1780"
+    ],
+    "correction_method": "byte-exact image read + objdump + Binary Ninja function/disassembly/basic-blocks/complexity/callees for 0x004010B0, 0x00402C40 and every tail-jump block + radare2 aaaa/afi/axt + angr CFGFast + capstone reachable-address walk",
+    "incorrect_size_in_earlier_pass": true,
+    "incorrect_size": "306 bytes for 0x004010B0",
+    "correct_size": "28 bytes for 0x004010B0; 775 bytes for the first tail block 0x00402C40; 1464 bytes for the full reachable chain",
+    "unresolved_origin_of_306_and_5": "The 306-byte/5-block figures were not found at 0x004010B0 and Binary Ninja does not show them at 0x00402C40 either (775 bytes/1 block). Their origin is unresolved and they are not asserted.",
+    "note": "Binary Ninja was not used in the earlier pass; it is the single decompiler for this corrected pass and verifies the separation between the 28-byte entry and the 775-byte tail block."
+  }
+}

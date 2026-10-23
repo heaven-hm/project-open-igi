@@ -1,7 +1,7 @@
 // IGI native provenance: Camera_ApplyBandFilter_31 - 0x004AF776 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 004AF776-Camera_ApplyBandFilter_31.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AF776-Camera_ApplyBandFilter_31.hpp"
-LRESULT __stdcall Camera_ApplyBandFilter_31(HIC hic, unsigned int msg, unsigned int dw1, unsigned int dw2)
+#include "Camera_ApplyBandFilter_31.h"
+LRESULT __stdcall ICSendMessage(HIC hic, unsigned int msg, unsigned int dw1, unsigned int dw2)
 
 {
     /* tailcall */

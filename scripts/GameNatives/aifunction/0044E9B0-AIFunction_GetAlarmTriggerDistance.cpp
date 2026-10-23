@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_GetAlarmTriggerDistance - 0x0044E9B0 - CFG score 86.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044E9B0-AIFunction_GetAlarmTriggerDistance.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044E9B0-AIFunction_GetAlarmTriggerDistance.hpp"
+#include "AIFunction_GetAlarmTriggerDistance.h"
 int AIFunction_GetAlarmTriggerDistance(int context)
 
 // Sig: float AIFunction_GetAlarmTriggerDistance()

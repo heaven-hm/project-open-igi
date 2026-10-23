@@ -1,6 +1,6 @@
 // IGI native provenance: Transcontext_SetActiveTransContext - 0x00497E70 - CFG score 66.7% (FAIL; structural only); runtime behavior not verified.
 // Evidence: 00497E70-Transcontext_SetActiveTransContext.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00497E70-Transcontext_SetActiveTransContext.hpp"
+#include "Transcontext_SetActiveTransContext.h"
 int Transcontext_SetActiveTransContext(int* context)
 
 // Sig: void Transcontext_SetActiveTransContext(void* ctx)

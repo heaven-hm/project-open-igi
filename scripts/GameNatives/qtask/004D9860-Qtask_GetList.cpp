@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_GetList - 0x004D9860 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9860-Qtask_GetList.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9860-Qtask_GetList.hpp"
+#include "Qtask_GetList.h"
 int Qtask_GetList()
 
 // Sig: void* Qtask_GetList(void)

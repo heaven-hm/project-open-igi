@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004A68A9",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7c15759f970e56e3c6857fcd814840b0b80e06a6d81ca0ed30f26f8cc7fee1c7",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x004A68A9 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004A68A9-Camera_UpdateViewCone_8.cpp at sha256 7c15759f970e56e3c6857fcd814840b0b80e06a6d81ca0ed30f26f8cc7fee1c7 (recorded implementation.signature: void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004A68A9",
+    "name": "Camera_UpdateViewCone_8",
+    "binary_ninja_name": "Camera_UpdateViewCone_8",
+    "signature": "void* __stdcall(int32_t* arg1)",
+    "start": "0x004A68A9",
+    "end": "0x4a68c3",
+    "basic_blocks": 1,
+    "edges": [],
+    "cfg_similarity": 1.0,
+    "summary": "One block 0x4A68A9-0x4A68C1: push ebp; ECX=[E+8]; EBP=[ECX]; push [ECX+0x1C]; push [ECX+0x18]; call 0x004A5D42 (Camera_SetFieldOfView_7); add esp,8; pop ebp; retn 4.",
+    "blocks": [
+      {
+        "address": "0x004a68a9",
+        "start": "0x4a68a9",
+        "end": "0x4a68c4",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Camera_UpdateViewCone_8(int32_t*",
+      "Camera_SetFieldOfView_7"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004A68A9-Camera_UpdateViewCone_8.cpp",
+    "sha256": "7c15759f970e56e3c6857fcd814840b0b80e06a6d81ca0ed30f26f8cc7fee1c7",
+    "signature": "void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);",
+    "status_after_review": "STRUCTURALLY_VERIFIED",
+    "summary": "One block 0x4A68A9-0x4A68C1: push ebp; ECX=[E+8]; EBP=[ECX]; push [ECX+0x1C]; push [ECX+0x18]; call 0x004A5D42 (Camera_SetFieldOfView_7); add esp,8; pop ebp; retn 4."
+  },
+  "candidate_comparison": {
+    "result": "match",
+    "divergences": [],
+    "statement": "No candidate divergence found in the checked dimensions."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004A68A9 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004A68A9-Camera_UpdateViewCone_8.cpp (sha256 7c15759f970e56e3c6857fcd814840b0b80e06a6d81ca0ed30f26f8cc7fee1c7). One block 0x4A68A9-0x4A68C1: push ebp; ECX=[E+8]; EBP=[ECX]; push [ECX+0x1C]; push [ECX+0x18]; call 0x004A5D42 (Camera_SetFieldOfView_7); add esp,8; pop ebp; retn 4."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "One 4-byte stack argument at [E+8] after push ebp; callee cleanup with retn 4 \u2192 __stdcall. BN void* __stdcall(int32_t* arg1); candidate void* __stdcall __seh_longjmp_unwind(int* context) \u2014 same convention, same argument slot and the same EAX return."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "One 4-byte stack argument at [E+8] after push ebp; callee cleanup with retn 4 \u2192 __stdcall. BN void* __stdcall(int32_t* arg1); candidate void* __stdcall __seh_longjmp_unwind(int* context) \u2014 same convention, same argument slot and the same EAX return."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 1 block(s)/0 edge(s) at 0x004A68A9; radare2 recovers the identical 1 block(s)/0 edge(s) (score 1.0000); angr CFGFast recovers 2 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "Camera_SetFieldOfView_7(0x004A5D42) with two arguments: retail pushes [ECX+0x1C] first then [ECX+0x18], so the first cdecl argument is [ECX+0x18]. The candidate passes (context[6],context[7]) = ([ECX+0x18],[ECX+0x1C]), which matches the push order."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Argument indices 6 and 7 (byte offsets 0x18 and 0x1C); the [ECX] load into EBP is discarded."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "Reads [arg1], [arg1+0x18], [arg1+0x1C]; no writes. The candidate's `*context;` discarded load reproduces retail's mov ebp,[ecx]."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns Camera_SetFieldOfView_7's EAX; the discarded load has no side effect and cannot fault differently (same pointer, same first access)."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "The two forwarded words are opaque view-cone parameters; this block performs no floating-point arithmetic and contains no x87 instruction.",
+      "rationale": "The two forwarded words are opaque view-cone parameters; this block performs no floating-point arithmetic and contains no x87 instruction."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"void* __stdcall(int32_t* arg1)\" at 0x004A68A9; radare2 recovers \"fcn.004a68a9 (int32_t arg_8h);\". Both tools place the entry at 0x004A68A9 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: void* __stdcall Camera_UpdateViewCone_8(int32_t* param_1);."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x004A68A9-binaryninja.json",
+      "evidence_sha256": "5d15c0877e6e3048eb01ced294860bf418c70145da16d066d7720cc1f482a9c6",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x004A68A9-radare2.json",
+      "evidence_sha256": "9f2aaf892889a584e8855c73f83027ca45cf6c8d7557c5c7c527aa3ca5225c6c",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x004A68A9-angr-20261023.json",
+      "evidence_sha256": "409c821e273814bd104646d8cae54aed652de310167ddfc0520f9472c2d34ff1",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source.",
+    "The candidate's decompiler-derived symbol spelling (__seh_longjmp_unwind) is the spelling already recorded in implementation.signature; retail identity is fixed by the address."
+  ]
+}

@@ -1,0 +1,74 @@
+{
+ "schema_version": 1,
+ "kind": "structural-comparison",
+ "address": "0x00405850",
+ "native": "Config_Read",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+ "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+ "retail": {
+  "blocks": 3,
+  "edges": 2,
+  "instruction_count": 24,
+  "size_bytes": 74,
+  "nodes": [
+   {
+    "address": "0x00405850",
+    "size": 20,
+    "role": "push the path argument, call Qvm_Load, test EAX, je to the failed-load block"
+   },
+   {
+    "address": "0x00405864",
+    "size": 32,
+    "role": "success: Qvm_Execute(qvm), Qvm_Cleanup(qvm), add esp,8, 0x004058A0, 0x00405980, 0x00405B30, pop esi, ret"
+   },
+   {
+    "address": "0x00405884",
+    "size": 22,
+    "role": "failed load: 0x00405300, 0x004058A0, 0x00405980, 0x00405B30, pop esi, ret"
+   }
+  ]
+ },
+ "candidate": {
+  "blocks": 3,
+  "edges": 2,
+  "object_offset": "0x00000220",
+  "nodes": [
+   {
+    "address": "0x00000220",
+    "role": "Qvm_Load + test"
+   },
+   {
+    "address": "0x00000233",
+    "role": "Qvm_Execute, Qvm_Cleanup, Config_SaveSoundOptions, Config_NoD3DDriversWithHard, tail jmp Config_Language_2"
+   },
+   {
+    "address": "0x00000260",
+    "role": "Config_SaveGraphicOptions, Config_SaveSoundOptions, Config_NoD3DDriversWithHard, tail jmp Config_Language_2"
+   }
+  ]
+ },
+ "mapping": [
+  {
+   "retail": "0x00405850",
+   "candidate": "0x00000220",
+   "result": "match"
+  },
+  {
+   "retail": "0x00405864",
+   "candidate": "0x00000233",
+   "result": "match"
+  },
+  {
+   "retail": "0x00405884",
+   "candidate": "0x00000260",
+   "result": "match"
+  }
+ ],
+ "result": "match",
+ "differences": [
+  "The candidate tail-calls Config_Language_2 (jmp) where retail calls it and then runs `pop esi; ret`; the returned EAX is the same and the call order is unchanged.",
+  "The candidate keeps the qvm pointer in a callee-saved register (saved through the 8-byte argument area) instead of retail's esi push."
+ ],
+ "note": "Retail CFG from radare2 6.2.0 afbj and angr CFGFast (docs/fidelity/evidence/0x00405850-radare2.json, 0x00405850-angr.json) against the compiled candidate object (i686-w64-mingw32-objdump)."
+}

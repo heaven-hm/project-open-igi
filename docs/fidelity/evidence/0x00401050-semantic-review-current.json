@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x00401050",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "6ff87620c72d67e17cd0f078ea736ff2c06f9aa6d07806636823e0aebd5bbf10",
+  "reviewed": true,
+  "reviewed_by": "Independent static source review against the retained Binary Ninja and Radare2 disassembly",
+  "scope": "Intraprocedural control flow, call order, and dispatch-table address mapping only. No live runtime or candidate execution acceptance.",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Retained Binary Ninja and Radare2 evidence identifies the same exact retail entry 0x00401050 and three blocks."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "The retail entry and candidate are invoked without explicit arguments; callback argument semantics are out of scope."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "The frame index is a 16-bit field at context offset +0x1C. task_phase_stride 0x180 entries corresponds to byte address delta 0x600 for 4-byte entries, matching retail phase-1 table base 0x00A970E0."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "The candidate reads the context dispatch index and callback table through the named table mapping; no callback target contents were compared."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Candidate preserves setjmp boundary, normal dispatch callback and longjmp branch call to Loop_SetStatusByte/FX_SmokeEmit_27 as established by the retained disassembly. Callback side effects remain unobserved."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "The function has no value return. Both normal dispatch and the nonzero setjmp branch return; callback failures and runtime exception behavior are not evaluated."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point operation is part of this function."
+    }
+  ],
+  "limitations": [
+    "The older 0x00401050-semantic-review.json is unrelated generic evidence and is superseded for this source snapshot.",
+    "No paired Frida runtime comparison; natural frame dispatch, callback data and resulting state are unverified.",
+    "Helper task-table mapping is source-level; current game initialization does not prove populated callback parity."
+  ]
+}

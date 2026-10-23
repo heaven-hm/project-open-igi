@@ -1,0 +1,80 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x00505E40",
+ "signature": "not restated",
+ "capture": {
+  "captured_at": "2026-10-22T23:00:01+00:00",
+  "method": "Binary Ninja MCP bn_function_basic_blocks on the loaded retail view",
+  "retail_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+ },
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x00505E40"
+   },
+   {
+    "address": "0x00505EBB"
+   },
+   {
+    "address": "0x00505E4E"
+   },
+   {
+    "address": "0x00505E60"
+   },
+   {
+    "address": "0x00505E78"
+   },
+   {
+    "address": "0x00505E69"
+   },
+   {
+    "address": "0x00505E76"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x00505E40",
+    "target": "0x00505EBB",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E40",
+    "target": "0x00505E4E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E4E",
+    "target": "0x00505EBB",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E4E",
+    "target": "0x00505E60",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E60",
+    "target": "0x00505E78",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E60",
+    "target": "0x00505E69",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x00505E69",
+    "target": "0x00505E76",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x00505E76",
+    "target": "0x00505E76",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

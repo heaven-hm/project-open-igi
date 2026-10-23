@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00407E30",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "445f304451962003a56a3136bdce597b5e5a0b365515c51c70890b86f77ab421",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00407E30 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/defineq/00407E30-DefineQMaterial.cpp at sha256 445f304451962003a56a3136bdce597b5e5a0b365515c51c70890b86f77ab421 (recorded implementation.signature: int32_t DefineQMaterial(long param_1, long param_2, long param_3, int32_t param_4, int32_t param_5);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00407E30",
+    "name": "DefineQMaterial",
+    "binary_ninja_name": "DefineQ_Material",
+    "signature": "int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, int32_t arg4, int32_t arg5 @ 0xc)",
+    "start": "0x00407E30",
+    "end": "0x407f4a",
+    "basic_blocks": 1,
+    "edges": [],
+    "cfg_similarity": 1.0,
+    "summary": "Single block 0x407E30-0x4080xx: three x87 arguments (st0/st1/st2) and two stack arguments; Profile_ValueSet x3; writes the material record at g_569210+g_53851c*0x268 (+0x0/+0x8/+0xC fields plus the three Script_EvalArgInt()*2^-20 scaled dwords); memcpy(arg4,{1,0,0x3FF00000,&g_script_ret_type},0x18); return arg4.",
+    "blocks": [
+      {
+        "address": "0x00407e30",
+        "start": "0x407e30",
+        "end": "0x407f4b",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "only",
+      "Profile_ValueSet",
+      "Profile_ValueSet",
+      "Profile_ValueSet",
+      "Script_EvalArgInt",
+      "Script_EvalArgInt",
+      "Script_EvalArgInt"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/defineq/00407E30-DefineQMaterial.cpp",
+    "sha256": "445f304451962003a56a3136bdce597b5e5a0b365515c51c70890b86f77ab421",
+    "signature": "int32_t DefineQMaterial(long param_1, long param_2, long param_3, int32_t param_4, int32_t param_5);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Single block 0x407E30-0x4080xx: three x87 arguments (st0/st1/st2) and two stack arguments; Profile_ValueSet x3; writes the material record at g_569210+g_53851c*0x268 (+0x0/+0x8/+0xC fields plus the three Script_EvalArgInt()*2^-20 scaled dwords); memcpy(arg4,{1,0,0x3FF00000,&g_script_ret_type},0x18); return arg4."
+  },
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Three x87 register arguments replaced by stack long doubles.",
+      "Result/frame arguments shifted; malformed float literals.",
+      "Profile_ValueSet and Script_EvalArgInt operands do not match retail."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00407E30 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/defineq/00407E30-DefineQMaterial.cpp (sha256 445f304451962003a56a3136bdce597b5e5a0b365515c51c70890b86f77ab421). Single block 0x407E30-0x4080xx: three x87 arguments (st0/st1/st2) and two stack arguments; Profile_ValueSet x3; writes the material record at g_569210+g_53851c*0x268 (+0x0/+0x8/+0xC fields plus the three Script_EvalArgInt()*2^-20 scaled dwords); memcpy(arg4,{1,0,0x3FF00000,&g_script_ret_type},0x18); return arg4."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN (long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, int32_t arg4, int32_t arg5 @ 0xc): three x87 register inputs, the result buffer at [E+4], and the frame at [E+0xc]. The candidate (long double context, long double arg2, long double arg3, int arg4, int arg5) puts all three long doubles on the stack, which shifts arg4/arg5 by 36 bytes and reads neither the x87 inputs nor the right frame slot."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "BN (long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, int32_t arg4, int32_t arg5 @ 0xc): three x87 register inputs, the result buffer at [E+4], and the frame at [E+0xc]. The candidate (long double context, long double arg2, long double arg3, int arg4, int arg5) puts all three long doubles on the stack, which shifts arg4/arg5 by 36 bytes and reads neither the x87 inputs nor the right frame slot."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 1 block(s)/0 edge(s) at 0x00407E30; radare2 recovers the identical 1 block(s)/0 edge(s) (score 1.0000); angr CFGFast recovers 9 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail calls 0x004B8A50 Profile_ValueSet three times and 0x004B8A20 Script_EvalArgInt three times (indices 3,4,5). The candidate has the same call names but passes the shifted arg4/arg5 and contains malformed literals (9.53674316e-07.0f), so the call sites do not encode the retail operands."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "failed",
+      "detail": "Scale 2^-20 (9.53674316e-07f); material stride 0x268; return record 0x18 bytes {1,0,0x3FF00000,&g_script_ret_type}; global g_53851c; fields +0x0/+0x8/+0xC."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The three profile-field writes use g_53851c*0x268 with the right offsets, but the candidate's argument positions are shifted, so arg4/arg5 do not denote the retail result/frame words."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns arg4; with the shifted stack layout arg4 is not the retail [E+4] result pointer."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "Retail consumes three values from st0/st1/st2 and scales with 2^-20; the candidate declares three long-double stack parameters and never reproduces the x87 entry state."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, int32_t arg4, int32_t arg5 @ 0xc)\" at 0x00407E30; radare2 recovers \"fcn.00407e30 (int32_t arg_24h, int32_t arg_28h);\". Both tools place the entry at 0x00407E30 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineQMaterial(long param_1, long param_2, long param_3, int32_t param_4, int32_t param_5);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00407E30-binaryninja.json",
+      "evidence_sha256": "c98c92d472e567c44b5110ccae9b6c797e0b90a82f5d8e61a088312afd41b30d",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00407E30-radare2.json",
+      "evidence_sha256": "5303f0761225392ba628801e211fea2b25997e9a53611e1778df57949f460b91",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00407E30-angr-20261023.json",
+      "evidence_sha256": "2c96f99a8e44794212f4b7f4b55b23cf8529a89bce06f0960c2f29756d0a5f1a",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
+}

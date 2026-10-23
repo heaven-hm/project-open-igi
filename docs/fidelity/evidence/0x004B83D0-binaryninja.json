@@ -1,0 +1,200 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
+ "function_entry": "0x004B83D0",
+ "symbol": "Qvm_Cleanup",
+ "signature": "int32_t(int32_t* arg1)",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "function": {
+  "start": "0x004B83D0",
+  "end": "0x004B8406",
+  "size_bytes": 55,
+  "basic_blocks": 3,
+  "instruction_count": 25
+ },
+ "disassembly": [
+  "int32_t Qvm_Cleanup(int32_t* arg1)",
+  "0x4b83d0  // Sig: void Qvm_Cleanup(void* qvm)",
+  "0x4b83d0  // Note: Frees a loaded QVM script object: reads qvm+0x8C and releases the",
+  "0x4b83d0  // program block when non-zero. Param: qvm = pointer from Qvm_Load. Pair with",
+  "0x4b83d0  // Qvm_Load to avoid leaks.",
+  "0x4b83d0  push    esi",
+  "0x4b83d1  mov     esi, dword [esp+0x8]",
+  "0x4b83d5  mov     eax, dword [esi+0x8c]",
+  "0x4b83db  test    eax, eax",
+  "0x4b83dd  je      0x4b83f3",
+  "0x4b83df  push    eax",
+  "0x4b83e0  call    Sys_CheckHeap_28",
+  "0x4b83e5  add     esp, 0x4",
+  "0x4b83e8  push    esi",
+  "0x4b83e9  call    Mem_DeAllocFn",
+  "0x4b83ee  add     esp, 0x4",
+  "0x4b83f1  pop     esi",
+  "0x4b83f2  retn",
+  "0x4b83f3  push    esi",
+  "0x4b83f4  call    Resource_Unload",
+  "0x4b83f9  add     esp, 0x4",
+  "0x4b83fc  push    esi",
+  "0x4b83fd  call    Mem_DeAllocFn",
+  "0x4b8402  add     esp, 0x4",
+  "0x4b8405  pop     esi",
+  "0x4b8406  retn"
+ ],
+ "pseudocode": "  int32_t Qvm_Cleanup(int32_t* arg1)\n\n// Sig: void Qvm_Cleanup(void* qvm)\n// Note: Frees a loaded QVM script object: reads qvm+0x8C and releases the\n// program block when non-zero. Param: qvm = pointer from Qvm_Load. Pair with\n// Qvm_Load to avoid leaks.\n{\n    void* eax = arg1[0x23];\n\n    if (!eax)\n    {\n        Resource_Unload(arg1);\n        return Mem_DeAllocFn(arg1);\n    }\n\n    Sys_CheckHeap_28(eax);\n    return Mem_DeAllocFn(arg1);\n}",
+ "callers": [
+  {
+   "callsite": "0x40586b",
+   "caller": "Config_Read (0x405850 (x86))"
+  },
+  {
+   "callsite": "0x40836b",
+   "caller": "GameMaterial_LoadParameters (0x408350 (x86))"
+  },
+  {
+   "callsite": "0x4137bb",
+   "caller": "HumanPlayer_LoadParameters (0x4137a0 (x86))"
+  },
+  {
+   "callsite": "0x413ad3",
+   "caller": "WeaponType_Open_2 (0x413a90 (x86))"
+  },
+  {
+   "callsite": "0x4151b3",
+   "caller": "IntroScreen_Update (0x415170 (x86))"
+  },
+  {
+   "callsite": "0x418c27",
+   "caller": "Menu_Manager (0x418b00 (x86))"
+  },
+  {
+   "callsite": "0x44ffed",
+   "caller": "HumanAI_Process (0x44ffc0 (x86))"
+  },
+  {
+   "callsite": "0x4505fb",
+   "caller": "HumanAI_OnEvent (0x4505d0 (x86))"
+  },
+  {
+   "callsite": "0x4508bd",
+   "caller": "AI_CheckVisibility (0x450830 (x86))"
+  },
+  {
+   "callsite": "0x47ca83",
+   "caller": "AmmoType_Open (0x47ca40 (x86))"
+  },
+  {
+   "callsite": "0x484ef0",
+   "caller": "Mission_Open (0x484e60 (x86))"
+  },
+  {
+   "callsite": "0x4887d2",
+   "caller": "SubLevel_LoadParameters (0x488780 (x86))"
+  },
+  {
+   "callsite": "0x4b82fa",
+   "caller": "Qvm_Load (0x4b80b0 (x86))"
+  },
+  {
+   "callsite": "0x4b836c",
+   "caller": "Qvm_Load (0x4b80b0 (x86))"
+  },
+  {
+   "callsite": "0x4b8562",
+   "caller": "Qsc_Compile (0x4b8410 (x86))"
+  },
+  {
+   "callsite": "0x4b858b",
+   "caller": "Qsc_Compile (0x4b8410 (x86))"
+  },
+  {
+   "callsite": "0x4c490e",
+   "caller": "Rigid_DyncubeObjRead (0x4c48e0 (x86))"
+  },
+  {
+   "callsite": "0x4c65ab",
+   "caller": "Terrain_Load (0x4c6240 (x86))"
+  },
+  {
+   "callsite": "0x4e5f3d",
+   "caller": "SoundSys_RegisterDefs (0x4e5ec0 (x86))"
+  },
+  {
+   "callsite": "0x4ec09e",
+   "caller": "AnimTrigger_ParseConfigFile (0x4ec070 (x86))"
+  },
+  {
+   "callsite": "0x4edc3f",
+   "caller": "PhysicsObj_RegisterLod (0x4edc00 (x86))"
+  },
+  {
+   "callsite": "0x4ee00e",
+   "caller": "PhysicsObjType_ParseConfigFile (0x4edfe0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d2a",
+   "caller": "Config_Compile (0x4f0cf0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d9e",
+   "caller": "Task_New_2 (0x4f0d40 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4b83e0",
+   "callee_address": "0x4bd380",
+   "callee": "Sys_CheckHeap_28 (0x4bd380 (x86))"
+  },
+  {
+   "callsite": "0x4b83e9",
+   "callee_address": "0x4b0d10",
+   "callee": "Mem_DeAllocFn (0x4b0d10 (x86))"
+  },
+  {
+   "callsite": "0x4b83f4",
+   "callee_address": "0x4b6380",
+   "callee": "Resource_Unload (0x4b6380 (x86))"
+  },
+  {
+   "callsite": "0x4b83fd",
+   "callee_address": "0x4b0d10",
+   "callee": "Mem_DeAllocFn (0x4b0d10 (x86))"
+  }
+ ],
+ "cfg": {
+  "entry": "0x004B83D0",
+  "nodes": [
+   {
+    "address": "0x004B83D0"
+   },
+   {
+    "address": "0x004B83F3"
+   },
+   {
+    "address": "0x004B83DF"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004B83D0",
+    "target": "0x004B83F3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B83D0",
+    "target": "0x004B83DF",
+    "kind": "conditional"
+   }
+  ]
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+ ]
+}

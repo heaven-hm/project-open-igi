@@ -1,6 +1,6 @@
 // IGI native provenance: HumanPlayer_LoadParameters_7 - 0x0040DA40 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0040DA40-HumanPlayer_LoadParameters_7.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "HumanPlayer_LoadParameters_7.hpp"
+#include "HumanPlayer_LoadParameters_7.h"
 void** HumanPlayer_LoadParameters_7(void* context, void* arg2)
 
 {

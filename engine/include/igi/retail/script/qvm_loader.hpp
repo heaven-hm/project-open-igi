@@ -26,7 +26,7 @@ public:
     [[nodiscard]] std::span<const std::byte> file_bytes() const noexcept;
 
 private:
-    friend QvmLoadedScript Host_LoadQvmScript(
+    friend QvmLoadedScript Qvm_LoadScript(
         resource::ResourceCache& resource_cache,
         const std::filesystem::path& qvm_path);
 
@@ -44,7 +44,7 @@ private:
 // Confidence: partial host adapter for scene/test harness.
 // Signature: C++ ResourceCache/path -> QvmLoadedScript differs from retail void*(const char*).
 // Usage/tests: Used by host QVM inspection tests and diagnostic scene harness.
-[[nodiscard]] QvmLoadedScript Host_LoadQvmScript(
+[[nodiscard]] QvmLoadedScript Qvm_LoadScript(
     resource::ResourceCache& resource_cache,
     const std::filesystem::path& qvm_path);
 

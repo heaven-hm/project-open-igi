@@ -1,6 +1,6 @@
 // IGI native provenance: Config_FillScreenResolutionListBox - 0x00404450 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404450-Config_FillScreenResolutionListBox.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404450-Config_FillScreenResolutionListBox.hpp"
+#include "Config_FillScreenResolutionListBox.h"
 int Config_FillScreenResolutionListBox(int context, float arg2 )
 
 // Sig: void Config_FillScreenResolutionListBox(int deviceIndex)

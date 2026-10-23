@@ -1,13 +1,19 @@
-// IGI native provenance: Mem_InvokeNewHandler - 0x004AD722 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004AD722-Mem_InvokeNewHandler.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004AD722-Mem_InvokeNewHandler.hpp"
-int Mem_InvokeNewHandler(int context)
+// IGI native Mem_InvokeNewHandler - 0x004AD722 - transcribed from retail igi.exe.
+// Retail: cdecl (size). Calls the new handler stored at g_936254 with the size when it is set; returns 1 when the handler returns non-zero, otherwise 0.
+#include <cstdint>
+#include <cstring>
+static inline std::uint32_t rd32(const void* p, std::intptr_t off) { std::uint32_t v; std::memcpy(&v, reinterpret_cast<const std::uint8_t*>(p) + off, 4); return v; }
+static inline void wr32(void* p, std::intptr_t off, std::uint32_t v) { std::memcpy(reinterpret_cast<std::uint8_t*>(p) + off, &v, 4); }
+static inline void* ptr32(std::uint32_t v) { return reinterpret_cast<void*>(static_cast<std::uintptr_t>(v)); }
+static inline std::uint32_t u32(const void* p) { return static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(p)); }
 
+extern int (__cdecl *g_936254)(std::uint32_t);
+int __cdecl Mem_InvokeNewHandler(std::uint32_t size)
 {
-    int data_3 = g_936254;
-
-    if (data_3 && data_3(context))
-        return 1;
-
+    if (g_936254 != nullptr) {
+        if (g_936254(size) != 0) {
+            return 1;
+        }
+    }
     return 0;
 }

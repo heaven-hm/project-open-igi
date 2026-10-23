@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_Update - 0x004F0E90 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004F0E90-Qtask_Update.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004F0E90-Qtask_Update.hpp"
+#include "Qtask_Update.h"
 int* Qtask_Update()
 
 // Sig: void Qtask_Update(void)

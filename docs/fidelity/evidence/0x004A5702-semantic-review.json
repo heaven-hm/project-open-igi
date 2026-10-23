@@ -1,0 +1,86 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x004A5702",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+ "reviewed": true,
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/error/error_show.cpp hashes to e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x004A5702",
+  "name": "String_VFormat",
+  "signature": "int32_t(char* arg1, char* arg2, int32_t arg3)",
+  "start": "0x004A5702",
+  "end": "0x004A5752",
+  "size_bytes": 81,
+  "basic_blocks": 4,
+  "edges": 4,
+  "cfg_similarity": 1.0,
+  "summary": "0x004A5702-0x004A5753 (81 bytes), 4 blocks/4 edges; same stack _iobuf initialization, calls _output(0x004A7720) with (buffer, 0x7FFFFFFF, format, args), decrements the count and either flushes when negative or NUL-terminates, returning the character count."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/error/error_show.cpp",
+  "sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+  "summary": "igi::retail::error::String_VFormat(char*, const char*, std::va_list): host vsprintf into buffer, then the same count decrement and buffer[result]=0; no retail _output path.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
+ },
+ "checks": [
+  {
+   "name": "function_boundary",
+   "result": "passed",
+   "detail": "Binary Ninja and Radare2 recover 81 bytes, 4 blocks/4 edges; cfg_similarity 1.0."
+  },
+  {
+   "name": "abi",
+   "result": "passed",
+   "detail": "Retail takes (char* buffer, char* format, int32 va_list); the candidate takes (char*, const char*, std::va_list), which is the same 32-bit char* third argument."
+  },
+  {
+   "name": "host_crt",
+   "result": "passed_with_limitation",
+   "detail": "The candidate delegates formatting to host vsprintf and does not reproduce the retail _iobuf/_output code path."
+  },
+  {
+   "name": "behavioural_differential",
+   "result": "passed",
+   "detail": "scripts/format_diff_runner.py: 10/10 matched returned length and destination bytes for bounded fixtures."
+  }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail's third argument is the 32-bit va_list pointer; the candidate declares std::va_list, which is char* on i386. cdecl and the argument order are preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004A5702-binaryninja.json",
+   "evidence_sha256": "a51cf2ea15512e1f69f73ce1fcbd03bab9bb8881d0fa579ac0c22ed4bd91c123",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004A5702-radare2.json",
+   "evidence_sha256": "f43cfebf7872a62fb039bcb5a40d86343ddf807ccec7d2c16df93aabbcf8afd8",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
+   "evidence_sha256": "5e0e3ab036fb46612e6b045a27c5bef2dfa0e3fd6fad207bd336d2334379279f",
+   "runner": "scripts/format_diff_runner.py",
+   "method": "Retail formatter instructions executed in VEX; candidate PE32 CRT boundary modeled by host libc snprintf with explicit x86 va_list dword reads for bounded integer/string formats. Exact return and 512 destination bytes compared.",
+   "oracle": "retail-binary-execution",
+   "tests_passed": 10,
+   "tests_total": 10
+  }
+ },
+ "limitations": [
+  "Host-CRT delegation and the same format-family limits as sprintf apply.",
+  "No live paired runtime capture exists.",
+  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
+ ]
+}

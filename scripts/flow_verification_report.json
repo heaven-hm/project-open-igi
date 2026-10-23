@@ -1,0 +1,133 @@
+{
+  "total": 14,
+  "passed": 0,
+  "failed": 14,
+  "details": [
+    {
+      "name": "DefineHumanPlayerGeneral",
+      "address": "0x00410070",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": "native_gate: BLOCKED: Requested methods are not bound to the selected source: ['0x00410070']"
+      }
+    },
+    {
+      "name": "HumanPlayer_LoadParameters",
+      "address": "0x004137A0",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "GOInRemap",
+      "address": "0x004037C0",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "InputPort_Process",
+      "address": "0x004ED5C0",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "QTask_OpenEvent",
+      "address": "0x00401050",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Game_GetContext",
+      "address": "0x00402880",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Flow_SetState",
+      "address": "0x004028A0",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GetActiveGraphicOptions",
+      "address": "0x00404590",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "address": "0x00404F00",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "address": "0x00404F60",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "address": "0x00405530",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "address": "0x004055C0",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "address": "0x00405620",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    },
+    {
+      "name": "Human_IsCrouched",
+      "address": "0x00463180",
+      "status": "FAIL",
+      "details": {
+        "success": false,
+        "error": ""
+      }
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 // IGI native provenance: Config_GraphicOptionsGetPerformanceFlags - 0x00404F60 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404F60-Config_GraphicOptionsGetPerformanceFlags.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404F60-Config_GraphicOptionsGetPerformanceFlags.hpp"
+#include "Config_GraphicOptionsGetPerformanceFlags.h"
 int Config_GraphicOptionsGetPerformanceFlags(int context)
 
 // Sig: int Config_GraphicOptionsGetPerformanceFlags()

@@ -1,6 +1,6 @@
 // IGI native provenance: Game_GetScriptContext - 0x00402890 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00402890-Game_GetScriptContext.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00402890-Game_GetScriptContext.hpp"
+#include "Game_GetScriptContext.h"
 int Game_GetScriptContext()
 
 // Sig: void* Game_GetScriptContext(void)

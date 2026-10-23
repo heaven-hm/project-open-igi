@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_Initialize - 0x004D9810 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9810-Qtask_Initialize.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9810-Qtask_Initialize.hpp"
+#include "Qtask_Initialize.h"
 int* Qtask_Initialize()
 
 // Sig: void Qtask_Initialize(void)

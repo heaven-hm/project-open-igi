@@ -3,7 +3,7 @@
 // Scope: The objects.qsc input selects objects.qvm through the compiled loader.
 // IGI native provenance: Qvm_Load - 0x004B80B0 - CFG score 91.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B80B0-Qvm_Load.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B80B0-Qvm_Load.hpp"
+#include "Qvm_Load.h"
 int* Qvm_Load(void* context)
 
 // Sig: int* Qvm_Load(char* qvmPath)

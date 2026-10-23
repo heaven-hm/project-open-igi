@@ -1,6 +1,6 @@
 // IGI native provenance: Qtask_GetEventId - 0x004D9850 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9850-Qtask_GetEventId.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9850-Qtask_GetEventId.hpp"
+#include "Qtask_GetEventId.h"
 int Qtask_GetEventId()
 
 // Sig: unsigned char Qtask_GetEventId(void)

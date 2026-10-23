@@ -1,9 +1,11 @@
-// IGI native provenance: Loop_SetStatusByte - 0x0048F480 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 0048F480-Loop_SetStatusByte.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0048F480-Loop_SetStatusByte.hpp"
-int Loop_SetStatusByte(char context)
+// IGI native Loop_SetStatusByte - 0x0048F480 - transcribed from retail igi.exe.
+// Retail: cdecl (byte). Stores the byte argument at 0x5C8DE8.
+#include <cstdint>
+#include <cstring>
 
+extern std::int8_t g_5c8de8;
+
+void __cdecl Loop_SetStatusByte(std::int8_t value)
 {
-    g_5c8de8 = context;
-    return context;
+    g_5c8de8 = value;
 }

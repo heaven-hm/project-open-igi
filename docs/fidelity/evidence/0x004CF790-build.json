@@ -1,0 +1,53 @@
+{
+ "schema_version": 1,
+ "kind": "build-report",
+ "result": "passed",
+ "address": "0x004CF790",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
+ "executed": true,
+ "performed_at": "2026-10-23T07:06:09Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/texture/texture_loaders.cpp -o /tmp/taskb-build/texture_loaders.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS and the engine/include include path."
+ },
+ "object": {
+  "path": "/tmp/taskb-build/texture_loaders.o",
+  "sha256": "1817e92709b6dcd0011082c7d3b749f1c04b7f36408c991a99bd674dc5160893",
+  "size_bytes": 5481,
+  "format": "pe-i386 relocatable object",
+  "symbol": "igi::retail::texture::DynObj_LoadModelTextures(void*)",
+  "symbol_offset": 1904,
+  "symbol_size_bytes": 336,
+  "function_bytes_hex": "83ec64896c24608b6c2468c744240800000000c7442404465845548b4508895c2454890424e8000000008b1089c389554085d27f1cc745340000000089d88b5c2454c74538000000008b6c246083c464c38d04d2c74424040400000083c304c1e002897c245c8904248954240c89742458e8000000008b54240cc74424040400000089c78d0452c1e002890424e8000000008b54240c897d3431c98945388955408d6c2410c7440c1000000000c7440c140000000083c10883f94072e8c7440d000000000089c6902e8db42600000000c7460400000000895c2408c744240471000000892c248954240ce800000000896c240889742404893c24e8d1f8ffff8b54240c8d4bff89d8eb0d8db60000000083c00139c8743180380075f429c801c383c60c83c72483ea0175a531db8b7424588b7c245c89d88b6c24608b5c245483c464c32e8d742600b8ffffffffebcf90",
+  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding.",
+  "function_bytes_length": 336
+ },
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_sequence",
+   "result": "passed",
+   "detail": "The object label for igi::retail::texture::DynObj_LoadModelTextures(void*) spans 336 bytes at offset 0x770; 336 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
+  "No runtime path was executed by this build report."
+ ]
+}

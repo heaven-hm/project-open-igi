@@ -1,8 +1,11 @@
-// IGI native provenance: Model_GetAttachment - 0x004D0CF0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
-// Evidence: 004D0CF0-Model_GetAttachment.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D0CF0-Model_GetAttachment.hpp"
-int Model_GetAttachment(void* context, int arg2)
+// IGI native Model_GetAttachment - 0x004D0CF0 - transcribed from retail igi.exe.
+// Retail: cdecl (model, index). ecx=[[esp+4]+0xc]; edx=[[ecx+0xc]+0x8c]; return edx + index*0x44.
+#include <cstdint>
 
+void* __cdecl Model_GetAttachment(void* model, std::int32_t index)
 {
-    return *(*(*(context + 0xc) + 0xc) + 0x8c) + arg2 * 0x44;
+    std::uint32_t a = *reinterpret_cast<std::uint32_t*>(reinterpret_cast<std::uintptr_t>(model) + 0xc);
+    std::uint32_t b = *reinterpret_cast<std::uint32_t*>(static_cast<std::uintptr_t>(a) + 0xc);
+    std::uint32_t t = *reinterpret_cast<std::uint32_t*>(static_cast<std::uintptr_t>(b) + 0x8c);
+    return reinterpret_cast<void*>(static_cast<std::uintptr_t>(t + static_cast<std::uint32_t>(index) * 0x44u));
 }

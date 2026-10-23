@@ -3,7 +3,7 @@
 // Scope: Returns data pointer; optional second argument receives byte count. objects.qvm length 183749 = 0x2CDC5.
 // IGI native provenance: Resource_Load - 0x004B5F00 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B5F00-Resource_Load.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "Resource_Load.hpp"
+#include "Resource_Load.h"
 int* Resource_Load(int context, int arg2, void* arg3, int* arg4 )
 
 // Sig: int* Resource_Load(char* resourcePath, char** outBuffer)

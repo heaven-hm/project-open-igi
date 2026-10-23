@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00407F50",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "45b8ac411405d666be6f824b06b1542cdfcd598c4baef26b8d854675df241ed3",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00407F50 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/define/00407F50-DefineGameMaterial.cpp at sha256 45b8ac411405d666be6f824b06b1542cdfcd598c4baef26b8d854675df241ed3 (recorded implementation.signature: int32_t DefineGameMaterial(long param_1, long param_2, long param_3, long param_4, int32_t param_5, float param_6);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00407F50",
+    "name": "DefineGameMaterial",
+    "binary_ninja_name": "Define_GameMaterial",
+    "signature": "int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, int32_t arg5, float arg6 @ 0xc)",
+    "start": "0x00407F50",
+    "end": "0x4082a6",
+    "basic_blocks": 12,
+    "edges": [
+      {
+        "source": "0x00407f50",
+        "target": "0x00408026",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00408021",
+        "target": "0x00408026",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00408026",
+        "target": "0x00408021",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00408026",
+        "target": "0x00408051",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00408051",
+        "target": "0x0040809a",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0040809a",
+        "target": "0x0040809a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040809a",
+        "target": "0x004080ca",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080ca",
+        "target": "0x004080cc",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004080cc",
+        "target": "0x004080cc",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080cc",
+        "target": "0x004080f9",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080f9",
+        "target": "0x0040814e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080f9",
+        "target": "0x004081b8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040814e",
+        "target": "0x004081b8",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004081b8",
+        "target": "0x0040820a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004081b8",
+        "target": "0x0040826f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040820a",
+        "target": "0x0040826f",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Twelve blocks 0x407F50-0x4082xx: parses the material name and per-slot fields, calls Sys_ResolveSymbol_23/Profile_ValueSet/Script_EvalArgInt, allocates with 0x004B0C60, writes g_5C89FC-indexed records at 0x00569250..0x00569474 and stores 1 to 0x00A96AE0, then memcpy's the 0x18-byte return record.",
+    "blocks": [
+      {
+        "address": "0x00407f50",
+        "start": "0x407f50",
+        "end": "0x408021",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00408026",
+        "start": "0x408026",
+        "end": "0x408051",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00408021",
+        "start": "0x408021",
+        "end": "0x408026",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00408051",
+        "start": "0x408051",
+        "end": "0x40809a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0040809a",
+        "start": "0x40809a",
+        "end": "0x4080ca",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004080ca",
+        "start": "0x4080ca",
+        "end": "0x4080cc",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004080cc",
+        "start": "0x4080cc",
+        "end": "0x4080f9",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004080f9",
+        "start": "0x4080f9",
+        "end": "0x40814e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004081b8",
+        "start": "0x4081b8",
+        "end": "0x40820a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0040814e",
+        "start": "0x40814e",
+        "end": "0x4081b8",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0040826f",
+        "start": "0x40826f",
+        "end": "0x4082a7",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0040820a",
+        "start": "0x40820a",
+        "end": "0x40826f",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Sys_ResolveSymbol_23",
+      "Profile_ValueSet",
+      "Profile_ValueSet",
+      "Profile_ValueSet",
+      "Script_EvalArgInt",
+      "Profile_ValueSet",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Script_EvalArgInt",
+      "eax",
+      "Mem_AllocFn",
+      "dword",
+      "Script_EvalArgInt",
+      "eax",
+      "Mem_AllocFn",
+      "dword"
+    ],
+    "globals_written": []
+  },
+  "candidate_function": {
+    "path": "scripts/GameNatives/define/00407F50-DefineGameMaterial.cpp",
+    "sha256": "45b8ac411405d666be6f824b06b1542cdfcd598c4baef26b8d854675df241ed3",
+    "signature": "int32_t DefineGameMaterial(long param_1, long param_2, long param_3, long param_4, int32_t param_5, float param_6);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Twelve blocks 0x407F50-0x4082xx: parses the material name and per-slot fields, calls Sys_ResolveSymbol_23/Profile_ValueSet/Script_EvalArgInt, allocates with 0x004B0C60, writes g_5C89FC-indexed records at 0x00569250..0x00569474 and stores 1 to 0x00A96AE0, then memcpy's the 0x18-byte return record."
+  },
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Four x87 register arguments replaced by stack longs.",
+      "Result/frame words shifted.",
+      "Indirect call slots have no bound retail target."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00407F50 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/define/00407F50-DefineGameMaterial.cpp (sha256 45b8ac411405d666be6f824b06b1542cdfcd598c4baef26b8d854675df241ed3). Twelve blocks 0x407F50-0x4082xx: parses the material name and per-slot fields, calls Sys_ResolveSymbol_23/Profile_ValueSet/Script_EvalArgInt, allocates with 0x004B0C60, writes g_5C89FC-indexed records at 0x00569250..0x00569474 and stores 1 to 0x00A96AE0, then memcpy's the 0x18-byte return record."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN records (long double arg1, long double arg2, long double arg3, long double arg4, int32_t arg5, float arg6 @ 0xc): four x87 inputs, a stack result buffer and a [E+0xc] frame. The candidate (long,long,long,long,int,float) shifts the stack words and never binds the x87 values."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "BN records (long double arg1, long double arg2, long double arg3, long double arg4, int32_t arg5, float arg6 @ 0xc): four x87 inputs, a stack result buffer and a [E+0xc] frame. The candidate (long,long,long,long,int,float) shifts the stack words and never binds the x87 values."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 12 block(s)/16 edge(s) at 0x00407F50; radare2 recovers the identical 12 block(s)/16 edge(s) (score 1.0000); angr CFGFast recovers 33 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail's 12 Sys_ResolveSymbol_23 calls, 4 Profile_ValueSet calls, 3 Script_EvalArgInt calls and the two 0x004B0C60 allocations are present in name but not with the retail argument words because the stack layout is shifted; indirect call slots (eax/dword) are transcribed without their retail targets."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Material record stride 0x4A8, slots 0x20/0x100; return record 0x18; global 0x00A96AE0 set to 1; g_5C89FC index."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The g_5C89FC*0x4A8 record writes use the right offsets but the candidate's void*/long arithmetic in places changes the store widths; the result record destination is a shifted stack word."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns arg5/result word, not the retail [E+4] result pointer."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "Retail consumes four x87 values (with fstp stores); the candidate passes stack longs and does not model st0-st3."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0, long double arg2 @ st1, long double arg3 @ st2, long double arg4 @ st3, int32_t arg5, float arg6 @ 0xc)\" at 0x00407F50; radare2 recovers \"fcn.00407f50 (int32_t arg_28h, int32_t arg_30h);\". Both tools place the entry at 0x00407F50 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineGameMaterial(long param_1, long param_2, long param_3, long param_4, int32_t param_5, float param_6);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
+  },
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00407F50-binaryninja.json",
+      "evidence_sha256": "4d54a2190f4ce545557f163c806265b790b1f198aa57c24460160b81951cd637",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00407F50-radare2.json",
+      "evidence_sha256": "42ec98dc7323534330de6fa0982d26eca03486c206907e8bf9959f097175edfa",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00407F50-angr-20261023.json",
+      "evidence_sha256": "068a21d80e1144566debfbd7df4ee7994b7c788adf328883d55f6dbda6001511",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
+  },
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
+}

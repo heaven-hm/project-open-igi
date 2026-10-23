@@ -1,0 +1,247 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x004B80B0",
+ "symbol": "fcn.004b80b0",
+ "signature": "fcn.004b80b0 (int32_t arg_130h);",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "commands": [
+  "af-*; s 0x004B80B0; af; afij",
+  "af-*; s 0x004B80B0; af; afbj",
+  "p8 791 @ 0x004B80B0",
+  "s 0x004B80B0; af-*; af @ 0x004B80B0; pdf"
+ ],
+ "function": {
+  "size_bytes": 791,
+  "basic_block_count": 21,
+  "instruction_count": 276,
+  "call_convention": "cdecl",
+  "edge_count": 29,
+  "argument_count": 1
+ },
+ "bytes_hex": "81ec1c01000053555633db57895c2414895c2410e80771fdff8bac243001000085c00f84e10000008bfd83c9ff33c08d54242cf2aef7d12bf98bc18bf78bfac1e902f3a58bc883e103f3a48d4c242c515353e8899dffff8b159072540083c40c89108a0d94725400884804e82072fdff85c0743d8d54242c52e832daffff83c40485c00f84a3000000538d4424305350e8db50000083c40c3bc3894424100f85950000005f5e5d33c05b81c41c010000c38d4c242c51e8f5d9ffff83c40485c074478d54242c8d4424245250e8bfe2ffff8d4c24245551e8b4e2ffff8d54242c8d4424345250e8f5e2ffff83c41885c07c17538d4c24305351e87250000083c40c3bc389442410753055e8a1d9ffff83c40485c074168d5424185255e82fddffff83c4083bc389442414750d5f5e5d33c05b81c41c010000c36a046894000000e86b8affff8bd8b92500000033c08bfbf3ab50e8080800008b44241c83c40c85c00f85750100008b4c24148bfd898b800000008b54241883c9ff899384000000898388000000f2aef7d12bf98bc18bf78bfbc1e902f3a58bc883e103f3a4e87d6ffdff85c00f845f0100008bfd83c9ff33c08d9424ac000000f2aef7d12bf98bc18bf78bfac1e902f3a58bc883e103f3a48d8c24ac000000516a006a00e8fe9bffff8b158872540089108a0d8c7254008d54243888480452e81398ffff8d8424bc00000050e80698ffff8d8c24c00000005351e8e839000083c41c85c00f85980000008d9424ac0000008d44242c5250e88b2f000083c40885c075648d8c24ac00000051e8c797ffff53e8d10000006a046894000000e85589ffff8bd833c0b9250000008bfb508d5424405052f3abe8fc4e000083c41c85c075618d4c242c51686c725400e8d6faffff53e8d089ffff83c40c33c05f5e5d5b81c41c010000c3556840725400e8b5faffff83c4088bc35f5e5d5b81c41c010000c353e85f000000556840725400e894faffff83c40c33c05f5e5d5b81c41c010000c3c683900000000189838c0000008d7c242c83c9ff33c0f2aef7d12bf98bc18bf78bfbc1e902f3a58bc883e103f3a45f5e8bc35d5b81c41c010000c3",
+ "disassembly": [],
+ "cfg": {
+  "entry": "0x004B80B0",
+  "nodes": [
+   {
+    "address": "0x004B80B0"
+   },
+   {
+    "address": "0x004B80D8"
+   },
+   {
+    "address": "0x004B8124"
+   },
+   {
+    "address": "0x004B8139"
+   },
+   {
+    "address": "0x004B8154"
+   },
+   {
+    "address": "0x004B8161"
+   },
+   {
+    "address": "0x004B8172"
+   },
+   {
+    "address": "0x004B81A2"
+   },
+   {
+    "address": "0x004B81B9"
+   },
+   {
+    "address": "0x004B81C6"
+   },
+   {
+    "address": "0x004B81DC"
+   },
+   {
+    "address": "0x004B81E9"
+   },
+   {
+    "address": "0x004B8217"
+   },
+   {
+    "address": "0x004B825B"
+   },
+   {
+    "address": "0x004B82D3"
+   },
+   {
+    "address": "0x004B82EC"
+   },
+   {
+    "address": "0x004B832B"
+   },
+   {
+    "address": "0x004B8350"
+   },
+   {
+    "address": "0x004B836B"
+   },
+   {
+    "address": "0x004B838C"
+   },
+   {
+    "address": "0x004B83BA"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004B80B0",
+    "target": "0x004B81B9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B80B0",
+    "target": "0x004B80D8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B80D8",
+    "target": "0x004B8161",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B80D8",
+    "target": "0x004B8124",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8124",
+    "target": "0x004B81DC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8124",
+    "target": "0x004B8139",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8139",
+    "target": "0x004B81E9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8139",
+    "target": "0x004B8154",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8161",
+    "target": "0x004B81B9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8161",
+    "target": "0x004B8172",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8172",
+    "target": "0x004B81B9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8172",
+    "target": "0x004B81A2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81A2",
+    "target": "0x004B81E9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81A2",
+    "target": "0x004B81B9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81B9",
+    "target": "0x004B81DC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81B9",
+    "target": "0x004B81C6",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81C6",
+    "target": "0x004B81E9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81C6",
+    "target": "0x004B81DC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81E9",
+    "target": "0x004B838C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B81E9",
+    "target": "0x004B8217",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8217",
+    "target": "0x004B83BA",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8217",
+    "target": "0x004B825B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B825B",
+    "target": "0x004B836B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B825B",
+    "target": "0x004B82D3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B82D3",
+    "target": "0x004B8350",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B82D3",
+    "target": "0x004B82EC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B82EC",
+    "target": "0x004B838C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B82EC",
+    "target": "0x004B832B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B838C",
+    "target": "0x004B83BA",
+    "kind": "unconditional"
+   }
+  ]
+ },
+ "cfg_scope": "Retail-image CFG from Radare2 only; compared with Binary Ninja recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence."
+ ]
+}

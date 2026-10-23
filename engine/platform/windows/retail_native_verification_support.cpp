@@ -17,10 +17,6 @@
 
 extern "C" {
 
-// Retail global 0x00A970E0: the frame dispatch callback table. The host does
-// not install retail frame callbacks, so every slot stays empty.
-igi::retail::core::FrameDispatchCallback DAT_00A970E0[64]{};
-
 // Retail logger used by the sound natives for empty or dotless paths.
 void IGI_RETAIL_CDECL Engine_LogFormattedMessage(const char* format, ...)
 {

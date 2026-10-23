@@ -1,6 +1,6 @@
 // IGI native provenance: Game_DisablePlayerInput - 0x004157D0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004157D0-Game_DisablePlayerInput.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004157D0-Game_DisablePlayerInput.hpp"
+#include "Game_DisablePlayerInput.h"
 int Game_DisablePlayerInput(int context)
 
 // Sig: void Game_DisablePlayerInput(void)

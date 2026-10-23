@@ -1,6 +1,6 @@
 // IGI native provenance: QFile_ReadWrite - 0x004B1510 - CFG score 96.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B1510-QFile_ReadWrite.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B1510-QFile_ReadWrite.hpp"
+#include "QFile_ReadWrite.h"
 int* QFile_ReadWrite(void* context, char* arg2)
 
 // Sig: void* QFile_ReadWrite(char* vpath, char* mode)

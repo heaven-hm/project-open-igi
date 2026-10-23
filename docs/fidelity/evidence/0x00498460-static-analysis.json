@@ -1,0 +1,839 @@
+{
+  "schema_version": 1,
+  "kind": "retail-static-analysis",
+  "tool": "Binary Ninja MCP (binaryninja_ui_mcp 0.1.0, MCP initialize serverInfo.version) + radare2 6.2.0 + angr 10.0.4.post1 + capstone 5.0.7 + objdump (Apple LLVM 16.0.0)",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x00498460",
+  "record_id": "0x00498460-static-analysis",
+  "title": "Retail static analysis of 0x00498460: 23-byte x87 rounding-control setter writing the global control-word slot 0x006E5BC4 and forcing truncate rounding",
+  "analysis_scope": "static analysis of the retail Project IGI 1 executable only; no runtime, candidate, build or paired evidence",
+  "status": {
+    "value": "ANALYZED",
+    "basis": "AGENTS.md 10.5: static analysis has been performed and recorded. No build, structural-verification, runtime-tested or verified status is claimed.",
+    "static_analysis_only": true,
+    "runtime_or_paired_verification_claimed": false,
+    "analysis_result": "STATIC_ANALYSIS_RECORDED",
+    "runtime_result": "NOT_TESTED"
+  },
+  "binary_identity": {
+    "role": "retail",
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "md5": "9d8ebb7f28a1be56a8626dd5948826e4",
+    "size_bytes": 1384448,
+    "format": "PE32",
+    "machine": "x86 (IMAGE_FILE_MACHINE_I386, 0x014C)",
+    "preferred_image_base": "0x00400000",
+    "subsystem": "Windows GUI",
+    "text_section": {
+      "va": "0x00401000",
+      "virtual_size": "0x00132000",
+      "file_offset": "0x00001000"
+    },
+    "identity_check": {
+      "command": "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "stdout": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01  /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "outcome": "sha256 matches the retail identity required by the task"
+    }
+  },
+  "address": {
+    "va": "0x00498460",
+    "first_byte": "0x00498460",
+    "last_byte": "0x00498476",
+    "end_exclusive": "0x00498477",
+    "size_bytes": 23,
+    "raw_bytes": "9bd93dc45b6e0066810dc45b6e00000cd92dc45b6e00c3",
+    "size_note": "The observed extent is 23 bytes (0x17), not 17 bytes. The byte at 0x00498470 is not a function end; it is the start of the fldcw instruction. The ret is at 0x00498476."
+  },
+  "function": {
+    "entry_va": "0x00498460",
+    "basic_blocks": 1,
+    "branches": 0,
+    "loops": 0,
+    "callees": [],
+    "instructions": [
+      {
+        "va": "0x00498460",
+        "bytes": "9b",
+        "disassembly": "wait (fwait)"
+      },
+      {
+        "va": "0x00498461",
+        "bytes": "d93dc45b6e00",
+        "disassembly": "fnstcw word [0x006E5BC4]"
+      },
+      {
+        "va": "0x00498467",
+        "bytes": "66810dc45b6e00000c",
+        "disassembly": "or word [0x006E5BC4], 0x0C00"
+      },
+      {
+        "va": "0x00498470",
+        "bytes": "d92dc45b6e00",
+        "disassembly": "fldcw word [0x006E5BC4]"
+      },
+      {
+        "va": "0x00498476",
+        "bytes": "c3",
+        "disassembly": "ret"
+      }
+    ],
+    "decoder_notes": {
+      "binary_ninja": "5 instructions: fwait; fnstcw word [0x006E5BC4]; or word [0x006E5BC4],0xC00; fldcw word [0x006E5BC4]; ret. BN keeps the 0x9B fwait as its own instruction.",
+      "radare2_capstone_objdump": "5 instructions; the 0x9B wait prefix is shown as its own instruction.",
+      "prior_pass_ghidra": "The earlier Ghidra pass reported 4 instructions because it folded 9B D9 3D ... into FSTCW [0x006E5BC4]. The byte extent (23) and semantics are identical. This is superseded history only."
+    },
+    "abi": {
+      "frame": "plain 32-bit x86 call/ret; no stack allocation, no ESP-relative memory operand, no ret imm",
+      "arguments": [],
+      "argument_reads": "none: no ESP- or EBP-relative memory operand; the x87control parameter shown by Binary Ninja is a decompiler modeling artifact, not a stack argument",
+      "return_value": "not established: the function does not write EAX for a return value",
+      "return_type": "no source-level return type is proven; Binary Ninja's int32_t prototype is a decompiler inference",
+      "calling_convention": "cdecl (Binary Ninja prototype; radare2 default label)",
+      "binary_ninja_view": {
+        "calling_convention": "cdecl",
+        "parameter_count": "prototype shows int16_t arg1 @ x87control, but no stack argument is read",
+        "return_type": "int32_t (decompiler inference; no EAX write observed)",
+        "decompiled": "int32_t Display_ClearSurfaces_16(int16_t arg1 @ x87control)\n{\n    int16_t x87status;\n    int16_t temp0;\n    temp0 = __fnstcw_memmem16(arg1);\n    g_6e5bc4 = temp0;\n    g_6e5bc4 |= 0xc00;\n    int16_t x87control;\n    int16_t x87status_1;\n    x87control = __fldcw_memmem16(g_6e5bc4);\n}",
+        "stack_layout": "only __return_addr; no local stack variables"
+      },
+      "radare2_view": {
+        "calling_convention": "cdecl (radare2 default)",
+        "stack_frame_bytes": 0,
+        "arguments": 0
+      },
+      "angr_view": {
+        "function": "sub_498460",
+        "size": "0x17",
+        "basic_blocks": 1,
+        "returning": true
+      },
+      "prior_pass_ghidra_view": {
+        "status": "superseded; not used for any conclusion in this record",
+        "calling_convention": "unknown (no parameters)",
+        "parameter_count": 0,
+        "return_type": "void",
+        "decompiled": "void FUN_00498460(void)\n{\n  ushort in_FPUControlWord;\n  \n  DAT_006e5bc4 = in_FPUControlWord | 0xc00;\n  return;\n}"
+      }
+    },
+    "side_effects": {
+      "writes": [
+        {
+          "va": "0x006E5BC4",
+          "width_bits": 16,
+          "instruction": "0x00498461 (fnstcw) and 0x00498467 (or)"
+        }
+      ],
+      "reads": [
+        {
+          "va": "0x006E5BC4",
+          "width_bits": 16,
+          "instruction": "0x00498467 (or) and 0x00498470 (fldcw)"
+        }
+      ],
+      "x87_state": "the current x87 control word is replaced by (CW & 0xF3FF) | 0x0C00; the previous control word is not restored",
+      "global_state": "the 16-bit global at 0x006E5BC4 is overwritten with the current CW, then ORed with 0x0C00, then used as the source of fldcw; it remains modified after return",
+      "calls": []
+    }
+  },
+  "rounding_semantics": {
+    "observed_sequence": "fwait; fnstcw word [0x006E5BC4] (store current CW); or word [0x006E5BC4],0x0C00 (set bits 10 and 11); fldcw word [0x006E5BC4] (load the modified CW); ret",
+    "control_word_bits": "x87 CW bits 10-11 are the rounding-control field: 00 nearest, 01 down, 10 up, 11 truncate/chop. OR with 0x0C00 sets both bits to 1 while leaving the other 14 control bits unchanged.",
+    "equivalent_expression": "CW = (CW & 0xF3FF) | 0x0C00; no AND instruction is needed because OR with 1s overwrites exactly those two bits",
+    "previous_state": "not saved for restoration and not restored by this function; the 16-bit slot at 0x006E5BC4 is overwritten on every call",
+    "scope": "the effect is on the x87 control word of the calling thread; this analysis did not observe any thread state at runtime. The bit assignments are architectural x86 facts, not runtime observations from this game."
+  },
+  "global_0x006E5BC4": {
+    "references_total": 3,
+    "reference_census": "byte-exact dword scan of the whole image",
+    "references": [
+      {
+        "va": "0x00498463",
+        "instruction": "0x00498461",
+        "access": "write",
+        "width_bits": 16,
+        "context": "fnstcw stores the current control word"
+      },
+      {
+        "va": "0x0049846A",
+        "instruction": "0x00498467",
+        "access": "read-write",
+        "width_bits": 16,
+        "context": "or sets the two rounding bits in place"
+      },
+      {
+        "va": "0x00498472",
+        "instruction": "0x00498470",
+        "access": "read",
+        "width_bits": 16,
+        "context": "fldcw loads the modified word"
+      }
+    ],
+    "binary_ninja_data_at": {
+      "definition": "int16_t",
+      "auto_discovered": true,
+      "symbol": "g_6e5bc4 (database annotation)"
+    },
+    "binary_ninja_data_xrefs_to": "0 rows; BN did not independently recover the three code references. The count is from the byte-exact scan, objdump and radare2.",
+    "prior_pass_ghidra_reference_manager": [
+      {
+        "from": "0x00498460",
+        "type": "WRITE"
+      },
+      {
+        "from": "0x00498467",
+        "type": "READ_WRITE"
+      },
+      {
+        "from": "0x00498470",
+        "type": "READ"
+      }
+    ],
+    "note": "All three references are inside this function. The global behaves as a 16-bit control-word slot written and loaded by this code, not as a value restored later by this function."
+  },
+  "direct_callers_of_0x00498460": {
+    "count": 5,
+    "encoding": "E8 rel32 only; no E9/EB jumps and no stored dword literal equal to 0x00498460 anywhere in the file",
+    "addresses": [
+      "0x0048F7A5",
+      "0x0048F80D",
+      "0x0048F9EA",
+      "0x004925FC",
+      "0x0049427F"
+    ],
+    "binary_ninja_callers_count": 5,
+    "radare2_callers_count": 5,
+    "prior_pass_ghidra_count": 5,
+    "agreement": "Binary Ninja bn_function_callers and radare2 axt both list the same five sites; the earlier Ghidra pass also listed five.",
+    "classified_call_sites": [
+      {
+        "va": "0x0048F7A5",
+        "classification": "window-creation routine: immediately after the 0x0048F0E0 call at 0x0048F7A0 that stores the CreateWindowExA handle"
+      },
+      {
+        "va": "0x0048F80D",
+        "classification": "window-creation routine, after a comparison and branch at 0x0048F805-0x0048F807; full condition not classified"
+      },
+      {
+        "va": "0x0048F9EA",
+        "classification": "window procedure 0x0048F970, param == 0x1C branch; call then return 0"
+      },
+      {
+        "va": "0x004925FC",
+        "classification": "not classified; BN reports caller symbol Display_InitDirectDraw (database annotation)"
+      },
+      {
+        "va": "0x0049427F",
+        "classification": "not classified; BN reports caller symbol Display_RestoreDevice_6 (database annotation)"
+      }
+    ]
+  },
+  "window_procedure_0x0048F970_branch": {
+    "window_procedure": "0x0048F970, Binary Ninja range 0x48f970-0x48fa72 (258 bytes), 21 basic blocks; prototype LRESULT __stdcall(HWND pThis, uint32_t param, WPARAM flags, LPARAM arg4)",
+    "message_register": "EDI; Binary Ninja disassembly loads it at 0x0048F981 as mov edi, dword [esp+0x18 {param}] (the old [esp+8] note was wrong because the procedure pushes EBX, EBP, ESI and EDI before the load)",
+    "dispatch_sequence": "0x0048F9B2 cmp edi,0x1C; 0x0048F9B5 ja 0x0048F9F8; 0x0048F9B7 je 0x0048F9EA. The ja sends messages greater than 0x1C to the 0x0104/0x0105 path at 0x0048F9F8; the je sends exactly 0x1C to 0x0048F9EA.",
+    "equality_branch_sequence": "0x0048F9EA call 0x00498460; 0x0048F9EF pop edi; 0x0048F9F0 pop esi; 0x0048F9F1 pop ebp; 0x0048F9F2 xor eax,eax; 0x0048F9F4 pop ebx; 0x0048F9F5 ret 0x10",
+    "reconstructed_shape": "if (param <= 0x1C) { if (param == 0x1C) { call_0x00498460(); return 0; } ... }",
+    "return_value": "0 in EAX on the param == 0x1C branch",
+    "message_constant_note": "0x001C is the documented Win32 WM_ACTIVATEAPP value (winuser.h WM_ACTIVATEAPP 0x001C, 28). WM_ACTIVATE is 0x0006 and is not this branch. The earlier brief's description of 0x1C as retail-specific is not supported by the image or the Win32 headers. Whether the game treats the message as WM_ACTIVATEAPP is a hypothesis, not a runtime observation.",
+    "call_reachability": "The only path to the 0x0048F9EA call is the je from the 0x001C comparison; no other branch targets 0x0048F9EA."
+  },
+  "tooling": [
+    {
+      "id": "T1",
+      "name": "Binary Ninja MCP",
+      "version": "binaryninja_ui_mcp 0.1.0 (MCP initialize serverInfo.version); UI application 6.0.10601_free (informational)",
+      "mode": "JSON-RPC 2.0 over HTTP at http://127.0.0.1:24642/mcp; tools/call to bn_function_info, bn_function_decompile, bn_function_disassembly, bn_function_basic_blocks, bn_function_complexity, bn_function_stack_layout, bn_function_callers, bn_function_callees, bn_function_prototype_get, bn_data_at, bn_data_xrefs_to and bn_function_decompile/disassembly of 0x0048F970",
+      "role": "the single decompiler used for this corrected pass",
+      "selected_decompiler": true
+    },
+    {
+      "id": "T2",
+      "name": "radare2",
+      "version": "6.2.0 (commit 6.2.0, darwin-arm_64, cs:5 cl:2)",
+      "role": "independent function boundaries, CFG metrics and call-site census"
+    },
+    {
+      "id": "T3",
+      "name": "angr",
+      "version": "10.0.4.post1",
+      "role": "independent CFGFast entry and size recovery at image base 0x00400000"
+    },
+    {
+      "id": "T4",
+      "name": "objdump",
+      "version": "Apple LLVM version 16.0.0 (Xcode command-line tools objdump; reports file format coff-i386)",
+      "role": "linear disassembly and byte-range checks"
+    },
+    {
+      "id": "T5",
+      "name": "capstone",
+      "version": "5.0.7",
+      "role": "byte-exact instruction walking and reference census"
+    },
+    {
+      "id": "T6",
+      "name": "Ghidra (prior pass only)",
+      "version": "12.1.2 PUBLIC / OpenJDK 23.0.2",
+      "role": "superseded earlier decompiler; retained only for audit history and not used for any conclusion in this corrected record"
+    }
+  ],
+  "commands": [
+    {
+      "id": "C1",
+      "purpose": "verify retail image identity",
+      "command": "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe; md5 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01  /Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "MD5 (igi.exe) = 9d8ebb7f28a1be56a8626dd5948826e4"
+      ]
+    },
+    {
+      "id": "C2",
+      "purpose": "read the exact retail bytes and following padding",
+      "command": "python3 - <<'PY'\ndata=open('/Users/haseeb-mir/Downloads/IGI/igi.exe','rb').read()\noff=0x498460-0x400000\nprint(data[off:off+32].hex())\nPY",
+      "output": [
+        "9bd93dc45b6e0066810dc45b6e00000cd92dc45b6e00c3909090909090909090"
+      ]
+    },
+    {
+      "id": "C3",
+      "purpose": "Binary Ninja MCP initialize, active-view selection and function recovery for 0x00498460",
+      "transport": "POST http://127.0.0.1:24642/mcp with Content-Type: application/json and Accept: application/json, text/event-stream; MCP-Session-Id returned by initialize",
+      "initialize": {
+        "method": "initialize",
+        "params": {
+          "protocolVersion": "2025-11-25",
+          "capabilities": {},
+          "clientInfo": {
+            "name": "dsh",
+            "version": "1.0"
+          }
+        }
+      },
+      "server_info": {
+        "name": "binaryninja_ui_mcp",
+        "version": "0.1.0"
+      },
+      "calls": [
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_binary_view_list",
+            "arguments": {}
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_decompile",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_basic_blocks",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_complexity",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_stack_layout",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_callers",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_callees",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_prototype_get",
+            "arguments": {
+              "function": "0x00498460"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_data_at",
+            "arguments": {
+              "address": "0x006E5BC4"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_data_xrefs_to",
+            "arguments": {
+              "address": "0x006E5BC4"
+            }
+          }
+        }
+      ],
+      "output": [
+        "active view: view_1, PE, x86, windows-x86, base 0x00400000",
+        "bn_function_info: 0x498460-0x498477 (23 bytes), 1 basic block, int32_t(int16_t arg1 @ x87control)",
+        "bn_function_disassembly: fwait; fnstcw word [g_6e5bc4]; or word [g_6e5bc4],0xc00; fldcw word [0x6e5bc4]; retn",
+        "bn_function_complexity: blocks 1, edges 0, calls 0, total bytes 23",
+        "bn_function_stack_layout: only __return_addr; no locals",
+        "bn_function_callers: 5 rows",
+        "bn_data_at 0x006E5BC4: int16_t, symbol g_6e5bc4 (annotation)",
+        "bn_data_xrefs_to 0x006E5BC4: 0 rows"
+      ]
+    },
+    {
+      "id": "C4",
+      "purpose": "radare2 function boundaries, metrics and disassembly",
+      "command": "r2 -q -e bin.relocs.apply=true -c \"aaaa; af @ 0x498460; afi @ 0x498460; pdf @ 0x498460\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "addr: 0x00498460",
+        "size: 23",
+        "realsz: 23",
+        "stackframe: 0",
+        "callconv: cdecl",
+        "num-bbs: 1",
+        "num-instrs: 5",
+        "minaddr: 0x00498460",
+        "maxaddr: 0x00498477",
+        "in-degree: 5",
+        "out-degree: 0",
+        "args: 0",
+        "0x498460 wait; 0x498461 fnstcw word [0x6e5bc4]; 0x498467 or word [0x6e5bc4],0xc00; 0x498470 fldcw word [0x6e5bc4]; 0x498476 ret"
+      ]
+    },
+    {
+      "id": "C5",
+      "purpose": "radare2 independent direct-call census",
+      "command": "r2 -q -e bin.relocs.apply=true -c \"aaaa; axt @ 0x498460\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "0x48f7a5 [CALL] call fcn.00498460",
+        "0x48f80d [CALL] call fcn.00498460",
+        "0x48f9ea [CALL] call fcn.00498460",
+        "0x4925fc [CALL] call fcn.00498460",
+        "0x49427f [CALL] call fcn.00498460"
+      ]
+    },
+    {
+      "id": "C6",
+      "purpose": "independent CFG entry recovery (angr 10.0.4.post1 CFGFast)",
+      "command": "cd /tmp && /Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python - <<'PY'\nimport angr\np=angr.Project('/Users/haseeb-mir/Downloads/IGI/igi.exe', auto_load_libs=False, main_opts={'base_addr':0x400000})\ncfg=p.analyses.CFGFast(normalize=True, data_references=True, force_complete_scan=False)\nfor va in (0x498460,0x48F970):\n    f=cfg.kb.functions.get(va); print(hex(va), f.name, hex(f.size), len(list(f.blocks)), f.returning)\nPY",
+      "output": [
+        "angr 10.0.4.post1",
+        "0x498460 recovered sub_498460 size 0x17 blocks 1 returning True",
+        "0x48f970 recovered sub_48f970 size 0x102 blocks 29 returning True"
+      ]
+    },
+    {
+      "id": "C7",
+      "purpose": "byte-exact reference census for 0x006E5BC4",
+      "command": "python3 - <<'PY'\nimport struct\ndata=open('/Users/haseeb-mir/Downloads/IGI/igi.exe','rb').read()\npat=struct.pack('<I',0x6E5BC4); hits=[]; o=0\nwhile True:\n    i=data.find(pat,o)\n    if i<0: break\n    hits.append(i); o=i+1\nprint([hex(h) for h in hits])\nPY",
+      "output": [
+        "['0x98463', '0x9846a', '0x98472'] (file offsets; corresponding VAs are 0x498463, 0x49846A, 0x498472)"
+      ]
+    },
+    {
+      "id": "C8",
+      "purpose": "linear disassembly of the exact range",
+      "command": "objdump -d --start-address=0x498460 --stop-address=0x498477 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "498460: 9b wait",
+        "498461: d9 3d c4 5b 6e 00 fnstcw 0x6e5bc4",
+        "498467: 66 81 0d c4 5b 6e 00 00 0c orw $0xc00,0x6e5bc4",
+        "498470: d9 2d c4 5b 6e 00 fldcw 0x6e5bc4",
+        "498476: c3 ret"
+      ]
+    },
+    {
+      "id": "C9",
+      "purpose": "Binary Ninja recovery of the calling window procedure and the 0x001C branch",
+      "transport": "same MCP session",
+      "calls": [
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_info",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_decompile",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_disassembly",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        },
+        {
+          "method": "tools/call",
+          "params": {
+            "name": "bn_function_basic_blocks",
+            "arguments": {
+              "function": "0x0048F970"
+            }
+          }
+        }
+      ],
+      "output": [
+        "0x48f970: 258 bytes, 21 basic blocks, LRESULT __stdcall(HWND,uint32_t,WPARAM,LPARAM)",
+        "0x48f9b2 cmp edi,0x1c",
+        "0x48f9b5 ja 0x48f9f8",
+        "0x48f9b7 je 0x48f9ea",
+        "0x48f9ea call fcn.00498460",
+        "0x48f9ef-0x48f9f5 pop edi/esi/ebp; xor eax,eax; pop ebx; ret 0x10",
+        "BN pseudocode: if (param <= 0x1c) { if (param == 0x1c) { Display_ClearSurfaces_16(x87control); return 0; } ... }"
+      ]
+    },
+    {
+      "id": "C10",
+      "purpose": "radare2 independent confirmation of the 0x001C branch",
+      "command": "r2 -q -e bin.relocs.apply=true -c \"aaaa; s 0x48f9b2; pd 24\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "output": [
+        "0x48f9b2 cmp edi,0x1c",
+        "0x48f9b5 ja 0x48f9f8",
+        "0x48f9b7 je 0x48f9ea",
+        "0x48f9c5 push 1",
+        "0x48f9c7 mov byte [0x5c8de8],0",
+        "0x48f9ce call [USER32!ShowCursor]",
+        "0x48f9d4 call fcn.004010b0",
+        "0x48f9db call [USER32!PostQuitMessage]",
+        "0x48f9ea call fcn.00498460",
+        "0x48f9ef pop edi",
+        "0x48f9f0 pop esi",
+        "0x48f9f1 pop ebp",
+        "0x48f9f2 xor eax,eax",
+        "0x48f9f4 pop ebx",
+        "0x48f9f5 ret 0x10"
+      ]
+    }
+  ],
+  "independent_reanalysis": {
+    "performed": true,
+    "detail": "The retail image was re-read byte-exactly with objdump and capstone, then re-analysed with Binary Ninja MCP, radare2 6.2.0 and angr 10.0.4.post1. Binary Ninja is the only decompiler used in this corrected pass. The prior Ghidra pass is retained only as superseded historical evidence."
+  },
+  "observed_facts": [
+    {
+      "id": "F1",
+      "fact": "The hashed image is PE32, machine i386, preferred image base 0x00400000, Windows GUI subsystem, .text at VA 0x00401000 with virtual size 0x00132000. SHA-256 is dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01 and MD5 is 9d8ebb7f28a1be56a8626dd5948826e4.",
+      "evidence": "C1, binary_identity"
+    },
+    {
+      "id": "F2",
+      "fact": "The function at 0x00498460 spans 0x00498460-0x00498476 inclusive, 23 bytes (0x17). It is not 17 bytes and does not end at 0x00498470. The byte at 0x00498477 is 0x90 padding.",
+      "evidence": "C2, C8; BN range 0x498460-0x498477 (23 bytes); r2 size 23; angr size 0x17"
+    },
+    {
+      "id": "F3",
+      "fact": "The retail instruction sequence is: fwait (9B); fnstcw word [0x006E5BC4] (D9 3D C4 5B 6E 00); or word [0x006E5BC4],0x0C00 (66 81 0D C4 5B 6E 00 00 0C); fldcw word [0x006E5BC4] (D9 2D C4 5B 6E 00); ret (C3).",
+      "evidence": "C2, C4, C8; binary_ninja_confirmation"
+    },
+    {
+      "id": "F4",
+      "fact": "Binary Ninja reports one basic block, 23 bytes, zero calls and zero edges. radare2 reports num-bbs 1, num-instrs 5 and args 0; angr reports one block and size 0x17.",
+      "evidence": "C3, C4, C6"
+    },
+    {
+      "id": "F5",
+      "fact": "The function reads no stack arguments and has no ESP- or EBP-relative memory operand; Binary Ninja's stack layout contains only __return_addr and no local variables. It uses no stack allocation and ends with a plain C3 ret. Binary Ninja's x87control parameter and int32_t return are decompiler modeling artifacts, not evidence of a real stack argument or EAX return.",
+      "evidence": "C3, C4; binary_ninja_confirmation stack_layout"
+    },
+    {
+      "id": "F6",
+      "fact": "The function touches the 16-bit global at 0x006E5BC4: fnstcw writes the current control word, OR 0x0C00 modifies bits 10-11 in place, fldcw reads the result. All three references to 0x006E5BC4 are inside this function. The byte-exact scan finds the four-byte value at file offsets 0x98463, 0x9846a and 0x98472 (VAs 0x498463, 0x49846A, 0x498472).",
+      "evidence": "C7, C8; binary_ninja_confirmation data_at/data_xrefs"
+    },
+    {
+      "id": "F7",
+      "fact": "The semantic effect is CW := CW | 0x0C00, equivalently (CW & 0xF3FF) | 0x0C00: rounding control becomes 11 (truncate/chop), all other control bits are preserved, and the previous CW is not restored. The global at 0x006E5BC4 remains modified.",
+      "evidence": "C2, C8, F3"
+    },
+    {
+      "id": "F8",
+      "fact": "Exactly five direct call instructions target 0x00498460: 0x0048F7A5, 0x0048F80D, 0x0048F9EA, 0x004925FC, 0x0049427F. Binary Ninja and radare2 both list the same five; there are no E9/EB jumps and no stored dword literal equal to the VA.",
+      "evidence": "C3, C5, C7"
+    },
+    {
+      "id": "F9",
+      "fact": "0x0048F9EA is reached only when the window-procedure param equals 0x1C. The dispatch first compares EDI with 0x1C and uses ja to send greater values to 0x0048F9F8; the je then reaches 0x0048F9EA. After the call the procedure returns 0 via xor eax,eax and ret 0x10.",
+      "evidence": "C9, C10; F10"
+    },
+    {
+      "id": "F10",
+      "fact": "0x001C is the documented Win32 WM_ACTIVATEAPP value; WM_ACTIVATE is 0x0006. The compared immediate is not a retail-only constant and is not WM_ACTIVATE.",
+      "evidence": "Win32 platform constant; C9 and C10 confirm the compared immediate is 0x1C"
+    },
+    {
+      "id": "F11",
+      "fact": "0x0048F7A5 immediately follows the setter call at 0x0048F7A0 in the window-creation routine, so the retail code stores the CreateWindowExA handle before it forces truncating rounding.",
+      "evidence": "C8 in the 0x0048F0A0 record; C10; r2/objdump window-creation walk"
+    },
+    {
+      "id": "F12",
+      "fact": "The contexts of 0x004925FC and 0x0049427F were not classified. Binary Ninja reports caller symbols Display_InitDirectDraw and Display_RestoreDevice_6, but these are database annotations and are not treated as behavior evidence.",
+      "evidence": "C3, C5"
+    }
+  ],
+  "hypotheses": [
+    {
+      "id": "H1",
+      "hypothesis": "The setter is used to force truncating rounding for subsequent x87 float work after window creation and on WM_ACTIVATEAPP.",
+      "basis": "The call sites and the forced RC bits; the intended numerical reason is not documented in the image.",
+      "status": "inference; not proven"
+    },
+    {
+      "id": "H2",
+      "hypothesis": "0x006E5BC4 is a dedicated control-word slot.",
+      "basis": "All three references are inside this function and the value is not restored by it.",
+      "status": "supported by the reference census; still an inference about intent"
+    },
+    {
+      "id": "H3",
+      "hypothesis": "The game treats message 0x1C as WM_ACTIVATEAPP.",
+      "basis": "The value matches the Win32 constant and the response is an FPU-state reset.",
+      "status": "inference; no runtime evidence"
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "U1",
+      "item": "The contexts and purposes of call sites 0x004925FC and 0x0049427F are unknown."
+    },
+    {
+      "id": "U2",
+      "item": "Other code elsewhere in the image contains fldcw instructions (for example 0x004A9D46, 0x004A9D70, 0x004A9DD5); whether any of them restores a different rounding mode later is not analysed here."
+    },
+    {
+      "id": "U3",
+      "item": "The effect on individual floating-point operations, exception masks and precision control is not evaluated; only the control-word bits are analysed."
+    },
+    {
+      "id": "U4",
+      "item": "Why a global scratch is used rather than a stack slot is not established; the described stack-based sequence is absent from the image."
+    },
+    {
+      "id": "U5",
+      "item": "The function has no symbol name; 'x87 truncate-rounding setter' is descriptive, and Display_ClearSurfaces_16 is a Binary Ninja database annotation."
+    },
+    {
+      "id": "U6",
+      "item": "The actual x87 control-word value at any call site was not observed at runtime."
+    }
+  ],
+  "limitations": [
+    "Static analysis only. No runtime, behavioural or paired retail/candidate evidence exists for this record, and none is implied.",
+    "Binary Ninja MCP was reachable for this corrected pass and is the single decompiler used here. The earlier pass used Ghidra 12.1.2 only because the BN endpoint had returned no_active_binary_view at that time; that Ghidra output is retained only as superseded history and is not used for any conclusion.",
+    "The earlier pass produced an incorrect size for this function: it claimed 17 bytes ending at 0x00498470 with a stack-local sequence and no global access. That was wrong. The corrected retail facts are 23 bytes (0x00498460-0x00498476), a global control-word slot at 0x006E5BC4, no stack local, and a plain C3 ret at 0x00498476. The correction is based on the byte-exact image, Binary Ninja, radare2 and angr.",
+    "The earlier pass also described the calling convention as void/unknown and used Ghidra's folding of the wait prefix. Binary Ninja keeps fwait as a separate instruction and reports five instructions; the byte extent and effect are unchanged.",
+    "No candidate source was reviewed or compared, and no CFG-similarity score or structural-verification claim is made.",
+    "The function name is descriptive only; the retail PE provides no source-level name for this address.",
+    "The byte census of callers covers direct E8/E9/EB encodings in the .text section and stored dword literals equal to the target VA across the whole file. It cannot rule out an indirect call whose address is computed rather than stored as a literal.",
+    "objdump emits AT&T syntax (source, destination order); the Intel-style listings in this record come from Binary Ninja and radare2.",
+    "Binary Ninja's data-xref query returned 0 rows for 0x006E5BC4. The three-reference count is established by the byte-exact scan, objdump and radare2, not by BN data xrefs.",
+    "The x87 control-word field assignments (bits 10-11, 11 = truncate) are architectural facts about the x86 FPU, not runtime observations from this game.",
+    "No later control-word state was observed, so the claim that truncating mode remains in force beyond the function is not made.",
+    "The BN Pseudo C for fnstcw/fldcw uses intrinsic pseudo-arguments; it is not literal C and is not used as a signature source.",
+    "No runtime execution, Frida/IGI-Probe capture, candidate build or paired comparison was performed."
+  ],
+  "supplied_finding_cross_check": {
+    "source": "findings supplied with the earlier Task B brief, re-checked against the retail bytes and Binary Ninja",
+    "items": [
+      {
+        "claim": "17 bytes (0x00498460..0x00498470)",
+        "outcome": "not reproduced; the image contains 23 bytes",
+        "observed": "23 bytes (0x00498460..0x00498476); 0x00498470 is the start of fldcw, and the ret is at 0x00498476",
+        "evidence": "F2"
+      },
+      {
+        "claim": "single basic block, no branches, no callees, zero arguments, void return",
+        "outcome": "partially reproduced: the block, branch, callee and zero-stack-argument parts are reproduced; the void return type is not proven",
+        "observed": "one block, no branches, no callees; no stack arguments; no EAX write, so no source-level return type is established",
+        "evidence": "F4, F5"
+      },
+      {
+        "claim": "no globals touched",
+        "outcome": "not reproduced; the global at 0x006E5BC4 is written and read",
+        "observed": "fnstcw writes, or read-modify-writes and fldcw reads the 16-bit global at 0x006E5BC4; all three references are inside the function",
+        "evidence": "F6"
+      },
+      {
+        "claim": "stack-local sequence sub esp,4; fnstcw [esp]; ...; fldcw [esp]; add esp,4; ret",
+        "outcome": "not reproduced; that sequence is absent from the image",
+        "observed": "fwait; fnstcw [0x006E5BC4]; or word [0x006E5BC4],0x0C00; fldcw [0x006E5BC4]; ret",
+        "evidence": "F3, C2, C8"
+      },
+      {
+        "claim": "CW = (CW & 0xF3FF) | 0x0C00, forcing truncate and preserving all other FPU control bits",
+        "outcome": "reproduced as the semantic effect",
+        "evidence": "F7"
+      },
+      {
+        "claim": "the previous control word is NOT restored",
+        "outcome": "reproduced",
+        "evidence": "F7"
+      },
+      {
+        "claim": "five call sites, one being the 0x0048F970 message==0x1C branch shaped if (message == 0x1C) { call 0x00498460; return 0; }",
+        "outcome": "reproduced, with the exact dispatch shape",
+        "observed": "cmp edi,0x1C; ja 0x0048F9F8; je 0x0048F9EA; call 0x00498460; xor eax,eax; ret 0x10. The equality branch is reached only through the je inside the <= 0x1C dispatch.",
+        "evidence": "F8, F9"
+      },
+      {
+        "claim": "0x001C is a retail-specific message value, not Win32 WM_ACTIVATE (0x0006)",
+        "outcome": "partially reproduced; the 'retail-specific' part is not supported",
+        "observed": "it is not WM_ACTIVATE (0x0006), but 0x001C is the documented Win32 WM_ACTIVATEAPP value; the image does not establish a retail-only meaning",
+        "evidence": "F10"
+      }
+    ],
+    "summary": "The five call sites, the 0x1C equality branch, the truncate-rounding effect and the no-restore behavior are reproduced. The earlier 17-byte size, the stack-local sequence and the 'no globals touched' claim are contradicted by the image. The retail function is a 23-byte global-control-word setter at 0x006E5BC4."
+  },
+  "runtime_and_paired_evidence": {
+    "runtime_evidence_exists": false,
+    "paired_retail_candidate_evidence_exists": false,
+    "statement": "No runtime instrumentation, game execution, Frida/IGI-Probe capture, candidate build, differential run or paired retail/candidate comparison was performed for this record. The task forbids running the game, Wine/CrossOver/Frida, deploying executables and running the strict build gate. Every statement here is static-analysis evidence only."
+  },
+  "authoring": {
+    "authored_by": "delegated AI agent (correction pass, documentation only)",
+    "authored_at": "2026-10-23",
+    "code_changes": false,
+    "manifest_changes": false,
+    "supersedes": "the earlier 17-byte/stack-local revision of this same record; the earlier revision remains described in superseded_pass_correction for audit"
+  },
+  "decompiler": {
+    "selected": "Binary Ninja",
+    "single_decompiler_for_this_pass": true,
+    "version_from_mcp_server": "binaryninja_ui_mcp 0.1.0 (MCP initialize serverInfo.version)",
+    "ui_application_version_informational": "6.0.10601_free (local Binary Ninja bundle; not part of the MCP serverInfo)",
+    "binary_view": {
+      "handle": "view_1",
+      "open_item": "item_1",
+      "view_type": "PE",
+      "architecture": "x86",
+      "platform": "windows-x86",
+      "image_base": "0x00400000",
+      "entry_point": "0x004a50f5"
+    },
+    "note": "Ghidra was used only in the superseded earlier pass and is not used for any conclusion in this corrected record."
+  },
+  "binary_ninja_confirmation": {
+    "function_info": "0x498460, name Display_ClearSurfaces_16 (database annotation), 1 basic block, range 0x498460-0x498477 (23 bytes), definition int32_t(int16_t arg1 @ x87control)",
+    "disassembly": [
+      "0x498460  fwait",
+      "0x498461  fnstcw  word [g_6e5bc4]",
+      "0x498467  or      word [g_6e5bc4], 0xc00",
+      "0x498470  fldcw   word [0x6e5bc4]",
+      "0x498476  retn    {__return_addr}"
+    ],
+    "decompile_note": "BN's Pseudo C renders fnstcw/fldcw as intrinsics with pseudo-arguments; the disassembly is authoritative. The pseudocode shows g_6e5bc4 being written, ORed with 0xc00, then loaded by fldcw.",
+    "complexity": {
+      "blocks": 1,
+      "edges": 0,
+      "calls": 0,
+      "variables": 6,
+      "total_bytes": 23
+    },
+    "stack_layout": "only __return_addr at offset 0; no local stack variables",
+    "data_at_0x006E5BC4": {
+      "definition": "int16_t",
+      "auto_discovered": true,
+      "symbol": "g_6e5bc4 (database annotation)"
+    },
+    "data_xrefs_to_0x006E5BC4": "bn_data_xrefs_to returned 0 rows; BN did not independently recover the three code references. The three-reference census comes from the byte-exact scan, objdump and radare2.",
+    "callers": {
+      "total": 5,
+      "addresses": [
+        "0x0048F7A5",
+        "0x0048F80D",
+        "0x0048F9EA",
+        "0x004925FC",
+        "0x0049427F"
+      ],
+      "note": "same five direct E8 call sites as radare2"
+    }
+  },
+  "superseded_pass_correction": {
+    "earlier_pass": "The earlier record described 0x00498460 as a 17-byte function ending at 0x00498470, using a stack local (sub esp,4; fnstcw [esp]; ...; fldcw [esp]; add esp,4) and leaving the global 0x006E5BC4 untouched.",
+    "what_was_wrong": [
+      "size 17 bytes (wrong)",
+      "end address 0x00498470 (wrong; that is the fldcw start)",
+      "stack-local sequence (absent from the image)",
+      "global 0x006E5BC4 untouched (wrong; it is written, ORed and loaded)"
+    ],
+    "corrected_facts": [
+      "23 bytes, 0x00498460-0x00498476, ret at 0x00498476",
+      "fwait; fnstcw word [0x006E5BC4]; or word [0x006E5BC4],0xC00; fldcw word [0x006E5BC4]; ret",
+      "no stack local; only __return_addr in the stack layout",
+      "all three references to 0x006E5BC4 are inside the function",
+      "5 direct E8 call sites, confirmed by BN and radare2",
+      "0x1C branch is cmp edi,0x1C; ja; je, with the equality path calling 0x00498460 and returning 0"
+    ],
+    "correction_method": "byte-exact image read + objdump linear disassembly + Binary Ninja function/disassembly/decompile/stack-layout + radare2 aaaa/afi/axt + angr CFGFast",
+    "incorrect_size_in_earlier_pass": true,
+    "incorrect_size": "17 bytes",
+    "correct_size": "23 bytes",
+    "note": "Binary Ninja was not used in the earlier pass; it is the single decompiler for this corrected pass and confirms the 23-byte global-scratch form."
+  }
+}

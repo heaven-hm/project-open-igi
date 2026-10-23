@@ -1,0 +1,206 @@
+{
+  "applied": true,
+  "updated": [
+    {
+      "path": "scripts/GameNatives/break/004B8C10-Break_Script.hpp",
+      "address": "0x004B8C10",
+      "name": "BreakScript"
+    },
+    {
+      "path": "scripts/GameNatives/create/004C6760-Create_TerrainTileMap.hpp",
+      "address": "0x004C6760",
+      "name": "Terrain_CreateTileMap"
+    },
+    {
+      "path": "scripts/GameNatives/define/00407F50-Define_GameMaterial.hpp",
+      "address": "0x00407F50",
+      "name": "DefineGameMaterial"
+    },
+    {
+      "path": "scripts/GameNatives/define/004101C0-Define_HumanPlayerWeaponCycle.hpp",
+      "address": "0x004101C0",
+      "name": "DefineHumanPlayerWeaponCycle"
+    },
+    {
+      "path": "scripts/GameNatives/define/00410240-Define_HumanPlayerWeaponCategory.hpp",
+      "address": "0x00410240",
+      "name": "DefineHumanPlayerWeaponCategory"
+    },
+    {
+      "path": "scripts/GameNatives/define/004102D0-Define_HumanPlayerAmmoLimit.hpp",
+      "address": "0x004102D0",
+      "name": "DefineHumanPlayerAmmoLimit"
+    },
+    {
+      "path": "scripts/GameNatives/define/0047CAD0-Define_AmmoType.hpp",
+      "address": "0x0047CAD0",
+      "name": "DefineAmmoType"
+    },
+    {
+      "path": "scripts/GameNatives/define/00484F60-Define_Mission.hpp",
+      "address": "0x00484F60",
+      "name": "DefineMission"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E8C60-Define_Sound.hpp",
+      "address": "0x004E8C60",
+      "name": "DefineSound"
+    },
+    {
+      "path": "scripts/GameNatives/define/004E9EC0-Define_TriggerOnce.hpp",
+      "address": "0x004E9EC0",
+      "name": "DefineTriggerOnce"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EAD20-Define_Graph.hpp",
+      "address": "0x004EAD20",
+      "name": "DefineGraph"
+    },
+    {
+      "path": "scripts/GameNatives/define/004EBA90-Define_Group.hpp",
+      "address": "0x004EBA90",
+      "name": "DefineGroup"
+    },
+    {
+      "path": "scripts/GameNatives/defineq/00407E30-DefineQ_Material.hpp",
+      "address": "0x00407E30",
+      "name": "DefineQMaterial"
+    },
+    {
+      "path": "scripts/GameNatives/display/004924D0-Display_InitDirectDraw.hpp",
+      "address": "0x004924D0",
+      "name": "Display_InitDirectDraw"
+    },
+    {
+      "path": "scripts/GameNatives/display/00492B70-Display_GetDDErrStr.hpp",
+      "address": "0x00492B70",
+      "name": "Display_GetDDErrStr"
+    },
+    {
+      "path": "scripts/GameNatives/go/004036B0-GO_Player.hpp",
+      "address": "0x004036B0",
+      "name": "GOPlayer"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403750-GO_ActiveMission.hpp",
+      "address": "0x00403750",
+      "name": "GOActiveMission"
+    },
+    {
+      "path": "scripts/GameNatives/go/004037C0-GO_InRemap.hpp",
+      "address": "0x004037C0",
+      "name": "GOInRemap"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403870-GO_InMouInv.hpp",
+      "address": "0x00403870",
+      "name": "GOInMouInv"
+    },
+    {
+      "path": "scripts/GameNatives/go/004038E0-GO_InMouSens.hpp",
+      "address": "0x004038E0",
+      "name": "GOInMouSens"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403950-GO_GfxDisp.hpp",
+      "address": "0x00403950",
+      "name": "GOGfxDisp"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403A00-GO_GameLang.hpp",
+      "address": "0x00403A00",
+      "name": "GOGameLang"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403AC0-GO_GameDiff.hpp",
+      "address": "0x00403AC0",
+      "name": "GOGameDiff"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403DF0-GO_IsBlood.hpp",
+      "address": "0x00403DF0",
+      "name": "GOIsBlood"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403E60-GO_SoundSpeech.hpp",
+      "address": "0x00403E60",
+      "name": "GOSoundSpeech"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403EF0-GO_SoundMusic.hpp",
+      "address": "0x00403EF0",
+      "name": "GOSoundMusic"
+    },
+    {
+      "path": "scripts/GameNatives/go/00403F80-GO_SoundFX.hpp",
+      "address": "0x00403F80",
+      "name": "GOSoundFX"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404010-GO_GfxDevice.hpp",
+      "address": "0x00404010",
+      "name": "GOGfxDevice"
+    },
+    {
+      "path": "scripts/GameNatives/go/00404080-GO_GfxGamma.hpp",
+      "address": "0x00404080",
+      "name": "GOGfxGamma"
+    },
+    {
+      "path": "scripts/GameNatives/go/004040F0-GO_GfxPerformance.hpp",
+      "address": "0x004040F0",
+      "name": "GOGfxPerformance"
+    },
+    {
+      "path": "scripts/GameNatives/humanplayer/004108C0-HumanPlayer_Invoke8_4108C0.hpp",
+      "address": "0x004108C0",
+      "name": "HumanPlayer_Invoke8_4108C0"
+    },
+    {
+      "path": "scripts/GameNatives/input/0048F970-Input_GetDIErrStr.hpp",
+      "address": "0x0048F970",
+      "name": "Input_GetDIErrStr"
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004A67E4-MathSys_Invoke7_4A67E4.hpp",
+      "address": "0x004A67E4",
+      "name": "MathSys_Invoke7_4A67E4"
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AA0A6-MathSys_Invoke19.hpp",
+      "address": "0x004AA0A6",
+      "name": "MathSys_Invoke19"
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AAA44-MathSys_Invoke21.hpp",
+      "address": "0x004AAA44",
+      "name": "MathSys_Invoke21"
+    },
+    {
+      "path": "scripts/GameNatives/mathsys/004AD004-MathSys_Invoke3.hpp",
+      "address": "0x004AD004",
+      "name": "MathSys_Invoke3"
+    },
+    {
+      "path": "scripts/GameNatives/misc/004C6670-CreateTerrainMaterial.hpp",
+      "address": "0x004C6670",
+      "name": "Terrain_CreateMaterial"
+    },
+    {
+      "path": "scripts/GameNatives/script/004B8C60-Script_SetWarningLevel.hpp",
+      "address": "0x004B8C60",
+      "name": "_Script_SetWarningLevel"
+    },
+    {
+      "path": "scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.hpp",
+      "address": "0x00471120",
+      "name": "WeaponGun_ProcessWNES"
+    },
+    {
+      "path": "scripts/GameNatives/weatherwatersky/005236C0-WeatherWaterSky_Invoke7_5236C0.hpp",
+      "address": "0x005236C0",
+      "name": "WeatherWaterSky_Invoke7_5236C0"
+    }
+  ],
+  "skipped": []
+}

@@ -1,0 +1,539 @@
+{
+ "schema_version": 1,
+ "kind": "native-addressability-report",
+ "result": "passed",
+ "performed_at": "2026-10-23T11:05:31Z",
+ "revision": "807c1b2d",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+ "candidate_receipt_sha256": "c144995432d7ee8f0a61e57a0b2a9dbe180cf11aa17a8a5b8b5901b81faf399b",
+ "candidate_path": "build-clean-win32/igi1.exe",
+ "diagnosis": "All six natives already had external linkage and out-of-line bodies. No symbol was internal, static, inline-only or dead. The linked image emitted them under C++-mangled port identifiers (IffChunk_FindByTag, IffChunk_FindChildByTag, IffChunk_GetPayload, IffChunk_FindBelowForm, IffSkeleton_Read, App_ContextSetTerrainLightmapsUsed), so a lookup keyed on the retail catalog names (Iff_FindFormChunk, Iff_FindChunk, Iff_GetChunkPayload, Iff_FindChunkBelowForm, AnimIff_LoadAnimationFile, AppContext_SetTerrainLightmapsUsed) matched nothing. The fix is a declaration-level GCC asm-label in each owning header; the definitions, computations, argument order, return values and side effects are untouched. Baseline objects built from the pre-change headers and the post-change objects have byte-identical .text sections and identical relocation records after symbol-name mapping, so the change is name-only.",
+ "verification_effect": "Addressability does not raise any status. All six remain STRUCTURALLY_VERIFIED; their saved behavioral differentials are supplementary and do not establish RUNTIME_TESTED or VERIFIED.",
+ "symbol_map_corrections": [
+  {
+   "address": "0x00517890",
+   "retail_name": "Iff_FindFormChunk",
+   "implemented": true,
+   "engine_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "candidate_symbol": "Iff_FindFormChunk",
+   "vaddr": "0x004232A0",
+   "previous_vaddr": "0x0043B580"
+  },
+  {
+   "address": "0x005178E0",
+   "retail_name": "Iff_FindChunkBelowForm",
+   "implemented": true,
+   "engine_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "candidate_symbol": "Iff_FindChunkBelowForm",
+   "vaddr": "0x004238A0",
+   "previous_vaddr": "0x0043BB70"
+  },
+  {
+   "address": "0x00517940",
+   "retail_name": "Iff_FindChunk",
+   "implemented": true,
+   "engine_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "candidate_symbol": "Iff_FindChunk",
+   "vaddr": "0x004235B0",
+   "previous_vaddr": "0x0043B880"
+  },
+  {
+   "address": "0x005179C0",
+   "retail_name": "Iff_GetChunkPayload",
+   "implemented": true,
+   "engine_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "candidate_symbol": "Iff_GetChunkPayload",
+   "vaddr": "0x00423880",
+   "previous_vaddr": "0x0043BB50"
+  },
+  {
+   "address": "0x004D67A0",
+   "retail_name": "AnimIff_LoadAnimationFile",
+   "implemented": true,
+   "engine_path": "engine/src/retail/model/iff_skeleton.cpp",
+   "candidate_symbol": "AnimIff_LoadAnimationFile",
+   "vaddr": "0x00424620",
+   "previous_vaddr": "0x00414A70"
+  },
+  {
+   "address": "0x0048F260",
+   "retail_name": "AppContext_SetTerrainLightmapsUsed",
+   "implemented": true,
+   "engine_path": "engine/src/retail/core/app_context.cpp",
+   "candidate_symbol": "AppContext_SetTerrainLightmapsUsed",
+   "vaddr": "0x0041E7C0",
+   "previous_vaddr": "0x0041E7C0"
+  }
+ ],
+ "natives": [
+  {
+   "address": "0x00517890",
+   "retail_name": "Iff_FindFormChunk",
+   "retail_signature": "void**(void** arg1, int32_t arg2)",
+   "source_identifier": "IffChunk_FindByTag",
+   "implementation_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "header_path": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "object_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "symbol_extent_bytes": 784,
+    "function_bytes_sha256": "73bb96612c51f7d4d85b307686ce0996986434a240c6f67278dfec46c0a5c779",
+    "object_symbol_before": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+    "object_symbol_after": "Iff_FindFormChunk"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
+    "current_object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "Iff_FindFormChunk",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x004232A0",
+    "symbol_extent_bytes": 784,
+    "function_bytes_sha256": "73bb96612c51f7d4d85b307686ce0996986434a240c6f67278dfec46c0a5c779",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 4,
+    "callers_in_image": [
+     "AnimIff_LoadAnimationFile",
+     "Iff_FindChunkBelowForm",
+     "Iff_FindFormChunk"
+    ],
+    "call_sites_by_caller": {
+     "Iff_FindFormChunk": 1,
+     "Iff_FindChunkBelowForm": 1,
+     "AnimIff_LoadAnimationFile": 2
+    },
+    "reachable_statically": true
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x00517890-build.json",
+     "sha256": "750cf11a542de3471f03ed6c749253d2f02f3bcbcf525c379264977e74949790"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x00517890-semantic-review.json",
+     "sha256": "626b76a693c68545df3d0d313df0eb2bebcd253c1d72a7a88b64b7611577e94f"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x00517890-behavioral.json",
+     "sha256": "f480dabee53106e480cebf0d7f43e8f9e529309b5bc231a41542260675d56823",
+     "re_executed_in_this_task": true
+    }
+   }
+  },
+  {
+   "address": "0x005178E0",
+   "retail_name": "Iff_FindChunkBelowForm",
+   "retail_signature": "void**(void** form, int32_t tag)",
+   "source_identifier": "IffChunk_FindBelowForm",
+   "implementation_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "header_path": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "object_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "symbol_extent_bytes": 160,
+    "function_bytes_sha256": "f626cfad86abe46e8bd9d9f51dc0373ad563eac7de74d4fc5c7b640e4af553aa",
+    "object_symbol_before": "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
+    "object_symbol_after": "Iff_FindChunkBelowForm"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
+    "current_object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "Iff_FindChunkBelowForm",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x004238A0",
+    "symbol_extent_bytes": 160,
+    "function_bytes_sha256": "f626cfad86abe46e8bd9d9f51dc0373ad563eac7de74d4fc5c7b640e4af553aa",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 0,
+    "callers_in_image": [],
+    "call_sites_by_caller": {},
+    "reachable_statically": false
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x005178E0-build.json",
+     "sha256": "fdafbac1ee3f9067c0898d592164c3be503a1c3e01dca0d57105da2f2b8788bb"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x005178E0-semantic-review.json",
+     "sha256": "cd4c54be426388d244c2e86dd4ce69f68aa1fb63e6ad76881fac3eda8a4a8bc8"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x005178E0-behavioral.json",
+     "sha256": "53fd1212f8c9fdbe2b52186d45df6227f33a6d38fd9ae2a8f9f9eeb732a3eac3",
+     "re_executed_in_this_task": true
+    }
+   }
+  },
+  {
+   "address": "0x00517940",
+   "retail_name": "Iff_FindChunk",
+   "retail_signature": "void*(void** node, int32_t tag)",
+   "source_identifier": "IffChunk_FindChildByTag",
+   "implementation_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "header_path": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "object_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "symbol_extent_bytes": 720,
+    "function_bytes_sha256": "699be3b44f2d8e3a36b288759141f0730122eeca18f173e3a6b64e7702ce3e94",
+    "object_symbol_before": "__ZN3igi6retail5model23IffChunk_FindChildByTagEPNS1_12IffChunkNodeEj",
+    "object_symbol_after": "Iff_FindChunk"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
+    "current_object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "Iff_FindChunk",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x004235B0",
+    "symbol_extent_bytes": 720,
+    "function_bytes_sha256": "699be3b44f2d8e3a36b288759141f0730122eeca18f173e3a6b64e7702ce3e94",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 4,
+    "callers_in_image": [
+     "AnimIff_LoadAnimationFile",
+     "Iff_FindChunk"
+    ],
+    "call_sites_by_caller": {
+     "Iff_FindChunk": 1,
+     "AnimIff_LoadAnimationFile": 3
+    },
+    "reachable_statically": true
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x00517940-build.json",
+     "sha256": "da23baa925c405eaa3f3c1c7cafc9abe98ff4902ac08b7bc9bce13756d6ee7ed"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x00517940-semantic-review.json",
+     "sha256": "bad404bd070b800d5f1f009ea9d37c325add512e23df685429accd328d9fdeb6"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x00517940-behavioral.json",
+     "sha256": "5bd52f507e3db8122a37bd93a0355e00b57d19f4cfae47e9292480fe0556b10b",
+     "re_executed_in_this_task": true
+    }
+   }
+  },
+  {
+   "address": "0x005179C0",
+   "retail_name": "Iff_GetChunkPayload",
+   "retail_signature": "void*(void** node)",
+   "source_identifier": "IffChunk_GetPayload",
+   "implementation_path": "engine/src/retail/model/iff_chunk_tree.cpp",
+   "header_path": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "object_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "symbol_extent_bytes": 32,
+    "function_bytes_sha256": "17334516a26b9f6c7bd89fea05e5c77a5b38646dd303c0e8f3e18698e9d16fec",
+    "object_symbol_before": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+    "object_symbol_after": "Iff_GetChunkPayload"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
+    "current_object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+    "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "Iff_GetChunkPayload",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x00423880",
+    "symbol_extent_bytes": 32,
+    "function_bytes_sha256": "17334516a26b9f6c7bd89fea05e5c77a5b38646dd303c0e8f3e18698e9d16fec",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 3,
+    "callers_in_image": [
+     "AnimIff_LoadAnimationFile"
+    ],
+    "call_sites_by_caller": {
+     "AnimIff_LoadAnimationFile": 3
+    },
+    "reachable_statically": true
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x005179C0-build.json",
+     "sha256": "cedf22cd1a3a5e268fd43a1e93f21befa6399645298a81e7b839bbdff8c0bf08"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x005179C0-semantic-review.json",
+     "sha256": "037f07cb7fbc75ab4b7b2f7efb32088636dab8c267a17d665b3a6088d1442481"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x005179C0-behavioral.json",
+     "sha256": "5d96a767bb00be758da42fc26d020aaa708b445a883bb9bd2bf452d4f0dad7ea",
+     "re_executed_in_this_task": true
+    }
+   }
+  },
+  {
+   "address": "0x004D67A0",
+   "retail_name": "AnimIff_LoadAnimationFile",
+   "retail_signature": "int32_t(int32_t* context)",
+   "source_identifier": "IffSkeleton_Read",
+   "implementation_path": "engine/src/retail/model/iff_skeleton.cpp",
+   "header_path": "engine/include/igi/retail/model/iff_skeleton.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+    "object_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+    "symbol_extent_bytes": 1664,
+    "function_bytes_sha256": "3dca569afc3487b9f0fdd043a8ac3bb87a0a3cc9f80a903944931895335e72da",
+    "object_symbol_before": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+    "object_symbol_after": "AnimIff_LoadAnimationFile"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/model/iff_skeleton.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "3acd7537d8c56fe3708c2a3f95a0f801720bc96518919698f233b0d01c9a51ee",
+    "current_object_sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+    "baseline_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+    "current_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "AnimIff_LoadAnimationFile",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x00424620",
+    "symbol_extent_bytes": 1664,
+    "function_bytes_sha256": "86362cfb138259475faae0193ca345e8ba8e5cd29326077235c8a311bd15b7bb",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 1,
+    "callers_in_image": [
+     "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0"
+    ],
+    "call_sites_by_caller": {
+     "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0": 1
+    },
+    "reachable_statically": true
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x004D67A0-build.json",
+     "sha256": "dbf5a101324c40cf28fd906c4bcd0cef8a2efa6b3d2dda899ea06e7e91206479"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x004D67A0-semantic-review.json",
+     "sha256": "2a60f30543c6708e5a754b882ae4f5ad205f50d940b6b9eae3ef65dc956b708b"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x004D67A0-behavioral.json",
+     "sha256": "c2ded10677b83192baf87013cc96ee842b30ddd4310b3c5a1c4f16c4bbeb5606",
+     "re_executed_in_this_task": false
+    }
+   }
+  },
+  {
+   "address": "0x0048F260",
+   "retail_name": "AppContext_SetTerrainLightmapsUsed",
+   "retail_signature": "int32_t(char arg1)",
+   "source_identifier": "App_ContextSetTerrainLightmapsUsed",
+   "implementation_path": "engine/src/retail/core/app_context.cpp",
+   "header_path": "engine/include/igi/retail/core/app_context.hpp",
+   "object_level_diagnosis": {
+    "was_internal_static_inline_or_dead": false,
+    "object_linkage_before": "external (GCC nm type T)",
+    "object_linkage_after": "external (GCC nm type T)",
+    "why_no_symbol_matched": "The function was never absent or internal. GCC emitted it under the C++ mangled port identifier, so an nm lookup keyed on the retail catalog name could not match it. The mangled name is the only difference; the body, linkage and address were already present.",
+    "object_sha256": "ea0e9e52e3a0bf806ddf45806faef104ab935bad510f989031aebf450d6d35f5",
+    "object_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
+    "symbol_extent_bytes": 16,
+    "function_bytes_sha256": "e3e1c05829ed326d49f77f05c5bab86f56939ce649dc8d701eb79836eb6876c9",
+    "object_symbol_before": "__ZN3igi6retail4core34App_ContextSetTerrainLightmapsUsedEa",
+    "object_symbol_after": "AppContext_SetTerrainLightmapsUsed"
+   },
+   "assembler_name_change": {
+    "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
+    "asm_label_declared_in": "engine/include/igi/retail/core/app_context.hpp",
+    "declaration_text": "asm-label on the declaration, inherited by the definition",
+    "definition_edited": false,
+    "noinline_added": false,
+    "no_inline_justification": "Object evidence shows every one of the six bodies was already emitted out of line under -O3 (nm shows a T symbol with a distinct offset and a complete instruction stream), so no inlining suppression was needed and none was added.",
+    "previous_linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b"
+   },
+   "body_equivalence": {
+    "baseline_object_sha256": "6cc33edde729ec69468a0db0a168bb80eec2376bfbe6bd27478628f508248ccd",
+    "current_object_sha256": "ea0e9e52e3a0bf806ddf45806faef104ab935bad510f989031aebf450d6d35f5",
+    "baseline_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
+    "current_text_sha256": "b7ba836d93ee8601c3a1227356762c80a87e5a1cbbd8cbb7943ce448c02a4f64",
+    "text_section_bytes_identical": true,
+    "relocation_records_identical": true,
+    "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+    "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+    "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
+   },
+   "linked_image": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+    "symbol": "AppContext_SetTerrainLightmapsUsed",
+    "linkage": "external (nm type T)",
+    "vaddr": "0x0041E7C0",
+    "symbol_extent_bytes": 16,
+    "function_bytes_sha256": "a722b196b94759d6139a6b2826b145d6738f9d3bb1e2185ee869f1864215bf59",
+    "present": true
+   },
+   "addressability": {
+    "call_sites_in_image": 2,
+    "callers_in_image": [
+     "__ZN3igi6retail4core18debug_command_line28ApplyDebugFeatureCommandLineESt4spanIKSt17basic_string_viewIcSt11char_traitsIcEELj4294967295EE",
+     "__ZN3igi6retail4core18debug_command_line28Main_ParseDebugFeatPatchCmdsESt17basic_string_viewIcSt11char_traitsIcEE"
+    ],
+    "call_sites_by_caller": {
+     "__ZN3igi6retail4core18debug_command_line28Main_ParseDebugFeatPatchCmdsESt17basic_string_viewIcSt11char_traitsIcEE": 1,
+     "__ZN3igi6retail4core18debug_command_line28ApplyDebugFeatureCommandLineESt4spanIKSt17basic_string_viewIcSt11char_traitsIcEELj4294967295EE": 1
+    },
+    "reachable_statically": true
+   },
+   "evidence": {
+    "build": {
+     "path": "docs/fidelity/evidence/0x0048F260-build.json",
+     "sha256": "41d22ad643e3c459855ce1ba9ae35d9b8fbac35af6c2a42acd7b5ede5d075b46"
+    },
+    "semantic_review": {
+     "path": "docs/fidelity/evidence/0x0048F260-semantic-review.json",
+     "sha256": "2a289b548f7f372a1dda0231935d174bffdefc93628f73cbe95a2b145c7df7b3"
+    },
+    "behavioral": {
+     "path": "docs/fidelity/evidence/0x0048F260-behavioral.json",
+     "sha256": "9f3a7b4d6a578448304737b374a10d354aaf5b9487f98982435eb554a609bfec",
+     "re_executed_in_this_task": true
+    }
+   }
+  }
+ ],
+ "limitations": [
+  "Addressability is a symbol-level property; it is not behavioural evidence and does not raise any status.",
+  "The saved behavioral differential for 0x004D67A0 was bound to the unchanged implementation but was not re-executed in this task; its live paired runner needs sequential retail/candidate game sessions.",
+  "The linked-image VAs are for the candidate bound above; any later rebuild shifts them and this evidence must be regenerated.",
+  "This evidence supersedes the earlier name-lookup diagnosis for these six addresses; it does not re-review the semantics."
+ ],
+ "gate_projection": {
+  "note": "See the task report; the structural/semantic gate passes for all six, the live behavioral gate passes for five, and 0x004D67A0 keeps its existing behavioral gap."
+ },
+ "supersedes": {
+  "diagnosis": "docs/fidelity/evidence/iff-appcontext-addressability-20261023.json",
+  "manifest_patch": "build/manifest-patches/iff-appcontext.json",
+  "note": "The earlier diagnosis correctly established that all six were already external; it treated the missing names as a name-lookup artifact and made no source change. This record supersedes it with the declaration-level asm-label fix, the rebuilt candidate and the corrected map. Do not apply the earlier patch after this one: it would rebind the records to the old mangled symbols."
+ }
+}

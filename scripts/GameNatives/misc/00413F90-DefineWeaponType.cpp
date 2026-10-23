@@ -1,6 +1,6 @@
 // IGI native provenance: DefineWeaponType - 0x00413F90 - CFG score 99.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00413F90-DefineWeaponType.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00413F90-DefineWeaponType.hpp"
+#include "DefineWeaponType.h"
 int DefineWeaponType(long double context , long double arg2 , long double arg3 , long double arg4 , long double arg5 , long double arg6 , long double arg7 , long double arg8 , int arg9, float arg10 )
 
 // Sig: unknown DefineWeaponType(unknown param1, unknown param2)

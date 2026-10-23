@@ -1,0 +1,10 @@
+{
+ "kind": "candidate-defect",
+ "schema_version": 1,
+ "symptom": "The candidate loads a level and uploads textures, then fails every frame with 'Present frame failed HRESULT=0x88760096' (DDERR_SURFACELOST). It exits shortly after.",
+ "scope": "Reproduces at level1 and level5 with igi2.exe launched as 'window levelN' from /Users/haseeb-mir/Downloads/IGI.",
+ "when_it_worked": "The same binary rendered at 6.33 FPS earlier today (igi.log 08:35Z) and at 7.3 FPS at 07:16Z.",
+ "not_environment": "A trivial Win32 program still creates a window (hwnd=001B00D4) and CreateWindowEx succeeds, so the WindowServer is fine. The failure is in the DirectDraw surface path, not window creation.",
+ "impact": "Blocks the sequential paired Frida capture: retail currently yields 1379 dispatch calls while the candidate yields 0 because it dies before the frame loop dispatches.",
+ "next_step": "Re-check the primary-surface and back-buffer creation/restore path in initialize_direct_draw plus the Blt in the present path; DDERR_SURFACELOST means Restore() is needed on the lost surface before Blt."
+}

@@ -388,7 +388,7 @@ static std::int32_t native_leaves_test_handler(std::uint32_t size) { return (siz
 '''
             elif address == "0x004B0F80":
                 extra_header = '#include "igi/retail/texture/texture_loaders.hpp"'
-                pre_call = ("igi::retail::texture::Host_SetTextureBackendId("
+                pre_call = ("igi::retail::texture::Texture_SetBackendId("
                             "static_cast<std::int32_t>((value * 3 + 7919) & 0x7FFFFFFF));\n")
                 post_call = 'std::printf("GLOBAL=%d\\n", igi::retail::texture::Texture_GetActiveBackendId());'
             elif address == "0x004B26A0":

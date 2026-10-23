@@ -1,0 +1,401 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "result": "passed",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "address": "0x004AAD10",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "d5d7c04371f06db5793794ca340387d6e90de7a8f42ebf1f72f5ebd44de38e1c",
+ "method": "Retail and freshly compiled PE32 x86 candidate executed under angr with identical modeled resource boundaries; compared return identity (count vs relocated node), pool count, freedata call order, node anchor/semantic fields and modeled callee event traces.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "tests_total": 12,
+ "tests_passed": 12,
+ "tests_failed": 0,
+ "cases": [
+  {
+   "id": "match-equal",
+   "input": {
+    "str1": "RESOURCE",
+    "str2": "RESOURCE",
+    "max_len": 8
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-prefix-equal",
+   "input": {
+    "str1": "RESOURCE",
+    "str2": "RESOURCED",
+    "max_len": 8
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243454400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243454400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-str2-smaller",
+   "input": {
+    "str1": "RESOURCX",
+    "str2": "RESOURCE",
+    "max_len": 8
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "5245534f555243580000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "5245534f555243580000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-str2-greater",
+   "input": {
+    "str1": "RESOURCE",
+    "str2": "RESOURCY",
+    "max_len": 8
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243590000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243590000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-str1-shorter",
+   "input": {
+    "str1": "RES",
+    "str2": "RESOURCE",
+    "max_len": 8
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "52455300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "52455300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-str2-shorter",
+   "input": {
+    "str1": "RESOURCEDATA",
+    "str2": "RES",
+    "max_len": 8
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "5245534f555243454441544100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "52455300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "5245534f555243454441544100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "52455300000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-zero-len",
+   "input": {
+    "str1": "RESOURCE",
+    "str2": "RESOURCE",
+    "max_len": 0
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "5245534f555243450000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-one-byte",
+   "input": {
+    "str1": "A",
+    "str2": "B",
+    "max_len": 1
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "41000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "42000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "41000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "42000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-slash-difference",
+   "input": {
+    "str1": "LOCAL:path\\one",
+    "str2": "LOCAL:path/one",
+    "max_len": 14
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "4c4f43414c3a706174685c6f6e650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "4c4f43414c3a706174682f6f6e650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "4c4f43414c3a706174685c6f6e650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "4c4f43414c3a706174682f6f6e650000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-empty-str1",
+   "input": {
+    "str1": "",
+    "str2": "x",
+    "max_len": 8
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "78000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 4294967295,
+    "state_delta": {
+     "str1_after": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "78000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-empty-str2",
+   "input": {
+    "str1": "x",
+    "str2": "",
+    "max_len": 8
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "78000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {
+     "str1_after": "78000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+     "str2_after": "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "match-long-bound",
+   "input": {
+    "str1": "LOCAL:HARNESS/MATCH.VERY.LONG.STRING",
+    "str2": "LOCAL:HARNESS/MATCH.VERY.LONG.STRINH",
+    "max_len": 32
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "4c4f43414c3a4841524e4553532f4d415443482e564552592e4c4f4e472e535452494e4700000000000000000000000000000000000000000000000000000000",
+     "str2_after": "4c4f43414c3a4841524e4553532f4d415443482e564552592e4c4f4e472e535452494e4800000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "str1_after": "4c4f43414c3a4841524e4553532f4d415443482e564552592e4c4f4e472e535452494e4700000000000000000000000000000000000000000000000000000000",
+     "str2_after": "4c4f43414c3a4841524e4553532f4d415443482e564552592e4c4f4e472e535452494e4800000000000000000000000000000000000000000000000000000000"
+    },
+    "side_effects": []
+   }
+  }
+ ],
+ "runner": {
+  "path": "scripts/resource_sys_diff_runner.py",
+  "sha256": "94beb63208c406e7e2e0b040b44a079d6151ea6b11382464186d6f030d5d3194",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/resource_sys_diff_runner.py",
+   "--address",
+   "0x004AAD10",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/resource/sys_resource.cpp",
+   "--implementation-sha256",
+   "d5d7c04371f06db5793794ca340387d6e90de7a8f42ebf1f72f5ebd44de38e1c",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ },
+ "retail_execution": {
+  "tool": "angr",
+  "version": "10.0.4.post1",
+  "engine": "VEX",
+  "candidate_sha256": "501fc69936e0d65c355f0e6330dadde51650f9e451b205fc96afacf999cef982",
+  "candidate_build_command": [
+   "/opt/homebrew/bin/i686-w64-mingw32-g++",
+   "-std=c++20",
+   "-O0",
+   "-shared",
+   "-fno-exceptions",
+   "-fno-rtti",
+   "-static-libgcc",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-sys-6u_cehch/resource_sys_entry.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/resource/sys_resource.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/resource/resource_lifecycle.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/resource/is_resource_loaded.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/sys/resource_lookup.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/sys/ilff_navigation.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/qfile/alias_resolve.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/mem/heap_list.cpp",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/error/error_show.cpp",
+   "-o",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-resource-sys-6u_cehch/resource_sys_candidate.dll"
+  ]
+ },
+ "limitations": [
+  "Modeled boundaries: Sys_AllocateMemory_5 meta writes, fixture-driven chunk-tag/form-type and prefix-match returns, simulated CreateNode slots and container/insert call records.",
+  "Node link words +0x00..+0x07 are excluded: the port mirrors retail list behaviour through its own 64-bit-safe representation; anchor +0x10..+0x1C and all semantic fields are compared.",
+  "Concrete emulator fixtures, not a running retail process or a proof of all inputs."
+ ]
+}

@@ -1,0 +1,69 @@
+{
+  "evidence_id": "ev_c5c28d340e0b54e7349e075a3ffa4559fbe58c0edc5b84fccc7701c55d81c65d",
+  "subject": {
+    "name": "igi.exe",
+    "digest": {
+      "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+    },
+    "format": "pe",
+    "architecture": "x86",
+    "local_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe"
+  },
+  "provider": {
+    "id": "ghidra",
+    "name": "Ghidra",
+    "version": "12.1.2"
+  },
+  "procedure": {
+    "address": "0x402880",
+    "name": "FUN_00402880",
+    "classification": {
+      "external": false,
+      "thunk": false,
+      "thunk_target": null,
+      "provenance": "ghidra-function-manager"
+    },
+    "body": {
+      "available": true,
+      "provenance": "ghidra-function-body-address-set",
+      "ranges": [
+        {
+          "start": "0x402880",
+          "end": "0x402885"
+        }
+      ],
+      "total_bytes": 6,
+      "span_bytes": 6,
+      "non_contiguous": false,
+      "contains_entry": true
+    },
+    "signature": "undefined FUN_00402880()",
+    "locals": []
+  },
+  "assembly": [
+    "0x402880: MOV EAX, [0x00567c8c]",
+    "0x402885: RET"
+  ],
+  "pseudocode": "\nundefined4 FUN_00402880(void)\n\n{\n  return DAT_00567c8c;\n}\n\n",
+  "basic_blocks": [
+    {
+      "start": "0x402880",
+      "end": "0x402886",
+      "successors": []
+    }
+  ],
+  "limitations": [
+    "The session serves operations only after Ghidra reports default auto-analysis complete; incomplete analysis does not expose partial results.",
+    "The imported Program and temporary project are ephemeral and deleted on close. Annotation operations edit session database metadata; original executable bytes are never written.",
+    "Cancelling an active Ghidra request terminates its ephemeral database and discards session annotations. The selected target remains open; the next provider query imports the original artifact again.",
+    "Default-space addresses use lowercase 0x-prefixed hexadecimal; other address spaces use <percent-encoded-space>:0x<hex>.",
+    "References cover the complete Ghidra function-body AddressSet and exact entry. Dossier incoming edges omit sources owned by that function; procedure_references also retains those internal edges.",
+    "The dossier combines Ghidra FunctionManager, Listing, ReferenceManager, BasicBlockModel, and decompiler observations; provider-specific pseudocode and assembly are not cross-provider text invariants.",
+    "Resolved reference metadata identifies computed, indirect, external, call, jump, and data edges; unresolved targetless flows remain unknown, and function classifications distinguish thunks and externals.",
+    "Synthetic Ghidra entry-point references without actionable memory sources are omitted.",
+    "The Java bridge serializes one function request per Program and lets each decompilation run until it completes or the caller cancels.",
+    "macOS sessions require a matching executable Ghidra native decompiler; REA checks for it but does not build native components or change Gatekeeper quarantine state.",
+    "This session uses Ghidra 12.1.2. The bridge is verified against 12.1.4; other 12.1.x builds are accepted and the observed version is reported.",
+    "Loaded from a local REA analysis snapshot; this call did not re-run the provider."
+  ]
+}

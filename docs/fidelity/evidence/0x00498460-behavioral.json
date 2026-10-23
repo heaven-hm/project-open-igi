@@ -1,0 +1,454 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "address": "0x00498460",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "ff50294c8868f014dee0826a3d0a20a3e69e6d99c600612e34fa17be714d6c72",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "cases": [
+  {
+   "id": "case-0-control-037f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 895,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-1-control-027f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 639,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-2-control-007f",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "control_word": 127,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3199
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ca5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3199
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ca5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-3-control-077f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 1919,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-4-control-0b7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 2943,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-5-control-0f7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 3967,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3967
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0fa5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-6-control-067f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 1663,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  },
+  {
+   "id": "case-7-control-0e7f",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "control_word": 3711,
+    "arguments": [],
+    "eax": 305419896,
+    "flags": 514
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "EAX": 305419896,
+     "EBX": 0,
+     "ECX": 0,
+     "EDX": 0,
+     "ESI": 0,
+     "EDI": 0,
+     "EBP": 0,
+     "EFLAGS": 514,
+     "FPSW": 0,
+     "FPCW": 3711
+    },
+    "side_effects": {
+     "saved_control_and_adjacent_bytes": "7f0ea5a5a5a5a5a5"
+    }
+   },
+   "result": "passed"
+  }
+ ],
+ "runner": {
+  "path": "scripts/fpu_state_diff_runner.py",
+  "sha256": "3e9af28ae90dd961624aece1ead5d7a7f89a58f38230b7d2440827bf4bb2c3e7",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "scripts/fpu_state_diff_runner.py",
+   "--address",
+   "0x00498460",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "scripts/GameNatives/display/00498460-FP_InitExtendedPrecision.cpp",
+   "--implementation-sha256",
+   "ff50294c8868f014dee0826a3d0a20a3e69e6d99c600612e34fa17be714d6c72",
+   "--root",
+   "."
+  ]
+ },
+ "retail_execution": {
+  "tool": "Unicorn",
+  "version": "2.1.4",
+  "candidate_sha256": "6321f96bf8fd9f4cbf0bb2a3ccf0a922626e876d1401952d9a9195813b7ddbca",
+  "candidate_build_command": [
+   "i686-w64-mingw32-g++",
+   "-std=c++20",
+   "-O2",
+   "-shared",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-I/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/include",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-fvok7rnu/fpu.cpp",
+   "-Wl,--gc-sections,--image-base,0x10000000",
+   "-o",
+   "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/igi-fpu-diff-fvok7rnu/fpu.dll"
+  ]
+ },
+ "limitations": [
+  "Eight hardware-control fixtures, or sixteen scalar conversion fixtures; pending x87 exceptions and unmasked traps excluded.",
+  "No whole-game or all floating-point calculations equivalence claim."
+ ]
+}

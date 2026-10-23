@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x00405850",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "a5bead8a5fd558ba0504ba29d8ee8bae42adcf3a85f9cd72f6b431cae5685e0f",
+  "reviewed": true,
+  "reviewed_by": "Static source review with independent critic; Binary Ninja and Radare2 evidence",
+  "scope": "Reference source branch and call-order mapping only; not engine integration or runtime acceptance.",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Retail Binary Ninja and radare2 evidence identify the same 0x00405850 entry and three-block branch structure."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "The candidate passes its one argument to Qvm_Load and the returned pointer to execute and cleanup on the non-null path; pointee type is inferred."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "not_applicable",
+      "rationale": "No literal arithmetic or scaling appears in this wrapper."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "not_applicable",
+      "rationale": "This wrapper has no direct structure-field accesses; effects inside callees are outside this review."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Reviewed call order and null-branch selection against retail disassembly; callee internals and their side effects were not reviewed."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Both branches return the last callee result; a null load selects the graphics-default call. Runtime error effects remain unverified."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "No floating-point operations appear in this wrapper."
+    }
+  ],
+  "limitations": [
+    "Seven callees are undeclared in the candidate source and header; candidate is not independently compilable.",
+    "Callee internals, side effects, pointer pointee type and paired runtime behavior remain unverified.",
+    "No Config_Read engine entry exists; this does not verify the game input configuration path."
+  ]
+}

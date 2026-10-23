@@ -97,7 +97,7 @@ void Display_EvaluateSkinnedPalette(const MefModel& model, const MefSkinPalette&
     const std::size_t record_count = base_count + extra_count;
     if (record_count > kMaximumRecords)
     {
-        // Retail 0x0049B700: Error_Show("Bone model too large. Model %s has %d vertices.")
+        // Retail 0x0049B700: Debug_Error("Bone model too large. Model %s has %d vertices.")
         // followed by the self-loop at 0x0049B72A. The port surfaces the same fatal text.
         throw MefFormatError("Bone model too large. Model has " + std::to_string(record_count) +
                              " vertices.");

@@ -39,7 +39,7 @@ struct TransContext {
 // 0x00497E82:
 //   ... if (hook) hook(&local)
 //   g_6e5bb0 = 1; ++g_6e5bb4
-void Transcontext_SetActiveTransContext(const TransContext& context);
+std::int32_t Transcontext_SetActiveTransContext(const TransContext& context);
 
 // The retail active context (global 0x00BCAAE0).
 [[nodiscard]] TransContext& Transcontext_GetActiveTransContext();

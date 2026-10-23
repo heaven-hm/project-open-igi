@@ -4,7 +4,8 @@
 // Binary: igi.exe PE32 x86, SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // The player-state structure is unresolved; field offsets below are observed retail offsets.
 
-#include "00408460-FallLanding.hpp"
+#include "FallLanding.h"
+
 #include <math.h>
 #include <stdbool.h>
 #include <stdint.h>

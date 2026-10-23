@@ -35,7 +35,10 @@ extern QvmOpcodeHandlerRecord QvmOpcodeHandlerTable[qvm_opcode_handler_count];
 // Confidence: high for source boundary and observed writes; the full QVM context and interpreter remain partial.
 // Signature: x86 cdecl, state pointer then 32-bit value; prefix layout is asserted for Windows x86.
 // Usage/tests: called by retail constant-push opcodes; focused stack/index/tag test added; in-engine QVM dispatch pending.
-void Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value);
+// The retail body is one basic block that ends with `mov [value_stack + index*4], eax`, so EAX - the
+// register a caller sees after the call - still holds the pushed value. The port returns it explicitly
+// instead of leaving the post-call register to the host compiler's allocation.
+[[nodiscard]] std::uint32_t Qvm_PushInteger(QvmNativeStatePrefix* state, std::uint32_t value);
 
 // Native: Qvm_SetOpcodeHandler() - retail VA 0x004BD3D0; Binary Ninja label Sys_AllocateMemory_29.
 // Behavior: stores the callback at handler_table + (variant + opcode * 6) * 4 without bounds checks.
@@ -53,6 +56,9 @@ void Qvm_SetOpcodeHandler(std::int32_t opcode, std::int32_t variant, QvmOpcodeHa
 // Confidence: high for loop, offsets and callback arguments; table initialization and all retail opcodes remain incomplete.
 // Signature: x86 cdecl with one state pointer; dispatch callback is cdecl(state, 0, opcode, 0), caller cleans 16 bytes.
 // Usage/tests: called by retail QVM expression execution; dispatch loop and error/stop cases have focused tests.
-void Qvm_ExecuteInstructions(QvmNativeStatePrefix* state);
+// Retail's exit paths load the terminating field into EAX before returning: error_status on the
+// error path and stop_flag on the loop exit. The port returns that value so the post-call register
+// carries the termination reason instead of host-compiler residue.
+[[nodiscard]] std::uint32_t Qvm_ExecuteInstructions(QvmNativeStatePrefix* state);
 
 } // namespace igi::retail::script

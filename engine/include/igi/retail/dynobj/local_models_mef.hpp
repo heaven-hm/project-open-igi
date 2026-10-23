@@ -6,7 +6,6 @@
 namespace igi::retail::dynobj {
 
 // Native: DynObj_LoadModelMesh() - VA 0x004CF390 - complete port.
-// Previous catalog alias: DynObj_LocalModelsSMef.
 // Behavior: allocates a 24-byte (6-dword) model record via Mem_Alloc(0x18, 4) (0x004B0C60),
 //           clears fields +0x00, +0x04, +0x10, +0x14, formats `"LOCAL:models/%s.mef"` into
 //           global buffer 0x00A4EC6C, loads the resource via Resource_Load(0x00A4EC6C, nullptr)
@@ -28,17 +27,11 @@ namespace igi::retail::dynobj {
 // Usage/tests: retail MEF model loader; exercised by local_models_mef_test.cpp.
 void* DynObj_LoadModelMesh(const char* model_name);
 
-// Backward-compatible alias for existing retail catalog references:
-inline void* DynObj_LocalModelsSMef(const char* model_name)
-{
-    return DynObj_LoadModelMesh(model_name);
-}
-
 // Backend callback signature invoked by DynObj_LoadModelMesh at `0x00A94E84[backend_id]`.
 // Receives a 2-pointer pair `{ mesh_payload, model_container }`.
 using ModelBackendInitFn = void (*)(void** mesh_and_container);
 
 [[nodiscard]] const char* DynObj_GetModelPathBuffer();
-void Host_SetModelBackendInit(std::int32_t backend_id, ModelBackendInitFn callback);
+void Model_SetBackendInit(std::int32_t backend_id, ModelBackendInitFn callback);
 
 } // namespace igi::retail::dynobj

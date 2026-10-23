@@ -1,6 +1,6 @@
 // IGI native provenance: Anim_TriggerLoad - 0x004EC0C0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004EC0C0-Anim_TriggerLoad.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004EC0C0-Anim_TriggerLoad.hpp"
+#include "Anim_TriggerLoad.h"
 int Anim_TriggerLoad(void* context)
 
 // Sig: void Anim_TriggerLoad(char *path)

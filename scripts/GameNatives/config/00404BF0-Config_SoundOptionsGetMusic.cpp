@@ -1,6 +1,6 @@
 // IGI native provenance: Config_SoundOptionsGetMusic - 0x00404BF0 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00404BF0-Config_SoundOptionsGetMusic.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00404BF0-Config_SoundOptionsGetMusic.hpp"
+#include "Config_SoundOptionsGetMusic.h"
 int Config_SoundOptionsGetMusic(int context)
 
 // Sig: int Config_SoundOptionsGetMusic()

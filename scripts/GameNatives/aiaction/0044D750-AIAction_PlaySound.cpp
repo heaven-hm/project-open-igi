@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_PlaySound - 0x0044D750 - CFG score 94.4% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044D750-AIAction_PlaySound.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044D750-AIAction_PlaySound.hpp"
+#include "AIAction_PlaySound.h"
 int AIAction_PlaySound(int context, float arg2 )
 
 // Sig: void AIAction_PlaySound(int soundId, int param2, int flags)

@@ -495,6 +495,59 @@ def removed_native_addresses(root: pathlib.Path, path: pathlib.Path, relative: s
     return old - new
 
 
+def verify_canonical_source(
+    root: pathlib.Path,
+    native: dict[str, Any],
+    record: dict[str, Any],
+    relative: str,
+    minimum_status: str,
+    warnings: list[str],
+) -> list[str]:
+    """Validate a canonical GameNatives transcription that is not the record's implementation.
+
+    Engine-backed records point their implementation at the C++ source the candidate compiles, and keep a
+    GameNatives transcription as the canonical reference source. The staged sweep must not demand that the
+    reference source *be* the implementation: that would force the record onto an uncompilable translation
+    unit. Instead the reference source is held to its own contract - it is the record's recorded canonical
+    path, its digest matches, its filename is address-qualified with the record's address, it carries a
+    signature, and the record it references is verified at or above the requested threshold.
+    """
+    address = native["address"]
+    errors: list[str] = []
+    reference = record.get("game_natives")
+    if not isinstance(reference, dict):
+        errors.append(f"{relative}:{native['line']} {address}: canonical source has no game_natives record")
+        return errors
+    if reference.get("path") != relative:
+        errors.append(
+            f"{relative}:{native['line']} {address}: canonical source is not the record's game_natives path "
+            f"({reference.get('path')!r})")
+        return errors
+    source, _ = check_file_hash(
+        root, relative, reference.get("sha256"), f"{relative} canonical GameNatives source",
+        errors, required_prefix="scripts/GameNatives/",
+    )
+    if source is not None:
+        ref_match = GAME_NATIVE_ADDRESS.match(source.name)
+        if not ref_match:
+            errors.append(f"{address}: canonical GameNatives filename is not address-qualified")
+        elif normalize_address(ref_match.group("address")) != normalize_address(address):
+            errors.append(f"{address}: canonical GameNatives filename address does not match the record")
+        signature = reference.get("signature")
+        if not (isinstance(signature, str) and signature.strip()):
+            errors.append(f"{address}: missing GameNatives function signature")
+    implementation = record.get("implementation")
+    implementation_path = implementation.get("path") if isinstance(implementation, dict) else ""
+    status = (record.get("verification") or {}).get("status")
+    if status not in STATUS_RANK or STATUS_RANK[status] < STATUS_RANK[minimum_status]:
+        errors.append(
+            f"{address}: canonical reference source {relative} binds a record at status {status!r}, "
+            f"below the requested {minimum_status}")
+    warnings.append(
+        f"{relative}: canonical reference source for {address}; the record implementation is {implementation_path}")
+    return errors
+
+
 def check_provenance_comment(native: dict[str, Any], relative: str) -> list[str]:
     if native.get("is_canonical_source"):
         return []
@@ -1164,6 +1217,7 @@ def validate_status_evidence(
     status: str,
     require_semantic: bool,
     require_behavioral: bool,
+    require_frida_probes: bool,
     require_mutation: bool,
     errors: list[str],
 ) -> dict[str, Any] | None:
@@ -1186,6 +1240,25 @@ def validate_status_evidence(
             expected_kind="behavioral-test-report", native_address=native_address,
             binary_digest=binary_digest, implementation_digest=implementation_digest, errors=errors,
         )
+    if require_frida_probes and rank >= STATUS_RANK["VERIFIED"]:
+        frida_artifact = validate_report_artifact(
+            root, verification.get("frida_runtime"), report_name="Frida runtime probes",
+            expected_kind="frida-runtime-report", native_address=native_address,
+            binary_digest=binary_digest, implementation_digest=implementation_digest, errors=errors,
+        )
+        if frida_artifact is not None:
+            # A paired observation must show both programs were instrumented, the
+            # same probe was used, and at least one call was observed in each.
+            if frida_artifact.get("candidate_executable_sha256") in (None, ""):
+                errors.append(f"{native_address}: Frida evidence is not bound to a candidate executable")
+            retail_seen = frida_artifact.get("retail_observed_calls")
+            candidate_seen = frida_artifact.get("candidate_observed_calls")
+            if not isinstance(retail_seen, int) or retail_seen <= 0:
+                errors.append(f"{native_address}: Frida evidence records no retail calls")
+            if not isinstance(candidate_seen, int) or candidate_seen <= 0:
+                errors.append(
+                    f"{native_address}: Frida evidence records no candidate calls, so the native is not "
+                    "proven reachable end to end")
     if rank >= STATUS_RANK["VERIFIED"] or require_semantic:
         semantic_artifact = validate_report_artifact(
             root, verification.get("semantic_review"), report_name="semantic review",
@@ -1448,6 +1521,7 @@ def verify_record(
     minimum_cfg: float,
     require_semantic: bool,
     require_behavioral: bool,
+    require_frida_probes: bool,
     require_mutation: bool,
     angr_analysis: dict[str, Any],
     warnings: list[str],
@@ -1610,7 +1684,7 @@ def verify_record(
 
     semantic_artifact = validate_status_evidence(
         root, record, address, binary_digest, implementation_digest, status,
-        require_semantic, require_behavioral, require_mutation, errors,
+        require_semantic, require_behavioral, require_frida_probes, require_mutation, errors,
     )
     if require_semantic and require_behavioral and semantic_artifact is not None:
         validate_semantic_runtime_contract(semantic_artifact, address, errors)
@@ -1684,6 +1758,10 @@ def main() -> int:
     parser.add_argument("--skip-semantic-review", dest="require_semantic_evidence", action="store_false",
                         help="Temporarily disable the semantic-review requirement; not recommended for release builds.")
     behavior_group = parser.add_mutually_exclusive_group()
+    parser.add_argument("--require-frida-probes", dest="require_frida_probes", action="store_true",
+                        help="Block any native without paired retail/candidate IGI-Probe (Frida) runtime "
+                             "evidence bound to this binary and this implementation. CFG + angr + a "
+                             "differential runner are not sufficient on their own.")
     behavior_group.add_argument("--require-behavioral-tests", dest="require_behavioral_tests", action="store_true",
                                 help="Require retail-vs-candidate output comparisons (default).")
     behavior_group.add_argument("--allow-structural-only", dest="require_behavioral_tests", action="store_false",
@@ -1745,6 +1823,7 @@ def main() -> int:
         "primary_analysis_tools": list(PRIMARY_ANALYSIS_TOOLS),
         "backup_analysis_tools": list(BACKUP_ANALYSIS_TOOLS),
         "behavioral_tests_required": args.require_behavioral_tests,
+        "frida_probes_required": args.require_frida_probes,
         "semantic_review_required": args.require_semantic_evidence,
         "checked_files": [],
         "checked_natives": [],
@@ -1910,6 +1989,23 @@ def main() -> int:
                     failures.append(f"{relative}: no address-bound native identity is available to verify this source's logic")
             continue
         for native in natives:
+            record = manifest_records.get(native["address"])
+            implementation_record = record.get("implementation") if isinstance(record, dict) else None
+            implementation_path = implementation_record.get("path") if isinstance(implementation_record, dict) else None
+            reference = record.get("game_natives") if isinstance(record, dict) else None
+            if (relative.startswith("scripts/GameNatives/")
+                    and isinstance(implementation_path, str)
+                    and implementation_path != relative
+                    and isinstance(reference, dict)
+                    and reference.get("path") == relative):
+                checked += 1
+                canonical_errors = verify_canonical_source(
+                    root, native, record, relative, args.threshold, warnings)
+                failures.extend(canonical_errors)
+                report.setdefault("canonical_support_sources", []).append(
+                    {"path": relative, "address": native["address"],
+                     "implementation": implementation_path})
+                continue
             checked += 1
             print(f"native_gate: checking {native['address']} ({relative})", flush=True)
             native_errors, details = verify_record(
@@ -1924,6 +2020,7 @@ def main() -> int:
                 args.cfg_threshold,
                 args.require_semantic_evidence,
                 args.require_behavioral_tests,
+                args.require_frida_probes,
                 args.require_mutation_tests,
                 angr_analysis,
                 warnings,

@@ -1,6 +1,6 @@
 // IGI native provenance: QFile_DeviceHandlerLookup - 0x004B1620 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004B1620-QFile_DeviceHandlerLookup.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004B1620-QFile_DeviceHandlerLookup.hpp"
+#include "QFile_DeviceHandlerLookup.h"
 int QFile_DeviceHandlerLookup(char* context)
 
 // Sig: unsigned int QFile_DeviceHandlerLookup(const char* deviceName)

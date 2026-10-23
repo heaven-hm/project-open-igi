@@ -1,0 +1,489 @@
+{
+ "kind": "verification-gap-audit",
+ "schema_version": 1,
+ "scope": "the 78 MVP natives currently marked VERIFIED",
+ "cfg": {
+  "covered": 78,
+  "note": "Every record carries radare2 CFG evidence and the gate compares it at --cfg-threshold 0.85 against the selected decompiler artifact."
+ },
+ "angr": {
+  "covered": 78,
+  "note": "scripts/native_gate.py re-runs scripts/angr_analyze.py on every invocation and blocks unless the exact entry is recovered with result=pass, function_entry matching, nodes present and has_unresolved_jumps false. angr is enforced at gate time rather than stored in each record."
+ },
+ "frida": {
+  "covered": 0,
+  "note": "No record carries an IGI-Probe/Frida paired runtime observation with symbols resolved from the freshly built x86 candidate. 54 records even state 'No Frida run yet'. The strict gate does not enforce a Frida artifact, so these records passed on CFG + angr + a differential runner using retail bytes in unicorn and a candidate compiled from the same source.",
+  "why_not_equivalent": "Unicorn replays the retail instruction bytes and a compiled candidate side by side. That establishes behavioural equivalence of the function body, but it is not an in-game paired observation and does not prove the native is reached in the shipped candidate."
+ },
+ "consequence": "Under the bar just stated (CFG 0.85 + angr + Frida probes, end to end), none of the 78 are fully PASSED. They are CFG+angr verified with differential behavioural evidence, and should be treated as such rather than as end-to-end passed.",
+ "records": [
+  {
+   "address": "0x0048F230",
+   "name": "App_ContextGetLightmapsUsed",
+   "behavioral_runner": "scripts/context_getter_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F250",
+   "name": "App_ContextGetTerrainLightmapsUsed",
+   "behavioral_runner": "scripts/terrain_lightmap_flag_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F260",
+   "name": "AppContext_SetTerrainLightmapsUsed",
+   "behavioral_runner": "scripts/terrain_lightmap_flag_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00404590",
+   "name": "Config_GetActiveGraphicOptions",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00404F00",
+   "name": "Config_GraphicOptionsSetPerformanceFlags",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00404F60",
+   "name": "Config_GraphicOptionsGetPerformanceFlags",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00405620",
+   "name": "Config_GraphicOptionsNumPerfLevels",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004055C0",
+   "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00405530",
+   "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F1B0",
+   "name": "App_ContextGetDebugged",
+   "behavioral_runner": "scripts/native_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00402880",
+   "name": "Game_GetContext",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004028A0",
+   "name": "Flow_SetState",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F480",
+   "name": "Loop_SetStatusByte",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00401050",
+   "name": "QTask_OpenEvent",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F140",
+   "name": "AppContext_SetIsActive",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F170",
+   "name": "AppContext_GetIsActive",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004CF300",
+   "name": "DynObj_LookupHashItem",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004CEAA0",
+   "name": "Ilff_FindFormChunk",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004CF390",
+   "name": "DynObj_LoadModelMesh",
+   "behavioral_runner": "scripts/model_mesh_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004CF080",
+   "name": "DynObj_LoadModelTexturePackage",
+   "behavioral_runner": "scripts/mtp_package_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004A5702",
+   "name": "String_VFormat",
+   "behavioral_runner": "scripts/format_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004A53B3",
+   "name": "sprintf",
+   "behavioral_runner": "scripts/format_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004AF7B0",
+   "name": "Error_Show",
+   "behavioral_runner": "scripts/error_show_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x00465820",
+   "name": "Human_CameraEyePosition",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00463180",
+   "name": "Human_IsCrouched",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004659E0",
+   "name": "Human_TaskViewReset",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004AF8F0",
+   "name": "HeapList_Insert",
+   "behavioral_runner": "scripts/native_heaplist_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004AF960",
+   "name": "HeapList_Remove",
+   "behavioral_runner": "scripts/native_heaplist_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B0D40",
+   "name": "QHash_ValueSet",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B0BA0",
+   "name": "Mem_InitHeapState",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004AD722",
+   "name": "Mem_InvokeNewHandler",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004AA6AE",
+   "name": "Mem_AllocateRawBlock",
+   "behavioral_runner": "scripts/native_abi_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004AA682",
+   "name": "Mem_AllocWithRetry",
+   "behavioral_runner": "scripts/native_abi_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004AA670",
+   "name": "Mem_AllocChunk",
+   "behavioral_runner": "scripts/native_abi_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B0C60",
+   "name": "Mem_Alloc",
+   "behavioral_runner": "scripts/native_mem_alloc_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x00517890",
+   "name": "Iff_FindFormChunk",
+   "behavioral_runner": "scripts/iff_chunk_tree_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x00517940",
+   "name": "Iff_FindChunk",
+   "behavioral_runner": "scripts/iff_chunk_tree_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x005179C0",
+   "name": "Iff_GetChunkPayload",
+   "behavioral_runner": "scripts/iff_chunk_tree_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x005178E0",
+   "name": "Iff_FindChunkBelowForm",
+   "behavioral_runner": "scripts/iff_chunk_tree_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004D0CF0",
+   "name": "Model_GetAttachment",
+   "behavioral_runner": "scripts/attachment_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004D0D10",
+   "name": "Model_GetAttachmentCount",
+   "behavioral_runner": "scripts/attachment_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004CEA80",
+   "name": "Render_GetActiveBackendId",
+   "behavioral_runner": "scripts/context_getter_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7450",
+   "name": "Matrix_InvalidateSlot",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004EDB60",
+   "name": "LODSettings_LoadParameters",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x00497D70",
+   "name": "Transcontext_BuildViewBlock",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x00491D40",
+   "name": "Display_ComputeScreenAspect",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B6380",
+   "name": "Resource_Unload",
+   "behavioral_runner": "scripts/resource_lifecycle_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B5F00",
+   "name": "Resource_Load",
+   "behavioral_runner": "scripts/resource_lifecycle_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004AAD10",
+   "name": "Resource_MatchPrefix",
+   "behavioral_runner": "scripts/resource_sys_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B59F0",
+   "name": "Resource_CreateNode",
+   "behavioral_runner": "scripts/resource_sys_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B5C90",
+   "name": "Resource_FreeNode",
+   "behavioral_runner": "scripts/resource_sys_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B60F0",
+   "name": "Resource_RegisterIlffContainer",
+   "behavioral_runner": "scripts/resource_sys_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B5F80",
+   "name": "Resource_RegisterBuffer",
+   "behavioral_runner": "scripts/resource_register_buffer_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x0048F1D0",
+   "name": "Script_GetDebugCompileState",
+   "behavioral_runner": "scripts/context_getter_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x0048F340",
+   "name": "Script_GetForcePrecompiledState",
+   "behavioral_runner": "scripts/context_getter_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B8A10",
+   "name": "Qvm_SetGlobalState",
+   "behavioral_runner": "scripts/qvm_set_global_state_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B1E90",
+   "name": "String_FindExtension",
+   "behavioral_runner": "scripts/native_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B83D0",
+   "name": "Qvm_Cleanup",
+   "behavioral_runner": "scripts/qvm_cleanup_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B80B0",
+   "name": "Qvm_Load",
+   "behavioral_runner": "scripts/qvm_load_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004BD3D0",
+   "name": "Qvm_SetOpcodeHandler",
+   "behavioral_runner": "scripts/qvm_set_opcode_handler_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004F1160",
+   "name": "Script_GetParseMode",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004B7470",
+   "name": "Ilff_GetNextChunk",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7490",
+   "name": "Ilff_GetFirstChunk",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B74D0",
+   "name": "Ilff_GetChunkPayload",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7540",
+   "name": "Ilff_ReadContainerHeader",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7570",
+   "name": "Ilff_GetFormType",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7580",
+   "name": "Ilff_GetChunkTag",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B7590",
+   "name": "Ilff_FindChunk",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004AD73D",
+   "name": "String_ToUpperChar",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B5AF0",
+   "name": "Resource_CanonicalizePath",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B5B30",
+   "name": "Resource_CalculatePathHash",
+   "behavioral_runner": "scripts/hash_lookup_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004C6670",
+   "name": "Terrain_CreateMaterial",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004C6760",
+   "name": "Terrain_CreateTileMap",
+   "behavioral_runner": "scripts/native_unicorn_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B0F80",
+   "name": "Texture_GetActiveBackendId",
+   "behavioral_runner": "scripts/context_getter_diff_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B26A0",
+   "name": "Texture_EnableUpload",
+   "behavioral_runner": "scripts/native_leaves_runner.py",
+   "admits_no_frida": true
+  },
+  {
+   "address": "0x004B24C0",
+   "name": "Texture_LoadLoopTextureFile",
+   "behavioral_runner": "scripts/texture_loader_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x005175A0",
+   "name": "Terrain_LoadTexturePackage",
+   "behavioral_runner": "scripts/texture_loader_diff_runner.py",
+   "admits_no_frida": false
+  },
+  {
+   "address": "0x004CF790",
+   "name": "DynObj_LoadModelTextures",
+   "behavioral_runner": "scripts/texture_loader_diff_runner.py",
+   "admits_no_frida": false
+  }
+ ]
+}

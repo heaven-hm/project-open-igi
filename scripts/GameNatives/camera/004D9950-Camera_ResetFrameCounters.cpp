@@ -1,6 +1,6 @@
 // IGI native provenance: Camera_ResetFrameCounters - 0x004D9950 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 004D9950-Camera_ResetFrameCounters.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "004D9950-Camera_ResetFrameCounters.hpp"
+#include "Camera_ResetFrameCounters.h"
 void* Camera_ResetFrameCounters(void* context)
 
 // Sig: void Camera_ResetFrameCounters(CameraContext* camCtx)

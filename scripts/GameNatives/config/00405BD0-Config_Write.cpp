@@ -1,6 +1,6 @@
 // IGI native provenance: Config_Write - 0x00405BD0 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
 // Evidence: 00405BD0-Config_Write.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "00405BD0-Config_Write.hpp"
+#include "Config_Write.h"
 int Config_Write(void* context)
 
 // Sig: void Config_Write(char* cfg_file)

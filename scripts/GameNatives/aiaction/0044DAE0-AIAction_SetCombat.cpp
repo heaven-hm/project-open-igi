@@ -1,6 +1,6 @@
 // IGI native provenance: AIAction_SetCombat - 0x0044DAE0 - CFG score 91.7% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044DAE0-AIAction_SetCombat.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044DAE0-AIAction_SetCombat.hpp"
+#include "AIAction_SetCombat.h"
 int AIAction_SetCombat(int context, int arg2 )
 
 // Sig: void AIAction_SetCombat(int enemyId)

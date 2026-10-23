@@ -1,6 +1,6 @@
 // IGI native provenance: AIFunction_SendResponse - 0x0044EE40 - CFG score 88.9% (PASS; structural only); runtime behavior not verified.
 // Evidence: 0044EE40-AIFunction_SendResponse.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
-#include "0044EE40-AIFunction_SendResponse.hpp"
+#include "AIFunction_SendResponse.h"
 int AIFunction_SendResponse(int context)
 
 // Sig: void AIFunction_SendResponse()

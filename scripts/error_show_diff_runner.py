@@ -36,6 +36,7 @@ def main():
     compiler=shutil.which("i686-w64-mingw32-g++")
     if not compiler: raise RuntimeError("x86 compiler unavailable")
     wrapper_text=r'''
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/error/error_show.hpp"
 #include <cstring>
 extern "C" {
@@ -46,7 +47,7 @@ __declspec(dllexport) int NativeEntry(const char* format, int value, unsigned fl
     auto& g=igi::retail::error::Error_GetGlobals();
     g.g_936268=(flags&1)?NativeDisplay:nullptr;
     g.g_93626c=(flags&2)?NativeExit:nullptr;
-    const auto result=igi::retail::error::Error_Show(format,value);
+    const auto result=Debug_Error(format,value);
     return result;
 }
 }
@@ -57,7 +58,10 @@ __declspec(dllexport) int NativeEntry(const char* format, int value, unsigned fl
         wrapper=pathlib.Path(temp)/"entry.cpp"
         candidate=pathlib.Path(temp)/"candidate.dll"
         wrapper.write_text(wrapper_text)
-        command=[compiler,"-std=c++20","-O0","-shared",f"-I{root/'engine/include'}",str(wrapper),str(source),"-o",str(candidate)]
+        # The dispatcher is Debug_Error in retail_error.cpp; the shared error state and
+        # String_VFormat live in error_show.cpp, so both units are compiled into the candidate.
+        shared_state=root/"engine/src/retail/error/error_show.cpp"
+        command=[compiler,"-std=c++20","-O0","-shared",f"-I{root/'engine/include'}",str(wrapper),str(source),str(shared_state),"-o",str(candidate)]
         built=subprocess.run(command,capture_output=True,text=True,timeout=90)
         if built.returncode: raise RuntimeError(built.stderr)
         rebuilt=angr.Project(str(candidate),auto_load_libs=False)
