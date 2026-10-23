@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 55 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 56 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 55 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 56 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -853,3 +853,27 @@ Two bugs in the first drafts, both caught before they could produce a false pass
   passes integer arguments to `call_state`, which converts them itself.
 
 Verified count 53 -> 55; candidate-unreachable still 28; paired matches 63; mismatches 0.
+
+## A return contract the port had dropped
+
+`Transcontext_SetActiveTransContext` (0x00497E70) matched at runtime two rounds ago but could not promote: its
+behavioural runner was unsupported. Reading the retail tail showed a bigger problem than the runner. Retail
+0x00497EA6-0x00497EB6 is `eax=[0x006E5BB4]; [0x006E5BB0]=1; inc eax; [0x006E5BB4]=eax; ret` - the native
+**returns the incremented install counter through EAX**. The port performed the copy, set the installed flag and
+incremented the counter, then returned `void`. The difference was invisible to the paired capture, whose
+comparability override compares reachability only (retail calls it 840 times, the candidate once).
+
+The port now returns `++trans_context_install_count`, matching retail. Because the implementation digest
+changed, every evidence artifact bound to it had to be rebuilt rather than reused: the translation unit was
+recompiled for the build report, the semantic review added a `return_value_contract` check, the Frida report was
+re-emitted against the new candidate executable, and a new behavioural runner was written.
+
+`scripts/transcontext_diff_runner.py` executes both bodies with the optional render-method dispatch disabled and
+compares the returned counter (including 0x7FFFFFFF + 1 wrapping to INT_MIN), the 0xA8-byte copy by digest, the
+installed flag and the counter across eight seeded inputs. It would have failed before the port change - that is
+the point of writing it before promoting.
+
+The render-method dispatch through the table at 0x00A94E84 remains unimplemented; every captured call has index
+zero, which takes the same path in both.
+
+Verified count 55 -> 56; candidate-unreachable still 28; mismatches 0.

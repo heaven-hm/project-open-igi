@@ -43,7 +43,7 @@
     },
     "0x00497E70": {
       "comparable": false,
-      "reason": "retail 0x00497E70 copies the caller's 0xA8-byte context, dispatches the registered render method, marks the context installed and then returns the incremented install counter; the port performs the copy and the bookkeeping but returns void, so EAX is not a comparable result. Reachability is the meaningful criterion."
+      "reason": "retail 0x00497E70 returns the incremented install counter and the port now returns it too; the paired capture still compares reachability only because the two processes call the setter a different number of times (retail 840, candidate 1), so the return-class sets differ by observation count. Equivalence of the returned counter, the 0xA8-byte copy and the installed flag is proven by scripts/transcontext_diff_runner.py."
     },
     "0x004B26B0": {
       "comparable": false,

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-lifecycle2.json",
+  "capture": "build/runtime-traces/mvp-frida-pair-transcontext.json",
   "level": 5,
   "counts": {
     "candidate-unreachable": 28,
@@ -1225,6 +1225,7 @@
     "0x0048F250",
     "0x0048F260",
     "0x0048F340",
+    "0x00497E70",
     "0x00498460",
     "0x004A53B3",
     "0x004AA670",
@@ -1268,5 +1269,5 @@
     "0x00517890",
     "0x00517940"
   ],
-  "verified_strict_gate_count": 55
+  "verified_strict_gate_count": 56
 }
