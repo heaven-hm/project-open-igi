@@ -4,6 +4,8 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/texture/texture_loaders.hpp"
+#include "igi/retail/dynobj/hash_lookup.hpp"
 #include "igi/retail/script/qvm_stack_natives.hpp"
 #include "igi/retail/human/human_camera_eye.hpp"
 #include "igi/retail/resource/sys_resource.hpp"
@@ -2436,6 +2438,39 @@ int RunRetailModelScene(HINSTANCE instance,
         static_cast<void>(igi::retail::script::Script_GetParseMode());
         static_cast<void>(igi::retail::resource::Resource_CreateNode(
             "DATA\\LEVEL5.FF", nullptr, nullptr, 0, 1, nullptr));
+
+        // The upload-enable flag is a single store; retail never assigns EAX.
+        igi::retail::texture::Texture_EnableUpload();
+        // Hash-chain walk over four 16-byte nodes linked through their first dword.
+        {
+            alignas(16) std::uint8_t hash_nodes[4 * 16]{};
+            for (std::size_t i = 0; i + 1 < 4; ++i)
+            {
+                const std::uint32_t next = static_cast<std::uint32_t>(
+                    reinterpret_cast<std::uintptr_t>(hash_nodes + (i + 1) * 16));
+                std::memcpy(hash_nodes + i * 16, &next, sizeof(next));
+            }
+            auto* head = reinterpret_cast<igi::retail::dynobj::HashItem*>(hash_nodes);
+            static_cast<void>(igi::retail::dynobj::DynObj_LookupHashItem(&head, 2));
+        }
+        // Form-chunk search over a well-formed FORM container with one AAAA child chunk.
+        {
+            alignas(16) std::uint8_t form[0x40]{};
+            std::memcpy(form, "FORM", 4);
+            const std::uint32_t form_size = 0x14U;
+            const std::uint32_t be_form_size = ((form_size & 0xFFU) << 24) | ((form_size & 0xFF00U) << 8)
+                | ((form_size >> 8) & 0xFF00U) | ((form_size >> 24) & 0xFFU);
+            std::memcpy(form + 4, &be_form_size, 4);
+            std::memcpy(form + 8, "TEST", 4);
+            std::memcpy(form + 0x0C, "AAAA", 4);
+            const std::uint32_t child_size = 4U;
+            const std::uint32_t be_child_size = ((child_size & 0xFFU) << 24) | ((child_size & 0xFF00U) << 8)
+                | ((child_size >> 8) & 0xFF00U) | ((child_size >> 24) & 0xFFU);
+            std::memcpy(form + 0x10, &be_child_size, 4);
+            const std::int32_t target_tag = 0x41414141;
+            std::int32_t form_payload_size = 0;
+            static_cast<void>(igi::retail::dynobj::Ilff_FindFormChunk(form, target_tag, &form_payload_size));
+        }
 
         // The flow handler registration takes a flow pointer; retail leaves EAX to its callee, so only
         // reachability is comparable and the pass registers a null handler rather than a bogus one.

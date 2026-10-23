@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 38 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 41 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 38 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 41 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -708,3 +708,21 @@ with an unsupported behavioural runner.
 What did promote this round is `Qvm_SetOpcodeHandler` (0x004BD3D0): matched, and its record already had a
 real twin, a replayable runner and all four evidence pillars. Verified count 37 -> 38, paired matches
 41 -> 45, mismatches 0, candidate-unreachable 50 -> 46.
+
+## Fixtures instead of plumbing: three natives that only lacked runtime evidence
+
+The previous round showed that several matched natives were blocked on evidence plumbing rather than on
+runtime behaviour. This round found the cheap half of that problem: three natives whose behavioural runners
+already existed and already passed, so all they needed was to be reached.
+
+* `Texture_EnableUpload` (0x004B26A0) is a single store to the upload-enable flag. Reached with a plain
+  zero-argument call; retail does not assign EAX, but no override was needed because the captured classes
+  agree anyway.
+* `DynObj_LookupHashItem` (0x004CF300) walks a hash chain. The pass builds four 16-byte nodes linked through
+  their first dword - the same fixture `hash_lookup_diff_runner.py` uses for its differential cases - and
+  looks up index 2.
+* `Ilff_FindFormChunk` (0x004CEAA0) searches a FORM container. The pass builds `FORM`/`TEST` with one `AAAA`
+  child chunk, big-endian sizes and all, mirroring the runner's fixture, and finds that child.
+
+All three passed the strict gate on build, behavioural, semantic and Frida evidence without any comparability
+override. Verified count 38 -> 41, paired matches 45 -> 48, mismatches 0, candidate-unreachable 46 -> 43.
