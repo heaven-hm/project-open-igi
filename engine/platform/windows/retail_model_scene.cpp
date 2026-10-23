@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/human/human_camera_eye.hpp"
 #include "igi/retail/resource/sys_resource.hpp"
 #include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/core/app_context.hpp"
@@ -2434,6 +2435,16 @@ int RunRetailModelScene(HINSTANCE instance,
         static_cast<void>(igi::retail::script::Script_GetParseMode());
         static_cast<void>(igi::retail::resource::Resource_CreateNode(
             "DATA\\LEVEL5.FF", nullptr, nullptr, 0, 1, nullptr));
+
+        // The human eye natives read and write fixed offsets inside the human record. Run them on a
+        // zeroed record of the documented size so the ported bodies execute against a real layout;
+        // the scene's own players are host-side structs, so these natives are otherwise never reached.
+        {
+            alignas(16) std::uint8_t human_record[0x400]{};
+            alignas(16) std::uint8_t eye_position[0x40]{};
+            static_cast<void>(igi::retail::human::Human_IsCrouched(human_record));
+            igi::retail::human::Human_CameraEyePosition(eye_position, human_record);
+        }
 
         // The retail Game class (0x00415530) links the three phase handlers
         // into the handler table, so the per-frame dispatch at 0x00401050

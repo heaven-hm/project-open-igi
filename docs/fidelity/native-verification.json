@@ -1112,7 +1112,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f230-frida-runtime.json",
-          "evidence_sha256": "0c5409db8da91fe6a4b2fa7da9a969ec9ee1c3f6a58ce2ea78983007fbcf8403"
+          "evidence_sha256": "809554d034f6bb09a4819a426fdc3fa7008132399b04a67d9952bf618cafef6f"
         }
       },
       "status": "VERIFIED"
@@ -1266,7 +1266,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f250-frida-runtime.json",
-          "evidence_sha256": "d937e145d47942f88c68378ae9a343e4fa512f2cd065d5ecd5dec3c71d1b7111"
+          "evidence_sha256": "c609f45759dff6b7069db8fe8d63624806944d1c3e43c177fddf274212a21b08"
         }
       },
       "status": "VERIFIED"
@@ -1351,7 +1351,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f260-frida-runtime.json",
-          "evidence_sha256": "3fa23974ab3651ddbec0766943f9c5dfa21a8324bdd8e6e4299d4fce253a4ad8"
+          "evidence_sha256": "0dce3f26f09682168fee9063c2a635eb23c86d441dc61544edf6e168e1ed5370"
         }
       },
       "status": "VERIFIED"
@@ -50443,7 +50443,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004037c0-frida-runtime.json",
-          "evidence_sha256": "d1ad7fb28ea91365d55e33e2856c4039cc751c9a5e27cc402cf4e9c0b9cc84a5"
+          "evidence_sha256": "b3a91445cd1f02ee57d0942f040aa80f885cd1659810c61427f97d220b7c036b"
         }
       }
     },
@@ -50948,7 +50948,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00402260-frida-runtime.json",
-          "evidence_sha256": "34694e6bf89f56d346a71546682631ab6500402f3123942cb8d0c9c7edc9a714"
+          "evidence_sha256": "6141b5c0f3a7f56c921f43e4396c16c228a81302a3ce53697cfa80d11645f4cf"
         }
       }
     },
@@ -51552,7 +51552,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00498460-frida-runtime.json",
-          "evidence_sha256": "ba233aec3c073032bb31e5028f905c3c972ddf6332b237da1342b62048d7337c"
+          "evidence_sha256": "ca6fdd7ac900ceca0bd8ad8e6356c1748604b73b78874463033d559ba5679d7b"
         }
       }
     },
@@ -51630,7 +51630,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00402880-frida-runtime.json",
-          "evidence_sha256": "6d3802e179f836535aa1b2400f3982545af4e415eb26fc82d99a0311b71cd621"
+          "evidence_sha256": "0bbfb627f89a7cb38a410e8c5373a99214616639e785090b5ce4b372327745b5"
         }
       }
     },
@@ -51708,7 +51708,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004028a0-frida-runtime.json",
-          "evidence_sha256": "6f2e89f34e8344a8bb51eb3a147d28ce673cd9484149b8fffdd193b8fcc87314"
+          "evidence_sha256": "71a7a73f46d2adcaf9f9838df5ab376404e38827252a05421a446e19ad81121c"
         }
       }
     },
@@ -51866,7 +51866,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00401050-frida-runtime.json",
-          "evidence_sha256": "fbf16cb30380600625f497328ee0f68bbb9af5ea5b9871bb33572670c0e025d9"
+          "evidence_sha256": "3a3f8ab890b330b13f91366b9951b0fad42f784241a025e267e156d6fa3c434d"
         }
       },
       "cfg_similarity": 1.0
@@ -52018,7 +52018,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f170-frida-runtime.json",
-          "evidence_sha256": "a6699967b2904ce549bca318bdddb647a559a6005835ea6f38c1db6978a019c6"
+          "evidence_sha256": "93e5e78e188d36e4b86fd2d68ebe5cf0f6fabad1f75d1070e66618d5fae00212"
         }
       }
     },
@@ -53323,7 +53323,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004cf390-frida-runtime.json",
-          "evidence_sha256": "2de6752c963596a69a4d97f6c7a26729e16ce2b675bf3bd048bff91f3d145511"
+          "evidence_sha256": "fa2262e50ee7df2cdff51ff2816ff3f159afe4b8991307fc178293a784fe6ee9"
         }
       },
       "status": "STRUCTURALLY_VERIFIED",
@@ -53689,7 +53689,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004cf080-frida-runtime.json",
-          "evidence_sha256": "e4ac477f7c31f049ad5031637a95800e6355749f06df58da23e3733944aa2ecb"
+          "evidence_sha256": "724f2598bf4425e623e21ea85248d8b86cab88ec22147c39e63e9e2a5c221634"
         }
       },
       "status": "VERIFIED"
@@ -54010,6 +54010,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x00465820-frida-runtime.json",
+          "evidence_sha256": "f7000a75f431d958f8197ad7e657623b32df13675c280128d23df03eab45e969"
         }
       },
       "status": "VERIFIED"
@@ -54090,6 +54095,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "frida_runtime": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x00463180-frida-runtime.json",
+          "evidence_sha256": "5f663660714a0ff3f7c53ac11a79340cf64b5767f9ee0af241ac36d625d1868f"
         }
       },
       "status": "VERIFIED"
@@ -54464,7 +54474,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004af8f0-frida-runtime.json",
-          "evidence_sha256": "bd13ca07e85055d8afe291a319be7dec68caa19d08b9d7efc8ab5d01e1a77856"
+          "evidence_sha256": "63f6a6a7813c8b605fc1dbbc3579c4073612b86fe80f1e8f3f8f36c64f9d163b"
         }
       },
       "status": "VERIFIED"
@@ -54549,7 +54559,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004af960-frida-runtime.json",
-          "evidence_sha256": "d18d0068af53cf388929696bf8c5e3cf51c07fc21613191289fbef17844048c8"
+          "evidence_sha256": "6dbbbdaf50fe35716bb91d3313fda383466cde9c5fe36bb9f674e05ced85b23c"
         }
       },
       "status": "VERIFIED"
@@ -54634,7 +54644,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0d40-frida-runtime.json",
-          "evidence_sha256": "1b25b07c7bc230a737e79ad2dd6ef27ec781c6f137d15ba3196cf12271d3a4e9"
+          "evidence_sha256": "abae2cac3909de64ad0bbafbf2d72ed74664ddbeca4eac59198153461013bca8"
         }
       },
       "status": "VERIFIED"
@@ -54719,7 +54729,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0ba0-frida-runtime.json",
-          "evidence_sha256": "830390fb62519fc345f012a79cb68b0813d490ead2665aed95089fdb0a11817f"
+          "evidence_sha256": "599a9eb7c70e156c0d4acf7a5ff2b991199b4dd241385b2a39b468bfa19bce2c"
         }
       },
       "status": "VERIFIED"
@@ -54884,7 +54894,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004aa6ae-frida-runtime.json",
-          "evidence_sha256": "f28bc75eaa96d2fcc7d6afe77891bf8bf2e66d5ec17138d5cdfbb63f7910877c"
+          "evidence_sha256": "f478ef863c2664580dff1f917937d814f08bb9f78db241554f22e8c99b16b3e3"
         }
       },
       "status": "VERIFIED"
@@ -54969,7 +54979,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004aa682-frida-runtime.json",
-          "evidence_sha256": "1f24aff626ed39af35b91e82d5320427c8d9b381264ab97f970025a825b98c11"
+          "evidence_sha256": "84b8da6ce59996f9c4af510db299324c2b23447c95b5d803809df9e813d67dd5"
         }
       },
       "status": "VERIFIED"
@@ -55054,7 +55064,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004aa670-frida-runtime.json",
-          "evidence_sha256": "b2473ffe60d561aa0e9a06ccbdb40e132b7b7a25f417d9dd6ea0955b1cb7d55c"
+          "evidence_sha256": "b44ef37430d0959c0b80f6a68ce2983138815fee4487a74bded67dcaa7f1cbaa"
         }
       },
       "status": "VERIFIED"
@@ -55139,7 +55149,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0c60-frida-runtime.json",
-          "evidence_sha256": "e3390bbe356447348f25e4f6346be811abd55126a5121ef6178a3eece8b3e933"
+          "evidence_sha256": "2e3c5ad473ddf89cc67a137dce0e5b6e9eec9916bd69d97c6c06266d76a30a1d"
         }
       },
       "status": "VERIFIED"
@@ -55225,7 +55235,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517890-frida-runtime.json",
-          "evidence_sha256": "84c0d5efb373a4c8f1b83a7fff59d7f84f1c77678e98178b1f57e2c32c2c1571"
+          "evidence_sha256": "8541fd7575f2ff91951ae252b8b00aa0f3bd0db066208d9ac26e65bf7b1a46f4"
         }
       },
       "status": "VERIFIED"
@@ -55310,7 +55320,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00517940-frida-runtime.json",
-          "evidence_sha256": "5f6ba7ab90b73d925bc50b1678ffe6576edb3a95b2b65f472bd1759480f9d30e"
+          "evidence_sha256": "1aee1de57d6b9eaca801e4b1342a4cf9926a60801c6453acf3970cbfc78c0500"
         }
       },
       "status": "VERIFIED"
@@ -55775,7 +55785,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004cea80-frida-runtime.json",
-          "evidence_sha256": "5d61a7b9127c5008c0879fcdd44513d19d21b3c691a2f2b8d4f4639f25432f33"
+          "evidence_sha256": "84ecf660049a2f0bb4f1b7288aa30265a5e03ea3386014d41670c845b49e81bd"
         }
       },
       "status": "VERIFIED"
@@ -56855,7 +56865,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b59f0-frida-runtime.json",
-          "evidence_sha256": "26508862b1fca67c9d9c7ce7b085854746b70560411f0df4d5d5d2f4b61da9f8"
+          "evidence_sha256": "19f07c3059ac56b899fcdff98ff58509be6e9eb608f9dc73c32bded845b0a03f"
         }
       },
       "status": "VERIFIED"
@@ -57390,7 +57400,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f1d0-frida-runtime.json",
-          "evidence_sha256": "a0d0860f0d51dd00e51c84855c3d601ee15af22f29ae2ad405cf5c8acf6f9f30"
+          "evidence_sha256": "f056373759f59ee51c38d983e3c73eda8b1d542cb73dbeb2e58f6a39c7177411"
         }
       },
       "status": "VERIFIED"
@@ -57475,7 +57485,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x0048f340-frida-runtime.json",
-          "evidence_sha256": "beb46a0d6ce7645d6b82b94fe7edd82d206d975160ee8496978de334a9914fa4"
+          "evidence_sha256": "5a63bdede453edf95bcb5553f26792f7274eec15510ee8fc66ba95add2edbdb4"
         }
       },
       "status": "VERIFIED"
@@ -57551,7 +57561,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b5b60-frida-runtime.json",
-          "evidence_sha256": "bb01c7cde2118a3679de1130c235f0dea32250df7db91fbb639f42577aa0b521"
+          "evidence_sha256": "4fea6dcf1969cac67f6f5057233f6f57daf38e92bf2c3359bc307b38112abe3d"
         }
       }
     },
@@ -57635,7 +57645,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b8a10-frida-runtime.json",
-          "evidence_sha256": "441f66b7dd890c1d38c0b5ee7452eb9d48effb5b042c6cdf65ec7a4c7be8499b"
+          "evidence_sha256": "932bd3f579c0438f8f9101e3700ec57a5cc5f35acbf88f286c89f369bf5c219b"
         }
       },
       "status": "VERIFIED"
@@ -57717,7 +57727,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b1e90-frida-runtime.json",
-          "evidence_sha256": "eb82f1e3c47813a78cad5bc2e69b70a3508285e7643698563a655d4603986442"
+          "evidence_sha256": "dc17477cec140e1955d159cd2e0ba2ddb3079105daf7dc826dbb90e5c451b0b2"
         }
       },
       "status": "VERIFIED"
@@ -58256,7 +58266,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004f1160-frida-runtime.json",
-          "evidence_sha256": "3f29c6eecd9c6e30eec3213488bd6e8833ae27f08738f4590c13c1fc2864dc15"
+          "evidence_sha256": "04e24d70d007dbec4e27abe51c83c9a679cff82f68e261cf88459d525a4d0d1e"
         }
       },
       "status": "VERIFIED"
@@ -58421,7 +58431,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b7490-frida-runtime.json",
-          "evidence_sha256": "74fafa7bbeea38d81d13e46d67b47e1a7a27704e8cb818aa9ee39c0f76b77d03"
+          "evidence_sha256": "e1d889d4df46a47f141f0d16a6c5cd68f22363113d278d28096d1fcc6c51fcae"
         }
       },
       "status": "VERIFIED"
@@ -58666,7 +58676,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b7570-frida-runtime.json",
-          "evidence_sha256": "87437f92720a07953ac1903a3a2c2443b7aa04890aa63fb6972c34527949c3b8"
+          "evidence_sha256": "f599724437e341f16b06afa0a252f5734d0a6cf09f403d998bdcb5fbe5ba0958"
         }
       },
       "status": "VERIFIED"
@@ -58911,7 +58921,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004ad73d-frida-runtime.json",
-          "evidence_sha256": "818d1840eb1a89b6bff7259043bae0df6f20e220fdfdd580dd094d0799103c64"
+          "evidence_sha256": "3ba827a41b7bb42dd0a642e590ac307976ede4412811a71f08d0860592f3b99e"
         }
       },
       "status": "VERIFIED"
@@ -58996,7 +59006,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b5af0-frida-runtime.json",
-          "evidence_sha256": "fcfb5f7e0af756e9a3ea2dd6aefe7c761f355710ba21ee24292640bfbe652e95"
+          "evidence_sha256": "0e1a0971f437c67628001233e6a3b0e1f0aa2c5d78b422fda776dcc792da7981"
         }
       },
       "status": "VERIFIED"
@@ -59081,7 +59091,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b5b30-frida-runtime.json",
-          "evidence_sha256": "73f64fdfa607a97f7c8f53cc807b6ae2aa90917c79ea0fbbfe1ef0ebe1e9fb2f"
+          "evidence_sha256": "92c9d3dee8633a0b2478db71fdd0dc65cfa1c09882629278c015bef353255b11"
         }
       },
       "status": "VERIFIED"
@@ -59166,7 +59176,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004c6670-frida-runtime.json",
-          "evidence_sha256": "67514a0a0b3a646e0992f39f8a43b9c89dcb433c196d46423988fa7fa75117da"
+          "evidence_sha256": "f545400f68d399c4748413ce47c21e3f087a16653e36144db34a70af07fd3e94"
         }
       },
       "status": "VERIFIED"
@@ -59251,7 +59261,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004c6760-frida-runtime.json",
-          "evidence_sha256": "435387f2f766b2f156f346244e3afae6e553a0ea763af8fd7c516e624680be5e"
+          "evidence_sha256": "3936a85662e4fda3f49c461b22f4054d211265ec3ec9c10e1bf95c3d1a8a96cb"
         }
       },
       "status": "VERIFIED"
@@ -59526,7 +59536,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004c6240-frida-runtime.json",
-          "evidence_sha256": "d61b7330813086b2783327f4fa4f341510d5fef2618d23f622f70bac6cb7d27c"
+          "evidence_sha256": "9f824af4a558c385d20a32e31d6fdc7242f18aa17694b682e97a5a9cdcf0d6f8"
         }
       },
       "status": "ANALYZED"
@@ -59599,7 +59609,7 @@
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004c5f00-frida-runtime.json",
-          "evidence_sha256": "2dc91be5941feadf992e61a356aaf07b7a55a757da547dc961fdc779180ea97e"
+          "evidence_sha256": "2d7162121ec69f7eb24ea751c7d475845119bcfb100eefb06ffef68286fece55"
         }
       },
       "status": "ANALYZED"

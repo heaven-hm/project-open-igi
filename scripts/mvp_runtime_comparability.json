@@ -20,6 +20,14 @@
     "0x004B5B30": {
       "comparable": false,
       "reason": "the return value is a hash of the path argument, so its class is the class of whichever path was hashed. The two runs hash different paths, so class-set equality is not a meaningful criterion; the paired observation proves only that both images reached the native."
+    },
+    "0x00463180": {
+      "comparable": false,
+      "reason": "retail 0x00463180 is `mov eax,[esp+4]; mov al,[eax+0x33d]; ret`: it returns the human pointer with its low byte replaced by the crouch flag, so EAX still carries the caller's pointer bits and the class reflects the caller's data rather than a value the native computes. The port returns the flag byte as std::uint8_t; callers read AL only, which is equivalent. Class-set equality is therefore not a behavioural criterion here, only reachability."
+    },
+    "0x00465820": {
+      "comparable": false,
+      "reason": "retail 0x00465820 writes the eye vector into the caller's output buffer and never assigns EAX on any path, so the observed return is whatever its last `mov eax,[edi+0x2c]` copied out of the human record - caller data, not a result. The ported body is void for the same reason. Only reachability is meaningful."
     }
   }
 }

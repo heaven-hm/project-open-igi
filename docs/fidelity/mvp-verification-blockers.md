@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 35 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 37 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 35 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 37 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -647,3 +647,23 @@ Three more, taken once the dispatch record is live rather than before it:
   in one call. Its body tolerates the null debug/source arguments the pass passes.
 
 Verified count 32 -> 35, paired matches 36 -> 39, mismatches stay 0, candidate-unreachable 55 -> 52.
+
+## The human eye natives: a return class that belongs to the caller
+
+`Human_IsCrouched` (0x00463180) and `Human_CameraEyePosition` (0x00465820) operate on fixed offsets
+inside the human record, so the pass runs them on a zeroed record of the documented size. Both now match.
+
+Their retail return classes needed a different explanation than a behavioural one. Disassembly of the
+retail bodies shows:
+
+* `0x00463180` is `mov eax,[esp+4]; mov al,[eax+0x33d]; ret`. It returns the human pointer with its low
+  byte replaced by the crouch flag, so EAX still carries the caller's pointer bits. Callers read AL, and
+  the port returns exactly that byte as `std::uint8_t`, which is equivalent; the class in the capture
+  reflects the caller's data, not a value the native computes.
+* `0x00465820` writes the eye vector into the caller's buffer and never assigns EAX on any path - the
+  observed value is whatever its last `mov eax,[edi+0x2c]` copied out of the human record. The ported
+  body is `void` for the same reason.
+
+Both therefore take comparability overrides recording that the class is caller data and that reachability
+is the only meaningful criterion. Verified count 35 -> 37, paired matches 39 -> 41, mismatches 0,
+candidate-unreachable 52 -> 50.
