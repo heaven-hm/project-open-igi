@@ -1350,3 +1350,41 @@ evidence), so no neighbouring record on that file had to be re-evidenced.
 
 Verified count 77 -> 78. All three twin-bound records from the round-116 audit are now verified reproducibly in this
 tree (0x00491D40, 0x00497D70, 0x004B0F80).
+
+## Round 123: the remaining set is transcription-bound, not harness-bound
+
+An attempt to verify the last three runtime-observable natives ended with a correction to an earlier conclusion and
+a precise map of what blocks the other 42. No native was promoted, and describing the set as "evidence plumbing" was
+wrong: plumbing is now solved (the support-source model, the paired capture, the canonical trace), and what remains
+is missing retail semantics.
+
+**Flow_RunHandler: the wall is the port's scope, not SJLJ.** Round 120 recorded the blocker as angr being unable to
+decode the candidate's gcc SJLJ registration. That is true but secondary. The retail body is 1213 bytes with two
+`ret` sites, both of which return whatever a preceding callee returned (0x004010A0 or 0x00406220); the observed
+`null` class came from those callees returning 0. The port deliberately *throws* on the four retail branches it does
+not model (state byte at 0x005C8E00, the two pause flags, and `ticks <= total`), so even if the SJLJ registration
+were hooked away, a differential run would compare retail's 0 against the candidate's exception on every reachable
+input. Verifying this native requires transcribing the flow state machine, not a better harness.
+
+**Terrain_LoadTexturesAndLightmaps: a real fidelity gap that must not be fixed blind.** The paired capture reports
+retail `{small:10}` against candidate `{small:1}`. The retail tail explains it: the body ends by calling 0x004B6380
+with the address of the lightmap-stack scratch variable and returns that call's result, which is the number of
+lightmap pages registered (10 for the level-5 presentation). The port's host bridge returns the boolean success of
+`Terrain_LoadLightmaps`. The correct transcription is the page count, but a rebuilt candidate invalidates the
+candidate digest every Frida report is bound to, and this body cannot be replayed under angr (it performs file I/O
+and D3D uploads through 0x004B23B0/0x004B2610/0x004B2670), so the fix would be a blind change with no evidence that
+its 10 matches retail's 10 in any other scenario. It stays recorded as a scope gap.
+
+**The 42 remaining, by what would actually unblock them:**
+
+| group | count | what unblocks it |
+|---|---|---|
+| retail never calls it at level 5 (menu, config, camera, FPU, error paths, `Main`) | 24 | a retail scenario that reaches those paths - another level, a menu, a shutdown/reload drive - not a harness change |
+| candidate never calls it; retail class known | 10 | fixture calls, but each must not add a return class to an already-verified callee (the `DynObj_LoadPackageMeshes` precedent); three are 4-6 KB ANALYZED stubs that throw and need transcription first |
+| observed, class sets differ (`Terrain_LoadTexturesAndLightmaps` 10 vs 1; `Flow_RunHandler`) | 2 | transcription of the retail semantics, then a rebuild and a fresh paired capture |
+| source exists but is not linked into the build | 5 | build/link plumbing for the translation units |
+| observed and matched, needing only a replayable runner | 1 (`Terrain_Load`) | the body loads files and models, so angr cannot replay either side; needs a host-side differential that is still end-to-end |
+
+That last group is why the count is not growing: everything cheap has been verified. The next increase requires one
+of the three expensive commitments - transcribe a large body, drive retail into new scenarios, or extend the
+evidence model to cover host-side I/O - and each is a multi-round project rather than a harness fix.
