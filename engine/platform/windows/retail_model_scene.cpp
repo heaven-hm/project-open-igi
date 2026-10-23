@@ -2743,6 +2743,35 @@ int RunRetailModelScene(HINSTANCE instance,
             }
         }
 
+        // DynObj_LoadPackageLovs and DynObj_LoadPackagePalettes. Retail returned a chunk payload pointer for both,
+        // so each fixture builds a FORM whose first chunk is the searched tag (stored as the big-endian form of the
+        // tag constant) with a non-positive entry count.
+        {
+            alignas(16) std::uint8_t lovs_form[0x40]{};
+            std::memcpy(lovs_form, "FORM", 4);
+            const std::uint8_t form_size_be[4] = {0, 0, 0, 0x10};
+            std::memcpy(lovs_form + 4, form_size_be, 4);
+            std::memcpy(lovs_form + 8, "TEST", 4);
+            std::memcpy(lovs_form + 0x0C, "SVOL", 4);
+            const std::uint8_t chunk_size_be[4] = {0, 0, 0, 4};
+            std::memcpy(lovs_form + 0x10, chunk_size_be, 4);
+            std::uint8_t lovs_context[0x100]{};
+            *reinterpret_cast<std::uint32_t*>(lovs_context + 0x08) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(lovs_form));
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageLovs(lovs_context));
+
+            alignas(16) std::uint8_t palf_form[0x40]{};
+            std::memcpy(palf_form, "FORM", 4);
+            std::memcpy(palf_form + 4, form_size_be, 4);
+            std::memcpy(palf_form + 8, "TEST", 4);
+            std::memcpy(palf_form + 0x0C, "PALF", 4);
+            std::memcpy(palf_form + 0x10, chunk_size_be, 4);
+            std::uint8_t palf_context[0x100]{};
+            *reinterpret_cast<std::uint32_t*>(palf_context + 0x08) =
+                static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(palf_form));
+            static_cast<void>(igi::retail::dynobj::DynObj_LoadPackagePalettes(palf_context));
+        }
+
         // TextureModifier_Push. Retail returned scratch+1 for eight accepted pushes, so the fixture replays eight
         // accepted pushes with scratch values 0..7 and reproduces the observed class set {1..8}.
         {

@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 73 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 75 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 73 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 75 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1224,3 +1224,33 @@ Three traps cost time here and are worth writing down:
    the global is not part of the comparison rather than pretending to check it.
 
 Verified count 71 -> 73; paired matches 77 -> 79; candidate-unreachable 14 -> 12; mismatches 0.
+
+## The DynObj package loaders: two verified, one unreachable by construction
+
+`DynObj_LoadPackageLovs` (0x004CF630) and `DynObj_LoadPackagePalettes` (0x004CF870) locate a chunk inside
+`*(context + 0x08)` with Ilff_FindFormChunk and return the chunk payload pointer. Both are verified now; the
+fixtures build a FORM container whose first chunk is the searched tag with a non-positive entry count, which
+reproduces retail's `{ptr}` class exactly for each.
+
+`DynObj_LoadPackageMeshes` (0x004CF330) cannot be verified this way and was left alone: the port dereferences the
+lookup result unconditionally, so the only input that yields retail's observed `null` class (a missing `MODS`
+chunk) faults. Retail survives that through its fault handler; the port has no equivalent, so the honest position is
+that this native needs a modelled-miss path in the port before it can be replayed at all.
+
+Three traps, all of which produced plausible-looking results:
+
+1. **Big-endian tag bytes are the big-endian form of the constant, not the reversed ASCII.** `Ilff_FindFormChunk`
+   compares `bswap32(stored)` with the tag constant. For `'LOVS'` (0x53564F4C) the stored bytes are `SVOL`, but my
+   first attempt wrote `tag[::-1]`, which happens to be right for LOVS and wrong for `'PALF'` (0x50414C46, stored
+   ASCII `PALF`). The first palettes run therefore returned null in every case and "passed" - a comparison that
+   agreed only because both sides found nothing. A harness that never exercises the positive path is not evidence;
+   after fixing the layout the cases return `ptr` and the null boundary is the absent-chunk case.
+2. **Duplicate case ids silently corrupt the gate's recomputation.** Two LOVS cases differed only in form type,
+   which the id format omitted, so the gate deduplicated them and recomputed 7/1 against an 8/8 artifact. The
+   behavioral artifact looked fine standalone; the gate is what caught it. Case ids must be unique across all
+   distinguishing inputs.
+3. **Pointer returns cannot be compared as numbers** across two processes; both runners compare a pointer class
+   (`ptr`/`null`) and say so in the method, with the state writes (count at +0x44, palette pointer at +0x3C) carried
+   as separate observables where the port actually writes them.
+
+Verified count 73 -> 75; paired matches 79 -> 81; candidate-unreachable 12 -> 10; mismatches 0.

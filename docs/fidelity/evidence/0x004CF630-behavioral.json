@@ -1,24 +1,308 @@
 {
- "address": "0x004CF630",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004CF630",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+  "method": "Retail and the compiled candidate run the same form lookup over identical FORM layouts, and the lookup result is compared as a pointer class ('ptr' or 'null') because two processes cannot share addresses; the form layout, entry count and chunk order vary across the cases.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004CF630",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "f8c9193160919d2d7b82e64d31662d176e5c29eafb5e26829932490998cc0cfa"
+  },
+  "cases": [
+    {
+      "id": "present-1-count-0-type-54534554-filler-00",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": 0,
+          "form_type": 1414743380,
+          "filler_before": false,
+          "filler_after": false
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count--1-type-54534554-filler-00",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": -1,
+          "form_type": 1414743380,
+          "filler_before": false,
+          "filler_after": false
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count-0-type-00000000-filler-00",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": 0,
+          "form_type": 0,
+          "filler_before": false,
+          "filler_after": false
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count-0-type-54534554-filler-10",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": 0,
+          "form_type": 1414743380,
+          "filler_before": true,
+          "filler_after": false
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count--1-type-54534554-filler-11",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": -1,
+          "form_type": 1414743380,
+          "filler_before": true,
+          "filler_after": true
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-0-count-0-type-54534554-filler-00",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": false,
+          "entry_count": 0,
+          "form_type": 1414743380,
+          "filler_before": false,
+          "filler_after": false
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": "null",
+        "state_delta": {
+          "returned_pointer_class": "null"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "null",
+        "state_delta": {
+          "returned_pointer_class": "null"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count-0-type-41414141-filler-11",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": 0,
+          "form_type": 1094795585,
+          "filler_before": true,
+          "filler_after": true
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
+    },
+    {
+      "id": "present-1-count--2-type-00000000-filler-01",
+      "input": {
+        "args": [
+          "0x6000"
+        ],
+        "initial_state": {
+          "chunk_present": true,
+          "entry_count": -2,
+          "form_type": 0,
+          "filler_before": false,
+          "filler_after": true
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      },
+      "candidate_output": {
+        "return_value": "ptr",
+        "state_delta": {
+          "returned_pointer_class": "ptr"
+        },
+        "side_effects": []
+      }
     }
-   },
-   "note": "The candidate DynObj_LoadPackageLovs reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/dynobj_package_lovs_diff_runner.py",
+    "sha256": "c28b148facc87b9dda1adba2d9828c04e547994f625ceab37ba70cb1e05e7997",
+    "command": [
+      "scripts/dynobj_package_lovs_diff_runner.py",
+      "--address",
+      "0x004CF630",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "--implementation-sha256",
+      "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+      "--root",
+      "."
+    ]
   }
- ]
 }
