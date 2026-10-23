@@ -50702,9 +50702,9 @@
         "limitations": [
           "The reviewed scope is the single start-up call from main (0x0048F5F4); the function has no other path.",
           "CFG evidence is retail-image structure only: Binary Ninja and Radare2 independently recover the same one-block retail graph, and cfg_similarity 1.0 measures their agreement, not candidate-versus-retail similarity.",
-          "Candidate structural equivalence rests on the identical one-block load/store/return shape, confirmed in the fresh -O3 object (e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883); the previous linked image predates the AppTitle sibling global and the current revision was not relinked.",
+          "Candidate structural equivalence rests on the identical one-block load/store/return shape, confirmed in the current linked candidate image 29e08351fcdedfd64a658c8cef36461b1f3dcad24bf92ebcb0d171cb8a2479e7 (its receipt 7b4faab99eaba7ab26dd61760b1c9ee168cb4c491e385948d4a3c7071f50657b binds this source and header) and the -O3 object (e2dad9571a80b7071a3e179419dbf35febaf29ecc36faec0851142a12dc73883); objdump shows the linked body at 0x0041E830 as 8b 44 24 04; a3 c0 8b 5d 00; c3 with the store resolved to the candidate CommandLine global.",
           "The isolated differential runner scripts/native_diff_runner.py has a 0x0048F0C0 case: ten 32-bit pointer-bit inputs against the retail ESIL bytes and the current candidate, comparing return bits, the mapped global store and untouched neighboring state. It passed 10/10 when re-run on the current revision (337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a). This is emulator/host evidence, not a live game process.",
-          "The shared translation unit now also defines AppTitle for retail 0x005C8BD4, which changes link-time .bss offsets (AppTitle +0x0, InstanceHandle +0x4, CommandLine +0x8); the StoreCommandLine body and its global mapping are unchanged."
+          "The shared translation unit now also defines AppTitle for retail 0x005C8BD4, which changes link-time .bss offsets; the current linked image carries AppTitle 0x005D8BB8, InstanceHandle 0x005D8BBC and CommandLine 0x005D8BC0. The StoreCommandLine body and its global mapping are unchanged."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -50740,11 +50740,43 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-semantic-review.json",
-          "evidence_sha256": "0ea79bf3f0156283de15e4fafd0be69b7a42c3eabf224d1a52f9623540d65010"
+          "evidence_sha256": "4af6bb30208d3a2d7ef69c847f8013701ef32f5d7107d58f2db69618fbd88062"
+        },
+        "runtime_contract": {
+          "authority": "docs/fidelity/evidence/0x0048F0C0-semantic-review.json",
+          "authority_sha256": "4af6bb30208d3a2d7ef69c847f8013701ef32f5d7107d58f2db69618fbd88062",
+          "scope": "startup-command-line-store",
+          "probe_path": "scripts/frida_store_command_line_typed.js",
+          "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+          "actions_path": "scripts/frida_scenario_actions.js",
+          "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+          "required_observables": {
+            "inputs": [
+              "command_line",
+              "command_line_state"
+            ],
+            "outputs": [
+              "return_aliases_argument",
+              "return_is_null",
+              "return_matches_stored",
+              "return_text"
+            ],
+            "sideEffects": [
+              "previous_command_line",
+              "previous_command_line_state",
+              "stored_command_line",
+              "stored_command_line_state",
+              "stored_aliases_argument"
+            ]
+          },
+          "no_arguments": false,
+          "no_return": false,
+          "no_side_effects": false,
+          "note": "Digest-bound mirror of the reviewed contract in the semantic-review artifact, which remains authoritative and feeds the gate. The probe/actions digests were recomputed from the files on disk; every required observable name exists in the typedState emitted by that probe. No paired runtime capture exists yet, so this contract authorizes a capture but is not runtime evidence."
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-build.json",
-          "evidence_sha256": "bb8939e8610fbde53952d22a4b9bbec4eaf80a77c9bafa257b67bf87bccfca2b"
+          "evidence_sha256": "de8772fc9a4a96d5bca79029c3a07ebd78d004e8e4281db6140b2d73058e0d72"
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x0048F0C0-behavioral.json",

@@ -12,8 +12,16 @@
   "reviewed": true,
   "reviewed_by": "Automated source-semantic review by the delegated coding agent against live Binary Ninja 6.0.10601 (MCP), Radare2 6.2.0 and angr 10.0.4.post1 CFGFast",
   "reviewed_at": "2026-10-22T22:35:00Z",
-  "source_revision": "f674b36b3441561549e9db680c26373f00556f15",
-  "review_basis": "The working-tree revision of engine/src/retail/core/app_startup_natives.cpp read for this report hashes to 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and its header hashes to 790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50; both are the digests bound here. The report was rebound after the sibling fix that corrected the shared file's 0x0048F0B0 getter to read a distinct AppTitle global (retail 0x005C8BD4) instead of the InstanceHandle global; the StoreCommandLine body below is unchanged from the earlier review. The retail body was re-disassembled and re-decompiled through the live Binary Ninja MCP view, re-recovered through Radare2 6.2.0, and independently recovered by angr CFGFast at the exact entry. This report supersedes earlier reviews bound to 281a6628..., which is no longer the current source.",
+  "source_revision": "0f0be33ea6143141609e053d5f1f55810e84611e",
+  "review_basis": "The working-tree revision of engine/src/retail/core/app_startup_natives.cpp read for this report hashes to 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and its header hashes to 790a989331d01be1a96fe9e7136374f2f524d6f5f216a9f3e1a534c0ad026b50; both are the digests bound here. The report was rebound after the sibling fix that corrected the shared file's 0x0048F0B0 getter to read a distinct AppTitle global (retail 0x005C8BD4) instead of the InstanceHandle global; the StoreCommandLine body below is unchanged from the earlier review. The retail body was re-disassembled and re-decompiled through the live Binary Ninja MCP view, re-recovered through Radare2 6.2.0, and independently recovered by angr CFGFast at the exact entry. This report supersedes earlier reviews bound to 281a6628..., which is no longer the current source. The runtime_contract probe binding was subsequently refreshed from 13e12c15... to the repaired typed probe 6ed5dd51... (see contract_rebind); the reviewed source semantics are unchanged.",
+  "contract_rebind": {
+    "performed_at": "2026-10-23T00:16:19Z",
+    "previous_probe_sha256": "13e12c15a42755195063a26cea27ad8988804c6f7c1b428844abab5421cac986",
+    "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
+    "actions_sha256_recomputed": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+    "reason": "The previous probe digest bound a version that read args.length and threw 'RangeError: invalid array index' on the Frida 17.24.0 ia32 endpoint before any observation. The repaired probe reads explicit cdecl argument indices with an independent [esp+4] fallback and emitted typed observations on retail for 0x0048F0C0. Rebinding the reviewed contract to the probe bytes actually on disk does not change any reviewed source semantics.",
+    "observable_recheck": "Re-read of scripts/frida_store_command_line_typed.js at the bound digest: its 'observed' typedState emits inputs {command_line, command_line_state, argument_reads}, outputs {return_aliases_argument, return_aliases_argument_state, return_is_null, return_matches_stored, return_text}, and sideEffects {previous_command_line, previous_command_line_state, stored_command_line, stored_command_line_state, stored_aliases_argument, stored_aliases_argument_state}. Every name in required_observables below is present in that emitted set; no required name was added for a field the probe does not emit."
+  },
   "evidence": {
     "binary_ninja": {
       "tool": "Binary Ninja 6.0.10601 free, UI MCP 0.1.0",
@@ -91,15 +99,15 @@
       "definition": "char const* CommandLine = nullptr;",
       "width_bytes": 4,
       "candidate_image": "build-clean-win32/igi1.exe",
-      "candidate_image_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
-      "candidate_va": "0x005D5BBC",
-      "candidate_image_note": "Previous linked candidate image; it predates the AppTitle global added by the 0x0048F0B0 fix, so its .bss offsets are historical and the current source has not been relinked."
+      "candidate_image_sha256": "29e08351fcdedfd64a658c8cef36461b1f3dcad24bf92ebcb0d171cb8a2479e7",
+      "candidate_va": "0x005D8BC0",
+      "candidate_image_note": "Current linked candidate image, rebuilt from the bound source with scripts/candidate_build_receipt.py; its receipt build-clean-win32/candidate-receipt.json (SHA-256 7b4faab99eaba7ab26dd61760b1c9ee168cb4c491e385948d4a3c7071f50657b) records this source digest. objdump at _StoreCommandLine (0x0041E830) shows 8b 44 24 04; a3 c0 8b 5d 00; c3, and nm places _CommandLine at 0x005D8BC0."
     },
-    "concurrent_edit_assessment": "The source was re-read after the sibling 0x0048F0B0 fix. The current digest is 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and the body still performs exactly the retail store-then-return; only the shared .bss layout changed (AppTitle .bss+0, InstanceHandle .bss+4, CommandLine .bss+8 in the fresh object), so this evidence is rebound to the current revision."
+    "concurrent_edit_assessment": "The source was re-read after the sibling 0x0048F0B0 fix. The current digest is 337c5d5726e7d7ddc366dcece75a990ccdf7b7d436a8cf15a930b12e911dba3a and the body still performs exactly the retail store-then-return; only the shared .bss layout changed (AppTitle .bss+0, InstanceHandle .bss+4, CommandLine .bss+8 in the fresh object), so this evidence is rebound to the current revision. The current linked image now carries that layout: AppTitle 0x005D8BB8, InstanceHandle 0x005D8BBC, CommandLine 0x005D8BC0."
   },
   "runtime_contract": {
     "scope": "startup-command-line-store",
-    "probe_sha256": "13e12c15a42755195063a26cea27ad8988804c6f7c1b428844abab5421cac986",
+    "probe_sha256": "6ed5dd5135fffcc709fdca491cc105557e6c45ec1545f45a97fe871052b79cda",
     "probe_path": "scripts/frida_store_command_line_typed.js",
     "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
     "actions_path": "scripts/frida_scenario_actions.js",
@@ -126,7 +134,7 @@
     "no_arguments": false,
     "no_return": false,
     "no_side_effects": false,
-    "note": "The contract requires retail and the staged candidate to be observed through the same probe before their primary thread resumes. Pointer values are process-local, so it compares designated text and typed relations rather than raw addresses. No such capture has been run for this record."
+    "note": "The contract requires retail and the staged candidate to be observed through the same probe before their primary thread resumes. Pointer values are process-local, so it compares designated text and typed relations rather than raw addresses. Every name in required_observables was re-checked against the bound probe digest 6ed5dd51... and appears in the typedState it sends; the required set is a subset of the emitted fields and contains nothing the probe does not emit. No paired capture has been run for this record."
   },
   "checks": [
     {
@@ -147,7 +155,7 @@
     {
       "name": "memory_layout_and_access",
       "result": "passed",
-      "rationale": "Retail performs exactly one 4-byte store to 0x005C8BC8 and reads no global. The current candidate performs exactly one 4-byte store of the argument to the 4-byte global CommandLine; the fresh -O3 object encodes the store as mov %eax,<dir32 .bss+8> (CommandLine). The previous linked image 596d15c4... placed CommandLine at 0x005D5BBC, but it predates the AppTitle global added by the sibling 0x0048F0B0 fix and the current source has not been relinked, so no current link-time VA is claimed. Access width and kind match, and the body touches no other memory."
+      "rationale": "Retail performs exactly one 4-byte store to 0x005C8BC8 and reads no global. The current candidate performs exactly one 4-byte store of the argument to the 4-byte global CommandLine. The current linked image build-clean-win32/igi1.exe (29e08351...) places _CommandLine at 0x005D8BC0 and disassembles _StoreCommandLine at 0x0041E830 as mov 0x4(%esp),%eax; mov %eax,0x5d8bc0; ret, so the store operand resolves to the candidate global as intended. Access width and kind match, and the body touches no other memory."
     },
     {
       "name": "calls_and_side_effects",
@@ -168,8 +176,8 @@
   "limitations": [
     "The reviewed scope is the single observed retail path; the function has no alternate or error path.",
     "The CFG evidence recorded for this native is retail-image structure: Binary Ninja and Radare2 independently recover the same one-block graph from igi.exe. The cfg_similarity value of 1.0 is the agreement of those two retail graphs, not a candidate-versus-retail score.",
-    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the linked candidate image and the fresh -O3 object) and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py, not on a paired runtime capture. A paired typed Frida capture of retail igi.exe and the staged candidate is still outstanding; this record does not claim runtime equivalence.",
-    "The candidate stores to its own mapped CommandLine global rather than retail 0x005C8BC8. The previous linked image 596d15c4... placed it at 0x005D5BBC, but the current source (which now also defines AppTitle) has not been relinked; the manifest runtime_layout maps retail 0x005C8BC8 to the candidate CommandLine symbol, and this review does not establish process-wide memory-layout equivalence.",
+    "Candidate structural equivalence rests on the identical one-block load/store/return shape (verified in the current linked candidate image 29e08351fcdedfd64a658c8cef36461b1f3dcad24bf92ebcb0d171cb8a2479e7, covered by receipt 7b4faab99eaba7ab26dd61760b1c9ee168cb4c491e385948d4a3c7071f50657b for this source, and in the fresh -O3 object) and the 10-case retail-vs-candidate differential in scripts/native_diff_runner.py, not on a paired runtime capture. A paired typed Frida capture of retail igi.exe and the staged candidate is still outstanding; this record does not claim runtime equivalence.",
+    "The candidate stores to its own mapped CommandLine global rather than retail 0x005C8BC8. The current linked image 29e08351... places CommandLine at 0x005D8BC0 (AppTitle 0x005D8BB8, InstanceHandle 0x005D8BBC); the manifest runtime_layout maps retail 0x005C8BC8 to the candidate CommandLine symbol, and this review does not establish process-wide memory-layout equivalence.",
     "The behavioral differential executes the retail bytes in the Radare2 ESIL emulator and the candidate as a host-built translation unit; neither game process was launched. It is not a live IGI.exe observation.",
     "This review checks source semantics, not byte identity. The compiled instruction sequence is recorded separately in the build report.",
     "The shared translation unit also implements 0x0048F0B0 and 0x0048F0D0. The 0x0048F0B0 fix added the AppTitle .bss symbol, which changes link-time offsets of the other globals; those siblings have their own records and are not claimed here."
