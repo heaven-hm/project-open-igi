@@ -556,6 +556,20 @@ static object is back - and the p
 
 aired capture is healthy again (21 observed, 16 matched).
 
-That rules out the cheap version of this alignment: the retail allocator cannot simply be handed a
-30-byte request at scene start. Whatever `Mem_Alloc` needs (heap state initialised by an earlier retail
-call, or a different argument pair) has to be established first, and the crash is the evidence.
+That first attempt threw on a null return, so it never told us whether `Mem_Alloc` itself worked. A
+second attempt instrumented the call instead of throwing:
+
+* `Mem_Alloc(0, 0x30)` **returns a block** - the scene log records "calling" and "returned a block" on
+  every run. The retail allocator is fine on the host; the default heap mode (0) takes the `malloc`
+  path. This also means `Mem_Alloc`, `Mem_AllocChunk`, `Mem_AllocateRawBlock` and `Mem_InitHeapState`
+  all execute at scene start and are observable in principle.
+* With that block installed as `Game_FrameDispatchRecord`, the scene **crashes in the first per-frame
+  dispatch**: Wine reports "Unhandled page fault on read access to 00000000" about half a second after
+  `Level_Start` completes, and the capture observes zero candidate calls. The static record does not
+  crash. The content is identical - the record is zeroed either way - so the difference has to be the
+  address, not the bytes: some retail-side consumer of the dispatch record requires it to live where
+  the port's static object lives (or at least not on the host heap).
+
+So the cheap alignment is ruled out for a *sharper* reason than the first time: not that the allocator
+fails, but that a heap-resident dispatch record crashes the first frame. Reverted to the static record;
+the paired capture is healthy again (21 observed, 16 matched, 0 mismatched).
