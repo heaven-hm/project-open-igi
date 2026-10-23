@@ -51018,7 +51018,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00402800-behavioral.json",
-          "evidence_sha256": "08b6f16ad348f25551322d7dcbdf3479bdb76861d859f753b04d05f7775fcbcd"
+          "evidence_sha256": "6b86dbaf375bb10ae3b6e4d8a0fc45079636f9f5fabe3819b45c2062cc5104b3"
         },
         "frida_runtime": {
           "status": "PASS",
@@ -51028,7 +51028,7 @@
         "runtime_tests": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00402800-behavioral.json",
-          "evidence_sha256": "08b6f16ad348f25551322d7dcbdf3479bdb76861d859f753b04d05f7775fcbcd",
+          "evidence_sha256": "6b86dbaf375bb10ae3b6e4d8a0fc45079636f9f5fabe3819b45c2062cc5104b3",
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8,
@@ -54228,7 +54228,7 @@
         "signature": "struct status_msg* InputPort_Process(void * context)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54238,7 +54238,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/flow_create_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -54253,7 +54253,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -54279,12 +54279,21 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004ED5C0-behavioral.json",
-          "evidence_sha256": "67cae36eb43048fcda670e2843e9657f800062d3784f569d4edf34be12e42f97"
+          "evidence_sha256": "22278df300c3a67c3470c0d70c5efb089ef02726e75fbbfe0fe98384f9c568c9"
         },
         "frida_runtime": {
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004ed5c0-frida-runtime.json",
           "evidence_sha256": "d4e3b7b5bc352584e09d7a9acca46f0afa14a875d97a571891bcee60c190f493"
+        },
+        "runtime_tests": {
+          "status": "PASS",
+          "evidence_path": "docs/fidelity/evidence/0x004ED5C0-behavioral.json",
+          "evidence_sha256": "22278df300c3a67c3470c0d70c5efb089ef02726e75fbbfe0fe98384f9c568c9",
+          "oracle": "retail-binary-execution",
+          "tests_passed": 8,
+          "tests_total": 8,
+          "result": "passed"
         }
       }
     },

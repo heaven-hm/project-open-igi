@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Differential replay of Flow_CreateHandler against the candidate build.
+"""Differential replay of the registrar-marshalling natives against the candidate build.
 
-Retail (0x00402800) loads the Flow class id from 0x00567C7C and calls the input-port registrar at
-0x004012A0 with the object, that class id and zero; the candidate calls its own registrar with the
-same arguments. Both registrars are replaced by the same constant model so the comparison isolates
-this native's argument marshalling and its returned register.
+Both natives are the same shape: load a 16-bit global, push the caller's object, that value and zero, then
+call the input-port registrar at 0x004012A0 and return its result through EAX. Each case seeds the 16-bit
+global and the registrar's modelled result, so the comparison isolates the argument marshalling and the
+returned register. The candidate executes at the linked address of its own compiled function with its own
+registrar and global replaced by the same models.
 """
 from __future__ import annotations
 
@@ -19,11 +20,15 @@ import subprocess
 import sys
 
 STOP_ADDRESS = 0x13370000
-RETAIL_FUNCTION = 0x00402800
-RETAIL_CALLEE = 0x004012A0
-RETAIL_CLASS_ID = 0x00567C7C
+RETAIL_REGISTRAR = 0x004012A0
 
-# (object pointer, class id, registrar result) - eight distinct marshalling inputs.
+# address -> (retail VA, retail 16-bit global, candidate function, candidate 16-bit global)
+NATIVES = {
+    "0x00402800": (0x00402800, 0x00567C7C, "Flow_CreateHandler", "QTask_FlowClassId"),
+    "0x004ED5C0": (0x004ED5C0, 0x00A5EFA0, "InputPort_Process", "InputPort_CurrentIndex"),
+}
+
+# (object pointer, 16-bit global value, registrar result) - eight distinct marshalling inputs.
 CASES = (
     (0x00001000, 0, 0),
     (0x00001000, 7, 0),
@@ -40,12 +45,8 @@ def digest(path: pathlib.Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def candidate_symbols(executable: pathlib.Path) -> dict[str, int]:
-    wanted = {
-        "Flow_CreateHandler": "::Flow_CreateHandler",
-        "QTask_RegisterInputPortHandler": "::QTask_RegisterInputPortHandler",
-        "QTask_FlowClassId": "::QTask_FlowClassId",
-    }
+def candidate_symbols(executable: pathlib.Path, function: str, global_name: str) -> dict[str, int]:
+    wanted = {"function": function, "registrar": "QTask_RegisterInputPortHandler", "global": global_name}
     result = subprocess.run(["i686-w64-mingw32-nm", "-C", str(executable)],
                             capture_output=True, text=True, timeout=600, check=False)
     if result.returncode != 0:
@@ -58,8 +59,11 @@ def candidate_symbols(executable: pathlib.Path) -> dict[str, int]:
         name = " ".join(parts[2:])
         base = name.split("(")[0].strip()
         for label, suffix in wanted.items():
-            plain = suffix.lstrip(":")
-            if label not in found and (base == plain or base.endswith("::" + plain)):
+            if label in found:
+                continue
+            # Globals may live in an anonymous namespace, so match their full demangled name too.
+            names = (base,) if label == "function" else (name, base)
+            if any(item == suffix or item.endswith("::" + suffix) for item in names):
                 found[label] = int(parts[0], 16)
     missing = set(wanted) - set(found)
     if missing:
@@ -71,7 +75,7 @@ def signed32(value: int) -> int:
     return value - (1 << 32) if value >= (1 << 31) else value
 
 
-def run_body(project, entry: int, callee: int, class_id_address: int, obj: int, class_id: int,
+def run_body(project, entry: int, callee: int, global_address: int, obj: int, global_value: int,
              registrar_result: int) -> dict:
     import angr
 
@@ -89,7 +93,7 @@ def run_body(project, entry: int, callee: int, class_id_address: int, obj: int, 
         cc=angr.calling_conventions.SimCCCdecl(project.arch),
         add_options={angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,
                      angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS})
-    state.memory.store(class_id_address, struct.pack("<H", class_id))
+    state.memory.store(global_address, struct.pack("<H", global_value))
     manager = project.factory.simgr(state)
     manager.explore(find=STOP_ADDRESS, n=64)
     if not manager.found:
@@ -97,7 +101,7 @@ def run_body(project, entry: int, callee: int, class_id_address: int, obj: int, 
     final = manager.found[0]
     return {
         "return_value": signed32(final.solver.eval(final.regs.eax)),
-        "state_delta": {"class_id_seeded": class_id},
+        "state_delta": {"index_seeded": global_value},
         "side_effects": ["call:QTask_RegisterInputPortHandler"],
     }
 
@@ -114,8 +118,9 @@ def main() -> int:
     args = parser.parse_args()
 
     address = "0x" + args.address[-8:].upper()
-    if address != "0x00402800":
+    if address not in NATIVES:
         raise SystemExit(f"unsupported native address: {args.address}")
+    retail_entry, retail_global, candidate_function, candidate_global = NATIVES[address]
     binary = args.binary.resolve()
     implementation = args.implementation.resolve()
     root = args.root.resolve()
@@ -136,27 +141,26 @@ def main() -> int:
             raise RuntimeError("angr unavailable")
         return subprocess.call([interpreter, __file__, *sys.argv[1:]])
 
-    symbols = candidate_symbols(candidate)
+    symbols = candidate_symbols(candidate, candidate_function, candidate_global)
 
     cases = []
     passed = failed = 0
-    for obj, class_id, registrar_result in CASES:
+    for obj, global_value, registrar_result in CASES:
         # angr keeps the first hook for an address, so each case loads fresh projects.
         retail_project = angr.Project(str(binary), auto_load_libs=False)
         candidate_project = angr.Project(str(candidate), auto_load_libs=False)
-        reference = run_body(retail_project, RETAIL_FUNCTION, RETAIL_CALLEE, RETAIL_CLASS_ID,
-                             obj, class_id, registrar_result)
-        observed = run_body(candidate_project, symbols["Flow_CreateHandler"],
-                            symbols["QTask_RegisterInputPortHandler"], symbols["QTask_FlowClassId"],
-                            obj, class_id, registrar_result)
+        reference = run_body(retail_project, retail_entry, RETAIL_REGISTRAR, retail_global,
+                             obj, global_value, registrar_result)
+        observed = run_body(candidate_project, symbols["function"], symbols["registrar"],
+                            symbols["global"], obj, global_value, registrar_result)
         matches = reference == observed
         passed, failed = (passed + 1, failed) if matches else (passed, failed + 1)
         cases.append({
-            "id": f"object-{obj:08x}-class-{class_id}-result-{registrar_result}",
+            "id": f"object-{obj:08x}-index-{global_value}-result-{registrar_result}",
             "input": {"args": [f"0x{obj:08X}"],
-                      "initial_state": {"flow_class_id": class_id,
+                      "initial_state": {"seed_global": global_value,
                                         "registrar_result": registrar_result}},
-            "categories": ["boundary"] if obj in (0, 0xDEAD0000) or class_id in (0, 0xFFFF) else ["nominal"],
+            "categories": ["boundary"] if obj in (0, 0xDEAD0000) or global_value in (0, 0xFFFF) else ["nominal"],
             "reference_output": reference,
             "candidate_output": observed,
         })
@@ -171,8 +175,8 @@ def main() -> int:
         "binary_sha256": args.binary_sha256,
         "implementation_sha256": args.implementation_sha256,
         "method": ("Retail and the compiled candidate both execute the native with the input-port registrar "
-                   "replaced by the same constant model; the marshalled class id, the registrar result and "
-                   "the returned register are compared across eight object/class-id combinations."),
+                   "replaced by the same constant model; the seeded 16-bit global, the registrar result and the "
+                   "returned register are compared across eight object/seed combinations."),
         "observable_fields": ["return_value", "state_delta", "side_effects"],
         "float_tolerance": {"absolute": 0, "relative": 0},
         "tests_total": len(cases),

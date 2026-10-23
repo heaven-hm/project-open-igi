@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 56 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 57 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 56 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 57 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -877,3 +877,21 @@ The render-method dispatch through the table at 0x00A94E84 remains unimplemented
 zero, which takes the same path in both.
 
 Verified count 55 -> 56; candidate-unreachable still 28; mismatches 0.
+
+## One runner, two natives
+
+`InputPort_Process` (0x004ED5C0) is the same shape as `Flow_CreateHandler` (0x00402800): read a 16-bit global,
+push the caller's object, that value and zero, call the registrar at 0x004012A0, return its result. Rather than
+copy the runner, `scripts/flow_create_diff_runner.py` now dispatches both addresses from a table - retail entry,
+retail global, candidate function and candidate global - so the second native cost one table row and no new
+differential logic.
+
+Eight object/seed/result combinations run per native with the registrar replaced by the same constant model on
+both sides. Both pass 8/8. `Flow_CreateHandler`'s artifact was regenerated against the generalised runner so its
+stored report and the runner file stay consistent.
+
+The paired capture still compares `InputPort_Process` by reachability: the registrar allocates a port record and
+can invoke a registered handler, so the returned register depends on allocator and handler-table state that
+differs between the two processes. Argument marshalling and the returned register are what the runner proves.
+
+Verified count 56 -> 57; candidate-unreachable still 28; mismatches 0.

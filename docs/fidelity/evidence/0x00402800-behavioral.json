@@ -7,7 +7,7 @@
   "address": "0x00402800",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "implementation_sha256": "75ec23f4e6e88359d18b25a0df5099affcc81e54f5ac323f053454f2248480c4",
-  "method": "Retail and the compiled candidate both execute the native with the input-port registrar replaced by the same constant model; the marshalled class id, the registrar result and the returned register are compared across eight object/class-id combinations.",
+  "method": "Retail and the compiled candidate both execute the native with the input-port registrar replaced by the same constant model; the seeded 16-bit global, the registrar result and the returned register are compared across eight object/seed combinations.",
   "observable_fields": [
     "return_value",
     "state_delta",
@@ -26,17 +26,17 @@
     "version": "10.0.4.post1",
     "function_entry": "0x00402800",
     "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-    "candidate_sha256": "70c8b8c1e881ead70872a27262a3dc5eec1e92a80507b8b977711af9d11f1eeb"
+    "candidate_sha256": "4aec7df79d08a92a338f366f3fd6c7cf4efea18936c1a0c39d2139b62f535f56"
   },
   "cases": [
     {
-      "id": "object-00001000-class-0-result-0",
+      "id": "object-00001000-index-0-result-0",
       "input": {
         "args": [
           "0x00001000"
         ],
         "initial_state": {
-          "flow_class_id": 0,
+          "seed_global": 0,
           "registrar_result": 0
         }
       },
@@ -46,7 +46,7 @@
       "reference_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 0
+          "index_seeded": 0
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -55,7 +55,7 @@
       "candidate_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 0
+          "index_seeded": 0
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -63,13 +63,13 @@
       }
     },
     {
-      "id": "object-00001000-class-7-result-0",
+      "id": "object-00001000-index-7-result-0",
       "input": {
         "args": [
           "0x00001000"
         ],
         "initial_state": {
-          "flow_class_id": 7,
+          "seed_global": 7,
           "registrar_result": 0
         }
       },
@@ -79,7 +79,7 @@
       "reference_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 7
+          "index_seeded": 7
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -88,7 +88,7 @@
       "candidate_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 7
+          "index_seeded": 7
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -96,13 +96,13 @@
       }
     },
     {
-      "id": "object-00002000-class-7-result-48879",
+      "id": "object-00002000-index-7-result-48879",
       "input": {
         "args": [
           "0x00002000"
         ],
         "initial_state": {
-          "flow_class_id": 7,
+          "seed_global": 7,
           "registrar_result": 48879
         }
       },
@@ -112,7 +112,7 @@
       "reference_output": {
         "return_value": 48879,
         "state_delta": {
-          "class_id_seeded": 7
+          "index_seeded": 7
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -121,7 +121,7 @@
       "candidate_output": {
         "return_value": 48879,
         "state_delta": {
-          "class_id_seeded": 7
+          "index_seeded": 7
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -129,13 +129,13 @@
       }
     },
     {
-      "id": "object-00002000-class-65535-result-1",
+      "id": "object-00002000-index-65535-result-1",
       "input": {
         "args": [
           "0x00002000"
         ],
         "initial_state": {
-          "flow_class_id": 65535,
+          "seed_global": 65535,
           "registrar_result": 1
         }
       },
@@ -145,7 +145,7 @@
       "reference_output": {
         "return_value": 1,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -154,7 +154,7 @@
       "candidate_output": {
         "return_value": 1,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -162,13 +162,13 @@
       }
     },
     {
-      "id": "object-00000000-class-1-result-0",
+      "id": "object-00000000-index-1-result-0",
       "input": {
         "args": [
           "0x00000000"
         ],
         "initial_state": {
-          "flow_class_id": 1,
+          "seed_global": 1,
           "registrar_result": 0
         }
       },
@@ -178,7 +178,7 @@
       "reference_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 1
+          "index_seeded": 1
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -187,7 +187,7 @@
       "candidate_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 1
+          "index_seeded": 1
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -195,13 +195,13 @@
       }
     },
     {
-      "id": "object-dead0000-class-65535-result-3735928559",
+      "id": "object-dead0000-index-65535-result-3735928559",
       "input": {
         "args": [
           "0xDEAD0000"
         ],
         "initial_state": {
-          "flow_class_id": 65535,
+          "seed_global": 65535,
           "registrar_result": 3735928559
         }
       },
@@ -211,7 +211,7 @@
       "reference_output": {
         "return_value": -559038737,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -220,7 +220,7 @@
       "candidate_output": {
         "return_value": -559038737,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -228,13 +228,13 @@
       }
     },
     {
-      "id": "object-00001000-class-65535-result-0",
+      "id": "object-00001000-index-65535-result-0",
       "input": {
         "args": [
           "0x00001000"
         ],
         "initial_state": {
-          "flow_class_id": 65535,
+          "seed_global": 65535,
           "registrar_result": 0
         }
       },
@@ -244,7 +244,7 @@
       "reference_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -253,7 +253,7 @@
       "candidate_output": {
         "return_value": 0,
         "state_delta": {
-          "class_id_seeded": 65535
+          "index_seeded": 65535
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -261,13 +261,13 @@
       }
     },
     {
-      "id": "object-00002000-class-1-result-48879",
+      "id": "object-00002000-index-1-result-48879",
       "input": {
         "args": [
           "0x00002000"
         ],
         "initial_state": {
-          "flow_class_id": 1,
+          "seed_global": 1,
           "registrar_result": 48879
         }
       },
@@ -277,7 +277,7 @@
       "reference_output": {
         "return_value": 48879,
         "state_delta": {
-          "class_id_seeded": 1
+          "index_seeded": 1
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
@@ -286,12 +286,31 @@
       "candidate_output": {
         "return_value": 48879,
         "state_delta": {
-          "class_id_seeded": 1
+          "index_seeded": 1
         },
         "side_effects": [
           "call:QTask_RegisterInputPortHandler"
         ]
       }
     }
-  ]
+  ],
+  "runner": {
+    "path": "scripts/flow_create_diff_runner.py",
+    "sha256": "691eae06c387124fb1515d523d137a7785ebebf7542636978bba86be7400a5a5",
+    "command": [
+      "scripts/flow_create_diff_runner.py",
+      "--address",
+      "0x00402800",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/core/flow.cpp",
+      "--implementation-sha256",
+      "75ec23f4e6e88359d18b25a0df5099affcc81e54f5ac323f053454f2248480c4",
+      "--root",
+      "."
+    ]
+  }
 }
