@@ -1762,3 +1762,29 @@ render/registration paths are the parallel branch's transcription lane), 16 reta
 Evidence rebind: every frida-runtime report was re-emitted from the new merged capture so the
 candidate digest in each record matches the rebuilt image; two spot checks (`frame_natives.cpp`
 0x0048F140, `sys_resource.cpp` 0x004B5C90) still pass the full strict gate.
+
+## Round 136: what the retail spawn capture can and cannot reach
+
+The round-133 conclusion that a spawned retail run observes nothing was wrong for a mundane reason:
+the spawn failed while a stray image still held the retail mutex. With no other `igi.exe` alive the
+same command (spawn suspended, install the probe, resume) observes 97 natives including the startup
+path, so the mutex rule is an operational prerequisite for spawn captures too, not just for the
+games themselves.
+
+What it does not reach is any of the 16 outstanding observation-blocked natives: the config graphic
+option cluster, `Loop_SetStatusByte`, `Camera_ResetMatrix`, `Matrix_InvalidateSlot`,
+`Camera_UpdateFogPalette`, `String_VFormat`, `Error_Show`, `Qvm_ReportError`,
+`Mem_InvokeNewHandler`, `App_ContextGetDebugged`. They are not startup natives.
+
+The key driver was rewritten as a timed timeline - in-game menu open, entry walk, select, option
+screen navigation, back out, help/status, movement, interact - rather than a round-robin sweep, and
+the capture confirms the synthetic keys land (Human_TaskViewReset still observes its single retail
+call). The menu walk still produces zero calls for every one of the 16. So either the in-game menu
+does not route to the graphic-option records (they may belong to the front end rather than the pause
+menu), or navigation needs pointer input rather than key presses. That is the open question for the
+config cluster; the error-path natives need a different lever entirely (an actual failure), and
+`Mem_InvokeNewHandler` an allocation failure.
+
+No record was promoted: verified stays at 92. The six mismatches this capture shows are scenario
+artifacts in already-verified natives (the run visits different states), so the canonical evidence
+base stays the round-135 merge, not this capture.

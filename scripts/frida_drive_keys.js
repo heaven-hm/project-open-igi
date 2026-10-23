@@ -37,17 +37,39 @@ function press(virtualKey) {
   }, 80);
 }
 
-// Tab / M / T / O / N are the candidate task and map views, F1 help, Esc the
-// pause menu, the arrows and WASD movement, Enter and E interaction, C crouch.
-const KEYS = [0x09, 0x4D, 0x54, 0x4F, 0x4E, 0x70, 0x49, 0x1B, 0x1B,
-              0x25, 0x27, 0x26, 0x28, 0x57, 0x41, 0x53, 0x44, 0x0D, 0x45, 0x43];
-let index = 0;
+// Timeline of (milliseconds after the level is up, keys) events. The sweep covers the
+// task and map views, the in-game menu (which is where the graphic-option records are
+// read and written), the option screens' own navigation, and movement/interaction.
+const TIMELINE = [
+  [10000, [0x09]],                                  // task view
+  [12000, [0x4D]],                                  // map computer
+  [14000, [0x1B]],                                  // in-game menu
+  [15200, [0x28]],                                  // move down one entry
+  [16400, [0x28]],
+  [17600, [0x0D]],                                  // open the selected entry
+  [19000, [0x27]],                                  // walk the option screens
+  [20200, [0x28]],
+  [21400, [0x25]],
+  [22600, [0x0D]],                                  // apply the highlighted value
+  [24000, [0x1B]],
+  [25200, [0x1B]],                                  // leave the menu
+  [26600, [0x70]],                                  // help
+  [27800, [0x49]],                                  // inventory/status
+  [29200, [0x57]], [29600, [0x41]], [30000, [0x53]], [30400, [0x44]],
+  [31800, [0x0D]],                                  // interact
+];
+const CYCLE_MS = 34000;
 
-function step() {
-  press(KEYS[index % KEYS.length]);
-  index += 1;
-  setTimeout(step, 1100);
+function runCycle() {
+  for (const [offset, keys] of TIMELINE) {
+    setTimeout(() => {
+      for (const key of keys) {
+        press(key);
+      }
+    }, offset);
+  }
+  setTimeout(runCycle, CYCLE_MS);
 }
 
 // Let the level finish loading before touching the keyboard.
-setTimeout(step, 10000);
+setTimeout(runCycle, 1000);
