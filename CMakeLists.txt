@@ -30,6 +30,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_0048f0e0.cpp
     engine/src/retail/core/native_0048f0f0.cpp
     engine/src/retail/core/native_0048f970.cpp
+    engine/src/retail/core/qtask_create_task.cpp
     engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/retail_main.cpp
     engine/src/retail/core/task_types.cpp

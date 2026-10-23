@@ -1,5 +1,6 @@
 #include "igi/retail/script/qvm_native_loader.hpp"
 
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/resource/is_resource_loaded.hpp"
@@ -18,11 +19,15 @@ std::int32_t g_5c8bf0 = 0;
 
 // Port-owned storage for `0x00A965A0` (Qvm_SetGlobalState), `0x00A96598`, `0x00A965A8`, `0x00A43E68`, `0x00A43E70`.
 std::int32_t g_a965a0 = -1;
-std::int32_t g_a96598 = 1;
-[[maybe_unused]] std::int32_t g_a965a8 = 0;
-std::int32_t g_a43e68 = 0;
+// The error-state pair is observable retail memory: 0x004B8970 writes 0x00A96598 and the
+// 0x004B8B00 reset clears 0x00A43E70/0x00A43E68. They are volatile so a single-translation-unit
+// build cannot constant-fold away Qvm_ReportError's flag store, disabled-state return and
+// callback branch just because this unit contains no writer for them.
+volatile std::int32_t g_a96598 = 1;
+[[maybe_unused]] volatile std::int32_t g_a965a8 = 0;
+volatile std::int32_t g_a43e68 = 0;
 
-QvmErrorCallbackFn g_a43e70 = nullptr;
+QvmErrorCallbackFn volatile g_a43e70 = nullptr;
 
 // Retail extension constants at `0x00547290` (".qvm") and `0x00547288` (".qas").
 constexpr char kExtQvm[5] = ".qvm";
@@ -144,11 +149,23 @@ char* String_FindExtension(char* dst, std::int32_t max_len, char* path)
     return result;
 }
 
+namespace {
+
+// Retail 0x004B7E74 is `jmp $` (bytes eb fe): the fallback diagnostic path never returns.
+// The self-jump is emitted explicitly so no optimizer can treat the loop as terminating.
+[[noreturn]] void Qvm_ReportErrorHalt() noexcept
+{
+    __asm__ __volatile__("1: jmp 1b");
+    __builtin_unreachable();
+}
+
+} // namespace
+
 // Native: Qvm_ReportError; retail VA 0x004B7E10; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7E10-0x004B7E76, 102 bytes, digest 3a498c19bab408f24ec62452e00b3aaf5ca8863717620b589f9c5004002f24e6.
-// Behavior/CFG: sets `g_a965a8 = 1`; if `g_a96598 == 0`, returns `0`; otherwise formats `format` + variadic args into a 0x400-byte buffer via String_VFormat (0x004A5702) and either invokes `g_a43e70(buf, g_a43e68)` when non-null or calls Error_Show(buf) (0x004AF7B0). radare2 6 blocks/6 edges; Binary Ninja 6 blocks; 100% structural agreement.
-// Status/limits: STRUCTURALLY_VERIFIED; high for exact error-flag store, callback branch, and Error_Show fallback.
+// Tools/evidence: Binary Ninja MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE; VA 0x004B7E10-0x004B7E76, 102 bytes, digest 3a498c19bab408f24ec62452e00b3aaf5ca8863717620b589f9c5004002f24e6; CLEAN/qvm/004B7E10-Qvm_ReportError.c.
+// Behavior/CFG: reads `g_a96598` and stores `g_a965a8 = 1`; if `g_a96598 == 0`, returns `0` (0x004B7E60-0x004B7E66); otherwise formats `format` + variadic args into a 0x400-byte stack buffer via String_VFormat (0x004A5702); when `g_a43e70` is non-null, returns `g_a43e70(buffer, g_a43e68)`; otherwise calls Debug_Error(buffer) (0x004AF7B0) with the buffer as its format argument and halts in the retail `jmp $`, so that path never returns. radare2 6 blocks/7 edges; Binary Ninja 6 blocks/7 edges; angr CFGFast 9 blocks/10 edges (it splits at calls), no unresolved jumps; 100% Binary Ninja/radare2 structural agreement.
+// Status/limits: BUILD_VERIFIED; the fallback now matches retail (Debug_Error with the formatted buffer, then a non-returning halt). The error-state globals are volatile so the compiled object keeps the retail flag store, disabled-state return and callback branch instead of constant-folding them. The retail display/exit callbacks installed by 0x00498900 (0x004988D0 MessageBoxA and 0x00498930 DebugBreak+exit) remain unported, so the candidate installs neither and its Debug_Error returns 0 on the no-callback path; the explicit self-loop reproduces the raw retail `jmp $` for that case. No paired retail/candidate runtime capture exists, so RUNTIME_TESTED/VERIFIED is not claimed.
 std::int32_t Qvm_ReportError(const char* format, ...)
 {
     const std::int32_t a96598_1 = g_a96598;
@@ -159,18 +176,26 @@ std::int32_t Qvm_ReportError(const char* format, ...)
         return a96598_1;
     }
 
-    char var_400[0x400]{};
+    // Retail leaves the 0x400-byte frame uninitialized; String_VFormat writes the text and NUL.
+    char var_400[0x400];
     std::va_list args;
     va_start(args, format);
     error::String_VFormat(var_400, format, args);
     va_end(args);
 
-    if (g_a43e70 != nullptr)
+    // Retail 0x004B7E43 loads the callback once into EAX and calls that same value.
+    const QvmErrorCallbackFn callback = g_a43e70;
+    if (callback != nullptr)
     {
-        return g_a43e70(var_400, g_a43e68);
+        return callback(var_400, g_a43e68);
     }
 
-    return error::Error_Show("%s", var_400);
+    // Retail 0x004B7E67-0x004B7E71: `lea eax,[esp]; push eax; call Debug_Error; add esp,4`.
+    // The buffer itself is the format argument; retail passes no substitution list here.
+    Debug_Error(var_400);
+
+    // 0x004B7E74: `jmp $`; this path never returns.
+    Qvm_ReportErrorHalt();
 }
 
 // Native: Qvm_Cleanup; retail VA 0x004B83D0; signature/calling convention unknown.
