@@ -4,9 +4,112 @@
  "result": "passed",
  "address": "0x004B7E10",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+ "implementation_sha256": "48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
  "executed": true,
- "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/script/qvm_native_loader.cpp -o /tmp/native-x86.o",
- "target": "Windows x86 (Intel 80386 COFF object)",
- "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+ "performed_at": "2026-10-23T08:23:05Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -std=gnu++20 -Wall -Wextra -c engine/src/retail/script/qvm_native_loader.cpp -o /tmp/taskb-build/qvm_native_loader.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG -std=gnu++20 -Wall -Wextra",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS (-O3 -DNDEBUG) and the engine/include include path; -std=gnu++20 matches the target cxx_std_20 feature; the compile exited 0 with no warnings."
+ },
+ "object": {
+  "path": "/tmp/taskb-build/qvm_native_loader.o",
+  "sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "size_bytes": 5377,
+  "format": "pe-i386 relocatable object",
+  "symbol": "igi::retail::script::Qvm_ReportError(char const*, ...)",
+  "symbol_offset": 320,
+  "symbol_size_bytes": 112,
+  "instruction_bytes": 109,
+  "function_bytes_hex": "a100000000c705180000000100000085c07505c38d74260081ec0c0400008d8424140400008d54240c894424088b84241004000089142489442404e800000000a1100000008d54240c85c074168b0d14000000891424894c2404ffd081c40c040000c3891424e800000000ebfe8d7600",
+  "symbol_size_note": "Range from the compiled object label to the next global text label (0x1b0), including 3 trailing alignment bytes; the instructions end with the retail self-jump at symbol+0x6b."
+ },
+ "in_tree_rebuild": {
+  "path": "build-clean-win32/CMakeFiles/igi.dir/engine/src/retail/script/qvm_native_loader.cpp.obj",
+  "sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "command": "make -C build-clean-win32 -f CMakeFiles/igi.dir/build.make CMakeFiles/igi.dir/engine/src/retail/script/qvm_native_loader.cpp.obj",
+  "note": "Only the affected object was rebuilt in the build tree; its digest equals the standalone -O3 build. The candidate executable was not relinked."
+ },
+ "compiled_disassembly": [
+  "00000140 <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz>:",
+  "     140:      \tmov\teax, dword ptr [0x0]",
+  "\t\t\t00000141:  IMAGE_REL_I386_DIR32\t.data",
+  "     145:      \tmov\tdword ptr [0x18], 0x1",
+  "\t\t\t00000147:  IMAGE_REL_I386_DIR32\t.bss",
+  "     14f:      \ttest\teax, eax",
+  "     151:      \tjne\t0x158 <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz+0x18>",
+  "     153:      \tret",
+  "     154:      \tlea\tesi, [esi + eiz]",
+  "     158:      \tsub\tesp, 0x40c",
+  "     15e:      \tlea\teax, [esp + 0x414]",
+  "     165:      \tlea\tedx, [esp + 0xc]",
+  "     169:      \tmov\tdword ptr [esp + 0x8], eax",
+  "     16d:      \tmov\teax, dword ptr [esp + 0x410]",
+  "     174:      \tmov\tdword ptr [esp], edx",
+  "     177:      \tmov\tdword ptr [esp + 0x4], eax",
+  "     17b:      \tcall\t0x180 <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz+0x40>",
+  "\t\t\t0000017c:  IMAGE_REL_I386_REL32\t__ZN3igi6retail5error14String_VFormatEPcPKcS2_",
+  "     180:      \tmov\teax, dword ptr [0x10]",
+  "\t\t\t00000181:  IMAGE_REL_I386_DIR32\t.bss",
+  "     185:      \tlea\tedx, [esp + 0xc]",
+  "     189:      \ttest\teax, eax",
+  "     18b:      \tje\t0x1a3 <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz+0x63>",
+  "     18d:      \tmov\tecx, dword ptr [0x14]",
+  "\t\t\t0000018f:  IMAGE_REL_I386_DIR32\t.bss",
+  "     193:      \tmov\tdword ptr [esp], edx",
+  "     196:      \tmov\tdword ptr [esp + 0x4], ecx",
+  "     19a:      \tcall\teax",
+  "     19c:      \tadd\tesp, 0x40c",
+  "     1a2:      \tret",
+  "     1a3:      \tmov\tdword ptr [esp], edx",
+  "     1a6:      \tcall\t0x1ab <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz+0x6b>",
+  "\t\t\t000001a7:  IMAGE_REL_I386_REL32\t_Debug_Error",
+  "     1ab:      \tjmp\t0x1ab <__ZN3igi6retail6script15Qvm_ReportErrorEPKcz+0x6b>",
+  "     1ad:      \tlea\tesi, [esi]"
+ ],
+ "relocations_in_symbol": [
+  "00000141 IMAGE_REL_I386_DIR32     .data",
+  "00000147 IMAGE_REL_I386_DIR32     .bss",
+  "0000017c IMAGE_REL_I386_REL32     __ZN3igi6retail5error14String_VFormatEPcPKcS2_",
+  "00000181 IMAGE_REL_I386_DIR32     .bss",
+  "0000018f IMAGE_REL_I386_DIR32     .bss",
+  "000001a7 IMAGE_REL_I386_REL32     _Debug_Error"
+ ],
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target and the changed symbol was read back. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 with no warnings and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_call_sequence",
+   "result": "passed",
+   "detail": "objdump -dr shows String_VFormat at 0x17b (relocation 0x17c), the indirect callback call eax at 0x19a, Debug_Error at 0x1a6 (relocation 0x1a7) and the self-jump at 0x1ab (bytes eb fe). The Error_Show(\"%s\", buffer) call and the returning epilogue that the previous object had are gone."
+  },
+  {
+   "name": "retail_paths_present",
+   "result": "passed",
+   "detail": "The object loads the disabled-state flag from .data, stores 1 to the error flag in .bss, returns 0 on the disabled branch, loads the callback pointer from .bss once and calls that cached value, and reaches the Debug_Error path only when it is null; the volatile error-state storage keeps these retail effects from being folded."
+  },
+  {
+   "name": "call_target_defined",
+   "result": "passed",
+   "detail": "The Debug_Error relocation resolves to _Debug_Error, which is defined in build-clean-win32/CMakeFiles/igi.dir/engine/src/retail/core/retail_error.cpp.obj; String_VFormat is defined in engine/src/retail/error/error_show.cpp. Both units are in the CMake igi target. No link was performed by this report."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image or receipt claim is made.",
+  "No runtime path was executed by this build report.",
+  "The same translation unit carries seven other native records whose stored implementation sha256 is now stale; only 0x004B7E10 is rebound by this task."
+ ]
 }

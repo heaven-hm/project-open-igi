@@ -3,7 +3,7 @@
  "kind": "behavioral-test-report",
  "address": "0x004B8A10",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+ "implementation_sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
  "executed": true,
  "oracle": "retail-binary-execution",
  "method": "Retail bytes execute under unicorn x86-32; the candidate is compiled with i686-w64-mingw32-g++ and run under CrossOver. Each case compares the returned dword and the stored global at 0x00A965A0, read back through Qvm_GetLastPopStack23Value, so the store itself is compared.",

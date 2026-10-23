@@ -4,59 +4,77 @@
  "result": "passed",
  "address": "0x0048F250",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "398a6c72a5949997605ff1f4219f7a5a99d054502752a80d1d60e55fac6e5371",
+ "implementation_sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/core/app_context.cpp hashes to b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x0048F250",
+  "name": "App_ContextGetTerrainLightmapsUsed",
+  "signature": "int32_t()",
+  "start": "0x0048F250",
+  "end": "0x0048F255",
+  "size_bytes": 6,
+  "basic_blocks": 1,
+  "edges": 0,
+  "cfg_similarity": 1.0,
+  "summary": "0x0048F250: 6 bytes, one block; loads the 32-bit terrain-lightmaps-used flag at 0x005C8BE8 and returns it."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/core/app_context.cpp",
+  "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
+  "summary": "App_ContextGetTerrainLightmapsUsed(): returns app_context_state.terrain_lightmaps_used, written by the matching setter.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_identity",
+   "name": "function_boundary",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x0048F250 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "detail": "Binary Ninja and Radare2 recover 6 bytes, 1 block/0 edges; cfg_similarity 1.0."
   },
   {
-   "name": "constants_and_scaling",
+   "name": "global_mapping",
    "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "detail": "Retail 0x005C8BE8 maps to the candidate terrain-lightmaps field."
   },
   {
-   "name": "argument_mapping",
+   "name": "behavioural_differential",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
-  },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "detail": "scripts/native_unicorn_runner.py: 8/8 returned values matched."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail takes no arguments and returns int32_t; the candidate returns the same 32-bit field from the port state. cdecl is preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x0048F250-binaryninja.json",
+   "evidence_sha256": "dceb27e65b62dfaa8b14327afa1a496478dee7b14e5305f7072ec0ea45538133",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x0048F250-radare2.json",
+   "evidence_sha256": "f3d35c7069a4e7ec8043da36c66992c25677863f332b8dcb573c8ce0b67c2623",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": "docs/fidelity/evidence/0x0048F250-behavioral.json",
+   "evidence_sha256": "905642e6e7e517ea6b023434e9242f726d9b39d57f39b3499118f87cad60e558",
+   "runner": "scripts/native_unicorn_runner.py",
+   "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+   "oracle": "retail-binary-execution",
+   "tests_passed": 8,
+   "tests_total": 8
+  }
+ },
+ "limitations": [
+  "No live paired runtime capture exists; the differential is Unicorn plus the compiled candidate.",
+  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
  ]
 }

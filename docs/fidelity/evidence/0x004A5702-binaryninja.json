@@ -2,10 +2,109 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x004A5702",
- "signature": "not restated",
+ "symbol": "String_VFormat",
+ "signature": "int32_t(char* arg1, char* arg2, int32_t arg3)",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "function": {
+  "start": "0x004A5702",
+  "end": "0x004A5752",
+  "size_bytes": 81,
+  "basic_blocks": 4,
+  "instruction_count": 36
+ },
+ "disassembly": [
+  "int32_t String_VFormat(char* arg1, char* arg2, int32_t arg3)",
+  "0x4a5702  // Sig: int String_VFormat(char* buffer, const char* format, va_list args)",
+  "0x4a5702  // Note: Bounded printf-style va_list formatter wrapper around the parser core",
+  "0x4a5702  // at 0x004A7720. Catalogued for direct ABI-aware use; no generic NativeHelper",
+  "0x4a5702  // wrapper is emitted. Ghidra/r2 CFG agreement: 4 basic blocks and 4 edges; see",
+  "0x4a5702  // assets/IGI1-Native-Name-Evidence.json.",
+  "0x4a5702  push    ebp",
+  "0x4a5703  mov     ebp, esp",
+  "0x4a5705  sub     esp, 0x20",
+  "0x4a5708  mov     eax, dword [ebp+0x8]",
+  "0x4a570b  push    esi",
+  "0x4a570c  push    dword [ebp+0x10]",
+  "0x4a570f  mov     dword [ebp-0x18], eax",
+  "0x4a5712  mov     dword [ebp-0x20], eax",
+  "0x4a5715  lea     eax, [ebp-0x20]",
+  "0x4a5718  push    dword [ebp+0xc]",
+  "0x4a571b  mov     dword [ebp-0x14], 0x42",
+  "0x4a5722  mov     dword [ebp-0x1c], 0x7fffffff",
+  "0x4a5729  push    eax",
+  "0x4a572a  call    _output",
+  "0x4a572f  add     esp, 0xc",
+  "0x4a5732  dec     dword [ebp-0x1c]",
+  "0x4a5735  mov     esi, eax",
+  "0x4a5737  js      0x4a5741",
+  "0x4a5739  mov     eax, dword [ebp-0x20]",
+  "0x4a573c  and     byte [eax], 0x0",
+  "0x4a573f  jmp     0x4a574e",
+  "0x4a5741  lea     eax, [ebp-0x20]",
+  "0x4a5744  push    eax",
+  "0x4a5745  push    0x0",
+  "0x4a5747  call    _flsbuf",
+  "0x4a574c  pop     ecx",
+  "0x4a574d  pop     ecx",
+  "0x4a574e  mov     eax, esi",
+  "0x4a5750  pop     esi",
+  "0x4a5751  leave",
+  "0x4a5752  retn"
+ ],
+ "pseudocode": "  int32_t String_VFormat(char* arg1, char* arg2, int32_t arg3)\n\n// Sig: int String_VFormat(char* buffer, const char* format, va_list args)\n// Note: Bounded printf-style va_list formatter wrapper around the parser core\n// at 0x004A7720. Catalogued for direct ABI-aware use; no generic NativeHelper\n// wrapper is emitted. Ghidra/r2 CFG agreement: 4 basic blocks and 4 edges; see\n// assets/IGI1-Native-Name-Evidence.json.\n{\n    int32_t var_2c = arg3;\n    char* var_1c = arg1;\n    char* var_24 = arg1;\n    int32_t var_18 = 0x42;\n    int32_t var_20 = 0x7fffffff;\n    int32_t result = _output(&var_24, arg2);\n    int32_t var_20_1 = var_20 - 1;\n\n    if (var_20 - 1 < 0)\n    {\n        int32_t var_30_1 = 0;\n        _flsbuf(&var_24);\n    }\n    else\n        *var_24 = 0;\n\n    return result;\n}",
+ "callers": [
+  {
+   "callsite": "0x4af7e9",
+   "caller": "Debug_Error (0x4af7b0 (x86))"
+  },
+  {
+   "callsite": "0x4af849",
+   "caller": "Warning_Show (0x4af810 (x86))"
+  },
+  {
+   "callsite": "0x4b7e3e",
+   "caller": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4baf48",
+   "caller": "Sys_FreeMemory_26 (0x4baf30 (x86))"
+  },
+  {
+   "callsite": "0x4bbc54",
+   "caller": "Log_Add (0x4bbc30 (x86))"
+  },
+  {
+   "callsite": "0x4bbea8",
+   "caller": "Sys_CheckHeap_26 (0x4bbe90 (x86))"
+  },
+  {
+   "callsite": "0x4bbf14",
+   "caller": "Sys_AllocateMemory_27 (0x4bbef0 (x86))"
+  },
+  {
+   "callsite": "0x4e76ef",
+   "caller": "TextWindow_vprintf (0x4e76e0 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4a572a",
+   "callee_address": "0x4a7720",
+   "callee": "_output (0x4a7720 (x86))"
+  },
+  {
+   "callsite": "0x4a5747",
+   "callee_address": "0x4a760b",
+   "callee": "_flsbuf (0x4a760b (x86))"
+  }
+ ],
  "cfg": {
+  "entry": "0x004A5702",
   "nodes": [
    {
     "address": "0x004A5702"
@@ -42,5 +141,10 @@
     "kind": "unconditional"
    }
   ]
- }
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+ ]
 }

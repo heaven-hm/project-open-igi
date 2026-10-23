@@ -6,7 +6,48 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
  "executed": true,
- "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/script/qvm_stack_natives.cpp -o /tmp/native-x86.o",
- "target": "Windows x86 (Intel 80386 COFF object)",
- "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+ "performed_at": "2026-10-23T07:06:09Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/script/qvm_stack_natives.cpp -o /tmp/taskb-build/qvm_stack_natives.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS and the engine/include include path."
+ },
+ "object": {
+  "path": "/tmp/taskb-build/qvm_stack_natives.o",
+  "sha256": "4267200eef46b6499013b16c240741559b1ea1333e066c431945fa83ecd4b3ea",
+  "size_bytes": 1027,
+  "format": "pe-i386 relocatable object",
+  "symbol": "igi::retail::script::Qvm_PushInteger(igi::retail::script::QvmNativeStatePrefix*, unsigned int)",
+  "symbol_offset": 0,
+  "symbol_size_bytes": 48,
+  "function_bytes_hex": "538b4424088b501c8b58288d4aff8b501889481c83ea018950188b4024c7048b010000008b4c240c890c905bc38d7600",
+  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding.",
+  "function_bytes_length": 48
+ },
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_sequence",
+   "result": "passed",
+   "detail": "The object label for igi::retail::script::Qvm_PushInteger(igi::retail::script::QvmNativeStatePrefix*, unsigned int) spans 48 bytes at offset 0x0; 48 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
+  "No runtime path was executed by this build report."
+ ]
 }

@@ -6,66 +6,81 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
  "reviewed": true,
- "reviewed_by": "Lead static review against Binary Ninja and Radare2 disassembly, plus the retail-execution differential report docs/fidelity/evidence/0x004BDA00-behavioral.json",
- "runtime_contract": {
-  "scope": "unicorn-retail-differential",
-  "oracle": "retail-binary-execution",
-  "evidence_path": "docs/fidelity/evidence/0x004BDA00-behavioral.json",
-  "required_observables": {
-   "inputs": [
-    "value_stack_index (state +0x18, int32)",
-    "type_stack_index (state +0x1C, int32)",
-    "value_stack and type_stack contents at the touched slot",
-    "pushed integer value (cdecl argument 2)"
-   ],
-   "outputs": [
-    "new value_stack_index",
-    "new type_stack_index",
-    "value word written to value_stack[new index]",
-    "type tag word written to type_stack[new index] (constant 1)"
-   ],
-   "sideEffects": [
-    "caller-provided QVM state: two index fields and two stack slots are overwritten"
-   ]
-  },
-  "no_side_effects": false,
-  "note": "The retail PE is emulated and the native is executed with the three cdecl arguments on the emulated stack; the same inputs are fed to the compiled candidate by the same runner. Stack indices and slot words are compared exactly. Caller state allocation, the QVM interpreter loop and opcode dispatch are outside this native's contract."
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/script/qvm_stack_natives.cpp hashes to 197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x004BDA00",
+  "name": "Qvm_PushInteger",
+  "signature": "int32_t(void* arg1, int32_t arg2)",
+  "start": "0x004BDA00",
+  "end": "0x004BDA29",
+  "size_bytes": 42,
+  "basic_blocks": 1,
+  "edges": 0,
+  "cfg_similarity": 1.0,
+  "summary": "0x004BDA00: decrements the type-stack index at +0x1C and the value-stack index at +0x18, stores tag 1 at type_base[new_index], stores the dword argument at value_base[new_index], and leaves the argument in EAX."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/script/qvm_stack_natives.cpp",
+  "sha256": "197990cc63cf72b6006c25640d2dd79fcab055973d132a36c6b919a9d9120bd6",
+  "summary": "void Qvm_PushInteger(QvmNativeStatePrefix*, std::uint32_t): performs the same two index decrements, stores 1 and the argument in the two stacks at the new indices, and is declared void.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_identity",
+   "name": "function_boundary",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both report the single function entry at 0x004BDA00 (Binary Ninja label Sys_PushStack_29) with a one-block CFG and no outgoing edges; the candidate implements exactly that entry and no sibling."
+   "detail": "Binary Ninja and Radare2 recover 10 bytes, 1 block/0 edges; cfg_similarity 1.0."
   },
   {
-   "name": "argument_mapping",
+   "name": "stack_updates",
    "result": "passed",
-   "rationale": "The retail instructions read the state pointer from [esp+4] and the 32-bit value from [esp+8] (cdecl); the candidate takes (QvmNativeStatePrefix* state, std::uint32_t value) in the same order. The retail leaves the pushed value in EAX, but every recovered caller discards the result, so the candidate declares void and the residual register is excluded from the compared contract."
+   "detail": "Both indices decrement by one; tag 1 and the value are written at the same effective indices with the same 4-byte width."
   },
   {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The only literal is the integer type tag 1U stored into the type stack, matching the retail immediate. The state field offsets used by the candidate (0x18, 0x1C, 0x24, 0x28) are the retail displacements; no scaling or shift is involved."
+   "name": "return_contract",
+   "result": "passed_with_limitation",
+   "detail": "Retail returns the argument in EAX; the candidate is void. The recovered callers consume the stack stores, not EAX."
   },
   {
-   "name": "memory_layout_and_access",
+   "name": "behavioural_differential",
    "result": "passed",
-   "rationale": "Retail writes [[state+0x28]+type_index*4] and [[state+0x24]+value_index*4] after the decrements; the candidate indexes type_stack[] and value_stack[] with the same 4-byte stride and the same slot order (type tag written first, then the value). Byte offsets inside the candidate struct differ on a 64-bit host, so the differential compares stack indices and slot words rather than raw struct offsets."
-  },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The retail native makes no call; its only side effects are the two index decrements and the two stack-slot writes into the caller-provided state. The candidate performs exactly those four writes and no others."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "There is no error path and no branch: the retail function has one basic block and always executes the same stores. The candidate likewise has no conditional. The retail's residual EAX (the pushed value) is not part of the recovered contract because no caller reads it; the pushed value is instead observed through the value stack."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The native moves 32-bit integers only; no floating-point load, store or arithmetic appears in the retail disassembly or the candidate."
+   "detail": "scripts/native_unicorn_runner.py executed retail under Unicorn and the current candidate; 8/8 cases matched the two stack writes and indices."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail returns the pushed value in EAX; the candidate is declared void. cdecl, the state pointer plus 32-bit value arguments, and the stack stores are preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004BDA00-binaryninja.json",
+   "evidence_sha256": "fcb2fc800205b70653fe9cb273a679977d3688f0decd629a2be7c1c72c5e16c9",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004BDA00-radare2.json",
+   "evidence_sha256": "1387ce365a4500f93c01046d9d3a5cbc29e6ea34ec3d6c40ded5bce956cc1a71",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": "docs/fidelity/evidence/0x004BDA00-behavioral.json",
+   "evidence_sha256": "3533ce9652109167ec60778eb5f1214d4933e2f4bba04f6b676e4f881da54090",
+   "runner": "scripts/native_unicorn_runner.py",
+   "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+   "oracle": "retail-binary-execution",
+   "tests_passed": 8,
+   "tests_total": 8
+  }
+ },
+ "limitations": [
+  "The candidate drops the retail EAX return value (declared void).",
+  "No live paired runtime capture exists; the differential is Unicorn plus the compiled candidate.",
+  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
  ]
 }

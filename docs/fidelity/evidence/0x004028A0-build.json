@@ -4,9 +4,50 @@
  "result": "passed",
  "address": "0x004028A0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "cc715e50ab17d87b8b4cd7b0df441956f59211dd9a8b6d7b556b68491f7827b0",
+ "implementation_sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
  "executed": true,
- "command": "i686-w64-mingw32-g++ -std=c++20 -I engine/include -c engine/src/retail/core/frame_natives.cpp -o /tmp/native-x86.o",
- "target": "Windows x86 (Intel 80386 COFF object)",
- "note": "Candidate translation unit compiled successfully for the retail x86 architecture."
+ "performed_at": "2026-10-23T07:06:09Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/core/frame_natives.cpp -o /tmp/taskb-build/frame_natives.o",
+ "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
+ "toolchain": {
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
+  "flags": "-O3 -DNDEBUG",
+  "flags_note": "Matches build-clean-win32/CMakeFiles/igi.dir/flags.make CXX_FLAGS and the engine/include include path."
+ },
+ "object": {
+  "path": "/tmp/taskb-build/frame_natives.o",
+  "sha256": "59bd893f0fb22d96e69507a4c1c95e1568fbdc8d7d902eaeda130d85149f2da6",
+  "size_bytes": 1377,
+  "format": "pe-i386 relocatable object",
+  "symbol": "Flow_SetState",
+  "symbol_offset": 16,
+  "symbol_size_bytes": 16,
+  "function_bytes_hex": "8b4424048b150000000089422cc36690",
+  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding.",
+  "function_bytes_length": 16
+ },
+ "scope": "Build verification only: the bound translation unit was compiled to an object for the retail x86 target. It was not linked or executed by this report, so this is not runtime or behavioural evidence.",
+ "checks": [
+  {
+   "name": "source_digest_binding",
+   "result": "passed",
+   "detail": "The compiled source hashed 3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4, matching the implementation digest this report is bound to."
+  },
+  {
+   "name": "x86_object_compile",
+   "result": "passed",
+   "detail": "The compile command exited 0 and produced a pe-i386 object."
+  },
+  {
+   "name": "compiled_sequence",
+   "result": "passed",
+   "detail": "The object label for Flow_SetState spans 16 bytes at offset 0x10; 16 instruction bytes were read back from the compiled object with objdump and all lie inside that range."
+  }
+ ],
+ "limitations": [
+  "A successful compile does not prove behavioural equivalence.",
+  "The object was not linked into build-clean-win32/igi1.exe by this report; no linked-image claim is made.",
+  "No runtime path was executed by this build report."
+ ]
 }

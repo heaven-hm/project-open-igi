@@ -6,57 +6,82 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/model/iff_chunk_tree.cpp hashes to 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x00517890",
+  "name": "Terrain_BuildMipMaps_5",
+  "signature": "void**(void** arg1, int32_t arg2)",
+  "start": "0x00517890",
+  "end": "0x005178D9",
+  "size_bytes": 74,
+  "basic_blocks": 12,
+  "edges": 17,
+  "cfg_similarity": 1.0,
+  "summary": "0x00517890: walks the sibling list; a node whose +0x10 dword is FORM (0x464F524D) matches its form type at +0x14 against the query and descends into its first child at +0x0C; any other node matches its tag at +0x10; returns the selected node pointer or null."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/model/iff_chunk_tree.cpp",
+  "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
+  "summary": "IffChunk_FindByTag(IffChunkNode*, std::uint32_t): same sibling walk, same FORM marker test, same form-type-at-0x14 vs tag-at-0x10 matching, same first-child descent; returns the port node pointer.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_identity",
+   "name": "function_boundary",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00517890 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "detail": "Binary Ninja and Radare2 recover 12 blocks/17 edges; cfg_similarity 1.0."
   },
   {
-   "name": "constants_and_scaling",
+   "name": "walk_semantics",
    "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "detail": "FORM marker, form-type match, non-FORM tag match, sibling loop and first-child descent all map to the recovered pseudo-code."
   },
   {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "name": "representation",
+   "result": "passed_with_limitation",
+   "detail": "Retail uses raw sibling/child pointers at +0x08/+0x0C; the port holds unique_ptr nodes and links by pointer. Selection identity, not raw retail address, is compared."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "behavioural_differential",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "detail": "scripts/iff_chunk_tree_diff_runner.py executed retail under Unicorn and the compiled candidate over generated graphs; 9/9 cases matched selected-node identity and null results."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail uses void** raw node pointers; the candidate uses typed IffChunkNode pointers with the same 32-bit pointer ABI and argument order."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x00517890-binaryninja.json",
+   "evidence_sha256": "ee0b2ba382a23832a5e4ae3f2e14c671648fec8e1c615caed16a70ddcdde3662",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x00517890-radare2.json",
+   "evidence_sha256": "623e70f8965a537b253fbfdc9efbe244b404dcc48b3bb29aedebdad43ccdb152",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": "docs/fidelity/evidence/0x00517890-behavioral.json",
+   "evidence_sha256": "f480dabee53106e480cebf0d7f43e8f9e529309b5bc231a41542260675d56823",
+   "runner": "scripts/iff_chunk_tree_diff_runner.py",
+   "method": "Retail bytes execute under unicorn x86-32 over a synthetic IFF chunk graph laid out as the retail walk reads it (sibling +0x08, first child +0x0C, tag/FORM marker +0x10, form type +0x14, payload +0x1C). The candidate tree is rebuilt in the same shape and run under CrossOver. Both sides report whether a node was found and which node index the walk selected.",
+   "oracle": "retail-binary-execution",
+   "tests_passed": 9,
+   "tests_total": 9
+  }
+ },
+ "limitations": [
+  "The port holds the tree by value/unique_ptr; raw retail link addresses are not reproduced.",
+  "The differential uses generated graphs, not original game assets.",
+  "No live paired runtime capture exists.",
+  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
  ]
 }

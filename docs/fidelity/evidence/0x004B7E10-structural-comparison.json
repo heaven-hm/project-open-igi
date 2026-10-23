@@ -1,0 +1,115 @@
+{
+ "schema_version": 1,
+ "kind": "structural-comparison-report",
+ "address": "0x004B7E10",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "reviewed_at": "2026-10-23T08:23:05Z",
+ "reviewed_by": "Delegated coding agent comparison of the retail CFG with the recompiled candidate object symbol.",
+ "retail": {
+  "entry": "0x004B7E10",
+  "end": "0x004B7E75",
+  "size_bytes": 102,
+  "basic_blocks": 6,
+  "edges": 7,
+  "call_sequence": [
+   "String_VFormat(buffer, format, va_list) @ 0x004B7E3E",
+   "g_a43e70(buffer, g_a43e68) @ 0x004B7E5B (indirect, when non-null)",
+   "Debug_Error(buffer) @ 0x004B7E6C (when g_a43e70 is null)"
+  ],
+  "halts": [
+   {
+    "address": "0x004B7E74",
+    "instructions": "jmp 0x004B7E74",
+    "bytes": "ebfe"
+   }
+  ],
+  "returns": [
+   "0x004B7E66: retn (disabled state, returns 0)",
+   "0x004B7E5D -> 0x004B7E60: callback result returned"
+  ]
+ },
+ "candidate": {
+  "implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+  "implementation_sha256": "48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
+  "header_sha256": "953fe00e0d890e780b90905a2ad4a74e530d939e4c6846a4f615e51d096e9be8",
+  "object_path": "build-clean-win32/CMakeFiles/igi.dir/engine/src/retail/script/qvm_native_loader.cpp.obj",
+  "object_sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "symbol": "igi::retail::script::Qvm_ReportError(char const*, ...)",
+  "symbol_offset": 320,
+  "symbol_size_bytes": 112,
+  "instruction_bytes": 109,
+  "compile_command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -std=gnu++20 -Wall -Wextra -c engine/src/retail/script/qvm_native_loader.cpp -o /tmp/taskb-build/qvm_native_loader.o",
+  "linked": false,
+  "call_sequence": [
+   "String_VFormat(buffer, format, va_list) @ symbol+0x3b",
+   "call eax @ symbol+0x5a (cached g_a43e70(buffer, g_a43e68), when non-null)",
+   "Debug_Error(buffer) @ symbol+0x66 (when g_a43e70 is null)"
+  ],
+  "halts": [
+   {
+    "symbol_offset": "0x6b",
+    "instructions": "jmp self",
+    "bytes": "ebfe"
+   }
+  ],
+  "returns": [
+   "symbol+0x13: ret (disabled state, returns 0)",
+   "symbol+0x62: callback result returned"
+  ]
+ },
+ "comparison": [
+  {
+   "property": "error-flag store g_a965a8 = 1",
+   "result": "match"
+  },
+  {
+   "property": "load g_a96598 before the store; disabled state returns 0",
+   "result": "match"
+  },
+  {
+   "property": "0x400-byte stack buffer",
+   "result": "match"
+  },
+  {
+   "property": "String_VFormat(buffer, format, va_list) with the same argument order",
+   "result": "match"
+  },
+  {
+   "property": "callback pointer loaded once, g_a43e70(buffer, g_a43e68) called, its EAX returned",
+   "result": "match"
+  },
+  {
+   "property": "fallback callee Debug_Error(buffer) with the buffer as the format argument",
+   "result": "match"
+  },
+  {
+   "property": "fallback never returns (retail jmp $, candidate eb fe self-jump)",
+   "result": "match"
+  },
+  {
+   "property": "no extra calls or writes (the previous candidate zero-initialized the buffer, emitting a memset retail does not have; the initializer was removed)",
+   "result": "match"
+  },
+  {
+   "property": "frame allocation order: retail sub esp,0x400 before the disabled-state test; GCC shrink-wraps the frame after that return",
+   "result": "compiler-artifact"
+  },
+  {
+   "property": "epilogue shape: retail shares 0x004B7E60 with add esp,0x400; the candidate duplicates a small epilogue on the callback path",
+   "result": "compiler-artifact"
+  },
+  {
+   "property": "symbol extent: 102 retail bytes vs 109 candidate instruction bytes (plus 3 alignment bytes); instruction selection differs",
+   "result": "compiler-artifact"
+  }
+ ],
+ "result": "equivalent-with-resolved-compiler-divergences",
+ "unresolved_divergences": [],
+ "summary": "Control-flow decisions, globals touched, call order, call arguments, return paths and the non-returning fallback match retail. The previously reported divergence (Error_Show(\"%s\", buffer) followed by a return) is gone: the object now relocates against _Debug_Error and ends the fallback in eb fe. Remaining differences are GCC frame/epilogue placement, not behaviour.",
+ "limitations": [
+  "Retail CFG is Binary Ninja vs Radare2 on the retail image; angr CFGFast split the function at calls (9 blocks, 10 edges) with no unresolved jumps. The candidate graph is the compiled object disassembly, not a formal retail-vs-candidate isomorphism score.",
+  "The candidate object was not linked; no claim is made about the current build-clean-win32/igi1.exe image.",
+  "The retail callback installer (0x004B8B00 reset clears 0x00A43E70/0x00A43E68) and the 0x00A96598 writer 0x004B8970 are not ported, so the candidate has no way to arm the callback or clear the disabled state at runtime; the branches are present but never taken with different global values.",
+  "The retail display/exit callbacks (0x004988D0 MessageBoxA, 0x00498930 DebugBreak+exit) are unported, so the candidate Debug_Error returns 0 when no callback is installed; the explicit self-loop then reproduces retail jmp $."
+ ]
+}
