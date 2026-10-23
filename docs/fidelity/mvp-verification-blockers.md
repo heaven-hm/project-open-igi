@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 86 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 87 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 86 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 87 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1516,3 +1516,41 @@ mismatches. Verified count 85 -> 86.
   reached through a file/asset path, and the natural paths cascade observations into other natives that are themselves
   unverified (for example the texture-loader count>0 path calls the loop texture loader), so a fixture would trade one
   verification for a new class-set divergence elsewhere.
+
+## Round 128: a container fixture, and four routes ruled out by their own callees
+
+`Resource_RegisterIlffContainer` (0x004B60F0) had 29 retail calls returning `{small:1}` and none from the candidate.
+Its success path is reachable from a hand-built container: the ILFF readers take all their offsets from the container
+itself (declared size at +0x04, alignment at +0x08, first chunk at `(alignment + 0x13) & ~(alignment-1)`, sibling
+distance at +0x0C, payload at `(alignment + relative + 0x0F) & ~(alignment-1)`), so a 0x100-byte buffer with one
+`NAME` chunk and one `BODY` chunk walks the loop once, registers one child node through `Resource_CreateNode` and
+returns 1. Every callee it touches keeps its verified class set: `Ilff_GetFirstChunk`, `Resource_CreateNode`,
+`HeapList_Insert` and `Mem_Alloc` return `ptr`, and `Ilff_GetChunkPayload` returns `ptr` here (retail observed
+`{null, ptr}`). The malformed-input branch is `jmp $`, so the fixture is deliberately the well-formed path only.
+The candidate now observes the native (one call, `small:1`), the merged trace shows 90 matched natives and zero
+mismatches, and verified count is 86 -> 87.
+
+The rest of the group was ruled out this round, each for a reason found in code rather than by guessing:
+
+- **Texture_LoadLoopTextureFile** returns `Resource_Unload(path)`, which returns the node kind for kinds 1 and 3 and
+  otherwise the free hook's answer. Retail observed `{small:1, small:4454}`; 4454 can only come from the free hook, so a
+  fixture would call `Resource_FreeNode` with a value outside its verified retail set (`{ptr, 1, 10, 11, 12, 14, 15,
+  152}`) and turn a verified native into a mismatch. Not taken.
+- **DynObj_LoadPackageMeshes** needs a real `MODS` model name, which cascades into `DynObj_LoadModelMesh`; that port
+  dereferences the payload of a missing `.mef` resource without a null guard (retail crashes there too, but the
+  candidate would crash before the capture records anything), so it needs genuine model assets.
+- **DynObj_LoadModelTextures** returns its payload pointer on the zero-count path while retail returned null, so the
+  zero-count shape is a mismatch; the counted path cascades into the texture loader above.
+- **Flow_RunHandler** is not "nearly done": its port is a guard that computes the level scale and discards it, while the
+  retail body (1213 bytes, 146 CFG nodes) dispatches a per-frame handler registry at 0x00AFA7E0 and calls through a
+  table keyed by each record's word at +0x1C. Verifying it needs the dispatch transcribed, not a runner.
+- The three terrain stubs are 143-146 CFG nodes each (5.3KB-6.5KB of code) and remain transcription work.
+
+Also noted, not changed this round: `engine/src/retail/script/humanplayer_defines.cpp` defines three natives
+(`Config_Read`, `DefineHumanPlayerGeneral`, `HumanPlayer_LoadParameters`) but is not in the build, which is why they
+show as unlinked. Retail never called them in any captured run, so linking them would only turn "unlinked" into
+"retail-unobserved"; the build omission still needs fixing on its own merits.
+
+Input injection into the retail window was attempted to reach the menu-only natives and is not available here: the
+spawned Wine process cannot resolve `user32!keybd_event` through Frida (`hasKey` false), so key events cannot be
+injected from inside the process, and the alternatives (screen capture based navigation) do not provide an oracle.

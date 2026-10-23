@@ -2889,6 +2889,41 @@ int RunRetailModelScene(HINSTANCE instance,
             static_cast<void>(igi::retail::dynobj::DynObj_LoadPackageAnimations(anim_context));
         }
 
+        // Resource_RegisterIlffContainer: retail observed {small:1} over 29 calls. A minimal container with
+        // one NAME chunk and one BODY chunk is enough to reach the success return: the lookup helpers read
+        // the layout at +0x04 (declared size), +0x08 (alignment), the first chunk at (alignment+0x13)&~3,
+        // each chunk's +0x0C sibling distance, and each payload at (alignment+relative+0x0F)&~3. The parent
+        // node's child list is initialised the way Resource_CreateNode does, so HeapList_Insert links into it.
+        {
+            const std::int32_t meta[2]{0, 0};
+            alignas(8) std::uint8_t container[0x100]{};
+            const std::int32_t declared_size = 0x100;
+            const std::int32_t alignment = 4;
+            std::memcpy(container + 0x04, &declared_size, sizeof(declared_size));
+            std::memcpy(container + 0x08, &alignment, sizeof(alignment));
+
+            std::memcpy(container + 0x14, "NAME", 4);
+            const std::int32_t name_size = 0x10;
+            const std::int32_t name_next = 0x40;
+            std::memcpy(container + 0x18, &name_size, sizeof(name_size));
+            std::memcpy(container + 0x1C, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x20, &name_next, sizeof(name_next));
+            std::memcpy(container + 0x24, "DATA\\FIXTURE.TEX", 17);
+
+            std::memcpy(container + 0x54, "BODY", 4);
+            const std::int32_t body_size = 0x10;
+            const std::int32_t body_next = 0;
+            std::memcpy(container + 0x58, &body_size, sizeof(body_size));
+            std::memcpy(container + 0x5C, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x60, &body_next, sizeof(body_next));
+
+            igi::retail::resource::ResourceHashNode parent{};
+            parent.link_08[3] = &parent.link_08[4];
+            parent.link_08[5] = &parent.link_08[3];
+            static_cast<void>(igi::retail::resource::Resource_RegisterIlffContainer(
+                "DATA\\FIXTURE.TEX", &parent, container, meta));
+        }
+
         // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.
         // Each call set below reproduces exactly the return classes the retail run produced.
         {
