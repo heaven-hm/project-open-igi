@@ -2772,6 +2772,41 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::resource::Sys_SetFreeMemory16(nullptr);
         }
 
+        // Resource_FreeNode. Retail observed {ptr, small:1, small:10, small:11, small:12, small:14, small:15,
+        // small:152} over 1153 calls: the return is the new active count when the freed node was the last active
+        // slot, and the relocated node's address otherwise. Node creation and freeing are the native's own, so the
+        // fixture resets the pool to a capacity that can hold the largest observed count, creates kind-2 nodes
+        // through Resource_CreateNode and frees them in an order that produces exactly those eight classes.
+        {
+            igi::retail::resource::Resource_InitPoolForTest(200U);
+            const std::int32_t pool_meta[2]{0, 0};
+            std::uint32_t pool_node_index = 0U;
+            char pool_node_name[32];
+            auto create_pool_node = [&]() -> void* {
+                std::snprintf(pool_node_name, sizeof(pool_node_name), "DATA\\FNP%03u.BIN",
+                              static_cast<unsigned>(pool_node_index++));
+                return igi::retail::resource::Resource_CreateNode(
+                    pool_node_name, nullptr, nullptr, 0, 2, pool_meta);
+            };
+            auto create_pool_nodes = [&](int count) -> void* {
+                void* last = nullptr;
+                for (int index = 0; index < count; ++index)
+                {
+                    last = create_pool_node();
+                }
+                return last;
+            };
+            void* const pool_first = create_pool_node();
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(1)));   // 2 -> 1
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(10)));  // 11 -> 10
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 12 -> 11
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 13 -> 12
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(3)));   // 15 -> 14
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(2)));   // 16 -> 15
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(create_pool_nodes(138))); // 153 -> 152
+            static_cast<void>(igi::retail::resource::Resource_FreeNode(pool_first));             // relocate -> ptr
+        }
+
         // Texture_UploadPalettePacket. Retail returned a pointer. The renderer callback at dispatch slot 2
         // answers a pointer through the host stub, and the backend id is left at 0 so the nested
         // Texture_GetActiveBackendId call stays inside the classes retail observed for it.

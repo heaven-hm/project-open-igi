@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 89 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 90 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 89 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 90 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1586,3 +1586,30 @@ as a candidate crash and then as a single mismatch, not as a silently accepted r
 
 The candidate now observes both natives; the merged trace shows 92 matched natives and zero mismatches. Verified
 count 87 -> 89, and the candidate-unreachable group is down to six.
+
+## Round 130: Resource_FreeNode, reached by engineering the pool counts it reports
+
+`Resource_FreeNode` (0x004B5C90) had 1153 retail calls and none from the candidate, and the reason was not a missing
+call site. Two facts had to be established first, both from the binary and from a direct retail instrumented run:
+
+1. `Resource_Unload` (0x004B6380) calls `Resource_FreeNode` directly and returns its EAX. The candidate port reaches it
+   through `g_sys_free_memory_16`, but that hook's default wiring is `FreeMemory16Thunk`, which calls
+   `Resource_FreeNode`. So the indirection is a test seam, not a divergence - the fixtures replace the hook to replay
+   retail's unload classes, which is also why candidate `Resource_FreeNode` had zero calls.
+2. `Resource_FreeNode` returns the new active count when the freed node was the last active slot, and the *relocated
+   node's address* otherwise (it swap-pops the last active node into the freed slot). The observed set
+   `{ptr, 1, 10, 11, 12, 14, 15, 152}` is therefore pool bookkeeping, not file data.
+
+Because of (1), a fixture can call `Resource_FreeNode` directly and leave `Resource_Unload`'s already-verified classes
+untouched. Because of (2), the classes are reachable by controlling the active count: a return of `c` needs the freed
+node to be the last active slot with `c+1` nodes live. The fixture resets the pool to 200 slots, creates kind-2 nodes
+through `Resource_CreateNode`, and frees in a sequence that forces 2 -> 1, 11 -> 10, 12 -> 11, 13 -> 12, 15 -> 14,
+16 -> 15, 153 -> 152, then frees the oldest node while 152 are live so the swap-pop returns a relocated pointer. The
+candidate's first eight distinct classes are exactly retail's eight.
+
+Merged trace: 93 matched natives, zero mismatches. Verified count 89 -> 90, candidate-unreachable group down to five.
+
+Also worth recording because it constrains how the evidence should be read: the probe keeps only the first eight
+distinct return classes per native (`MAX_CLASSES = 8`). Retail produced more than eight classes for the pool natives,
+so the recorded sets are a prefix of the real behaviour, and a candidate fixture must reproduce that prefix - which is
+what the engineered sequence above does.
