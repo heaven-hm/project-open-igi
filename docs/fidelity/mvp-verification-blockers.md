@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 32 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 35 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 32 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 35 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -634,3 +634,16 @@ flag before reading it. `Qvm_SetGlobalState` (0x004B8A10) resets the QVM state g
 
 All five pass the strict gate: verified count 27 -> 32, paired matches 31 -> 36, mismatches stay 0,
 candidate-unreachable 60 -> 55.
+
+## Flow state, parser mode and a resource-pool node
+
+Three more, taken once the dispatch record is live rather than before it:
+
+* `Flow_SetState` (0x004028A0) writes the record's state word and returns it; the pass writes 4, the
+  value retail's own dispatch reports, so the class matches.
+* `Script_GetParseMode` (0x004F1160) is a pure read of two parser flags and returns 1, matching retail.
+* `Resource_CreateNode` (0x004B59F0) creates a node for a scene asset in the ported pool and splices it
+  into the global resource list, exercising the pool allocator, path canonicalisation and path hashing
+  in one call. Its body tolerates the null debug/source arguments the pass passes.
+
+Verified count 32 -> 35, paired matches 36 -> 39, mismatches stay 0, candidate-unreachable 55 -> 52.

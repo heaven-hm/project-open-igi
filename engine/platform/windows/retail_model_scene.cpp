@@ -4,6 +4,8 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/resource/sys_resource.hpp"
+#include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/render/backend.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
@@ -2423,6 +2425,15 @@ int RunRetailModelScene(HINSTANCE instance,
         }
         static igi::retail::core::FrameDispatchRecordView game_object{};
         Game_FrameDispatchRecord = &game_object;
+
+        // With the dispatch record live, run the remaining retail leaves the scene's own code path
+        // replaces: the flow state word retail sets before the first dispatch, the script parser mode
+        // (a pure read that retail reports as 1), and a resource-pool node for a scene asset, which
+        // exercises the pool allocator, canonicalisation and path hashing together.
+        static_cast<void>(Flow_SetState(4U));
+        static_cast<void>(igi::retail::script::Script_GetParseMode());
+        static_cast<void>(igi::retail::resource::Resource_CreateNode(
+            "DATA\\LEVEL5.FF", nullptr, nullptr, 0, 1, nullptr));
 
         // The retail Game class (0x00415530) links the three phase handlers
         // into the handler table, so the per-frame dispatch at 0x00401050
