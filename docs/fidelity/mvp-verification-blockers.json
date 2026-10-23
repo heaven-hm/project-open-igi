@@ -4,10 +4,11 @@
   "capture": "build/runtime-traces/mvp-frida-pair-lovs.json",
   "level": 5,
   "counts": {
-    "end-to-end": 95,
-    "candidate-unreachable": 4,
     "retail-unobserved": 16,
-    "unlinked": 5
+    "unlinked": 5,
+    "end-to-end": 92,
+    "candidate-unreachable": 4,
+    "matched-but-unverified": 3
   },
   "natives": [
     {
@@ -15,9 +16,9 @@
       "name": "Retail_Main",
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -25,9 +26,9 @@
       "name": "QTask_CreateTask",
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "unlinked",
-      "next_action": "transcribe it or make the ported unit linkable",
+      "next_action": "transcribe and link the implementation",
       "detail": "no candidate symbol for this name"
     },
     {
@@ -37,7 +38,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -45,19 +46,19 @@
       "name": "QTask_RegisterClasses",
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "candidate-unreachable",
-      "next_action": "pull the parallel-branch QTask lane; candidate registration path not wired",
+      "next_action": "wire the candidate path that calls it, then re-capture the pair",
       "detail": "retail observed once under the key-driven scenario; candidate silent"
     },
     {
       "address": "0x00402800",
       "name": "Flow_CreateHandler",
       "subsystem": "Flow Engine",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
     },
     {
@@ -65,9 +66,9 @@
       "name": "Flow_RunHandler",
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
-      "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "evidence_backed": false,
+      "blocker": "matched-but-unverified",
+      "next_action": "add or refresh the behavioral runner and semantic evidence, then gate",
       "detail": "paired observation accepted"
     },
     {
@@ -77,7 +78,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -86,78 +87,78 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x0048F480",
       "name": "Loop_SetStatusByte",
       "subsystem": "Flow Engine",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "the candidate executes it but the retail run did not"
     },
     {
       "address": "0x00404590",
       "name": "Config_GetActiveGraphicOptions",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "the candidate executes it but the retail run did not"
     },
     {
       "address": "0x00404F00",
       "name": "Config_GraphicOptionsSetPerformanceFlags",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "the candidate executes it but the retail run did not"
     },
     {
       "address": "0x00404F60",
       "name": "Config_GraphicOptionsGetPerformanceFlags",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
       "address": "0x00405530",
       "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
       "address": "0x004055C0",
       "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "the candidate executes it but the retail run did not"
     },
     {
       "address": "0x00405620",
       "name": "Config_GraphicOptionsNumPerfLevels",
       "subsystem": "config.qvm",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -165,9 +166,9 @@
       "name": "Config_Read",
       "subsystem": "config.qvm",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "unlinked",
-      "next_action": "transcribe it or make the ported unit linkable",
+      "next_action": "transcribe and link the implementation",
       "detail": "no candidate symbol for this name"
     },
     {
@@ -177,7 +178,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -185,9 +186,9 @@
       "name": "DefineHumanPlayerGeneral",
       "subsystem": "humanplayer.qvm",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "unlinked",
-      "next_action": "transcribe it or make the ported unit linkable",
+      "next_action": "transcribe and link the implementation",
       "detail": "no candidate symbol for this name"
     },
     {
@@ -195,9 +196,9 @@
       "name": "HumanPlayer_LoadParameters",
       "subsystem": "humanplayer.qvm",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "unlinked",
-      "next_action": "transcribe it or make the ported unit linkable",
+      "next_action": "transcribe and link the implementation",
       "detail": "no candidate symbol for this name"
     },
     {
@@ -206,8 +207,8 @@
       "subsystem": "humanplayer.qvm",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 51426 time(s); the candidate never executes this subsystem"
     },
     {
@@ -216,8 +217,8 @@
       "subsystem": "humanplayer.qvm",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 51426 time(s); the candidate never executes this subsystem"
     },
     {
@@ -234,10 +235,10 @@
       "address": "0x004ED5C0",
       "name": "InputPort_Process",
       "subsystem": "humanplayer.qvm",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
     },
     {
@@ -246,8 +247,8 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 121 time(s); the candidate never executes this subsystem"
     },
     {
@@ -256,8 +257,8 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 6160 time(s); the candidate never executes this subsystem"
     },
     {
@@ -266,18 +267,18 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 167 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004B5B60",
       "name": "Resource_FileExists",
       "subsystem": "QVM",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1439 time(s); the candidate never executes this subsystem"
     },
     {
@@ -285,9 +286,9 @@
       "name": "Qvm_ReportError",
       "subsystem": "QVM",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -296,8 +297,8 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 121 time(s); the candidate never executes this subsystem"
     },
     {
@@ -306,8 +307,8 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 83 time(s); the candidate never executes this subsystem"
     },
     {
@@ -316,18 +317,18 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 121 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004BCFD0",
       "name": "Qvm_ExecuteInstructions",
       "subsystem": "QVM",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 43208 time(s); the candidate never executes this subsystem"
     },
     {
@@ -336,18 +337,18 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 472 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004BDA00",
       "name": "Qvm_PushInteger",
       "subsystem": "QVM",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 28802 time(s); the candidate never executes this subsystem"
     },
     {
@@ -356,8 +357,8 @@
       "subsystem": "CTR / Camera",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 840 time(s); the candidate never executes this subsystem"
     },
     {
@@ -366,8 +367,8 @@
       "subsystem": "CTR / Camera",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 420 time(s); the candidate never executes this subsystem"
     },
     {
@@ -375,19 +376,19 @@
       "name": "Camera_ResetMatrix",
       "subsystem": "CTR / Camera",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
       "address": "0x004B7450",
       "name": "Matrix_InvalidateSlot",
       "subsystem": "CTR / Camera",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -396,8 +397,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 71573 time(s); the candidate never executes this subsystem"
     },
     {
@@ -406,8 +407,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 9463 time(s); the candidate never executes this subsystem"
     },
     {
@@ -416,8 +417,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 18984 time(s); the candidate never executes this subsystem"
     },
     {
@@ -426,8 +427,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 5444 time(s); the candidate never executes this subsystem"
     },
     {
@@ -436,8 +437,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 35 time(s); the candidate never executes this subsystem"
     },
     {
@@ -446,8 +447,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 21381 time(s); the candidate never executes this subsystem"
     },
     {
@@ -456,8 +457,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 9050 time(s); the candidate never executes this subsystem"
     },
     {
@@ -466,8 +467,8 @@
       "subsystem": "ILFF & IFF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 618 time(s); the candidate never executes this subsystem"
     },
     {
@@ -476,8 +477,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 50543 time(s); the candidate never executes this subsystem"
     },
     {
@@ -486,8 +487,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1443586 time(s); the candidate never executes this subsystem"
     },
     {
@@ -497,7 +498,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -506,8 +507,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 350 time(s); the candidate never executes this subsystem"
     },
     {
@@ -516,8 +517,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 203 time(s); the candidate never executes this subsystem"
     },
     {
@@ -526,8 +527,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 203 time(s); the candidate never executes this subsystem"
     },
     {
@@ -536,8 +537,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 5636 time(s); the candidate never executes this subsystem"
     },
     {
@@ -546,8 +547,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 13370 time(s); the candidate never executes this subsystem"
     },
     {
@@ -556,8 +557,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 13370 time(s); the candidate never executes this subsystem"
     },
     {
@@ -566,8 +567,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1153 time(s); the candidate never executes this subsystem"
     },
     {
@@ -576,8 +577,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 4649 time(s); the candidate never executes this subsystem"
     },
     {
@@ -586,8 +587,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 203 time(s); the candidate never executes this subsystem"
     },
     {
@@ -596,8 +597,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 29 time(s); the candidate never executes this subsystem"
     },
     {
@@ -606,8 +607,8 @@
       "subsystem": "RES",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1204 time(s); the candidate never executes this subsystem"
     },
     {
@@ -616,18 +617,18 @@
       "subsystem": "3D Models & MEF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 604 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004CF330",
       "name": "DynObj_LoadPackageMeshes",
       "subsystem": "3D Models & MEF",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 2 time(s); the candidate never executes this subsystem"
     },
     {
@@ -637,27 +638,27 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
       "address": "0x004CF630",
       "name": "DynObj_LoadPackageLovs",
       "subsystem": "3D Models & MEF",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 2 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004CF910",
       "name": "DynObj_LoadPackageAnimations",
       "subsystem": "3D Models & MEF",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 2 time(s); the candidate never executes this subsystem"
     },
     {
@@ -666,8 +667,8 @@
       "subsystem": "3D Models & MEF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 660 time(s); the candidate never executes this subsystem"
     },
     {
@@ -676,8 +677,8 @@
       "subsystem": "3D Models & MEF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1067 time(s); the candidate never executes this subsystem"
     },
     {
@@ -686,8 +687,8 @@
       "subsystem": "3D Models & MEF",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 462 time(s); the candidate never executes this subsystem"
     },
     {
@@ -697,7 +698,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -705,9 +706,9 @@
       "name": "Camera_UpdateFogPalette",
       "subsystem": "TEX",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -716,18 +717,18 @@
       "subsystem": "TEX",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 3128 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004B23B0",
       "name": "Texture_UploadMipmapPacket",
       "subsystem": "TEX",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1387 time(s); the candidate never executes this subsystem"
     },
     {
@@ -736,8 +737,8 @@
       "subsystem": "TEX",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 683 time(s); the candidate never executes this subsystem"
     },
     {
@@ -746,28 +747,28 @@
       "subsystem": "TEX",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 684 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004B26B0",
       "name": "Texture_DisableUpload",
       "subsystem": "TEX",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 685 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004B7CF0",
       "name": "Texture_UploadPalettePacket",
       "subsystem": "TEX",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 4 time(s); the candidate never executes this subsystem"
     },
     {
@@ -776,28 +777,28 @@
       "subsystem": "TEX",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 2 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004CF870",
       "name": "DynObj_LoadPackagePalettes",
       "subsystem": "TEX",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 2 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x00505E40",
       "name": "TextureModifier_Push",
       "subsystem": "TEX",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 7286 time(s); the candidate never executes this subsystem"
     },
     {
@@ -805,9 +806,9 @@
       "name": "Terrain_LoadTexturesAndLightmaps",
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
-      "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "evidence_backed": false,
+      "blocker": "matched-but-unverified",
+      "next_action": "add or refresh the behavioral runner and semantic evidence, then gate",
       "detail": "paired observation accepted"
     },
     {
@@ -815,9 +816,9 @@
       "name": "Terrain_Load",
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
-      "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "evidence_backed": false,
+      "blocker": "matched-but-unverified",
+      "next_action": "add or refresh the behavioral runner and semantic evidence, then gate",
       "detail": "paired observation accepted"
     },
     {
@@ -827,7 +828,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -837,7 +838,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -846,8 +847,8 @@
       "subsystem": "Terrain",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1209 time(s); the candidate never executes this subsystem"
     },
     {
@@ -855,29 +856,29 @@
       "name": "Terrain_TraverseContourQuadtree",
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "candidate-unreachable",
-      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "next_action": "wire the candidate path that calls it, then re-capture the pair",
       "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
       "address": "0x004F82B0",
       "name": "TerrainLightMap_Init_2",
       "subsystem": "Terrain",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 61149 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x00506F00",
       "name": "HeightMap_Enter",
       "subsystem": "Terrain",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1133 time(s); the candidate never executes this subsystem"
     },
     {
@@ -885,9 +886,9 @@
       "name": "Terrain_DecodeChunkCommands",
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "candidate-unreachable",
-      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "next_action": "wire the candidate path that calls it, then re-capture the pair",
       "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
@@ -895,9 +896,9 @@
       "name": "Terrain_Draw",
       "subsystem": "Terrain",
       "status": "STRUCTURALLY_VERIFIED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "candidate-unreachable",
-      "next_action": "pull the parallel-branch transcription (terrain lane) and wire the candidate render path",
+      "next_action": "wire the candidate path that calls it, then re-capture the pair",
       "detail": "retail now observed under the key-driven scenario (420/118/54 calls); candidate silent because the render path is a host-side stub"
     },
     {
@@ -906,8 +907,8 @@
       "subsystem": "Terrain",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
     },
     {
@@ -916,18 +917,18 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 14055 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004A5702",
       "name": "String_VFormat",
       "subsystem": "Memory & System",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -936,8 +937,8 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 73265 time(s); the candidate never executes this subsystem"
     },
     {
@@ -946,8 +947,8 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 73265 time(s); the candidate never executes this subsystem"
     },
     {
@@ -956,28 +957,28 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 73265 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004AD722",
       "name": "Mem_InvokeNewHandler",
       "subsystem": "Memory & System",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
       "address": "0x004AF7B0",
       "name": "Error_Show",
       "subsystem": "Memory & System",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -986,8 +987,8 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 98350 time(s); the candidate never executes this subsystem"
     },
     {
@@ -996,8 +997,8 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 62008 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1007,7 +1008,7 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
@@ -1016,8 +1017,8 @@
       "subsystem": "Memory & System",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 73040 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1026,8 +1027,8 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "the candidate executes it but the retail run did not"
     },
     {
@@ -1037,17 +1038,17 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
       "address": "0x0048F1B0",
       "name": "App_ContextGetDebugged",
       "subsystem": "Flow Engine",
-      "status": "VERIFIED",
-      "evidence_backed": true,
+      "status": "STRUCTURALLY_VERIFIED",
+      "evidence_backed": false,
       "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "next_action": "widen the retail run (front end, menus, error paths)",
       "detail": "neither side called it"
     },
     {
@@ -1056,8 +1057,8 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 22 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1066,8 +1067,8 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 386 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1076,8 +1077,8 @@
       "subsystem": "Flow Engine",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 1 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1087,67 +1088,67 @@
       "status": "VERIFIED",
       "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
       "address": "0x00497E70",
       "name": "TransContext_SetActiveTransContext",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 840 time(s); the candidate never executes this subsystem"
     },
     {
       "address": "0x004A7157",
       "name": "Camera_ApplyBandFilter_10",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     },
     {
       "address": "0x004AC620",
       "name": "Camera_SetFieldOfView_24",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     },
     {
       "address": "0x004AC655",
       "name": "Camera_ApplyLineFilter_24",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     },
     {
       "address": "0x004AC66B",
       "name": "Camera_ApplyBandFilter_24",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     },
     {
       "address": "0x004AC6FD",
       "name": "Camera_ApplyWideScreen_24",
       "subsystem": "CTR / Camera",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     },
     {
@@ -1156,8 +1157,8 @@
       "subsystem": "QVM",
       "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 61810 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1165,9 +1166,9 @@
       "name": "AnimIff_LoadAnimationFile",
       "subsystem": "MTP",
       "status": "ANALYZED",
-      "evidence_backed": true,
+      "evidence_backed": false,
       "blocker": "unlinked",
-      "next_action": "transcribe it or make the ported unit linkable",
+      "next_action": "transcribe and link the implementation",
       "detail": "no candidate symbol for this name"
     },
     {
@@ -1175,19 +1176,19 @@
       "name": "Iff_FindFormChunk",
       "subsystem": "MTP",
       "status": "VERIFIED",
-      "evidence_backed": false,
+      "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
       "address": "0x005178E0",
       "name": "Iff_FindChunkBelowForm",
       "subsystem": "MTP",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "candidate-unreachable",
-      "next_action": "port the subsystem that calls it, then re-capture the pair",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "retail called it 388 time(s); the candidate never executes this subsystem"
     },
     {
@@ -1195,115 +1196,115 @@
       "name": "Iff_FindChunk",
       "subsystem": "MTP",
       "status": "VERIFIED",
-      "evidence_backed": false,
+      "evidence_backed": true,
       "blocker": "end-to-end",
-      "next_action": "keep: re-run the strict gate whenever an implementation or runner changes",
+      "next_action": "none",
       "detail": "paired observation accepted"
     },
     {
       "address": "0x005179C0",
       "name": "Iff_GetChunkPayload",
       "subsystem": "MTP",
-      "status": "STRUCTURALLY_VERIFIED",
+      "status": "VERIFIED",
       "evidence_backed": true,
-      "blocker": "retail-unobserved",
-      "next_action": "widen the retail run (level, interaction) or record it as not exercised",
+      "blocker": "end-to-end",
+      "next_action": "none",
       "detail": "neither side called it"
     }
   ],
   "verified_strict_gate": [
-    "0x00401050",
-    "0x00402800",
-    "0x00402880",
-    "0x004028A0",
-    "0x004037C0",
-    "0x00463180",
-    "0x00465820",
-    "0x004659E0",
-    "0x0048F140",
-    "0x0048F170",
-    "0x0048F1D0",
-    "0x0048F230",
-    "0x0048F250",
-    "0x0048F260",
-    "0x0048F340",
-    "0x00491D40",
-    "0x00497D70",
-    "0x00497E70",
-    "0x00498460",
-    "0x004A53B3",
-    "0x004A7157",
-    "0x004AA670",
-    "0x004AA682",
-    "0x004AA6AE",
-    "0x004AAD10",
-    "0x004AC620",
-    "0x004AC655",
-    "0x004AC66B",
-    "0x004AC6FD",
-    "0x004AD73D",
-    "0x004AF8F0",
-    "0x004AF960",
-    "0x004B0BA0",
-    "0x004B0C60",
-    "0x004B0D40",
-    "0x004B0F80",
-    "0x004B1690",
-    "0x004B1780",
-    "0x004B17F0",
-    "0x004B1E90",
-    "0x004B23B0",
-    "0x004B24C0",
-    "0x004B26A0",
-    "0x004B26B0",
-    "0x004B59F0",
-    "0x004B5AF0",
-    "0x004B5B30",
-    "0x004B5B60",
-    "0x004B5C90",
-    "0x004B5F00",
-    "0x004B5F80",
-    "0x004B60F0",
-    "0x004B6380",
-    "0x004B7470",
-    "0x004B7490",
-    "0x004B74D0",
-    "0x004B7540",
-    "0x004B7570",
-    "0x004B7580",
-    "0x004B7590",
-    "0x004B7CF0",
-    "0x004B80B0",
-    "0x004B83D0",
-    "0x004B8A10",
-    "0x004BCFD0",
-    "0x004BD3D0",
-    "0x004BDA00",
-    "0x004C6670",
-    "0x004C6760",
-    "0x004CEA80",
-    "0x004CEAA0",
-    "0x004CF080",
-    "0x004CF300",
-    "0x004CF330",
-    "0x004CF390",
-    "0x004CF630",
-    "0x004CF790",
-    "0x004CF870",
-    "0x004CF910",
-    "0x004D0CF0",
-    "0x004D0D10",
-    "0x004ED5C0",
-    "0x004EDB60",
-    "0x004F1160",
-    "0x004F82B0",
-    "0x00505E40",
-    "0x00506F00",
-    "0x005175A0",
-    "0x00517890",
-    "0x005178E0",
-    "0x00517940",
-    "0x005179C0"
+    "0X00401050",
+    "0X00402800",
+    "0X00402880",
+    "0X004028A0",
+    "0X004037C0",
+    "0X00463180",
+    "0X00465820",
+    "0X004659E0",
+    "0X0048F140",
+    "0X0048F170",
+    "0X0048F1D0",
+    "0X0048F230",
+    "0X0048F250",
+    "0X0048F260",
+    "0X0048F340",
+    "0X00491D40",
+    "0X00497D70",
+    "0X00497E70",
+    "0X00498460",
+    "0X004A53B3",
+    "0X004A7157",
+    "0X004AA670",
+    "0X004AA682",
+    "0X004AA6AE",
+    "0X004AAD10",
+    "0X004AC620",
+    "0X004AC655",
+    "0X004AC66B",
+    "0X004AC6FD",
+    "0X004AD73D",
+    "0X004AF8F0",
+    "0X004AF960",
+    "0X004B0BA0",
+    "0X004B0C60",
+    "0X004B0D40",
+    "0X004B0F80",
+    "0X004B1690",
+    "0X004B1780",
+    "0X004B17F0",
+    "0X004B1E90",
+    "0X004B23B0",
+    "0X004B24C0",
+    "0X004B26A0",
+    "0X004B26B0",
+    "0X004B59F0",
+    "0X004B5AF0",
+    "0X004B5B30",
+    "0X004B5B60",
+    "0X004B5C90",
+    "0X004B5F00",
+    "0X004B5F80",
+    "0X004B60F0",
+    "0X004B6380",
+    "0X004B7470",
+    "0X004B7490",
+    "0X004B74D0",
+    "0X004B7540",
+    "0X004B7570",
+    "0X004B7580",
+    "0X004B7590",
+    "0X004B7CF0",
+    "0X004B80B0",
+    "0X004B83D0",
+    "0X004B8A10",
+    "0X004BCFD0",
+    "0X004BD3D0",
+    "0X004BDA00",
+    "0X004C6670",
+    "0X004C6760",
+    "0X004CEA80",
+    "0X004CEAA0",
+    "0X004CF080",
+    "0X004CF300",
+    "0X004CF330",
+    "0X004CF390",
+    "0X004CF630",
+    "0X004CF790",
+    "0X004CF870",
+    "0X004CF910",
+    "0X004D0CF0",
+    "0X004D0D10",
+    "0X004ED5C0",
+    "0X004EDB60",
+    "0X004F1160",
+    "0X004F82B0",
+    "0X00505E40",
+    "0X00506F00",
+    "0X005175A0",
+    "0X00517890",
+    "0X005178E0",
+    "0X00517940",
+    "0X005179C0"
   ],
   "verified_strict_gate_count": 92
 }

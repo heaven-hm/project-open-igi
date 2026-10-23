@@ -1788,3 +1788,32 @@ config cluster; the error-path natives need a different lever entirely (an actua
 No record was promoted: verified stays at 92. The six mismatches this capture shows are scenario
 artifacts in already-verified natives (the run visits different states), so the canonical evidence
 base stays the round-135 merge, not this capture.
+
+## Round 137: front end runs, but its option screens stay out of reach; register rebuilt
+
+Retail does start its front end when it is launched with `window` and no level word: the window is
+`IGI` at 640x508 and the capture observes 53 natives (front-end QVM loads, `sprintf`,
+`String_ToUpperChar`, the ILFF walkers). The earlier "Error" window seen in the same test was a
+dialog left over by the previous instance, not a complaint about the arguments.
+
+The front-end run still does not reach the config cluster. The graphic option records are script
+handlers registered by 0x00402FF0 under names such as
+`Config_GraphicOptionsSetPerformanceFlags`, so retail only calls them when config.qvm invokes those
+names - which is the option screen, not the menu itself. Two attempts failed to open it: the timed
+keyboard timeline (which provably lands, because `Human_TaskViewReset` still observes its call) and a
+5x5 mouse sweep over the client area using `ClientToScreen` + `SendInput`. Both produced exactly the
+same 53-native observation set, so the clicks either never reached the Wine window on its own macOS
+space or missed every button; confirming which needs a screenshot, and screen recording is waiting on
+a system approval we cannot give ourselves.
+
+Register rebuild: eleven rows still carried the status of an older generation and contradicted their
+own blocker line (a `retail-unobserved` row labelled `VERIFIED`). The file is now derived from the
+manifest plus the current capture, so status, blocker and the verified set agree:
+92 verified, 16 retail-unobserved, 5 unlinked, 4 candidate-unreachable, 3 matched-but-unverified.
+
+Parallel branch: three of my blockers advanced there to BUILD_VERIFIED (`QTask_CreateTask`,
+`Config_Read`, `Qvm_ReportError`) but none to VERIFIED, so there is still no evidence to adopt and
+`Config_Read`'s link work is the one that may also unblock the option-screen path.
+
+Operational note: a hung frida-server (frida-ps timing out) is recovered by killing the
+`frida-server-x86.exe` wine process and relaunching it against the bottle; enumerate then works again.

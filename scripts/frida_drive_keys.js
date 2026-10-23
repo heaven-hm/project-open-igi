@@ -1,64 +1,123 @@
 'use strict';
-// Synthetic keyboard driver for paired runtime captures.
+// Synthetic input driver for paired runtime captures.
 //
-// Several MVP natives sit behind interactive paths (task/objective view, pause
-// and status changes, menus) that a passive gameplay capture never enters. The
-// retail input layer is DirectInput, which reads device state rather than posted
-// WM_KEYDOWN messages, so this driver injects through SendInput from inside the
-// game process - the same path a physical key press takes.
+// Several MVP natives sit behind interactive paths (task/objective view, menus and the
+// front-end option screens) that a passive gameplay capture never enters. The retail input
+// layer is DirectInput, which reads device state rather than posted WM_KEYDOWN messages, so
+// this driver injects through SendInput from inside the game process - the same path a
+// physical key press or mouse click takes. Mouse clicks use ClientToScreen against the
+// foreground window, so a click lands at a fraction of the game's own client area whatever
+// size the window is.
 //
 // The driver attaches as a second Frida session so the observation probe stays
 // byte-identical and its recorded hash keeps meaning what it says.
 
-const sendInput = new NativeFunction(
-  Module.getExportByName('user32.dll', 'SendInput'), 'uint', ['uint', 'pointer', 'int']);
-const SIZE = 28;          // sizeof(INPUT) on 32-bit Windows
-const KEYUP = 0x0002;
+const user32 = {
+  sendInput: new NativeFunction(Module.getExportByName('user32.dll', 'SendInput'),
+    'uint', ['uint', 'pointer', 'int']),
+  foreground: new NativeFunction(Module.getExportByName('user32.dll', 'GetForegroundWindow'),
+    'pointer', []),
+  clientRect: new NativeFunction(Module.getExportByName('user32.dll', 'GetClientRect'),
+    'int', ['pointer', 'pointer']),
+  clientToScreen: new NativeFunction(Module.getExportByName('user32.dll', 'ClientToScreen'),
+    'int', ['pointer', 'pointer']),
+  setCursorPos: new NativeFunction(Module.getExportByName('user32.dll', 'SetCursorPos'),
+    'int', ['int', 'int'])
+};
 
-function press(virtualKey) {
-  const buffer = Memory.alloc(SIZE);
-  for (let offset = 0; offset < SIZE; offset += 1) {
+const INPUT_SIZE = 28;          // sizeof(INPUT) on 32-bit Windows
+const KEYUP = 0x0002;
+const MOUSE_LEFT_DOWN = 0x0002;
+const MOUSE_LEFT_UP = 0x0004;
+
+function blank() {
+  const buffer = Memory.alloc(INPUT_SIZE);
+  for (let offset = 0; offset < INPUT_SIZE; offset += 1) {
     buffer.add(offset).writeU8(0);
   }
-  buffer.writeU32(1);                  // INPUT_KEYBOARD
-  buffer.add(4).writeU16(virtualKey);  // KEYBDINPUT.wVk
-  buffer.add(6).writeU16(0);           // KEYBDINPUT.wScan
-  buffer.add(8).writeU32(0);           // key down
-  sendInput(1, buffer, SIZE);
+  return buffer;
+}
+
+function press(virtualKey) {
+  const down = blank();
+  down.writeU32(1);                  // INPUT_KEYBOARD
+  down.add(4).writeU16(virtualKey);  // KEYBDINPUT.wVk
+  user32.sendInput(1, down, INPUT_SIZE);
   setTimeout(() => {
-    const release = Memory.alloc(SIZE);
-    for (let offset = 0; offset < SIZE; offset += 1) {
-      release.add(offset).writeU8(0);
-    }
-    release.writeU32(1);
-    release.add(4).writeU16(virtualKey);
-    release.add(8).writeU32(KEYUP);
-    sendInput(1, release, SIZE);
+    const up = blank();
+    up.writeU32(1);
+    up.add(4).writeU16(virtualKey);
+    up.add(8).writeU32(KEYUP);
+    user32.sendInput(1, up, INPUT_SIZE);
   }, 80);
 }
 
-// Timeline of (milliseconds after the level is up, keys) events. The sweep covers the
-// task and map views, the in-game menu (which is where the graphic-option records are
-// read and written), the option screens' own navigation, and movement/interaction.
+function clickMouse() {
+  const down = blank();
+  down.writeU32(0);                  // INPUT_MOUSE
+  down.add(16).writeU32(MOUSE_LEFT_DOWN);
+  user32.sendInput(1, down, INPUT_SIZE);
+  setTimeout(() => {
+    const up = blank();
+    up.writeU32(0);
+    up.add(16).writeU32(MOUSE_LEFT_UP);
+    user32.sendInput(1, up, INPUT_SIZE);
+  }, 60);
+}
+
+// Click at a fraction of the foreground window's client area.
+function clickAt(fractionX, fractionY) {
+  const window = user32.foreground();
+  if (window.isNull()) {
+    return;
+  }
+  const rect = Memory.alloc(16);
+  if (user32.clientRect(window, rect) === 0) {
+    return;
+  }
+  const width = rect.add(8).readS32();
+  const height = rect.add(12).readS32();
+  if (width <= 0 || height <= 0) {
+    return;
+  }
+  const point = Memory.alloc(8);
+  point.writeS32(Math.round(width * fractionX));
+  point.add(4).writeS32(Math.round(height * fractionY));
+  if (user32.clientToScreen(window, point) === 0) {
+    return;
+  }
+  user32.setCursorPos(point.readS32(), point.add(4).readS32());
+  clickMouse();
+}
+
+// Keyboard timeline: task and map views, the in-game menu and its option screens,
+// help/status, movement and interaction.
 const TIMELINE = [
   [10000, [0x09]],                                  // task view
   [12000, [0x4D]],                                  // map computer
   [14000, [0x1B]],                                  // in-game menu
-  [15200, [0x28]],                                  // move down one entry
+  [15200, [0x28]],
   [16400, [0x28]],
-  [17600, [0x0D]],                                  // open the selected entry
-  [19000, [0x27]],                                  // walk the option screens
+  [17600, [0x0D]],
+  [19000, [0x27]],
   [20200, [0x28]],
   [21400, [0x25]],
-  [22600, [0x0D]],                                  // apply the highlighted value
+  [22600, [0x0D]],
   [24000, [0x1B]],
-  [25200, [0x1B]],                                  // leave the menu
-  [26600, [0x70]],                                  // help
-  [27800, [0x49]],                                  // inventory/status
+  [25200, [0x1B]],
+  [26600, [0x70]],
+  [27800, [0x49]],
   [29200, [0x57]], [29600, [0x41]], [30000, [0x53]], [30400, [0x44]],
-  [31800, [0x0D]],                                  // interact
+  [31800, [0x0D]]
 ];
-const CYCLE_MS = 34000;
+
+// Mouse sweep over the front-end menu: five columns by five rows of the client area,
+// which covers the button column and the option-screen controls.
+const CLICK_COLUMNS = [0.08, 0.25, 0.42, 0.58, 0.75];
+const CLICK_ROWS = [0.18, 0.32, 0.46, 0.60, 0.74];
+const CLICK_START_MS = 34000;
+const CLICK_INTERVAL_MS = 1100;
+const CYCLE_MS = CLICK_START_MS + CLICK_COLUMNS.length * CLICK_ROWS.length * CLICK_INTERVAL_MS + 4000;
 
 function runCycle() {
   for (const [offset, keys] of TIMELINE) {
@@ -68,8 +127,16 @@ function runCycle() {
       }
     }, offset);
   }
+  let index = 0;
+  for (const row of CLICK_ROWS) {
+    for (const column of CLICK_COLUMNS) {
+      const offset = CLICK_START_MS + index * CLICK_INTERVAL_MS;
+      index += 1;
+      setTimeout(() => clickAt(column, row), offset);
+    }
+  }
   setTimeout(runCycle, CYCLE_MS);
 }
 
-// Let the level finish loading before touching the keyboard.
+// Let the level or front end finish loading before touching the input devices.
 setTimeout(runCycle, 1000);

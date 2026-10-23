@@ -223,18 +223,23 @@ def compare(retail: dict, candidate: dict, comparability: dict | None = None) ->
     }
 
 
-def start_with_arguments(executable: str, level: int, extra_arguments: tuple[str, ...]):
-    """Launch an image with the retail window/level words plus extra scene modes."""
+def start_with_arguments(executable: str, level: int | None, extra_arguments: tuple[str, ...] = ()):
+    """Launch an image with the retail window/level words plus extra scene modes.
+
+    A missing level launches the front end instead of a level: retail then shows its
+    main menu, which is where the graphic-option records are read and written.
+    """
     environment = dict(nfd.os.environ)
+    words = ["window"] if level is None else ["window", f"level{level}"]
     return nfd.subprocess.Popen(
         ["env", "LC_ALL=C", "LANG=C", nfd.vnb.WINE, "--bottle", nfd.vnb.BOTTLE, executable,
-         "window", f"level{level}", *extra_arguments],
+         *words, *extra_arguments],
         cwd=Path(nfd.vnb.GAME_DIR), stdout=nfd.subprocess.DEVNULL,
         stderr=nfd.subprocess.DEVNULL, env=environment)
 
 
 def capture(process_name: str, executable: str, addresses: list[str], observe: float,
-            settle: float, level: int, result: dict,
+            settle: float, level: int | None, result: dict,
             extra_arguments: tuple[str, ...] = (), spawn: bool = False) -> None:
     """Start one image and observe the selected natives.
 
@@ -245,7 +250,7 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
     """
     process = None
     if not spawn:
-        if extra_arguments:
+        if extra_arguments or level is None:
             process = start_with_arguments(executable, level, extra_arguments)
         else:
             process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
@@ -255,7 +260,8 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
         if spawn:
             result["observed"] = nfd.run_observation_spawn(
                 executable, "Z:" + str(Path(nfd.vnb.GAME_DIR)).replace("/", "\\"),
-                ["window", f"level{level}", *extra_arguments], addresses, observe,
+                (["window"] if level is None else ["window", f"level{level}"]) + list(extra_arguments),
+                addresses, observe,
                 probe_source, settle=settle, meta=meta)
             result["pid"] = 0
             result["meta"] = meta
@@ -322,6 +328,9 @@ def main() -> int:
                         help="reuse the retail observations of an earlier capture whose "
                              "retail image digest still matches, instead of relaunching retail")
     parser.add_argument("--settle", type=float, default=30.0)
+    parser.add_argument("--front-end", action="store_true",
+                        help="launch retail without a level so its main menu runs; the graphic "
+                             "option records are read and written there")
     parser.add_argument("--spawn", action="store_true",
                         help="spawn each image suspended and install hooks before its entry "
                              "point, so natives called during startup are observed too")
@@ -430,10 +439,11 @@ def main() -> int:
             print("retail image changed since the prior capture; capturing retail", flush=True)
 
     if not reused:
-        print(f"capturing retail igi.exe (level {args.level}) ...", flush=True)
+        scene = "front end" if args.front_end else f"level {args.level}"
+        print(f"capturing retail igi.exe ({scene}) ...", flush=True)
         capture("igi.exe", "Z:" + str(retail).replace("/", "\\"),
                 [item["retail_va"] for item in plan], args.observe, args.settle,
-                args.level, retail_result, spawn=args.spawn)
+                None if args.front_end else args.level, retail_result, spawn=args.spawn)
         print(f"retail: {len(retail_result.get('observed') or {})} natives observed"
               f" error={retail_result.get('error')}", flush=True)
 
