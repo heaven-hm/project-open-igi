@@ -5,7 +5,7 @@
  "address": "0x004b59f0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "d5d7c04371f06db5793794ca340387d6e90de7a8f42ebf1f72f5ebd44de38e1c",
- "candidate_executable_sha256": "f93e5c566dd14de0505b895727e2ba32a579cd28ff4718d1a5cf04086593a4be",
+ "candidate_executable_sha256": "86b3b4cb9979feb421051d7407552215638321c0d987cdfb696783f9c4418ba3",
  "retail_observed_calls": 5636,
  "candidate_observed_calls": 1,
  "matched_calls": 1,
@@ -37,8 +37,8 @@
   "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-hash.json",
-  "paired_capture_sha256": "cac3c1665cf46c4fa6d2be2a24e62ef9ee66d130121ae4a6d59b45948b301f36"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-ilff2.json",
+  "paired_capture_sha256": "cd71565cdb5f8b7d546ba78a1de2b52f019f26f5e773dbea0ecf37159430d4a2"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

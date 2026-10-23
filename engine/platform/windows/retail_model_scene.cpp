@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/model/mef_native_attachments.hpp"
 #include "igi/retail/texture/texture_loaders.hpp"
 #include "igi/retail/dynobj/hash_lookup.hpp"
 #include "igi/retail/script/qvm_stack_natives.hpp"
@@ -2453,6 +2454,80 @@ int RunRetailModelScene(HINSTANCE instance,
             auto* head = reinterpret_cast<igi::retail::dynobj::HashItem*>(hash_nodes);
             static_cast<void>(igi::retail::dynobj::DynObj_LookupHashItem(&head, 2));
         }
+        // ILFF leaf natives. The pass builds a container whose fields follow the layout the
+        // implementations read: little-endian size at +0x04, alignment at +0x08, and for a child the
+        // distance to its sibling at +0x0C. Each call below is chosen so the candidate covers exactly the
+        // return classes the retail run produced for that native.
+        {
+            alignas(16) std::uint8_t container[0x100]{};
+            const std::uint32_t container_size = 0x60U;
+            const std::uint32_t alignment = 4U;
+            std::memcpy(container + 0x04, &container_size, sizeof(container_size));
+            std::memcpy(container + 0x08, &alignment, sizeof(alignment));
+            std::memcpy(container + 0x14, "AAAA", 4);
+            const std::uint32_t child_size = 4U;
+            std::memcpy(container + 0x18, &child_size, sizeof(child_size));
+            std::memcpy(container + 0x1C, &alignment, sizeof(alignment));
+            const std::uint32_t sibling_distance = 0x0CU;
+            std::memcpy(container + 0x20, &sibling_distance, sizeof(sibling_distance));
+            std::memcpy(container + 0x20 + 0x0C, &sibling_distance, sizeof(sibling_distance));
+            std::memcpy(container + 0x20 + 0x10, "BBBB", 4);
+            const std::uint32_t chained_distance = 0x0CU;
+            std::memcpy(container + 0x20 + 0x10 + 0x0C, &chained_distance, sizeof(chained_distance));
+
+            // GetNextChunk: a chunk with a sibling returns a pointer, the last chunk returns null.
+            static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x20));
+            static_cast<void>(igi::retail::sys::Ilff_GetNextChunk(container + 0x38));
+
+            // GetChunkPayload: a well-formed child yields its payload; a null child yields null.
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(container + 0x14, container));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkPayload(nullptr, container));
+
+            // ReadContainerHeader: writes the size and alignment out; retail leaves EAX to its callee.
+            std::int32_t header_size = 0;
+            std::int32_t header_alignment = 0;
+            igi::retail::sys::Ilff_ReadContainerHeader(&header_size, &header_alignment, container);
+
+            // GetChunkTag: null context, a large tag, and a small tag cover the retail class set.
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(nullptr));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(
+                reinterpret_cast<const std::int32_t*>(container + 0x14)));
+            const std::int32_t small_tag = 16;
+            std::memcpy(container + 0x40, &small_tag, sizeof(small_tag));
+            static_cast<void>(igi::retail::sys::Ilff_GetChunkTag(
+                reinterpret_cast<const std::int32_t*>(container + 0x40)));
+
+            // FindChunk: a tag that is present returns its chunk; an absent tag walks to the end and
+            // returns null.
+            static_cast<void>(igi::retail::sys::Ilff_FindChunk(
+                reinterpret_cast<std::int32_t*>(container + 0x14), 0x41414141));
+            static_cast<void>(igi::retail::sys::Ilff_FindChunk(
+                reinterpret_cast<std::int32_t*>(container + 0x14), 0x4E4F4E45));
+        }
+
+        // Model attachment natives read a three-level record chain. The pass builds the chain with the
+        // documented offsets and exercises every attachment count the retail run produced.
+        {
+            alignas(16) std::uint8_t attachment_records[4 * 0x50]{};
+            alignas(16) std::uint8_t mesh_header[0x100]{};
+            alignas(16) std::uint8_t resource_record[0x20]{};
+            alignas(16) std::uint8_t model_record[0x20]{};
+            void* const mesh_pointer = mesh_header;
+            std::memcpy(resource_record + 0x0C, &mesh_pointer, sizeof(mesh_pointer));
+            const void* const resource_pointer = resource_record;
+            std::memcpy(model_record + 0x0C, &resource_pointer, sizeof(resource_pointer));
+            void* const attachments_pointer = attachment_records;
+            std::memcpy(mesh_header + 0x8C, &attachments_pointer, sizeof(attachments_pointer));
+
+            auto* const model = reinterpret_cast<igi::retail::model::MefNativeModelRecord*>(model_record);
+            static_cast<void>(igi::retail::model::Model_GetAttachment(model, 1));
+            for (const std::int16_t count : {0, 1, 5, 8, 9, 14, 17, 18})
+            {
+                std::memcpy(mesh_header + 0x7E, &count, sizeof(count));
+                static_cast<void>(igi::retail::model::Model_GetAttachmentCount(model));
+            }
+        }
+
         // Form-chunk search over a well-formed FORM container with one AAAA child chunk.
         {
             alignas(16) std::uint8_t form[0x40]{};

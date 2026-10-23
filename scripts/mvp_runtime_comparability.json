@@ -36,6 +36,10 @@
     "0x004BD3D0": {
       "comparable": false,
       "reason": "retail 0x004BD3D0 stores the handler pointer into the opcode handler table and returns without writing EAX, so the observed class is callee residue rather than a result. The ported body is void; only reachability is meaningful."
+    },
+    "0x004B7540": {
+      "comparable": false,
+      "reason": "retail 0x004B7540 writes its two out-parameters and returns without assigning any observable value of its own; EAX still holds whatever the last 'mov eax,[esp+8]' left there. The ported body is void, so only reachability is a meaningful criterion."
     }
   }
 }

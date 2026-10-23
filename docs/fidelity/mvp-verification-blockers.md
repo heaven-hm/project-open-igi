@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 41 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 48 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 41 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 48 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -726,3 +726,26 @@ already existed and already passed, so all they needed was to be reached.
 
 All three passed the strict gate on build, behavioural, semantic and Frida evidence without any comparability
 override. Verified count 38 -> 41, paired matches 45 -> 48, mismatches 0, candidate-unreachable 46 -> 43.
+
+## Seven natives reached by making the fixture cover the retail class set
+
+The paired capture compares return-value *class sets*, so a native that returns both pointers and nulls needs
+the pass to exercise both branches - otherwise its candidate set is a strict subset and the observation is
+inconclusive, not a match. That is what held the ILFF leaves and the model attachment pair.
+
+This round built fixtures against the exact class sets the retail run had produced:
+
+* `Ilff_GetNextChunk` (0x004B7470), `Ilff_FindChunk` (0x004B7590) and `Ilff_GetChunkPayload` (0x004B74D0)
+  each need `{null, ptr}`. The pass builds a container with little-endian size at +0x04, alignment at +0x08
+  and a sibling distance at +0x0C, then calls each native once on a resolvable input and once on a null or
+  exhausted one.
+* `Ilff_GetChunkTag` (0x004B7580) needs `{null, ptr, small:16}`: a null context, a large tag, and a tag of 16.
+* `Ilff_ReadContainerHeader` (0x004B7540) is void and retail leaves EAX to its last load, so it takes a
+  reachability override.
+* `Model_GetAttachment` (0x004D0CF0) needs `{ptr}`: the pass builds the three-level record chain at the
+  documented offsets (model+0x0C, resource+0x0C, mesh+0x8C).
+* `Model_GetAttachmentCount` (0x004D0D10) needed all eight retail values - `null` and `small:1,5,8,9,14,17,18`
+  - so the pass rewrites the count field and calls it once per value.
+
+All seven pass the strict gate. Verified count 41 -> 48, paired matches 48 -> 55, mismatches 0,
+candidate-unreachable 43 -> 36.
