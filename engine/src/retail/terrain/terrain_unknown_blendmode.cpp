@@ -1,8 +1,8 @@
 // Native: Terrain_UnknownBlendmode; retail VA 0x005144E0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and
-//   angr 10.0.4.post1 CFGFast; block/edge counts and tool versions are recorded in
-//   docs/fidelity/native-verification.json. No Ghidra analysis was run for this target.
+// Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail IGI.EXE; evidence docs/fidelity/evidence/0x005144E0-*.json; no Ghidra analysis was run for this target.
+// Behavior/CFG: modes 0/1/2 each reload 0x005CA114 and call device vtable +0x50 and +0x94, returning the last +0x50 HRESULT; any other mode reports "Unknown blendmode" through 0x004AF7B0 and does not return. Binary Ninja and radare2 recover the same retail graph.
+// Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists. The null-device and scope limits are detailed below.
 //
 // Retail structure (from instructions, not decompiler naming)
 //   0x005144E0  mov eax, [esp+4]                  ; mode
@@ -33,7 +33,7 @@
 //           ZWRITEENABLE=0
 // Every other 32-bit mode reaches the fatal "Unknown blendmode" path, which does not return.
 //
-// Status/limits: TRANSCRIBED candidate; not wired into CMakeLists.txt; no runtime capture exists
+// Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists
 // for this source. The function deliberately performs no null check on 0x005CA114: retail would
 // fault on a null device and inventing an exception here would change the observable behavior.
 #include "igi/retail/terrain/terrain_unknown_blendmode.hpp"

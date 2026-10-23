@@ -1,8 +1,8 @@
 // Native: Terrain_OutOfTerrainRenderch; retail VA 0x00514680.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and
-//   angr 10.0.4.post1 CFGFast; block/edge counts and tool versions are recorded in
-//   docs/fidelity/native-verification.json. No Ghidra analysis was run for this target.
+// Tools/evidence: Binary Ninja MCP 0.1.0 (single selected decompiler), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail IGI.EXE; evidence docs/fidelity/evidence/0x00514680-*.json; no Ghidra analysis was run for this target.
+// Behavior/CFG: hash-bucketed render-chunk cache lookup ((arg2*0xB5AF + arg1*0x9D) % 0x1FD) returns a matching node or allocates from the 0x2EF8-stride pool; exhaustion reports "Out of terrain renderchunks" and halts. Binary Ninja and radare2 recover the same retail graph.
+// Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists. The retail pool initialisers 0x00516621 and 0x004B0B00 remain runtime preconditions, detailed below.
 //
 // Retail structure (from instructions, not decompiler naming)
 //   0x00514680  push ebx/esi/edi
@@ -32,7 +32,7 @@
 //   The slot index is stored at node+0x2EF4, i.e. in the four alignment-padding bytes after the
 //   0x2EF4-byte element; this is why the pool stride is 0x2EF8 and not 0x2EF4.
 //
-// Status/limits: TRANSCRIBED candidate; not wired into CMakeLists.txt; no runtime capture exists
+// Status/limits: STRUCTURALLY_VERIFIED; not wired into CMakeLists.txt; no runtime capture exists
 // for this source. The bucket table (g_a7e080) and pool capacity (g_a7f884) are defined in this
 // translation unit; the remaining pool globals are defined once by terrain_draw.cpp and g_a7f88c
 // is std::uint32_t there. The retail initialisers 0x00516621 (buckets) and 0x004B0B00 (pool) are

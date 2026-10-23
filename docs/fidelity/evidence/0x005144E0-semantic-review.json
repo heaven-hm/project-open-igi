@@ -8,7 +8,36 @@
   "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
   "binary_size_bytes": 1384448,
   "implementation_path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
-  "implementation_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+  "implementation_sha256": "28516a8d42661e0ba4a4064fad04cb7a90d75727e7e60ed0fa35a8593ea53975",
+  "implementation_object": {
+    "sha256": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o /tmp/igi-rebind/obj-final/terrain_unknown_blendmode.o",
+    "note": "Fresh out-of-tree compile of the rebound source; byte-identical to the object digest recorded by docs/fidelity/evidence/0x005144E0-structural-comparison.json."
+  },
+  "rebind": {
+    "recorded_at": "2026-10-23T13:28:50+05:30",
+    "reason": "Provenance comment edits changed the source digest; no compiled code changed.",
+    "previous_implementation_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "new_implementation_sha256": "28516a8d42661e0ba4a4064fad04cb7a90d75727e7e60ed0fa35a8593ea53975",
+    "object_sha256": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
+    "object_sha256_previous": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
+    "object_byte_identical": true,
+    "comment_only_proof": {
+      "committed_blob": "git show HEAD:engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+      "changed_lines": {
+        "removed": 4,
+        "added": 4,
+        "removed_lines_comment_only": true,
+        "added_lines_comment_only": true
+      },
+      "token_stream_identical_excluding_comments": true,
+      "token_count": 619,
+      "preprocessed_tu_sha256": "9cc023a1625c15c1d2cf2c7aa6841298dd1a8c5fbf6b7a0c797e3986782493cc",
+      "preprocessed_tu_identical": true
+    },
+    "limitation_note": "Only provenance comments changed: every edited line is a // comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object is byte-identical to the pre-rebind object (df7f35e3...), which is the digest recorded by the structural comparison. No compiled code, constant, layout or behaviour was altered; this rebind does not raise the verification status."
+  },
   "reviewed": true,
   "reviewed_by": "Automated source-semantic review in this session against the retail instruction bytes (radare2 6.2.0 disassembly of 0x005144E0..0x00514675, cross-checked with the Binary Ninja 0.1.0 and radare2 artifacts listed below) and against the pre-link i386 COFF object rebuilt from the reviewed source with i686-w64-mingw32-g++ (GCC) 16.2.0",
   "recorded_at": "2026-10-23T04:25:00Z",
@@ -41,14 +70,14 @@
     },
     {
       "path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
-      "sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+      "sha256": "28516a8d42661e0ba4a4064fad04cb7a90d75727e7e60ed0fa35a8593ea53975",
       "role": "reviewed implementation source"
     }
   ],
   "independent_measurement": {
     "method": "Recompiled the reviewed source with the recorded command and inspected the COFF object with i686-w64-mingw32-objdump -dr --no-show-raw-insn.",
-    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o /tmp/igi-semantic/blend.o",
-    "source_sha256_recomputed": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o /tmp/igi-rebind/obj-final/terrain_unknown_blendmode.o",
+    "source_sha256_recomputed": "28516a8d42661e0ba4a4064fad04cb7a90d75727e7e60ed0fa35a8593ea53975",
     "object_sha256_recomputed": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
     "object_matches_recorded_candidate_object": true,
     "object_instruction_count": 161,
@@ -254,7 +283,7 @@
   "candidate_semantics": {
     "entry": "Terrain_UnknownBlendmode (extern \"C\")",
     "source_path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
-    "source_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "source_sha256": "28516a8d42661e0ba4a4064fad04cb7a90d75727e7e60ed0fa35a8593ea53975",
     "dispatch": "if (blendmode == 0) mode 0; if (blendmode == 1) mode 1; if (blendmode == 2) mode 2; otherwise error::Error_Show(\"Unknown blendmode\"); halt_forever(). The comparison order is 0, 1, 2, default, matching the retail sub/dec/dec chain.",
     "device_abstraction": {
       "global": "igi::retail::terrain::g_5ca114 (Device7*)",
@@ -358,16 +387,16 @@
     "The candidate's host vtable uses +0x08/+0x14 rather than retail +0x50/+0x94. This is an abstraction boundary, not a semantic difference: argument count, order, callee-cleanup shape and per-call reload are preserved.",
     "The fatal path calls Error_Show (the port of 0x004AF7B0) with the same literal and then halts forever. The non-return of retail Debug_Error is not proven statically; the candidate's loop is the correct observable choice.",
     "Neither implementation checks g_5ca114 for null; both fault when the device is uninstalled, so the candidate does not invent a behaviour change.",
-    "The provenance comment in the reviewed source still says TRANSCRIBED while the manifest says STRUCTURALLY_VERIFIED; this review leaves the source digest untouched, so the gate's comment/status warning remains non-blocking."
+    "The provenance comment now records STRUCTURALLY_VERIFIED, matching the manifest. This rebind moves the bound implementation digest to the comment-bearing source; every edited line is a comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object remains byte-identical (df7f35e3...). No compiled code changed, so the gate's comment/status binding is satisfied without altering the reviewed semantics."
   ],
   "limitations": [
     "Static source/object review only. No retail runtime capture, no device-state observation and no rendered-frame comparison was performed.",
-    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_unknown_blendmode.cpp (source sha256 457ff29a..., object sha256 df7f35e3...). The current build-clean-win32/igi1.exe (sha256 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6, mtime 2026-10-23T10:00:01+0530, observed 2026-10-23T10:05:29+0530) contains Terrain_UnknownBlendmode at 0x00465180, and objdump of that address shows the same dispatch and device-call sequence as the reviewed object. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
+    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_unknown_blendmode.cpp (current source sha256 28516a8d..., object sha256 df7f35e3...). The linked build-clean-win32/igi1.exe on disk is sha256 936c8f7f7bc16c12800dc4aa781ed009815602a0c904f663240fc3eb7c6af72e (observed 2026-10-23T13:28:50+05:30) and its symbol table places Terrain_UnknownBlendmode at 0x004652E0; the prior 35d92a3a.../0x00465180 observation is superseded. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
     "The Direct3D 7 device and its vtable are host abstractions. The mapping +0x08/+0x14 to +0x50/+0x94 is by call shape; this review makes no claim that the host object layout or vtable addresses equal retail DX7 memory.",
     "The host function pointers are declared __stdcall, matching the callee-cleanup shape observed at the retail indirect call sites; no runtime ABI test was performed.",
     "Error_Show (retail 0x004AF7B0) is variadic and may return when its exit callback is null; the candidate's explicit halt preserves the retail jmp $ observable, but the retail callee's non-return is not statically proven.",
     "No live differential harness exists for 0x005144E0. A host harness is technically feasible (angr can execute the retail bytes with a synthetic device/vtable and record the +0x50/+0x94 arguments, while a compiled candidate stub records the same calls), but it was not built: this task owns only the two semantic-review files and the two manifest records, no existing repository runner dispatches this address, and pointing verification.behavioral_runner at a non-existent or placeholder script would fabricate evidence. The strict behavioral requirement therefore remains unmet.",
-    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 35d92a3 executable is observed but not bound by a build receipt."
+    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 936c8f7f executable is observed but not bound by a build receipt."
   ],
   "behavioral_evidence": {
     "status": "not_performed",
@@ -381,7 +410,7 @@
   "strict_gate_projection": {
     "status": "STRUCTURALLY_VERIFIED",
     "project_default_threshold": "VERIFIED",
-    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is now present and bound to implementation sha256 457ff29a...",
+    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is present and rebound to implementation sha256 28516a8d...; the bound object remains df7f35e3..., so this rebind changes no compiled code.",
     "at_threshold_verified": "The status is also below the required VERIFIED threshold, and the missing behavioral runner still blocks. No status promotion is claimed.",
     "cfg_similarity_scope": "The recorded 1.0 is the retail Binary Ninja-versus-radare2 graph score only; it is not candidate equivalence."
   }

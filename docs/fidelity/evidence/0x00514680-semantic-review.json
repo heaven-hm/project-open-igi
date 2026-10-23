@@ -8,7 +8,36 @@
   "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
   "binary_size_bytes": 1384448,
   "implementation_path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-  "implementation_sha256": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
+  "implementation_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
+  "implementation_object": {
+    "sha256": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp -o /tmp/igi-rebind/obj-final/terrain_out_of_terrain_renderch.o",
+    "note": "Fresh out-of-tree compile of the rebound source; byte-identical to the object digest recorded by docs/fidelity/evidence/0x00514680-structural-comparison.json."
+  },
+  "rebind": {
+    "recorded_at": "2026-10-23T13:28:50+05:30",
+    "reason": "Provenance comment edits changed the source digest; no compiled code changed.",
+    "previous_implementation_sha256": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
+    "new_implementation_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
+    "object_sha256": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
+    "object_sha256_previous": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
+    "object_byte_identical": true,
+    "comment_only_proof": {
+      "committed_blob": "git show HEAD:engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
+      "changed_lines": {
+        "removed": 4,
+        "added": 4,
+        "removed_lines_comment_only": true,
+        "added_lines_comment_only": true
+      },
+      "token_stream_identical_excluding_comments": true,
+      "token_count": 741,
+      "preprocessed_tu_sha256": "5541a55266833315f5beec4e0ec80594dab0d777adbcaecc6e5652343f51691b",
+      "preprocessed_tu_identical": true
+    },
+    "limitation_note": "Only provenance comments changed: every edited line is a // comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object is byte-identical to the pre-rebind object (14b7f744...), which is the digest recorded by the structural comparison. No compiled code, constant, layout or behaviour was altered; this rebind does not raise the verification status."
+  },
   "reviewed": true,
   "reviewed_by": "Automated source-semantic review in this session against the retail instruction bytes (radare2 6.2.0 disassembly of 0x00514680..0x00514759 and 0x004AF910..0x004AF926, cross-checked with the Binary Ninja 0.1.0 and radare2 artifacts listed below) and against the pre-link i386 COFF object rebuilt from the reviewed source with i686-w64-mingw32-g++ (GCC) 16.2.0",
   "recorded_at": "2026-10-23T04:27:00Z",
@@ -41,14 +70,14 @@
     },
     {
       "path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-      "sha256": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
+      "sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
       "role": "reviewed implementation source"
     }
   ],
   "independent_measurement": {
     "method": "Recompiled the reviewed source with the recorded command and inspected the COFF object with i686-w64-mingw32-objdump -dr --no-show-raw-insn and i686-w64-mingw32-nm.",
-    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp -o /tmp/igi-semantic/renderch.o",
-    "source_sha256_recomputed": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp -o /tmp/igi-rebind/obj-final/terrain_out_of_terrain_renderch.o",
+    "source_sha256_recomputed": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
     "object_sha256_recomputed": "14b7f744b0bfa9978d880e0c12f5ed8cb5eb3a1408daf308c7ae24bb076a7cc5",
     "object_matches_recorded_candidate_object": true,
     "object_instruction_count": 81,
@@ -140,7 +169,7 @@
   "candidate_semantics": {
     "entry": "Terrain_OutOfTerrainRenderch (extern \"C\")",
     "source_path": "engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp",
-    "source_sha256": "bbee39aa8003561d52a7076afe99d956083aaa69643aa04fb3daf5c8a2778f4f",
+    "source_sha256": "7b66375f55ec66efc3a7444a91721238bd4cb5017319258e5991a5ab6bbbe67a",
     "hash": "const std::uint32_t hash = (pass_value * 0xB5AFU + key * 0x9DU) % 0x1FDU; with key = the 32-bit value of texture_owner and pass_value = the 32-bit bits of pass.",
     "bucket_selection": "TerrainRenderChunkBucket& bucket = g_a7e080[hash]; the struct is 12 bytes with head/sentinel_next/sentinel_prev at +0x00/+0x04/+0x08 (static_asserts verify sizeof and offsets).",
     "traversal": "Address node = to_address(bucket.head); for (;;) { const Address next = load_u32(node + chunk_offset_next); if (next == 0) break; if (load_u32(node + chunk_offset_texture_owner) == key) { if (load_u32(node + chunk_offset_pass) == pass_value) return to_chunk(node); } node = next; } with chunk_offset_next = 0x0000, chunk_offset_texture_owner = 0x2EEC and chunk_offset_pass = 0x2EF0.",
@@ -249,7 +278,7 @@
   ],
   "limitations": [
     "Static source/object review only. No retail runtime capture, no memory/state observation and no rendered-output comparison was performed.",
-    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp (source sha256 bbee39aa..., object sha256 14b7f744...). The current build-clean-win32/igi1.exe (sha256 35d92a3aa52f3043fc953b5644aef0f34a8577eb9c18522b8d49ce8d09ce02f6, mtime 2026-10-23T10:00:01+0530, observed 2026-10-23T10:05:29+0530) contains Terrain_OutOfTerrainRenderch at 0x00462f40, and objdump of that address shows the same prologue, hash multiply and walk sequence as the reviewed object. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
+    "The measured candidate is the pre-link i386 COFF object from engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp (current source sha256 7b66375f..., object sha256 14b7f744...). The linked build-clean-win32/igi1.exe on disk is sha256 936c8f7f7bc16c12800dc4aa781ed009815602a0c904f663240fc3eb7c6af72e (observed 2026-10-23T13:28:50+05:30) and its symbol table places Terrain_OutOfTerrainRenderch at 0x00462F80; the prior 35d92a3a.../0x00462f40 observation is superseded. No build receipt or source-to-executable byte binding is recorded in this report, so BUILD_VERIFIED is not claimed.",
     "The retail bucket table 0x00A7E080 and pool globals 0x00A7F878/0x00A7F87C/0x00A7F880/0x00A7F884/0x00A7F888/0x00A7F88C are populated by runtime initialisers 0x00516621 and 0x00516640 -> 0x004B0B00, which this review did not execute. The traversal and allocation paths cannot be exercised against the file-image zero state; the review covers the function body and its use of the documented post-initialiser layout, not a live pool.",
     "The candidate stores the zero-filled file-image bucket table and g_a7f884 = 0, and does not run the retail initialisers. Calling it before 0x00516621 would dereference a null bucket head, exactly as retail would with the same file-image state; that is not a valid runtime scenario and is outside the compared scope.",
     "The hash is an unsigned 32-bit modulo. The candidate's reciprocal-multiply form was checked on 700,009 sampled inputs with zero mismatches, not exhaustively over all 2^32 values; the source-level operator is exact and the compiler transform is standard.",
@@ -257,9 +286,9 @@
     "The candidate loads the used count once and reuses it for the gate, slot lookup and slot-index store, while retail reloads it only for the increment. This is value-preserving absent a concurrent writer; the function is not reentrant in retail either.",
     "Error_Show (retail 0x004AF7B0) is variadic and may return; the candidate's explicit halt preserves the retail jmp $ observable, but the retail callee's non-return is not statically proven.",
     "g_a7f88c is typed std::uint32_t consistently in the header and both readers. The surrounding pool globals are now defined in terrain_storage.cpp, and all three terrain TUs are listed in the current CMakeLists; this review did not build or bind a build receipt for them.",
-    "The provenance comment in the reviewed source still says TRANSCRIBED while the manifest says STRUCTURALLY_VERIFIED; this review leaves the source digest untouched, so the gate's comment/status warning remains non-blocking.",
+    "The provenance comment now records STRUCTURALLY_VERIFIED, matching the manifest. This rebind moves the bound implementation digest to the comment-bearing source; every edited line is a comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object remains byte-identical (14b7f744...). No compiled code changed, so the gate's comment/status binding is satisfied without altering the reviewed semantics.",
     "No live differential harness exists for 0x00514680. A host harness is technically feasible (execute/emulate 0x00516621 and 0x004B0B00 to build the post-initialiser bucket/pool fixture on the retail side, install the same fixture in the candidate's globals, then compare matched-node, new-element, bucket links, count, slot index and field state), but it was not built: this task owns only the two semantic-review files and the two manifest records, no existing repository runner dispatches this address, and a fabricated or placeholder runner was deliberately not installed. The strict behavioral requirement therefore remains unmet.",
-    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 35d92a3 executable is observed but not bound by a build receipt."
+    "This review passes the source-semantic checks but does not authorize BUILD_VERIFIED, RUNTIME_TESTED or VERIFIED. The manifest status therefore remains STRUCTURALLY_VERIFIED; the linked 936c8f7f executable is observed but not bound by a build receipt."
   ],
   "behavioral_evidence": {
     "status": "not_performed",
@@ -273,7 +302,7 @@
   "strict_gate_projection": {
     "status": "STRUCTURALLY_VERIFIED",
     "project_default_threshold": "VERIFIED",
-    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is now present and bound to implementation sha256 bbee39aa...",
+    "at_threshold_structurally_verified": "With semantic and behavioral checks enabled, the remaining blocking failure is the missing verification.behavioral_runner. The semantic-review reference is present and rebound to implementation sha256 7b66375f...; the bound object remains 14b7f744..., so this rebind changes no compiled code.",
     "at_threshold_verified": "The status is also below the required VERIFIED threshold, and the missing behavioral runner still blocks. No status promotion is claimed.",
     "cfg_similarity_scope": "The recorded 1.0 is the retail Binary Ninja-versus-radare2 graph score only; it is not candidate equivalence."
   }

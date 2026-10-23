@@ -5,7 +5,36 @@
  "function_name": "Terrain_Draw",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation": "engine/src/retail/terrain/terrain_draw.cpp",
- "implementation_sha256": "94303de6372baa8fda019b1b5a03b5f0a6763612efe7e87c14fbd8c16c9cfc67",
+ "implementation_sha256": "5fd6cceac68df6caa76f374890e20a4cd50fa50cae58b9529f665fc38ef7f49b",
+ "implementation_object": {
+  "sha256": "03d61e64ef83597407d3b81046c31025a5013bd045ab16f0c556985ea8f633ad",
+  "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+  "compile_command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_draw.cpp -o /tmp/igi-rebind/obj-final/terrain_draw.o",
+  "note": "Fresh out-of-tree compile of the rebound source; byte-identical to the object digest recorded by docs/fidelity/evidence/0x00512C30-structural-comparison.json."
+ },
+ "rebind": {
+  "recorded_at": "2026-10-23T13:28:50+05:30",
+  "reason": "Provenance comment edits changed the source digest; no compiled code changed.",
+  "previous_implementation_sha256": "94303de6372baa8fda019b1b5a03b5f0a6763612efe7e87c14fbd8c16c9cfc67",
+  "new_implementation_sha256": "5fd6cceac68df6caa76f374890e20a4cd50fa50cae58b9529f665fc38ef7f49b",
+  "object_sha256": "03d61e64ef83597407d3b81046c31025a5013bd045ab16f0c556985ea8f633ad",
+  "object_sha256_previous": "03d61e64ef83597407d3b81046c31025a5013bd045ab16f0c556985ea8f633ad",
+  "object_byte_identical": true,
+  "comment_only_proof": {
+   "committed_blob": "git show HEAD:engine/src/retail/terrain/terrain_draw.cpp",
+   "changed_lines": {
+    "removed": 6,
+    "added": 5,
+    "removed_lines_comment_only": true,
+    "added_lines_comment_only": true
+   },
+   "token_stream_identical_excluding_comments": true,
+   "token_count": 8057,
+   "preprocessed_tu_sha256": "2dc71a7f5b731c5677bca3a7e7e675b863ad92cf4b2b9df7b2b1237ccfacb200",
+   "preprocessed_tu_identical": true
+  },
+  "limitation_note": "Only provenance comments changed: every edited line is a // comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object is byte-identical to the pre-rebind object (03d61e64...), which is the digest recorded by the structural comparison. No compiled code, constant, layout or behaviour was altered; this rebind does not raise the verification status."
+ },
  "reviewed": true,
  "reviewed_by": "subagent source-to-retail review pass, 2026-10-23",
  "recorded_at": "2026-10-23T06:26:26Z",
@@ -125,6 +154,7 @@
   "Static review only; no runtime, rendered, culling or memory-state observation.",
   "The candidate machine CFG is not isomorphic to retail (126/183/2629 plus a 26/39/198 helper vs 144/215/1670); the review relies on source-level property correspondence.",
   "x87 80-bit semantics, FISTP and exp2 are modelled with long double and libm; bit-exactness and every rounding mode are not established (TD-D4).",
-  "Null-block guard order, host device guards, host viewport getters, zero-initialised locals, frame shape and shared-callee internals are documented divergences TD-D1/TD-D2/TD-D3/TD-D5/TD-D6/TD-D8."
+  "Null-block guard order, host device guards, host viewport getters, zero-initialised locals, frame shape and shared-callee internals are documented divergences TD-D1/TD-D2/TD-D3/TD-D5/TD-D6/TD-D8.",
+  "Rebind 2026-10-23: the implementation digest changed only through provenance-comment edits; every edited line is a comment, the comment-stripped token stream and the preprocessed translation unit are identical, and the recompiled object is byte-identical (03d61e64...). This review therefore remains bound to the same compiled code, and the status is unchanged."
  ]
 }
