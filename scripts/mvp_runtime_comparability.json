@@ -12,6 +12,14 @@
     "0x004C5F00": {
       "comparable": false,
       "reason": "the native's return value is the value left by its tail call to Resource_Unload (0x004B6380), which returns a resource-cache bookkeeping value: the entry's kind at +0x??, or the freed-memory amount from the allocator hook (resource_lifecycle.cpp). The port reads TERRAIN.LMP directly through its host adapter and keeps no such cache entry, so this value measures the cache implementation rather than the native's behaviour. The captured values (retail 10, candidate 1) are consistent with that: neither is a count of the ten lightmap pages the native actually loads."
+    },
+    "0x004AD73D": {
+      "comparable": false,
+      "reason": "the return value is the uppercased form of the character passed in, so its class is the class of whichever character the caller sampled. The two runs call the native with different characters (retail 1,443,586 calls across level load, the candidate one deliberate call), so comparing class sets would compare two different samples. The paired observation still proves the native was reached in both images and that the ported body ran; it does not prove equal outputs."
+    },
+    "0x004B5B30": {
+      "comparable": false,
+      "reason": "the return value is a hash of the path argument, so its class is the class of whichever path was hashed. The two runs hash different paths, so class-set equality is not a meaningful criterion; the paired observation proves only that both images reached the native."
     }
   }
 }

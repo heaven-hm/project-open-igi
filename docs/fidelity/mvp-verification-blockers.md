@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 18 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 27 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 18 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 27 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -583,3 +583,34 @@ second attempt instrumented the call instead of throwing:
 So the cheap alignment is ruled out for a *sharper* reason than the first time: not that the allocator
 fails, but that a heap-resident dispatch record crashes the first frame. Reverted to the static record;
 the paired capture is healthy again (21 observed, 16 matched, 0 mismatched).
+
+## The leaf batch: nine more verified, one blocked on its own evidence
+
+The same technique that reached the allocator chain reached a second batch. The host adapters replace
+several retail leaves, so the port never called them even though the bodies are ported; one deliberate
+pass over them at scene start - with real inputs taken from the assets the scene loads - ran them
+against real data:
+
+* `String_FindExtension` (0x004B1E90), `Resource_CanonicalizePath` (0x004B5AF0), `Ilff_GetFirstChunk`
+  (0x004B7490) and `Resource_FileExists` (0x004B5B60) all now have matched paired observations.
+* `Render_GetActiveBackendId` (0x004CEA80) and the three app-context lightmap natives
+  (`0x0048F230`, `0x0048F250`, `0x0048F260`) match too. The setter `0x0048F260` is worth noting: earlier
+  rounds recorded it as unobservable because no call instruction reached it, but calling it from the
+  host makes the symbol observable and the paired capture matches it.
+* Two more were reached *indirectly*, as callees of `Resource_CanonicalizePath`: `String_ToUpperChar`
+  (0x004AD73D, 1.44M retail calls) and `Resource_CalculatePathHash` (0x004B5B30). Both return a value
+  whose class depends on the argument (a transformed character; a path hash), so their class sets cannot
+  agree across two independently timed runs. Their comparability overrides record that reason and the
+  reports state reachability as the basis rather than implying a value agreement.
+
+Nine of the ten pass the strict gate; the verified count goes 18 -> 27. `Resource_FileExists` does not:
+its record is still STRUCTURALLY_VERIFIED and its behavioural runner answers "unsupported native
+address: 0x004B5B60", so the gate refuses it on evidence rather than on runtime. It stays matched-but-
+unverified until a replayable behavioural runner exists for it, which is the same class of defect as the
+frozen behavioural claims documented above.
+
+Reaching `Resource_FileExists` at all needed one host fix: retail installs a file-existence dispatch for
+QVM opcode 7 during resource initialisation, and the port never installed one, so the ported body
+answered 0 where retail answers 1. With a host adapter backed by `std::filesystem::exists` installed via
+`Qvm_SetDispatchOpcode7`, the candidate answers 1 like retail and the mismatch disappears. That is a real
+behavioural gap the capture found, not a test artifact.

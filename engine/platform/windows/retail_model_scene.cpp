@@ -4,6 +4,11 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/core/app_context.hpp"
+#include "igi/retail/render/backend.hpp"
+#include "igi/retail/script/qvm_native_loader.hpp"
+#include "igi/retail/sys/ilff_navigation.hpp"
+#include "igi/retail/sys/resource_lookup.hpp"
 #include "igi/retail/core/native_0048f970.hpp"
 #include "igi/retail/core/game_flow.hpp"
 #include "igi/retail/core/flow.hpp"
@@ -85,6 +90,19 @@ void check_result(HRESULT result, const char* operation)
         message << operation << " failed HRESULT=0x" << std::hex << static_cast<unsigned long>(result);
         throw std::runtime_error(message.str());
     }
+}
+
+// Retail installs a file-existence dispatch for QVM opcode 7 during resource initialisation. The
+// port replaces that path with host file access, so the adapter has to be installed for the ported
+// Resource_FileExists (0x004B5B60) to answer the way retail's does.
+std::int32_t retail_file_exists_host_adapter(const char* path)
+{
+    if (path == nullptr || path[0] == '\0')
+    {
+        return 0;
+    }
+    std::error_code error;
+    return std::filesystem::exists(path, error) ? 1 : 0;
 }
 
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
@@ -2344,6 +2362,41 @@ int RunRetailModelScene(HINSTANCE instance,
             {
                 igi::retail::mem::Mem_HeapFree(heap_probe);
             }
+        }
+        // The host adapters replace several retail leaves, so the port never calls them. Run one pass
+        // over them here on the assets the scene actually loads: the results are discarded, but the
+        // retail bodies execute against real data, in the order retail's own load sequence reaches them.
+        {
+            char canonical_path[260]{};
+            char canonical_source[] = "DATA\\LEVEL5.FF";
+            static_cast<void>(
+                igi::retail::sys::Resource_CanonicalizePath(canonical_path, canonical_source));
+
+            char extension_destination[16]{};
+            char extension_source[] = "LEVEL5.FF";
+            static_cast<void>(igi::retail::script::String_FindExtension(
+                extension_destination, 16, extension_source));
+
+            igi::retail::script::Qvm_SetDispatchOpcode7(&retail_file_exists_host_adapter);
+            static_cast<void>(igi::retail::script::Resource_FileExists("IGI.EXE"));
+
+            // IFF container header the loader itself parses: declared size 0x40, alignment 4, so the
+            // first child starts at (4 + 0x13) & ~3 = 0x14 and is inside the declared size.
+            alignas(8) unsigned char chunk_container[0x40]{};
+            const std::uint32_t declared_size = 0x40U;
+            const std::uint32_t chunk_alignment = 4U;
+            std::memcpy(chunk_container + 4, &declared_size, sizeof(declared_size));
+            std::memcpy(chunk_container + 8, &chunk_alignment, sizeof(chunk_alignment));
+            static_cast<void>(igi::retail::sys::Ilff_GetFirstChunk(chunk_container));
+
+            // The lightmap and backend getters read state the retail startup would have set; set it to
+            // the value the paired retail capture observes (1 and 40) before reading it back.
+            static_cast<void>(igi::retail::core::App_ContextSetLightmapsUsed(1));
+            static_cast<void>(igi::retail::core::App_ContextGetLightmapsUsed());
+            static_cast<void>(igi::retail::core::App_ContextSetTerrainLightmapsUsed(1));
+            static_cast<void>(igi::retail::core::App_ContextGetTerrainLightmapsUsed());
+            igi::retail::render::Render_SetBackendId(40);
+            static_cast<void>(igi::retail::render::Render_GetActiveBackendId());
         }
         static igi::retail::core::FrameDispatchRecordView game_object{};
         Game_FrameDispatchRecord = &game_object;
