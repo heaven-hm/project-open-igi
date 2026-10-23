@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-iffbelow.json",
+  "capture": "build/runtime-traces/mvp-frida-pair-gap.json",
   "level": 5,
   "counts": {
     "candidate-unreachable": 15,

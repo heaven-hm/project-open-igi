@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 70 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 73 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 70 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 73 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1133,3 +1133,39 @@ already have a working twin and a working runner, with reachability as the only 
 promotions left, and the capture fixture is the entire job.
 
 Verified count 69 -> 70; paired matches 75 -> 76; candidate-unreachable 16 -> 15; mismatches 0.
+
+## Evidence audit: 22 VERIFIED claims that this tree could not reproduce
+
+The MVP manifest listed 92 records at status VERIFIED while the strict-gate register held only 70. The 22-record
+gap mattered more than a missing count suggests: those records were merged in from the parallel workflow, and in
+this tree their status was a claim without the evidence that binds it.
+
+Re-running the strict gate on all 22 produced **no pass**. Breakdown:
+
+- **19 blocked on "missing Frida runtime probes report reference"** - and the level-5 model-scene capture never
+  observes their retail calls (`retail_observed_calls` is 0), so the live differential cannot be reproduced here
+  at all. Their VERIFIED status rested on captures from other levels or scenes that are not in this tree.
+  Recovering these needs retail runs where they actually execute, not more port work.
+- **3 blocked because their GameNatives twin sources are absent** (`Display_ComputeScreenAspect`,
+  `Transcontext_BuildViewBlock`, `Texture_GetActiveBackendId`). The twins were recoverable from the sibling
+  worktree and a full in-tree re-verification was attempted: their capture observations already matched retail
+  exactly (`{ptr}`, `{small:1}`, `{null, small:-1, small:1}`), their static evidence was regenerated against the
+  restored twins, and all three passed the strict gate. It still could not be committed honestly: the recorded
+  twin digests exist only in the sibling fork's history, so the exact verified twins are unrecoverable, and the
+  staged gate rejects twin sources whose records point at engine implementations
+  (`implementation path does not match ... -Transcontext_BuildViewBlock.cpp`). Committing the newer sibling twins
+  would have silently re-bound evidence to content nobody reviewed here.
+
+**All 22 were demoted to STRUCTURALLY_VERIFIED**, each carrying an `imported_claim` block that names the claimed
+status, this audit, and the concrete reason. Demotion is not lost work - records, runners and evidence all remain -
+but leaving them VERIFIED would have counted twenty-two unproven natives toward the objective.
+
+Result: the manifest's VERIFIED records among the MVP set (**70**) now equal the strict-gate register (**70**), and
+there are **zero unregistered VERIFIED claims**.
+
+Two rules come out of this. First, manifest status is not evidence, and a cross-worktree merge imports claims
+without their proofs; re-run the audit after any merge. Second, the twin-model records are a structural liability:
+when a record's implementation is the engine source and its `game_natives` field points at a transcription, the
+staged gate refuses to commit the twin, so those records can never be re-verified reproducibly. Fixing that model
+(making the twin the implementation, or teaching the gate about support sources) is prerequisite work before the
+twin-backed records can be promoted here.

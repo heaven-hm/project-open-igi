@@ -49903,7 +49903,7 @@
         "signature": "void* __cdecl Config_GetActiveGraphicOptions(void);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -49964,6 +49964,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -49983,7 +49988,7 @@
         "signature": "void __cdecl Config_GraphicOptionsSetPerformanceFlags(std::uint32_t* result, int unused, void* vm);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50044,6 +50049,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -50063,7 +50073,7 @@
         "signature": "void __cdecl Config_GraphicOptionsGetPerformanceFlags(std::uint32_t* result, int unused, void* vm);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50124,6 +50134,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -50143,7 +50158,7 @@
         "signature": "void __cdecl Config_GraphicOptionsNumPerfLevels(std::uint32_t* result, int unused, void* vm);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50204,6 +50219,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -50223,7 +50243,7 @@
         "signature": "void __cdecl Config_GraphicOptionsGetPerfFlagsFromLevel(std::uint32_t* result, int unused, void* vm);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50284,6 +50304,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -50303,7 +50328,7 @@
         "signature": "void __cdecl Config_GraphicOptionsGetPerfLevelFromFlags(std::uint32_t* result, int unused, void* vm);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50364,6 +50389,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -50462,7 +50492,7 @@
         "signature": "int __cdecl App_ContextGetDebugged(void);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -50523,6 +50553,11 @@
           "tests_passed": 12,
           "tests_total": 12,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -51741,7 +51776,7 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51796,6 +51831,11 @@
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       }
     },
@@ -51900,7 +51940,7 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -51955,6 +51995,11 @@
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       }
     },
@@ -53747,7 +53792,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53808,6 +53853,11 @@
           "tests_passed": 10,
           "tests_total": 10,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -53912,7 +53962,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -53973,6 +54023,11 @@
           "tests_passed": 16,
           "tests_total": 16,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -54162,7 +54217,7 @@
         "signature": "void __cdecl Human_TaskViewReset(void* human);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54223,6 +54278,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -54806,7 +54866,7 @@
         "signature": "int __cdecl Mem_InvokeNewHandler(std::uint32_t size);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -54867,6 +54927,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -55877,7 +55942,7 @@
         "signature": "void __cdecl Matrix_InvalidateSlot(void* context, std::int32_t slot);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -55938,6 +56003,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -56268,7 +56338,7 @@
         "signature": "x86 cdecl int32_t(void*, const void*, const void*, float)"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56334,6 +56404,11 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00497d70-frida-runtime.json",
           "evidence_sha256": "9b4105f725cc60c13122cb1df564b60899c8327222aea490ba44ad2bcd1b2343"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",
@@ -56354,7 +56429,7 @@
         "signature": "x86 cdecl double()"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56420,6 +56495,11 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x00491d40-frida-runtime.json",
           "evidence_sha256": "e12d4a4830edae36f1bf02ddc62dc82b2f1f681a2efe3af0e674e0fc63cd5a4f"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",
@@ -56601,7 +56681,7 @@
         "signature": "int __cdecl Device_CloseStream(void* stream);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -56656,6 +56736,11 @@
           "result": "passed",
           "tests_passed": 8,
           "tests_total": 8
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       }
     },
@@ -57014,7 +57099,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57075,6 +57160,11 @@
           "tests_passed": 10,
           "tests_total": 10,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -57094,7 +57184,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -57155,6 +57245,11 @@
           "tests_passed": 10,
           "tests_total": 10,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -60044,7 +60139,7 @@
         "signature": "std::int32_t __cdecl Texture_GetActiveBackendId(void);"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -60110,6 +60205,11 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004b0f80-frida-runtime.json",
           "evidence_sha256": "e99cae908d25faeeadc91bb059eece27a5176d2958f73399387443fc88dc0e25"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status, but the GameNatives twin sources that bind the record do not exist in this tree and the recorded twin digests exist only in that fork's history, so the recorded evidence cannot be reproduced here. The twin-model also resists re-verification in this tree: the staged gate rejects twin sources whose records point at engine implementations."
         }
       },
       "status": "VERIFIED",
@@ -60468,7 +60568,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -60529,6 +60629,11 @@
           "tests_passed": 10,
           "tests_total": 10,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
@@ -60633,7 +60738,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -60694,6 +60799,11 @@
           "tests_passed": 8,
           "tests_total": 8,
           "result": "passed"
+        },
+        "imported_claim": {
+          "claimed_status": "VERIFIED",
+          "demoted_by": "lead, round 116 evidence audit",
+          "reason": "Merged from the parallel workflow with a VERIFIED status but without the runtime evidence that binds it in this tree: no Frida probes report reference, and the retail calls are not observed by the available captures, so the live differential cannot be reproduced here. Re-promotion needs retail runs at the levels/scenes where this native executes."
         }
       },
       "status": "VERIFIED"
