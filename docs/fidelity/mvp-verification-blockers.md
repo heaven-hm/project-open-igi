@@ -1254,3 +1254,43 @@ Three traps, all of which produced plausible-looking results:
    as separate observables where the port actually writes them.
 
 Verified count 73 -> 75; paired matches 79 -> 81; candidate-unreachable 12 -> 10; mismatches 0.
+
+## Round 120: five paths that are walls, and one that must not be forgotten
+
+No native was promoted this round. Five separate approaches were tried and each ended at a concrete wall; the
+value of the round is that the walls are now documented instead of being rediscovered.
+
+1. **A capture at another level does not help the retail-unobserved natives.** `scripts/verify_natives_batch.py`
+   defaults to `--level 4`, so a level-4 paired capture was tried. Retail reached only startup: 115 of the planned
+   natives were inconclusive, because the level-5 demo scene is what exercises the terrain/model/script path. Level 5
+   remains the only productive capture level.
+2. **The twin model still blocks engine-backed records.** `Display_ComputeScreenAspect` (0x00491D40) and
+   `Transcontext_BuildViewBlock` (0x00497D70) already match their runtime classes and now have 8/8 angr differential
+   runners that compare the raw x87 bit patterns of every field the bodies write. They still cannot be promoted: the
+   strict gate requires a canonical `scripts/GameNatives/<address>-<name>.cpp` source, and the only copies of those
+   two twins were the mislabeled ones deleted in round 116. Recreating them does not help either, because the staged
+   sweep rejects a staged GameNatives file whose record's implementation path is the engine source. Repointing
+   `game_natives` at the engine file is rejected as "canonical GameNatives source path is missing". This is the
+   unresolved twin-model design decision from round 116, now with a second concrete pair of records behind it.
+3. **`DynObj_LoadPackageMeshes` cannot be fixtured without breaking a verified neighbour.** A modelled fault path
+   (`MODS` lookup miss returns null, matching retail's fault-handler return) makes the runner pass 8/8, but the miss
+   necessarily calls the already-verified `Ilff_FindFormChunk` with a tag that is absent, which adds a `null` return
+   class to that callee. The paired capture then reports a mismatch for `Ilff_FindFormChunk` (569 retail observations
+   all `ptr`). A fixture must not change the observed class set of a verified callee, so this native stays blocked.
+4. **`Flow_RunHandler` cannot be replayed under angr.** Retail executes its null-object path cleanly, but the
+   candidate body is compiled with gcc's SJLJ exception model: the entry point calls `__Unwind_SjLj_Register` before
+   anything else, and the simulated run diverges into libgcc/libc exception machinery that angr cannot decode
+   (`IR decoding error at 0x455E7A` inside `pthread_once`). Hooking the timer does not help because the unwind
+   registration is unconditional. Its runtime evidence (3430 paired calls, retail class `{null}`) is good, but the
+   angr rung cannot be satisfied for this body as compiled.
+5. **Retail observations vary between capture runs, so the canonical retail trace must be reused.** Working on (3)
+   required a fresh paired capture, and that capture reported six "mismatches" that were pure retail-run variance:
+   retail exercised fewer texture-modifier pushes and different resource sizes than in the canonical run (for example
+   `TextureModifier_Push` retail `{1..5}` against candidate `{1..8}`). All six natives matched again under the
+   canonical trace. Every capture in this workflow must therefore pass `--reuse-retail` with the canonical trace
+   (`build/runtime-traces/mvp-frida-pair-lovs.json` at the time of writing) so that retail observations are held
+   fixed and only the candidate side is allowed to vary. A capture without `--reuse-retail` is a diagnostic, never
+   evidence.
+
+Verified count stays at 75; the paired-match and candidate-unreachable counts below are from the canonical trace, not
+from the diagnostic level-4 or fresh-retail runs.
