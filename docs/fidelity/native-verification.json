@@ -60101,7 +60101,7 @@
         "signature": "void __cdecl Texture_DisableUpload(void);"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "VERIFIED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -60111,7 +60111,7 @@
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
         ],
         "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
+          "path": "scripts/upload_flag_diff_runner.py",
           "args": [
             "--address",
             "{address}",
@@ -60126,7 +60126,7 @@
             "--root",
             "{root}"
           ],
-          "timeout_seconds": 360
+          "timeout_seconds": 900
         },
         "selected_decompiler": "binary_ninja",
         "radare2": {
@@ -60152,7 +60152,7 @@
         },
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004B26B0-behavioral.json",
-          "evidence_sha256": "d951d513a9fc1a6562eed3e27d9ee8cf60961cbfe8543767792f1e1a49213542"
+          "evidence_sha256": "fa4a7bffdd4c944da18f1fae7889f9b8a35ea97e5b3359c7696fb69aadf1bf4f"
         },
         "frida_runtime": {
           "status": "PASS",

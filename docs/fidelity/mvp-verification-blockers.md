@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 52 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 53 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 52 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 53 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -802,3 +802,26 @@ The same evidence-plumbing defect as `Resource_FileExists` and `Flow_CreateHandl
 obstacle for them.
 
 Verified count 51 -> 52, paired matches 59 -> 63, mismatches 0, candidate-unreachable 32 -> 31.
+
+## A behavioural runner for the store natives, dispatched against the real candidate build
+
+`Texture_DisableUpload` (0x004B26B0) had matched the paired capture for two rounds but could not promote: its
+behavioural runner was `native_diff_runner.py`, which answers "unsupported native address". That is an
+evidence-plumbing defect, not a runtime one, so this round built the missing runner instead of another fixture.
+
+`scripts/upload_flag_diff_runner.py` replays both bodies in angr. Retail executes at 0x004B26B0 with the store
+target 0x00943B3C seeded; the candidate executes at the linked address of the compiled
+`igi::retail::texture::Texture_DisableUpload` in `build-win32-verify-noinline/igi1.exe`, with the
+translation-unit global `g_943b3c` found by symbol rather than hard-coded. Eight initial flag values
+(0, 1, 2, 0x55, 0x7F, 0x80, 0xAA, 0xFF) cover nominal and boundary categories. The report compares the flag
+byte after the store - where the flag is the native's entire contract - as well as the final EAX and the write
+side effect. The runner asserts the retail image actually performed the expected store, so a stale flag address
+fails loudly instead of producing a silently vacuous comparison.
+
+The gate re-executes the runner on every invocation, so this artifact cannot go stale: the verified status is
+backed by a live differential, not a stored claim.
+
+The same runner also handles `Texture_EnableUpload` (0x004B26A0); the pattern now extends to any native whose
+observable contract is "one store, then return".
+
+Verified count 52 -> 53, candidate-unreachable still 28, mismatches 0.
