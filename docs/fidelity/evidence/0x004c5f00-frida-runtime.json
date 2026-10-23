@@ -5,7 +5,7 @@
  "address": "0x004c5f00",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
- "candidate_executable_sha256": "04bcb949866fe0fa731d1ed70dd4f92fe1d842e2ef1349dc4c556646b7e7edcd",
+ "candidate_executable_sha256": "ff68396125632e5f4bb2061d2f5f9d10a43e41be7a3c0ffc9eb9bbd2fbec9a0d",
  "retail_observed_calls": 1,
  "candidate_observed_calls": 1,
  "matched_calls": 1,
@@ -20,7 +20,7 @@
  "native_name": "Terrain_LoadTexturesAndLightmaps",
  "addresses": {
   "retail_va": "0x004C5F00",
-  "candidate_va": "0x0041FDD0"
+  "candidate_va": "0x0041FE30"
  },
  "comparison": {
   "basis": "reachability only; the native's return value is not comparable",
@@ -37,8 +37,8 @@
   "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-ilff.json",
-  "paired_capture_sha256": "5bc5d0ca08bd84474e0ee8ec2b0856cb66b77cf5529b696910850a54fd2c0303"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-heap2.json",
+  "paired_capture_sha256": "65e39248b39eb44c1db84b6fec988b4250482810ef11ad914479e23ae5accbcc"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

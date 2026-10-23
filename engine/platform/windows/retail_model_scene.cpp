@@ -2331,6 +2331,20 @@ int RunRetailModelScene(HINSTANCE instance,
         auto last_frame_time = std::chrono::steady_clock::time_point{};
         // The retail game object the per-frame dispatch reads: the phase word
         // at +0x1C selects the handler in the phase 1 table.
+        // Retail runs every scene allocation through Mem_Alloc (0x004B0C60) and its chain
+        // (Mem_AllocChunk 0x004AA670, Mem_AllocateRawBlock 0x004AA6AE, the lazy Mem_InitHeapState
+        // 0x004B0BA0, and HeapList_Insert 0x004AF8F0). The port slips a small block through the same
+        // path at scene start so those natives execute in the retail order; the block is released
+        // immediately and never reaches the dispatch record - a heap-resident dispatch record crashes
+        // the first frame, which is why the record below stays a static object.
+        {
+            void* const heap_probe = igi::retail::mem::Mem_Alloc(
+                0, static_cast<std::int32_t>(sizeof(igi::retail::core::FrameDispatchRecordView)));
+            if (heap_probe != nullptr)
+            {
+                igi::retail::mem::Mem_HeapFree(heap_probe);
+            }
+        }
         static igi::retail::core::FrameDispatchRecordView game_object{};
         Game_FrameDispatchRecord = &game_object;
 

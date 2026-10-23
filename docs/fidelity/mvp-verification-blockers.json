@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "kind": "mvp-verification-blockers",
-  "capture": "build/runtime-traces/mvp-frida-pair-ilff.json",
+  "capture": "build/runtime-traces/mvp-frida-pair-heap2.json",
   "level": 5,
   "counts": {
-    "candidate-unreachable": 75,
-    "end-to-end": 16,
+    "candidate-unreachable": 70,
+    "end-to-end": 21,
     "retail-unobserved": 24,
     "unlinked": 5
   },
@@ -1215,16 +1215,21 @@
     "0x00401050",
     "0x00402880",
     "0x004037C0",
-    "0x004B0D40",
-    "0x004CF390",
-    "0x004CF080",
-    "0x004C6670",
-    "0x004C6760",
-    "0x004B0BA0",
     "0x0048F170",
     "0x00498460",
+    "0x004AA670",
+    "0x004AA682",
+    "0x004AA6AE",
+    "0x004AF8F0",
+    "0x004B0BA0",
+    "0x004B0C60",
+    "0x004B0D40",
+    "0x004C6670",
+    "0x004C6760",
+    "0x004CF080",
+    "0x004CF390",
     "0x00517890",
     "0x00517940"
   ],
-  "verified_strict_gate_count": 13
+  "verified_strict_gate_count": 18
 }
