@@ -40,6 +40,18 @@
     "0x004B7540": {
       "comparable": false,
       "reason": "retail 0x004B7540 writes its two out-parameters and returns without assigning any observable value of its own; EAX still holds whatever the last 'mov eax,[esp+8]' left there. The ported body is void, so only reachability is a meaningful criterion."
+    },
+    "0x00497E70": {
+      "comparable": false,
+      "reason": "retail 0x00497E70 copies the caller's 0xA8-byte context, dispatches the registered render method, marks the context installed and then returns the incremented install counter; the port performs the copy and the bookkeeping but returns void, so EAX is not a comparable result. Reachability is the meaningful criterion."
+    },
+    "0x004B26B0": {
+      "comparable": false,
+      "reason": "retail 0x004B26B0 is a single store that clears the upload-enabled flag and returns without assigning a value of its own; the observed class is callee residue. The ported body is void; only reachability is meaningful."
+    },
+    "0x004ED5C0": {
+      "comparable": false,
+      "reason": "retail 0x004ED5C0 forwards its pointer and the current input-port index to QTask_RegisterInputPortHandler and returns without writing EAX; the observed class is residue from that call. The ported body is void; only reachability is meaningful."
     }
   }
 }

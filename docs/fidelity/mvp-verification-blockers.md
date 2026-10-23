@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 51 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 52 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 51 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 52 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -776,3 +776,29 @@ source's logic", and pointing `implementation.path` at a twin would invalidate t
 twin form the gate can bind, not another metadata edit.
 
 Verified count 48 -> 51, paired matches 55 -> 59, mismatches 0, candidate-unreachable 36 -> 32.
+
+## A hang, found by the candidate dying before the probes could see anything
+
+This round wired five natives. The first capture reported `candidate_observed: 0` with the harness saying
+`settleExpiredWithoutCall` - the candidate had died before the probes saw a single call. Inserting log markers
+around each new call localised it in one run: `Qvm_Cleanup` (0x004B83D0) never returned.
+
+The cause is a chain, not a crash. `Qvm_Cleanup` reads the standalone pointer at +0x8C; on a zeroed block that
+is zero, so it calls `Resource_Unload` with the block itself as a path - an empty string - and the resource
+cache probe on that path does not terminate. With the call removed the candidate renders normally. Verifying
+`Qvm_Cleanup` needs a real QVM block, not a zeroed one, so it stays candidate-unreachable.
+
+That diagnostic cost two capture attempts and a stalled Frida device, which also had to be restarted by hand
+after the killed candidate left the server unresponsive.
+
+`Resource_Load` (0x004B5F00) did promote: the pass registers a short non-ILFF buffer for `DATA\LEVEL5.FF`
+through `Resource_RegisterBuffer`, so the cache probe finds that node and returns its data pointer, matching
+retail's `{ptr}` class. The buffer is static, not stack, so the registered node never points at a dead frame.
+
+Three more natives matched but did not promote - `Transcontext_SetActiveTransContext` (0x00497E70),
+`Texture_DisableUpload` (0x004B26B0) and `InputPort_Process` (0x004ED5C0). All three are STRUCTURALLY_VERIFIED
+with `native_diff_runner.py` as their behavioural runner, which answers "unsupported native address" for each.
+The same evidence-plumbing defect as `Resource_FileExists` and `Flow_CreateHandler`; runtime is no longer the
+obstacle for them.
+
+Verified count 51 -> 52, paired matches 59 -> 63, mismatches 0, candidate-unreachable 32 -> 31.

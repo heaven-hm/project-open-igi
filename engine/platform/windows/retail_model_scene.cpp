@@ -4,6 +4,8 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/input/input_port_process.hpp"
+#include "igi/retail/resource/resource_lifecycle.hpp"
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/model/mef_native_attachments.hpp"
 #include "igi/retail/texture/texture_loaders.hpp"
@@ -2222,6 +2224,8 @@ LRESULT CALLBACK scene_window(HWND window, UINT message, WPARAM parameter, LPARA
 }
 } // namespace
 
+
+
 int RunRetailModelScene(HINSTANCE instance,
                         int show_command,
                         const std::filesystem::path& game_directory,
@@ -2455,6 +2459,30 @@ int RunRetailModelScene(HINSTANCE instance,
             auto* head = reinterpret_cast<igi::retail::dynobj::HashItem*>(hash_nodes);
             static_cast<void>(igi::retail::dynobj::DynObj_LookupHashItem(&head, 2));
         }
+        // Resource lifecycle, trans-context installation, input-port registration, upload disable and
+        // QVM cleanup. The void natives take reachability overrides because retail leaves EAX to its
+        // callee; the two value-returning ones reproduce the retail class exactly.
+        {
+            // A short non-ILFF buffer registers a resource node for the level archive path, so the
+            // following cache probe finds it and returns its data pointer - retail's {ptr} class.
+            alignas(8) static std::uint8_t resource_buffer[0x40]{};
+            static_cast<void>(igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\LEVEL5.FF", resource_buffer, 4));
+            std::int32_t loaded_size = 0;
+            static_cast<void>(
+                igi::retail::resource::Resource_Load("DATA\\LEVEL5.FF", &loaded_size));
+
+            // The active transform context is installed by copying 0xA8 bytes; retail returns its
+            // install counter, which the port does not expose, so this call is reachability only.
+            const igi::retail::render::TransContext trans_context{};
+            igi::retail::render::Transcontext_SetActiveTransContext(trans_context);
+
+            // Input-port registration and the upload-disable store are both void; retail EAX carries
+            // whatever the callee left there.
+            ::InputPort_Process(nullptr);
+            igi::retail::texture::Texture_DisableUpload();
+        }
+
         // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.
         // Each call set below reproduces exactly the return classes the retail run produced.
         {
@@ -2489,11 +2517,6 @@ int RunRetailModelScene(HINSTANCE instance,
             igi::retail::texture::Texture_SetBackendId(0);
             static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
 
-            // Buffer registration with a short, non-ILFF payload takes the arg3 < 8 path, creates a node
-            // and returns the caller's buffer pointer.
-            alignas(8) std::uint8_t resource_buffer[0x40]{};
-            static_cast<void>(igi::retail::resource::Resource_RegisterBuffer(
-                "DATA\\LEVEL5.FF", resource_buffer, 4));
         }
 
         // ILFF leaf natives. The pass builds a container whose fields follow the layout the
