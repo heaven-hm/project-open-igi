@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 27 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 32 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 27 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 32 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -614,3 +614,23 @@ QVM opcode 7 during resource initialisation, and the port never installed one, s
 answered 0 where retail answers 1. With a host adapter backed by `std::filesystem::exists` installed via
 `Qvm_SetDispatchOpcode7`, the candidate answers 1 like retail and the mismatch disappears. That is a real
 behavioural gap the capture found, not a test artifact.
+
+## The heap lifecycle and the script state flags
+
+The next five came from the same pass, extended in two directions.
+
+`HeapList_Remove` (0x004AF960) needed the real lifecycle rather than a synthetic one. `Mem_Alloc` links
+the raw block into the heap list and stores the raw block pointer in the header slot at
+`(payload - 4) & ~3`; walking back through that slot recovers the block, and the pass allocates, unlinks
+and frees in the retail order. That exposed a real bug in the previous round's wiring: it called
+`Mem_HeapFree` on the **aligned payload** rather than the raw block, which is `free` on an interior
+pointer. It happened not to crash, but it was wrong, and this round frees the raw block it recovered.
+
+The script state getters (`Script_GetDebugCompileState` 0x0048F1D0,
+`Script_GetForcePrecompiledState` 0x0048F340) read flags the retail startup sets, so the pass sets each
+flag before reading it. `Qvm_SetGlobalState` (0x004B8A10) resets the QVM state global. `Ilff_GetFormType`
+(0x004B7570) returns the FourCC at chunk offset +0x10, and the constructed container carries a real
+`FORM` tag so the return class matches the retail `ptr`.
+
+All five pass the strict gate: verified count 27 -> 32, paired matches 31 -> 36, mismatches stay 0,
+candidate-unreachable 60 -> 55.

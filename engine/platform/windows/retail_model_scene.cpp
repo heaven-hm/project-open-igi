@@ -18,6 +18,7 @@
 #include "igi/retail/config/retail_config.hpp"
 #include "igi/retail/config/retail_input_bindings.hpp"
 #include "igi/retail/input/input_port.hpp"
+#include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/model/mef_bone_rig.hpp"
 #include "igi/retail/model/mef_render_data.hpp"
@@ -2356,11 +2357,21 @@ int RunRetailModelScene(HINSTANCE instance,
         // immediately and never reaches the dispatch record - a heap-resident dispatch record crashes
         // the first frame, which is why the record below stays a static object.
         {
-            void* const heap_probe = igi::retail::mem::Mem_Alloc(
-                0, static_cast<std::int32_t>(sizeof(igi::retail::core::FrameDispatchRecordView)));
-            if (heap_probe != nullptr)
+            // Full retail heap lifecycle: Mem_Alloc links the raw block into the heap list, so walk
+            // back through the header slot Mem_Alloc writes at (payload - 4) to recover the raw block,
+            // unlink it with HeapList_Remove, and release the raw block (not the aligned payload).
+            if (void* const lifecycle_payload = igi::retail::mem::Mem_Alloc(
+                    0, static_cast<std::int32_t>(sizeof(igi::retail::core::FrameDispatchRecordView))))
             {
-                igi::retail::mem::Mem_HeapFree(heap_probe);
+                const std::uintptr_t back_pointer_slot =
+                    (reinterpret_cast<std::uintptr_t>(lifecycle_payload) - sizeof(void*)) &
+                    ~static_cast<std::uintptr_t>(sizeof(void*) - 1U);
+                void** const heap_node = *reinterpret_cast<void***>(back_pointer_slot);
+                if (heap_node != nullptr)
+                {
+                    static_cast<void>(igi::retail::mem::HeapList_Remove(heap_node));
+                    igi::retail::mem::Mem_HeapFree(heap_node);
+                }
             }
         }
         // The host adapters replace several retail leaves, so the port never calls them. Run one pass
@@ -2391,6 +2402,18 @@ int RunRetailModelScene(HINSTANCE instance,
 
             // The lightmap and backend getters read state the retail startup would have set; set it to
             // the value the paired retail capture observes (1 and 40) before reading it back.
+            // Script compile-state getters read flags the retail startup sets; set both, read back.
+            igi::retail::script::Script_SetDebugCompileFlag(1);
+            static_cast<void>(igi::retail::script::Script_GetDebugCompileState());
+            igi::retail::script::Script_SetForcePrecompiledFlag(1);
+            static_cast<void>(igi::retail::script::Script_GetForcePrecompiledState());
+            static_cast<void>(igi::retail::script::Qvm_SetGlobalState(0));
+
+            // The IFF form type is the FourCC at +0x10; a real form tag classifies as a pointer.
+            const std::uint32_t form_fourcc = 0x4D524F46U;  // 'FORM'
+            std::memcpy(chunk_container + 0x10, &form_fourcc, sizeof(form_fourcc));
+            static_cast<void>(igi::retail::sys::Ilff_GetFormType(chunk_container));
+
             static_cast<void>(igi::retail::core::App_ContextSetLightmapsUsed(1));
             static_cast<void>(igi::retail::core::App_ContextGetLightmapsUsed());
             static_cast<void>(igi::retail::core::App_ContextSetTerrainLightmapsUsed(1));
