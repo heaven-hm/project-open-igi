@@ -24,11 +24,12 @@
  "candidate_function": {
   "path": "engine/src/retail/model/iff_chunk_tree.cpp",
   "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-  "symbol": "igi::retail::model::IffChunk_FindByTag(igi::retail::model::IffChunkNode*, unsigned int)",
+  "symbol": "Iff_FindFormChunk",
   "signature": "IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)",
   "linked_image_vaddr": "0x004232A0",
   "summary": "IffChunk_FindByTag: sibling walk; FORM marker test on tag; form-type match at +0x14; recursive descent into the first child; non-FORM match on form_type.",
-  "status_after_review": "STRUCTURALLY_VERIFIED"
+  "status_after_review": "STRUCTURALLY_VERIFIED",
+  "source_identifier": "IffChunk_FindByTag"
  },
  "checks": [
   {
@@ -69,12 +70,12 @@
   {
    "name": "addressability",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x004232A0 in build-clean-win32/igi1.exe, 4 direct call sites, caller IffSkeleton_Read."
+   "detail": "Present with external linkage (nm type T) at 0x004232A0 in build-clean-win32/igi1.exe under the retail catalog name Iff_FindFormChunk, pinned by the asm-label on the declaration in engine/include/igi/retail/model/iff_chunk_tree.hpp and inherited by the out-of-line definition; 4 direct call site(s) (per caller: AnimIff_LoadAnimationFile x2, Iff_FindChunkBelowForm x1, Iff_FindFormChunk x1). The C++ source identifier remains IffChunk_FindByTag."
   },
   {
    "name": "port_only_divergence",
    "result": "passed",
-   "detail": "Port-only divergence: C++ linkage and typed IffChunkNode pointers instead of raw void**. This changes symbol naming and tree representation, not the walk. No codegen change was made or needed for addressability."
+   "detail": "Port-only divergence: C++ source identifier IffChunk_FindByTag and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
   }
  ],
  "signature_comparison": {
@@ -84,16 +85,32 @@
  },
  "addressability": {
   "linkage": "external",
-  "object_symbol": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+  "object_symbol": "Iff_FindFormChunk",
   "linked_image_vaddr": "0x004232A0",
-  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "call_sites_in_image": 4,
   "callers_in_image": [
-   "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
-   "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
-   "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE"
+   "AnimIff_LoadAnimationFile",
+   "Iff_FindChunkBelowForm",
+   "Iff_FindFormChunk"
   ],
-  "reachable_statically": true
+  "reachable_statically": true,
+  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "source_identifier": "IffChunk_FindByTag",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "symbol_extent_bytes": 784,
+  "body_equivalence": {
+   "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "text_section_bytes_identical": true,
+   "relocation_records_identical": true,
+   "object_image_identical_outside_relocated_fields": true
+  },
+  "call_sites_by_caller": {
+   "Iff_FindFormChunk": 1,
+   "Iff_FindChunkBelowForm": 1,
+   "AnimIff_LoadAnimationFile": 2
+  }
  },
  "evidence": {
   "binary_ninja": {
@@ -116,7 +133,22 @@
  "port_only_divergences": [
   {
    "kind": "symbol-naming",
-   "detail": "retail symbol name Iff_FindFormChunk -> candidate mangled IffChunk_FindByTag; codegen unchanged."
+   "detail": "retail symbol name Iff_FindFormChunk equals the candidate emitted symbol Iff_FindFormChunk; the C++ source identifier IffChunk_FindByTag is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
   }
- ]
+ ],
+ "addressability_rebind": {
+  "performed_at": "2026-10-23T11:04:09Z",
+  "revision": "807c1b2d",
+  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
+  "addressable_symbol": "Iff_FindFormChunk",
+  "source_identifier": "IffChunk_FindByTag",
+  "linked_image_vaddr": "0x004232A0",
+  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+  "build_evidence_path": "docs/fidelity/evidence/0x00517890-build.json",
+  "build_evidence_sha256": "750cf11a542de3471f03ed6c749253d2f02f3bcbcf525c379264977e74949790",
+  "object_text_bytes_identical_to_baseline": true,
+  "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. Addressability is not behavioural evidence."
+ }
 }

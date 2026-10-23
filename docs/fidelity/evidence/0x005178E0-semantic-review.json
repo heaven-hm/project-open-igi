@@ -24,11 +24,12 @@
  "candidate_function": {
   "path": "engine/src/retail/model/iff_chunk_tree.cpp",
   "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-  "symbol": "igi::retail::model::IffChunk_FindBelowForm(igi::retail::model::IffChunkNode*, unsigned int)",
+  "symbol": "Iff_FindChunkBelowForm",
   "signature": "IffChunkNode* IffChunk_FindBelowForm(IffChunkNode* node, std::uint32_t tag)",
   "linked_image_vaddr": "0x004238A0",
   "summary": "IffChunk_FindBelowForm: skips the given node when its form_type already equals the query, then performs the same walk and child recursion as IffChunk_FindByTag.",
-  "status_after_review": "STRUCTURALLY_VERIFIED"
+  "status_after_review": "STRUCTURALLY_VERIFIED",
+  "source_identifier": "IffChunk_FindBelowForm"
  },
  "checks": [
   {
@@ -69,12 +70,12 @@
   {
    "name": "addressability",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x004238A0 in build-clean-win32/igi1.exe; zero call sites, so addressable but not reachable."
+   "detail": "Present with external linkage (nm type T) at 0x004238A0 in build-clean-win32/igi1.exe under the retail catalog name Iff_FindChunkBelowForm, pinned by the asm-label on the declaration in engine/include/igi/retail/model/iff_chunk_tree.hpp and inherited by the out-of-line definition; 0 direct call site(s) (no direct call site was found in this image). The C++ source identifier remains IffChunk_FindBelowForm."
   },
   {
    "name": "port_only_divergence",
    "result": "passed",
-   "detail": "Port-only divergence: C++ linkage and typed IffChunkNode pointers, plus no caller at all in the port. The missing caller is a reachability gap, not an addressability gap; wiring a caller would change behaviour and is out of scope."
+   "detail": "Port-only divergence: C++ source identifier IffChunk_FindBelowForm and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
   }
  ],
  "signature_comparison": {
@@ -84,12 +85,25 @@
  },
  "addressability": {
   "linkage": "external",
-  "object_symbol": "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
+  "object_symbol": "Iff_FindChunkBelowForm",
   "linked_image_vaddr": "0x004238A0",
-  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "call_sites_in_image": 0,
   "callers_in_image": [],
-  "reachable_statically": false
+  "reachable_statically": false,
+  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "source_identifier": "IffChunk_FindBelowForm",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "symbol_extent_bytes": 160,
+  "body_equivalence": {
+   "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "text_section_bytes_identical": true,
+   "relocation_records_identical": true,
+   "object_image_identical_outside_relocated_fields": true
+  },
+  "call_sites_by_caller": {},
+  "note": "External symbol, but no direct call site was found in this linked image; addressable, not statically reached here."
  },
  "evidence": {
   "binary_ninja": {
@@ -112,11 +126,26 @@
  "port_only_divergences": [
   {
    "kind": "symbol-naming",
-   "detail": "retail symbol name Iff_FindChunkBelowForm -> candidate mangled IffChunk_FindBelowForm; codegen unchanged."
+   "detail": "retail symbol name Iff_FindChunkBelowForm equals the candidate emitted symbol Iff_FindChunkBelowForm; the C++ source identifier IffChunk_FindBelowForm is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
   },
   {
    "kind": "reachability",
    "detail": "the candidate function has no caller; retail's consumers are not yet wired."
   }
- ]
+ ],
+ "addressability_rebind": {
+  "performed_at": "2026-10-23T11:04:09Z",
+  "revision": "807c1b2d",
+  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
+  "addressable_symbol": "Iff_FindChunkBelowForm",
+  "source_identifier": "IffChunk_FindBelowForm",
+  "linked_image_vaddr": "0x004238A0",
+  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+  "build_evidence_path": "docs/fidelity/evidence/0x005178E0-build.json",
+  "build_evidence_sha256": "fdafbac1ee3f9067c0898d592164c3be503a1c3e01dca0d57105da2f2b8788bb",
+  "object_text_bytes_identical_to_baseline": true,
+  "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. Addressability is not behavioural evidence."
+ }
 }

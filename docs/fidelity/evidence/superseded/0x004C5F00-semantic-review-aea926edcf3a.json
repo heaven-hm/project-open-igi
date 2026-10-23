@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed",
+  "address": "0x004C5F00",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "a043d7b04094ae034871c436d2e9653b1440093b96036c1cf67964bc3ed51d9b",
+  "reviewed": true,
+  "reviewed_by": "Automated static review, 2026-10-23 (Binary Ninja MCP, Radare2 6.2.0, angr 10.0.4.post1 CFGFast) against retail igi.exe and the current terrain_loaders.cpp",
+  "scope": "Structural and return-path review of retail Terrain_LoadTexturesAndLightmaps (0x004C5F00) and its host file-stage bridge. Behavioral equivalence is not claimed; the candidate does not reproduce the retail texture/palette/resource-manager side effects or the observed pool-count return value.",
+  "structural_comparison_evidence": "docs/fidelity/evidence/004C5F00-structural-comparison.json",
+  "runtime_contract": {
+    "scope": "retail-load-phase-observation-only; no candidate capture",
+    "probe_sha256": "ede626093a3c84272bb7a1ff02f87b16ae377dd37fe7679c67bc41280a1398e8",
+    "required_observables": {
+      "inputs": [
+        "args"
+      ],
+      "outputs": [
+        "returnValue"
+      ],
+      "sideEffects": []
+    },
+    "no_side_effects": false,
+    "note": "The only runtime observation is one retail load-phase call in build/runtime-traces/20261023T015650-level1-retail (EAX 0x0000000A). There is no paired candidate capture; this contract does not authorize runtime acceptance."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Binary Ninja and Radare2 both identify one function at 0x004C5F00 with identical CFG node/edge sets (20 blocks, 30 edges; body 0x004C5F00-0x004C6156, 599 bytes). angr CFGFast recovers the exact entry with no unresolved jumps. The candidate entry is igi::retail::terrain::Terrain_LoadTexturesAndLightmaps at 0x0045AC50 in the fresh x86 candidate."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Retail is x86 cdecl with context at [esp+4] and the path/name pointer at [esp+8]; the path is copied to g_b97c20 and suffixed with \".tex\" and later \".lmp\". The candidate takes void* context and const char* base_path in the same order and derives the terrain directory from base_path.parent_path()."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "not_applicable",
+      "rationale": "Retail's stack frame (0x484), context offsets (+0xDBC, +0xDF4, +0xDF8, +0xE00), 0x2C lightmap-table stride and 256-entry palette are host-adapted into TerrainLevelData members. No literal constant equivalence is claimed."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "not_applicable",
+      "rationale": "The host object stores typed vectors and arrays instead of the retail context offsets; no byte-identical memory layout or access claim is made."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "not_applicable",
+      "rationale": "Retail calls Terrain_LoadTexturePackage (0x005175A0), Texture_UploadPalettePacket, Resource_FileExists, Resource_Load, per-page Texture_UploadMipmapPacket and Resource_Unload. The host bridge reads TERRAIN.LMP with ifstream, fills ModelTexturePixels, and does not register the .lmp in the resource table. Those retail side effects are deliberately not reproduced and are recorded as divergences, so call/side-effect equivalence is not part of this structural claim."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Retail has one ret at 0x004C6156. The path at 0x004C600B returns 0 when App_ContextGetTerrainLightmapsUsed()==0; 0x004C6096 returns 0 when Resource_FileExists(\"<path>.lmp\")==0; otherwise 0x004C613F-0x004C6144 calls Resource_Unload and no instruction writes EAX before the ret, so the return is Resource_Unload's EAX. Resource_Unload (0x004B6380) returns the node kind for 1/3, otherwise Resource_FreeNode's result (remaining pool count, or a relocated node address on a non-last free). The live retail call returned 0x0000000A, the post-unload pool count with no swap. The candidate returns 0 on its null/empty-file paths and Resource_Unload's value only when the port resource table holds the .lmp; because the host stage never registers it, the observed 0xA is not reproduced. This is recorded, not hard-coded."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Neither the retail function nor the reviewed candidate path performs floating-point arithmetic."
+    }
+  ],
+  "review_findings": [
+    "Retail control flow and the single return path are structurally confirmed: the return value is exactly Resource_Unload's EAX, and 0xA is the post-unload pool count with no slot swap.",
+    "The candidate is a host file-stage bridge: 12 blocks / 335 bytes plus Terrain_LoadLightmaps (193 blocks / 5231 bytes), versus retail 20 blocks / 599 bytes. Its CFG is not equivalent.",
+    "Retail texture-list load, palette upload, per-page mipmap upload into g_b81b20 and resource-table registration are not reproduced; the observed 0xA is therefore not reproduced.",
+    "The retail App_ContextGetTerrainLightmapsUsed() gate is omitted because Config_SetResolution_2 (0x004063D1), the setter's caller, is not wired in this branch.",
+    "No paired candidate runtime capture exists; status is capped at STRUCTURALLY_VERIFIED."
+  ],
+  "limits": [
+    "Host file-stage bridge only; retail allocation layout, resource-table state and texture-upload calls are not byte-identical.",
+    "The loaded path returns the port Resource_Unload value only for a registered resource; the observed retail 0xA is not reproduced.",
+    "Retail App_ContextGetTerrainLightmapsUsed() gate is omitted.",
+    "No paired candidate runtime capture exists."
+  ]
+}

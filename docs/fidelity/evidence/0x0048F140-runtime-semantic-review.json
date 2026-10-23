@@ -1,0 +1,187 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x0048F140",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
+ "implementation_header": "engine/include/igi/retail/core/frame_natives.hpp",
+ "reviewed": true,
+ "reviewed_by": "Source-semantic review by the Task C capture author (2026-10-23) against Binary Ninja 6.0.10601 (view_1, retail PE32 base 0x00400000), the raw retail bytes, and the linked candidate build-clean-win32/igi1.exe sha256 8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885 rebuilt 2026-10-23T11:39:06Z.",
+ "reviewed_at": "2026-10-23T11:45:00Z",
+ "review_basis": "Binary Ninja function definition, byte-level objdump re-read of the retail image, the current candidate disassembly, and the source in engine/src/retail/core/frame_natives.cpp. This review is static; the paired runtime observation is a separate record.",
+ "signature": {
+  "calling_convention": "cdecl",
+  "arguments": [
+   {
+    "index": 0,
+    "location": "[esp+4]",
+    "type": "int32_t",
+    "meaning": "the new isActive value; only the low byte selects the stored dword (movsx), while the full word reaches the optional handler and is the null-handler return"
+   }
+  ],
+  "return": "int32_t: the optional handler result, or the unmodified argument word when the handler dword is null"
+ },
+ "observed_semantics": {
+  "entry_va": "0x0048F140",
+  "bytes": "8b 44 24 04 0f be c8 89 0d fc 8b 5c 00 8b 0d 18 8c 5c 00 85 c9 74 0d 8b 15 1c 8c 5c 00 52 50 ff d1 83 c4 08 c3",
+  "instructions": [
+   "0x0048F140  8b 44 24 04     mov eax, dword [esp+4]",
+   "0x0048F144  0f be c8        movsx ecx, al",
+   "0x0048F147  89 0d fc8b5c00  mov dword [0x005C8BFC], ecx",
+   "0x0048F14D  8b 0d 188c5c00  mov ecx, dword [0x005C8C18]",
+   "0x0048F153  85 c9           test ecx, ecx",
+   "0x0048F155  74 0d           je 0x0048F164",
+   "0x0048F157  8b 15 1c8c5c00  mov edx, dword [0x005C8C1C]",
+   "0x0048F15D  52              push edx",
+   "0x0048F15E  50              push eax",
+   "0x0048F15F  ff d1           call ecx",
+   "0x0048F161  83 c4 08        add esp, 8",
+   "0x0048F164  c3              ret"
+  ],
+  "basic_blocks": 3,
+  "state_delta": {
+   "va": "0x005C8BFC",
+   "width_bytes": 4,
+   "instruction_va": "0x0048F147",
+   "value": "sign_extend_8(argument[7:0])"
+  },
+  "optional_handler": {
+   "handler_va": "0x005C8C18",
+   "context_va": "0x005C8C1C",
+   "installer_va": "0x0048F180",
+   "installer_callers": "none in the retail image"
+  },
+  "callers": [
+   {
+    "entry": "0x0048F530",
+    "symbol": "main (catalog name FX_Igimutex)",
+    "call_site": "0x0048F615",
+    "return_address": "0x0048F61A",
+    "argument": "push 0x1"
+   },
+   {
+    "entry": "0x00494F50",
+    "symbol": "display window handler (catalog name Display_SwapBuffers_7)",
+    "call_site": "0x0049502A",
+    "argument": "push 0",
+    "in_scope": false
+   },
+   {
+    "entry": "0x00494F50",
+    "symbol": "display window handler",
+    "call_site": "0x00495046",
+    "argument": "push 1",
+    "in_scope": false
+   }
+  ]
+ },
+ "candidate_semantics": {
+  "path": "engine/src/retail/core/frame_natives.cpp",
+  "symbol": "AppContext_SetIsActive",
+  "entry_va": "0x0041F7C0",
+  "bytes": "83 ec 08 8b 44 24 0c 0f be d0 89 15 ec 1b 5e 00 8b 15 e8 1b 5e 00 85 d2 74 0f 8b 0d e4 1b 5e 00 89 04 24 89 4c 24 04 ff d2 83 c4 08 c3",
+  "state_symbol": "AppContext_IsActive (0x005E1BEC)",
+  "handler_symbol": "AppContext_OptionalHandler (0x005E1BE8)",
+  "handler_context_symbol": "AppContext_OptionalHandlerContext (0x005E1BE4)",
+  "call_site": "0x004824A1 in RunRetailModelScene, return address 0x004824A6, push 0x1",
+  "note": "instruction-for-instruction the same load, movsbl store, handler read, cdecl handler call and EAX fallthrough"
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "rationale": "Binary Ninja identifies one analyzed function at 0x0048F140 (the catalog name FX_SmokeEmit_23 is an inherited FX-namespace misnomer; identity is the VA), definition int32_t(int32_t arg1), range 0x0048F140-0x0048F165 (37 bytes), three basic blocks. The raw retail bytes re-read with i686-w64-mingw32-objdump match the byte list recorded in observed_semantics exactly, and the candidate body at 0x0041F7C0 is the same sequence with the candidate's own stack adjustment."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "rationale": "One 32-bit cdecl argument is loaded once from [esp+4] at 0x0048F140 and never re-read. Only the low byte selects the stored dword (movsx at 0x0048F144); the full word is what the handler is called with and what EAX keeps on the null-handler path. The candidate loads the same word from [esp+0xc] after its 8-byte frame adjustment at 0x0041F7C3 and applies the same movsbl. No other argument is read."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "There is no scaling, no arithmetic and no literal constant in the function. The only value transformation is sign_extend_8(argument[7:0]) through movsx, which the candidate reproduces with movsbl. The stored dword is therefore 0 or 1 for the observed 0/1 arguments, and the runtime record confirms stored_flag_value 1 for argument_bits 1 and stored_equals_sign_extended_low_byte true."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "The only write is the 4-byte store at 0x0048F147 to the dword at 0x005C8BFC. That VA lies in the zero-filled tail of .data (VirtualSize 0x6FC558, SizeOfRawData 0x1A000, no file-backed bytes at that VA), so the load-time value is 0. The optional handler dword at 0x005C8C18 and its context at 0x005C8C1C are read (never written) here; their only writer is the installer 0x0048F180, which has no callers in the retail image, and the paired capture observed both null at the reviewed startup call. The candidate maps the same three objects to AppContext_IsActive (0x005E1BEC), AppContext_OptionalHandler (0x005E1BE8) and AppContext_OptionalHandlerContext (0x005E1BE4)."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The single possible call is the indirect cdecl call at 0x0048F15F to the handler dword with (argument bits, context dword), guarded by a null test; when the handler is null the call is skipped and the stack adjustment at 0x0048F161 is the only other effect. There are no other callees, no allocation, no error reporting and no writes beyond the one store. The candidate performs the identical guarded call with the same two stack arguments and the same add esp,8 cleanup."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "There is no branch other than the handler null test and no error path. On the null-handler path EAX still holds the loaded argument word and is returned unchanged; on the non-null path EAX is the handler's return value. The candidate returns the same way (the value parameter on the null path). The runtime record confirms return_equals_argument true, return_equals_stored true and return_bits 1 for the observed startup call."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The function only moves and sign-extends a 32-bit integer flag and calls an optional handler; it contains no x87, SSE or other floating-point instruction and no floating-point state is read or written. The candidate implementation likewise performs only integer moves."
+  }
+ ],
+ "limitations": [
+  "The review covers the reviewed main callsite and the null-handler path. The display window handler 0x00494F50 also calls this native on WM_ACTIVATE; those invocations are out of the reviewed scope.",
+  "A runtime-installed handler (written through 0x0048F180) changes the return value to the handler's EAX; that path was observed as a secondary invocation in a contaminated pilot run and is not claimed equivalent.",
+  "The catalog function name is a misnomer; the review deliberately relies on the address and bytes, not the name."
+ ],
+ "runtime_contract_reviewed_at": "2026-10-23T11:45:00Z",
+ "runtime_contract": {
+  "scope": "startup-app-context-active-flag",
+  "probe_path": "scripts/frida_app_context_isactive_typed.js",
+  "probe_sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1",
+  "actions_path": "scripts/frida_scenario_actions.js",
+  "actions_sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7",
+  "execution_status": "executed: exactly one reviewed-callsite setter invocation observed per side; 26/26 typed fields matched; the pre-call flag was 0 and the store changed it to 1 on both sides; the optional handler and its context were null; the getter load that immediately follows returned 1.",
+  "required_observables": {
+   "inputs": [
+    "caller_class",
+    "is_primary_startup_call",
+    "argument_state",
+    "argument_bits",
+    "argument_low_byte",
+    "argument_sign_extended_low_byte",
+    "argument_is_zero"
+   ],
+   "outputs": [
+    "return_state",
+    "return_bits",
+    "return_equals_argument",
+    "return_is_zero",
+    "return_equals_stored"
+   ],
+   "sideEffects": [
+    "previous_flag_state",
+    "previous_flag_value",
+    "previous_flag_is_zero",
+    "stored_flag_state",
+    "stored_flag_value",
+    "stored_equals_sign_extended_low_byte",
+    "store_changed",
+    "handler_state",
+    "handler_is_null",
+    "handler_context_state",
+    "handler_context_is_null",
+    "flag_readback_after_state",
+    "flag_readback_after_value",
+    "store_visible_after_return"
+   ]
+  },
+  "no_arguments": false,
+  "no_return": false,
+  "no_side_effects": false,
+  "note": "required_observables is the typedState subset (26 fields) this review authorizes for 0x0048F140. Only scalar flag values (0/1), the sign-extension relation, pointer classes and within-process relations are compared; no address is compared across processes. caller_class comes from the per-side reviewed callsite return address (retail 0x0048F61A, candidate 0x004824A6) and is not an address comparison. The probe emits explicit unavailable markers for any field it cannot read and never throws. Every other setter invocation, if any, is reported separately as a setter_aux record and is not part of this required-observables set.",
+  "capture_path": "build/runtime-traces/20261023T113721Z-48f140-paired/pair.json"
+ },
+ "runtime_capture": {
+  "probe_path": "scripts/frida_app_context_isactive_typed.js",
+  "probe_sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1",
+  "actions_path": "scripts/frida_scenario_actions.js",
+  "capture_directory": "build/runtime-traces/20261023T113721Z-48f140-paired",
+  "note": "Sequential retail-then-candidate capture, level 1 windowed, cwd /Users/haseeb-mir/Downloads/IGI, spawn suspended with the hooks installed before resume. The comparison evidence is docs/fidelity/evidence/0x0048F140-runtime-comparison.json."
+ }
+}

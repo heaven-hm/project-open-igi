@@ -8,11 +8,11 @@
  "function_entry": "0x0048F250",
  "symbol": "fcn.0048f250",
  "signature": "fcn.0048f250 ();",
- "analyzed_at": "2026-10-23T06:59:32Z",
+ "analyzed_at": "2026-10-23T11:50:00Z",
  "commands": [
   "af-*; s 0x0048F250; af; afij",
   "af-*; s 0x0048F250; af; afbj",
-  "p8 6 @ 0x0048F250",
+  "p8 16 @ 0x0048F250",
   "s 0x0048F250; af-*; af @ 0x0048F250; pdf"
  ],
  "function": {
@@ -23,8 +23,12 @@
   "edge_count": 0,
   "argument_count": 0
  },
- "bytes_hex": "a1e88b5c00c3",
- "disassembly": [],
+ "bytes_hex": "a1e88b5c00c390909090909090909090",
+ "disassembly": [
+  "\u250c 6: fcn.0048f250 ();",
+  "\u2502           0x0048f250      a1e88b5c00     mov eax, dword [0x5c8be8]   ; [0x5c8be8:4]=0",
+  "\u2514           0x0048f255      c3             ret"
+ ],
  "cfg": {
   "entry": "0x0048F250",
   "nodes": [

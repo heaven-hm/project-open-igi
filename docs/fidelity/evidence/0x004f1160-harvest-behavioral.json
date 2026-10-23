@@ -1,0 +1,253 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "address": "0x004F1160",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "5e9c5f3afd9aa309fb3875631cf93bac0006a6b08c2b488e6208ec650b87211b",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/native_unicorn_runner_deepseek.py",
+  "sha256": "df79fa2de4c65993084f1b2aedebf2ac82aabc89e21be6669dd857721cf0d5a1",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner_deepseek.py",
+   "--address",
+   "0x004F1160",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/script/script_mode.cpp",
+   "--implementation-sha256",
+   "5e9c5f3afd9aa309fb3875631cf93bac0006a6b08c2b488e6208ec650b87211b",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+  ]
+ },
+ "result": "passed",
+ "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 1e-06,
+  "relative": 1e-06
+ },
+ "limits": "",
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "cases": [
+  {
+   "id": "script-get-parse-mode-0",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     0,
+     0,
+     0
+    ],
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-1",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     0,
+     1,
+     1
+    ],
+    "initial_state": {
+     "seed": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-2",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1,
+     0,
+     2
+    ],
+    "initial_state": {
+     "seed": 2
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-3",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     1,
+     1,
+     3
+    ],
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-4",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     2,
+     0,
+     4
+    ],
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-5",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     0,
+     255,
+     5
+    ],
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-6",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     255,
+     1,
+     6
+    ],
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  },
+  {
+   "id": "script-get-parse-mode-7",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     128,
+     128,
+     7
+    ],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1,
+    "state_delta": {},
+    "side_effects": []
+   }
+  }
+ ]
+}

@@ -24,11 +24,12 @@
  "candidate_function": {
   "path": "engine/src/retail/model/iff_chunk_tree.cpp",
   "sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
-  "symbol": "igi::retail::model::IffChunk_GetPayload(igi::retail::model::IffChunkNode const*)",
+  "symbol": "Iff_GetChunkPayload",
   "signature": "const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk)",
   "linked_image_vaddr": "0x00423880",
   "summary": "IffChunk_GetPayload: returns the payload buffer address, or nullptr when the payload is empty.",
-  "status_after_review": "STRUCTURALLY_VERIFIED"
+  "status_after_review": "STRUCTURALLY_VERIFIED",
+  "source_identifier": "IffChunk_GetPayload"
  },
  "checks": [
   {
@@ -69,12 +70,12 @@
   {
    "name": "addressability",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x00423880 in build-clean-win32/igi1.exe, 3 direct call sites, caller IffSkeleton_Read."
+   "detail": "Present with external linkage (nm type T) at 0x00423880 in build-clean-win32/igi1.exe under the retail catalog name Iff_GetChunkPayload, pinned by the asm-label on the declaration in engine/include/igi/retail/model/iff_chunk_tree.hpp and inherited by the out-of-line definition; 3 direct call site(s) (per caller: AnimIff_LoadAnimationFile x3). The C++ source identifier remains IffChunk_GetPayload."
   },
   {
    "name": "port_only_divergence",
    "result": "passed",
-   "detail": "Port-only divergence: C++ linkage; the payload is held by value and an empty payload returns nullptr. No codegen change was made or needed."
+   "detail": "Port-only divergence: C++ source identifier IffChunk_GetPayload and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
   }
  ],
  "signature_comparison": {
@@ -84,14 +85,28 @@
  },
  "addressability": {
   "linkage": "external",
-  "object_symbol": "__ZN3igi6retail5model19IffChunk_GetPayloadEPKNS1_12IffChunkNodeE",
+  "object_symbol": "Iff_GetChunkPayload",
   "linked_image_vaddr": "0x00423880",
-  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "call_sites_in_image": 3,
   "callers_in_image": [
-   "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE"
+   "AnimIff_LoadAnimationFile"
   ],
-  "reachable_statically": true
+  "reachable_statically": true,
+  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "source_identifier": "IffChunk_GetPayload",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
+  "symbol_extent_bytes": 32,
+  "body_equivalence": {
+   "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+   "text_section_bytes_identical": true,
+   "relocation_records_identical": true,
+   "object_image_identical_outside_relocated_fields": true
+  },
+  "call_sites_by_caller": {
+   "AnimIff_LoadAnimationFile": 3
+  }
  },
  "evidence": {
   "binary_ninja": {
@@ -113,11 +128,26 @@
  "port_only_divergences": [
   {
    "kind": "symbol-naming",
-   "detail": "retail symbol name Iff_GetChunkPayload -> candidate mangled IffChunk_GetPayload; codegen unchanged."
+   "detail": "retail symbol name Iff_GetChunkPayload equals the candidate emitted symbol Iff_GetChunkPayload; the C++ source identifier IffChunk_GetPayload is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
   },
   {
    "kind": "return-value",
    "detail": "empty payload returns nullptr instead of the raw +0x1C dword."
   }
- ]
+ ],
+ "addressability_rebind": {
+  "performed_at": "2026-10-23T11:04:09Z",
+  "revision": "807c1b2d",
+  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
+  "addressable_symbol": "Iff_GetChunkPayload",
+  "source_identifier": "IffChunk_GetPayload",
+  "linked_image_vaddr": "0x00423880",
+  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+  "build_evidence_path": "docs/fidelity/evidence/0x005179C0-build.json",
+  "build_evidence_sha256": "cedf22cd1a3a5e268fd43a1e93f21befa6399645298a81e7b839bbdff8c0bf08",
+  "object_text_bytes_identical_to_baseline": true,
+  "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace. Addressability is not behavioural evidence."
+ }
 }

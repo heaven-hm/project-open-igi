@@ -1,0 +1,182 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "function_entry": "0x004B85B0",
+ "symbol": "fcn.004b85b0",
+ "signature": "fcn.004b85b0 (int32_t arg_85ch);",
+ "analyzed_at": "2026-10-23T11:10:38Z",
+ "commands": [
+  "e anal.hasnext=true; aaa; s 0x004B85B0; afij",
+  "aa; s 0x004B85B0; afbj",
+  "p8 301 @ 0x004B85B0",
+  "s 0x004B85B0; pdf; axt"
+ ],
+ "function": {
+  "size_bytes": 301,
+  "basic_block_count": 14,
+  "instruction_count": 90,
+  "call_convention": "cdecl",
+  "edge_count": 20,
+  "argument_count": 1
+ },
+ "bytes_hex": "81ec54080000568bb4245c0800005733ff893da465a900893da865a9008b868c0000003bc7743a50e8a34a000083c40485c00f84e60000008b868c0000000568020000505668bc725400e811f8ffff83c40c893da465a9005f5e81c454080000c38d4c245c68000800008d542410518d4424345250e8d67b00008b8e840000008b9680000000518d4424205250e87e6b000083c41c393da065a9007408393da465a900756c8d4c24348d54242c5152897c2410e80876000083c40885c074528d4424088d4c242c5051e8726b000083c40885c074208b54240852e8f17300008b44240c50e857720000a1a865a90083c4083bc774a0393d9865a900740e566898725400e858f7ffff83c408893da865a9008d4c240c51e8f568000083c404893da465a9005f5e81c454080000c3",
+ "disassembly": [],
+ "cfg": {
+  "entry": "0x004B85B0",
+  "nodes": [
+   {
+    "address": "0x004B85B0"
+   },
+   {
+    "address": "0x004B85D7"
+   },
+   {
+    "address": "0x004B85E8"
+   },
+   {
+    "address": "0x004B8611"
+   },
+   {
+    "address": "0x004B8645"
+   },
+   {
+    "address": "0x004B864D"
+   },
+   {
+    "address": "0x004B8655"
+   },
+   {
+    "address": "0x004B866F"
+   },
+   {
+    "address": "0x004B8685"
+   },
+   {
+    "address": "0x004B86A5"
+   },
+   {
+    "address": "0x004B86AD"
+   },
+   {
+    "address": "0x004B86BB"
+   },
+   {
+    "address": "0x004B86C1"
+   },
+   {
+    "address": "0x004B86CE"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004B85B0",
+    "target": "0x004B8611",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B85B0",
+    "target": "0x004B85D7",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B85D7",
+    "target": "0x004B86CE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B85D7",
+    "target": "0x004B85E8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8611",
+    "target": "0x004B8645",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B8645",
+    "target": "0x004B8655",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8645",
+    "target": "0x004B864D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B864D",
+    "target": "0x004B86C1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B864D",
+    "target": "0x004B8655",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8655",
+    "target": "0x004B86C1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8655",
+    "target": "0x004B866F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B866F",
+    "target": "0x004B86A5",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B866F",
+    "target": "0x004B8685",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8685",
+    "target": "0x004B8645",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B8685",
+    "target": "0x004B86A5",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B86A5",
+    "target": "0x004B86BB",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B86A5",
+    "target": "0x004B86AD",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B86AD",
+    "target": "0x004B86BB",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B86BB",
+    "target": "0x004B86C1",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004B86C1",
+    "target": "0x004B86CE",
+    "kind": "unconditional"
+   }
+  ]
+ },
+ "cfg_scope": "Retail-image CFG from Radare2 only; compared with Binary Ninja and angr recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Radare2 recovers the stack arguments but not the x87 return value of 0x004B8A50; the long double return is established from the call sites (`call` followed by `fstp`) and from both callees leaving the value in ST0."
+ ]
+}

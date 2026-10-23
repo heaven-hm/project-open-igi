@@ -7,49 +7,74 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
  "executed": true,
- "performed_at": "2026-10-23T10:20:53Z",
- "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -I /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include -c /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/model/iff_skeleton.cpp -o /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/taskb-evidence-643d58gg/iff_skeleton.o",
+ "performed_at": "2026-10-23T11:00:56Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -I /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include -c /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/model/iff_skeleton.cpp -o /tmp/iffa/evidence/iff_skeleton.o",
  "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
  "toolchain": {
   "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
   "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
   "flags": "-O3 -DNDEBUG -I engine/include",
-  "flags_note": "The exact flags from build-clean-win32/CMakeFiles/igi.dir/flags.make (CXX_FLAGS = -O3 -DNDEBUG), includes_CXX.rsp and compile_commands.json. No -std flag is passed by this build; CMake's cxx_std_20 feature is satisfied by the compiler default."
+  "flags_note": "The exact flags from build-clean-win32/CMakeFiles/igi.dir/flags.make (CXX_FLAGS = -O3 -DNDEBUG) and includes_CXX.rsp. This compile reproduces the object with -I <root>/engine/include, the same include the configured build passes."
  },
  "object": {
-  "path": "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/taskb-evidence-643d58gg/iff_skeleton.o",
-  "sha256": "3acd7537d8c56fe3708c2a3f95a0f801720bc96518919698f233b0d01c9a51ee",
-  "size_bytes": 7949,
+  "path": "/tmp/iffa/evidence/iff_skeleton.o",
+  "sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+  "size_bytes": 7757,
   "format": "pe-i386 relocatable object",
-  "symbol": "igi::retail::model::IffSkeleton_Read(std::filesystem::path const&)",
+  "symbol": "AnimIff_LoadAnimationFile",
   "symbol_offset": 64,
-  "symbol_size_bytes": 1664,
-  "function_bytes_hex": "6100000000000000000000000000000000000000000000000000000000000000400030c02e6273730000000000000000000000000000000000000000000000000000000000000000800030c02f340000000000000000000000000000a001000094110000ec1600000000000009000000201050602e7264617461000000000000000000001c00000034130000000000000000000000000000400030402f3130380000000000000000000000001800000050130000000000000000000000000000400030c02f313236000000000000000000000000a000000068130000461700000000000004000000201050602f3230330000000000000000000000001400000008140000000000000000000000000000400030408b018b51048b4c240429c2c1fa0269d2a38b2eba39d173186bc92c01c880782800740dc2040066902e8db4260000000031c0c204008d76002e8db426000000005557565383ec788d442438c744245000000000890424c744245400000000896c2458c744245c4b06000089642460e8000000008b842490000000c744243cffffffff894424048d44246c890424e8000000008b74246c397424700f84b8020000c74424044a424f428b06c744243c01000000890424e80000000085c00f8484000000c744240448424f42890424c744243c01000000e80000000085c07468c744240448534f428904248944240ce8000000008944241c8b44240cc744240454534c50890424e800000000894424108b44240cc744240454534c54890424e8000000008b5c241c8b7424108944242c89c185db0f94c085f60f94c208d0750885c90f85420200008b94248c00000031c0c7040200000000c74402040000000083c00883f82872e98b9c248c000000c70403000000008b4424708b74246c39f00f84a301000089742428894424308d7426008b4424288b008944242c85c00f846e0100008b48208b701c39f10f840d010000894c2424897424182e8db426000000008b4424188b008944241c85c00f84d10000008b50208b581c39da747689542414895c240c8d7426002e8db426000000008b44240c8b3085f674428d4e1c89742410e8000000008b7424108b461085c074178b4e1889042489ca894c242029c289542404e8000000008b442410c744240428000000890424e8000000008344240c048b44240c3944241475a58b44241c8b581c85db74198b44241c8b4024891c248944240c29d889442404e8000000008b4c241c8b411085c074158b51188904248954240c29c289542404e8000000008b44241cc744240428000000890424e80000000083442418048b442418394424240f850affffff8b44242c8b701c85f674198b44242c8b40248934248944240c29f089442404e8000000008b54242c8b421085c074178b5a1889042489da895c240c29c289542404e8000000008b44242cc744240428000000890424e80000000083442428048b442428394424300f856dfeffff8b74246c85f674128b44247489342429f089442404e8000000008d442438890424e8000000008b84248c00000083c4785b5e5f5dc38b94248c00000031c0c7040200000000c74402040000000083c00883f82872e98b9c248c000000c7040300000000eb9f891c24e80000000085c00f84aefdffff8b5804895c240c85db75258b94248c00000031c0c7040200000000c74402040000000083c00883f82872e9e99efdffff8b00c744243c03000000894424288b442410890424e8000000008b54242c89442410891424e8000000008b5c24108944243485db74a585c074a1817c240cffffff1f0f872f0200008b5c240cc744243c030000008d049d000000008904248944242ce8000000008b5c240c31c989442414890883eb01895c241c741c8d149d0000000083c0048954240831d289542404890424e8000000008b5c24148b54242c8d041389d989442430894424248b442410895c241001c28b1883c00483c1048959fc39d075f1817c240caaaaaa0a0f878f0100006b44240c0cc744243c0400000089042489442420e800000000d9ee8b5c241c8944241889c1d910d95004d9580885db74206bd30c8d400c01c28b1983c00c8958f48b59048958f88b59088958fc39c275e88b4424208b5c2418c744243c0200000089042401c3895c242ce800000000d9eed910d95004d95808837c241c0074226b54241c0c8d480c01ca8b1883c10c8959f48b58048959f88b58088959fc39ca75e88b5424208b5c243489c18b6c241801c2d9038b7c24108b37d95500d911d94304d95504d95104d94308d95508d951",
-  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding."
+  "symbol_extent_bytes": 1664,
+  "function_bytes_sha256": "3dca569afc3487b9f0fdd043a8ac3bb87a0a3cc9f80a903944931895335e72da",
+  "text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "text_size_bytes": 4160,
+  "note": "The extent runs from the symbol to the next symbol in .text and includes alignment padding.",
+  "last_instruction_end_offset": "0x00000680",
+  "alignment_padding_bytes": 0
  },
  "linked_image": {
   "path": "build-clean-win32/igi1.exe",
-  "sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "receipt_path": "build-clean-win32/candidate-receipt.json",
-  "receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
-  "symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+  "receipt_sha256": "c144995432d7ee8f0a61e57a0b2a9dbe180cf11aa17a8a5b8b5901b81faf399b",
+  "symbol": "AnimIff_LoadAnimationFile",
   "linkage": "external (nm type T)",
   "vaddr": "0x00424620",
-  "function_bytes_hex": "5557565383ec788d442438c744245020885900890424c744245428bf5900896c2458c744245c2b4c420089642460e80d2e07008b842490000000c744243cffffffff894424048d44246c890424e8bef8ffff8b74246c397424700f84b8020000c74424044a424f428b06c744243c01000000890424e806ecffff85c00f8484000000c744240448424f42890424c744243c01000000e8e6ebffff85c07468c744240448534f428904248944240ce8deeeffff8944241c8b44240cc744240454534c50890424e8c6eeffff894424108b44240cc744240454534c54890424e8aeeeffff8b5c241c8b7424108944242c89c185db0f94c085f60f94c208d0750885c90f85420200008b94248c00000031c0c7040200000000c74402040000000083c00883f82872e98b9c248c000000c70403000000008b4424708b74246c39f00f84a301000089742428894424308d7426008b4424288b008944242c85c00f846e0100008b48208b701c39f10f840d010000894c2424897424182e8db426000000008b4424188b008944241c85c00f84d10000008b50208b581c39da747689542414895c240c8d7426002e8db426000000008b44240c8b3085f674428d4e1c89742410e89a2914008b7424108b461085c074178b4e1889042489ca894c242029c289542404e8683417008b442410c744240428000000890424e8543417008344240c048b44240c3944241475a58b44241c8b581c85db74198b44241c8b4024891c248944240c29d889442404e8213417008b4c241c8b411085c074158b51188904248954240c29c289542404e8013417008b44241cc744240428000000890424e8ed33170083442418048b442418394424240f850affffff8b44242c8b701c85f674198b44242c8b40248934248944240c29f089442404e8b63317008b54242c8b421085c074178b5a1889042489da895c240c29c289542404e8943317008b44242cc744240428000000890424e88033170083442428048b442428394424300f856dfeffff8b74246c85f674128b44247489342429f089442404e8533317008d442438890424e8c72b07008b84248c00000083c4785b5e5f5dc38b94248c00000031c0c7040200000000c74402040000000083c00883f82872e98b9c248c000000c7040300000000eb9f891c24e810efffff85c00f84aefdffff8b5804895c240c85db75258b94248c00000031c0c7040200000000c74402040000000083c00883f82872e9e99efdffff8b00c744243c03000000894424288b442410890424e8beeeffff8b54242c89442410891424e8aeeeffff8b5c24108944243485db74a585c074a1817c240cffffff1f0f872f0200008b5c240cc744243c030000008d049d000000008904248944242ce8113317008b5c240c31c989442414890883eb01895c241c741c8d149d0000000083c0048954240831d289542404890424e808de07008b5c24148b54242c8d041389d989442430894424248b442410895c241001c28b1883c00483c1048959fc39d075f1817c240caaaaaa0a0f878f0100006b44240c0cc744243c0400000089042489442420e88b321700d9ee8b5c241c8944241889c1d910d95004d9580885db74206bd30c8d400c01c28b1983c00c8958f48b59048958f88b59088958fc39c275e88b4424208b5c2418c744243c0200000089042401c3895c242ce835321700d9eed910d95004d95808837c241c0074226b54241c0c8d480c01ca8b1883c10c8959f48b58048959f88b58088959fc39ca75e88b5424208b5c243489c18b6c241801c2d9038b7c24108b37d95500d911d94304d95504d95104d94308d95508d9510885f6784f3b74240c7351d9ca8944241ceb0a3b74240c7329d9cad9c98b7c24188d04768d0487d800d9c9d84004d9cad840088b4424148b34b085f679d5d9c9eb02d9c9d919d9c98b44241cd95904d95908eb0eddd8ddd8ddd8eb06ddd8ddd8ddd883442410048b7c243083c30c83c50c83c10c397c24100f8564ffffff8bbc248c0000008b5c2428891f8b5c241489471c895f048b5c2410895720895f08895f0c8b5c2418895724895f108b5c242cc6472801895f14895f18e949fbffffc70424a4625a00c744243c04000000e8095e1700c70424a4625a00e8fd5d17008b4424408944240c8b44243c85c0751d8d4c246ce83c2514008b44240cc744243cffffffff890424e8e82b070083e80175338b442420894424048b442418890424e8ff2f1700837c24140074c38b5c24148b44242429d8891c2489442404e8e22f1700ebab83e80174a683e80174d70f0b8d742600",
+  "symbol_extent_bytes": 1664,
+  "function_bytes_sha256": "86362cfb138259475faae0193ca345e8ba8e5cd29326077235c8a311bd15b7bb",
   "present": true,
-  "proof": "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | grep __ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE -> T 0x00424620"
+  "proof": "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | awk '$3==\"AnimIff_LoadAnimationFile\"' -> 00424620 T",
+  "alignment_padding_bytes": 0
  },
  "addressability": {
+  "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
   "linkage": "external",
   "emitted_in_object": true,
   "emitted_in_linked_image": true,
-  "object_bytes_equal_linked_bytes": false,
-  "object_image_byte_note": "Raw object bytes and linked-image bytes differ only where the linker applies relocations (relative call displacements or absolute data addresses); this is not a body change.",
+  "object_symbol": "AnimIff_LoadAnimationFile",
+  "source_identifier": "IffSkeleton_Read",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_skeleton.hpp",
+  "object_bytes_equal_linked_bytes": true,
+  "object_image_byte_note": "The object and linked extents are identical outside the 4-byte fields the linker relocates; the remaining differences are linker-applied relocation values and padding, not body changes.",
   "call_sites_in_image": 1,
   "callers_in_image": [
    "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0"
   ],
-  "reachable": true
+  "reachable_statically": true,
+  "relocation_fields_in_extent": 49,
+  "call_sites_by_caller": {
+   "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0": 1
+  }
+ },
+ "body_equivalence": {
+  "baseline_object_sha256": "3acd7537d8c56fe3708c2a3f95a0f801720bc96518919698f233b0d01c9a51ee",
+  "current_object_sha256": "22b1a3f69b7ece18e2304359d4319872a0e3358f6d90d5e09df47872e0a6209f",
+  "baseline_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "current_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "text_section_bytes_identical": true,
+  "relocation_records_identical": true,
+  "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+  "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+  "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
  },
  "checks": [
   {
@@ -65,23 +90,23 @@
   {
    "name": "object_symbol_external",
    "result": "passed",
-   "detail": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE is type T at object offset 0x40, size 1664 bytes."
+   "detail": "AnimIff_LoadAnimationFile is type T at object offset 0x00000040, extent 1664 bytes."
   },
   {
    "name": "linked_image_presence",
    "result": "passed",
-   "detail": "The same symbol is type T at 0x00424620 in build-clean-win32/igi1.exe, whose candidate-receipt.json binds SHA-256 f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b."
+   "detail": "AnimIff_LoadAnimationFile is type T at 0x00424620 in build-clean-win32/igi1.exe, whose candidate-receipt.json binds SHA-256 7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a."
   },
   {
-   "name": "linked_image_body",
+   "name": "body_unchanged",
    "result": "passed",
-   "detail": "The linked image carries a 1664-byte body at 0x00424620 for this symbol; the object and image bytes differ only in linker-applied relocations, not in the instruction sequence."
+   "detail": ".text is byte-identical to the pre-change object (SHA-256 005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3); relocation records match after symbol-name mapping; the linker applies only relocation values to the linked extent."
   }
  ],
- "scope": "Build and linked-image addressability only. The symbol is present in the built candidate with external linkage; no runtime execution, no behaviour comparison and no game-process call is claimed by this report.",
+ "scope": "Build and linked-image addressability only. The symbol is present under the retail catalog name with external linkage at the stated VA; no runtime execution, behaviour comparison or game-process call is claimed by this report.",
  "limitations": [
   "A successful compile and link does not prove behavioural equivalence.",
-  "Presence in the image proves addressability, not reachability on any particular level.",
+  "Presence in the image proves addressability, not reachability on any level.",
   "Reachability here is static: 1 direct call site(s) found in the linked image."
  ]
 }

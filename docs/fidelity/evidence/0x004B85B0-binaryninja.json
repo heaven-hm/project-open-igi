@@ -1,0 +1,425 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
+ "function_entry": "0x004B85B0",
+ "symbol": "Qvm_Execute",
+ "signature": "int32_t(void* arg1)",
+ "analyzed_at": "2026-10-23T11:10:38Z",
+ "function": {
+  "start": "0x004b85b0",
+  "end": "0x4b86dc",
+  "size_bytes": 301,
+  "basic_blocks": 14,
+  "instruction_count": 90
+ },
+ "disassembly": [
+  "  int32_t Qvm_Execute(void* arg1)",
+  "",
+  "0x4b85b0  // Sig: int Qvm_Execute(void* qvm)",
+  "0x4b85b0  // Note: EXECUTES a loaded QVM script program (the interpreter entry - despite",
+  "0x4b85b0  // the old analyst label QvmRead). On runtime failure reports \"Error in QVM",
+  "0x4b85b0  // program: %s\" / \"An error occured in script file: %s\". Param: qvm = pointer",
+  "0x4b85b0  // from Qvm_Load. RETURNS script result value.",
+  "0x4b85b0  sub     esp, 0x854",
+  "0x4b85b6  push    esi {__saved_esi}",
+  "0x4b85b7  mov     esi, dword [esp+0x85c {arg1}]",
+  "0x4b85be  push    edi {__saved_edi}",
+  "0x4b85bf  xor     edi, edi  {0x0}",
+  "0x4b85c1  mov     dword [g_a965a4], edi  {0x0}",
+  "0x4b85c7  mov     dword [g_a965a8], edi  {0x0}",
+  "0x4b85cd  mov     eax, dword [esi+0x8c]",
+  "0x4b85d3  cmp     eax, edi",
+  "0x4b85d5  je      0x4b8611",
+  "",
+  "0x4b85d7  push    eax {var_860_1}",
+  "0x4b85d8  call    Sys_UndefinedError",
+  "0x4b85dd  add     esp, 0x4",
+  "0x4b85e0  test    eax, eax",
+  "0x4b85e2  je      0x4b86ce",
+  "",
+  "0x4b85e8  mov     eax, dword [esi+0x8c]",
+  "0x4b85ee  add     eax, 0x268",
+  "0x4b85f3  push    eax {var_860_2}",
+  "0x4b85f4  push    esi {var_864_1}",
+  "0x4b85f5  push    data_5472bc {var_868}  {\"Error in QVM program: %s\\r\\n%s\"}",
+  "0x4b85fa  call    Qvm_ReportError",
+  "0x4b85ff  add     esp, 0xc",
+  "0x4b8602  mov     dword [g_a965a4], edi  {0x0}",
+  "0x4b8608  pop     edi {__saved_edi}",
+  "0x4b8609  pop     esi {__saved_esi}",
+  "0x4b860a  add     esp, 0x854",
+  "0x4b8610  retn     {__return_addr}",
+  "",
+  "0x4b8611  lea     ecx, [esp+0x5c {var_800}]",
+  "0x4b8615  push    0x800 {var_860}",
+  "0x4b861a  lea     edx, [esp+0x10 {var_850}]",
+  "0x4b861e  push    ecx {var_800} {var_864_2}",
+  "0x4b861f  lea     eax, [esp+0x34 {var_830}]",
+  "0x4b8623  push    edx {var_850} {var_868_1}",
+  "0x4b8624  push    eax {var_830} {var_86c_1}",
+  "0x4b8625  call    Script_BufInit",
+  "0x4b862a  mov     ecx, dword [esi+0x84]",
+  "0x4b8630  mov     edx, dword [esi+0x80]",
+  "0x4b8636  push    ecx {var_870_1}",
+  "0x4b8637  lea     eax, [esp+0x20 {var_850}]",
+  "0x4b863b  push    edx {var_874_1}",
+  "0x4b863c  push    eax {var_850} {var_878_1}",
+  "0x4b863d  call    Sys_ResolveSymbol_30",
+  "0x4b8642  add     esp, 0x1c",
+  "",
+  "0x4b8645  cmp     dword [g_a965a0], edi",
+  "0x4b864b  je      0x4b8655",
+  "",
+  "0x4b864d  cmp     dword [g_a965a4], edi",
+  "0x4b8653  jne     0x4b86c1",
+  "",
+  "0x4b8655  lea     ecx, [esp+0x34 {var_828}]",
+  "0x4b8659  lea     edx, [esp+0x2c {var_830}]",
+  "0x4b865d  push    ecx {var_828} {var_860_3}",
+  "0x4b865e  push    edx {var_830} {var_864_3}",
+  "0x4b865f  mov     dword [esp+0x10 {var_854}], edi  {0x0}",
+  "0x4b8663  call    Sys_CloseFileStream_31",
+  "0x4b8668  add     esp, 0x8",
+  "0x4b866b  test    eax, eax",
+  "0x4b866d  je      0x4b86c1",
+  "",
+  "0x4b866f  lea     eax, [esp+0x8 {var_854}]",
+  "0x4b8673  lea     ecx, [esp+0x2c {var_830}]",
+  "0x4b8677  push    eax {var_854} {var_860_4}",
+  "0x4b8678  push    ecx {var_830} {var_864_4}",
+  "0x4b8679  call    Sys_UnexpectedEndOfFile",
+  "0x4b867e  add     esp, 0x8",
+  "0x4b8681  test    eax, eax",
+  "0x4b8683  je      0x4b86a5",
+  "",
+  "0x4b8685  mov     edx, dword [esp+0x8 {var_854}]",
+  "0x4b8689  push    edx {var_860_5}",
+  "0x4b868a  call    Sys_UnknownBlockType_2",
+  "0x4b868f  mov     eax, dword [esp+0xc {var_854}]",
+  "0x4b8693  push    eax {var_864_5}",
+  "0x4b8694  call    Sys_UnknownBlockType",
+  "0x4b8699  mov     eax, dword [g_a965a8]",
+  "0x4b869e  add     esp, 0x8",
+  "0x4b86a1  cmp     eax, edi",
+  "0x4b86a3  je      0x4b8645",
+  "",
+  "0x4b86a5  cmp     dword [g_a96598], edi",
+  "0x4b86ab  je      0x4b86bb",
+  "",
+  "0x4b86ad  push    esi {var_860_6}",
+  "0x4b86ae  push    data_547298 {var_864}  {\"An error occured in script file: %s\"}",
+  "0x4b86b3  call    Qvm_ReportError",
+  "0x4b86b8  add     esp, 0x8",
+  "",
+  "0x4b86bb  mov     dword [g_a965a8], edi  {0x0}",
+  "",
+  "0x4b86c1  lea     ecx, [esp+0xc {var_850}]",
+  "0x4b86c5  push    ecx {var_850} {var_860_7}",
+  "0x4b86c6  call    Sys_PopStack_30",
+  "0x4b86cb  add     esp, 0x4",
+  "",
+  "0x4b86ce  mov     dword [g_a965a4], edi  {0x0}",
+  "0x4b86d4  pop     edi {__saved_edi}",
+  "0x4b86d5  pop     esi {__saved_esi}",
+  "0x4b86d6  add     esp, 0x854",
+  "0x4b86dc  retn     {__return_addr}"
+ ],
+ "pseudocode": "  int32_t Qvm_Execute(void* arg1)\n\n// Sig: int Qvm_Execute(void* qvm)\n// Note: EXECUTES a loaded QVM script program (the interpreter entry - despite\n// the old analyst label QvmRead). On runtime failure reports \"Error in QVM\n// program: %s\" / \"An error occured in script file: %s\". Param: qvm = pointer\n// from Qvm_Load. RETURNS script result value.\n{\n    g_a965a4 = 0;\n    g_a965a8 = 0;\n    int32_t* eax = *(arg1 + 0x8c);\n    int32_t eax_1;\n\n    if (!eax)\n    {\n        void var_850;\n        void var_830;\n        void var_800;\n        Script_BufInit(&var_830, &var_850, &var_800, 0x800);\n        Sys_ResolveSymbol_30(&var_850, *(arg1 + 0x80), *(arg1 + 0x84));\n\n        while (!g_a965a0 || !g_a965a4)\n        {\n            void* var_854 = nullptr;\n            void var_828;\n\n            if (!Sys_CloseFileStream_31(&var_830, &var_828))\n                break;\n\n            if (Sys_UnexpectedEndOfFile(&var_830, &var_854))\n            {\n                Sys_UnknownBlockType_2(var_854);\n                Sys_UnknownBlockType(var_854);\n\n                if (!g_a965a8)\n                    continue;\n            }\n\n            if (g_a96598)\n            {\n                void* var_860_6 = arg1;\n                Qvm_ReportError(\"An error occured in script file: %s\");\n            }\n\n            g_a965a8 = 0;\n            break;\n        }\n\n        eax_1 = Sys_PopStack_30(&var_850);\n    }\n    else\n    {\n        eax_1 = Sys_UndefinedError(eax);\n\n        if (eax_1)\n        {\n            int32_t var_860_2 = *(arg1 + 0x8c) + 0x268;\n            void* var_864_1 = arg1;\n            int32_t eax_4 = Qvm_ReportError(\"Error in QVM program: %s\\r\\n%s\");\n            g_a965a4 = 0;\n            return eax_4;\n        }\n    }\n\n    g_a965a4 = 0;\n    return eax_1;\n}\n",
+ "callers": [
+  {
+   "callsite": "0x405865",
+   "caller": "Config_Read (0x405850 (x86))"
+  },
+  {
+   "callsite": "0x408365",
+   "caller": "GameMaterial_LoadParameters (0x408350 (x86))"
+  },
+  {
+   "callsite": "0x4137b5",
+   "caller": "HumanPlayer_LoadParameters (0x4137a0 (x86))"
+  },
+  {
+   "callsite": "0x413acd",
+   "caller": "WeaponType_Open_2 (0x413a90 (x86))"
+  },
+  {
+   "callsite": "0x4151ad",
+   "caller": "IntroScreen_Update (0x415170 (x86))"
+  },
+  {
+   "callsite": "0x418c21",
+   "caller": "Menu_Manager (0x418b00 (x86))"
+  },
+  {
+   "callsite": "0x44e07f",
+   "caller": "AIFunction_DefaultHandler (0x44e060 (x86))"
+  },
+  {
+   "callsite": "0x44fce8",
+   "caller": "HumanAI_EventDispatch (0x44fc90 (x86))"
+  },
+  {
+   "callsite": "0x47ca7d",
+   "caller": "AmmoType_Open (0x47ca40 (x86))"
+  },
+  {
+   "callsite": "0x484eea",
+   "caller": "Mission_Open (0x484e60 (x86))"
+  },
+  {
+   "callsite": "0x4887cc",
+   "caller": "SubLevel_LoadParameters (0x488780 (x86))"
+  },
+  {
+   "callsite": "0x4c4908",
+   "caller": "Rigid_DyncubeObjRead (0x4c48e0 (x86))"
+  },
+  {
+   "callsite": "0x4c65a5",
+   "caller": "Terrain_Load (0x4c6240 (x86))"
+  },
+  {
+   "callsite": "0x4e5f37",
+   "caller": "SoundSys_RegisterDefs (0x4e5ec0 (x86))"
+  },
+  {
+   "callsite": "0x4ec098",
+   "caller": "AnimTrigger_ParseConfigFile (0x4ec070 (x86))"
+  },
+  {
+   "callsite": "0x4edc39",
+   "caller": "PhysicsObj_RegisterLod (0x4edc00 (x86))"
+  },
+  {
+   "callsite": "0x4ee008",
+   "caller": "PhysicsObjType_ParseConfigFile (0x4edfe0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d24",
+   "caller": "Config_Compile (0x4f0cf0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d98",
+   "caller": "Task_New_2 (0x4f0d40 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4b85d8",
+   "callee_address": "0x4bd080",
+   "callee": "Sys_UndefinedError (0x4bd080 (x86))"
+  },
+  {
+   "callsite": "0x4b85fa",
+   "callee_address": "0x4b7e10",
+   "callee": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4b8625",
+   "callee_address": "0x4c0200",
+   "callee": "Script_BufInit (0x4c0200 (x86))"
+  },
+  {
+   "callsite": "0x4b863d",
+   "callee_address": "0x4bf1c0",
+   "callee": "Sys_ResolveSymbol_30 (0x4bf1c0 (x86))"
+  },
+  {
+   "callsite": "0x4b8663",
+   "callee_address": "0x4bfc70",
+   "callee": "Sys_CloseFileStream_31 (0x4bfc70 (x86))"
+  },
+  {
+   "callsite": "0x4b8679",
+   "callee_address": "0x4bf1f0",
+   "callee": "Sys_UnexpectedEndOfFile (0x4bf1f0 (x86))"
+  },
+  {
+   "callsite": "0x4b868a",
+   "callee_address": "0x4bfa80",
+   "callee": "Sys_UnknownBlockType_2 (0x4bfa80 (x86))"
+  },
+  {
+   "callsite": "0x4b8694",
+   "callee_address": "0x4bf8f0",
+   "callee": "Sys_UnknownBlockType (0x4bf8f0 (x86))"
+  },
+  {
+   "callsite": "0x4b86b3",
+   "callee_address": "0x4b7e10",
+   "callee": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4b86c6",
+   "callee_address": "0x4befc0",
+   "callee": "Sys_PopStack_30 (0x4befc0 (x86))"
+  }
+ ],
+ "cfg": {
+  "entry": "0x004B85B0",
+  "nodes": [
+   {
+    "address": "0x4b85b0"
+   },
+   {
+    "address": "0x4b8611"
+   },
+   {
+    "address": "0x4b85d7"
+   },
+   {
+    "address": "0x4b8655"
+   },
+   {
+    "address": "0x4b864d"
+   },
+   {
+    "address": "0x4b86ce"
+   },
+   {
+    "address": "0x4b85e8"
+   },
+   {
+    "address": "0x4b86c1"
+   },
+   {
+    "address": "0x4b866f"
+   },
+   {
+    "address": "0x4b86a5"
+   },
+   {
+    "address": "0x4b8685"
+   },
+   {
+    "address": "0x4b86bb"
+   },
+   {
+    "address": "0x4b86ad"
+   },
+   {
+    "address": "0x4b8645"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x4b85b0",
+    "target": "0x4b8611",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b85b0",
+    "target": "0x4b85d7",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8611",
+    "target": "0x4b8645",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x4b85d7",
+    "target": "0x4b86ce",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b85d7",
+    "target": "0x4b85e8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8655",
+    "target": "0x4b86c1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8655",
+    "target": "0x4b866f",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b864d",
+    "target": "0x4b86c1",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b864d",
+    "target": "0x4b8655",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b86c1",
+    "target": "0x4b86ce",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x4b866f",
+    "target": "0x4b86a5",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b866f",
+    "target": "0x4b8685",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b86a5",
+    "target": "0x4b86bb",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b86a5",
+    "target": "0x4b86ad",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8685",
+    "target": "0x4b8645",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8685",
+    "target": "0x4b86a5",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b86bb",
+    "target": "0x4b86c1",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x4b86ad",
+    "target": "0x4b86bb",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x4b8645",
+    "target": "0x4b8655",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8645",
+    "target": "0x4b864d",
+    "kind": "conditional"
+   }
+  ]
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 and angr recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Binary Ninja's auto-generated symbol names and user notes are not semantic proof of a function name; the conflicts for these two entries are recorded in the semantic review."
+ ],
+ "raw_output_sha256": {
+  "info": "04e8425856ac48c671e580a39254efcb86a2fdd910d9ff82f9a2c87d7a934f71",
+  "disasm": "964ebedb6dec1e6f070ef14602363527daa70b10adfe527b7918dd7ff6d9468c",
+  "pseudo": "2a7d85daca3703a4558d9579fea7074b88c86c8755235447364dada52ac14b92",
+  "callees": "803b5316973d009a6495f0bcc6e08c9d35e310553d32cc08eb1bbaca7183b8a8",
+  "callers": "b1216cbe6b6593b2f4e2f91f9ab4e76584aa6167769e8b15a46d20e048f56e8a",
+  "blocks": "c780494373c2f1cde76b73421cd00196489c118ffb8488b01c96b47741d5290e"
+ }
+}

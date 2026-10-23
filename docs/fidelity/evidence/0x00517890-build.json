@@ -7,51 +7,78 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "69b2e71f88a595c3cfcccf5b40df8c3ca54412b41ff46f09a0585175dc050ace",
  "executed": true,
- "performed_at": "2026-10-23T10:20:53Z",
- "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -I /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include -c /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/model/iff_chunk_tree.cpp -o /var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/taskb-evidence-643d58gg/iff_chunk_tree.o",
+ "performed_at": "2026-10-23T11:00:56Z",
+ "command": "/opt/homebrew/bin/i686-w64-mingw32-g++ -O3 -DNDEBUG -I /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/include -c /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/model/iff_chunk_tree.cpp -o /tmp/iffa/evidence/iff_chunk_tree.o",
  "target": "Windows x86 PE32 relocatable object (pe-i386) from the i686-w64-mingw32 toolchain",
  "toolchain": {
   "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
   "path": "/opt/homebrew/bin/i686-w64-mingw32-g++",
   "flags": "-O3 -DNDEBUG -I engine/include",
-  "flags_note": "The exact flags from build-clean-win32/CMakeFiles/igi.dir/flags.make (CXX_FLAGS = -O3 -DNDEBUG), includes_CXX.rsp and compile_commands.json. No -std flag is passed by this build; CMake's cxx_std_20 feature is satisfied by the compiler default."
+  "flags_note": "The exact flags from build-clean-win32/CMakeFiles/igi.dir/flags.make (CXX_FLAGS = -O3 -DNDEBUG) and includes_CXX.rsp. This compile reproduces the object with -I <root>/engine/include, the same include the configured build passes."
  },
  "object": {
-  "path": "/var/folders/q0/rj0k1xgn28x14thfz4gnbm5c0000gn/T/taskb-evidence-643d58gg/iff_chunk_tree.o",
-  "sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
-  "size_bytes": 9452,
+  "path": "/tmp/iffa/evidence/iff_chunk_tree.o",
+  "sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+  "size_bytes": 9261,
   "format": "pe-i386 relocatable object",
-  "symbol": "igi::retail::model::IffChunk_FindByTag(igi::retail::model::IffChunkNode*, unsigned int)",
+  "symbol": "Iff_FindFormChunk",
   "symbol_offset": 0,
-  "symbol_size_bytes": 0,
-  "function_bytes_hex": "",
-  "symbol_size_note": "Range from the compiled object label to the next global text label, including trailing alignment padding."
+  "symbol_extent_bytes": 784,
+  "function_bytes_sha256": "73bb96612c51f7d4d85b307686ce0996986434a240c6f67278dfec46c0a5c779",
+  "text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "text_size_bytes": 4928,
+  "note": "The extent runs from the symbol to the next symbol in .text and includes alignment padding.",
+  "last_instruction_end_offset": "0x0000030F",
+  "alignment_padding_bytes": 1
  },
  "linked_image": {
   "path": "build-clean-win32/igi1.exe",
-  "sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "receipt_path": "build-clean-win32/candidate-receipt.json",
-  "receipt_sha256": "158f189c8fa97ca19110c18849031cb5a5b164529e9627dfccd550ee60ebd934",
-  "symbol": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
+  "receipt_sha256": "c144995432d7ee8f0a61e57a0b2a9dbe180cf11aa17a8a5b8b5901b81faf399b",
+  "symbol": "Iff_FindFormChunk",
   "linkage": "external (nm type T)",
   "vaddr": "0x004232A0",
-  "function_bytes_hex": "",
+  "symbol_extent_bytes": 784,
+  "function_bytes_sha256": "73bb96612c51f7d4d85b307686ce0996986434a240c6f67278dfec46c0a5c779",
   "present": true,
-  "proof": "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | grep __ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj -> T 0x004232A0"
+  "proof": "i686-w64-mingw32-nm --defined-only build-clean-win32/igi1.exe | awk '$3==\"Iff_FindFormChunk\"' -> 004232a0 T",
+  "alignment_padding_bytes": 1
  },
  "addressability": {
+  "mechanism": "declaration-level GCC asm-label in the owning header; the definition inherits it, so the compiler emits the retail name for the same out-of-line function",
   "linkage": "external",
   "emitted_in_object": true,
   "emitted_in_linked_image": true,
+  "object_symbol": "Iff_FindFormChunk",
+  "source_identifier": "IffChunk_FindByTag",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_chunk_tree.hpp",
   "object_bytes_equal_linked_bytes": true,
-  "object_image_byte_note": "Raw object bytes and linked-image bytes differ only where the linker applies relocations (relative call displacements or absolute data addresses); this is not a body change.",
+  "object_image_byte_note": "The object and linked extents are identical outside the 4-byte fields the linker relocates and outside trailing alignment padding; the remaining differences are linker-applied relocation values and padding, not body changes.",
   "call_sites_in_image": 4,
   "callers_in_image": [
-   "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj",
-   "__ZN3igi6retail5model22IffChunk_FindBelowFormEPNS1_12IffChunkNodeEj",
-   "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE"
+   "AnimIff_LoadAnimationFile",
+   "Iff_FindChunkBelowForm",
+   "Iff_FindFormChunk"
   ],
-  "reachable": true
+  "reachable_statically": true,
+  "relocation_fields_in_extent": 9,
+  "call_sites_by_caller": {
+   "Iff_FindFormChunk": 1,
+   "Iff_FindChunkBelowForm": 1,
+   "AnimIff_LoadAnimationFile": 2
+  }
+ },
+ "body_equivalence": {
+  "baseline_object_sha256": "3408562e685623693dc89fefc23c7ff42206a79ff99cce8a269b8852302efb45",
+  "current_object_sha256": "84afa1cd9b4e676a15f19099693ad2d7c9aacf1603b9b7dc25fe79919a3e0f7f",
+  "baseline_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "current_text_sha256": "eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727",
+  "text_section_bytes_identical": true,
+  "relocation_records_identical": true,
+  "change_kind": "symbol name only; instruction bytes and relocation records unchanged",
+  "note": "Compared against the object built from the pre-change headers (same compiler, same flags). All three translation units keep byte-identical .text; the emitted symbol name is the only difference.",
+  "relocation_note": "Compared after mapping the six renamed symbols to their retail names; every relocation offset, type and target matches."
  },
  "checks": [
   {
@@ -67,23 +94,23 @@
   {
    "name": "object_symbol_external",
    "result": "passed",
-   "detail": "__ZN3igi6retail5model18IffChunk_FindByTagEPNS1_12IffChunkNodeEj is type T at object offset 0x0, size 0 bytes."
+   "detail": "Iff_FindFormChunk is type T at object offset 0x00000000, extent 784 bytes."
   },
   {
    "name": "linked_image_presence",
    "result": "passed",
-   "detail": "The same symbol is type T at 0x004232a0 in build-clean-win32/igi1.exe, whose candidate-receipt.json binds SHA-256 f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b."
+   "detail": "Iff_FindFormChunk is type T at 0x004232A0 in build-clean-win32/igi1.exe, whose candidate-receipt.json binds SHA-256 7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a."
   },
   {
-   "name": "linked_image_body",
+   "name": "body_unchanged",
    "result": "passed",
-   "detail": "The linked image carries a 0-byte body at 0x004232a0 for this symbol; its bytes are identical to the compiled object."
+   "detail": ".text is byte-identical to the pre-change object (SHA-256 eb2a7e53f82a23fb5d8daceb51805d252b02d795ff7465ae7628e9c13c220727); relocation records match after symbol-name mapping; the linker applies only relocation values to the linked extent."
   }
  ],
- "scope": "Build and linked-image addressability only. The symbol is present in the built candidate with external linkage; no runtime execution, no behaviour comparison and no game-process call is claimed by this report.",
+ "scope": "Build and linked-image addressability only. The symbol is present under the retail catalog name with external linkage at the stated VA; no runtime execution, behaviour comparison or game-process call is claimed by this report.",
  "limitations": [
   "A successful compile and link does not prove behavioural equivalence.",
-  "Presence in the image proves addressability, not reachability on any particular level.",
-  "Reachability here is static: 4 direct call site(s) found in the linked image."
+  "Presence in the image proves addressability, not reachability on any level.",
+  "Reachability here is static: 3 direct call site(s) found in the linked image."
  ]
 }

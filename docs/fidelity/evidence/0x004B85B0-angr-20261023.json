@@ -1,0 +1,220 @@
+{
+ "analysis": "CFGFast",
+ "analysis_options": {
+  "automatic_first": true,
+  "data_references": true,
+  "normalize": true,
+  "seeded_address_count": 0
+ },
+ "angr_version": "10.0.4.post1",
+ "architecture": "X86",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "bits": 32,
+ "function_entry": "0x004B85B0",
+ "functions": {
+  "0x004B85B0": {
+   "baseline_has_unresolved_jumps": false,
+   "block_count": 24,
+   "edges": [
+    {
+     "kind": "unknown",
+     "source": "0x004B85B0",
+     "target": "0x004B85D7"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B85B0",
+     "target": "0x004B8611"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B85D7",
+     "target": "0x004B85DD"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B85DD",
+     "target": "0x004B85E8"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B85DD",
+     "target": "0x004B86CE"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B85E8",
+     "target": "0x004B85FF"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8611",
+     "target": "0x004B862A"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B862A",
+     "target": "0x004B8642"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8642",
+     "target": "0x004B8645"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8645",
+     "target": "0x004B864D"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8645",
+     "target": "0x004B8655"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B864D",
+     "target": "0x004B8655"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B864D",
+     "target": "0x004B86C1"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8655",
+     "target": "0x004B8668"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8668",
+     "target": "0x004B866F"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8668",
+     "target": "0x004B86C1"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B866F",
+     "target": "0x004B867E"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B867E",
+     "target": "0x004B8685"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B867E",
+     "target": "0x004B86A5"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8685",
+     "target": "0x004B868F"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B868F",
+     "target": "0x004B8699"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8699",
+     "target": "0x004B8645"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B8699",
+     "target": "0x004B86A5"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86A5",
+     "target": "0x004B86AD"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86A5",
+     "target": "0x004B86BB"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86AD",
+     "target": "0x004B86B8"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86B8",
+     "target": "0x004B86BB"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86BB",
+     "target": "0x004B86C1"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86C1",
+     "target": "0x004B86CB"
+    },
+    {
+     "kind": "unknown",
+     "source": "0x004B86CB",
+     "target": "0x004B86CE"
+    }
+   ],
+   "function_entry": "0x004B85B0",
+   "has_unresolved_jumps": false,
+   "initialization_model": null,
+   "name": "sub_4b85b0",
+   "nodes": [
+    "0x004B85B0",
+    "0x004B85D7",
+    "0x004B85DD",
+    "0x004B85E8",
+    "0x004B85FF",
+    "0x004B8611",
+    "0x004B862A",
+    "0x004B8642",
+    "0x004B8645",
+    "0x004B864D",
+    "0x004B8655",
+    "0x004B8668",
+    "0x004B866F",
+    "0x004B867E",
+    "0x004B8685",
+    "0x004B868F",
+    "0x004B8699",
+    "0x004B86A5",
+    "0x004B86AD",
+    "0x004B86B8",
+    "0x004B86BB",
+    "0x004B86C1",
+    "0x004B86CB",
+    "0x004B86CE"
+   ],
+   "reason": null,
+   "recovery_mode": "automatic",
+   "result": "pass",
+   "returning": true
+  }
+ },
+ "has_unresolved_jumps": false,
+ "kind": "angr-analysis",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence"
+ ],
+ "mapped_base": "0x400000",
+ "reason": null,
+ "result": "pass",
+ "schema_version": 1,
+ "tool": "angr",
+ "analyzed_at": "2026-10-23T11:10:38Z",
+ "method": "scripts/angr_analyze.py --binary retail igi.exe --address 0x004B85B0"
+}

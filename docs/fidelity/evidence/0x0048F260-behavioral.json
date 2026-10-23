@@ -8,9 +8,9 @@
   "oracle": "retail-binary-execution",
   "runner": {
     "path": "scripts/native_unicorn_runner.py",
-    "sha256": "2c8f8234f96f2cf42719fc7a9659aa22fe9b74c17d69b59aead7e65249ab7d9f",
+    "sha256": "c72f27122c033c58fb3eac13ef70c96d3f4a3d11d897624bbb4f9e795ac041f2",
     "command": [
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/scripts/native_unicorn_runner.py",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
       "--address",
       "0x0048F260",
       "--binary",
@@ -18,11 +18,11 @@
       "--binary-sha256",
       "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "--implementation",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow/engine/src/retail/core/app_context.cpp",
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/core/app_context.cpp",
       "--implementation-sha256",
       "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
       "--root",
-      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/cmdc-smart-workflow"
+      "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
     ]
   },
   "result": "passed",

@@ -9,20 +9,21 @@
  "function_entry": "0x0048F250",
  "symbol": "App_ContextGetTerrainLightmapsUsed",
  "signature": "int32_t()",
- "analyzed_at": "2026-10-23T06:59:32Z",
+ "analyzed_at": "2026-10-23T11:50:00Z",
  "function": {
-  "start": "0x0048F250",
-  "end": "0x0048F255",
+  "start": "0x48f250",
+  "end": "0x48f255",
   "size_bytes": 6,
   "basic_blocks": 1,
   "instruction_count": 2
  },
+ "bytes_hex": "a1e88b5c00c390909090909090909090",
  "disassembly": [
-  "int32_t App_ContextGetTerrainLightmapsUsed()",
-  "0x48f250  mov     eax, dword [0x5c8be8]",
-  "0x48f255  retn"
+  "  int32_t App_ContextGetTerrainLightmapsUsed()",
+  "0x48f250  mov     eax, dword [g_5c8be8]",
+  "0x48f255  retn     {__return_addr}"
  ],
- "pseudocode": "  int32_t App_ContextGetTerrainLightmapsUsed()\n\n{\n    return g_5c8be8;\n}",
+ "pseudocode": "int32_t App_ContextGetTerrainLightmapsUsed()\n\n{\n    return g_5c8be8;\n}",
  "callers": [
   {
    "callsite": "0x416ed8",
@@ -50,6 +51,7 @@
  "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
  "limitations": [
   "Retail-image structure only; not candidate code and not runtime evidence.",
-  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name.",
+  "Binary Ninja user comments on this entry are analyst annotations, not retail symbols."
  ]
 }

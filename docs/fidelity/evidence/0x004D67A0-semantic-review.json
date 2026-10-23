@@ -24,11 +24,12 @@
  "candidate_function": {
   "path": "engine/src/retail/model/iff_skeleton.cpp",
   "sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9",
-  "symbol": "igi::retail::model::IffSkeleton_Read(std::filesystem::path const&)",
+  "symbol": "AnimIff_LoadAnimationFile",
   "signature": "std::optional<IffSkeleton> IffSkeleton_Read(const std::filesystem::path& path)",
   "linked_image_vaddr": "0x00424620",
   "summary": "IffSkeleton_Read: parses the file into the port tree, finds BOBJ, BOBH and the BOSH/PLST/TLST children, then builds object id, parent indices, rest translations and accumulated world positions.",
-  "status_after_review": "STRUCTURALLY_VERIFIED"
+  "status_after_review": "STRUCTURALLY_VERIFIED",
+  "source_identifier": "IffSkeleton_Read"
  },
  "checks": [
   {
@@ -69,12 +70,12 @@
   {
    "name": "addressability",
    "result": "passed",
-   "detail": "Present with external linkage (nm type T) at 0x00424620 in build-clean-win32/igi1.exe, called from the model-load path."
+   "detail": "Present with external linkage (nm type T) at 0x00424620 in build-clean-win32/igi1.exe under the retail catalog name AnimIff_LoadAnimationFile, pinned by the asm-label on the declaration in engine/include/igi/retail/model/iff_skeleton.hpp and inherited by the out-of-line definition; 1 direct call site(s) (per caller: __ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0 x1). The C++ source identifier remains IffSkeleton_Read."
   },
   {
    "name": "port_only_divergence",
    "result": "passed",
-   "detail": "Port-only divergence: host ABI (filesystem path, optional<IffSkeleton>) and skeleton-only scope. The retail clip parse and the 0xA542F0/0xA538F0 global writes are not reproduced. No codegen change was made for addressability."
+   "detail": "Port-only divergence: C++ source identifier IffSkeleton_Read and typed pointers instead of the retail ABI; the emitted assembler name now matches the retail catalog name, and the compiled body is byte-identical to the pre-change object."
   }
  ],
  "signature_comparison": {
@@ -84,14 +85,28 @@
  },
  "addressability": {
   "linkage": "external",
-  "object_symbol": "__ZN3igi6retail5model16IffSkeleton_ReadERKNSt10filesystem7__cxx114pathE",
+  "object_symbol": "AnimIff_LoadAnimationFile",
   "linked_image_vaddr": "0x00424620",
-  "linked_image_sha256": "f9f3b9ee5b6af2010d75e1edc925e1fe38ab55de65b3b26765880e8a5582ed1b",
+  "linked_image_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
   "call_sites_in_image": 1,
   "callers_in_image": [
    "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0"
   ],
-  "reachable_statically": true
+  "reachable_statically": true,
+  "mechanism": "declaration-level GCC asm-label in engine/include/igi/retail/model/iff_skeleton.hpp",
+  "source_identifier": "IffSkeleton_Read",
+  "asm_label_declared_in": "engine/include/igi/retail/model/iff_skeleton.hpp",
+  "symbol_extent_bytes": 1664,
+  "body_equivalence": {
+   "baseline_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+   "current_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+   "text_section_bytes_identical": true,
+   "relocation_records_identical": true,
+   "object_image_identical_outside_relocated_fields": true
+  },
+  "call_sites_by_caller": {
+   "__ZN12_GLOBAL__N_15Scene4loadERKNSt10filesystem7__cxx114pathEj.constprop.0": 1
+  }
  },
  "evidence": {
   "binary_ninja": {
@@ -115,7 +130,7 @@
  "port_only_divergences": [
   {
    "kind": "symbol-naming",
-   "detail": "retail symbol name AnimIff_LoadAnimationFile -> candidate mangled IffSkeleton_Read; codegen unchanged."
+   "detail": "retail symbol name AnimIff_LoadAnimationFile equals the candidate emitted symbol AnimIff_LoadAnimationFile; the C++ source identifier IffSkeleton_Read is pinned with a declaration-level asm-label. Instruction bytes and relocations are unchanged by the label."
   },
   {
    "kind": "abi",
@@ -125,5 +140,20 @@
    "kind": "scope",
    "detail": "skeleton-read subgraph only; clip parsing and global tables omitted."
   }
- ]
+ ],
+ "addressability_rebind": {
+  "performed_at": "2026-10-23T11:04:09Z",
+  "revision": "807c1b2d",
+  "change": "declaration-level GCC asm-label added to the owning header; no definition, computation, argument, return value or side effect changed",
+  "addressable_symbol": "AnimIff_LoadAnimationFile",
+  "source_identifier": "IffSkeleton_Read",
+  "linked_image_vaddr": "0x00424620",
+  "candidate_sha256": "7495327774cb4147261135a381006a2b8466f02b5bfa92042bd693d913fd4e6a",
+  "build_evidence_path": "docs/fidelity/evidence/0x004D67A0-build.json",
+  "build_evidence_sha256": "dbf5a101324c40cf28fd906c4bcd0cef8a2efa6b3d2dda899ea06e7e91206479",
+  "object_text_bytes_identical_to_baseline": true,
+  "baseline_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "current_text_sha256": "005f260b39ca2e1272e9b9de664ebfcc862c7798fe153d40116a52cc9e55abd3",
+  "note": "This rebind re-established the symbol and linked-image address after the assembler-name change. The semantic findings above were not re-derived; they remain bound to implementation SHA-256 653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9. Addressability is not behavioural evidence."
+ }
 }

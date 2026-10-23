@@ -1,0 +1,48 @@
+{
+ "analysis": "CFGFast",
+ "analysis_options": {
+  "automatic_first": true,
+  "data_references": true,
+  "normalize": true,
+  "seeded_address_count": 0
+ },
+ "angr_version": "10.0.4.post1",
+ "architecture": "X86",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "bits": 32,
+ "function_entry": "0x0048F340",
+ "functions": {
+  "0x0048F340": {
+   "baseline_has_unresolved_jumps": false,
+   "block_count": 1,
+   "edges": [],
+   "function_entry": "0x0048F340",
+   "has_unresolved_jumps": false,
+   "initialization_model": null,
+   "name": "sub_48f340",
+   "nodes": [
+    "0x0048F340"
+   ],
+   "reason": null,
+   "recovery_mode": "automatic",
+   "result": "pass",
+   "returning": true
+  }
+ },
+ "has_unresolved_jumps": false,
+ "kind": "angr-analysis",
+ "limitations": [
+  "CFGFast is approximate static analysis",
+  "This result does not prove semantic or behavioral equivalence",
+  "A previous invocation of the same helper for this address was terminated by SIGTERM before producing output (gate exit code -15); a rerun of the same command completed in about 30 seconds with the result recorded here. The failure was environmental and not an analysis result."
+ ],
+ "mapped_base": "0x400000",
+ "reason": null,
+ "result": "pass",
+ "schema_version": 1,
+ "tool": "angr",
+ "analyzed_at": "2026-10-23T11:55:00Z",
+ "method": "scripts/angr_analyze.py --binary retail igi.exe --address 0x0048F340",
+ "rerun_note": "2026-10-23 Task B: the earlier gate run reported exit code -15 with empty stdout. The identical command was rerun with no timeout and passed; the SIGTERM is treated as an environment kill, not a CFGFast failure."
+}

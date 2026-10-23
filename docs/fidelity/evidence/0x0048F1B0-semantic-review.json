@@ -6,10 +6,9 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
  "reviewed": true,
- "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
- "reviewed_at": "2026-10-23T07:24:56Z",
- "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
- "review_basis": "The current engine/src/retail/core/app_context.cpp hashes to b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; the candidate translation unit was read from the working tree at the recorded digest.",
+ "reviewed_at": "2026-10-23T10:50:17Z",
+ "review_basis": "The current engine/src/retail/core/app_context.cpp hashes to b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823. Binary Ninja recovered the retail entry live at 0x0048F1B0 (6 bytes, 1 basic block, 0 edges, bytes a1f88b5c00c3) and Radare2 independently recovered the same entry, size, bytes and empty edge set. The candidate body was then read against that reconstruction. This review restates the same source verdict as the previous artifact but supplies the seven gate-required check names; the earlier artifact used the non-schema labels function_boundary/global_mapping/behavioural_differential and could not satisfy the strict semantic gate.",
  "retail_function": {
   "entry": "0x0048F1B0",
   "name": "App_ContextGetDebugged",
@@ -19,36 +18,58 @@
   "size_bytes": 6,
   "basic_blocks": 1,
   "edges": 0,
+  "call_convention": "cdecl",
   "cfg_similarity": 1.0,
-  "summary": "0x0048F1B0: 6 bytes, one block; loads the 32-bit debug flag at 0x005C8BF8 into EAX and returns."
+  "bytes_hex": "a1f88b5c00c3",
+  "summary": "0x0048F1B0: 6 bytes, one block, no calls. mov eax, dword [0x5C8BF8]; retn. Loads the app-level debug flag into EAX and returns it."
  },
  "candidate_function": {
   "path": "engine/src/retail/core/app_context.cpp",
   "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823",
-  "summary": "App_ContextGetDebugged(): returns the debugged field of the port AppContextState, the same field written by App_ContextSetDebugged.",
+  "summary": "App_ContextGetDebugged(): returns the debugged field of the port AppContextState, the same field written by App_ContextSetDebugged (0x0048F1A0).",
   "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_boundary",
+   "name": "function_identity",
    "result": "passed",
-   "detail": "Binary Ninja and Radare2 recover 6 bytes, 1 block/0 edges; cfg_similarity 1.0."
+   "rationale": "Binary Ninja and Radare2 both recover a function entry at 0x0048F1B0 with 6 bytes, one basic block and zero edges, and the two retail-image graphs agree 1.000. The candidate defines App_ContextGetDebugged at that scope; no other body is claimed."
   },
   {
-   "name": "global_mapping",
+   "name": "argument_mapping",
    "result": "passed",
-   "detail": "Retail 0x005C8BF8 maps to the candidate app_context_state.debugged field; the setter writes the same field."
+   "rationale": "Retail is cdecl int32_t() with zero stack arguments (Radare2 records nargs=0; Binary Ninja's definition is int32_t()). The candidate takes no parameters. Argument count and calling convention match, and no register input is read before the global load."
   },
   {
-   "name": "behavioural_differential",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "detail": "scripts/native_unicorn_runner.py seeded the retail global and the candidate field and compared 8/8 returned values."
+   "rationale": "The only constant is the retail absolute global 0x005C8BF8, represented as the debugged member of AppContextState. The body performs no arithmetic, scaling or table indexing."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "rationale": "Retail performs exactly one 32-bit load from 0x005C8BF8 and writes no memory. The candidate reads exactly one int32_t field and writes nothing. Access width and the absence of neighbouring writes match."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "rationale": "The retail body contains no call and neither does the candidate. There is no side effect: the function is a pure read of the app-context flag."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "rationale": "Retail returns the loaded dword in EAX through the single retn; there are no branches or error paths. The candidate returns the same field on its single path, with no fallback value."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The body contains no floating-point load, store, conversion or arithmetic instruction on either side."
   }
  ],
  "signature_comparison": {
   "reviewed": true,
   "result": "abi-adapted",
-  "rationale": "Retail takes no arguments and returns int32_t; the candidate returns the same 32-bit field from the port state. cdecl is preserved."
+  "rationale": "Retail is int32_t() under cdecl; the candidate is std::int32_t App_ContextGetDebugged(). No arguments and a 32-bit EAX return are preserved. The manifest's Binary Ninja/Radare2 signature strings are aligned to the recorded artifact text (int32_t() and fcn.0048f1b0 ();) rather than the earlier 'not restated' placeholder."
  },
  "evidence": {
   "binary_ninja": {
@@ -65,16 +86,17 @@
    "evidence_path": "docs/fidelity/evidence/0x0048F1B0-behavioral.json",
    "evidence_sha256": "5236241f5f6c18cfb4185f3bc381d6f241c2272bc6f04a353e6063fbba75126a",
    "runner": "scripts/native_unicorn_runner.py",
-   "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+   "method": "Retail instruction bytes executed under unicorn x86-32 with the true PE image; the compiled candidate executed natively with the same synthetic state; returned dwords and the seeded retail global compared case by case. This is emulator/host execution, not a live paired game process.",
    "oracle": "retail-binary-execution",
    "tests_passed": 8,
    "tests_total": 8
   }
  },
  "limitations": [
-  "No live paired runtime capture exists; the differential is Unicorn plus the compiled candidate.",
-  "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
-  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
-  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
+  "The candidate represents the retail absolute global 0x005C8BF8 as a member of the port AppContextState; raw absolute-address identity is not reproduced.",
+  "This review covers the 6-byte retail body and the single candidate body only. No natural game reachability, concurrency or whole-game parity is claimed.",
+  "The behavioural differential is emulator/host execution (Unicorn retail bytes plus the compiled candidate), not a live paired retail/candidate game process; RUNTIME_TESTED and VERIFIED are not claimed.",
+  "cfg_similarity 1.0 is the retail Binary Ninja-vs-Radare2 graph score for a one-block body; it is not a candidate-vs-retail CFG score.",
+  "The previous artifact already bound the current implementation digest; only its check labels were non-conforming for the strict gate. Its verdict is retained, and its unsupported runtime_contract-free status is unchanged."
  ]
 }

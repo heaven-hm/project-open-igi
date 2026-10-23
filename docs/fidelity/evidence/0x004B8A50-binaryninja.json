@@ -1,0 +1,907 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
+ "function_entry": "0x004B8A50",
+ "symbol": "Profile_ValueSet",
+ "signature": "int32_t(float arg1, float arg2)",
+ "analyzed_at": "2026-10-23T11:10:38Z",
+ "function": {
+  "start": "0x004b8a50",
+  "end": "0x4b8a7b",
+  "size_bytes": 44,
+  "basic_blocks": 3,
+  "instruction_count": 17
+ },
+ "disassembly": [
+  "  int32_t Profile_ValueSet(float arg1, float arg2)",
+  "",
+  "0x4b8a50  // Sig: void Profile_ValueSet(void* profile, int index)",
+  "0x4b8a50  // Note: Sets a profile value through the profile object/value-table path used",
+  "0x4b8a50  // by the retail music and sound-effects option setters. Ghidra/r2 CFG",
+  "0x4b8a50  // agreement: 3 basic blocks and 2 edges; see",
+  "0x4b8a50  // assets/IGI1-Native-Name-Evidence.json.",
+  "0x4b8a50  mov     eax, dword [esp+0x4 {arg1}]",
+  "0x4b8a54  mov     ecx, dword [eax+0x4]",
+  "0x4b8a57  test    ecx, ecx",
+  "0x4b8a59  je      0x4b8a6a",
+  "",
+  "0x4b8a5b  mov     ecx, dword [esp+0x8 {arg2}]",
+  "0x4b8a5f  push    ecx {var_4}",
+  "0x4b8a60  push    eax {var_8}",
+  "0x4b8a61  call    Sys_DispatchOpcode_28",
+  "0x4b8a66  add     esp, 0x8",
+  "0x4b8a69  retn     {__return_addr}",
+  "",
+  "0x4b8a6a  mov     edx, dword [eax+0x8]",
+  "0x4b8a6d  mov     eax, dword [esp+0x8 {arg2}]",
+  "0x4b8a71  mov     ecx, dword [edx+eax*4]",
+  "0x4b8a74  push    ecx {var_4_1}",
+  "0x4b8a75  call    Sys_DispatchOpcode_24",
+  "0x4b8a7a  pop     ecx {var_4_1}",
+  "0x4b8a7b  retn     {__return_addr}"
+ ],
+ "pseudocode": "  int32_t Profile_ValueSet(float arg1, float arg2)\n\n// Sig: void Profile_ValueSet(void* profile, int index)\n// Note: Sets a profile value through the profile object/value-table path used\n// by the retail music and sound-effects option setters. Ghidra/r2 CFG\n// agreement: 3 basic blocks and 2 edges; see\n// assets/IGI1-Native-Name-Evidence.json.\n{\n    long double x87_r0;\n    long double x87_r1;\n\n    if (!*(arg1 + 4))\n        return Sys_DispatchOpcode_24(x87_r0, x87_r1, *(*(arg1 + 8) + (arg2 << 2)));\n    int32_t result;\n    int32_t edx;\n    int80_t st0;\n    st0 = Sys_DispatchOpcode_28(arg1, edx, arg2, arg1, arg2);\n    return result;\n}\n",
+ "callers": [
+  {
+   "callsite": "0x4038ec",
+   "caller": "GOInMouSens (0x4038e0 (x86))"
+  },
+  {
+   "callsite": "0x403e8f",
+   "caller": "GO_SoundSpeech (0x403e60 (x86))"
+  },
+  {
+   "callsite": "0x403f1f",
+   "caller": "GO_SoundMusic (0x403ef0 (x86))"
+  },
+  {
+   "callsite": "0x403faf",
+   "caller": "GO_SoundFX (0x403f80 (x86))"
+  },
+  {
+   "callsite": "0x40408c",
+   "caller": "GOGfxGamma (0x404080 (x86))"
+  },
+  {
+   "callsite": "0x40416a",
+   "caller": "Config_GameOptionsInputSetInvertMouse (0x404160 (x86))"
+  },
+  {
+   "callsite": "0x40423c",
+   "caller": "Config_GameOptionsInputSetMouseSensitivity (0x404230 (x86))"
+  },
+  {
+   "callsite": "0x4042ed",
+   "caller": "Config_GameOptionsInputSetBloodEnabled (0x4042e0 (x86))"
+  },
+  {
+   "callsite": "0x4048bc",
+   "caller": "Config_GraphicOptionsSetGamma (0x4048b0 (x86))"
+  },
+  {
+   "callsite": "0x404aec",
+   "caller": "Config_SoundOptionsSetSoundsEffectsVolume (0x404ae0 (x86))"
+  },
+  {
+   "callsite": "0x404c4c",
+   "caller": "Config_SoundOptionsSetMusicVolume (0x404c40 (x86))"
+  },
+  {
+   "callsite": "0x404dac",
+   "caller": "Config_SoundOptionsSetSpeechVolume (0x404da0 (x86))"
+  },
+  {
+   "callsite": "0x407e3c",
+   "caller": "DefineQ_Material (0x407e30 (x86))"
+  },
+  {
+   "callsite": "0x407e59",
+   "caller": "DefineQ_Material (0x407e30 (x86))"
+  },
+  {
+   "callsite": "0x407e76",
+   "caller": "DefineQ_Material (0x407e30 (x86))"
+  },
+  {
+   "callsite": "0x407f86",
+   "caller": "Define_GameMaterial (0x407f50 (x86))"
+  },
+  {
+   "callsite": "0x407fa3",
+   "caller": "Define_GameMaterial (0x407f50 (x86))"
+  },
+  {
+   "callsite": "0x407fc0",
+   "caller": "Define_GameMaterial (0x407f50 (x86))"
+  },
+  {
+   "callsite": "0x408000",
+   "caller": "Define_GameMaterial (0x407f50 (x86))"
+  },
+  {
+   "callsite": "0x41007d",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x41008b",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x4100a5",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x4100bf",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x4100d9",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x4100ed",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x410101",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x41011c",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x410132",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x41014a",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x410169",
+   "caller": "DefineHumanPlayerGeneral (0x410070 (x86))"
+  },
+  {
+   "callsite": "0x414184",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4141a4",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4141c4",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4141e7",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x41428b",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4142ab",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4142cb",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4142ee",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x41430e",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x41433d",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x414373",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4145ed",
+   "caller": "DefineWeaponType (0x413f90 (x86))"
+  },
+  {
+   "callsite": "0x4152ac",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x4152b8",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x4152c4",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x4152df",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x4152eb",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x415303",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x41531b",
+   "caller": "MovieSubtitle_RegisterText (0x415260 (x86))"
+  },
+  {
+   "callsite": "0x41595c",
+   "caller": "Game_SetMusicVolume (0x415950 (x86))"
+  },
+  {
+   "callsite": "0x4159bc",
+   "caller": "Game_SetSFXVolume (0x4159b0 (x86))"
+  },
+  {
+   "callsite": "0x42324c",
+   "caller": "ControlsMenu_ConvertOffsetFromFloat (0x423240 (x86))"
+  },
+  {
+   "callsite": "0x426cf0",
+   "caller": "VehiclePhysics_InvokeGetArg (0x426cd0 (x86))"
+  },
+  {
+   "callsite": "0x426d0c",
+   "caller": "VehiclePhysics_InvokeGetArg (0x426cd0 (x86))"
+  },
+  {
+   "callsite": "0x427251",
+   "caller": "HeliDoor_Init_2 (0x427240 (x86))"
+  },
+  {
+   "callsite": "0x427267",
+   "caller": "HeliDoor_Init_2 (0x427240 (x86))"
+  },
+  {
+   "callsite": "0x4277e0",
+   "caller": "VehiclePhysics_InvokeGetArg_4277C0 (0x4277c0 (x86))"
+  },
+  {
+   "callsite": "0x4277f6",
+   "caller": "VehiclePhysics_InvokeGetArg_4277C0 (0x4277c0 (x86))"
+  },
+  {
+   "callsite": "0x427f61",
+   "caller": "VehiclePhysics_InvokeValueSet (0x427f50 (x86))"
+  },
+  {
+   "callsite": "0x427f70",
+   "caller": "VehiclePhysics_InvokeValueSet (0x427f50 (x86))"
+  },
+  {
+   "callsite": "0x42979f",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x4297b5",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x4297d1",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x4297e7",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x429803",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x429822",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x429838",
+   "caller": "Missile_Update (0x429730 (x86))"
+  },
+  {
+   "callsite": "0x42da2a",
+   "caller": "VehiclePhysics_InvokeGetArg_42D9F0 (0x42d9f0 (x86))"
+  },
+  {
+   "callsite": "0x42da3a",
+   "caller": "VehiclePhysics_InvokeGetArg_42D9F0 (0x42d9f0 (x86))"
+  },
+  {
+   "callsite": "0x42db97",
+   "caller": "Menu_LeaveMenus_22 (0x42db00 (x86))"
+  },
+  {
+   "callsite": "0x42dbbd",
+   "caller": "Menu_LeaveMenus_22 (0x42db00 (x86))"
+  },
+  {
+   "callsite": "0x42dbd6",
+   "caller": "Menu_LeaveMenus_22 (0x42db00 (x86))"
+  },
+  {
+   "callsite": "0x42dc06",
+   "caller": "Menu_LeaveMenus_22 (0x42db00 (x86))"
+  },
+  {
+   "callsite": "0x42feb0",
+   "caller": "VehiclePhysics_Invoke23 (0x42fe80 (x86))"
+  },
+  {
+   "callsite": "0x42fecc",
+   "caller": "VehiclePhysics_Invoke23 (0x42fe80 (x86))"
+  },
+  {
+   "callsite": "0x435be4",
+   "caller": "Gear_Setup (0x435bd0 (x86))"
+  },
+  {
+   "callsite": "0x435c03",
+   "caller": "Gear_Setup (0x435bd0 (x86))"
+  },
+  {
+   "callsite": "0x435c10",
+   "caller": "Gear_Setup (0x435bd0 (x86))"
+  },
+  {
+   "callsite": "0x435c20",
+   "caller": "Gear_Setup (0x435bd0 (x86))"
+  },
+  {
+   "callsite": "0x43609f",
+   "caller": "WeatherEnv_InvokeValueSet (0x436090 (x86))"
+  },
+  {
+   "callsite": "0x436760",
+   "caller": "WeatherEnv_InvokeGetArg (0x436740 (x86))"
+  },
+  {
+   "callsite": "0x4387fe",
+   "caller": "PlaceExplosiveTBA_Init_2 (0x4387b0 (x86))"
+  },
+  {
+   "callsite": "0x43c227",
+   "caller": "ExplodeMagicObj_LoadParameters (0x43c1f0 (x86))"
+  },
+  {
+   "callsite": "0x43c257",
+   "caller": "ExplodeMagicObj_LoadParameters (0x43c1f0 (x86))"
+  },
+  {
+   "callsite": "0x43c26a",
+   "caller": "ExplodeMagicObj_LoadParameters (0x43c1f0 (x86))"
+  },
+  {
+   "callsite": "0x43c277",
+   "caller": "ExplodeMagicObj_LoadParameters (0x43c1f0 (x86))"
+  },
+  {
+   "callsite": "0x43c287",
+   "caller": "ExplodeMagicObj_LoadParameters (0x43c1f0 (x86))"
+  },
+  {
+   "callsite": "0x449241",
+   "caller": "Siren_Init_2 (0x449220 (x86))"
+  },
+  {
+   "callsite": "0x449251",
+   "caller": "Siren_Init_2 (0x449220 (x86))"
+  },
+  {
+   "callsite": "0x44d3bd",
+   "caller": "AIAction_FallFlat (0x44d2c0 (x86))"
+  },
+  {
+   "callsite": "0x44d5a4",
+   "caller": "AIAction_FireAtNode (0x44d580 (x86))"
+  },
+  {
+   "callsite": "0x44d5bd",
+   "caller": "AIAction_FireAtNode (0x44d580 (x86))"
+  },
+  {
+   "callsite": "0x44d654",
+   "caller": "AIAction_FireAtTask (0x44d630 (x86))"
+  },
+  {
+   "callsite": "0x44d66d",
+   "caller": "AIAction_FireAtTask (0x44d630 (x86))"
+  },
+  {
+   "callsite": "0x44d892",
+   "caller": "AIAction_LookAtEvent (0x44d870 (x86))"
+  },
+  {
+   "callsite": "0x44d909",
+   "caller": "AIAction_Stunned (0x44d8f0 (x86))"
+  },
+  {
+   "callsite": "0x44da19",
+   "caller": "AIAction_RunPanicking (0x44da00 (x86))"
+  },
+  {
+   "callsite": "0x44dc4a",
+   "caller": "AIFunction_SetViewLength (0x44dc40 (x86))"
+  },
+  {
+   "callsite": "0x44dcdc",
+   "caller": "AIFunction_SetAlarmViewLength (0x44dcd0 (x86))"
+  },
+  {
+   "callsite": "0x44dd3c",
+   "caller": "AIFunction_SetViewAlpha (0x44dd30 (x86))"
+  },
+  {
+   "callsite": "0x44dd9c",
+   "caller": "AIFunction_SetViewGamma (0x44dd90 (x86))"
+  },
+  {
+   "callsite": "0x44ddfa",
+   "caller": "AIFunction_SetSecondaryViewLength (0x44ddf0 (x86))"
+  },
+  {
+   "callsite": "0x44de8c",
+   "caller": "AIFunction_SetSecondaryAlarmViewLength (0x44de80 (x86))"
+  },
+  {
+   "callsite": "0x44deec",
+   "caller": "AIFunction_SetSecondaryViewAlpha (0x44dee0 (x86))"
+  },
+  {
+   "callsite": "0x44df4c",
+   "caller": "AIFunction_SetSecondaryViewGamma (0x44df40 (x86))"
+  },
+  {
+   "callsite": "0x44e00c",
+   "caller": "AIFunction_GetRandomValue (0x44e000 (x86))"
+  },
+  {
+   "callsite": "0x44e7a6",
+   "caller": "AIFunction_SetScriptRealValue (0x44e790 (x86))"
+  },
+  {
+   "callsite": "0x44eafc",
+   "caller": "AIFunction_SetAnimationInterval (0x44eaf0 (x86))"
+  },
+  {
+   "callsite": "0x44eb1e",
+   "caller": "AIFunction_SetAnimationInterval (0x44eaf0 (x86))"
+  },
+  {
+   "callsite": "0x44ebe0",
+   "caller": "AIFunction_AddAnimationEntry (0x44ebb0 (x86))"
+  },
+  {
+   "callsite": "0x44ec46",
+   "caller": "AIFunction_AddAnimationEntry (0x44ebb0 (x86))"
+  },
+  {
+   "callsite": "0x46fa74",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46fa8a",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46faa0",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46fac6",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46fae2",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46fb11",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x46fb2d",
+   "caller": "AIStationaryGun_Process (0x46fa50 (x86))"
+  },
+  {
+   "callsite": "0x470551",
+   "caller": "WeaponGun_InvokeValueSet (0x470540 (x86))"
+  },
+  {
+   "callsite": "0x4737a4",
+   "caller": "GunM16A2_Process (0x473790 (x86))"
+  },
+  {
+   "callsite": "0x4737b3",
+   "caller": "GunM16A2_Process (0x473790 (x86))"
+  },
+  {
+   "callsite": "0x4737c0",
+   "caller": "GunM16A2_Process (0x473790 (x86))"
+  },
+  {
+   "callsite": "0x475914",
+   "caller": "ProximityMine_Process (0x475900 (x86))"
+  },
+  {
+   "callsite": "0x475923",
+   "caller": "ProximityMine_Process (0x475900 (x86))"
+  },
+  {
+   "callsite": "0x475933",
+   "caller": "ProximityMine_Process (0x475900 (x86))"
+  },
+  {
+   "callsite": "0x475940",
+   "caller": "ProximityMine_Process (0x475900 (x86))"
+  },
+  {
+   "callsite": "0x476f81",
+   "caller": "WeaponGun_InvokeValueSet_476F70 (0x476f70 (x86))"
+  },
+  {
+   "callsite": "0x47cb87",
+   "caller": "Define_AmmoType (0x47cad0 (x86))"
+  },
+  {
+   "callsite": "0x4c66b9",
+   "caller": "CreateTerrainMaterial (0x4c6670 (x86))"
+  },
+  {
+   "callsite": "0x4c66c5",
+   "caller": "CreateTerrainMaterial (0x4c6670 (x86))"
+  },
+  {
+   "callsite": "0x4c66d2",
+   "caller": "CreateTerrainMaterial (0x4c6670 (x86))"
+  },
+  {
+   "callsite": "0x4c66f2",
+   "caller": "CreateTerrainMaterial (0x4c6670 (x86))"
+  },
+  {
+   "callsite": "0x4e8cad",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8cbc",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8ccb",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8cda",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8cec",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8cfb",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e8d37",
+   "caller": "Define_Sound (0x4e8c60 (x86))"
+  },
+  {
+   "callsite": "0x4e9f0d",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f1c",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f2b",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f3a",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f4c",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f5b",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4e9f6a",
+   "caller": "Define_TriggerOnce (0x4e9ec0 (x86))"
+  },
+  {
+   "callsite": "0x4ead6f",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4ead7e",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4ead8d",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4ead9c",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4eadae",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4eadbd",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4eae19",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4eae40",
+   "caller": "Define_Graph (0x4ead20 (x86))"
+  },
+  {
+   "callsite": "0x4edd63",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4edd6e",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4edd79",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4edd84",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4ede7e",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4ede8b",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4ede98",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4edebe",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4edecb",
+   "caller": "DefinePhysicsObjType (0x4edd20 (x86))"
+  },
+  {
+   "callsite": "0x4ef883",
+   "caller": "CameraBase_Cleanup (0x4ef860 (x86))"
+  },
+  {
+   "callsite": "0x4ef9f4",
+   "caller": "CameraBase_Update_2 (0x4ef9e0 (x86))"
+  },
+  {
+   "callsite": "0x4efac6",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0 (0x4efab0 (x86))"
+  },
+  {
+   "callsite": "0x4efad9",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0 (0x4efab0 (x86))"
+  },
+  {
+   "callsite": "0x4efae9",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFAB0 (0x4efab0 (x86))"
+  },
+  {
+   "callsite": "0x4efbb8",
+   "caller": "CameraBase_OnEvent (0x4efba0 (x86))"
+  },
+  {
+   "callsite": "0x4efbc9",
+   "caller": "CameraBase_OnEvent (0x4efba0 (x86))"
+  },
+  {
+   "callsite": "0x4efbda",
+   "caller": "CameraBase_OnEvent (0x4efba0 (x86))"
+  },
+  {
+   "callsite": "0x4efcf8",
+   "caller": "CameraBase_Process (0x4efce0 (x86))"
+  },
+  {
+   "callsite": "0x4efd09",
+   "caller": "CameraBase_Process (0x4efce0 (x86))"
+  },
+  {
+   "callsite": "0x4efd1a",
+   "caller": "CameraBase_Process (0x4efce0 (x86))"
+  },
+  {
+   "callsite": "0x4eff44",
+   "caller": "CameraBase_Action (0x4eff30 (x86))"
+  },
+  {
+   "callsite": "0x4effe6",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFFD0 (0x4effd0 (x86))"
+  },
+  {
+   "callsite": "0x4efff9",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFFD0 (0x4effd0 (x86))"
+  },
+  {
+   "callsite": "0x4f0009",
+   "caller": "PhysicsTerrain_InvokeTooFewParametersInLi_4EFFD0 (0x4effd0 (x86))"
+  },
+  {
+   "callsite": "0x4f35c2",
+   "caller": "AnimTask_LoadParameters (0x4f3570 (x86))"
+  },
+  {
+   "callsite": "0x4f35e2",
+   "caller": "AnimTask_LoadParameters (0x4f3570 (x86))"
+  },
+  {
+   "callsite": "0x503205",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x503219",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50322a",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50323b",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50324c",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50325d",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50326e",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50327f",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x503293",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5032a4",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5032d8",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5032ea",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5032fc",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50330e",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x503326",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x50333c",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x503351",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x503390",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5033aa",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x5033ca",
+   "caller": "Physics_InterpolateWaypoint_2 (0x5031f0 (x86))"
+  },
+  {
+   "callsite": "0x51ba74",
+   "caller": "LevelTimer_Init_2 (0x51ba60 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4b8a61",
+   "callee_address": "0x4bd010",
+   "callee": "Sys_DispatchOpcode_28 (0x4bd010 (x86))"
+  },
+  {
+   "callsite": "0x4b8a75",
+   "callee_address": "0x4b9660",
+   "callee": "Sys_DispatchOpcode_24 (0x4b9660 (x86))"
+  }
+ ],
+ "cfg": {
+  "entry": "0x004B8A50",
+  "nodes": [
+   {
+    "address": "0x4b8a50"
+   },
+   {
+    "address": "0x4b8a6a"
+   },
+   {
+    "address": "0x4b8a5b"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x4b8a50",
+    "target": "0x4b8a6a",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x4b8a50",
+    "target": "0x4b8a5b",
+    "kind": "conditional"
+   }
+  ]
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 and angr recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Binary Ninja's auto-generated symbol names and user notes are not semantic proof of a function name; the conflicts for these two entries are recorded in the semantic review."
+ ],
+ "raw_output_sha256": {
+  "info": "8117e6ba43c41a3b7c4bda21d06f7ca6e16d993bd7c26c6f1e2931919e6dff9d",
+  "disasm": "26976894cc768ae12a8deb11859456bf1c48ff3ab346b421d8bc7054ebd164c9",
+  "pseudo": "f2e7e2008a54d44fef4d17845695ca58d562be801a8a1e3535502ca4fa0db835",
+  "callees": "6b0691b92b74caee8ff2ed249db9950bb2a0f1d4730d8e6d777ee0bebdfc4271",
+  "callers": "746259be373569f9ceecc9813dda292322421d7cc06788b898665dc58b8e5681",
+  "blocks": "18671cd0fbf13b8c19268c96a358a9b0f848db8a4f7f06b6b95a28639c77ce97"
+ },
+ "symbol_note": "Binary Ninja names 0x004B8A50 Profile_ValueSet and annotates it as a profile value setter used by the music/sound option code. That is contradicted by the 201 call sites (including DefineHumanPlayerGeneral 0x00410070, which consumes the result with fstp) and by both callees returning 80-bit values in ST0."
+}
