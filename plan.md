@@ -1,9 +1,11 @@
+> **Current complete execution plan:** [tasks/plan.md](tasks/plan.md), [task board](tasks/todo.md), and [MVP.md](MVP.md) govern this branch. The older roadmap below is historical; use [DEEPSEEK_HANDOFF.md](DEEPSEEK_HANDOFF.md) for the captain/team handoff.
+
 # Level 1 Playable Demo Plan
 
 > **Active execution decision (2026-10-23):** Use `mvp/level1-integration` in the existing main checkout; create no worktrees. [MVP.md](MVP.md) now defines M0–M4, with the Level 1 player loop as the next gameplay milestone and complete Level 1 gameplay as the full product goal. One coordinator writes/builds; parallel subagents investigate without competing source or Git changes. The older numbered roadmap below is reference detail, not permission to expand the current slice or require separate human sign-off.
 
 
-> **Audit 2026-10-23:** See [current implementation and workflow findings](MVP.md#workflow-audit-2026-10-23). Older name-only verification, terrain-status and manual-review statements below are historical; current `AGENTS.md` and the acceptance update govern evidence. Models/terrain render diagnostically, but integrated gameplay is not accepted.
+> **Audit 2026-10-23:** See [current implementation and workflow findings](docs/fidelity/MVP-before-captain-plan.md#workflow-audit-2026-10-23). Older name-only verification, terrain-status and manual-review statements below are historical; current `AGENTS.md` and the acceptance update govern evidence. Models/terrain render diagnostically, but integrated gameplay is not accepted.
 
 
 > Acceptance update (2026-10-21): Paired Frida probes with the same scripted scenario in retail and the newly built x86 candidate provide the runtime checks. A separate human gameplay sign-off is not required. Retain screenshots for visible increments and record coverage gaps; finite probe coverage does not establish whole-game equivalence. This update supersedes older manual-review prerequisites below.

@@ -1,54 +1,189 @@
-# Level 1 Gameplay MVP
+# Project Open IGI — Level 1 Gameplay MVP
 
-## Active branch and checkout
+## 1. Goal and authority
 
-- Integration branch: `mvp/level1-integration`.
-- Current executable: `igi1.exe`; the retail reference remains `igi.exe`. The older `open-igi.exe` is a separate diagnostic output.
-- Work only in `/Users/haseeb-mir/Documents/Code/project-open-igi` for this plan. Do not create another worktree.
-- Preserve and integrate the existing Codex and DeepSeek work, including captured uncommitted changes. Existing worktrees are retained for recovery; they are not additional execution lanes under this plan.
-- One coordinator owns writes, Git staging/commits, shared manifests and the candidate build. Subagents may investigate independently, but only one implementation writer may modify this checkout at a time. Runtime capture is serialized through the shared lease. Do not let separate harnesses switch branches, overwrite the executable, or edit the same files concurrently.
-- Existing source/evidence statuses are provisional after integration until their bindings are checked. No push, release or deployment is implied by branch creation or a diagnostic build.
+Deliver one playable Project I.G.I. Level 1 mission in the reconstructed Windows x86 C++20 executable `igi1.exe`, using the original local assets and DirectDraw 7 / Direct3D 7. The player must load the level, move and interact, fight the required enemies, complete the actual authored objectives, and reach the mission success state. Death/failure and a repeatable restart path must also work.
 
-This owner-directed single-checkout decision supersedes the earlier two-worktree recommendation in the historical audit below.
+**Keep Level 1 gameplay as the full MVP.** Deliver it through the milestones below. The first gameplay milestone is the player loop; a model viewer or walking demo does not complete the mission MVP. The number of required natives is determined by the Level 1 dependency closure, not by an arbitrary quota or the whole catalog.
 
-## Product goal: keep Level 1 gameplay
+- Branch: `mvp/level1-integration`.
+- Only implementation checkout: `/Users/haseeb-mir/Documents/Code/project-open-igi`.
+- Integration baseline: local merge `730ce9bfd4209954758f1644776f4a60829def15`; obtain the current HEAD again before work.
+- Create no new worktree. Existing agent worktrees and recovery refs are retained as references.
+- Retail authority: `/Users/haseeb-mir/Downloads/IGI/igi.exe`.
+- Retail SHA-256: `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`.
+- Candidate build: `build-win32-no-verify-gate/igi1.exe`.
+- Local diagnostic copy: `/Users/haseeb-mir/Downloads/IGI/igi1.exe`.
+- CrossOver is the local execution environment; the product target remains Windows x86.
 
-The MVP remains one **playable Level 1 mission** on Windows x86, C++20 and DirectDraw 7 / Direct3D 7, using the original local assets and retail `igi.exe` as the behavior authority. CrossOver is the local test environment, not another product platform.
+Read `AGENTS.md` for technical and evidence rules. This owner-requested mission scope supersedes the older inspection-only scope in its sections 10.10–10.12 and historical roadmaps. Its single-decompiler, ABI, evidence, runtime sequencing and source-preservation rules continue to apply. Complete the player milestone before promoting AI/combat into the active implementation slice.
 
-Do not shrink the product goal to a scene viewer or call a walking demo the completed MVP. Instead, deliver the full goal through small accepted milestones. Audio, menus, movies/cutscenes, vehicles and decorative smoke remain deferred unless a required Level 1 gameplay dependency is demonstrated.
+Execution plan: [tasks/plan.md](tasks/plan.md). Work checklist: [tasks/todo.md](tasks/todo.md). Ready-to-paste captain instructions: [DEEPSEEK_HANDOFF.md](DEEPSEEK_HANDOFF.md). The prior mixed roadmap/audit is preserved in [the historical document](docs/fidelity/MVP-before-captain-plan.md).
 
-## Immediate target: the Level 1 player loop
+## 2. Scope
 
-The next playable milestone is: launch Level 1, load its required world/tasks, spawn the player, look around, walk/run, crouch, jump, land, collide with the required terrain/building geometry, and complete one authored building interaction. Controls, root motion, physics and task behavior must be recovered from retail evidence rather than replaced with guessed FPS rules.
+| Required for this MVP | Deferred unless a required Level 1 dependency is demonstrated |
+|---|---|
+| Retail-supported startup, configuration, resource loading and simulation lifecycle | Other complete missions and whole-catalog native transcription |
+| Level 1 terrain, buildings, models, materials, original textures and authored placements | Menus, launcher polish, save/load UI and unrelated editor features |
+| Required QVM/task execution, native dispatch and entity state | Movies, cutscenes, decorative smoke and optional effects |
+| Player spawn, camera, controls, walk/run/crouch, jump/landing and required world collision | Audio, music and sound fidelity |
+| Authored doors, ladders, stairs and other interactions used by the actual mission route | Vehicles and optional actor/weapon types absent from the required route |
+| Required weapons, ammunition/reload, hit/damage/health/death, enemy navigation/perception/combat | Additional platforms and renderer modernization |
+| Gameplay animation/event synchronization and required inventory/mission items | Extra tools or upstream integrations without a demonstrated blocker |
+| Authored objectives, success/failure and repeatable restart | Universal behavior-equivalence claims beyond captured scenarios |
 
-This milestone does **not** include accepting AI/combat or the full mission. It is the first integrated gameplay dependency to close after the build/workflow baseline.
+A deferred subsystem's name is not permission to skip a required callee. Record its observable effects and prove the chosen exclusion is safe for the declared scenario. Developer free camera remains explicit diagnostic tooling; it cannot substitute for the player's camera or collision.
 
-## Milestones and exit criteria
+## 3. Current baseline and known limits
 
-| Milestone | Deliverable | Acceptance evidence |
+These observations describe the integration audit, not accepted gameplay. Recompute them after source, candidate or evidence changes.
+
+| Item | Observed state | Meaning |
 |---|---|---|
-| M0 — Integration/build baseline | Consolidated source and required workflow helpers; one reproducible Windows x86 candidate. Fix missed-source selection and empty-scope acceptance before trusting automation. | Source snapshot, PE32 architecture, compiler/build log, executable hash and candidate receipt. An ungated build is diagnostic only. Reconcile the inherited staged rename/deletion work before claiming focused feature acceptance. |
-| M1 — Level 1 scene foundation | Required models, terrain, textures and placements loaded through the supported script/task path. | Bound asset/object/transform/material observations and matched game-window captures; known visual/task omissions remain explicit. Existing diagnostic rendering is a starting point, not a reason to redo all levels or declare parity. |
-| M2 — Player loop (next gameplay milestone) | Config/player parameters, simulation tick, spawn, view, locomotion/root motion, jump/landing and one required building interaction. | Scripted retail/candidate traces for input, tick, position, velocity, stance, ground/contact and interaction state. Missing clips, collision or runtime mappings block the relevant scenario. |
-| M3 — One combat encounter | Required guard task/navigation/perception, one Level 1 weapon's equip/fire/reload/ammo path, hit resolution, health/damage/death and synchronized gameplay animations. | Repeatable encounter with source-bound native checks, typed paired runtime observations and explicit handling of death/failure. Then extend to the remaining Level 1-required actors/weapons. |
-| M4 — Level 1 mission completion | Required objectives, interactions, AI/combat and mission success/failure operate together. | A documented start-to-completion scenario and failure/death/restart scenario on the exact integrated candidate, plus regression coverage for M1–M3 and unresolved-path limitations. |
+| Integrated source | Main, DeepSeek, Codex and the captured later Codex source updates were combined in local merge `730ce9bf` | Integration progress; no native acceptance implied |
+| Candidate | Built and launched as PE32 x86 through `build_no_verify.sh` | Diagnostic executable works at startup; gameplay parity remains open |
+| Last built candidate SHA-256 | `de2f8e81edaa52c37c09c4941014cfb4a6991a5950d2ef0a177456decdb8fb33` | Historical build identity; hash again before reuse |
+| Manifest | 885 records | Inventory, not accepted coverage |
+| BN + Radare2 artifact checks | 757 records had matching artifact hashes, image identity and entries; 684 also matched current source | Partial static provenance audit; not a full semantic/behavioral pass |
+| Paired runtime | Five referenced comparison artifacts; one matched current source; none matched the last built candidate | **0 demonstrated natives with both current-source static evidence and paired runtime evidence for that candidate** |
+| Infrastructure | 31 CTest bridge regression checks passed; sample scope fixture passed | Validator infrastructure only; these are not 31 verified game natives |
+| Compiled native mapping | 144 linked mapped natives + 5 compile-only mapped natives; 28 compiled source files unbound | Resolve classification and linkage before claiming full compiled-scope coverage |
+| Performance | Roughly 7 FPS observed in the diagnostic scene against its configured 30 FPS target | Performance and simulation timing need investigation |
+| Git paths | 7,033 groups of tracked paths differ only by case | A case-insensitive checkout can overwrite one variant with another; inspect Git blobs before editing/staging |
+| Remaining dirty evidence | 273 evidence JSON paths were modified; all are members of case-collision groups; four tracked Python caches were also dirty | These are not automatically fresh valid evidence or safe bulk-staging candidates |
+| Evidence integrity | 257 of those modified artifacts were manifest-referenced; none matched its recorded file hash in that worktree audit | Repair provenance and aliases together; never just rehash an unsupported pass |
 
-All milestones start **OPEN** unless current integrated evidence demonstrates their exit criteria. Imported status labels and earlier screenshots do not automatically close them.
+The disputed evidence set also contained reduced static records, 27 failed-to-passed semantic promotions without adequate supporting observations, and build reports for other source hashes. Some edits correctly retract prior tests. Compare original blobs, worktree variants and raw observations individually; preserve useful retractions and detailed evidence. Do not equate a casing collision with proof of who authored a bad artifact.
 
-## Native testing scope: dependency closure, not the entire catalog
+### Binary Ninja connection: now available
 
-There is no defensible fixed native count for Level 1 yet. Derive each milestone's required closure from source bindings, startup/task dependencies and observed execution. The 3,050-entry name inventory and reference-only candidate totals are not a testing quota or completion denominator.
+- URL: `http://127.0.0.1:24642/mcp`.
+- Authorization: disabled; clients send no `Authorization` header.
+- A live MCP handshake and tool listing succeeded; 75 tools were exposed.
+- The already-open database is `/Users/haseeb-mir/Documents/Code/project-igi-natives/assets/igi.exe.bndb`.
+- Its PE view `view_1` was selected: Windows x86, image base `0x400000`.
+- A 16-byte sample at `0x0048F0C0` matched the local retail executable.
+- Local connection record: `build/binary-ninja-health-latest.json`.
+- One fresh existing pipeline capture at `0x0048F0C0` completed with `analysis_collected`, BN/Radare2 CFG score `1.0`, matching entry bytes and exact angr recovery. Report: `build/native-analysis/bn-reconnected-0048F0C0.json`; it retains `verified=false`. This is a startup sample, not player or mission acceptance.
 
-For each implementation slice:
+This replaces the earlier connection-refused observation for Binary Ninja. Recheck health before a batch and confirm the active view; the GUI view is shared state. This connection check does not mark a native verified. Frida/IGI-Probe, compiler, angr, Radare2 and optional RE-Agent components have separate health results.
 
-1. Select one behavior and the exact changed native/source set. Discover address identities through the source/manifest mapping, not hexadecimal filenames. Unknown required identities are blockers.
-2. Collect/reuse current evidence from one selected decompiler (Binary Ninja preferred; Ghidra fallback only), Radare2 CFG and angr exact-entry recovery. Keep semantic/ABI/side-effect review separate from structural similarity.
-3. Run the appropriate focused behavioral comparison and compile the current x86 candidate. Keep required semantic and behavioral checks enabled for acceptance.
-4. Capture retail then candidate sequentially with the same level, assets, configuration, reviewed typed probe and scripted actions. Bind the observations to the current source, binary, candidate and probe hashes; retain complete ordered calls and required state effects.
-5. Compare every required address and observable from the gate's declared feature scope. Unobserved required paths, stale source hashes, unknown ABI or mismatches remain blocked/inconclusive. Reuse unaffected accepted evidence only while its source/binary/probe/scenario bindings remain valid.
-6. Replay the integrated milestone to catch interactions between individually checked functions. Capture actual-window screenshots for visible increments. Finite scenario coverage is scoped evidence, not universal equivalence.
+## 4. Milestones and acceptance
 
-The standard feature gate remains:
+All milestones start **OPEN**. Close them only with evidence for the current integrated source and candidate.
+
+| Milestone | Product outcome | Required exit evidence |
+|---|---|---|
+| M0 — Reliable branch and verification workflow | One usable checkout, preserved source variants, canonical noncolliding paths, correct local config, working native verification pipeline | Collision/provenance reconciliation; source-to-native/link map; tool health; current x86 build receipt; one complete native proof pilot; missing/stale/empty inputs demonstrably block acceptance |
+| M1 — Level 1 world and task foundation | Required world/resources/materials load in authored positions through the supported startup/QVM/task lifecycle | Level 1 dependency inventory; object transforms and task state compared to retail; terrain/material checks; known missing calls/assets explicit; actual-window captures |
+| M2 — Player loop | Spawn, correct player camera/input, walk/run/crouch, jump/land, collision and one authored building interaction | Matched scenarios with input, simulation time, position, velocity, stance, grounding/contact and interaction state; no guessed movement replacement or silent motion fallback |
+| M3 — Required combat and actors | Mission-required weapons and guards, equip/fire/reload/ammo, navigation/perception, hit/health/death and synchronized animation | Isolated weapon/damage/AI scenarios followed by one integrated encounter; all required outputs and effects compared to retail; then remaining Level 1-required variants covered |
+| M4 — Playable mission completion | Actual authored objectives and interactions lead to success; failure/death/restart also work | Repeatable start-to-success route; failure/restart route; prior milestone regressions; exact candidate receipt/hashes; remaining limitations; no missing required native or unsupported required behavior |
+
+M0 is an acceptance dependency. Researchers may investigate later milestones while M0 is open, but the captain must not close gameplay milestones on a broken evidence workflow.
+
+### Gameplay scenario matrix
+
+Derive concrete inputs, spawn/configuration and expected outcomes from retail. The labels below are test intentions, not invented expected values.
+
+| Scenario | Observe in both programs | Milestone |
+|---|---|---|
+| S01 cold Level 1 load | Resources/scripts, task order, entity identities, spawn state, relevant failures | M1 |
+| S02 world inspection | Object/terrain transforms, materials/textures, clipping/occlusion and representative building views | M1 |
+| S03 look and locomotion | Input state, camera state, tick/delta, position/velocity, stance and animation state | M2 |
+| S04 ground, jump and collision | Takeoff/landing, ground contact, slopes, wall/building collision and required steps | M2 |
+| S05 authored interaction | Actual trigger/task, player state and the required door/ladder/building transition | M2 |
+| S06 weapon lifecycle | Equip, trigger events, shot result, ammunition, reload state and animation events | M3 |
+| S07 guard encounter | Task/graph state, perception decisions, movement, hits, health, death and side effects | M3 |
+| S08 objective progression | Actual objective prerequisites, item/trigger state, progression order and success event | M4 |
+| S09 failure and restart | Authored failure/death state, resource/task cleanup and repeatable restart | M4 |
+| S10 integrated regression | S01–S09 on one frozen candidate plus representative cross-level regressions | M4 |
+
+Use the same scenario, game directory, assets, config, scripts and reviewed probe for retail and candidate. Where paths require different input events, align semantically equivalent events and explain the mapping. Predetermine numeric tolerances from ABI, measurement precision and retail repeat runs; never loosen them after seeing a candidate mismatch. Screenshots assess rendered output; typed observations assess behavior.
+
+For the existing AGENTS.md cross-level requirement, select 3–5 representative supported levels including Level 1 for regressions of shared systems. This is regression sampling, not an expansion to completing those missions. Recover the actual authored Level 1 objective list before naming or implementing objectives.
+
+## 5. Native definition of done
+
+For every required native in the declared feature closure:
+
+1. Identify the exact retail VA, image hash/base, function boundaries, ABI, inputs, returns, callees, global/state effects and unknowns.
+2. Use exactly one selected decompiler: Binary Ninja first; Ghidra only if Binary Ninja is unavailable for that target. Retain tool/version, disassembly/pseudocode and raw provenance. Independently compare Radare2 CFG and angr exact-entry recovery; unresolved required flow blocks structural acceptance.
+3. Bind the implementation and canonical reference to the current source hashes. Review semantics, data layout and side effects independently of the CFG score. A score of 0.85 or more alone does not prove correct calculations.
+4. Define a reviewed typed runtime contract and probe hash. Specify required input/output/side-effect fields, coverage and any proven absence of effects. Unknown pointer layouts remain unknown.
+5. Run meaningful focused behavioral comparisons supported by retail observations. Synthetic validator fixtures test infrastructure and must never become native observations.
+6. Compile/link the required implementation into the current x86 candidate; retain its build receipt, compiler inputs and symbols. An object that only compiled as a dependency has no candidate runtime proof.
+7. Capture retail first, then the candidate, sequentially. Bind raw observations to source, retail, candidate, probe and scenario hashes. Require actual candidate calls for every required mapped native and compare complete ordered observations.
+8. Independently review the result; fix the earliest divergence and repeat affected checks. Keep failures and retractions. Set a status only for the scope actually demonstrated.
+
+A helper failure, missing ABI, unresolved required method, absent call, dropped sequence, stale hash, different probe or failed comparison blocks acceptance. A successful launch, model response, name match, return-only probe or emulated run cannot replace paired runtime evidence for the current game build.
+
+Use the strict feature gate on the complete changed feature scope. After a commit, do not treat an empty `--changed` set as regression acceptance: retain the feature's gate report/address closure and rerun its declared scope explicitly. Shared headers/build changes require the affected native closure, not merely one convenient address.
+
+## 6. Captain, team and shared resources
+
+| Role | Responsibility | Write ownership |
+|---|---|---|
+| Captain / integrator | Read baseline, choose active slice, own task board, resolve dependencies, integrate reviewed work, assign status and next task | Git/index, shared manifests/config, CMake, candidate build/deployment; may grant the implementation token |
+| Static researcher | Recover required retail behavior with the selected decompiler, Radare2 and angr; flag ABI/control-flow unknowns | Return findings or an assigned unique research note; do not overwrite accepted artifacts |
+| Task/asset researcher | Decode QVM/config/task and asset references; map Level 1 dependencies and observations | Assigned unique note/packet only |
+| Implementer | Implement one assigned native or narrow feature from evidence | Only the granted source/header allowlist while holding the single implementation token |
+| Runtime operator | Design/run approved typed scenarios, maintain shared lease and raw trace identities | One assigned capture directory; sole game-capture owner |
+| Independent critic | Review implementation, source/binary bindings, semantic assertions, probes and comparisons | Findings only; no implementation edits or self-approval |
+
+The harness can use multiple agents and team members, but this shared checkout has **one implementation writer at a time**. Parallelize read-only research, review and independent analysis. A captain may delegate disjoint notes, but source changes and shared evidence/manifest writes require explicit ownership. Do not create worktrees or let subagents switch branches, stage, commit, rebuild or replace the candidate independently.
+
+Treat the Binary Ninja active view as shared state. One analyst/broker selects the retail view; other agents coordinate before changing view, symbols or types. Use bounded independent Radare2/angr jobs rather than flooding the host. Runtime capture is globally serialized with `frida_capture_lease.py`; CTest's process-local resource lock is an additional guard, not a substitute.
+
+During a paired runtime run, freeze source, manifest, probe, scenario and candidate. No builds, source edits or candidate copies may run until the operator releases the capture lease. Never kill someone else's game to obtain a run. A busy game/server is a task blocker with a retry condition.
+
+## 7. Commands and evidence locations
+
+Run from this checkout with the local working locale:
+
+```sh
+cd /Users/haseeb-mir/Documents/Code/project-open-igi
+export LC_ALL=C LANG=C PYTHONDONTWRITEBYTECODE=1
+git branch --show-current
+git rev-parse HEAD
+python3 scripts/igi_workflow.py doctor --check
+python3 scripts/igi_workflow.py self-check
+```
+
+Tool health alone is not native acceptance. `scripts/igi-workflow.json` already names the supplied BN URL; its inherited candidate/build and external catalog paths must be reconciled in task P03 before trusting default verification commands. The existing BN clients send no authorization header. Do not add a key requirement for this local provider.
+
+Capture static analysis for a real selected native (address shown is a known startup example, not the player-loop closure):
+
+```sh
+python3 scripts/igi_workflow.py analyze 0x0048F0C0 \
+  --report build/native-analysis/0x0048F0C0/capture.json
+```
+
+Diagnostic build, under the captain's build ownership:
+
+```sh
+./build_no_verify.sh
+```
+
+That script disables native gates/tests, builds the candidate and copies it into the game directory after backing up the previous candidate. Label it **UNVERIFIED DIAGNOSTIC**. Preserve retail `igi.exe`. Build before testing changed code; final acceptance/deployment claims require the paired checks.
+
+Configure infrastructure/static checks for a declared pilot (two startup examples only):
+
+```sh
+cmake -S . -B build-native-checks \
+  -DIGI_VERIFICATION_ONLY=ON -DBUILD_TESTING=ON \
+  '-DIGI_NATIVE_TEST_ADDRESSES=0x0048F0C0;0x0048F0D0'
+ctest --test-dir build-native-checks -N
+ctest --test-dir build-native-checks -L infrastructure --output-on-failure
+ctest --test-dir build-native-checks -L static --output-on-failure
+```
+
+A normal Windows CMake configuration defaults to compiled source scope. Host verification-only mode requires an explicit valid scope/address list. Reconfigure after source/manifest/script/config changes because CTest pins that scope. Fix unbound required sources and compile-only linkage rather than masking the full scope with the example addresses.
+
+For runtime, configure `IGI_NATIVE_TEST_PROBE_MAP` with a reviewed JSON mapping of retail addresses to probe paths, then run `ctest --test-dir build-native-checks -L runtime --output-on-failure`. A single explicitly reviewed probe can instead use `IGI_NATIVE_TEST_PROBE`. Missing or unreviewed probes block the fixture. The runtime fixture binds one candidate receipt; runtime tests remain serialized. CMake targets `verify-native-static` and `verify-native-runtime` expose the same bridge.
+
+Strict changed-feature gate:
 
 ```sh
 python3 scripts/native_gate.py --root . --changed \
@@ -57,190 +192,36 @@ python3 scripts/native_gate.py --root . --changed \
   --report build/native-verification.json
 ```
 
-Do not narrow that required changed-feature gate or remove semantic/behavioral requirements to get a green status. Whole-catalog audits are separate. A dirty integration snapshot can have many unrelated changes; reconcile its provenance and staging deliberately instead of pretending its full changed set is a single native.
-
-## Diagnostic build versus accepted gameplay
-
-The owner requested `./build_no_verify.sh` for the integration build. It disables native verification and may copy the diagnostic executable into the game directory after backing up the previous executable. Preserve the build log and PE hash and label the output **UNVERIFIED DIAGNOSTIC**. Do not use it to promote natives, seal a verified build, or mark a milestone accepted. The retail `igi.exe` is not replaced.
-
-## Automation coverage observed before integration
-
-On 2026-10-23, Codex's checkout had 885 manifest records and five referenced paired-runtime comparison files whose hashes matched the manifest. DeepSeek's checkout had 881 records and 95 referenced runtime reports whose hashes matched, all reporting observed retail and candidate calls. Only 56 of those 95 reports' implementation hashes matched the then-current source files. This is partial coverage, not verification of every native; all counts are pre-integration snapshots and require rechecking after merge.
-
-The automatic pipeline also has known missed-path discovery, optional fresh-intake and empty-scope concerns recorded below. Do not confuse the existence of automation with evidence that every required native was successfully tested.
-
-## Automated checks on this branch
-
-CMake now exposes `verify-native-static` and `verify-native-runtime`. With `BUILD_TESTING=ON`, CTest registers a scope fixture, one candidate-build receipt fixture and separate static/runtime tests for every selected native. The default Windows test scope comes from the configured `igi` target sources, with static coverage for compile-only object dependencies too; this is not all catalog entries. Compile-only natives explicitly block runtime acceptance until linked. Explicit addresses select a declared smaller investigation.
-
-For example, configure host-side checks for two startup natives (these are not gameplay coverage):
+The reviewed feature's runtime capture/checker must consume that gate report so every required native is mapped and observed. For one fully declared new-native slice, the existing intake command is:
 
 ```sh
-cmake -S . -B build-native-checks \
-  -DIGI_VERIFICATION_ONLY=ON -DBUILD_TESTING=ON \
-  '-DIGI_NATIVE_TEST_ADDRESSES=0x0048F0C0;0x0048F0D0'
-ctest --test-dir build-native-checks -L infrastructure --output-on-failure
-ctest --test-dir build-native-checks -L static --output-on-failure
+python3 scripts/igi_workflow.py intake RETAIL_VA \
+  --probe REVIEWED_TYPED_PROBE --level 1 --report build/native-intake/report.json
 ```
 
-For paired runtime, configure `IGI_NATIVE_TEST_PROBE` with a reviewed typed probe, or `IGI_NATIVE_TEST_PROBE_MAP` with a JSON address-to-probe-path mapping. Explicit `verification.runtime_probe.path` entries in the manifest are also supported. A probe's hash must match that native's reviewed semantic contract; no generic raw-word probe is substituted. Set `IGI_NATIVE_TEST_LEVEL` to the scenario's level, then run:
+`RETAIL_VA` and `REVIEWED_TYPED_PROBE` above are placeholders to replace from the task packet; do not run them literally. Do not use a one-address command to approve a broader change.
 
-```sh
-ctest --test-dir build-native-checks -L runtime --output-on-failure
-```
+Launch retail and candidate with game cwd `/Users/haseeb-mir/Downloads/IGI` and the same `window level1` arguments, using the established CrossOver/Frida procedure in `docs/fidelity/runtime-test-workflow.md`. Run retail first, confirm it has ended, then run the candidate. Neither program should overlap the other or another user's game.
 
-CTest builds/binds one candidate receipt fixture and reuses it with per-native `--skip-build` checks. Runtime remains serialized and uses the existing cross-process lease. The bridge checks for active games before any behavioral backend and blocks known live Frida runners without their own lease; it never kills another game. Missing probes, tools, receipts, observations or matching identities fail the tests rather than becoming passes.
+Retain:
 
-Static collection means Binary Ninja/Radare2/angr observations were gathered; it does not mean semantic equivalence or native acceptance. Full runtime acceptance still goes through the existing strict source-semantic/behavioral gate, fresh paired capture and typed comparator. A pinned test-scope/source/manifest fingerprint prevents CTest silently missing new changes: rerun CMake after edits. `changed` scope blocks shared-header/build changes unless the complete affected closure is explicitly supplied; prefer compiled scope for those.
+- Native registry and reviewed evidence: `docs/fidelity/native-verification.json`, `docs/fidelity/evidence/`.
+- Immutable per-run raw traces/build records: unique directories under `build/runtime-traces/` and `build/native-ctest/`; publish stable references to evidence intended for commits.
+- Tool-health observations: `build/tool-health.json` and `build/binary-ninja-health-latest.json`.
+- Prior diagnostic merge failure: `build/native-gate-diagnostic-report.json` and `build/native-gate-diagnostic.log`.
+- Captain's task state: `tasks/todo.md`, with task packets in `tasks/packets/` as needed.
 
-Infrastructure checks are generated validator fixtures, never retail observations. Their passing count is not a count of accepted natives. The diagnostic script still uses `BUILD_TESTING=OFF`; verification is a separate, explicit action, not a hidden claim made by `build_no_verify.sh`.
+The pre-commit hook normally requires `VERIFIED`. Its explicit `IGI_ALLOW_UNVERIFIED_DIAGNOSTIC_MERGE=1` mode recorded the historical diagnostic integration despite a failed structural gate. That override is never evidence of a native or milestone pass. Do not export it globally or make it the harness's normal acceptance path.
 
-### Integration and check status (2026-10-23)
+## 8. Full MVP completion checklist
 
-- Source from the captured main/Codex/DeepSeek snapshots is combined in this checkout; three subsequent Codex source changes and their four updated native records were also included. Recovery refs and the original staged/unstaged stash are retained. No worktree was created.
-- `Qvm_Execute` / QVM argument helpers and the human-player/config definitions are compile-only objects, not linked gameplay. Their unresolved retail callees/state remain a player-loop blocker; static compilation cannot approve their runtime wiring.
-- The combined `igi1.exe` built successfully with `build_no_verify.sh` and was copied to `/Users/haseeb-mir/Downloads/IGI/igi1.exe`. This is **UNVERIFIED DIAGNOSTIC** output.
-- Thirty-one CTest-bridge infrastructure regressions pass. The configured scope fixture passed for the two startup example addresses.
-- An actual static CTest ran Radare2 and angr successfully but blocked because the configured Binary Ninja HTTP service at `127.0.0.1:24642` refused the calls. This is not a static-pass claim.
-- The newly launched combined diagnostic writes `igi.log` and showed roughly 7 FPS in the observed interval against its 30 FPS target; playable performance remains open.
-- The initial runtime fixture blocked without a configured reviewed typed probe. No new paired-runtime acceptance is claimed. An older diagnostic game session was present during setup; it was not terminated by the test bridge.
-- The normal merge-commit hook requires `VERIFIED` and blocks on incomplete/stale native evidence. For this integration only, `IGI_ALLOW_UNVERIFIED_DIAGNOSTIC_MERGE=1` runs the structural-only gate and explicitly allows the diagnostic integration commit even when that gate blocks. It saves the machine-readable report and full log under `build/native-gate-diagnostic-report.json` and `build/native-gate-diagnostic.log`, prints the failure, and never labels the result verified. This exception records integration progress only; it does not verify native behavior or gameplay.
+- [ ] M0–M4 are accepted on one identified source snapshot and candidate, with each required native's scoped evidence current.
+- [ ] The authored Level 1 success route runs from a cold start to success; failure/death/restart is repeatable.
+- [ ] The M1–M3 scenario suite passes on the integrated candidate; required cross-level shared-system regressions are recorded.
+- [ ] No required QVM opcode/native/task is silently skipped and no required movement/collision/combat behavior is replaced with guessed constants or fallbacks.
+- [ ] Actual rendered output, object transforms and materials have paired observations and captures for the declared route.
+- [ ] Performance is measured on a fixed machine/configuration with retail baseline, candidate frame-time distribution and simulation timing. Investigate the current ~7 FPS scene; target the configured 30 FPS budget for the supported profile and report any unmet budget explicitly.
+- [ ] Evidence records bind the exact source, compiler inputs, retail/candidate images, probes and scenario; the critic has resolved or explicitly recorded every finding.
+- [ ] The completion packet names tested scope and remaining limitations. Native status totals, screenshots alone and infrastructure test counts are not substituted for these criteria.
 
-## Full MVP acceptance
-
-Level 1 is accepted only when M0–M4 operate together on the current Windows candidate and the declared scenarios pass their source-bound, scoped retail comparisons. A separate human gameplay sign-off is not required under the 2026-10-21 acceptance update, but screenshots, raw evidence, limitations and reproducible results remain required. Sound remains deferred. Model activity, a successful diagnostic build, catalog labels and single-native tests are insufficient.
-
----
-
-The following is the **historical pre-integration audit**. Its checkout counts, old branch names and earlier worktree recommendation describe the snapshot at that time; the active single-branch instructions above now take precedence.
-
-## Workflow audit 2026-10-23
-
-Snapshot: 2026-10-23. Root checkout: `game-engine-impl`, HEAD `80fe859624e9b1ac03d56af385c1417a70c8bed1`. This is a source/workflow audit, not a new gameplay acceptance run. Existing changes, running agents, game processes, branches, index and evidence manifests were not modified.
-
-### Decision
-
-The current product is a Windows x86 model/terrain inspection scene, not an accepted playable Level 1 mission. More model calls will not by themselves close the integration and runtime-evidence gaps. Keep Codex and DeepSeek working on separate owned slices, with one designated integration owner and one serialized retail/candidate capture lane.
-
-Two model workers are not the problem. Unclear ownership, different checkout state, unreliable work discovery and evidence becoming stale are the problems.
-
-### Checkout boundaries
-
-| Checkout inspected | Branch observed | Audit observation |
-|---|---|---|
-| Main checkout | `game-engine-impl` | 1,232 changed paths: 754 staged modifications, 450 staged deletions, 26 staged additions and two unstaged modifications at initial inspection. |
-| `.worktrees/codex-smart-workflow` | `codex-smart-workflow` | Separate Git worktree; its work is not automatically present in the main checkout. |
-| `.worktrees/deepseek-smart-workflow` | `integration-both` | 610 changed paths at inspection; workflow helpers exist here that are absent from the main checkout. |
-
-There is also a `codex-f0f0-runtime` worktree; a directory name is not proof of which live agent owns a process. The user's statement establishes that Codex and DeepSeek are working. This audit did not inspect credentials, change their configuration, stop them, or certify that either live process is reading the documents updated here. Markdown changes in this checkout require a reviewed handoff before another worktree consumes them.
-
-### What is missing for the Level 1 MVP
-
-| Order | Missing deliverable | Observed evidence / limit | Exit condition |
-|---|---|---|---|
-| 0 | Reproducible integrated x86 candidate | Main checkout and agent worktrees differ; evidence records are stale or missing. | One identified source snapshot, build receipt and candidate hash with the appropriate strict feature gates passing. |
-| 1 | Accepted scene placement/material/terrain path | Models and terrain are rendered, but README explicitly says visual artifacts and parity remain unresolved. Drawing decoded task data is not complete execution of the retail task lifecycle. | Paired Level 1 object transforms, material/texture resolution and actual-window captures tied to the same candidate. |
-| 2 | Retail QVM/task execution and tick closure | `docs/fidelity/input-retail-gap-20261020.md` distinguishes decoded config calls from the retail load/execute/cleanup path. | Required Level 1 tasks and native dispatch execute in supported retail order; unknown required calls block instead of being skipped. |
-| 3 | Reliable player movement, root motion and world collision | `PlayerController` and `TerrainCollisionGrid` are host-side implementations. `retail_model_scene.cpp` catches motion exceptions, restores player state and sets `player_motion_available=false`. Missing root-motion clips can therefore leave a rendered scene with motion disabled. | Paired input/position/velocity/stance/ground traces for walking, jumping, landing, walls, building entry and required stairs/doors/ladders. No substituted movement constants. |
-| 4 | Live AI and graph navigation | Current README excludes playable AI; rendering a character or decoding a graph is not patrol/perception/combat integration. | Level 1 guards spawn from tasks, follow authored graphs, detect/lose the player and enter combat in a repeatable scenario. |
-| 5 | Health, damage, weapons and inventory | The scene explicitly logs `health/ammunition native integration pending`; F9 is only a request. Historical macOS weapon checkpoints are not current Windows evidence. | Equip/fire/reload/ammo/hit/damage/death work together in the current Windows candidate with measured retail comparisons. |
-| 6 | Gameplay animations and interactions | Animation assets and attachments do not establish synchronized locomotion, reload, death or task callback behavior. | Animation events, root motion and interactions advance through the actual gameplay state/task loop. |
-| 7 | Mission objectives and completion/failure | No integrated playable mission acceptance is established by current scene captures or native inventory. | One reproducible Level 1 path from spawn through its required objectives to success, plus a failure/death/restart scenario. Retain observable coverage and limitations. |
-
-Audio, menus, movies/cutscenes, vehicles and decorative smoke remain deferred under the current `MVP.md` / `plan.md` scope. Contradictory older statements in `PROMPT.md` do not demonstrate implementation or acceptance. Do not silently expand to every native or all levels to satisfy the Level 1 MVP.
-
-### Major workflow issues
-
-#### P0 — The advertised pipeline is incomplete in the main checkout
-
-`AGENT_PIPELINE.md` tells an agent to run `scripts/automatic_reverse_engineering.sh`. Its Python driver invokes `igi_workflow.py`, `workflow_self_check.py`, `frida_shell_smoke.py` and the `igi-workflow.json` configuration. Those files are absent from the main checkout but present in the DeepSeek worktree. The intake dependency `smart_end_to_end_verification.py` also exists in that worktree.
-
-Do not call this a uniformly available repository-wide pipeline. Integrate the workflow dependency closure as a small reviewed change, with imports and command paths checked in the checkout that will actually build the game. Do not copy all dirty worktree changes indiscriminately.
-
-#### P0 — Automatic change discovery can omit real native edits
-
-`scan_changed_native_addresses()` in `scripts/advanced_reverse_engineering_pipeline.py` extracts eight-digit hex tokens from changed **paths**, then looks those addresses up in the manifest. Normally named engine files have no such token.
-
-Isolated reproduction, using the real manifest and mocked Git command output only:
-
-```text
-changed implementation: engine/src/retail/core/frame_natives.cpp
-manifest address:       0x00401050
-pipeline selected:      []
-```
-
-The main and DeepSeek copies of this pipeline were byte-identical when checked. Resolve changed source paths through manifest/source-native mappings, as the strict native gate does; do not rely on address-bearing filenames. An empty selection must be explicitly diagnostic/blocked, never feature acceptance. The final-result branch currently has no independent nonempty-scope requirement; healthy infrastructure plus no selected natives can reach a `passed` result without feature work.
-
-#### P0 — Fresh paired intake is optional in the top-level command
-
-The driver invokes intake only when `not args.skip_intake and args.probe`. Its advertised default invocation supplies no probe. Strict per-native gates can themselves require behavioral runners, so this is not a claim that all behavioral checks are disabled. It means a top-level `passed` label does not by itself establish that this invocation built the current candidate and captured a fresh reviewed retail/candidate scenario.
-
-Require explicit acceptance mode with nonempty scope and a reviewed typed probe, or report gate-only work as diagnostic. Retain source/candidate/probe/scenario hashes and the final typed comparison. Never weaken the existing gate or manufacture observations to achieve a green status.
-
-#### P1 — Unlimited reruns can repeat the same native without advancing the MVP
-
-The driver sorts changed addresses and selects `addresses[:max_natives]`, default one. It does not itself keep a persistent completed/blocked scheduler or choose the next gameplay dependency. The strict gate is run before that invocation's additional angr analysis, and its earlier failure is not cleared by a later successful analysis.
-
-An external harness may already schedule explicit addresses; that live scheduling was not established here. Without such a scheduler, repeated default runs can revisit the same first native. Existing `native_verification_queue.py` already has fingerprint-bound checkpoint/resume logic; evaluate connecting that machinery rather than adding another unrelated queue.
-
-Use a dependency-aware Level 1 queue with `ready`, `in_progress`, `blocked`, `needs_review`, `accepted_for_scope`, owner, source snapshot, last failure fingerprint and next action. Repeated identical failures should produce a blocker/handoff, not more model-generated status text. Unlimited token allowance does not remove runtime/tool contention or disk limits.
-
-#### P1 — Evidence/source drift and source binding are material blockers
-
-A fresh inventory-only run of `scripts/mvp_scope_report.py` found:
-
-- 112 address-bound engine native identities in its source scope.
-- 14 identities without verification records.
-- 29 existing records whose implementation is missing or whose source hash no longer matches.
-- 19 source files with no native identity discovered by this inventory.
-- 1,862 reference-only candidates, which are neither missing gameplay features nor proven runtime dependencies.
-
-The 112 status labels were 70 `STRUCTURALLY_VERIFIED`, 20 `VERIFIED`, three `VERIFIED_WITH_DOCUMENTED_SCOPE`, five `ANALYZED` and 14 without a status. These are inventory labels, **not a freshly revalidated acceptance count**; stale records can overlap them. Inventory excludes audio and diagnostics and does not establish runtime reachability.
-
-The saved `build/native-verification.json` contains 1,544 failure lines, while narrower saved reports have different scopes and failure counts. These are retained artifacts, not a freshly rerun gate. Do not compare those totals as native completion percentages. Fix source bindings, ABI and evidence for the current feature closure, then rerun the strict check on the exact snapshot. Keep the rename/deletion campaign separate from gameplay fixes.
-
-#### P1 — Two workers share one runtime capture resource
-
-`frida_capture_lease.py` already provides a host-keyed exclusive capture lease, and several pair runners use it. Other runners, such as `frida_lightmap_pair.py`, only preflight whether a game is active. A saved lightmap report is blocked by `a game is already active; refusing to overlap captures`.
-
-Use the shared lease consistently for paired capture, including across Codex and DeepSeek worktrees. Run retail then candidate sequentially according to current `AGENTS.md`; do not terminate another worker's game or assume separate Git branches imply separate Frida servers, asset directories, installed executables or mutexes. Build candidate binaries in separate build directories and pass their exact paths/receipts to the serialized capture lane.
-
-#### P1 — Documents disagree about scope and acceptance
-
-`HEAVEN.md` targets another checkout/branch and contains historical push, no-tests, structural-only and simultaneous-runtime instructions. These conflict with current `AGENTS.md` / per-native feature acceptance. `PROMPT.md` requires sound and describes an older metadata-only status. `plan.md` contains a name-equality verification rule, old terrain status and older manual-review gates; its acceptance banner already supersedes the manual-review language. `AGENT_PIPELINE.md` still calls the current increment an inspection/mouse-look demo.
-
-Treat `AGENTS.md` as the current workflow rules, `MVP.md` as product scope, and source-bound evidence as completion truth. The dated audit links added during this review identify drift; old numeric claims and older records must not become acceptance by repetition. Gate-integrity pins passed with `LC_ALL=C LANG=C`; do not re-pin already-correct files just because an old prompt says they need repair.
-
-#### P1 — Some workflow instructions do not travel through Git
-
-`git check-ignore -v` identifies `.gitignore:6:/*` as ignoring `AGENT_PIPELINE.md`, `HEAVEN.md` and newly created files under `docs/`. Existing tracked files remain tracked, but editing these ignored handoffs or adding a new audit file does not make them part of normal branch integration. This can leave Codex and DeepSeek following different local instructions despite a successful code handoff.
-
-The canonical version of this audit is therefore included in tracked `MVP.md`, linked by the tracked README, plan and project prompt. The separate `docs/` copy is a local reading convenience. No ignore rules or Git index entries were changed by this review. Treat future workflow/prompt handoffs as explicit versioned artifacts, not undocumented local files.
-
-### Recommended Codex / DeepSeek division
-
-This is a proposed ownership plan, not a claim that either running harness has been reconfigured.
-
-| Lane | Suggested owner | Scope | Handoff |
-|---|---|---|---|
-| Build/gate/integration | Codex | Repair missed-source discovery, empty-scope acceptance, workflow dependency integration, candidate receipts and source/evidence binding. | Small reviewed commits/patches with exact files, hashes, checks and remaining blockers. |
-| First playable dependency | DeepSeek | One bounded Level 1 task/config/player/root-motion dependency at a time, selected from the actual earliest divergence. | Candidate source plus evidence, typed probe, precise scenario and unresolved dependencies. |
-| Shared runtime capture | One lease holder at a time | Retail then exact candidate, same level/config/actions; no competing launches. | Raw traces, candidate/build/probe identities, typed comparison and actual-window capture where visible. |
-| Acceptance/integration | One designated integrator | Review and integrate one completed slice, rebuild, invalidate stale evidence and replay the integrated scenario. | Update `MVP.md` with the accepted behavior and reproducible evidence, not just native counts. |
-
-Do not give both workers simultaneous ownership of the shared manifest, gate scripts, branch-wide rename campaign or installed game executable. Keep the full catalog as inventory and research input; prioritize the dependency closure of the next visible/playable behavior.
-
-### Next steps
-
-1. Pin the integration checkout and confirm what each live harness reads; hand off this audit to both without overwriting their dirty trees.
-2. Fix missed-path discovery and empty-scope success; integrate the missing workflow helpers; keep semantic/behavioral requirements enabled.
-3. Separate rename/path reconciliation from behavior changes and refresh only the evidence invalidated by the selected slice.
-4. Complete one Level 1 loop: load tasks/config/player parameters, spawn, walk/jump/land against real terrain and one building interaction, with typed paired traces. This is an intermediate demo, not a redefinition of the full MVP.
-5. Add AI/combat/health/ammo, gameplay animations and objective transitions in the canonical order; replay the integrated Level 1 mission after every accepted slice.
-6. Stop treating model activity, catalog size, successful parsing or single-native verification as proof of a playable mission.
-
-### Checks actually performed
-
-Read-only source/document/worktree inspection; inventory generation to `/tmp/project-open-igi-mvp-audit-20261023.json`; isolated change-discovery reproduction with mocked Git output and the real manifest; gate-integrity hashes with `LC_ALL=C LANG=C`; free-space check (about 11 GiB available, 95% used at inspection).
-
-No engine implementation was changed. No new tests were written, no full strict/native/host build was executed, no gameplay was launched, no external agent was stopped, and no push/merge/staging/commit occurred during this audit. Live tool health, the running harness configuration, and retail parity were not established. Recheck counts after either worker changes the relevant snapshot.
+The captain may progress autonomously between accepted slices. No separate human gameplay approval gate is added by this plan. Pushes, releases and unrelated external integrations are outside this handoff.

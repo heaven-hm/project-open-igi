@@ -1,3 +1,5 @@
+> **Current owner scope:** `MVP.md`, `tasks/plan.md`, and `DEEPSEEK_HANDOFF.md` define the active `mvp/level1-integration` Level 1 mission plan. Inspection-only scope in sections 10.10–10.12 below is historical; finish the player-loop milestone before the required combat/mission milestones. Existing evidence, single-decompiler, source-preservation and sequential-runtime requirements still apply. Use this existing checkout, one implementation writer, and no new worktree.
+
 ## 10. AI-Agent Native Transcription and Verification Protocol
 
 The goal is to reconstruct native functions from the original retail Project IGI binary (`igi.exe`) as faithfully as possible. The executable is the source of truth. AI-generated code is only a reconstruction until supported by static analysis, structural verification, and runtime evidence.
