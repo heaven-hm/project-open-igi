@@ -16,6 +16,7 @@
 #include "igi/retail/script/script_mode.hpp"
 #include "igi/retail/core/app_context.hpp"
 #include "igi/retail/render/backend.hpp"
+#include "igi/retail/render/lod_settings.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
 #include "igi/retail/sys/ilff_navigation.hpp"
 #include "igi/retail/sys/resource_lookup.hpp"
@@ -114,6 +115,13 @@ std::int32_t retail_file_exists_host_adapter(const char* path)
     }
     std::error_code error;
     return std::filesystem::exists(path, error) ? 1 : 0;
+}
+
+// Answers like a retail block release: Qvm_Cleanup returns this value through EAX.
+std::int32_t retail_qvm_block_release_stub(void* context)
+{
+    static_cast<void>(context);
+    return 1;
 }
 
 void write_log(std::string_view message, diagnostics::LogLevel level = diagnostics::LogLevel::info)
@@ -2481,6 +2489,37 @@ int RunRetailModelScene(HINSTANCE instance,
             // whatever the callee left there.
             ::InputPort_Process(nullptr);
             igi::retail::texture::Texture_DisableUpload();
+
+            // LOD settings: retail returned both null and a record pointer for 0x004EDB60, so the
+            // lookup boundary is called once with an empty registry and once with a hit.
+            static igi::retail::render::LODSettingsRecord lod_record{};
+            alignas(8) std::uint8_t lod_context[0x80]{};
+            std::memcpy(lod_context + 0x20, "PLAYER", 7);
+            auto* const lod_distances = reinterpret_cast<float*>(lod_context + 0x30);
+            lod_distances[0] = 1.0F;
+            lod_distances[1] = 2.0F;
+            lod_distances[2] = 3.0F;
+            lod_distances[3] = 4.0F;
+            lod_distances[4] = 5.0F;
+            static_cast<void>(igi::retail::render::LODSettings_LoadParameters(
+                lod_context,
+                [](const char* name) noexcept -> igi::retail::render::LODSettingsRecord* {
+                    static_cast<void>(name);
+                    return nullptr;
+                }));
+            static_cast<void>(igi::retail::render::LODSettings_LoadParameters(
+                lod_context,
+                [](const char* name) noexcept -> igi::retail::render::LODSettingsRecord* {
+                    static_cast<void>(name);
+                    return &lod_record;
+                }));
+
+            // Qvm_Cleanup: a non-zero standalone pointer skips the resource-cache probe that does not
+            // terminate on an empty path, and the injected release stub answers 1 as retail did.
+            igi::retail::script::Sys_SetQvmBlockRelease(&retail_qvm_block_release_stub);
+            alignas(16) std::uint8_t qvm_block[0x100]{};
+            *reinterpret_cast<std::int32_t*>(qvm_block + 0x8C) = 1;
+            static_cast<void>(igi::retail::script::Qvm_Cleanup(qvm_block));
         }
 
         // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.

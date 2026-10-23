@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 57 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 59 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 57 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 59 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -895,3 +895,24 @@ can invoke a registered handler, so the returned register depends on allocator a
 differs between the two processes. Argument marshalling and the returned register are what the runner proves.
 
 Verified count 56 -> 57; candidate-unreachable still 28; mismatches 0.
+
+## Two natives that were already VERIFIED - they only needed a runtime observation
+
+The manifest analysis for this round found something the previous rounds had missed: several candidate-unreachable
+natives were not blocked on evidence at all. `Qvm_Cleanup` (0x004B83D0) and `LODSettings_LoadParameters`
+(0x004EDB60) were both already VERIFIED with build, semantic and behavioural evidence and working runners; they
+only lacked a Frida observation. Both promotions this round are therefore scene wiring, not new verification
+machinery.
+
+`LODSettings_LoadParameters` takes its dyn-object lookup as a host callback, so the two retail classes are
+reproducible exactly: one call with a lookup that returns nullptr (class `null`) and one with a lookup that
+returns a record (class `ptr`). The fixture seeds distances at +0x30 that are already non-decreasing, so the
+clamp path and the record write both run.
+
+`Qvm_Cleanup` is the native whose zeroed-block call **hung** the candidate in round 100. The hang's cause is now
+handled properly instead of avoided: a zeroed block has a zero standalone pointer at +0x8C, which sends the body
+into `Resource_Unload` with an empty path. The fixture sets +0x8C non-zero, which takes the retail-shape
+standalone-release path, and an injected release stub answers 1 - exactly the retail class `small:1`. The native
+now runs in the scene rather than being skipped.
+
+Verified count 57 -> 59; paired matches 63 -> 65; candidate-unreachable 28 -> 26; mismatches 0.
