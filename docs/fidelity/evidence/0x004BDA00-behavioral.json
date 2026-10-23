@@ -1,24 +1,388 @@
 {
- "address": "0x004BDA00",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+  "schema_version": 1,
+  "kind": "behavioral-test-report",
+  "result": "passed",
+  "executed": true,
+  "oracle": "retail-binary-execution",
+  "address": "0x004BDA00",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+  "method": "Retail and the compiled candidate execute the push against a state block at the documented offsets; the comparison covers both stack indexes, the type slot, the value slot and EAX.",
+  "observable_fields": [
+    "return_value",
+    "state_delta",
+    "side_effects"
+  ],
+  "float_tolerance": {
+    "absolute": 0,
+    "relative": 0
+  },
+  "tests_total": 8,
+  "tests_passed": 8,
+  "tests_failed": 0,
+  "retail_execution": {
+    "tool": "angr",
+    "engine": "VEX",
+    "version": "10.0.4.post1",
+    "function_entry": "0x004BDA00",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "candidate_sha256": "c3844f0b87b159a1927ed5f69a754522eb0922209ea666b6250899220c90f7de"
+  },
+  "cases": [
+    {
+      "id": "push-1",
+      "input": {
+        "args": [
+          "0x6000",
+          "1"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 1,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 1
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 1,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 1
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-2",
+      "input": {
+        "args": [
+          "0x6000",
+          "2"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 2,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 2
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 2,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 2
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-3",
+      "input": {
+        "args": [
+          "0x6000",
+          "3"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 3,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 3
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 3,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 3
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-10",
+      "input": {
+        "args": [
+          "0x6000",
+          "10"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 10,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 10
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 10,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 10
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-11",
+      "input": {
+        "args": [
+          "0x6000",
+          "11"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 11,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 11
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 11,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 11
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-12",
+      "input": {
+        "args": [
+          "0x6000",
+          "12"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 12,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 12
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 12,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 12
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-13",
+      "input": {
+        "args": [
+          "0x6000",
+          "13"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "nominal"
+      ],
+      "reference_output": {
+        "return_value": 13,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 13
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 13,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 13
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
+    },
+    {
+      "id": "push-14",
+      "input": {
+        "args": [
+          "0x6000",
+          "14"
+        ],
+        "initial_state": {
+          "value_stack_index": 8,
+          "type_stack_index": 8
+        }
+      },
+      "categories": [
+        "boundary"
+      ],
+      "reference_output": {
+        "return_value": 14,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 14
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      },
+      "candidate_output": {
+        "return_value": 14,
+        "state_delta": {
+          "value_stack_index": 7,
+          "type_stack_index": 7,
+          "type_slot": 1,
+          "value_slot": 14
+        },
+        "side_effects": [
+          "write:value_stack",
+          "write:type_stack"
+        ]
+      }
     }
-   },
-   "note": "The candidate Qvm_PushInteger reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+  ],
+  "runner": {
+    "path": "scripts/qvm_push_integer_diff_runner.py",
+    "sha256": "7472083d3b5c97658fd36981fce8125ac8031d2b6018984483dccbf24bc24d89",
+    "command": [
+      "scripts/qvm_push_integer_diff_runner.py",
+      "--address",
+      "0x004BDA00",
+      "--binary",
+      "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+      "--binary-sha256",
+      "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "--implementation",
+      "engine/src/retail/script/qvm_stack_natives.cpp",
+      "--implementation-sha256",
+      "5d1e8df669b91907e4d8c0a219ece37b7ef371e579b793d4dd3c3abd5b28eeb0",
+      "--root",
+      "."
+    ]
   }
- ]
 }

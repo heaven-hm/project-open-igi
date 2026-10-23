@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 67 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 68 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 67 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 68 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1048,3 +1048,34 @@ The capture fixture installs callbacks on both slots and replays the eight disti
 observed, reproducing the eight-class set exactly while leaving the backend id at 0.
 
 Verified count 66 -> 67; paired matches 72 -> 73; candidate-unreachable 19 -> 18; mismatches 0.
+
+## Qvm_PushInteger: a real register divergence, and the cascade it caused
+
+`Qvm_PushInteger` (0x004BDA00) looked like the simplest native left: decrement two stack indexes, write a type
+slot, write a value slot. The behavioural runner proved the state writes matched exactly - and then failed on the
+return value. Retail returned the **pushed value** in EAX (`1, 2, 3, ...`); the candidate returned a pointer.
+
+Reading the retail instructions explains it: the body is one basic block whose last instruction is
+`mov [value_stack + index*4], eax`, with `eax` loaded from the argument. So retail's EAX still holds the pushed
+value when it returns - incidental to the compiler, but observable, and the capture had recorded exactly that as
+the native's return class set `{1, 2, 3, 10, 11, 12, 13, 14}`. The port's host compiler leaves a stack pointer
+there instead, so the port's observable post-call register state did not match the retail binary.
+
+That made this a port defect rather than a fixture problem, and it could not be waved through: the gate recomputes
+per-case equality over every observable field, so a divergent EAX cannot be excluded or overridden. The honest fix
+is to return the pushed value explicitly - `Qvm_PushInteger` now returns `std::uint32_t` - so the post-call
+register is defined by the port instead of by the host compiler's register allocation. The runner then passed
+8/8 with both the state delta and EAX compared.
+
+**The cascade is the important lesson.** Changing that implementation file invalidated every record bound to it,
+not just this one: `Qvm_SetOpcodeHandler` (VERIFIED) and `Qvm_ExecuteInstructions` (STRUCTURALLY_VERIFIED) both
+carry the implementation digest in their evidence. Leaving them stale would have silently rot-rotted two verified
+records. All three had their r2/Binja/semantic/build evidence regenerated through
+`generate_native_evidence.py` (addressed against a throw-away manifest so it could not clobber the real
+verification fields), their behavioural artifacts re-run, and their Frida reports re-emitted. `Qvm_SetOpcodeHandler`
+re-gated clean afterwards.
+
+Practically: a shared implementation file means a change to one native's record is a change to all of them. Before
+editing an implementation file, the records that point at it are part of the blast radius.
+
+Verified count 67 -> 68; paired matches 73 -> 74; candidate-unreachable 18 -> 17; mismatches 0.

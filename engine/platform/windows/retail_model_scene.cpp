@@ -20,6 +20,8 @@
 #include "igi/retail/render/lod_settings.hpp"
 #include "igi/retail/resource/device_dispatch.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
+#include "igi/retail/script/qvm_native_state.hpp"
+#include "igi/retail/script/qvm_stack_natives.hpp"
 #include "igi/retail/sys/ilff_navigation.hpp"
 #include "igi/retail/sys/resource_lookup.hpp"
 #include "igi/retail/core/native_0048f970.hpp"
@@ -2695,6 +2697,25 @@ int RunRetailModelScene(HINSTANCE instance,
                 std::int32_t mipmap_packet[12]{};
                 static_cast<void>(igi::retail::texture::Texture_UploadMipmapPacket(
                     mipmap_packet, mipmap_source, index * 4, 5, 6, 7, 8, 9, mipmap_payload));
+            }
+        }
+
+        // Qvm_PushInteger. Retail returned the pushed value in EAX for every call, so eight pushes replay
+        // the eight observed classes {1, 2, 3, 10, 11, 12, 13, 14}.
+        {
+            alignas(8) std::uint8_t push_state_bytes[0x40]{};
+            static std::uint32_t push_value_stack[8]{};
+            static std::uint32_t push_type_stack[8]{};
+            auto* const push_state =
+                reinterpret_cast<igi::retail::script::QvmNativeStatePrefix*>(push_state_bytes);
+            push_state->value_stack = push_value_stack + 8;
+            push_state->type_stack = push_type_stack + 8;
+            push_state->value_stack_index = 8;
+            push_state->type_stack_index = 8;
+            static constexpr std::uint32_t push_values[8] = {1, 2, 3, 10, 11, 12, 13, 14};
+            for (std::uint32_t index = 0; index < 8; ++index)
+            {
+                static_cast<void>(igi::retail::script::Qvm_PushInteger(push_state, push_values[index]));
             }
         }
 
