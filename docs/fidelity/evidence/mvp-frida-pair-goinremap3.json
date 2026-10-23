@@ -518,7 +518,7 @@
  ],
  "natives": [
   {
-   "name": "Retail_Main",
+   "name": "main",
    "address": "0x0048F530",
    "retail_va": "0x0048F530",
    "candidate_va": "0x0040B3F0",

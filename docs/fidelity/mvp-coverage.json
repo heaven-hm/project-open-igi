@@ -34,7 +34,7 @@
         "paired_result": null
       },
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "category": "Flow Engine",
       "manifest_status": "STRUCTURALLY_VERIFIED",
       "pillars": {

@@ -6,7 +6,7 @@
   "results": [
     {
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "cppName": "Main",
       "implementation": "engine/src/retail/core/retail_main.cpp",
       "status": "STRUCTURALLY_VERIFIED",

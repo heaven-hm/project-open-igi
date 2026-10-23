@@ -3,7 +3,7 @@
   "aliases": {
     "0x0048F530": {
       "symbol": "Main",
-      "reason": "the port's Main implements this entry; the catalog name Retail_Main is descriptive"
+      "reason": "the port's Main implements this entry and the binary names it main"
     },
     "0x00498460": {
       "symbol": "igi::retail::core::FP_InitExtendedPrecision",

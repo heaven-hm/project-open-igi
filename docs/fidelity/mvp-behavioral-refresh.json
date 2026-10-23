@@ -8,7 +8,7 @@
   "natives": [
     {
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "outcome": "runner does not support this address",
       "detail": "unsupported native address: 0x0048F530",
       "exit_code": 1

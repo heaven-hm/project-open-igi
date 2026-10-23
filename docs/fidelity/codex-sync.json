@@ -24,7 +24,7 @@
   "rows": [
     {
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "blocker": "retail-unobserved",
       "my_implementation": "engine/src/retail/core/retail_main.cpp",
       "codex_status": "STRUCTURALLY_VERIFIED",

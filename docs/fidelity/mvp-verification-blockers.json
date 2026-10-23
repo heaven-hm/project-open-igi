@@ -13,7 +13,7 @@
   "natives": [
     {
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "subsystem": "Flow Engine",
       "status": "STRUCTURALLY_VERIFIED",
       "evidence_backed": false,

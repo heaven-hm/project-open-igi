@@ -37,7 +37,7 @@
   "behavioural_failures": [
     {
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "state": "no-behavioural-evidence"
     },
     {

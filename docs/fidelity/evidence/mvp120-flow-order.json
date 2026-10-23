@@ -12,7 +12,7 @@
     {
       "order": 1,
       "address": "0x0048F530",
-      "name": "Retail_Main",
+      "name": "main",
       "depth": 0,
       "parent": null,
       "edge": "direct",

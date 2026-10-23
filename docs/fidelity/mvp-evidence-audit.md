@@ -35,7 +35,7 @@ new report under `docs/fidelity/evidence`, validates it with the gate's own
 report the gate would reject can no longer overwrite a good artifact with a bad
 one.
 
-`Retail_Main 0x0048F530` needed a different kind of repair. Its saved semantic
+`main 0x0048F530` needed a different kind of repair. Its saved semantic
 review did not describe `main` at all: it asserted chunk-tag constants, a
 sibling/child walk and a payload pointer, which is an IFF chunk-tree review. Its
 implementation comment was also truncated mid-sentence, and its block referenced
