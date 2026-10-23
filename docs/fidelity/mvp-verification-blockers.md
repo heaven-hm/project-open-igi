@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 78 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 83 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 78 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 83 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1388,3 +1388,49 @@ its 10 matches retail's 10 in any other scenario. It stays recorded as a scope g
 That last group is why the count is not growing: everything cheap has been verified. The next increase requires one
 of the three expensive commitments - transcribe a large body, drive retail into new scenarios, or extend the
 evidence model to cover host-side I/O - and each is a multi-round project rather than a harness fix.
+
+## Round 124: the startup natives were invisible because the harness attached after them
+
+The 24 "retail never calls it" natives were not all unreachable: the capture harness launched the image, polled
+`frida-ps` until it appeared, and only then attached. Every native executed between process entry and that attach was
+unobservable by construction - which includes the FPU initialisation family that the retail entry-point chain calls
+before the first frame.
+
+The harness now supports `--spawn`: it asks the bottle's Frida server to spawn the image suspended, installs the
+hooks against the suspended process, and only then resumes it. The same probe and the same settle/observe logic run
+from process entry, so startup and the demo are one observation window. On the first spawn-mode capture retail
+observed 97 natives instead of 91 and the candidate 93 instead of 88.
+
+Five natives became verifiable from that one change, all previously recorded as retail-unobserved:
+
+| native | retail startup | candidate | evidence |
+|---|---|---|---|
+| `FP_ControlWordToFlags` (0x004AC66B) | 1 call, class `ptr` | 2 calls, class `ptr` | angr 8/8 |
+| `FP_FlagsToControlWord` (0x004AC6FD) | 1 call, control word `0x023F` | 2 calls, `0x023F` | angr 8/8 |
+| `FP_MergeControlWord` (0x004AC620) | 1 call, class `ptr` | 1 call, class `ptr` | angr 8/8 |
+| `FP_MergeControlWordNoDenormal` (0x004AC655) | 1 call, class `ptr` | 1 call, class `ptr` | angr 8/8 |
+| `AppContext_SetIsActive` (0x0048F140) | 1 call, class `small:1` | 1 call, class `small:1` | unicorn 8/8 |
+
+The first fixture attempt failed for a reason worth recording: it called the merge helpers *and* the two flag
+mappings. The merge helpers convert through the mappings, so those fixture calls added observations of
+`FP_FlagsToControlWord` with a different result (`3647` next to `575`) and the native's observed class set diverged
+from retail's. This is the `DynObj_LoadPackageMeshes` trap again: a fixture may not add a class to a native. The
+fixture now replays only the two leaf mappings; the merge helpers are reached naturally by the candidate's own FPU
+initialisation, one call each, which is exactly the retail pattern.
+
+**The strategy for the next natives is visible here**: the pair of `FP_*` records was also carrying a stale identity.
+The MVP target list still names 0x004AC620/0x004AC655/0x004AC66B/0x004AC6FD/0x004A7157 as `Camera_SetFieldOfView_24`,
+`Camera_ApplyLineFilter_24`, `Camera_ApplyBandFilter_24`, `Camera_ApplyWideScreen_24` and `Camera_ApplyBandFilter_10`.
+Those bodies perform no camera work - the spawn capture shows them executing once during FPU setup, and the angr
+replay reproduces the retail return values exactly as x87 control-word conversions. The records keep the verified
+FPU identity and four now have real address-qualified transcriptions under `scripts/GameNatives/camera/` (the
+directory follows the stale catalog path; the comments state why). `FP_SetDefaultPrecision` (0x004A7157) also matches
+the reference, but stays unpromoted: it takes no arguments, so an angr differential cannot present eight distinct
+inputs, and its only input is the x87 control word, which angr models as one fixed default.
+
+The captured evidence for all five comes from a merged trace (`scripts/merge_mvp_captures.py`): the canonical capture
+holds the retail side fixed for every native it already observed and only supplies startup observations for natives
+it never reached, while the candidate side always comes from the newest image. A fresh retail run alone is not used
+as evidence because of its documented run-to-run variance.
+
+Verified count 78 -> 83.

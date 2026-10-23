@@ -189,6 +189,123 @@ def run_observation(pid: int, addresses: list[str], observe: float, probe_source
     return data
 
 
+CHILD_SPAWN = r"""
+import hashlib, json, os, sys, time
+import frida
+from pathlib import Path
+
+executable = sys.argv[1]
+working_directory = sys.argv[2]
+arguments = json.loads(sys.argv[3])
+targets = json.loads(sys.argv[4])
+script_source = sys.stdin.buffer.read().decode("utf-8")
+result_path = sys.argv[6]
+observe = float(sys.argv[7])
+settle = float(sys.argv[8]) if len(sys.argv) > 8 else 0.0
+
+device = frida.get_device_manager().add_remote_device(os.environ.get("FRIDA_HOST", "127.0.0.1:27042"))
+pid = device.spawn([executable, *arguments], cwd=working_directory)
+session = device.attach(pid)
+script = session.create_script(script_source)
+observed = {}
+failures = []
+trace_dir = Path(result_path).parent / "runtime-traces"
+trace_dir.mkdir(parents=True, exist_ok=True)
+raw_log = (trace_dir / f"native-spawn-{pid}-{time.time_ns()}.jsonl").open("w")
+raw_log.write(json.dumps({"type": "probe-source", "sha256": hashlib.sha256(script_source.encode("utf-8")).hexdigest()}) + "\n")
+raw_log.flush()
+
+
+def on_message(message, data):
+    raw_log.write(json.dumps(message) + "\n")
+    raw_log.flush()
+    payload = message.get("payload") or {}
+    if message.get("type") == "error" or payload.get("type") == "hook_failed":
+        failures.append(message)
+    if payload.get("type") == "observed":
+        calls = observed.setdefault(payload.get("address"), [])
+        if len(calls) < 10000:
+            calls.append(payload)
+        elif not failures:
+            failures.append({"error": "native call sequence exceeds capture capacity; incomplete evidence"})
+
+
+script.on("message", on_message)
+script.load()
+for address in targets:
+    script.exports_sync.hook(address)
+# Hooks are installed against the suspended image, so the run observes the
+# natives from process entry instead of from the first frame after attach.
+device.resume(pid)
+hook_started = time.time()
+last_hook_at = hook_started
+settle_expired = False
+while time.time() - last_hook_at < settle:
+    if observed:
+        break
+    time.sleep(0.2)
+    last_hook_at = time.time()
+else:
+    settle_expired = not observed
+if observed:
+    time.sleep(observe)
+if settle_expired:
+    json.dump({"settleExpiredWithoutCall": True}, open(result_path, "w"))
+    try:
+        session.detach()
+    finally:
+        device.kill(pid)
+    raw_log.close()
+    raise RuntimeError("no native call was observed before the settle window expired")
+if failures:
+    raise RuntimeError(f"Frida probe failed: {failures}")
+json.dump(observed, open(result_path, "w"))
+session.detach()
+device.kill(pid)
+raw_log.close()
+"""
+
+
+def run_observation_spawn(executable: str, working_directory: str, arguments: list[str],
+                          addresses: list[str], observe: float, probe_source: str,
+                          settle: float = 0.0, meta: dict | None = None) -> dict:
+    """Observe a spawned image from process entry rather than after attach.
+
+    Launching first and polling frida-ps attaches after the image is already
+    running, so every native called during startup (the FPU state helpers and
+    the entry point itself) is invisible. Frida can spawn under the bottle's
+    Wine server, which suspends the image before its entry point; hooks are
+    installed there and the image is resumed, so the same observation covers
+    startup and the demo.
+    """
+    child = ROOT / "build" / "frida_observe_spawn_child.py"
+    child.parent.mkdir(parents=True, exist_ok=True)
+    child.write_text(CHILD_SPAWN)
+    out = ROOT / "build" / "frida_observed_spawn.json"
+    out.unlink(missing_ok=True)
+    cmd = [FRIDA_PYTHON, str(child), executable, working_directory, json.dumps(arguments),
+           json.dumps(addresses), "-", str(out), str(observe), str(settle)]
+    try:
+        p = subprocess.run(cmd, input=probe_source, capture_output=True, text=True,
+                           encoding="utf-8", timeout=observe + settle + 180)
+    except subprocess.TimeoutExpired:
+        print("  spawn observation timed out")
+        return {}
+    if p.returncode != 0 or not out.exists():
+        message = (p.stderr or p.stdout or '')[-600:]
+        print(f"  spawn observation failed: {message}")
+        if meta is not None and "settle window expired" in message:
+            meta["settleExpiredWithoutCall"] = True
+        return {}
+    data = json.loads(out.read_text())
+    out.unlink()
+    if not data:
+        print(f"  spawn observation produced no calls; child output: "
+              f"{(p.stderr or p.stdout or '')[-300:]}")
+    return data
+
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbols", default=str(ROOT / "assets" / "candidate_symbol_map.json"))

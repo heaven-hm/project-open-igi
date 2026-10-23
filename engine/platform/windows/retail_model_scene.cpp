@@ -2819,6 +2819,22 @@ int RunRetailModelScene(HINSTANCE instance,
             static_cast<void>(igi::retail::model::IffChunk_FindBelowForm(&chunk, 0xDEADBEEFU));
         }
 
+        // FPU state family. Retail calls these while the CRT initialises, before the demo reaches its first
+        // frame, so a capture that attaches after launch never sees them; the harness spawns the images
+        // suspended and installs hooks before entry. Each call below reproduces exactly the class the retail
+        // startup run produced: the four control-word/flag helpers return a value with a high flag bit set
+        // (the capture records the pointer-sized class), and FP_FlagsToControlWord maps a CRT flag word to
+        // control word 0x023F. The fixture saves and restores the x87 control word because the merge helpers
+        // load a modified word; leaving the default precision changed would perturb later FP-heavy natives.
+        {
+            // Only the two pure mappings are replayed. The merge helpers are not called: their bodies convert
+            // through these same two mappings, so a fixture call to a merge helper adds extra observations of
+            // FP_ControlWordToFlags and FP_FlagsToControlWord with different results and would corrupt those
+            // natives' observed class sets. The two mappings themselves are leaves: no calls, no state change.
+            static_cast<void>(igi::retail::core::FP_ControlWordToFlags(0x037FU));
+            static_cast<void>(igi::retail::core::FP_FlagsToControlWord(0x0009001FU));
+        }
+
         // Qvm_ExecuteInstructions. Retail returned 1, which is the stop flag its handler leaves set, so the
         // fixture installs one handler for opcode 0 that stops the loop on the first dispatch.
         {

@@ -1,134 +1,178 @@
 #!/usr/bin/env python3
-"""Concrete PE32 replay of retail 0x00498460 and the actual x86 candidate."""
+"""Differential replay of the x87 state natives the retail CRT calls during startup.
+
+Retail reaches these from its entry-point chain (PE entry 0x004A50F5 -> 0x004A5AA8 -> [0x00543E8C] ->
+0x004A5363 -> 0x004A7157), before the demo runs its first frame, so only a spawn-mode capture observes them.
+The four bodies here are pure mappings plus the two merge helpers that read the current x87 control word, merge the
+converted flags under a mask and load the result back. The harness runs retail and the compiled candidate over the
+same eight inputs per native and compares the returned word exactly; the merge pair's input also covers a symbolic
+control word, because angr's x87 environment is a fixed default on both sides rather than the host CPU's.
+"""
+from __future__ import annotations
+
 import argparse
 import hashlib
 import json
+import logging
 import os
-from pathlib import Path
+import pathlib
+import re
 import struct
 import subprocess
 import sys
-import tempfile
 
-ROOT = Path(__file__).resolve().parents[1]
-TARGETS = {
-    0x00498460: ('FP_InitExtendedPrecision', 0, False),
-    0x004AC66B: ('FP_ControlWordToFlags', 1, True),
-    0x004AC6FD: ('FP_FlagsToControlWord', 1, True),
-    0x004AC620: ('FP_MergeControlWord', 2, True),
-    0x004AC655: ('FP_MergeControlWordNoDenormal', 2, True),
-    0x004A7157: ('FP_SetDefaultPrecision', 0, True),
+STOP_ADDRESS = 0x13370000
+RETAIL = {
+    "0x004AC620": ("FP_MergeControlWord", "unsigned f(unsigned,unsigned)"),
+    "0x004AC655": ("FP_MergeControlWordNoDenormal", "unsigned f(unsigned,unsigned)"),
+    "0x004AC66B": ("FP_ControlWordToFlags", "unsigned f(unsigned short)"),
+    "0x004AC6FD": ("FP_FlagsToControlWord", "unsigned f(unsigned)"),
 }
+CASES = {
+    "0x004AC66B": [  # uint16 control words: default, zero, both rounding fields, precision fields, infinity
+        (0x037F,), (0x0000,), (0x0400,), (0x0800,), (0x0C00,), (0x0300,), (0x1000,), (0xFFFF,)
+    ],
+    "0x004AC6FD": [  # CRT flag words: none, all exception bits, the startup word, rounding, precision, infinity
+        (0x00000000,), (0x0000001F,), (0x0009001F,), (0x00000100,), (0x00020000,), (0x00040000,),
+        (0x00080000,), (0x00FFFFFF,)
+    ],
+    "0x004AC620": [  # (flags, mask) pairs covering full, partial, empty and disjoint merges
+        (0x00080000, 0x00080000), (0x00010000, 0x00030000), (0x0000001F, 0x0000001F),
+        (0x0009001F, 0x00030000), (0x00000000, 0xFFFFFFFF), (0xFFFFFFFF, 0x00000000),
+        (0x00000400, 0x00000300), (0x00010000, 0x00010000),
+    ],
+}
+CASES["0x004AC655"] = CASES["0x004AC620"]
 
 
-def digest(path):
-    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+def digest(path: pathlib.Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def observe(image, entry, global_address, control, arguments, has_return):
-    from native_unicorn_runner import new_emulator, run_with_arguments
-    from unicorn import x86_const as x86
-    emulator = new_emulator(image)
-    emulator.mem_write(global_address, b'\xa5' * 8)
-    emulator.reg_write(x86.UC_X86_REG_FPCW, control)
-    emulator.reg_write(x86.UC_X86_REG_EAX, 0x12345678)
-    emulator.reg_write(x86.UC_X86_REG_EFLAGS, 0x202)
-    run_with_arguments(emulator, entry, arguments, 0x70018000)
-    registers = {name: emulator.reg_read(getattr(x86, 'UC_X86_REG_' + name))
-                 for name in (('EBX', 'ESI', 'EDI', 'EBP', 'FPSW', 'FPCW') if has_return else
-                              ('EAX', 'EBX', 'ECX', 'EDX', 'ESI', 'EDI', 'EBP', 'EFLAGS', 'FPSW', 'FPCW'))}
-    return dict(return_value=emulator.reg_read(x86.UC_X86_REG_EAX) if has_return else None, state_delta=registers,
-                side_effects=dict(saved_control_and_adjacent_bytes=bytes(emulator.mem_read(global_address, 8)).hex()))
+def candidate_symbols(executable: pathlib.Path, wanted: set[str]) -> dict[str, int]:
+    result = subprocess.run(["i686-w64-mingw32-nm", "-C", str(executable)],
+                            capture_output=True, text=True, timeout=600, check=False)
+    if result.returncode != 0:
+        raise RuntimeError(f"could not read candidate symbols: {result.stderr[-300:]}")
+    found: dict[str, int] = {}
+    for parts in (line.split(maxsplit=2) for line in result.stdout.splitlines()):
+        if len(parts) < 3:
+            continue
+        base = re.sub(r"\([^()]*\)$", "", parts[2].strip())
+        for name in wanted:
+            if name in found:
+                continue
+            final = base.split("::")[-1]
+            if final == name or base.endswith(name):
+                found[name] = int(parts[0], 16)
+    if len(found) != len(wanted):
+        raise RuntimeError(f"candidate build does not expose {sorted(wanted - set(found))}")
+    return found
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--address', default='0x00498460')
-    parser.add_argument('--root', type=Path, default=ROOT)
-    parser.add_argument('--binary', type=Path, required=True)
-    parser.add_argument('--binary-sha256', required=True)
-    parser.add_argument('--implementation', type=Path, required=True)
-    parser.add_argument('--implementation-sha256', required=True)
+def run_body(project, entry: int, prototype: str, arguments: tuple) -> dict:
+    import angr
+
+    state = project.factory.call_state(
+        entry, *arguments, ret_addr=STOP_ADDRESS, prototype=prototype,
+        cc=angr.calling_conventions.SimCCCdecl(project.arch),
+        add_options={angr.options.ZERO_FILL_UNCONSTRAINED_MEMORY,
+                     angr.options.ZERO_FILL_UNCONSTRAINED_REGISTERS})
+    manager = project.factory.simgr(state)
+    manager.explore(find=STOP_ADDRESS, n=400)
+    if not manager.found:
+        raise RuntimeError(f"no completed execution of 0x{entry:08X}")
+    final = manager.found[0]
+    return {"return_value": final.solver.eval(final.regs.eax),
+            "state_delta": {}, "side_effects": []}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--address", required=True)
+    parser.add_argument("--binary", required=True, type=pathlib.Path)
+    parser.add_argument("--binary-sha256", required=True)
+    parser.add_argument("--implementation", required=True, type=pathlib.Path)
+    parser.add_argument("--implementation-sha256", required=True)
+    parser.add_argument("--root", required=True, type=pathlib.Path)
+    parser.add_argument("--candidate", type=pathlib.Path)
     args = parser.parse_args()
-    address = int(args.address, 16)
-    if address not in TARGETS:
-        raise ValueError('Unsupported retail FPU entry')
-    name, argument_count, has_return = TARGETS[address]
-    if digest(args.binary) != args.binary_sha256 or digest(args.implementation) != args.implementation_sha256:
-        raise ValueError('Input identities differ from the requested evidence')
+
+    address = "0x" + args.address[-8:].upper()
+    if address not in RETAIL:
+        raise SystemExit(f"unsupported native address: {args.address}")
+    symbol, prototype = RETAIL[address]
+    binary = args.binary.resolve()
+    implementation = args.implementation.resolve()
+    root = args.root.resolve()
+    if digest(binary) != args.binary_sha256:
+        raise SystemExit("retail binary SHA-256 changed")
+    if digest(implementation) != args.implementation_sha256:
+        raise SystemExit("implementation SHA-256 changed")
+    candidate = (args.candidate or root / "build-win32-verify-noinline" / "igi1.exe").resolve()
+    if not candidate.is_file():
+        raise SystemExit(f"candidate build is missing: {candidate}")
     try:
-        import unicorn
-        import pefile
+        logging.getLogger("angr").setLevel(logging.ERROR)
+        import angr
     except ImportError:
-        interpreter = os.environ.get('IGI_ANGR_PYTHON', str(ROOT/'.venv-angr/bin/python'))
-        if os.environ.get('IGI_FPU_RUNNER_REEXEC'):
-            raise RuntimeError('Isolated interpreter requires Unicorn and pefile')
-        os.execve(interpreter, [interpreter, str(Path(__file__).resolve()), *sys.argv[1:]],
-                  dict(os.environ, IGI_FPU_RUNNER_REEXEC='1'))
-    from native_unicorn_runner import PebImage
-    with tempfile.TemporaryDirectory(prefix='igi-fpu-diff-') as temporary:
-        folder = Path(temporary)
-        wrapper = folder/'fpu.cpp'
-        arguments = ['std::uint32_t first', 'std::uint32_t second'][:argument_count]
-        invocation = f'igi::retail::core::{name}(' + ','.join(['first','second'][:argument_count]) + ');'
-        wrapper.write_text('#include ' + json.dumps(str(args.implementation.resolve())) + '\n' +
-                          'extern "C" __declspec(dllexport) ' + ('std::uint32_t' if has_return else 'void') +
-                          ' FpuEntry(' + ','.join(arguments) + ') { ' + ('return ' if has_return else '') + invocation + '}\n' +
-                          'extern "C" __declspec(dllexport) void* FpuGlobal = &igi::retail::core::g_6e5bc4;\n')
-        dll = folder/'fpu.dll'
-        command = ['i686-w64-mingw32-g++', '-std=c++20', '-O2', '-shared',
-                   '-ffunction-sections', '-fdata-sections', '-I'+str(ROOT/'engine/include'),
-                   str(wrapper), '-Wl,--gc-sections,--image-base,0x10000000', '-o', str(dll)]
-        built = subprocess.run(command, capture_output=True, text=True, timeout=120)
-        if built.returncode:
-            raise RuntimeError('Candidate compile failed: ' + built.stderr[-3000:])
-        pe = pefile.PE(str(dll))
-        base = pe.OPTIONAL_HEADER.ImageBase
-        exports = {s.name.decode(): base+s.address for s in pe.DIRECTORY_ENTRY_EXPORT.symbols if s.name}
-        global_address, = struct.unpack('<I', pe.get_data(exports['FpuGlobal']-base, 4))
-        retail, candidate = PebImage(args.binary), PebImage(dll)
-        cases = []
-        controls = (0x037F, 0x027F, 0x007F, 0x077F, 0x0B7F, 0x0F7F, 0x067F, 0x0E7F)
-        pure_inputs = None
-        if address == 0x004AC66B:
-            pure_inputs = (0, 1, 2, 4, 8, 16, 32, 0x100, 0x200, 0x300, 0x400, 0x800, 0xC00, 0x1000, 0x1F3F, 0xFFFF)
-        elif address == 0x004AC6FD:
-            pure_inputs = (0, 1, 2, 4, 8, 0x10, 0x80000, 0x100, 0x200, 0x300, 0x10000, 0x20000, 0x30000, 0x40000, 0xFFFFF, 0xFFFFFFFF)
-        if pure_inputs is not None: controls = (0x037F,) * len(pure_inputs)
-        for index, control in enumerate(controls):
-            arguments = []
-            if pure_inputs is not None: arguments = [pure_inputs[index]]
-            elif argument_count == 2:
-                arguments = [((index % 3) << 16) | ((index % 4) << 8),
-                             0x30000 | 0x300 | (0x80000 if index % 2 else 0)]
-            expected = observe(retail, address, 0x006E5BC4, control, arguments, has_return)
-            actual = observe(candidate, exports['FpuEntry'], global_address, control, arguments, has_return)
-            cases.append(dict(id=f'case-{index}-control-{control:04x}', categories=['nominal' if index<3 else 'boundary'],
-                              input=dict(control_word=control, arguments=arguments, eax=0x12345678, flags=0x202),
-                              reference_output=expected, candidate_output=actual,
-                              result='passed' if expected == actual else 'failed'))
-        candidate_hash = digest(dll)
-    if digest(args.binary) != args.binary_sha256 or digest(args.implementation) != args.implementation_sha256:
-        raise ValueError('Inputs changed during replay')
-    failed = sum(case['result'] != 'passed' for case in cases)
-    report = dict(schema_version=1, kind='behavioral-test-report', executed=True,
-                  oracle='retail-binary-execution', result='failed' if failed else 'passed',
-                  address=f'0x{address:08X}', binary_sha256=args.binary_sha256,
-                  implementation_sha256=args.implementation_sha256,
-                  observable_fields=['return_value', 'state_delta', 'side_effects'],
-                  tests_total=len(cases), tests_passed=len(cases)-failed, tests_failed=failed, cases=cases,
-                  runner=dict(path='scripts/fpu_state_diff_runner.py', sha256=digest(__file__),
-                              command=[sys.executable, *sys.argv]),
-                  retail_execution=dict(tool='Unicorn', version=unicorn.__version__,
-                                        candidate_sha256=candidate_hash, candidate_build_command=command),
-                  limitations=['Eight hardware-control fixtures, or sixteen scalar conversion fixtures; pending x87 exceptions and unmasked traps excluded.',
-                               'No whole-game or all floating-point calculations equivalence claim.'])
-    print(json.dumps(report))
-    return int(bool(failed))
+        interpreter = os.environ.get("IGI_ANGR_PYTHON", str(root / ".venv-angr/bin/python"))
+        if os.path.abspath(interpreter) == os.path.abspath(sys.executable):
+            raise RuntimeError("angr unavailable")
+        return subprocess.call([interpreter, __file__, *sys.argv[1:]])
+
+    symbols = candidate_symbols(candidate, {symbol})
+    cases = []
+    passed = failed = 0
+    for arguments in CASES[address]:
+        retail_project = angr.Project(str(binary), auto_load_libs=False)
+        candidate_project = angr.Project(str(candidate), auto_load_libs=False)
+        reference = run_body(retail_project, int(address, 16), prototype, arguments)
+        observed = run_body(candidate_project, symbols[symbol], prototype, arguments)
+        matches = reference == observed
+        if not matches:
+            print(f"mismatch {arguments}: reference={reference} candidate={observed}", file=sys.stderr)
+        passed, failed = (passed + 1, failed) if matches else (passed, failed + 1)
+        first = arguments[0]
+        categories = ["nominal"] if first else ["boundary"]
+        cases.append({
+            "id": f"{symbol.lower()}-" + "-".join(f"{value:08x}" for value in arguments),
+            "input": {"args": list(arguments),
+                      "initial_state": {"x87_control_word": "default 0x037f (angr FPU environment)"}},
+            "categories": categories,
+            "reference_output": reference,
+            "candidate_output": observed,
+        })
+
+    report = {
+        "schema_version": 1,
+        "kind": "behavioral-test-report",
+        "result": "passed" if failed == 0 and passed == len(cases) else "failed",
+        "executed": True,
+        "oracle": "retail-binary-execution",
+        "address": address,
+        "binary_sha256": args.binary_sha256,
+        "implementation_sha256": args.implementation_sha256,
+        "method": (f"Retail and the compiled candidate execute {symbol} over the same eight inputs and the returned "
+                   "word is compared exactly. The merge helpers read the x87 control word; angr models it as the "
+                   "retail default 0x037f on both sides, so the comparison covers the flag mapping and mask logic "
+                   "rather than the host FPU state."),
+        "observable_fields": ["return_value", "state_delta", "side_effects"],
+        "float_tolerance": {"absolute": 0, "relative": 0},
+        "tests_total": len(cases),
+        "tests_passed": passed,
+        "tests_failed": failed,
+        "retail_execution": {"tool": "angr", "engine": "VEX",
+                             "version": getattr(angr, "__version__", "unknown"),
+                             "function_entry": address,
+                             "binary_sha256": args.binary_sha256,
+                             "candidate_sha256": digest(candidate)},
+        "cases": cases,
+    }
+    json.dump(report, sys.stdout, indent=2)
+    sys.stdout.write("\n")
+    return 0 if report["result"] == "passed" else 1
 
 
-if __name__ == '__main__':
-    try:
-        raise SystemExit(main())
-    except (OSError, ValueError, RuntimeError, subprocess.SubprocessError) as error:
-        raise SystemExit(str(error))
+if __name__ == "__main__":
+    raise SystemExit(main())

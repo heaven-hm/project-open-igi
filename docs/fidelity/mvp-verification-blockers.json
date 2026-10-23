@@ -4,9 +4,9 @@
   "capture": "build/runtime-traces/mvp-frida-pair-lovs.json",
   "level": 5,
   "counts": {
+    "end-to-end": 87,
     "candidate-unreachable": 10,
-    "end-to-end": 81,
-    "retail-unobserved": 24,
+    "retail-unobserved": 17,
     "unlinked": 5
   },
   "natives": [
@@ -1219,6 +1219,7 @@
     "0x004037C0",
     "0x00463180",
     "0x00465820",
+    "0x0048F140",
     "0x0048F170",
     "0x0048F1D0",
     "0x0048F230",
@@ -1234,6 +1235,10 @@
     "0x004AA682",
     "0x004AA6AE",
     "0x004AAD10",
+    "0x004AC620",
+    "0x004AC655",
+    "0x004AC66B",
+    "0x004AC6FD",
     "0x004AD73D",
     "0x004AF8F0",
     "0x004AF960",
@@ -1291,5 +1296,5 @@
     "0x005178E0",
     "0x00517940"
   ],
-  "verified_strict_gate_count": 78
+  "verified_strict_gate_count": 83
 }

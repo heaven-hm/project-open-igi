@@ -235,7 +235,7 @@ def start_with_arguments(executable: str, level: int, extra_arguments: tuple[str
 
 def capture(process_name: str, executable: str, addresses: list[str], observe: float,
             settle: float, level: int, result: dict,
-            extra_arguments: tuple[str, ...] = ()) -> None:
+            extra_arguments: tuple[str, ...] = (), spawn: bool = False) -> None:
     """Start one image and observe the selected natives.
 
     The retail vocabulary is "window levelN"; the candidate also understands
@@ -243,11 +243,27 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
     inputdemo), so those can be added for the candidate run without changing the
     retail invocation.
     """
-    if extra_arguments:
-        process = start_with_arguments(executable, level, extra_arguments)
-    else:
-        process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
+    process = None
+    if not spawn:
+        if extra_arguments:
+            process = start_with_arguments(executable, level, extra_arguments)
+        else:
+            process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
     try:
+        probe_source = PROBE.read_text()
+        meta: dict = {}
+        if spawn:
+            result["observed"] = nfd.run_observation_spawn(
+                executable, "Z:" + str(Path(nfd.vnb.GAME_DIR)).replace("/", "\\"),
+                ["window", f"level{level}", *extra_arguments], addresses, observe,
+                probe_source, settle=settle, meta=meta)
+            result["pid"] = 0
+            result["meta"] = meta
+            if not result["observed"]:
+                result["error"] = (f"no native call observed for {process_name} "
+                                   f"(spawn mode; settleExpiredWithoutCall="
+                                   f"{meta.get('settleExpiredWithoutCall')})")
+            return
         pid = 0
         for _ in range(120):
             pid = max(nfd.frida_list().get(process_name, [0]))
@@ -258,8 +274,6 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
             result["error"] = f"Frida did not see {process_name}"
             return
         result["pid"] = pid
-        meta: dict = {}
-        probe_source = PROBE.read_text()
         result["observed"] = nfd.run_observation(
             pid, addresses, observe, probe_source, settle=settle, meta=meta)
         result["meta"] = meta
@@ -269,7 +283,8 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
     except Exception as error:  # keep both captures independent
         result["error"] = str(error)
     finally:
-        nfd.vnb.stop_game(process)
+        if process is not None:
+            nfd.vnb.stop_game(process)
         for _ in range(60):
             if not nfd.frida_list().get(process_name):
                 break
@@ -307,6 +322,9 @@ def main() -> int:
                         help="reuse the retail observations of an earlier capture whose "
                              "retail image digest still matches, instead of relaunching retail")
     parser.add_argument("--settle", type=float, default=30.0)
+    parser.add_argument("--spawn", action="store_true",
+                        help="spawn each image suspended and install hooks before its entry "
+                             "point, so natives called during startup are observed too")
     parser.add_argument("--limit", type=int, default=0,
                         help="capture only the first N linked natives (0 = all)")
     parser.add_argument("--recompare", type=Path, default=None,
@@ -415,7 +433,7 @@ def main() -> int:
         print(f"capturing retail igi.exe (level {args.level}) ...", flush=True)
         capture("igi.exe", "Z:" + str(retail).replace("/", "\\"),
                 [item["retail_va"] for item in plan], args.observe, args.settle,
-                args.level, retail_result)
+                args.level, retail_result, spawn=args.spawn)
         print(f"retail: {len(retail_result.get('observed') or {})} natives observed"
               f" error={retail_result.get('error')}", flush=True)
 
@@ -426,7 +444,7 @@ def main() -> int:
         capture(staged.name.lower(), "Z:" + str(staged).replace("/", "\\"),
                 [item["candidate_va"] for item in plan], candidate_window, args.settle,
                 args.level, candidate_result,
-                extra_arguments=tuple(args.candidate_args or ()))
+                extra_arguments=tuple(args.candidate_args or ()), spawn=args.spawn)
     print(f"candidate: {len(candidate_result.get('observed') or {})} natives observed"
           f" error={candidate_result.get('error')}", flush=True)
 
