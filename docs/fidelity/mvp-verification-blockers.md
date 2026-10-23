@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 48 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 51 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 48 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 51 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -749,3 +749,30 @@ This round built fixtures against the exact class sets the retail run had produc
 
 All seven pass the strict gate. Verified count 41 -> 48, paired matches 48 -> 55, mismatches 0,
 candidate-unreachable 43 -> 36.
+
+## A symbol collision hid sprintf, and a stale twin header blocks a fourth promotion
+
+`Resource_MatchPrefix` (0x004AAD10), `Resource_RegisterBuffer` (0x004B5F80) and `sprintf` (0x004A53B3) now
+pass the strict gate. Getting there exposed two defects worth recording.
+
+The first capture of this batch reported a mismatch for `Resource_MatchPrefix` - and it was mine, not the
+port's. The retail body returns `null` for an equal prefix, `small:-1` when the argument byte is greater and
+`small:1` when it is smaller; the fixture I wrote passed mismatching strings for the "equal" case, so the
+candidate covered only two of the three retail classes. Corrected, and the capture then showed zero mismatches.
+
+`sprintf` never appeared in the candidate at all. `nm -C` resolves the bare name `sprintf` to the CRT
+`sprintf` at 0x00451620, while the port's implementation is the namespaced
+`igi::retail::error::sprintf` at 0x0040D110 - so the probe was watching the wrong function and its eight
+formatted lengths showed up on `String_VFormat` (0x004A5702, which a sprintf call internally reaches) instead.
+A symbol alias for the address now makes the collision explicit, and the eight literals of length
+15/17/19/20/21/27/29/31 cover the retail class set exactly.
+
+`Texture_GetActiveBackendId` (0x004B0F80) matched - its classes `{null, small:-1, small:1}` came out exactly
+through `Texture_SetBackendId` - but did not promote: its `game_natives` metadata points at
+`scripts/GameNatives/sys/004B0F80-Texture_GetActiveBackendId.hpp`, which does not exist. Writing it does not
+help: the staged gate rejects a header twin with "no address-bound native identity is available to verify this
+source's logic", and pointing `implementation.path` at a twin would invalidate the artifacts bound to
+`engine/src/retail/texture/texture_loaders.cpp`. The same class of defect as the display pair; it needs a
+twin form the gate can bind, not another metadata edit.
+
+Verified count 48 -> 51, paired matches 55 -> 59, mismatches 0, candidate-unreachable 36 -> 32.

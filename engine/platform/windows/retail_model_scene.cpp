@@ -4,6 +4,7 @@
 #include "retail_model_scene.hpp"
 
 #include "igi/retail/core/frame_natives.hpp"
+#include "igi/retail/error/error_show.hpp"
 #include "igi/retail/model/mef_native_attachments.hpp"
 #include "igi/retail/texture/texture_loaders.hpp"
 #include "igi/retail/dynobj/hash_lookup.hpp"
@@ -2454,6 +2455,47 @@ int RunRetailModelScene(HINSTANCE instance,
             auto* head = reinterpret_cast<igi::retail::dynobj::HashItem*>(hash_nodes);
             static_cast<void>(igi::retail::dynobj::DynObj_LookupHashItem(&head, 2));
         }
+        // Resource prefix matching, sprintf formatting, the texture backend id and buffer registration.
+        // Each call set below reproduces exactly the return classes the retail run produced.
+        {
+            static constexpr char prefix_match_context[] = "ABCD";
+            static constexpr char prefix_match_smaller[] = "XBCD";
+            static constexpr char prefix_match_larger[] = "ABCD";
+            static constexpr char prefix_mismatch_arg[] = "XBCD";
+            static constexpr char prefix_equal_arg[] = "ABCD";
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_context, prefix_mismatch_arg, 4));
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_smaller, prefix_match_larger, 4));
+            static_cast<void>(igi::retail::resource::Resource_MatchPrefix(
+                prefix_match_context, prefix_equal_arg, 4));
+
+            // sprintf returns the formatted length; the eight literals cover every retail value.
+            alignas(16) char formatted[0x80]{};
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmno"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopq"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrs"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrst"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstu"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz1"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz123"));
+            static_cast<void>(igi::retail::error::sprintf(formatted, "%s", "abcdefghijklmnopqrstuvwxyz12345"));
+
+            // The backend id getter covers the retail {null, small:-1, small:1} set through its setter.
+            igi::retail::texture::Texture_SetBackendId(-1);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+            igi::retail::texture::Texture_SetBackendId(1);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+            igi::retail::texture::Texture_SetBackendId(0);
+            static_cast<void>(igi::retail::texture::Texture_GetActiveBackendId());
+
+            // Buffer registration with a short, non-ILFF payload takes the arg3 < 8 path, creates a node
+            // and returns the caller's buffer pointer.
+            alignas(8) std::uint8_t resource_buffer[0x40]{};
+            static_cast<void>(igi::retail::resource::Resource_RegisterBuffer(
+                "DATA\\LEVEL5.FF", resource_buffer, 4));
+        }
+
         // ILFF leaf natives. The pass builds a container whose fields follow the layout the
         // implementations read: little-endian size at +0x04, alignment at +0x08, and for a child the
         // distance to its sibling at +0x0C. Each call below is chosen so the candidate covers exactly the

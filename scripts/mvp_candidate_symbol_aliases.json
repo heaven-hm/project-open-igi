@@ -60,6 +60,10 @@
     "0x005179C0": {
       "symbol": "igi::retail::sys::Ilff_GetChunkPayload",
       "reason": "the catalog spells this native Iff_GetChunkPayload while the port defines it as Ilff_GetChunkPayload in engine/src/retail/sys/ilff_navigation.cpp; without the alias the capture reports the native as unlinked even though the symbol is in the image."
+    },
+    "0x004A53B3": {
+      "symbol": "igi::retail::error::sprintf",
+      "reason": "nm -C resolves the bare name sprintf to the CRT sprintf at 0x00451620, so the port's namespaced implementation at 0x0040D110 was never observed; the address alias makes the collision explicit"
     }
   }
 }
