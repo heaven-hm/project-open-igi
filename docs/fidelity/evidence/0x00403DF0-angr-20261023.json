@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "angr-analysis",
+  "tool": "angr",
+  "angr_version": "10.0.4.post1",
+  "analysis": "CFGFast",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00403DF0",
+  "result": "pass",
+  "has_unresolved_jumps": false,
+  "block_count": 4,
+  "nodes": [
+    "0x00403DF0",
+    "0x00403E01",
+    "0x00403E4E",
+    "0x00403E50"
+  ],
+  "edges": [
+    {
+      "kind": "unknown",
+      "source": "0x00403DF0",
+      "target": "0x00403E01"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00403E01",
+      "target": "0x00403E4E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00403E4E",
+      "target": "0x00403E4E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00403E4E",
+      "target": "0x00403E50"
+    }
+  ],
+  "recovery_mode": "automatic",
+  "reason": null,
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "limitations": [
+    "CFGFast is approximate static analysis",
+    "This result does not prove semantic or behavioral equivalence",
+    "CFGFast is approximate static analysis and does not prove semantic or behavioral equivalence."
+  ]
+}

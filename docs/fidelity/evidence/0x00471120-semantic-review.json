@@ -1,62 +1,166 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x00471120",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "f3a9733ee4bf753475983f4d5cac56cea5e893f04096c4b634848b334d39472e",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00471120",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f3a9733ee4bf753475983f4d5cac56cea5e893f04096c4b634848b334d39472e",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00471120 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.cpp at sha256 f3a9733ee4bf753475983f4d5cac56cea5e893f04096c4b634848b334d39472e (recorded implementation.signature: int32_t __convention WeaponGun_ProcessWNES(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00471120",
+    "name": "WeaponGun_ProcessWNES",
+    "binary_ninja_name": "WeaponGun_ProcessWNES",
+    "signature": "int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, void* arg4)",
+    "start": "0x00471120",
+    "end": "0x47127d",
+    "basic_blocks": 3,
+    "edges": [
+      {
+        "source": "0x00471120",
+        "target": "0x0047113e",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0047113e",
+        "target": "0x0047113e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0047113e",
+        "target": "0x00471154",
+        "kind": "conditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Three blocks 0x471120-0x4712xx: 12-iteration Weapon_UpdateZoom loop over arg4+0x2B54; then for each WNES slot, AI_MoveToNode_28(g_script_ret_type?,0,0) returns a descriptor whose +0x10 is passed to Sys_OpenFileStream_18, storing the stream at arg4+0x20/0x24/0x28/0x2C/0x30/0x34; then Sys_ResolveSymbol_13(arg4+0x138), Weapon_EjectMagazine(arg4+0x14C,0x18), memset(arg4+0x2C44,0,0x1B8); return 0.",
+    "blocks": [
+      {
+        "address": "0x00471120",
+        "start": "0x471120",
+        "end": "0x47113e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0047113e",
+        "start": "0x47113e",
+        "end": "0x471154",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00471154",
+        "start": "0x471154",
+        "end": "0x47127e",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "Weapon_UpdateZoom",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "AI_MoveToNode_28",
+      "Sys_OpenFileStream_18",
+      "Sys_ResolveSymbol_13",
+      "Weapon_EjectMagazine"
+    ],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00471120 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.cpp",
+    "sha256": "f3a9733ee4bf753475983f4d5cac56cea5e893f04096c4b634848b334d39472e",
+    "signature": "int32_t __convention WeaponGun_ProcessWNES(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Three blocks 0x471120-0x4712xx: 12-iteration Weapon_UpdateZoom loop over arg4+0x2B54; then for each WNES slot, AI_MoveToNode_28(g_script_ret_type?,0,0) returns a descriptor whose +0x10 is passed to Sys_OpenFileStream_18, storing the stream at arg4+0x20/0x24/0x28/0x2C/0x30/0x34; then Sys_ResolveSymbol_13(arg4+0x138), Weapon_EjectMagazine(arg4+0x14C,0x18), memset(arg4+0x2C44,0,0x1B8); return 0."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Six AI_MoveToNode_28 calls elided; Sys_OpenFileStream_18 receives a folded global instead of the call's +0x10 field."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00471120 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/weapongun/00471120-WeaponGun_ProcessWNES.cpp (sha256 f3a9733ee4bf753475983f4d5cac56cea5e893f04096c4b634848b334d39472e). Three blocks 0x471120-0x4712xx: 12-iteration Weapon_UpdateZoom loop over arg4+0x2B54; then for each WNES slot, AI_MoveToNode_28(g_script_ret_type?,0,0) returns a descriptor whose +0x10 is passed to Sys_OpenFileStream_18, storing the stream at arg4+0x20/0x24/0x28/0x2C/0x30/0x34; then Sys_ResolveSymbol_13(arg4+0x138), Weapon_EjectMagazine(arg4+0x14C,0x18), memset(arg4+0x2C44,0,0x1B8); return 0."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "BN int32_t __convention(regparm)(int32_t arg1,int32_t arg2,int32_t arg3,void* arg4): three register args and one stack arg. The candidate has the same regparm declaration and the same four-word shape."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "BN int32_t __convention(regparm)(int32_t arg1,int32_t arg2,int32_t arg3,void* arg4): three register args and one stack arg. The candidate has the same regparm declaration and the same four-word shape."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 3 block(s)/3 edge(s) at 0x00471120; radare2 recovers the identical 3 block(s)/3 edge(s) (score 1.0000); angr CFGFast recovers 20 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail makes six AI_MoveToNode_28(0x0046B4D0) calls, each followed by Sys_OpenFileStream_18(0x004B6EC0); the candidate's decompiler-derived text elides those six calls and stores a folded constant (g_5bddc0) as the stream descriptor."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Weapon slot base 0x2B54, stride 0x14, count 0xC; zoom (0x1E,0x3CA3D70A); stream slots 0x20/0x24/0x28/0x2C/0x30/0x34; name table 0x005402A8; memset 0x1B8 at 0x2C44."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The 12 zoom iterations and the final memset/pointer fields match; the six stream descriptors are written from the wrong source (folded constant instead of the AI_MoveToNode_28 return +0x10)."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns 0 \u2014 matches."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "The 0x3CA3D70A word is a stored float constant passed to Weapon_UpdateZoom; no x87 instruction in the block.",
+      "rationale": "The 0x3CA3D70A word is a stored float constant passed to Weapon_UpdateZoom; no x87 instruction in the block."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t __convention(\"regparm\")(int32_t arg1, int32_t arg2, int32_t arg3, void* arg4)\" at 0x00471120; radare2 recovers \"fcn.00471120 (int32_t arg_14h);\". Both tools place the entry at 0x00471120 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t __convention WeaponGun_ProcessWNES(\"regparm\")(int32_t param_1, int32_t param_2, int32_t param_3, void* param_4);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00471120-binaryninja.json",
+      "evidence_sha256": "4982c4f21b890c73d5c5a6ed92fa9663bdfee164208b67a35f903c9eaac8d24b",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00471120-radare2.json",
+      "evidence_sha256": "8f8ca6f3a6c0497e0a35a6cd28c3fafe712f94e2c5c2fc733e30b12693e5f09b",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00471120-angr-20261023.json",
+      "evidence_sha256": "4d9083d2d327250bd4c16bb26cf90cf4cdeda680bc9f0fa7a8a2e5d664abce77",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
 }

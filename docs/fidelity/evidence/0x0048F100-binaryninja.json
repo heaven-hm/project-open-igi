@@ -1,38 +1,71 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x0048F100",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x0048F100"
-   },
-   {
-    "address": "0x0048F113"
-   },
-   {
-    "address": "0x0048F11B"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x0048F100",
-    "target": "0x0048F11B",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0048F100",
-    "target": "0x0048F113",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0048F113",
-    "target": "0x0048F11B",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x0048F100",
+  "symbol": "FX_ExplosionSpawn_23",
+  "signature": "BOOL(BOOL arg1)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x0048F100",
+    "end": "0x48f11b",
+    "size_bytes": 28,
+    "basic_blocks": 3,
+    "instruction_count": 9
+  },
+  "bytes_hex": "8b0dc48b5c008b44240485c9a3d48b5c",
+  "bytes_sha256": "f5e8eb1fd1ce3724a83feb0d53e507e42c728546adc2abfe42ca6cf6c39dd7e1",
+  "cfg": {
+    "entry": "0x0048F100",
+    "nodes": [
+      {
+        "address": "0x0048f100",
+        "start": "0x48f100",
+        "end": "0x48f113",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0048f11b",
+        "start": "0x48f11b",
+        "end": "0x48f11c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0048f113",
+        "start": "0x48f113",
+        "end": "0x48f11b",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x0048f100",
+        "target": "0x0048f113",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0048f100",
+        "target": "0x0048f11b",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0048f113",
+        "target": "0x0048f11b",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "`asm\n  BOOL FX_ExplosionSpawn_23(BOOL arg1)\n\n0x48f100  mov     ecx, dword [g_5c8bc4]\n0x48f106  mov     eax, dword [esp+0x4 {arg1}]\n0x48f10a  test    ecx, ecx\n0x48f10c  mov     dword [g_5c8bd4], eax\n0x48f111  je      0x48f11b\n\n0x48f113  push    eax {var_4_1}\n0x48f114  push    ecx {var_8_1}\n0x48f115  call    dword [SetWindowTextA]\n\n0x48f11b  retn     {__return_addr}",
+  "pseudocode": "`bn-pseudoc\n  BOOL FX_ExplosionSpawn_23(BOOL arg1)\n\n{\n    HWND 5c8bc4_1 = g_5c8bc4;\n    g_5c8bd4 = arg1;\n\n    if (!5c8bc4_1)\n        return arg1;\n\n    return SetWindowTextA(5c8bc4_1, arg1);\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x48f100\"\narch: \"x86\"\nname: \"FX_ExplosionSpawn_23\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x48f115 | x86 | 0x5331dc |  |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x48f100\"\narch: \"x86\"\nname: \"FX_ExplosionSpawn_23\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x401005 | x86 | QTask_CreateTask (0x401000 (x86)) |\n| 0x48f60e | x86 | FX_Igimutex (0x48f530 (x86)) |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
   ]
- }
 }

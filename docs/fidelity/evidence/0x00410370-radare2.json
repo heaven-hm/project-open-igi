@@ -1,51 +1,84 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x00410370",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x00410370"
-   },
-   {
-    "address": "0x0041046B"
-   },
-   {
-    "address": "0x00410470"
-   },
-   {
-    "address": "0x00410493"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x00410370",
-    "target": "0x00410493",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x00410370",
-    "target": "0x0041046B",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0041046B",
-    "target": "0x00410470",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x00410470",
-    "target": "0x00410470",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x00410470",
-    "target": "0x00410493",
-    "kind": "conditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00410370",
+  "symbol": "fcn.00410370",
+  "signature": "fcn.00410370 (int32_t arg_68h, int32_t arg_70h, int32_t arg_78h, int32_t arg_a0h, int32_t arg_cch, int32_t arg_258h, int32_t arg_2ech, int32_t arg_338h, int32_t arg_340h, int32_t arg_4ech, int32_t arg_650h, int8_t arg_695h, int8_t arg_696h, int8_t arg_697h, int8_t arg_698h, int32_t arg_cf8h, int8_t arg_d44h, int8_t arg_d45h, int32_t arg_d48h, int32_t arg_d4ch, int32_t arg_d50h, int32_t arg_d54h, int32_t arg_d58h, int32_t arg_d5ch, int8_t arg_d68h, int8_t arg_d78h, int8_t arg_d79h, int8_t arg_d7ah, int32_t arg_d8ch, int8_t arg_d90h, int8_t arg_d91h, int8_t arg_d92h, int8_t arg_d93h, int8_t arg_d94h, int32_t arg_d9ch, int8_t arg_da0h, int8_t arg_da1h, int32_t arg_dbch, int32_t arg_dc0h, int32_t arg_dc4h, int32_t arg_dc8h, int32_t arg_dcch, int32_t arg_dd0h, int32_t arg_dd4h, int32_t arg_dd8h, int32_t arg_ddch, int32_t arg_de0h, int32_t arg_de4h, int32_t arg_de8h, int32_t arg_2ch, int32_t arg_30h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x00410370; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 592,
+    "basic_block_count": 4,
+    "instruction_count": 146,
+    "call_convention": "cdecl",
+    "edge_count": 5,
+    "argument_count": 51,
+    "is_linear": true
+  },
+  "bytes_hex": "83ec1853555657c744241000000000c7",
+  "bytes_sha256": "0b268e8e658ccc316c0e136b5dfea989bae1fc3db9c1b2c13753f675771f9c8d",
+  "cfg": {
+    "entry": "0x00410370",
+    "nodes": [
+      {
+        "address": "0x00410370",
+        "size": 251,
+        "instructions": 69
+      },
+      {
+        "address": "0x0041046b",
+        "size": 5,
+        "instructions": 1
+      },
+      {
+        "address": "0x00410470",
+        "size": 35,
+        "instructions": 13
+      },
+      {
+        "address": "0x00410493",
+        "size": 301,
+        "instructions": 63
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x00410370",
+        "target": "0x0041046b",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00410370",
+        "target": "0x00410493",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041046b",
+        "target": "0x00410470",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00410470",
+        "target": "0x00410470",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00410470",
+        "target": "0x00410493",
+        "kind": "conditional"
+      }
+    ]
+  },
+  "disassembly": "\u250c 592: fcn.00410370 (int32_t arg_68h, int32_t arg_70h, int32_t arg_78h, int32_t arg_a0h, int32_t arg_cch, int32_t arg_258h, int32_t arg_2ech, int32_t arg_338h, int32_t arg_340h, int32_t arg_4ech, int32_t arg_650h, int8_t arg_695h, int8_t arg_696h, int8_t arg_697h, int8_t arg_698h, int32_t arg_cf8h, int8_t arg_d44h, int8_t arg_d45h, int32_t arg_d48h, int32_t arg_d4ch, int32_t arg_d50h, int32_t arg_d54h, int32_t arg_d58h, int32_t arg_d5ch, int8_t arg_d68h, int8_t arg_d78h, int8_t arg_d79h, int8_t arg_d7ah, int32_t arg_d8ch, int8_t arg_d90h, int8_t arg_d91h, int8_t arg_d92h, int8_t arg_d93h, int8_t arg_d94h, int32_t arg_d9ch, int8_t arg_da0h, int8_t arg_da1h, int32_t arg_dbch, int32_t arg_dc0h, int32_t arg_dc4h, int32_t arg_dc8h, int32_t arg_dcch, int32_t arg_dd0h, int32_t arg_dd4h, int32_t arg_dd8h, int32_t arg_ddch, int32_t arg_de0h, int32_t arg_de4h, int32_t arg_de8h, int32_t arg_2ch, int32_t arg_30h);\n\u2502 `- args(sp[0x4..0xdc0]) vars(6:sp[0x4..0x18])\n\u2502           0x00410370      83ec18         sub esp, 0x18\n\u2502           0x00410373      53             push ebx\n\u2502           0x00410374      55             push ebp\n\u2502           0x00410375      56             push esi\n\u2502           0x00410376      57             push edi\n\u2502           0x00410377      c744241000..   mov dword [var_10h], 0\n\u2502           0x0041037f      c744241400..   mov dword [var_14h], 0\n\u2502           0x00410387      c744241800..   mov dword [var_18h], 0\n\u2502           0x0041038f      c744241c00..   mov dword [var_1ch], 0\n\u2502           0x00410397      c744242000..   mov dword [var_20h], 0\n\u2502           0x0041039f      c744242400..   mov dword [var_24h], 0\n\u2502           0x004103a7      e834080500     call 0x460be0\n\u2502           0x004103ac      8b4c2430       mov ecx, dword [arg_30h]\n\u2502           0x004103b0      8b6c242c       mov ebp, dword [arg_2ch]\n\u2502           0x004103b4      25ffff0000     and eax, 0xffff\n\u2502           0x004103b9      51             push ecx\n\u2502           0x004103ba      55             push ebp\n\u2502           0x004103bb      8b0485e06a..   mov eax, dword [eax*4 + 0xa96ae0]\n\u2502           0x004103c2      ffd0           call eax\n\u2502           0x004103c4      8b1510e25600   mov edx, dword [0x56e210]   ; [0x56e210:4]=0\n\u2502           0x004103ca      55             push ebp\n\u2502           0x004103cb      52             push edx\n\u2502           0x004103cc      e8bf130b00     call 0x4c1790\n\u2502           0x004103d1      83c410         add esp, 0x10\n\u2502           0x004103d4      33db           xor ebx, ebx\n\u2502           0x004103d6      c685950600..   mov byte [arg_695h], 1\n\u2502           0x004103dd      c685960600..   mov byte [arg_696h], 1\n\u2502           0x004103e4      53             push ebx\n\u2502           0x004103e5      53             push ebx\n\u2502           0x004103e6      c685970600..   mov byte [arg_697h], 1\n\u2502           0x004103ed      55             push ebp\n\u2502           0x004103ee      c685980600..   mov byte [arg_698h], 1\n\u2502           0x004103f5      e826650000     call 0x416920\n\u2502           0x004103fa      50             push eax\n\u2502           0x004103fb      e820920c00     call 0x4d9620\n\u2502           0x00410400      53             push ebx\n\u2502           0x00410401      53             push ebx\n\u2502           0x00410402      6a02           push 2                      ; 2\n\u2502           0x00410404      55             push ebp\n\u2502           0x00410405      c785cc0000..   mov dword [arg_cch], 2\n\u2502           0x0041040f      e88c9a0700     call 0x489ea0\n\u2502           0x00410414      8d4568         lea eax, [arg_68h]\n\u2502           0x00410417      8d4d78         lea ecx, [arg_78h]\n\u2502           0x0041041a      50             push eax\n\u2502           0x0041041b      51             push ecx\n\u2502           0x0041041c      e89f340c00     call 0x4d38c0\n\u2502           0x00410421      8b7570         mov esi, dword [arg_70h]\n\u2502           0x00410424      8dbd50060000   lea edi, [arg_650h]\n\u2502           0x0041042a      83c64c         add esi, 0x4c               ; 76\n\u2502           0x0041042d      b905000000     mov ecx, 5\n\u2502           0x00410432      83c428         add esp, 0x28\n\u2502           0x00410435      8d442410       lea eax, [var_10h]\n\u2502           0x00410439      f3a5           rep movsd dword es:[edi], dword [esi]\n\u2502           0x0041043b      8b95a0000000   mov edx, dword [arg_a0h]\n\u2502           0x00410441      6a02           push 2                      ; 2\n\u2502           0x00410443      52             push edx\n\u2502           0x00410444      50             push eax\n\u2502           0x00410445      55             push ebp\n\u2502           0x00410446      e8d5640000     call 0x416920\n\u2502           0x0041044b      50             push eax\n\u2502           0x0041044c      e8ef6c0b00     call 0x4c7140\n\u2502           0x00410451      8b8dec040000   mov ecx, dword [arg_4ech]\n\u2502           0x00410457      51             push ecx\n\u2502           0x00410458      e803420500     call 0x464660\n\u2502           0x0041045d      a198df5600     mov eax, dword [0x56df98]   ; [0x56df98:4]=0\n\u2502           0x00410462      83c418         add esp, 0x18\n\u2502           0x00410465      33ff           xor edi, edi\n\u2502           0x00410467      3bc3           cmp eax, ebx\n\u2502       \u250c\u2500< 0x00410469      7e28           jle 0x410493\n\u2502       \u2502   0x0041046b      be9cdf5600     mov esi, 0x56df9c\n\u2502      \u250c\u2500\u2500> 0x00410470      8b5604         mov edx, dword [esi + 4]\n\u2502      \u254e\u2502   0x00410473      8b06           mov eax, dword [esi]\n\u2502      \u254e\u2502   0x00410475      52             push edx\n\u2502      \u254e\u2502   0x00410476      50             push eax\n\u2502      \u254e\u2502   0x00410477      8d8540030000   lea eax, [arg_340h]\n\u2502      \u254e\u2502   0x0041047d      50             push eax\n\u2502      \u254e\u2502   0x0041047e      e8edc90600     call 0x47ce70\n\u2502      \u254e\u2502   0x00410483      a198df5600     mov eax, dword [0x56df98]   ; [0x56df98:4]=0\n\u2502      \u254e\u2502   0x00410488      83c40c         add esp, 0xc\n\u2502      \u254e\u2502   0x0041048b      47             inc edi\n\u2502      \u254e\u2502   0x0041048c      83c608         add esi, 8\n\u2502      \u254e\u2502   0x0041048f      3bf8           cmp edi, eax\n\u2502      \u2514\u2500\u2500< 0x00410491      7cdd           jl 0x410470\n\u2502       \u2514\u2500> 0x00410493      6810875300     push 0x538710\n\u2502           0x00410498      6a02           push 2                      ; 2\n\u2502           0x0041049a      53             push ebx\n\u2502           0x0041049b      68b4855300     push 0x5385b4\n\u2502           0x004104a0      8d8dec020000   lea ecx, [arg_2ech]\n\u2502           0x004104a6      68c0054100     push 0x4105c0\n\u2502           0x004104ab      51             push ecx\n\u2502           0x004104ac      e8dfbc0d00     call 0x4ec190\n\u2502           0x004104b1      68f8895300     push 0x5389f8\n\u2502           0x004104b6      55             push ebp\n\u2502           0x004104b7      c785380300..   mov dword [arg_338h], 0x538870\n\u2502           0x004104c1      e86a970700     call 0x489c30\n\u2502           0x004104c6      8b1504e25600   mov edx, dword [0x56e204]   ; [0x56e204:4]=0\n\u2502           0x004104cc      53             push ebx\n\u2502           0x004104cd      53             push ebx\n\u2502           0x004104ce      6a01           push 1                      ; 1\n\u2502           0x004104d0      6878865300     push 0x538678\n\u2502           0x004104d5      8d85f80c0000   lea eax, [arg_cf8h]\n\u2502           0x004104db      6800074100     push 0x410700\n\u2502           0x004104e0      50             push eax\n\u2502           0x004104e1      899558020000   mov dword [arg_258h], edx\n\u2502           0x004104e7      e8a4bc0d00     call 0x4ec190\n\u2502           0x004104ec      83c438         add esp, 0x38\n\u2502           0x004104ef      83c8ff         or eax, 0xffffffff          ; -1\n\u2502           0x004104f2      889d440d0000   mov byte [arg_d44h], bl\n\u2502           0x004104f8      889d450d0000   mov byte [arg_d45h], bl\n\u2502           0x004104fe      5f             pop edi\n\u2502           0x004104ff      8985480d0000   mov dword [arg_d48h], eax\n\u2502           0x00410505      89854c0d0000   mov dword [arg_d4ch], eax\n\u2502           0x0041050b      8985500d0000   mov dword [arg_d50h], eax\n\u2502           0x00410511      899d540d0000   mov dword [arg_d54h], ebx\n\u2502           0x00410517      899d580d0000   mov dword [arg_d58h], ebx\n\u2502           0x0041051d      899d5c0d0000   mov dword [arg_d5ch], ebx\n\u2502           0x00410523      889d680d0000   mov byte [arg_d68h], bl\n\u2502           0x00410529      889d780d0000   mov byte [arg_d78h], bl\n\u2502           0x0041052f      889d790d0000   mov byte [arg_d79h], bl\n\u2502           0x00410535      889d7a0d0000   mov byte [arg_d7ah], bl\n\u2502           0x0041053b      899d8c0d0000   mov dword [arg_d8ch], ebx\n\u2502           0x00410541      889d900d0000   mov byte [arg_d90h], bl\n\u2502           0x00410547      889d910d0000   mov byte [arg_d91h], bl\n\u2502           0x0041054d      889d920d0000   mov byte [arg_d92h], bl\n\u2502           0x00410553      889d930d0000   mov byte [arg_d93h], bl\n\u2502           0x00410559      889d940d0000   mov byte [arg_d94h], bl\n\u2502           0x0041055f      899d9c0d0000   mov dword [arg_d9ch], ebx\n\u2502           0x00410565      889da00d0000   mov byte [arg_da0h], bl\n\u2502           0x0041056b      889da10d0000   mov byte [arg_da1h], bl\n\u2502           0x00410571      899dbc0d0000   mov dword [arg_dbch], ebx\n\u2502           0x00410577      899dc00d0000   mov dword [arg_dc0h], ebx\n\u2502           0x0041057d      899dc40d0000   mov dword [arg_dc4h], ebx\n\u2502           0x00410583      899dc80d0000   mov dword [arg_dc8h], ebx\n\u2502           0x00410589      899dcc0d0000   mov dword [arg_dcch], ebx\n\u2502           0x0041058f      899dd00d0000   mov dword [arg_dd0h], ebx\n\u2502           0x00410595      899dd40d0000   mov dword [arg_dd4h], ebx\n\u2502           0x0041059b      899dd80d0000   mov dword [arg_dd8h], ebx\n\u2502           0x004105a1      899ddc0d0000   mov dword [arg_ddch], ebx\n\u2502           0x004105a7      899de00d0000   mov dword [arg_de0h], ebx\n\u2502           0x004105ad      899de40d0000   mov dword [arg_de4h], ebx\n\u2502           0x004105b3      899de80d0000   mov dword [arg_de8h], ebx\n\u2502           0x004105b9      5e             pop esi\n\u2502           0x004105ba      5d             pop ebp\n\u2502           0x004105bb      5b             pop ebx\n\u2502           0x004105bc      83c418         add esp, 0x18\n\u2514           0x004105bf      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
   ]
- }
 }

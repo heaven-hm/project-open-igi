@@ -1,16 +1,43 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x00403870",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x00403870"
-   }
-  ],
-  "edges": []
- }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x00403870",
+  "symbol": "GOInMouInv",
+  "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x00403870",
+    "end": "0x4038d5",
+    "size_bytes": 102,
+    "basic_blocks": 1,
+    "instruction_count": 31
+  },
+  "bytes_hex": "83ec188b44242456576a0050e89f510b",
+  "bytes_sha256": "de43d0f88d951e27e809dc6931fc3df2692c584090ee244f6134033488812172",
+  "cfg": {
+    "entry": "0x00403870",
+    "nodes": [
+      {
+        "address": "0x00403870",
+        "start": "0x403870",
+        "end": "0x4038d6",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "`asm\n  int32_t GOInMouInv(int32_t arg1, float arg2 @ 0xc)\n\n0x403870  // Sig: int GO_InMouInv(int invert)\n0x403870  // Note: Toggles inverted mouse-look for the current profile. Param: invert = 1\n0x403870  // invert Y axis, 0 normal. Use in config scripts. Returns 1.\n0x403870  sub     esp, 0x18\n0x403873  mov     eax, dword [esp+0x24]\n0x403877  push    esi\n0x403878  push    edi\n0x403879  push    0x0\n0x40387b  push    eax\n0x40387c  call    Script_EvalArgInt\n0x403881  mov     edx, dword [0xbc2380]\n0x403887  add     esp, 0x8\n0x40388a  lea     esi, [esp+0x8]\n0x40388e  mov     dword [esp+0x8], 0x0\n0x403896  lea     ecx, [edx+edx*2]\n0x403899  mov     dword [esp+0x10], 0x0\n0x4038a1  shl     ecx, 0x3\n0x4038a4  sub     ecx, edx\n0x4038a6  mov     dword [esp+0x14], 0x0\n0x4038ae  mov     dword [esp+0x18], 0x567c74\n0x4038b6  lea     ecx, [ecx+ecx*2]\n0x4038b9  lea     ecx, [ecx+ecx*4]\n0x4038bc  mov     dword [ecx*4+0xbc235c], eax\n0x4038c3  mov     eax, dword [esp+0x24]\n0x4038c7  mov     ecx, 0x6\n0x4038cc  mov     edi, eax\n0x4038ce  rep movsd dword [edi], [esi]\n0x4038d0  pop     edi\n0x4038d1  pop     esi\n0x4038d2  add     esp, 0x18\n0x4038d5  retn",
+  "pseudocode": "`bn-pseudoc\n  int32_t GOInMouInv(int32_t arg1, float arg2 @ 0xc)\n\n// Sig: int GO_InMouInv(int invert)\n// Note: Toggles inverted mouse-look for the current profile. Param: invert = 1\n// invert Y axis, 0 normal. Use in config scripts. Returns 1.\n{\n    int32_t eax_1 = Script_EvalArgInt(arg2, 0);\n    int32_t bc2380_1 = g_bc2380;\n    int32_t var_18 = 0;\n    int32_t var_10 = 0;\n    int32_t var_c = 0;\n    char* var_8 = &g_script_ret_type;\n    *(bc2380_1 * 0x564 + &g_bc235c) = eax_1;\n    __builtin_memcpy(arg1, &var_18, 0x18);\n    return arg1;\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x403870\"\narch: \"x86\"\nname: \"GOInMouInv\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x40387c | x86 | 0x4b8a20 | Script_EvalArgInt (0x4b8a20 (x86)) |\n| 0x4038ce | x86 | 0xc35040 |  |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x403870\"\narch: \"x86\"\nname: \"GOInMouInv\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
+  ]
 }

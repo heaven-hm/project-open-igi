@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "kind": "native-addressability-report",
+  "candidate_path": "build-clean-win32/igi1.exe",
+  "candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
+  "candidate_build_receipt": "build-clean-win32/candidate-receipt.json",
+  "candidate_receipt_sha256": "e84c813a48f30d589e393a35ee1ed57b266971cfffb8f2a185594549724fd199",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "recorded_at": "2026-10-23T13:02:28Z",
+  "method": "i686-w64-mingw32-nm -C -n and i686-w64-mingw32-objdump -d on the linked image named by build-clean-win32/candidate-receipt.json; the receipt binds every source digest below. Call sites are direct e8 rel32 calls to the mnemonically resolved symbol; callers are resolved from the nearest preceding symbol in the nm table.",
+  "natives": [
+    {
+      "address": "0x004037C0",
+      "name": "GOInRemap",
+      "implementation": {
+        "path": "engine/src/retail/config/input_remap.cpp",
+        "sha256": "3da4376f2e3624d90e9eb65edd1d3b41c5958bb28929469cab41f7a896b41ba9"
+      },
+      "candidate_symbol": "GOInRemap",
+      "candidate_address": "0x0040C7C0",
+      "linkage": "external (nm type T)",
+      "call_sites_in_image": 1,
+      "call_sites": [
+        {
+          "call_site": "0x0040F302",
+          "caller": "igi::retail::config::decode_input_config(igi::retail::config::ScriptProgram const&, igi::retail::config::InputConfig&, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >&)",
+          "caller_entry": "0x0040EE10",
+          "note": "Calls the header's single-argument overload, which inline-forwards to the three-argument retail entry; the call targets 0x0040C7C0."
+        }
+      ],
+      "body_proof": {
+        "count_load": "0x0040C7C7 mov 0x5e1b80,%eax",
+        "action_stride": "0x0040C7D0 imul $0x564,%eax,%ebx  (345 * 4 bytes)",
+        "slot_factor": "0x0040C7D6 sub $0x1,%eax; 0x0040C7D9 imul $0x73,%eax,%eax  (115)",
+        "action_slot_load": "0x0040C7DC mov 0x5c9b80(%ebx),%ecx",
+        "action_slot_increment": "0x0040C7E4 add $0x1,%ecx",
+        "action_slot_store": "0x0040C80A mov %ecx,0x5c9b80(%ebx)",
+        "frame_argument": "0x0040C7EA mov 0x34(%esp),%eax; 0x0040C7F5 mov 0x8(%eax),%eax",
+        "remap_stores": [
+          "0x0040C7FA mov %ebp,0x5c1b80(,%edi,4)",
+          "0x0040C804 mov %edi,0x4(%esi)",
+          "0x0040C815 mov %eax,0x8(%esi)"
+        ],
+        "result_block": [
+          "0x0040C81A movl $0x0,(%edx)",
+          "0x0040C820 movl $0x0,0x4(%edx)",
+          "0x0040C827 movl $0x0,0x8(%edx)",
+          "0x0040C82E movl $0x0,0xc(%edx)",
+          "0x0040C835 movl $0x567c74,0x10(%edx)",
+          "0x0040C83C movl $0x0,0x14(%edx)"
+        ],
+        "return": "0x0040C818 mov %edx,%eax (arg1 destination); 0x0040C84A ret"
+      },
+      "caveat": "The candidate block stores all six dwords; retail never writes dwords 1 and 5. The candidate stores zero for determinism."
+    },
+    {
+      "address": "0x0048F530",
+      "name": "Main",
+      "implementation": {
+        "path": "engine/src/retail/core/retail_main.cpp",
+        "sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617"
+      },
+      "candidate_symbol": "Main",
+      "candidate_address": "0x0041FCA0",
+      "linkage": "external (nm type T)",
+      "call_sites_in_image": 0,
+      "call_sites": [],
+      "startup_calls_inside_body": [
+        {
+          "call_site": "0x0041FDD4",
+          "callee": "AppContext_SetIsActive",
+          "callee_address": "0x0041F800",
+          "argument": 1,
+          "argument_push": "0x0041FDB8 movl $0x1,(%esp)",
+          "retail_equivalent": "0x0048F613 push 1; 0x0048F615 call 0x0048F140 (returns 0x0048F61A)"
+        },
+        {
+          "call_site": "0x0041FDE0",
+          "callee": "AppContext_SetTerrainLightmapsUsed",
+          "callee_address": "0x0041E800",
+          "argument": 1,
+          "argument_push": "0x0041FDD9 movl $0x1,(%esp)",
+          "retail_equivalent": "0x0048F63B push 1; 0x0048F63D call 0x0048F260 (returns 0x0048F642)"
+        }
+      ],
+      "order_proof": "RegisterClassExW is called indirectly at 0x0041FD56 (*0x6fd8e0); the two app-context calls follow at 0x0041FDD4 and 0x0041FDE0; CreateWindowExW is called later in the same function.",
+      "caveat": "Retail makes five further startup calls between class registration and window creation (0x0048F120, 0x0048F1A0, 0x0048F1C0, 0x0048F1E0, 0x0048F240). The candidate wires only the two app-context setters."
+    },
+    {
+      "address": "0x0048F140",
+      "name": "AppContext_SetIsActive",
+      "implementation": {
+        "path": "engine/src/retail/core/frame_natives.cpp",
+        "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4"
+      },
+      "candidate_symbol": "AppContext_SetIsActive",
+      "candidate_address": "0x0041F800",
+      "linkage": "external (nm type T)",
+      "call_sites_in_image": 2,
+      "call_sites": [
+        {
+          "call_site": "0x0041FDD4",
+          "caller": "Main",
+          "caller_entry": "0x0041FCA0",
+          "note": "New startup call site; argument 1."
+        },
+        {
+          "call_site": "0x004824E1",
+          "caller": "RunRetailModelScene(HINSTANCE__*, int, std::filesystem::__cxx11::path const&, unsigned int, std::filesystem::__cxx11::path const&, bool, bool, bool)",
+          "caller_entry": "0x004817C0",
+          "note": "Previously recorded call site; argument 1."
+        }
+      ]
+    },
+    {
+      "address": "0x0048F260",
+      "name": "AppContext_SetTerrainLightmapsUsed",
+      "implementation": {
+        "path": "engine/src/retail/core/app_context.cpp",
+        "sha256": "b6ba8b5b6d1e337910c59bc20ee7a50299013b9b50cbf14f7e0f235aa0037823"
+      },
+      "candidate_symbol": "AppContext_SetTerrainLightmapsUsed",
+      "candidate_address": "0x0041E800",
+      "linkage": "external (nm type T)",
+      "call_sites_in_image": 3,
+      "call_sites": [
+        {
+          "call_site": "0x0041FDE0",
+          "caller": "Main",
+          "caller_entry": "0x0041FCA0",
+          "note": "New startup call site; argument 1."
+        },
+        {
+          "call_site": "0x0041E933",
+          "caller": "igi::retail::core::debug_command_line::Main_ParseDebugFeatPatchCmds(std::basic_string_view<char, std::char_traits<char> >)",
+          "caller_entry": "0x0041E8D0"
+        },
+        {
+          "call_site": "0x0041EAE3",
+          "caller": "igi::retail::core::debug_command_line::ApplyDebugFeatureCommandLine(std::span<std::basic_string_view<char, std::char_traits<char> > const, 4294967295u>)",
+          "caller_entry": "0x0041EA20"
+        }
+      ]
+    }
+  ],
+  "limitations": [
+    "Addressability and static reachability only; no runtime observation is recorded in this report.",
+    "Call-site counts are direct e8 calls in the linked image; indirect or tail calls are not counted.",
+    "The new Main call sites are present in the image but are not covered by any paired retail/candidate runtime capture."
+  ]
+}

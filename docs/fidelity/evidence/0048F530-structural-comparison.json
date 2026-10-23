@@ -5,10 +5,12 @@
   "function_name": "Main",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
   "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
-  "candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc",
+  "candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
   "candidate_path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
   "candidate_build_receipt": "build-clean-win32/candidate-receipt.json",
-  "generated_at": "2026-10-22T22:08:04+00:00",
+  "candidate_receipt_sha256": "e84c813a48f30d589e393a35ee1ed57b266971cfffb8f2a185594549724fd199",
+  "candidate_receipt_created_at": "2026-10-23T12:43:07.997508+00:00",
+  "generated_at": "2026-10-23T13:02:28Z",
   "retail": {
     "function_entry": "0x0048F530",
     "signature": "WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc)",
@@ -23,16 +25,17 @@
   "candidate": {
     "functions": [
       {
-        "address": "0x0041FB60",
+        "address": "0x0041FCA0",
         "name": "sym._Main",
-        "size": 789,
+        "size": 821,
         "blocks": 22,
         "edges": 31
       }
     ],
     "source": "engine/src/retail/core/retail_main.cpp",
-    "source_sha256": "7499b59e6d6e3e6b6db66428669aba25c2305f08c3d04faf64ea80167ede72e4",
-    "measured_on_candidate_sha256": "596d15c4e5372bb5b54f800ba8536c30f057025da40fc01163a43fc7b97eb5cc"
+    "source_sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617",
+    "measured_on_candidate_sha256": "846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4",
+    "measurement": "radare2 afij on build-clean-win32/igi1.exe at 0x0041FCA0; 821 bytes, 22 blocks, 31 edges. The previous image measured 789 bytes / 22 blocks / 31 edges at 0x0041FB60; the two startup calls add 32 bytes without adding a block or edge."
   },
   "cfg_comparison": {
     "bn_vs_r2_retail": 1.0,
@@ -45,7 +48,9 @@
     "GetLastError() == 0xB7 branch to shared failure block",
     "second GetLastError() == 6 branch to shared failure block",
     "MessageBoxA(NULL, \"IGI is already running.\", \"Error\", 0x10) then return 0 with no CloseHandle/ReleaseMutex",
-    "normal-path ReleaseMutex at 0x0048F8CA"
+    "normal-path ReleaseMutex at 0x0048F8CA",
+    "AppContext_SetIsActive(1) at retail 0x0048F615 / candidate 0x0041FDD4, after class registration",
+    "AppContext_SetTerrainLightmapsUsed(1) at retail 0x0048F63D / candidate 0x0041FDE0, immediately after the is-active store and before window creation"
   ],
   "divergences": [
     "Candidate Main is cdecl and takes RetailMainConfig*, while retail is __stdcall(HINSTANCE, int) with ret 0x10.",
@@ -53,15 +58,13 @@
     "Retail does not test RegisterClassA; candidate returns 1 on RegisterClassExW failure. Retail shows MessageBoxA(NULL, \"Couldn't open window\", \"Innerloop\", MB_ICONERROR) and returns 0 on CreateWindowExA failure; candidate returns 1 without a box.",
     "Retail normal teardown also calls SetForegroundWindow, UnregisterClassA and CoUninitialize; candidate does not.",
     "Retail can return the WM_QUIT wParam stored at [esp+0x14] (0x0048F8A3); candidate returns 0.",
-    "Candidate CFG: 22 blocks / 31 edges at 0x0041FB60 versus retail 26 blocks / 37 edges. Only the mutex prefix and failure block were compared structurally."
+    "Candidate CFG: 22 blocks / 31 edges at 0x0041FCA0 versus retail 26 blocks / 37 edges. Only the mutex prefix, failure block and the two app-context startup calls were compared structurally.",
+    "Retail calls 0x0048F120, 0x0048F1A0, 0x0048F1C0, 0x0048F1E0 and 0x0048F240 between class registration and window creation; the candidate wires only the two app-context setters, so the intervening startup order is incomplete."
   ],
   "limitations": [
-    "The candidate mutex prefix was compared instruction-by-instruction. The remainder of Main is a host adaptation and was not claimed equivalent.",
+    "The candidate mutex prefix and the two app-context calls were compared instruction-by-instruction. The remainder of Main is a host adaptation and was not claimed equivalent.",
     "Binary Ninja and radare2 CFG scores are retail-image structure only. They do not measure candidate equivalence.",
     "angr CFGFast is approximate and splits blocks differently; only the exact entry and unresolved-jump result are used as evidence.",
     "No paired retail/candidate runtime capture exists for this native, so no behavioral equivalence is claimed."
-  ],
-  "candidate_receipt_sha256": "61c35e99bd11fd717803bd6560ebe422bafbf77efad6d00786160ad535347708",
-  "candidate_receipt_created_at": "2026-10-22T22:09:28.154970+00:00",
-  "candidate_rebound_at": "2026-10-22T22:18:42+00:00"
+  ]
 }

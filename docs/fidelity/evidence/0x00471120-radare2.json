@@ -1,38 +1,69 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x00471120",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x00471120"
-   },
-   {
-    "address": "0x0047113E"
-   },
-   {
-    "address": "0x00471154"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x00471120",
-    "target": "0x0047113E",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x0047113E",
-    "target": "0x0047113E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0047113E",
-    "target": "0x00471154",
-    "kind": "conditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00471120",
+  "symbol": "fcn.00471120",
+  "signature": "fcn.00471120 (int32_t arg_14h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x00471120; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 350,
+    "basic_block_count": 3,
+    "instruction_count": 113,
+    "call_convention": "cdecl",
+    "edge_count": 3,
+    "argument_count": 1,
+    "is_linear": true
+  },
+  "bytes_hex": "515355568b74241433db57885c241288",
+  "bytes_sha256": "0597a9f2a9f921ec086ae6d173523f3d1ceeefe75eb13bdc4c81c609405bef47",
+  "cfg": {
+    "entry": "0x00471120",
+    "nodes": [
+      {
+        "address": "0x00471120",
+        "size": 30,
+        "instructions": 11
+      },
+      {
+        "address": "0x0047113e",
+        "size": 22,
+        "instructions": 8
+      },
+      {
+        "address": "0x00471154",
+        "size": 298,
+        "instructions": 94
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x00471120",
+        "target": "0x0047113e",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0047113e",
+        "target": "0x0047113e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0047113e",
+        "target": "0x00471154",
+        "kind": "conditional"
+      }
+    ]
+  },
+  "disassembly": "\u250c 350: fcn.00471120 (int32_t arg_14h);\n\u2502 `- args(sp[0x4..0x4]) vars(2:sp[0x1..0x2])\n\u2502           0x00471120      51             push ecx\n\u2502           0x00471121      53             push ebx\n\u2502           0x00471122      55             push ebp\n\u2502           0x00471123      56             push esi\n\u2502           0x00471124      8b742414       mov esi, dword [arg_14h]\n\u2502           0x00471128      33db           xor ebx, ebx\n\u2502           0x0047112a      57             push edi\n\u2502           0x0047112b      885c2412       mov byte [var_12h], bl\n\u2502           0x0047112f      885c2413       mov byte [var_13h], bl\n\u2502           0x00471133      8dbe542b0000   lea edi, [esi + 0x2b54]\n\u2502           0x00471139      bd0c000000     mov ebp, 0xc                ; 12\n\u2502       \u250c\u2500> 0x0047113e      680ad7a33c     push 0x3ca3d70a\n\u2502       \u254e   0x00471143      6a1e           push 0x1e                   ; 30\n\u2502       \u254e   0x00471145      57             push edi\n\u2502       \u254e   0x00471146      e895010000     call fcn.004712e0\n\u2502       \u254e   0x0047114b      83c40c         add esp, 0xc\n\u2502       \u254e   0x0047114e      83c714         add edi, 0x14               ; 20\n\u2502       \u254e   0x00471151      4d             dec ebp\n\u2502       \u2514\u2500< 0x00471152      75ea           jne 0x47113e\n\u2502           0x00471154      68747c5600     push 0x567c74               ; 't|V'\n\u2502           0x00471159      53             push ebx\n\u2502           0x0047115a      53             push ebx\n\u2502           0x0047115b      e870a3ffff     call fcn.0046b4d0\n\u2502           0x00471160      8b4010         mov eax, dword [eax + 0x10]\n\u2502           0x00471163      50             push eax\n\u2502           0x00471164      e8575d0400     call fcn.004b6ec0\n\u2502           0x00471169      83c410         add esp, 0x10\n\u2502           0x0047116c      894620         mov dword [esi + 0x20], eax\n\u2502           0x0047116f      68747c5600     push 0x567c74               ; 't|V'\n\u2502           0x00471174      53             push ebx\n\u2502           0x00471175      53             push ebx\n\u2502           0x00471176      e855a3ffff     call fcn.0046b4d0\n\u2502           0x0047117b      8b4810         mov ecx, dword [eax + 0x10]\n\u2502           0x0047117e      51             push ecx\n\u2502           0x0047117f      e83c5d0400     call fcn.004b6ec0\n\u2502           0x00471184      83c410         add esp, 0x10\n\u2502           0x00471187      894634         mov dword [esi + 0x34], eax\n\u2502           0x0047118a      8a15a8025400   mov dl, byte [str.WNES]     ; [0x5402a8:1]=87 ; \"WNES\"\n\u2502           0x00471190      8d442412       lea eax, [var_12h]\n\u2502           0x00471194      50             push eax\n\u2502           0x00471195      53             push ebx\n\u2502           0x00471196      53             push ebx\n\u2502           0x00471197      8854241e       mov byte [var_12h], dl\n\u2502           0x0047119b      e830a3ffff     call fcn.0046b4d0\n\u2502           0x004711a0      8b4810         mov ecx, dword [eax + 0x10]\n\u2502           0x004711a3      51             push ecx\n\u2502           0x004711a4      e8175d0400     call fcn.004b6ec0\n\u2502           0x004711a9      83c410         add esp, 0x10\n\u2502           0x004711ac      894624         mov dword [esi + 0x24], eax\n\u2502           0x004711af      8a15a9025400   mov dl, byte [0x5402a9]     ; [0x5402a9:1]=78 ; \"NES\"\n\u2502           0x004711b5      8d442412       lea eax, [var_12h]\n\u2502           0x004711b9      50             push eax\n\u2502           0x004711ba      53             push ebx\n\u2502           0x004711bb      53             push ebx\n\u2502           0x004711bc      8854241e       mov byte [var_12h], dl\n\u2502           0x004711c0      e80ba3ffff     call fcn.0046b4d0\n\u2502           0x004711c5      8b4810         mov ecx, dword [eax + 0x10]\n\u2502           0x004711c8      51             push ecx\n\u2502           0x004711c9      e8f25c0400     call fcn.004b6ec0\n\u2502           0x004711ce      83c410         add esp, 0x10\n\u2502           0x004711d1      894628         mov dword [esi + 0x28], eax\n\u2502           0x004711d4      8a15aa025400   mov dl, byte [0x5402aa]     ; [0x5402aa:1]=69 ; \"ES\"\n\u2502           0x004711da      8d442412       lea eax, [var_12h]\n\u2502           0x004711de      50             push eax\n\u2502           0x004711df      53             push ebx\n\u2502           0x004711e0      53             push ebx\n\u2502           0x004711e1      8854241e       mov byte [var_12h], dl\n\u2502           0x004711e5      e8e6a2ffff     call fcn.0046b4d0\n\u2502           0x004711ea      8b4810         mov ecx, dword [eax + 0x10]\n\u2502           0x004711ed      51             push ecx\n\u2502           0x004711ee      e8cd5c0400     call fcn.004b6ec0\n\u2502           0x004711f3      83c410         add esp, 0x10\n\u2502           0x004711f6      89462c         mov dword [esi + 0x2c], eax\n\u2502           0x004711f9      8a15ab025400   mov dl, byte [0x5402ab]     ; [0x5402ab:1]=83 ; \"S\"\n\u2502           0x004711ff      8d442412       lea eax, [var_12h]\n\u2502           0x00471203      50             push eax\n\u2502           0x00471204      53             push ebx\n\u2502           0x00471205      53             push ebx\n\u2502           0x00471206      8854241e       mov byte [var_12h], dl\n\u2502           0x0047120a      e8c1a2ffff     call fcn.0046b4d0\n\u2502           0x0047120f      8b4810         mov ecx, dword [eax + 0x10]\n\u2502           0x00471212      51             push ecx\n\u2502           0x00471213      e8a85c0400     call fcn.004b6ec0\n\u2502           0x00471218      8d9638010000   lea edx, [esi + 0x138]\n\u2502           0x0047121e      895e60         mov dword [esi + 0x60], ebx\n\u2502           0x00471221      895e68         mov dword [esi + 0x68], ebx\n\u2502           0x00471224      895e70         mov dword [esi + 0x70], ebx\n\u2502           0x00471227      52             push edx\n\u2502           0x00471228      894630         mov dword [esi + 0x30], eax\n\u2502           0x0047122b      895e64         mov dword [esi + 0x64], ebx\n\u2502           0x0047122e      895e6c         mov dword [esi + 0x6c], ebx\n\u2502           0x00471231      895e74         mov dword [esi + 0x74], ebx\n\u2502           0x00471234      c7467c0000..   mov dword [esi + 0x7c], 0x3f800000 ; [0x3f800000:4]=-1\n\u2502           0x0047123b      899e80000000   mov dword [esi + 0x80], ebx\n\u2502           0x00471241      899e84000000   mov dword [esi + 0x84], ebx\n\u2502           0x00471247      e8d4340400     call fcn.004b4720\n\u2502           0x0047124c      8d864c010000   lea eax, [esi + 0x14c]\n\u2502           0x00471252      6a18           push 0x18                   ; 24\n\u2502           0x00471254      50             push eax\n\u2502           0x00471255      e826000000     call fcn.00471280\n\u2502           0x0047125a      83c41c         add esp, 0x1c\n\u2502           0x0047125d      b96e000000     mov ecx, 0x6e               ; 'n' ; 110\n\u2502           0x00471262      33c0           xor eax, eax\n\u2502           0x00471264      8dbe442c0000   lea edi, [esi + 0x2c44]\n\u2502           0x0047126a      899e48010000   mov dword [esi + 0x148], ebx\n\u2502           0x00471270      899e44010000   mov dword [esi + 0x144], ebx\n\u2502           0x00471276      f3ab           rep stosd dword es:[edi], eax\n\u2502           0x00471278      5f             pop edi\n\u2502           0x00471279      5e             pop esi\n\u2502           0x0047127a      5d             pop ebp\n\u2502           0x0047127b      5b             pop ebx\n\u2502           0x0047127c      59             pop ecx\n\u2514           0x0047127d      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
   ]
- }
 }

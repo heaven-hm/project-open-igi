@@ -1,24 +1,527 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x004037C0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "3da4376f2e3624d90e9eb65edd1d3b41c5958bb28929469cab41f7a896b41ba9",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/native_unicorn_runner.py",
+  "sha256": "c72f27122c033c58fb3eac13ef70c96d3f4a3d11d897624bbb4f9e795ac041f2",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/scripts/native_unicorn_runner.py",
+   "--address",
+   "0x004037C0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/engine/src/retail/config/input_remap.cpp",
+   "--implementation-sha256",
+   "3da4376f2e3624d90e9eb65edd1d3b41c5958bb28929469cab41f7a896b41ba9",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow"
+  ]
+ },
+ "result": "passed",
+ "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 1e-06,
+  "relative": 1e-06
+ },
+ "limits": "The frame reader 0x004B8A20 is stubbed to return the case argument, so the differential covers the native's arithmetic, remap stores, action-slot increment, result-block build and returned destination pointer, not the retail QVM reader itself. Result-block dwords 1 and 5 are never written by retail (stack residue); the comparison records only dwords 0, 2, 3 and 4 and the candidate's deterministic zero for dwords 1 and 5 is a documented port deviation. Case counts stay below the candidate's action-table and remap-table bounds.",
+ "tests_total": 9,
+ "tests_passed": 9,
+ "tests_failed": 0,
  "cases": [
   {
-   "id": "static-structure",
+   "id": "go-in-remap-nominal-first",
    "categories": [
-    "structure"
+    "nominal"
    ],
    "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
+    "args": [
+     1,
+     10,
+     20,
+     30,
+     1,
+     0
+    ],
+    "initial_state": {
+     "seed": 0
     }
    },
-   "note": "The candidate GOInRemap reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      10,
+      20,
+      30
+     ],
+     "action_slot_after": 2,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      10,
+      20,
+      30
+     ],
+     "action_slot_after": 2,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-nominal-zero-args",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     2,
+     0,
+     0,
+     0,
+     2,
+     1
+    ],
+    "initial_state": {
+     "seed": 1
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 3,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 3,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-nominal-high-bits",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     3,
+     4294967295,
+     2147483648,
+     1073741824,
+     3,
+     2
+    ],
+    "initial_state": {
+     "seed": 2
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      4294967295,
+      2147483648,
+      0
+     ],
+     "action_slot_after": 4,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      4294967295,
+      2147483648,
+      0
+     ],
+     "action_slot_after": 4,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-nominal-small",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     5,
+     1,
+     2,
+     3,
+     5,
+     3
+    ],
+    "initial_state": {
+     "seed": 3
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      1,
+      2,
+      3
+     ],
+     "action_slot_after": 6,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      1,
+      2,
+      3
+     ],
+     "action_slot_after": 6,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-nominal-mid",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     12,
+     286331153,
+     572662306,
+     858993459,
+     12,
+     4
+    ],
+    "initial_state": {
+     "seed": 4
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      286331153,
+      572662306,
+      858993459
+     ],
+     "action_slot_after": 13,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      286331153,
+      572662306,
+      858993459
+     ],
+     "action_slot_after": 13,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-nominal-last",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     20,
+     2147483647,
+     4294967295,
+     1073741823,
+     20,
+     5
+    ],
+    "initial_state": {
+     "seed": 5
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      2147483647,
+      4294967295,
+      1073741823
+     ],
+     "action_slot_after": 21,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      2147483647,
+      4294967295,
+      1073741823
+     ],
+     "action_slot_after": 21,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-boundary-count-zero-wrap",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     115,
+     0,
+     0,
+     0,
+     0,
+     6
+    ],
+    "initial_state": {
+     "seed": 6
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 116,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      0,
+      0,
+      0
+     ],
+     "action_slot_after": 116,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-boundary-action-zero",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     0,
+     3735928559,
+     3405691582,
+     3221225473,
+     1,
+     7
+    ],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      3735928559,
+      3405691582,
+      1
+     ],
+     "action_slot_after": 1,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      3735928559,
+      3405691582,
+      1
+     ],
+     "action_slot_after": 1,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "go-in-remap-boundary-mask-bit30",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     200,
+     4,
+     5,
+     1073741825,
+     7,
+     8
+    ],
+    "initial_state": {
+     "seed": 8
+    }
+   },
+   "reference_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      4,
+      5,
+      1
+     ],
+     "action_slot_after": 201,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": null,
+    "state_delta": {
+     "return_is_destination": 1,
+     "remap_entry": [
+      4,
+      5,
+      1
+     ],
+     "action_slot_after": 201,
+     "result_word0": 0,
+     "result_word2": 0,
+     "result_word3": 0,
+     "result_word4": 5667956
+    },
+    "side_effects": []
+   }
   }
- ]
+ ],
+ "adapter": {
+  "path": "scripts/native_adapters/0x004037C0_GOInRemap.py",
+  "sha256": "a93db53eccf81980909352ba7697276e4da8a20748012b854fb67e0e082ecc7a",
+  "note": "The runner loads this address adapter to map the case onto the retail globals 0x00BC2380/0x00BC2358/0x00BC25BC and the candidate GOInRemap entry. The retail frame reader 0x004B8A20 is stubbed inside the adapter so the differential exercises the native arithmetic, remap stores, action-slot increment, six-dword result block and returned destination pointer."
+ }
 }

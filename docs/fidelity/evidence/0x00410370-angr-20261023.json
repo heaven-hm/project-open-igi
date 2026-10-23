@@ -1,0 +1,155 @@
+{
+  "schema_version": 1,
+  "kind": "angr-analysis",
+  "tool": "angr",
+  "angr_version": "10.0.4.post1",
+  "analysis": "CFGFast",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00410370",
+  "result": "pass",
+  "has_unresolved_jumps": false,
+  "block_count": 20,
+  "nodes": [
+    "0x00410370",
+    "0x004103AC",
+    "0x004103C4",
+    "0x004103D1",
+    "0x004103FA",
+    "0x00410400",
+    "0x00410414",
+    "0x00410421",
+    "0x00410439",
+    "0x0041043B",
+    "0x0041044B",
+    "0x00410451",
+    "0x0041045D",
+    "0x0041046B",
+    "0x00410470",
+    "0x00410483",
+    "0x00410493",
+    "0x004104B1",
+    "0x004104C6",
+    "0x004104EC"
+  ],
+  "edges": [
+    {
+      "kind": "unknown",
+      "source": "0x00410370",
+      "target": "0x004103AC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004103AC",
+      "target": "0x004103C4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004103C4",
+      "target": "0x004103D1"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004103D1",
+      "target": "0x004103FA"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004103FA",
+      "target": "0x00410400"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410400",
+      "target": "0x00410414"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410414",
+      "target": "0x00410421"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410421",
+      "target": "0x00410439"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410439",
+      "target": "0x00410439"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410439",
+      "target": "0x0041043B"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041043B",
+      "target": "0x0041044B"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041044B",
+      "target": "0x00410451"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410451",
+      "target": "0x0041045D"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041045D",
+      "target": "0x0041046B"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041045D",
+      "target": "0x00410493"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0041046B",
+      "target": "0x00410470"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410470",
+      "target": "0x00410483"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410483",
+      "target": "0x00410470"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410483",
+      "target": "0x00410493"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00410493",
+      "target": "0x004104B1"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004104B1",
+      "target": "0x004104C6"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004104C6",
+      "target": "0x004104EC"
+    }
+  ],
+  "recovery_mode": "automatic",
+  "reason": null,
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "limitations": [
+    "CFGFast is approximate static analysis",
+    "This result does not prove semantic or behavioral equivalence",
+    "CFGFast is approximate static analysis and does not prove semantic or behavioral equivalence."
+  ]
+}

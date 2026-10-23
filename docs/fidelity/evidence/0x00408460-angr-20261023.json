@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "kind": "angr-analysis",
+  "tool": "angr",
+  "angr_version": "10.0.4.post1",
+  "analysis": "CFGFast",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00408460",
+  "result": "pass",
+  "has_unresolved_jumps": false,
+  "block_count": 34,
+  "nodes": [
+    "0x00408460",
+    "0x004084A2",
+    "0x004084AE",
+    "0x004084C1",
+    "0x004084CF",
+    "0x004084E2",
+    "0x004084EA",
+    "0x004084FD",
+    "0x00408503",
+    "0x0040857A",
+    "0x00408587",
+    "0x00408589",
+    "0x004085AC",
+    "0x004085B6",
+    "0x004085C3",
+    "0x004085CB",
+    "0x004085E1",
+    "0x0040860F",
+    "0x00408621",
+    "0x0040863A",
+    "0x0040863E",
+    "0x00408650",
+    "0x00408661",
+    "0x00408675",
+    "0x00408681",
+    "0x00408695",
+    "0x004086A1",
+    "0x004086AB",
+    "0x004086B0",
+    "0x004086C4",
+    "0x004086CF",
+    "0x004086EF",
+    "0x00408705",
+    "0x0040870E"
+  ],
+  "edges": [
+    {
+      "kind": "unknown",
+      "source": "0x00408460",
+      "target": "0x004084A2"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408460",
+      "target": "0x004084AE"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084A2",
+      "target": "0x004084AE"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084AE",
+      "target": "0x004084C1"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084AE",
+      "target": "0x004084CF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084C1",
+      "target": "0x004084CF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084CF",
+      "target": "0x004084E2"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084CF",
+      "target": "0x004084EA"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084E2",
+      "target": "0x004084EA"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084EA",
+      "target": "0x004084FD"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084EA",
+      "target": "0x00408503"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004084FD",
+      "target": "0x00408503"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408503",
+      "target": "0x0040857A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408503",
+      "target": "0x0040870E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040857A",
+      "target": "0x00408587"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040857A",
+      "target": "0x00408589"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408587",
+      "target": "0x00408589"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408589",
+      "target": "0x004085AC"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408589",
+      "target": "0x004085B6"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085AC",
+      "target": "0x004085CB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085B6",
+      "target": "0x004085C3"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085B6",
+      "target": "0x004085CB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085C3",
+      "target": "0x004085CB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085CB",
+      "target": "0x004085E1"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085E1",
+      "target": "0x0040860F"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004085E1",
+      "target": "0x004086CF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040860F",
+      "target": "0x00408621"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408621",
+      "target": "0x0040863A"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040863A",
+      "target": "0x0040863E"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040863A",
+      "target": "0x00408650"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x0040863E",
+      "target": "0x00408650"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408650",
+      "target": "0x00408661"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408650",
+      "target": "0x004086CF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408661",
+      "target": "0x00408675"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408661",
+      "target": "0x00408681"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408675",
+      "target": "0x004086AB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408681",
+      "target": "0x00408695"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408681",
+      "target": "0x004086A1"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x00408695",
+      "target": "0x004086AB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086A1",
+      "target": "0x004086AB"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086AB",
+      "target": "0x004086B0"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086B0",
+      "target": "0x004086C4"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086C4",
+      "target": "0x004086CF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086CF",
+      "target": "0x004086EF"
+    },
+    {
+      "kind": "unknown",
+      "source": "0x004086EF",
+      "target": "0x00408705"
+    }
+  ],
+  "recovery_mode": "automatic",
+  "reason": null,
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "limitations": [
+    "CFGFast is approximate static analysis",
+    "This result does not prove semantic or behavioral equivalence",
+    "CFGFast is approximate static analysis and does not prove semantic or behavioral equivalence."
+  ]
+}
