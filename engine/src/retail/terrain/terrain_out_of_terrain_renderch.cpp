@@ -43,7 +43,7 @@
 #include <cstddef>
 #include <cstring>
 
-#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/core/retail_error.hpp"
 
 namespace igi::retail::terrain
 {
@@ -165,7 +165,7 @@ extern "C" TerrainRenderChunk* Terrain_OutOfTerrainRenderch(const void* texture_
     const std::uint32_t count = g_a7f880;                      // 0x005146DD
     if (count == g_a7f884)
     {
-        error::Error_Show("Out of terrain renderchunks"); // retail callee 0x004AF7B0 (Debug_Error)
+        Debug_Error("Out of terrain renderchunks"); // retail callee 0x004AF7B0 (Debug_Error)
         halt_forever();                                    // 0x005146F9 jmp $
     }
 

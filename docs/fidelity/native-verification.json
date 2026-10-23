@@ -59238,8 +59238,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/dynobj/local_models_mef.cpp",
-        "sha256": "c41e38440d81333cbce4963827c438b89ab6ba330610bf69ca2112f13a418144",
-        "signature": "unknown"
+        "sha256": "27fe5eb16ad461a6bd47c09a3aba6bd2dec5f284956a3ac01a3cba7d049aff35",
+        "signature": "void* __cdecl DynObj_LoadModelMesh(const char* model_name)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/dynobj/004CF390-DynObj_LoadModelMesh.cpp",
@@ -59251,12 +59251,15 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+          "rationale": "Retail 0x004CF390 is cdecl with one stack argument and returns the heap model record in EAX; the port keeps that signature, return value and ownership."
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
           "2026-10-22 acceptance audit: x86 emulator fixtures and a build do not satisfy paired game acceptance; semantic review is blocked and no reviewed typed runtime contract exists. Retained runtime_tests are emulator observations, not paired game parity.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004CF390-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
+          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004CF390-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+          "0x004CF390 is cdecl with one name argument ([esp+0x20]); its only caller 0x004CF35A pushes one name. It returns the 0x18-byte heap model record it allocates, so the free function keeps the retail return value and ownership.",
+          "The inline DynObj_LocalModelsSMef alias was removed; DynObj_LoadPackageMeshes now calls the 0x004CF390 body directly, matching retail 0x004CF35A.",
+          "2026-10-23 symbol-completion pass: retail disassembly establishes the free-function ABI (arguments, buffer ownership, return value and callers) and the std::span member overload that shared this catalog name was deleted from the candidate, leaving exactly one candidate symbol for the name (nm -C). The in-memory parser the diagnostic harness still needs was moved out of the catalog namespace to a host-only name and is not bound to any retail address. The retained behavioral artifact is an angr/VEX emulator differential bound to the pre-pass implementation digest; it is supplementary evidence and does not establish paired runtime parity."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -59292,11 +59295,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004CF390-semantic-review.json",
-          "evidence_sha256": "a8e6c7690db5535cfc3e7e3c4bb19f7d609afb20c7e0c0441b7cdffe01d67564"
+          "evidence_sha256": "da8bff933e212d1226e18b5b34a2d3256c53b402fc7f5c4f634978872a8ea7eb"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004CF390-build.json",
-          "evidence_sha256": "4a783a07c0a09e5f16e4c0fb2189854d5b7e49ba1c6f3b39843e886660be1e1e"
+          "evidence_sha256": "0f3a98261ed4c7b2fab03e55856f3d8a567760da94bab6d6fa739a13ba2c51e1"
         },
         "behavioral": {
           "status": "PASS",
@@ -59305,6 +59308,16 @@
           "oracle": "retail-binary-execution",
           "tests_passed": 11,
           "tests_total": 11
+        },
+        "recorded_at": "2026-10-23T17:12:00Z",
+        "symbol_identity": {
+          "catalog_name": "DynObj_LoadModelMesh",
+          "candidate_symbol": "igi::retail::dynobj::DynObj_LoadModelMesh(char const*)",
+          "candidate_address": "0x00421720",
+          "nm_candidate_symbols_for_catalog_name": 1,
+          "removed_scaffolding": "igi::retail::model::MefModel::DynObj_LoadModelMesh(std::span<std::byte const>)",
+          "host_only_replacement": "igi::retail::model::MefModel_ParseContainer(std::span<std::byte const>)",
+          "exact_match": true
         }
       },
       "status": "STRUCTURALLY_VERIFIED",
@@ -59600,8 +59613,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/dynobj/mtp_package_loader.cpp",
-        "sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
-        "signature": "unknown"
+        "sha256": "53d7de82382a91b647aa9aa2eae5c934e0e3ac0ff9168dbc359e3ad602d3c5b9",
+        "signature": "void* __cdecl DynObj_LoadModelTexturePackage(void* context, const char* arg2, std::int32_t arg3)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/dynobj/004CF080-DynObj_LoadModelTexturePackage.cpp",
@@ -59613,11 +59626,13 @@
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+          "rationale": "Retail 0x004CF080 is cdecl with three stack arguments; the port keeps that order and width. Retail 0x004CF390 is cdecl with one stack argument; the port keeps it. Both are verified against the retail instructions and the single call site of each entry."
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004CF080-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
+          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004CF080-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+          "0x004CF080 is cdecl(context, name, texture_flag): arg1 [esp+0x124], arg2 [esp+0x12c], arg3 [esp+0x130]; its only caller 0x004CF02F pushes (context, name, 1). The context is caller-owned (0x4C bytes allocated at 0x004CEFA9); the callee adds instance records and lists, never the context, and the caller ignores the callee return value.",
+          "2026-10-23 symbol-completion pass: retail disassembly establishes the free-function ABI (arguments, buffer ownership, return value and callers) and the std::span member overload that shared this catalog name was deleted from the candidate, leaving exactly one candidate symbol for the name (nm -C). The in-memory parser the diagnostic harness still needs was moved out of the catalog namespace to a host-only name and is not bound to any retail address. The retained behavioral artifact is an angr/VEX emulator differential bound to the pre-pass implementation digest; it is supplementary evidence and does not establish paired runtime parity."
         ],
         "behavioral_runner": {
           "path": "scripts/mtp_package_diff_runner.py",
@@ -59653,11 +59668,11 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004CF080-semantic-review.json",
-          "evidence_sha256": "aa8a464047a97e70c6b53fe84b0cceb3375120c913b659d7d9a4e28b3fe0acea"
+          "evidence_sha256": "b06e8fede9c6c5002f0c20ccb206f7f6823ae0d9cb8ccbf659c370bdceb7efae"
         },
         "build": {
           "evidence_path": "docs/fidelity/evidence/0x004CF080-build.json",
-          "evidence_sha256": "d1a55ec36c6e931691fff8e9e6d3e6d1c49c5fcc2c54e27135112328eebaba19"
+          "evidence_sha256": "8495f6c2b9469cc412e166fa561e052babc56fcf16f39fb022cceb5d156e4715"
         },
         "behavioral": {
           "status": "PASS",
@@ -59666,6 +59681,16 @@
           "oracle": "retail-binary-execution",
           "tests_passed": 8,
           "tests_total": 8
+        },
+        "recorded_at": "2026-10-23T17:12:00Z",
+        "symbol_identity": {
+          "catalog_name": "DynObj_LoadModelTexturePackage",
+          "candidate_symbol": "igi::retail::dynobj::DynObj_LoadModelTexturePackage(void*, char const*, int)",
+          "candidate_address": "0x00421E60",
+          "nm_candidate_symbols_for_catalog_name": 1,
+          "removed_scaffolding": "igi::retail::model::MtpPackage::DynObj_LoadModelTexturePackage(std::span<std::byte const>)",
+          "host_only_replacement": "igi::retail::model::MtpPackage_ParseContainer(std::span<std::byte const>)",
+          "exact_match": true
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
@@ -63485,8 +63510,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
-        "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "void __cdecl DefineHumanPlayerGeneral(void* qvm_context, const float* arguments, unsigned int argument_count)"
+        "sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+        "signature": "extern \"C\" void* IGI_RETAIL_CDECL DefineHumanPlayerGeneral(void* context, std::int32_t argument_slot, void* frame)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/misc/00410070-DefineHumanPlayerGeneral.cpp",
@@ -63494,11 +63519,11 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
-          "result": "mismatch",
-          "rationale": "Retail 0x00410070 fetches each script argument through the accessor 0x004B8A50, writes eight named values plus two tables, converts index 6 to an integer, and copies a six-dword result block into its first stack argument. The candidate takes a flat float array plus a count, returns void, never calls 0x004B8A50, and applies only the 1/108000 factor."
+          "result": "abi-recovered",
+          "rationale": "Retail is cdecl with three 4-byte stack arguments and returns the context argument in EAX. The body reads the frame from [esp+0x34] at 0x00410075 and the result block from [esp+0x30] at 0x0041017E; the second argument is never read. The script VM's native-call site (0x004BD8F3-0x004BD8FE) pushes the VM value-block slot, the symbol record's +0x18 dword and the argument frame, then copies six dwords from the returned EAX, which fixes the layout. The parameter names are the port's; retail has no symbols."
         },
         "limitations": [
           "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to ANALYZED. The source body does not implement the retail behavior and the translation unit is not linked; DefineHumanPlayerGeneral is absent from build-clean-win32/igi1.exe.",
@@ -63528,32 +63553,65 @@
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x00410070-radare2.json",
-          "evidence_sha256": "e0a23bd2f632386f5e1766eff4c1cd50196753a37bf2378dfab964c3a4c73b6c",
+          "evidence_sha256": "1579c20839fac6c6550b6249776e4bfd2ebefdd2abfb6f37a8f28d2bbb32de5f",
           "evidence_id": "r2:live:0x00410070",
-          "signature": "not restated"
+          "signature": "fcn.00410070 ();"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x00410070-binaryninja.json",
           "evidence_sha256": "ce8fca9cf94d446c14774c402dd28e2118fdb39b2199d7298fae3a329e48db82",
-          "evidence_id": "bn:live:0x00410070",
-          "signature": "not restated"
+          "evidence_id": "bn:stored:0x00410070",
+          "signature": "not restated by the stored record",
+          "signature_note": "Reused from the record already in this directory; Binary Ninja MCP was unreachable this session (127.0.0.1:24642 refused), so no new Binary Ninja run is claimed."
         },
         "cfg_similarity": 1.0,
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x00410070-build-20261023.json",
-          "evidence_sha256": "436692a39b8d1bd82d723d56c78a7c44822390c4c611f51c30a3994b92081646"
+          "evidence_path": "docs/fidelity/evidence/0x00410070-build.json",
+          "evidence_sha256": "07fdf0ba91bac20f0dccf306066278f7223c2c588e9f8b91203f6387ee392e4f"
         },
-        "recorded_at": "2026-10-23T15:45:00+05:30",
-        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only; no candidate CFG is measured because the source does not implement the retail body and is not linked.",
+        "recorded_at": "2026-10-23T17:35:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only (0.35*node_jaccard + 0.65*edge_jaccard); it is not candidate equivalence, and the candidate object graph is compared separately in the structural-comparison evidence.",
         "source_audit": {
           "evidence_path": "docs/fidelity/evidence/0x00410070-source-audit-20261023.json",
           "evidence_sha256": "be57edd4883e3685fbe9cd69e6690393b4e112e63e37f9c22142e5c6cecc3782"
         },
         "link_blockers": {
           "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
-          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
-        }
-      }
+          "evidence_sha256": "c3984def42ef64b4a235b0b13b0188ffc190749bcf9972deb3a66f6b2c14e76b"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/0x00410070-angr.json",
+          "evidence_sha256": "165599eecd27d6819473bd61ce59226363289b9795b5fa1e852ba9607dde4555",
+          "entry_recovered": true,
+          "blocks": 18,
+          "edges": 20,
+          "unresolved_jumps": false,
+          "note": "Live angr 10.0.4.post1 CFGFast of the exact retail entry through scripts/angr_analyze.py; approximate structural evidence only."
+        },
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00410070-semantic-review.json",
+          "evidence_sha256": "06b5abc854d727793417138b04b92a93b839b26e1aef9680a4e6ad78926b7403"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/0x00410070-structural-comparison.json",
+          "evidence_sha256": "743f33d3e45b980c38ff1c84bcde447005708d68421aa0f2e520438ee8f45561",
+          "result": "structurally-equivalent-with-one-documented-fold"
+        },
+        "behavioral_note": "docs/fidelity/evidence/0x00410070-behavioral.json records result=not_run: the unit is not in the linked candidate, so no paired capture exists."
+      },
+      "linked_into_igi": false,
+      "cmake_target": "igi_humanplayer_defines_object (OBJECT library; compile evidence only)",
+      "notes": [
+        "Returns the context argument; the 0x18-byte value block is {int32 1, undefined +0x04, float64 1.0, type 0x00567C74}.",
+        "The port's +0x04 block dword is zero where retail copies stack residue.",
+        "std::rintl reproduces fistp's rounding under the current x87 control word; the compiler adds a control-word save, frndint and a restore around the conversion.",
+        "Retail's table-B base set-up block 0x0041015F is folded into the candidate's table-B loop."
+      ],
+      "outstanding": [
+        "The unit cannot link: the four config natives and the 45-function QVM execute closure are unported (see the link-blocker report).",
+        "No paired retail/candidate runtime capture exists.",
+        "Binary Ninja was unavailable for new evidence this session; stored Binary Ninja records were reused and the new CFG, angr and byte evidence came from radare2 6.2.0, angr 10.0.4.post1 and direct image reads."
+      ]
     },
     {
       "address": "0x004137A0",
@@ -63561,8 +63619,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
-        "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "void __cdecl HumanPlayer_LoadParameters(void)"
+        "sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+        "signature": "extern \"C\" std::int32_t IGI_RETAIL_CDECL HumanPlayer_LoadParameters()"
       },
       "game_natives": {
         "path": "scripts/GameNatives/humanplayer/004137A0-HumanPlayer_LoadParameters.cpp",
@@ -63570,11 +63628,11 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "ANALYZED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
-          "result": "mismatch",
-          "rationale": "Retail 0x004137A0 is int32_t __cdecl with no arguments: Qvm_Load on LOCAL:humanplayer/humanplayer.qsc, then Qvm_Execute and Qvm_Cleanup and return of the cleanup result, or Debug_Error followed by a non-returning self-loop. The candidate is void(void) and probes the filesystem instead of loading the QVM script."
+          "result": "abi-recovered",
+          "rationale": "No arguments; cdecl; EAX on the success path is Qvm_Cleanup's return value (0x004137C0-0x004137C4 leaves it untouched) and the failure path never returns. The only retail caller 0x004020D3 discards the value."
         },
         "limitations": [
           "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to ANALYZED. The source body does not implement the retail behavior and the translation unit is not linked; HumanPlayer_LoadParameters is absent from build-clean-win32/igi1.exe.",
@@ -63604,32 +63662,64 @@
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x004137A0-radare2.json",
-          "evidence_sha256": "7dfd9444bde7e6c8ba3d88dafa5d8c4082ecd58a8b072e34f9b413f67e0559ab",
+          "evidence_sha256": "60180412234748b2a14ee9313aa63cdb2c9701e750bd502a8bb03bd4d2d331eb",
           "evidence_id": "r2:live:0x004137A0",
-          "signature": "not restated"
+          "signature": "fcn.004137a0 ();"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x004137A0-binaryninja.json",
           "evidence_sha256": "1b4a1e706070bf879830f2c49f39f901f2575eeaf70d1fa70e58378d0b4c38fc",
-          "evidence_id": "bn:live:0x004137A0",
-          "signature": "not restated"
+          "evidence_id": "bn:stored:0x004137A0",
+          "signature": "not restated by the stored record",
+          "signature_note": "Reused from the record already in this directory; Binary Ninja MCP was unreachable this session (127.0.0.1:24642 refused), so no new Binary Ninja run is claimed."
         },
         "cfg_similarity": 1.0,
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004137A0-build-20261023.json",
-          "evidence_sha256": "f2be135e9f06d0009e2ef87e20db682afc60af145b195d542b22b93e170738c5"
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-build.json",
+          "evidence_sha256": "813dcfdd2d4a0c5446e277ee4f07a5bb0484f7b1b4a3b6675055069c55492ee1"
         },
-        "recorded_at": "2026-10-23T15:45:00+05:30",
-        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only; no candidate CFG is measured because the source does not implement the retail body and is not linked.",
+        "recorded_at": "2026-10-23T17:35:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only (0.35*node_jaccard + 0.65*edge_jaccard); it is not candidate equivalence, and the candidate object graph is compared separately in the structural-comparison evidence.",
         "source_audit": {
           "evidence_path": "docs/fidelity/evidence/0x004137A0-source-audit-20261023.json",
           "evidence_sha256": "7743a0741663ce73528d9305179a7da8c8b3c8cfbd8678d7c6b408d3bc2baf96"
         },
         "link_blockers": {
           "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
-          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
-        }
-      }
+          "evidence_sha256": "c3984def42ef64b4a235b0b13b0188ffc190749bcf9972deb3a66f6b2c14e76b"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-angr.json",
+          "evidence_sha256": "932f44d0aec7196ec25de18239618e9ba0d355eef23563465d04a517c5eb73ab",
+          "entry_recovered": true,
+          "blocks": 8,
+          "edges": 8,
+          "unresolved_jumps": false,
+          "note": "Live angr 10.0.4.post1 CFGFast of the exact retail entry through scripts/angr_analyze.py; approximate structural evidence only."
+        },
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-semantic-review.json",
+          "evidence_sha256": "4020d212efe3984d0c3649f3a2e5db8c0551b5976bb301b796bb4864851f37ce"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/0x004137A0-structural-comparison.json",
+          "evidence_sha256": "18649fe7b250f4e725aa13ef29c661f7b22219ddf7c5b0e295e6c9a9cce6c564",
+          "result": "structurally-equivalent"
+        },
+        "behavioral_note": "docs/fidelity/evidence/0x004137A0-behavioral.json records result=not_run: the unit is not in the linked candidate, so no paired capture exists."
+      },
+      "linked_into_igi": false,
+      "cmake_target": "igi_humanplayer_defines_object (OBJECT library; compile evidence only)",
+      "notes": [
+        "Loads the exact retail literal LOCAL:humanplayer/humanplayer.qsc, then Qvm_Execute and Qvm_Cleanup, and returns the cleanup result.",
+        "The failure branch reports HumanPlayer_LoadParameters: Couldn't load script \"%s\" through Debug_Error and then halts in a self-loop, matching 0x004137D7.",
+        "The earlier invented std::filesystem/Resource_OpenFile probe and the COMMON/humanplayer/humanplayer.qsc path were removed; retail has neither."
+      ],
+      "outstanding": [
+        "The unit cannot link: the four config natives and the 45-function QVM execute closure are unported (see the link-blocker report).",
+        "No paired retail/candidate runtime capture exists.",
+        "Binary Ninja was unavailable for new evidence this session; stored Binary Ninja records were reused and the new CFG, angr and byte evidence came from radare2 6.2.0, angr 10.0.4.post1 and direct image reads."
+      ]
     },
     {
       "address": "0x00405850",
@@ -63637,8 +63727,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/script/humanplayer_defines.cpp",
-        "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-        "signature": "std::int32_t __cdecl Config_Read(void* path)"
+        "sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+        "signature": "extern \"C\" std::int32_t IGI_RETAIL_CDECL Config_Read(const char* path)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/config/00405850-Config_Read.cpp",
@@ -63646,11 +63736,11 @@
         "signature": "unresolved"
       },
       "verification": {
-        "status": "BUILD_VERIFIED",
+        "status": "STRUCTURALLY_VERIFIED",
         "signature_comparison": {
           "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Retail is int32_t __cdecl with one stack argument passed unchanged to Qvm_Load. The candidate is extern \"C\" __cdecl std::int32_t Config_Read(void* path); the single argument and the 32-bit return are preserved, and the pointee type (a NUL-terminated path) is inferred from Qvm_Load's string use."
+          "result": "abi-recovered",
+          "rationale": "The single stack argument is pushed straight into Qvm_Load at 0x00405855-0x00405856 (the config path). EAX is the final Config_Language_2 result on both branches; the only retail caller 0x004020C9 discards it."
         },
         "limitations": [
           "2026-10-23 link audit: status lowered from STRUCTURALLY_VERIFIED to BUILD_VERIFIED. The translation unit is not in the CMake igi target and the target link fails on Qvm_Execute (0x004B85B0), Config_SaveGraphicOptions (0x00405300), Config_SaveSoundOptions (0x004058A0), Config_NoD3DDriversWithHard (0x00405980) and Config_Language_2 (0x00405B30); Config_Read is absent from build-clean-win32/igi1.exe.",
@@ -63679,32 +63769,64 @@
         "selected_decompiler": "binary_ninja",
         "radare2": {
           "evidence_path": "docs/fidelity/evidence/0x00405850-radare2.json",
-          "evidence_sha256": "2bb1f6708cab775ecb3ff576aab010090cd7d016ed2bd3bc461f2053a760b4e8",
+          "evidence_sha256": "b762853cfde42aa65bbfb51e007d3a3b98e44cfd93b1e9af19387b35ddc952b7",
           "evidence_id": "r2:live:0x00405850",
-          "signature": "not restated"
+          "signature": "fcn.00405850 ();"
         },
         "binary_ninja": {
           "evidence_path": "docs/fidelity/evidence/0x00405850-binaryninja.json",
           "evidence_sha256": "f1ddc00a008e8ebc31d7b270a2c2a01b280bbd9b26b5321c0b01b4e9ce8378af",
-          "evidence_id": "bn:live:0x00405850",
-          "signature": "not restated"
+          "evidence_id": "bn:stored:0x00405850",
+          "signature": "not restated by the stored record",
+          "signature_note": "Reused from the record already in this directory; Binary Ninja MCP was unreachable this session (127.0.0.1:24642 refused), so no new Binary Ninja run is claimed."
         },
         "cfg_similarity": 1.0,
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x00405850-build-20261023.json",
-          "evidence_sha256": "e5ca1084db4d5e9fe583d334abcee2e57f2296fa878c505569a24a7143cc1ca1"
+          "evidence_path": "docs/fidelity/evidence/0x00405850-build.json",
+          "evidence_sha256": "f79d06f69fcbae3eb80b70a2734bd5fb236d6708584029801a8951996c8625d1"
         },
-        "recorded_at": "2026-10-23T15:45:00+05:30",
-        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only (0.35*node_jaccard + 0.65*edge_jaccard); it is not candidate equivalence, and no candidate CFG is measured because the translation unit is not linked.",
+        "recorded_at": "2026-10-23T17:35:00+05:30",
+        "cfg_similarity_basis": "Retail Binary Ninja-vs-Radare2 graph score only (0.35*node_jaccard + 0.65*edge_jaccard); it is not candidate equivalence, and the candidate object graph is compared separately in the structural-comparison evidence.",
         "source_audit": {
           "evidence_path": "docs/fidelity/evidence/0x00405850-source-audit-20261023.json",
           "evidence_sha256": "5c210a56ac5f1c5cfd7baa6c88d9aacee578f0d2bf97968d71dba1c012411a1f"
         },
         "link_blockers": {
           "evidence_path": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json",
-          "evidence_sha256": "76a56796873eb437cbcc460bf94f56cf27bfc5584b0c47440cb16a2b7e59c160"
-        }
-      }
+          "evidence_sha256": "c3984def42ef64b4a235b0b13b0188ffc190749bcf9972deb3a66f6b2c14e76b"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/0x00405850-angr.json",
+          "evidence_sha256": "a220e31c4216ed9b3e4f04356022b7ccb362280dfd94b465aa67759f8b93de65",
+          "entry_recovered": true,
+          "blocks": 13,
+          "edges": 12,
+          "unresolved_jumps": false,
+          "note": "Live angr 10.0.4.post1 CFGFast of the exact retail entry through scripts/angr_analyze.py; approximate structural evidence only."
+        },
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x00405850-semantic-review.json",
+          "evidence_sha256": "60fda0bbcbb98638eecaadabcc476a2403ae8d37b47c49960422dd63f8e97262"
+        },
+        "structural_comparison": {
+          "evidence_path": "docs/fidelity/evidence/0x00405850-structural-comparison.json",
+          "evidence_sha256": "a222cd6c23499b1a27f458ac28356d954e85b37876625c53d6ae440d15057ab6",
+          "result": "structurally-equivalent"
+        },
+        "behavioral_note": "docs/fidelity/evidence/0x00405850-behavioral.json records result=not_run: the unit is not in the linked candidate, so no paired capture exists."
+      },
+      "linked_into_igi": false,
+      "cmake_target": "igi_humanplayer_defines_object (OBJECT library; compile evidence only)",
+      "notes": [
+        "Success: Qvm_Execute, Qvm_Cleanup, then 0x004058A0, 0x00405980, 0x00405B30. Failure: 0x00405300, 0x004058A0, 0x00405980, 0x00405B30. The graphic-options save is failure-only.",
+        "The candidate tail-calls Config_Language_2; the value returned is the same.",
+        "The four callees are untranscribed retail natives and block the link."
+      ],
+      "outstanding": [
+        "The unit cannot link: the four config natives and the 45-function QVM execute closure are unported (see the link-blocker report).",
+        "No paired retail/candidate runtime capture exists.",
+        "Binary Ninja was unavailable for new evidence this session; stored Binary Ninja records were reused and the new CFG, angr and byte evidence came from radare2 6.2.0, angr 10.0.4.post1 and direct image reads."
+      ]
     },
     {
       "address": "0x0048F1D0",

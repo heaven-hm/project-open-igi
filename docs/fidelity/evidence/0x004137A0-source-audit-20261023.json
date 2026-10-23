@@ -1,81 +1,102 @@
 {
-  "schema_version": 1,
-  "kind": "native-source-audit",
-  "address": "0x004137A0",
-  "name": "HumanPlayer_LoadParameters",
-  "recorded_at": "2026-10-23T10:10:00Z",
-  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "candidate_executable": {
-    "path": "build-clean-win32/igi1.exe",
-    "sha256": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
-    "symbol_present": false
+ "schema_version": 1,
+ "kind": "native-source-audit",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "recorded_at": "2026-10-23T17:30:00Z",
+ "candidate_executable": {
+  "path": "build-clean-win32/igi1.exe",
+  "sha256": "14ae511a32c0b5a78dd3faccb03934557945eed70b8c4be1ab4c4890bc782451",
+  "symbol_present": false
+ },
+ "selected_decompiler": "binary_ninja",
+ "tool_availability": "Binary Ninja MCP was not reachable at 127.0.0.1:24642 during this session (connection refused; the application starts without an MCP listener). The Binary Ninja records already in this directory (0x00410070-binaryninja.json, 0x004137A0-binaryninja.json, 0x00405850-binaryninja.json) were reused; the new CFG, angr and byte evidence in this task came from radare2 6.2.0, angr 10.0.4.post1 and direct memory reads of the retail image. No new Binary Ninja run is claimed.",
+ "candidate_source": {
+  "path": "engine/src/retail/script/humanplayer_defines.cpp",
+  "sha256": "95dabb86465fc432ca88cfe9945f20d4eb35b2f2d749aae4d7a5c3b33f22732d",
+  "header_path": "engine/include/igi/retail/script/humanplayer_defines.hpp",
+  "header_sha256": "e98081a9b3ec4dd9b30fd06b45edc0a4b3508d1fd43a3ed6d6e2795136fe7eef",
+  "object_path": "build-clean-win32/CMakeFiles/igi_humanplayer_defines_object.dir/engine/src/retail/script/humanplayer_defines.cpp.obj",
+  "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243",
+  "linked_into_target": false
+ },
+ "build": {
+  "executed": true,
+  "result": "passed",
+  "command": "cmake --build build-clean-win32 -j8",
+  "target": "igi_humanplayer_defines_object",
+  "object_sha256": "827929b450dbf40cd117a0217f11f8193268cbe62cc86964ef2f161f8bfa5243"
+ },
+ "link": {
+  "attempted": true,
+  "result": "failed",
+  "undefined_symbol_count": 17,
+  "report": "docs/fidelity/evidence/humanplayer-defines-link-blockers.json"
+ },
+ "supersedes": "This file previously recorded the audit of the earlier invented body (source sha256 020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9). That body and its findings are replaced; the corrected source is audited here.",
+ "address": "0x004137A0",
+ "name": "HumanPlayer_LoadParameters",
+ "retail": {
+  "function_entry": "0x004137A0",
+  "range": "0x004137A0-0x004137D4",
+  "size_bytes": 57,
+  "basic_blocks": 4,
+  "edges": 4,
+  "instruction_count": 19,
+  "calling_convention": "cdecl",
+  "prototype_evidence": "No arguments are read; the only caller 0x004020D3 pushes nothing. EAX on the success path is Qvm_Cleanup's return value, which 0x004137C0-0x004137C4 leaves untouched; the failure path never returns, so the declared int32_t return is only observable on success.",
+  "callees": [
+   {
+    "callsite": "0x004137A6",
+    "callee": "Qvm_Load (0x004B80B0)"
+   },
+   {
+    "callsite": "0x004137BA",
+    "callee": "Qvm_Execute (0x004B85B0)"
+   },
+   {
+    "callsite": "0x004137C0",
+    "callee": "Qvm_Cleanup (0x004B83D0)"
+   },
+   {
+    "callsite": "0x004137D4",
+    "callee": "Debug_Error (0x004AF7B0)"
+   }
+  ],
+  "string_literals": [
+   {
+    "address": "0x00539188",
+    "text": "LOCAL:humanplayer/humanplayer.qsc"
+   },
+   {
+    "address": "0x00539150",
+    "text": "HumanPlayer_LoadParameters: Couldn't load script \"%s\""
+   }
+  ],
+  "halt": {
+   "address": "0x004137D7",
+   "bytes": "ebfe",
+   "instruction": "jmp 0x004137D7, a self-loop with no exit"
   },
-  "selected_decompiler": "binary_ninja",
-  "retail": {
-    "function_entry": "0x004137A0",
-    "range": "0x004137A0-0x004137D9",
-    "size_bytes": 57,
-    "basic_blocks": 4,
-    "definition": "int32_t(void)",
-    "strings": [
-      {"address": "0x00539188", "value": "LOCAL:humanplayer/humanplayer.qsc"},
-      {"address": "0x00539150", "value": "HumanPlayer_LoadParameters: Couldn't load script \"%s\""}
-    ],
-    "call_sites": [
-      {"callsite": "0x004137A6", "callee": "0x004B80B0", "name": "Qvm_Load"},
-      {"callsite": "0x004137B5", "callee": "0x004B85B0", "name": "Qvm_Execute"},
-      {"callsite": "0x004137BB", "callee": "0x004B83D0", "name": "Qvm_Cleanup"},
-      {"callsite": "0x004137CF", "callee": "0x004AF7B0", "name": "Debug_Error"}
-    ],
-    "behavior": "Calls Qvm_Load(\"LOCAL:humanplayer/humanplayer.qsc\"). When the result is non-null it calls Qvm_Execute(qvm), then returns the result of Qvm_Cleanup(qvm). When the result is null it calls Debug_Error(\"HumanPlayer_LoadParameters: Couldn't load script \\\"%s\\\"\", path) and then loops forever at 0x004137D7, so the failure path never returns.",
-    "tool_evidence": "Binary Ninja MCP bn_function_info, bn_function_callees, bn_function_disassembly and bn_function_decompile on retail igi.exe at 0x004137A0."
-  },
-  "candidate_source": {
-    "path": "engine/src/retail/script/humanplayer_defines.cpp",
-    "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
-    "header_path": "engine/include/igi/retail/script/humanplayer_defines.hpp",
-    "header_sha256": "e2ee46d8189c74a98ec1f2a359ec2d25e2d2d5247b2ab9eb67a1d57e192aaf60",
-    "signature": "void __cdecl HumanPlayer_LoadParameters(void)",
-    "lines": "85-102",
-    "linked_into_target": false
-  },
-  "comparison": {
-    "result": "divergent",
-    "findings": [
-      "Retail calls Qvm_Load on the fixed path LOCAL:humanplayer/humanplayer.qsc. The candidate never calls Qvm_Load; it probes COMMON/humanplayer/humanplayer.qsc (and HUMANPLAYER/.QSC variants) with std::filesystem::exists and then calls Resource_OpenFile.",
-      "Retail calls Qvm_Execute and Qvm_Cleanup on the loaded script and returns the Qvm_Cleanup result. The candidate opens a resource and returns without executing or releasing it.",
-      "Retail reports a missing script through Debug_Error with the retail message and then never returns; the candidate silently returns.",
-      "Retail is int32_t(void); the candidate is declared and defined void.",
-      "The candidate's behavior comment mislabels 0x004B80B0/0x004B85B0/0x004B83D0 as file natives; they are Qvm_Load, Qvm_Execute and Qvm_Cleanup.",
-      "The record's behavioral case claims the candidate 'returns the retail's null when the chunk is absent and the retail's payload pointer when it is present', which describes neither the source nor retail."
-    ]
-  },
-  "build": {
-    "executed": true,
-    "result": "passed",
-    "command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -std=c++20 -I engine/include -c engine/src/retail/script/humanplayer_defines.cpp -o /tmp/hp-standalone.o",
-    "target": "Windows x86 (Intel 80386 COFF object)",
-    "object_path": "/tmp/hp-standalone.o",
-    "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7"
-  },
-  "link": {
-    "attempted": true,
-    "result": "failed",
-    "exit_code": 1,
-    "undefined_symbols": [
-      {"symbol": "Qvm_Execute", "retail_address": "0x004B85B0", "diagnostics": 1},
-      {"symbol": "Config_SaveGraphicOptions", "retail_address": "0x00405300", "diagnostics": 1},
-      {"symbol": "Config_SaveSoundOptions", "retail_address": "0x004058A0", "diagnostics": 2},
-      {"symbol": "Config_NoD3DDriversWithHard", "retail_address": "0x00405980", "diagnostics": 2},
-      {"symbol": "Config_Language_2", "retail_address": "0x00405B30", "diagnostics": 2}
-    ],
-    "additional_missing_after_correction": [
-      {"symbol": "Qvm_Execute", "retail_address": "0x004B85B0", "note": "A retail-faithful body needs Qvm_Load, Qvm_Execute, Qvm_Cleanup and Debug_Error. Qvm_Load, Qvm_Cleanup and Debug_Error exist in the target; Qvm_Execute does not."}
-    ]
-  },
-  "limitations": [
-    "The candidate is absent from the linked image and does not implement the retail behavior.",
-    "No paired retail/candidate runtime capture exists for this address.",
-    "Correcting the source to the retail body would still not link until Qvm_Execute (0x004B85B0) exists in the target."
+  "behavior": "Load LOCAL:humanplayer/humanplayer.qsc; when the load returns a VM, execute it, clean it up and return the cleanup result; when it returns null, report the fatal error and halt."
+ },
+ "previous_audit_errors": [
+  "The earlier candidate probed the resource system with std::filesystem::exists and Resource_OpenFile and then executed COMMON/humanplayer/humanplayer.qsc. Retail performs no such probe and the shipped path is LOCAL:humanplayer/humanplayer.qsc, so that body was invented and has been removed."
+ ],
+ "comparison": {
+  "result": "match",
+  "findings": [
+   "The corrected candidate calls Qvm_Load with the exact retail literal, then Qvm_Execute and Qvm_Cleanup in that order, and returns Qvm_Cleanup's result.",
+   "The failure branch calls Debug_Error with the exact format and the same path, then loops with no exit condition, matching the retail self-loop.",
+   "The guessing probe, the resource-system call and the wrong path are gone."
+  ],
+  "documented_differences": [
+   "The candidate restores a callee-saved register before returning where retail re-pushes its esi copy."
   ]
+ },
+ "status": "STRUCTURALLY_VERIFIED",
+ "limitations": [
+  "No runtime capture exists, and the failure path halts, so the fatal branch cannot be observed in the candidate.",
+  "Qvm_Execute and Qvm_GetFloatArg live in engine/src/retail/script/qvm_execute.cpp, whose own ten retail callees are unported, so the unit does not link.",
+  "Binary Ninja was unavailable for new evidence this session; its existing record was reused."
+ ]
 }

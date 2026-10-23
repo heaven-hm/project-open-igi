@@ -18,15 +18,19 @@
 // stays terminal without moving the self-loop into this function. The callbacks are zero in the
 // file image; 0x00498900 installs g_936268=0x004988D0 and g_93626C=0x00498930, and the exit
 // callback's CRT exit(1) -> ExitProcess(1) path never returns once installed. Error_GetGlobals
-// exposes the port-owned storage for retail 0x00936268/0x0093626C/0x00A84640, shared with
-// Error_Show in engine/src/retail/error/error_show.cpp (the same retail VA).
+// exposes the port-owned storage for retail 0x00936268/0x0093626C/0x00A84640, defined in
+// engine/src/retail/error/error_show.cpp together with String_VFormat (0x004A5702).
+//
+// This is the only candidate symbol for retail 0x004AF7B0. The former Error_Show body in
+// engine/src/retail/error/error_show.cpp duplicated this same retail VA under a second name and
+// has been removed; its callers now call Debug_Error, which is the name retail uses.
 extern "C" int Debug_Error(const char* format, ...)
 {
     namespace error = igi::retail::error;
 
     // Retail reads the single pair of callbacks at 0x00936268/0x0093626C and formats into the
     // single buffer at 0x00A84640. Error_GetGlobals exposes the port-owned storage for exactly
-    // those retail globals, shared with Error_Show (the raw body of the same retail VA).
+    // those retail globals; String_VFormat is the shared formatter from error_show.cpp.
     error::ErrorGlobalsState& globals = error::Error_GetGlobals();
 
     if (globals.g_936268 != nullptr)

@@ -1,8 +1,8 @@
 #pragma once
 
 #include <cstdarg>
-#include <cstddef>
 #include <cstdint>
+#include <cstdio>
 
 namespace igi::retail::error {
 
@@ -18,43 +18,33 @@ namespace igi::retail::error {
 // CFG: radare2 4 blocks/4 edges; Binary Ninja 4 blocks; 100% structural agreement.
 // Confidence: high for exact unbounded CRT vsprintf semantics and NUL termination.
 // Signature: x86 cdecl int32_t(char* buffer, const char* format, va_list args); ported with matching parameters.
-// Usage/tests: called by Error_Show (0x004AF7B0); exercised by error_show_test.cpp.
+// Usage: called by Debug_Error (0x004AF7B0) to append the formatted fatal message.
 std::int32_t String_VFormat(char* buffer, const char* format, std::va_list args);
 
-// Native: sprintf() - VA 0x004A53B3 - complete port (CRT stream sprintf wrapper).
-// Behavior: initializes a stack CRT _iobuf stream over `buffer` with count `0x7FFFFFFF` and
-//           flags `0x42` (_IOWRT | _IOSTRG), passes `&arg_10h` (variadic argument list) to
-//           `0x004A7720` (`_output`), NUL-terminates `*ptr = 0`, and returns
-//           the formatted length.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004A53B3-0x004A5405, 82 bytes,
-//                 digest 903e5756370f8719b677989dccf6159c0e5d23a86e6b57b11d9e7669453b7042;
-//                 CLEAN/game/004A53B3-sprintf.c.
-// CFG: radare2 4 blocks/4 edges; Binary Ninja 4 blocks; 100% structural agreement.
-// Confidence: high for exact variadic sprintf behavior used across retail path builders and Error_Show.
-// Signature: x86 cdecl int32_t(char* buffer, const char* format, ...); ported with matching parameters.
-// Usage/tests: called by Error_Show (0x004AF7B0), DynObj_LocalModelsSMef (0x004CF390), and DynObj_LoadModelTexturePackage (0x004CF080); exercised by error_show_test.cpp.
-std::int32_t sprintf(char* buffer, const char* format, ...);
+// Native: sprintf() - VA 0x004A53B3 - CRT-visible function, no port-owned body.
+// Retail: the statically linked MSVC CRT sprintf. 0x004A53B3-0x004A5405 (82 bytes), x86 cdecl
+//         variadic `int sprintf(char* buffer, const char* format, ...)`: builds a stack _iobuf over
+//         `buffer` (counter 0x7FFFFFFF, flags 0x42 = _IOWRT|_IOSTRG), passes `&arg_10h` (the
+//         variadic list) to `_output` (0x004A7720), NUL-terminates `*ptr` unless `_output` drove
+//         the counter negative, flushes via `_flsbuf` (0x004A760B) in that case, and returns the
+//         formatting result. Binary Ninja reports 4 blocks and 484 callsites across the game;
+//         radare2 recovers the same 82-byte, 4-block/4-edge graph; angr CFGFast recovers the same
+//         entry with no unresolved jumps.
+// Port: retail calls the CRT entry directly, so the port has no wrapper and no second symbol.
+//       `using ::sprintf` binds `igi::retail::error::sprintf` to the toolchain's CRT-visible
+//       sprintf (mingw-w64/UCRT in the built candidate); the candidate therefore exposes exactly
+//       one `sprintf` symbol, the same CRT entry its retail callsites use. The candidate does not
+//       reproduce retail's _iobuf/_output instruction sequence; that limitation is recorded in
+//       the evidence.
+// Evidence: docs/fidelity/evidence/0x004A53B3-{binaryninja,radare2,angr-20261023,semantic-review,build}.json.
+using ::sprintf;
 
-// Native: Error_Show() - VA 0x004AF7B0 - complete port.
-// Behavior: if callback `g_936268` is non-null, formats `"Fatal error:\n\n"` into global buffer
-//           `0x00A84640` via sprintf (0x004A53B3), scans `0x00A84640` with `repne scasb`
-//           (`i = 0xFFFFFFFF`) to find its NUL terminator (`~i - 1`), formats `format` and variadic
-//           arguments at `0x00A84640 + (~i - 1)` via String_VFormat (0x004A5702), and calls
-//           `g_936268(0x00A84640)`. Then reads callback `g_93626c`; if zero returns 0, otherwise
-//           tail-calls `g_93626c()`.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004AF7B0-0x004AF809, 89 bytes,
-//                 digest 1c20410541c863f90a17d98f1088afa496d65e0a6a62a8f4447fbd46ac37d72e;
-//                 CLEAN/error/004AF7B0-Error_Show.c.
-// CFG: radare2 5 blocks/5 edges; Binary Ninja 5 blocks; 100% structural agreement.
-// Confidence: high for exact branch, `repne scasb` length arithmetic, buffer append, and callback tailcall.
-// Signature: x86 cdecl int32_t(const char* format, ...); ported with matching parameters.
-// Usage/tests: retail fatal-error formatter/dispatcher; exercised by error_show_test.cpp.
+// Port-owned storage for retail globals 0x00936268 (display callback), 0x0093626C (exit
+// callback) and 0x00A84640 (message buffer). The fatal dispatcher that consumes them is
+// Debug_Error (0x004AF7B0), defined in engine/src/retail/core/retail_error.cpp.
 using ErrorDisplayFn = void (*)(const char* text);
 using ErrorExitFn = std::int32_t (*)();
 
-std::int32_t Error_Show(const char* format, ...);
-
-// Port-owned storage for retail globals 0x00936268, 0x0093626C, and 0x00A84640.
 struct ErrorGlobalsState {
     ErrorDisplayFn g_936268 = nullptr;
     ErrorExitFn g_93626c = nullptr;

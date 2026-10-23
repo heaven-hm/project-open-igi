@@ -138,9 +138,16 @@ class MefModel
     std::optional<IlffChunk> portal_faces;
     std::optional<IlffChunk> portal_vertices;
 
-    [[nodiscard]] static MefModel DynObj_LoadModelMesh(std::span<const std::byte> file_bytes);
     [[nodiscard]] MefRenderChunks render_chunks() const noexcept;
 };
+
+// Host adapter: parses an in-memory OCEM/ILFF model container into this struct for the
+// diagnostic scene harness. It is NOT the retail native and carries no retail symbol: the
+// native DynObj_LoadModelMesh (0x004CF390) is
+// igi::retail::dynobj::DynObj_LoadModelMesh(const char*), which formats
+// "LOCAL:models/<name>.mef", loads the resource itself and returns the retail 6-dword model
+// record. This host parser only converts bytes the harness already holds.
+[[nodiscard]] MefModel MefModel_ParseContainer(std::span<const std::byte> file_bytes);
 
 // retail routine 0x0049FB10 - 0x0049FB10 - accepts only MESH+0x20 values 0, 1, and 3.
 // Evidence: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01;

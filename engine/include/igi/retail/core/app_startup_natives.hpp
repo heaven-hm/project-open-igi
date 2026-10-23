@@ -38,9 +38,10 @@ extern char const* AppTitle;
 // mov eax,[esp+4]; mov [0x005C8BC8],eax; ret -- the argument bits are the return value.
 char const* IGI_RETAIL_CDECL StoreCommandLine(char const* command_line);
 
-// Native at VA 0x0048F080.
+// Native at VA 0x0048F080 (record name GetCommandLine; the C identifier must
+// not collide with the Win32 GetCommandLine macro).
 // mov eax,[0x005C8BC8]; ret
-char const* IGI_RETAIL_CDECL GetRetailCommandLine();
+char const* IGI_RETAIL_CDECL GameCommandLine();
 
 // Native at VA 0x0048F0D0.
 // mov eax,[esp+4]; mov [0x005C8BC0],eax; ret -- the argument bits are the return value.

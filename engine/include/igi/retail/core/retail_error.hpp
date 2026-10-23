@@ -1,6 +1,8 @@
 #pragma once
 
-// Native: Debug_Error; retail VA 0x004AF7B0.
+// Native: Debug_Error; retail VA 0x004AF7B0. The catalog name for this address is Debug_Error
+// and this is the only candidate symbol bound to it; the former Error_Show name was port
+// scaffolding for the same retail body and was removed.
 // Artifact: retail igi.exe, SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01,
 //   1,384,448 bytes, image base 0x00400000, entry 0x004A50F5, machine i386.
 // Tools/evidence (single decompiler: Binary Ninja, plus Radare2 CFG and angr CFGFast):
@@ -17,7 +19,7 @@
 //     reported returning because the no-callback path ends in `retn`.
 // Signature: x86 cdecl `std::int32_t Debug_Error(const char* format, ...)`; the first stack
 //   argument at [esp+4] is a printf-style format string, the remaining stack arguments are its
-//   substitutions. Callers clean the stack (`add esp,N`), which confirms cdecl.
+//   substitutions. All 274 retail call sites clean the stack (`add esp,N`), which confirms cdecl.
 // Behavior: if the display callback global 0x00936268 is non-null, `sprintf` writes the literal
 //   `"Fatal error:\n\n"` to the global buffer 0x00A84640, a `repne scasb` scan finds the NUL,
 //   `String_VFormat` (0x004A5702) appends the formatted message at that offset, and the display
@@ -40,13 +42,15 @@
 //   runs the registered atexit callbacks and calls ExitProcess(1) (or TerminateProcess with code 1
 //   when shutdown has already begun). The callbacks are both zero in the file image, so before the
 //   installer runs the raw entry returns 0 without reporting anything.
-// Scope/status: this header declares the retail-named C symbol only; the callback storage and the
-//   global message buffer live in igi/retail/error/error_show.hpp and error_show.cpp, so this entry
-//   and Error_Show (the same retail VA) share one copy of 0x00936268/0x0093626C/0x00A84640.
+// Scope/status: this header declares the retail-named C symbol only. The callback storage and the
+//   global message buffer live in igi/retail/error/error_show.hpp and error_show.cpp (that unit
+//   hosts the shared error state and String_VFormat; the fatal dispatcher itself is defined here),
+//   so the port keeps one copy of 0x00936268/0x0093626C/0x00A84640.
 //   ANALYZED and STRUCTURALLY_VERIFIED against the bytes above; BUILD_VERIFIED for MinGW x86.
 //   No runtime observation was made in this task.
-// Fatal-call contract: the candidate entry reproduces the retail fatal call sequence, not just the
-//   bare body: after the report and after the exit callback (if any) it never returns. That makes
-//   the caller-side `jmp $` guarantee explicit and prevents a caller from continuing past a fatal
-//   report. The raw 0x004AF7B0 no-callback return is preserved by Error_Show, not by this symbol.
+// Fatal-call contract: the candidate entry reproduces the retail body, including the genuine
+//   return path: it returns 0 when no exit callback is installed and otherwise tail-dispatches
+//   through the callback. Retail's installed exit callback never returns, and the examined
+//   callers append `jmp $`, so a fatal call sequence stays terminal in the initialized game
+//   without moving a self-loop into this function.
 extern "C" int Debug_Error(const char* format, ...);

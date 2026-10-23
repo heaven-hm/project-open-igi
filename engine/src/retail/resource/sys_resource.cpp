@@ -1,6 +1,6 @@
 #include "igi/retail/resource/sys_resource.hpp"
 
-#include "igi/retail/error/error_show.hpp"
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/mem/heap_list.hpp"
 #include "igi/retail/resource/is_resource_loaded.hpp"
 #include "igi/retail/resource/resource_lifecycle.hpp"
@@ -324,7 +324,7 @@ void LinkChildIntoContainer(ResourceHashNode* parent, ResourceHashNode* child)
 // Native: Resource_RegisterIlffContainer; retail VA 0x004B60F0; signature/calling convention unknown.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B60F0-0x004B637F, 655 bytes, digest 115d8cda2c658da73d9407d22baf6b6ee0562634c1e8d259034645ca75867cc6; CLEAN/sys/004B60F0-Sys_ErrorInResourceFileS.c.
-// Behavior/CFG: walks ILFF chunks inside an `ILFF`/`IRES` container (`arg3`) starting at Ilff_GetFirstChunk(arg3) (0x004B7490): requires `NAME` (`0x454D414E`) followed by a payload chunk (`BODY` `0x59444F42`, nested `ILFF`/`IRES` `0x46464C49`/`0x53455249`, `CSTR` `0x52545343`, or `PATH` `0x48544150`, with optional `DBUG` `0x47554244` sibling), allocates a child resource node via Resource_CreateNode (0x004B59F0), and splices `&child[2]` into the parent container's child list (`arg2 + 0x14`) via HeapList_Insert (0x004AF8F0). Calls Error_Show("Error in resource file: '%s'", context) on malformed chunk tags. radare2 28 blocks/44 edges; Binary Ninja 28 blocks; 100.0% structural agreement.
+// Behavior/CFG: walks ILFF chunks inside an `ILFF`/`IRES` container (`arg3`) starting at Ilff_GetFirstChunk(arg3) (0x004B7490): requires `NAME` (`0x454D414E`) followed by a payload chunk (`BODY` `0x59444F42`, nested `ILFF`/`IRES` `0x46464C49`/`0x53455249`, `CSTR` `0x52545343`, or `PATH` `0x48544150`, with optional `DBUG` `0x47554244` sibling), allocates a child resource node via Resource_CreateNode (0x004B59F0), and splices `&child[2]` into the parent container's child list (`arg2 + 0x14`) via HeapList_Insert (0x004AF8F0). Calls Debug_Error("Error in resource file: '%s'", context) (0x004AF7B0) on malformed chunk tags. radare2 28 blocks/44 edges; Binary Ninja 28 blocks; 100.0% structural agreement.
 // Status/limits: VERIFIED; high for exact FourCC constants (`NAME`, `BODY`, `IRES`, `CSTR`, `PATH`, `DBUG`) and child-list linking.
 std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, void* arg3,
                                             const std::int32_t* arg4)
@@ -355,8 +355,8 @@ std::int32_t Resource_RegisterIlffContainer(const char* context, void* arg2, voi
                 }
 
             label_4b636f:
-                error::Error_Show("Error in resource file: '%s'", context);
-                // Retail 0x004B637D: EB FE (jmp $) after Error_Show.
+                Debug_Error("Error in resource file: '%s'", context);
+                // Retail 0x004B637D: EB FE (jmp $) after Debug_Error.
                 // Malformed containers halt here; they do not return a failure code.
                 for (;;)
                 {

@@ -1,5 +1,6 @@
 #include "igi/retail/dynobj/local_models_mef.hpp"
 
+#include "igi/retail/core/retail_error.hpp"
 #include "igi/retail/error/error_show.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include "igi/retail/render/backend.hpp"
@@ -23,7 +24,7 @@ ModelBackendInitFn g_a94e84[0x10]{};
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE (SHA256: dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); VA 0x004CF390-0x004CF623, 659 bytes, digest 3c192ccc9ea19c77aeb0aa4ff7e828e45e4629d29743d3f9f83442360bab6366; CLEAN/dynobj/004CF390-DynObj_LocalModelsSMef.c.
 // Behavior/CFG: allocates a 24-byte (6-dword) model record via Mem_Alloc(0x18, 4) (0x004B0C60), clears fields +0x00, +0x04, +0x10, +0x14, formats `"LOCAL:models/%s.mef"` into global buffer 0x00A4EC6C via sprintf (0x004A53B3), loads the resource via Resource_Load(0x00A4EC6C, nullptr) (0x004B5F00) into `result[2]` (+0x08), locates the `'MESH'` (0x4D455348) chunk via Ilff_GetFirstChunk / Ilff_FindChunk / Ilff_GetChunkPayload into `result[3]` (+0x0C), verifies `*(uint32_t*)result[3] == 0x3DCCCCCD` (0.1f), resolves optional chunks `'ATTA'` (0x41545441 -> mesh+0x8C), `'MVTX'` (0x4D565458 -> mesh+0x88), `'PORT'` (0x504F5254 -> mesh+0x98), `'PTFC'` (0x50544643 -> mesh+0x90), `'PTVX'` (0x50545658 -> mesh+0x94), counts and populates any `'NAXT'` (0x4E415854) 20-byte texture animation records (`result[4]` = count, `result[5]` = array), and invokes the active render backend callback at `0x00A94E84[Render_GetActiveBackendId()]` with `{result[3], result[2]}`. radare2 15 blocks/23 edges; Binary Ninja 15 blocks; 99.1% structural agreement.
-// Status/limits: VERIFIED; high for exact chunk tags, MESH header offsets (+0x88..+0x98), NAXT loop, and backend dispatch, checked against the retail's own bytes in 11 of 11 cases.
+// Status/limits: STRUCTURALLY_VERIFIED; high for exact chunk tags, MESH header offsets (+0x88..+0x98), NAXT loop, and backend dispatch, checked against the retail's own bytes in 11 of 11 cases.
 void* DynObj_LoadModelMesh(const char* model_name)
 {
     // On 32-bit retail ABI each slot in `result` is 4 bytes (total 0x18 = 6 slots).
@@ -159,13 +160,13 @@ void* DynObj_LoadModelMesh(const char* model_name)
 
     float bad_version = 0.0f;
     std::memcpy(&bad_version, data_4, sizeof(float));
-    error::Error_Show("Mesh \"%s\" and source code are incompatible. (Mesh \"%s\" is version %0.2f, source code "
+    Debug_Error("Mesh \"%s\" and source code are incompatible. (Mesh \"%s\" is version %0.2f, source code "
                       "is version %0.2f.)",
                       // Retail pushes qword 0x3FB99999A0000000, the widened float32 0.1 value.
                       model_name, model_name, static_cast<double>(bad_version), 0x1.99999ap-4);
     if constexpr (sizeof(void*) == 4)
     {
-        // Retail incompatible-version path does not return if Error_Show returns.
+        // Retail incompatible-version path does not return if Debug_Error returns.
         for (;;) {}
     }
     return nullptr;

@@ -123,3 +123,22 @@ add_library(igi_qvm_execute_object OBJECT engine/src/retail/script/qvm_execute.c
 target_include_directories(igi_qvm_execute_object PRIVATE engine/include)
 target_compile_features(igi_qvm_execute_object PRIVATE cxx_std_20)
 add_dependencies(igi igi_qvm_execute_object)
+
+# The three human player/config natives in humanplayer_defines.cpp are transcribed (0x00410070
+# DefineHumanPlayerGeneral, 0x004137A0 HumanPlayer_LoadParameters, 0x00405850 Config_Read), but
+# they cannot join the igi link yet. HumanPlayer_LoadParameters and Config_Read call
+# Qvm_Load/Qvm_Execute/Qvm_Cleanup/Qvm_GetFloatArg: Qvm_Load and Qvm_Cleanup are already in the
+# igi link (qvm_native_loader.cpp), while Qvm_Execute/Qvm_GetFloatArg live in the
+# igi_qvm_execute_object unit above, which cannot link until its own ten retail callees and the
+# three QVM state words exist. Config_Read's remaining four callees are separate retail natives
+# that are not transcribed on this branch: 0x00405300 Config_SaveGraphicOptions,
+# 0x004058A0 Config_SaveSoundOptions, 0x00405980 Config_NoD3DDriversWithHard and
+# 0x00405B30 Config_Language_2 (13-function closure, see
+# docs/fidelity/evidence/humanplayer-defines-link-blockers.json). The unit is therefore compiled
+# by every build as an object target so its source is checked without adding undefined symbols to
+# the igi link; move it into the igi source list once those dependencies exist. The object is
+# compile evidence only, not a linked native.
+add_library(igi_humanplayer_defines_object OBJECT engine/src/retail/script/humanplayer_defines.cpp)
+target_include_directories(igi_humanplayer_defines_object PRIVATE engine/include)
+target_compile_features(igi_humanplayer_defines_object PRIVATE cxx_std_20)
+add_dependencies(igi igi_humanplayer_defines_object)
