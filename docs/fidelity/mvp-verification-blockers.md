@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 69 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 70 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 69 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 70 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1114,3 +1114,22 @@ passed.
 The rule: never edit an implementation file for cosmetics. Either batch the cosmetic change into a real change and
 regenerate the cascade once, or leave the warning. The gate's comment-status warning is cheaper than a stale
 digest, and a stale digest is a false claim about evidence coverage.
+
+## Iff_FindChunkBelowForm: a twin-implementation promotion, no code change needed
+
+`Iff_FindChunkBelowForm` (0x005178E0) was already in the best possible position for promotion and had been sitting
+there: the record points at the GameNatives twin implementation, its paired runner
+(`scripts/iff_chunk_tree_diff_runner.py`) already produced a valid nine-case report against the retail walk, and
+only the runtime observation was missing. The candidate symbol existed but had never been called, so the capture
+had no candidate call to compare.
+
+The fixture builds the port's node graph directly - a chunk node whose sibling is a FORM node whose form type is
+the query - and calls the port once for a hit and once with an absent tag. That replays both observed classes
+exactly: `{null, ptr}`, no override, no mismatch. The record was promoted, its behavioural artifact regenerated
+with the runner block, its Frida report emitted, and the strict gate passed on the twin implementation.
+
+The generalisable point: not every remaining native needs port work. Several STRUCTURALLY_VERIFIED records may
+already have a working twin and a working runner, with reachability as the only gap - those are the cheapest
+promotions left, and the capture fixture is the entire job.
+
+Verified count 69 -> 70; paired matches 75 -> 76; candidate-unreachable 16 -> 15; mismatches 0.

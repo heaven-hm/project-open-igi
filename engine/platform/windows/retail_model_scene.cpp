@@ -20,6 +20,7 @@
 #include "igi/retail/render/lod_settings.hpp"
 #include "igi/retail/resource/device_dispatch.hpp"
 #include "igi/retail/script/qvm_native_loader.hpp"
+#include "igi/retail/model/iff_chunk_tree.hpp"
 #include "igi/retail/script/qvm_native_state.hpp"
 #include "igi/retail/script/qvm_stack_natives.hpp"
 #include "igi/retail/sys/ilff_navigation.hpp"
@@ -2727,6 +2728,20 @@ int RunRetailModelScene(HINSTANCE instance,
             {
                 static_cast<void>(igi::retail::script::Qvm_PushInteger(push_state, push_values[index]));
             }
+        }
+
+        // Iff_FindChunkBelowForm. The retail walk returns a form node whose form type matches and null when
+        // nothing matches; a two-node sibling list replays both observed classes {ptr, null}.
+        {
+            igi::retail::model::IffChunkNode chunk{};
+            igi::retail::model::IffChunkNode form{};
+            chunk.next = &form;
+            chunk.tag = 0x4B4E4843U;
+            chunk.form_type = 0U;
+            form.tag = igi::retail::model::iff_form_marker;
+            form.form_type = 0x54534554U;
+            static_cast<void>(igi::retail::model::IffChunk_FindBelowForm(&chunk, form.form_type));
+            static_cast<void>(igi::retail::model::IffChunk_FindBelowForm(&chunk, 0xDEADBEEFU));
         }
 
         // Qvm_ExecuteInstructions. Retail returned 1, which is the stop flag its handler leaves set, so the
