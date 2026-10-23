@@ -1,62 +1,179 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x00484F60",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "bb21f9249abd710c574b87f1db6d4f37b26f05fba7037af7a602ecbd475475ba",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00484F60",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "bb21f9249abd710c574b87f1db6d4f37b26f05fba7037af7a602ecbd475475ba",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00484F60 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/define/00484F60-DefineMission.cpp at sha256 bb21f9249abd710c574b87f1db6d4f37b26f05fba7037af7a602ecbd475475ba (recorded implementation.signature: int32_t DefineMission(int32_t param_1, float param_2);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00484F60",
+    "name": "DefineMission",
+    "binary_ninja_name": "Define_Mission",
+    "signature": "int32_t(int32_t arg1, float arg2 @ 0xc)",
+    "start": "0x00484F60",
+    "end": "0x48513f",
+    "basic_blocks": 4,
+    "edges": [
+      {
+        "source": "0x00484f60",
+        "target": "0x00484f93",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00484f60",
+        "target": "0x00484fb8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00484f93",
+        "target": "0x00484fb6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00484fb6",
+        "target": "0x00484fb6",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Four blocks 0x484F60-0x484FC7: Script_EvalArgInt(frame,0), store to g_5C1590[g_5C89FC*0x4A8]; FX_ExplosionSpawn_6(value); if false, Sys_ResolveSymbol_23 for the mission fields, Script_EvalArgInt(4), two more Sys_ResolveSymbol_23 calls, memcpy of the 0x18-byte return record; else Debug_Error at 0x004AF7B0.",
+    "blocks": [
+      {
+        "address": "0x00484f60",
+        "start": "0x484f60",
+        "end": "0x484f93",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00484fb8",
+        "start": "0x484fb8",
+        "end": "0x485140",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00484f93",
+        "start": "0x484f93",
+        "end": "0x484fb6",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00484fb6",
+        "start": "0x484fb6",
+        "end": "0x484fb8",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "from",
+      "Script_EvalArgInt",
+      "FX_ExplosionSpawn_6",
+      "Debug_Error",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Script_EvalArgInt",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23",
+      "Sys_ResolveSymbol_23"
+    ],
+    "globals_written": [
+      "0x5c89fc"
+    ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00484F60 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/define/00484F60-DefineMission.cpp",
+    "sha256": "bb21f9249abd710c574b87f1db6d4f37b26f05fba7037af7a602ecbd475475ba",
+    "signature": "int32_t DefineMission(int32_t param_1, float param_2);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Four blocks 0x484F60-0x484FC7: Script_EvalArgInt(frame,0), store to g_5C1590[g_5C89FC*0x4A8]; FX_ExplosionSpawn_6(value); if false, Sys_ResolveSymbol_23 for the mission fields, Script_EvalArgInt(4), two more Sys_ResolveSymbol_23 calls, memcpy of the 0x18-byte return record; else Debug_Error at 0x004AF7B0."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Frame pointer read from [E+8] instead of [E+0xc].",
+      "All Script_EvalArgInt/Sys_ResolveSymbol_23 calls receive the argc word."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00484F60 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/define/00484F60-DefineMission.cpp (sha256 bb21f9249abd710c574b87f1db6d4f37b26f05fba7037af7a602ecbd475475ba). Four blocks 0x484F60-0x484FC7: Script_EvalArgInt(frame,0), store to g_5C1590[g_5C89FC*0x4A8]; FX_ExplosionSpawn_6(value); if false, Sys_ResolveSymbol_23 for the mission fields, Script_EvalArgInt(4), two more Sys_ResolveSymbol_23 calls, memcpy of the 0x18-byte return record; else Debug_Error at 0x004AF7B0."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN int32_t(int32_t arg1, float arg2 @ 0xc): the frame is at [E+0xc]; the candidate (int context, float arg2) puts arg2 at [E+8].The retail frame slot is [E+0xc] (BN already models it as arg2/arg3 with an explicit @ 0xc offset). The candidate declaration puts its second (or third) parameter at [E+8], the registered argc slot, so the same source compiled into the QVM call site would read the wrong stack word."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "BN int32_t(int32_t arg1, float arg2 @ 0xc): the frame is at [E+0xc]; the candidate (int context, float arg2) puts arg2 at [E+8].The retail frame slot is [E+0xc] (BN already models it as arg2/arg3 with an explicit @ 0xc offset). The candidate declaration puts its second (or third) parameter at [E+8], the registered argc slot, so the same source compiled into the QVM call site would read the wrong stack word."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 4 block(s)/4 edge(s) at 0x00484F60; radare2 recovers the identical 4 block(s)/4 edge(s) (score 1.0000); angr CFGFast recovers 19 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail calls 0x004B8A20 Script_EvalArgInt, 0x00485170 FX_ExplosionSpawn_6, 0x004AF7B0 Debug_Error and 0x004B8A80 Sys_ResolveSymbol_23 repeatedly. The candidate keeps Script_GetArg/FX_ExplosionSpawn_6/Error_Show (alias of 0x004AF7B0) but passes the argc word as the frame and therefore does not reproduce the retail string fields."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Record stride 0x4A8; field offsets 0x5C1594/0x5C15B4/0x5C16B4/0x5C16D4/0x5C17D4/0x5C18D4/0x5C19D4/0x5C19F4; sizes 0x20/0x100; return record 0x18."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "failed",
+      "detail": "The g_5C89FC*0x4A8 record layout is preserved, but the frame source is [E+8] instead of [E+0xc]; the result record destination is arg1 ([E+4]) which is correct."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Both branches return arg1 ([E+4]) \u2014 matches."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "detail": "No floating-point arithmetic.",
+      "rationale": "No floating-point arithmetic."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(int32_t arg1, float arg2 @ 0xc)\" at 0x00484F60; radare2 recovers \"fcn.00484f60 (int32_t arg_24h, int32_t arg_28h);\". Both tools place the entry at 0x00484F60 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t DefineMission(int32_t param_1, float param_2);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00484F60-binaryninja.json",
+      "evidence_sha256": "97b8e558a24b46ebca54e9055ca335f07f20c9dfde10c93d3effbea8b99e692a",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00484F60-radare2.json",
+      "evidence_sha256": "88957bf29070021b25ccc9d3528cc23a59a437d45115154f0b1f655a5370d485",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00484F60-angr-20261023.json",
+      "evidence_sha256": "4c8470d917a144deb2f18d3897f53c5705a7cc1f9137ec5fd8f4ba2ced4c8365",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
 }

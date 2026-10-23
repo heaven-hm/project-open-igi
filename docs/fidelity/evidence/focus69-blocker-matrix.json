@@ -1,0 +1,203 @@
+{
+ "kind": "focused-mvp-blocker-matrix",
+ "count": 35,
+ "rows": [
+  {
+   "address": "0x00405850",
+   "name": "Config_Read",
+   "runner_failure": "runner produced no report: ate_native_symbol_binding"
+  },
+  {
+   "address": "0x004037C0",
+   "name": "GOInRemap",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004037C0"
+  },
+  {
+   "address": "0x00410070",
+   "name": "DefineHumanPlayerGeneral",
+   "runner_failure": "runner produced no report: unsupported native address: 0x00410070"
+  },
+  {
+   "address": "0x004137A0",
+   "name": "HumanPlayer_LoadParameters",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004137A0"
+  },
+  {
+   "address": "0x004ED5C0",
+   "name": "InputPort_Process",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004ED5C0"
+  },
+  {
+   "address": "0x004B5B60",
+   "name": "Resource_FileExists",
+   "runner_failure": "runner produced no report: ad_diff_runner.py\", line 43, in main"
+  },
+  {
+   "address": "0x004B7E10",
+   "name": "Qvm_ReportError",
+   "runner_failure": "runner produced no report: :77:42: error: use of undeclared identifier 'Qvm_ReportError'"
+  },
+  {
+   "address": "0x004B80B0",
+   "name": "Qvm_Load",
+   "runner_failure": "runner produced no report:          IMPLEMENTATION_SHA256 --root ROOT"
+  },
+  {
+   "address": "0x004B8A10",
+   "name": "Qvm_SetGlobalState",
+   "runner_failure": "runner produced no report: unicorn is required; set IGI_UNICORN_PYTHON to an x86_64 Python with unicorn"
+  },
+  {
+   "address": "0x004BCFD0",
+   "name": "Qvm_ExecuteInstructions",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004BCFD0"
+  },
+  {
+   "address": "0x004BD3D0",
+   "name": "Qvm_SetOpcodeHandler",
+   "runner_failure": "runner produced no report: unicorn is required; set IGI_UNICORN_PYTHON to an x86_64 Python with unicorn"
+  },
+  {
+   "address": "0x004BDA00",
+   "name": "Qvm_PushInteger",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004BDA00"
+  },
+  {
+   "address": "0x004B7540",
+   "name": "Ilff_ReadContainerHeader",
+   "runner_failure": "runner produced no report: no differential adapter registered for 0x004B7540"
+  },
+  {
+   "address": "0x004B7570",
+   "name": "Ilff_GetFormType",
+   "runner_failure": "runner produced no report: orktrees/codex-smart-workflow/scripts/resource_register_buffer_diff_runner.py\", line 273, in main"
+  },
+  {
+   "address": "0x004B7580",
+   "name": "Ilff_GetChunkTag",
+   "runner_failure": "runner produced no report: orktrees/codex-smart-workflow/scripts/resource_register_buffer_diff_runner.py\", line 273, in main"
+  },
+  {
+   "address": "0x004CF330",
+   "name": "DynObj_LoadPackageMeshes",
+   "runner_failure": "runner produced no report:                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  },
+  {
+   "address": "0x004CF630",
+   "name": "DynObj_LoadPackageLovs",
+   "runner_failure": "runner produced no report:                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  },
+  {
+   "address": "0x004CF910",
+   "name": "DynObj_LoadPackageAnimations",
+   "runner_failure": "runner produced no report:                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  },
+  {
+   "address": "0x004B23B0",
+   "name": "Texture_UploadMipmapPacket",
+   "runner_failure": "runner produced no report: \", line 30, in main"
+  },
+  {
+   "address": "0x004B26B0",
+   "name": "Texture_DisableUpload",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004B26B0"
+  },
+  {
+   "address": "0x004B7CF0",
+   "name": "Texture_UploadPalettePacket",
+   "runner_failure": "runner produced no report: \", line 30, in main"
+  },
+  {
+   "address": "0x004CF790",
+   "name": "DynObj_LoadModelTextures",
+   "runner_failure": "runner produced no report:                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  },
+  {
+   "address": "0x004CF870",
+   "name": "DynObj_LoadPackagePalettes",
+   "runner_failure": "runner produced no report:                                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^"
+  },
+  {
+   "address": "0x004C5F00",
+   "name": "Terrain_LoadTexturesAndLightmaps",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004C5F00"
+  },
+  {
+   "address": "0x004C6240",
+   "name": "Terrain_Load",
+   "runner_failure": "runner produced no report: unsupported native address: 0x004C6240"
+  },
+  {
+   "address": "0x004D14E0",
+   "name": "Terrain_TraverseContourQuadtree",
+   "runner_failure": "runner produced no report: didate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable."
+  },
+  {
+   "address": "0x004F82B0",
+   "name": "TerrainLightMap_PushEntry",
+   "runner_failure": "runner produced no report: p:9:40: warning: 'LightmapGlobals' initialized and declared 'extern'"
+  },
+  {
+   "address": "0x00510010",
+   "name": "Terrain_DecodeChunkCommands",
+   "runner_failure": "runner produced no report: ndidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable."
+  },
+  {
+   "address": "0x00512C30",
+   "name": "Terrain_Draw",
+   "runner_failure": "runner produced no report: candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable."
+  },
+  {
+   "address": "0x004F1160",
+   "name": "Script_GetParseMode",
+   "runner_failure": "runner produced no report: p:9:40: warning: 'LightmapGlobals' initialized and declared 'extern'"
+  },
+  {
+   "address": "0x004D67A0",
+   "name": "AnimIff_LoadAnimationFile",
+   "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
+  },
+  {
+   "address": "0x00517890",
+   "name": "Iff_FindFormChunk",
+   "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
+  },
+  {
+   "address": "0x005178E0",
+   "name": "Iff_FindChunkBelowForm",
+   "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
+  },
+  {
+   "address": "0x00517940",
+   "name": "Iff_FindChunk",
+   "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
+  },
+  {
+   "address": "0x005179C0",
+   "name": "Iff_GetChunkPayload",
+   "runner_failure": "runner produced no report: candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe"
+  }
+ ],
+ "rule": "No status promotion is permitted from a placeholder artifact or an unsupported runner; each row requires a dedicated runner or a completed transcription.",
+ "repairability": {
+  "resolved_infrastructure": "IFF runners now resolve build-clean-win32/igi1.exe before legacy open-igi.exe paths.",
+  "requires_dedicated_typed_runner": [
+   "0x004037C0",
+   "0x00410070",
+   "0x004137A0",
+   "0x004ED5C0",
+   "0x004BCFD0",
+   "0x004BDA00",
+   "0x004B7540",
+   "0x004B26B0"
+  ],
+  "requires_transcription_or_typed_terrain_runner": [
+   "0x004C5F00",
+   "0x004C6240",
+   "0x004D14E0",
+   "0x00510010",
+   "0x00512C30"
+  ],
+  "do_not_promote": "Unsupported address dispatch and incomplete terrain implementations remain blocked; no generic adapter was added without ABI/state evidence."
+ }
+}

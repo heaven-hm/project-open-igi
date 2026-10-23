@@ -1,62 +1,172 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x004A5955",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "4691a9334c8cb4b19ce26a67d01cdddd7156b803d6f5d767a9f0309929734e7a",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "scalar-arguments-and-result",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004A5955",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4691a9334c8cb4b19ce26a67d01cdddd7156b803d6f5d767a9f0309929734e7a",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x004A5955 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/camera/004A5955-Camera_ResetMatrix_5.cpp at sha256 4691a9334c8cb4b19ce26a67d01cdddd7156b803d6f5d767a9f0309929734e7a (recorded implementation.signature: int32_t Camera_ResetMatrix_5(long param_1);). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x004A5955",
+    "name": "Camera_ResetMatrix_5",
+    "binary_ninja_name": "Camera_ResetMatrix_5",
+    "signature": "int32_t(long double arg1 @ st0)",
+    "start": "0x004A5955",
+    "end": "0x4a597c",
+    "basic_blocks": 5,
+    "edges": [
+      {
+        "source": "0x004a5955",
+        "target": "0x004a5963",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a5955",
+        "target": "0x004a597a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a5963",
+        "target": "0x004a5977",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a5963",
+        "target": "0x004a5979",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a5977",
+        "target": "0x004a5979",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Five blocks 0x4A5955-0x4A597A: round-to-int of st0, compare/status-word flags in CL (0/1), if bit 6 of the status high byte set then multiply by g_543F00, round again and set CL=2; retn. No eax store.",
+    "blocks": [
+      {
+        "address": "0x004a5955",
+        "start": "0x4a5955",
+        "end": "0x4a5963",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a597a",
+        "start": "0x4a597a",
+        "end": "0x4a597d",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a5963",
+        "start": "0x4a5963",
+        "end": "0x4a5977",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a5979",
+        "start": "0x4a5979",
+        "end": "0x4a597a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a5977",
+        "start": "0x4a5977",
+        "end": "0x4a5979",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [],
+    "globals_written": []
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004A5955 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/camera/004A5955-Camera_ResetMatrix_5.cpp",
+    "sha256": "4691a9334c8cb4b19ce26a67d01cdddd7156b803d6f5d767a9f0309929734e7a",
+    "signature": "int32_t Camera_ResetMatrix_5(long param_1);",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Five blocks 0x4A5955-0x4A597A: round-to-int of st0, compare/status-word flags in CL (0/1), if bit 6 of the status high byte set then multiply by g_543F00, round again and set CL=2; retn. No eax store."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "st0 argument replaced by a stack long double.",
+      "Return register/value is the packed status word in EAX instead of CL."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x004A5955 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/camera/004A5955-Camera_ResetMatrix_5.cpp (sha256 4691a9334c8cb4b19ce26a67d01cdddd7156b803d6f5d767a9f0309929734e7a). Five blocks 0x4A5955-0x4A597A: round-to-int of st0, compare/status-word flags in CL (0/1), if bit 6 of the status high byte set then multiply by g_543F00, round again and set CL=2; retn. No eax store."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "failed",
+      "detail": "BN int32_t(long double arg1 @ st0): the input is the x87 TOS, not a stack argument, and the retail return convention is CL/ECX (the only written register). The candidate int _test_whether_TOS_is_int(long double context) takes a stack long double and returns the packed status word in EAX."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "failed",
+      "detail": "BN int32_t(long double arg1 @ st0): the input is the x87 TOS, not a stack argument, and the retail return convention is CL/ECX (the only written register). The candidate int _test_whether_TOS_is_int(long double context) takes a stack long double and returns the packed status word in EAX."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 5 block(s)/5 edge(s) at 0x004A5955; radare2 recovers the identical 5 block(s)/5 edge(s) (score 1.0000); angr CFGFast recovers 5 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "detail": "None: the function is pure x87 and has no call sites."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "g_543F00 multiplier (the second scaling test); status bits 0x800 and bit 6 of the high byte; FCOMP flags."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "One global read at 0x00543F00; no writes."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "detail": "Retail returns with CL = 0/1/2 and never writes EAX; the candidate returns the status-word integer in EAX. The return register and value are not the same."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "failed",
+      "detail": "The whole function is x87 (fld/frndint/fcomp/fmul/fcompp); the candidate models it with roundl() on a stack long double, so the TOS entry and the CL return are not preserved."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(long double arg1 @ st0)\" at 0x004A5955; radare2 recovers \"fcn.004a5955 ();\". Both tools place the entry at 0x004A5955 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int32_t Camera_ResetMatrix_5(long param_1);. The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x004A5955-binaryninja.json",
+      "evidence_sha256": "5c4a0e73c501cf727ae04acffdd5622056d19e20e1ba8a451a50f597d80673a7",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x004A5955-radare2.json",
+      "evidence_sha256": "633085f6b0d05c228d3db561b3398a9ed928fa8df65a51e7eca2dc015e6be4cb",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x004A5955-angr-20261023.json",
+      "evidence_sha256": "64127f2a19edbf6899d0f4d965d779e44bf7e2e2045fc1ccd1cddd030354337c",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
 }

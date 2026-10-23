@@ -1,0 +1,15 @@
+{
+  "kind": "native-function-byte-identity",
+  "schema_version": 1,
+  "result": "matched",
+  "verified": false,
+  "address": "0x004CF390",
+  "length": 659,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "image_base": "0x400000",
+  "file_offset": "0xcf390",
+  "function_sha256": "3c192ccc9ea19c77aeb0aa4ff7e828e45e4629d29743d3f9f83442360bab6366",
+  "binary_ninja_capture": "build/autonomous-re/0x004CF390-full-bytes.txt",
+  "capture_sha256": "c088f7560024d54f85d758a70b3fa802707a27d77ecf75a99a5e54ccad069fe3",
+  "scope": "All function bytes [0x004CF390,0x004CF623) match the pinned retail executable; not behavioral acceptance."
+}

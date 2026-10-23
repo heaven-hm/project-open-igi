@@ -2,10 +2,584 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x004B80B0",
- "signature": "not restated",
+ "symbol": "Qvm_Load",
+ "signature": "int32_t*(void* arg1)",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "function": {
+  "start": "0x004B80B0",
+  "end": "0x004B83C6",
+  "size_bytes": 791,
+  "basic_blocks": 21,
+  "instruction_count": 282
+ },
+ "disassembly": [
+  "int32_t* Qvm_Load(void* arg1)",
+  "0x4b80b0  // Sig: int* Qvm_Load(char* qvmPath)",
+  "0x4b80b0  // Note: Loads a COMPILED .qvm script binary from the virtual filesystem",
+  "0x4b80b0  // (appends/selects \".qvm\"; big 0x130 stack frame builds the script object).",
+  "0x4b80b0  // Param: qvmPath = path like \"LOCAL:common/ai/guard.qvm\". RETURNS pointer to",
+  "0x4b80b0  // the loaded QVM object, 0 on failure (calls engine debug-state check 0x48F1D0",
+  "0x4b80b0  // first). Use before executing/attaching scripts.",
+  "0x4b80b0  sub     esp, 0x11c",
+  "0x4b80b6  push    ebx",
+  "0x4b80b7  push    ebp",
+  "0x4b80b8  push    esi",
+  "0x4b80b9  xor     ebx, ebx",
+  "0x4b80bb  push    edi",
+  "0x4b80bc  mov     dword [esp+0x14], ebx",
+  "0x4b80c0  mov     dword [esp+0x10], ebx",
+  "0x4b80c4  call    Script_GetDebugCompileState",
+  "0x4b80c9  mov     ebp, dword [esp+0x130]",
+  "0x4b80d0  test    eax, eax",
+  "0x4b80d2  je      0x4b81b9",
+  "0x4b80d8  mov     edi, ebp",
+  "0x4b80da  or      ecx, 0xffffffff",
+  "0x4b80dd  xor     eax, eax",
+  "0x4b80df  lea     edx, [esp+0x2c]",
+  "0x4b80e3  repne scasb byte [edi]",
+  "0x4b80e5  not     ecx",
+  "0x4b80e7  sub     edi, ecx",
+  "0x4b80e9  mov     eax, ecx",
+  "0x4b80eb  mov     esi, edi",
+  "0x4b80ed  mov     edi, edx",
+  "0x4b80ef  shr     ecx, 0x2",
+  "0x4b80f2  rep movsd dword [edi], [esi]",
+  "0x4b80f4  mov     ecx, eax",
+  "0x4b80f6  and     ecx, 0x3",
+  "0x4b80f9  rep movsb byte [edi], [esi]",
+  "0x4b80fb  lea     ecx, [esp+0x2c]",
+  "0x4b80ff  push    ecx",
+  "0x4b8100  push    ebx",
+  "0x4b8101  push    ebx",
+  "0x4b8102  call    String_FindExtension",
+  "0x4b8107  mov     edx, dword [0x547290]  {\".qvm\"}",
+  "0x4b810d  add     esp, 0xc",
+  "0x4b8110  mov     dword [eax], edx",
+  "0x4b8112  mov     cl, byte [0x547294]",
+  "0x4b8118  mov     byte [eax+0x4], cl",
+  "0x4b811b  call    Script_GetForcePrecompiledState",
+  "0x4b8120  test    eax, eax",
+  "0x4b8122  je      0x4b8161",
+  "0x4b8124  lea     edx, [esp+0x2c]",
+  "0x4b8128  push    edx",
+  "0x4b8129  call    Resource_FileExists",
+  "0x4b812e  add     esp, 0x4",
+  "0x4b8131  test    eax, eax",
+  "0x4b8133  je      0x4b81dc",
+  "0x4b8139  push    ebx",
+  "0x4b813a  lea     eax, [esp+0x30]",
+  "0x4b813e  push    ebx",
+  "0x4b813f  push    eax",
+  "0x4b8140  call    Sys_ResolveSymbol_28",
+  "0x4b8145  add     esp, 0xc",
+  "0x4b8148  cmp     eax, ebx",
+  "0x4b814a  mov     dword [esp+0x10], eax",
+  "0x4b814e  jne     0x4b81e9",
+  "0x4b8154  pop     edi",
+  "0x4b8155  pop     esi",
+  "0x4b8156  pop     ebp",
+  "0x4b8157  xor     eax, eax",
+  "0x4b8159  pop     ebx",
+  "0x4b815a  add     esp, 0x11c",
+  "0x4b8160  retn",
+  "0x4b8161  lea     ecx, [esp+0x2c]",
+  "0x4b8165  push    ecx",
+  "0x4b8166  call    Resource_FileExists",
+  "0x4b816b  add     esp, 0x4",
+  "0x4b816e  test    eax, eax",
+  "0x4b8170  je      0x4b81b9",
+  "0x4b8172  lea     edx, [esp+0x2c]",
+  "0x4b8176  lea     eax, [esp+0x24]",
+  "0x4b817a  push    edx",
+  "0x4b817b  push    eax",
+  "0x4b817c  call    Sys_PushStack_16",
+  "0x4b8181  lea     ecx, [esp+0x24]",
+  "0x4b8185  push    ebp",
+  "0x4b8186  push    ecx",
+  "0x4b8187  call    Sys_PushStack_16",
+  "0x4b818c  lea     edx, [esp+0x2c]",
+  "0x4b8190  lea     eax, [esp+0x34]",
+  "0x4b8194  push    edx",
+  "0x4b8195  push    eax",
+  "0x4b8196  call    Sys_PopStack_16",
+  "0x4b819b  add     esp, 0x18",
+  "0x4b819e  test    eax, eax",
+  "0x4b81a0  jl      0x4b81b9",
+  "0x4b81a2  push    ebx",
+  "0x4b81a3  lea     ecx, [esp+0x30]",
+  "0x4b81a7  push    ebx",
+  "0x4b81a8  push    ecx",
+  "0x4b81a9  call    Sys_ResolveSymbol_28",
+  "0x4b81ae  add     esp, 0xc",
+  "0x4b81b1  cmp     eax, ebx",
+  "0x4b81b3  mov     dword [esp+0x10], eax",
+  "0x4b81b7  jne     0x4b81e9",
+  "0x4b81b9  push    ebp",
+  "0x4b81ba  call    Resource_FileExists",
+  "0x4b81bf  add     esp, 0x4",
+  "0x4b81c2  test    eax, eax",
+  "0x4b81c4  je      0x4b81dc",
+  "0x4b81c6  lea     edx, [esp+0x18]",
+  "0x4b81ca  push    edx",
+  "0x4b81cb  push    ebp",
+  "0x4b81cc  call    Resource_Load",
+  "0x4b81d1  add     esp, 0x8",
+  "0x4b81d4  cmp     eax, ebx",
+  "0x4b81d6  mov     dword [esp+0x14], eax",
+  "0x4b81da  jne     0x4b81e9",
+  "0x4b81dc  pop     edi",
+  "0x4b81dd  pop     esi",
+  "0x4b81de  pop     ebp",
+  "0x4b81df  xor     eax, eax",
+  "0x4b81e1  pop     ebx",
+  "0x4b81e2  add     esp, 0x11c",
+  "0x4b81e8  retn",
+  "0x4b81e9  push    0x4",
+  "0x4b81eb  push    0x94",
+  "0x4b81f0  call    Mem_AllocFn",
+  "0x4b81f5  mov     ebx, eax",
+  "0x4b81f7  mov     ecx, 0x25",
+  "0x4b81fc  xor     eax, eax",
+  "0x4b81fe  mov     edi, ebx",
+  "0x4b8200  rep stosd dword [edi]",
+  "0x4b8202  push    eax",
+  "0x4b8203  call    Qvm_SetGlobalState",
+  "0x4b8208  mov     eax, dword [esp+0x1c]",
+  "0x4b820c  add     esp, 0xc",
+  "0x4b820f  test    eax, eax",
+  "0x4b8211  jne     0x4b838c",
+  "0x4b8217  mov     ecx, dword [esp+0x14]",
+  "0x4b821b  mov     edi, ebp",
+  "0x4b821d  mov     dword [ebx+0x80], ecx",
+  "0x4b8223  mov     edx, dword [esp+0x18]",
+  "0x4b8227  or      ecx, 0xffffffff",
+  "0x4b822a  mov     dword [ebx+0x84], edx",
+  "0x4b8230  mov     dword [ebx+0x88], eax",
+  "0x4b8236  repne scasb byte [edi]",
+  "0x4b8238  not     ecx",
+  "0x4b823a  sub     edi, ecx",
+  "0x4b823c  mov     eax, ecx",
+  "0x4b823e  mov     esi, edi",
+  "0x4b8240  mov     edi, ebx",
+  "0x4b8242  shr     ecx, 0x2",
+  "0x4b8245  rep movsd dword [edi], [esi]",
+  "0x4b8247  mov     ecx, eax",
+  "0x4b8249  and     ecx, 0x3",
+  "0x4b824c  rep movsb byte [edi], [esi]",
+  "0x4b824e  call    Script_GetDebugCompileState",
+  "0x4b8253  test    eax, eax",
+  "0x4b8255  je      0x4b83ba",
+  "0x4b825b  mov     edi, ebp",
+  "0x4b825d  or      ecx, 0xffffffff",
+  "0x4b8260  xor     eax, eax",
+  "0x4b8262  lea     edx, [esp+0xac]",
+  "0x4b8269  repne scasb byte [edi]",
+  "0x4b826b  not     ecx",
+  "0x4b826d  sub     edi, ecx",
+  "0x4b826f  mov     eax, ecx",
+  "0x4b8271  mov     esi, edi",
+  "0x4b8273  mov     edi, edx",
+  "0x4b8275  shr     ecx, 0x2",
+  "0x4b8278  rep movsd dword [edi], [esi]",
+  "0x4b827a  mov     ecx, eax",
+  "0x4b827c  and     ecx, 0x3",
+  "0x4b827f  rep movsb byte [edi], [esi]",
+  "0x4b8281  lea     ecx, [esp+0xac]",
+  "0x4b8288  push    ecx",
+  "0x4b8289  push    0x0",
+  "0x4b828b  push    0x0",
+  "0x4b828d  call    String_FindExtension",
+  "0x4b8292  mov     edx, dword [0x547288]  {\".qas\"}",
+  "0x4b8298  mov     dword [eax], edx",
+  "0x4b829a  mov     cl, byte [0x54728c]",
+  "0x4b82a0  lea     edx, [esp+0x38]",
+  "0x4b82a4  mov     byte [eax+0x4], cl",
+  "0x4b82a7  push    edx",
+  "0x4b82a8  call    QScript_Cleanup",
+  "0x4b82ad  lea     eax, [esp+0xbc]",
+  "0x4b82b4  push    eax",
+  "0x4b82b5  call    QScript_Cleanup",
+  "0x4b82ba  lea     ecx, [esp+0xc0]",
+  "0x4b82c1  push    ebx",
+  "0x4b82c2  push    ecx",
+  "0x4b82c3  call    QScript_ParseAndAssemble",
+  "0x4b82c8  add     esp, 0x1c",
+  "0x4b82cb  test    eax, eax",
+  "0x4b82cd  jne     0x4b836b",
+  "0x4b82d3  lea     edx, [esp+0xac]",
+  "0x4b82da  lea     eax, [esp+0x2c]",
+  "0x4b82de  push    edx",
+  "0x4b82df  push    eax",
+  "0x4b82e0  call    QScript_Assemble",
+  "0x4b82e5  add     esp, 0x8",
+  "0x4b82e8  test    eax, eax",
+  "0x4b82ea  jne     0x4b8350  {\"Uh@rT\"}",
+  "0x4b82ec  lea     ecx, [esp+0xac]",
+  "0x4b82f3  push    ecx",
+  "0x4b82f4  call    QScript_Cleanup",
+  "0x4b82f9  push    ebx",
+  "0x4b82fa  call    Qvm_Cleanup",
+  "0x4b82ff  push    0x4",
+  "0x4b8301  push    0x94",
+  "0x4b8306  call    Mem_AllocFn",
+  "0x4b830b  mov     ebx, eax",
+  "0x4b830d  xor     eax, eax",
+  "0x4b830f  mov     ecx, 0x25",
+  "0x4b8314  mov     edi, ebx",
+  "0x4b8316  push    eax",
+  "0x4b8317  lea     edx, [esp+0x40]",
+  "0x4b831b  push    eax",
+  "0x4b831c  push    edx",
+  "0x4b831d  rep stosd dword [edi]",
+  "0x4b831f  call    Sys_ResolveSymbol_28",
+  "0x4b8324  add     esp, 0x1c",
+  "0x4b8327  test    eax, eax",
+  "0x4b8329  jne     0x4b838c",
+  "0x4b832b  lea     ecx, [esp+0x2c]",
+  "0x4b832f  push    ecx",
+  "0x4b8330  push    0x54726c  {\"Failed to load QVM file: %s\"}",
+  "0x4b8335  call    Qvm_ReportError",
+  "0x4b833a  push    ebx",
+  "0x4b833b  call    Mem_DeAllocFn",
+  "0x4b8340  add     esp, 0xc",
+  "0x4b8343  xor     eax, eax",
+  "0x4b8345  pop     edi",
+  "0x4b8346  pop     esi",
+  "0x4b8347  pop     ebp",
+  "0x4b8348  pop     ebx",
+  "0x4b8349  add     esp, 0x11c",
+  "0x4b834f  retn",
+  "0x4b8350  push    ebp",
+  "0x4b8351  push    0x547240  {\"An error occured when compiling file: %s\"}",
+  "0x4b8356  call    Qvm_ReportError",
+  "0x4b835b  add     esp, 0x8",
+  "0x4b835e  mov     eax, ebx",
+  "0x4b8360  pop     edi",
+  "0x4b8361  pop     esi",
+  "0x4b8362  pop     ebp",
+  "0x4b8363  pop     ebx",
+  "0x4b8364  add     esp, 0x11c",
+  "0x4b836a  retn",
+  "0x4b836b  push    ebx",
+  "0x4b836c  call    Qvm_Cleanup",
+  "0x4b8371  push    ebp",
+  "0x4b8372  push    0x547240  {\"An error occured when compiling file: %s\"}",
+  "0x4b8377  call    Qvm_ReportError",
+  "0x4b837c  add     esp, 0xc",
+  "0x4b837f  xor     eax, eax",
+  "0x4b8381  pop     edi",
+  "0x4b8382  pop     esi",
+  "0x4b8383  pop     ebp",
+  "0x4b8384  pop     ebx",
+  "0x4b8385  add     esp, 0x11c",
+  "0x4b838b  retn",
+  "0x4b838c  mov     byte [ebx+0x90], 0x1",
+  "0x4b8393  mov     dword [ebx+0x8c], eax",
+  "0x4b8399  lea     edi, [esp+0x2c]",
+  "0x4b839d  or      ecx, 0xffffffff",
+  "0x4b83a0  xor     eax, eax",
+  "0x4b83a2  repne scasb byte [edi]",
+  "0x4b83a4  not     ecx",
+  "0x4b83a6  sub     edi, ecx",
+  "0x4b83a8  mov     eax, ecx",
+  "0x4b83aa  mov     esi, edi",
+  "0x4b83ac  mov     edi, ebx",
+  "0x4b83ae  shr     ecx, 0x2",
+  "0x4b83b1  rep movsd dword [edi], [esi]",
+  "0x4b83b3  mov     ecx, eax",
+  "0x4b83b5  and     ecx, 0x3",
+  "0x4b83b8  rep movsb byte [edi], [esi]",
+  "0x4b83ba  pop     edi",
+  "0x4b83bb  pop     esi",
+  "0x4b83bc  mov     eax, ebx",
+  "0x4b83be  pop     ebp",
+  "0x4b83bf  pop     ebx",
+  "0x4b83c0  add     esp, 0x11c",
+  "0x4b83c6  retn"
+ ],
+ "pseudocode": "  int32_t* Qvm_Load(void* arg1)\n\n// Sig: int* Qvm_Load(char* qvmPath)\n// Note: Loads a COMPILED .qvm script binary from the virtual filesystem\n// (appends/selects \".qvm\"; big 0x130 stack frame builds the script object).\n// Param: qvmPath = path like \"LOCAL:common/ai/guard.qvm\". RETURNS pointer to\n// the loaded QVM object, 0 on failure (calls engine debug-state check 0x48F1D0\n// first). Use before executing/attaching scripts.\n{\n    int32_t* var_118 = nullptr;\n    void** var_11c = nullptr;\n    int32_t var_114;\n    void var_100;\n\n    if (!Script_GetDebugCompileState())\n    {\n    label_4b81ba:\n        int32_t eax_10;\n        void* ecx_7;\n        eax_10 = Resource_FileExists(arg1);\n\n        if (!eax_10)\n            return 0;\n\n        void* var_134_2 = arg1;\n        int32_t* eax_11 = Resource_Load(eax_10, &var_114, ecx_7, &var_114);\n        var_118 = eax_11;\n\n        if (!eax_11)\n            return 0;\n    }\n    else\n    {\n        void* edi_1 = arg1;\n        int32_t i = 0xffffffff;\n\n        while (i)\n        {\n            bool cond:0_1 = 0 != *edi_1;\n            edi_1 += 1;\n            i -= 1;\n\n            if (!cond:0_1)\n                break;\n        }\n\n        int32_t ecx_1 = ~i;\n        int32_t esi_2;\n        int32_t edi_3;\n        edi_3 = __builtin_memcpy(&var_100, edi_1 - ecx_1, ecx_1 & 0xfffffffc);\n        __builtin_memcpy(edi_3, esi_2, ecx_1 & 3);\n        char* eax_2 = String_FindExtension(nullptr, 0, &var_100);\n        *eax_2 = g_547290[0];\n        eax_2[4] = g_547290[4][0];\n\n        if (!Script_GetForcePrecompiledState())\n        {\n            if (!Resource_FileExists(&var_100))\n                goto label_4b81ba;\n\n            void var_108;\n            Sys_PushStack_16(&var_108, &var_100);\n            void var_110;\n            Sys_PushStack_16(&var_110, arg1);\n\n            if (Sys_PopStack_16(&var_108, &var_110) < 0)\n                goto label_4b81ba;\n\n            void** eax_9 = Sys_ResolveSymbol_28(&var_100, 0, 0);\n            var_11c = eax_9;\n\n            if (!eax_9)\n                goto label_4b81ba;\n        }\n        else\n        {\n            if (!Resource_FileExists(&var_100))\n                return 0;\n\n            void** eax_5 = Sys_ResolveSymbol_28(&var_100, 0, 0);\n            var_11c = eax_5;\n\n            if (!eax_5)\n                return 0;\n        }\n    }\n\n    int32_t* result = Mem_AllocFn(0x94, 4);\n    __builtin_memset(result, 0, 0x94);\n    Qvm_SetGlobalState(0);\n    void** eax_14 = var_11c;\n\n    if (eax_14)\n    {\n    label_4b838c:\n        result[0x24] = 1;\n        result[0x23] = eax_14;\n        void* edi_13 = &var_100;\n        int32_t i_1 = 0xffffffff;\n\n        while (i_1)\n        {\n            bool cond:3_1 = 0 != *edi_13;\n            edi_13 += 1;\n            i_1 -= 1;\n\n            if (!cond:3_1)\n                break;\n        }\n\n        int32_t ecx_19 = ~i_1;\n        int32_t esi_8;\n        int32_t edi_16;\n        edi_16 = __builtin_memcpy(result, edi_13 - ecx_19, ecx_19 & 0xfffffffc);\n        __builtin_memcpy(edi_16, esi_8, ecx_19 & 3);\n    }\n    else\n    {\n        void* edi_5 = arg1;\n        result[0x20] = var_118;\n        int32_t i_2 = 0xffffffff;\n        result[0x21] = var_114;\n        result[0x22] = eax_14;\n\n        while (i_2)\n        {\n            bool cond:4_1 = eax_14 != *edi_5;\n            edi_5 += 1;\n            i_2 -= 1;\n\n            if (!cond:4_1)\n                break;\n        }\n\n        int32_t ecx_9 = ~i_2;\n        int32_t esi_4;\n        int32_t edi_8;\n        edi_8 = __builtin_memcpy(result, edi_5 - ecx_9, ecx_9 & 0xfffffffc);\n        __builtin_memcpy(edi_8, esi_4, ecx_9 & 3);\n\n        if (Script_GetDebugCompileState())\n        {\n            void* edi_9 = arg1;\n            int32_t i_3 = 0xffffffff;\n\n            while (i_3)\n            {\n                bool cond:6_1 = 0 != *edi_9;\n                edi_9 += 1;\n                i_3 -= 1;\n\n                if (!cond:6_1)\n                    break;\n            }\n\n            int32_t ecx_13 = ~i_3;\n            void var_80;\n            int32_t esi_6;\n            int32_t edi_11;\n            edi_11 = __builtin_memcpy(&var_80, edi_9 - ecx_13, ecx_13 & 0xfffffffc);\n            __builtin_memcpy(edi_11, esi_6, ecx_13 & 3);\n            char* eax_18 = String_FindExtension(nullptr, 0, &var_80);\n            *eax_18 = g_547288[0];\n            eax_18[4] = g_547288[4][0];\n            QScript_Cleanup(&var_100);\n            QScript_Cleanup(&var_80);\n\n            if (QScript_ParseAndAssemble(&var_80, result))\n            {\n                Qvm_Cleanup(result);\n                void* var_134_5 = arg1;\n                Qvm_ReportError(\"An error occured when compiling file: %s\");\n                return 0;\n            }\n\n            if (QScript_Assemble(&var_100, &var_80))\n            {\n                void* var_130_11 = arg1;\n                Qvm_ReportError(\"An error occured when compiling file: %s\");\n                return result;\n            }\n\n            QScript_Cleanup(&var_80);\n            Qvm_Cleanup(result);\n            result = Mem_AllocFn(0x94, 4);\n            __builtin_memset(result, 0, 0x94);\n            eax_14 = Sys_ResolveSymbol_28(&var_100, 0, 0);\n\n            if (eax_14)\n                goto label_4b838c;\n\n            void* var_130_10 = &var_100;\n            Qvm_ReportError(\"Failed to load QVM file: %s\");\n            Mem_DeAllocFn(result);\n            return 0;\n        }\n    }\n\n    return result;\n}",
+ "callers": [
+  {
+   "callsite": "0x405856",
+   "caller": "Config_Read (0x405850 (x86))"
+  },
+  {
+   "callsite": "0x408356",
+   "caller": "GameMaterial_LoadParameters (0x408350 (x86))"
+  },
+  {
+   "callsite": "0x4137a6",
+   "caller": "HumanPlayer_LoadParameters (0x4137a0 (x86))"
+  },
+  {
+   "callsite": "0x413abe",
+   "caller": "WeaponType_Open_2 (0x413a90 (x86))"
+  },
+  {
+   "callsite": "0x41519e",
+   "caller": "IntroScreen_Update (0x415170 (x86))"
+  },
+  {
+   "callsite": "0x418bf0",
+   "caller": "Menu_Manager (0x418b00 (x86))"
+  },
+  {
+   "callsite": "0x44cabf",
+   "caller": "HumanAI_Init (0x44c8d0 (x86))"
+  },
+  {
+   "callsite": "0x450635",
+   "caller": "HumanAI_OnEvent (0x4505d0 (x86))"
+  },
+  {
+   "callsite": "0x47ca6e",
+   "caller": "AmmoType_Open (0x47ca40 (x86))"
+  },
+  {
+   "callsite": "0x484edb",
+   "caller": "Mission_Open (0x484e60 (x86))"
+  },
+  {
+   "callsite": "0x4887b2",
+   "caller": "SubLevel_LoadParameters (0x488780 (x86))"
+  },
+  {
+   "callsite": "0x4c48f9",
+   "caller": "Rigid_DyncubeObjRead (0x4c48e0 (x86))"
+  },
+  {
+   "callsite": "0x4c659d",
+   "caller": "Terrain_Load (0x4c6240 (x86))"
+  },
+  {
+   "callsite": "0x4e5f28",
+   "caller": "SoundSys_RegisterDefs (0x4e5ec0 (x86))"
+  },
+  {
+   "callsite": "0x4ec089",
+   "caller": "AnimTrigger_ParseConfigFile (0x4ec070 (x86))"
+  },
+  {
+   "callsite": "0x4edc1a",
+   "caller": "PhysicsObj_RegisterLod (0x4edc00 (x86))"
+  },
+  {
+   "callsite": "0x4edff9",
+   "caller": "PhysicsObjType_ParseConfigFile (0x4edfe0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d06",
+   "caller": "Config_Compile (0x4f0cf0 (x86))"
+  },
+  {
+   "callsite": "0x4f0d7d",
+   "caller": "Task_New_2 (0x4f0d40 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4b80c4",
+   "callee_address": "0x48f1d0",
+   "callee": "Script_GetDebugCompileState (0x48f1d0 (x86))"
+  },
+  {
+   "callsite": "0x4b80f2",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b80f9",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b8102",
+   "callee_address": "0x4b1e90",
+   "callee": "String_FindExtension (0x4b1e90 (x86))"
+  },
+  {
+   "callsite": "0x4b811b",
+   "callee_address": "0x48f340",
+   "callee": "Script_GetForcePrecompiledState (0x48f340 (x86))"
+  },
+  {
+   "callsite": "0x4b8129",
+   "callee_address": "0x4b5b60",
+   "callee": "Resource_FileExists (0x4b5b60 (x86))"
+  },
+  {
+   "callsite": "0x4b8140",
+   "callee_address": "0x4bd220",
+   "callee": "Sys_ResolveSymbol_28 (0x4bd220 (x86))"
+  },
+  {
+   "callsite": "0x4b8166",
+   "callee_address": "0x4b5b60",
+   "callee": "Resource_FileExists (0x4b5b60 (x86))"
+  },
+  {
+   "callsite": "0x4b817c",
+   "callee_address": "0x4b6440",
+   "callee": "Sys_PushStack_16 (0x4b6440 (x86))"
+  },
+  {
+   "callsite": "0x4b8187",
+   "callee_address": "0x4b6440",
+   "callee": "Sys_PushStack_16 (0x4b6440 (x86))"
+  },
+  {
+   "callsite": "0x4b8196",
+   "callee_address": "0x4b6490",
+   "callee": "Sys_PopStack_16 (0x4b6490 (x86))"
+  },
+  {
+   "callsite": "0x4b81a9",
+   "callee_address": "0x4bd220",
+   "callee": "Sys_ResolveSymbol_28 (0x4bd220 (x86))"
+  },
+  {
+   "callsite": "0x4b81ba",
+   "callee_address": "0x4b5b60",
+   "callee": "Resource_FileExists (0x4b5b60 (x86))"
+  },
+  {
+   "callsite": "0x4b81cc",
+   "callee_address": "0x4b5f00",
+   "callee": "Resource_Load (0x4b5f00 (x86))"
+  },
+  {
+   "callsite": "0x4b81f0",
+   "callee_address": "0x4b0c60",
+   "callee": "Mem_AllocFn (0x4b0c60 (x86))"
+  },
+  {
+   "callsite": "0x4b8200",
+   "callee_address": "0xc35044",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b8203",
+   "callee_address": "0x4b8a10",
+   "callee": "Qvm_SetGlobalState (0x4b8a10 (x86))"
+  },
+  {
+   "callsite": "0x4b8245",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b824c",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b824e",
+   "callee_address": "0x48f1d0",
+   "callee": "Script_GetDebugCompileState (0x48f1d0 (x86))"
+  },
+  {
+   "callsite": "0x4b8278",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b827f",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b828d",
+   "callee_address": "0x4b1e90",
+   "callee": "String_FindExtension (0x4b1e90 (x86))"
+  },
+  {
+   "callsite": "0x4b82a8",
+   "callee_address": "0x4b1ac0",
+   "callee": "QScript_Cleanup (0x4b1ac0 (x86))"
+  },
+  {
+   "callsite": "0x4b82b5",
+   "callee_address": "0x4b1ac0",
+   "callee": "QScript_Cleanup (0x4b1ac0 (x86))"
+  },
+  {
+   "callsite": "0x4b82c3",
+   "callee_address": "0x4bbcb0",
+   "callee": "QScript_ParseAndAssemble (0x4bbcb0 (x86))"
+  },
+  {
+   "callsite": "0x4b82e0",
+   "callee_address": "0x4bb270",
+   "callee": "QScript_Assemble (0x4bb270 (x86))"
+  },
+  {
+   "callsite": "0x4b82f4",
+   "callee_address": "0x4b1ac0",
+   "callee": "QScript_Cleanup (0x4b1ac0 (x86))"
+  },
+  {
+   "callsite": "0x4b82fa",
+   "callee_address": "0x4b83d0",
+   "callee": "Qvm_Cleanup (0x4b83d0 (x86))"
+  },
+  {
+   "callsite": "0x4b8306",
+   "callee_address": "0x4b0c60",
+   "callee": "Mem_AllocFn (0x4b0c60 (x86))"
+  },
+  {
+   "callsite": "0x4b831d",
+   "callee_address": "0xc35044",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b831f",
+   "callee_address": "0x4bd220",
+   "callee": "Sys_ResolveSymbol_28 (0x4bd220 (x86))"
+  },
+  {
+   "callsite": "0x4b8335",
+   "callee_address": "0x4b7e10",
+   "callee": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4b833b",
+   "callee_address": "0x4b0d10",
+   "callee": "Mem_DeAllocFn (0x4b0d10 (x86))"
+  },
+  {
+   "callsite": "0x4b8356",
+   "callee_address": "0x4b7e10",
+   "callee": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4b836c",
+   "callee_address": "0x4b83d0",
+   "callee": "Qvm_Cleanup (0x4b83d0 (x86))"
+  },
+  {
+   "callsite": "0x4b8377",
+   "callee_address": "0x4b7e10",
+   "callee": "Qvm_ReportError (0x4b7e10 (x86))"
+  },
+  {
+   "callsite": "0x4b83b1",
+   "callee_address": "0xc35040",
+   "callee": ""
+  },
+  {
+   "callsite": "0x4b83b8",
+   "callee_address": "0xc35040",
+   "callee": ""
+  }
+ ],
  "cfg": {
+  "entry": "0x004B80B0",
   "nodes": [
    {
     "address": "0x004B80B0"
@@ -218,5 +792,10 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+ ]
 }

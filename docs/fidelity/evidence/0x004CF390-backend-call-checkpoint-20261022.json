@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "kind": "mvp-native-fix-checkpoint",
+  "address": "0x004CF390",
+  "result": "provisional",
+  "verified": false,
+  "scope": "Restore the second backend ID read before model mesh backend dispatch; MVP model loading only.",
+  "artifacts": [
+    {
+      "path": "build/autonomous-re/0x004CF390-analysis.json",
+      "sha256": "11ec1e264ee3bbb9252c2f7258279118315f2f0b4b8d5ca7a7b4eed1a1ba7534"
+    },
+    {
+      "path": "build/autonomous-re/0x004CF390-backend-call-review.json",
+      "sha256": "251e76f9f044cc4ffdc73ecc21c9eaa30f3238c8fcc519412ffcc326c311aa28"
+    },
+    {
+      "path": "build/autonomous-re/0x004CF390-backend-call-fixed.json",
+      "sha256": "c44cd29e5e741fe2505d162b8a687ea87e0047845d08ac4f6999a2de1a67f7d0"
+    },
+    {
+      "path": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "sha256": "f482930d903f9416808f17ab5e60bede2596d5038a5fa7191cea804a90a83b8f"
+    },
+    {
+      "path": "scripts/model_mesh_diff_runner.py",
+      "sha256": "5f3816a93b28ea9ad086b78944a6d0d1bbcc842c23cf00f613edf6028283867e"
+    }
+  ],
+  "retail_evidence": "Binary Ninja disassembly: getter at 0x004CF5F5, callback-null test at 0x004CF602, second getter at 0x004CF606, indirect call at 0x004CF610.",
+  "comparison": {
+    "before": {
+      "passed": 1,
+      "failed": 8
+    },
+    "after": {
+      "passed": 9,
+      "failed": 0
+    },
+    "execution": "Retail and freshly compiled x86 DLL under angr, with actual getter bodies and observed getter-entry events; no live game comparison."
+  },
+  "independent_review": {
+    "reviewer": "review_model_evidence",
+    "instrumentation": "approved for detection of dropped getter calls",
+    "source_change": "approved only for restoration of the second getter call"
+  },
+  "outstanding": [
+    "Backend table extent and valid caller indices still need initialization/caller evidence; source now preserves the unchecked retail lookup.",
+    "Changing/out-of-range backend IDs remain outside fixtures.",
+    "Allocator, VFS, formatter, error function and callback are modeled boundaries.",
+    "Fresh full semantic and ABI review plus authorized typed probe and sequential paired retail/new x86 candidate runtime comparison required.",
+    "Manifest/source evidence hashes intentionally remain stale; no status promotion or acceptance.",
+    "64-bit host behavior is outside x86 fixture scope."
+  ],
+  "diagnostic_build": {
+    "command": "./build.sh --diagnostic",
+    "exit_code": 0,
+    "candidate": "build-clean-win32/igi1.exe",
+    "candidate_sha256": "9d0fe176c87cf9cc00a3cd4f7d0d91d238d2136bcc3d65a44fdd2fe02a09f899",
+    "scope": "Diagnostic x86 build only; no runtime or feature acceptance. Initial concurrent scene signature link failure was followed by a successful rerun after current declarations matched; no scene files changed by this fix."
+  },
+  "expanded_comparison": {
+    "report": "build/autonomous-re/0x004CF390-null-backend-abi-final.json",
+    "sha256": "b5e72440d52520813de338f6d87161c83c3a5a15e786f300e22ff4d1ba758f30",
+    "runner_sha256": "7e2d1cf4023983b345d6383c4e6f420c8ad2b3bc77dccc751779ef4a21d8d4ed",
+    "tests_total": 11,
+    "tests_passed": 11,
+    "null_backend_branch": "Two fixtures derived from retail branch 0x004CF604, with/without NAXT records.",
+    "abi": "Nonzero EBX/ESI/EDI/EBP seeds; native entry/return boundary observed inside candidate wrapper; all returning cases preserve registers and have cdecl ESP delta 4. Nonreturning error case has no return ABI claim.",
+    "review": "Independent reviewer approved ABI observation and null-branch scope; identified fixture-control symbol collision, resolved by renaming to NativeCallbackEnabled; final execution then passed."
+  },
+  "candidate_call_path_gap": {
+    "observation": "Inspection scene directly invokes model::MefModel::DynObj_LoadModelMesh(span), not the dynobj::DynObj_LoadModelMesh(const char*) native examined here. Matching method labels do not establish the same implementation or runtime calls.",
+    "references": [
+      "engine/platform/windows/retail_model_scene.cpp:986",
+      "engine/platform/windows/retail_model_scene.cpp:1116",
+      "engine/src/retail/model/mef_model_loader.cpp:373"
+    ],
+    "consequence": "Do not bind scene span-loader calls to retail native 0x004CF390 or accept this native from rendered scene output. Required native must be observed through its actual newly compiled candidate symbol; source/runtime mapping remains unresolved."
+  },
+  "backend_branch_update": {
+    "implementation_sha256": "72d6eb79481d3266d6bf7b1cbca21420a9d3a81a0335c231d9f6ff92e09d9c4a",
+    "change": "Removed candidate-only range tests; retains retail first lookup/null test, second getter, indirect dispatch.",
+    "independent_review": "Matches selected retail disassembly on initialized valid table inputs; caller-range assumptions and table extent remain unproven.",
+    "behavioral_report": "build/autonomous-re/0x004CF390-retail-backend-branch.json",
+    "report_sha256": "8f1f9c135c579f2cad0fbbec531609a98261b3a37526933f693f27547e703b16",
+    "tests_passed": 11,
+    "tests_failed": 0,
+    "diagnostic_build": "./build.sh --diagnostic exited0",
+    "candidate_sha256": "49084dd8c90d43ee3b5debe90002e68670cc012fff87ba97153fd491a99b0483"
+  }
+}

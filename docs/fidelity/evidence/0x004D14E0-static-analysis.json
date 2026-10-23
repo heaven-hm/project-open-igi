@@ -1,0 +1,1619 @@
+{
+ "schema_version": 1,
+ "kind": "retail-static-analysis",
+ "tool": "Binary Ninja MCP (binaryninja_ui_mcp 0.1.0, MCP initialize serverInfo.version) + radare2 6.2.0 + angr 10.0.4.post1 (via scripts/angr_analyze.py)",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004D14E0",
+ "record_id": "0x004D14E0-static-analysis",
+ "title": "Retail static analysis of 0x004D14E0: 4181-byte cdecl terrain contour traversal that walks a 0x40-byte cube/tree records through an explicit LIFO stack, scans a 2048-entry 28-byte previous-frame cache, and leaves 0x800 in EAX at its single return",
+ "analysis_scope": "static analysis of the retail Project IGI 1 executable only, plus one previously captured retail-only runtime observation set (no candidate, no build, no paired comparison)",
+ "status": "ANALYZED",
+ "binary_identity": {
+  "role": "retail",
+  "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "md5": "9d8ebb7f28a1be56a8626dd5948826e4",
+  "size_bytes": 1384448,
+  "format": "PE32",
+  "machine": "x86 (IMAGE_FILE_MACHINE_I386, 0x014C)",
+  "preferred_image_base": "0x00400000",
+  "entry_point": "0x004A50F5",
+  "subsystem": "Windows GUI",
+  "sections": [
+   {
+    "name": ".text",
+    "va": "0x00401000",
+    "virtual_end": "0x00532510",
+    "raw_size": "0x00132000"
+   },
+   {
+    "name": ".rdata",
+    "va": "0x00533000",
+    "virtual_end": "0x005358F6",
+    "raw_size": "0x00003000"
+   },
+   {
+    "name": ".data",
+    "va": "0x00536000",
+    "virtual_end": "0x00C32558",
+    "raw_size": "0x0001A000"
+   }
+  ],
+  "data_section_note": "The .data section is 0x6FC558 bytes of virtual size but only 0x1A000 bytes of raw data, so VAs from 0x00550000 to 0x00C32558 are zero-filled at load time. 0x00A9CAE0, 0x00A9C4E0, 0x00A4EF38, 0x00A53740 and 0x00B04340 all fall in that zero-filled tail.",
+  "identity_check": {
+   "command": "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "stdout": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01  /Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "outcome": "sha256 matches the retail identity required by the task"
+  }
+ },
+ "address": {
+  "va": "0x004D14E0",
+  "first_byte": "0x004D14E0",
+  "last_byte": "0x004D2534",
+  "end_exclusive": "0x004D2535",
+  "size_bytes": 4181,
+  "size_hex": "0x1055",
+  "raw_bytes_sha256": "5b8b1e85e44075fe0090585b1ac4e92ee128550d160d7b6212e775a69e5ea7e5",
+  "raw_bytes_head_32": "558bec83e4f881ec34060000a14443a4005356578b80fc0d000085c07413dd00",
+  "raw_bytes_tail_16": "c36850845400e880d2fdff83c404ebfe",
+  "size_note": "4181 bytes is the extent from the first prologue byte to the last byte of the third Debug_Error block (0x004D2533 'eb fe' jmp $-0). The single ret is at 0x004D2525. Bytes 0x004D2535-0x004D253F are 11 * 0x90 alignment padding; the next function (Render_DrawLightmapMesh_4) starts at 0x004D2540.",
+  "extent_agreement": "Binary Ninja range 0x4d14e0-0x4d2535 (4181 bytes), radare2 size 4181 / maxaddr 0x004d2535, and the PE raw byte span all agree."
+ },
+ "function": {
+  "entry_va": "0x004D14E0",
+  "name_note": "Binary Ninja reports 'Terrain_TraverseContourQuadtree' with Has User Annotations = true. The PE carries no symbol for this address, so the name and the 'Terrain Generator using octree octal bounding cube subdivision checks and previous frame cache' comment are prior-session database annotations, not retail evidence. Nothing in this record depends on the name.",
+  "basic_blocks": 146,
+  "edges": 228,
+  "back_edges": 18,
+  "loops": 15,
+  "non_returning_trap_blocks": 3,
+  "conditional_branches": 83,
+  "unconditional_branches": 13,
+  "instructions": 1114,
+  "calls": 6,
+  "memcpy_rep_movsd": 4,
+  "returns": 1,
+  "recursive": false,
+  "recursion_note": "There is no call to 0x004D14E0 anywhere inside 0x004D14E0, radare2 reports recursive=false, and angr CFGFast found no self edge on 0x004D14E0. Recursion is implemented iteratively with an explicit LIFO stack. The two indirect calls (0x004D1AE3, 0x004D1CAB) dispatch through pointer tables that are zero in the file image, so runtime self-recursion through them is not excluded.",
+  "callers": {
+   "count": 1,
+   "sites": [
+    {
+     "va": "0x004D2639",
+     "caller": "0x004D2540 (Binary Ninja annotation Render_DrawLightmapMesh_4)",
+     "encoding": "e8 a2 ee ff ff (call rel32)",
+     "argument_setup": "0x004D2638 push esi ; 0x004D2639 call ; 0x004D263E add esp,0x4 -> exactly one dword argument, caller-cleaned",
+     "return_use": "none: after 0x004D263E the caller pops esi (0x004D2641), adds 8 (0x004D2642) and executes retn at 0x004D2645 without writing EAX, so the 0x800 returned here becomes the caller's own EAX"
+    }
+   ],
+   "agreement": "Binary Ninja bn_function_callers, radare2 (CALL XREF from fcn.004d2540 @ 0x4d2639) and angr entry recovery all report the same single call site."
+  },
+  "callees": [
+   {
+    "callsite": "0x004D1579",
+    "target": "0x004C5810",
+    "name": "DynObj_ParseConfigFile_6 (Binary Ninja annotation, unverified and inconsistent with the body)",
+    "evidence": "28-byte, single-block function 0x004C5810-0x004C582B whose body is: xor eax,eax ; mov [0x00B97DF4],eax ; mov [0x00B97D24],eax ; mov [0x00B97DF8],eax ; mov [0x00BA2058],eax ; mov [0x00BA5060],eax ; retn. Binary Ninja prototype int32_t(). The name implies config parsing, but the instructions only zero five globals, so the name must not be trusted.",
+    "arguments_at_call": "no push between 0x004D14EC and 0x004D1579; the stores preceding the call write stack temporaries, not outgoing arguments"
+   },
+   {
+    "callsite": "0x004D1AE3",
+    "target": "indirect: dword table at 0x00A9CAE0",
+    "name": "unknown",
+    "evidence": "ff 14 8d e0 ca a9 00 = call dword [ecx*4+0xA9CAE0]; ecx is loaded as a zero-extended 16-bit word from [edi+0x1c] at 0x004D1ADD; outgoing arguments pushed at 0x004D1AE1/0x004D1AE2 are [edi+0x48] and edi; esp is restored by add esp,0x8 at 0x004D1AEE.",
+    "arguments_at_call": "2 dwords on the stack, cleaned by the caller"
+   },
+   {
+    "callsite": "0x004D1CAB",
+    "target": "indirect: dword table at 0x00A9C4E0",
+    "name": "unknown",
+    "evidence": "ff 14 95 e0 c4 a9 00 = call dword [edx*4+0xA9C4E0]; edx is loaded as a zero-extended 16-bit word from [edi+0x1c] at 0x004D1CA5; outgoing arguments pushed at 0x004D1CA9/0x004D1CAA are [edi+0x48] and edi; esp is restored by add esp,0x8 at 0x004D1CBA.",
+    "arguments_at_call": "2 dwords on the stack, cleaned by the caller"
+   },
+   {
+    "callsite": "0x004D2425",
+    "target": "0x004AF7B0",
+    "name": "Debug_Error",
+    "evidence": "push 0x00548490 (\"Should have allocated data for cube existing previous frame\") ; call 0x004AF7B0 ; add esp,4 ; jmp 0x004D242D (jmp $). Binary Ninja prototype int32_t(char* arg1), cdecl.",
+    "arguments_at_call": "1 dword pointer"
+   },
+   {
+    "callsite": "0x004D2434",
+    "target": "0x004AF7B0",
+    "name": "Debug_Error",
+    "evidence": "push 0x00548464 (\"Should't have allocate hash data! ERROR!\") ; call ; add esp,4 ; jmp 0x004D243C (jmp $)"
+   },
+   {
+    "callsite": "0x004D252B",
+    "target": "0x004AF7B0",
+    "name": "Debug_Error",
+    "evidence": "push 0x00548450 (\"Illegal alloc info\") ; call ; add esp,4 ; jmp 0x004D2533 (jmp $)"
+   }
+  ],
+  "callee_note": "Binary Ninja also lists six callsites to 0x00C35040, but that address is Binary Ninja's synthetic builtin (section .synthetic_builtins, va 0x00C35040, 0x18 bytes) used to model the four 'rep movsd' instructions (0x4D15B6, 0x4D162F, 0x4D18C4, 0x4D2347) and one pair of adjacent 8-byte stack stores (0x4D175F/0x4D1772). It is not a retail function.",
+  "abi": {
+   "calling_convention": "cdecl (Binary Ninja bn_function_prototype_get: name cdecl, isCdecl true; radare2 afi: callconv cdecl)",
+   "prototype_as_recovered": "int32_t(void* arg1)",
+   "frame": "push ebp (0x4D14E0) ; mov ebp,esp (0x4D14E1) ; and esp,0xFFFFFFF8 (0x4D14E3) ; sub esp,0x634 (0x4D14E6) ; push ebx/esi/edi (0x4D14F1-0x4D14F3). Epilogue at 0x4D251F: pop edi, pop esi, pop ebx, mov esp,ebp, pop ebp, retn.",
+   "stack_frame": "0x634 bytes after 8-byte alignment; radare2 reports stackframe 1612 (0x64C) including the three saved registers and the frame/return slots",
+   "arguments": {
+    "count": 1,
+    "size_bytes": 4,
+    "stack_offset": "[ebp+0x8]",
+    "read_sites": [
+     "0x004D1521",
+     "0x004D1966",
+     "0x004D2327"
+    ],
+    "argument_reads_note": "Only [ebp+0x8] is ever read. No other ebp-relative operand exists in the 1114 instructions, so the function reads exactly one stack argument regardless of what the call site left above it.",
+    "supported_meaning": "Opaque object pointer. Fields read from it are [arg1+0x0C] (a root pointer, tested for null at 0x004D1852-0x004D1862) and [arg1+0x10+4*idx] (node pointers, 0x004D18AB and 0x004D2338). The caller 0x004D2540 passes its own arg1 (0x004D2550 mov esi,[esp+0x10]) unchanged. The record type and the source of that pointer are not established here."
+   },
+   "return_value": {
+    "register": "EAX",
+    "single_return_site": "0x004D2525 retn",
+    "value": "0x800",
+    "derivation": "The epilogue block 0x004D251F has exactly one predecessor: the fall-through of block 0x004D2504-0x004D251F, whose only conditional edge is 0x004D2519 jl 0x004D2392. That block starts 0x004D2504 mov eax,dword [esp+0x24] (the loop counter), then 0x004D2510 cmp eax,0x800, 0x004D2515 mov [esp+0x24],eax, 0x004D2519 jl. The loop is entered with [esp+0x24]=0 at 0x004D2386 and incremented by 1 at 0x004D250B, so it exits only with EAX = 0x800. No instruction between 0x004D2504 and the retn writes EAX.",
+    "what_0x800_is": "0x800 = 2048 = the iteration count and the terminating value of the final loop, which walks 28-byte (0x1C) records based at 0x00B04340. The same 2048 bound appears as the hash mask 0x7FF at 0x004D214C (and eax,0x7ff), and the stride 28 is computed at 0x004D2113-0x004D211C (lea ecx,[eax*8] ; sub ecx,eax ; shl ecx,2). 2048 * 0x1C = 0xE000, i.e. 0x00B04340-0x00B12340. The returned value is therefore the size of the previous-frame cache table that the function scans, not a data-dependent result.",
+    "caller_use": "discarded at the only call site (see callers[0].return_use)"
+   }
+  }
+ },
+ "control_flow": {
+  "graph_metrics": {
+   "binary_ninja": {
+    "blocks": 146,
+    "edges": 228,
+    "calls": 12,
+    "variables": 803,
+    "total_bytes": 4181,
+    "mlil_ssa_edge_count": 329
+   },
+   "radare2": {
+    "num-bbs": 146,
+    "edges": 228,
+    "num-instrs": 1114,
+    "cyclomatic-complexity": 84,
+    "end-bbs": 1,
+    "args": 1,
+    "locals": 67
+   },
+   "angr": {
+    "block_count": 159,
+    "edge_count": 245,
+    "has_unresolved_jumps": false,
+    "returning": true,
+    "recovery_mode": "automatic"
+   }
+  },
+  "loops": [
+   {
+    "id": "L1",
+    "head": "0x4D15EC",
+    "latch": "0x4D15EC",
+    "back_edge": "jl 0x4D15EC",
+    "iterations": "64 (0x40)",
+    "role": "gathers 64 bytes, one per 4-byte stride, from 0x00548060 into the local table at [esp+0x1C0]"
+   },
+   {
+    "id": "L2",
+    "head": "0x4D1753",
+    "latch": "0x4D178C",
+    "back_edge": "jl 0x4D1753",
+    "iterations": "8 (byte offset 0 -> 0x59, step 0xC)",
+    "role": "builds eight transformed 3-dword corners at [esp+0x100..] and [esp+0x160..]"
+   },
+   {
+    "id": "L3",
+    "head": "0x4D18A7",
+    "latch": "0x4D19A3",
+    "back_edge": "jb 0x4D18A7",
+    "iterations": "5 (index 0xA -> 0xE)",
+    "role": "five-child apply loop over the byte table at 0x00548444"
+   },
+   {
+    "id": "L4",
+    "head": "0x4D1AD2",
+    "latch": "0x4D1AF6",
+    "back_edge": "jne 0x4D1AD2",
+    "iterations": "data-dependent",
+    "role": "walks the chain at [record+0x2C] via [item+0x58], dispatching through 0x00A9CAE0"
+   },
+   {
+    "id": "L5",
+    "head": "0x4D1B0B",
+    "latch": "0x4D1B45",
+    "back_edge": "jne 0x4D1B0B",
+    "iterations": "data-dependent",
+    "role": "second chain walk via [item+0x58], appending 8-byte commands"
+   },
+   {
+    "id": "L6",
+    "head": "0x4D1AAA",
+    "latch": "0x4D1B50",
+    "back_edge": "jne 0x4D1AAA",
+    "iterations": "5",
+    "role": "ascending bit loop over the 5-bit mask (bit doubles at 0x4D1B58)"
+   },
+   {
+    "id": "L7",
+    "head": "0x4D1C9A",
+    "latch": "0x4D1CBD",
+    "back_edge": "jne 0x4D1C9A",
+    "iterations": "data-dependent",
+    "role": "chain walk testing [item+0x5C] & 0x80, dispatching through 0x00A9C4E0"
+   },
+   {
+    "id": "L8",
+    "head": "0x4D1CCD",
+    "latch": "0x4D1D08",
+    "back_edge": "jne 0x4D1CCD",
+    "iterations": "data-dependent",
+    "role": "chain walk testing [item+0x5C] & 0x01 and [item+0x60]"
+   },
+   {
+    "id": "L9",
+    "head": "0x4D1C64",
+    "latch": "0x4D1D13",
+    "back_edge": "jne 0x4D1C64",
+    "iterations": "5",
+    "role": "ascending bit loop selecting which of the five child records to descend into (bit doubles at 0x4D1D1A)"
+   },
+   {
+    "id": "L10",
+    "head": "0x4D1FD8",
+    "latch": "0x4D2017",
+    "back_edge": "jne 0x4D1FD8",
+    "iterations": "5",
+    "role": "tests five child masks/flags, sets the 0x400-scaled descend bits at 0x4D2006"
+   },
+   {
+    "id": "L11",
+    "head": "0x4D212A",
+    "latch": "0x4D214B",
+    "back_edge": "jne 0x4D212A",
+    "iterations": "bounded to 2048 probes",
+    "role": "open-addressing probe of the 0x00B04340 cache: index+1 & 0x7FF at 0x4D214C"
+   },
+   {
+    "id": "L12",
+    "head": "0x4D1E2A",
+    "latch": "0x4D22E6",
+    "back_edge": "jl 0x4D1E2A",
+    "iterations": "8 (offset 0xC -> 0x28, step 4)",
+    "role": "eight-corner loop driven by the permutation row at [esp+0x1C0+8*row]"
+   },
+   {
+    "id": "L13",
+    "head": "0x4D1A42",
+    "latch": "0x4D2318",
+    "back_edge": "jae 0x4D1A42",
+    "iterations": "data-dependent",
+    "role": "the explicit-stack DFS; terminates when the stack pointer drops below the base [esp+0x240]. Contains L4-L12."
+   },
+   {
+    "id": "L14",
+    "head": "0x4D2331",
+    "latch": "0x4D2349",
+    "back_edge": "jb 0x4D2331",
+    "iterations": "5 (0x00A4EF38 -> 0x00A4F078, stride 0x40)",
+    "role": "writes the five 0x40-byte scratch records back into the five child nodes"
+   },
+   {
+    "id": "L15",
+    "head": "0x4D2392",
+    "latch": "0x4D2504",
+    "back_edge": "jl 0x4D2392",
+    "iterations": "2048 (0x800)",
+    "role": "scans/repairs the 2048-entry 28-byte previous-frame cache and produces the return value"
+   }
+  ],
+  "non_returning_traps": [
+   {
+    "va": "0x4D242D",
+    "instruction": "eb fe (jmp $)"
+   },
+   {
+    "va": "0x4D243C",
+    "instruction": "eb fe (jmp $)"
+   },
+   {
+    "va": "0x4D2533",
+    "instruction": "eb fe (jmp $)"
+   }
+  ],
+  "trap_note": "Each trap directly follows a Debug_Error call and add esp,4. They spin instead of returning, so the three error reports do not produce a return value.",
+  "branch_census": {
+   "je": 42,
+   "jne": 23,
+   "jge": 6,
+   "jl": 5,
+   "jle": 4,
+   "jb": 2,
+   "jae": 1,
+   "jmp": 13
+  }
+ },
+ "traversal_structure": {
+  "summary": "Not recursive in the binary. The quadtree/octree walk is a depth-first traversal of 0x40-byte cube records using a manual LIFO of 8-byte {record, key} frames carved out of the 0x634-byte stack frame.",
+  "frame_stack": {
+   "base": "[esp+0x240] (0x4D1A20 lea esi,[esp+0x240]; 0x4D1A36 mov [esp+0x30],esi)",
+   "entry_size_bytes": 8,
+   "entry_fields": [
+    {
+     "offset": 0,
+     "content": "cube record pointer",
+     "evidence": "0x4D22CD mov dword [esi+4],ecx and 0x4D22D0 mov dword [esi],eax ; read back at 0x4D1A42 mov eax,[esi+4] and 0x4D1C15/0x4D1C74 mov ecx/eax,dword [esi]/[ecx]"
+    },
+    {
+     "offset": 4,
+     "content": "packed traversal key",
+     "evidence": "0x4D22CD stores it; 0x4D1C02 or al,0x1 with 0x4D1C08 mov [esi+4],eax rewrite the visited bit in place"
+    }
+   ],
+   "push": "0x4D22BD add esi,0x8 ; 0x4D22C0 shl ecx,0x7 ; 0x4D22C3 or ecx,edx ; 0x4D22C9 mov [esp+0x30],esi ; 0x4D22CD mov [esi+4],ecx ; 0x4D22D0 mov [esi],eax",
+   "pop": "0x4D1BEE sub esi,0x8 ; 0x4D1BF9 mov [esp+0x30],esi ; 0x4D1BFD jmp 0x4D2318",
+   "loop_condition": "0x4D2318 lea edx,[esp+0x240] ; 0x4D231F cmp esi,edx ; 0x4D2321 jae 0x4D1A42",
+   "root_frame": "0x4D1852 eax=[arg1+0xC] ; if non-null: 0x4D186D mov [esp+0x240],eax(root+0x20) ; 0x4D1877 mov dword [esp+0x244],2",
+   "depth_counter": "ebx: 0x4D1A33 or ebx,0xFFFFFFFF (=-1), 0x4D1BEC dec ebx on pop, 0x4D1D37 inc ebx, also kept at [esp+0x58] and [esp+0x68]"
+  },
+  "base_case": [
+   "No root at all: 0x4D1860 test eax,eax ; 0x4D1862 je 0x4D1882 skips the only block that initialises [esp+0x240] and [esp+0x244] (0x4D186D, 0x4D1877). On that path the five-child loop reads [esp+0x244] as its mask accumulator at 0x4D18CC and the DFS entry block reads the same dword at 0x4D1A42 before any stack-depth comparison. This is an uninitialised stack read in the retail code, recorded as an instruction-level observation and not as intended behaviour; a transcription must decide deliberately whether to reproduce it.",
+   "Empty stack: the pop path leaves esi = base-8 so 0x4D2321 jae fails and control falls to 0x4D2327.",
+   "Leaf record with no child mask: 0x4D1C3B cmp eax,ecx (mask vs 0) ; 0x4D1C43 je 0x4D1D33.",
+   "Mask bit not set for the current child: 0x4D1C6C test eax,edi ; 0x4D1C6E je 0x4D1D13.",
+   "No descend bits in the key: 0x4D1A82 test eax,eax ; 0x4D1A84 je 0x4D1B74.",
+   "Null child node in the five-child loop: 0x4D18AF test edx,edx ; 0x4D18B1 je 0x4D19A3.",
+   "Null record in the write-back loop: 0x4D233C test edi,edi ; 0x4D233E je 0x4D2349."
+  ],
+  "iteration_order": [
+   "Child selection is an ascending bit scan: the bit register starts at 1 and doubles per iteration (0x4D1B58 shl eax,0x1 and 0x4D1D1A shl eax,0x1), over the 5-bit mask tested at 0x4D1B50/0x4D1C6C.",
+   "The five child slots are the entries of the byte table at 0x00548444 = {0,1,2,4,5}; slot 3 is not used by either loop (0x4D1887 mov esi,0x00548444 ; 0x4D1895 sub esi,0xA gives the base 0x0054843A used at 0x4D18A7 with index 0xA..0xE, i.e. 0x00548444..0x00548448; 0x4D2331 reads 0x00548444+0..4).",
+   "Within a record, the eight child slots are indexed by (key >> 7) & 7 (0x4D1A49 sar edx,0x7 ; 0x4D1A4C and edx,0x7) into the dword array at [record+0xC] (0x4D1C7A mov eax,dword [eax+edx*4+0xC]).",
+   "The eight-corner inner loop (L12) visits corners in the order given by eight consecutive bytes read from [esp+0x1C0 + 8*row] (0x4D1DD2 lea ecx,[esp+eax*8+0x1C0] ; 0x4D1E31 movsx ecx,byte [eax] ; 0x4D1E34 inc eax). That 64-byte table is built at 0x4D15B8..0x4D15FC from the low byte of each dword of the 64-dword table at 0x00548060, which is eight rows of eight distinct values 0..7."
+  ],
+  "quaternary_versus_octary": "The instructions show a 3-bit, 8-slot child array ([record+0xC] with (key>>7)&7) and an 8-corner inner loop, while the two outer loops use only five of the eight slots (table {0,1,2,4,5}). 'Quadtree' is only the Binary Ninja annotation. This record does not assert a branching factor for the data structure."
+ },
+ "record_layout": {
+  "proven_extent": "0x40 bytes. 0x4D18BD mov ecx,0x10 plus 0x4D18C4 rep movsd copies 0x40 bytes from a child node to the scratch area, and 0x4D2340 mov ecx,0x10 plus 0x4D2347 rep movsd copies 0x40 bytes back out.",
+  "records": [
+   {
+    "name": "terrain_object",
+    "base": "arg1 ([ebp+0x8])",
+    "fields": [
+     {
+      "offset": "0x00C",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1852 mov eax,dword [ebx+0xC]",
+      "meaning": "root pointer; tested for null at 0x4D1860"
+     },
+     {
+      "offset": "0x010 + 4*idx",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D18AB mov edx,dword [ebx+edx*4+0x10] and 0x4D2338 mov edi,dword [ebx+ecx*4+0x10]",
+      "meaning": "five node pointers, idx from the byte table at 0x00548444; a null entry skips that slot (0x4D18AF, 0x4D233C)"
+     }
+    ]
+   },
+   {
+    "name": "cube_record",
+    "base": "child node pointer (0x4D18AB / 0x4D2338), and the frame pointer (root+0x20 or a child read at 0x4D1C7A)",
+    "fields": [
+     {
+      "offset": "0x00C..0x028",
+      "size": 32,
+      "access": "write (8 dwords)",
+      "instruction": "0x4D18C6/0x4D18D3, 0x4D18D6/0x4D18DC, 0x4D18DF/0x4D18E5, 0x4D18E8/0x4D18EE, 0x4D18F1/0x4D18F7, 0x4D18FA/0x4D1900, 0x4D1903/0x4D1909, 0x4D190C/0x4D1912",
+      "meaning": "eight dwords written from the scratch copy in reverse order (scratch+0x28 -> +0x0C ... scratch+0x0C -> +0x28). Because the scratch is a copy of the same record, this is old[+0x2C] -> new[+0x0C], old[+0x28] -> new[+0x10], ... old[+0x10] -> new[+0x28]."
+     },
+     {
+      "offset": "0x030",
+      "size": 1,
+      "access": "read+write",
+      "instruction": "0x4D1917 mov al,byte [edx+0x30] ... 0x4D1976 mov byte [edx+0x30],cl",
+      "meaning": "8-bit child mask. The eight steps 0x4D1917-0x4D1974 rebuild cl from bits 0,1,2,3,4,5,6,7 in that order, i.e. the byte is bit-reversed in place before being stored."
+     },
+     {
+      "offset": "0x038",
+      "size": 1,
+      "access": "read+write",
+      "instruction": "0x4D1864 mov cl,byte [eax+0x38] ; 0x4D1874 mov byte [eax+0x18],cl (eax advanced by 0x20 at 0x4D1867, so the same address); 0x4D1C8B mov cl,byte [eax+0x38]",
+      "meaning": "flag byte. The value is masked with 0xF0 at 0x4D186A, so only the high nibble survives the store."
+     }
+    ]
+   },
+   {
+    "name": "traversal_record",
+    "base": "0x00A53740 + k*0x40, k = 0..4 (0x4D198C lea edx,[eax+0xA53740])",
+    "fields": [
+     {
+      "offset": "0x00C..0x028",
+      "size": 32,
+      "access": "read",
+      "instruction": "0x4D1C7A mov eax,dword [eax+edx*4+0xC] with edx = (key>>7)&7",
+      "meaning": "eight child-record pointers; the slot selected by the key's 3-bit child index is descended"
+     },
+     {
+      "offset": "0x00C",
+      "size": 4,
+      "access": "write",
+      "instruction": "0x4D197D mov dword [eax+0xA5374C],edx (eax = k*0x40, edx = the child node pointer)",
+      "meaning": "back-pointer from the traversal record to the node it was built from. NOTE: this is slot 0 of the 0x00C..0x028 array read at 0x4D1C7A. Whether slot 0 intentionally holds the owning node or a real child is not resolved by these instructions."
+     },
+     {
+      "offset": "0x030",
+      "size": 1,
+      "access": "read",
+      "instruction": "0x4D1C82 mov cl,byte [eax+0x30] ; 0x4D1FE4 test byte [eax+0x30],dl",
+      "meaning": "child mask of the current record, OR-accumulated at 0x4D1C89"
+     },
+     {
+      "offset": "0x038",
+      "size": 2,
+      "access": "read",
+      "instruction": "0x4D1C8B mov cl,byte [eax+0x38] (0x80 test at 0x4D1C8E, 0x01 test at 0x4D1CC4, 0x02 test at 0x4D1AFD) ; 0x4D1AC7 test word [eax+0x38],cx ; 0x4D1FF4 or dx,word [eax+0x38]",
+      "meaning": "flag halfword; tested combined with +0x3A against 0x183 at 0x4D1FF8"
+     },
+     {
+      "offset": "0x03A",
+      "size": 2,
+      "access": "read",
+      "instruction": "0x4D1FF0 mov dx,word [eax+0x3A]",
+      "meaning": "second flag halfword"
+     },
+     {
+      "offset": "0x02C",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1ACF mov edi,dword [eax+0x2C] ; 0x4D1CCA mov eax,dword [eax+0x2C] ; 0x4D1B03 mov eax,dword [eax+0x2C]",
+      "meaning": "head of a singly linked chain of item records"
+     },
+     {
+      "offset": "0x008",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1AC4 mov edi,dword [eax+0x08] ; 0x4D1ACB mov dword [edx],edi",
+      "meaning": "next pointer consumed while replacing the current slot"
+     }
+    ]
+   },
+   {
+    "name": "chain_item_record",
+    "base": "value loaded from [traversal_record+0x2C] or from an item's own +0x58",
+    "fields": [
+     {
+      "offset": "0x01C",
+      "size": 2,
+      "access": "read",
+      "instruction": "0x4D1ADD mov cx,word [edi+0x1C] ; 0x4D1CA5 mov dx,word [edi+0x1C]",
+      "meaning": "16-bit selector indexing the call tables at 0x00A9CAE0 / 0x00A9C4E0"
+     },
+     {
+      "offset": "0x048",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1AD8 mov edx,dword [edi+0x48] ; 0x4D1CA0 mov eax,dword [edi+0x48]",
+      "meaning": "second argument passed to the table callback"
+     },
+     {
+      "offset": "0x058",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1AF6 mov edi,dword [edi+0x58] ; 0x4D1B45 ; 0x4D1CBD ; 0x4D1D08",
+      "meaning": "next item in the chain; the walk ends when it is zero (0x4D1AF9, 0x4D1B48, 0x4D1CC2, 0x4D1D0B)"
+     },
+     {
+      "offset": "0x05C",
+      "size": 1,
+      "access": "read",
+      "instruction": "0x4D1AD2 test word [edi+0x5C],cx ; 0x4D1C9A test byte [edi+0x5C],0x80 ; 0x4D1CCD test byte [eax+0x5C],0x01",
+      "meaning": "flag byte selecting which callbacks run for the item"
+     },
+     {
+      "offset": "0x060",
+      "size": 4,
+      "access": "read",
+      "instruction": "0x4D1B11 mov edi,dword [eax+0x60] ; 0x4D1CD3 mov ecx,dword [eax+0x60]",
+      "meaning": "tested for zero before appending a command (0x4D1B14, 0x4D1CD6)"
+     }
+    ],
+    "type_caution": "These five offsets are read through the chain pointer, not through the 0x40-byte cube record. Presenting them as cube-record fields would be a guess; they are listed as a separate record type for that reason."
+   }
+  ],
+  "overlap_note": "0x00A53740 records and 0x40-byte cube nodes are both 0x40 bytes and are both reached from this function, but the instructions only prove the 0x40 extent and the offsets listed above. Fields 0x000-0x00B, 0x020, 0x034, 0x03C-0x047 and 0x04C-0x057 are copied but never directly named by an operand in this function, so no meaning is assigned to them."
+ },
+ "globals": {
+  "census_method": "Every absolute image address appearing as a memory operand in the 1114 instructions, plus every symbol Binary Ninja names in the disassembly text, was collected from the instruction text and cross-checked on the raw file for the file-backed ones. Register-indirect accesses whose base is one of the fixed tables are recorded under computed_tables.",
+  "read": [
+   {
+    "va": "0x00533504",
+    "size": 4,
+    "file_value": "0x3F000000 (float 0.5f)",
+    "instructions": [
+     "0x4D1D57",
+     "0x4D1D95"
+    ]
+   },
+   {
+    "va": "0x00534AE0",
+    "size": 8,
+    "file_value": "double 64.0 (0x4050000000000000 little-endian 0000000000005040)",
+    "instructions": [
+     "0x4D1E88"
+    ]
+   },
+   {
+    "va": "0x00534B08",
+    "size": 4,
+    "file_value": "float 9600.0 (0x46160000)",
+    "instructions": [
+     "0x4D1FB7"
+    ]
+   },
+   {
+    "va": "0x00534B0C",
+    "size": 4,
+    "file_value": "float 1073741824.0 = 2^30 (0x4E800000)",
+    "instructions": [
+     "0x4D15C5",
+     "0x4D15E2"
+    ]
+   },
+   {
+    "va": "0x00534B10",
+    "size": 4,
+    "file_value": "float 1.732100009918213 (0x3FDDB574)",
+    "instructions": [
+     "0x4D15BF",
+     "0x4D15DC"
+    ]
+   },
+   {
+    "va": "0x00548060",
+    "size": 256,
+    "file_value": "64 dwords, each 0..7, eight rows of eight: 0,1,2,3,4,5,6,7 / 2,0,3,1,6,4,7,5 / 3,2,1,0,7,6,5,4 / 1,3,0,2,5,7,4,6 / 1,0,3,2,5,4,7,6 / 3,1,2,0,7,5,6,4 / 2,3,0,1,6,7,4,5 / 0,2,1,3,4,6,5,7",
+    "instructions": [
+     "0x4D15B8",
+     "0x4D15EC-0x4D15FC (stride 4, 64 iterations)"
+    ]
+   },
+   {
+    "va": "0x00548444",
+    "size": 5,
+    "file_value": "00 01 02 04 05",
+    "instructions": [
+     "0x4D18A7 (via base 0x0054843A + index 0xA..0xE)",
+     "0x4D2331 (via 0x00548444 + index 0..4)"
+    ]
+   },
+   {
+    "va": "0x00A44344",
+    "size": 4,
+    "instructions": [
+     "0x4D14EC"
+    ],
+    "note": "pointer to a context object; [ctx+0xDFC] is read at 0x4D14F4 and the qword it points to is loaded at 0x4D14FE"
+   },
+   {
+    "va": "0x00B12BB8",
+    "size": 4,
+    "instructions": [
+     "0x4D1DE7"
+    ]
+   },
+   {
+    "va": "0x00B12BC0",
+    "size": 4,
+    "instructions": [
+     "0x4D1640"
+    ]
+   },
+   {
+    "va": "0x00B12BC4",
+    "size": 4,
+    "instructions": [
+     "0x4D165D"
+    ]
+   },
+   {
+    "va": "0x00B12BC8",
+    "size": 4,
+    "instructions": [
+     "0x4D166B"
+    ]
+   },
+   {
+    "va": "0x00B12C20",
+    "size": 4,
+    "instructions": [
+     "0x4D1B38",
+     "0x4D1CF2"
+    ]
+   },
+   {
+    "va": "0x00B12C40",
+    "size": 4,
+    "instructions": [
+     "0x4D2465"
+    ]
+   },
+   {
+    "va": "0x00B12C44",
+    "size": 4,
+    "instructions": [
+     "0x4D245F",
+     "0x4D2483"
+    ]
+   },
+   {
+    "va": "0x00B12C48",
+    "size": 4,
+    "instructions": [
+     "0x4D244C"
+    ]
+   },
+   {
+    "va": "0x00B12C50",
+    "size": 4,
+    "instructions": [
+     "0x4D246E"
+    ]
+   },
+   {
+    "va": "0x00B12C54",
+    "size": 4,
+    "instructions": [
+     "0x4D2443",
+     "0x4D248C"
+    ]
+   },
+   {
+    "va": "0x00B12C58",
+    "size": 4,
+    "instructions": [
+     "0x4D1B18",
+     "0x4D1B21",
+     "0x4D1B2A",
+     "0x4D1CDA",
+     "0x4D1CE3",
+     "0x4D1CEC"
+    ],
+    "note": "bump cursor over a command buffer; also read as a pointer whose +4 dword is written"
+   },
+   {
+    "va": "0x00B12B60",
+    "size": 4,
+    "instructions": [
+     "0x4D23EE"
+    ]
+   },
+   {
+    "va": "0x00B12B64",
+    "size": 4,
+    "instructions": [
+     "0x4D23E8",
+     "0x4D240C"
+    ]
+   },
+   {
+    "va": "0x00B12B68",
+    "size": 4,
+    "instructions": [
+     "0x4D23D5"
+    ]
+   },
+   {
+    "va": "0x00B12B70",
+    "size": 4,
+    "instructions": [
+     "0x4D23F7"
+    ]
+   },
+   {
+    "va": "0x00B12B74",
+    "size": 4,
+    "instructions": [
+     "0x4D23CC",
+     "0x4D2415"
+    ]
+   },
+   {
+    "va": "0x00B16C6C",
+    "size": 4,
+    "instructions": [
+     "0x4D1543"
+    ]
+   },
+   {
+    "va": "0x00B16CC0",
+    "size": 4,
+    "instructions": [
+     "0x4D24BB"
+    ]
+   },
+   {
+    "va": "0x00B16CC4",
+    "size": 4,
+    "instructions": [
+     "0x4D24B5",
+     "0x4D24D9"
+    ]
+   },
+   {
+    "va": "0x00B16CC8",
+    "size": 4,
+    "instructions": [
+     "0x4D24A6"
+    ]
+   },
+   {
+    "va": "0x00B16CD0",
+    "size": 4,
+    "instructions": [
+     "0x4D24C4"
+    ]
+   },
+   {
+    "va": "0x00B16CD4",
+    "size": 4,
+    "instructions": [
+     "0x4D249D",
+     "0x4D24E2"
+    ]
+   },
+   {
+    "va": "0x00B97B1C",
+    "size": 4,
+    "instructions": [
+     "0x4D2226 (indexed by g_b97d24)"
+    ],
+    "note": "dword array; the value ORed with (g_ba2058 << 16)"
+   },
+   {
+    "va": "0x00B97D24",
+    "size": 4,
+    "instructions": [
+     "0x4D2212"
+    ]
+   },
+   {
+    "va": "0x00BA2058",
+    "size": 4,
+    "instructions": [
+     "0x4D2220",
+     "0x4D2239"
+    ]
+   },
+   {
+    "va": "0x00BA5060",
+    "size": 4,
+    "instructions": [
+     "0x4D2207"
+    ]
+   },
+   {
+    "va": "0x00BCAB08",
+    "size": 8,
+    "instructions": [
+     "0x4D15FE"
+    ]
+   },
+   {
+    "va": "0x00BCAB10",
+    "size": 4,
+    "instructions": [
+     "0x4D1604"
+    ]
+   },
+   {
+    "va": "0x00BCAB18",
+    "size": 4,
+    "instructions": [
+     "0x4D161B"
+    ]
+   },
+   {
+    "va": "0x00BCAB20",
+    "size": 4,
+    "instructions": [
+     "0x4D157E",
+     "0x4D1FB1"
+    ]
+   },
+   {
+    "va": "0x00BCAB24",
+    "size": 4,
+    "instructions": [
+     "0x4D1584"
+    ]
+   },
+   {
+    "va": "0x00C10380",
+    "size": 4,
+    "instructions": [
+     "0x4D151C"
+    ],
+    "note": "frame/sequence counter; low 16 bits at 0x4D1534 and (x-1) & 0xFFFF at 0x4D1531/0x4D1553"
+   },
+   {
+    "va": "0x00A9CAE0",
+    "size": 4,
+    "instructions": [
+     "0x4D1AE3"
+    ],
+    "access": "execute (call)",
+    "file_value": "zero-filled"
+   },
+   {
+    "va": "0x00A9C4E0",
+    "size": 4,
+    "instructions": [
+     "0x4D1CAB"
+    ],
+    "access": "execute (call)",
+    "file_value": "zero-filled"
+   }
+  ],
+  "write": [
+   {
+    "va": "0x00A5374C + k*0x40",
+    "size": 4,
+    "instructions": [
+     "0x4D197D"
+    ],
+    "note": "k = 0..4, see 0x4D1972/0x4D1983"
+   },
+   {
+    "va": "0x00A4EF38 + k*0x40",
+    "size": 64,
+    "instructions": [
+     "0x4D18C4 rep movsd (0x10 dwords) from the child node"
+    ],
+    "note": "scratch area 0x00A4EF38-0x00A4F077; read back at 0x4D18C6-0x4D1912 and 0x4D2347"
+   },
+   {
+    "va": "0x00B12B80",
+    "size": 4,
+    "instructions": [
+     "0x4D1539 (store 0)",
+     "0x4D21ED (inc)"
+    ],
+    "note": "overflow counter"
+   },
+   {
+    "va": "0x00B16C9C",
+    "size": 4,
+    "instructions": [
+     "0x4D2379"
+    ],
+    "note": "receives the 8-byte-per-output counter [esp+0x74]"
+   },
+   {
+    "va": "0x00B16CA4",
+    "size": 4,
+    "instructions": [
+     "0x4D2360"
+    ],
+    "note": "receives the 0x60-byte-per-record counter [esp+0x2C]"
+   },
+   {
+    "va": "0x00B12C20",
+    "size": 4,
+    "instructions": [
+     "0x4D1B3F",
+     "0x4D1D02"
+    ]
+   },
+   {
+    "va": "0x00B12C48",
+    "size": 4,
+    "instructions": [
+     "0x4D2454"
+    ]
+   },
+   {
+    "va": "0x00B12B68",
+    "size": 4,
+    "instructions": [
+     "0x4D23DD"
+    ]
+   },
+   {
+    "va": "0x00B16CC8",
+    "size": 4,
+    "instructions": [
+     "0x4D24AE"
+    ]
+   }
+  ],
+  "computed_tables": [
+   {
+    "va": "0x00B04340",
+    "entry_size_bytes": 28,
+    "entries": 2048,
+    "extent": "0x00B04340-0x00B12340",
+    "stride_evidence": "0x4D2113 lea ecx,[eax*8] ; 0x4D211A sub ecx,eax ; 0x4D211C shl ecx,2 (= 28*index), and 0x4D2176 lea eax,[ecx*4+0xB04340]",
+    "bound_evidence": "0x4D214C and eax,0x7FF (hash wrap) and 0x4D2510 cmp eax,0x800",
+    "fields": [
+     {
+      "offset": "0x000",
+      "access": "read+write",
+      "instructions": [
+       "0x4D2133",
+       "0x4D21D8"
+      ],
+      "value": "X coordinate (esi)"
+     },
+     {
+      "offset": "0x004",
+      "access": "read+write",
+      "instructions": [
+       "0x4D213B",
+       "0x4D21DA"
+      ],
+      "value": "Y coordinate (edi)"
+     },
+     {
+      "offset": "0x008",
+      "access": "read+write",
+      "instructions": [
+       "0x4D2143",
+       "0x4D21DD"
+      ],
+      "value": "Z coordinate (ebx)"
+     },
+     {
+      "offset": "0x00C",
+      "access": "write",
+      "instructions": [
+       "0x4D21D1"
+      ],
+      "value": "[esp+0x54] (level/LOD value)"
+     },
+     {
+      "offset": "0x010",
+      "access": "read+write",
+      "instructions": [
+       "0x4D211F",
+       "0x4D215D",
+       "0x4D2184",
+       "0x4D2190",
+       "0x4D24FD",
+       "0x4D2392 (mov eax,[ecx-8])"
+      ],
+      "value": "stamp; 0xFFFFFFFF marks a free entry (0x4D2125 cmp edx,0xFFFFFFFF)"
+     },
+     {
+      "offset": "0x014",
+      "access": "read+write",
+      "instructions": [
+       "0x4D21CA (store 3)",
+       "0x4D23C5 (mov edx,[ecx-4])"
+      ],
+      "value": "state; 0, 1 and 2 are distinguished at 0x4D23CA/0x4D2441/0x4D2497"
+     },
+     {
+      "offset": "0x018",
+      "access": "read+write",
+      "instructions": [
+       "0x4D218D",
+       "0x4D21A4 (store through the 0xB12C60 cursor)",
+       "0x4D23BB",
+       "0x4D24EF"
+      ],
+      "value": "payload pointer/slot"
+     }
+    ]
+   },
+   {
+    "va": "0x00B16D10",
+    "direction": "write",
+    "note": "address taken at 0x4D1526 and used as a descending 0x60-byte record writer: 0x4D2200 mov ecx,[esp+0xA0] ... 0x4D2210/0x4D2219/0x4D2235/0x4D224B/0x4D2265/0x4D226E/0x4D2276/0x4D227F/0x4D2288/0x4D2291, cursor restored at 0x4D2297. Only the 0x60-byte stride and the fact that it is written are proved here; the record's field meanings are not."
+   },
+   {
+    "va": "0x00B12C60",
+    "direction": "write",
+    "note": "address taken at 0x4D1559 and used as a 4-byte-slot writer via 0x4D21A4 mov dword [esi],ecx with add esi,4 at 0x4D21AA"
+   },
+   {
+    "va": "0x00B12BE0",
+    "direction": "read",
+    "note": "0x4D15A6 mov esi,0xB12BE0 then 0x4D15B6 rep movsd (0x10 dwords) into [esp+0x200]"
+   },
+   {
+    "va": "0x00BCAAE0",
+    "direction": "read",
+    "note": "0x4D160F mov esi,0xBCAAE0 then 0x4D162F rep movsd (0xA dwords) into [esp+0xD8]"
+   }
+  ],
+  "string_constants": [
+   {
+    "va": "0x00548450",
+    "bytes": "Illegal alloc info",
+    "pushed_at": "0x4D2526"
+   },
+   {
+    "va": "0x00548464",
+    "bytes": "Should't have allocate hash data! ERROR!",
+    "pushed_at": "0x4D242F"
+   },
+   {
+    "va": "0x00548490",
+    "bytes": "Should have allocated data for cube existing previous frame",
+    "pushed_at": "0x4D2420"
+   }
+  ]
+ },
+ "runtime_observations": {
+  "classification": "RETAIL RUNTIME OBSERVATION - kept separate from every static fact above",
+  "capture_path": "build/runtime-traces/20261023T015650-level1-retail",
+  "source_files": [
+   "observed-final.json",
+   "observed-summary.json",
+   "observed-table.md",
+   "analysis.md",
+   "limitations.md",
+   "metadata.json"
+  ],
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "probe": {
+   "path": "scripts/frida_level_probe.js",
+   "sha256": "ede626093a3c84272bb7a1ff02f87b16ae377dd37fe7679c67bc41280a1398e8",
+   "targets": 91,
+   "installed": 91,
+   "failed": 0
+  },
+  "launch": "retail igi.exe, working directory /Users/haseeb-mir/Downloads/IGI, arguments 'window level1', CrossOver bottle open-igi",
+  "attach": "late attach by name about 9-11 s after launch (2026-10-23T01:57:08+05:30), 60 s capture, 6 snapshots",
+  "target": {
+   "va": "0x004D14E0",
+   "name": "Terrain_TraverseContourQuadtree",
+   "hits": 1244
+  },
+  "raw_first_four_calls": [
+   {
+    "args": [
+     "0x38910B4",
+     "0x5AE930C",
+     "0xA3",
+     "0x0",
+     "0x4D26B2",
+     "0x38910B4"
+    ],
+    "returnValue": "0x800"
+   },
+   {
+    "args": [
+     "0x38910B4",
+     "0x5AE930C",
+     "0xA3",
+     "0x0",
+     "0x4D26B2",
+     "0x38910B4"
+    ],
+    "returnValue": "0x800"
+   },
+   {
+    "args": [
+     "0x38910B4",
+     "0x5AE930C",
+     "0xA3",
+     "0x0",
+     "0x4D26B2",
+     "0x38910B4"
+    ],
+    "returnValue": "0x800"
+   },
+   {
+    "args": [
+     "0x38910B4",
+     "0x5AE930C",
+     "0xA3",
+     "0x0",
+     "0x4D26B2",
+     "0x38910B4"
+    ],
+    "returnValue": "0x800"
+   }
+  ],
+  "first_four_argument_words_as_captured": [
+   "0x38910B4",
+   "0x5AE930C",
+   "0xA3",
+   "0x0"
+  ],
+  "probe_mechanics": "scripts/frida_level_probe.js lines 441-452 push args[i].toString() for i in 0..5 in onEnter and the return value in onLeave. Frida's ia32 argument array starts at the first stack argument, i.e. [esp+4], so args[0] corresponds to [esp+4] and args[5] to [esp+24].",
+  "interpretation": {
+   "arg0": "The only real argument. 0x39010B4-class object pointer: the same value that Terrain_Load (0x004C6240) returned in this capture (1 hit, EAX 0x38910B4), matching the single push at the call site 0x004D2638. Static analysis reads [arg1+0xC] and [arg1+0x10+4*idx] from it.",
+   "args_1_to_5": "NOT arguments of this function. The only call site pushes exactly one dword (0x004D2638 push esi; 0x004D263E add esp,0x4), and the callee reads only [ebp+0x8]. Words 2-6 are therefore caller stack slots above the single argument. 0x4D26B2 in word 5 is a code address inside the caller 0x004D2540 and is a leftover return address, not a callback argument.",
+   "eax_0x800": "Matches the static conclusion that the single return site always leaves 0x800 in EAX. The 1244 recorded calls are all identical in EAX, so the capture is consistent with, but does not by itself prove, the static derivation.",
+   "count_relationship": "Terrain_Draw (0x00512C30) was observed 1243 times and this function 1244 times in the same capture. The difference of one is not attributed to anything by the capture files and is not explained here."
+  },
+  "capture_limitations_relevant_here": [
+   "Late attach: calls made during startup before the attach were not seen; 1244 is a from-attach count, not a total for the run.",
+   "Only the first four calls per target had their words recorded; the remaining 1240 hits only increment a counter.",
+   "Single run, single level (level1), single retail image. No repeat capture was performed.",
+   "Pointer values are process-local; 0x38910B4 is not comparable with any other process."
+  ]
+ },
+ "cfg_confirmation": {
+  "selected_decompiler": "Binary Ninja (single decompiler used for this target; Ghidra was not run on 0x004D14E0)",
+  "independent_tools": [
+   {
+    "tool": "radare2",
+    "version": "6.2.0 (darwin-arm_64, cs:5 cl:2)",
+    "commands": [
+     "aaaa",
+     "s 0x4d14e0",
+     "afi",
+     "afbj",
+     "pdf"
+    ],
+    "result": "size 4181, num-bbs 146, num-instrs 1114, edges 228, callconv cdecl, args 1, end-bbs 1, maxaddr 0x004d2535, in-degree 1, recursive false, stackframe 1612"
+   },
+   {
+    "tool": "angr",
+    "version": "10.0.4.post1 via scripts/angr_analyze.py",
+    "command": ".venv-angr/bin/python scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --address 0x4D14E0",
+    "result": "CFGFast recovered the entry at mapped base 0x400000 with has_unresolved_jumps=false, returning=true, block_count 159, 245 edges"
+   }
+  ],
+  "agreement": {
+   "binary_ninja_versus_radare2": "Exact. Both report 146 basic blocks and 228 edges, and comparing the full edge sets (radare2 afbj jump/fail targets against the Binary Ninja basic-block outgoing edges) produced 228 common edges with 0 differences in either direction.",
+   "binary_ninja_versus_angr": "Reconciled. angr has 13 extra block starts and 17 extra edges, entirely accounted for by representation: angr ends a block at every call return (0x4D157E, 0x4D1AEA, 0x4D1CB2, 0x4D242A, 0x4D2439, 0x4D2530 = 6 new starts) and models each 'rep movsd' as its own looping block (0x4D15B6, 0x4D15B8, 0x4D162F, 0x4D1631, 0x4D18C4, 0x4D18C6, 0x4D2347 = 7 new starts) with a self edge per rep (4 extra edges). 146+13=159 and 228+13+4=245 exactly. No angr-only block lies outside a Binary Ninja block, and no Binary Ninja block start is missing from angr."
+  },
+  "disagreements_resolved": [
+   "Block splitting at calls and at 'rep movsd' is a modelling difference, not a control-flow disagreement; the Binary Ninja/radare2 block-and-edge boundary is used as the structural authority because the two agree exactly.",
+   "Binary Ninja lists six callsites to the synthetic builtin 0x00C35040 while radare2 counts no such calls; this is Binary Ninja modelling 'rep movsd' and one adjacent 8-byte store pair as __builtin_memcpy. The four real 'rep movsd' instructions are at 0x4D15B6, 0x4D162F, 0x4D18C4 and 0x4D2347."
+  ],
+  "unanimated_disagreement": "None found in block count, edge set, call sites, function extent or instruction count."
+ },
+ "facts": [
+  "0x004D14E0 is 4181 bytes (0x004D14E0-0x004D2534 inclusive), with one ret at 0x004D2525 and 11 bytes of 0x90 padding before 0x004D2540.",
+  "The function has 146 basic blocks, 228 edges, 1114 instructions, 83 conditional jumps, 13 jmp, 6 call instructions and 4 rep movsd.",
+  "It uses cdecl and reads exactly one 4-byte stack argument at [ebp+0x8], at three sites.",
+  "Its only caller is 0x004D2639 inside 0x004D2540, which pushes exactly one dword.",
+  "It has one ret and EAX at that ret is provably 0x800 = 2048, the terminating value of the loop that scans 2048 28-byte records based at 0x00B04340.",
+  "It is not self-recursive in the binary; the traversal uses an explicit 8-byte-per-entry LIFO at [esp+0x240].",
+  "When arg1->[0x0C] is null, the only block that initialises the DFS frame ([esp+0x240], [esp+0x244]) is skipped (0x4D1862 je 0x4D1882), yet [esp+0x244] is still read as the mask accumulator at 0x4D18CC and as the frame key at 0x4D1A42. The retail code therefore reads uninitialised stack memory on that path. Recorded as an instruction-level fact; no meaning is assigned to it.",
+  "Two calls go through zero-filled pointer tables at 0x00A9CAE0 and 0x00A9C4E0, selected by a 16-bit word at [item+0x1C]; their targets are not in the file image.",
+  "The five child slots come from the byte table at 0x00548444 = {0,1,2,4,5}, applied to [arg1+0x10+4*idx].",
+  "The 0x40-byte record mask byte at +0x30 is bit-reversed in place, and eight dwords at +0x0C..+0x28 are written in reverse order from the scratch copy.",
+  "The three error paths call Debug_Error and then spin on 'jmp $' instead of returning."
+ ],
+ "hypotheses": [
+  {
+   "claim": "0x004D2540 is a lightmap-mesh renderer and arg1 is the per-frame terrain/render context.",
+   "basis": "Binary Ninja names Render_DrawLightmapMesh_4 and the caller reads [esi+0xDE0..0xDE8] as a 3-float position and stores it to globals immediately before the call.",
+   "confidence": "hypothesis, not established by this record"
+  },
+  {
+   "claim": "The 0x800 return value is an artefact of the compiler leaving the loop counter in EAX rather than a meaningful result.",
+   "basis": "The caller ignores EAX at 0x004D263E-0x004D2645, and the value is the constant table size.",
+   "confidence": "hypothesis; the static value itself is a fact"
+  },
+  {
+   "claim": "The flags at +0x38/+0x3A (masked against 0x183 and 0x80/0x01/0x02) control per-node visibility or culling.",
+   "basis": "Their use gates the two callback chains and the 0x400 descend bit, but no instruction names the flags.",
+   "confidence": "hypothesis"
+  },
+  {
+   "claim": "0x00A53740 slot 0 is a back-pointer to the owning node rather than a child record.",
+   "basis": "0x4D197D stores the node pointer at +0x00C while 0x4D1C7A reads +0x00C as slot 0 of an 8-slot array.",
+   "confidence": "hypothesis; the instructions do not distinguish the two readings"
+  },
+  {
+   "claim": "0x00B16D10 and 0x00B12C60 are a per-frame command buffer and its pointer list, written with 0x60-byte and 4-byte strides.",
+   "basis": "The cursor arithmetic at 0x4D2200-0x4D2297 and 0x4D21A4, plus the reset of 0x00B12C58 to 0x00B16C98 in the caller at 0x004D2548.",
+   "confidence": "hypothesis"
+  }
+ ],
+ "limitations": [
+  "Static analysis only for everything outside the runtime section. No transcription, build, structural or runtime verification of any implementation exists; status stays ANALYZED.",
+  "No paired retail and candidate evidence exists for this function. The candidate for this VA is a placeholder that throws, so there is nothing to compare against; no differential capture was made and none is claimed.",
+  "The runtime numbers come from a single retail-only capture with a late attach, so startup calls are missing and 1244 is a from-attach count.",
+  "The runtime argument words beyond the first are caller stack residue; they are recorded as captured but must not be read as arguments.",
+  "The two indirect callees cannot be resolved from the image: 0x00A9CAE0 and 0x00A9C4E0 are in the zero-filled tail of .data (beyond the 0x1A000 raw bytes) and hold zeros on disk.",
+  "Binary Ninja symbol names (Terrain_TraverseContourQuadtree, Render_DrawLightmapMesh_4, DynObj_ParseConfigFile_6, Debug_Error, g_xxx) are database annotations, not retail symbols. The 0x004C5810 name in particular is contradicted by its own body.",
+  "The x87 conversions (ten 'fistp qword' sites in this function: 0x4D1500, 0x4D1631, 0x4D1651, 0x4D1683, 0x4D171F, 0x4D1737, 0x4D1743, 0x4D1818, 0x4D182E, 0x4D183D; plus 0x4D261C in the caller) store 64-bit integers but only the low dword is consumed, and the conversion truncates or rounds according to the current x87 control word, which this function does not set. Any reconstruction must reproduce the caller's rounding mode; that is an assumption here, not a verified fact.",
+  "The meaning of the cube record bytes 0x000-0x00B, 0x020, 0x034 and 0x03C-0x047 is not established, and no meaning is invented for them.",
+  "The overlap between the node slot at +0x00C (0x4D197D) and slot 0 of the child array at +0x00C (0x4D1C7A) is recorded as unresolved rather than guessed.",
+  "The 8-corner inner loop's row index register ([esp+0x10]) also accumulates flag bits on some paths (0x4D2009 sets a 0x400 bit); the exact reachable value range at 0x4D1DD2 was not proven, so the row indexing is described by instruction, not by asserted range.",
+  "Prior evidence files for this VA (0x004D14E0-binaryninja.json, -radare2.json, -build.json, -behavioral.json, -semantic-review.json) contain only CFG node/edge dumps and build/behaviour labels with no argument or return semantics; nothing was copied from them, and every fact here was re-derived from the binary and the capture files."
+ ],
+ "no_paired_evidence_statement": "There is no paired retail and candidate evidence for 0x004D14E0. The only runtime data is the retail-only capture build/runtime-traces/20261023T015650-level1-retail. No candidate build was executed, no call was compared across the two programs, and no return value, memory effect or ordering has been shown equivalent. Nothing in this record supports a status above ANALYZED.",
+ "tooling": [
+  {
+   "id": "T1",
+   "name": "Binary Ninja MCP",
+   "version": "binaryninja_ui_mcp 0.1.0 (MCP initialize serverInfo.version)",
+   "mode": "JSON-RPC 2.0 over HTTP at http://127.0.0.1:24642/mcp, session header MCP-Session-Id",
+   "role": "the single decompiler used for this target",
+   "selected_decompiler": true,
+   "binary_view": "view_1, PE, x86, windows-x86, base 0x400000, entry 0x4A50F5, 5732 functions"
+  },
+  {
+   "id": "T2",
+   "name": "radare2",
+   "version": "6.2.0 (darwin-arm_64)",
+   "role": "independent function boundary, CFG and call-site confirmation"
+  },
+  {
+   "id": "T3",
+   "name": "angr",
+   "version": "10.0.4.post1 via scripts/angr_analyze.py",
+   "role": "independent CFGFast entry and block/edge recovery at base 0x400000"
+  },
+  {
+   "id": "T4",
+   "name": "PE parser (python3 struct)",
+   "role": "section table, raw-vs-zero-filled determination and byte extraction for globals and the function body"
+  }
+ ],
+ "mcp_calls_and_commands": {
+  "binary_ninja": [
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_binary_view_list",
+     "arguments": {}
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_binary_view_info",
+     "arguments": {}
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_binary_view_triage",
+     "arguments": {}
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_section_list",
+     "arguments": {}
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_info",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_info",
+     "arguments": {
+      "function": "0x004C5810"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_disassembly",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_disassembly",
+     "arguments": {
+      "function": "0x004D14E0",
+      "offset": 1000,
+      "limit": 400
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_disassembly",
+     "arguments": {
+      "function": "0x004D2540"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_disassembly",
+     "arguments": {
+      "function": "0x004C5810"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_decompile",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_basic_blocks",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_callees",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_callers",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_prototype_get",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_prototype_get",
+     "arguments": {
+      "function": "0x004AF7B0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_complexity",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_stack_layout",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_function_xrefs_from",
+     "arguments": {
+      "function": "0x004D14E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0xA9CAE0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0xA9C4E0"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0xB04340"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0xB04358"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0x00548444"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0x00A4EF38"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0x00533504"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0x00A44344"
+     }
+    }
+   },
+   {
+    "method": "tools/call",
+    "params": {
+     "name": "bn_data_at",
+     "arguments": {
+      "address": "0x00548060"
+     }
+    }
+   }
+  ],
+  "shell_commands": [
+   "r2 -q -e scr.color=0 -c 'aaaa; s 0x4d14e0; afi; echo ---AFBJ---; afbj; echo ---PDF---; pdf' /Users/haseeb-mir/Downloads/IGI/igi.exe",
+   ".venv-angr/bin/python scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --address 0x4D14E0",
+   "shasum -a 256 /Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "python3 -c '<PE section parser and raw byte reader for 0x004D14E0, 0x00548444, 0x00548060, 0x00548450/64/90>'",
+   "python3 -c '<edge-set diff of radare2 afbj jump/fail against Binary Ninja block edges>'",
+   "python3 -c '<node-set diff of angr CFGFast nodes against Binary Ninja block starts>'",
+   "python3 -m json.tool docs/fidelity/evidence/0x004D14E0-static-analysis.json"
+  ]
+ },
+ "transcription_plan": {
+  "target_shape": {
+   "declaration": "int32_t Terrain_TraverseContourQuadtree(void* arg1);  // cdecl, 1 dword argument, int32 return",
+   "must_preserve": [
+    "the exact 0x634-and-alignment stack frame is not behaviourally required, but the 8-byte-aligned frame (0x4D14E3) and the frame-local DFS stack at frame+0x240 must keep the same capacity and 8-byte entry layout",
+    "the callee-clean discipline of all six calls (add esp,N after each; no callee cleanup anywhere)",
+    "the explicit LIFO traversal instead of real recursion",
+    "the single return with 0x800 in EAX",
+    "the three Debug_Error + jmp $ error paths (a reconstruction that returns instead would diverge)",
+    "x87 evaluation order for the corner transforms (double intermediates, fistp truncation)",
+    "a deliberate decision, recorded in the transcription, about the null-root path that reads [esp+0x244] before it is written (0x4D18CC, 0x4D1A42); do not silently 'fix' it without recording the divergence"
+   ],
+   "skeleton": [
+    "0x004D14E0-0x004D151C: prologue; seed = ctx->[0xDFC] ? trunc(*(double*)field) : 0xE0000000 stored at frame+0x8C",
+    "0x004D151C-0x004D15EC: per-frame preamble. stamp = g_c10380 & 0xFFFF, prev = (g_c10380-1) & 0xFFFF; g_b12b80 = 0; call 0x004C5810; two x87 'fpatan + fcos' chains from g_bcab20 and g_bcab24 that each divide by 1.7321f (0x534B10) and multiply by 1073741824.0f (0x534B0C); copy 0x40 bytes from 0x00B12BE0 to frame+0x200; copy 0x28 bytes from 0x00BCAAE0 to frame+0xD8",
+    "0x004D15EC-0x004D15FE: for i in 0..63: frame[0x1C0+i] = *(uint8_t*)(0x00548060 + 4*i)",
+    "0x004D15FE-0x004D1753: derive six base coordinates from 0x00BCAB08/10/18 and g_b12bc0/bc4/bc8",
+    "0x004D1753-0x004D184C: for k in 0..7 build the corner at frame+0x100+12k from the 0x40000000/0xC0000000 combination selected by k&1, k&2, k&4, then transform into frame+0x160+12k",
+    "0x004D1852-0x004D1882: root = arg1->[0x0C]; if root: frame[0x240] = root+0x20, frame[0x244] = 2, root->[0x38] &= 0xF0",
+    "0x004D1882-0x004D19C6: for i in 0..4 (idx = table00548444[i]): node = arg1->[0x10+4*idx]; if node: copy node to scratch 0x00A4EF38+0x40*i, write node->[0x0C..0x28] reversed from the scratch, bit-reverse node->[0x30], store node at 0x00A5374C+0x40*i, frame[0xA4+4*i] = 0x00A53740+0x40*i, mask |= 1<<i",
+    "0x004D19C6-0x004D1A42: compute the six working coordinates and initialise the DFS (esi = frame+0x240, depth ebx = -1, [frame+0x68] = 0)",
+    "0x004D1A42-0x004D2321: the DFS loop (pop frame, decode key bits 0/1, 4-6, 7-9, 10-14; first-visit block; five-child mask loop with the two callback chains; push up to five frames)",
+    "0x004D2327-0x004D2354: for i in 0..4 write the 0x40-byte scratch back into arg1->[0x10+4*table00548444[i]] when that node is non-null",
+    "0x004D2354-0x004D2392: publish g_b16ca4 = [frame+0x2C], g_b16c9c = [frame+0x74]; ecx = 0x00B04358",
+    "0x004D2392-0x004D251F: for i in 0..0x7FF: walk the 28-byte cache entry at 0x00B04340+28*i, repair its free list for state 0/1/2, clear the slot; EAX ends at 0x800",
+    "0x004D251F-0x004D2525: epilogue and ret"
+   ]
+  },
+  "callees_to_reconstruct_first": [
+   {
+    "order": 1,
+    "va": "0x004AF7B0",
+    "name": "Debug_Error (annotation)",
+    "why": "three call sites on the allocation-failure paths, each followed by an infinite loop; without it the error paths cannot be reproduced, and the reconstruction must keep 'report then spin', not 'report then return'",
+    "known": "cdecl, one char* argument, called with 0x00548450, 0x00548464, 0x00548490"
+   },
+   {
+    "order": 2,
+    "va": "0x004C5810",
+    "name": "unknown (annotated DynObj_ParseConfigFile_6)",
+    "why": "the target calls it unconditionally at 0x004D1579 and then reads 0x00B97D24, 0x00BA2058 and 0x00BA5060, which this helper zeroes",
+    "known": "28 bytes, no stack arguments, body zeroes 0x00B97DF4, 0x00B97D24, 0x00B97DF8, 0x00BA2058, 0x00BA5060; the annotation name does not match the body"
+   },
+   {
+    "order": 3,
+    "va": "callbacks in tables 0x00A9CAE0 and 0x00A9C4E0",
+    "name": "unknown",
+    "why": "these are the only two calls whose targets cannot be read from the image; they are selected by the 16-bit word at [item+0x1C] and receive ([item+0x48], item)",
+    "known": "2 stack arguments, caller-cleaned; tables are zero on disk, so their contents must be captured from a running retail process before any faithful reconstruction can call them"
+   },
+   {
+    "order": 4,
+    "va": "0x004D2540",
+    "name": "Render_DrawLightmapMesh_4 (annotation)",
+    "why": "the only caller; it supplies arg1 and discards the return while letting EAX propagate as its own return",
+    "known": "one dword argument (its own arg1), reads [arg1+0xDE0..0xDE8] and stores those to g_b12bc0/bc4/bc8 and g_b16c70/c74/c78 before the call"
+   },
+   {
+    "order": 5,
+    "va": "data only",
+    "name": "0x00548444, 0x00548060, 0x00533504, 0x00534B08/0C/10, 0x00534AE0, 0x00BCAB08/10/18/20/24",
+    "why": "constants and tables that must be copied byte-exactly",
+    "known": "0x00548444 = 00 01 02 04 05; 0x00548060 = 64 dwords listed above; 0x00533504 = 0.5f"
+   }
+  ],
+  "what_remains_unknown": [
+   "the identity and behaviour of the two table callbacks at 0x00A9CAE0 / 0x00A9C4E0",
+   "the meaning of cube-record bytes 0x00-0x0B, 0x20, 0x34, 0x3C-0x47 and of chain-item bytes 0x00-0x1B, 0x20-0x47, 0x4C-0x57",
+   "whether 0x00A53740 slot 0 is the owning node (0x4D197D) or a genuine child (0x4D1C7A)",
+   "the exact accumulate/skip rule that builds the [esp+0x10] row index for the 8-corner loop",
+   "the semantics of the +0x38/+0x3A flags and the 0x183 mask",
+   "whether any of the observed runtime behaviour depends on the x87 rounding mode set outside this function",
+   "whether the uninitialised-frame read on the null-root path (0x4D18CC / 0x4D1A42) ever happens in retail, and what a faithful transcription should do about it",
+   "the consumers of g_b16C9C / g_b16CA4 and of the 0x00B12C60 / 0x00B16D10 buffers"
+  ],
+  "minimal_focused_host_test": {
+   "purpose": "structural smoke test of the transcription only; it is not retail parity and must not be reported as verification",
+   "case": "call the transcription once with arg1 pointing to a zeroed 0x40-byte object (so arg1->[0x0C] = null and every arg1->[0x10+4*idx] = null)",
+   "assertions": [
+    "return value == 0x800 (statically established; the only return path)",
+    "no write occurs to 0x00A4EF38-0x00A4F077 or 0x00A53740-0x00A537FF, because the five-child loop is skipped when every node pointer is null (0x4D18AF / 0x4D233C)",
+    "g_b12b80 == 0 after the call (set at 0x4D1539 and incremented only at 0x4D21ED)",
+    "g_b16ca4 == 0 and g_b16c9c == 0 for this input (both are counters published at 0x4D2360/0x4D2379)",
+    "the 2048-entry cache at 0x00B04340 is walked exactly 2048 times and every entry whose stamp is 0xFFFFFFFF is left untouched",
+    "the three Debug_Error paths are not reached"
+   ],
+   "second_case": "same object but arg1->[0x0C] = a 0x40-byte node with +0x30 = 0 (no child mask) and every +0x0C..+0x28 child null; assert return 0x800, that 0x00A4EF38 receives exactly one 0x40-byte copy, that node->[0x38] becomes node->[0x38] & 0xF0, and that 0x00A5374C receives the node pointer",
+   "explicitly_not_asserted": "no expected values for g_b16C9C/g_b16CA4, the cache repairs or the output buffer contents, because no retail observation of those exists at the level needed to make them contract values"
+  }
+ },
+ "captured_at": "2026-10-22T23:03:40+00:00",
+ "cfg": {
+  "binary_ninja": {
+   "nodes": 146,
+   "edges": 228
+  },
+  "radare2": {
+   "nodes": 146,
+   "edges": 228
+  },
+  "angr_cfgfast": {
+   "nodes": 159,
+   "function_entry": "0x004D14E0",
+   "has_unresolved_jumps": false
+  }
+ }
+}

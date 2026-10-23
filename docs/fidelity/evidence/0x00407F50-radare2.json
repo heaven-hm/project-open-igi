@@ -1,130 +1,179 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x00407F50",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x00407F50"
-   },
-   {
-    "address": "0x00408021"
-   },
-   {
-    "address": "0x00408026"
-   },
-   {
-    "address": "0x00408051"
-   },
-   {
-    "address": "0x0040809A"
-   },
-   {
-    "address": "0x004080CA"
-   },
-   {
-    "address": "0x004080CC"
-   },
-   {
-    "address": "0x004080F9"
-   },
-   {
-    "address": "0x0040814E"
-   },
-   {
-    "address": "0x004081B8"
-   },
-   {
-    "address": "0x0040820A"
-   },
-   {
-    "address": "0x0040826F"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x00407F50",
-    "target": "0x00408026",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x00408021",
-    "target": "0x00408026",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x00408026",
-    "target": "0x00408021",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x00408026",
-    "target": "0x00408051",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x00408051",
-    "target": "0x0040809A",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x0040809A",
-    "target": "0x0040809A",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0040809A",
-    "target": "0x004080CA",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004080CA",
-    "target": "0x004080CC",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004080CC",
-    "target": "0x004080CC",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004080CC",
-    "target": "0x004080F9",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004080F9",
-    "target": "0x004081B8",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004080F9",
-    "target": "0x0040814E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0040814E",
-    "target": "0x004081B8",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004081B8",
-    "target": "0x0040826F",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004081B8",
-    "target": "0x0040820A",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0040820A",
-    "target": "0x0040826F",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x00407F50",
+  "symbol": "fcn.00407f50",
+  "signature": "fcn.00407f50 (int32_t arg_28h, int32_t arg_30h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x00407F50; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 855,
+    "basic_block_count": 12,
+    "instruction_count": 258,
+    "call_convention": "cdecl",
+    "edge_count": 16,
+    "argument_count": 2,
+    "is_linear": true
+  },
+  "bytes_hex": "a11c85530083ec188d0cc05556578d14",
+  "bytes_sha256": "950772e4b337702f23bf340b444fce4da00053c5d1d84ffe013daa4e9ef3a505",
+  "cfg": {
+    "entry": "0x00407F50",
+    "nodes": [
+      {
+        "address": "0x00407f50",
+        "size": 209,
+        "instructions": 61
+      },
+      {
+        "address": "0x00408021",
+        "size": 5,
+        "instructions": 1
+      },
+      {
+        "address": "0x00408026",
+        "size": 43,
+        "instructions": 16
+      },
+      {
+        "address": "0x00408051",
+        "size": 73,
+        "instructions": 26
+      },
+      {
+        "address": "0x0040809a",
+        "size": 48,
+        "instructions": 16
+      },
+      {
+        "address": "0x004080ca",
+        "size": 2,
+        "instructions": 1
+      },
+      {
+        "address": "0x004080cc",
+        "size": 45,
+        "instructions": 16
+      },
+      {
+        "address": "0x004080f9",
+        "size": 85,
+        "instructions": 23
+      },
+      {
+        "address": "0x0040814e",
+        "size": 106,
+        "instructions": 32
+      },
+      {
+        "address": "0x004081b8",
+        "size": 82,
+        "instructions": 21
+      },
+      {
+        "address": "0x0040820a",
+        "size": 101,
+        "instructions": 31
+      },
+      {
+        "address": "0x0040826f",
+        "size": 56,
+        "instructions": 14
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x00407f50",
+        "target": "0x00408026",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00408021",
+        "target": "0x00408026",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00408026",
+        "target": "0x00408021",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00408026",
+        "target": "0x00408051",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00408051",
+        "target": "0x0040809a",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0040809a",
+        "target": "0x0040809a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040809a",
+        "target": "0x004080ca",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080ca",
+        "target": "0x004080cc",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004080cc",
+        "target": "0x004080cc",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080cc",
+        "target": "0x004080f9",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080f9",
+        "target": "0x0040814e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004080f9",
+        "target": "0x004081b8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040814e",
+        "target": "0x004081b8",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004081b8",
+        "target": "0x0040820a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004081b8",
+        "target": "0x0040826f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0040820a",
+        "target": "0x0040826f",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "\u250c 855: fcn.00407f50 (int32_t arg_28h, int32_t arg_30h);\n\u2502 `- args(sp[0x4..0xc]) vars(5:sp[0x8..0x18])\n\u2502           0x00407f50      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00407f55      83ec18         sub esp, 0x18\n\u2502           0x00407f58      8d0cc0         lea ecx, [eax + eax*8]\n\u2502           0x00407f5b      55             push ebp\n\u2502           0x00407f5c      56             push esi\n\u2502           0x00407f5d      57             push edi\n\u2502           0x00407f5e      8d1448         lea edx, [eax + ecx*2]\n\u2502           0x00407f61      8b7c2430       mov edi, dword [arg_30h]\n\u2502           0x00407f65      6a20           push 0x20                   ; 32\n\u2502           0x00407f67      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00407f6a      c1e003         shl eax, 3\n\u2502           0x00407f6d      c680749456..   mov byte [eax + 0x569474], 1 ; [0x569474:1]=0\n\u2502           0x00407f74      8d8030925600   lea eax, [eax + 0x569230]\n\u2502           0x00407f7a      50             push eax\n\u2502           0x00407f7b      6a00           push 0\n\u2502           0x00407f7d      57             push edi\n\u2502           0x00407f7e      e8fd0a0b00     call 0x4b8a80\n\u2502           0x00407f83      6a01           push 1                      ; 1\n\u2502           0x00407f85      57             push edi\n\u2502           0x00407f86      e8c50a0b00     call 0x4b8a50\n\u2502           0x00407f8b      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00407f90      6a02           push 2                      ; 2\n\u2502           0x00407f92      57             push edi\n\u2502           0x00407f93      8d0cc0         lea ecx, [eax + eax*8]\n\u2502           0x00407f96      8d1448         lea edx, [eax + ecx*2]\n\u2502           0x00407f99      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00407f9c      d91cc55092..   fstp dword [eax*8 + 0x569250] ; [0x569250:4]=0\n\u2502           0x00407fa3      e8a80a0b00     call 0x4b8a50\n\u2502           0x00407fa8      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00407fad      6a03           push 3                      ; 3\n\u2502           0x00407faf      57             push edi\n\u2502           0x00407fb0      8d0cc0         lea ecx, [eax + eax*8]\n\u2502           0x00407fb3      8d1448         lea edx, [eax + ecx*2]\n\u2502           0x00407fb6      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00407fb9      d91cc55492..   fstp dword [eax*8 + 0x569254] ; [0x569254:4]=0\n\u2502           0x00407fc0      e88b0a0b00     call 0x4b8a50\n\u2502           0x00407fc5      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00407fca      6a04           push 4                      ; 4\n\u2502           0x00407fcc      57             push edi\n\u2502           0x00407fcd      8d0cc0         lea ecx, [eax + eax*8]\n\u2502           0x00407fd0      8d1448         lea edx, [eax + ecx*2]\n\u2502           0x00407fd3      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00407fd6      d91cc55892..   fstp dword [eax*8 + 0x569258] ; [0x569258:4]=0\n\u2502           0x00407fdd      e83e0a0b00     call 0x4b8a20\n\u2502           0x00407fe2      8b0d1c855300   mov ecx, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00407fe8      6a05           push 5                      ; 5\n\u2502           0x00407fea      57             push edi\n\u2502           0x00407feb      be06000000     mov esi, 6\n\u2502           0x00407ff0      8d14c9         lea edx, [ecx + ecx*8]\n\u2502           0x00407ff3      8d1451         lea edx, [ecx + edx*2]\n\u2502           0x00407ff6      8d0c91         lea ecx, [ecx + edx*4]\n\u2502           0x00407ff9      8804cd5c92..   mov byte [ecx*8 + 0x56925c], al ; [0x56925c:1]=0\n\u2502           0x00408000      e84b0a0b00     call 0x4b8a50\n\u2502           0x00408005      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x0040800a      83c438         add esp, 0x38\n\u2502           0x0040800d      33ed           xor ebp, ebp\n\u2502           0x0040800f      8d14c0         lea edx, [eax + eax*8]\n\u2502           0x00408012      8d0c50         lea ecx, [eax + edx*2]\n\u2502           0x00408015      8d1488         lea edx, [eax + ecx*4]\n\u2502           0x00408018      d91cd56092..   fstp dword [edx*8 + 0x569260] ; [0x569260:4]=0\n\u2502       \u250c\u2500< 0x0040801f      eb05           jmp 0x408026\n\u2502      \u250c\u2500\u2500> 0x00408021      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502      \u254e\u2502   ; CODE XREF from fcn.00407f50 @ 0x40801f(x)\n\u2502      \u254e\u2514\u2500> 0x00408026      8d14c0         lea edx, [eax + eax*8]\n\u2502      \u254e    0x00408029      8bce           mov ecx, esi\n\u2502      \u254e    0x0040802b      6a20           push 0x20                   ; 32\n\u2502      \u254e    0x0040802d      46             inc esi\n\u2502      \u254e    0x0040802e      8d1450         lea edx, [eax + edx*2]\n\u2502      \u254e    0x00408031      8d0490         lea eax, [eax + edx*4]\n\u2502      \u254e    0x00408034      8d94c56492..   lea edx, [ebp + eax*8 + 0x569264]\n\u2502      \u254e    0x0040803b      52             push edx\n\u2502      \u254e    0x0040803c      51             push ecx\n\u2502      \u254e    0x0040803d      57             push edi\n\u2502      \u254e    0x0040803e      e83d0a0b00     call 0x4b8a80\n\u2502      \u254e    0x00408043      8d46fa         lea eax, [esi - 6]\n\u2502      \u254e    0x00408046      83c410         add esp, 0x10\n\u2502      \u254e    0x00408049      83c520         add ebp, 0x20               ; 32\n\u2502      \u254e    0x0040804c      83f806         cmp eax, 6                  ; 6\n\u2502      \u2514\u2500\u2500< 0x0040804f      7cd0           jl 0x408021\n\u2502           0x00408051      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00408056      8bce           mov ecx, esi\n\u2502           0x00408058      6a20           push 0x20                   ; 32\n\u2502           0x0040805a      46             inc esi\n\u2502           0x0040805b      8d14c0         lea edx, [eax + eax*8]\n\u2502           0x0040805e      8d1450         lea edx, [eax + edx*2]\n\u2502           0x00408061      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00408064      8d14c52493..   lea edx, [eax*8 + 0x569324]\n\u2502           0x0040806b      52             push edx\n\u2502           0x0040806c      51             push ecx\n\u2502           0x0040806d      57             push edi\n\u2502           0x0040806e      e80d0a0b00     call 0x4b8a80\n\u2502           0x00408073      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x00408078      8bce           mov ecx, esi\n\u2502           0x0040807a      6a20           push 0x20                   ; 32\n\u2502           0x0040807c      46             inc esi\n\u2502           0x0040807d      8d14c0         lea edx, [eax + eax*8]\n\u2502           0x00408080      8d1450         lea edx, [eax + edx*2]\n\u2502           0x00408083      8d0490         lea eax, [eax + edx*4]\n\u2502           0x00408086      8d14c54493..   lea edx, [eax*8 + 0x569344]\n\u2502           0x0040808d      52             push edx\n\u2502           0x0040808e      51             push ecx\n\u2502           0x0040808f      57             push edi\n\u2502           0x00408090      e8eb090b00     call 0x4b8a80\n\u2502           0x00408095      83c420         add esp, 0x20\n\u2502           0x00408098      33ed           xor ebp, ebp\n\u2502       \u250c\u2500> 0x0040809a      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502       \u254e   0x0040809f      8bce           mov ecx, esi\n\u2502       \u254e   0x004080a1      6a20           push 0x20                   ; 32\n\u2502       \u254e   0x004080a3      46             inc esi\n\u2502       \u254e   0x004080a4      8d14c0         lea edx, [eax + eax*8]\n\u2502       \u254e   0x004080a7      8d1450         lea edx, [eax + edx*2]\n\u2502       \u254e   0x004080aa      8d0490         lea eax, [eax + edx*4]\n\u2502       \u254e   0x004080ad      8d94c56493..   lea edx, [ebp + eax*8 + 0x569364]\n\u2502       \u254e   0x004080b4      52             push edx\n\u2502       \u254e   0x004080b5      51             push ecx\n\u2502       \u254e   0x004080b6      57             push edi\n\u2502       \u254e   0x004080b7      e8c4090b00     call 0x4b8a80\n\u2502       \u254e   0x004080bc      83c520         add ebp, 0x20               ; 32\n\u2502       \u254e   0x004080bf      83c410         add esp, 0x10\n\u2502       \u254e   0x004080c2      81fdc0000000   cmp ebp, 0xc0               ; 192\n\u2502       \u2514\u2500< 0x004080c8      7cd0           jl 0x40809a\n\u2502           0x004080ca      33ed           xor ebp, ebp\n\u2502       \u250c\u2500> 0x004080cc      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502       \u254e   0x004080d1      8bce           mov ecx, esi\n\u2502       \u254e   0x004080d3      6a20           push 0x20                   ; 32\n\u2502       \u254e   0x004080d5      46             inc esi\n\u2502       \u254e   0x004080d6      8d14c0         lea edx, [eax + eax*8]\n\u2502       \u254e   0x004080d9      8d1450         lea edx, [eax + edx*2]\n\u2502       \u254e   0x004080dc      8d0490         lea eax, [eax + edx*4]\n\u2502       \u254e   0x004080df      8d94c52494..   lea edx, [ebp + eax*8 + 0x569424]\n\u2502       \u254e   0x004080e6      52             push edx\n\u2502       \u254e   0x004080e7      51             push ecx\n\u2502       \u254e   0x004080e8      57             push edi\n\u2502       \u254e   0x004080e9      e892090b00     call 0x4b8a80\n\u2502       \u254e   0x004080ee      83c520         add ebp, 0x20               ; 32\n\u2502       \u254e   0x004080f1      83c410         add esp, 0x10\n\u2502       \u254e   0x004080f4      83fd40         cmp ebp, 0x40               ; '@' ; 64\n\u2502       \u2514\u2500< 0x004080f7      7cd3           jl 0x4080cc\n\u2502           0x004080f9      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x004080fe      8bce           mov ecx, esi\n\u2502           0x00408100      51             push ecx\n\u2502           0x00408101      57             push edi\n\u2502           0x00408102      8d14c0         lea edx, [eax + eax*8]\n\u2502           0x00408105      46             inc esi\n\u2502           0x00408106      8d1450         lea edx, [eax + edx*2]\n\u2502           0x00408109      8d2c90         lea ebp, [eax + edx*4]\n\u2502           0x0040810c      c1e503         shl ebp, 3\n\u2502           0x0040810f      e80c090b00     call 0x4b8a20\n\u2502           0x00408114      6689856494..   mov word [ebp + 0x569464], ax\n\u2502           0x0040811b      a118855300     mov eax, dword [0x538518]   ; [0x538518:4]=0xffffff\n\u2502           0x00408120      25ff000000     and eax, 0xff               ; 255\n\u2502           0x00408125      33c9           xor ecx, ecx\n\u2502           0x00408127      c785689456..   mov dword [ebp + 0x569468], 0\n\u2502           0x00408131      668b8d6494..   mov cx, word [ebp + 0x569464]\n\u2502           0x00408138      8d0440         lea eax, [eax + eax*2]\n\u2502           0x0040813b      83c408         add esp, 8\n\u2502           0x0040813e      c1e007         shl eax, 7\n\u2502           0x00408141      03c1           add eax, ecx\n\u2502           0x00408143      8b0485e06a..   mov eax, dword [eax*4 + 0xa96ae0]\n\u2502           0x0040814a      85c0           test eax, eax\n\u2502       \u250c\u2500< 0x0040814c      746a           je 0x4081b8\n\u2502       \u2502   0x0040814e      8d542430       lea edx, [arg_30h]\n\u2502       \u2502   0x00408152      52             push edx\n\u2502       \u2502   0x00408153      6a00           push 0\n\u2502       \u2502   0x00408155      ffd0           call eax\n\u2502       \u2502   0x00408157      8b442438       mov eax, dword [arg_30h]\n\u2502       \u2502   0x0040815b      6a04           push 4                      ; 4\n\u2502       \u2502   0x0040815d      50             push eax\n\u2502       \u2502   0x0040815e      e8fd8a0a00     call 0x4b0c60\n\u2502       \u2502   0x00408163      8b0d1c855300   mov ecx, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502       \u2502   0x00408169      8944241c       mov dword [var_ch], eax\n\u2502       \u2502   0x0040816d      897c2420       mov dword [var_20h], edi\n\u2502       \u2502   0x00408171      89742424       mov dword [var_14h], esi\n\u2502       \u2502   0x00408175      8d14c9         lea edx, [ecx + ecx*8]\n\u2502       \u2502   0x00408178      8d1451         lea edx, [ecx + edx*2]\n\u2502       \u2502   0x0040817b      8d0c91         lea ecx, [ecx + edx*4]\n\u2502       \u2502   0x0040817e      c1e103         shl ecx, 3\n\u2502       \u2502   0x00408181      898168945600   mov dword [ecx + 0x569468], eax ; [0x569468:4]=0\n\u2502       \u2502   0x00408187      33c0           xor eax, eax\n\u2502       \u2502   0x00408189      668b816494..   mov ax, word [ecx + 0x569464]\n\u2502       \u2502   0x00408190      8bc8           mov ecx, eax\n\u2502       \u2502   0x00408192      33c0           xor eax, eax\n\u2502       \u2502   0x00408194      a019855300     mov al, byte [0x538519]     ; [0x538519:1]=255\n\u2502       \u2502   0x00408199      8d1440         lea edx, [eax + eax*2]\n\u2502       \u2502   0x0040819c      8d44241c       lea eax, [var_ch]\n\u2502       \u2502   0x004081a0      c1e207         shl edx, 7\n\u2502       \u2502   0x004081a3      03ca           add ecx, edx\n\u2502       \u2502   0x004081a5      50             push eax\n\u2502       \u2502   0x004081a6      6a00           push 0\n\u2502       \u2502   0x004081a8      ff148de06a..   call dword [ecx*4 + 0xa96ae0]\n\u2502       \u2502   0x004081af      8b442430       mov eax, dword [var_18h]\n\u2502       \u2502   0x004081b3      83c418         add esp, 0x18\n\u2502       \u2502   0x004081b6      03f0           add esi, eax\n\u2502       \u2514\u2500> 0x004081b8      a11c855300     mov eax, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502           0x004081bd      56             push esi\n\u2502           0x004081be      57             push edi\n\u2502           0x004081bf      8d0cc0         lea ecx, [eax + eax*8]\n\u2502           0x004081c2      8d1448         lea edx, [eax + ecx*2]\n\u2502           0x004081c5      8d2c90         lea ebp, [eax + edx*4]\n\u2502           0x004081c8      c1e503         shl ebp, 3\n\u2502           0x004081cb      e850080b00     call 0x4b8a20\n\u2502           0x004081d0      6689856c94..   mov word [ebp + 0x56946c], ax\n\u2502           0x004081d7      a118855300     mov eax, dword [0x538518]   ; [0x538518:4]=0xffffff\n\u2502           0x004081dc      25ff000000     and eax, 0xff               ; 255\n\u2502           0x004081e1      33c9           xor ecx, ecx\n\u2502           0x004081e3      c785709456..   mov dword [ebp + 0x569470], 0\n\u2502           0x004081ed      668b8d6c94..   mov cx, word [ebp + 0x56946c]\n\u2502           0x004081f4      8d0440         lea eax, [eax + eax*2]\n\u2502           0x004081f7      83c408         add esp, 8\n\u2502           0x004081fa      c1e007         shl eax, 7\n\u2502           0x004081fd      03c1           add eax, ecx\n\u2502           0x004081ff      8b0485e06a..   mov eax, dword [eax*4 + 0xa96ae0]\n\u2502           0x00408206      85c0           test eax, eax\n\u2502       \u250c\u2500< 0x00408208      7465           je 0x40826f\n\u2502       \u2502   0x0040820a      8d542430       lea edx, [arg_30h]\n\u2502       \u2502   0x0040820e      52             push edx\n\u2502       \u2502   0x0040820f      6a00           push 0\n\u2502       \u2502   0x00408211      ffd0           call eax\n\u2502       \u2502   0x00408213      8b442438       mov eax, dword [arg_30h]\n\u2502       \u2502   0x00408217      6a04           push 4                      ; 4\n\u2502       \u2502   0x00408219      50             push eax\n\u2502       \u2502   0x0040821a      e8418a0a00     call 0x4b0c60\n\u2502       \u2502   0x0040821f      8b0d1c855300   mov ecx, dword [0x53851c]   ; [0x53851c:4]=-1\n\u2502       \u2502   0x00408225      8944241c       mov dword [var_ch], eax\n\u2502       \u2502   0x00408229      897c2420       mov dword [var_20h], edi\n\u2502       \u2502   0x0040822d      8d14c9         lea edx, [ecx + ecx*8]\n\u2502       \u2502   0x00408230      8d1451         lea edx, [ecx + edx*2]\n\u2502       \u2502   0x00408233      8d0c91         lea ecx, [ecx + edx*4]\n\u2502       \u2502   0x00408236      c1e103         shl ecx, 3\n\u2502       \u2502   0x00408239      46             inc esi\n\u2502       \u2502   0x0040823a      898170945600   mov dword [ecx + 0x569470], eax ; [0x569470:4]=0\n\u2502       \u2502   0x00408240      33c0           xor eax, eax\n\u2502       \u2502   0x00408242      668b816c94..   mov ax, word [ecx + 0x56946c]\n\u2502       \u2502   0x00408249      89742424       mov dword [var_14h], esi\n\u2502       \u2502   0x0040824d      8bc8           mov ecx, eax\n\u2502       \u2502   0x0040824f      33c0           xor eax, eax\n\u2502       \u2502   0x00408251      a019855300     mov al, byte [0x538519]     ; [0x538519:1]=255\n\u2502       \u2502   0x00408256      8d1440         lea edx, [eax + eax*2]\n\u2502       \u2502   0x00408259      8d44241c       lea eax, [var_ch]\n\u2502       \u2502   0x0040825d      c1e207         shl edx, 7\n\u2502       \u2502   0x00408260      03ca           add ecx, edx\n\u2502       \u2502   0x00408262      50             push eax\n\u2502       \u2502   0x00408263      6a00           push 0\n\u2502       \u2502   0x00408265      ff148de06a..   call dword [ecx*4 + 0xa96ae0]\n\u2502       \u2502   0x0040826c      83c418         add esp, 0x18\n\u2502       \u2514\u2500> 0x0040826f      8b442428       mov eax, dword [arg_28h]\n\u2502           0x00408273      b906000000     mov ecx, 6\n\u2502           0x00408278      8d74240c       lea esi, [var_ch]\n\u2502           0x0040827c      8bf8           mov edi, eax\n\u2502           0x0040827e      c744240c01..   mov dword [var_ch], 1\n\u2502           0x00408286      c744241400..   mov dword [var_14h], 0\n\u2502           0x0040828e      c744241800..   mov dword [var_18h], 0x3ff00000 ; [0x3ff00000:4]=-1\n\u2502           0x00408296      c744241c74..   mov dword [var_1ch], 0x567c74 ; 't|V'\n\u2502                                                                      ; [0x567c74:4]=0\n\u2502           0x0040829e      f3a5           rep movsd dword es:[edi], dword [esi]\n\u2502           0x004082a0      5f             pop edi\n\u2502           0x004082a1      5e             pop esi\n\u2502           0x004082a2      5d             pop ebp\n\u2502           0x004082a3      83c418         add esp, 0x18\n\u2514           0x004082a6      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
   ]
- }
 }

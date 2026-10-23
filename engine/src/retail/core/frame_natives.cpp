@@ -1,5 +1,6 @@
 #include "igi/retail/core/frame_natives.hpp"
 
+#include "igi/retail/core/native_0048f970.hpp"
 #include "igi/retail/core/task_types.hpp"
 
 #if defined(_MSC_VER) && defined(_M_IX86)
@@ -15,7 +16,6 @@ extern "C" {
 std::jmp_buf QTask_SetjmpFrame{};
 // Retail 0x005C8C00 loop status byte, written by Loop_SetStatusByte (0x0048F480).
 // frame_natives.hpp declares it extern, so it needs exactly one definition here.
-std::uint8_t Loop_StatusByte = 0U;
 std::int32_t AppContext_IsActive = 0;
 igi::retail::core::FrameFlagHandler AppContext_OptionalHandler = nullptr;
 std::int32_t AppContext_OptionalHandlerContext = 0;

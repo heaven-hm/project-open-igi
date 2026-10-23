@@ -2,10 +2,93 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x004B7580",
- "signature": "not restated",
+ "symbol": "Ilff_GetChunkTag",
+ "signature": "int32_t(int32_t* arg1)",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "function": {
+  "start": "0x004B7580",
+  "end": "0x004B758D",
+  "size_bytes": 14,
+  "basic_blocks": 3,
+  "instruction_count": 7
+ },
+ "disassembly": [
+  "int32_t Ilff_GetChunkTag(int32_t* arg1)",
+  "0x4b7580  mov     eax, dword [esp+0x4]",
+  "0x4b7584  test    eax, eax",
+  "0x4b7586  je      0x4b758b",
+  "0x4b7588  mov     eax, dword [eax]",
+  "0x4b758a  retn",
+  "0x4b758b  xor     eax, eax",
+  "0x4b758d  retn"
+ ],
+ "pseudocode": "  int32_t Ilff_GetChunkTag(int32_t* arg1)\n\n{\n    if (!arg1)\n        return 0;\n\n    return *arg1;\n}",
+ "callers": [
+  {
+   "callsite": "0x4b2009",
+   "caller": "Sys_PushStack_7 (0x4b1ff0 (x86))"
+  },
+  {
+   "callsite": "0x4b2028",
+   "caller": "Sys_PushStack_7 (0x4b1ff0 (x86))"
+  },
+  {
+   "callsite": "0x4b20a1",
+   "caller": "Sys_PopStack_7 (0x4b2070 (x86))"
+  },
+  {
+   "callsite": "0x4b20d9",
+   "caller": "Sys_PopStack_7 (0x4b2070 (x86))"
+  },
+  {
+   "callsite": "0x4b5f9a",
+   "caller": "Resource_RegisterBuffer (0x4b5f80 (x86))"
+  },
+  {
+   "callsite": "0x4b610f",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6158",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6187",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b61b6",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6213",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6282",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b62c3",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6322",
+   "caller": "Resource_RegisterIlffContainer (0x4b60f0 (x86))"
+  },
+  {
+   "callsite": "0x4b6744",
+   "caller": "Sys_IlfFileCorruptS (0x4b6720 (x86))"
+  }
+ ],
+ "callees": [],
  "cfg": {
+  "entry": "0x004B7580",
   "nodes": [
    {
     "address": "0x004B7580"
@@ -29,5 +112,10 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+ ]
 }

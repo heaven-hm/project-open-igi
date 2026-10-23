@@ -1,0 +1,505 @@
+{
+  "schema_version": 1,
+  "kind": "structural-review",
+  "address": "0x00516640",
+  "name": "Terrain_SelectTerrainLOD_3",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "4a217bd703538796e5041ec0ba72073a6e832e07c74c90f9b9f846ae8bcd2e68",
+  "recorded_at": "2026-10-23T05:30:00Z",
+  "scope": "Retail 0x00516640 and its direct callee 0x004B0B00 against the candidate transcription in engine/src/retail/terrain/terrain_storage.cpp.",
+  "retail": {
+    "entry": "0x00516640",
+    "size_bytes": 119,
+    "blocks": 3,
+    "edges": 3,
+    "instructions": 29,
+    "call_sites": [
+      {
+        "site": "0x0051669A",
+        "kind": "indirect",
+        "target": "[ecx+0x14]",
+        "note": "IDirect3D7 vtable slot +0x14, __stdcall with 4 dwords"
+      },
+      {
+        "site": "0x005166AE",
+        "kind": "direct",
+        "target": "0x004B0B00",
+        "note": "descriptor constructor"
+      }
+    ],
+    "cfg_similarity_binary_ninja_vs_radare2": 1.0,
+    "angr_cfgfast": {
+      "blocks": 5,
+      "edges": 5,
+      "has_unresolved_jumps": false,
+      "result": "pass"
+    },
+    "evidence": {
+      "binary_ninja": {
+        "path": "docs/fidelity/evidence/0x00516640-binaryninja-20261023.json",
+        "sha256": "1fc3f39e3b77d8de10d7340ad490fc4c9d69aa7117d3c89be9dc5cd85d34e1cd"
+      },
+      "radare2": {
+        "path": "docs/fidelity/evidence/0x00516640-radare2-20261023.json",
+        "sha256": "4179bb0ea5ff76efab4f540fd87d3f1dfd7aea0e203c3ee0d465bbaf91c18cfd"
+      },
+      "angr": {
+        "path": "docs/fidelity/evidence/0x00516640-angr-20261023.json",
+        "sha256": "545c0def44600a5f3f8fbc4fd93fb3766badc5a599ca7bbd70c4825e6f00de20"
+      }
+    }
+  },
+  "callee_0x004B0B00": {
+    "entry": "0x004B0B00",
+    "size_bytes": 101,
+    "blocks": 5,
+    "edges": 7,
+    "instructions": 41,
+    "callers": 32,
+    "callees": [
+      {
+        "site": "0x004B0B33",
+        "target": "0x004B0C60",
+        "name": "Mem_AllocFn / engine Mem_Alloc"
+      }
+    ],
+    "cfg_similarity_binary_ninja_vs_radare2": 1.0,
+    "angr_cfgfast": {
+      "blocks": 6,
+      "edges": 8,
+      "has_unresolved_jumps": false,
+      "result": "pass"
+    },
+    "evidence": {
+      "binary_ninja": {
+        "path": "docs/fidelity/evidence/0x004B0B00-binaryninja-20261023.json",
+        "sha256": "a71744fc0e2feb53d164a5bf1ab0225be308c993e08d106753bf2fcc30a5ffc2"
+      },
+      "radare2": {
+        "path": "docs/fidelity/evidence/0x004B0B00-radare2-20261023.json",
+        "sha256": "a498578d87dfa1ca2cb2ba742f607214659eb240420fed5ba6aa6e3ac6d9a666"
+      },
+      "angr": {
+        "path": "docs/fidelity/evidence/0x004B0B00-angr-20261023.json",
+        "sha256": "fc6757d0789f1bb83bdeb108a44330313a94abec3bf2afa6bcdc47a478344a3f"
+      }
+    }
+  },
+  "candidate": {
+    "source": "engine/src/retail/terrain/terrain_storage.cpp",
+    "source_sha256": "4a217bd703538796e5041ec0ba72073a6e832e07c74c90f9b9f846ae8bcd2e68",
+    "object": {
+      "path": "/tmp/linkcheck/terrain_storage.o",
+      "sha256": "86cfe4506a69ce2994eeeef1dedac3c58aa707a88de0242acccf0a197f274582",
+      "format": "coff-i386",
+      "objdump_file_format": "pe-i386",
+      "format_check": "i686-w64-mingw32-objdump -f /tmp/linkcheck/terrain_storage.o -> file format pe-i386, architecture i386 (host Apple LLVM objdump -f prints coff-i386 for the same file)"
+    },
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "command": "i686-w64-mingw32-g++ -std=gnu++20 -O2 -Wall -Wextra -Wpedantic -Iengine/include -c engine/src/retail/terrain/terrain_storage.cpp -o /tmp/linkcheck/terrain_storage.o",
+    "native": {
+      "symbol": "_Terrain_SelectTerrainLOD_3",
+      "entry_offset": "0x80",
+      "instruction_count": 28,
+      "block_count": 1,
+      "edge_count": 0,
+      "calls": [
+        {
+          "offset": "0xd4",
+          "bytes": "ff5214",
+          "text": "call dword ptr [edx + 0x14]"
+        },
+        {
+          "offset": "0x109",
+          "bytes": "e8f2feffff",
+          "text": "call 0x0 <__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0>"
+        }
+      ],
+      "instructions": [
+        {
+          "offset": "0x80",
+          "bytes": "83ec40",
+          "text": "sub esp, 0x40"
+        },
+        {
+          "offset": "0x83",
+          "bytes": "833d0000000001",
+          "text": "cmp dword ptr [0x0], 0x1"
+        },
+        {
+          "offset": "0x8a",
+          "bytes": "19c0",
+          "text": "sbb eax, eax"
+        },
+        {
+          "offset": "0x8c",
+          "bytes": "8d4c2418",
+          "text": "lea ecx, [esp + 0x18]"
+        },
+        {
+          "offset": "0x90",
+          "bytes": "c744241810000000",
+          "text": "mov dword ptr [esp + 0x18], 0x10"
+        },
+        {
+          "offset": "0x98",
+          "bytes": "2500080000",
+          "text": "and eax, 0x800"
+        },
+        {
+          "offset": "0x9d",
+          "bytes": "c7442420c4010000",
+          "text": "mov dword ptr [esp + 0x20], 0x1c4"
+        },
+        {
+          "offset": "0xa5",
+          "bytes": "0500000100",
+          "text": "add eax, 0x10000"
+        },
+        {
+          "offset": "0xaa",
+          "bytes": "c744242400800000",
+          "text": "mov dword ptr [esp + 0x24], 0x8000"
+        },
+        {
+          "offset": "0xb2",
+          "bytes": "8944241c",
+          "text": "mov dword ptr [esp + 0x1c], eax"
+        },
+        {
+          "offset": "0xb6",
+          "bytes": "a104000000",
+          "text": "mov eax, dword ptr [0x4]"
+        },
+        {
+          "offset": "0xbb",
+          "bytes": "8b10",
+          "text": "mov edx, dword ptr [eax]"
+        },
+        {
+          "offset": "0xbd",
+          "bytes": "894c2404",
+          "text": "mov dword ptr [esp + 0x4], ecx"
+        },
+        {
+          "offset": "0xc1",
+          "bytes": "c744240c00000000",
+          "text": "mov dword ptr [esp + 0xc], 0x0"
+        },
+        {
+          "offset": "0xc9",
+          "bytes": "c744240800000000",
+          "text": "mov dword ptr [esp + 0x8], 0x0"
+        },
+        {
+          "offset": "0xd1",
+          "bytes": "890424",
+          "text": "mov dword ptr [esp], eax"
+        },
+        {
+          "offset": "0xd4",
+          "bytes": "ff5214",
+          "text": "call dword ptr [edx + 0x14]"
+        },
+        {
+          "offset": "0xd7",
+          "bytes": "83ec10",
+          "text": "sub esp, 0x10"
+        },
+        {
+          "offset": "0xda",
+          "bytes": "c7042418000000",
+          "text": "mov dword ptr [esp], 0x18"
+        },
+        {
+          "offset": "0xe1",
+          "bytes": "c744240414000000",
+          "text": "mov dword ptr [esp + 0x4], 0x14"
+        },
+        {
+          "offset": "0xe9",
+          "bytes": "c744240810000000",
+          "text": "mov dword ptr [esp + 0x8], 0x10"
+        },
+        {
+          "offset": "0xf1",
+          "bytes": "c744240c00000000",
+          "text": "mov dword ptr [esp + 0xc], 0x0"
+        },
+        {
+          "offset": "0xf9",
+          "bytes": "c74424100c000000",
+          "text": "mov dword ptr [esp + 0x10], 0xc"
+        },
+        {
+          "offset": "0x101",
+          "bytes": "c744241408000000",
+          "text": "mov dword ptr [esp + 0x14], 0x8"
+        },
+        {
+          "offset": "0x109",
+          "bytes": "e8f2feffff",
+          "text": "call 0x0 <__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0>"
+        },
+        {
+          "offset": "0x10e",
+          "bytes": "b880000000",
+          "text": "mov eax, 0x80"
+        },
+        {
+          "offset": "0x113",
+          "bytes": "83c440",
+          "text": "add esp, 0x40"
+        },
+        {
+          "offset": "0x116",
+          "bytes": "c3",
+          "text": "ret"
+        }
+      ]
+    },
+    "helper": {
+      "symbol": "__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0",
+      "entry_offset": "0x0",
+      "instruction_count": 23,
+      "block_count": 2,
+      "edge_count": 2,
+      "calls": [
+        {
+          "offset": "0x1c",
+          "bytes": "e800000000",
+          "text": "call 0x21 <__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0+0x21>"
+        }
+      ],
+      "instructions": [
+        {
+          "offset": "0x0",
+          "bytes": "83ec08",
+          "text": "sub esp, 0x8"
+        },
+        {
+          "offset": "0x3",
+          "bytes": "c70508000000f42e0000",
+          "text": "mov dword ptr [0x8], 0x2ef4"
+        },
+        {
+          "offset": "0xd",
+          "bytes": "c744240404000000",
+          "text": "mov dword ptr [esp + 0x4], 0x4"
+        },
+        {
+          "offset": "0x15",
+          "bytes": "c70424007e1700",
+          "text": "mov dword ptr [esp], 0x177e00"
+        },
+        {
+          "offset": "0x1c",
+          "bytes": "e800000000",
+          "text": "call 0x21 <__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0+0x21>"
+        },
+        {
+          "offset": "0x21",
+          "bytes": "c7050000000080000000",
+          "text": "mov dword ptr [0x0], 0x80"
+        },
+        {
+          "offset": "0x2b",
+          "bytes": "c7050c000000f82e0000",
+          "text": "mov dword ptr [0xc], 0x2ef8"
+        },
+        {
+          "offset": "0x35",
+          "bytes": "89c1",
+          "text": "mov ecx, eax"
+        },
+        {
+          "offset": "0x37",
+          "bytes": "c7051000000000000000",
+          "text": "mov dword ptr [0x10], 0x0"
+        },
+        {
+          "offset": "0x41",
+          "bytes": "a318000000",
+          "text": "mov dword ptr [0x18], eax"
+        },
+        {
+          "offset": "0x46",
+          "bytes": "8d80007c1700",
+          "text": "lea eax, [eax + 0x177c00]"
+        },
+        {
+          "offset": "0x4c",
+          "bytes": "a314000000",
+          "text": "mov dword ptr [0x14], eax"
+        },
+        {
+          "offset": "0x51",
+          "bytes": "31c0",
+          "text": "xor eax, eax"
+        },
+        {
+          "offset": "0x53",
+          "bytes": "2e8d742600",
+          "text": "lea esi, cs:[esi + eiz]"
+        },
+        {
+          "offset": "0x58",
+          "bytes": "2e8db42600000000",
+          "text": "lea esi, cs:[esi + eiz]"
+        },
+        {
+          "offset": "0x60",
+          "bytes": "898481007c1700",
+          "text": "mov dword ptr [ecx + 4*eax + 0x177c00], eax"
+        },
+        {
+          "offset": "0x67",
+          "bytes": "8d5001",
+          "text": "lea edx, [eax + 0x1]"
+        },
+        {
+          "offset": "0x6a",
+          "bytes": "83c002",
+          "text": "add eax, 0x2"
+        },
+        {
+          "offset": "0x6d",
+          "bytes": "899491007c1700",
+          "text": "mov dword ptr [ecx + 4*edx + 0x177c00], edx"
+        },
+        {
+          "offset": "0x74",
+          "bytes": "3d80000000",
+          "text": "cmp eax, 0x80"
+        },
+        {
+          "offset": "0x79",
+          "bytes": "75e5",
+          "text": "jne 0x60 <__ZN3igi6retail7terrain12_GLOBAL__N_1L23build_render_chunk_poolENS2_19RenderChunkPoolViewEiii.constprop.0+0x60>"
+        },
+        {
+          "offset": "0x7b",
+          "bytes": "83c408",
+          "text": "add esp, 0x8"
+        },
+        {
+          "offset": "0x7e",
+          "bytes": "c3",
+          "text": "ret"
+        }
+      ]
+    }
+  },
+  "operation_mapping": [
+    {
+      "retail": "0x00516640 sub esp,0x10",
+      "candidate": "sub esp,0x40; desc lives at [esp+0x18]",
+      "result": "frame size differs; same four-dword descriptor"
+    },
+    {
+      "retail": "0x00516645/0x00516649 store 0 then 0x10 at [esp]",
+      "candidate": "mov dword [esp+0x18],0x10",
+      "result": "final value 0x10; first store eliminated as dead"
+    },
+    {
+      "retail": "0x00516651/0x00516655 store 0 then 0x10000 at [esp+4]",
+      "candidate": "cmp [g_bcad74],1; sbb eax,eax; and 0x800; add 0x10000; store [esp+0x1c]",
+      "result": "final value 0x10000 or 0x10800; branch replaced by a branchless select"
+    },
+    {
+      "retail": "0x0051665D store 0 at [esp+8]; 0x00516661 store 0 at [esp+0xC]",
+      "candidate": "mov [esp+0x20],0x1C4 and [esp+0x24],0x8000 later",
+      "result": "final values 0x1C4 and 0x8000"
+    },
+    {
+      "retail": "0x00516665 read [0xBCAD74]; 0x0051666A test; 0x0051666C jne 0x516676; 0x0051666E store 0x10800",
+      "candidate": "branchless select described above",
+      "result": "same value; retail has a separate 8-byte block, candidate has none"
+    },
+    {
+      "retail": "0x00516676 read [0x5CA110]; 0x00516691 read [eax]",
+      "candidate": "mov eax,[0x5CA110]; mov edx,[eax]",
+      "result": "same interface and vtable load"
+    },
+    {
+      "retail": "0x0051667B push 0; 0x00516693 push 0xA7F890; 0x00516698 push edx; 0x00516699 push eax; 0x0051669A call [ecx+0x14]",
+      "candidate": "stores the same four dwords at [esp..esp+0xC]; call [edx+0x14]",
+      "result": "same __stdcall call with (this,&desc,&g_a7f890,0)"
+    },
+    {
+      "retail": "0x0051669D push 0; 0x0051669F push 0x80; 0x005166A4 push 0x2EF4; 0x005166A9 push 0xA7F878; 0x005166AE call 0x4B0B00",
+      "candidate": "passes 0,0x80,0x2EF4 and the six field addresses to the noinline helper then calls it",
+      "result": "same constructor arguments; internal ABI differs"
+    },
+    {
+      "retail": "0x005166B3 add esp,0x20; 0x005166B6 retn",
+      "candidate": "mov eax,0x80; add esp,0x40; ret",
+      "result": "same observable return value 0x80"
+    }
+  ],
+  "callee_mapping": [
+    {
+      "retail": "0x004B0B00..0x004B0B09 max(alignment,4)",
+      "candidate": "constant-folded to 4 (argument is 0)",
+      "result": "same alignment 4"
+    },
+    {
+      "retail": "0x004B0B1D store element_size at +0x14",
+      "candidate": "mov [g_a7f88c],0x2EF4",
+      "result": "same field/value"
+    },
+    {
+      "retail": "0x004B0B19/0x004B0B24/0x004B0B2A stride (size+align+3)&~(align-1)",
+      "candidate": "mov [g_a7f888],0x2EF8 (constant)",
+      "result": "same stride 0x2EF8"
+    },
+    {
+      "retail": "0x004B0B2C..0x004B0B33 Mem_Alloc((stride+4)*capacity, alignment)",
+      "candidate": "push 0x177E00; push 4; call Mem_Alloc",
+      "result": "same size 0x177E00 and alignment 4"
+    },
+    {
+      "retail": "0x004B0B3A..0x004B0B51 six field stores",
+      "candidate": "five global stores plus the seed pointer store",
+      "result": "same values; object store order differs from retail and from source order"
+    },
+    {
+      "retail": "0x004B0B56..0x004B0B5F index[i]=i loop",
+      "candidate": "same loop unrolled by two",
+      "result": "same 0x80 dwords written; return 0x80"
+    }
+  ],
+  "divergences": [
+    "Retail 0x00516640 has 3 basic blocks / 3 edges because 0x0051666C branches on [0xBCAD74]; GCC if-converted the equivalent source branch into cmp/sbb/and/add, so the candidate native has 1 block / 0 edges. The selected caps value is identical (0x10000 when the dword is non-zero, 0x10800 when zero), and there is no skipped side effect on either path.",
+    "GCC dead-store-eliminated the first writes of 0x10 and 0x10000/0x10800 (and the zero stores of FVF/vertex count where they are overwritten before any read); the source keeps the retail store order, but the object has one store per final field.",
+    "GCC emits the two direct stores to g_a7f880/g_a7f888/g_a7f884/g_a7f878/g_a7f87C in a different order (capacity, stride, used, base, index list) than retail (base, index list, capacity, stride, used). The stores target distinct globals, are not volatile, and the callback is single-threaded, so the order is not observable; the source statements remain in retail order.",
+    "The candidate helper is a GCC .constprop.0 clone specialised for this call: it receives the six descriptor-field addresses (and constants) instead of one descriptor pointer, and writes absolute globals rather than [esi+offset]. The helper is internal, so this changes code shape, not the function contract.",
+    "GCC unrolled the index-seed loop by two; the write set (index[i]=i for i in [0,0x80)) and the final EAX=0x80 are identical.",
+    "The candidate returns a constant 0x80 because the compiler proved the helper result for this call; retail returns the same value in EAX from 0x004B0B00.",
+    "Memory-allocation failure is not guarded in retail (Mem_Alloc result is stored as the base and the index pointer is derived from it) and is not guarded in the candidate either; with a null base the seed loop would fault in both. Neither path was executed."
+  ],
+  "build_check": {
+    "compile": "succeeded with -Wall -Wextra -Wpedantic (no diagnostics) using i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "object_format": "i686-w64-mingw32-objdump -f reports file format pe-i386, architecture i386; host Apple LLVM objdump -f reports coff-i386 for the same COFF object",
+    "partial_link": {
+      "command": "i686-w64-mingw32-g++ -r -nostdlib -o /tmp/linkcheck/combined.o <eight terrain objects> mem_alloc.o heap_list.o",
+      "result": "succeeded",
+      "undefined_symbol_count": 86,
+      "undefined_includes_new_references": false,
+      "note": "No Mem_Alloc, g_a7f890, g_a7f884, g_5ca110 or g_bcad74 remains undefined; the 86 undefined symbols are CRT/libstdc++ and other engine units outside the terrain+mem subset. No executable was produced and no full target relink is claimed."
+    }
+  },
+  "verdict": {
+    "result": "source-equivalent at the operation level; object structure differs only by documented GCC transformations",
+    "cfg_similarity_claimed": 1.0,
+    "cfg_similarity_scope": "retail Binary Ninja vs retail radare2 only",
+    "candidate_cfg_similarity": "not reduced to a jaccard score; 1 block vs 3 blocks is reported above rather than hidden"
+  },
+  "limitations": [
+    "Static analysis and source/object comparison only; the initialiser was never executed in retail or in the candidate, so the allocation result, the created vertex-buffer pointer and the index contents were not observed at runtime.",
+    "The candidate TU compiles and participates in a /tmp partial link, but the full igi target was not relinked by this change; no receipt or executable binds this source to build-clean-win32/igi1.exe.",
+    "The function is not reachable from the current candidate because the registrar 0x00516600 is not transcribed; reachability in retail is via the display callback list, not a direct call.",
+    "The 509-entry bucket seed at 0x00516621 belongs to 0x00516600 and is outside both compared functions.",
+    "The helper 0x004B0B00 has 32 retail callers; only the terrain call is transcribed, so the candidate helper is not a general replacement for the retail constructor."
+  ]
+}

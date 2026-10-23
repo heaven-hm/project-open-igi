@@ -2,6 +2,7 @@
 #define UNICODE
 #define _UNICODE
 #include "igi/retail/core/app_context.hpp"
+#include "igi/retail/core/app_startup_natives.hpp"
 #include "igi/retail/core/debug_command_line.hpp"
 #include "igi/retail/core/frame_natives.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
@@ -341,18 +342,49 @@ LRESULT CALLBACK window_procedure(HWND window_handle,
 
 } // namespace
 
-int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR, int show_command)
+int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR command_line, int show_command)
 {
 
-    // Retail IGI.EXE creates the "IGIMUTEX" mutex and refuses a second instance with
-    // "IGI is already running." (VA 0x00541ECC / 0x00541DBC).
-    HANDLE single_instance_mutex = CreateMutexA(nullptr, FALSE, "IGI2MUTEX");
-    if (single_instance_mutex != nullptr && GetLastError() == ERROR_ALREADY_EXISTS)
+    // Retail IGI.EXE creates the single-instance mutex at 0x0048F544 with
+    // CreateMutexA(NULL, TRUE, "IGIMUTEX"); the name bytes are at VA 0x00541ECC.
+    // A NULL handle, ERROR_ALREADY_EXISTS (0xB7) or ERROR_INVALID_HANDLE (6)
+    // reaches the shared MessageBoxA at 0x0048F8F0: MessageBoxA(NULL,
+    // "IGI is already running.", "Error", MB_ICONERROR), then returns 0. The
+    // retail does not release or close the handle on that path.
+    HANDLE const single_instance_mutex = CreateMutexA(nullptr, TRUE, "IGIMUTEX");
+    bool refuse_second_instance = single_instance_mutex == nullptr;
+    if (!refuse_second_instance && GetLastError() == ERROR_ALREADY_EXISTS)
     {
-        MessageBoxA(nullptr, "IGI is already running.", "IGI1", MB_OK | MB_ICONERROR);
-        CloseHandle(single_instance_mutex);
-        return 1;
+        refuse_second_instance = true;
     }
+    if (!refuse_second_instance && GetLastError() == ERROR_INVALID_HANDLE)
+    {
+        refuse_second_instance = true;
+    }
+    if (refuse_second_instance)
+    {
+        MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR);
+        return 0;
+    }
+
+    // Retail IGI.EXE main 0x0048F530 stores the startup command line and then the
+    // instance handle, in that order, after the single-instance mutex check and
+    // before any window is created (CreateWindowExA is at 0x0048F770):
+    //   0x0048F585  mov ebp, [esp+0x478]      ; WinMain hInstance (entry [esp+4])
+    //   0x0048F5EC  mov ecx, [esp+0x480]      ; WinMain lpCmdLine (entry [esp+0xc])
+    //   0x0048F5F3  push ecx
+    //   0x0048F5F4  call 0x0048F0C0           ; StoreCommandLine(lpCmdLine)
+    //   0x0048F5F9  push ebp
+    //   0x0048F5FA  call 0x0048F0D0           ; StoreInstanceHandle(hInstance)
+    // Both return values are left in EAX and never read by main. The same real
+    // WinMain arguments are forwarded here: no substitute command line is invented
+    // when lpCmdLine is empty or null, so the native sees exactly what the CRT
+    // startup passed. The retail registers its window class just before these two
+    // calls; this shell registers the class in the scene/shell paths that follow,
+    // so the two stores are kept adjacent and ahead of both argument parsing and
+    // window creation.
+    StoreCommandLine(command_line);
+    StoreInstanceHandle(instance_handle);
 
     int argument_count = 0;
     wchar_t** arguments = CommandLineToArgvW(GetCommandLineW(), &argument_count);

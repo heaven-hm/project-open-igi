@@ -4,59 +4,107 @@
  "result": "passed",
  "address": "0x004B1E90",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "1a878672bb811d20730c8c12391fd20ebfd3f267536465ca7cac737dfa3d4b6c",
+ "implementation_sha256": "48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "Delegated coding agent source-semantic review against the live Binary Ninja 6.0.10601 MCP view and Radare2 6.2.0 on retail igi.exe (SHA-256 dea34892...); the candidate translation unit was recompiled with the repository -O3 -DNDEBUG flags and its object symbol compared with the body recorded for the previous source digest.",
+ "reviewed_at": "2026-10-23T09:19:34Z",
+ "source_revision": "worktree HEAD 5a3b6e40521b2159f6dce7e8ecbeafb8fe3b9b91 plus the uncommitted Qvm_ReportError correction; bound by engine/src/retail/script/qvm_native_loader.cpp sha256 48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
+ "review_basis": "The current engine/src/retail/script/qvm_native_loader.cpp hashes to 48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f. The retail entry was re-read through the live Binary Ninja view and independently recovered with Radare2 on 2026-10-23; both live graphs are identical to the bound artifacts, so the recorded CFG is current. The candidate was recompiled from that source; its object symbol body was compared with the body compiled from the previous source digest 655494c9... and is instruction-identical after relocation resolution, proving the Qvm_ReportError edit did not alter this function. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x004B1E90",
+  "name": "String_FindExtension",
+  "signature": "char*(char* arg1, int32_t arg2, int32_t arg3)",
+  "start": "0x004B1E90",
+  "end": "0x004B1EDA",
+  "size_bytes": 75,
+  "basic_blocks": 6,
+  "edges": 8,
+  "cfg_similarity": 1.0,
+  "summary": "0x004B1E90-0x004B1ED9 (75 bytes), 6 basic blocks / 8 edges, cdecl char*(char* out,int32_t size,char* path): scans path backwards for the last 0x2E (.) at an index >= 1; when out is non-null, copies at most size-1 bytes from the dot into out via the in-binary copy helper 0x004A5500 and writes out[size-1]=0; returns the dot pointer (or path when no dot is found)."
+ },
+ "object_body": {
+  "artifact": "build/qvm-siblings-rebind/body-comparison.json",
+  "artifact_sha256": "f76054a7334aedc93ac157d3c25b54e2d7890229d173a61d3a98fcec1162b606",
+  "previous_source_sha256": "655494c97dcb48d25cdaae324a1782d51f2e3fce4c966477d8bb4b270d92093d",
+  "previous_object_sha256": "3388b99084d4d18265f3a1ea2b6a50af0374208bcb9f9baaa2bc96f2cd41c40a",
+  "current_source_sha256": "48ae1e2700dfc8738d9ea1a31178495ff821c3bed69ac189263a88eebac8359f",
+  "current_object_sha256": "4cf2f01ba7c2d9ea5c76e59d85fff0f5a8ece1e1976ae88b78827e8d25f91cf1",
+  "comparison": {
+   "raw_bytes_identical": true,
+   "relocation_normalized_instruction_stream_identical": true,
+   "changed_bytes": "none; 208-byte body identical (sha256 404e1b0a212bd7ab0c906b51d5d97446400160157ac8fa0a7adfd99902d66d75)",
+   "instruction_count": 71
+  }
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004B1E90 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "Binary Ninja and Radare2 both recover 0x004B1E90-0x004B1ED9 with 6 blocks / 8 edges; the live re-read matches the bound artifacts exactly (similarity 1.000). The candidate symbol igi::retail::script::String_FindExtension(char*, int, char*) is the body implementing that entry, 208 bytes including alignment padding."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "Three stack arguments in retail order: arg3 path is read at [esp+0xC] at entry, arg1 out and arg2 size are read later; the candidate declares (char* dst, std::int32_t max_len, char* path) in that order. Binary Ninja types the third argument int32_t because it never types it, but the body dereferences it as a NUL-terminated string, so char* is ABI-identical. cdecl, three stack arguments and the char* return are preserved."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "rationale": "The separator compare is 0x2E, the scan length starts at 0xFFFFFFFF and is converted with not/dec, and the copy/terminator index is max_len-1; all appear at the corresponding points in the candidate."
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+   "rationale": "Retail calls the in-binary copy helper 0x004A5500 (Camera_ApplyLineFilter_5) with (out, dot, size-1) and then writes out[size-1]=0; the candidate calls std::strncpy with the same arguments and writes the same terminator. The 12-case positive-length differential compared the complete destination buffer and matched. The candidate guards the call (max_len>1) and the terminator (max_len>0); for positive sizes that produces identical memory, and the max_len<=0 divergence is recorded below."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "Byte/string scanning and copying only; no floating-point data or instructions."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "The scan compares path[length] first (the NUL) and walks down to path[1], never path[0]; the candidate implements exactly that loop. Destination writes stay within max_len for positive sizes. For max_len<=0 retail would pass a wrapped count to the copy helper and write out[max_len-1]; the candidate skips both, so that undefined retail domain is not reproduced (documented limitation)."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "Returns path+dot when a dot is found and path when it is not, on the same branches in the candidate; the null-out path returns the dot pointer without writing. No error path exists in retail."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Binary Ninja reports char*(char*, int32_t, int32_t) and Radare2 recovers cdecl with three stack arguments; the candidate declares char* String_FindExtension(char*, std::int32_t, char*). The third argument is typed int32_t by the decompiler but dereferenced as a string; char* is ABI-identical and the char* return is preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004B1E90-binaryninja.json",
+   "evidence_sha256": "a26282faf0b3e33907df528cdd99a00635104cadd497a2d6314c75e6361d4ed0",
+   "tool": "Binary Ninja 6.0.10601, UI MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004B1E90-radare2.json",
+   "evidence_sha256": "f2cbb129e188304bf347ac8fc201443563c6ebb3d41bf5e453d3cc07eb93f87a",
+   "tool": "radare2 6.2.0"
+  },
+  "build": {
+   "evidence_path": "docs/fidelity/evidence/0x004B1E90-build.json",
+   "evidence_sha256": "bf93f6534d9e9ab348c62a98597830c7f54fcaeb6e53f17dd76e9e7b53a60661"
+  },
+  "object_body_comparison": {
+   "evidence_path": "build/qvm-siblings-rebind/body-comparison.json",
+   "evidence_sha256": "f76054a7334aedc93ac157d3c25b54e2d7890229d173a61d3a98fcec1162b606",
+   "result": "instruction-identical after relocation resolution"
+  }
+ },
+ "limitations": [
+  "No paired retail/candidate game-process runtime capture exists for this address; runtime_tests and behavioral are intentionally absent and RUNTIME_TESTED/VERIFIED are not claimed.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; cfg_similarity 1.0 is not a candidate-vs-retail CFG score, and the candidate machine CFG was not compared for isomorphism.",
+  "The candidate object was rebuilt and hashed, but the image was not linked by this review; no linked-image or receipt claim is made.",
+  "For max_len <= 0 the candidate adds guards the retail body does not have: retail calls the copy helper with max_len-1 wrapped to an unsigned count and then writes out[max_len-1] (undefined behaviour), while the candidate performs neither operation. Positive lengths match; the non-positive domain is documented and not claimed equivalent.",
+  "The compiled object body is byte-for-byte identical to the 208-byte body recorded for source 655494c9... (symbol offset 0x70 in both objects), so the Qvm_ReportError edit provably did not change this function.",
+  "The binary_ninja and radare2 evidence signatures bound here were re-derived from the current artifacts (char*(char* arg1, int32_t arg2, int32_t arg3) and fcn.004b1e90 (int32_t arg_ch_2, int32_t arg_14h, int32_t arg_ch);); the manifest previously said 'not restated'."
  ]
 }

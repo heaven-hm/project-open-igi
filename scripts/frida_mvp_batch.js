@@ -91,6 +91,15 @@ function hookNative(address) {
       entry.hits++;
       remember(entry.ret, classify(retval), MAX_CLASSES);
       remember(entry.args, this.pattern, MAX_PATTERNS);
+      // Rare natives (the entry point in particular) can be followed by an
+      // immediate process exit, which would lose the whole capture before the
+      // periodic flush. The first few hits of every native are sent at once;
+      // hot natives fall back to the 1.5 s aggregate.
+      if (entry.hits <= 5) {
+        emit(key, {hits: entry.hits,
+                   ret_classes: Object.keys(entry.ret).sort(),
+                   arg_patterns: Object.keys(entry.args).sort()}, false);
+      }
     }
   });
 }

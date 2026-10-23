@@ -4,59 +4,84 @@
  "result": "passed",
  "address": "0x004AF8F0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
+ "implementation_sha256": "1465553fdf323540f4ea79ac40cade281260ea7ef5919eabf9457640b175dc97",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Automated static review with live Binary Ninja and Radare2 CFG extraction plus the current source/retail behavior notes",
+ "reviewed_at": "2026-10-23T12:12:12+05:30",
+ "retail_evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF8F0-binaryninja.json",
+   "evidence_sha256": "6fea2fa6286bd6e6ecb801181223cc80b10aa2d7521a226c873f381c8e72d9ff",
+   "nodes": 1,
+   "edges": 0
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF8F0-radare2.json",
+   "evidence_sha256": "9e11cea5186e6b31dd226cba8c6d8423e788b64908e66e5edb56ccb859c78bbf",
+   "nodes": 1,
+   "edges": 0
+  },
+  "cfg_similarity": 1.0
+ },
+ "behavior_summary": "inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`.",
  "runtime_contract": {
   "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "probe_sha256": "028d60b7f0e132f45a10721e12a067dc1fbdb1f140616437ffac856192faadf3",
   "required_observables": {
    "inputs": [
     "args"
    ],
    "outputs": [
-    "outputs"
+    "return_value"
    ],
-   "sideEffects": []
+   "sideEffects": [
+    "side_effects"
+   ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "note": "Contract for the paired live typed probe. The behavioral evidence currently cited for this record is the angr/ESIL differential in verification.behavioral and verification.runtime_tests, not a live game-process capture."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AF8F0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "rationale": "Live Binary Ninja and Radare2 extraction on the retail image both identify one function entry at 0x004AF8F0; Binary Ninja reports 1 nodes/0 edges and Radare2 reports 1 nodes/0 edges, recomputed similarity 1.000."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "The candidate preserves the retail argument order and width: void __cdecl HeapList_Insert(void* node, void* head);"
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+   "rationale": "inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "This native performs integer/pointer work; no x87 or SSE arithmetic is involved."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "inserts `arg2` at the tail of an intrusive doubly-linked list whose header is at `context` (`context + 4` = head anchor, `context + 8` = tail pointer): writes `arg2[1] = *(context + 8)`, `*arg2 = context + 4`, `**(context + 8) = arg2`, `*(context + 8) = arg2`, and returns `context`."
   }
+ ],
+ "limitations": [
+  "The retained level-1 retail trace build/runtime-traces/early-L1.json records this address in observed_order, establishing retail reachability only; it does not supply typed arguments, returns or state for this address.",
+  "Behavioral evidence for this record is the documented angr/ESIL differential, not a live game-process argument/return capture.",
+  "Build evidence covers the Windows x86 translation-unit compile; it does not relink or bind build-clean-win32/igi1.exe. The receipt's source hash for this file predates the final comment-only edits, so no candidate-binding claim is made.",
+  "These tests cover valid list layouts and first/middle/last removal positions; they do not test invalid pointers or malformed list state.",
+  "Execution is instruction-level VEX under angr, not a live retail game process."
  ]
 }

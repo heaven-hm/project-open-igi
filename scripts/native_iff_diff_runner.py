@@ -330,6 +330,18 @@ def run_side_with_retries(mode: str, executable: str, level: int, symbols: dict,
     raise SystemExit(f"the {mode} side did not produce an observation: {last_error}")
 
 
+def default_candidate_executable() -> pathlib.Path:
+    """Resolve the current candidate, retaining legacy layouts as fallback."""
+    configured = os.environ.get("IGI_CANDIDATE_EXE")
+    if configured:
+        return pathlib.Path(configured)
+    candidates = [
+        ROOT / "build-clean-win32" / "igi1.exe",
+        ROOT / "build-win32-no-verify" / "engine" / "platform" / "windows" / "open-igi.exe",
+    ]
+    return next((path for path in candidates if path.is_file()), candidates[0])
+
+
 def main() -> int:
     ensure_frida()
     ensure_frida_server()
@@ -344,10 +356,7 @@ def main() -> int:
     parser.add_argument(
         "--candidate-exe",
         type=pathlib.Path,
-        default=pathlib.Path(os.environ.get(
-            "IGI_CANDIDATE_EXE",
-            str(ROOT / "build-win32-no-verify/engine/platform/windows/open-igi.exe"),
-        )),
+        default=default_candidate_executable(),
     )
     parser.add_argument("--candidate-exe-sha256", default=os.environ.get("IGI_CANDIDATE_SHA256"))
     parser.add_argument("--level", type=int, default=4)

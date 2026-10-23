@@ -1,11 +1,11 @@
 # Retail igi.exe call flow (transcription, not implementation)
 
-Source: radare2 (aa) on ~/Downloads/IGI/igi.exe, 2026-10-21. Order is call order inside each function. Names are not established; addresses only. angr CFGFast cross-check and Binary Ninja confirmation still pending.
+Source: radare2 (aa) on ~/Downloads/IGI/igi.exe, 2026-10-21. Order is call order inside each function. Names are not established; addresses only. The mutex sequence was re-checked on 2026-10-23 with Binary Ninja MCP, radare2 6.2.0 and angr 10.0.4.post1 CFGFast (retail SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01); the rest of the chain remains radare2-only.
 
 ## Level 0: entry
 - entry 0x4A511B: CRT startup (GetVersion, GetCommandLine, GetStartupInfo, GetModuleHandle) then call main
 
-## Level 1: main 0x48F544
+## Level 1: main 0x0048F530
 1. CreateMutex (single instance), CoInitialize, LoadIcon, LoadCursor, RegisterClass
 2. small init calls in order: 0x48F0C0, 0x48F0D0, 0x48F0F0, 0x48F100, 0x48F140, 0x48F120, 0x48F1A0, 0x48F1C0, 0x48F1E0, 0x48F240, 0x48F260, 0x48F280, 0x48F290, 0x48F2A0, 0x48F210, 0x48F2B0, 0x48F300, 0x48F200
 3. 0x48F360 x4, then 0x498480, then CreateWindowEx
@@ -37,9 +37,12 @@ BF0 0x443ED0 0x443680 0x440FD0 0x440C20 0x440710 0x4403E0 0x43F900 0x43EFF0 0x43
 ```
 Note: 0x402930 looks like a table of per-class registration calls (descending addresses). Next: trace what each registers, then Level_Load from 0x401050 path.
 
-## Deferred step: single-instance mutex (main 0x48F544 step 1)
-Retail order is unchanged: CreateMutex (IGIMUTEX, FX_Igimutex 0x0048F530, "IGI is already running") stays step 1 in the retail flow above.
-In the open-igi build the mutex is deferred: the code in scripts/GameNatives/fx/0048F530-FX_Igimutex.cpp is commented out behind IGI_ENABLE_SINGLE_INSTANCE_MUTEX (not deleted), so retail igi.exe and open-igi.exe can run side by side under the same Frida probes. Restore later by defining IGI_ENABLE_SINGLE_INSTANCE_MUTEX. Keep it undefined for all testing.
+## Single-instance mutex (main 0x0048F530 step 1)
+Verified against retail bytes with Binary Ninja MCP, radare2 6.2.0 and angr CFGFast: retail main 0x0048F530 calls CreateMutexA(NULL, TRUE, "IGIMUTEX") at 0x0048F544; the name pointer is 0x00541ECC and its bytes are 49 47 49 4D 55 54 45 58 00 ("IGIMUTEX\0"). The returned handle is tested for NULL at 0x0048F54A (je 0x0048F8F0). GetLastError is then sampled at 0x0048F560 and compared with ERROR_ALREADY_EXISTS (0xB7) at 0x0048F562 (je 0x0048F8F0); if that misses it is sampled again at 0x0048F56D and compared with ERROR_INVALID_HANDLE (6) at 0x0048F56F (je 0x0048F8F0).
+
+The shared failure block at 0x0048F8F0 pushes MB_ICONERROR (0x10), "Error" (0x00541E60) and "IGI is already running." (0x00541DBC), falls through to MessageBoxA at 0x0048F8FC with a NULL owner, then executes xor eax,eax and ret 0x10: it returns 0 and does not call CloseHandle or ReleaseMutex. The success path instead reaches 0x0048F8CA and calls ReleaseMutex on the handle stored at [var_20h].
+
+The candidate now matches this step: engine/src/retail/core/retail_main.cpp and engine/platform/windows/scene_main.cpp both use CreateMutexA(nullptr, TRUE, "IGIMUTEX"), the same handle and error checks, MessageBoxA(nullptr, "IGI is already running.", "Error", MB_ICONERROR), return 0 on the failure path, and ReleaseMutex on the normal Main path. There is no IGI_ENABLE_SINGLE_INSTANCE_MUTEX switch and no OPEN_IGI_MUTEX_NAME / OPENIGIMUTEX_TEST rename in the engine sources. The catalog reference scripts/GameNatives/fx/0048F530-Main.cpp still contains the old OPEN_IGI_MUTEX_NAME path (CreateMutexA with OPENIGIMUTEX_TEST); it is not part of the candidate build and was left untouched. Because both programs now take IGIMUTEX, retail and candidate cannot run at the same time; paired captures must remain sequential. The diagnostic shell (engine/platform/windows/scene_main.cpp WinMain) has no single teardown and never calls ReleaseMutex or CloseHandle, so it relies on process exit to release the mutex; the reconstructed Main at 0x0048F530 is compiled but not wired into that shell.
 
 ## 0x402930 registrations (r2, first string literal in each callee, call order)
 Method: pd 40 at each callee, first string literal. Heuristic, so a few callees that register through a helper show "-" or a nearby literal. Names are what the callee registers, not verified native names. Callee addresses are in the call list above.
@@ -69,5 +72,5 @@ Level_Load = 0x4F0D40(script path, arg): frees entries of the table 0xA71890..0x
 Order observation for the MVP demos: terrain (0x4C5F00/0x4C6240) comes before textures.res, and both come before objects.qsc via Level_Load.
 Status: radare2 only. angr CFGFast and Binary Ninja confirmation of this chain, and the Frida call-order check on retail, are still pending. Class names for 0x41xxxx menu callees and a few "-" entries are not resolved.
 
-## Mutex update (supersedes the deferred-mutex note above)
-open-igi keeps the single-instance mutex step in the retail order (main 0x48F544 step 1, FX_Igimutex 0x0048F530) but names it OPENIGIMUTEX_TEST instead of retail IGIMUTEX, so both games run side by side under the same Frida probes. The IGI_ENABLE_SINGLE_INSTANCE_MUTEX switch is gone. TODO: set OPEN_IGI_MUTEX_NAME back to IGIMUTEX after side-by-side testing.
+## Mutex naming: resolved
+The earlier OPENIGIMUTEX_TEST / OPEN_IGI_MUTEX_NAME note is obsolete. The candidate uses the retail name "IGIMUTEX" from 0x00541ECC with CreateMutexA(NULL, TRUE, ...) at 0x0048F544, so no side-by-side retail/candidate launch is possible any more. Capture the two programs sequentially, as required by the runtime workflow.

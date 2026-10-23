@@ -30,6 +30,8 @@ add_executable(igi WIN32
     engine/src/retail/core/native_0048f0e0.cpp
     engine/src/retail/core/native_0048f0f0.cpp
     engine/src/retail/core/native_0048f970.cpp
+    engine/src/retail/core/qtask_create_task.cpp
+    engine/src/retail/core/retail_error.cpp
     engine/src/retail/core/retail_main.cpp
     engine/src/retail/core/task_types.cpp
     engine/src/retail/diagnostics/log_record.cpp
@@ -40,7 +42,6 @@ add_executable(igi WIN32
     engine/src/retail/error/error_show.cpp
     engine/src/retail/human/human_camera_eye.cpp
     engine/src/retail/human/human_view.cpp
-    engine/src/retail/input/input_port.cpp
     engine/src/retail/input/input_port_process.cpp
     engine/src/retail/mem/heap_list.cpp
     engine/src/retail/mem/mem_alloc.cpp
@@ -73,12 +74,28 @@ add_executable(igi WIN32
     engine/src/retail/script/script_mode.cpp
     engine/src/retail/sys/ilff_navigation.cpp
     engine/src/retail/sys/resource_lookup.cpp
+    # All terrain translation units are in the target. terrain_storage.cpp owns the shared retail
+    # storage (0x005CA114, 0x00A7E068, 0x00BCAB08, 0x00BCAAE0, 0x00A7F878..0x00A7F88C); those
+    # definitions were removed from terrain_draw.cpp so exactly one definition of each exists in
+    # the link. terrain_loaders.cpp no longer carries the throwing Terrain_TraverseContourQuadtree
+    # and Terrain_Draw placeholders: terrain_quadtree.cpp defines the traversal native and
+    # terrain_draw.cpp defines Terrain_Draw() with the retail no-argument ABI.
+    # terrain_draw.cpp's Terrain_BuildMipMaps_2 (0x00514760) call resolves to terrain_mipmaps.cpp,
+    # whose g_a7e070 (0x00A7E070) definition lives in terrain_draw.cpp; no unit is left out.
+    engine/src/retail/terrain/terrain_draw.cpp
     engine/src/retail/terrain/terrain_loaders.cpp
+    engine/src/retail/terrain/terrain_mipmaps.cpp
+    engine/src/retail/terrain/terrain_out_of_terrain_renderch.cpp
+    engine/src/retail/terrain/terrain_quadtree.cpp
+    engine/src/retail/terrain/terrain_scene_state.cpp
+    engine/src/retail/terrain/terrain_storage.cpp
+    engine/src/retail/terrain/terrain_unknown_blendmode.cpp
     engine/src/retail/texture/loop_terrain_texture.cpp
     engine/src/retail/texture/model_texture_pixels.cpp
     engine/src/retail/texture/texture_loaders.cpp
     engine/platform/windows/player_controller.cpp
     engine/platform/windows/retail_animation.cpp
+    engine/platform/windows/direct_input_mouse.cpp
     engine/platform/windows/retail_model_scene.cpp
     engine/platform/windows/retail_native_verification_support.cpp)
 target_include_directories(igi PRIVATE engine/include)
@@ -93,6 +110,5 @@ if(MINGW)
     target_link_options(igi PRIVATE -static -static-libgcc -static-libstdc++
                         -Wl,-Bstatic)
     # The retail renders through DirectDraw 7 (igi.exe imports ddraw.dll).
-    target_link_libraries(igi PRIVATE ddraw dxguid)
-
+    target_link_libraries(igi PRIVATE ddraw dxguid dinput)
 endif()

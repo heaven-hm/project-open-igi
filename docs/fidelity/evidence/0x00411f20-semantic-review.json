@@ -1,62 +1,453 @@
 {
- "schema_version": 1,
- "kind": "semantic-review-report",
- "result": "passed",
- "address": "0x00411F20",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "feb1ace4b32a08ee3795198e5e4a56738205d1c3e12a134c77597496c25cf796",
- "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x00411F20",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "feb1ace4b32a08ee3795198e5e4a56738205d1c3e12a134c77597496c25cf796",
+  "reviewed": true,
+  "reviewed_by": "Delegated coding agent static review against live Binary Ninja 6.0.10601 MCP (retail PE view_1), radare2 6.2.0 CFG and angr 10.0.4.post1 CFGFast on retail igi.exe; candidate source read from this worktree. No game process was executed and no runtime behavior is claimed.",
+  "reviewed_at": "2026-10-23T12:58:32Z",
+  "source_revision": "caeefd75e3d7fceba1dab7a49b2093d9adfdaa76",
+  "review_basis": "Retail 0x00411F20 was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view, independently recovered with radare2 6.2.0 and angr 10.0.4.post1 CFGFast. The candidate is scripts/GameNatives/humanplayer/00411F20-HumanPlayer_WireSlide.cpp at sha256 feb1ace4b32a08ee3795198e5e4a56738205d1c3e12a134c77597496c25cf796 (recorded implementation.signature: int HumanPlayer_WireSlide1_2(float* context)). The evidence artifact digests are bound in this review.",
+  "retail_function": {
+    "entry": "0x00411F20",
+    "name": "HumanPlayer_WireSlide",
+    "binary_ninja_name": "HumanPlayer_WireSlide",
+    "signature": "int32_t(float* arg1)",
+    "start": "0x00411F20",
+    "end": "0x4123e6",
+    "basic_blocks": 22,
+    "edges": [
+      {
+        "source": "0x00411f20",
+        "target": "0x00411f4f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00411f20",
+        "target": "0x0041223f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00411f4f",
+        "target": "0x0041200f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00411f4f",
+        "target": "0x0041202f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041200f",
+        "target": "0x00412029",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041200f",
+        "target": "0x0041202f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412029",
+        "target": "0x0041202f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0041202f",
+        "target": "0x00412143",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041202f",
+        "target": "0x0041216f",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412143",
+        "target": "0x0041216f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0041216f",
+        "target": "0x004123cd",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x0041223f",
+        "target": "0x004122bc",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041223f",
+        "target": "0x004122d4",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122bc",
+        "target": "0x004122d4",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122bc",
+        "target": "0x004122d8",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122d4",
+        "target": "0x004122dc",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004122d8",
+        "target": "0x004122dc",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004122dc",
+        "target": "0x004122f4",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122dc",
+        "target": "0x00412307",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122f4",
+        "target": "0x00412307",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004122f4",
+        "target": "0x00412317",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412307",
+        "target": "0x0041230b",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412307",
+        "target": "0x00412317",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041230b",
+        "target": "0x00412317",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041230b",
+        "target": "0x004123e0",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412317",
+        "target": "0x0041235d",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412317",
+        "target": "0x00412370",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041235d",
+        "target": "0x00412370",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x00412370",
+        "target": "0x0041238a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x00412370",
+        "target": "0x004123ae",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0041238a",
+        "target": "0x004123cd",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004123ae",
+        "target": "0x004123cd",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004123cd",
+        "target": "0x004123e0",
+        "kind": "unconditional"
+      }
+    ],
+    "cfg_similarity": 1.0,
+    "summary": "Twenty-two blocks 0x411F20-0x4123xx: wire-slide state machine over the human_player fields (0x368 gate), AI_CombatTarget_21, Vehicle_DeployGear_10, WeaponType_RegisterType_2 x3, AI_* ordering/cover/vision calls, Mat33_ToEulerAngles, Vec3_Normalize, Human_ViewCam x2, HumanPlayer_UpdateAnimation_4, SoundSys_SetMasterVolume_7/SetFrequency_7, HumanPlayer_LoadParameters_6 and an indirect call.",
+    "blocks": [
+      {
+        "address": "0x00411f20",
+        "start": "0x411f20",
+        "end": "0x411f4f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041223f",
+        "start": "0x41223f",
+        "end": "0x4122bc",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00411f4f",
+        "start": "0x411f4f",
+        "end": "0x41200f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004122d4",
+        "start": "0x4122d4",
+        "end": "0x4122d8",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004122bc",
+        "start": "0x4122bc",
+        "end": "0x4122d4",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041202f",
+        "start": "0x41202f",
+        "end": "0x412143",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041200f",
+        "start": "0x41200f",
+        "end": "0x412029",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004122dc",
+        "start": "0x4122dc",
+        "end": "0x4122f4",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004122d8",
+        "start": "0x4122d8",
+        "end": "0x4122dc",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041216f",
+        "start": "0x41216f",
+        "end": "0x41223f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00412143",
+        "start": "0x412143",
+        "end": "0x41216f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00412029",
+        "start": "0x412029",
+        "end": "0x41202f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00412307",
+        "start": "0x412307",
+        "end": "0x41230b",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004122f4",
+        "start": "0x4122f4",
+        "end": "0x412307",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004123cd",
+        "start": "0x4123cd",
+        "end": "0x4123e0",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00412317",
+        "start": "0x412317",
+        "end": "0x41235d",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041230b",
+        "start": "0x41230b",
+        "end": "0x412317",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x00412370",
+        "start": "0x412370",
+        "end": "0x41238a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041235d",
+        "start": "0x41235d",
+        "end": "0x412370",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004123e0",
+        "start": "0x4123e0",
+        "end": "0x4123e7",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004123ae",
+        "start": "0x4123ae",
+        "end": "0x4123cd",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x0041238a",
+        "start": "0x41238a",
+        "end": "0x4123ae",
+        "flags": "can-exit"
+      }
+    ],
+    "calls": [
+      "AI_CombatTarget_21",
+      "Vehicle_DeployGear_10",
+      "WeaponType_RegisterType_2",
+      "WeaponType_RegisterType_2",
+      "AI_UpdateOrders_19",
+      "Mat33_ToEulerAngles",
+      "WeaponType_UpdateAnim",
+      "WeaponType_UpdateAnim",
+      "Vec3_Normalize",
+      "AI_AlertAllies_19",
+      "AI_AlertAllies_20",
+      "AI_TakeCover_20",
+      "AI_MoveToNode_22",
+      "AI_UpdateOrders_22",
+      "AI_UpdatePatrol_20",
+      "AI_CheckVisibility_20",
+      "AI_UpdateSensors_19",
+      "Human_ViewCam",
+      "HumanPlayer_UpdateAnimation_4",
+      "SoundSys_SetMasterVolume_7",
+      "AI_SelectTarget_21",
+      "Vehicle_DeployGear_10",
+      "WeaponType_RegisterType_2",
+      "WeaponType_RegisterType_2",
+      "AI_SelectTarget_20",
+      "AI_UpdateOrders_20",
+      "AI_TakeCover_22",
+      "AI_CombatTarget_20",
+      "AI_CheckHearing_20",
+      "Human_ViewCam",
+      "HumanPlayer_LoadParameters_6",
+      "SoundSys_SetFrequency_7",
+      "AI_UpdateSensors_21",
+      "eax"
+    ],
+    "globals_written": [
+      "0x533400",
+      "0x5334f0"
+    ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
- },
- "checks": [
-  {
-   "name": "function_identity",
-   "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x00411F20 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+  "candidate_function": {
+    "path": "scripts/GameNatives/humanplayer/00411F20-HumanPlayer_WireSlide.cpp",
+    "sha256": "feb1ace4b32a08ee3795198e5e4a56738205d1c3e12a134c77597496c25cf796",
+    "signature": "int HumanPlayer_WireSlide1_2(float* context)",
+    "status_after_review": "TRANSCRIBED",
+    "summary": "Twenty-two blocks 0x411F20-0x4123xx: wire-slide state machine over the human_player fields (0x368 gate), AI_CombatTarget_21, Vehicle_DeployGear_10, WeaponType_RegisterType_2 x3, AI_* ordering/cover/vision calls, Mat33_ToEulerAngles, Vec3_Normalize, Human_ViewCam x2, HumanPlayer_UpdateAnimation_4, SoundSys_SetMasterVolume_7/SetFrequency_7, HumanPlayer_LoadParameters_6 and an indirect call."
   },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+  "candidate_comparison": {
+    "result": "divergent",
+    "divergences": [
+      "Extra Sys_Atan2UndefinedInOrig and Sys_FreeMemory_11 calls.",
+      "Missing/changed AI pair calls (retail 33 call sites vs candidate's sequence).",
+      "Indirect call target differs."
+    ],
+    "statement": "Divergences are listed above; by contract they keep the record at TRANSCRIBED or lower."
   },
-  {
-   "name": "argument_mapping",
-   "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "detail": "Retail entry 0x00411F20 is recovered by all three tools; the address-bound implementation is scripts/GameNatives/humanplayer/00411F20-HumanPlayer_WireSlide.cpp (sha256 feb1ace4b32a08ee3795198e5e4a56738205d1c3e12a134c77597496c25cf796). Twenty-two blocks 0x411F20-0x4123xx: wire-slide state machine over the human_player fields (0x368 gate), AI_CombatTarget_21, Vehicle_DeployGear_10, WeaponType_RegisterType_2 x3, AI_* ordering/cover/vision calls, Mat33_ToEulerAngles, Vec3_Normalize, Human_ViewCam x2, HumanPlayer_UpdateAnimation_4, SoundSys_SetMasterVolume_7/SetFrequency_7, HumanPlayer_LoadParameters_6 and an indirect call."
+    },
+    {
+      "name": "abi_and_signature",
+      "result": "passed",
+      "detail": "BN int32_t(float* arg1): one pointer argument at [E+4]; the candidate int HumanPlayer_WireSlide1_2(float* context) matches the pointer and cdecl."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "detail": "BN int32_t(float* arg1): one pointer argument at [E+4]; the candidate int HumanPlayer_WireSlide1_2(float* context) matches the pointer and cdecl."
+    },
+    {
+      "name": "control_flow_shape",
+      "result": "passed",
+      "detail": "Retail CFG: Binary Ninja reports 22 block(s)/33 edge(s) at 0x00411F20; radare2 recovers the identical 22 block(s)/33 edge(s) (score 1.0000); angr CFGFast recovers 60 block(s) with has_unresolved_jumps=False."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "detail": "Retail's 33 call sites include Mat33_ToEulerAngles(0x004B3C50), Vec3_Normalize(0x004B3100), WeaponType_RegisterType_2 x3, Air_* pairs and Human_ViewCam x2. The candidate adds Sys_Atan2UndefinedInOrig and Sys_FreeMemory_11 (neither is a retail call at this address) and drops/changes several AI pair calls (e.g. AI_UpdateOrders_19/22, AI_SelectTarget_21/20, AI_TakeCover_20/22, Human_ViewCam one of two)."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "detail": "Angle/velocity constants 0x20000, 0x538DC4, field offsets 0x368/0x30/0x28/0x20, table 0x00533400/0x005334F0."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "detail": "The typed float* accesses cover the same 0x368-gated state block, but the added free/atan2 calls change the side-effect set and the candidate's call sequence is not the retail sequence."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "detail": "Returns an int (the candidate's context-derived value); BN models int32_t \u2014 the shape is plausible but the side effects differ."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "passed",
+      "detail": "The fld/fmul/fcom/fchs sequences and the NaN handling via FCMP_UO are preserved in the candidate's expression form."
+    }
+  ],
+  "signature_comparison": {
+    "reviewed": true,
+    "result": "abi-adapted",
+    "rationale": "Binary Ninja reports \"int32_t(float* arg1)\" at 0x00411F20; radare2 recovers \"fcn.00411f20 (int32_t arg_8h);\". Both tools place the entry at 0x00411F20 and agree on the stack/register word count and cleanup; the difference is the level of type/argument-name detail, not the call frame. Candidate declaration: int HumanPlayer_WireSlide1_2(float* context). The candidate declaration is separately recorded as divergent below and does not satisfy the retail ABI."
   },
-  {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+  "evidence": {
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/0x00411F20-binaryninja.json",
+      "evidence_sha256": "1c97c0b797c8508ff7885b48f7c968d9190d098829a87dcdff08c99e57619569",
+      "tool": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/0x00411F20-radare2.json",
+      "evidence_sha256": "9dd1318fc11cfdabf03adf849c500ba08eaf98d0f48921d0105a6d40a91442a7",
+      "tool": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/0x00411F20-angr-20261023.json",
+      "evidence_sha256": "b4014b715aa768e4439b7a90a477929f21556c1d67813d2d53aa5016296410b6",
+      "tool": "angr 10.0.4.post1 CFGFast"
+    }
   },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
-  }
- ]
+  "limitations": [
+    "No game process was executed; this review is static (live Binary Ninja, radare2 CFG, angr CFGFast) plus the candidate source."
+  ]
 }

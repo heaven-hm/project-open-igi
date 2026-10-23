@@ -1,38 +1,69 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x0048F100",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x0048F100"
-   },
-   {
-    "address": "0x0048F113"
-   },
-   {
-    "address": "0x0048F11B"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x0048F100",
-    "target": "0x0048F11B",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0048F100",
-    "target": "0x0048F113",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x0048F113",
-    "target": "0x0048F11B",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x0048F100",
+  "symbol": "fcn.0048f100",
+  "signature": "fcn.0048f100 (int32_t arg_4h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x0048F100; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 28,
+    "basic_block_count": 3,
+    "instruction_count": 9,
+    "call_convention": "cdecl",
+    "edge_count": 3,
+    "argument_count": 1,
+    "is_linear": true
+  },
+  "bytes_hex": "8b0dc48b5c008b44240485c9a3d48b5c",
+  "bytes_sha256": "f5e8eb1fd1ce3724a83feb0d53e507e42c728546adc2abfe42ca6cf6c39dd7e1",
+  "cfg": {
+    "entry": "0x0048F100",
+    "nodes": [
+      {
+        "address": "0x0048f100",
+        "size": 19,
+        "instructions": 5
+      },
+      {
+        "address": "0x0048f113",
+        "size": 8,
+        "instructions": 3
+      },
+      {
+        "address": "0x0048f11b",
+        "size": 1,
+        "instructions": 1
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x0048f100",
+        "target": "0x0048f113",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0048f100",
+        "target": "0x0048f11b",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x0048f113",
+        "target": "0x0048f11b",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "\u250c 28: fcn.0048f100 (int32_t arg_4h);\n\u2502 `- args(sp[0x4..0x4])\n\u2502           0x0048f100      8b0dc48b5c00   mov ecx, dword [0x5c8bc4]   ; [0x5c8bc4:4]=0\n\u2502           0x0048f106      8b442404       mov eax, dword [arg_4h]\n\u2502           0x0048f10a      85c9           test ecx, ecx\n\u2502           0x0048f10c      a3d48b5c00     mov dword [0x5c8bd4], eax   ; [0x5c8bd4:4]=0\n\u2502       \u250c\u2500< 0x0048f111      7408           je 0x48f11b\n\u2502       \u2502   0x0048f113      50             push eax\n\u2502       \u2502   0x0048f114      51             push ecx\n\u2502       \u2502   0x0048f115      ff15dc315300   call dword [sym.imp.USER32.dll_SetWindowTextA] ; 0x5331dc ; BOOL SetWindowTextA(HWND hWnd, LPCSTR lpString)\n\u2514       \u2514\u2500> 0x0048f11b      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
   ]
- }
 }

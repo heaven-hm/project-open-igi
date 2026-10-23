@@ -4,59 +4,85 @@
  "result": "passed",
  "address": "0x004B5C90",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "d5d7c04371f06db5793794ca340387d6e90de7a8f42ebf1f72f5ebd44de38e1c",
+ "implementation_sha256": "79828f8249015f48208a5b6ec70c11dec9277e06b85d9a05674cd3f6a7060e1d",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+ "reviewed_by": "Automated static review with live Binary Ninja and Radare2 CFG extraction plus the current source/retail behavior notes",
+ "reviewed_at": "2026-10-23T12:12:12+05:30",
+ "retail_evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004B5C90-binaryninja.json",
+   "evidence_sha256": "419647938fc6c8f234a835c8dfc488bff0f5d92deccee5d97ece32ac7b1ae28e",
+   "nodes": 13,
+   "edges": 16
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004B5C90-radare2.json",
+   "evidence_sha256": "d91eec9bc2e75318b4e41284608c3433c89b4801e8bc1e147d04a313e17662c7",
+   "nodes": 13,
+   "edges": 16
+  },
+  "cfg_similarity": 1.0
+ },
+ "behavior_summary": "switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the last active node into the freed position, retail returns that relocated node's address in EAX (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index).",
  "runtime_contract": {
   "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+  "probe_sha256": "028d60b7f0e132f45a10721e12a067dc1fbdb1f140616437ffac856192faadf3",
   "required_observables": {
    "inputs": [
     "args"
    ],
    "outputs": [
-    "outputs"
+    "return_value"
    ],
-   "sideEffects": []
+   "sideEffects": [
+    "side_effects"
+   ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "note": "Contract for the paired live typed probe. The behavioral evidence currently cited for this record is the angr/ESIL differential in verification.behavioral and verification.runtime_tests, not a live game-process capture."
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004B5C90 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "rationale": "Live Binary Ninja and Radare2 extraction on the retail image both identify one function entry at 0x004B5C90; Binary Ninja reports 13 nodes/16 edges and Radare2 reports 13 nodes/16 edges, recomputed similarity 1.000."
   },
   {
    "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "rationale": "switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the last active node into the freed position, retail returns that relocated node's address in EAX (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index)."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "rationale": "The candidate preserves the retail argument order and width: unknown"
   },
   {
    "name": "calls_and_side_effects",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+   "rationale": "switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the last active node into the freed position, retail returns that relocated node's address in EAX (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index)."
   },
   {
    "name": "floating_point_semantics",
    "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "rationale": "This native performs integer/pointer work; no x87 or SSE arithmetic is involved."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "rationale": "switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the last active node into the freed position, retail returns that relocated node's address in EAX (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index)."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "rationale": "switches on `context[9]` (`+0x24` resource kind): - case 0 (container): walks child list at `context[5]`, recursively calling Resource_FreeNode on each child node (`i_1[2]`), unlinks `context` via Camera_ApplyHandiCam_33 (0x004AF910), frees `context[0x0D]` via Sys_OpenFileStream_5 (0x004B1A30), and returns the slot to free-list `g_943e24` / `g_943e28`; - case 1, 4 (sub-resource): unlinks child link `&context[2]` and `context`, then returns slot; - case 2 (standalone raw resource): frees `context[0x0D]`, unlinks `context`, returns slot; - case 3: unlinks `context` and returns slot. Return value: when the freed node's `pool_active_idx` equals the decremented `g_943e28` (freeing the last active slot) retail returns the new count in EAX; otherwise, after the swap-pop relocates the last active node into the freed position, retail returns that relocated node's address in EAX (verified by executing retail 0x004B5C90 under angr: freeing a middle node of three returned 0x0600004AC = &pool[table[new_count]], and mutated that node's +0x244 to the freed index)."
   }
+ ],
+ "limitations": [
+  "The retained level-1 retail trace build/runtime-traces/early-L1.json records this address in observed_order, establishing retail reachability only; it does not supply typed arguments, returns or state for this address.",
+  "Behavioral evidence for this record is the documented angr/ESIL differential, not a live game-process argument/return capture.",
+  "Build evidence covers the Windows x86 translation-unit compile; it does not relink or bind build-clean-win32/igi1.exe. The receipt's source hash for this file predates the final comment-only edits, so no candidate-binding claim is made.",
+  "Modeled boundaries: Sys_AllocateMemory_5 meta writes, fixture-driven chunk-tag/form-type and prefix-match returns, simulated CreateNode slots and container/insert call records.",
+  "Node link words +0x00..+0x07 are excluded: the port mirrors retail list behaviour through its own 64-bit-safe representation; anchor +0x10..+0x1C and all semantic fields are compared.",
+  "Concrete emulator fixtures, not a running retail process or a proof of all inputs."
  ]
 }

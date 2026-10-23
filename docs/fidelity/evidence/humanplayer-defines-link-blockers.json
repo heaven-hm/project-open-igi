@@ -1,0 +1,95 @@
+{
+ "schema_version": 1,
+ "kind": "link-gap-report",
+ "result": "blocked",
+ "addresses": [
+  "0x00405850",
+  "0x00410070",
+  "0x004137A0"
+ ],
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "candidate_sha256": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
+ "translation_unit": {
+  "path": "engine/src/retail/script/humanplayer_defines.cpp",
+  "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
+  "object_path": "/tmp/humanplayer_defines.o",
+  "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7",
+  "compiled": true
+ },
+ "scratch_link": {
+  "command": "cd build-clean-win32/CMakeFiles/igi.dir && i686-w64-mingw32-g++ -O3 -DNDEBUG -L/opt/homebrew/opt/llvm/lib -mwindows -static -static-libgcc -static-libstdc++ -Wl,-Bstatic -Wl,--whole-archive objects.a -Wl,--no-whole-archive /tmp/humanplayer_defines.o -o /tmp/igi1-with-humanplayer.exe -Wl,--out-implib,/tmp/libigi1-test.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @linkLibs.rsp",
+  "exit_code": 1,
+  "stderr": "/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x11b): undefined reference to `Qvm_Execute'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x12c): undefined reference to `Config_SaveSoundOptions'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x131): undefined reference to `Config_NoD3DDriversWithHard'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x141): undefined reference to `Config_SaveGraphicOptions'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x146): undefined reference to `Config_SaveSoundOptions'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x14b): undefined reference to `Config_NoD3DDriversWithHard'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x139): undefined reference to `Config_Language_2'\n/opt/homebrew/Cellar/mingw-w64/14.0.0_3/toolchain-i686/bin/i686-w64-mingw32-ld: /tmp/humanplayer_defines.o:humanplayer_defines.cpp:(.text+0x153): undefined reference to `Config_Language_2'\ncollect2: error: ld returned 1 exit status\n",
+  "executed_at": "2026-10-23T09:27:47Z"
+ },
+ "missing_symbols": [
+  {
+   "symbol": "Qvm_Execute",
+   "retail_address": "0x004B85B0",
+   "defined_in_target": false,
+   "reason": "No engine transcription is in the CMake igi target. Only scripts/GameNatives/qvm/004B85B0-Qvm_Execute.cpp carries a historical candidate, and it is not built; its provenance records \"full semantics NOT verified\". It was not linked or stubbed."
+  },
+  {
+   "symbol": "Config_SaveGraphicOptions",
+   "retail_address": "0x00405300",
+   "defined_in_target": false,
+   "reason": "No engine transcription is in the CMake igi target. The historical candidate is scripts/GameNatives/config/00405300-Config_SaveGraphicOptions.cpp, outside the built source list; it was not linked or stubbed."
+  },
+  {
+   "symbol": "Config_SaveSoundOptions",
+   "retail_address": "0x004058A0",
+   "defined_in_target": false,
+   "reason": "No engine transcription is in the CMake igi target. The historical candidate is scripts/GameNatives/config/004058A0-Config_SaveSoundOptions.cpp, outside the built source list; it was not linked or stubbed."
+  },
+  {
+   "symbol": "Config_NoD3DDriversWithHard",
+   "retail_address": "0x00405980",
+   "defined_in_target": false,
+   "reason": "No engine transcription is in the CMake igi target. The historical candidate is scripts/GameNatives/config/00405980-Config_NoD3DDriversWithHard.cpp, outside the built source list; it was not linked or stubbed."
+  },
+  {
+   "symbol": "Config_Language_2",
+   "retail_address": "0x00405B30",
+   "defined_in_target": false,
+   "reason": "No engine transcription is in the CMake igi target. The historical candidate is scripts/GameNatives/config/00405B30-Config_Language_2.cpp, outside the built source list; it was not linked or stubbed."
+  }
+ ],
+ "consequence": [
+  "DefineHumanPlayerGeneral (0x00410070), HumanPlayer_LoadParameters (0x004137A0) and Config_Read (0x00405850) remain absent from the linked candidate.",
+  "Adding the translation unit to the target without the five missing callees fails the configured link with undefined references, so it was not added to CMakeLists.txt.",
+  "No stub, weak definition or guessed config/QVM behaviour was introduced."
+ ],
+ "limitations": [
+  "The scratch link was run outside CMake against the current objects.a to enumerate the unresolved references; it did not modify the target or produce a candidate image."
+ ],
+ "reproduced_20261023": {
+  "executed_at": "2026-10-23T15:34:00+05:30",
+  "candidate_sha256_verified": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
+  "candidate_sha256_note": "The digest stated in the 2026-10-23 task (11f939200afd865bf728b1e38a22e750b8ba1b7f07f2b58bc09a58c4d6e2ffd0) does not match build-clean-win32/igi1.exe; the value above is the verified file digest.",
+  "compile": {
+   "command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -std=c++20 -I engine/include -c engine/src/retail/script/humanplayer_defines.cpp -o /tmp/hp-standalone.o",
+   "exit_code": 0,
+   "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7",
+   "reproduced": true
+  },
+  "link": {
+   "exit_code": 1,
+   "undefined_reference_diagnostics": 8,
+   "distinct_undefined_symbols": 5,
+   "nm_over_objects_and_exe": "No definition of Qvm_Execute, Config_SaveGraphicOptions, Config_SaveSoundOptions, Config_NoD3DDriversWithHard or Config_Language_2 exists in build-clean-win32/CMakeFiles/igi.dir/objects.a or build-clean-win32/igi1.exe; only the unrelated Qvm_ExecuteInstructions (0x004BCFD0) is present.",
+   "result": "blocked"
+  },
+  "per_address_audit": {
+   "0x00405850": "docs/fidelity/evidence/0x00405850-source-audit-20261023.json",
+   "0x00410070": "docs/fidelity/evidence/0x00410070-source-audit-20261023.json",
+   "0x004137A0": "docs/fidelity/evidence/0x004137A0-source-audit-20261023.json"
+  }
+ },
+ "source_divergence_20261023": {
+  "summary": "Two of the three natives are not retail-faithful in addition to being absent from the image; linking them would not make them correct.",
+  "0x00405850": "The candidate wrapper matches the retail call order and branch selection (Binary Ninja bn_function_callees at 0x00405850).",
+  "0x00410070": "The candidate reads a flat float array and never calls the retail script accessor 0x004B8A50; the retail fetches each argument through 0x004B8A50 and writes eight named values plus two tables, and it scales indices 1-3 by 4096000.0f and 9.259259e-06f. The candidate applies only 1/108000 and discards its wide-scale value.",
+  "0x004137A0": "The candidate probes the filesystem for COMMON/humanplayer/humanplayer.qsc and opens it as a resource; the retail calls Qvm_Load on LOCAL:humanplayer/humanplayer.qsc, then Qvm_Execute and Qvm_Cleanup, and on failure calls Debug_Error and never returns. The retail result type is int32_t, not void.",
+  "missing_after_correction": "A retail-faithful DefineHumanPlayerGeneral also needs 0x004B8A50 (script float-argument getter), which is likewise absent from the target."
+ }
+}

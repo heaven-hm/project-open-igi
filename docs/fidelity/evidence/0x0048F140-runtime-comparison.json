@@ -1,0 +1,497 @@
+{
+ "schema_version": 1,
+ "kind": "igi-paired-native-runtime-comparison",
+ "address": "0x0048F140",
+ "name": "AppContext_SetIsActive",
+ "generated_utc": "2026-10-23T11:57:19.150829+00:00",
+ "result": "matched",
+ "verdict": "runtime_match",
+ "status_promotion": "RUNTIME_TESTED for the documented startup invocation and scenario only; not VERIFIED. The Lead applies the manifest patch.",
+ "scope": "The startup activation store of the app-context isActive dword: the reviewed main call of retail 0x0048F140 (return address 0x0048F61A) against the candidate symbol _AppContext_SetIsActive called from RunRetailModelScene (return address 0x004824A6), in one paired retail-then-candidate capture.",
+ "reason": "The probe observed exactly one reviewed-callsite setter invocation on each side and 26/26 typed fields matched: the argument bits were 1 on both sides; the pre-call flag was 0 on both sides (the zero-filled .data initial value); the store wrote sign_extend_8(1)=1, changing the flag 0->1; the optional handler dword and its context were null, so no handler call occurred; the return was the unmodified argument bits (1); and the flag read back after the call equalled the stored value. The immediately following frame-loop getter load returned the same value, which is recorded in the 0x0048F170 evidence produced from the same capture.",
+ "retail_call_site": {
+  "entry_va": "0x0048F140",
+  "name_in_catalog": "FX_SmokeEmit_23 (inherited FX-namespace misnomer; identity is the VA)",
+  "bytes": "8b 44 24 04 0f be c8 89 0d fc 8b 5c 00 8b 0d 18 8c 5c 00 85 c9 74 0d 8b 15 1c 8c 5c 00 52 50 ff d1 83 c4 08 c3",
+  "instructions": [
+   "0x0048F140  8b 44 24 04     mov eax, dword [esp+4]",
+   "0x0048F144  0f be c8        movsx ecx, al",
+   "0x0048F147  89 0d fc8b5c00  mov dword [0x005C8BFC], ecx",
+   "0x0048F14D  8b 0d 188c5c00  mov ecx, dword [0x005C8C18]",
+   "0x0048F153  85 c9           test ecx, ecx",
+   "0x0048F155  74 0d           je 0x0048F164",
+   "0x0048F157  8b 15 1c8c5c00  mov edx, dword [0x005C8C1C]",
+   "0x0048F15D  52              push edx",
+   "0x0048F15E  50              push eax",
+   "0x0048F15F  ff d1           call ecx",
+   "0x0048F161  83 c4 08        add esp, 8",
+   "0x0048F164  c3              ret"
+  ],
+  "basic_blocks": 3,
+  "calling_convention": "cdecl",
+  "signature": "int32_t __cdecl(int32_t value)",
+  "arguments": [
+   {
+    "index": 0,
+    "location": "[esp+4]",
+    "type": "int32_t",
+    "meaning": "the new isActive value; only the low byte selects the stored dword (movsx), while the full word reaches the handler and is the null-handler return"
+   }
+  ],
+  "return_value": "EAX = the optional handler result, or the unmodified argument word when the handler dword is null",
+  "state_delta": {
+   "va": "0x005C8BFC",
+   "width_bytes": 4,
+   "value": "sign_extend_8(argument[7:0])",
+   "instruction_va": "0x0048F147"
+  },
+  "optional_handler": {
+   "handler_va": "0x005C8C18",
+   "context_va": "0x005C8C1C",
+   "installer_va": "0x0048F180",
+   "installer_callers": "none in the retail image"
+  },
+  "initial_value": "0x005C8BFC is in the zero-filled tail of .data (VirtualSize 0x6FC558, SizeOfRawData 0x1A000), so the load-time dword is 0",
+  "caller": {
+   "entry": "0x0048F530",
+   "retail_symbol": "main (FX_Igimutex in the catalog)",
+   "call_site": "0x0048F615",
+   "return_address": "0x0048F61A",
+   "argument_source": "push 0x1 immediately before the call",
+   "order": "after RegisterClassA and the 0x0048F60E CreateWindowEx-class call; the first of four adjacent startup flag stores"
+  },
+  "other_callers": [
+   "0x00494F50 (display window handler) at 0x0049502A (push 0) and 0x00495046 (push 1); out of the paired scope"
+  ],
+  "static_evidence": {
+   "decompiler": "Binary Ninja 6.0.10601 (view_1, PE32 base 0x00400000); no second decompiler was used for this function",
+   "binary_ninja_evidence": "docs/fidelity/evidence/0x0048F140-binaryninja.json",
+   "radare2_evidence": "docs/fidelity/evidence/0x0048F140-radare2.json",
+   "semantic_review": "docs/fidelity/evidence/0x0048F140-runtime-semantic-review.json",
+   "raw_bytes_recheck": "i686-w64-mingw32-objdump -d --start-address=0x48f140 --stop-address=0x48f180 /Users/haseeb-mir/Downloads/IGI/igi.exe"
+  },
+  "artifact": {
+   "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "preferred_image_base": "0x00400000",
+   "architecture": "x86 PE32"
+  }
+ },
+ "candidate_wiring": {
+  "path": "engine/src/retail/core/frame_natives.cpp",
+  "source_sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4",
+  "symbol": "_AppContext_SetIsActive",
+  "entry_va": "0x0041F7C0",
+  "bytes": "83 ec 08 8b 44 24 0c 0f be d0 89 15 ec 1b 5e 00 8b 15 e8 1b 5e 00 85 d2 74 0f 8b 0d e4 1b 5e 00 89 04 24 89 4c 24 04 ff d2 83 c4 08 c3",
+  "state_symbol": "_AppContext_IsActive",
+  "state_va": "0x005E1BEC",
+  "handler_symbol": "_AppContext_OptionalHandler",
+  "handler_va": "0x005E1BE8",
+  "handler_context_symbol": "_AppContext_OptionalHandlerContext",
+  "handler_context_va": "0x005E1BE4",
+  "call_site": "0x004824A1 in RunRetailModelScene (push 0x1, return address 0x004824A6), after LinkWindowHandler and Loop_SetStatusByte(1), before the level start",
+  "dead_duplicate": "_Main in retail_main.cpp contains a second AppContext_GetIsActive call at 0x0041FE85 but _Main has no callers in this image",
+  "verification_note": "the compiled body and callsite were re-read from the tested image with i686-w64-mingw32-objdump after the rebuild"
+ },
+ "comparison": {
+  "fields_compared": 26,
+  "fields_matched": 26,
+  "per_field": [
+   {
+    "field": "caller_class",
+    "part": "inputs",
+    "retail": "primary",
+    "candidate": "primary",
+    "match": true
+   },
+   {
+    "field": "is_primary_startup_call",
+    "part": "inputs",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "argument_state",
+    "part": "inputs",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "argument_bits",
+    "part": "inputs",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "argument_low_byte",
+    "part": "inputs",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "argument_sign_extended_low_byte",
+    "part": "inputs",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "argument_is_zero",
+    "part": "inputs",
+    "retail": false,
+    "candidate": false,
+    "match": true
+   },
+   {
+    "field": "return_state",
+    "part": "outputs",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "return_bits",
+    "part": "outputs",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "return_equals_argument",
+    "part": "outputs",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "return_is_zero",
+    "part": "outputs",
+    "retail": false,
+    "candidate": false,
+    "match": true
+   },
+   {
+    "field": "return_equals_stored",
+    "part": "outputs",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "previous_flag_state",
+    "part": "sideEffects",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "previous_flag_value",
+    "part": "sideEffects",
+    "retail": 0,
+    "candidate": 0,
+    "match": true
+   },
+   {
+    "field": "previous_flag_is_zero",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "stored_flag_state",
+    "part": "sideEffects",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "stored_flag_value",
+    "part": "sideEffects",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "stored_equals_sign_extended_low_byte",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "store_changed",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "handler_state",
+    "part": "sideEffects",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "handler_is_null",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "handler_context_state",
+    "part": "sideEffects",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "handler_context_is_null",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   },
+   {
+    "field": "flag_readback_after_state",
+    "part": "sideEffects",
+    "retail": "known",
+    "candidate": "known",
+    "match": true
+   },
+   {
+    "field": "flag_readback_after_value",
+    "part": "sideEffects",
+    "retail": 1,
+    "candidate": 1,
+    "match": true
+   },
+   {
+    "field": "store_visible_after_return",
+    "part": "sideEffects",
+    "retail": true,
+    "candidate": true,
+    "match": true
+   }
+  ],
+  "auxiliary_setter_calls": {
+   "retail": [],
+   "candidate": [],
+   "compared_fields": []
+  }
+ },
+ "conditions": {
+  "level": true,
+  "display_mode": true,
+  "working_directory": true,
+  "probe": true,
+  "sequential_order": true,
+  "same_arguments": true,
+  "receipt_valid_at_start": true,
+  "receipt_valid_after": true,
+  "candidate_unchanged": true,
+  "no_process_left": true,
+  "all_true": true,
+  "note": "Both sides: window level1, working directory /Users/haseeb-mir/Downloads/IGI, the same reviewed typed probe, actions script and driver; retail captured first and the candidate only after retail's owned process was confirmed gone; each executable spawned suspended with both native hooks installed before the primary thread resumed."
+ },
+ "capture": {
+  "pair_json": "build/runtime-traces/20261023T113721Z-48f140-paired/pair.json",
+  "pair_json_sha256": "acb0d4824465b310397c19ed1bb19ade49058ee9c243de20340eea2304d365b2",
+  "capture_directory": "build/runtime-traces/20261023T113721Z-48f140-paired",
+  "created_utc": "2026-10-23T11:52:14.010943+00:00",
+  "finished_utc": "2026-10-23T11:53:24.945787+00:00",
+  "frida_host": "127.0.0.1:27042",
+  "frida_client_version": "17.24.0",
+  "retail": {
+   "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "owned_pid": 244,
+   "result": "captured",
+   "hook_phase": "before-primary-thread-resume",
+   "arguments": [
+    "window",
+    "level1"
+   ],
+   "working_directory": "/Users/haseeb-mir/Downloads/IGI"
+  },
+  "candidate": {
+   "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/igi1.exe",
+   "sha256": "8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885",
+   "staged_sha256": "8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885",
+   "owned_pid": 440,
+   "result": "captured",
+   "hook_phase": "before-primary-thread-resume",
+   "arguments": [
+    "window",
+    "level1"
+   ],
+   "working_directory": "/Users/haseeb-mir/Downloads/IGI"
+  },
+  "candidate_receipt": {
+   "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-smart-workflow/build-clean-win32/candidate-receipt.json",
+   "sha256": "fb617ef6d9fa563c7913f84b5c0407791a12a6ff0d230baeb9ee4020be0fdd5a",
+   "created_utc": "2026-10-23T11:39:06.579346+00:00",
+   "valid_at_capture_start": true,
+   "valid_after_capture": true
+  },
+  "probe": {
+   "path": "scripts/frida_app_context_isactive_typed.js",
+   "sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1",
+   "reviewed_sha256": "7636bd0bade8ba6dcf7e10e1622e5f2b894abd160244c7d72b7d661b510f22b1"
+  },
+  "actions": {
+   "path": "scripts/frida_scenario_actions.js",
+   "sha256": "995a8e42647c4b5989a6995996664fb3ff55f9dff1d63189371028bd43697dd7"
+  },
+  "driver": {
+   "path": "scripts/frida_scoped_capture.py",
+   "sha256": "1119bd16344112c7f622e25372cf7441cff1c2d08b4540a01432346b66933ed6",
+   "note": "capture() reused directly; main() gate precondition unsatisfied"
+  },
+  "sources": [
+   {
+    "path": "engine/src/retail/core/frame_natives.cpp",
+    "sha256": "3354340eacc317ce61aee8901fb71d1af922a41bdec35b0ad288b5944e7f4af4"
+   },
+   {
+    "path": "engine/platform/windows/retail_model_scene.cpp",
+    "sha256": "ba5cdd1f6470d3df072a1460a0c05f62c90d2fc7e00ec6d6e0c0a3cb3037b769"
+   }
+  ],
+  "layouts": {
+   "retail": {
+    "0x0048F140": {
+     "entryVA": "0x0048F140",
+     "stateVA": "0x005C8BFC",
+     "handlerVA": "0x005C8C18",
+     "handlerContextVA": "0x005C8C1C",
+     "primaryCallerReturnVA": "0x0048F61A"
+    },
+    "0x0048F170": {
+     "entryVA": "0x0048F170",
+     "stateVA": "0x005C8BFC",
+     "handlerVA": "0x005C8C18",
+     "handlerContextVA": "0x005C8C1C",
+     "primaryCallerReturnVA": "0x0048F817"
+    }
+   },
+   "candidate": {
+    "0x0048F140": {
+     "entryVA": "0x0041F7C0",
+     "stateVA": "0x005E1BEC",
+     "handlerVA": "0x005E1BE8",
+     "handlerContextVA": "0x005E1BE4",
+     "primaryCallerReturnVA": "0x004824A6"
+    },
+    "0x0048F170": {
+     "entryVA": "0x0041F7F0",
+     "stateVA": "0x005E1BEC",
+     "handlerVA": "0x005E1BE8",
+     "handlerContextVA": "0x005E1BE4",
+     "primaryCallerReturnVA": "0x00482D54"
+    }
+   }
+  },
+  "observation": {
+   "settle_seconds": 45.0,
+   "observe_seconds": 25.0,
+   "mode": "pair"
+  },
+  "preflight": {
+   "clear": true,
+   "waited_seconds": 0.04
+  },
+  "postflight": {
+   "frida_processes_after": [],
+   "candidate_unchanged": true,
+   "receipt_unchanged": true,
+   "owned_processes_terminated": {
+    "retail": true,
+    "candidate": true
+   }
+  },
+  "call_counts": {
+   "retail": {
+    "0x0048F140": 1,
+    "0x0048F170": 1
+   },
+   "candidate": {
+    "0x0048F140": 1,
+    "0x0048F170": 1
+   }
+  },
+  "sequence_aggregates": {
+   "retail": {
+    "type": "getter_sequence",
+    "address": "0x0048F170",
+    "scope": "startup-app-context-active-flag",
+    "module": "igi.exe",
+    "observed_ms": 32944,
+    "call_count": 4888,
+    "overflow": false,
+    "primary_call_count": 4888,
+    "other_call_count": 0,
+    "distinct_primary_returns": [
+     1
+    ],
+    "distinct_other_returns": [],
+    "distinct_all_returns": [
+     1
+    ],
+    "all_returns_equal_flag_before": true,
+    "all_calls_left_flag_unchanged": true,
+    "first_primary_call_after_primary_setter": true,
+    "final_flag_state": "known",
+    "final_flag_value": 1
+   },
+   "candidate": {
+    "type": "getter_sequence",
+    "address": "0x0048F170",
+    "scope": "startup-app-context-active-flag",
+    "module": "open-igi-probe-bdnptti6.exe",
+    "observed_ms": 28938,
+    "call_count": 168,
+    "overflow": false,
+    "primary_call_count": 168,
+    "other_call_count": 0,
+    "distinct_primary_returns": [
+     1
+    ],
+    "distinct_other_returns": [],
+    "distinct_all_returns": [
+     1
+    ],
+    "all_returns_equal_flag_before": true,
+    "all_calls_left_flag_unchanged": true,
+    "first_primary_call_after_primary_setter": true,
+    "final_flag_state": "known",
+    "final_flag_value": 1
+   }
+  },
+  "secondary_setter_calls": {
+   "retail": [],
+   "candidate": []
+  }
+ },
+ "limitations": [
+  "One paired scenario only: retail level 1, windowed (arguments \"window level1\"), working directory /Users/haseeb-mir/Downloads/IGI. Other levels, fullscreen mode, other command lines and other working directories were not captured.",
+  "This is runtime parity for the typed contract below, not a VERIFIED status and not a claim that the whole game, startup sequence or any other native is equivalent.",
+  "The candidate binary tested is build-clean-win32/igi1.exe sha256 8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885 with receipt fb617ef6d9fa563c7913f84b5c0407791a12a6ff0d230baeb9ee4020be0fdd5a. The task-context receipt c1449954 (image 74953277) was already stale at preflight because concurrent worktree edits changed CMakeLists.txt and added an unlinked qvm_execute.cpp object target after that build; the candidate was rebuilt in place with the project receipt generator (not ./build.sh) at 2026-10-23T11:39:06Z and the receipt validated at capture start and after capture. The rebuilt image has the same native bodies and callsites but a different hash from the stale image.",
+  "Only the reviewed startup/main-loop callsite is classified as the primary invocation (retail setter 0x0048F61A, getter 0x0048F817; candidate setter 0x004824A6, getter 0x00482D54). The retail display window handler 0x00494F50 also calls both natives on WM_ACTIVATE; those invocations are outside the paired scope and are reported separately.",
+  "Pointer words are never compared across processes; only scalar flag values, pointer classes and within-process relations are compared.",
+  "The typed contract covers the null-handler startup path only. The retail later installs a handler through 0x0048F180 (observed as a non-null 0x005C8C18 on a secondary invocation in the pilot run) and the display window handler can store 0 on deactivation; neither path is claimed equivalent."
+ ],
+ "does_not_establish": [
+  "Runtime parity beyond the single documented startup invocation, level and mode.",
+  "Equivalence of the display-handler invocations, the optional-handler path, or the surrounding startup sequence.",
+  "A VERIFIED status for 0x0048F140 or for the game.",
+  "That a later candidate rebuild is equivalent; the tested image and receipt bind only the captured bytes."
+ ],
+ "recommended_next_step": "The Lead applies build/manifest-patches/app-context-isactive-runtime.json and keeps this capture directory, the rebuilt candidate image and its receipt together. Re-validate the receipt immediately before any rerun because the shared worktree is edited concurrently."
+}

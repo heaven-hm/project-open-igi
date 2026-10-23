@@ -1,0 +1,289 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "result": "passed",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "address": "0x004CF910",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "d04ae642fc0a8052deb28125bf3540ea4a72d50e1f1e4ba7f3ffaa06ee2444f2",
+ "method": "Retail and the compiled candidate both execute the loader with the 'MANM' form lookup modelled by the same constant; the count-to-pointer conversion and the null returns are compared across non-positive counts. The positive count path is out of scope: it allocates through the retail allocator and walks global script/texture state.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "retail_execution": {
+  "tool": "angr",
+  "engine": "VEX",
+  "version": "10.0.4.post1",
+  "function_entry": "0x004CF910",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_sha256": "8e25dcde3e2ebbbcb6c8593974d4fd34ce14cec3775e00cacfbae8b4e92ca885"
+ },
+ "cases": [
+  {
+   "id": "context-2000-count-0",
+   "input": {
+    "args": [
+     "0x2000"
+    ],
+    "initial_state": {
+     "animation_count": 0
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-2000-count--1",
+   "input": {
+    "args": [
+     "0x2000"
+    ],
+    "initial_state": {
+     "animation_count": -1
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-3000-count-0",
+   "input": {
+    "args": [
+     "0x3000"
+    ],
+    "initial_state": {
+     "animation_count": 0
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-3000-count--1",
+   "input": {
+    "args": [
+     "0x3000"
+    ],
+    "initial_state": {
+     "animation_count": -1
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-4000-count-0",
+   "input": {
+    "args": [
+     "0x4000"
+    ],
+    "initial_state": {
+     "animation_count": 0
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-4000-count--1",
+   "input": {
+    "args": [
+     "0x4000"
+    ],
+    "initial_state": {
+     "animation_count": -1
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-5000-count-0",
+   "input": {
+    "args": [
+     "0x5000"
+    ],
+    "initial_state": {
+     "animation_count": 0
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "reference_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": 0,
+    "state_delta": {
+     "animation_count_seeded": 0
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  },
+  {
+   "id": "context-5000-count--1",
+   "input": {
+    "args": [
+     "0x5000"
+    ],
+    "initial_state": {
+     "animation_count": -1
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "reference_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   },
+   "candidate_output": {
+    "return_value": -1,
+    "state_delta": {
+     "animation_count_seeded": -1
+    },
+    "side_effects": [
+     "call:Ilff_FindFormChunk"
+    ]
+   }
+  }
+ ]
+}

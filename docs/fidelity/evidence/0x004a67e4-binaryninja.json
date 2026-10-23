@@ -1,130 +1,190 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004A67E4",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004A67E4"
-   },
-   {
-    "address": "0x004A688C"
-   },
-   {
-    "address": "0x004A680A"
-   },
-   {
-    "address": "0x004A6885"
-   },
-   {
-    "address": "0x004A6824"
-   },
-   {
-    "address": "0x004A68A1"
-   },
-   {
-    "address": "0x004A6873"
-   },
-   {
-    "address": "0x004A682E"
-   },
-   {
-    "address": "0x004A681F"
-   },
-   {
-    "address": "0x004A6840"
-   },
-   {
-    "address": "0x004A687E"
-   },
-   {
-    "address": "0x004A6842"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x004A67E4",
-    "target": "0x004A688C",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A67E4",
-    "target": "0x004A680A",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A688C",
-    "target": "0x004A68A1",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A680A",
-    "target": "0x004A681F",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A6885",
-    "target": "0x004A68A1",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A6824",
-    "target": "0x004A6873",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A6824",
-    "target": "0x004A682E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A6873",
-    "target": "0x004A681F",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A682E",
-    "target": "0x004A6873",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A682E",
-    "target": "0x004A6840",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A681F",
-    "target": "0x004A6885",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A681F",
-    "target": "0x004A6824",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A6840",
-    "target": "0x004A687E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A6840",
-    "target": "0x004A6842",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A687E",
-    "target": "0x004A68A1",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A6842",
-    "target": "0x004A6873",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004A67E4",
+  "symbol": "MathSys_Invoke7_4A67E4",
+  "signature": "int32_t __convention(\"regparm\")(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x004A67E4",
+    "end": "0x4a68a8",
+    "size_bytes": 197,
+    "basic_blocks": 12,
+    "instruction_count": 79
+  },
+  "bytes_hex": "5643323058433030558bec83ec085356",
+  "bytes_sha256": "69e1b362ebc7fbb73a593ca98fc4d5c57db171d0dd11268efc0a795207d8bb7d",
+  "cfg": {
+    "entry": "0x004A67E4",
+    "nodes": [
+      {
+        "address": "0x004a67e4",
+        "start": "0x4a67e4",
+        "end": "0x4a680a",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a688c",
+        "start": "0x4a688c",
+        "end": "0x4a68a1",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a680a",
+        "start": "0x4a680a",
+        "end": "0x4a681f",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6885",
+        "start": "0x4a6885",
+        "end": "0x4a688c",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6824",
+        "start": "0x4a6824",
+        "end": "0x4a682e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a68a1",
+        "start": "0x4a68a1",
+        "end": "0x4a68a9",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6873",
+        "start": "0x4a6873",
+        "end": "0x4a687e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a682e",
+        "start": "0x4a682e",
+        "end": "0x4a6840",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a681f",
+        "start": "0x4a681f",
+        "end": "0x4a6824",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6840",
+        "start": "0x4a6840",
+        "end": "0x4a6842",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a687e",
+        "start": "0x4a687e",
+        "end": "0x4a6885",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a6842",
+        "start": "0x4a6842",
+        "end": "0x4a6873",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004a67e4",
+        "target": "0x004a680a",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a67e4",
+        "target": "0x004a688c",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a680a",
+        "target": "0x004a681f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a681f",
+        "target": "0x004a6824",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a681f",
+        "target": "0x004a6885",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6824",
+        "target": "0x004a682e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6824",
+        "target": "0x004a6873",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a682e",
+        "target": "0x004a6840",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a682e",
+        "target": "0x004a6873",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6840",
+        "target": "0x004a6842",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6840",
+        "target": "0x004a687e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a6842",
+        "target": "0x004a6873",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a6873",
+        "target": "0x004a681f",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a687e",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a6885",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a688c",
+        "target": "0x004a68a1",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "`asm\n  int32_t __convention(\"regparm\") MathSys_Invoke7_4A67E4(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc)\n\n0x4a67e4  push    esi\n0x4a67e5  inc     ebx\n0x4a67e6  xor     dh, byte [eax]\n0x4a67e8  pop     eax\n0x4a67e9  inc     ebx\n0x4a67ea  xor     byte [eax], dh\n0x4a67ec  push    ebp\n0x4a67ed  mov     ebp, esp\n0x4a67ef  sub     esp, 0x8\n0x4a67f2  push    ebx\n0x4a67f3  push    esi\n0x4a67f4  push    edi\n0x4a67f5  push    ebp\n0x4a67f6  cld\n0x4a67f7  mov     ebx, dword [ebp+0xc]\n0x4a67fa  mov     eax, dword [ebp+0x8]\n0x4a67fd  test    dword [eax+0x4], 0x6\n0x4a6804  jne     0x4a688c\n\n0x4a680a  mov     dword [ebp-0x8], eax\n0x4a680d  mov     eax, dword [ebp+0x10]\n0x4a6810  mov     dword [ebp-0x4], eax\n0x4a6813  lea     eax, [ebp-0x8]\n0x4a6816  mov     dword [ebx-0x4], eax\n0x4a6819  mov     esi, dword [ebx+0xc]\n0x4a681c  mov     edi, dword [ebx+0x8]\n\n0x4a681f  cmp     esi, 0xffffffff\n0x4a6822  je      0x4a6885\n\n0x4a6824  lea     ecx, [esi+esi*2]\n0x4a6827  cmp     dword [edi+ecx*4+0x4], 0x0\n0x4a682c  je      0x4a6873\n\n0x4a682e  push    esi\n0x4a682f  push    ebp\n0x4a6830  lea     ebp, [ebx+0x10]\n0x4a6833  call    dword [edi+ecx*4+0x4]\n0x4a6837  pop     ebp\n0x4a6838  pop     esi\n0x4a6839  mov     ebx, dword [ebp+0xc]\n0x4a683c  or      eax, eax\n0x4a683e  je      0x4a6873\n\n0x4a6840  js      0x4a687e\n\n0x4a6842  mov     edi, dword [ebx+0x8]\n0x4a6845  push    ebx\n0x4a6846  call    Camera_UpdateTransform_7\n0x4a684b  add     esp, 0x4\n0x4a684e  lea     ebp, [ebx+0x10]\n0x4a6851  push    esi\n0x4a6852  push    ebx\n0x4a6853  call    Camera_SetFieldOfView_7\n0x4a6858  add     esp, 0x8\n0x4a685b  lea     ecx, [esi+esi*2]\n0x4a685e  push    0x1\n0x4a6860  mov     eax, dword [edi+ecx*4+0x8]\n0x4a6864  call    Camera_ApplyLineFilter_7\n0x4a6869  mov     eax, dword [edi+ecx*4]\n0x4a686c  mov     dword [ebx+0xc], eax\n0x4a686f  call    dword [edi+ecx*4+0x8]\n\n0x4a6873  mov     edi, dword [ebx+0x8]\n0x4a6876  lea     ecx, [esi+esi*2]\n0x4a6879  mov     esi, dword [edi+ecx*4]\n0x4a687c  jmp     0x4a681f\n\n0x4a687e  mov     eax, 0x0\n0x4a6883  jmp     0x4a68a1\n\n0x4a6885  mov     eax, 0x1\n0x4a688a  jmp     0x4a68a1\n\n0x4a688c  push    ebp\n0x4a688d  lea     ebp, [ebx+0x10]\n0x4a6890  push    0xffffffff\n0x4a6892  push    ebx\n0x4a6893  call    Camera_SetFieldOfView_7\n0x4a6898  add     esp, 0x8\n0x4a689b  pop     ebp\n0x4a689c  mov     eax, 0x1\n\n0x4a68a1  pop     ebp\n0x4a68a2  pop     edi\n0x4a68a3  pop     esi\n0x4a68a4  pop     ebx\n0x4a68a5  mov     esp, ebp\n0x4a68a7  pop     ebp\n0x4a68a8  retn",
+  "pseudocode": "`bn-pseudoc\n  int32_t __convention(\"regparm\") MathSys_Invoke7_4A67E4(char* arg1, int16_t arg2, void* arg3 @ 0x4, void* arg4 @ 0x8, int32_t arg5 @ 0xc)\n\n{\n    char* esi;\n    char* var_4 = esi;\n    *(&arg2 + 1) ^= *arg1;\n    char* eax = var_4;\n    *eax ^= *(&arg2 + 1);\n    char* ebp;\n    var_4 = ebp;\n    char** ebp_1 = &var_4;\n    int32_t entry_ebx;\n    int32_t var_10 = entry_ebx + 2;\n    char* var_14 = esi;\n    void* ebx_2 = arg4;\n\n    if (*(arg3 + 4) & 6)\n    {\n        char** var_20_5 = &var_4;\n        Camera_SetFieldOfView_7(ebx_2, 0xffffffff);\n        return 1;\n    }\n\n    void* var_c = arg3;\n    int32_t var_8_1 = arg5;\n    *(ebx_2 - 4) = &var_c;\n    int32_t i = *(ebx_2 + 0xc);\n    int32_t edi_1 = *(ebx_2 + 8);\n\n    for (; i != 0xffffffff; i = *(edi_1 + i * 0xc))\n    {\n        int32_t ecx_1 = i * 3;\n\n        if (*(edi_1 + (ecx_1 << 2) + 4))\n        {\n            int32_t eax_3 = (*(edi_1 + (ecx_1 << 2) + 4))(ebp_1, i, &var_4);\n            ebx_2 = ebp_1[3];\n\n            if (eax_3)\n            {\n                if (eax_3 < 0)\n                    return 0;\n\n                int32_t edi_2 = *(ebx_2 + 8);\n                Camera_UpdateTransform_7(ebx_2);\n                ebp_1 = ebx_2 + 0x10;\n                Camera_SetFieldOfView_7(ebx_2, i);\n                int32_t ecx_2 = i * 3;\n                int32_t var_20_4 = 1;\n                Camera_ApplyLineFilter_7(*(edi_2 + (ecx_2 << 2) + 8), ebp_1);\n                *(ebx_2 + 0xc) = *(edi_2 + (ecx_2 << 2));\n                (*(edi_2 + (ecx_2 << 2) + 8))();\n            }\n        }\n\n        edi_1 = *(ebx_2 + 8);\n    }\n\n    return 1;\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a67e4\"\narch: \"x86\"\nname: \"MathSys_Invoke7_4A67E4\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 4\ntotal: 4\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4a6846 | x86 | 0x4a5d00 | Camera_UpdateTransform_7 (0x4a5d00 (x86)) |\n| 0x4a6853 | x86 | 0x4a5d42 | Camera_SetFieldOfView_7 (0x4a5d42 (x86)) |\n| 0x4a6864 | x86 | 0x4a5dd6 | Camera_ApplyLineFilter_7 (0x4a5dd6 (x86)) |\n| 0x4a6893 | x86 | 0x4a5d42 | Camera_SetFieldOfView_7 (0x4a5d42 (x86)) |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a67e4\"\narch: \"x86\"\nname: \"MathSys_Invoke7_4A67E4\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 0\ntotal: 0\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
   ]
- }
 }

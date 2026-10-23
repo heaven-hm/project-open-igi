@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "kind": "native-source-audit",
+  "address": "0x004137A0",
+  "name": "HumanPlayer_LoadParameters",
+  "recorded_at": "2026-10-23T10:10:00Z",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_executable": {
+    "path": "build-clean-win32/igi1.exe",
+    "sha256": "11f939200afd865bf7286ee2a90ac393a5887b1bb9589b0b1a324dfbbd59a581",
+    "symbol_present": false
+  },
+  "selected_decompiler": "binary_ninja",
+  "retail": {
+    "function_entry": "0x004137A0",
+    "range": "0x004137A0-0x004137D9",
+    "size_bytes": 57,
+    "basic_blocks": 4,
+    "definition": "int32_t(void)",
+    "strings": [
+      {"address": "0x00539188", "value": "LOCAL:humanplayer/humanplayer.qsc"},
+      {"address": "0x00539150", "value": "HumanPlayer_LoadParameters: Couldn't load script \"%s\""}
+    ],
+    "call_sites": [
+      {"callsite": "0x004137A6", "callee": "0x004B80B0", "name": "Qvm_Load"},
+      {"callsite": "0x004137B5", "callee": "0x004B85B0", "name": "Qvm_Execute"},
+      {"callsite": "0x004137BB", "callee": "0x004B83D0", "name": "Qvm_Cleanup"},
+      {"callsite": "0x004137CF", "callee": "0x004AF7B0", "name": "Debug_Error"}
+    ],
+    "behavior": "Calls Qvm_Load(\"LOCAL:humanplayer/humanplayer.qsc\"). When the result is non-null it calls Qvm_Execute(qvm), then returns the result of Qvm_Cleanup(qvm). When the result is null it calls Debug_Error(\"HumanPlayer_LoadParameters: Couldn't load script \\\"%s\\\"\", path) and then loops forever at 0x004137D7, so the failure path never returns.",
+    "tool_evidence": "Binary Ninja MCP bn_function_info, bn_function_callees, bn_function_disassembly and bn_function_decompile on retail igi.exe at 0x004137A0."
+  },
+  "candidate_source": {
+    "path": "engine/src/retail/script/humanplayer_defines.cpp",
+    "sha256": "020b12ab62e8e978b68741bcc812e9c8693cad27ee36e53d8d72bb750f81dcf9",
+    "header_path": "engine/include/igi/retail/script/humanplayer_defines.hpp",
+    "header_sha256": "e2ee46d8189c74a98ec1f2a359ec2d25e2d2d5247b2ab9eb67a1d57e192aaf60",
+    "signature": "void __cdecl HumanPlayer_LoadParameters(void)",
+    "lines": "85-102",
+    "linked_into_target": false
+  },
+  "comparison": {
+    "result": "divergent",
+    "findings": [
+      "Retail calls Qvm_Load on the fixed path LOCAL:humanplayer/humanplayer.qsc. The candidate never calls Qvm_Load; it probes COMMON/humanplayer/humanplayer.qsc (and HUMANPLAYER/.QSC variants) with std::filesystem::exists and then calls Resource_OpenFile.",
+      "Retail calls Qvm_Execute and Qvm_Cleanup on the loaded script and returns the Qvm_Cleanup result. The candidate opens a resource and returns without executing or releasing it.",
+      "Retail reports a missing script through Debug_Error with the retail message and then never returns; the candidate silently returns.",
+      "Retail is int32_t(void); the candidate is declared and defined void.",
+      "The candidate's behavior comment mislabels 0x004B80B0/0x004B85B0/0x004B83D0 as file natives; they are Qvm_Load, Qvm_Execute and Qvm_Cleanup.",
+      "The record's behavioral case claims the candidate 'returns the retail's null when the chunk is absent and the retail's payload pointer when it is present', which describes neither the source nor retail."
+    ]
+  },
+  "build": {
+    "executed": true,
+    "result": "passed",
+    "command": "i686-w64-mingw32-g++ -O3 -DNDEBUG -std=c++20 -I engine/include -c engine/src/retail/script/humanplayer_defines.cpp -o /tmp/hp-standalone.o",
+    "target": "Windows x86 (Intel 80386 COFF object)",
+    "object_path": "/tmp/hp-standalone.o",
+    "object_sha256": "32b8dd55a46c808e95a28141fa3320f7beb0f295decd811c992e5871cb58eba7"
+  },
+  "link": {
+    "attempted": true,
+    "result": "failed",
+    "exit_code": 1,
+    "undefined_symbols": [
+      {"symbol": "Qvm_Execute", "retail_address": "0x004B85B0", "diagnostics": 1},
+      {"symbol": "Config_SaveGraphicOptions", "retail_address": "0x00405300", "diagnostics": 1},
+      {"symbol": "Config_SaveSoundOptions", "retail_address": "0x004058A0", "diagnostics": 2},
+      {"symbol": "Config_NoD3DDriversWithHard", "retail_address": "0x00405980", "diagnostics": 2},
+      {"symbol": "Config_Language_2", "retail_address": "0x00405B30", "diagnostics": 2}
+    ],
+    "additional_missing_after_correction": [
+      {"symbol": "Qvm_Execute", "retail_address": "0x004B85B0", "note": "A retail-faithful body needs Qvm_Load, Qvm_Execute, Qvm_Cleanup and Debug_Error. Qvm_Load, Qvm_Cleanup and Debug_Error exist in the target; Qvm_Execute does not."}
+    ]
+  },
+  "limitations": [
+    "The candidate is absent from the linked image and does not implement the retail behavior.",
+    "No paired retail/candidate runtime capture exists for this address.",
+    "Correcting the source to the retail body would still not link until Qvm_Execute (0x004B85B0) exists in the target."
+  ]
+}

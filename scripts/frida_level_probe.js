@@ -369,12 +369,34 @@ const targets = [
   }
 ];
 const imageBase = ptr('0x00400000');
-const moduleNames = ['igi.exe', 'open-igi.exe'];
+// Recognised game modules, in precedence order (first exact name match wins):
+//   1. igi.exe               - retail Project IGI 1; its code path below is unchanged.
+//   2. open-igi.exe          - legacy reconstruction executable name.
+//   3. igi1.exe              - current reconstruction executable name.
+//   4. open-igi-probe-*.exe  - strict driver's staged copy of the candidate.
+// The staged pattern is matched last; if several staged copies exist they are
+// ordered by name then base, so resolution is deterministic. There is
+// deliberately no Process.mainModule / getModuleByName fallback: an absent game
+// module is an explicit probe error, never a hook on an unrelated system DLL.
+const moduleNames = ['igi.exe', 'open-igi.exe', 'igi1.exe'];
 const modules = Process.enumerateModules();
+const lowered = m => m.name.toLowerCase();
 let targetModule = null;
 for (const wanted of moduleNames) {
-  targetModule = modules.find(m => m.name.toLowerCase() === wanted);
-  if (targetModule) break;
+  targetModule = modules.find(m => lowered(m) === wanted) || null;
+  if (targetModule !== null) break;
+}
+if (targetModule === null) {
+  const staged = modules.filter(m => lowered(m).startsWith('open-igi-probe-') &&
+                                     lowered(m).endsWith('.exe'));
+  staged.sort((a, b) => {
+    const left = lowered(a);
+    const right = lowered(b);
+    if (left < right) return -1;
+    if (left > right) return 1;
+    return a.base.compare(b.base);
+  });
+  if (staged.length > 0) targetModule = staged[0];
 }
 if (targetModule === null) {
   send({type: 'probe_error', error: 'target game module not found', modules: modules.map(m => ({name:m.name, base:m.base.toString(), size:m.size}))});
@@ -385,17 +407,33 @@ send({type:'probe_start', module:targetModule.name, base:targetModule.base.toStr
 const installed=[];
 const failures=[];
 const counts={};
+// Retail VAs are absolute addresses only for retail igi.exe at its preferred
+// base; that path (including the silent skip below) is unchanged. A candidate
+// image is assumed to keep retail image RVAs (VA - imageBase), so its hooks are
+// relocated into the loaded module and must land in executable memory. That is
+// an address convention, not proof the candidate places that native at the
+// retail RVA: an installed hook that never fires is not evidence of absence.
+const retailModule = targetModule.name.toLowerCase() === 'igi.exe';
 for (const target of targets) {
   const va=ptr(target.va);
-  // Retail VAs are only meaningful for original igi.exe at its preferred base.
-  if (targetModule.name.toLowerCase() !== 'igi.exe' || !targetModule.base.equals(imageBase)) {
-    continue;
+  if (retailModule) {
+    // Retail VAs are only meaningful for original igi.exe at its preferred base.
+    if (!targetModule.base.equals(imageBase)) {
+      continue;
+    }
   }
-  const address=va;
+  const address=retailModule ? va : targetModule.base.add(va.sub(imageBase));
   const offset=address.sub(targetModule.base);
   if (offset.compare(ptr(0)) < 0 || offset.compare(ptr(targetModule.size)) >= 0) {
     failures.push({name:target.name,va:target.va,error:'VA outside module'});
     continue;
+  }
+  if (!retailModule) {
+    const range = Process.findRangeByAddress(address);
+    if (range === null || range.protection.toLowerCase().indexOf('x') < 0) {
+      failures.push({name:target.name,va:target.va,error:'candidate address is not executable'});
+      continue;
+    }
   }
   counts[target.name]={va:target.va,hits:0,first:[]};
   try {

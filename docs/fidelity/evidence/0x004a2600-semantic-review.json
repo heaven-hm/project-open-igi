@@ -6,57 +6,81 @@
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "d8bee270d895a13cd458afaf549bfc15b5d1bf8a02ab59d64d0fb4625fa280a7",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
-   ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
-  },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+ "reviewed_by": "Delegated coding agent source-semantic review against live Binary Ninja 6.0.10601 MCP and Radare2 6.2.0 on retail igi.exe; candidate translation unit recompiled with the repository -O3 flags.",
+ "reviewed_at": "2026-10-23T07:24:56Z",
+ "source_revision": "efc3b24b0ede80c5561d15ece7e1f190d30a619a",
+ "review_basis": "The current engine/src/retail/render/camera_transform.cpp hashes to d8bee270d895a13cd458afaf549bfc15b5d1bf8a02ab59d64d0fb4625fa280a7. The retail entry was re-disassembled, re-decompiled and re-CFG'd through the live Binary Ninja view and independently recovered with Radare2; both graphs are recorded in the referenced evidence files and agree at 1.000 on nodes and edges. The candidate source and its compiled object symbol were then read against that reconstruction. This review supersedes the earlier evidence that was stale against the current source digest.",
+ "retail_function": {
+  "entry": "0x004A2600",
+  "name": "Camera_ResetMatrix",
+  "signature": "int32_t(void* arg1)",
+  "start": "0x004A2600",
+  "end": "0x004A26BB",
+  "size_bytes": 188,
+  "basic_blocks": 3,
+  "edges": 3,
+  "cfg_similarity": 1.0,
+  "summary": "0x004A2600-0x004A26BC (188 bytes), 3 blocks/3 edges; reads the color context at arg1+0x64/+0x68/+0x6C, multiplies R/G by -128.0f and B by +128.0f for the half value and by -255.0f/+255.0f for the full value, uses fistp (64-bit) to round to integers, packs (R<<8 + G)<<8 - B, and fills a 0x935C10 palette block: four iterations of 0x20 half entries then 0x20 full entries."
+ },
+ "candidate_function": {
+  "path": "engine/src/retail/render/camera_transform.cpp",
+  "sha256": "d8bee270d895a13cd458afaf549bfc15b5d1bf8a02ab59d64d0fb4625fa280a7",
+  "summary": "Camera_ResetMatrix(const CameraColorContext*): the same four constants (-128/128/-255/255), same packing and same 4x0x20+0x20 fill into camera_matrix_state.palette_935c10; returns the full packed value. It adds an early return when the context is null.",
+  "status_after_review": "STRUCTURALLY_VERIFIED"
  },
  "checks": [
   {
-   "name": "function_identity",
+   "name": "function_boundary",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004A2600 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
+   "detail": "Binary Ninja and Radare2 recover 188 bytes, 3 blocks/3 edges; cfg_similarity 1.0."
   },
   {
-   "name": "constants_and_scaling",
+   "name": "constants",
    "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "detail": "The four float constants were read from retail memory: 0x5342E0=0xC3000000 (-128.0f), 0x5335B4=0x43000000 (+128.0f), 0x5342D8=0xC37F0000 (-255.0f), 0x5336D4=0x437F0000 (+255.0f); the candidate uses exactly these."
   },
   {
-   "name": "argument_mapping",
+   "name": "packing_and_fill",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "detail": "The ((R<<8)+G)<<8-B packing and the 4x(0x20 half + 0x20 full) fill match the recovered loop."
   },
   {
-   "name": "calls_and_side_effects",
-   "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
+   "name": "floating_point",
+   "result": "passed_with_limitation",
+   "detail": "Retail computes in x87 extended precision and rounds once with fistp qword; the candidate multiplies float operands and calls std::lrint under the default round-to-nearest mode. The literals match, but the intermediate precision is not bit-identical for fractional products."
   },
   {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
-  },
-  {
-   "name": "memory_layout_and_access",
-   "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
-  },
-  {
-   "name": "return_and_error_paths",
-   "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "name": "null_context",
+   "result": "passed_with_limitation",
+   "detail": "Retail dereferences arg1 without a null check; the candidate returns 0 for null. The guard avoids a fault retail would take and is not observable for valid camera contexts."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail takes void*; the candidate takes const CameraColorContext*. cdecl, one stack argument and the int32_t return are preserved."
+ },
+ "evidence": {
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004A2600-binaryninja.json",
+   "evidence_sha256": "683b67e13f4d56cbdc392358ba1efd6a016453931b33095e06c4c73ec57b6e6c",
+   "tool": "Binary Ninja 6.0.10601 MCP 0.1.0"
+  },
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004A2600-radare2.json",
+   "evidence_sha256": "82bf9fa89dadb2618fecbfea52e2aac5bc9624922953191eb2aff20d460fefe2",
+   "tool": "radare2 6.2.0"
+  },
+  "behavioural": {
+   "evidence_path": null,
+   "note": "No runner executes this address as its subject; the absence is recorded rather than binding another native's artifact."
+  }
+ },
+ "limitations": [
+  "x87 extended-precision intermediate rounding is not reproduced; the candidate uses float arithmetic plus std::lrint.",
+  "The candidate adds a null-context early return that retail does not have.",
+  "No behavioural runner and no live paired runtime capture exist for this address.",
+  "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+  "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism."
  ]
 }

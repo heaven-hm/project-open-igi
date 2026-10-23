@@ -1,0 +1,131 @@
+{
+  "schema_version": 1,
+  "kind": "native-structural-comparison",
+  "address": "0x004AF7B0",
+  "function_name": "Debug_Error",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "candidate_sha256": null,
+  "candidate_path": null,
+  "candidate_note": "No candidate executable is bound to this record; the shared build directory changed during the task. Candidate evidence below is a compile check of the named source revision.",
+  "generated_at": "2026-10-23T03:05:00Z",
+  "retail": {
+    "function_entry": "0x004AF7B0",
+    "signature": "int32_t __cdecl Debug_Error(const char* format, ...)",
+    "calling_convention": "cdecl (x86)",
+    "size_bytes": 89,
+    "bytes_sha256": "1c20410541c863f90a17d98f1088afa496d65e0a6a62a8f4447fbd46ac37d72e",
+    "bytes_match_binary_ninja_view": true,
+    "bytes_hex": "a16862930085c074445768b86d5400684046a800e8ea5bffff8b4c24108d4424145051bf4046a80083c9ff33c0f2aef7d14981c14046a80051e8145fffff684046a800ff156862930083c4185fa16c62930085c07402ffe0c3",
+    "basic_blocks": 5,
+    "edges": 5,
+    "instructions": 29,
+    "call_instructions": 3,
+    "rep_instructions": 0,
+    "return_instructions": 1,
+    "abi": {
+      "calling_convention": "cdecl (x86)",
+      "arguments": [
+        "[esp+4] const char* format",
+        "remaining stack dwords: variadic substitutions"
+      ],
+      "variadic": true,
+      "return_value": "int32 in EAX; 0 when 0x0093626C is null; otherwise the exit callback's return value via tail jmp eax at 0x004AF806",
+      "stack_cleanup": "caller (274 call sites, e.g. 0x00415B6A add esp,8; 0x00415F8D add esp,4)"
+    },
+    "globals": [
+      {
+        "address": "0x00936268",
+        "role": "display callback pointer; zero in the file image, installed by 0x00498900",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x0093626C",
+        "role": "exit callback pointer; zero in the file image, installed by 0x00498900",
+        "initial": "0x00000000"
+      },
+      {
+        "address": "0x00A84640",
+        "role": "fatal message buffer written by sprintf/String_VFormat",
+        "initial": "zero-filled"
+      },
+      {
+        "address": "0x00546DB8",
+        "role": "literal \"Fatal error:\\n\\n\""
+      }
+    ],
+    "callees": [
+      {
+        "site": "0x004AF7C4",
+        "target": "0x004A53B3",
+        "name": "sprintf"
+      },
+      {
+        "site": "0x004AF7E9",
+        "target": "0x004A5702",
+        "name": "String_VFormat"
+      },
+      {
+        "site": "0x004AF7F3",
+        "target": "indirect [0x00936268]",
+        "name": "display callback (unresolved)"
+      }
+    ],
+    "caller_count": 274,
+    "radare2": {
+      "size": 89,
+      "ninstrs": 29,
+      "nargs": 2,
+      "calltype": "cdecl"
+    },
+    "angr_cfgfast": {
+      "function_entry": "0x004AF7B0",
+      "result": "pass",
+      "nodes": 10,
+      "edges": 11,
+      "has_unresolved_jumps": false,
+      "angr_version": "10.0.4.post1"
+    }
+  },
+  "cfg_agreement": {
+    "binary_ninja_vs_radare2": 1.0,
+    "note": "This is the gate's Binary Ninja-vs-radare2 score over the two retail artifacts. It is retail structural agreement, not candidate equivalence."
+  },
+  "candidate": {
+    "source_path": "engine/src/retail/core/retail_error.cpp",
+    "source_sha256": "3fb6c8a0f44dfc254cee823f74762aad25666cfaea9aecba8e97b3060f51d19b",
+    "object_path": "/tmp/igi-evidence/obj/retail_error.o",
+    "object_sha256": "cbf751d98596af70669a47c84d79b34ac697ff1e0c3ae73c3062f261df2f25bb",
+    "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/core/retail_error.cpp -o /tmp/igi-evidence/obj/retail_error.o",
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "compile_result": "PASS (COFF object produced)",
+    "build_or_link_result": "NOT ATTEMPTED (no ./build.sh run; unit is not wired for link where noted)",
+    "function_symbol": "Debug_Error",
+    "function_size_bytes": 128,
+    "function_instructions": 37,
+    "conditional_branches": 3,
+    "unconditional_jumps": 2,
+    "call_instructions": 6,
+    "returns": 0,
+    "structure": "GCC -O3 emits a 0x80-byte function of 37 instructions (3 conditional branches, 2 unconditional jumps, 6 call instructions, no return). Two conditional early-outs guard a null display callback and an empty format result; the terminal path is a `jmp .` self-loop.",
+    "divergences": [
+      "Retail returns EAX=0 at 0x004AF808 when 0x0093626C is null; the candidate has no return path and spins. This is a deliberate, documented divergence, not an oversight, and it is why the status is TRANSCRIBED.",
+      "Retail tail-dispatches the exit callback with `jmp eax` at 0x004AF806 so the callback's return value becomes the caller-visible result; the candidate uses `call *%ebx` and then loops, discarding any callback return value.",
+      "Retail formats into 0x00A84640 with sprintf then appends with String_VFormat only when the buffer is non-empty; the candidate reproduces both calls but reads the globals through a shared Error_GetGlobals() accessor.",
+      "Candidate installs neither 0x00936268 nor 0x0093626C; retail initialises them at 0x00498900."
+    ],
+    "unimplemented": [
+      "Callback installation and the null-exit-callback return path.",
+      "Exact sprintf/String_VFormat call ordering is preserved, but the shared storage accessor differs from retail's direct absolute addressing."
+    ]
+  },
+  "status": {
+    "value": "TRANSCRIBED",
+    "basis": "A candidate implementation exists and compiles, and its divergences from the raw retail entry (no return path, call instead of tail jmp, no callback installation) are documented. It is not structurally equivalent, so no higher status is claimed."
+  },
+  "limitations": [
+    "See structural review; the candidate deliberately removes the raw entry's return path.",
+    "Retail-image evidence does not by itself prove candidate equivalence.",
+    "No runtime, semantic-review or behavioral evidence is claimed in this file."
+  ]
+}

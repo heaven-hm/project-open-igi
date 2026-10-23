@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 (git 6.2.0, 2026-08-07)",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x0048F0B0",
+  "symbol": "fcn.0048f0b0",
+  "signature": "int32_t __cdecl(void)",
+  "signature_raw": "fcn.0048f0b0 ();",
+  "analyzed_at": "2026-10-22T22:33:00Z",
+  "commands": [
+    "e anal.timeout=300",
+    "aaa",
+    "s 0x48f0b0",
+    "afij",
+    "afbj",
+    "p8 6 @ 0x48f0b0",
+    "axt",
+    "axt @ 0x5c8bd4"
+  ],
+  "disassembly": [
+    "0x0048f0b0  a1d48b5c00  mov eax, dword [0x5c8bd4]",
+    "0x0048f0b5  c3  ret"
+  ],
+  "bytes_hex": "a1d48b5c00c3",
+  "function": {
+    "size_bytes": 6,
+    "basic_block_count": 1,
+    "instruction_count": 2,
+    "call_convention": "cdecl",
+    "argument_count": 0,
+    "edge_count": 0,
+    "indegree": 1,
+    "outdegree": 0
+  },
+  "cfg": {
+    "entry": "0x0048F0B0",
+    "nodes": [
+      {
+        "address": "0x0048F0B0",
+        "size": 6,
+        "opaddr": 4780208,
+        "ninstr": 2,
+        "instrs": [
+          4780208,
+          4780213
+        ]
+      }
+    ],
+    "edges": []
+  },
+  "xrefs_to_entry": [
+    {
+      "from": "0x4988dd",
+      "type": "CALL",
+      "caller_function": "fcn.004988d0"
+    }
+  ],
+  "xrefs_to_global": [
+    {
+      "from": "0x48f0b0",
+      "type": "DATA read",
+      "text": "mov eax, dword [0x5c8bd4]"
+    },
+    {
+      "from": "0x48f10c",
+      "type": "DATA write",
+      "text": "mov dword [0x5c8bd4], eax"
+    }
+  ],
+  "cfg_scope": "Retail-image CFG from Radare2 only. The gate compares node/edge identity with Binary Ninja's retail graph; this is not a candidate CFG.",
+  "limitations": [
+    "This artifact is retail-image CFG/disassembly structure only; it is not candidate code and does not by itself establish candidate equivalence.",
+    "The candidate's start-up runtime path was not executed for this artifact; no paired retail/candidate process capture is recorded here.",
+    "The global reference list is what `axt @ 0x5c8bd4` reports in a fully analysed (`aaa`) session; it cannot rule out an access computed through a register at run time."
+  ]
+}

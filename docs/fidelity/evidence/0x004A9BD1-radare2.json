@@ -1,67 +1,104 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004A9BD1",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004A9BD1"
-   },
-   {
-    "address": "0x004A9BDD"
-   },
-   {
-    "address": "0x004A9BF1"
-   },
-   {
-    "address": "0x004A9BF6"
-   },
-   {
-    "address": "0x004A9BF7"
-   },
-   {
-    "address": "0x004A9BFE"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x004A9BD1",
-    "target": "0x004A9BF7",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9BD1",
-    "target": "0x004A9BDD",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9BDD",
-    "target": "0x004A9BFE",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9BDD",
-    "target": "0x004A9BF1",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9BF1",
-    "target": "0x004A9BF6",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A9BF7",
-    "target": "0x004A9BF6",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A9BFE",
-    "target": "0x004A9BF6",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x004A9BD1",
+  "symbol": "fcn.004a9bd1",
+  "signature": "fcn.004a9bd1 ();",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x004A9BD1; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 52,
+    "basic_block_count": 6,
+    "instruction_count": 22,
+    "call_convention": "cdecl",
+    "edge_count": 7,
+    "argument_count": 0,
+    "is_linear": true
+  },
+  "bytes_hex": "d9c0d9fcd8d99bdfe09e751ad9c0dc0d",
+  "bytes_sha256": "72949c0dbfe931be45b2331f9ea9a0bd16e08ff260fe980316b816dc665b4a79",
+  "cfg": {
+    "entry": "0x004A9BD1",
+    "nodes": [
+      {
+        "address": "0x004a9bd1",
+        "size": 12,
+        "instructions": 7
+      },
+      {
+        "address": "0x004a9bdd",
+        "size": 20,
+        "instructions": 9
+      },
+      {
+        "address": "0x004a9bf1",
+        "size": 5,
+        "instructions": 1
+      },
+      {
+        "address": "0x004a9bf6",
+        "size": 1,
+        "instructions": 1
+      },
+      {
+        "address": "0x004a9bf7",
+        "size": 7,
+        "instructions": 2
+      },
+      {
+        "address": "0x004a9bfe",
+        "size": 7,
+        "instructions": 2
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004a9bd1",
+        "target": "0x004a9bdd",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bd1",
+        "target": "0x004a9bf7",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bdd",
+        "target": "0x004a9bf1",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bdd",
+        "target": "0x004a9bfe",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9bf1",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a9bf7",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a9bfe",
+        "target": "0x004a9bf6",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "\u250c 52: fcn.004a9bd1 ();\n\u2502           0x004a9bd1      d9c0           fld st(0)\n\u2502           0x004a9bd3      d9fc           frndint\n\u2502           0x004a9bd5      d8d9           fcomp st(1)\n\u2502           0x004a9bd7      9b             wait\n\u2502           0x004a9bd8      dfe0           fnstsw ax\n\u2502           0x004a9bda      9e             sahf\n\u2502       \u250c\u2500< 0x004a9bdb      751a           jne 0x4a9bf7\n\u2502       \u2502   0x004a9bdd      d9c0           fld st(0)\n\u2502       \u2502   0x004a9bdf      dc0d72455400   fmul qword [0x544572]       ; [0x544572:8]=0x3fe0000000000000\n\u2502       \u2502   0x004a9be5      d9c0           fld st(0)\n\u2502       \u2502   0x004a9be7      d9fc           frndint\n\u2502       \u2502   0x004a9be9      ded9           fcompp\n\u2502       \u2502   0x004a9beb      9b             wait\n\u2502       \u2502   0x004a9bec      dfe0           fnstsw ax\n\u2502       \u2502   0x004a9bee      9e             sahf\n\u2502      \u250c\u2500\u2500< 0x004a9bef      740d           je 0x4a9bfe\n\u2502      \u2502\u2502   0x004a9bf1      b801000000     mov eax, 1\n\u2502      \u2502\u2502   ; CODE XREFS from fcn.004a9bd1 @ 0x4a9bfc(x), 0x4a9c03(x)\n\u2502    \u250c\u250c\u2500\u2500\u2500> 0x004a9bf6      c3             ret\n\u2502    \u254e\u254e\u2502\u2514\u2500> 0x004a9bf7      b800000000     mov eax, 0\n\u2502    \u2514\u2500\u2500\u2500\u2500< 0x004a9bfc      ebf8           jmp 0x4a9bf6\n\u2502     \u254e\u2514\u2500\u2500> 0x004a9bfe      b802000000     mov eax, 2\n\u2514     \u2514\u2500\u2500\u2500< 0x004a9c03      ebf1           jmp 0x4a9bf6",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
   ]
- }
 }

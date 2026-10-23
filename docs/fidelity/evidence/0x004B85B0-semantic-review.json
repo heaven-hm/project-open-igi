@@ -1,0 +1,333 @@
+{
+ "schema_version": 1,
+ "kind": "semantic-review-report",
+ "result": "passed",
+ "address": "0x004B85B0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "17d7ef30330e93850f8187f7abb139cef4162d6964cd530536fed0d7a799d5cf",
+ "header_sha256": "6f9fe69a3c6e7eb07b38d45ea26b32d08e9ebab5c9c74667867d516f992efea8",
+ "reviewed": true,
+ "reviewed_by": "Delegated coding agent source-semantic review against the live Binary Ninja 6.0.10601 MCP view, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail igi.exe (SHA-256 dea34892...), with the candidate object recompiled for Windows x86.",
+ "reviewed_at": "2026-10-23T11:45:00Z",
+ "source_revision": "worktree branch 807c1b2d (clean except the pre-existing pyc); implementation bound by engine/src/retail/script/qvm_execute.cpp sha256 17d7ef30330e93850f8187f7abb139cef4162d6964cd530536fed0d7a799d5cf",
+ "review_basis": "The retail entry was re-read through the live Binary Ninja view, independently recovered by Radare2 and CFGFast, and the candidate object was compiled with the repository -O3 -DNDEBUG flags and disassembled. All branches, calls, stores and returns below were compared instruction by instruction against 0x004B85B0-0x004B86DC.",
+ "retail_function": {
+  "entry": "0x004B85B0",
+  "name": "Qvm_Execute",
+  "binary_ninja_name": "Qvm_Execute",
+  "signature": "cdecl int32_t(void* qvm)  [Binary Ninja definition int32_t(void* arg1)]",
+  "start": "0x004B85B0",
+  "end": "0x004B86DC",
+  "size_bytes": 301,
+  "basic_blocks": 14,
+  "edges": 20,
+  "instruction_count": 90,
+  "stack_frame_bytes": 2132,
+  "globals": [
+   "0x00A965A4 store 0 (entry, program success, program error, script-path exit)",
+   "0x00A965A8 store 0 (entry, script-path error clear)",
+   "0x00A965A0 load (source-path loop condition)",
+   "0x00A965A8 load (after the block releases)",
+   "0x00A96598 load (enables the 'An error occured in script file: %s' report)"
+  ],
+  "callees": [
+   {
+    "callsite": "0x004B85D8",
+    "address": "0x004BD080",
+    "name": "Qvm_RunProgram_4BD080",
+    "role": "runs the resolved precompiled program; drives Qvm_ExecuteInstructions 0x004BCFD0"
+   },
+   {
+    "callsite": "0x004B85FA",
+    "address": "0x004B7E10",
+    "name": "Qvm_ReportError",
+    "role": "reports the program error text and supplies the return value of that path"
+   },
+   {
+    "callsite": "0x004B8625",
+    "address": "0x004C0200",
+    "name": "Qvm_SourceBufferInit_4C0200",
+    "role": "initialises the script-source buffer"
+   },
+   {
+    "callsite": "0x004B863D",
+    "address": "0x004BF1C0",
+    "name": "Qvm_SourceReaderInit_4BF1C0",
+    "role": "attaches the loaded resource bytes to the source reader"
+   },
+   {
+    "callsite": "0x004B8663",
+    "address": "0x004BFC70",
+    "name": "Qvm_ReadNextBlock_4BFC70",
+    "role": "reads the next source block"
+   },
+   {
+    "callsite": "0x004B8679",
+    "address": "0x004BF1F0",
+    "name": "Qvm_ParseBlock_4BF1F0",
+    "role": "parses one source block"
+   },
+   {
+    "callsite": "0x004B868A",
+    "address": "0x004BFA80",
+    "name": "Qvm_ReleaseBlockTree_4BFA80",
+    "role": "recursively releases a parsed block tree"
+   },
+   {
+    "callsite": "0x004B8694",
+    "address": "0x004BF8F0",
+    "name": "Qvm_ReleaseBlock_4BF8F0",
+    "role": "releases one parsed block"
+   },
+   {
+    "callsite": "0x004B86B3",
+    "address": "0x004B7E10",
+    "name": "Qvm_ReportError",
+    "role": "reports 'An error occured in script file: %s' when 0x00A96598 is enabled"
+   },
+   {
+    "callsite": "0x004B86C6",
+    "address": "0x004BEFC0",
+    "name": "Qvm_ReleaseSourceReader_4BEFC0",
+    "role": "releases the source reader and supplies the return value of that path"
+   }
+  ],
+  "callers": [
+   {
+    "callsite": "0x405865",
+    "caller": "Config_Read"
+   },
+   {
+    "callsite": "0x408365",
+    "caller": "GameMaterial_LoadParameters"
+   },
+   {
+    "callsite": "0x4137b5",
+    "caller": "HumanPlayer_LoadParameters"
+   },
+   {
+    "callsite": "0x413acd",
+    "caller": "WeaponType_Open_2"
+   },
+   {
+    "callsite": "0x4151ad",
+    "caller": "IntroScreen_Update"
+   },
+   {
+    "callsite": "0x418c21",
+    "caller": "Menu_Manager"
+   },
+   {
+    "callsite": "0x44e07f",
+    "caller": "AIFunction_DefaultHandler"
+   },
+   {
+    "callsite": "0x44fce8",
+    "caller": "HumanAI_EventDispatch"
+   },
+   {
+    "callsite": "0x47ca7d",
+    "caller": "AmmoType_Open"
+   },
+   {
+    "callsite": "0x484eea",
+    "caller": "Mission_Open"
+   },
+   {
+    "callsite": "0x4887cc",
+    "caller": "SubLevel_LoadParameters"
+   },
+   {
+    "callsite": "0x4c4908",
+    "caller": "Rigid_DyncubeObjRead"
+   },
+   {
+    "callsite": "0x4c65a5",
+    "caller": "Terrain_Load"
+   },
+   {
+    "callsite": "0x4e5f37",
+    "caller": "SoundSys_RegisterDefs"
+   },
+   {
+    "callsite": "0x4ec098",
+    "caller": "AnimTrigger_ParseConfigFile"
+   },
+   {
+    "callsite": "0x4edc39",
+    "caller": "PhysicsObj_RegisterLod"
+   },
+   {
+    "callsite": "0x4ee008",
+    "caller": "PhysicsObjType_ParseConfigFile"
+   },
+   {
+    "callsite": "0x4f0d24",
+    "caller": "Config_Compile"
+   },
+   {
+    "callsite": "0x4f0d98",
+    "caller": "Task_New_2"
+   }
+  ],
+  "summary": "Two mutually exclusive paths, selected by the precompiled-program pointer at qvm+0x8C. Program path: g_a965a4=0, g_a965a8=0, load qvm+0x8C; if non-zero call 0x004BD080(program), store g_a965a4=0, return 0 when it returned 0, otherwise report \"Error in QVM program: %s\\r\\n%s\" with (qvm, program+0x268), store g_a965a4=0 and return the reporter's EAX. Source path: 0x004C0200(&var_830,&var_850,&var_800,0x800), 0x004BF1C0(&var_850,qvm[0x80],qvm[0x84]), then loop while (g_a965a0==0 || g_a965a4==0): var_854=0, break when 0x004BFC70(&var_830,&var_828)==0, else if 0x004BF1F0(&var_830,&var_854)!=0 release the block with 0x004BFA80 and 0x004BF8F0 and continue when g_a965a8==0; otherwise report \"An error occured in script file: %s\" when g_a96598!=0, store g_a965a8=0 and break. Then 0x004BEFC0(&var_850), store g_a965a4=0 and return its EAX."
+ },
+ "path_selection": {
+  "finding": "The retail release build executes the precompiled-program path (qvm+0x8C non-zero), not the source parser.",
+  "evidence": [
+   "0x0040100A: push 1; call 0x0048F330 - Script_SetForcePrecompiledState(1) at the executable's startup stub, before any level load.",
+   "0x0048F627: push 1; call 0x0048F1C0 - Script_SetDebugCompileState(1) in main's startup sequence.",
+   "0x0048F334 stores the byte argument to 0x005C8BF0 and 0x0048F1C5 stores it to 0x005C8BEC; Qvm_Load (0x004B80B0) reads both through 0x0048F1D0/0x0048F340.",
+   "With both flags set, Qvm_Load replaces the extension with .qvm, resolves it through 0x004BD220 and stores the resolved program at qvm+0x8C, so Qvm_Execute takes the 0x004BD080 path."
+  ],
+  "consequence": "The source-parsing loop in branch B is the non-precompiled fallback; it contains no opcode dispatch. The instruction loop is Qvm_ExecuteInstructions (0x004BCFD0), reached through 0x004BD080, and is already transcribed separately in qvm_stack_natives.cpp (with an incomplete handler table)."
+ },
+ "candidate_function": {
+  "implementation": "engine/src/retail/script/qvm_execute.cpp",
+  "header": "engine/include/igi/retail/script/qvm_execute.hpp",
+  "implementation_sha256": "17d7ef30330e93850f8187f7abb139cef4162d6964cd530536fed0d7a799d5cf",
+  "header_sha256": "6f9fe69a3c6e7eb07b38d45ea26b32d08e9ebab5c9c74667867d516f992efea8",
+  "object_path": "build/qvm-execute/cmake-build/CMakeFiles/igi_qvm_execute_object.dir/engine/src/retail/script/qvm_execute.cpp.obj",
+  "object_sha256": "e99c151a15de28954d1983ba68318c91d315ec52e0489ca7b6a2b5a9af98ab0d",
+  "symbol": "Qvm_Execute",
+  "symbol_offset": "0x0",
+  "symbol_size_bytes": 432,
+  "instruction_bytes": 395,
+  "basic_blocks": 14,
+  "edges": 21,
+  "instruction_count": 82,
+  "compile_command": "cmake --build build/qvm-execute/cmake-build --target igi_qvm_execute_object -j4 (i686-w64-mingw32-g++, -O3 -DNDEBUG)",
+  "linked": false,
+  "call_sequence": [
+   "Qvm_RunProgram_4BD080(program) @ symbol+0x3c",
+   "Qvm_ReportError(\"Error in QVM program: %s\\r\\n%s\", qvm, program+0x268) @ symbol+0x175",
+   "Qvm_SourceBufferInit_4C0200(&buffer, &stack, text, 0x800) @ symbol+0x9d",
+   "Qvm_SourceReaderInit_4BF1C0(&stack, qvm[0x80], qvm[0x84]) @ symbol+0xb9",
+   "Qvm_ReadNextBlock_4BFC70(&buffer, &buffer.block_slot) @ symbol+0xe5",
+   "Qvm_ParseBlock_4BF1F0(&buffer, &parsed) @ symbol+0xf9",
+   "Qvm_ReleaseBlockTree_4BFA80(parsed) @ symbol+0x109",
+   "Qvm_ReleaseBlock_4BF8F0(parsed) @ symbol+0x111",
+   "Qvm_ReportError(\"An error occured in script file: %s\", qvm) @ symbol+0x19b",
+   "Qvm_ReleaseSourceReader_4BEFC0(&stack) @ symbol+0x136"
+  ],
+  "stores": [
+   "g_a965a4 = 0 (entry, symbol+0x6; program path, symbol+0x41; program error, symbol+0x17a; exit, symbol+0x142)",
+   "g_a965a8 = 0 (entry, symbol+0x2b; script error clear, symbol+0x129)"
+  ]
+ },
+ "checks": [
+  {
+   "name": "function_identity",
+   "result": "passed",
+   "detail": "Binary Ninja, Radare2 and angr all recover the exact entry 0x004B85B0; Binary Ninja names it Qvm_Execute, Radare2 recovers cdecl with one stack argument and 14 blocks/20 edges, and the candidate defines Qvm_Execute as the body implementing that entry."
+  },
+  {
+   "name": "argument_mapping",
+   "result": "passed",
+   "detail": "cdecl with one 4-byte stack argument is preserved. qvm is read once into a register (retail ESI at 0x004B85B7); all field accesses use the retail offsets +0x80, +0x84, +0x8C and program+0x268."
+  },
+  {
+   "name": "branch_structure",
+   "result": "passed",
+   "detail": "The decision order matches: clear both state words, test qvm+0x8C, then the program path or the source path; the source loop tests g_a965a0 first and g_a965a4 second (break only when both are non-zero), breaks on end-of-buffer, and exits through 0x004BEFC0."
+  },
+  {
+   "name": "program_path",
+   "result": "passed",
+   "detail": "0x004BD080 receives qvm+0x8C; a zero result returns 0; a non-zero result reports the exact retail format at 0x005472BC with (qvm, program+0x268), stores g_a965a4=0 after the call (retail 0x004B8602) and returns the reporter's EAX."
+  },
+  {
+   "name": "source_path",
+   "result": "passed",
+   "detail": "0x004C0200 receives (&buffer,&stack,text,0x800) in the retail push order; 0x004BF1C0 receives (&stack,qvm[0x80],qvm[0x84]); the parsed slot is zeroed before each 0x004BFC70 call and passed as buffer+0x08; the two block releases run in retail order followed by the g_a965a8 test."
+  },
+  {
+   "name": "error_reporting",
+   "result": "passed",
+   "detail": "Both retail formats are byte-exact, including the retail typo 'occured' and the \\r\\n between the two program substitutions. The second report is gated on g_a96598 != 0 and is followed by g_a965a8 = 0 in both."
+  },
+  {
+   "name": "return_and_error_paths",
+   "result": "passed",
+   "detail": "Four retail returns: program success returns 0; program error returns Qvm_ReportError's EAX; the source path returns 0x004BEFC0's EAX; every return stores g_a965a4=0 first. The candidate reproduces all four and does not present the source-path value as a script result. Error reporting is gated on g_a96598!=0 for the script path and is unconditional for the program path, exactly as in the retail body."
+  },
+  {
+   "name": "constants_and_offsets",
+   "result": "passed",
+   "detail": "0x800 arena size, +0x80/+0x84/+0x8C object offsets, +0x268 program error text offset and +0x08 buffer slot are the retail literals. No numeric constant was invented."
+  },
+  {
+   "name": "memory_layout",
+   "result": "passed-with-note",
+   "detail": "The 0x20 source stack, 0x30 source buffer and 0x800 text arena are modelled at the retail frame offsets; only pointers to them are passed to callees, so the compiler's different absolute frame placement is not observable. The 0x800 arena stays uninitialised as in retail."
+  },
+  {
+   "name": "shared_state",
+   "result": "passed-with-note",
+   "detail": "0x00A965A4 is defined here and the other three words are declared extern with the retail addresses. The declarations fail closed at link time while qvm_native_loader.cpp keeps them internal; duplicating them here would be silently wrong because Qvm_ReportError sets 0x00A965A8 in its own unit."
+  },
+  {
+   "name": "call_dependencies",
+   "result": "passed-with-note",
+   "detail": "All ten retail call sites are declared with their retail cdecl signatures and addresses; none is guessed or replaced by a stub. They are simply not implemented on this branch, which is recorded as a link blocker, not hidden."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "Qvm_Execute performs no x87 arithmetic of its own; its only floating-point interaction is through the unported callees, so there is no floating-point semantic to compare at this entry."
+  },
+  {
+   "name": "instruction_loop_and_dispatch",
+   "result": "not_applicable",
+   "rationale": "The retail body contains no opcode dispatch. Binary Ninja's user note calling 0x004B85B0 'the interpreter entry' conflicts with its own callee list: the instruction loop is Qvm_ExecuteInstructions (0x004BCFD0), reached via 0x004BD080. The note is recorded as a conflict, not used as evidence."
+  },
+  {
+   "name": "constants_and_scaling",
+   "result": "passed",
+   "detail": "The only literals are retail literals: 0x800 for the source-text arena passed to 0x004C0200, the QVM object offsets +0x80 (data) and +0x84 (size) and +0x8C (resolved program), the program error-text offset +0x268, and the +0x08 parsed-block out slot inside the 0x30-byte source buffer. No scaling factor, size or bound is invented; the frame sizes 0x20 (source stack), 0x30 (source buffer) and 0x800 (text arena) are asserted with static_assert in the candidate and match the retail frame layout."
+  },
+  {
+   "name": "memory_layout_and_access",
+   "result": "passed",
+   "detail": "All reads are at the retail offsets: qvm+0x80, qvm+0x84, qvm+0x8C and program+0x268. The frame-local objects (0x20 source stack, 0x30 source buffer, 0x800 text arena) are only passed to callees by pointer, so the compiler's different absolute frame placement is not observable; the 0x800 arena stays uninitialised as in retail. The internal field writes performed by the unported callees 0x004C0200 and 0x004BFC70 are not modelled; that is a declared dependency, not a claimed memory-layout equivalence."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "detail": "The ten retail call sites are reproduced in retail order with the retail arguments: 0x004BD080(program) at 0x004B85D8; 0x004B7E10(\"Error in QVM program: %s\\r\\n%s\", qvm, program+0x268) at 0x004B85FA; 0x004C0200(&buffer,&stack,text,0x800) at 0x004B8625; 0x004BF1C0(&stack,qvm[0x80],qvm[0x84]) at 0x004B863D; 0x004BFC70(&buffer,&buffer.block_slot) at 0x004B8663; 0x004BF1F0(&buffer,&parsed) at 0x004B8679; 0x004BFA80(parsed) at 0x004B868A; 0x004BF8F0(parsed) at 0x004B8694; 0x004B7E10(\"An error occured in script file: %s\", qvm) at 0x004B86B3; 0x004BEFC0(&stack) at 0x004B86C6. Side effects: g_a965a4=0 at entry, after the program runner, after the program-error report and on every source-path exit; g_a965a8=0 at entry and after a reported script error; g_a965a0 and g_a96598 are read only. The candidate performs no store the retail does not, and none of the callees is replaced by a stub: each is declared with its retail cdecl signature and left unresolved (documented link blocker)."
+  }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Retail is cdecl with one stack argument and returns whatever the selected path leaves in EAX. The candidate is extern \"C\" __cdecl std::int32_t Qvm_Execute(void* qvm), preserving the argument slot, cdecl cleanup and 32-bit return. humanplayer_defines.cpp declares the same symbol as returning void because HumanPlayer_LoadParameters ignores the result; that is ABI-compatible with this definition and is recorded rather than changed (the file is outside this increment)."
+ },
+ "evidence": {
+  "binary_ninja": "docs/fidelity/evidence/0x004B85B0-binaryninja.json",
+  "radare2": "docs/fidelity/evidence/0x004B85B0-radare2.json",
+  "angr": "docs/fidelity/evidence/0x004B85B0-angr-20261023.json",
+  "build": "docs/fidelity/evidence/0x004B85B0-build.json",
+  "structural_comparison": "docs/fidelity/evidence/0x004B85B0-structural-comparison.json",
+  "link_blockers": "docs/fidelity/evidence/qvm-execute-link-blockers.json"
+ },
+ "runtime_contract": null,
+ "limitations": [
+  "The eight retail callees are declared with their retail cdecl signatures but are not transcribed on this branch; the object therefore does not link, and no execution path past this function can run yet.",
+  "0x00A965A0, 0x00A965A8 and 0x00A96598 are still defined inside qvm_native_loader.cpp's anonymous namespace. This unit declares them extern to keep the retail storage shared; until those three definitions move to external linkage the link fails. A duplicate definition here was deliberately not used because it would split the state Qvm_ReportError and Qvm_SetGlobalState update.",
+  "No paired retail/candidate runtime capture exists for this address; runtime_tests and behavioral are intentionally null and RUNTIME_TESTED/VERIFIED is not claimed.",
+  "Which Qvm_Execute branch the retail takes was established statically, not by a runtime capture: the startup stub calls 0x0048F330(1) at 0x0040100A and main calls 0x0048F1C0(1) at 0x0048F627, so debug-compile and force-precompiled are both 1 and Qvm_Load resolves the .qvm program into qvm+0x8C (branch A). Branch B is the non-precompiled source path.",
+  "The retail argument order of 0x004C0200 is (buffer, source_stack, text, 0x800) as pushed at 0x004B8611-0x004B8625; the callee is unported, so its internal field writes are inferred only from its disassembly and are not reproduced here.",
+  "The candidate object compiles to 14 blocks/21 edges (Radare2 on the COFF object with relocations applied) against 14/20 in retail; the extra edge is GCC's explicit jump from the source-path tail to the shared return block where retail falls through.",
+  "The instruction count is 82 candidate vs 90 retail; byte extent 432 vs 301 including padding, because of GCC register allocation, frame size and epilogue placement.",
+  "The pre-existing scripts/GameNatives/qvm/004B85B0-Qvm_Execute.cpp candidate is a raw decompiler dump and was not used: its source-parser error path calls Sys_FreeMemory_22 with the report format string instead of Qvm_ReportError (0x004B7E10), and its signature/return comments repeat the stale 'script result value' claim. This transcription was made from the retail body.",
+  "2026-10-23 Task B repair: the canonical GameNatives reference is now scripts/GameNatives/qvm/004B85B0-Qvm_Execute.cpp (a reconstruction of the retail body, explicitly not a verbatim original). The previous file at that path was an uncorrected Ghidra/r2 dump and was archived to docs/fidelity/evidence/superseded/004B85B0-Qvm_Execute-ghidra-dump-20261023.cpp. The checks array was completed with the three gate-required checks named above; their content restates evidence already recorded in this report."
+ ],
+ "repair_notes": {
+  "recorded_at": "2026-10-23T11:45:00Z",
+  "task": "Task B: canonical GameNatives reference and semantic-review repair",
+  "changes": [
+   "Added the gate-required check names constants_and_scaling, memory_layout_and_access and calls_and_side_effects with the retail evidence for this entry; the earlier names constants_and_offsets, memory_layout, shared_state and call_dependencies are retained as extra detail.",
+   "The verdict, implementation digest (qvm_execute.cpp 17d7ef30...) and all limitations are unchanged; no status was raised."
+  ]
+ }
+}

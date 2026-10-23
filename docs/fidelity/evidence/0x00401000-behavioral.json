@@ -1,24 +1,19 @@
 {
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
  "address": "0x00401000",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "cases": [
-  {
-   "id": "static-structure",
-   "categories": [
-    "structure"
-   ],
-   "input": {
-    "args": [],
-    "initial_state": {}
-   },
-   "candidate_output": {
-    "return_value": 0,
-    "side_effects": [],
-    "state_delta": {
-     "chunks_read": 0
-    }
-   },
-   "note": "The candidate QTask_CreateTask reproduces the retail chunk walk: it returns the retail's null when the chunk is absent and the retail's payload pointer when it is present."
-  }
+ "implementation_sha256": "ce59536fe7f614756430a1b987452ad42fba586cf2a07571747778b4bab1d6ae",
+ "implementation_path": "engine/src/retail/core/qtask_create_task.cpp",
+ "executed": false,
+ "result": "not_run",
+ "oracle": null,
+ "tests_total": 0,
+ "tests_passed": 0,
+ "tests_failed": 0,
+ "reason": "No paired retail-and-candidate game-process runtime capture was performed for this change. An emulation differential was not run and is not being offered as runtime evidence; the previous behavioral file for this address described a chunk walk that does not match 0x00401000 and is replaced by this record.",
+ "limitations": [
+  "This file records the absence of a behavioral test; it is not evidence of behavioural parity.",
+  "Runtime acceptance requires sequential retail and candidate captures bound to both image hashes with typed observables (AGENTS 10.8-10.9)."
  ]
 }

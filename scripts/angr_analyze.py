@@ -164,7 +164,7 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
 
     results = [item.get("result") for item in functions.values()]
     overall = "fail" if "fail" in results else "inconclusive" if "inconclusive" in results else "pass"
-    return {
+    artifact = {
         "schema_version": 1,
         "kind": "angr-analysis",
         "result": overall,
@@ -185,6 +185,14 @@ def analyze(binary: pathlib.Path, addresses: list[int]) -> dict[str, Any]:
         "functions": functions,
         "limitations": ["CFGFast is approximate static analysis", "This result does not prove semantic or behavioral equivalence"],
     }
+    # When one address is analyzed, its function's facts are also reported at
+    # the top level, so a caller does not have to reach into the function map.
+    if len(functions) == 1:
+        only = next(iter(functions.values()))
+        artifact["function_entry"] = only.get("function_entry")
+        artifact["has_unresolved_jumps"] = only.get("has_unresolved_jumps")
+        artifact["reason"] = only.get("reason")
+    return artifact
 
 
 def main() -> int:

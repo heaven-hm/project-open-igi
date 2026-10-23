@@ -14,6 +14,16 @@
 // The node layout the helpers use is the retail's, and the offsets below are
 // the ones the helpers read.
 //
+// The four definitions in iff_chunk_tree.cpp already have external linkage in
+// their translation unit, so --whole-archive cannot drop them. Their emitted
+// names were the port's descriptive C++ identifiers, though, which left the
+// retail catalog names unresolvable in the linked candidate. Each declaration
+// below therefore pins its assembler name to the retail catalog name with a
+// GCC asm-label, so the out-of-line definition itself is addressable under the
+// name the symbol map, the coverage report and the paired probes resolve. The
+// assembler name does not alter the body, the cdecl argument layout, the
+// return value or any side effect.
+//
 // Artifact: retail igi.exe SHA256
 // dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja decompilation of the four helpers above;
@@ -56,22 +66,26 @@ inline constexpr std::uint32_t iff_form_marker = 0x464F524DU;
 // Finds the first chunk or form whose tag matches, descending into the
 // children of a nested form. The retail's source name for this routine is a
 // terrain function; the body is the chunk search.
-[[nodiscard]] IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag);
+[[nodiscard]] IffChunkNode* IffChunk_FindByTag(IffChunkNode* list, std::uint32_t tag)
+    asm("Iff_FindFormChunk");
 
 // Native: 0x00517940, the retail's find-child-by-tag.
 //
 // Searches a form's children for a matching chunk, and descends into a nested
 // form to search its children.
-[[nodiscard]] IffChunkNode* IffChunk_FindChildByTag(IffChunkNode* form, std::uint32_t tag);
+[[nodiscard]] IffChunkNode* IffChunk_FindChildByTag(IffChunkNode* form, std::uint32_t tag)
+    asm("Iff_FindChunk");
 
 // Native: 0x005179C0, the retail's chunk payload pointer.
-[[nodiscard]] const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk);
+[[nodiscard]] const std::byte* IffChunk_GetPayload(const IffChunkNode* chunk)
+    asm("Iff_GetChunkPayload");
 
 // Native: 0x005178E0, the retail's find-below-a-form.
 //
 // Like the find-by-tag, but when the node it is given already carries the
 // tag, the search starts at that node's sibling.
-[[nodiscard]] IffChunkNode* IffChunk_FindBelowForm(IffChunkNode* node, std::uint32_t tag);
+[[nodiscard]] IffChunkNode* IffChunk_FindBelowForm(IffChunkNode* node, std::uint32_t tag)
+    asm("Iff_FindChunkBelowForm");
 
 // HOST HELPER: parses a retail IFF file into the retail's chunk tree.
 //

@@ -2,10 +2,142 @@
  "schema_version": 1,
  "kind": "native-disassembly",
  "tool": "binary_ninja",
+ "tool_version": "Binary Ninja 6.0.10601 free, UI MCP server binaryninja_ui_mcp 0.1.0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "view": "PE32 x86 windows-x86, image 0x400000-0xC35058, entry 0x004A50F5, active view_1",
  "function_entry": "0x004CF790",
- "signature": "not restated",
+ "symbol": "DynObj_LoadModelTextures",
+ "signature": "int32_t*(void* arg1)",
+ "analyzed_at": "2026-10-23T06:59:32Z",
+ "function": {
+  "start": "0x004CF790",
+  "end": "0x004CF864",
+  "size_bytes": 213,
+  "basic_blocks": 7,
+  "instruction_count": 82
+ },
+ "disassembly": [
+  "int32_t* DynObj_LoadModelTextures(void* arg1)",
+  "0x4cf790  push    ecx",
+  "0x4cf791  push    ebx",
+  "0x4cf792  mov     ebx, dword [esp+0xc]",
+  "0x4cf796  push    ebp",
+  "0x4cf797  push    esi",
+  "0x4cf798  mov     eax, dword [ebx+0x8]",
+  "0x4cf79b  xor     ebp, ebp",
+  "0x4cf79d  push    edi",
+  "0x4cf79e  push    ebp",
+  "0x4cf79f  push    0x54455846",
+  "0x4cf7a4  push    eax",
+  "0x4cf7a5  call    Ilff_FindFormChunk",
+  "0x4cf7aa  mov     esi, eax",
+  "0x4cf7ac  add     esp, 0xc",
+  "0x4cf7af  mov     edi, dword [esi]",
+  "0x4cf7b1  cmp     edi, ebp",
+  "0x4cf7b3  mov     dword [ebx+0x40], edi",
+  "0x4cf7b6  jle     0x4cf859",
+  "0x4cf7bc  lea     ecx, [edi+edi*8]",
+  "0x4cf7bf  push    0x4",
+  "0x4cf7c1  shl     ecx, 0x2",
+  "0x4cf7c4  push    ecx",
+  "0x4cf7c5  call    Mem_AllocFn",
+  "0x4cf7ca  lea     edx, [edi+edi*2]",
+  "0x4cf7cd  push    0x4",
+  "0x4cf7cf  shl     edx, 0x2",
+  "0x4cf7d2  push    edx",
+  "0x4cf7d3  mov     dword [ebx+0x34], eax",
+  "0x4cf7d6  call    Mem_AllocFn",
+  "0x4cf7db  add     esp, 0x10",
+  "0x4cf7de  add     esi, 0x4",
+  "0x4cf7e1  cmp     edi, ebp",
+  "0x4cf7e3  mov     dword [ebx+0x38], eax",
+  "0x4cf7e6  jle     0x4cf85f",
+  "0x4cf7e8  mov     dword [esp+0x18], ebp",
+  "0x4cf7ec  mov     dword [esp+0x10], edi",
+  "0x4cf7f0  mov     eax, dword [ebx+0x38]",
+  "0x4cf7f3  push    esi",
+  "0x4cf7f4  push    0x548320  {\"LOCAL:textures/%s.tex\"}",
+  "0x4cf7f9  push    0xa4ec6c",
+  "0x4cf7fe  mov     dword [eax+ebp+0x4], 0x0",
+  "0x4cf806  call    sprintf",
+  "0x4cf80b  mov     edi, dword [ebx+0x38]",
+  "0x4cf80e  mov     edx, dword [ebx+0x34]",
+  "0x4cf811  mov     eax, dword [esp+0x24]",
+  "0x4cf815  mov     ecx, ebp",
+  "0x4cf817  add     ecx, edi",
+  "0x4cf819  push    0xa4ec6c",
+  "0x4cf81e  add     edx, eax",
+  "0x4cf820  push    ecx",
+  "0x4cf821  push    edx",
+  "0x4cf822  call    Texture_LoadLoopTextureFile",
+  "0x4cf827  mov     edi, esi",
+  "0x4cf829  or      ecx, 0xffffffff",
+  "0x4cf82c  xor     eax, eax",
+  "0x4cf82e  add     esp, 0x18",
+  "0x4cf831  repne scasb byte [edi]",
+  "0x4cf833  mov     eax, dword [esp+0x10]",
+  "0x4cf837  add     ebp, 0xc",
+  "0x4cf83a  not     ecx",
+  "0x4cf83c  dec     ecx",
+  "0x4cf83d  lea     esi, [esi+ecx+0x1]",
+  "0x4cf841  mov     ecx, dword [esp+0x18]",
+  "0x4cf845  add     ecx, 0x24",
+  "0x4cf848  dec     eax",
+  "0x4cf849  mov     dword [esp+0x18], ecx",
+  "0x4cf84d  mov     dword [esp+0x10], eax",
+  "0x4cf851  jne     0x4cf7f0",
+  "0x4cf853  pop     edi",
+  "0x4cf854  pop     esi",
+  "0x4cf855  pop     ebp",
+  "0x4cf856  pop     ebx",
+  "0x4cf857  pop     ecx",
+  "0x4cf858  retn",
+  "0x4cf859  mov     dword [ebx+0x34], ebp",
+  "0x4cf85c  mov     dword [ebx+0x38], ebp",
+  "0x4cf85f  pop     edi",
+  "0x4cf860  pop     esi",
+  "0x4cf861  pop     ebp",
+  "0x4cf862  pop     ebx",
+  "0x4cf863  pop     ecx",
+  "0x4cf864  retn"
+ ],
+ "pseudocode": "  int32_t* DynObj_LoadModelTextures(void* arg1)\n\n{\n    void* ebx = arg1;\n    int32_t ebp = 0;\n    int32_t* eax_1 = Ilff_FindFormChunk(*(ebx + 8), 0x54455846, nullptr);\n    int32_t* esi = eax_1;\n    int32_t __saved_ecx_2 = *esi;\n    *(ebx + 0x40) = __saved_ecx_2;\n\n    if (__saved_ecx_2 <= 0)\n    {\n        *(ebx + 0x34) = 0;\n        *(ebx + 0x38) = 0;\n    }\n    else\n    {\n        *(ebx + 0x34) = Mem_AllocFn(__saved_ecx_2 * 0x24, 4);\n        eax_1 = Mem_AllocFn(__saved_ecx_2 * 0xc, 4);\n        void* esi_1 = &esi[1];\n        *(ebx + 0x38) = eax_1;\n\n        if (__saved_ecx_2 > 0)\n        {\n            arg1 = nullptr;\n            int32_t __saved_ecx = __saved_ecx_2;\n            int32_t __saved_ecx_1;\n            bool cond:3_1;\n\n            do\n            {\n                void* var_18_1 = esi_1;\n                *(*(ebx + 0x38) + ebp + 4) = 0;\n                sprintf(0xa4ec6c, \"LOCAL:textures/%s.tex\");\n                Texture_LoadLoopTextureFile(*(ebx + 0x34) + arg1, ebp + *(ebx + 0x38), 0xa4ec6c);\n                void* edi_1 = esi_1;\n                int32_t i = 0xffffffff;\n\n                while (i)\n                {\n                    bool cond:2_1 = 0 != *edi_1;\n                    edi_1 += 1;\n                    i -= 1;\n\n                    if (!cond:2_1)\n                        break;\n                }\n\n                ebp += 0xc;\n                esi_1 = esi_1 + ~i - 1 + 1;\n                __saved_ecx_1 = __saved_ecx - 1;\n                cond:3_1 = __saved_ecx != 1;\n                arg1 += 0x24;\n                __saved_ecx = __saved_ecx_1;\n            } while (cond:3_1);\n            return __saved_ecx_1;\n        }\n    }\n\n    return eax_1;\n}",
+ "callers": [
+  {
+   "callsite": "0x4cf0d6",
+   "caller": "DynObj_LoadModelTexturePackage (0x4cf080 (x86))"
+  }
+ ],
+ "callees": [
+  {
+   "callsite": "0x4cf7a5",
+   "callee_address": "0x4ceaa0",
+   "callee": "Ilff_FindFormChunk (0x4ceaa0 (x86))"
+  },
+  {
+   "callsite": "0x4cf7c5",
+   "callee_address": "0x4b0c60",
+   "callee": "Mem_AllocFn (0x4b0c60 (x86))"
+  },
+  {
+   "callsite": "0x4cf7d6",
+   "callee_address": "0x4b0c60",
+   "callee": "Mem_AllocFn (0x4b0c60 (x86))"
+  },
+  {
+   "callsite": "0x4cf806",
+   "callee_address": "0x4a53b3",
+   "callee": "sprintf (0x4a53b3 (x86))"
+  },
+  {
+   "callsite": "0x4cf822",
+   "callee_address": "0x4b24c0",
+   "callee": "Texture_LoadLoopTextureFile (0x4b24c0 (x86))"
+  }
+ ],
  "cfg": {
+  "entry": "0x004CF790",
   "nodes": [
    {
     "address": "0x004CF790"
@@ -71,5 +203,10 @@
     "kind": "conditional"
    }
   ]
- }
+ },
+ "cfg_scope": "Retail-image CFG from Binary Ninja only; compared with Radare2 recovery of the same retail entry, not candidate code.",
+ "limitations": [
+  "Retail-image structure only; not candidate code and not runtime evidence.",
+  "Auto-generated Binary Ninja symbol names are not semantic proof of a function name."
+ ]
 }

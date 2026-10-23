@@ -78,13 +78,17 @@ char* String_FindExtension(char* dst, std::int32_t max_len, char* path);
 // Native: Qvm_ReportError() - VA 0x004B7E10 - complete port.
 // Behavior: sets `g_a965a8 = 1`; if `g_a96598 == 0`, returns `0`; otherwise formats `format` +
 //           variadic args into a 0x400-byte buffer via String_VFormat (0x004A5702) and either
-//           invokes `g_a43e70(buf, g_a43e68)` when non-null or calls Error_Show(buf) (0x004AF7B0).
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004B7E10-0x004B7E76, 102 bytes,
+//           invokes `g_a43e70(buf, g_a43e68)` when non-null or calls Debug_Error(buf) (0x004AF7B0)
+//           with the buffer as the format argument, then halts (retail `jmp $` at 0x004B7E74).
+// Tools/evidence: Binary Ninja MCP, Radare2 6.2.0 and angr 10.0.4.post1 CFGFast on retail IGI.EXE;
+//                 VA 0x004B7E10-0x004B7E76, 102 bytes,
 //                 digest 3a498c19bab408f24ec62452e00b3aaf5ca8863717620b589f9c5004002f24e6.
-// CFG: radare2 6 blocks/6 edges; Binary Ninja 6 blocks; 100% structural agreement.
-// Confidence: high for exact error-flag store, callback branch, and Error_Show fallback.
+// CFG: radare2 6 blocks/7 edges; Binary Ninja 6 blocks/7 edges; angr CFGFast 9 blocks/10 edges; 100% BN/r2 structural agreement.
+// Status: BUILD_VERIFIED; compiled object retains the retail flag store, disabled-state return,
+//         callback branch and the non-returning Debug_Error fallback. The retail display/exit callbacks
+//         (0x004988D0/0x00498930) remain unported and no paired runtime capture exists.
 // Signature: x86 cdecl int32_t(const char* format, ...); ported as variadic function.
-// Usage/tests: QVM compilation/load error reporter called by Qvm_Load; exercised by qvm_native_loader_test.cpp.
+// Usage/tests: QVM compilation/load error reporter called by Qvm_Load's error paths; no test source exists for it in this branch.
 std::int32_t Qvm_ReportError(const char* format, ...);
 
 // Native: Qvm_Cleanup() - VA 0x004B83D0 - complete port.

@@ -1,0 +1,612 @@
+{
+  "schema_version": 1,
+  "kind": "native-structural-comparison",
+  "address": "0x005144E0",
+  "function_name": "Terrain_UnknownBlendmode",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "binary_size_bytes": 1384448,
+  "image_base": "0x00400000",
+  "candidate_sha256": null,
+  "candidate_path": null,
+  "generated_at": "2026-10-23T03:44:47Z",
+  "comparison_scope": "retail structure recovered with Binary Ninja MCP disassembly, radare2 CFG and angr CFGFast; candidate structure measured on the pre-link COFF object built from the recorded source digest. The candidate is not linked into build-clean-win32/igi1.exe.",
+  "retail": {
+    "function_entry": "0x005144E0",
+    "function_extent": [
+      "0x005144E0",
+      "0x00514676"
+    ],
+    "size_bytes": 406,
+    "bytes_sha256": "c36e2ca4fa190e8230821b61701966ab183cacd0a6883cf2fe55e348b4709107",
+    "bytes_sha256_scope": "0x005144E0..0x00514675 read from the retail image (406 bytes, last byte 0x00514675); digest of the function bytes, not of the whole image",
+    "signature": "int32_t __cdecl Terrain_UnknownBlendmode(int32_t blendmode)",
+    "calling_convention": "cdecl",
+    "arguments": [
+      {
+        "index": 0,
+        "location": "[esp+4]",
+        "type": "int32",
+        "meaning": "blendmode selector: 0, 1 or 2; any other value takes the fatal path"
+      }
+    ],
+    "return": {
+      "register": "EAX",
+      "type": "int32",
+      "meaning": "HRESULT of the last device SetRenderState call on the selected path"
+    },
+    "instructions": 153,
+    "basic_blocks": 8,
+    "edges": 8,
+    "conditional_branches": 3,
+    "call_instructions": 23,
+    "returns": 3,
+    "callers": [
+      {
+        "site": "0x005143C9",
+        "function": "Terrain_Draw",
+        "cleanup": "add esp,4 after the call"
+      }
+    ],
+    "callees": [
+      {
+        "site": "0x005144FC",
+        "target": "0x004AF7B0",
+        "symbol": "Debug_Error",
+        "kind": "direct",
+        "arguments": [
+          "\"Unknown blendmode\""
+        ]
+      },
+      {
+        "sites": [
+          "mode 0 body",
+          "mode 1 body",
+          "mode 2 body"
+        ],
+        "target": "[device_vtable+0x50]",
+        "symbol": "IDirect3DDevice7::SetRenderState",
+        "kind": "indirect",
+        "call_count": 19,
+        "arguments": [
+          "device (0x005CA114)",
+          "state",
+          "value"
+        ]
+      },
+      {
+        "sites": [
+          "mode 0 body",
+          "mode 1 body",
+          "mode 2 body"
+        ],
+        "target": "[device_vtable+0x94]",
+        "symbol": "IDirect3DDevice7::SetTextureStageState",
+        "kind": "indirect",
+        "call_count": 3,
+        "arguments": [
+          "device (0x005CA114)",
+          "stage 0",
+          "type 1",
+          "value"
+        ]
+      }
+    ],
+    "globals": [
+      {
+        "address": "0x005CA114",
+        "role": "IDirect3DDevice7 pointer loaded before every device call"
+      },
+      {
+        "address": "0x00A7E068",
+        "role": "FOGCOLOR value operand in all three modes"
+      },
+      {
+        "address": "0x005470B4",
+        "role": "FOGENABLE value operand in all three modes"
+      }
+    ],
+    "dispatch": {
+      "order": [
+        "mode 0 at 0x005144ED -> 0x0051460C",
+        "mode 1 at 0x005144EE -> 0x00514589",
+        "mode 2 at 0x005144F5 -> 0x00514506",
+        "default at 0x005144F7 -> Debug_Error + jmp $"
+      ],
+      "implementation": "mov eax,[esp+4]; sub eax,0; je mode0; dec eax; je mode1; dec eax; je mode2; fatal"
+    },
+    "mode_call_sequences": {
+      "0": [
+        [
+          "+0x50",
+          "0x1B",
+          "0"
+        ],
+        [
+          "+0x50",
+          "0x22",
+          "g_a7e068"
+        ],
+        [
+          "+0x50",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x94",
+          "0",
+          "1",
+          "4"
+        ],
+        [
+          "+0x50",
+          "0x17",
+          "2"
+        ],
+        [
+          "+0x50",
+          "0x0E",
+          "1"
+        ]
+      ],
+      "1": [
+        [
+          "+0x50",
+          "0x1B",
+          "1"
+        ],
+        [
+          "+0x50",
+          "0x13",
+          "2"
+        ],
+        [
+          "+0x50",
+          "0x14",
+          "2"
+        ],
+        [
+          "+0x50",
+          "0x22",
+          "0"
+        ],
+        [
+          "+0x50",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x94",
+          "0",
+          "1",
+          "4"
+        ],
+        [
+          "+0x50",
+          "0x17",
+          "4"
+        ],
+        [
+          "+0x50",
+          "0x0E",
+          "0"
+        ]
+      ],
+      "2": [
+        [
+          "+0x50",
+          "0x1B",
+          "1"
+        ],
+        [
+          "+0x50",
+          "0x13",
+          "1"
+        ],
+        [
+          "+0x50",
+          "0x22",
+          "0xFFFFFFFF"
+        ],
+        [
+          "+0x50",
+          "0x14",
+          "3"
+        ],
+        [
+          "+0x50",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x94",
+          "0",
+          "1",
+          "2"
+        ],
+        [
+          "+0x50",
+          "0x17",
+          "4"
+        ],
+        [
+          "+0x50",
+          "0x0E",
+          "0"
+        ]
+      ]
+    },
+    "notes": "Each body reloads g_5ca114 immediately before every indirect call and reloads g_a7e068/g_5470b4 before using them; the disassembly shows no hoisted device pointer. Return sites: 0x0051460? (mode 0), 0x00514589.. (mode 1), 0x00514506.. (mode 2).",
+    "binary_ninja": "BN view_1: 8 blocks, 8 edges, 153 instructions; disassembly and decompile inspected",
+    "radare2": "af/afij: 8 blocks, 8 edges; node/edge sets identical to Binary Ninja",
+    "angr": "CFGFast exact entry recovered; blocks 31, edges 31, has_unresolved_jumps=false; approximate block partition (not compared block-for-block)"
+  },
+  "candidate": {
+    "linked_into_candidate_executable": false,
+    "candidate_executable": {
+      "path": "build-clean-win32/igi1.exe",
+      "sha256": "691c08393507b9cbbd42f3eca2c1888be8e624ecbc08bf8fbd81ae53008e12ce",
+      "contains_implementation": false
+    },
+    "candidate_executable_note": "build-clean-win32/igi1.exe does not contain this TU: CMakeLists.txt:76-79 excludes engine/src/retail/terrain/terrain_unknown_blendmode.cpp, and the executable's symbol table has no Terrain_UnknownBlendmode symbol. The executable digest is recorded only to identify the repository build state; it is not the measured artifact.",
+    "measurement_artifact": {
+      "kind": "pre-link i386 COFF object",
+      "source_path": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+      "source_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+      "object_sha256": "df7f35e3f0c76bbb680d2b7cbe1957a9180500302bd431905572c31e1696873c",
+      "object_path": "/tmp/ev/obj2/terrain_unknown_blendmode.o (outside the repository; reproducible from the recorded command)",
+      "compile_command": "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o terrain_unknown_blendmode.o",
+      "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+      "reproducibility": "Repeated compiles of the same source produced byte-identical objects."
+    },
+    "function": {
+      "symbol": "_Terrain_UnknownBlendmode",
+      "linkage": "extern \"C\"",
+      "signature": "std::int32_t Terrain_UnknownBlendmode(std::int32_t blendmode)",
+      "text_extent_bytes": 736,
+      "code_extent_bytes": 722,
+      "instructions": 161,
+      "basic_blocks": 10,
+      "edges": 11,
+      "conditional_branches": 3,
+      "call_instructions": 20,
+      "returns": 2,
+      "measurement": "objdump -dr on the pre-link object; block/edge split derived from branch targets in the object, approximate (no linked image CFG)"
+    },
+    "host_abi": {
+      "device": "Device7* g_5ca114 with an explicit host vtable",
+      "slots": {
+        "+0x08": "SetRenderState(state,value)",
+        "+0x14": "SetTextureStageState(stage,type,value)"
+      },
+      "note": "The host offsets are not retail offsets. The comparison maps them by call shape and argument order; no claim is made that the host vtable layout matches retail."
+    },
+    "mode_call_sequences": {
+      "0": [
+        [
+          "+0x08",
+          "0x1B",
+          "0"
+        ],
+        [
+          "+0x08",
+          "0x22",
+          "g_a7e068"
+        ],
+        [
+          "+0x08",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x14",
+          "0",
+          "1",
+          "4"
+        ],
+        [
+          "+0x08",
+          "0x17",
+          "2"
+        ],
+        [
+          "+0x08",
+          "0x0E",
+          "1"
+        ]
+      ],
+      "1": [
+        [
+          "+0x08",
+          "0x1B",
+          "1"
+        ],
+        [
+          "+0x08",
+          "0x13",
+          "2"
+        ],
+        [
+          "+0x08",
+          "0x14",
+          "2"
+        ],
+        [
+          "+0x08",
+          "0x22",
+          "0"
+        ],
+        [
+          "+0x08",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x14",
+          "0",
+          "1",
+          "4"
+        ],
+        [
+          "+0x08",
+          "0x17",
+          "4"
+        ],
+        [
+          "+0x08",
+          "0x0E",
+          "0"
+        ]
+      ],
+      "2": [
+        [
+          "+0x08",
+          "0x1B",
+          "1"
+        ],
+        [
+          "+0x08",
+          "0x13",
+          "1"
+        ],
+        [
+          "+0x08",
+          "0x22",
+          "0xFFFFFFFF"
+        ],
+        [
+          "+0x08",
+          "0x14",
+          "3"
+        ],
+        [
+          "+0x08",
+          "0x1C",
+          "g_5470b4"
+        ],
+        [
+          "+0x14",
+          "0",
+          "1",
+          "2"
+        ],
+        [
+          "+0x08",
+          "0x17",
+          "4"
+        ],
+        [
+          "+0x08",
+          "0x0E",
+          "0"
+        ]
+      ]
+    },
+    "fatal_path": "Error_Show(\"Unknown blendmode\") then an infinite loop; Error_Show is called through the retail VA 0x004AF7B0.",
+    "return_value": "EAX of the last SetRenderState on the executed path; mode 1 jumps into the mode 2 tail at 0x1A3 and returns the shared 0x0E result.",
+    "functions": [
+      {
+        "address": "0x0 (object-relative)",
+        "name": "_Terrain_UnknownBlendmode",
+        "size": 722,
+        "blocks": 10,
+        "edges": 11
+      }
+    ],
+    "source": "engine/src/retail/terrain/terrain_unknown_blendmode.cpp",
+    "source_sha256": "457ff29a114ab497e15155d5f276956048f3499cadab2d4adce959fbf604c60a",
+    "measured_on_candidate_sha256": null
+  },
+  "cfg_comparison": {
+    "retail_binary_ninja_vs_radare2": {
+      "nodes_jaccard": 1.0,
+      "edges_jaccard": 1.0,
+      "cfg_score": 1.0,
+      "score_formula": "0.35*node_jaccard + 0.65*edge_jaccard (recomputed by scripts/native_gate.py from the recorded BN/r2 graphs)",
+      "blocks": {
+        "binary_ninja": 8,
+        "radare2": 8
+      },
+      "edges": {
+        "binary_ninja": 8,
+        "radare2": 8
+      },
+      "scope": "RETAIL IMAGE ONLY. This score compares the two retail graphs with each other; it is not candidate equivalence."
+    },
+    "candidate_vs_retail": {
+      "candidate_cfg_comparable": false,
+      "reason": "The candidate is a pre-link object, not a linked PE function; objdump block/edge counts are approximate and cannot be fed to the gate's CFG jaccard.",
+      "structural_totals": {
+        "retail": {
+          "instructions": 153,
+          "blocks": 8,
+          "edges": 8,
+          "returns": 3,
+          "calls": 23
+        },
+        "candidate": {
+          "instructions": 161,
+          "blocks": 10,
+          "edges": 11,
+          "returns": 2,
+          "calls": 20
+        }
+      },
+      "execution_path_equivalence": "asserted only for the three documented mode sequences, which were compared call-by-call (state, value, order) and found identical; it is not a full instruction-for-instruction equivalence."
+    },
+    "retail_image_score_is_candidate_equivalence": false,
+    "bn_vs_r2_retail": 1.0,
+    "bn_vs_r2_scope": "retail image only; this numeric score is not candidate equivalence"
+  },
+  "compared_properties": [
+    {
+      "property": "entry and dispatch order",
+      "retail": "0->0x51460C, 1->0x514589, 2->0x514506, else fatal; sub/dec/dec chain",
+      "candidate": "same 0->1->2->fatal order; switch on the same int32",
+      "result": "match"
+    },
+    {
+      "property": "mode 0 device call sequence",
+      "retail": "19 SetRenderState + 3 SetTextureStageState over the three modes, in the order recorded in retail.mode_call_sequences",
+      "candidate": "same sequence, same constants and same argument order per mode",
+      "result": "match"
+    },
+    {
+      "property": "mode 1 device call sequence",
+      "retail": "8 calls: 1B/1, 13/2, 14/2, 22/0, 1C/g, TSS(0,1,4), 17/4, 0E/0",
+      "candidate": "same 8 calls in the same order; GCC moved the last three into the shared mode-2 tail",
+      "result": "match-after-resolution"
+    },
+    {
+      "property": "mode 2 device call sequence",
+      "retail": "8 calls: 1B/1, 13/1, 22/FFFFFFFF, 14/3, 1C/g, TSS(0,1,2), 17/4, 0E/0",
+      "candidate": "same 8 calls in the same order",
+      "result": "match"
+    },
+    {
+      "property": "device pointer reload",
+      "retail": "g_5ca114 is reloaded before every indirect call; g_a7e068/g_5470b4 are reloaded in each body",
+      "candidate": "reloads g_5ca114 through a volatile-like host reference before every call; the globals are read at each site",
+      "result": "match"
+    },
+    {
+      "property": "vtable slots",
+      "retail": "SetRenderState at vtable+0x50; SetTextureStageState at vtable+0x94 (DX7)",
+      "candidate": "host Device7 slots +0x08 and +0x14",
+      "result": "match-after-resolution",
+      "note": "host ABI abstraction, mapped by call shape; not a retail ABI claim"
+    },
+    {
+      "property": "return value",
+      "retail": "EAX of the last SetRenderState on the selected path",
+      "candidate": "EAX of the last SetRenderState; mode 1 returns through the shared tail's 0x0E call",
+      "result": "match"
+    },
+    {
+      "property": "fatal default",
+      "retail": "push \"Unknown blendmode\"; call 0x004AF7B0; add esp,4; jmp $",
+      "candidate": "Error_Show(\"Unknown blendmode\"); infinite loop",
+      "result": "match-after-resolution",
+      "note": "Error_Show is the project's declaration of the same retail VA 0x004AF7B0"
+    },
+    {
+      "property": "device null check",
+      "retail": "none",
+      "candidate": "none",
+      "result": "match"
+    },
+    {
+      "property": "compile-time structural totals",
+      "retail": "406 bytes, 153 instructions, 8 blocks/8 edges, 23 call sites, 3 returns",
+      "candidate": "736-byte text extent, 161 instructions, 10 blocks/11 edges, 20 call sites, 2 returns",
+      "result": "match-after-resolution",
+      "note": "GCC tail-merges the mode-1 and mode-2 endings and folds one return site; execution count is unchanged"
+    }
+  ],
+  "divergences": [
+    {
+      "id": "BM-D1",
+      "kind": "host-abi",
+      "severity": "none",
+      "status": "resolved",
+      "summary": "Candidate calls host vtable slots +0x08/+0x14 instead of retail +0x50/+0x94.",
+      "retail": "SetRenderState at [device+0x50]; SetTextureStageState at [device+0x94]",
+      "candidate": "SetRenderState at [device+0x08]; SetTextureStageState at [device+0x14]",
+      "impact": "Host Device7 abstraction only; argument order, argument count and execution order are preserved. This is not evidence that the host ABI matches DX7.",
+      "resolution": "The comparison maps the slots by call shape; no behavioural difference on the three paths."
+    },
+    {
+      "id": "BM-D2",
+      "kind": "compiler-codegen",
+      "severity": "none",
+      "status": "resolved",
+      "summary": "GCC tail-merges mode 1 into the mode-2 tail, reducing static call sites and return sites.",
+      "retail": "23 call instructions (22 device + 1 Debug_Error), 3 returns, 8 blocks",
+      "candidate": "20 call instructions (19 device + 1 Error_Show), 2 returns, 10 blocks",
+      "impact": "Static shape differs; per-mode execution sequence and the returned EAX are identical.",
+      "resolution": "Verified by following the mode-1 jump at 0x1A3 into the shared TSS/0x17/0x0E tail and by comparing all three sequences."
+    },
+    {
+      "id": "BM-D3",
+      "kind": "fatal-path",
+      "severity": "low",
+      "status": "resolved",
+      "summary": "Fatal call is Error_Show rather than the Binary Ninja name Debug_Error.",
+      "retail": "call 0x004AF7B0; add esp,4; jmp $",
+      "candidate": "Error_Show(\"Unknown blendmode\"); for(;;){}",
+      "impact": "Same retail callee and same halt. Error_Show is variadic and may return, so the candidate's halt is what preserves the retail hang.",
+      "resolution": "Call target and post-call hang match; the no-return property of retail Debug_Error is not statically proven."
+    }
+  ],
+  "limitations": [
+    "Static comparison only. No runtime capture, no device-state observation and no FPS/frame comparison was performed.",
+    "The measured candidate is the pre-link COFF object from engine/src/retail/terrain/terrain_unknown_blendmode.cpp (sha256 457ff29a...), compiled with the recorded command. build-clean-win32/igi1.exe does not contain this TU (CMakeLists.txt:76-79 excludes it; the executable has no such symbol and its digest 691c0839... is recorded for build-state traceability only).",
+    "cfg_similarity 1.0 in this record is the retail Binary Ninja-vs-radare2 graph score. It is not a candidate score; the candidate is compared in this file at source/object level and that comparison is not reduced to a jaccard value.",
+    "The candidate's host vtable slots +0x08/+0x14 are not retail offsets. The comparison maps them by call shape; the record makes no claim that Device7's host layout equals DX7's.",
+    "GCC tail merging means static call-site counts (23 vs 20) and return-site counts (3 vs 2) differ while the per-mode execution sequence is identical. The equivalence claim covers only those three documented sequences, not arbitrary device-pointer aliasing.",
+    "Error_Show (retail 0x004AF7B0) is variadic and may return; the candidate still halts forever after the call. The retail Debug_Error's non-return cannot be proven statically.",
+    "The source provenance comment still carries the pre-comparison TRANSCRIBED label and its Tools/evidence lines are wrapped, so scripts/native_gate.py emits non-blocking provenance warnings (missing Behavior/CFG: and Status/limits: lines, comment/status disagreement). The comment was not edited to avoid changing the source digest that this comparison binds.",
+    "This record promotes to STRUCTURALLY_VERIFIED on the strength of the structural comparison, not on the retail-image CFG score. The project's strict gate still requires a semantic-review report bound to this implementation digest and a live behavioral runner; neither exists for this TU, so a strict gate invocation remains blocked."
+  ],
+  "status_recommendation": {
+    "status": "STRUCTURALLY_VERIFIED",
+    "rationale": "Retail entry, ABI, dispatch order, per-mode call order/arguments/constants, fatal path and return value were recovered from instruction-level evidence and compared against the compiled candidate. Every difference found is a compiler or host-ABI artifact with a stated resolution; no unresolved behavioural divergence remains in the compared scope.",
+    "remaining_for_strict_gate": [
+      "missing verification.semantic_review bound to implementation digest 457ff29a...",
+      "missing live verification.behavioral_runner"
+    ],
+    "cfg_similarity_claim": "1.0 retail BN-vs-r2 only; not candidate equivalence"
+  },
+  "tool_evidence": {
+    "binary_ninja": {
+      "tool": "binaryninja_ui_mcp 0.1.0",
+      "view": "view_1",
+      "evidence_path": "docs/fidelity/evidence/0x005144E0-binaryninja-20261023.json",
+      "evidence_sha256": "352b96bc238bd8a3a094ac71d27bd762b42c73947fc05a331716926cdf561c72"
+    },
+    "radare2": {
+      "tool": "radare2 6.2.0",
+      "evidence_path": "docs/fidelity/evidence/0x005144E0-radare2-20261023.json",
+      "evidence_sha256": "b241318895ad5ed1e3e495c4107dd2b78c2db185febd535712951a3239cd7ffd"
+    },
+    "angr": {
+      "tool": "angr 10.0.4.post1 CFGFast",
+      "evidence_path": "docs/fidelity/evidence/0x005144E0-angr-20261023.json",
+      "evidence_sha256": "04bbe7ae090e75eef33dfde716f3ece7de104fd58b1f72debe6b649cd5bb17fc",
+      "entry_recovered": true,
+      "blocks": 31,
+      "edges": 31,
+      "unresolved_jumps": false
+    },
+    "compiler": "i686-w64-mingw32-g++ (GCC) 16.2.0",
+    "objdump": "i686-w64-mingw32-objdump -dr"
+  },
+  "commands": [
+    "Binary Ninja MCP: get_function_info_at(0x005144E0); get_function_disassembly(0x005144E0); get_function_decompile(0x005144E0); get_function_callees(0x005144E0); get_function_callers(0x005144E0); get_function_globals(0x005144E0)",
+    "r2 -q -e bin.relocs.apply=true -c \"s 0x005144E0; af; pdf\" /Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "python3 scripts/angr_analyze.py --binary /Users/haseeb-mir/Downloads/IGI/igi.exe --address 0x005144E0 --output docs/fidelity/evidence/0x005144E0-angr-20261023.json",
+    "i686-w64-mingw32-g++ -std=gnu++20 -O3 -DNDEBUG -Iengine/include -c engine/src/retail/terrain/terrain_unknown_blendmode.cpp -o terrain_unknown_blendmode.o",
+    "i686-w64-mingw32-objdump -dr --no-show-raw-insn terrain_unknown_blendmode.o"
+  ],
+  "candidate_build_receipt": null
+}

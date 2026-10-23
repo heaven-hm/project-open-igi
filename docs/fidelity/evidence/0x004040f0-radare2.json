@@ -1,16 +1,43 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "radare2",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004040F0",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004040F0"
-   }
-  ],
-  "edges": []
- }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "radare2 6.2.0 +0 abi:132 @ darwin-arm_64",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "function_entry": "0x004040F0",
+  "symbol": "fcn.004040f0",
+  "signature": "fcn.004040f0 (int32_t arg_24h_2, int32_t arg_24h);",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "analysis": {
+    "commands": "s 0x004040F0; af-*; af; afij; afbj",
+    "note": "radare2 function analysis at the exact retail entry (af-*; af), then afij/afbj."
+  },
+  "function": {
+    "size_bytes": 102,
+    "basic_block_count": 1,
+    "instruction_count": 28,
+    "call_convention": "cdecl",
+    "edge_count": 0,
+    "argument_count": 2,
+    "is_linear": true
+  },
+  "bytes_hex": "83ec188b44242456576a0050e81f490b",
+  "bytes_sha256": "16c524fc441e22e497dd689dac72a8249781cb07ba839f6b8be9eb57d7ce7201",
+  "cfg": {
+    "entry": "0x004040F0",
+    "nodes": [
+      {
+        "address": "0x004040f0",
+        "size": 102,
+        "instructions": 28
+      }
+    ],
+    "edges": []
+  },
+  "disassembly": "\u250c 102: fcn.004040f0 (int32_t arg_24h_2, int32_t arg_24h);\n\u2502 `- args(sp[0x4..0xc]) vars(4:sp[0x8..0x18])\n\u2502           0x004040f0      83ec18         sub esp, 0x18\n\u2502           0x004040f3      8b442424       mov eax, dword [arg_24h]\n\u2502           0x004040f7      56             push esi\n\u2502           0x004040f8      57             push edi\n\u2502           0x004040f9      6a00           push 0\n\u2502           0x004040fb      50             push eax\n\u2502           0x004040fc      e81f490b00     call fcn.004b8a20\n\u2502           0x00404101      8b158023bc00   mov edx, dword [0xbc2380]   ; [0xbc2380:4]=0\n\u2502           0x00404107      83c408         add esp, 8\n\u2502           0x0040410a      8d742408       lea esi, [var_8h]\n\u2502           0x0040410e      c744240800..   mov dword [var_8h], 0\n\u2502           0x00404116      8d0c52         lea ecx, [edx + edx*2]\n\u2502           0x00404119      c744241000..   mov dword [var_10h], 0\n\u2502           0x00404121      c1e103         shl ecx, 3\n\u2502           0x00404124      2bca           sub ecx, edx\n\u2502           0x00404126      c744241400..   mov dword [var_14h], 0\n\u2502           0x0040412e      c744241874..   mov dword [var_18h], 0x567c74 ; 't|V'\n\u2502                                                                      ; [0x567c74:4]=0\n\u2502           0x00404136      8d0c49         lea ecx, [ecx + ecx*2]\n\u2502           0x00404139      8d0c89         lea ecx, [ecx + ecx*4]\n\u2502           0x0040413c      89048d3c1e..   mov dword [ecx*4 + 0xbc1e3c], eax ; [0xbc1e3c:4]=0\n\u2502           0x00404143      8b442424       mov eax, dword [arg_24h_2]\n\u2502           0x00404147      b906000000     mov ecx, 6\n\u2502           0x0040414c      8bf8           mov edi, eax\n\u2502           0x0040414e      f3a5           rep movsd dword es:[edi], dword [esi]\n\u2502           0x00404150      5f             pop edi\n\u2502           0x00404151      5e             pop esi\n\u2502           0x00404152      83c418         add esp, 0x18\n\u2514           0x00404155      c3             ret",
+  "limitations": [
+    "radare2 edge kinds are derived from the afbj jump/fail fields: a conditional block contributes its jump and its fail edge as the two conditional outcomes.",
+    "radare2 does not recover types; the signature is its best-effort calling-convention sketch."
+  ]
 }

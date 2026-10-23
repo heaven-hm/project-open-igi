@@ -1,46 +1,82 @@
 {
- "schema_version": 1,
- "kind": "native-disassembly",
- "tool": "binary_ninja",
- "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "function_entry": "0x004A9C40",
- "signature": "not restated",
- "cfg": {
-  "nodes": [
-   {
-    "address": "0x004A9C40"
-   },
-   {
-    "address": "0x004A9C60"
-   },
-   {
-    "address": "0x004A9C91"
-   },
-   {
-    "address": "0x004A9C8E"
-   }
-  ],
-  "edges": [
-   {
-    "source": "0x004A9C40",
-    "target": "0x004A9C60",
-    "kind": "unconditional"
-   },
-   {
-    "source": "0x004A9C60",
-    "target": "0x004A9C91",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9C60",
-    "target": "0x004A9C8E",
-    "kind": "conditional"
-   },
-   {
-    "source": "0x004A9C8E",
-    "target": "0x004A9C91",
-    "kind": "unconditional"
-   }
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "tool_version": "Binary Ninja 6.0.10601 free; UI MCP server binaryninja_ui_mcp 0.1.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "view": "view_1",
+  "function_entry": "0x004A9C40",
+  "symbol": "Camera_ApplyPostProcess_17",
+  "signature": "long double __convention(\"regparm\")(int32_t arg1, int32_t arg2, long double arg3 @ st0, int32_t arg4 @ 0xc, int32_t arg5 @ 0x10, int32_t arg6 @ 0x14, int32_t arg7 @ 0x18)",
+  "analyzed_at": "2026-10-23T12:58:32Z",
+  "function": {
+    "start": "0x004A9C40",
+    "end": "0x4a9c92",
+    "size_bytes": 83,
+    "basic_blocks": 4,
+    "instruction_count": 28
+  },
+  "bytes_hex": "558bec83c4e08945e08b45188945f08b",
+  "bytes_sha256": "1d1844f76a8d65c0fa2bd61d1f0a54f106aaf3eff01fa52336ce08b9a9c0618f",
+  "cfg": {
+    "entry": "0x004A9C40",
+    "nodes": [
+      {
+        "address": "0x004a9c40",
+        "start": "0x4a9c40",
+        "end": "0x4a9c57",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9c60",
+        "start": "0x4a9c60",
+        "end": "0x4a9c8e",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9c91",
+        "start": "0x4a9c91",
+        "end": "0x4a9c93",
+        "flags": "can-exit"
+      },
+      {
+        "address": "0x004a9c8e",
+        "start": "0x4a9c8e",
+        "end": "0x4a9c91",
+        "flags": "can-exit"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004a9c40",
+        "target": "0x004a9c60",
+        "kind": "unconditional"
+      },
+      {
+        "source": "0x004a9c60",
+        "target": "0x004a9c8e",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9c60",
+        "target": "0x004a9c91",
+        "kind": "conditional"
+      },
+      {
+        "source": "0x004a9c8e",
+        "target": "0x004a9c91",
+        "kind": "unconditional"
+      }
+    ]
+  },
+  "disassembly": "`asm\n\ud83c\udf10  long double __convention(\"regparm\") Camera_ApplyPostProcess_17(int32_t arg1, int32_t arg2, long double arg3 @ st0, int32_t arg4 @ 0xc, int32_t arg5 @ 0x10, int32_t arg6 @ 0x14, int32_t arg7 @ 0x18)\n\n0x4a9c40  push    ebp {__saved_ebp}\n0x4a9c41  mov     ebp, esp {__saved_ebp}\n0x4a9c43  add     esp, 0xffffffe0\n0x4a9c46  mov     dword [ebp-0x20 {var_24}], eax\n0x4a9c49  mov     eax, dword [ebp+0x18 {arg6}]\n0x4a9c4c  mov     dword [ebp-0x10 {var_14}], eax\n0x4a9c4f  mov     eax, dword [ebp+0x1c {arg7}]\n0x4a9c52  mov     dword [ebp-0xc {var_10}], eax\n0x4a9c55  jmp     0x4a9c60\n\n0x4a9c60  fstp    qword [ebp-0x8 {var_c}], st0\n0x4a9c63  mov     dword [ebp-0x1c {var_20}], ecx\n0x4a9c66  mov     eax, dword [ebp+0x10 {arg4}]\n0x4a9c69  mov     ecx, dword [ebp+0x14 {arg5}]\n0x4a9c6c  mov     dword [ebp-0x18 {var_1c}], eax\n0x4a9c6f  mov     dword [ebp-0x14 {var_18}], ecx\n0x4a9c72  lea     eax, [ebp+0x8 {arg_4}]\n0x4a9c75  lea     ecx, [ebp-0x20 {var_24}]\n0x4a9c78  push    eax {arg_4} {var_28}\n0x4a9c79  push    ecx {var_24} {var_2c}\n0x4a9c7a  push    edx {var_30}\n0x4a9c7b  call    Camera_ApplyWideScreen_27\n0x4a9c80  add     esp, 0xc\n0x4a9c83  fld     st0, qword [ebp-0x8 {var_c}]\n0x4a9c86  cmp     word [ebp+0x8 {arg_4}], 0x27f\n0x4a9c8c  je      0x4a9c91\n\n0x4a9c8e  fldcw   word [ebp+0x8 {arg_4}]\n\n0x4a9c91  leave    {__saved_ebp}\n0x4a9c92  retn     {__return_addr}",
+  "pseudocode": "`bn-pseudoc\n\ud83c\udf10  long double __convention(\"regparm\") Camera_ApplyPostProcess_17(int32_t arg1, int32_t arg2, long double arg3 @ st0, int32_t arg4 @ 0xc, int32_t arg5 @ 0x10, int32_t arg6 @ 0x14, int32_t arg7 @ 0x18)\n\n{\n    int32_t var_24 = arg1;\n    int32_t var_14 = arg6;\n    int32_t var_10 = arg7;\n    double var_c = arg3;\n    int32_t ecx;\n    int32_t var_20 = ecx;\n    int32_t var_1c = arg4;\n    int32_t var_18 = arg5;\n    int16_t arg_4;\n    Camera_ApplyWideScreen_27(arg2, &var_24, &arg_4);\n    int16_t x87control_1;\n    int16_t x87status_1;\n\n    if (arg_4 != 0x27f)\n        x87control_1 = __fldcw_memmem16(arg_4);\n    return var_c;\n}",
+  "callees": "---\ntool: \"bn_function_callees\"\nfunction: \"0x4a9c40\"\narch: \"x86\"\nname: \"Camera_ApplyPostProcess_17\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 1\ntotal: 1\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Callee Address | Callee Functions |\n| --- | --- | --- | --- |\n| 0x4a9c7b | x86 | 0x4ad371 | Camera_ApplyWideScreen_27 (0x4ad371 (x86)) |\n",
+  "callers": "---\ntool: \"bn_function_callers\"\nfunction: \"0x4a9c40\"\narch: \"x86\"\nname: \"Camera_ApplyPostProcess_17\"\nplatform: \"windows-x86\"\noffset: 0\nlimit: 500\ncount: 2\ntotal: 2\nnextOffset: null\ntruncated: false\n---\n\n| Callsite | Architecture | Caller Function |\n| --- | --- | --- |\n| 0x4a5812 | x86 | Camera_UpdateViewCone_5 (0x4a5782 (x86)) |\n| 0x4a9dce | x86 | Camera_UpdateViewCone_5 (0x4a5782 (x86)) |\n",
+  "evidence_source": "live Binary Ninja MCP view_1 (retail PE), bn_function_info/bn_function_basic_blocks/bn_function_disassembly/bn_function_decompile",
+  "limitations": [
+    "Binary Ninja types and pseudocode are its interpretation of the retail bytes; the disassembly and CFG block table are the primary evidence.",
+    "The BN analyst comments (Sig/Note) are annotations, not retail symbols."
   ]
- }
 }
