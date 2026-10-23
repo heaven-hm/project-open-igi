@@ -1,0 +1,345 @@
+{
+  "schema_version": 1,
+  "codex_ref": "codex-smart-workflow",
+  "my_ref": "worktree",
+  "my_verified_count": 92,
+  "codex_record_count": 883,
+  "codex_status_counts": {
+    "ANALYZED": 84,
+    "STRUCTURALLY_VERIFIED": 795,
+    "INCONCLUSIVE": 1,
+    "BUILD_VERIFIED": 2,
+    "RUNTIME_TESTED": 1
+  },
+  "remaining_mvp_count": 29,
+  "actions": {
+    "adopt-file": 3,
+    "evidence-only": 16,
+    "hunk-merge": 10
+  },
+  "file_states": {
+    "differs": 13,
+    "identical": 16
+  },
+  "rows": [
+    {
+      "address": "0x0048F530",
+      "name": "Retail_Main",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/core/retail_main.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/retail_main.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 0,
+      "action": "adopt-file"
+    },
+    {
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "blocker": "unlinked",
+      "my_implementation": "scripts/GameNatives/qtask/00401000-QTask_CreateTask.cpp",
+      "codex_status": "BUILD_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/qtask_create_task.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 0,
+      "action": "adopt-file"
+    },
+    {
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "blocker": "candidate-unreachable",
+      "my_implementation": "engine/src/retail/core/class_registration.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/class_registration.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "blocker": "end-to-end",
+      "my_implementation": "engine/src/retail/core/flow.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/flow.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 1,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x0048F480",
+      "name": "Loop_SetStatusByte",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/core/frame_natives.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/frame_natives.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x00404590",
+      "name": "Config_GetActiveGraphicOptions",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00404F00",
+      "name": "Config_GraphicOptionsSetPerformanceFlags",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00404F60",
+      "name": "Config_GraphicOptionsGetPerformanceFlags",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00405530",
+      "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004055C0",
+      "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00405620",
+      "name": "Config_GraphicOptionsNumPerfLevels",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/config/config_graphic_options.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "blocker": "unlinked",
+      "my_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "blocker": "unlinked",
+      "my_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004137A0",
+      "name": "HumanPlayer_LoadParameters",
+      "blocker": "unlinked",
+      "my_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/script/humanplayer_defines.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004659E0",
+      "name": "Human_TaskViewReset",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/human/human_view.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/human/human_view.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "codex_status": "BUILD_VERIFIED",
+      "codex_implementation": "engine/src/retail/script/qvm_native_loader.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004A2600",
+      "name": "Camera_ResetMatrix",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004B7450",
+      "name": "Matrix_InvalidateSlot",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/render/camera_transform.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 0,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004C5F00",
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "blocker": "end-to-end",
+      "my_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004C6240",
+      "name": "Terrain_Load",
+      "blocker": "end-to-end",
+      "my_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004D14E0",
+      "name": "Terrain_TraverseContourQuadtree",
+      "blocker": "candidate-unreachable",
+      "my_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/terrain/terrain_quadtree.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x00510010",
+      "name": "Terrain_DecodeChunkCommands",
+      "blocker": "candidate-unreachable",
+      "my_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x00512C30",
+      "name": "Terrain_Draw",
+      "blocker": "candidate-unreachable",
+      "my_implementation": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/terrain/terrain_draw.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 5,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004A5702",
+      "name": "String_VFormat",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/error/error_show.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/error/error_show.cpp",
+      "file_state": "identical",
+      "verified_natives_in_that_file": 1,
+      "action": "evidence-only"
+    },
+    {
+      "address": "0x004AD722",
+      "name": "Mem_InvokeNewHandler",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/mem/mem_alloc.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 6,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004AF7B0",
+      "name": "Error_Show",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/error/error_show.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/retail_error.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 1,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x0048F1B0",
+      "name": "App_ContextGetDebugged",
+      "blocker": "retail-unobserved",
+      "my_implementation": "engine/src/retail/core/app_context.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/core/app_context.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 1,
+      "action": "hunk-merge"
+    },
+    {
+      "address": "0x004D67A0",
+      "name": "AnimIff_LoadAnimationFile",
+      "blocker": "unlinked",
+      "my_implementation": "scripts/GameNatives/render/004D67A0-Render_FileSIsNotIffFile 2.cpp",
+      "codex_status": "STRUCTURALLY_VERIFIED",
+      "codex_implementation": "engine/src/retail/model/iff_skeleton.cpp",
+      "file_state": "differs",
+      "verified_natives_in_that_file": 0,
+      "action": "adopt-file"
+    }
+  ]
+}

@@ -1656,3 +1656,35 @@ non-positive count returns the form payload pointer instead of null.
 
 All eleven cases agree on return class, inserted-node count, anchor chain and modeled call trace. Verified count
 90 -> 91; the candidate-unreachable group is now four.
+
+## Round 133: parallel-branch sync, and who owns what
+
+`codex-smart-workflow` is a second reconstruction lane. Its register holds 883 records but none at
+VERIFIED (795 STRUCTURALLY_VERIFIED, 2 BUILD_VERIFIED, 1 RUNTIME_TESTED), so there is no
+verification duplication to worry about; what it has in abundance is transcriptions this branch
+does not, including complete terrain bodies (quadtree 1004 lines, draw 1303, loaders 2148 versus
+1219 here) and the QTask creation path.
+
+`scripts/codex_sync_report.py` turns the divergence into a pull list
+(`docs/fidelity/codex-sync.json`). Of the 29 remaining MVP natives: 16 have byte-identical
+implementation files on both branches (nothing to pull), 10 need a function-body merge because their
+file also implements natives verified here (evidence binds to the file's SHA-256, so a whole-file
+swap would silently invalidate those records), and 3 are safe whole-file adoptions.
+
+Ownership is recorded in `docs/fidelity/parallel-work-split.md`: the parallel branch is actively
+editing the terrain lane, QTask, the QVM error path, the startup accessors, AnimIff and the
+humanplayer-defines link, so those are left to it. This branch keeps the fourteen natives that are
+blocked on **observation** rather than transcription - the config callback cluster, task view,
+camera/matrix/fog, loop status, string formatting, error display and the new-handler path.
+
+Retail VA validation with radare2 cleared one suspicion: all fourteen VAs are real function entries.
+The config five are absent from `aaa` only because they are referenced as data pointers pushed by
+`fcn.00402FF0`, and disassembly at each VA shows a real prologue. So the blocker really is scenario
+coverage.
+
+A spawned-retail capture was run to test whether the canonical capture simply attaches too late:
+it observed **zero** natives (candidate observed 99 in the same run), so spawn never reaches the
+retail game loop. Attaching to a running image stays the only workable mode, which means the
+fourteen must be reached by driving the running game, not by moving the attach point.
+
+Verified unchanged at 91.
