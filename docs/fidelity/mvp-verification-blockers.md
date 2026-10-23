@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 73 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 71 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 73 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 71 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1169,3 +1169,34 @@ when a record's implementation is the engine source and its `game_natives` field
 staged gate refuses to commit the twin, so those records can never be re-verified reproducibly. Fixing that model
 (making the twin the implementation, or teaching the gate about support sources) is prerequisite work before the
 twin-backed records can be promoted here.
+
+## Twin-model pilot: the precondition cannot be fixed by switching sides
+
+Round 117 started by trying to fix the twin liability recorded in the audit: make the twin the record's
+implementation (the model ~100 working records already use) so the staged gate can commit the twin source.
+
+The pilot exposed two things. First, `00497D70-Transcontext_BuildViewBlock.cpp` does not contain that function at
+all - it contains `Display_CloseDevice_15`, with its own comment recording a **CFG 80% FAIL** and "runtime behavior
+not verified". `00491D40-Display_ComputeScreenAspect.cpp` likewise contains `Display_ClearSurfaces_4`. Those two
+records were bound to sources for different functions, so their VERIFIED status was never reproducible in any
+tree. Only `004B0F80-Texture_GetActiveBackendId.cpp` is the transcription its name claims.
+
+Second, the switch does not work mechanically even for the honest twin: the paired runner compiles the twin and
+links it against a harness that references engine symbols, which fails (`undefined reference to g_a94a64` and the
+engine API). The runner was written for the engine implementation as the compile unit. So the twin-model records
+remain blocked on a design decision - either the runner gains a twin compile mode, or the gate learns about
+support sources - and this is recorded as prerequisite work rather than worked around. The two mislabelled twins
+were deleted; keeping them would have kept a false binding in the tree.
+
+## TerrainLightMap_PushEntry verified through a purpose-written differential
+
+With the generic leaves runner failing on both push natives (`missing symbol called` / empty failure), the useful
+target was `TerrainLightMap_PushEntry` (0x004F82B0): a bounded push that reads a parse mode and counter, stores
++0xD8 onto a host stack, sets the +0xE0 flag and returns the new stack index.
+
+The new runner (`scripts/terrainlightmap_push_diff_runner.py`, 8/8) compares the returned index, the post-call
+stack index, the stored value, the push flag and the store side effect, including the counter-zero boundary where
+retail returns the object instead of pushing. The fixture replays seven valid pushes, which reproduces retail's
+observed class set `{1..7}` exactly - no override needed. Strict gate passed.
+
+Verified count 70 -> 71; paired matches 76 -> 77; candidate-unreachable 15 -> 14; mismatches 0.

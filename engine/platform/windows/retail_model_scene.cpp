@@ -2730,6 +2730,19 @@ int RunRetailModelScene(HINSTANCE instance,
             }
         }
 
+        // TerrainLightMap_PushEntry. Retail returned the incrementing host stack index (1..7) across seven
+        // pushes, so the fixture replays seven valid pushes and nothing else.
+        {
+            alignas(8) std::uint8_t lightmap_push_bytes[0x200]{};
+            *reinterpret_cast<std::int32_t*>(lightmap_push_bytes + 0x108) = 1;
+            for (std::uint32_t index = 0; index < 7; ++index)
+            {
+                *reinterpret_cast<std::uint32_t*>(lightmap_push_bytes + 0xD8) = index;
+                static_cast<void>(
+                    igi::retail::terrain::TerrainLightMap_PushEntry(lightmap_push_bytes));
+            }
+        }
+
         // Iff_FindChunkBelowForm. The retail walk returns a form node whose form type matches and null when
         // nothing matches; a two-node sibling list replays both observed classes {ptr, null}.
         {
