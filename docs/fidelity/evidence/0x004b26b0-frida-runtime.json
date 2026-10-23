@@ -5,7 +5,7 @@
  "address": "0x004b26b0",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
  "implementation_sha256": "7044dad2b62ba970dce285072439ea4b009788cf79eb697013f53aeed8391f32",
- "candidate_executable_sha256": "586a84bd10757400fdddf0b2c7e08995088b37a63b0c51d6e234d51996a15df8",
+ "candidate_executable_sha256": "1511355b97d0903a72ddcdfff735760fa03b92e25ca7b34e1fb348f7add5bb94",
  "retail_observed_calls": 685,
  "candidate_observed_calls": 2,
  "matched_calls": 2,
@@ -41,8 +41,8 @@
   "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value."
  },
  "evidence": {
-  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-palette.json",
-  "paired_capture_sha256": "986a81dfe85d34d3922853108ec2dc56d5af9015e4aad95a44d877393c5863da"
+  "paired_capture": "docs/fidelity/evidence/mvp-frida-pair-mipmap.json",
+  "paired_capture_sha256": "29ff90e5e90b38f1624b163a08409d7c83bfe80d507f337a9ad3e77f11d0ca6b"
  },
  "limitations": [
   "Retail and candidate are captured sequentially because both hold a single-instance mutex; the two runs attach at different points of level load, so call indices and call counts do not correspond.",

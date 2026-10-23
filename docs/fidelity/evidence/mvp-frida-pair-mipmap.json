@@ -1,0 +1,4782 @@
+{
+ "schema_version": 1,
+ "kind": "mvp-paired-capture",
+ "tool": "frida",
+ "captureMode": "sequential",
+ "probe": "scripts/frida_mvp_batch.js",
+ "probeSha256": "0e20b059058dd39f92db46548a50bc5261f084abffd05a4997b6108b12584d2a",
+ "retail": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "retailSha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "candidate": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-verify-noinline/igi1.exe",
+ "candidateSha256": "1511355b97d0903a72ddcdfff735760fa03b92e25ca7b34e1fb348f7add5bb94",
+ "level": 5,
+ "observe_seconds": 45.0,
+ "settle_seconds": 45.0,
+ "capture": {
+  "retail": {
+   "pid": 356,
+   "reused_from": "build/runtime-traces/mvp-frida-pair-ilff.json",
+   "error": null
+  },
+  "candidate": {
+   "pid": 1144,
+   "error": null
+  }
+ },
+ "summary": {
+  "planned": 115,
+  "unlinked": 5,
+  "retail_observed": 91,
+  "candidate_observed": 80,
+  "matched": 73,
+  "mismatched": 0,
+  "inconclusive": 42
+ },
+ "returnComparability": {
+  "0x00517890": {
+   "comparable": false,
+   "reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values."
+  },
+  "0x004CF080": {
+   "comparable": false,
+   "reason": "DynObj_LoadModelTexturePackage leaves a path-dependent value in EAX: its only return (0x004CF2F2) is reached after loop counters are decremented, and the live paired capture observed a null return on the shipped data while the empty-fixture differential (scripts/mtp_package_diff_runner.py) observes a non-null value for the same entry. The return is therefore not a stable contract to compare across two independently timed runs; the paired observation still proves the native was reached in both images."
+  },
+  "0x004C5F00": {
+   "comparable": false,
+   "reason": "the native's return value is the value left by its tail call to Resource_Unload (0x004B6380), which returns a resource-cache bookkeeping value: the entry's kind at +0x??, or the freed-memory amount from the allocator hook (resource_lifecycle.cpp). The port reads TERRAIN.LMP directly through its host adapter and keeps no such cache entry, so this value measures the cache implementation rather than the native's behaviour. The captured values (retail 10, candidate 1) are consistent with that: neither is a count of the ten lightmap pages the native actually loads."
+  },
+  "0x004AD73D": {
+   "comparable": false,
+   "reason": "the return value is the uppercased form of the character passed in, so its class is the class of whichever character the caller sampled. The two runs call the native with different characters (retail 1,443,586 calls across level load, the candidate one deliberate call), so comparing class sets would compare two different samples. The paired observation still proves the native was reached in both images and that the ported body ran; it does not prove equal outputs."
+  },
+  "0x004B5B30": {
+   "comparable": false,
+   "reason": "the return value is a hash of the path argument, so its class is the class of whichever path was hashed. The two runs hash different paths, so class-set equality is not a meaningful criterion; the paired observation proves only that both images reached the native."
+  },
+  "0x00463180": {
+   "comparable": false,
+   "reason": "retail 0x00463180 is `mov eax,[esp+4]; mov al,[eax+0x33d]; ret`: it returns the human pointer with its low byte replaced by the crouch flag, so EAX still carries the caller's pointer bits and the class reflects the caller's data rather than a value the native computes. The port returns the flag byte as std::uint8_t; callers read AL only, which is equivalent. Class-set equality is therefore not a behavioural criterion here, only reachability."
+  },
+  "0x00465820": {
+   "comparable": false,
+   "reason": "retail 0x00465820 writes the eye vector into the caller's output buffer and never assigns EAX on any path, so the observed return is whatever its last `mov eax,[edi+0x2c]` copied out of the human record - caller data, not a result. The ported body is void for the same reason. Only reachability is meaningful."
+  },
+  "0x00402800": {
+   "comparable": false,
+   "reason": "retail 0x00402800 pushes its argument and calls QTask_RegisterInputPortHandler, then returns without assigning EAX, so the observed return is whatever the callee left there - not a value this native computes. The ported body is void for the same reason; reachability is the only meaningful criterion."
+  },
+  "0x004BD3D0": {
+   "comparable": false,
+   "reason": "retail 0x004BD3D0 stores the handler pointer into the opcode handler table and returns without writing EAX, so the observed class is callee residue rather than a result. The ported body is void; only reachability is meaningful."
+  },
+  "0x004B7540": {
+   "comparable": false,
+   "reason": "retail 0x004B7540 writes its two out-parameters and returns without assigning any observable value of its own; EAX still holds whatever the last 'mov eax,[esp+8]' left there. The ported body is void, so only reachability is a meaningful criterion."
+  },
+  "0x00497E70": {
+   "comparable": false,
+   "reason": "retail 0x00497E70 returns the incremented install counter and the port now returns it too; the paired capture still compares reachability only because the two processes call the setter a different number of times (retail 840, candidate 1), so the return-class sets differ by observation count. Equivalence of the returned counter, the 0xA8-byte copy and the installed flag is proven by scripts/transcontext_diff_runner.py."
+  },
+  "0x004B26B0": {
+   "comparable": false,
+   "reason": "retail 0x004B26B0 is a single store that clears the upload-enabled flag and returns without assigning a value of its own; the observed class is callee residue. The ported body is void; only reachability is meaningful."
+  },
+  "0x004ED5C0": {
+   "comparable": false,
+   "reason": "retail 0x004ED5C0 forwards to the input-port registrar at 0x004012A0, which allocates a port record and may invoke a registered handler, so the return value depends on allocator and handler-table state that differs between the two processes; the paired capture compares reachability. Argument marshalling and the returned register are proven by scripts/flow_create_diff_runner.py with the registrar modelled."
+  },
+  "0x0048F530": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x00401050": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x00402930": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0xa4edec]) before returning"
+  },
+  "0x00402260": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x567c8c]) before returning"
+  },
+  "0x00402880": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x567c8c]) before returning"
+  },
+  "0x004028A0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x0048F480": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov al, byte [esp + 4]) before returning"
+  },
+  "0x00404590": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [eax*4 + 0xbc2394]) before returning"
+  },
+  "0x00404F00": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x24]) before returning"
+  },
+  "0x00404F60": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x24]) before returning"
+  },
+  "0x00405530": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x34]) before returning"
+  },
+  "0x004055C0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x34]) before returning"
+  },
+  "0x00405620": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x1c]) before returning"
+  },
+  "0x004037C0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x28]) before returning"
+  },
+  "0x004659E0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x0048F1D0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8bec]) before returning"
+  },
+  "0x0048F340": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8bf0]) before returning"
+  },
+  "0x004B1E90": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004B5B60": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, 1) before returning"
+  },
+  "0x004B7E10": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [esp]) before returning"
+  },
+  "0x004B80B0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, ebx) before returning"
+  },
+  "0x004B83D0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esi + 0x8c]) before returning"
+  },
+  "0x004B8A10": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x004BCFD0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esi + 0x2c]) before returning"
+  },
+  "0x004BDA00": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 8]) before returning"
+  },
+  "0x00491D40": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [eax + 4]) before returning"
+  },
+  "0x00497D70": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, 1) before returning"
+  },
+  "0x004A2600": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, ebx) before returning"
+  },
+  "0x004B7450": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 8]) before returning"
+  },
+  "0x004B7470": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B7490": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B74D0": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B7570": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B7580": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B7590": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004CEAA0": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004AAD10": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, ecx) before returning"
+  },
+  "0x004B0D40": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004B1690": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning"
+  },
+  "0x004B1780": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning"
+  },
+  "0x004B17F0": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning"
+  },
+  "0x004B59F0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004B5AF0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov al, byte [edi + 1]) before returning"
+  },
+  "0x004B5C90": {
+   "comparable": true,
+   "reason": "the body writes EAX (add eax, edi) before returning"
+  },
+  "0x004B5F00": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [eax + 0x34]) before returning"
+  },
+  "0x004B5F80": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004B60F0": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004B6380": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [ecx + 0x24]) before returning"
+  },
+  "0x004CF300": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004CF330": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004CF390": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004CF630": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004CF910": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004D0CF0": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [edx + ecx*4]) before returning"
+  },
+  "0x004D0D10": {
+   "comparable": true,
+   "reason": "the body writes EAX (movsx eax, word [edx + 0x7e]) before returning"
+  },
+  "0x004EDB60": {
+   "comparable": true,
+   "reason": "the body writes EAX (add eax, 4) before returning"
+  },
+  "0x004A26C0": {
+   "comparable": true,
+   "reason": "the body writes EAX (sub eax, ecx) before returning"
+  },
+  "0x004B0F80": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0xa94a64]) before returning"
+  },
+  "0x004B23B0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x546fb0]) before returning"
+  },
+  "0x004B24C0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov ax, word [esi + 0x1a]) before returning"
+  },
+  "0x004B26A0": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004B7CF0": {
+   "comparable": true,
+   "reason": "the body writes EAX (lea eax, [esp]) before returning"
+  },
+  "0x004CF790": {
+   "comparable": true,
+   "reason": "the body writes EAX (dec eax) before returning"
+  },
+  "0x004CF870": {
+   "comparable": true,
+   "reason": "the body writes EAX (dec eax) before returning"
+  },
+  "0x00505E40": {
+   "comparable": true,
+   "reason": "the body writes EAX (inc eax) before returning"
+  },
+  "0x004C6240": {
+   "comparable": true,
+   "reason": "the body writes EAX (add eax, 0x10) before returning"
+  },
+  "0x004C6670": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x28]) before returning"
+  },
+  "0x004C6760": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 0x2c]) before returning"
+  },
+  "0x004CEA80": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x548208]) before returning"
+  },
+  "0x004D14E0": {
+   "comparable": true,
+   "reason": "the body writes EAX (inc eax) before returning"
+  },
+  "0x004F82B0": {
+   "comparable": true,
+   "reason": "the body writes EAX (inc eax) before returning"
+  },
+  "0x00506F00": {
+   "comparable": true,
+   "reason": "the body writes EAX (inc eax) before returning"
+  },
+  "0x00510010": {
+   "comparable": true,
+   "reason": "the body writes EAX (inc eax) before returning"
+  },
+  "0x00512C30": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0xa7f880]) before returning"
+  },
+  "0x005175A0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, ebx) before returning"
+  },
+  "0x004A53B3": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004A5702": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004AA670": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004AA682": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004AA6AE": {
+   "comparable": true,
+   "reason": "the body writes EAX (shr eax, 4) before returning"
+  },
+  "0x004AD722": {
+   "comparable": true,
+   "reason": "the body writes EAX (xor eax, eax) before returning"
+  },
+  "0x004AF7B0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x93626c]) before returning"
+  },
+  "0x004AF8F0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x004AF960": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x004B0BA0": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004B0C60": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, edi) before returning"
+  },
+  "0x0048F140": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning"
+  },
+  "0x0048F170": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8bfc]) before returning"
+  },
+  "0x0048F1B0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8bf8]) before returning"
+  },
+  "0x0048F230": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8be4]) before returning"
+  },
+  "0x0048F250": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [0x5c8be8]) before returning"
+  },
+  "0x0048F260": {
+   "comparable": true,
+   "reason": "the body writes EAX (movsx eax, byte [esp + 4]) before returning"
+  },
+  "0x00498460": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004A7157": {
+   "comparable": false,
+   "reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract"
+  },
+  "0x004AC620": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x004AC655": {
+   "comparable": true,
+   "reason": "the body writes EAX (and eax, 0xfff7ffff) before returning"
+  },
+  "0x004AC66B": {
+   "comparable": true,
+   "reason": "the body writes EAX (or eax, 0x40000) before returning"
+  },
+  "0x004AC6FD": {
+   "comparable": true,
+   "reason": "the body writes EAX (or eax, edx) before returning"
+  },
+  "0x004F1160": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, 1) before returning"
+  },
+  "0x005178E0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x00517940": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, esi) before returning"
+  },
+  "0x005179C0": {
+   "comparable": true,
+   "reason": "the body writes EAX (mov eax, dword [eax + 0x1c]) before returning"
+  }
+ },
+ "unlinked": [
+  {
+   "name": "QTask_CreateTask",
+   "address": "0x00401000"
+  },
+  {
+   "name": "Config_Read",
+   "address": "0x00405850"
+  },
+  {
+   "name": "DefineHumanPlayerGeneral",
+   "address": "0x00410070"
+  },
+  {
+   "name": "HumanPlayer_LoadParameters",
+   "address": "0x004137A0"
+  },
+  {
+   "name": "AnimIff_LoadAnimationFile",
+   "address": "0x004D67A0"
+  }
+ ],
+ "natives": [
+  {
+   "name": "Retail_Main",
+   "address": "0x0048F530",
+   "retail_va": "0x0048F530",
+   "candidate_va": "0x0040B4A0",
+   "candidate_symbol": "Main",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "QTask_OpenEvent",
+   "address": "0x00401050",
+   "retail_va": "0x00401050",
+   "candidate_va": "0x0040B100",
+   "candidate_symbol": "QTask_OpenEvent",
+   "retail_observed_calls": 3430,
+   "candidate_observed_calls": 3202,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 3430,
+    "candidate_observed_calls": 3202,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "QTask_RegisterClasses",
+   "address": "0x00402930",
+   "retail_va": "0x00402930",
+   "candidate_va": "0x005719B2",
+   "candidate_symbol": "QTask_RegisterClasses",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0xa4edec]) before returning",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:7"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "small:1|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Flow_CreateHandler",
+   "address": "0x00402800",
+   "retail_va": "0x00402800",
+   "candidate_va": "0x0040AE70",
+   "candidate_symbol": "Flow_CreateHandler",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x00402800 pushes its argument and calls QTask_RegisterInputPortHandler, then returns without assigning EAX, so the observed return is whatever the callee left there - not a value this native computes. The ported body is void for the same reason; reachability is the only meaningful criterion.",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|small:1|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Flow_RunHandler",
+   "address": "0x00402260",
+   "retail_va": "0x00402260",
+   "candidate_va": "0x0040AC20",
+   "candidate_symbol": "Flow_RunHandler",
+   "retail_observed_calls": 3430,
+   "candidate_observed_calls": 3202,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x567c8c]) before returning",
+    "retail_observed_calls": 3430,
+    "candidate_observed_calls": 3202,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|small:33|ptr",
+     "ptr|null|small:52|ptr",
+     "ptr|null|small:53|ptr",
+     "ptr|null|small:54|ptr",
+     "ptr|null|small:55|ptr",
+     "ptr|null|small:56|ptr",
+     "ptr|null|small:802|null",
+     "ptr|null|small:802|ptr",
+     "ptr|null|small:802|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Game_GetContext",
+   "address": "0x00402880",
+   "retail_va": "0x00402880",
+   "candidate_va": "0x0040B0D0",
+   "candidate_symbol": "Game_GetContext",
+   "retail_observed_calls": 6862,
+   "candidate_observed_calls": 3202,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x567c8c]) before returning",
+    "retail_observed_calls": 6862,
+    "candidate_observed_calls": 3202,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|small:33|ptr",
+     "ptr|null|small:52|ptr",
+     "ptr|null|small:53|ptr",
+     "ptr|null|small:54|ptr",
+     "ptr|null|small:55|ptr",
+     "ptr|null|small:56|ptr",
+     "ptr|null|small:802|null",
+     "ptr|null|small:802|ptr",
+     "ptr|null|small:802|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Flow_SetState",
+   "address": "0x004028A0",
+   "retail_va": "0x004028A0",
+   "candidate_va": "0x0040B0E0",
+   "candidate_symbol": "Flow_SetState",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:4"
+    ],
+    "candidate_ret_classes": [
+     "small:4"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "small:4|ptr|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:4|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Loop_SetStatusByte",
+   "address": "0x0048F480",
+   "retail_va": "0x0048F480",
+   "candidate_va": "0x0040B0F0",
+   "candidate_symbol": "Loop_SetStatusByte",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov al, byte [esp + 4]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "small:1|ptr|small:1024|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GetActiveGraphicOptions",
+   "address": "0x00404590",
+   "retail_va": "0x00404590",
+   "candidate_va": "0x00405A90",
+   "candidate_symbol": "Config_GetActiveGraphicOptions",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [eax*4 + 0xbc2394]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "null|null|ptr|small:1032"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GraphicOptionsSetPerformanceFlags",
+   "address": "0x00404F00",
+   "retail_va": "0x00404F00",
+   "candidate_va": "0x00405AC0",
+   "candidate_symbol": "Config_GraphicOptionsSetPerformanceFlags",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x24]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "ptr|null|small:12|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GraphicOptionsGetPerformanceFlags",
+   "address": "0x00404F60",
+   "retail_va": "0x00404F60",
+   "candidate_va": "0x00405B20",
+   "candidate_symbol": "Config_GraphicOptionsGetPerformanceFlags",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x24]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GraphicOptionsGetPerfLevelFromFlags",
+   "address": "0x00405530",
+   "retail_va": "0x00405530",
+   "candidate_va": "0x004058E0",
+   "candidate_symbol": "Config_GraphicOptionsGetPerfLevelFromFlags",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x34]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+   "address": "0x004055C0",
+   "retail_va": "0x004055C0",
+   "candidate_va": "0x00405B80",
+   "candidate_symbol": "Config_GraphicOptionsGetPerfFlagsFromLevel",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x34]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "ptr|small:6|small:12|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Config_GraphicOptionsNumPerfLevels",
+   "address": "0x00405620",
+   "retail_va": "0x00405620",
+   "candidate_va": "0x004058A0",
+   "candidate_symbol": "Config_GraphicOptionsNumPerfLevels",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x1c]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "GOInRemap",
+   "address": "0x004037C0",
+   "retail_va": "0x004037C0",
+   "candidate_va": "0x00405C00",
+   "candidate_symbol": "GOInRemap",
+   "retail_observed_calls": 81,
+   "candidate_observed_calls": 81,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x28]) before returning",
+    "retail_observed_calls": 81,
+    "candidate_observed_calls": 81,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Human_IsCrouched",
+   "address": "0x00463180",
+   "retail_va": "0x00463180",
+   "candidate_va": "0x0040D260",
+   "candidate_symbol": "Human_IsCrouched",
+   "retail_observed_calls": 51426,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x00463180 is `mov eax,[esp+4]; mov al,[eax+0x33d]; ret`: it returns the human pointer with its low byte replaced by the crouch flag, so EAX still carries the caller's pointer bits and the class reflects the caller's data rather than a value the native computes. The port returns the flag byte as std::uint8_t; callers read AL only, which is equivalent. Class-set equality is therefore not a behavioural criterion here, only reachability.",
+    "retail_observed_calls": 51426,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|small:35|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|small:1024|ptr",
+     "ptr|small:802|small:31|small:31"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Human_CameraEyePosition",
+   "address": "0x00465820",
+   "retail_va": "0x00465820",
+   "candidate_va": "0x0040D270",
+   "candidate_symbol": "Human_CameraEyePosition",
+   "retail_observed_calls": 51426,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x00465820 writes the eye vector into the caller's output buffer and never assigns EAX on any path, so the observed return is whatever its last `mov eax,[edi+0x2c]` copied out of the human record - caller data, not a result. The ported body is void for the same reason. Only reachability is meaningful.",
+    "retail_observed_calls": 51426,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:1024|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Human_TaskViewReset",
+   "address": "0x004659E0",
+   "retail_va": "0x004659E0",
+   "candidate_va": "0x0040D330",
+   "candidate_symbol": "Human_TaskViewReset",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "InputPort_Process",
+   "address": "0x004ED5C0",
+   "retail_va": "0x004ED5C0",
+   "candidate_va": "0x0040DC50",
+   "candidate_symbol": "InputPort_Process",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x004ED5C0 forwards to the input-port registrar at 0x004012A0, which allocates a port record and may invoke a registered handler, so the return value depends on allocator and handler-table state that differs between the two processes; the paired capture compares reachability. Argument marshalling and the returned register are proven by scripts/flow_create_diff_runner.py with the registrar modelled.",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|small:29|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Script_GetDebugCompileState",
+   "address": "0x0048F1D0",
+   "retail_va": "0x0048F1D0",
+   "candidate_va": "0x0041AD40",
+   "candidate_symbol": "Script_GetDebugCompileState",
+   "retail_observed_calls": 121,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8bec]) before returning",
+    "retail_observed_calls": 121,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|ptr|ptr|null",
+     "ptr|null|ptr|null",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|small:12|ptr|null",
+     "ptr|small:16|ptr|null",
+     "ptr|small:20|ptr|null",
+     "ptr|small:24|ptr|null",
+     "ptr|small:28|ptr|null",
+     "ptr|small:32|ptr|null",
+     "ptr|small:4|ptr|null",
+     "ptr|small:8|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|null|null|null",
+     "small:1|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Script_GetForcePrecompiledState",
+   "address": "0x0048F340",
+   "retail_va": "0x0048F340",
+   "candidate_va": "0x0041AD50",
+   "candidate_symbol": "Script_GetForcePrecompiledState",
+   "retail_observed_calls": 6160,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8bf0]) before returning",
+    "retail_observed_calls": 6160,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|ptr|ptr|null",
+     "ptr|null|ptr|null",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|small:12|ptr|null",
+     "ptr|small:16|ptr|null",
+     "ptr|small:20|ptr|null",
+     "ptr|small:24|ptr|null",
+     "ptr|small:28|ptr|null",
+     "ptr|small:32|ptr|null",
+     "ptr|small:4|ptr|null",
+     "ptr|small:8|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|null|ptr|null",
+     "small:1|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "String_FindExtension",
+   "address": "0x004B1E90",
+   "retail_va": "0x004B1E90",
+   "candidate_va": "0x0041ADB0",
+   "candidate_symbol": "String_FindExtension",
+   "retail_observed_calls": 167,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 167,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|null|ptr|null",
+     "null|null|ptr|ptr",
+     "ptr|small:10|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|null|ptr|null",
+     "ptr|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_FileExists",
+   "address": "0x004B5B60",
+   "retail_va": "0x004B5B60",
+   "candidate_va": "0x0041AD60",
+   "candidate_symbol": "Resource_FileExists",
+   "retail_observed_calls": 1439,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, 1) before returning",
+    "retail_observed_calls": 1439,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:128|ptr",
+     "ptr|ptr|small:12|ptr",
+     "ptr|ptr|small:16|ptr",
+     "ptr|ptr|small:20|ptr",
+     "ptr|ptr|small:24|ptr",
+     "ptr|ptr|small:28|ptr",
+     "ptr|ptr|small:32|ptr",
+     "ptr|ptr|small:4|ptr",
+     "ptr|ptr|small:8|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|ptr|null",
+     "ptr|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Qvm_ReportError",
+   "address": "0x004B7E10",
+   "retail_va": "0x004B7E10",
+   "candidate_va": "0x0041AE80",
+   "candidate_symbol": "Qvm_ReportError",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [esp]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Qvm_Load",
+   "address": "0x004B80B0",
+   "retail_va": "0x004B80B0",
+   "candidate_va": "0x0041AF30",
+   "candidate_symbol": "Qvm_Load",
+   "retail_observed_calls": 121,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, ebx) before returning",
+    "retail_observed_calls": 121,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:10",
+     "ptr|ptr|ptr|small:1506",
+     "ptr|ptr|ptr|small:1898",
+     "ptr|ptr|ptr|small:1989",
+     "ptr|ptr|ptr|small:2022",
+     "ptr|ptr|ptr|small:2217",
+     "ptr|ptr|ptr|small:3032",
+     "ptr|ptr|ptr|small:3091",
+     "ptr|ptr|ptr|small:3099",
+     "ptr|ptr|ptr|small:3201"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:16|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Qvm_Cleanup",
+   "address": "0x004B83D0",
+   "retail_va": "0x004B83D0",
+   "candidate_va": "0x0041AEE0",
+   "candidate_symbol": "Qvm_Cleanup",
+   "retail_observed_calls": 83,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esi + 0x8c]) before returning",
+    "retail_observed_calls": 83,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:1"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Qvm_SetGlobalState",
+   "address": "0x004B8A10",
+   "retail_va": "0x004B8A10",
+   "candidate_va": "0x0041ADA0",
+   "candidate_symbol": "Qvm_SetGlobalState",
+   "retail_observed_calls": 121,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 121,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|small:148|small:4|null",
+     "null|small:148|small:4|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|small:16|ptr|small:6",
+     "null|small:4|null|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Qvm_ExecuteInstructions",
+   "address": "0x004BCFD0",
+   "retail_va": "0x004BCFD0",
+   "candidate_va": "0x0041C730",
+   "candidate_symbol": "Qvm_ExecuteInstructions",
+   "retail_observed_calls": 43208,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esi + 0x2c]) before returning",
+    "retail_observed_calls": 43208,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|ptr|small:2",
+     "ptr|small:10728|ptr|small:2",
+     "ptr|small:11920|ptr|small:2",
+     "ptr|small:1192|ptr|small:2",
+     "ptr|small:2384|ptr|small:2",
+     "ptr|small:3576|ptr|small:2",
+     "ptr|small:4768|ptr|small:2",
+     "ptr|small:5960|ptr|small:2",
+     "ptr|small:7152|ptr|small:2",
+     "ptr|small:8344|ptr|small:2",
+     "ptr|small:9536|ptr|small:2"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Qvm_SetOpcodeHandler",
+   "address": "0x004BD3D0",
+   "retail_va": "0x004BD3D0",
+   "candidate_va": "0x0041C700",
+   "candidate_symbol": "Qvm_SetOpcodeHandler",
+   "retail_observed_calls": 472,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x004BD3D0 stores the handler pointer into the opcode handler table and returns without writing EAX, so the observed class is callee residue rather than a result. The ported body is void; only reachability is meaningful.",
+    "retail_observed_calls": 472,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|null|ptr|ptr",
+     "small:10|null|ptr|ptr",
+     "small:11|null|ptr|ptr",
+     "small:1|null|ptr|ptr",
+     "small:2|null|ptr|ptr",
+     "small:3|null|ptr|ptr",
+     "small:4|null|ptr|ptr",
+     "small:5|null|ptr|ptr",
+     "small:6|null|ptr|ptr",
+     "small:7|null|ptr|ptr",
+     "small:8|null|ptr|ptr",
+     "small:9|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|null|null|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Qvm_PushInteger",
+   "address": "0x004BDA00",
+   "retail_va": "0x004BDA00",
+   "candidate_va": "0x0041C6D0",
+   "candidate_symbol": "Qvm_PushInteger",
+   "retail_observed_calls": 28802,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 8]) before returning",
+    "retail_observed_calls": 28802,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:10",
+     "small:11",
+     "small:12",
+     "small:13",
+     "small:14",
+     "small:2",
+     "small:3"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|small:10|ptr|ptr",
+     "ptr|small:11|ptr|ptr",
+     "ptr|small:12|ptr|ptr",
+     "ptr|small:13|ptr|ptr",
+     "ptr|small:14|ptr|ptr",
+     "ptr|small:1|ptr|ptr",
+     "ptr|small:2|ptr|ptr",
+     "ptr|small:3|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:5|ptr|ptr",
+     "ptr|small:6|ptr|ptr",
+     "ptr|small:7|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Display_ComputeScreenAspect",
+   "address": "0x00491D40",
+   "retail_va": "0x00491D40",
+   "candidate_va": "0x00415CD0",
+   "candidate_symbol": "Display_ComputeScreenAspect",
+   "retail_observed_calls": 840,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [eax + 4]) before returning",
+    "retail_observed_calls": 840,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|null|null|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Transcontext_BuildViewBlock",
+   "address": "0x00497D70",
+   "retail_va": "0x00497D70",
+   "candidate_va": "0x00415CF0",
+   "candidate_symbol": "Transcontext_BuildViewBlock",
+   "retail_observed_calls": 420,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, 1) before returning",
+    "retail_observed_calls": 420,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Camera_ResetMatrix",
+   "address": "0x004A2600",
+   "retail_va": "0x004A2600",
+   "candidate_va": "0x00415860",
+   "candidate_symbol": "Camera_ResetMatrix",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, ebx) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Matrix_InvalidateSlot",
+   "address": "0x004B7450",
+   "retail_va": "0x004B7450",
+   "candidate_va": "0x00415780",
+   "candidate_symbol": "Matrix_InvalidateSlot",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 8]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Ilff_GetNextChunk",
+   "address": "0x004B7470",
+   "retail_va": "0x004B7470",
+   "candidate_va": "0x0041C7E0",
+   "candidate_symbol": "Ilff_GetNextChunk",
+   "retail_observed_calls": 71573,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 71573,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:-1"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|small:5",
+     "ptr|small:802|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_GetFirstChunk",
+   "address": "0x004B7490",
+   "retail_va": "0x004B7490",
+   "candidate_va": "0x0041C810",
+   "candidate_symbol": "Ilff_GetFirstChunk",
+   "retail_observed_calls": 9463,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 9463,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:-1"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_GetChunkPayload",
+   "address": "0x004B74D0",
+   "retail_va": "0x004B74D0",
+   "candidate_va": "0x0041C8A0",
+   "candidate_symbol": "Ilff_GetChunkPayload",
+   "retail_observed_calls": 18984,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 18984,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:1",
+     "ptr|ptr|small:1056|small:1",
+     "ptr|ptr|small:160|small:1",
+     "ptr|ptr|small:16416|small:1",
+     "ptr|ptr|small:2080|small:1",
+     "ptr|ptr|small:288|small:1",
+     "ptr|ptr|small:32800|small:1",
+     "ptr|ptr|small:4128|small:1",
+     "ptr|ptr|small:544|small:1",
+     "ptr|ptr|small:61|small:4",
+     "ptr|ptr|small:8224|small:1"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_ReadContainerHeader",
+   "address": "0x004B7540",
+   "retail_va": "0x004B7540",
+   "candidate_va": "0x0041C990",
+   "candidate_symbol": "Ilff_ReadContainerHeader",
+   "retail_observed_calls": 5444,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x004B7540 writes its two out-parameters and returns without assigning any observable value of its own; EAX still holds whatever the last 'mov eax,[esp+8]' left there. The ported body is void, so only reachability is a meaningful criterion.",
+    "retail_observed_calls": 5444,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "small:4"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_GetFormType",
+   "address": "0x004B7570",
+   "retail_va": "0x004B7570",
+   "candidate_va": "0x0041C9D0",
+   "candidate_symbol": "Ilff_GetFormType",
+   "retail_observed_calls": 35,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 35,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|small:1|ptr|ptr",
+     "ptr|small:2|ptr|ptr",
+     "ptr|small:3|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:5|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_GetChunkTag",
+   "address": "0x004B7580",
+   "retail_va": "0x004B7580",
+   "candidate_va": "0x0041C9F0",
+   "candidate_symbol": "Ilff_GetChunkTag",
+   "retail_observed_calls": 21381,
+   "candidate_observed_calls": 13,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 21381,
+    "candidate_observed_calls": 13,
+    "retail_ret_classes": [
+     "null",
+     "ptr",
+     "small:16"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr",
+     "small:16"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:1",
+     "ptr|ptr|ptr|small:10",
+     "ptr|ptr|ptr|small:2",
+     "ptr|ptr|ptr|small:3",
+     "ptr|ptr|ptr|small:4",
+     "ptr|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:6",
+     "ptr|ptr|ptr|small:7",
+     "ptr|ptr|ptr|small:8",
+     "ptr|ptr|ptr|small:9"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|ptr|small:5",
+     "ptr|null|ptr|small:1032",
+     "ptr|ptr|ptr|small:1032",
+     "ptr|ptr|ptr|small:5",
+     "ptr|small:514|ptr|small:1032"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_FindChunk",
+   "address": "0x004B7590",
+   "retail_va": "0x004B7590",
+   "candidate_va": "0x0041CA10",
+   "candidate_symbol": "Ilff_FindChunk",
+   "retail_observed_calls": 9050,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 9050,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Ilff_FindFormChunk",
+   "address": "0x004CEAA0",
+   "retail_va": "0x004CEAA0",
+   "candidate_va": "0x0040C3F0",
+   "candidate_symbol": "Ilff_FindFormChunk",
+   "retail_observed_calls": 618,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 618,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_MatchPrefix",
+   "address": "0x004AAD10",
+   "retail_va": "0x004AAD10",
+   "candidate_va": "0x00419290",
+   "candidate_symbol": "Resource_MatchPrefix",
+   "retail_observed_calls": 50543,
+   "candidate_observed_calls": 12,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, ecx) before returning",
+    "retail_observed_calls": 50543,
+    "candidate_observed_calls": 12,
+    "retail_ret_classes": [
+     "null",
+     "small:-1",
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "small:-1",
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|small:12|null",
+     "ptr|ptr|small:12|ptr",
+     "ptr|ptr|small:12|small:35",
+     "ptr|ptr|small:13|null",
+     "ptr|ptr|small:13|ptr",
+     "ptr|ptr|small:13|small:35",
+     "ptr|ptr|small:6|null",
+     "ptr|ptr|small:6|ptr",
+     "ptr|ptr|small:8|null",
+     "ptr|ptr|small:8|ptr",
+     "ptr|ptr|small:9|null",
+     "ptr|ptr|small:9|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:4|small:5",
+     "ptr|ptr|small:8|small:1032"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "String_ToUpperChar",
+   "address": "0x004AD73D",
+   "retail_va": "0x004AD73D",
+   "candidate_va": "0x0041CA70",
+   "candidate_symbol": "String_ToUpperChar",
+   "retail_observed_calls": 1443586,
+   "candidate_observed_calls": 320,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the return value is the uppercased form of the character passed in, so its class is the class of whichever character the caller sampled. The two runs call the native with different characters (retail 1,443,586 calls across level load, the candidate one deliberate call), so comparing class sets would compare two different samples. The paired observation still proves the native was reached in both images and that the ported body ran; it does not prove equal outputs.",
+    "retail_observed_calls": 1443586,
+    "candidate_observed_calls": 320,
+    "retail_ret_classes": [
+     "small:58",
+     "small:65",
+     "small:66",
+     "small:67",
+     "small:68",
+     "small:69",
+     "small:76",
+     "small:79"
+    ],
+    "candidate_ret_classes": [
+     "small:53",
+     "small:65",
+     "small:68",
+     "small:69",
+     "small:76",
+     "small:84",
+     "small:86",
+     "small:92"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "small:100|ptr|ptr|ptr",
+     "small:101|ptr|ptr|ptr",
+     "small:102|ptr|ptr|ptr",
+     "small:103|ptr|ptr|ptr",
+     "small:117|ptr|ptr|ptr",
+     "small:46|ptr|ptr|ptr",
+     "small:58|ptr|ptr|ptr",
+     "small:65|ptr|ptr|ptr",
+     "small:67|ptr|ptr|ptr",
+     "small:76|ptr|ptr|ptr",
+     "small:79|ptr|ptr|ptr",
+     "small:98|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:46|small:802|ptr|ptr",
+     "small:53|small:802|ptr|ptr",
+     "small:65|small:802|ptr|ptr",
+     "small:68|small:802|ptr|ptr",
+     "small:69|small:802|ptr|ptr",
+     "small:70|small:802|ptr|ptr",
+     "small:71|ptr|ptr|ptr",
+     "small:73|ptr|ptr|ptr",
+     "small:76|small:802|ptr|ptr",
+     "small:84|small:802|ptr|ptr",
+     "small:86|small:802|ptr|ptr",
+     "small:92|small:802|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "QHash_ValueSet",
+   "address": "0x004B0D40",
+   "retail_va": "0x004B0D40",
+   "candidate_va": "0x0040DD20",
+   "candidate_symbol": "QHash_ValueSet",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:8"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:76|small:802|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Device_CloseStream",
+   "address": "0x004B1690",
+   "retail_va": "0x004B1690",
+   "candidate_va": "0x00415F30",
+   "candidate_symbol": "Device_CloseStream",
+   "retail_observed_calls": 350,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning",
+    "retail_observed_calls": 350,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:-1",
+     "ptr|ptr|ptr|small:5",
+     "ptr|ptr|small:9|ptr",
+     "ptr|small:1|ptr|ptr",
+     "ptr|small:2|ptr|ptr",
+     "ptr|small:3|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:5|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Device_GetStreamPosition",
+   "address": "0x004B1780",
+   "retail_va": "0x004B1780",
+   "candidate_va": "0x00415ED0",
+   "candidate_symbol": "Device_GetStreamPosition",
+   "retail_observed_calls": 203,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning",
+    "retail_observed_calls": 203,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "ptr",
+     "small:255",
+     "small:259",
+     "small:270",
+     "small:313",
+     "small:314",
+     "small:319",
+     "small:354"
+    ],
+    "candidate_ret_classes": [
+     "ptr",
+     "small:255",
+     "small:259",
+     "small:270",
+     "small:313",
+     "small:314",
+     "small:319",
+     "small:354"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:-1",
+     "ptr|ptr|ptr|small:5",
+     "ptr|small:1|ptr|ptr",
+     "ptr|small:2|ptr|ptr",
+     "ptr|small:3|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:5|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Device_SeekStream",
+   "address": "0x004B17F0",
+   "retail_va": "0x004B17F0",
+   "candidate_va": "0x00415F00",
+   "candidate_symbol": "Device_SeekStream",
+   "retail_observed_calls": 203,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [eax + eax*4]) before returning",
+    "retail_observed_calls": 203,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_CreateNode",
+   "address": "0x004B59F0",
+   "retail_va": "0x004B59F0",
+   "candidate_va": "0x004195C0",
+   "candidate_symbol": "Resource_CreateNode",
+   "retail_observed_calls": 5636,
+   "candidate_observed_calls": 11,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 5636,
+    "candidate_observed_calls": 11,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|ptr|small:20604",
+     "ptr|null|ptr|small:255",
+     "ptr|null|ptr|small:259",
+     "ptr|null|ptr|small:263",
+     "ptr|null|ptr|small:266",
+     "ptr|null|ptr|small:267",
+     "ptr|null|ptr|small:270",
+     "ptr|null|ptr|small:313",
+     "ptr|null|ptr|small:314",
+     "ptr|null|ptr|small:319",
+     "ptr|null|ptr|small:354"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|null|null",
+     "ptr|null|ptr|small:16",
+     "ptr|null|ptr|small:4",
+     "ptr|null|ptr|small:64"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_CanonicalizePath",
+   "address": "0x004B5AF0",
+   "retail_va": "0x004B5AF0",
+   "candidate_va": "0x0041CA90",
+   "candidate_symbol": "Resource_CanonicalizePath",
+   "retail_observed_calls": 13370,
+   "candidate_observed_calls": 24,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov al, byte [edi + 1]) before returning",
+    "retail_observed_calls": 13370,
+    "candidate_observed_calls": 24,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|null|small:802",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:260|small:6",
+     "ptr|ptr|small:802|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_CalculatePathHash",
+   "address": "0x004B5B30",
+   "retail_va": "0x004B5B30",
+   "candidate_va": "0x0041CAF0",
+   "candidate_symbol": "Resource_CalculatePathHash",
+   "retail_observed_calls": 13370,
+   "candidate_observed_calls": 23,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the return value is a hash of the path argument, so its class is the class of whichever path was hashed. The two runs hash different paths, so class-set equality is not a meaningful criterion; the paired observation proves only that both images reached the native.",
+    "retail_observed_calls": 13370,
+    "candidate_observed_calls": 23,
+    "retail_ret_classes": [
+     "small:10406",
+     "small:3015",
+     "small:4384",
+     "small:5523",
+     "small:583",
+     "small:6908",
+     "small:843",
+     "small:9268"
+    ],
+    "candidate_ret_classes": [
+     "small:11793",
+     "small:11800",
+     "small:4179",
+     "small:4567",
+     "small:5826",
+     "small:7009",
+     "small:716",
+     "small:9677"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:255",
+     "ptr|ptr|ptr|small:259",
+     "ptr|ptr|ptr|small:263",
+     "ptr|ptr|ptr|small:266",
+     "ptr|ptr|ptr|small:267",
+     "ptr|ptr|ptr|small:270",
+     "ptr|ptr|ptr|small:313",
+     "ptr|ptr|ptr|small:314",
+     "ptr|ptr|ptr|small:319",
+     "ptr|ptr|ptr|small:354"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|null|small:802",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:802|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_FreeNode",
+   "address": "0x004B5C90",
+   "retail_va": "0x004B5C90",
+   "candidate_va": "0x00419370",
+   "candidate_symbol": "Resource_FreeNode",
+   "retail_observed_calls": 1153,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (add eax, edi) before returning",
+    "retail_observed_calls": 1153,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "ptr",
+     "small:1",
+     "small:10",
+     "small:11",
+     "small:12",
+     "small:14",
+     "small:15",
+     "small:152"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Resource_Load",
+   "address": "0x004B5F00",
+   "retail_va": "0x004B5F00",
+   "candidate_va": "0x00419030",
+   "candidate_symbol": "Resource_Load",
+   "retail_observed_calls": 4649,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [eax + 0x34]) before returning",
+    "retail_observed_calls": 4649,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|ptr|small:1",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:30|small:31",
+     "ptr|ptr|small:33|small:34",
+     "ptr|ptr|small:34|small:35",
+     "ptr|ptr|small:35|small:36",
+     "ptr|ptr|small:36|small:37",
+     "ptr|ptr|small:37|small:38",
+     "ptr|ptr|small:38|small:39",
+     "ptr|ptr|small:39|small:40"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_RegisterBuffer",
+   "address": "0x004B5F80",
+   "retail_va": "0x004B5F80",
+   "candidate_va": "0x00419A90",
+   "candidate_symbol": "Resource_RegisterBuffer",
+   "retail_observed_calls": 203,
+   "candidate_observed_calls": 10,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 203,
+    "candidate_observed_calls": 10,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:255|ptr",
+     "ptr|ptr|small:259|ptr",
+     "ptr|ptr|small:263|ptr",
+     "ptr|ptr|small:264|ptr",
+     "ptr|ptr|small:266|ptr",
+     "ptr|ptr|small:267|ptr",
+     "ptr|ptr|small:270|ptr",
+     "ptr|ptr|small:313|ptr",
+     "ptr|ptr|small:314|ptr",
+     "ptr|ptr|small:319|ptr",
+     "ptr|ptr|small:354|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:16|null",
+     "ptr|ptr|small:4|null",
+     "ptr|ptr|small:64|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Resource_RegisterIlffContainer",
+   "address": "0x004B60F0",
+   "retail_va": "0x004B60F0",
+   "candidate_va": "0x00419720",
+   "candidate_symbol": "Resource_RegisterIlffContainer",
+   "retail_observed_calls": 29,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 29,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Resource_Unload",
+   "address": "0x004B6380",
+   "retail_va": "0x004B6380",
+   "candidate_va": "0x00418FC0",
+   "candidate_symbol": "Resource_Unload",
+   "retail_observed_calls": 1204,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [ecx + 0x24]) before returning",
+    "retail_observed_calls": 1204,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "small:1",
+     "small:10",
+     "small:15",
+     "small:206",
+     "small:2666",
+     "small:4454",
+     "small:622"
+    ],
+    "candidate_ret_classes": [
+     "small:1",
+     "small:10",
+     "small:15",
+     "small:206",
+     "small:2666",
+     "small:4454",
+     "small:622"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:128",
+     "ptr|ptr|ptr|small:16",
+     "ptr|ptr|ptr|small:256",
+     "ptr|ptr|ptr|small:32",
+     "ptr|ptr|ptr|small:512",
+     "ptr|ptr|ptr|small:64",
+     "ptr|ptr|small:23|ptr",
+     "ptr|ptr|small:53|small:25526",
+     "ptr|ptr|small:79|ptr",
+     "ptr|ptr|small:9|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:16|null",
+     "ptr|small:4|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "DynObj_LookupHashItem",
+   "address": "0x004CF300",
+   "retail_va": "0x004CF300",
+   "candidate_va": "0x0040C390",
+   "candidate_symbol": "DynObj_LookupHashItem",
+   "retail_observed_calls": 604,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 604,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|null|ptr",
+     "ptr|small:10|null|ptr",
+     "ptr|small:11|null|ptr",
+     "ptr|small:1|null|ptr",
+     "ptr|small:2|null|ptr",
+     "ptr|small:3|null|ptr",
+     "ptr|small:4|null|ptr",
+     "ptr|small:5|null|ptr",
+     "ptr|small:6|null|ptr",
+     "ptr|small:7|null|ptr",
+     "ptr|small:8|null|ptr",
+     "ptr|small:9|null|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:2|null|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "DynObj_LoadPackageMeshes",
+   "address": "0x004CF330",
+   "retail_va": "0x004CF330",
+   "candidate_va": "0x0040CA60",
+   "candidate_symbol": "DynObj_LoadPackageMeshes",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "DynObj_LoadModelMesh",
+   "address": "0x004CF390",
+   "retail_va": "0x004CF390",
+   "candidate_va": "0x00411730",
+   "candidate_symbol": "DynObj_LoadModelMesh",
+   "retail_observed_calls": 604,
+   "candidate_observed_calls": 134,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 604,
+    "candidate_observed_calls": 134,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:20184|null",
+     "ptr|ptr|small:3088|null",
+     "ptr|ptr|small:4536|null",
+     "ptr|ptr|small:4616|null",
+     "ptr|ptr|small:4836|null",
+     "ptr|ptr|small:5064|null",
+     "ptr|ptr|small:5716|null",
+     "ptr|ptr|small:6560|ptr",
+     "ptr|ptr|small:7340|null",
+     "ptr|ptr|small:7420|null",
+     "ptr|ptr|small:8300|null",
+     "ptr|ptr|small:8340|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "DynObj_LoadPackageLovs",
+   "address": "0x004CF630",
+   "retail_va": "0x004CF630",
+   "candidate_va": "0x0040CB00",
+   "candidate_symbol": "DynObj_LoadPackageLovs",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "DynObj_LoadPackageAnimations",
+   "address": "0x004CF910",
+   "retail_va": "0x004CF910",
+   "candidate_va": "0x0040C7C0",
+   "candidate_symbol": "DynObj_LoadPackageAnimations",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:28|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Model_GetAttachment",
+   "address": "0x004D0CF0",
+   "retail_va": "0x004D0CF0",
+   "candidate_va": "0x00411DD0",
+   "candidate_symbol": "Model_GetAttachment",
+   "retail_observed_calls": 660,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [edx + ecx*4]) before returning",
+    "retail_observed_calls": 660,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|small:93|ptr",
+     "ptr|small:1|ptr|ptr",
+     "ptr|small:1|small:93|ptr",
+     "ptr|small:2|ptr|ptr",
+     "ptr|small:2|small:93|ptr",
+     "ptr|small:3|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:5|ptr|ptr",
+     "ptr|small:6|ptr|ptr",
+     "ptr|small:7|ptr|ptr",
+     "ptr|small:8|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:1|small:320|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Model_GetAttachmentCount",
+   "address": "0x004D0D10",
+   "retail_va": "0x004D0D10",
+   "candidate_va": "0x00411DF0",
+   "candidate_symbol": "Model_GetAttachmentCount",
+   "retail_observed_calls": 1067,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (movsx eax, word [edx + 0x7e]) before returning",
+    "retail_observed_calls": 1067,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "null",
+     "small:1",
+     "small:14",
+     "small:17",
+     "small:18",
+     "small:5",
+     "small:8",
+     "small:9"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "small:1",
+     "small:14",
+     "small:17",
+     "small:18",
+     "small:5",
+     "small:8",
+     "small:9"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:65535|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:1|small:320|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "LODSettings_LoadParameters",
+   "address": "0x004EDB60",
+   "retail_va": "0x004EDB60",
+   "candidate_va": "0x00415A40",
+   "candidate_symbol": "LODSettings_LoadParameters",
+   "retail_observed_calls": 462,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (add eax, 4) before returning",
+    "retail_observed_calls": 462,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "DynObj_LoadModelTexturePackage",
+   "address": "0x004CF080",
+   "retail_va": "0x004CF080",
+   "candidate_va": "0x00414E90",
+   "candidate_symbol": "DynObj_LoadModelTexturePackage",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "DynObj_LoadModelTexturePackage leaves a path-dependent value in EAX: its only return (0x004CF2F2) is reached after loop counters are decremented, and the live paired capture observed a null return on the shipped data while the empty-fixture differential (scripts/mtp_package_diff_runner.py) observes a non-null value for the same entry. The return is therefore not a stable contract to compare across two independently timed runs; the paired observation still proves the native was reached in both images.",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|small:1|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:13256|null",
+     "ptr|ptr|small:24708|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Camera_UpdateFogPalette",
+   "address": "0x004A26C0",
+   "retail_va": "0x004A26C0",
+   "candidate_va": "0x004159A0",
+   "candidate_symbol": "Camera_UpdateFogPalette",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (sub eax, ecx) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Texture_GetActiveBackendId",
+   "address": "0x004B0F80",
+   "retail_va": "0x004B0F80",
+   "candidate_va": "0x00422710",
+   "candidate_symbol": "Texture_GetActiveBackendId",
+   "retail_observed_calls": 3128,
+   "candidate_observed_calls": 12,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0xa94a64]) before returning",
+    "retail_observed_calls": 3128,
+    "candidate_observed_calls": 12,
+    "retail_ret_classes": [
+     "null",
+     "small:-1",
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "small:-1",
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|null|small:133|small:1",
+     "null|ptr|small:2|ptr",
+     "ptr|null|ptr|ptr",
+     "ptr|null|small:3|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:131",
+     "ptr|ptr|ptr|small:16",
+     "ptr|ptr|ptr|small:32",
+     "ptr|ptr|small:-1|ptr",
+     "ptr|small:530|ptr|ptr",
+     "small:20|small:1|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:6",
+     "ptr|ptr|small:663|ptr",
+     "small:-1|ptr|ptr|small:5",
+     "small:1|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Texture_UploadMipmapPacket",
+   "address": "0x004B23B0",
+   "retail_va": "0x004B23B0",
+   "candidate_va": "0x00422740",
+   "candidate_symbol": "Texture_UploadMipmapPacket",
+   "retail_observed_calls": 1387,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x546fb0]) before returning",
+    "retail_observed_calls": 1387,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "small:1364",
+     "small:170",
+     "small:18",
+     "small:2048",
+     "small:32768",
+     "small:43690",
+     "small:512",
+     "small:8192"
+    ],
+    "candidate_ret_classes": [
+     "small:1364",
+     "small:170",
+     "small:18",
+     "small:2048",
+     "small:32768",
+     "small:43690",
+     "small:512",
+     "small:8192"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|small:256|small:128",
+     "ptr|null|small:256|small:64",
+     "ptr|ptr|small:128|small:128",
+     "ptr|ptr|small:128|small:64",
+     "ptr|ptr|small:16|small:16",
+     "ptr|ptr|small:16|small:8",
+     "ptr|ptr|small:256|small:128",
+     "ptr|ptr|small:32|small:16",
+     "ptr|ptr|small:32|small:32",
+     "ptr|ptr|small:512|small:256",
+     "ptr|ptr|small:64|small:32",
+     "ptr|ptr|small:64|small:64"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|small:5",
+     "ptr|ptr|small:12|small:5",
+     "ptr|ptr|small:16|small:5",
+     "ptr|ptr|small:20|small:5",
+     "ptr|ptr|small:24|small:5",
+     "ptr|ptr|small:28|small:5",
+     "ptr|ptr|small:4|small:5",
+     "ptr|ptr|small:8|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Texture_LoadLoopTextureFile",
+   "address": "0x004B24C0",
+   "retail_va": "0x004B24C0",
+   "candidate_va": "0x00422850",
+   "candidate_symbol": "Texture_LoadLoopTextureFile",
+   "retail_observed_calls": 683,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov ax, word [esi + 0x1a]) before returning",
+    "retail_observed_calls": 683,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:4454"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|ptr|small:93",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Texture_EnableUpload",
+   "address": "0x004B26A0",
+   "retail_va": "0x004B26A0",
+   "candidate_va": "0x00422720",
+   "candidate_symbol": "Texture_EnableUpload",
+   "retail_observed_calls": 684,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 684,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:5"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|null|null|null",
+     "ptr|small:530|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Texture_DisableUpload",
+   "address": "0x004B26B0",
+   "retail_va": "0x004B26B0",
+   "candidate_va": "0x00422730",
+   "candidate_symbol": "Texture_DisableUpload",
+   "retail_observed_calls": 685,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x004B26B0 is a single store that clears the upload-enabled flag and returns without assigning a value of its own; the observed class is callee residue. The ported body is void; only reachability is meaningful.",
+    "retail_observed_calls": 685,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [
+     "ptr",
+     "small:1",
+     "small:18",
+     "small:4454"
+    ],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:5"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|ptr|small:4|null",
+     "small:48|small:4|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Texture_UploadPalettePacket",
+   "address": "0x004B7CF0",
+   "retail_va": "0x004B7CF0",
+   "candidate_va": "0x00422800",
+   "candidate_symbol": "Texture_UploadPalettePacket",
+   "retail_observed_calls": 4,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (lea eax, [esp]) before returning",
+    "retail_observed_calls": 4,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|small:1|ptr",
+     "ptr|ptr|small:1|small:12"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:64|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "DynObj_LoadModelTextures",
+   "address": "0x004CF790",
+   "retail_va": "0x004CF790",
+   "candidate_va": "0x00422CA0",
+   "candidate_symbol": "DynObj_LoadModelTextures",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (dec eax) before returning",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "DynObj_LoadPackagePalettes",
+   "address": "0x004CF870",
+   "retail_va": "0x004CF870",
+   "candidate_va": "0x0040C980",
+   "candidate_symbol": "DynObj_LoadPackagePalettes",
+   "retail_observed_calls": 2,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (dec eax) before returning",
+    "retail_observed_calls": 2,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|small:14148|ptr|null",
+     "ptr|small:9864|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "TextureModifier_Push",
+   "address": "0x00505E40",
+   "retail_va": "0x00505E40",
+   "candidate_va": "0x0041D540",
+   "candidate_symbol": "TextureModifier_Push",
+   "retail_observed_calls": 7286,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (inc eax) before returning",
+    "retail_observed_calls": 7286,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:2",
+     "small:3",
+     "small:4",
+     "small:5",
+     "small:6",
+     "small:7",
+     "small:8"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|small:1|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:1|ptr",
+     "ptr|small:1280|ptr|ptr",
+     "ptr|small:1280|small:1|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Terrain_LoadTexturesAndLightmaps",
+   "address": "0x004C5F00",
+   "retail_va": "0x004C5F00",
+   "candidate_va": "0x0041FE30",
+   "candidate_symbol": "Terrain_LoadTexturesAndLightmaps",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the native's return value is the value left by its tail call to Resource_Unload (0x004B6380), which returns a resource-cache bookkeeping value: the entry's kind at +0x??, or the freed-memory amount from the allocator hook (resource_lifecycle.cpp). The port reads TERRAIN.LMP directly through its host adapter and keeps no such cache entry, so this value measures the cache implementation rather than the native's behaviour. The captured values (retail 10, candidate 1) are consistent with that: neither is a count of the ten lightmap pages the native actually loads.",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:10"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Terrain_Load",
+   "address": "0x004C6240",
+   "retail_va": "0x004C6240",
+   "candidate_va": "0x0041F9D0",
+   "candidate_symbol": "Terrain_Load",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (add eax, 0x10) before returning",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Terrain_CreateMaterial",
+   "address": "0x004C6670",
+   "retail_va": "0x004C6670",
+   "candidate_va": "0x0041D2B0",
+   "candidate_symbol": "Terrain_CreateMaterial",
+   "retail_observed_calls": 6,
+   "candidate_observed_calls": 6,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x28]) before returning",
+    "retail_observed_calls": 6,
+    "candidate_observed_calls": 6,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:12733|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Terrain_CreateTileMap",
+   "address": "0x004C6760",
+   "retail_va": "0x004C6760",
+   "candidate_va": "0x0041D420",
+   "candidate_symbol": "Terrain_CreateTileMap",
+   "retail_observed_calls": 8,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 0x2c]) before returning",
+    "retail_observed_calls": 8,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:12733|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Render_GetActiveBackendId",
+   "address": "0x004CEA80",
+   "retail_va": "0x004CEA80",
+   "candidate_va": "0x00415760",
+   "candidate_symbol": "Render_GetActiveBackendId",
+   "retail_observed_calls": 1209,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x548208]) before returning",
+    "retail_observed_calls": 1209,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:40"
+    ],
+    "candidate_ret_classes": [
+     "small:40"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:184",
+     "ptr|ptr|ptr|small:185",
+     "ptr|ptr|ptr|small:186",
+     "ptr|ptr|ptr|small:187",
+     "ptr|ptr|ptr|small:188",
+     "ptr|ptr|ptr|small:189",
+     "ptr|ptr|small:185|ptr",
+     "ptr|ptr|small:186|ptr",
+     "ptr|ptr|small:187|ptr",
+     "ptr|ptr|small:188|ptr",
+     "ptr|ptr|small:189|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:40|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Terrain_TraverseContourQuadtree",
+   "address": "0x004D14E0",
+   "retail_va": "0x004D14E0",
+   "candidate_va": "0x005719F0",
+   "candidate_symbol": "Terrain_TraverseContourQuadtree",
+   "retail_observed_calls": 420,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (inc eax) before returning",
+    "retail_observed_calls": 420,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:2048"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:163|null"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "TerrainLightMap_Init_2",
+   "address": "0x004F82B0",
+   "retail_va": "0x004F82B0",
+   "candidate_va": "0x0041D610",
+   "candidate_symbol": "igi::retail::terrain::TerrainLightMap_PushEntry",
+   "retail_observed_calls": 61149,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (inc eax) before returning",
+    "retail_observed_calls": 61149,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:2",
+     "small:3",
+     "small:4",
+     "small:5",
+     "small:6",
+     "small:7"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|small:1280|ptr|ptr",
+     "ptr|small:12983|ptr|ptr",
+     "ptr|small:13625|ptr|ptr",
+     "ptr|small:30615|ptr|ptr",
+     "ptr|small:30935|ptr|ptr",
+     "ptr|small:34949|ptr|ptr",
+     "ptr|small:38319|ptr|ptr",
+     "ptr|small:38635|ptr|ptr",
+     "ptr|small:38965|ptr|ptr",
+     "ptr|small:781|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "HeightMap_Enter",
+   "address": "0x00506F00",
+   "retail_va": "0x00506F00",
+   "candidate_va": "0x0041D680",
+   "candidate_symbol": "HeightMap_Enter",
+   "retail_observed_calls": 1133,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (inc eax) before returning",
+    "retail_observed_calls": 1133,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:2",
+     "small:3"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "ptr|null|small:1|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Terrain_DecodeChunkCommands",
+   "address": "0x00510010",
+   "retail_va": "0x00510010",
+   "candidate_va": "0x00571A86",
+   "candidate_symbol": "Terrain_DecodeChunkCommands",
+   "retail_observed_calls": 386,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (inc eax) before returning",
+    "retail_observed_calls": 386,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "small:1",
+     "small:2",
+     "small:36",
+     "small:4",
+     "small:42",
+     "small:499",
+     "small:5",
+     "small:8"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Terrain_Draw",
+   "address": "0x00512C30",
+   "retail_va": "0x00512C30",
+   "candidate_va": "0x00571B1C",
+   "candidate_symbol": "Terrain_Draw",
+   "retail_observed_calls": 419,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0xa7f880]) before returning",
+    "retail_observed_calls": 419,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "null"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "small:1|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Terrain_LoadTexturePackage",
+   "address": "0x005175A0",
+   "retail_va": "0x005175A0",
+   "candidate_va": "0x004229A0",
+   "candidate_symbol": "Terrain_LoadTexturePackage",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, ebx) before returning",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:64|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "sprintf",
+   "address": "0x004A53B3",
+   "retail_va": "0x004A53B3",
+   "candidate_va": "0x0040D110",
+   "candidate_symbol": "igi::retail::error::sprintf",
+   "retail_observed_calls": 14055,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 14055,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [
+     "small:15",
+     "small:17",
+     "small:19",
+     "small:20",
+     "small:21",
+     "small:27",
+     "small:29",
+     "small:31"
+    ],
+    "candidate_ret_classes": [
+     "small:15",
+     "small:17",
+     "small:19",
+     "small:20",
+     "small:21",
+     "small:27",
+     "small:29",
+     "small:31"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:28225",
+     "ptr|ptr|small:1|ptr",
+     "ptr|ptr|small:2|ptr",
+     "ptr|ptr|small:3|ptr",
+     "ptr|ptr|small:4|ptr",
+     "ptr|ptr|small:5|ptr",
+     "ptr|ptr|small:6|ptr",
+     "ptr|ptr|small:7|ptr",
+     "ptr|ptr|small:8|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "String_VFormat",
+   "address": "0x004A5702",
+   "retail_va": "0x004A5702",
+   "candidate_va": "0x0040D0E0",
+   "candidate_symbol": "String_VFormat",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 8,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 8,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "small:15",
+     "small:17",
+     "small:19",
+     "small:20",
+     "small:21",
+     "small:27",
+     "small:29",
+     "small:31"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Mem_AllocChunk",
+   "address": "0x004AA670",
+   "retail_va": "0x004AA670",
+   "candidate_va": "0x0040DE30",
+   "candidate_symbol": "Mem_AllocChunk",
+   "retail_observed_calls": 73265,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 73265,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|small:584|ptr|ptr",
+     "small:12032|small:8|ptr|ptr",
+     "small:2464|ptr|ptr|null",
+     "small:40|ptr|null|ptr",
+     "small:51|ptr|ptr|ptr",
+     "small:52|ptr|ptr|ptr",
+     "small:53|ptr|ptr|ptr",
+     "small:54|ptr|ptr|ptr",
+     "small:60020|small:4999|ptr|ptr",
+     "small:60|ptr|null|ptr",
+     "small:80|ptr|ptr|ptr",
+     "small:92|ptr|small:10|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:180|ptr|ptr|null",
+     "small:32|null|ptr|null",
+     "small:32|null|ptr|ptr",
+     "small:76|small:802|ptr|null",
+     "small:80|null|ptr|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Mem_AllocWithRetry",
+   "address": "0x004AA682",
+   "retail_va": "0x004AA682",
+   "candidate_va": "0x0040DDF0",
+   "candidate_symbol": "Mem_AllocWithRetry",
+   "retail_observed_calls": 73265,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 73265,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|null|ptr|ptr",
+     "small:12032|null|ptr|small:12032",
+     "small:2464|null|ptr|small:2464",
+     "small:40|null|ptr|small:40",
+     "small:51|null|ptr|small:51",
+     "small:52|null|ptr|small:52",
+     "small:53|null|ptr|small:53",
+     "small:54|null|ptr|small:54",
+     "small:60020|null|ptr|small:60020",
+     "small:60|null|ptr|small:60",
+     "small:80|null|ptr|small:80",
+     "small:92|null|ptr|small:92"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:180|null|ptr|small:180",
+     "small:32|null|ptr|small:32",
+     "small:76|null|ptr|small:76",
+     "small:80|null|ptr|small:80"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Mem_AllocateRawBlock",
+   "address": "0x004AA6AE",
+   "retail_va": "0x004AA6AE",
+   "candidate_va": "0x0040DDA0",
+   "candidate_symbol": "Mem_AllocateRawBlock",
+   "retail_observed_calls": 73265,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (shr eax, 4) before returning",
+    "retail_observed_calls": 73265,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "small:12032|ptr|small:12032|null",
+     "small:2464|ptr|small:2464|null",
+     "small:40|ptr|small:40|null",
+     "small:51|ptr|small:51|null",
+     "small:52|ptr|small:52|null",
+     "small:53|ptr|small:53|null",
+     "small:54|ptr|small:54|null",
+     "small:60020|ptr|small:60020|null",
+     "small:60|ptr|small:60|null",
+     "small:80|ptr|small:80|null",
+     "small:92|ptr|small:92|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:180|ptr|small:180|null",
+     "small:32|ptr|small:32|null",
+     "small:76|ptr|small:76|null",
+     "small:80|ptr|small:80|null"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Mem_InvokeNewHandler",
+   "address": "0x004AD722",
+   "retail_va": "0x004AD722",
+   "candidate_va": "0x0040DD70",
+   "candidate_symbol": "Mem_InvokeNewHandler",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (xor eax, eax) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Error_Show",
+   "address": "0x004AF7B0",
+   "retail_va": "0x004AF7B0",
+   "candidate_va": "0x0040D140",
+   "candidate_symbol": "Error_Show",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x93626c]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "HeapList_Insert",
+   "address": "0x004AF8F0",
+   "retail_va": "0x004AF8F0",
+   "candidate_va": "0x0040DC80",
+   "candidate_symbol": "HeapList_Insert",
+   "retail_observed_calls": 98350,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 98350,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:10",
+     "ptr|ptr|ptr|small:256",
+     "ptr|ptr|small:20|ptr",
+     "ptr|ptr|small:24|ptr",
+     "ptr|ptr|small:32|ptr",
+     "ptr|ptr|small:48|ptr",
+     "ptr|ptr|small:4999|ptr",
+     "ptr|ptr|small:56|ptr",
+     "ptr|ptr|small:584|ptr",
+     "ptr|ptr|small:8|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "HeapList_Remove",
+   "address": "0x004AF960",
+   "retail_va": "0x004AF960",
+   "candidate_va": "0x0040DCA0",
+   "candidate_symbol": "HeapList_Remove",
+   "retail_observed_calls": 62008,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 62008,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:108",
+     "ptr|ptr|ptr|small:24",
+     "ptr|ptr|ptr|small:28",
+     "ptr|ptr|ptr|small:324",
+     "ptr|ptr|ptr|small:4",
+     "ptr|ptr|ptr|small:8",
+     "ptr|small:108|ptr|ptr",
+     "ptr|small:28|ptr|ptr",
+     "ptr|small:324|ptr|ptr",
+     "ptr|small:4|ptr|ptr",
+     "ptr|small:8|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|small:48|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Mem_InitHeapState",
+   "address": "0x004B0BA0",
+   "retail_va": "0x004B0BA0",
+   "candidate_va": "0x0040DD30",
+   "candidate_symbol": "Mem_InitHeapState",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:8"
+    ],
+    "candidate_ret_classes": [
+     "null"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:76|small:802|ptr|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Mem_Alloc",
+   "address": "0x004B0C60",
+   "retail_va": "0x004B0C60",
+   "candidate_va": "0x0040DE50",
+   "candidate_symbol": "Mem_Alloc",
+   "retail_observed_calls": 73040,
+   "candidate_observed_calls": 5,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, edi) before returning",
+    "retail_observed_calls": 73040,
+    "candidate_observed_calls": 5,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|small:4|ptr|ptr",
+     "small:12000|small:4|ptr|ptr",
+     "small:19|small:4|ptr|ptr",
+     "small:20|small:4|ptr|ptr",
+     "small:21|small:4|ptr|ptr",
+     "small:22|small:4|ptr|ptr",
+     "small:2432|small:4|ptr|ptr",
+     "small:28|small:4|small:1|ptr",
+     "small:48|small:4|ptr|ptr",
+     "small:59988|small:4|small:8|small:4",
+     "small:60|small:4|ptr|ptr",
+     "small:8|small:4|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "null|small:48|ptr|small:6",
+     "null|small:4|small:802|ptr",
+     "small:148|small:4|null|ptr",
+     "small:48|small:4|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "AppContext_SetIsActive",
+   "address": "0x0048F140",
+   "retail_va": "0x0048F140",
+   "candidate_va": "0x0040B160",
+   "candidate_symbol": "AppContext_SetIsActive",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [esp + 4]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "small:1|ptr|small:1024|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "AppContext_GetIsActive",
+   "address": "0x0048F170",
+   "retail_va": "0x0048F170",
+   "candidate_va": "0x0040B190",
+   "candidate_symbol": "AppContext_GetIsActive",
+   "retail_observed_calls": 3431,
+   "candidate_observed_calls": 3202,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8bfc]) before returning",
+    "retail_observed_calls": 3431,
+    "candidate_observed_calls": 3202,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "null|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "App_ContextGetDebugged",
+   "address": "0x0048F1B0",
+   "retail_va": "0x0048F1B0",
+   "candidate_va": "0x0040A730",
+   "candidate_symbol": "App_ContextGetDebugged",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8bf8]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "App_ContextGetLightmapsUsed",
+   "address": "0x0048F230",
+   "retail_va": "0x0048F230",
+   "candidate_va": "0x0040A760",
+   "candidate_symbol": "App_ContextGetLightmapsUsed",
+   "retail_observed_calls": 22,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8be4]) before returning",
+    "retail_observed_calls": 22,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "small:93|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:1|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "App_ContextGetTerrainLightmapsUsed",
+   "address": "0x0048F250",
+   "retail_va": "0x0048F250",
+   "candidate_va": "0x0040A780",
+   "candidate_symbol": "App_ContextGetTerrainLightmapsUsed",
+   "retail_observed_calls": 386,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [0x5c8be8]) before returning",
+    "retail_observed_calls": 386,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|null",
+     "ptr|small:3|ptr|ptr",
+     "small:93|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:1|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "AppContext_SetTerrainLightmapsUsed",
+   "address": "0x0048F260",
+   "retail_va": "0x0048F260",
+   "candidate_va": "0x0040A770",
+   "candidate_symbol": "igi::retail::core::App_ContextSetTerrainLightmapsUsed",
+   "retail_observed_calls": 1,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (movsx eax, byte [esp + 4]) before returning",
+    "retail_observed_calls": 1,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "small:1|ptr|ptr|null"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:1|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Display_ClearSurfaces_16",
+   "address": "0x00498460",
+   "retail_va": "0x00498460",
+   "candidate_va": "0x0040B0B0",
+   "candidate_symbol": "igi::retail::core::FP_InitExtendedPrecision",
+   "retail_observed_calls": 3435,
+   "candidate_observed_calls": 3202,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 3435,
+    "candidate_observed_calls": 3202,
+    "retail_ret_classes": [
+     "null",
+     "ptr",
+     "small:-1",
+     "small:2"
+    ],
+    "candidate_ret_classes": [
+     "ptr",
+     "small:-256"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "null|null|ptr|ptr",
+     "ptr|null|null|ptr",
+     "ptr|small:845|ptr|small:1",
+     "small:3|null|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|null|null",
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "TransContext_SetActiveTransContext",
+   "address": "0x00497E70",
+   "retail_va": "0x00497E70",
+   "candidate_va": "0x00415BF0",
+   "candidate_symbol": "igi::retail::render::Transcontext_SetActiveTransContext",
+   "retail_observed_calls": 840,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "retail 0x00497E70 returns the incremented install counter and the port now returns it too; the paired capture still compares reachability only because the two processes call the setter a different number of times (retail 840, candidate 1), so the return-class sets differ by observation count. Equivalence of the returned counter, the 0xA8-byte copy and the installed flag is proven by scripts/transcontext_diff_runner.py.",
+    "retail_observed_calls": 840,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1",
+     "small:2",
+     "small:3",
+     "small:4",
+     "small:5",
+     "small:6",
+     "small:7",
+     "small:8"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|small:4|null"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Camera_ApplyBandFilter_10",
+   "address": "0x004A7157",
+   "retail_va": "0x004A7157",
+   "candidate_va": "0x0040B090",
+   "candidate_symbol": "igi::retail::core::FP_SetDefaultPrecision",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "the body never writes EAX, so the return value is whatever its last callee left there and is not part of this function's contract",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Camera_SetFieldOfView_24",
+   "address": "0x004AC620",
+   "retail_va": "0x004AC620",
+   "candidate_va": "0x0040B040",
+   "candidate_symbol": "igi::retail::core::FP_MergeControlWord",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Camera_ApplyLineFilter_24",
+   "address": "0x004AC655",
+   "retail_va": "0x004AC655",
+   "candidate_va": "0x0040B080",
+   "candidate_symbol": "igi::retail::core::FP_MergeControlWordNoDenormal",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (and eax, 0xfff7ffff) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Camera_ApplyBandFilter_24",
+   "address": "0x004AC66B",
+   "retail_va": "0x004AC66B",
+   "candidate_va": "0x0040AEC0",
+   "candidate_symbol": "igi::retail::core::FP_ControlWordToFlags",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (or eax, 0x40000) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Camera_ApplyWideScreen_24",
+   "address": "0x004AC6FD",
+   "retail_va": "0x004AC6FD",
+   "candidate_va": "0x0040AF80",
+   "candidate_symbol": "igi::retail::core::FP_FlagsToControlWord",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (or eax, edx) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Script_ParseEnumReal32_5",
+   "address": "0x004F1160",
+   "retail_va": "0x004F1160",
+   "candidate_va": "0x0041C7A0",
+   "candidate_symbol": "igi::retail::script::Script_GetParseMode",
+   "retail_observed_calls": 61810,
+   "candidate_observed_calls": 1,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, 1) before returning",
+    "retail_observed_calls": 61810,
+    "candidate_observed_calls": 1,
+    "retail_ret_classes": [
+     "small:1"
+    ],
+    "candidate_ret_classes": [
+     "small:1"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|null|ptr",
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|small:1280|ptr",
+     "ptr|ptr|small:12983|ptr",
+     "ptr|ptr|small:13625|ptr",
+     "ptr|ptr|small:30615|ptr",
+     "ptr|ptr|small:30935|ptr",
+     "ptr|ptr|small:34949|ptr",
+     "ptr|ptr|small:38319|ptr",
+     "ptr|ptr|small:38635|ptr",
+     "ptr|ptr|small:38965|ptr",
+     "ptr|ptr|small:781|ptr"
+    ],
+    "candidate_argument_class_patterns": [
+     "small:4|small:16|ptr|small:6"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Iff_FindFormChunk",
+   "address": "0x00517890",
+   "retail_va": "0x00517890",
+   "candidate_va": "0x0040DF90",
+   "candidate_symbol": "igi::retail::model::IffChunk_FindChildByTag",
+   "retail_observed_calls": 406,
+   "candidate_observed_calls": 18,
+   "comparison": {
+    "basis": "reachability only; the native's return value is not comparable",
+    "return_comparison": "not_applicable",
+    "return_comparability_reason": "Iff_FindFormChunk walks a chunk tree and returns the node whose tag matches the argument, or null when the tag is absent. The class of the return therefore depends on the tag searched for and on the tree contents, and the two runs made different calls (retail 406, candidate 18), so comparing the class sets would be comparing two different call samples. The paired observation still proves the native was reached in both images; it does not prove equal return values.",
+    "retail_observed_calls": 406,
+    "candidate_observed_calls": 18,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:1",
+     "ptr|ptr|ptr|small:2",
+     "ptr|ptr|ptr|small:3",
+     "ptr|ptr|ptr|small:4",
+     "ptr|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:6"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "The retail body does not write EAX, so it returns nothing and the observed value belongs to its callee. This native is compared on reachability, not on a return value.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Iff_FindChunkBelowForm",
+   "address": "0x005178E0",
+   "retail_va": "0x005178E0",
+   "candidate_va": "0x0040DFE0",
+   "candidate_symbol": "igi::retail::model::IffChunk_FindBelowForm",
+   "retail_observed_calls": 388,
+   "candidate_observed_calls": 0,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 388,
+    "candidate_observed_calls": 0,
+    "retail_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "candidate_ret_classes": [],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:1",
+     "ptr|ptr|ptr|small:2",
+     "ptr|ptr|ptr|small:3",
+     "ptr|ptr|ptr|small:4",
+     "ptr|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:6"
+    ],
+    "candidate_argument_class_patterns": [],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  },
+  {
+   "name": "Iff_FindChunk",
+   "address": "0x00517940",
+   "retail_va": "0x00517940",
+   "candidate_va": "0x0040DF20",
+   "candidate_symbol": "igi::retail::model::IffChunk_FindByTag",
+   "retail_observed_calls": 1638,
+   "candidate_observed_calls": 18,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, esi) before returning",
+    "retail_observed_calls": 1638,
+    "candidate_observed_calls": 18,
+    "retail_ret_classes": [
+     "ptr"
+    ],
+    "candidate_ret_classes": [
+     "ptr"
+    ],
+    "ret_classes_match": true,
+    "retail_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr",
+     "ptr|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:6",
+     "ptr|ptr|small:120|small:4",
+     "ptr|ptr|small:240|small:4",
+     "ptr|ptr|small:24|small:4",
+     "ptr|ptr|small:312|small:4",
+     "ptr|ptr|small:396|small:4",
+     "ptr|ptr|small:48|small:4",
+     "ptr|ptr|small:528|small:4",
+     "ptr|ptr|small:72|small:4",
+     "ptr|ptr|small:96|small:4"
+    ],
+    "candidate_argument_class_patterns": [
+     "ptr|ptr|ptr|ptr"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": true
+   },
+   "result": "match"
+  },
+  {
+   "name": "Iff_GetChunkPayload",
+   "address": "0x005179C0",
+   "retail_va": "0x005179C0",
+   "candidate_va": "0x0041C8A0",
+   "candidate_symbol": "igi::retail::sys::Ilff_GetChunkPayload",
+   "retail_observed_calls": 0,
+   "candidate_observed_calls": 2,
+   "comparison": {
+    "basis": "reachability plus return-value class set",
+    "return_comparison": "classes",
+    "return_comparability_reason": "the body writes EAX (mov eax, dword [eax + 0x1c]) before returning",
+    "retail_observed_calls": 0,
+    "candidate_observed_calls": 2,
+    "retail_ret_classes": [],
+    "candidate_ret_classes": [
+     "null",
+     "ptr"
+    ],
+    "ret_classes_match": false,
+    "retail_argument_class_patterns": [],
+    "candidate_argument_class_patterns": [
+     "null|ptr|ptr|small:5",
+     "ptr|ptr|ptr|small:5"
+    ],
+    "arguments_compared": false,
+    "note": "Call counts and per-call arguments differ because the two runs are timed independently; only the return-value class set is compared.",
+    "match": false
+   },
+   "result": "inconclusive"
+  }
+ ],
+ "limitations": [
+  "The probe records arguments and return values as process-independent classes: pointers cannot be compared by value because heap addresses differ, so only the class (null/small-exact/pointer) is comparable.",
+  "Retail and the candidate are captured one at a time because both hold a single-instance mutex, and the two runs attach at different points of level load, so call indices, call counts and per-call arguments do not correspond. Only the return-value class set is compared.",
+  "A captured call proves the native was reached in both images and that both returned the same class of value; it does not prove behavioural parity and does not establish any side effect."
+ ]
+}

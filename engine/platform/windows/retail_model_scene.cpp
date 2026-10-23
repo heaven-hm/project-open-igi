@@ -171,6 +171,23 @@ std::int32_t probe_palette_callback_stub(void* packet)
     return 0x61000020;
 }
 
+// The mipmap upload discards the primary callback's answer and returns the secondary one. Retail observed
+// eight distinct secondary answers, so this stub replays them in order.
+std::int32_t g_probe_mipmap_result_index = 0;
+const std::int32_t g_probe_mipmap_results[8] = {18, 170, 512, 1364, 2048, 8192, 32768, 43690};
+
+std::int32_t probe_mipmap_primary_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return 0;
+}
+
+std::int32_t probe_mipmap_secondary_stub(void* packet)
+{
+    static_cast<void>(packet);
+    return g_probe_mipmap_results[g_probe_mipmap_result_index++ & 7];
+}
+
 // Models the retail symbol resolver Qvm_Load consults on the precompiled path: any non-null handle is
 // enough to take the branch that allocates and returns the loader block.
 void** retail_qvm_resolve_stub(const char* path, std::int32_t first, std::int32_t second)
@@ -2662,6 +2679,23 @@ int RunRetailModelScene(HINSTANCE instance,
             alignas(8) std::uint8_t palette_payload[0x20]{};
             static_cast<void>(igi::retail::texture::Texture_UploadPalettePacket(
                 palette_packet, palette_payload, 0x40));
+        }
+
+        // Texture_UploadMipmapPacket. Retail returned eight distinct secondary-callback answers; the
+        // fixture installs callbacks on the primary and secondary slots and replays those answers, one
+        // per call. The backend id stays at 0, inside the classes Texture_GetActiveBackendId observed.
+        {
+            igi::retail::texture::Texture_SetCallbackSlots(0, 1, 2);
+            igi::retail::texture::Texture_SetBackendCallback(0, &probe_mipmap_primary_stub);
+            igi::retail::texture::Texture_SetBackendCallback(1, &probe_mipmap_secondary_stub);
+            alignas(8) std::uint8_t mipmap_source[0x20]{};
+            alignas(8) std::uint8_t mipmap_payload[0x20]{};
+            for (std::int32_t index = 0; index < 8; ++index)
+            {
+                std::int32_t mipmap_packet[12]{};
+                static_cast<void>(igi::retail::texture::Texture_UploadMipmapPacket(
+                    mipmap_packet, mipmap_source, index * 4, 5, 6, 7, 8, 9, mipmap_payload));
+            }
         }
 
         // DynObj package loaders. Retail returned {null} for DynObj_LoadPackageAnimations, which the

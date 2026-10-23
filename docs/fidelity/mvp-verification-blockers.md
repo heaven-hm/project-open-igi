@@ -459,7 +459,7 @@ record only claims the retail body was read: for those an address-bound provenan
 a record at STRUCTURALLY_VERIFIED or above must name a unit that actually defines the native. That
 distinction is what makes the remaining not-in-build trio comparable to this one instead of hiding it.
 
-Also of note: 81 manifest records carry a VERIFIED status label, but only 66 have been shown to pass the
+Also of note: 81 manifest records carry a VERIFIED status label, but only 67 have been shown to pass the
 strict gate with paired runtime probes. The label and the proof are different things, and the register
 should be read as the proof.
 
@@ -499,7 +499,7 @@ estimate should be recorded as interpreter-core work rather than a single missin
 The terrain creators `Terrain_CreateMaterial` and `Terrain_CreateTileMap` passed the strict gate with CFG,
 angr, behavioural differential and paired probes when their result-block fix landed, and both still pass
 when re-run this round. The "11" carried in earlier notes was simply never updated after that fix. The
-register now records the proven set explicitly: 66 addresses, each one a matched paired observation whose
+register now records the proven set explicitly: 67 addresses, each one a matched paired observation whose
 record passes `--threshold VERIFIED --require-frida-probes`.
 
 The five added this round are the allocator chain: `Mem_Alloc` (0x004B0C60), `Mem_AllocChunk`
@@ -1027,3 +1027,24 @@ class, and leaves the backend id at 0 so the nested `Texture_GetActiveBackendId`
 retail-observed classes.
 
 Verified count 65 -> 66; paired matches 71 -> 72; candidate-unreachable 20 -> 19; mismatches 0.
+
+## Texture_UploadMipmapPacket: two callbacks, one of them silent
+
+`Texture_UploadMipmapPacket` (0x004B23B0) was STRUCTURALLY_VERIFIED and unreachable. It packs a twelve-slot
+packet (including the upload-flag byte at `0x00943B3C`) and dispatches through two slots: the primary slot's
+return is discarded, the secondary slot's return is the native's result.
+
+That asymmetry is the trap. A runner that only models the secondary callback would pass even if the primary
+dispatch were missing entirely. The runner (`scripts/texture_mipmap_upload_diff_runner.py`) therefore gives the
+primary callback an observable effect - it records its own fold of the twelve slots into a probe address - so the
+dispatch order and the primary call are compared through the state delta. Both callbacks fold the twelve slots, so
+slot order, the backend-id write and the upload-flag inclusion all move the compared values. Eight cases, real
+retail globals on each side.
+
+A small angr detail resurfaced: inside a SimProcedure the fold is a bitvector, not an integer, so
+`struct.pack` fails and the value has to be stored directly through `memory.store`.
+
+The capture fixture installs callbacks on both slots and replays the eight distinct secondary answers retail
+observed, reproducing the eight-class set exactly while leaving the backend id at 0.
+
+Verified count 66 -> 67; paired matches 72 -> 73; candidate-unreachable 19 -> 18; mismatches 0.
