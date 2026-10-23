@@ -1,0 +1,653 @@
+{
+ "address": "0x004B0BA0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "seed-0x0",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x1",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x2",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 2
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x7",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 7
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x100",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 256
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x7f",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 127
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "seed-0x80",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 128
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "seed-0xff",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "seed": 255
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": {
+     "arg_buffer": [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ],
+     "globals": {
+      "head_is_sentinel_address": true,
+      "heap_init_flag_0x009422fc": 1,
+      "heap_state_0x00a960e0": 16,
+      "qhash_flag_0x009422fd": 1,
+      "sentinel_is_null": true,
+      "tail_is_head_address": true
+     }
+    }
+   }
+  }
+ ],
+ "executed": true,
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "implementation_sha256": "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
+ "kind": "behavioral-test-report",
+ "method": "Retail instruction bytes for the selected function were executed in Radare2 ESIL with cdecl stack arguments and initialized globals; the current C++ implementation was compiled and called with the same arguments and equivalent seeded state. Return values and instrumented state were compared. Emulation was used because this ARM64 macOS host cannot launch the Windows x86 retail process.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "schema_version": 1,
+ "tests_failed": 0,
+ "tests_passed": 8,
+ "tests_total": 8,
+ "runner": {
+  "path": "scripts/native_leaves_runner.py",
+  "sha256": "fcdc0a4e450ba4ebd75772606f2bdd5ac729eaf96d98494f199844f1597188a0",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_leaves_runner.py",
+   "--address",
+   "0x004B0BA0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/mem/mem_alloc.cpp",
+   "--implementation-sha256",
+   "a23d33ffafa8ea92e2d793f90db03a25283bf1f0eb4da16ae8c72d8d15b01a69",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
+}

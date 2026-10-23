@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "6.2.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048F230",
+  "signature": "int32_t(void)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048F230"
+      }
+    ],
+    "edges": []
+  },
+  "evidence_id": "local-r2-capture:0x0048F230:2026-10-19",
+  "observed": {
+    "raw_function": {
+      "name": "fcn.0048f230",
+      "addr": 4780592,
+      "ninstr": 2,
+      "nargs": 0,
+      "nlocals": 0,
+      "size": 6,
+      "stack": 0,
+      "type": "fcn",
+      "blocks": [
+        {
+          "addr": 4780592,
+          "size": 6,
+          "ops": [
+            {
+              "addr": 4780592,
+              "ptr": 6065124,
+              "esil": "0x5c8be4,[4],eax,=",
+              "refptr": 4,
+              "fcn_addr": 4780592,
+              "fcn_last": 4780593,
+              "size": 5,
+              "opcode": "mov eax, dword [0x5c8be4]",
+              "disasm": "mov eax, dword [0x5c8be4]",
+              "bytes": "a1e48b5c00",
+              "family": "cpu",
+              "type": "mov",
+              "reloc": false,
+              "type_num": 9,
+              "type2_num": 0,
+              "flags": [
+                "fcn.0048f230"
+              ],
+              "refs": [
+                {
+                  "addr": 6065124,
+                  "type": "DATA",
+                  "perm": "r--"
+                }
+              ]
+            },
+            {
+              "addr": 4780597,
+              "esil": "esp,[4],eip,=,4,esp,+=",
+              "refptr": 0,
+              "fcn_addr": 4780592,
+              "fcn_last": 4780597,
+              "size": 1,
+              "opcode": "ret",
+              "disasm": "ret",
+              "bytes": "c3",
+              "family": "cpu",
+              "type": "ret",
+              "reloc": false,
+              "type_num": 5,
+              "type2_num": 0
+            }
+          ]
+        }
+      ]
+    },
+    "limitations": [
+      "Setter integer return is an inferred declaration exposing observed EAX; original source return type is unknown.",
+      "This is static disassembly, not runtime game evidence."
+    ]
+  }
+}

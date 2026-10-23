@@ -1,0 +1,309 @@
+{
+ "schema_version": 1,
+ "kind": "behavioral-test-report",
+ "address": "0x004C6760",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "implementation_sha256": "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
+ "executed": true,
+ "oracle": "retail-binary-execution",
+ "runner": {
+  "path": "scripts/native_unicorn_runner.py",
+  "sha256": "df79fa2de4c65993084f1b2aedebf2ac82aabc89e21be6669dd857721cf0d5a1",
+  "command": [
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_unicorn_runner.py",
+   "--address",
+   "0x004C6760",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/engine/src/retail/terrain/terrain_loaders.cpp",
+   "--implementation-sha256",
+   "e214e84ca47bd11c6e271e8c2746172f37015f8cf6b8f777c20fc3a8a51930e6",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ },
+ "result": "passed",
+ "method": "Retail instruction bytes for the selected function were executed under unicorn 2.1.4 (x86-32) with the true PE image mapped at 0x00400000 and a synthetic cdecl stack; the candidate C++ implementation was compiled and executed natively with the same synthetic state; return values, context fields, and copied bytes were compared. Unicorn is used for isolated retail-byte execution, rather than a live Windows game process, and because x87 (fptan/fld/fmul/fdiv/fstp) is not implemented by Radare2 ESIL or angr VEX.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "float_tolerance": {
+  "absolute": 1e-06,
+  "relative": 1e-06
+ },
+ "limits": "The retail context block is produced by `rep movsd` from a stack temporary whose dwords 1 and 5 are never initialized (disassembly 0x004C671E-0x004C6755 and 0x004C6798-0x004C67D0); the emulator's freshly mapped stack is zero, so those two dwords do not distinguish a reconstruction that writes zero (the documented port behaviour) from one that copies the same residue. The retail group index is not bounds checked; every case here uses an index inside the ported table so the port's documented clamping is not exercised.",
+ "tests_total": 8,
+ "tests_passed": 8,
+ "tests_failed": 0,
+ "cases": [
+  {
+   "id": "tilemap-group-0",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     0,
+     500
+    ],
+    "initial_state": {
+     "seed": 500
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 0,
+     "table_hex": "8306890c8f1295189b1ea155d85bde60e366e96cef72f578fb7e32b538bb3dc043c649cc4fd255d85b0f9215981a9d20a326a92caf32b538bb6ff275f87afd80",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 0,
+     "table_hex": "8306890c8f1295189b1ea155d85bde60e366e96cef72f578fb7e32b538bb3dc043c649cc4fd255d85b0f9215981a9d20a326a92caf32b538bb6ff275f87afd80",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-1",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     1,
+     853
+    ],
+    "initial_state": {
+     "seed": 853
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 1,
+     "table_hex": "84078a0d901396199c1fa256d95cdf61e467ea6df073f679fc7f33b639bc3ec144c74acd50d356d95c109316991b9e21a427aa2db033b639bc70f376f97bfe81",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 1,
+     "table_hex": "84078a0d901396199c1fa256d95cdf61e467ea6df073f679fc7f33b639bc3ec144c74acd50d356d95c109316991b9e21a427aa2db033b639bc70f376f97bfe81",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-31",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     31,
+     1443
+    ],
+    "initial_state": {
+     "seed": 1443
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 31,
+     "table_hex": "a225a82bae31b437ba3dc074f77afd7f0285088b0e9114971a9d51d457da5cdf62e568eb6ef174f77a2eb134b739bc3fc245c84bce51d457da8e119416991c9f",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 31,
+     "table_hex": "a225a82bae31b437ba3dc074f77afd7f0285088b0e9114971a9d51d457da5cdf62e568eb6ef174f77a2eb134b739bc3fc245c84bce51d457da8e119416991c9f",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-32",
+   "categories": [
+    "nominal"
+   ],
+   "input": {
+    "args": [
+     32,
+     1796
+    ],
+    "initial_state": {
+     "seed": 1796
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 32,
+     "table_hex": "a326a92caf32b538bb3ec175f87bfe800386098c0f9215981b9e52d558db5de063e669ec6ff275f87b2fb235b83abd40c346c94ccf52d558db8f1295179a1da0",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 32,
+     "table_hex": "a326a92caf32b538bb3ec175f87bfe800386098c0f9215981b9e52d558db5de063e669ec6ff275f87b2fb235b83abd40c346c94ccf52d558db8f1295179a1da0",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-62",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     62,
+     386
+    ],
+    "initial_state": {
+     "seed": 386
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 62,
+     "table_hex": "c144c74acd50d356d95c109316991b9e21a427aa2db033b639bc70f376f97bfe8104870a8d109316994dd053d658db5ee164e76aed70f3762aad30b335b83bbe",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 62,
+     "table_hex": "c144c74acd50d356d95c109316991b9e21a427aa2db033b639bc70f376f97bfe8104870a8d109316994dd053d658db5ee164e76aed70f3762aad30b335b83bbe",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-63",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     63,
+     739
+    ],
+    "initial_state": {
+     "seed": 739
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 63,
+     "table_hex": "c245c84bce51d457da5d1194179a1c9f22a528ab2eb134b73abd71f477fa7cff8205880b8e1194179a4ed154d759dc5fe265e86bee71f4772bae31b436b93cbf",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 63,
+     "table_hex": "c245c84bce51d457da5d1194179a1c9f22a528ab2eb134b73abd71f477fa7cff8205880b8e1194179a4ed154d759dc5fe265e86bee71f4772bae31b436b93cbf",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-16",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     16,
+     148
+    ],
+    "initial_state": {
+     "seed": 148
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 16,
+     "table_hex": "9316991c9f22a528ab2eb165e86bee70f376f97cff8205880b8e42c548cb4dd053d659dc5fe265e86b1fa225a82aad30b336b93cbf42c548cb7f0285078a0d90",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 16,
+     "table_hex": "9316991c9f22a528ab2eb165e86bee70f376f97cff8205880b8e42c548cb4dd053d659dc5fe265e86b1fa225a82aad30b336b93cbf42c548cb7f0285078a0d90",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  },
+  {
+   "id": "tilemap-group-47",
+   "categories": [
+    "boundary"
+   ],
+   "input": {
+    "args": [
+     47,
+     1091
+    ],
+    "initial_state": {
+     "seed": 1091
+    }
+   },
+   "reference_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 47,
+     "table_hex": "b235b83bbe41c447ca4dd084078a0c8f1295189b1ea124a72aad61e467ea6cef72f578fb7e0184078a3ec144c749cc4fd255d85bde61e4671b9e21a426a92caf",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   },
+   "candidate_output": {
+    "return_value": 1879114496,
+    "state_delta": {
+     "group_index": 47,
+     "table_hex": "b235b83bbe41c447ca4dd084078a0c8f1295189b1ea124a72aad61e467ea6cef72f578fb7e0184078a3ec144c749cc4fd255d85bde61e4671b9e21a426a92caf",
+     "context_hex": "00000000000000000000000000000000747c560000000000"
+    },
+    "side_effects": []
+   }
+  }
+ ]
+}

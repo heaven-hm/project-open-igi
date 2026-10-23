@@ -29,7 +29,7 @@
           "Ghidra retained snapshot; original return type uncertain, observed EAX preserved."
         ],
         "ghidra": {
-          "evidence_path": "docs/fidelity/evidence/0048F1A0-ghidra.json",
+          "evidence_path": "docs/fidelity/evidence/0x0048f1a0-ghidra.json",
           "evidence_sha256": "39800abff11247ecd61d2715ea7a7c9db64091745c12539f713eab0c4b2bbea4",
           "evidence_id": "ev_aa6400ca289d0af9949715a32ed2bee92d8a1f97870bd296d25b2e52ccd57931",
           "signature": "void(char param_1)"

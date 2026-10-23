@@ -1,238 +1,238 @@
 {
- "summary": {
-  "stored": 2,
-  "unsupported": 22,
-  "failed": 8,
-  "skipped": 0
- },
- "natives": [
-  {
-   "address": "0x0048F530",
-   "name": "Retail_Main",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x0048F530",
-   "exit_code": 1
+  "summary": {
+    "stored": 2,
+    "unsupported": 22,
+    "failed": 8,
+    "skipped": 0
   },
-  {
-   "address": "0x00401000",
-   "name": "QTask_CreateTask",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00401000",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00402930",
-   "name": "QTask_RegisterClasses",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00402930",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00402800",
-   "name": "Flow_CreateHandler",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00402800",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00402260",
-   "name": "Flow_RunHandler",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00402260",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00405850",
-   "name": "Config_Read",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00405850",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00410070",
-   "name": "DefineHumanPlayerGeneral",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00410070",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004137A0",
-   "name": "HumanPlayer_LoadParameters",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004137A0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004ED5C0",
-   "name": "InputPort_Process",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004ED5C0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004B5B60",
-   "name": "Resource_FileExists",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B5B60",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004B7E10",
-   "name": "Qvm_ReportError",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "4 errors generated.",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004BCFD0",
-   "name": "Qvm_ExecuteInstructions",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004BCFD0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004BDA00",
-   "name": "Qvm_PushInteger",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004BDA00",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004A2600",
-   "name": "Camera_ResetMatrix",
-   "outcome": "report stored",
-   "result": "passed",
-   "tests_passed": 8,
-   "tests_total": 8,
-   "evidence_path": "docs/fidelity/evidence/0x004A2600-behavioral.json"
-  },
-  {
-   "address": "0x004CF330",
-   "name": "DynObj_LoadPackageMeshes",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004CF330",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004CF630",
-   "name": "DynObj_LoadPackageLovs",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004CF630",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004CF910",
-   "name": "DynObj_LoadPackageAnimations",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004CF910",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004A26C0",
-   "name": "Camera_UpdateFogPalette",
-   "outcome": "report stored",
-   "result": "passed",
-   "tests_passed": 8,
-   "tests_total": 8,
-   "evidence_path": "docs/fidelity/evidence/0x004A26C0-behavioral.json"
-  },
-  {
-   "address": "0x004B23B0",
-   "name": "Texture_UploadMipmapPacket",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B23B0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004B26B0",
-   "name": "Texture_DisableUpload",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B26B0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004B7CF0",
-   "name": "Texture_UploadPalettePacket",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004B7CF0",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004CF870",
-   "name": "DynObj_LoadPackagePalettes",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004CF870",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00505E40",
-   "name": "TextureModifier_Push",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0:",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004C5F00",
-   "name": "Terrain_LoadTexturesAndLightmaps",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004C5F00",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004C6240",
-   "name": "Terrain_Load",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x004C6240",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004D14E0",
-   "name": "Terrain_TraverseContourQuadtree",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable.",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004F82B0",
-   "name": "TerrainLightMap_Init_2",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: dyld[72378]: missing symbol called",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00506F00",
-   "name": "HeightMap_Enter",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0:",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00510010",
-   "name": "Terrain_DecodeChunkCommands",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable.",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00512C30",
-   "name": "Terrain_Draw",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable.",
-   "exit_code": 1
-  },
-  {
-   "address": "0x00497E70",
-   "name": "TransContext_SetActiveTransContext",
-   "outcome": "runner does not support this address",
-   "detail": "unsupported native address: 0x00497E70",
-   "exit_code": 1
-  },
-  {
-   "address": "0x004D67A0",
-   "name": "AnimIff_LoadAnimationFile",
-   "outcome": "runner did not produce a behavioural report",
-   "detail": "candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe",
-   "exit_code": 1
-  }
- ]
+  "natives": [
+    {
+      "address": "0x0048F530",
+      "name": "Retail_Main",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x0048F530",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00401000",
+      "name": "QTask_CreateTask",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00401000",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00402930",
+      "name": "QTask_RegisterClasses",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00402930",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00402800",
+      "name": "Flow_CreateHandler",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00402800",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00402260",
+      "name": "Flow_RunHandler",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00402260",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00405850",
+      "name": "Config_Read",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00405850",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00410070",
+      "name": "DefineHumanPlayerGeneral",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00410070",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004137A0",
+      "name": "HumanPlayer_LoadParameters",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004137A0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004ED5C0",
+      "name": "InputPort_Process",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004ED5C0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004B5B60",
+      "name": "Resource_FileExists",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004B5B60",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004B7E10",
+      "name": "Qvm_ReportError",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "4 errors generated.",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004BCFD0",
+      "name": "Qvm_ExecuteInstructions",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004BCFD0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004BDA00",
+      "name": "Qvm_PushInteger",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004BDA00",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004A2600",
+      "name": "Camera_ResetMatrix",
+      "outcome": "report stored",
+      "result": "passed",
+      "tests_passed": 8,
+      "tests_total": 8,
+      "evidence_path": "docs/fidelity/evidence/0x004a2600-behavioral.json"
+    },
+    {
+      "address": "0x004CF330",
+      "name": "DynObj_LoadPackageMeshes",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004CF330",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004CF630",
+      "name": "DynObj_LoadPackageLovs",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004CF630",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004CF910",
+      "name": "DynObj_LoadPackageAnimations",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004CF910",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004A26C0",
+      "name": "Camera_UpdateFogPalette",
+      "outcome": "report stored",
+      "result": "passed",
+      "tests_passed": 8,
+      "tests_total": 8,
+      "evidence_path": "docs/fidelity/evidence/0x004a26c0-behavioral.json"
+    },
+    {
+      "address": "0x004B23B0",
+      "name": "Texture_UploadMipmapPacket",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004B23B0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004B26B0",
+      "name": "Texture_DisableUpload",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004B26B0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004B7CF0",
+      "name": "Texture_UploadPalettePacket",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004B7CF0",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004CF870",
+      "name": "DynObj_LoadPackagePalettes",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004CF870",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00505E40",
+      "name": "TextureModifier_Push",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0:",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004C5F00",
+      "name": "Terrain_LoadTexturesAndLightmaps",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004C5F00",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004C6240",
+      "name": "Terrain_Load",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x004C6240",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004D14E0",
+      "name": "Terrain_TraverseContourQuadtree",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_TraverseContourQuadtree (0x004D14E0) is not transcribed; native traversal is unavailable.",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004F82B0",
+      "name": "TerrainLightMap_Init_2",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0: dyld[72378]: missing symbol called",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00506F00",
+      "name": "HeightMap_Enter",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0:",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00510010",
+      "name": "Terrain_DecodeChunkCommands",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_DecodeChunkCommands (0x00510010) is not transcribed; native CMD decoding is unavailable.",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00512C30",
+      "name": "Terrain_Draw",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate failed for seed 0x0: libc++abi: terminating due to uncaught exception of type std::logic_error: Terrain_Draw (0x00512C30) is not transcribed; native terrain rendering is unavailable.",
+      "exit_code": 1
+    },
+    {
+      "address": "0x00497E70",
+      "name": "TransContext_SetActiveTransContext",
+      "outcome": "runner does not support this address",
+      "detail": "unsupported native address: 0x00497E70",
+      "exit_code": 1
+    },
+    {
+      "address": "0x004D67A0",
+      "name": "AnimIff_LoadAnimationFile",
+      "outcome": "runner did not produce a behavioural report",
+      "detail": "candidate executable does not exist: /Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/build-win32-no-verify/engine/platform/windows/open-igi.exe",
+      "exit_code": 1
+    }
+  ]
 }

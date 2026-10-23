@@ -1,0 +1,224 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004C5F00",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004C5F00"
+   },
+   {
+    "address": "0x004C5F8E"
+   },
+   {
+    "address": "0x004C5F98"
+   },
+   {
+    "address": "0x004C5FBC"
+   },
+   {
+    "address": "0x004C5FC6"
+   },
+   {
+    "address": "0x004C5FCF"
+   },
+   {
+    "address": "0x004C5FE2"
+   },
+   {
+    "address": "0x004C6011"
+   },
+   {
+    "address": "0x004C609C"
+   },
+   {
+    "address": "0x004C60BE"
+   },
+   {
+    "address": "0x004C60C8"
+   },
+   {
+    "address": "0x004C60CD"
+   },
+   {
+    "address": "0x004C60D9"
+   },
+   {
+    "address": "0x004C60E3"
+   },
+   {
+    "address": "0x004C60ED"
+   },
+   {
+    "address": "0x004C611E"
+   },
+   {
+    "address": "0x004C6128"
+   },
+   {
+    "address": "0x004C612D"
+   },
+   {
+    "address": "0x004C613F"
+   },
+   {
+    "address": "0x004C614C"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004C5F00",
+    "target": "0x004C5F98",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5F00",
+    "target": "0x004C5F8E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5F8E",
+    "target": "0x004C5F98",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C5F98",
+    "target": "0x004C5FC6",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5F98",
+    "target": "0x004C5FBC",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5FBC",
+    "target": "0x004C5FC6",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C5FC6",
+    "target": "0x004C5FCF",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C5FCF",
+    "target": "0x004C5FCF",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5FCF",
+    "target": "0x004C5FE2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5FE2",
+    "target": "0x004C614C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C5FE2",
+    "target": "0x004C6011",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C6011",
+    "target": "0x004C614C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C6011",
+    "target": "0x004C609C",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C609C",
+    "target": "0x004C613F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C609C",
+    "target": "0x004C60BE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60BE",
+    "target": "0x004C613F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60BE",
+    "target": "0x004C60C8",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60C8",
+    "target": "0x004C60CD",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C60CD",
+    "target": "0x004C612D",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60CD",
+    "target": "0x004C60D9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60D9",
+    "target": "0x004C60ED",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60D9",
+    "target": "0x004C60E3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60E3",
+    "target": "0x004C60ED",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C60ED",
+    "target": "0x004C6128",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C60ED",
+    "target": "0x004C611E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C611E",
+    "target": "0x004C6128",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C6128",
+    "target": "0x004C612D",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004C612D",
+    "target": "0x004C60CD",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C612D",
+    "target": "0x004C613F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004C613F",
+    "target": "0x004C614C",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

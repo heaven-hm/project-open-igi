@@ -1,0 +1,124 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "binary_ninja",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004DC340",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004DC340"
+   },
+   {
+    "address": "0x004DC3C2"
+   },
+   {
+    "address": "0x004DC349"
+   },
+   {
+    "address": "0x004DC3B3"
+   },
+   {
+    "address": "0x004DC360"
+   },
+   {
+    "address": "0x004DC3B9"
+   },
+   {
+    "address": "0x004DC39F"
+   },
+   {
+    "address": "0x004DC377"
+   },
+   {
+    "address": "0x004DC3BE"
+   },
+   {
+    "address": "0x004DC38B"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004DC340",
+    "target": "0x004DC3C2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC340",
+    "target": "0x004DC349",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC349",
+    "target": "0x004DC3B3",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC349",
+    "target": "0x004DC360",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3B3",
+    "target": "0x004DC3C2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3B3",
+    "target": "0x004DC3B9",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC360",
+    "target": "0x004DC39F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC360",
+    "target": "0x004DC377",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3B9",
+    "target": "0x004DC3C2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3B9",
+    "target": "0x004DC3BE",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC39F",
+    "target": "0x004DC3B3",
+    "kind": "unconditional"
+   },
+   {
+    "source": "0x004DC377",
+    "target": "0x004DC39F",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC377",
+    "target": "0x004DC38B",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3BE",
+    "target": "0x004DC349",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC3BE",
+    "target": "0x004DC3C2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004DC38B",
+    "target": "0x004DC39F",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

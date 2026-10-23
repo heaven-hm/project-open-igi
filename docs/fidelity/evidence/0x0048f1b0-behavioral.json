@@ -1,0 +1,309 @@
+{
+ "address": "0x0048F1B0",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "cases": [
+  {
+   "candidate_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": 0
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-00000000",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 0
+    }
+   },
+   "reference_output": {
+    "return_value": 0,
+    "side_effects": [],
+    "state_delta": 0
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1,
+    "side_effects": [],
+    "state_delta": 1
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "state-00000001",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 1
+    }
+   },
+   "reference_output": {
+    "return_value": 1,
+    "side_effects": [],
+    "state_delta": 1
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": -1,
+    "side_effects": [],
+    "state_delta": -1
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-ffffffff",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": -1
+    }
+   },
+   "reference_output": {
+    "return_value": -1,
+    "side_effects": [],
+    "state_delta": -1
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 127,
+    "side_effects": [],
+    "state_delta": 127
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-0000007f",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 127
+    }
+   },
+   "reference_output": {
+    "return_value": 127,
+    "side_effects": [],
+    "state_delta": 127
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 128,
+    "side_effects": [],
+    "state_delta": 128
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-00000080",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 128
+    }
+   },
+   "reference_output": {
+    "return_value": 128,
+    "side_effects": [],
+    "state_delta": 128
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": -128,
+    "side_effects": [],
+    "state_delta": -128
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-ffffff80",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": -128
+    }
+   },
+   "reference_output": {
+    "return_value": -128,
+    "side_effects": [],
+    "state_delta": -128
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 305419896,
+    "side_effects": [],
+    "state_delta": 305419896
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "state-12345678",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 305419896
+    }
+   },
+   "reference_output": {
+    "return_value": 305419896,
+    "side_effects": [],
+    "state_delta": 305419896
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": -305419896,
+    "side_effects": [],
+    "state_delta": -305419896
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "state-edcba988",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": -305419896
+    }
+   },
+   "reference_output": {
+    "return_value": -305419896,
+    "side_effects": [],
+    "state_delta": -305419896
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 2147483647,
+    "side_effects": [],
+    "state_delta": 2147483647
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-7fffffff",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 2147483647
+    }
+   },
+   "reference_output": {
+    "return_value": 2147483647,
+    "side_effects": [],
+    "state_delta": 2147483647
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": -2147483648,
+    "side_effects": [],
+    "state_delta": -2147483648
+   },
+   "categories": [
+    "boundary"
+   ],
+   "id": "state-80000000",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": -2147483648
+    }
+   },
+   "reference_output": {
+    "return_value": -2147483648,
+    "side_effects": [],
+    "state_delta": -2147483648
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": 1431655765,
+    "side_effects": [],
+    "state_delta": 1431655765
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "state-55555555",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": 1431655765
+    }
+   },
+   "reference_output": {
+    "return_value": 1431655765,
+    "side_effects": [],
+    "state_delta": 1431655765
+   }
+  },
+  {
+   "candidate_output": {
+    "return_value": -1431655766,
+    "side_effects": [],
+    "state_delta": -1431655766
+   },
+   "categories": [
+    "nominal"
+   ],
+   "id": "state-aaaaaaaa",
+   "input": {
+    "args": [],
+    "initial_state": {
+     "debugged": -1431655766
+    }
+   },
+   "reference_output": {
+    "return_value": -1431655766,
+    "side_effects": [],
+    "state_delta": -1431655766
+   }
+  }
+ ],
+ "executed": true,
+ "float_tolerance": {
+  "absolute": 0,
+  "relative": 0
+ },
+ "implementation_sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
+ "kind": "behavioral-test-report",
+ "method": "Retail x86 global-load/RET instructions from the selected igi.exe were executed in Radare2 ESIL with twelve seeded 32-bit global values; the current candidate was compiled and called with the same values. Return values and unchanged state were compared. This is emulator evidence, not a live IGI.exe process.",
+ "observable_fields": [
+  "return_value",
+  "state_delta",
+  "side_effects"
+ ],
+ "oracle": "retail-binary-execution",
+ "result": "passed",
+ "schema_version": 1,
+ "tests_failed": 0,
+ "tests_passed": 12,
+ "tests_total": 12,
+ "runner": {
+  "path": "scripts/native_diff_runner.py",
+  "sha256": "7ce83949697abf32e3b29616b6facd3db3596687321ca7b0399da4c400c9a405",
+  "command": [
+   "/Library/Frameworks/Python.framework/Versions/3.12/bin/python3",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow/scripts/native_diff_runner.py",
+   "--address",
+   "0x0048F1B0",
+   "--binary",
+   "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+   "--binary-sha256",
+   "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+   "--implementation",
+   "engine/src/retail/core/app_context.cpp",
+   "--implementation-sha256",
+   "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463",
+   "--root",
+   "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/deepseek-smart-workflow"
+  ]
+ }
+}

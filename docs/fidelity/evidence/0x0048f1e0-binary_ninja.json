@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048F1E0",
+  "signature": "int32_t App_ContextSetDebugtextState(char arg1)",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048F1E0"
+      }
+    ],
+    "edges": []
+  },
+  "observed": {
+    "body_bytes": 11,
+    "instructions": 3,
+    "basic_blocks": 1,
+    "conditional_branches": 0,
+    "calls": 0,
+    "raw_output_path": "docs/fidelity/evidence/0x0048f1e0-binaryninja.json",
+    "raw_output_sha256": "c98897483fcbc1e3bb06e4a5a4fe297f9df1dac270156b2584f75b88c760c781"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "failed",
+  "address": "0x004A50F5",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f6f9d70ba9bab8c2b708dc18165a4023787c3ae880bb93dbdbfdc4a2a77c87b4",
+  "reviewed": true,
+  "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
+  "runtime_contract": {
+    "scope": "unverified-startup-and-exception-path",
+    "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
+    "required_observables": {
+      "inputs": [
+        "args"
+      ],
+      "outputs": [
+        "outputs"
+      ],
+      "sideEffects": []
+    },
+    "no_side_effects": false,
+    "note": "Prior scalar-only contract did not cover startup writes, calls, process exit or exception effects; it does not authorize runtime acceptance."
+  },
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "radare2 pi at 0x004A50F5 shows the retail entry (SEH frame scope table 0x534308, handler 0x4a67ec); the candidate implements that entry. The name Camera_ApplyHandiCam_3 is a catalog label only."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "The version word packing (GetVersion shifts and masks into 0x93607c, 0x936078, 0x936074, 0x936070), the 0x1c exit code and the show-window default of 10 are the literals in the retail instructions."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "The retail entry takes no arguments; main receives the module handle, a null previous instance, the command line from 0x4A5FD7 and the show-window value."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Call order matches retail: GetVersion, 0x4A6787 then 0x4A5210(0x1c) on zero, 0x4A6467, GetCommandLineA into 0xC32554, 0x4A6335 into 0x93604C, 0x4A60E8, 0x4A602F, 0x4A5AA8, GetStartupInfoA, 0x4A5FD7, main, 0x4A5AD5."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "The five version and command line globals are written at the retail addresses with the retail widths."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "rationale": "Candidate uses C++ catch with exit code zero, while retail uses the exception filter and exception code; equivalence is not established."
+    }
+  ],
+  "review_findings": [
+    "The native has startup side effects; the prior no-side-effects claim was false.",
+    "The candidate exception path differs from retail SEH and remains unverified.",
+    "The behavioral artifact is not a paired runtime comparison."
+  ]
+}

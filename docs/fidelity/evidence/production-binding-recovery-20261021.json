@@ -63,15 +63,15 @@
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00404590-semantic-review.json",
-            "evidence_sha256": "030e59ab4d02e00eb8b0b18978f94d712977d66a55e878c6f6076a67bf162369"
+            "evidence_sha256": "23b2f85ca173006c914e0fd98c34159a0210db96953617f740a44f36f3ab91de"
           },
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00404590-build.json",
-            "evidence_sha256": "d1109f971d3ec1309f3f74e471d38f4c717b543c2ddaa2394ca244658012316b"
+            "evidence_sha256": "30a8b379eec91987fbf374b0bd2198af6023168222d2bbc59cfe8fc95dd5a201"
           },
           "behavioral": {
             "evidence_path": "docs/fidelity/evidence/0x00404590-behavioral.json",
-            "evidence_sha256": "e2d763d5d47ddd87651b38203342a494303998501fada15b129b7112b625f600"
+            "evidence_sha256": "edb89bbea80c6229dbb34ced64fb46b97896c36f55ffd6ca8152250764bdb29f"
           }
         }
       },
@@ -95,13 +95,13 @@
             "evidence_id": "bn:live:0x00404590",
             "signature": "x86 cdecl void*(void)",
             "evidence_path": "docs/fidelity/evidence/0x00404590-binaryninja.json",
-            "evidence_sha256": "c376e475f116d6edd4020e18594ff3e77e6e132f38bdf05dd68bf0880fe50c9a"
+            "evidence_sha256": "a9a5bf69424602d462bfc8c8f7a7452e971fe261edb6921de9af30d9bb4eb332"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00404590",
             "signature": "x86 cdecl void*(void)",
             "evidence_path": "docs/fidelity/evidence/0x00404590-radare2.json",
-            "evidence_sha256": "31fe9bab30aac409a00a6354022cf89b2bb42e75ceec9b90ef1a66202a9a828c"
+            "evidence_sha256": "68c875968c937883dbb7adbc1d41d80327be184fb70bff453dd49ad839258c47"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -111,7 +111,7 @@
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00404590-semantic-review.json",
-            "evidence_sha256": "1b62e0a7c649bb75bf4e4f0da621678755369770fa54f5f8b23719fe832b3039"
+            "evidence_sha256": "23b2f85ca173006c914e0fd98c34159a0210db96953617f740a44f36f3ab91de"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -137,7 +137,7 @@
           ],
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00404590-build.json",
-            "evidence_sha256": "400e1b97c0a0d0759c2b90ce292ab2989ca277bc86a08d2b025640c9dbbac9c3"
+            "evidence_sha256": "30a8b379eec91987fbf374b0bd2198af6023168222d2bbc59cfe8fc95dd5a201"
           }
         }
       },
@@ -190,29 +190,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-radare2.json",
             "evidence_sha256": "14c4eb48dbc249d0cb721b6c4436fe2c900d6bcf398ed297e638e409cfbad318",
             "evidence_id": "r2:live:0x00404F00",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-binaryninja.json",
             "evidence_sha256": "c1e0cf7015121450b583f811838a3c5b7a8330dc35f9afaa7b1b63532bff048d",
             "evidence_id": "bn:live:0x00404F00",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-semantic-review.json",
-            "evidence_sha256": "a92ad88dff93db97b1992e3e10428bb7338b75574da28e495f4c56d29a51aa99"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-semantic-review.json",
+            "evidence_sha256": "4fdbec59f5b5d0f1241e3ba3aa57b69695c1a56af2c8addee0009d20f0cd376e"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-build.json",
-            "evidence_sha256": "cad7b3f7e23e2c2ead6e2f4c2d4df3ba9e2dfd68749c0af5f7fc35e583db9305"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-build.json",
+            "evidence_sha256": "4bb2fdbcdf152ac6445c91e851818e4de096f03639bcd996a38b01b922a55075"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-behavioral.json",
-            "evidence_sha256": "a342710ee42888b3299825f2842d4e873be237a2041e8e8ff005e0892c7869c6"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-behavioral.json",
+            "evidence_sha256": "08d06d5d292b5499a76dcef6dca5f52c649873cf5c3991230b57681300a0b704"
           }
         }
       },
@@ -235,14 +235,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x00404F00",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-binaryninja.json",
-            "evidence_sha256": "c85869a9c006e304924f32ed11e5bb357ab0839224c76169c232ccd5d2a12760"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-binaryninja.json",
+            "evidence_sha256": "c1e0cf7015121450b583f811838a3c5b7a8330dc35f9afaa7b1b63532bff048d"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00404F00",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-radare2.json",
-            "evidence_sha256": "1c78f05b8549ad7a6c11690082b754c929ea806905de281609403d36947239ab"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-radare2.json",
+            "evidence_sha256": "14c4eb48dbc249d0cb721b6c4436fe2c900d6bcf398ed297e638e409cfbad318"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -251,8 +251,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-semantic-review.json",
-            "evidence_sha256": "69c2594c3aba54a25e85c2a0832e0f4b3f5edfca907948dbc93ae6a47cd01303"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-semantic-review.json",
+            "evidence_sha256": "4fdbec59f5b5d0f1241e3ba3aa57b69695c1a56af2c8addee0009d20f0cd376e"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -277,8 +277,8 @@
             "Config harness stubs Script_GetArg and uses zeroed emulated stack residue; VM argument extraction and undefined-padding behavior outside this fixture are not covered."
           ],
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F00-build.json",
-            "evidence_sha256": "7f8871e1f7bb8308a8cc67536c83f697cb9a592db4099fbf960afc6f92222032"
+            "evidence_path": "docs/fidelity/evidence/0x00404f00-build.json",
+            "evidence_sha256": "4bb2fdbcdf152ac6445c91e851818e4de096f03639bcd996a38b01b922a55075"
           }
         }
       },
@@ -331,29 +331,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-radare2.json",
             "evidence_sha256": "39bc5ea364b38f1d478a62741f308eab349e74c60965922680a439c924fda6f7",
             "evidence_id": "r2:live:0x00404F60",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-binaryninja.json",
             "evidence_sha256": "23de84f2ef32e4a50ee2d3c243404a699b70f266a62929dc6dc6615697a4c773",
             "evidence_id": "bn:live:0x00404F60",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-semantic-review.json",
-            "evidence_sha256": "8139305a4a63f35cfaf029f1be3a228d330a6efe29f6d0780bd4de24455bf6b8"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-semantic-review.json",
+            "evidence_sha256": "a863a8e4be04a91ff1a6d001312a572750c3dd41e9e1dcd4d1fdc2940610b670"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-build.json",
-            "evidence_sha256": "fb119cdd70a9cbcf91a0d1a6e21d6f584cbde448e9c42263c314f5a60876a969"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-build.json",
+            "evidence_sha256": "1d8cc7479038551d400a7cc6ef2289bcc776ae866d0dc4e7ca860871a8006d13"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-behavioral.json",
-            "evidence_sha256": "f376f7590deb02a4910ab90e7deede55fa89cef7bc259b048b9614f18c1ac1fb"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-behavioral.json",
+            "evidence_sha256": "4db56a4c4b2a28c1095dd281cd0787e68899e39d315db5032d1e8a0a225cb4d3"
           }
         }
       },
@@ -376,14 +376,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x00404F60",
             "signature": "x86 cdecl void(void* context)",
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-binaryninja.json",
-            "evidence_sha256": "7b5b6deff009bf23c2c6c45d2bb19d494935dddbc80dac904b0dc22e47d23859"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-binaryninja.json",
+            "evidence_sha256": "23de84f2ef32e4a50ee2d3c243404a699b70f266a62929dc6dc6615697a4c773"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00404F60",
             "signature": "x86 cdecl void(void* context)",
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-radare2.json",
-            "evidence_sha256": "8e161b21d63c376d501bca328db77335e067ccb4d0c13f2322396f418249a8fa"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-radare2.json",
+            "evidence_sha256": "39bc5ea364b38f1d478a62741f308eab349e74c60965922680a439c924fda6f7"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -392,8 +392,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-semantic-review.json",
-            "evidence_sha256": "51c51fd5bbe81c59cf89de5167966b66ee7d300a45b96876b2fc4274b62ef2b3"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-semantic-review.json",
+            "evidence_sha256": "a863a8e4be04a91ff1a6d001312a572750c3dd41e9e1dcd4d1fdc2940610b670"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -418,8 +418,8 @@
             "Config harness stubs Script_GetArg and uses zeroed emulated stack residue; VM argument extraction and undefined-padding behavior outside this fixture are not covered."
           ],
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00404F60-build.json",
-            "evidence_sha256": "8c03d6f5c1fd8dc29747a351b94a19ec79f72eb91b9d003f3046da276bb02c33"
+            "evidence_path": "docs/fidelity/evidence/0x00404f60-build.json",
+            "evidence_sha256": "1d8cc7479038551d400a7cc6ef2289bcc776ae866d0dc4e7ca860871a8006d13"
           }
         }
       },
@@ -473,28 +473,28 @@
           "selected_decompiler": "binary_ninja",
           "radare2": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-radare2.json",
-            "evidence_sha256": "9cc9035a154e15eb22d1b08f7f4d179b456f4cec9eae647acfa5ced8eb4dce11",
+            "evidence_sha256": "bfd77c2fff904887c24338bdced2dd9020a4b37c7d2f9dd8acc5686bda2f77e8",
             "evidence_id": "r2:live:0x00405530",
             "signature": "not restated"
           },
           "binary_ninja": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-binaryninja.json",
-            "evidence_sha256": "fd8baad9d8c6a5900e79f814aade2bd96ef783cfa1369dae03b75bfd20ea0d82",
+            "evidence_sha256": "5530f6389323ae9fc318e6639bc00ee32c5fa20ce31c5c3c1c59c9fd17b02487",
             "evidence_id": "bn:live:0x00405530",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-semantic-review.json",
-            "evidence_sha256": "05aeccc5b26df110e0ded1663ac42301211735d175b88f69203e971d54233323"
+            "evidence_sha256": "a9b0361c5b5afe1a7af87e7ae475ae7dbe2a438523663f3117a507a2c8e52412"
           },
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-build.json",
-            "evidence_sha256": "18c33b938e8cf0a879865ce1c3e432f76271336ff8b484fe8c80660b9d99510f"
+            "evidence_sha256": "c74cb06505ac89dad5382368d4f48131343ae975fd8b8104cc27b487026cbbad"
           },
           "behavioral": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-behavioral.json",
-            "evidence_sha256": "a5d6c6a78bed6b217b855076e58470de15d7601f6b9cfd151a4e98a240694384"
+            "evidence_sha256": "2c8c490ea176caeee14b76973f2cb111db5dd7151f6722fdd0d11aed6328a70a"
           }
         }
       },
@@ -518,13 +518,13 @@
             "evidence_id": "bn:live:0x00405530",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
             "evidence_path": "docs/fidelity/evidence/0x00405530-binaryninja.json",
-            "evidence_sha256": "5774c8f93da9ff92bedcdb8ddd747df372a8a1e0ad4b8994058136413f9235c6"
+            "evidence_sha256": "5530f6389323ae9fc318e6639bc00ee32c5fa20ce31c5c3c1c59c9fd17b02487"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00405530",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
             "evidence_path": "docs/fidelity/evidence/0x00405530-radare2.json",
-            "evidence_sha256": "4f6bdf02a2783da47619e3fdf6c72915bfaff6f5f2f880ac3139c142666fe995"
+            "evidence_sha256": "bfd77c2fff904887c24338bdced2dd9020a4b37c7d2f9dd8acc5686bda2f77e8"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -534,7 +534,7 @@
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-semantic-review.json",
-            "evidence_sha256": "ce7b1c771d5c70ab012f18d1ddde917ad31951e5936f13737167cfa14de23cb5"
+            "evidence_sha256": "a9b0361c5b5afe1a7af87e7ae475ae7dbe2a438523663f3117a507a2c8e52412"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -560,7 +560,7 @@
           ],
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00405530-build.json",
-            "evidence_sha256": "5d6c25517732f268e27e95adc9a2e7c93c9366de1c6aba0fa204b6b4985695a6"
+            "evidence_sha256": "c74cb06505ac89dad5382368d4f48131343ae975fd8b8104cc27b487026cbbad"
           }
         }
       },
@@ -613,29 +613,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-radare2.json",
             "evidence_sha256": "0365b8cd6b294435594ba26cdb9acc1ca25e1d151f2d4e03d8a80d92540cabe3",
             "evidence_id": "r2:live:0x004055C0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-binaryninja.json",
             "evidence_sha256": "5ec13960f8410e174fa4c6a1f1398368024076540c34f55da4be77f45b9e5fb8",
             "evidence_id": "bn:live:0x004055C0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-semantic-review.json",
-            "evidence_sha256": "6a38b9a62c0acae61e6cfea2f0898f3f3f09a935ed28d8537f1967b49bd77c03"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-semantic-review.json",
+            "evidence_sha256": "30c81e5a9c8c726a3b9b9d5588f8d6bed8be85028bc1a6dfef016f166bc700b4"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-build.json",
-            "evidence_sha256": "5b7ca57194f3d4f0ff9f0762b3a452ee8d6477286f5276e6b6a65c3f3e38730b"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-build.json",
+            "evidence_sha256": "e450e317f35eeb13f92a46872ee016805f5ac2a696a28c31135754dbd6713316"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-behavioral.json",
-            "evidence_sha256": "89eb3b32be4f07839f05a962259689e7ae0b8275c2783d94fe2ba36fe2601621"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-behavioral.json",
+            "evidence_sha256": "53e4775fe168be1a9eb8e3bac4f2d93e2d0b1f4aa73b1d5d0db62942c76f1204"
           }
         }
       },
@@ -658,14 +658,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004055C0",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-binaryninja.json",
-            "evidence_sha256": "f8908fb48a8bb14bd3b295f117a09baabda1d5c4d749d9b6b00d8b87b105afb0"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-binaryninja.json",
+            "evidence_sha256": "5ec13960f8410e174fa4c6a1f1398368024076540c34f55da4be77f45b9e5fb8"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004055C0",
             "signature": "x86 cdecl void(void* context, const void* script_value)",
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-radare2.json",
-            "evidence_sha256": "58ea9e20d26e2fc87e671e1b0634c2f00839d53e8ac8bf972f53b223e5c90c8c"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-radare2.json",
+            "evidence_sha256": "0365b8cd6b294435594ba26cdb9acc1ca25e1d151f2d4e03d8a80d92540cabe3"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -674,8 +674,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-semantic-review.json",
-            "evidence_sha256": "12a4ecaa90f0342ab0428badb25e6b368ebcc3eff3899e7d9f13430b61b831a2"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-semantic-review.json",
+            "evidence_sha256": "30c81e5a9c8c726a3b9b9d5588f8d6bed8be85028bc1a6dfef016f166bc700b4"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -700,8 +700,8 @@
             "Config harness stubs Script_GetArg and uses zeroed emulated stack residue; VM argument extraction and undefined-padding behavior outside this fixture are not covered."
           ],
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004055C0-build.json",
-            "evidence_sha256": "03fcbb9a079d38a8b3eea1e5205839e41683a7457de08842e3e7f05d3ee198be"
+            "evidence_path": "docs/fidelity/evidence/0x004055c0-build.json",
+            "evidence_sha256": "e450e317f35eeb13f92a46872ee016805f5ac2a696a28c31135754dbd6713316"
           }
         }
       },
@@ -768,15 +768,15 @@
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00405620-semantic-review.json",
-            "evidence_sha256": "d0abac327d31782731c14625d3110acf6944f808de75dc333c57701f0dd51fc2"
+            "evidence_sha256": "7224289e7dc08e3acd7da8f6717b5877e90da987f22991e187215a27a77f1261"
           },
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00405620-build.json",
-            "evidence_sha256": "30364102e906e85470948af917161ad0ee59a925d11fa45d0c9ba40b17e63d58"
+            "evidence_sha256": "b74d5f6002f9fbc6a0bbceebfd257bf3bf8643c0c2d0b292ee5fcd6822af1153"
           },
           "behavioral": {
             "evidence_path": "docs/fidelity/evidence/0x00405620-behavioral.json",
-            "evidence_sha256": "0bf2c2c63ba1e3472259a2cc93274a174511d0d22e92e4ea28582f1925fd81b8"
+            "evidence_sha256": "b0ef28c5f7d4310631aadaf5e227a39c52f003ea9b87ad686b69a06652f77055"
           }
         }
       },
@@ -800,13 +800,13 @@
             "evidence_id": "bn:live:0x00405620",
             "signature": "x86 cdecl void(void* context)",
             "evidence_path": "docs/fidelity/evidence/0x00405620-binaryninja.json",
-            "evidence_sha256": "5af9db2b59c8631e1033628ceaaf4bd6b2bedd49319d8a55158838b004152a52"
+            "evidence_sha256": "0b26eeb00cc562c519cae56e35d36743c5a9abb306c4cd9537898d22c44bbe23"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00405620",
             "signature": "x86 cdecl void(void* context)",
             "evidence_path": "docs/fidelity/evidence/0x00405620-radare2.json",
-            "evidence_sha256": "6c76b6e98b9b8e65734b8d4671d09f33dd25729593741208bb1086efd727c9d4"
+            "evidence_sha256": "1d24ed40b0c2ca240fb139e80d8a02cd8978f9b92384f4fd10d4ae50dccb1fdf"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -816,7 +816,7 @@
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00405620-semantic-review.json",
-            "evidence_sha256": "8182a6ec9a86d085b0873e4be0dda2eed4624efd6aac48242f741da66b14978a"
+            "evidence_sha256": "7224289e7dc08e3acd7da8f6717b5877e90da987f22991e187215a27a77f1261"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -842,7 +842,7 @@
           ],
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00405620-build.json",
-            "evidence_sha256": "0015bf078f3ee997baca04e00fc3f08b19d57083976a4a95abbe35d8ddb4d177"
+            "evidence_sha256": "b74d5f6002f9fbc6a0bbceebfd257bf3bf8643c0c2d0b292ee5fcd6822af1153"
           }
         }
       },
@@ -895,29 +895,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-radare2.json",
             "evidence_sha256": "76086d33bf6050ec5bac0dbf242707de877cd9090f1786166378ea9ee2520fb9",
             "evidence_id": "r2:live:0x004659E0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-binaryninja.json",
             "evidence_sha256": "ad7f592a63877c13b089711d2996ebc267e3525423ed53a17af71fb83b6fa0f7",
             "evidence_id": "bn:live:0x004659E0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-semantic-review.json",
-            "evidence_sha256": "ea40846128426cebf40dcffa262d05f9e88758f03609bf0a6d89e085db3de3b3"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-semantic-review.json",
+            "evidence_sha256": "dc1c3c513de34f9544713cc2ff0a26de82e4cc992229b13010a63f9889463a9b"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-build.json",
-            "evidence_sha256": "8081c15a3ffb3583a9e1b5464c3f852c3b8fe0f81cb1d5aa3ffd8cdf3e9b5a73"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-build.json",
+            "evidence_sha256": "704625290adfdfc012fed6e8fae7b0eddb512d8c8252a4212ab61bb268a923f1"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-behavioral.json",
-            "evidence_sha256": "f41494d17b9a606e5ac21abab136205c85b60663f87a81ac7783c09f2dc34414"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-behavioral.json",
+            "evidence_sha256": "49ea8f296c5b81520c2cfacd8cc2e11f5005793682cc8a7cac9715ac71cb75c9"
           }
         }
       },
@@ -940,14 +940,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004659E0",
             "signature": "x86 cdecl void*(void*)",
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-binaryninja.json",
-            "evidence_sha256": "ead1498bb248a1ab2457ce6bc39175269a1daa3b3688144c6bb367603230f6b0"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-binaryninja.json",
+            "evidence_sha256": "ad7f592a63877c13b089711d2996ebc267e3525423ed53a17af71fb83b6fa0f7"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004659E0",
             "signature": "x86 cdecl void*(void*)",
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-radare2.json",
-            "evidence_sha256": "bd35d1562caa82b2fc14e922d55dae41541772317026ac2bba359e3ce66236a8"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-radare2.json",
+            "evidence_sha256": "76086d33bf6050ec5bac0dbf242707de877cd9090f1786166378ea9ee2520fb9"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -956,8 +956,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-semantic-review.json",
-            "evidence_sha256": "d322a8b26ddabd0221ca911538a7d8045951eb8b04009271815922b7e2c9cefb"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-semantic-review.json",
+            "evidence_sha256": "dc1c3c513de34f9544713cc2ff0a26de82e4cc992229b13010a63f9889463a9b"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -981,8 +981,8 @@
             "Differential harness uses synthetic inputs and emulated retail instruction bytes; live game integration and Windows x86 calling-convention parity are not established by this harness."
           ],
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004659E0-build.json",
-            "evidence_sha256": "cff17367240a00658ef365e51b9557e66271c8724e8b0c2c6f9a4dd7e005f281"
+            "evidence_path": "docs/fidelity/evidence/0x004659e0-build.json",
+            "evidence_sha256": "704625290adfdfc012fed6e8fae7b0eddb512d8c8252a4212ab61bb268a923f1"
           }
         }
       },
@@ -1035,29 +1035,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-radare2.json",
             "evidence_sha256": "382d14d09f284ac4e6af7acda779c0a4f276b6f199c51f187707d62495248380",
             "evidence_id": "r2:live:0x004B0D40",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-binaryninja.json",
             "evidence_sha256": "4e36bddf674a582a5eb00b14e1ea3b3577f5839da1f2b2d5b1b3cf299c64f6b4",
             "evidence_id": "bn:live:0x004B0D40",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-semantic-review.json",
-            "evidence_sha256": "edc1839aa8ad6320e22af4bdde623f2a3fb5040677e5dd4926cba58406074e84"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-semantic-review.json",
+            "evidence_sha256": "5fc6b26389219b58aee4d000e72ef26b63da6c00a09a4c3d26d589a7f9543f5f"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-build.json",
-            "evidence_sha256": "fe4a90fd48f1c60bacf0a8731be3e43efba80f856a2701a1ba5c7de49bdf3895"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-build.json",
+            "evidence_sha256": "baefbf2f62e47d3738128fcedf335f100e58ce947ff05225eed7ce18239f16c3"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-behavioral.json",
-            "evidence_sha256": "4e042640be280a768b7789d0b6add20ba87bfd4a17db7ff0bd30a67b6985f38a"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-behavioral.json",
+            "evidence_sha256": "bf4c12b51579c4ad7207a27e51f81b28cfaba7241db6f5782ad8613ff830d2e0"
           }
         }
       },
@@ -1080,14 +1080,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004B0D40",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-binaryninja.json",
-            "evidence_sha256": "539b949707fa6d6dc7efe5f3274d272ce7ab9670731a65a8de7caa8016a934c7"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-binaryninja.json",
+            "evidence_sha256": "4e36bddf674a582a5eb00b14e1ea3b3577f5839da1f2b2d5b1b3cf299c64f6b4"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004B0D40",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-radare2.json",
-            "evidence_sha256": "8bfc1a2f2ecf9116967bc795c8281d462182fd6178caab56e821b7a42e223319"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-radare2.json",
+            "evidence_sha256": "382d14d09f284ac4e6af7acda779c0a4f276b6f199c51f187707d62495248380"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1116,12 +1116,12 @@
             "timeout_seconds": 300
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-build.json",
-            "evidence_sha256": "6c13e8ae725d05bcbd3c7a1fde9dc5ab5879a1190481d022bb465f1a5296a97a"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-build.json",
+            "evidence_sha256": "baefbf2f62e47d3738128fcedf335f100e58ce947ff05225eed7ce18239f16c3"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B0D40-semantic-review.json",
-            "evidence_sha256": "63f7d3c0e65bb8c2e504937c212e82761eaf0bf823d8be5d69bec7e513aa11a5"
+            "evidence_path": "docs/fidelity/evidence/0x004b0d40-semantic-review.json",
+            "evidence_sha256": "5fc6b26389219b58aee4d000e72ef26b63da6c00a09a4c3d26d589a7f9543f5f"
           }
         }
       },
@@ -1174,29 +1174,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-radare2.json",
-            "evidence_sha256": "5308b4fdc7ee986b7395fdb6739201c755f539fb46dc83c4d79ac21831137af8",
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-radare2.json",
+            "evidence_sha256": "d04dba414c6335c0674379ef55c26eafa40318a57793fd5f581ec01ac7b81f44",
             "evidence_id": "r2:live:0x004B5F00",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-binaryninja.json",
-            "evidence_sha256": "a86e6ed04e0fd83c23af246e337a1e19c359e3243ff8ec3c5b1ae5958162efaf",
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-binaryninja.json",
+            "evidence_sha256": "ee6a106f16b6136174340dc3492b3505f6157108de8cc223855f3047e6a529e0",
             "evidence_id": "bn:live:0x004B5F00",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-semantic-review.json",
-            "evidence_sha256": "8f96d50e766168214800c90a689a8acb5de7b52fb5cb49a39600bbd7221ebbb7"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-semantic-review.json",
+            "evidence_sha256": "ef2e49bde8633f960d1db63a5f94abd03e1ac8234f83c5fac899c1abc4c8ea4a"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-build.json",
-            "evidence_sha256": "c00e20b8b3eff542dbfa522740fd5dc85a68269e6313c3e932c559420e547c25"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-build.json",
+            "evidence_sha256": "7f2dea6b2e58ec4d350e52f889bdaee3d870c2c023e4fe6b91466c39600dadce"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-behavioral.json",
-            "evidence_sha256": "ee2103f1aeb1cbef513b806c55290965809dda66377445d2900c5ff2a2685f68"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-behavioral.json",
+            "evidence_sha256": "28f8997db62ed380ce98be95e364d6d58cc50aabca55f902c02e01aa2402c9b2"
           }
         }
       },
@@ -1219,14 +1219,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004B5F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-binaryninja.json",
-            "evidence_sha256": "18f4996ee4e0c36d44ddc1f79a4e900c9b019f78b7b492c697b703134c372446"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-binaryninja.json",
+            "evidence_sha256": "ee6a106f16b6136174340dc3492b3505f6157108de8cc223855f3047e6a529e0"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004B5F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-radare2.json",
-            "evidence_sha256": "3c0ebf0ded0cb3d301ac80723d5b9f35e080674ac57f7c86065549dad0e1ba7a"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-radare2.json",
+            "evidence_sha256": "d04dba414c6335c0674379ef55c26eafa40318a57793fd5f581ec01ac7b81f44"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1235,12 +1235,12 @@
           },
           "cfg_similarity": 1.0,
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-angr-behavioral.json",
             "evidence_sha256": "9d95c6ee3bad2224e62a289dd383260d978ea5114876c4062c658e1e20feb669"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-semantic-review.json",
-            "evidence_sha256": "c0380bb43ac51db384a073ef147366651573063af6ead483ab4d12cd97173699"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-semantic-review.json",
+            "evidence_sha256": "ef2e49bde8633f960d1db63a5f94abd03e1ac8234f83c5fac899c1abc4c8ea4a"
           },
           "behavioral_runner": {
             "path": "scripts/resource_lifecycle_diff_runner.py",
@@ -1261,8 +1261,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B5F00-build.json",
-            "evidence_sha256": "566b40e150714bc93ecfd78222d4c8b210f2b27bda8e392945b0f6aa2b1368f2"
+            "evidence_path": "docs/fidelity/evidence/0x004b5f00-build.json",
+            "evidence_sha256": "7f2dea6b2e58ec4d350e52f889bdaee3d870c2c023e4fe6b91466c39600dadce"
           }
         }
       },
@@ -1315,29 +1315,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-radare2.json",
-            "evidence_sha256": "bff530f8e634505e8d749af588b15fd031eba323c1eb99e2a634d04a7189c2ec",
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-radare2.json",
+            "evidence_sha256": "0b08934829b067c35daac4bec4f81eafd43bb4e9454a17ebbbfd76b10157711f",
             "evidence_id": "r2:live:0x004B6380",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-binaryninja.json",
-            "evidence_sha256": "8ccc3d668d06b0b371842b3fcdf76fd5164602a4717d14b40ac3215a9a2f1b31",
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-binaryninja.json",
+            "evidence_sha256": "81e3eccbeeb4805cbbb2b8f363b854fd614e607d3a1cfa37c876d724a0ae2db7",
             "evidence_id": "bn:live:0x004B6380",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-semantic-review.json",
-            "evidence_sha256": "0253e948b464a6e292211ae9ab55ddbdb5ff6fb32df2b6d4df7c3a7b58b6645b"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-semantic-review.json",
+            "evidence_sha256": "fb5cecd5329d15d498caa6f20816160974b0d3bdcad13d98297c80cf680f2400"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-build.json",
-            "evidence_sha256": "e49f97a3afcbc1c9affcc5b3f9f3dedb0a80734e58bf369e87e535ae08aa620f"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-build.json",
+            "evidence_sha256": "878610444c5422b77c35950a4d2186fa8b81b06c1597a2ce1cd2259d32af9191"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-behavioral.json",
-            "evidence_sha256": "56627eaf7c4de67ebcef9945f1c7297c3ebc0a3148cf104a174e5e6499d8f37f"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-behavioral.json",
+            "evidence_sha256": "3281c976fdd4424a57132cd1cf23c91c3d2b17b16470d84473524a56ca5c1709"
           }
         }
       },
@@ -1360,14 +1360,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004B6380",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-binaryninja.json",
-            "evidence_sha256": "7cc551eb76923aa3e60d1e0166a0aa40a2fe4c97d00bda58436c8be106ac892b"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-binaryninja.json",
+            "evidence_sha256": "81e3eccbeeb4805cbbb2b8f363b854fd614e607d3a1cfa37c876d724a0ae2db7"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004B6380",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-radare2.json",
-            "evidence_sha256": "0db0234803e3428747b6a85fbff37d43f77c15123a125294839341ee385251eb"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-radare2.json",
+            "evidence_sha256": "0b08934829b067c35daac4bec4f81eafd43bb4e9454a17ebbbfd76b10157711f"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1376,12 +1376,12 @@
           },
           "cfg_similarity": 1.0,
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-angr-behavioral.json",
             "evidence_sha256": "565243820292b785ab389e20532d876dc6d7ba058d2de87ccefceb61a2af6b2a"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-semantic-review.json",
-            "evidence_sha256": "20773781eb020b10c4d6ebba5ac434d0da177ebe226ec40a3256032352b86487"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-semantic-review.json",
+            "evidence_sha256": "fb5cecd5329d15d498caa6f20816160974b0d3bdcad13d98297c80cf680f2400"
           },
           "behavioral_runner": {
             "path": "scripts/resource_lifecycle_diff_runner.py",
@@ -1402,8 +1402,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004B6380-build.json",
-            "evidence_sha256": "af5086eb98138bcec92167fc23e53c0e80437f47837e20d06dd992d25adf8d7d"
+            "evidence_path": "docs/fidelity/evidence/0x004b6380-build.json",
+            "evidence_sha256": "878610444c5422b77c35950a4d2186fa8b81b06c1597a2ce1cd2259d32af9191"
           }
         }
       },
@@ -1456,28 +1456,28 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-radare2.json",
-            "evidence_sha256": "63184a6675fef9c743dc26f4f1006d25a42482733eb9d68e9112483036149e8b",
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-radare2.json",
+            "evidence_sha256": "def1ab38c73bf49c1fb451045e92675899422b3605c21ea16993edae8e785fd0",
             "evidence_id": "r2:live:0x004C5F00",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-binaryninja.json",
-            "evidence_sha256": "0c57e33233e0a98941fa624a35ad58f985e3f03c87bbe9d394d9a64bbe95ef20",
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-binaryninja.json",
+            "evidence_sha256": "4acbd4ca3140041a3910137664672f3040734f8a9fbc6f08b071597662a4d69d",
             "evidence_id": "bn:live:0x004C5F00",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-semantic-review.json",
-            "evidence_sha256": "8cf44cb494ffe0d171d610511a95c7f10ddf98383b2c290e1ef41312b9db27a3"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-semantic-review.json",
+            "evidence_sha256": "4b78da72c7a234526754d15618fb5be90ba1cc2ce0a0e594b50af914ab4f1f71"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-build.json",
-            "evidence_sha256": "8e256bd51640f147093f9eb2890bbc0ded9b988767c980d6dee36ba7fd8011d8"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-build.json",
+            "evidence_sha256": "4799f7958935ba8f8a8b950ac4db9522a2dd3d9faa757de463221dc9636c70df"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-behavioral.json",
             "evidence_sha256": "d9651088cebb6bb57364a9f67c5e4b0fcbcf996e5e0b7be7d6e565b8ee1c0fe2"
           }
         }
@@ -1501,14 +1501,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004C5F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-binaryninja.json",
-            "evidence_sha256": "65a7e20133a96ad0fb93b8a73b9f0e95537d2e61b31c62afebdeea8083c6bf05"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-binaryninja.json",
+            "evidence_sha256": "4acbd4ca3140041a3910137664672f3040734f8a9fbc6f08b071597662a4d69d"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004C5F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-radare2.json",
-            "evidence_sha256": "f72bbe19264a3ba848cf112c9053f81dd900b085431cf93588b534856ecaf60b"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-radare2.json",
+            "evidence_sha256": "def1ab38c73bf49c1fb451045e92675899422b3605c21ea16993edae8e785fd0"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1535,12 +1535,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-semantic-review.json",
-            "evidence_sha256": "40da1ea50ee152096e6b9aa94dd44e844425addd777a2428d40e70a5b7d35132"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-semantic-review.json",
+            "evidence_sha256": "4b78da72c7a234526754d15618fb5be90ba1cc2ce0a0e594b50af914ab4f1f71"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004C5F00-build.json",
-            "evidence_sha256": "f1a4d98a8ce3315b814841008b045dd9be035a163aeb1fd3aa91b649d8bc00db"
+            "evidence_path": "docs/fidelity/evidence/0x004c5f00-build.json",
+            "evidence_sha256": "4799f7958935ba8f8a8b950ac4db9522a2dd3d9faa757de463221dc9636c70df"
           }
         }
       },
@@ -1593,28 +1593,28 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-radare2.json",
-            "evidence_sha256": "5ae72c514b4a12238dfb2944570477da5e7e24de2d9616e7ee2c7c07a2661ff9",
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-radare2.json",
+            "evidence_sha256": "93cdd5db6723af5f005b3528a58b95bf3fab93c7752322206a2d7404be618c1b",
             "evidence_id": "r2:live:0x004C6240",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-binaryninja.json",
-            "evidence_sha256": "73a05f51b9f4857886ab7d82380a4b9d9ed37d81a63e3a337d351cb25aa68f07",
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-binaryninja.json",
+            "evidence_sha256": "e0324a38be6eee5120b05d129e49fc232b20fcc51bf37a8a796b7b64edc497b3",
             "evidence_id": "bn:live:0x004C6240",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
-            "evidence_sha256": "f9d501c171e898773a29284d9add11818d3d8b3c7bf36ef6d0c5abf9de4e8715"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-semantic-review.json",
+            "evidence_sha256": "99d2082c292a1f0a22d04dfd847085773e41ffcd10edf54c8bde41fcdadce26b"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-build.json",
-            "evidence_sha256": "670eab2f70b35ad51a2e8aceb9db20eeb53e53ce6b848353adfb9c17f284bcee"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-build.json",
+            "evidence_sha256": "5789778e76847d9aea4f29cce530b8e5c4aeac1f0bc8d92a546bc9635ae48cfa"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-behavioral.json",
             "evidence_sha256": "b830d0ef080bd45b020fbf3be2eaf1305ea542aee224775a6a295c7b3fec7877"
           }
         }
@@ -1638,14 +1638,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004C6240",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-binaryninja.json",
-            "evidence_sha256": "0f23a40dfe0687119cc467bcd0e22f8cd41cc6868a7aebeac202fb297d772baf"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-binaryninja.json",
+            "evidence_sha256": "e0324a38be6eee5120b05d129e49fc232b20fcc51bf37a8a796b7b64edc497b3"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004C6240",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-radare2.json",
-            "evidence_sha256": "0b345ef75314ef6e476ed2380861fae6817eaf2bc0a310107e9976f20c29b6c8"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-radare2.json",
+            "evidence_sha256": "93cdd5db6723af5f005b3528a58b95bf3fab93c7752322206a2d7404be618c1b"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1672,12 +1672,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-semantic-review.json",
-            "evidence_sha256": "b82f1c2867f6fc31e720735ea28d17d8d8549d9ae68839894b12955fe96656e6"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-semantic-review.json",
+            "evidence_sha256": "99d2082c292a1f0a22d04dfd847085773e41ffcd10edf54c8bde41fcdadce26b"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004C6240-build.json",
-            "evidence_sha256": "99625ec7e68b494157f12713d63fdfb0c3b69d54ba6719219a5956e428bb6d52"
+            "evidence_path": "docs/fidelity/evidence/0x004c6240-build.json",
+            "evidence_sha256": "5789778e76847d9aea4f29cce530b8e5c4aeac1f0bc8d92a546bc9635ae48cfa"
           }
         }
       },
@@ -1730,29 +1730,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-radare2.json",
             "evidence_sha256": "12047655b20d249fb046ce9a64aa0ad5c935c8dc8535dedfef1b2c35c548a2ee",
             "evidence_id": "r2:live:0x004CEA80",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-binaryninja.json",
             "evidence_sha256": "0abfffd9fe5620412bdd9c637a7a38021a21558996949c84024f1c9c9c79b234",
             "evidence_id": "bn:live:0x004CEA80",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-semantic-review.json",
-            "evidence_sha256": "af1e9c75697eec578e7d5b05bde51969abc6e4f8d4c12ec0d096bc7e316ddcea"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-semantic-review.json",
+            "evidence_sha256": "a31a2b4f3f9d32660e939bb99155335954e6696e42a43c2dd6ccd6a5d792d539"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-build.json",
-            "evidence_sha256": "593ce8fc7b3ebaad0a870c8ae729786417b81cbdfef4f25fa1b6e03b2e13d39f"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-build.json",
+            "evidence_sha256": "62542222924a5a91a9eefbd6c34b3caf9a158325cef5e7ea93800100307c4e78"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-behavioral.json",
-            "evidence_sha256": "8ae150f095d0ffa27c1513b4c195da97c3767db4f09453975f3daf74ae6ebaed"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-behavioral.json",
+            "evidence_sha256": "dbb7f90e7ade7cb099e5895ea48522f3b558288d45cbfbdb65aa3e442f74e620"
           }
         }
       },
@@ -1775,14 +1775,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CEA80",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-binaryninja.json",
-            "evidence_sha256": "e0110a949e173602f17d8897f2789b5bbadcf47897cef1307eea706f5aa8e846"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-binaryninja.json",
+            "evidence_sha256": "0abfffd9fe5620412bdd9c637a7a38021a21558996949c84024f1c9c9c79b234"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CEA80",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-radare2.json",
-            "evidence_sha256": "baf3c9991e9ccc73fcaca30fadc364f1711305c12e36f108f08b855d32edc26b"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-radare2.json",
+            "evidence_sha256": "12047655b20d249fb046ce9a64aa0ad5c935c8dc8535dedfef1b2c35c548a2ee"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1809,12 +1809,12 @@
             "timeout_seconds": 300
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-build.json",
-            "evidence_sha256": "04d8c2dbcf1fd2e4cd20039c62e7c374d35358bfb4b7f4f21c41b95ce4ba9b4c"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-build.json",
+            "evidence_sha256": "62542222924a5a91a9eefbd6c34b3caf9a158325cef5e7ea93800100307c4e78"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEA80-semantic-review.json",
-            "evidence_sha256": "3888ed2a5af56f4f157240db08b59b7465c46841f50419527c12d161813a2949"
+            "evidence_path": "docs/fidelity/evidence/0x004cea80-semantic-review.json",
+            "evidence_sha256": "a31a2b4f3f9d32660e939bb99155335954e6696e42a43c2dd6ccd6a5d792d539"
           }
         }
       },
@@ -1867,29 +1867,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-radare2.json",
-            "evidence_sha256": "73f5c8b447354b6649ccfce48a729ddf352053cc78f5cdd71d360cb7f39155ea",
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-radare2.json",
+            "evidence_sha256": "2f447dab6bd5f216051156582eb3e77fe12d36dbf1fcc1dc7520b2da00ad993d",
             "evidence_id": "r2:live:0x004CEAA0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-binaryninja.json",
-            "evidence_sha256": "f639e656a6158ad42a7052481c5a1a12717e1da1e0f5ca9d0b0ed0edab9c8f46",
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-binaryninja.json",
+            "evidence_sha256": "78dedec489f2da415fbcb3a1c583d853d7233592ed4b63e4583e0169b0c3b758",
             "evidence_id": "bn:live:0x004CEAA0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-semantic-review.json",
-            "evidence_sha256": "1c5975e3124427e202894e537a47290c5bce9c06d542422bcce6cc4f40c78d87"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-semantic-review.json",
+            "evidence_sha256": "27c98337ad4eaddc2b57a4aa52a1ae5f128cd4a9f8f979d6974aec3b43e6932f"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-build.json",
-            "evidence_sha256": "6070005a4cda8242a84643ecd45e2ada31832ed8fad358baa9214f382ea1b6a4"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-build.json",
+            "evidence_sha256": "91e84e4e1fc774923e356243323faf86e1a43b7382fdafb9fd8578f65ab1213e"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-behavioral.json",
-            "evidence_sha256": "90aca6fe43d9f437353eaf221ebbbee6a95790f29b229a38e3c1bfd8313cf2dd"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-behavioral.json",
+            "evidence_sha256": "4dc5209d82d140371be2c754850ef010933b0af0a9ce4ac4e9d433a064b9938a"
           }
         }
       },
@@ -1912,14 +1912,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CEAA0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-binaryninja.json",
-            "evidence_sha256": "85e997acccc40dca9605ddedf385bfdb88a8f5d0b36976bd985d8ef11f5b3d49"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-binaryninja.json",
+            "evidence_sha256": "78dedec489f2da415fbcb3a1c583d853d7233592ed4b63e4583e0169b0c3b758"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CEAA0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-radare2.json",
-            "evidence_sha256": "22a876a2a51e80557102df0c41841c73c102e558a35b019554e67938644d201c"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-radare2.json",
+            "evidence_sha256": "2f447dab6bd5f216051156582eb3e77fe12d36dbf1fcc1dc7520b2da00ad993d"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -1928,11 +1928,11 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-semantic-review.json",
-            "evidence_sha256": "1b9eb45ea3d7680f59a9dd834e26fd0ee2c27b413a4a6834ef015ba840d8cc14"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-semantic-review.json",
+            "evidence_sha256": "27c98337ad4eaddc2b57a4aa52a1ae5f128cd4a9f8f979d6974aec3b43e6932f"
           },
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-angr-behavioral.json",
             "evidence_sha256": "12b86d1614aeb2b80c6cf8c7774c87b0cd70387a818187da4cb90e9631fbd541"
           },
           "behavioral_runner": {
@@ -1954,8 +1954,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CEAA0-build.json",
-            "evidence_sha256": "8cb19dcdd48868cebba5df7f941e786c3f189a3554095ca071c6b5c9bd5a1be8"
+            "evidence_path": "docs/fidelity/evidence/0x004ceaa0-build.json",
+            "evidence_sha256": "91e84e4e1fc774923e356243323faf86e1a43b7382fdafb9fd8578f65ab1213e"
           }
         }
       },
@@ -2008,29 +2008,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-radare2.json",
-            "evidence_sha256": "eb51915f27ced2b7b553eff797c273a420b79c9feeb7fc420207cbc75ec58868",
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-radare2.json",
+            "evidence_sha256": "b3c213a81521be0b63b32b02b763c0857bd377f47963a346a18b537746856fb2",
             "evidence_id": "r2:live:0x004CF080",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-binaryninja.json",
-            "evidence_sha256": "0e14f729bb6b7c8489ab5b0af7b091d7df81717ed482c4256a9af49d9d0ec021",
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-binaryninja.json",
+            "evidence_sha256": "e7320720cc322c0b6a33266ee3a02317e5d5deaf760fed21fdde88e5c88d58d1",
             "evidence_id": "bn:live:0x004CF080",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-semantic-review.json",
-            "evidence_sha256": "3a030ffcc793969ff8a8a7b05fdccf9a1de4ad206db425a837040f810173a3a7"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-semantic-review.json",
+            "evidence_sha256": "aa8a464047a97e70c6b53fe84b0cceb3375120c913b659d7d9a4e28b3fe0acea"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-build.json",
-            "evidence_sha256": "512cf1fd27722ecc1c8b1a1feb44b88edfec8cdbf3bd7005804004f733645939"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-build.json",
+            "evidence_sha256": "d1a55ec36c6e931691fff8e9e6d3e6d1c49c5fcc2c54e27135112328eebaba19"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-behavioral.json",
-            "evidence_sha256": "4a9d447c97d4f9622fe3cf905063ddc2a42aa907f52a45dca1cd06201c1ae37d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-behavioral.json",
+            "evidence_sha256": "da3028e9f4c304663323d0685b2e388dda9ad9ad0c15b6c5c20a997fd3701e95"
           }
         }
       },
@@ -2053,14 +2053,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF080",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-binaryninja.json",
-            "evidence_sha256": "fd98a910232bc150f306e65134cbd25d737c8e6e508193286e53fe88d4097384"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-binaryninja.json",
+            "evidence_sha256": "e7320720cc322c0b6a33266ee3a02317e5d5deaf760fed21fdde88e5c88d58d1"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF080",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-radare2.json",
-            "evidence_sha256": "e6e8df32e88e293805c13f01e48405bfc1179dd6836fd094cfbbcfc9ca3b48bb"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-radare2.json",
+            "evidence_sha256": "b3c213a81521be0b63b32b02b763c0857bd377f47963a346a18b537746856fb2"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2069,8 +2069,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-semantic-review.json",
-            "evidence_sha256": "2fcf648e9e667cc37fd25bb026061b56786349e9b0f55b3c381429a2d2da782e"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-semantic-review.json",
+            "evidence_sha256": "aa8a464047a97e70c6b53fe84b0cceb3375120c913b659d7d9a4e28b3fe0acea"
           },
           "behavioral_runner": {
             "path": "scripts/mtp_package_diff_runner.py",
@@ -2091,8 +2091,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF080-build.json",
-            "evidence_sha256": "ea773cae4003028458c849b3556123977669abe1f5702ecb8f959b907d207bd6"
+            "evidence_path": "docs/fidelity/evidence/0x004cf080-build.json",
+            "evidence_sha256": "d1a55ec36c6e931691fff8e9e6d3e6d1c49c5fcc2c54e27135112328eebaba19"
           }
         }
       },
@@ -2145,29 +2145,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-radare2.json",
-            "evidence_sha256": "83ebb790da623ec91d8e679aafae0d1dbf3e50fea219df42aa84ec845a8c48ed",
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-radare2.json",
+            "evidence_sha256": "7c446fe52f9445373e90d41dd57d3b224cb090e79cec91e74f2b5536cd95ff40",
             "evidence_id": "r2:live:0x004CF300",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-binaryninja.json",
-            "evidence_sha256": "04cf81e9010112e55932aa1abc83ea480e407ff03620c07ebc955f099f66c217",
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-binaryninja.json",
+            "evidence_sha256": "86ef1692a13ef86b0fa21b9a06693f34d0c7cd38015d6754da04f374b8ead62f",
             "evidence_id": "bn:live:0x004CF300",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-semantic-review.json",
-            "evidence_sha256": "2af7904b50de61677b65375acb7f9ff307153247e404b06033d52a7d538c5299"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-semantic-review.json",
+            "evidence_sha256": "c5baf88a8ff7fc6b54223195a96f17e586c4fdbb787c1bc3a3aa94f8b90b4e57"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-build.json",
-            "evidence_sha256": "49c583c95b7646d2b880d4047e9e9c16aa8639e91c747621b783e9d3913aa121"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-build.json",
+            "evidence_sha256": "9c87e2aa2065e8fac11292700587756f1bf9e543619a866f680b78dec26ab115"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-behavioral.json",
-            "evidence_sha256": "23c823618708fb141002c37bbb638c04d86c2b8138d139f6b8c71815ff5f9044"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-behavioral.json",
+            "evidence_sha256": "ca120d7803bc7653892af01859fc38faa9de1cb2a2fe343f665aa237b1c67d9a"
           }
         }
       },
@@ -2190,14 +2190,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF300",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-binaryninja.json",
-            "evidence_sha256": "ae4ce9fd24b65d57160d97119bd5bf7f1e1e71e6cac9c8648c1dcf1fde4be4ee"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-binaryninja.json",
+            "evidence_sha256": "86ef1692a13ef86b0fa21b9a06693f34d0c7cd38015d6754da04f374b8ead62f"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF300",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-radare2.json",
-            "evidence_sha256": "999f158187c668477faa21d6cd05d2d58d477e04cf816107ac69465ba3eb7290"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-radare2.json",
+            "evidence_sha256": "7c446fe52f9445373e90d41dd57d3b224cb090e79cec91e74f2b5536cd95ff40"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2206,11 +2206,11 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-semantic-review.json",
-            "evidence_sha256": "8f341dfbbee89661ce76f055baf52ea66a593fe1c4d2522f71938a724f88dcbb"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-semantic-review.json",
+            "evidence_sha256": "c5baf88a8ff7fc6b54223195a96f17e586c4fdbb787c1bc3a3aa94f8b90b4e57"
           },
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-angr-behavioral.json",
             "evidence_sha256": "276b991f35584f6c8920c555a057b7f76f9cf246e5630e225e22e14f8d277666"
           },
           "behavioral_runner": {
@@ -2232,8 +2232,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF300-build.json",
-            "evidence_sha256": "e3df6ba5dbfddec5e28175b3ae20dac3fdb1d0767492719c2a44d2905440237a"
+            "evidence_path": "docs/fidelity/evidence/0x004cf300-build.json",
+            "evidence_sha256": "9c87e2aa2065e8fac11292700587756f1bf9e543619a866f680b78dec26ab115"
           }
         }
       },
@@ -2286,29 +2286,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-radare2.json",
-            "evidence_sha256": "e73fd1c0adf0ddc7593f4d9117364e7c3ec7deaac805a438d71d57f8bfe3c052",
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-radare2.json",
+            "evidence_sha256": "67ae9d053c0532281b89d0b461d45ea5e12c252de568c306160bc88727fdff60",
             "evidence_id": "r2:live:0x004CF330",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-binaryninja.json",
-            "evidence_sha256": "2e2b9b832c46492ebe4103021bb9706727e112ef54b4f12849d357e8b39543d0",
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-binaryninja.json",
+            "evidence_sha256": "77258d8ac1beb8557f4e54d6073a1e191b6edd7a570a37706c716a1bb04a193e",
             "evidence_id": "bn:live:0x004CF330",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-semantic-review.json",
-            "evidence_sha256": "6044b68d56fdf60ba4522be38f53314584dadc26f8d8052aaae068ed047b431d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-semantic-review.json",
+            "evidence_sha256": "ad848465d974a47b5e2a36489728cafd4af8de6345a91e7eb3b89077d332a702"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-build.json",
-            "evidence_sha256": "c76ebbf4579f2ba662d936953d8029e3ff3f85bcdad912531747c4e9d4caa84c"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-build.json",
+            "evidence_sha256": "6d9249b5e76792ee760d191eb9b1a5074ec2bb9694023193e1dc928da392bc83"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-behavioral.json",
-            "evidence_sha256": "9731abd5a40475b35da2f0e39561e0d1a630777fdd177a2b671654cf0d77f2f1"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-behavioral.json",
+            "evidence_sha256": "ed324817e43e7292a6dede3d7513d60c277ed487c10c2d72727207e819df0321"
           }
         }
       },
@@ -2331,14 +2331,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF330",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-binaryninja.json",
-            "evidence_sha256": "814bcf8adc15b3c631485915a3f1721f384dfcfbacdf777fadebac2fccb2b5ea"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-binaryninja.json",
+            "evidence_sha256": "77258d8ac1beb8557f4e54d6073a1e191b6edd7a570a37706c716a1bb04a193e"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF330",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-radare2.json",
-            "evidence_sha256": "6323b1701b97a650606b0229e17d32fd72a370225a31b9fa92ca396003f91efe"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-radare2.json",
+            "evidence_sha256": "67ae9d053c0532281b89d0b461d45ea5e12c252de568c306160bc88727fdff60"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2347,12 +2347,12 @@
           },
           "cfg_similarity": 1.0,
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-build.json",
-            "evidence_sha256": "bc3d19f136eecf8bd39a25da54ab0a7af687b5aaf745fa7b974e7555fa01175d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-build.json",
+            "evidence_sha256": "6d9249b5e76792ee760d191eb9b1a5074ec2bb9694023193e1dc928da392bc83"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF330-semantic-review.json",
-            "evidence_sha256": "ea817ed74d02bda2436ea82579aec7bb8a5f88848d7accf9d83373686a46f08b"
+            "evidence_path": "docs/fidelity/evidence/0x004cf330-semantic-review.json",
+            "evidence_sha256": "ad848465d974a47b5e2a36489728cafd4af8de6345a91e7eb3b89077d332a702"
           }
         }
       },
@@ -2405,29 +2405,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-radare2.json",
-            "evidence_sha256": "4b03bfc613faed7ac054880199589514e90a4a9272bda1f836b55d3d8a05eea2",
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-radare2.json",
+            "evidence_sha256": "23e41e0030c88c5055380502f8a8bd7869e50abe729a6acf875f211d16cf1760",
             "evidence_id": "r2:live:0x004CF390",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-binaryninja.json",
-            "evidence_sha256": "358d79224c706fcffd358fd7030269a0a0c3ebff2a5ec4745634ca10ea878b1f",
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-binaryninja.json",
+            "evidence_sha256": "381b3eb0bf5192ef896061b999d0e63e4a3beee4da2d37119257695cbf03572d",
             "evidence_id": "bn:live:0x004CF390",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-semantic-review.json",
-            "evidence_sha256": "67d8c78642ef2668f64bb312c389208658bd26a760daeb793c43b018e38dbcaf"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-semantic-review.json",
+            "evidence_sha256": "a8e6c7690db5535cfc3e7e3c4bb19f7d609afb20c7e0c0441b7cdffe01d67564"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-build.json",
-            "evidence_sha256": "e326d48869552a60f3e19ad10f922bd9c77a07765476bb5a24ebbc5c169d89be"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-build.json",
+            "evidence_sha256": "4a783a07c0a09e5f16e4c0fb2189854d5b7e49ba1c6f3b39843e886660be1e1e"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-behavioral.json",
-            "evidence_sha256": "133d9edf0fdf9a74d7a1bc4929160e5c6cbefef72b5624aa41ab9b31b649a770"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-behavioral.json",
+            "evidence_sha256": "0b6dff234e71901ec6a5875e4c24b8e5a230c63a661b056a62bd833e50a14e14"
           }
         }
       },
@@ -2450,14 +2450,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF390",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-binaryninja.json",
-            "evidence_sha256": "0ba0e9fa35b28e07cac66011eb71b7436c2c549b220ffb6d7e5a5a532feab13d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-binaryninja.json",
+            "evidence_sha256": "381b3eb0bf5192ef896061b999d0e63e4a3beee4da2d37119257695cbf03572d"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF390",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-radare2.json",
-            "evidence_sha256": "0ffbd120cc64bc655ec03c6ca57851eae0dc9b47e11af19cf47d64ceefca5931"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-radare2.json",
+            "evidence_sha256": "23e41e0030c88c5055380502f8a8bd7869e50abe729a6acf875f211d16cf1760"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2466,12 +2466,12 @@
           },
           "cfg_similarity": 1.0,
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-angr-behavioral.json",
             "evidence_sha256": "a68724dc491a0c792f058a091079d25e8c5bddc97bf8e0fc111469379948c8d9"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-semantic-review.json",
-            "evidence_sha256": "6d3b7c6f71e942605c9ed863758477090b28f479ab98ac013357ba5f187ae436"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-semantic-review.json",
+            "evidence_sha256": "a8e6c7690db5535cfc3e7e3c4bb19f7d609afb20c7e0c0441b7cdffe01d67564"
           },
           "behavioral_runner": {
             "path": "scripts/model_mesh_diff_runner.py",
@@ -2492,8 +2492,8 @@
             "timeout_seconds": 180
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF390-build.json",
-            "evidence_sha256": "b6482558cd054441e92ace41dfd9cc20ae47e2e95c28d6b993fc518f04fe1b65"
+            "evidence_path": "docs/fidelity/evidence/0x004cf390-build.json",
+            "evidence_sha256": "4a783a07c0a09e5f16e4c0fb2189854d5b7e49ba1c6f3b39843e886660be1e1e"
           },
           "candidate_runtime_observation": {
             "evidence_path": "docs/fidelity/evidence/frida-open-igi-level1-20261019.json",
@@ -2563,29 +2563,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-radare2.json",
-            "evidence_sha256": "fc7f6a1812197e21c4ac56a882e6b9cc6ba30b04835bdd33a42a944f334b4466",
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-radare2.json",
+            "evidence_sha256": "b357eb605cb090c8bf493b3e08aa94d9004080b458fd01b039b322ff5201e911",
             "evidence_id": "r2:live:0x004CF630",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-binaryninja.json",
-            "evidence_sha256": "562f88c969809a712491bb67a390eaf1b12ac2f6bc47900694b927790e9b693a",
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-binaryninja.json",
+            "evidence_sha256": "60954cac75ee56f4f48a05189bd35e2a038078fc99dbb2e1ee3d2ff205c099bc",
             "evidence_id": "bn:live:0x004CF630",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-semantic-review.json",
-            "evidence_sha256": "bb8a8e92c79ded6bea8fe6e322783deab8809ffa8a0c0113c050de62c6be2351"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-semantic-review.json",
+            "evidence_sha256": "46c4527999c5d3033675f7ee7f4aeef2904b17421e0b9219639653f0138286a0"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-build.json",
-            "evidence_sha256": "8430a7266aa81ab573de059d77c59e87a544118a622719de00ad29497401e24d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-build.json",
+            "evidence_sha256": "88b27d42866b26e1bb7bb5d56d5a434091e37a008bad0f4d744e2d1e72feb686"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-behavioral.json",
-            "evidence_sha256": "19e18449f55196f0a846e49e92ae1353504bfea45dc6909bf5ce8e61d15c6974"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-behavioral.json",
+            "evidence_sha256": "91728d1a2f9fa6a11652453d3a2136039150206f11213021b52a73b2dc196fe4"
           }
         }
       },
@@ -2608,14 +2608,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF630",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-binaryninja.json",
-            "evidence_sha256": "7fcf63dd04e764faeac2491bbbe6e000bb9a3abf7a0ff6c24638ec39de6ebe6a"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-binaryninja.json",
+            "evidence_sha256": "60954cac75ee56f4f48a05189bd35e2a038078fc99dbb2e1ee3d2ff205c099bc"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF630",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-radare2.json",
-            "evidence_sha256": "9779f95972324a4868accc7f536988ff22a33d82e1a2024a25e9d7be08f67e65"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-radare2.json",
+            "evidence_sha256": "b357eb605cb090c8bf493b3e08aa94d9004080b458fd01b039b322ff5201e911"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2624,12 +2624,12 @@
           },
           "cfg_similarity": 1.0,
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-build.json",
-            "evidence_sha256": "27923458a98c6771d7d4a51f3487e80a11013127de0504048e016d0a2014eb1d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-build.json",
+            "evidence_sha256": "88b27d42866b26e1bb7bb5d56d5a434091e37a008bad0f4d744e2d1e72feb686"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF630-semantic-review.json",
-            "evidence_sha256": "4e81719b1726ea0eab3c6fcac2dc5fed311b42766fb925e70151d15dea8b459e"
+            "evidence_path": "docs/fidelity/evidence/0x004cf630-semantic-review.json",
+            "evidence_sha256": "46c4527999c5d3033675f7ee7f4aeef2904b17421e0b9219639653f0138286a0"
           }
         }
       },
@@ -2682,29 +2682,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-radare2.json",
-            "evidence_sha256": "9c99bddd9d2cd24c335402b7b46e4142ca6196c26ba39d8e7214610740cdb72c",
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-radare2.json",
+            "evidence_sha256": "708d479c2861dd95a163490d90b68ce8ac52e8ce316780a518e236b10d06c5f9",
             "evidence_id": "r2:live:0x004CF790",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-binaryninja.json",
-            "evidence_sha256": "121a858c0c06809778639fb64f81c8a4485cd0a57de5607c0421b42fef8faaae",
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-binaryninja.json",
+            "evidence_sha256": "73b353ecd0d8d6b056b68f0b8f9ef2fd5ec576c3227f52622835f28686fb7c48",
             "evidence_id": "bn:live:0x004CF790",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-semantic-review.json",
-            "evidence_sha256": "9e5b2b55de209170acb8bd85766b7c664ec9fef6501b0c23297f6c947e6f640c"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-semantic-review.json",
+            "evidence_sha256": "3df0dc5c9d6a20c286f2898b1a6cd320fe6a6a50a2b2654b1a68c0221ea4b626"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-build.json",
-            "evidence_sha256": "b5869e760e76897b715caa6803cd873133419346e417efa8159c9e107fb793ff"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-build.json",
+            "evidence_sha256": "f2188feebb02bc7e12514456701c8bf73ee4cb5486308af4abbee840b4a682d1"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-behavioral.json",
-            "evidence_sha256": "0de93f651289a3a9606638719f970f856798cb8fd323e713ad68b880b5f20382"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-behavioral.json",
+            "evidence_sha256": "2d35049ea90232ce3c52060ef155961c905358ee5f70070b17ed63eaa5058dfd"
           }
         }
       },
@@ -2727,14 +2727,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF790",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-binaryninja.json",
-            "evidence_sha256": "f7f6c3cb82330fb428b35f1d464ad853cf3b4013a0ccc0b9df17098ac903bafe"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-binaryninja.json",
+            "evidence_sha256": "73b353ecd0d8d6b056b68f0b8f9ef2fd5ec576c3227f52622835f28686fb7c48"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF790",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-radare2.json",
-            "evidence_sha256": "95a78bc02cf87c8e29253bbebd1374ced1112efa122558fb972f6d6001e5720e"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-radare2.json",
+            "evidence_sha256": "708d479c2861dd95a163490d90b68ce8ac52e8ce316780a518e236b10d06c5f9"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2743,7 +2743,7 @@
           },
           "cfg_similarity": 1.0,
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-angr-behavioral.json",
             "evidence_sha256": "9420f9f48e996543b15c5a5f3d4f48022cad7b5def0242fb03d1e405068a1968"
           },
           "behavioral_runner": {
@@ -2765,12 +2765,12 @@
             "timeout_seconds": 240
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-semantic-review.json",
-            "evidence_sha256": "e24170733ab84578f026d163025b37ab6582abb06ab4f36821853ce242c51c8f"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-semantic-review.json",
+            "evidence_sha256": "3df0dc5c9d6a20c286f2898b1a6cd320fe6a6a50a2b2654b1a68c0221ea4b626"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF790-build.json",
-            "evidence_sha256": "c03655eb70e3432522bef084e8b9a4785c89a35f07d0d17fe43438948ace7424"
+            "evidence_path": "docs/fidelity/evidence/0x004cf790-build.json",
+            "evidence_sha256": "f2188feebb02bc7e12514456701c8bf73ee4cb5486308af4abbee840b4a682d1"
           },
           "scope": {
             "path": "docs/fidelity/scopes/0x004CF790.json",
@@ -2827,29 +2827,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-radare2.json",
-            "evidence_sha256": "fbeff5119de028cba25d18d63eec097153ac1bf7a15e1d381917c6de948e21bd",
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-radare2.json",
+            "evidence_sha256": "e2560e783dff74ee115a14d1d80fee4b4ac345bf42e8373ed058e633dc67a721",
             "evidence_id": "r2:live:0x004CF870",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-binaryninja.json",
-            "evidence_sha256": "79efbbd556b57fa5eeb3afb41361734ee158007bfd47d0e96b9d36c7a914609f",
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-binaryninja.json",
+            "evidence_sha256": "ff6461fde4b4dcaeebc36e4c931886fb668cbcbd5d9c8a381e00addcd32056bb",
             "evidence_id": "bn:live:0x004CF870",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-semantic-review.json",
-            "evidence_sha256": "d61007c28e457d924b4fe2cd511f9df967b7225cbb71e72eb403f0d1d3c0bd66"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-semantic-review.json",
+            "evidence_sha256": "1279491250e8fdae9cb9395139dfd7f32c46f758e36e05f6997a9a695b7e906c"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-build.json",
-            "evidence_sha256": "4ed2c7bbb34c7efdcd73111d2ab4e61cbf3db3644c03c453c06f117d97b59d81"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-build.json",
+            "evidence_sha256": "fb04c55343ce33e2fd925ed39a3ab0adb29f6d98dbaafe47ce7496d04ef326b6"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-behavioral.json",
-            "evidence_sha256": "a78414b91786c29fc2a01e1d69dc3d15a3ee99df34d67376ec006b261435456d"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-behavioral.json",
+            "evidence_sha256": "3f04d8d62bc76d30fe4590db159b39b6b4d0fa4449b52bcad22f6234c4bf9a11"
           }
         }
       },
@@ -2872,14 +2872,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF870",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-binaryninja.json",
-            "evidence_sha256": "da1c7faac60645a60af50437ec1185f958e5050a1febfe5525aed6a64b1ed8da"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-binaryninja.json",
+            "evidence_sha256": "ff6461fde4b4dcaeebc36e4c931886fb668cbcbd5d9c8a381e00addcd32056bb"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF870",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-radare2.json",
-            "evidence_sha256": "182aff0e43263e67087257afb13ad3b7310cb4563feb44ad7e2eff1a6c24ab2e"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-radare2.json",
+            "evidence_sha256": "e2560e783dff74ee115a14d1d80fee4b4ac345bf42e8373ed058e633dc67a721"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -2888,12 +2888,12 @@
           },
           "cfg_similarity": 1.0,
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-build.json",
-            "evidence_sha256": "7ae51059b1c40d74416aacb2b50497dde1b03916565413a73f67f3ca3794debe"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-build.json",
+            "evidence_sha256": "fb04c55343ce33e2fd925ed39a3ab0adb29f6d98dbaafe47ce7496d04ef326b6"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF870-semantic-review.json",
-            "evidence_sha256": "4f23edce06cbf7a980a7de2239e169eac0c61abe740b742e2fe08cfd75bd2fcb"
+            "evidence_path": "docs/fidelity/evidence/0x004cf870-semantic-review.json",
+            "evidence_sha256": "1279491250e8fdae9cb9395139dfd7f32c46f758e36e05f6997a9a695b7e906c"
           }
         }
       },
@@ -2946,29 +2946,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-radare2.json",
-            "evidence_sha256": "32952d12d1d40796b0bdf97a4a4d6566f1d7a82153d451a618cbad9a67039083",
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-radare2.json",
+            "evidence_sha256": "216e59ac15ede575faf7ae180f051aa0dc510455a744ef04e838328ae8f2ad3b",
             "evidence_id": "r2:live:0x004CF910",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-binaryninja.json",
-            "evidence_sha256": "ef1874befe913a1c42db0efe9bfc222958eb1d5f0c35322226ca3f3bc3255c58",
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-binaryninja.json",
+            "evidence_sha256": "b3ead67422d2da21098e277c9f7f3be4fa029013cc658e826808a974ab89176d",
             "evidence_id": "bn:live:0x004CF910",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-semantic-review.json",
-            "evidence_sha256": "a5467b710e47b143515a4a84683e6232e80d2bf5a2d34d79b150e995d0ce08fc"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-semantic-review.json",
+            "evidence_sha256": "a2c5918fa8f6a099579d607cddf4aec9a37cd94eb4bbd307c88968d7e10101e2"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-build.json",
-            "evidence_sha256": "4c327356409578cf23aecac69511bf12d4aadfebdc242e95d22a097fa2696604"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-build.json",
+            "evidence_sha256": "39b042cddbb4df838c3ab6a1b2e7a71861f39ed53a9bf2290512c12cef0f6a1b"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-behavioral.json",
-            "evidence_sha256": "ab64a330475fbe4646984a2915c8295bcdb7a13619a8048e6afc158e21a32efb"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-behavioral.json",
+            "evidence_sha256": "7a1e7a2044d57b2b50b8fac99ffce190f739107faaebf7cc9f1e1d65690d5e53"
           }
         }
       },
@@ -2991,14 +2991,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004CF910",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-binaryninja.json",
-            "evidence_sha256": "3c48efeb73d39a569e4075bcbba4a94f5ed04540688da6718cdb4a38684a9d63"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-binaryninja.json",
+            "evidence_sha256": "b3ead67422d2da21098e277c9f7f3be4fa029013cc658e826808a974ab89176d"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004CF910",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-radare2.json",
-            "evidence_sha256": "20f0c2d8fa7d5018442a8a38d0cac1c38ebcc2e649e3063cf20e67d98f8f1178"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-radare2.json",
+            "evidence_sha256": "216e59ac15ede575faf7ae180f051aa0dc510455a744ef04e838328ae8f2ad3b"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3007,12 +3007,12 @@
           },
           "cfg_similarity": 1.0,
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-build.json",
-            "evidence_sha256": "408f0f5f7ae3b0d112c78cfa222082a583f413179fffe60a4a125bd5bcf4cca3"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-build.json",
+            "evidence_sha256": "39b042cddbb4df838c3ab6a1b2e7a71861f39ed53a9bf2290512c12cef0f6a1b"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004CF910-semantic-review.json",
-            "evidence_sha256": "f4028f5a7f8ad869a04273d8d8294751716096b1f7f5bc40c51e0a5850e53983"
+            "evidence_path": "docs/fidelity/evidence/0x004cf910-semantic-review.json",
+            "evidence_sha256": "a2c5918fa8f6a099579d607cddf4aec9a37cd94eb4bbd307c88968d7e10101e2"
           }
         }
       },
@@ -3065,29 +3065,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-radare2.json",
             "evidence_sha256": "876b422ff7cbb173594b891b1bd2384b08b3e01a14813c05037b6e7af12d5e57",
             "evidence_id": "r2:live:0x004D0CF0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-binaryninja.json",
             "evidence_sha256": "35c6e4cc1585aa3ce1563468425f274790febf30d119453e51f0547f55a610cd",
             "evidence_id": "bn:live:0x004D0CF0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-semantic-review.json",
-            "evidence_sha256": "75ce99d89c77286aee56262422ba99e1d8199ebe562d33aa5b8d2ad05304fc41"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-semantic-review.json",
+            "evidence_sha256": "4a40a09ea229d8dda0b893cf61c8e1493d796b12608b57bc7945a91dd3f33d73"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-build.json",
-            "evidence_sha256": "acb6f726f1e207c4046b3e2b6664f604d7e49aca3eeaefbef6e54d381717a788"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-build.json",
+            "evidence_sha256": "7011243b45ac0ccc132553297dc5718f1cd6afbb1b4e85d504494ffc2dda58ad"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-behavioral.json",
-            "evidence_sha256": "415aa5c7b4c6b4a7fe7b646f1dd9cca0caabe9cd0a2df28c87cfb2ea1a229133"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-behavioral.json",
+            "evidence_sha256": "e64cfd8e3c4d1554c94f9f39924794970143f4844bfb9ec70443d371b5e36611"
           }
         }
       },
@@ -3110,16 +3110,16 @@
           "ghidra": {
             "evidence_id": "ev_071c88c9c6571c37506fab9854e9b720a468356cf4f915755e1a0d6747abc601",
             "signature": "undefined FUN_004d0cf0()",
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-ghidra.json",
-            "evidence_sha256": "3caf4251608382ecfbd78812a1a7df8cd60b2fc69daae36f37f2e4c6e81ec8ee",
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-ghidra.json",
+            "evidence_sha256": "5fc8f125def2635489d85e43be825c147d13eed8400d7a07c712667d75a8e5a7",
             "comparison_reviewed": true,
             "comparison_rationale": "Ghidra retains an undefined recovered signature; stack offsets, EAX return and pointer/field accesses are established by its instruction listing and agree with the primary pair. Typed C++ names are descriptive aliases."
           },
           "radare2": {
             "evidence_id": "radare2:live:0x004D0CF0",
             "signature": "MefNativeAttachmentRecord* __cdecl Model_GetAttachment(MefNativeModelRecord*, int32_t)",
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-radare2.json",
-            "evidence_sha256": "e35c4853859786542b3bf7a96bd576848d48bd9377bf002f5c424e16af80edd8"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-radare2.json",
+            "evidence_sha256": "876b422ff7cbb173594b891b1bd2384b08b3e01a14813c05037b6e7af12d5e57"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3130,20 +3130,20 @@
           "binary_ninja": {
             "evidence_id": "binary_ninja:live:0x004D0CF0",
             "signature": "MefNativeAttachmentRecord* __cdecl Model_GetAttachment(MefNativeModelRecord*, int32_t)",
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-binaryninja.json",
-            "evidence_sha256": "7d15384c0c874a0ce949e21e3c8eb4e631deada416730e7258964721655fc32e"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-binaryninja.json",
+            "evidence_sha256": "35c6e4cc1585aa3ce1563468425f274790febf30d119453e51f0547f55a610cd"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-build.json",
-            "evidence_sha256": "5e21d582bcbb3d97af124c4498a03ba2ff0b50e7522dca83fced1be98168b4ee"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-build.json",
+            "evidence_sha256": "7011243b45ac0ccc132553297dc5718f1cd6afbb1b4e85d504494ffc2dda58ad"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-semantic-review.json",
-            "evidence_sha256": "358a5e75bd4a4836d3d311b9b20c9f9829837dc6bc55ee0093b090fef64446c6"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-semantic-review.json",
+            "evidence_sha256": "4a40a09ea229d8dda0b893cf61c8e1493d796b12608b57bc7945a91dd3f33d73"
           },
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0CF0-behavioral.json",
-            "evidence_sha256": "28766d3e11f466ca0dfc92671d25297b50dc958b55bef6dbb45023e99c54923f"
+            "evidence_path": "docs/fidelity/evidence/0x004d0cf0-behavioral.json",
+            "evidence_sha256": "e64cfd8e3c4d1554c94f9f39924794970143f4844bfb9ec70443d371b5e36611"
           },
           "behavioral_runner": {
             "path": "scripts/attachment_diff_runner.py",
@@ -3214,29 +3214,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-radare2.json",
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-radare2.json",
             "evidence_sha256": "048206ea4dc059ee58fe46f7d4412fcc8119f4e3a30fefc9cefe88b48eefcc29",
             "evidence_id": "r2:live:0x004D0D10",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-binaryninja.json",
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-binaryninja.json",
             "evidence_sha256": "dd0be6204c32e368c2d3278f0f931c9dc8ea8e545cbf5028ddd34eb6cbf5130f",
             "evidence_id": "bn:live:0x004D0D10",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-semantic-review.json",
-            "evidence_sha256": "83f7234ac219277235b0a4d7d7fdeb3b7bfaf44ca97b1e0dbb8c6c1ddd06d335"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-semantic-review.json",
+            "evidence_sha256": "58e9fa3a475308a7c1b9af67f30d4e3178288e4d15d66f70677e73b2f4ca0f7b"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-build.json",
-            "evidence_sha256": "916a3542d94aa9600cb9de99a12f8917a649974caf0789d32ca0dce255bc7c7d"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-build.json",
+            "evidence_sha256": "78493a5bd5cbf5ce2bd9b42b97585f17e5838c599c31e961a5f653fe6eace13d"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-behavioral.json",
-            "evidence_sha256": "1ca32ced25c7b1cee96a13c43ec06d99e6c970296011eca4ef139f5d798f1ca8"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-behavioral.json",
+            "evidence_sha256": "a8da54ffa90cc9c3bf72ca81d3c3174e48cd3add6563b6d5e6be4085e07f1774"
           }
         }
       },
@@ -3259,16 +3259,16 @@
           "ghidra": {
             "evidence_id": "ev_7b846c0c715632c6acc647ceeb7908041ffd10cb8d1aaede72edff8f32c2ca9d",
             "signature": "undefined FUN_004d0d10()",
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-ghidra.json",
-            "evidence_sha256": "bc360279d952192e2a20841868e423d1a8c3568abcc50e2f7b16a8860d92ec66",
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-ghidra.json",
+            "evidence_sha256": "af411e8fa5fe0eb88c1ebee94825aa23d54647653daaf90fc4af6071ad11505f",
             "comparison_reviewed": true,
             "comparison_rationale": "Ghidra retains an undefined recovered signature; stack offsets, EAX return and pointer/field accesses are established by its instruction listing and agree with the primary pair. Typed C++ names are descriptive aliases."
           },
           "radare2": {
             "evidence_id": "radare2:live:0x004D0D10",
             "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-radare2.json",
-            "evidence_sha256": "75174f3bbb29d5df9ad3d2c8fb1c8a75e7fc2f6d70136cabca38ed8e71bc0218"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-radare2.json",
+            "evidence_sha256": "048206ea4dc059ee58fe46f7d4412fcc8119f4e3a30fefc9cefe88b48eefcc29"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3279,20 +3279,20 @@
           "binary_ninja": {
             "evidence_id": "binary_ninja:live:0x004D0D10",
             "signature": "int32_t __cdecl Model_GetAttachmentCount(MefNativeModelRecord*)",
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-binaryninja.json",
-            "evidence_sha256": "c535fea6c3721cf0608ac6581a2f028114df767435e5b0803cbbb3e2e6327ade"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-binaryninja.json",
+            "evidence_sha256": "dd0be6204c32e368c2d3278f0f931c9dc8ea8e545cbf5028ddd34eb6cbf5130f"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-build.json",
-            "evidence_sha256": "fbcdc01ae24e7138c9c746305054d62c53ae1e88a31997103fb626d82c2d55cc"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-build.json",
+            "evidence_sha256": "78493a5bd5cbf5ce2bd9b42b97585f17e5838c599c31e961a5f653fe6eace13d"
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-semantic-review.json",
-            "evidence_sha256": "514fe2e18221e71114ae23131303d6059a1343610a4c18b1658515b6f7a50ed9"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-semantic-review.json",
+            "evidence_sha256": "58e9fa3a475308a7c1b9af67f30d4e3178288e4d15d66f70677e73b2f4ca0f7b"
           },
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x004D0D10-behavioral.json",
-            "evidence_sha256": "9ec0dbe3b10cdcef1d78ca1a3c5f96b827ad1f76b009549122f31dde62abca40"
+            "evidence_path": "docs/fidelity/evidence/0x004d0d10-behavioral.json",
+            "evidence_sha256": "a8da54ffa90cc9c3bf72ca81d3c3174e48cd3add6563b6d5e6be4085e07f1774"
           },
           "behavioral_runner": {
             "path": "scripts/attachment_diff_runner.py",
@@ -3363,28 +3363,28 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-radare2.json",
-            "evidence_sha256": "712473122f6c51ef1b22743257bd38b8afb438883393b547891e29917066b6a7",
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-radare2.json",
+            "evidence_sha256": "a1e602b54ce85128e65877f0d16d48ceed58da8df1b8361dfaf04ed7fbcab248",
             "evidence_id": "r2:live:0x004D14E0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-binaryninja.json",
-            "evidence_sha256": "bfde743344b29307182d84e4c5e9c505a70a01ce292487e431d0d80dc113caa3",
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-binaryninja.json",
+            "evidence_sha256": "76ffb9660c7de0e36296ed905824568e65b636ec59a55039451b1c802a83f283",
             "evidence_id": "bn:live:0x004D14E0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-semantic-review.json",
-            "evidence_sha256": "edd1a0006194363e035d07cdd187895755658d2c266d6673f1d2a470a8dae6fe"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-semantic-review.json",
+            "evidence_sha256": "d5d6f55cea40b2fc787f33ac62a839b757456397a9b92d5c0e80db0ed762737d"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-build.json",
-            "evidence_sha256": "73c5a8d500f331a867dd1ac3812f78b8608c7d416b848b8974f46059f3bfa17a"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-build.json",
+            "evidence_sha256": "28b27094e17d50e16da48bcfa7cc8a61aed964409c6cadd29393140dbf2a5121"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-behavioral.json",
             "evidence_sha256": "cc7cb56111ea12b87f1efb01882123efd6158b8d5068561d8fcce22141b0aa09"
           }
         }
@@ -3408,14 +3408,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004D14E0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-binaryninja.json",
-            "evidence_sha256": "c339f13de07e1f226308a7024edb68e3a908817eae72ebc7208bb604014c2d13"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-binaryninja.json",
+            "evidence_sha256": "76ffb9660c7de0e36296ed905824568e65b636ec59a55039451b1c802a83f283"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004D14E0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-radare2.json",
-            "evidence_sha256": "c8c523f666ae3dd1eaa49701522c10b7726dac8f02853a3f23f1cc7eb940fcdd"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-radare2.json",
+            "evidence_sha256": "a1e602b54ce85128e65877f0d16d48ceed58da8df1b8361dfaf04ed7fbcab248"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3442,12 +3442,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-semantic-review.json",
-            "evidence_sha256": "a9bebe32602409fe0c30338869d540d9b13ed11dc363d064c2a8603f0347e247"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-semantic-review.json",
+            "evidence_sha256": "d5d6f55cea40b2fc787f33ac62a839b757456397a9b92d5c0e80db0ed762737d"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004D14E0-build.json",
-            "evidence_sha256": "16eb400de81e5389b25b01f952b439f2e223c2ea5f0b28fc43ccca6b72f29ed0"
+            "evidence_path": "docs/fidelity/evidence/0x004d14e0-build.json",
+            "evidence_sha256": "28b27094e17d50e16da48bcfa7cc8a61aed964409c6cadd29393140dbf2a5121"
           }
         }
       },
@@ -3500,29 +3500,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-radare2.json",
-            "evidence_sha256": "58cf404e74ebf1b3c7425b1fd9d1ffab603f5906e6ea773d430ac946f1063947",
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-radare2.json",
+            "evidence_sha256": "ca536a5617286d461f7aef532b573a02326fc5c10ea8f8402aeceae5a7b5aff2",
             "evidence_id": "r2:live:0x004EDB60",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-binaryninja.json",
-            "evidence_sha256": "8dec37685569c92fff9c2c4c34ff581c22374b5f941933a4cded87860062d9ef",
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-binaryninja.json",
+            "evidence_sha256": "6c80230fb2c010c9a33f7302004fe4a9e31b01188d796311c226a2c54a34c413",
             "evidence_id": "bn:live:0x004EDB60",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-semantic-review.json",
-            "evidence_sha256": "9eacf5244fcf81266892718fa77aea65f514a6f3bd4044636a4cf375a5a0d159"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-semantic-review.json",
+            "evidence_sha256": "d9630028a1c00869483ae1c03786da352cdaa019bb6d3e37b6ba5b0f7cf1a0e1"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-build.json",
-            "evidence_sha256": "312e7922fbcf84ece5d62045a35b5eb408a53bfaeeb6c775358e3ff3e89c4346"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-build.json",
+            "evidence_sha256": "07d3900ebc2e167e31474f69d172496c116eb323e1b003041551221ae20ba1ef"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-behavioral.json",
-            "evidence_sha256": "161bf768d57ee3bd3ba85e1eb17bb983bb4001f9c17a5a1c34ad13aa5a4daa34"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-behavioral.json",
+            "evidence_sha256": "26990b9aa51395387a11878af82633785f89fc53f8a02bf0b7fa1e837fabbcae"
           }
         }
       },
@@ -3545,14 +3545,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004EDB60",
             "signature": "x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))",
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-binaryninja.json",
-            "evidence_sha256": "4bc6a2ee7e91513ee54b8cbc76a7505cd5b0a0d399e54a8d97018a61bb37156b"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-binaryninja.json",
+            "evidence_sha256": "6c80230fb2c010c9a33f7302004fe4a9e31b01188d796311c226a2c54a34c413"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004EDB60",
             "signature": "x86 cdecl void*(void* context, LODSettingsRecord* (*lookup)(const char*))",
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-radare2.json",
-            "evidence_sha256": "42db4cf800567131fc5855ef6ce417d82f8f39e7d95962ec6cb9e41c904d9f12"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-radare2.json",
+            "evidence_sha256": "ca536a5617286d461f7aef532b573a02326fc5c10ea8f8402aeceae5a7b5aff2"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3561,8 +3561,8 @@
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-semantic-review.json",
-            "evidence_sha256": "b9d0ddfe2eaed606d79e8bed3360876bd3560fb940b566502a786d29321b13b4"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-semantic-review.json",
+            "evidence_sha256": "d9630028a1c00869483ae1c03786da352cdaa019bb6d3e37b6ba5b0f7cf1a0e1"
           },
           "behavioral_runner": {
             "path": "scripts/native_unicorn_runner.py",
@@ -3587,8 +3587,8 @@
             "Dyn-object registry lookup is stubbed for missing/present records; real registry behavior is not covered."
           ],
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004EDB60-build.json",
-            "evidence_sha256": "3e9c325b1a1c07fa5351b2913720bcb712d01f90b1cdd725de15adc5ef2543c7"
+            "evidence_path": "docs/fidelity/evidence/0x004edb60-build.json",
+            "evidence_sha256": "07d3900ebc2e167e31474f69d172496c116eb323e1b003041551221ae20ba1ef"
           }
         }
       },
@@ -3641,29 +3641,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-radare2.json",
-            "evidence_sha256": "c852e28ec910b9939d95ee1d6cb9ad3430da6c58f32964de456c0d3fcc0164bf",
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-radare2.json",
+            "evidence_sha256": "dc38c8e822fde0d42c698a2eedbc9cbe0b2630126b95504fa0bb5616326f3c26",
             "evidence_id": "r2:live:0x004F82B0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-binaryninja.json",
-            "evidence_sha256": "3a00281aafd4c7ae9bbb3bc92e33136a12627ffc9ebbe0a33f7bcb804340d37c",
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-binaryninja.json",
+            "evidence_sha256": "5321ef9a196af5faafa2148d178714e103560105dd0976b6d054bedc981549a5",
             "evidence_id": "bn:live:0x004F82B0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-semantic-review.json",
-            "evidence_sha256": "5d578b5bbecf88613585d269a72549760244539938d0efcb986ae3ee7a932f3c"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-semantic-review.json",
+            "evidence_sha256": "6b6e0f488b378f6ba22fd7dcb65464dff9c5c9366f9f3db1cfcb19e68a858e36"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-build.json",
-            "evidence_sha256": "da2697e5c7470ec777a2c8f687c51e5852b9bd5c94d35bbfd132e55f743a82af"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-build.json",
+            "evidence_sha256": "d6231b4d0c644fd946a08556fd137dca4df5fe28fdf82d5cdb00e088022fae6a"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-behavioral.json",
-            "evidence_sha256": "b31f3c9e863fc89a6ed3b4a851ffd8fb31a421917910ea1e0ece2279b6d3d802"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-behavioral.json",
+            "evidence_sha256": "d256abe01f086d69c1d22e237f52989f6a838d200d9b24d4c06f18d3cbcf015e"
           }
         }
       },
@@ -3686,14 +3686,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x004F82B0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-binaryninja.json",
-            "evidence_sha256": "6638350f8ab4e492d9a89e6f83c320ec9454984bbe9bf63fd386f24a5655d85e"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-binaryninja.json",
+            "evidence_sha256": "5321ef9a196af5faafa2148d178714e103560105dd0976b6d054bedc981549a5"
           },
           "radare2": {
             "evidence_id": "r2:live:0x004F82B0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-radare2.json",
-            "evidence_sha256": "e5b643d3c760e0812a5cd8f4d45595b2fc8b830356a1be2e16d0c2ec18f833cb"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-radare2.json",
+            "evidence_sha256": "dc38c8e822fde0d42c698a2eedbc9cbe0b2630126b95504fa0bb5616326f3c26"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3720,12 +3720,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-semantic-review.json",
-            "evidence_sha256": "67cf76c8dcb9147288a81734f915a23a3bb327c321721329617f28a1ced9e5b4"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-semantic-review.json",
+            "evidence_sha256": "6b6e0f488b378f6ba22fd7dcb65464dff9c5c9366f9f3db1cfcb19e68a858e36"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x004F82B0-build.json",
-            "evidence_sha256": "fd786cbe257d80899b134ac00dcf226412eedff44d533724fdffae498c8df722"
+            "evidence_path": "docs/fidelity/evidence/0x004f82b0-build.json",
+            "evidence_sha256": "d6231b4d0c644fd946a08556fd137dca4df5fe28fdf82d5cdb00e088022fae6a"
           }
         }
       },
@@ -3778,29 +3778,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-radare2.json",
-            "evidence_sha256": "2420c4e1aa9e8e915ec23e525a4c4cf84dea96be4a385816aadc61dd99dc22d2",
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-radare2.json",
+            "evidence_sha256": "ca8fbc35dc4ea2442274afbf48f846a051dcc5bb2341440ae665e55d444c1cb0",
             "evidence_id": "r2:live:0x00505E40",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-binaryninja.json",
-            "evidence_sha256": "70d6788f60046de874f59f67e93248456f2bb30f41438616516a5996733b4228",
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-binaryninja.json",
+            "evidence_sha256": "2b3a895bba08904027dab3c8dd96efbe993ae91c5a3a2adf74403c90bb2628ca",
             "evidence_id": "bn:live:0x00505E40",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-semantic-review.json",
-            "evidence_sha256": "29e51ef8a07e26b19dd1f8833b364c4dfe67fbe4f045e2b9a9acf721ae130d70"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-semantic-review.json",
+            "evidence_sha256": "1fdf6531777be85e640bdb06c46645a3149bede6f9525b829ba3c7c22f925ade"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-build.json",
-            "evidence_sha256": "02136c14c080beeace4029f51156b646b3f7944364893c87d9773c4d62b77ac5"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-build.json",
+            "evidence_sha256": "ef6dc169ee618b291e7f0b2f4e63157cf205b368a7c368737cc6e55a09a07dea"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-behavioral.json",
-            "evidence_sha256": "49a7240027be20ea949f125d47398360a367e8bb4797129f815c1407ad5ab286"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-behavioral.json",
+            "evidence_sha256": "453dbb38b527f32a6f159ae4e371bcf872e1b8e3eb2c28c7d2d10c23f83afd8e"
           }
         }
       },
@@ -3823,14 +3823,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x00505E40",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-binaryninja.json",
-            "evidence_sha256": "a4ad86200f543ad3354bc3ae1548b8b41b03b7d9d2b07b470f06d8efe7f19ae6"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-binaryninja.json",
+            "evidence_sha256": "2b3a895bba08904027dab3c8dd96efbe993ae91c5a3a2adf74403c90bb2628ca"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00505E40",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-radare2.json",
-            "evidence_sha256": "a8a6848853458fffeee6133b404513b51023c17e706c0770813bb8bd74de253e"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-radare2.json",
+            "evidence_sha256": "ca8fbc35dc4ea2442274afbf48f846a051dcc5bb2341440ae665e55d444c1cb0"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3857,12 +3857,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-semantic-review.json",
-            "evidence_sha256": "e4e0ccf8cee548bb153f0632baac442000ec505f231c9e2ba7f86369b6baa82f"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-semantic-review.json",
+            "evidence_sha256": "1fdf6531777be85e640bdb06c46645a3149bede6f9525b829ba3c7c22f925ade"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00505E40-build.json",
-            "evidence_sha256": "a0caa0cca1c09ebd4eb221e1993601f552329d213649078fe2170c36aabd4013"
+            "evidence_path": "docs/fidelity/evidence/0x00505e40-build.json",
+            "evidence_sha256": "ef6dc169ee618b291e7f0b2f4e63157cf205b368a7c368737cc6e55a09a07dea"
           }
         }
       },
@@ -3915,29 +3915,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-radare2.json",
-            "evidence_sha256": "23a111b5e46a91d3250288ad43b72d478a46e1ec4f4a255a4a05b180b9c568c9",
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-radare2.json",
+            "evidence_sha256": "0a2bbf60347b7e698f485ce66557f19789c8a0d33669d76e630a25100209d48e",
             "evidence_id": "r2:live:0x00506F00",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-binaryninja.json",
-            "evidence_sha256": "bc880094e57d00f2e79936e59d9bf69ef66afa115643d69b3e32a67d87787083",
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-binaryninja.json",
+            "evidence_sha256": "78c3ad04097e22ab7df73c0d039242bf51410990ee77f58ea75577bfaa1ab5de",
             "evidence_id": "bn:live:0x00506F00",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-semantic-review.json",
-            "evidence_sha256": "624abb1f35101aebe2fb61ccd5decd4ea3daadc2dd30ed73d0a6be615d724df3"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-semantic-review.json",
+            "evidence_sha256": "76e82555e1fda5cffb682a3fc56f084c6ec32e89e427255a191b5f03ed372bc1"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-build.json",
-            "evidence_sha256": "d9b53dcd1dcd07c3efd4b9c8de558bd3bf6db4203a5b90d10c0dfc6726270566"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-build.json",
+            "evidence_sha256": "544cac25c684bd3a2fb8f391b1e9bcdf1e973c758e690f4543c99886a6ede4ed"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-behavioral.json",
-            "evidence_sha256": "d203135dae9ffcc44f4b682022703167ce3b5a10d1f6172ca202b00f4f181052"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-behavioral.json",
+            "evidence_sha256": "5d0fc58eb3af63baaa3a692474052a6f8df5bd5887aab75fa36c246f458618be"
           }
         }
       },
@@ -3960,14 +3960,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x00506F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-binaryninja.json",
-            "evidence_sha256": "8dfcc0ba3efb22b4177309440c982c33e0f3f7a5c47f2a3d843b0ce65a78a05c"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-binaryninja.json",
+            "evidence_sha256": "78c3ad04097e22ab7df73c0d039242bf51410990ee77f58ea75577bfaa1ab5de"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00506F00",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-radare2.json",
-            "evidence_sha256": "93ac0e94de8ba8cb3391e6126d20f82e163d09049aa3211727404503ecfbc2ba"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-radare2.json",
+            "evidence_sha256": "0a2bbf60347b7e698f485ce66557f19789c8a0d33669d76e630a25100209d48e"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -3994,12 +3994,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-semantic-review.json",
-            "evidence_sha256": "fc6d7b3d1b6be411294bc4d314ce7c51431c1465a25418890f72ae3da2e1fc50"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-semantic-review.json",
+            "evidence_sha256": "76e82555e1fda5cffb682a3fc56f084c6ec32e89e427255a191b5f03ed372bc1"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00506F00-build.json",
-            "evidence_sha256": "81026a44158b289927583ade9638ac01dd31ee5516000e17dcfd8a97fc181ba2"
+            "evidence_path": "docs/fidelity/evidence/0x00506f00-build.json",
+            "evidence_sha256": "544cac25c684bd3a2fb8f391b1e9bcdf1e973c758e690f4543c99886a6ede4ed"
           }
         }
       },
@@ -4053,24 +4053,24 @@
           "selected_decompiler": "binary_ninja",
           "radare2": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-radare2.json",
-            "evidence_sha256": "7d619eb70b26b0172848bb51e3e506f8d362cffbfbf37a7e6b3a708779d5c871",
+            "evidence_sha256": "43478146563656ba010bbb5254db96d5cb27dab670a4ae00f27e2a7bdfae9b9f",
             "evidence_id": "r2:live:0x00510010",
             "signature": "not restated"
           },
           "binary_ninja": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-binaryninja.json",
-            "evidence_sha256": "76125c2d26db37210a935274055d51fb22fe46026c9e121be7d8b1e2464ca08a",
+            "evidence_sha256": "d229fac900b1ee4c4e17bc1c8551994425145a76263cf1cc30ea72baf71edac5",
             "evidence_id": "bn:live:0x00510010",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-semantic-review.json",
-            "evidence_sha256": "32d9ca5dd4a38ebfaef9d1874c9fca31999a286b4f6cf1342a4e3d6729714c01"
+            "evidence_sha256": "adc69e5ebbc0b9f59b4e648a403e7576f0fa522d84845fa1ef79b4466790a4b7"
           },
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-build.json",
-            "evidence_sha256": "2c369658aec7d7356f8c892ac2bf6529c437944b9da22f0065fc85fc04f79dce"
+            "evidence_sha256": "9a948b80e29b4c1f5977fc7eb5e20c99152f7d7b324bebf8e27a9839e7b486e5"
           },
           "behavioral": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-behavioral.json",
@@ -4098,13 +4098,13 @@
             "evidence_id": "bn:live:0x00510010",
             "signature": "unknown",
             "evidence_path": "docs/fidelity/evidence/0x00510010-binaryninja.json",
-            "evidence_sha256": "61498ae473c1b41d775147b4ceb452488440be12438927f36b6e439365b926e4"
+            "evidence_sha256": "d229fac900b1ee4c4e17bc1c8551994425145a76263cf1cc30ea72baf71edac5"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00510010",
             "signature": "unknown",
             "evidence_path": "docs/fidelity/evidence/0x00510010-radare2.json",
-            "evidence_sha256": "17db32e9ac372cc56b818aabf774f7186317ef13852991766c1b21949bb1a469"
+            "evidence_sha256": "43478146563656ba010bbb5254db96d5cb27dab670a4ae00f27e2a7bdfae9b9f"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -4132,11 +4132,11 @@
           },
           "semantic_review": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-semantic-review.json",
-            "evidence_sha256": "c6f8ab727d953a039feab1228bbaa36fe7791147a66017e0226cc741772ebf26"
+            "evidence_sha256": "adc69e5ebbc0b9f59b4e648a403e7576f0fa522d84845fa1ef79b4466790a4b7"
           },
           "build": {
             "evidence_path": "docs/fidelity/evidence/0x00510010-build.json",
-            "evidence_sha256": "db174b840d3f5ff3a0084be1e8da4352033e3c8d9fee15d8b224e5c096a5e328"
+            "evidence_sha256": "9a948b80e29b4c1f5977fc7eb5e20c99152f7d7b324bebf8e27a9839e7b486e5"
           }
         }
       },
@@ -4189,28 +4189,28 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-radare2.json",
-            "evidence_sha256": "0d0e9e6dde2456ec3146a3ddc847b6f7145fdbbd98800d39fe9a6186202a6d30",
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-radare2.json",
+            "evidence_sha256": "b1c087d5f0a6202bcda54f9939d2c8ccd622357cf0f58029594064e3f90e65a4",
             "evidence_id": "r2:live:0x00512C30",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-binaryninja.json",
-            "evidence_sha256": "1d0a93a9c718e3841968d01abbe4d63933ab07a7c3be2ade5a2de7404fefb7ea",
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-binaryninja.json",
+            "evidence_sha256": "2027cbf54db93e32d796c1fc1f7bd13d3b27542f5cc9be39613c34a07133a72f",
             "evidence_id": "bn:live:0x00512C30",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-semantic-review.json",
-            "evidence_sha256": "646eaf9a08b0b80522d92067b8a2e344812d96e4a2a301d45c8423553016c341"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-semantic-review.json",
+            "evidence_sha256": "8504e839a97fdbad26ac73ce22f57b3b950dc331712f7ae214f12647e35bfe4a"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-build.json",
-            "evidence_sha256": "eb2db91ce70c52793417aca7bd71ee00ef9a192a89577398afe8e2138f90f65f"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-build.json",
+            "evidence_sha256": "fbc53fe40f6a98041fce6105344dc17da6af6f9189e57eff2dab1f6ae37c3550"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-behavioral.json",
             "evidence_sha256": "265312d51c3e943c2a72705c70838e9631d567e94a1014a57cfd59d3622d7a7f"
           }
         }
@@ -4234,14 +4234,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x00512C30",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-binaryninja.json",
-            "evidence_sha256": "d2b92f35dc33172d08bfb4840dacbd7bc3cc9cb2c74702d8598c9996c088b5a2"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-binaryninja.json",
+            "evidence_sha256": "2027cbf54db93e32d796c1fc1f7bd13d3b27542f5cc9be39613c34a07133a72f"
           },
           "radare2": {
             "evidence_id": "r2:live:0x00512C30",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-radare2.json",
-            "evidence_sha256": "d0fa8f8649d3b08b907fb4c319d507667f5eab2d79590c9cdec1bb56d10aa6d5"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-radare2.json",
+            "evidence_sha256": "b1c087d5f0a6202bcda54f9939d2c8ccd622357cf0f58029594064e3f90e65a4"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -4268,12 +4268,12 @@
             "timeout_seconds": 300
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-semantic-review.json",
-            "evidence_sha256": "814fb161a50f9266a3bb23e4d488b31ef039e65c0323db07f35acdf66cdc4f89"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-semantic-review.json",
+            "evidence_sha256": "8504e839a97fdbad26ac73ce22f57b3b950dc331712f7ae214f12647e35bfe4a"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x00512C30-build.json",
-            "evidence_sha256": "46c73c270f7cec7f832ea8c80632d98273fbb733359a0eee17034f9a5dd8a6e0"
+            "evidence_path": "docs/fidelity/evidence/0x00512c30-build.json",
+            "evidence_sha256": "fbc53fe40f6a98041fce6105344dc17da6af6f9189e57eff2dab1f6ae37c3550"
           }
         }
       },
@@ -4326,29 +4326,29 @@
           },
           "selected_decompiler": "binary_ninja",
           "radare2": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-radare2.json",
-            "evidence_sha256": "ecb7cd401a6f1c485d2b89a2ed207f091a4aa06849d1a65151eab271001d7ae3",
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-radare2.json",
+            "evidence_sha256": "1079bf717e8ed246085ae078a3114aace4472aec4ba9ac0e72ac6f18f479240a",
             "evidence_id": "r2:live:0x005175A0",
             "signature": "not restated"
           },
           "binary_ninja": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-binaryninja.json",
-            "evidence_sha256": "0ed331940d4d2b8be30d0790c3c574f5bfddbea0ce4b48d66378c1f0ddc59e00",
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-binaryninja.json",
+            "evidence_sha256": "f6f8bd5ddffc6895ae42d615456a15b4176d0aeb777384bfe8a17b4a2bacd642",
             "evidence_id": "bn:live:0x005175A0",
             "signature": "not restated"
           },
           "cfg_similarity": 1.0,
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-semantic-review.json",
-            "evidence_sha256": "16c72e44a7679eb28452f567cf03f2a208b1efbc0328c4c134d500310685d67d"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-semantic-review.json",
+            "evidence_sha256": "45a9788a0a03082e0db7b44e4ed437e09985a09cd611eb092c590b2208421406"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-build.json",
-            "evidence_sha256": "dd364135273586dc48b618fa37cc914d53778f3ec3e99a9df342c9f7054d4093"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-build.json",
+            "evidence_sha256": "0d1b5abca614928aecc763ef09580b5b0cbeb3ee222a0e2a22299c13e7a27d36"
           },
           "behavioral": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-behavioral.json",
-            "evidence_sha256": "c045301946ccf6f62bcc42c731ea29ab3eb706ab280d45bfa1039dd8571b84d1"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-behavioral.json",
+            "evidence_sha256": "068576dcfbebf74810557ebaef67f5f27f57a8b6d747124d08fe36aa1eea6de2"
           }
         }
       },
@@ -4371,14 +4371,14 @@
           "binary_ninja": {
             "evidence_id": "bn:live:0x005175A0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-binaryninja.json",
-            "evidence_sha256": "d72de653f458afa566199a05e789ecc57fcea49ad868973fe761b9ff2443cf74"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-binaryninja.json",
+            "evidence_sha256": "f6f8bd5ddffc6895ae42d615456a15b4176d0aeb777384bfe8a17b4a2bacd642"
           },
           "radare2": {
             "evidence_id": "r2:live:0x005175A0",
             "signature": "unknown",
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-radare2.json",
-            "evidence_sha256": "b703c09f6481762865000b1974514a0ead6286d35e4e11a85f4eaead8796cd10"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-radare2.json",
+            "evidence_sha256": "1079bf717e8ed246085ae078a3114aace4472aec4ba9ac0e72ac6f18f479240a"
           },
           "signature_comparison": {
             "reviewed": true,
@@ -4387,7 +4387,7 @@
           },
           "cfg_similarity": 1.0,
           "runtime_tests": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-angr-behavioral.json",
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-angr-behavioral.json",
             "evidence_sha256": "53925df4ed09e8ce7e2e3e7126b341364f44cebde023596c1e9d57f1bb2b688a"
           },
           "behavioral_runner": {
@@ -4409,12 +4409,12 @@
             "timeout_seconds": 240
           },
           "semantic_review": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-semantic-review.json",
-            "evidence_sha256": "a4fe400bee3b10dfe13a4e62a224acbafcd0828e855f7e15eb08e0bcaae90ce6"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-semantic-review.json",
+            "evidence_sha256": "45a9788a0a03082e0db7b44e4ed437e09985a09cd611eb092c590b2208421406"
           },
           "build": {
-            "evidence_path": "docs/fidelity/evidence/0x005175A0-build.json",
-            "evidence_sha256": "f2718f1659dd30de602a3ab93ca6b8cb90da0a6cb3fd6e14cf97acd48ef924df"
+            "evidence_path": "docs/fidelity/evidence/0x005175a0-build.json",
+            "evidence_sha256": "0d1b5abca614928aecc763ef09580b5b0cbeb3ee222a0e2a22299c13e7a27d36"
           },
           "scope": {
             "path": "docs/fidelity/scopes/0x005175A0.json",

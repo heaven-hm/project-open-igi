@@ -7,7 +7,7 @@
   "signature": "x86 cdecl char*(char* dst, int32_t max_len, char* path)",
   "signature_provenance": "Normalized from Ghidra pseudocode char*(char*, int, char*) and three 32-bit stack parameters; int is 32-bit on this PE32 x86 target.",
   "rea_evidence_id": "ev_efc7fd53f5d4d8cd709ec8454d69fbb028a7f01283964b0877bf137dfd5482a4",
-  "rea_evidence_path": "docs/fidelity/evidence/0x004B1E90-ghidra-rea.json",
+  "rea_evidence_path": "docs/fidelity/evidence/0x004b1e90-ghidra-rea.json",
   "rea_evidence_sha256": "0aa1a4937a5bfa28322bd7a9f486ad0073f92f8fe0a2938c66219f22c046fc7d",
   "body_ranges": [
     {

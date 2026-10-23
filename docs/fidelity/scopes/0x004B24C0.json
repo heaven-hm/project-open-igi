@@ -1,8 +1,8 @@
 {
   "evidence": [
-    "docs/fidelity/evidence/0x004B24C0-angr-behavioral.json",
-    "docs/fidelity/evidence/0x004B24C0-semantic-review.json",
-    "docs/fidelity/evidence/0x004B24C0-build.json"
+    "docs/fidelity/evidence/0x004b24c0-angr-behavioral.json",
+    "docs/fidelity/evidence/0x004b24c0-semantic-review.json",
+    "docs/fidelity/evidence/0x004b24c0-build.json"
   ],
   "excluded": [
     "Arbitrary original game assets and every malformed/truncated-input path",

@@ -1,0 +1,119 @@
+{
+ "schema_version": 1,
+ "kind": "native-disassembly",
+ "tool": "radare2",
+ "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+ "function_entry": "0x004B74D0",
+ "signature": "not restated",
+ "cfg": {
+  "nodes": [
+   {
+    "address": "0x004B74D0"
+   },
+   {
+    "address": "0x004B74DA"
+   },
+   {
+    "address": "0x004B74E2"
+   },
+   {
+    "address": "0x004B74F0"
+   },
+   {
+    "address": "0x004B74FB"
+   },
+   {
+    "address": "0x004B750E"
+   },
+   {
+    "address": "0x004B7512"
+   },
+   {
+    "address": "0x004B7516"
+   },
+   {
+    "address": "0x004B7524"
+   },
+   {
+    "address": "0x004B752E"
+   }
+  ],
+  "edges": [
+   {
+    "source": "0x004B74D0",
+    "target": "0x004B752E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74D0",
+    "target": "0x004B74DA",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74DA",
+    "target": "0x004B752E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74DA",
+    "target": "0x004B74E2",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74E2",
+    "target": "0x004B7524",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74E2",
+    "target": "0x004B74F0",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74F0",
+    "target": "0x004B7524",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74F0",
+    "target": "0x004B74FB",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74FB",
+    "target": "0x004B7524",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B74FB",
+    "target": "0x004B750E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B750E",
+    "target": "0x004B7524",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B750E",
+    "target": "0x004B7512",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B7512",
+    "target": "0x004B752E",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B7512",
+    "target": "0x004B7516",
+    "kind": "conditional"
+   },
+   {
+    "source": "0x004B7524",
+    "target": "0x004B752E",
+    "kind": "unconditional"
+   }
+  ]
+ }
+}

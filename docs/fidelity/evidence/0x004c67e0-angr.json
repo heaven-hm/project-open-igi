@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "kind": "angr-analysis",
+  "tool": "angr",
+  "angr_version": "10.0.4.post1",
+  "analysis": "CFGFast",
+  "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "architecture": "X86",
+  "bits": 32,
+  "mapped_base": "0x400000",
+  "function_entry": "0x004C67E0",
+  "function": {
+    "result": "pass",
+    "function_entry": "0x004C67E0",
+    "nodes": ["0x004C67E0", "0x004C6801", "0x004C6808", "0x004C6823", "0x004C682A", "0x004C6831", "0x004C6836"],
+    "block_count": 7,
+    "has_unresolved_jumps": false,
+    "returning": true
+  },
+  "limitations": ["CFGFast is approximate static analysis and does not establish semantic or behavioral equivalence."]
+}

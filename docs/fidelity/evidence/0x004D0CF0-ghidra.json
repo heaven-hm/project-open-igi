@@ -2,10 +2,9 @@
   "schema_version": 1,
   "kind": "native-disassembly",
   "tool": "ghidra",
-  "function_entry": "0x004D0CF0",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "signature": "undefined FUN_004d0cf0()",
-  "evidence_id": "ev_071c88c9c6571c37506fab9854e9b720a468356cf4f915755e1a0d6747abc601",
+  "function_entry": "0x004D0CF0",
+  "signature": "int32_t(int32_t arg1, int32_t arg2)",
   "cfg": {
     "nodes": [
       {
@@ -14,17 +13,16 @@
     ],
     "edges": []
   },
-  "instructions": [
-    "0x4d0cf0: MOV EAX, dword ptr [ESP + 0x4]",
-    "0x4d0cf4: MOV ECX, dword ptr [EAX + 0xc]",
-    "0x4d0cf7: MOV EAX, dword ptr [ESP + 0x8]",
-    "0x4d0cfb: MOV EDX, dword ptr [ECX + 0xc]",
-    "0x4d0cfe: MOV ECX, EAX",
-    "0x4d0d00: SHL ECX, 0x4",
-    "0x4d0d03: MOV EDX, dword ptr [EDX + 0x8c]",
-    "0x4d0d09: ADD ECX, EAX",
-    "0x4d0d0b: LEA EAX, [EDX + ECX*0x4]",
-    "0x4d0d0e: RET"
-  ],
-  "observation_path": "docs/fidelity/evidence/0x004D0CF0-ghidra-observation.json"
+  "evidence_id": "ev_e6afef5e2623b1aabfd234e70891511594e02b468fc8d5c7c93d83d2b64d824b",
+  "observed": {
+    "body_bytes": 31,
+    "instructions": 10,
+    "basic_blocks": 1,
+    "conditional_branches": 0,
+    "calls": 0,
+    "pseudocode": "int FUN_004d0cf0(int param_1,int param_2) { return *(int *)(*(int *)(*(int *)(param_1 + 0xc) + 0xc) + 0x8c) + param_2 * 0x44; }",
+    "limitations": [
+      "Ghidra 12.1.2 REA MCP data is from the session local analysis snapshot; it was not freshly imported on this call."
+    ]
+  }
 }
