@@ -223,7 +223,8 @@ def compare(retail: dict, candidate: dict, comparability: dict | None = None) ->
     }
 
 
-def start_with_arguments(executable: str, level: int | None, extra_arguments: tuple[str, ...] = ()):
+def start_with_arguments(executable: str, level: int | None, extra_arguments: tuple[str, ...] = (),
+                         workdir: Path | None = None):
     """Launch an image with the retail window/level words plus extra scene modes.
 
     A missing level launches the front end instead of a level: retail then shows its
@@ -234,13 +235,15 @@ def start_with_arguments(executable: str, level: int | None, extra_arguments: tu
     return nfd.subprocess.Popen(
         ["env", "LC_ALL=C", "LANG=C", nfd.vnb.WINE, "--bottle", nfd.vnb.BOTTLE, executable,
          *words, *extra_arguments],
-        cwd=Path(nfd.vnb.GAME_DIR), stdout=nfd.subprocess.DEVNULL,
+        cwd=Path(workdir) if workdir is not None else Path(nfd.vnb.GAME_DIR),
+        stdout=nfd.subprocess.DEVNULL,
         stderr=nfd.subprocess.DEVNULL, env=environment)
 
 
 def capture(process_name: str, executable: str, addresses: list[str], observe: float,
             settle: float, level: int | None, result: dict,
-            extra_arguments: tuple[str, ...] = (), spawn: bool = False) -> None:
+            extra_arguments: tuple[str, ...] = (), spawn: bool = False,
+            workdir: Path | None = None) -> None:
     """Start one image and observe the selected natives.
 
     The retail vocabulary is "window levelN"; the candidate also understands
@@ -250,8 +253,8 @@ def capture(process_name: str, executable: str, addresses: list[str], observe: f
     """
     process = None
     if not spawn:
-        if extra_arguments or level is None:
-            process = start_with_arguments(executable, level, extra_arguments)
+        if extra_arguments or level is None or workdir is not None:
+            process = start_with_arguments(executable, level, extra_arguments, workdir)
         else:
             process = nfd.vnb.start_game(executable, level, game_directory=Path(nfd.vnb.GAME_DIR))
     try:
@@ -328,6 +331,15 @@ def main() -> int:
                         help="reuse the retail observations of an earlier capture whose "
                              "retail image digest still matches, instead of relaunching retail")
     parser.add_argument("--settle", type=float, default=30.0)
+    parser.add_argument("--retail", type=Path, default=None,
+                        help="retail image to observe (defaults to igi.exe in the game folder); a "
+                             "symlinked copy with one asset missing exercises the error path")
+    parser.add_argument("--retail-only", action="store_true",
+                        help="capture the retail side only; the result is a retail observation "
+                             "source for merge_mvp_captures.py, not a paired verdict")
+    parser.add_argument("--retail-workdir", type=Path, default=None,
+                        help="start retail from this working directory instead of the game folder, "
+                             "to exercise the engine's own missing-asset error path")
     parser.add_argument("--front-end", action="store_true",
                         help="launch retail without a level so its main menu runs; the graphic "
                              "option records are read and written there")
@@ -383,6 +395,8 @@ def main() -> int:
     candidate = args.candidate.resolve()
     table = candidate_symbol_table(candidate)
     retail = Path(nfd.vnb.GAME_DIR) / "igi.exe"
+    if args.retail:
+        retail = args.retail.resolve()
 
     plan = []
     unlinked = []
@@ -443,18 +457,22 @@ def main() -> int:
         print(f"capturing retail igi.exe ({scene}) ...", flush=True)
         capture("igi.exe", "Z:" + str(retail).replace("/", "\\"),
                 [item["retail_va"] for item in plan], args.observe, args.settle,
-                None if args.front_end else args.level, retail_result, spawn=args.spawn)
+                None if args.front_end else args.level, retail_result, spawn=args.spawn,
+                workdir=args.retail_workdir)
         print(f"retail: {len(retail_result.get('observed') or {})} natives observed"
               f" error={retail_result.get('error')}", flush=True)
 
+    if args.retail_only:
+        candidate_result = {}
     print("retail closed; capturing the candidate ...", flush=True)
-    with stage_candidate(candidate, retail.resolve().parent) as staged:
-        nfd.os.environ["IGI_SCENE_LOG"] = "open-igi-scene.log"
-        candidate_window = args.observe_candidate if args.observe_candidate else args.observe
-        capture(staged.name.lower(), "Z:" + str(staged).replace("/", "\\"),
-                [item["candidate_va"] for item in plan], candidate_window, args.settle,
-                args.level, candidate_result,
-                extra_arguments=tuple(args.candidate_args or ()), spawn=args.spawn)
+    if not args.retail_only:
+        with stage_candidate(candidate, retail.resolve().parent) as staged:
+            nfd.os.environ["IGI_SCENE_LOG"] = "open-igi-scene.log"
+            candidate_window = args.observe_candidate if args.observe_candidate else args.observe
+            capture(staged.name.lower(), "Z:" + str(staged).replace("/", "\\"),
+                    [item["candidate_va"] for item in plan], candidate_window, args.settle,
+                    args.level, candidate_result,
+                    extra_arguments=tuple(args.candidate_args or ()), spawn=args.spawn)
     print(f"candidate: {len(candidate_result.get('observed') or {})} natives observed"
           f" error={candidate_result.get('error')}", flush=True)
 
