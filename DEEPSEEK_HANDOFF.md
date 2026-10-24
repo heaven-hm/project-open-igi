@@ -1086,3 +1086,21 @@ handler-table presence test, bit per non-0xFF phase, `or ah,0x80`), so only the 
 
 Do not read "built 0 record(s)" as "nothing to do": for an address outside the catalog it always means the script
 never looked.
+
+## Correction to the round-177 "catalog gap" explanation (round 178)
+
+Round 177 concluded that 0x004014E0 cannot get CFG artifacts because it is missing from the v4 catalog that
+build_native_records.py iterates. That explanation is NOT established, and the check below contradicts part of it:
+
+    ng.implementation_natives(Path('engine/src/retail/core/native_4014b0.cpp'), ...) -> []
+    ng.implementation_natives(Path('engine/src/retail/core/native_4014e0.cpp'), ...) -> []
+
+Both files parse to no natives at all, yet 0x00401 4B0 DID receive artifacts from the same script. So the provenance
+parser is not what produced that record, and "the catalog lacks the address" was an inference from reading the loop at
+line 215, not from observing the candidate list. The file provenance blocks for both files have the same shape ("VA
+0x0040XXXX-0x0040YYYY (N bytes)"), so format divergence is not the difference either.
+
+What is actually known: the script prints nothing at all for 0x004014E0 and "built 0 record(s)"; for 0x004014B0 it
+printed a BN/r2 block comparison and wrote artifacts. The discriminator is somewhere in discover()/canonical_source()
+or in how the address is matched, and it has not been found. Do not repeat the catalog claim as fact; the next
+investigation step is to print `discover()` and check whether 0x004014E0 appears in the candidate list at all.
