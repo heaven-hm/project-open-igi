@@ -1035,3 +1035,23 @@ two words into a one-argument prototype (the x86 cdecl caller cleans, so it link
 confirm for each of the nine natives that its retail body actually reads a second argument at [esp+8]; handlers that
 read only [esp+4] are still ABI-compatible with a two-argument type (they simply ignore the second), so the type change
 is safe for them and only the call sites' cleanliness has to be right.
+
+## The FrameHandler ABI change is NOT mechanical: the second argument is unknown at three dispatch sites (round 172)
+
+Widening the type to `void (*)(void*, std::uint32_t)` produced 13 compile errors across three files, and that
+enumeration is itself the finding. The errors split into two groups:
+
+1. Six registered handlers must gain the second parameter: game_flow.cpp:72-74 (Level_Start, Game_Setup,
+   Game_DeleteHandler) and flow.cpp:267-269 (Flow_Start, Flow_RunHandler_Handler, Flow_Delete_Handler). Mechanical -
+   the retail bodies of these handlers do not read the second argument, so they ignore it.
+2. Three dispatch sites CALL a handler with one argument and the compiler now demands the second:
+   flow.cpp:147 (0x00402365), flow.cpp:193 and flow.cpp:238. **What retail pushes there is not established.**
+
+Point 2 is the blocker. The allocator wrapper's second argument is its own third argument (proven in section 17), but
+the Flow walk at 0x00402365 is a different dispatcher and no evidence sheet states what it pushes as the second word.
+Filling in 0 would be an invented constant inside a native's flow - rule 1/10.13 - and the tree would then look
+complete while the dispatch ABI is wrong.
+
+So the change was reverted and the tree is green again. Before the ABI lands, each of the three Flow dispatch sites
+must be transcribed from its own retail instructions: 0x00402365 in the Flow node walk, plus the two in
+Flow_RunHandler. That is the next analysis task, not a compilation exercise.
