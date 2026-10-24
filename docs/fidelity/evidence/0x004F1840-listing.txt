@@ -1,0 +1,110 @@
+#
+addr: 0x004f1840
+name: fcn.004f1840
+size: 123
+is-pure: false
+realsz: 123
+stackframe: 12
+callconv: cdecl
+cyclic-cost: 48
+cyclomatic-complexity: 1
+bits: 32
+type: fcn [NEW]
+num-bbs: 1
+num-instrs: 30
+edges: 0
+minaddr: 0x004f1840
+maxaddr: 0x004f18bb
+is-lineal: true
+end-bbs: 1
+maxbbins: 30
+midbbins: 30.00
+ratbbins: 1.00
+noreturn: false
+recursive: false
+in-degree: 0
+out-degree: 8
+locals: 0
+args: 0
+
+/ 123: fcn.004f1840 ();
+|           0x004f1840      33c0           xor eax, eax
+|           0x004f1842      57             push edi
+|           0x004f1843      a3c858a700     mov dword [0xa758c8], eax   ; [0xa758c8:4]=0
+|           0x004f1848      b9c0040000     mov ecx, 0x4c0              ; 1216
+|           0x004f184d      a3cc58a700     mov dword [0xa758cc], eax   ; [0xa758cc:4]=0
+|           0x004f1852      bfe058a700     mov edi, 0xa758e0
+|           0x004f1857      a3d058a700     mov dword [0xa758d0], eax   ; [0xa758d0:4]=0
+|           0x004f185c      f3ab           rep stosd dword es:[edi], eax
+|           0x004f185e      50             push eax
+|           0x004f185f      a3d458a700     mov dword [0xa758d4], eax   ; [0xa758d4:4]=0
+|           0x004f1864      e857fff0ff     call fcn.004017c0
+|           0x004f1869      6a00           push 0
+|           0x004f186b      a2e4e05400     mov byte [0x54e0e4], al     ; [0x54e0e4:1]=255
+|           0x004f1870      e84bfff0ff     call fcn.004017c0
+|           0x004f1875      83c408         add esp, 8
+|           0x004f1878      a2e5e05400     mov byte [0x54e0e5], al     ; [0x54e0e5:1]=255
+|           0x004f187d      e89e020000     call fcn.004f1b20
+|           0x004f1882      a2ebe05400     mov byte [0x54e0eb], al     ; [0x54e0eb:1]=255
+|           0x004f1887      e894020000     call fcn.004f1b20
+|           0x004f188c      a2eae05400     mov byte [0x54e0ea], al     ; [0x54e0ea:1]=255
+|           0x004f1891      e88a020000     call fcn.004f1b20
+|           0x004f1896      a2e7e05400     mov byte [0x54e0e7], al     ; [0x54e0e7:1]=255
+|           0x004f189b      e880020000     call fcn.004f1b20
+|           0x004f18a0      a2e8e05400     mov byte [0x54e0e8], al     ; [0x54e0e8:1]=255
+|           0x004f18a5      e876020000     call fcn.004f1b20
+|           0x004f18aa      a2e9e05400     mov byte [0x54e0e9], al     ; [0x54e0e9:1]=255
+|           0x004f18af      e86c020000     call fcn.004f1b20
+|           0x004f18b4      a2e6e05400     mov byte [0x54e0e6], al     ; [0x54e0e6:1]=255
+|           0x004f18b9      5f             pop edi
+\           0x004f18ba      c3             ret
+            0x004f18bb      90             nop
+            0x004f18bc      90             nop
+            0x004f18bd      90             nop
+            0x004f18be      90             nop
+            0x004f18bf      90             nop
+            0x004f18c0      a0ebe05400     mov al, byte [0x54e0eb]     ; [0x54e0eb:1]=255
+            0x004f18c5      50             push eax
+            0x004f18c6      e885020000     call 0x4f1b50
+            0x004f18cb      8a0deae05400   mov cl, byte [0x54e0ea]     ; [0x54e0ea:1]=255
+            0x004f18d1      51             push ecx
+            0x004f18d2      e879020000     call 0x4f1b50
+            0x004f18d7      8a15e7e05400   mov dl, byte [0x54e0e7]     ; [0x54e0e7:1]=255
+            0x004f18dd      52             push edx
+            0x004f18de      e86d020000     call 0x4f1b50
+            0x004f18e3      a0e8e05400     mov al, byte [0x54e0e8]     ; [0x54e0e8:1]=255
+            0x004f18e8      50             push eax
+            0x004f18e9      e862020000     call 0x4f1b50
+            0x004f18ee      8a0de9e05400   mov cl, byte [0x54e0e9]     ; [0x54e0e9:1]=255
+            0x004f18f4      51             push ecx
+            0x004f18f5      e856020000     call 0x4f1b50
+            0x004f18fa      8a15e6e05400   mov dl, byte [0x54e0e6]     ; [0x54e0e6:1]=255
+            0x004f1900      52             push edx
+            0x004f1901      e84a020000     call 0x4f1b50
+            0x004f1906      0cff           or al, 0xff                 ; 255
+            0x004f1908      a2ebe05400     mov byte [0x54e0eb], al     ; [0x54e0eb:1]=255
+            0x004f190d      a2eae05400     mov byte [0x54e0ea], al     ; [0x54e0ea:1]=255
+            0x004f1912      a2e7e05400     mov byte [0x54e0e7], al     ; [0x54e0e7:1]=255
+            0x004f1917      a2e8e05400     mov byte [0x54e0e8], al     ; [0x54e0e8:1]=255
+            0x004f191c      a2e9e05400     mov byte [0x54e0e9], al     ; [0x54e0e9:1]=255
+            0x004f1921      a2e6e05400     mov byte [0x54e0e6], al     ; [0x54e0e6:1]=255
+            0x004f1926      a0e4e05400     mov al, byte [0x54e0e4]     ; [0x54e0e4:1]=255
+            0x004f192b      50             push eax
+            0x004f192c      e88ffff0ff     call 0x4018c0
+            0x004f1931      8a0de5e05400   mov cl, byte [0x54e0e5]     ; [0x54e0e5:1]=255
+            0x004f1937      51             push ecx
+            0x004f1938      e883fff0ff     call 0x4018c0
+            0x004f193d      b0ff           mov al, 0xff                ; 255
+            0x004f193f      83c420         add esp, 0x20
+            0x004f1942      a2e4e05400     mov byte [0x54e0e4], al     ; [0x54e0e4:1]=255
+            0x004f1947      a2e5e05400     mov byte [0x54e0e5], al     ; [0x54e0e5:1]=255
+            0x004f194c      c3             ret
+            0x004f194d      90             nop
+            0x004f194e      90             nop
+            0x004f194f      90             nop
+            0x004f1950      56             push esi
+            0x004f1951      8b742408       mov esi, dword [esp + 8]
+            0x004f1955      8bc6           mov eax, esi
+            0x004f1957      6a04           push 4                      ; 4
+            0x004f1959      c1e004         shl eax, 4
+            0x004f195c      83c00c         add eax, 0xc                ; 12

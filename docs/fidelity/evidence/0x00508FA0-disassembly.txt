@@ -1643,3 +1643,23 @@ then revisiting it.
 
 This also explains the recurring "unowned global" blocker across the arc: it was never scarce storage
 - it was always ordering.
+
+### State routine entry recovered: 0x4F1840 (123 B, 1 block, 30 instructions)
+
+Boundary found without a runtime probe this time: padding search `/x c3909090` located a `ret`+nop
+at `0x4F1835`, nops run to `0x4F183F`, and the next instruction is `xor eax,eax` at `0x4F1840` -
+so the routine owning the `0x54E0E7` state bytes starts at **0x4F1840**.
+
+```
+0x4F1840-0x4F18BB approx   123 bytes, 1 block, 30 instructions, 3 rets inside
+calls: 6x 0x4F1B50, 6x 0x4F1B20, 2x 0x4018C0 (landed), 2x 0x4017C0 (transcribed)
+```
+
+Listing saved as `docs/fidelity/evidence/0x004F1840-listing.txt`. Note the writers at `0x4F1896`
+and `0x4F1912` mean at least one more routine follows (0x4F1912 is beyond this extent), so the
+`0x4F1x` state cluster is several small routines, not one.
+
+Remaining new dependencies: `0x4F1B20` and `0x4F1B50` (both MISSING, likely further small getters of
+the same family). Useful process note: the padding-scan heuristic worked here where seeding failed,
+so the boundary technique that reliably works on this image is "find the preceding `c3 90 90 90`,
+then skip nops" - cheaper than a runtime probe.
