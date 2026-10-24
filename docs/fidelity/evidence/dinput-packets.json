@@ -1,0 +1,14 @@
+{
+  "DINPUT-LAYER.md": {
+    "sha256": "72b1ee67246a5d357ae447529f3b996c2cf2bc3c5403d731e327f7972692a2e0",
+    "bytes": 27998
+  },
+  "DINPUT-CALLBACKS.md": {
+    "sha256": "c5f59fa88dca8d61e64e6e1d4278dcfd0b82d146e027f92e629d7701db36726c",
+    "bytes": 97259
+  },
+  "DINPUT-BODIES.md": {
+    "sha256": "cef2c71b5a2dc5a5474eb54ed33d5e85528b8bc64a0787c2eb4be1f512ced662",
+    "bytes": 46193
+  }
+}
