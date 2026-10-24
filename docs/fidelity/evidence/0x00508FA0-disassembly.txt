@@ -1258,3 +1258,25 @@ Plan is now fully serialized and each step is a few bytes:
 3. transcribe the already-decoded `0x4AF810` (78 B, 3 blocks);
 4. transcribe the already-decoded `0x4F9DF0` (120 B, 7 blocks);
 5. write `0x508FA0` (755 B, 1 block, listing already captured) and the `0x508F80` thunk.
+
+### 0x4AF810 complete decode (warning log emitter, 78 B, 3 blocks)
+
+```
+if (g_936274 == 0) return;                       ; 0x4AF817 je -> ret at 0x4AF85D
+push edi
+0x4A53B3(0x00A84640, "Warning: \n\n")            ; prefix into the shared buffer
+ecx = arg1 (format); eax = &arg2 (varargs)       ; [esp+0x10] / lea [esp+0x14]
+push &arg2; push ecx; edi = 0x00A84640
+strlen(buffer) -> ecx = buffer + len
+push (buffer + len); call 0x4A5702                ; 0x4A5702(dest=buf+len, format, &args)
+push 0x00A84640; call [0x00936274]                ; hand the assembled text to the callback
+add esp,0x18; pop edi; ret
+```
+
+So the emitter appends the literal prefix `"Warning: \n\n"` to the shared buffer at `0x00A84640`,
+formats the caller's arguments at the buffer's current end, then passes the whole buffer to the
+installed callback at `0x00A936274` (now port-owned via the setters landed in round 111).
+
+Dependencies to resolve before transcription: `0x004A53B3` (buffer append/assign) and `0x004A5702`
+(varargs format) - provenance grep results recorded in the next step; the buffer `0x00A84640` is
+already claimed by `error_show.cpp`.
