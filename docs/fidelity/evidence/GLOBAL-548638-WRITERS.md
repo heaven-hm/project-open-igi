@@ -284,3 +284,31 @@ low byte of the `arg & 0xFFFF` value, so the returned `eax` is not simply the in
 id. The transcription must reproduce the retail instruction order rather than
 "return the argument", and the return type should stay unverified until a caller is
 seen consuming it.
+
+## Round 42: 0x4B0B70 decoded - reference-clearing destructor shim
+
+24-byte cdecl `0x004B0B70-0x004B0B87`, 1 block, one callee:
+
+```
+push esi
+esi = [esp+8]          ; arg1 = pointer to a pointer
+eax = [esi]            ; load the referenced value
+push eax; call 0x004B0D10
+add esp, 4
+[esi] = 0              ; clear the caller's reference
+pop esi; ret
+```
+
+So it is "destroy the referenced object through `0x004B0D10`, then null the
+caller's pointer" - exactly the operation `0x401A20` performs on a task-type slot's
+payload at `slot+0x0C`. Not a helper to be inlined: it is a distinct retail routine
+and must be its own transcription, and it cannot be written until `0x004B0D10`
+(42 bytes) exists.
+
+Dependency chain now visible and all small:
+`0x4D9790` -> `0x401A20` -> `0x4B0B70` -> `0x4B0D10` (42 B, not yet decoded).
+`0x4B0B00` (task-list build path) remains a separate untranscribed branch chosen by
+`FlashTask`'s non-zero fourth registration argument; it is not in this chain.
+
+Status: three decoded bodies (`0x4D9790`, `0x401A20`, `0x4B0B70`) wait on
+`0x4B0D10`; recorded in dependency order so the next round starts at the leaf.
