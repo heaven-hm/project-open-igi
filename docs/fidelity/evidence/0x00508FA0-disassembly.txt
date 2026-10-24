@@ -759,3 +759,23 @@ three arguments.
 Note the 0x4BAAC0 site's cleanup is `add esp,0x18` covering its own earlier pushes, which is
 why the apparent mismatch with three pushed dwords appeared; the callee itself is a plain
 three-argument cdecl.
+
+### 0x4BAAC0 tail captured (complete listing) - 28-byte record filled from 7 stack slots
+
+```
+0x4BAB18  [esi] = edx; [esi+4] = eax; [esi+8] = ecx
+0x4BAB20  call 0x4B0D90            ; flag-stack push (landed)
+0x4BAB25  pop edi; pop esi; ret    ; returns whatever eax holds (the index from 0x4B0D90)
+```
+
+Full body shape now known: pops the flag stack with 1 (`0x4B0D60(1)`), allocates 0x1C bytes via
+`Mem_Alloc(0x1C,4)`, zeroes them with `rep stosd` (7 dwords), registers the symbol through
+`0x4C0560(0x00A43E88, arg4, record)` storing the returned key at `[record+0x14]`, fills
+`[record+0x10]`, `[record+0x18]`, `[record+0xC]`, `[record]`, `[record+4]`, `[record+8]` from the
+remaining stack slots, then pushes the flag stack back with `0x4B0D90` and returns the value
+left in eax.
+
+Open items recorded rather than guessed: this routine reads stack slots up to `+0x3C`, so it
+takes **at least seven** arguments (the caller site is one of the registrar push-pairs), and the
+generated return value is whatever `0x4B0D90` leaves in eax rather than an explicit mov - both
+need confirmation from the caller's push sequence before writing the body.
