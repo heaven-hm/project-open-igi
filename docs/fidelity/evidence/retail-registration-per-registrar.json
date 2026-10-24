@@ -1,0 +1,4097 @@
+{
+  "scope": "retail-class-registration-per-registrar-v1",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "trace": "build/tester/20261024T030541Z/registration-baseline/runtime/retail-registration.json",
+  "probe_sha256": "5a66146be7e995bc0c3fbf819628ce75886cf5205ff9041c93f29d4953ae0798",
+  "level": 1,
+  "probe_attach": "spawn-suspended; probe installed before first instruction",
+  "executed_positions": 153,
+  "static_linear_calls_to_first_ret": 314,
+  "unhooked_positions": [
+    {
+      "call_site": "0x40294e",
+      "return_site": "0x402953",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402b6f",
+      "return_site": "0x402b74",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402c40",
+      "return_site": "0x402c45",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402cef",
+      "return_site": "0x402cf4",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402cf9",
+      "return_site": "0x402cfe",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402d03",
+      "return_site": "0x402d08",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    },
+    {
+      "call_site": "0x402f24",
+      "return_site": "0x402f29",
+      "target": "0x4c1780",
+      "reason": "single-byte ret 0x4C1780 cannot be intercepted; retail body registers nothing"
+    }
+  ],
+  "control_flow_note": "0x00402930 executes 153 registrar calls then unconditionally jumps to 0x004CEF30 at 0x00402C37; the remaining call instructions in the linear disassembly up to the first ret are not executed on this level-1 path.",
+  "registrations": 279,
+  "class_id_range": [
+    0,
+    278
+  ],
+  "registrars": [
+    {
+      "position": 1,
+      "registrar": "0x508f80",
+      "qtask_callsite": "0x402935",
+      "class_count": 123,
+      "class_ids": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55,
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92,
+        93,
+        94,
+        95,
+        96,
+        97,
+        98,
+        99,
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109,
+        110,
+        111,
+        112,
+        113,
+        114,
+        115,
+        116,
+        117,
+        118,
+        119,
+        120,
+        121,
+        122
+      ],
+      "classes": [
+        {
+          "classId": 0,
+          "name": "QTask",
+          "namePointer": "0x536164",
+          "objectSize": 32,
+          "parentRaw": 385,
+          "tasktype_callsite": "0x401135"
+        },
+        {
+          "classId": 1,
+          "name": "QObj",
+          "namePointer": "0x54863c",
+          "objectSize": 80,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4d9779"
+        },
+        {
+          "classId": 2,
+          "name": "DynCubeObj",
+          "namePointer": "0x548760",
+          "objectSize": 104,
+          "parentRaw": 39583745,
+          "tasktype_callsite": "0x4e5387"
+        },
+        {
+          "classId": 3,
+          "name": "Hazinglayers",
+          "namePointer": "0x54866c",
+          "objectSize": 144,
+          "parentRaw": 1,
+          "tasktype_callsite": "0x4da1ea"
+        },
+        {
+          "classId": 4,
+          "name": "TransparencyList",
+          "namePointer": "0x54f8c4",
+          "objectSize": 128,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x531fba"
+        },
+        {
+          "classId": 5,
+          "name": "PointlightDynCubeObj",
+          "namePointer": "0x54f818",
+          "objectSize": 128,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x53131a"
+        },
+        {
+          "classId": 6,
+          "name": "SpotlightDynCubeObj",
+          "namePointer": "0x54f804",
+          "objectSize": 144,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x53133b"
+        },
+        {
+          "classId": 7,
+          "name": "Sprite3D",
+          "namePointer": "0x54f874",
+          "objectSize": 136,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x531f0a"
+        },
+        {
+          "classId": 8,
+          "name": "RigidDynCubeObj",
+          "namePointer": "0x547f6c",
+          "objectSize": 240,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x4c346a"
+        },
+        {
+          "classId": 9,
+          "name": "MagicObj",
+          "namePointer": "0x548660",
+          "objectSize": 312,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x4d9a19"
+        },
+        {
+          "classId": 10,
+          "name": "BoneDynCubeObj",
+          "namePointer": "0x54861c",
+          "objectSize": 216,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x4d756a"
+        },
+        {
+          "classId": 11,
+          "name": "PolyListDynCubeObj",
+          "namePointer": "0x543c84",
+          "objectSize": 184,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x49a53a"
+        },
+        {
+          "classId": 12,
+          "name": "SplineObjSegment",
+          "namePointer": "0x548748",
+          "objectSize": 1464,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x4e41c9"
+        },
+        {
+          "classId": 13,
+          "name": "Shadow",
+          "namePointer": "0x548740",
+          "objectSize": 292,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e0969"
+        },
+        {
+          "classId": 14,
+          "name": "BoneMagicObj",
+          "namePointer": "0x54f864",
+          "objectSize": 304,
+          "parentRaw": 1065353226,
+          "tasktype_callsite": "0x5317e9"
+        },
+        {
+          "classId": 15,
+          "name": "Sector",
+          "namePointer": "0x5486c4",
+          "objectSize": 328,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x4dcf39"
+        },
+        {
+          "classId": 16,
+          "name": "SectorObject",
+          "namePointer": "0x5486b4",
+          "objectSize": 416,
+          "parentRaw": 15,
+          "tasktype_callsite": "0x4dcfc3"
+        },
+        {
+          "classId": 17,
+          "name": "SectorInteriorObject",
+          "namePointer": "0x54869c",
+          "objectSize": 240,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x4dd177"
+        },
+        {
+          "classId": 18,
+          "name": "MagicObjContainer",
+          "namePointer": "0x5486f0",
+          "objectSize": 36,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e0856"
+        },
+        {
+          "classId": 19,
+          "name": "Rain",
+          "namePointer": "0x543c5c",
+          "objectSize": 22224,
+          "parentRaw": 12779522,
+          "tasktype_callsite": "0x498ad4"
+        },
+        {
+          "classId": 20,
+          "name": "SoundSysController",
+          "namePointer": "0x548884",
+          "objectSize": 32,
+          "parentRaw": 65273856,
+          "tasktype_callsite": "0x4e60ad"
+        },
+        {
+          "classId": 21,
+          "name": "SoundSysDef",
+          "namePointer": "0x548878",
+          "objectSize": 160,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e60cf"
+        },
+        {
+          "classId": 22,
+          "name": "SoundSysDefParent",
+          "namePointer": "0x548864",
+          "objectSize": 160,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e60f1"
+        },
+        {
+          "classId": 23,
+          "name": "SoundSysMicrophone",
+          "namePointer": "0x54db6c",
+          "objectSize": 104,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ebc76"
+        },
+        {
+          "classId": 24,
+          "name": "SoundDefGroup",
+          "namePointer": "0x54db4c",
+          "objectSize": 96,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4eb1e9"
+        },
+        {
+          "classId": 25,
+          "name": "SoundDefSound",
+          "namePointer": "0x54d9b8",
+          "objectSize": 304,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e83ac"
+        },
+        {
+          "classId": 26,
+          "name": "SoundDefGraph",
+          "namePointer": "0x54dadc",
+          "objectSize": 392,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ea3ec"
+        },
+        {
+          "classId": 27,
+          "name": "SoundDefTriggerOnce",
+          "namePointer": "0x54da64",
+          "objectSize": 312,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e953c"
+        },
+        {
+          "classId": 28,
+          "name": "Screen",
+          "namePointer": "0x5488d0",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e7396"
+        },
+        {
+          "classId": 29,
+          "name": "ViewportQTask",
+          "namePointer": "0x54d990",
+          "objectSize": 200,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e7daa"
+        },
+        {
+          "classId": 30,
+          "name": "TerraDrawTask",
+          "namePointer": "0x54d9a4",
+          "objectSize": 36,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e82d6"
+        },
+        {
+          "classId": 31,
+          "name": "CameraControlTask",
+          "namePointer": "0x54d978",
+          "objectSize": 44,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e7c66"
+        },
+        {
+          "classId": 32,
+          "name": "FreeCamera",
+          "namePointer": "0x54f7d4",
+          "objectSize": 144,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x5310f9"
+        },
+        {
+          "classId": 33,
+          "name": "DebugText",
+          "namePointer": "0x54d968",
+          "objectSize": 32,
+          "parentRaw": 12713984,
+          "tasktype_callsite": "0x4e789a"
+        },
+        {
+          "classId": 34,
+          "name": "FadeOutStart",
+          "namePointer": "0x54da40",
+          "objectSize": 124,
+          "parentRaw": 53673984,
+          "tasktype_callsite": "0x4e92d6"
+        },
+        {
+          "classId": 35,
+          "name": "FadeOutEnd",
+          "namePointer": "0x54da34",
+          "objectSize": 124,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e92f5"
+        },
+        {
+          "classId": 36,
+          "name": "GlowTask",
+          "namePointer": "0x54da54",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4e9496"
+        },
+        {
+          "classId": 37,
+          "name": "ParticleSystemDynCubeObj",
+          "namePointer": "0x54f7b4",
+          "objectSize": 184,
+          "parentRaw": 2,
+          "tasktype_callsite": "0x530c9a"
+        },
+        {
+          "classId": 38,
+          "name": "SpriteParticleSystemDynCubeObj",
+          "namePointer": "0x54f7e0",
+          "objectSize": 216,
+          "parentRaw": 11010085,
+          "tasktype_callsite": "0x5311a9"
+        },
+        {
+          "classId": 39,
+          "name": "FlashTask",
+          "namePointer": "0x54f7a4",
+          "objectSize": 136,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x530a99"
+        },
+        {
+          "classId": 40,
+          "name": "LineFilter",
+          "namePointer": "0x543dc0",
+          "objectSize": 56,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4a2a55"
+        },
+        {
+          "classId": 41,
+          "name": "WideScreenFilter",
+          "namePointer": "0x543dac",
+          "objectSize": 68,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4a2a74"
+        },
+        {
+          "classId": 42,
+          "name": "BandFilter",
+          "namePointer": "0x543da0",
+          "objectSize": 116,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4a2a93"
+        },
+        {
+          "classId": 43,
+          "name": "HandiCamFilter",
+          "namePointer": "0x543d90",
+          "objectSize": 84,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4a2ab2"
+        },
+        {
+          "classId": 44,
+          "name": "Particle2DDynCubeObjTask",
+          "namePointer": "0x54e56c",
+          "objectSize": 256,
+          "parentRaw": 5505026,
+          "tasktype_callsite": "0x4fcf6a"
+        },
+        {
+          "classId": 45,
+          "name": "CamTask",
+          "namePointer": "0x54f76c",
+          "objectSize": 136,
+          "parentRaw": 1715601408,
+          "tasktype_callsite": "0x530239"
+        },
+        {
+          "classId": 46,
+          "name": "InputPort",
+          "namePointer": "0x54dbd0",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ed527"
+        },
+        {
+          "classId": 47,
+          "name": "Sync",
+          "namePointer": "0x54e834",
+          "objectSize": 2452,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x508d89"
+        },
+        {
+          "classId": 48,
+          "name": "MenuItemTask",
+          "namePointer": "0x54e70c",
+          "objectSize": 68,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x504e26"
+        },
+        {
+          "classId": 49,
+          "name": "MenuItem",
+          "namePointer": "0x54e724",
+          "objectSize": 84,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x50566d"
+        },
+        {
+          "classId": 50,
+          "name": "PushButton",
+          "namePointer": "0x54dee8",
+          "objectSize": 124,
+          "parentRaw": 49,
+          "tasktype_callsite": "0x52ca86"
+        },
+        {
+          "classId": 51,
+          "name": "SimBoneDynCubeObj",
+          "namePointer": "0x54f704",
+          "objectSize": 320,
+          "parentRaw": 10,
+          "tasktype_callsite": "0x52ca49"
+        },
+        {
+          "classId": 52,
+          "name": "Level",
+          "namePointer": "0x539688",
+          "objectSize": 56,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ee996"
+        },
+        {
+          "classId": 53,
+          "name": "Static",
+          "namePointer": "0x54e004",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ee9b3"
+        },
+        {
+          "classId": 54,
+          "name": "Dynamic",
+          "namePointer": "0x54dffc",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ee9d0"
+        },
+        {
+          "classId": 55,
+          "name": "Idle",
+          "namePointer": "0x541ba4",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ee9ed"
+        },
+        {
+          "classId": 56,
+          "name": "CameraBase",
+          "namePointer": "0x54dff0",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4eea0a"
+        },
+        {
+          "classId": 57,
+          "name": "LevelScript",
+          "namePointer": "0x54f6f4",
+          "objectSize": 40,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x52c839"
+        },
+        {
+          "classId": 58,
+          "name": "SkyTask",
+          "namePointer": "0x54f6e8",
+          "objectSize": 120,
+          "parentRaw": 65273856,
+          "tasktype_callsite": "0x52c6c9"
+        },
+        {
+          "classId": 59,
+          "name": "PhysicsObj",
+          "namePointer": "0x54e4d0",
+          "objectSize": 1824,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x4fb1c9"
+        },
+        {
+          "classId": 60,
+          "name": "PhysicsMagicObj",
+          "namePointer": "0x54e68c",
+          "objectSize": 1896,
+          "parentRaw": 59,
+          "tasktype_callsite": "0x503d79"
+        },
+        {
+          "classId": 61,
+          "name": "EditorRigidObj",
+          "namePointer": "0x54e638",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x503406"
+        },
+        {
+          "classId": 62,
+          "name": "DiscardTerrain",
+          "namePointer": "0x54f6d4",
+          "objectSize": 344,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x52c0df"
+        },
+        {
+          "classId": 63,
+          "name": "DiscardTerrainArea",
+          "namePointer": "0x54f6c0",
+          "objectSize": 120,
+          "parentRaw": 65273864,
+          "tasktype_callsite": "0x52b6d9"
+        },
+        {
+          "classId": 64,
+          "name": "CubeModifier",
+          "namePointer": "0x54f6b0",
+          "objectSize": 376,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x52b3dc"
+        },
+        {
+          "classId": 65,
+          "name": "AnimTask",
+          "namePointer": "0x54e1f4",
+          "objectSize": 131424,
+          "parentRaw": 65863741,
+          "tasktype_callsite": "0x4f3459"
+        },
+        {
+          "classId": 66,
+          "name": "TagItem",
+          "namePointer": "0x54e5cc",
+          "objectSize": 292,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4fe7e8"
+        },
+        {
+          "classId": 67,
+          "name": "TagItemInt32",
+          "namePointer": "0x54e5bc",
+          "objectSize": 296,
+          "parentRaw": 66,
+          "tasktype_callsite": "0x4fe880"
+        },
+        {
+          "classId": 68,
+          "name": "TagItemReal32",
+          "namePointer": "0x54e5ac",
+          "objectSize": 296,
+          "parentRaw": 66,
+          "tasktype_callsite": "0x4fe8fb"
+        },
+        {
+          "classId": 69,
+          "name": "TagItemString16",
+          "namePointer": "0x54e59c",
+          "objectSize": 308,
+          "parentRaw": 65863746,
+          "tasktype_callsite": "0x4fe975"
+        },
+        {
+          "classId": 70,
+          "name": "TagItemString256",
+          "namePointer": "0x54e588",
+          "objectSize": 548,
+          "parentRaw": 66,
+          "tasktype_callsite": "0x4fe9f0"
+        },
+        {
+          "classId": 71,
+          "name": "SplineObj",
+          "namePointer": "0x54e5f0",
+          "objectSize": 104,
+          "parentRaw": 65863680,
+          "tasktype_callsite": "0x50226c"
+        },
+        {
+          "classId": 72,
+          "name": "SplineObjWaypoint",
+          "namePointer": "0x54e5dc",
+          "objectSize": 424,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x50228e"
+        },
+        {
+          "classId": 73,
+          "name": "EditRigidObj",
+          "namePointer": "0x54e1c8",
+          "objectSize": 416,
+          "parentRaw": 17,
+          "tasktype_callsite": "0x4f275f"
+        },
+        {
+          "classId": 74,
+          "name": "TextureModifier",
+          "namePointer": "0x54e7a4",
+          "objectSize": 240,
+          "parentRaw": 573702146,
+          "tasktype_callsite": "0x505f99"
+        },
+        {
+          "classId": 75,
+          "name": "Water",
+          "namePointer": "0x54ed24",
+          "objectSize": 19528,
+          "parentRaw": 11010056,
+          "tasktype_callsite": "0x518f49"
+        },
+        {
+          "classId": 76,
+          "name": "EditHazinglayer",
+          "namePointer": "0x54f6a0",
+          "objectSize": 136,
+          "parentRaw": 65863741,
+          "tasktype_callsite": "0x52b05f"
+        },
+        {
+          "classId": 77,
+          "name": "LODSettings",
+          "namePointer": "0x54dc14",
+          "objectSize": 64,
+          "parentRaw": 65863680,
+          "tasktype_callsite": "0x4ed71c"
+        },
+        {
+          "classId": 78,
+          "name": "ModelLODSettings",
+          "namePointer": "0x54dc00",
+          "objectSize": 68,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ed73b"
+        },
+        {
+          "classId": 79,
+          "name": "ModelLODSettingsContainer",
+          "namePointer": "0x54dbe4",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4ed75a"
+        },
+        {
+          "classId": 80,
+          "name": "EditRigidObjAttachedToBone",
+          "namePointer": "0x54e6ec",
+          "objectSize": 312,
+          "parentRaw": 65863688,
+          "tasktype_callsite": "0x504c6f"
+        },
+        {
+          "classId": 81,
+          "name": "CutScene",
+          "namePointer": "0x54e2b4",
+          "objectSize": 632,
+          "parentRaw": 10747965,
+          "tasktype_callsite": "0x4f4b45"
+        },
+        {
+          "classId": 82,
+          "name": "AnimScaleTask",
+          "namePointer": "0x54f690",
+          "objectSize": 131432,
+          "parentRaw": 5374017,
+          "tasktype_callsite": "0x52ad33"
+        },
+        {
+          "classId": 83,
+          "name": "AnimRigidDynCubeObj",
+          "namePointer": "0x54f678",
+          "objectSize": 344,
+          "parentRaw": 65863688,
+          "tasktype_callsite": "0x52ab09"
+        },
+        {
+          "classId": 84,
+          "name": "Graph",
+          "namePointer": "0x54df48",
+          "objectSize": 128,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x4faa81"
+        },
+        {
+          "classId": 85,
+          "name": "GraphNode",
+          "namePointer": "0x54ed0c",
+          "objectSize": 280,
+          "parentRaw": 10944573,
+          "tasktype_callsite": "0x51877f"
+        },
+        {
+          "classId": 86,
+          "name": "AnimCam",
+          "namePointer": "0x54f410",
+          "objectSize": 544,
+          "parentRaw": 65863725,
+          "tasktype_callsite": "0x5284bf"
+        },
+        {
+          "classId": 87,
+          "name": "AreaActivate",
+          "namePointer": "0x54e6a0",
+          "objectSize": 184,
+          "parentRaw": 65863741,
+          "tasktype_callsite": "0x5043cf"
+        },
+        {
+          "classId": 88,
+          "name": "Vehicle",
+          "namePointer": "0x54e298",
+          "objectSize": 1864,
+          "parentRaw": 65863739,
+          "tasktype_callsite": "0x4f41a9"
+        },
+        {
+          "classId": 89,
+          "name": "GlobalLight",
+          "namePointer": "0x54f18c",
+          "objectSize": 440,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x527cb1"
+        },
+        {
+          "classId": 90,
+          "name": "GlobalLightKeyframe",
+          "namePointer": "0x54f178",
+          "objectSize": 420,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x527cd3"
+        },
+        {
+          "classId": 91,
+          "name": "Dirlight",
+          "namePointer": "0x54f0e8",
+          "objectSize": 100,
+          "parentRaw": 5046272,
+          "tasktype_callsite": "0x526efc"
+        },
+        {
+          "classId": 92,
+          "name": "DirlightKeyframe",
+          "namePointer": "0x54f0d4",
+          "objectSize": 84,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x526f1b"
+        },
+        {
+          "classId": 93,
+          "name": "LightmapInfo",
+          "namePointer": "0x54f0ac",
+          "objectSize": 224,
+          "parentRaw": 5046272,
+          "tasktype_callsite": "0x526350"
+        },
+        {
+          "classId": 94,
+          "name": "Lensflare",
+          "namePointer": "0x54f034",
+          "objectSize": 152,
+          "parentRaw": 262144,
+          "tasktype_callsite": "0x520bd0"
+        },
+        {
+          "classId": 95,
+          "name": "LensflareItem",
+          "namePointer": "0x54f024",
+          "objectSize": 64,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x520bef"
+        },
+        {
+          "classId": 96,
+          "name": "Container",
+          "namePointer": "0x54e76c",
+          "objectSize": 32,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x505ca6"
+        },
+        {
+          "classId": 97,
+          "name": "Origo",
+          "namePointer": "0x54f010",
+          "objectSize": 304,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x5207bf"
+        },
+        {
+          "classId": 98,
+          "name": "NoiseQTask",
+          "namePointer": "0x54f004",
+          "objectSize": 304,
+          "parentRaw": 65863741,
+          "tasktype_callsite": "0x51ff0f"
+        },
+        {
+          "classId": 99,
+          "name": "MoveRigidObj",
+          "namePointer": "0x54efe0",
+          "objectSize": 520,
+          "parentRaw": 11010056,
+          "tasktype_callsite": "0x51f5a3"
+        },
+        {
+          "classId": 100,
+          "name": "SmoothQTask",
+          "namePointer": "0x54ef70",
+          "objectSize": 256,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x51eeff"
+        },
+        {
+          "classId": 101,
+          "name": "MipMapControl",
+          "namePointer": "0x54ef28",
+          "objectSize": 48,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x51ecc9"
+        },
+        {
+          "classId": 102,
+          "name": "ScreenGrab",
+          "namePointer": "0x54dcc0",
+          "objectSize": 40,
+          "parentRaw": 65929216,
+          "tasktype_callsite": "0x4ee429"
+        },
+        {
+          "classId": 103,
+          "name": "FlatSky",
+          "namePointer": "0x54eed8",
+          "objectSize": 208,
+          "parentRaw": 65273856,
+          "tasktype_callsite": "0x51de0f"
+        },
+        {
+          "classId": 104,
+          "name": "FlatSkyLayer",
+          "namePointer": "0x54eec8",
+          "objectSize": 620,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x51de31"
+        },
+        {
+          "classId": 105,
+          "name": "FlatWater",
+          "namePointer": "0x54ee88",
+          "objectSize": 144,
+          "parentRaw": 65929216,
+          "tasktype_callsite": "0x51c2cf"
+        },
+        {
+          "classId": 106,
+          "name": "FlatWaterLayer",
+          "namePointer": "0x54ee78",
+          "objectSize": 620,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x51c2f1"
+        },
+        {
+          "classId": 107,
+          "name": "SoundManager",
+          "namePointer": "0x54ee40",
+          "objectSize": 68,
+          "parentRaw": 65929216,
+          "tasktype_callsite": "0x51bfc9"
+        },
+        {
+          "classId": 108,
+          "name": "EditCamera",
+          "namePointer": "0x54e800",
+          "objectSize": 232,
+          "parentRaw": 10747965,
+          "tasktype_callsite": "0x507f5a"
+        },
+        {
+          "classId": 109,
+          "name": "LevelTimer",
+          "namePointer": "0x54ee30",
+          "objectSize": 272,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x51badf"
+        },
+        {
+          "classId": 110,
+          "name": "EditorMagicObj",
+          "namePointer": "0x54ee0c",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x51b979"
+        },
+        {
+          "classId": 111,
+          "name": "AnimSound",
+          "namePointer": "0x54ede8",
+          "objectSize": 4,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x51b416"
+        },
+        {
+          "classId": 112,
+          "name": "RainDynCubeObj",
+          "namePointer": "0x54e2d8",
+          "objectSize": 17040,
+          "parentRaw": 5177346,
+          "tasktype_callsite": "0x4f7385"
+        },
+        {
+          "classId": 113,
+          "name": "TerrainLightMap",
+          "namePointer": "0x54e304",
+          "objectSize": 272,
+          "parentRaw": 573702146,
+          "tasktype_callsite": "0x4f8379"
+        },
+        {
+          "classId": 114,
+          "name": "SimpointObjContainer",
+          "namePointer": "0x54e654",
+          "objectSize": 100,
+          "parentRaw": 65929216,
+          "tasktype_callsite": "0x5034f6"
+        },
+        {
+          "classId": 115,
+          "name": "SimpointObj",
+          "namePointer": "0x54e648",
+          "objectSize": 256,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x50354c"
+        },
+        {
+          "classId": 116,
+          "name": "SplinePathNodeQTask",
+          "namePointer": "0x54ed54",
+          "objectSize": 200,
+          "parentRaw": 10944512,
+          "tasktype_callsite": "0x51986f"
+        },
+        {
+          "classId": 117,
+          "name": "SplinePathDynCubeObj",
+          "namePointer": "0x54eda4",
+          "objectSize": 512,
+          "parentRaw": 65929218,
+          "tasktype_callsite": "0x51a1ea"
+        },
+        {
+          "classId": 118,
+          "name": "SplinePathGuideQTask",
+          "namePointer": "0x54edbc",
+          "objectSize": 68,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x51b159"
+        },
+        {
+          "classId": 119,
+          "name": "HeightMap",
+          "namePointer": "0x54e7e0",
+          "objectSize": 256,
+          "parentRaw": 573702146,
+          "tasktype_callsite": "0x506fd9"
+        },
+        {
+          "classId": 120,
+          "name": "ShadowTask",
+          "namePointer": "0x54ed40",
+          "objectSize": 48,
+          "parentRaw": 65929216,
+          "tasktype_callsite": "0x519779"
+        },
+        {
+          "classId": 121,
+          "name": "GFXCapsViewer",
+          "namePointer": "0x54ed2c",
+          "objectSize": 32,
+          "parentRaw": 385,
+          "tasktype_callsite": "0x519725"
+        },
+        {
+          "classId": 122,
+          "name": "AIGraph",
+          "namePointer": "0x54e888",
+          "objectSize": 192,
+          "parentRaw": 84,
+          "tasktype_callsite": "0x508fbf"
+        }
+      ]
+    },
+    {
+      "position": 2,
+      "registrar": "0x489560",
+      "qtask_callsite": "0x40293a",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 3,
+      "registrar": "0x407d60",
+      "qtask_callsite": "0x40293f",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 4,
+      "registrar": "0x488bb0",
+      "qtask_callsite": "0x402944",
+      "class_count": 1,
+      "class_ids": [
+        123
+      ],
+      "classes": [
+        {
+          "classId": 123,
+          "name": "LevelFlow",
+          "namePointer": "0x541148",
+          "objectSize": 296,
+          "parentRaw": 10747965,
+          "tasktype_callsite": "0x488be1"
+        }
+      ]
+    },
+    {
+      "position": 5,
+      "registrar": "0x402ff0",
+      "qtask_callsite": "0x402949",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 6,
+      "registrar": "0x415530",
+      "qtask_callsite": "0x40294e",
+      "class_count": 1,
+      "class_ids": [
+        124
+      ],
+      "classes": [
+        {
+          "classId": 124,
+          "name": "Game",
+          "namePointer": "0x539680",
+          "objectSize": 344,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x41555b"
+        }
+      ]
+    },
+    {
+      "position": 7,
+      "registrar": "0x401fc0",
+      "qtask_callsite": "0x402958",
+      "class_count": 1,
+      "class_ids": [
+        125
+      ],
+      "classes": [
+        {
+          "classId": 125,
+          "name": "Flow",
+          "namePointer": "0x536274",
+          "objectSize": 84,
+          "parentRaw": 3259498496,
+          "tasktype_callsite": "0x401fd6"
+        }
+      ]
+    },
+    {
+      "position": 8,
+      "registrar": "0x488800",
+      "qtask_callsite": "0x40295d",
+      "class_count": 1,
+      "class_ids": [
+        126
+      ],
+      "classes": [
+        {
+          "classId": 126,
+          "name": "EditVariable",
+          "namePointer": "0x5410d4",
+          "objectSize": 224,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x48881f"
+        }
+      ]
+    },
+    {
+      "position": 9,
+      "registrar": "0x488620",
+      "qtask_callsite": "0x402962",
+      "class_count": 1,
+      "class_ids": [
+        127
+      ],
+      "classes": [
+        {
+          "classId": 127,
+          "name": "SubLevel",
+          "namePointer": "0x5410c4",
+          "objectSize": 288,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x48863f"
+        }
+      ]
+    },
+    {
+      "position": 10,
+      "registrar": "0x487be0",
+      "qtask_callsite": "0x402967",
+      "class_count": 1,
+      "class_ids": [
+        128
+      ],
+      "classes": [
+        {
+          "classId": 128,
+          "name": "GuardGenerator",
+          "namePointer": "0x541098",
+          "objectSize": 128,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x487bff"
+        }
+      ]
+    },
+    {
+      "position": 11,
+      "registrar": "0x4872c0",
+      "qtask_callsite": "0x40296c",
+      "class_count": 1,
+      "class_ids": [
+        129
+      ],
+      "classes": [
+        {
+          "classId": 129,
+          "name": "ConditionalContainer",
+          "namePointer": "0x54107c",
+          "objectSize": 276,
+          "parentRaw": 65929312,
+          "tasktype_callsite": "0x4872df"
+        }
+      ]
+    },
+    {
+      "position": 12,
+      "registrar": "0x415070",
+      "qtask_callsite": "0x402971",
+      "class_count": 1,
+      "class_ids": [
+        130
+      ],
+      "classes": [
+        {
+          "classId": 130,
+          "name": "IntroScreen",
+          "namePointer": "0x5394cc",
+          "objectSize": 56,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x415086"
+        }
+      ]
+    },
+    {
+      "position": 13,
+      "registrar": "0x486900",
+      "qtask_callsite": "0x402976",
+      "class_count": 1,
+      "class_ids": [
+        131
+      ],
+      "classes": [
+        {
+          "classId": 131,
+          "name": "StatusScreen",
+          "namePointer": "0x540d30",
+          "objectSize": 1264,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x48691b"
+        }
+      ]
+    },
+    {
+      "position": 14,
+      "registrar": "0x485a40",
+      "qtask_callsite": "0x40297b",
+      "class_count": 1,
+      "class_ids": [
+        132
+      ],
+      "classes": [
+        {
+          "classId": 132,
+          "name": "StatusMessageScreen",
+          "namePointer": "0x540b30",
+          "objectSize": 99392,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x485a59"
+        }
+      ]
+    },
+    {
+      "position": 15,
+      "registrar": "0x485330",
+      "qtask_callsite": "0x402980",
+      "class_count": 1,
+      "class_ids": [
+        133
+      ],
+      "classes": [
+        {
+          "classId": 133,
+          "name": "StatusMessage",
+          "namePointer": "0x540a90",
+          "objectSize": 480,
+          "parentRaw": 61,
+          "tasktype_callsite": "0x48534f"
+        }
+      ]
+    },
+    {
+      "position": 16,
+      "registrar": "0x4851b0",
+      "qtask_callsite": "0x402985",
+      "class_count": 1,
+      "class_ids": [
+        134
+      ],
+      "classes": [
+        {
+          "classId": 134,
+          "name": "GameScreen",
+          "namePointer": "0x540a80",
+          "objectSize": 40,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x4851c6"
+        }
+      ]
+    },
+    {
+      "position": 17,
+      "registrar": "0x484f30",
+      "qtask_callsite": "0x40298a",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 18,
+      "registrar": "0x4825c0",
+      "qtask_callsite": "0x40298f",
+      "class_count": 1,
+      "class_ids": [
+        135
+      ],
+      "classes": [
+        {
+          "classId": 135,
+          "name": "HumanCamera",
+          "namePointer": "0x540994",
+          "objectSize": 296,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4825d9"
+        }
+      ]
+    },
+    {
+      "position": 19,
+      "registrar": "0x4813e0",
+      "qtask_callsite": "0x402994",
+      "class_count": 1,
+      "class_ids": [
+        136
+      ],
+      "classes": [
+        {
+          "classId": 136,
+          "name": "ExplodeObject",
+          "namePointer": "0x540980",
+          "objectSize": 568,
+          "parentRaw": 6029329,
+          "tasktype_callsite": "0x4813ff"
+        }
+      ]
+    },
+    {
+      "position": 20,
+      "registrar": "0x4801b0",
+      "qtask_callsite": "0x402999",
+      "class_count": 4,
+      "class_ids": [
+        137,
+        138,
+        139,
+        140
+      ],
+      "classes": [
+        {
+          "classId": 137,
+          "name": "Explosion0",
+          "namePointer": "0x540970",
+          "objectSize": 136,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x4801c9"
+        },
+        {
+          "classId": 138,
+          "name": "FireBall",
+          "namePointer": "0x540964",
+          "objectSize": 280,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x48021f"
+        },
+        {
+          "classId": 139,
+          "name": "Fragment",
+          "namePointer": "0x540958",
+          "objectSize": 280,
+          "parentRaw": 115,
+          "tasktype_callsite": "0x48030a"
+        },
+        {
+          "classId": 140,
+          "name": "ExplosionSmoke",
+          "namePointer": "0x540948",
+          "objectSize": 72,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4803a9"
+        }
+      ]
+    },
+    {
+      "position": 21,
+      "registrar": "0x47e700",
+      "qtask_callsite": "0x40299e",
+      "class_count": 1,
+      "class_ids": [
+        141
+      ],
+      "classes": [
+        {
+          "classId": 141,
+          "name": "FlashBang",
+          "namePointer": "0x540924",
+          "objectSize": 72,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x47e725"
+        }
+      ]
+    },
+    {
+      "position": 22,
+      "registrar": "0x47cf70",
+      "qtask_callsite": "0x4029a3",
+      "class_count": 1,
+      "class_ids": [
+        142
+      ],
+      "classes": [
+        {
+          "classId": 142,
+          "name": "BulletHole",
+          "namePointer": "0x540908",
+          "objectSize": 57672,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x47cfc5"
+        }
+      ]
+    },
+    {
+      "position": 23,
+      "registrar": "0x47cf20",
+      "qtask_callsite": "0x4029a8",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 24,
+      "registrar": "0x47cab0",
+      "qtask_callsite": "0x4029ad",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 25,
+      "registrar": "0x413df0",
+      "qtask_callsite": "0x4029b2",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 26,
+      "registrar": "0x407290",
+      "qtask_callsite": "0x4029b7",
+      "class_count": 2,
+      "class_ids": [
+        143,
+        144
+      ],
+      "classes": [
+        {
+          "classId": 143,
+          "name": "WeaponConfigContainer",
+          "namePointer": "0x538500",
+          "objectSize": 292,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4072be"
+        },
+        {
+          "classId": 144,
+          "name": "WeaponConfig",
+          "namePointer": "0x5384f0",
+          "objectSize": 1800,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x407322"
+        }
+      ]
+    },
+    {
+      "position": 27,
+      "registrar": "0x47b4b0",
+      "qtask_callsite": "0x4029bc",
+      "class_count": 1,
+      "class_ids": [
+        145
+      ],
+      "classes": [
+        {
+          "classId": 145,
+          "name": "GunShot",
+          "namePointer": "0x540890",
+          "objectSize": 3128,
+          "parentRaw": 66060288,
+          "tasktype_callsite": "0x47b4c9"
+        }
+      ]
+    },
+    {
+      "position": 28,
+      "registrar": "0x477e30",
+      "qtask_callsite": "0x4029c1",
+      "class_count": 2,
+      "class_ids": [
+        146,
+        147
+      ],
+      "classes": [
+        {
+          "classId": 146,
+          "name": "Gun",
+          "namePointer": "0x54081c",
+          "objectSize": 432,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x477e4f"
+        },
+        {
+          "classId": 147,
+          "name": "GunCasing",
+          "namePointer": "0x540810",
+          "objectSize": 296,
+          "parentRaw": 65994760,
+          "tasktype_callsite": "0x478203"
+        }
+      ]
+    },
+    {
+      "position": 29,
+      "registrar": "0x477220",
+      "qtask_callsite": "0x4029c6",
+      "class_count": 3,
+      "class_ids": [
+        148,
+        149,
+        150
+      ],
+      "classes": [
+        {
+          "classId": 148,
+          "name": "GunFlame",
+          "namePointer": "0x5407ac",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x477239"
+        },
+        {
+          "classId": 149,
+          "name": "GunClip",
+          "namePointer": "0x5407a4",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x477391"
+        },
+        {
+          "classId": 150,
+          "name": "GunMovingPart",
+          "namePointer": "0x540794",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x4774b3"
+        }
+      ]
+    },
+    {
+      "position": 30,
+      "registrar": "0x476730",
+      "qtask_callsite": "0x4029cb",
+      "class_count": 1,
+      "class_ids": [
+        151
+      ],
+      "classes": [
+        {
+          "classId": 151,
+          "name": "Grenade",
+          "namePointer": "0x5406c4",
+          "objectSize": 1848,
+          "parentRaw": 59,
+          "tasktype_callsite": "0x476749"
+        }
+      ]
+    },
+    {
+      "position": 31,
+      "registrar": "0x476110",
+      "qtask_callsite": "0x4029d0",
+      "class_count": 1,
+      "class_ids": [
+        152
+      ],
+      "classes": [
+        {
+          "classId": 152,
+          "name": "M203",
+          "namePointer": "0x540664",
+          "objectSize": 296,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x476129"
+        }
+      ]
+    },
+    {
+      "position": 32,
+      "registrar": "0x475ac0",
+      "qtask_callsite": "0x4029d5",
+      "class_count": 1,
+      "class_ids": [
+        153
+      ],
+      "classes": [
+        {
+          "classId": 153,
+          "name": "Mine",
+          "namePointer": "0x540628",
+          "objectSize": 592,
+          "parentRaw": 5701768,
+          "tasktype_callsite": "0x475adf"
+        }
+      ]
+    },
+    {
+      "position": 33,
+      "registrar": "0x475380",
+      "qtask_callsite": "0x4029da",
+      "class_count": 1,
+      "class_ids": [
+        154
+      ],
+      "classes": [
+        {
+          "classId": 154,
+          "name": "ProximityMine",
+          "namePointer": "0x540554",
+          "objectSize": 432,
+          "parentRaw": 146,
+          "tasktype_callsite": "0x475399"
+        }
+      ]
+    },
+    {
+      "position": 34,
+      "registrar": "0x473ed0",
+      "qtask_callsite": "0x4029df",
+      "class_count": 1,
+      "class_ids": [
+        155
+      ],
+      "classes": [
+        {
+          "classId": 155,
+          "name": "StationaryGun",
+          "namePointer": "0x54052c",
+          "objectSize": 544,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x473eef"
+        }
+      ]
+    },
+    {
+      "position": 35,
+      "registrar": "0x4739d0",
+      "qtask_callsite": "0x4029e4",
+      "class_count": 1,
+      "class_ids": [
+        156
+      ],
+      "classes": [
+        {
+          "classId": 156,
+          "name": "GunMP5SD",
+          "namePointer": "0x540500",
+          "objectSize": 440,
+          "parentRaw": 66519186,
+          "tasktype_callsite": "0x4739e9"
+        }
+      ]
+    },
+    {
+      "position": 36,
+      "registrar": "0x4733f0",
+      "qtask_callsite": "0x4029e9",
+      "class_count": 1,
+      "class_ids": [
+        157
+      ],
+      "classes": [
+        {
+          "classId": 157,
+          "name": "GunM16A2",
+          "namePointer": "0x540448",
+          "objectSize": 432,
+          "parentRaw": 146,
+          "tasktype_callsite": "0x473409"
+        }
+      ]
+    },
+    {
+      "position": 37,
+      "registrar": "0x472d00",
+      "qtask_callsite": "0x4029ee",
+      "class_count": 1,
+      "class_ids": [
+        158
+      ],
+      "classes": [
+        {
+          "classId": 158,
+          "name": "GunDRAGUNOV",
+          "namePointer": "0x5403f8",
+          "objectSize": 440,
+          "parentRaw": 146,
+          "tasktype_callsite": "0x472d19"
+        }
+      ]
+    },
+    {
+      "position": 38,
+      "registrar": "0x472a70",
+      "qtask_callsite": "0x4029f3",
+      "class_count": 1,
+      "class_ids": [
+        159
+      ],
+      "classes": [
+        {
+          "classId": 159,
+          "name": "GunSPAS12",
+          "namePointer": "0x540388",
+          "objectSize": 432,
+          "parentRaw": 5701778,
+          "tasktype_callsite": "0x472a89"
+        }
+      ]
+    },
+    {
+      "position": 39,
+      "registrar": "0x472670",
+      "qtask_callsite": "0x4029f8",
+      "class_count": 2,
+      "class_ids": [
+        160,
+        161
+      ],
+      "classes": [
+        {
+          "classId": 160,
+          "name": "GunCABarrel",
+          "namePointer": "0x540330",
+          "objectSize": 312,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x472689"
+        },
+        {
+          "classId": 161,
+          "name": "GunCAClip",
+          "namePointer": "0x540324",
+          "objectSize": 312,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x47272f"
+        }
+      ]
+    },
+    {
+      "position": 40,
+      "registrar": "0x470fa0",
+      "qtask_callsite": "0x4029fd",
+      "class_count": 2,
+      "class_ids": [
+        162,
+        163
+      ],
+      "classes": [
+        {
+          "classId": 162,
+          "name": "BinocularOverlay",
+          "namePointer": "0x540294",
+          "objectSize": 11776,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x470fbc"
+        },
+        {
+          "classId": 163,
+          "name": "BinocularOverlayHolder",
+          "namePointer": "0x54026c",
+          "objectSize": 120,
+          "parentRaw": 5701632,
+          "tasktype_callsite": "0x47106e"
+        }
+      ]
+    },
+    {
+      "position": 41,
+      "registrar": "0x470610",
+      "qtask_callsite": "0x402a02",
+      "class_count": 1,
+      "class_ids": [
+        164
+      ],
+      "classes": [
+        {
+          "classId": 164,
+          "name": "Binocular",
+          "namePointer": "0x53ff6c",
+          "objectSize": 456,
+          "parentRaw": 66060434,
+          "tasktype_callsite": "0x470629"
+        }
+      ]
+    },
+    {
+      "position": 42,
+      "registrar": "0x470410",
+      "qtask_callsite": "0x402a07",
+      "class_count": 1,
+      "class_ids": [
+        165
+      ],
+      "classes": [
+        {
+          "classId": 165,
+          "name": "Medipack",
+          "namePointer": "0x53ff04",
+          "objectSize": 432,
+          "parentRaw": 146,
+          "tasktype_callsite": "0x470429"
+        }
+      ]
+    },
+    {
+      "position": 43,
+      "registrar": "0x46f2b0",
+      "qtask_callsite": "0x402a0c",
+      "class_count": 1,
+      "class_ids": [
+        166
+      ],
+      "classes": [
+        {
+          "classId": 166,
+          "name": "AIStationaryGun",
+          "namePointer": "0x53fee0",
+          "objectSize": 488,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x46f2c9"
+        }
+      ]
+    },
+    {
+      "position": 44,
+      "registrar": "0x46e370",
+      "qtask_callsite": "0x402a11",
+      "class_count": 1,
+      "class_ids": [
+        167
+      ],
+      "classes": [
+        {
+          "classId": 167,
+          "name": "AIStationaryGunHolder",
+          "namePointer": "0x53fea8",
+          "objectSize": 9888,
+          "parentRaw": 4587528,
+          "tasktype_callsite": "0x46e393"
+        }
+      ]
+    },
+    {
+      "position": 45,
+      "registrar": "0x46df10",
+      "qtask_callsite": "0x402a16",
+      "class_count": 1,
+      "class_ids": [
+        168
+      ],
+      "classes": [
+        {
+          "classId": 168,
+          "name": "KnifeStab",
+          "namePointer": "0x53fe9c",
+          "objectSize": 32,
+          "parentRaw": 65994840,
+          "tasktype_callsite": "0x46df26"
+        }
+      ]
+    },
+    {
+      "position": 46,
+      "registrar": "0x46dd00",
+      "qtask_callsite": "0x402a1b",
+      "class_count": 1,
+      "class_ids": [
+        169
+      ],
+      "classes": [
+        {
+          "classId": 169,
+          "name": "Gunx2",
+          "namePointer": "0x53fe7c",
+          "objectSize": 312,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x46dd19"
+        }
+      ]
+    },
+    {
+      "position": 47,
+      "registrar": "0x46db40",
+      "qtask_callsite": "0x402a20",
+      "class_count": 1,
+      "class_ids": [
+        170
+      ],
+      "classes": [
+        {
+          "classId": 170,
+          "name": "AddAmmo",
+          "namePointer": "0x53fe60",
+          "objectSize": 72,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x46db59"
+        }
+      ]
+    },
+    {
+      "position": 48,
+      "registrar": "0x46d420",
+      "qtask_callsite": "0x402a25",
+      "class_count": 1,
+      "class_ids": [
+        171
+      ],
+      "classes": [
+        {
+          "classId": 171,
+          "name": "AmmoPickup",
+          "namePointer": "0x53fe2c",
+          "objectSize": 312,
+          "parentRaw": 66519057,
+          "tasktype_callsite": "0x46d43f"
+        }
+      ]
+    },
+    {
+      "position": 49,
+      "registrar": "0x46cb70",
+      "qtask_callsite": "0x402a2a",
+      "class_count": 1,
+      "class_ids": [
+        172
+      ],
+      "classes": [
+        {
+          "classId": 172,
+          "name": "GunPickup",
+          "namePointer": "0x53fde8",
+          "objectSize": 344,
+          "parentRaw": 65994769,
+          "tasktype_callsite": "0x46cb8f"
+        }
+      ]
+    },
+    {
+      "position": 50,
+      "registrar": "0x46c0c0",
+      "qtask_callsite": "0x402a2f",
+      "class_count": 1,
+      "class_ids": [
+        173
+      ],
+      "classes": [
+        {
+          "classId": 173,
+          "name": "GenericPickup",
+          "namePointer": "0x53fdb8",
+          "objectSize": 288,
+          "parentRaw": 65994769,
+          "tasktype_callsite": "0x46c0df"
+        }
+      ]
+    },
+    {
+      "position": 51,
+      "registrar": "0x46ba60",
+      "qtask_callsite": "0x402a34",
+      "class_count": 1,
+      "class_ids": [
+        174
+      ],
+      "classes": [
+        {
+          "classId": 174,
+          "name": "Computer",
+          "namePointer": "0x53fda0",
+          "objectSize": 408,
+          "parentRaw": 65994760,
+          "tasktype_callsite": "0x46ba79"
+        }
+      ]
+    },
+    {
+      "position": 52,
+      "registrar": "0x46b7f0",
+      "qtask_callsite": "0x402a39",
+      "class_count": 1,
+      "class_ids": [
+        175
+      ],
+      "classes": [
+        {
+          "classId": 175,
+          "name": "ComputerTextItem",
+          "namePointer": "0x53fd84",
+          "objectSize": 144,
+          "parentRaw": 49,
+          "tasktype_callsite": "0x46b809"
+        }
+      ]
+    },
+    {
+      "position": 53,
+      "registrar": "0x46b510",
+      "qtask_callsite": "0x402a3e",
+      "class_count": 1,
+      "class_ids": [
+        176
+      ],
+      "classes": [
+        {
+          "classId": 176,
+          "name": "ComputerButtonItem",
+          "namePointer": "0x53fd70",
+          "objectSize": 148,
+          "parentRaw": 49,
+          "tasktype_callsite": "0x46b529"
+        }
+      ]
+    },
+    {
+      "position": 54,
+      "registrar": "0x46ab60",
+      "qtask_callsite": "0x402a43",
+      "class_count": 1,
+      "class_ids": [
+        177
+      ],
+      "classes": [
+        {
+          "classId": 177,
+          "name": "ComputerMenu",
+          "namePointer": "0x53fa08",
+          "objectSize": 60,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x46ab76"
+        }
+      ]
+    },
+    {
+      "position": 55,
+      "registrar": "0x4696b0",
+      "qtask_callsite": "0x402a48",
+      "class_count": 1,
+      "class_ids": [
+        178
+      ],
+      "classes": [
+        {
+          "classId": 178,
+          "name": "ComputerMap",
+          "namePointer": "0x53f778",
+          "objectSize": 172,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4696c9"
+        }
+      ]
+    },
+    {
+      "position": 56,
+      "registrar": "0x468e20",
+      "qtask_callsite": "0x402a4d",
+      "class_count": 1,
+      "class_ids": [
+        179
+      ],
+      "classes": [
+        {
+          "classId": 179,
+          "name": "ComputerObjectives",
+          "namePointer": "0x53f700",
+          "objectSize": 56,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x468e36"
+        }
+      ]
+    },
+    {
+      "position": 57,
+      "registrar": "0x4688b0",
+      "qtask_callsite": "0x402a52",
+      "class_count": 1,
+      "class_ids": [
+        180
+      ],
+      "classes": [
+        {
+          "classId": 180,
+          "name": "ComputerLog",
+          "namePointer": "0x53f6e4",
+          "objectSize": 36,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4688c6"
+        }
+      ]
+    },
+    {
+      "position": 58,
+      "registrar": "0x4682f0",
+      "qtask_callsite": "0x402a57",
+      "class_count": 1,
+      "class_ids": [
+        181
+      ],
+      "classes": [
+        {
+          "classId": 181,
+          "name": "ComputerHilight",
+          "namePointer": "0x53f6d4",
+          "objectSize": 1248,
+          "parentRaw": 5963837,
+          "tasktype_callsite": "0x468328"
+        }
+      ]
+    },
+    {
+      "position": 59,
+      "registrar": "0x467700",
+      "qtask_callsite": "0x402a5c",
+      "class_count": 1,
+      "class_ids": [
+        182
+      ],
+      "classes": [
+        {
+          "classId": 182,
+          "name": "ComputerObject",
+          "namePointer": "0x53f6c0",
+          "objectSize": 36,
+          "parentRaw": 66519040,
+          "tasktype_callsite": "0x467716"
+        }
+      ]
+    },
+    {
+      "position": 60,
+      "registrar": "0x466f70",
+      "qtask_callsite": "0x402a61",
+      "class_count": 1,
+      "class_ids": [
+        183
+      ],
+      "classes": [
+        {
+          "classId": 183,
+          "name": "DefineComputerObjective",
+          "namePointer": "0x53f564",
+          "objectSize": 1336,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x466f8f"
+        }
+      ]
+    },
+    {
+      "position": 61,
+      "registrar": "0x466e40",
+      "qtask_callsite": "0x402a66",
+      "class_count": 1,
+      "class_ids": [
+        184
+      ],
+      "classes": [
+        {
+          "classId": 184,
+          "name": "DefineComputerLimit",
+          "namePointer": "0x53f550",
+          "objectSize": 64,
+          "parentRaw": 66519048,
+          "tasktype_callsite": "0x466e59"
+        }
+      ]
+    },
+    {
+      "position": 62,
+      "registrar": "0x4663d0",
+      "qtask_callsite": "0x402a6b",
+      "class_count": 1,
+      "class_ids": [
+        185
+      ],
+      "classes": [
+        {
+          "classId": 185,
+          "name": "ComputerStartup",
+          "namePointer": "0x53f540",
+          "objectSize": 144,
+          "parentRaw": 66519040,
+          "tasktype_callsite": "0x4663e9"
+        }
+      ]
+    },
+    {
+      "position": 63,
+      "registrar": "0x465bc0",
+      "qtask_callsite": "0x402a70",
+      "class_count": 1,
+      "class_ids": [
+        186
+      ],
+      "classes": [
+        {
+          "classId": 186,
+          "name": "DeathZone",
+          "namePointer": "0x53f514",
+          "objectSize": 312,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x465bd9"
+        }
+      ]
+    },
+    {
+      "position": 64,
+      "registrar": "0x465a10",
+      "qtask_callsite": "0x402a75",
+      "class_count": 1,
+      "class_ids": [
+        187
+      ],
+      "classes": [
+        {
+          "classId": 187,
+          "name": "HumanAttach",
+          "namePointer": "0x53f4f0",
+          "objectSize": 320,
+          "parentRaw": 80,
+          "tasktype_callsite": "0x465a29"
+        }
+      ]
+    },
+    {
+      "position": 65,
+      "registrar": "0x464260",
+      "qtask_callsite": "0x402a7a",
+      "class_count": 1,
+      "class_ids": [
+        188
+      ],
+      "classes": [
+        {
+          "classId": 188,
+          "name": "HumanView",
+          "namePointer": "0x53f4d8",
+          "objectSize": 808,
+          "parentRaw": 10,
+          "tasktype_callsite": "0x464279"
+        }
+      ]
+    },
+    {
+      "position": 66,
+      "registrar": "0x45e450",
+      "qtask_callsite": "0x402a7f",
+      "class_count": 1,
+      "class_ids": [
+        189
+      ],
+      "classes": [
+        {
+          "classId": 189,
+          "name": "Human",
+          "namePointer": "0x53f408",
+          "objectSize": 3320,
+          "parentRaw": 10,
+          "tasktype_callsite": "0x45e47d"
+        }
+      ]
+    },
+    {
+      "position": 67,
+      "registrar": "0x40fe30",
+      "qtask_callsite": "0x402a84",
+      "class_count": 1,
+      "class_ids": [
+        190
+      ],
+      "classes": [
+        {
+          "classId": 190,
+          "name": "HumanPlayer",
+          "namePointer": "0x538efc",
+          "objectSize": 3568,
+          "parentRaw": 189,
+          "tasktype_callsite": "0x40fe49"
+        }
+      ]
+    },
+    {
+      "position": 68,
+      "registrar": "0x45db70",
+      "qtask_callsite": "0x402a89",
+      "class_count": 1,
+      "class_ids": [
+        191
+      ],
+      "classes": [
+        {
+          "classId": 191,
+          "name": "HumanPlayerInput",
+          "namePointer": "0x53f2f8",
+          "objectSize": 484,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x45db8f"
+        }
+      ]
+    },
+    {
+      "position": 69,
+      "registrar": "0x45cab0",
+      "qtask_callsite": "0x402a8e",
+      "class_count": 1,
+      "class_ids": [
+        192
+      ],
+      "classes": [
+        {
+          "classId": 192,
+          "name": "HumanSoldier",
+          "namePointer": "0x53f2e0",
+          "objectSize": 3408,
+          "parentRaw": 65994941,
+          "tasktype_callsite": "0x45cacf"
+        }
+      ]
+    },
+    {
+      "position": 70,
+      "registrar": "0x459880",
+      "qtask_callsite": "0x402a93",
+      "class_count": 1,
+      "class_ids": [
+        193
+      ],
+      "classes": [
+        {
+          "classId": 193,
+          "name": "HumanSoldierPistol",
+          "namePointer": "0x53ebf8",
+          "objectSize": 3408,
+          "parentRaw": 66519229,
+          "tasktype_callsite": "0x45989f"
+        }
+      ]
+    },
+    {
+      "position": 71,
+      "registrar": "0x456ad0",
+      "qtask_callsite": "0x402a98",
+      "class_count": 1,
+      "class_ids": [
+        194
+      ],
+      "classes": [
+        {
+          "classId": 194,
+          "name": "HumanSoldierRPG",
+          "namePointer": "0x53e8a8",
+          "objectSize": 3392,
+          "parentRaw": 66519229,
+          "tasktype_callsite": "0x456aef"
+        }
+      ]
+    },
+    {
+      "position": 72,
+      "registrar": "0x454970",
+      "qtask_callsite": "0x402a9d",
+      "class_count": 1,
+      "class_ids": [
+        195
+      ],
+      "classes": [
+        {
+          "classId": 195,
+          "name": "HumanSoldierFemale",
+          "namePointer": "0x53e64c",
+          "objectSize": 3408,
+          "parentRaw": 66519229,
+          "tasktype_callsite": "0x45498f"
+        }
+      ]
+    },
+    {
+      "position": 73,
+      "registrar": "0x453550",
+      "qtask_callsite": "0x402aa2",
+      "class_count": 1,
+      "class_ids": [
+        196
+      ],
+      "classes": [
+        {
+          "classId": 196,
+          "name": "PatrolPath",
+          "namePointer": "0x53e3d0",
+          "objectSize": 52,
+          "parentRaw": 66519040,
+          "tasktype_callsite": "0x453584"
+        }
+      ]
+    },
+    {
+      "position": 74,
+      "registrar": "0x4533b0",
+      "qtask_callsite": "0x402aa7",
+      "class_count": 1,
+      "class_ids": [
+        197
+      ],
+      "classes": [
+        {
+          "classId": 197,
+          "name": "PatrolPathCommand",
+          "namePointer": "0x53e288",
+          "objectSize": 40,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4533c9"
+        }
+      ]
+    },
+    {
+      "position": 75,
+      "registrar": "0x44c8d0",
+      "qtask_callsite": "0x402aac",
+      "class_count": 1,
+      "class_ids": [
+        198
+      ],
+      "classes": [
+        {
+          "classId": 198,
+          "name": "HumanAI",
+          "namePointer": "0x53d404",
+          "objectSize": 16080,
+          "parentRaw": 4456448,
+          "tasktype_callsite": "0x44c8f6"
+        }
+      ]
+    },
+    {
+      "position": 76,
+      "registrar": "0x406450",
+      "qtask_callsite": "0x402ab1",
+      "class_count": 2,
+      "class_ids": [
+        199,
+        200
+      ],
+      "classes": [
+        {
+          "classId": 199,
+          "name": "HumanAIConfig",
+          "namePointer": "0x5383f0",
+          "objectSize": 384,
+          "parentRaw": 5701632,
+          "tasktype_callsite": "0x40646f"
+        },
+        {
+          "classId": 200,
+          "name": "HumanAIConfigItem",
+          "namePointer": "0x5383dc",
+          "objectSize": 680,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x406491"
+        }
+      ]
+    },
+    {
+      "position": 77,
+      "registrar": "0x44c130",
+      "qtask_callsite": "0x402ab6",
+      "class_count": 1,
+      "class_ids": [
+        201
+      ],
+      "classes": [
+        {
+          "classId": 201,
+          "name": "AmbientArea",
+          "namePointer": "0x53c90c",
+          "objectSize": 528,
+          "parentRaw": 10747965,
+          "tasktype_callsite": "0x44c161"
+        }
+      ]
+    },
+    {
+      "position": 78,
+      "registrar": "0x449d30",
+      "qtask_callsite": "0x402abb",
+      "class_count": 1,
+      "class_ids": [
+        202
+      ],
+      "classes": [
+        {
+          "classId": 202,
+          "name": "GlassShatter",
+          "namePointer": "0x53c8fc",
+          "objectSize": 176200,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x449e14"
+        }
+      ]
+    },
+    {
+      "position": 79,
+      "registrar": "0x449970",
+      "qtask_callsite": "0x402ac0",
+      "class_count": 1,
+      "class_ids": [
+        203
+      ],
+      "classes": [
+        {
+          "classId": 203,
+          "name": "Glass",
+          "namePointer": "0x53c878",
+          "objectSize": 328,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x449989"
+        }
+      ]
+    },
+    {
+      "position": 80,
+      "registrar": "0x449360",
+      "qtask_callsite": "0x402ac5",
+      "class_count": 1,
+      "class_ids": [
+        204
+      ],
+      "classes": [
+        {
+          "classId": 204,
+          "name": "Siren",
+          "namePointer": "0x53c860",
+          "objectSize": 728,
+          "parentRaw": 136,
+          "tasktype_callsite": "0x44937f"
+        }
+      ]
+    },
+    {
+      "position": 81,
+      "registrar": "0x448d30",
+      "qtask_callsite": "0x402aca",
+      "class_count": 1,
+      "class_ids": [
+        205
+      ],
+      "classes": [
+        {
+          "classId": 205,
+          "name": "RadarDish",
+          "namePointer": "0x53c848",
+          "objectSize": 384,
+          "parentRaw": 66584585,
+          "tasktype_callsite": "0x448d49"
+        }
+      ]
+    },
+    {
+      "position": 82,
+      "registrar": "0x4485e0",
+      "qtask_callsite": "0x402acf",
+      "class_count": 1,
+      "class_ids": [
+        206
+      ],
+      "classes": [
+        {
+          "classId": 206,
+          "name": "Building",
+          "namePointer": "0x53c828",
+          "objectSize": 496,
+          "parentRaw": 16,
+          "tasktype_callsite": "0x4485ff"
+        }
+      ]
+    },
+    {
+      "position": 83,
+      "registrar": "0x447db0",
+      "qtask_callsite": "0x402ad4",
+      "class_count": 1,
+      "class_ids": [
+        207
+      ],
+      "classes": [
+        {
+          "classId": 207,
+          "name": "GenericTBA",
+          "namePointer": "0x53c7e0",
+          "objectSize": 680,
+          "parentRaw": 6029448,
+          "tasktype_callsite": "0x447de3"
+        }
+      ]
+    },
+    {
+      "position": 84,
+      "registrar": "0x4464c0",
+      "qtask_callsite": "0x402ad9",
+      "class_count": 1,
+      "class_ids": [
+        208
+      ],
+      "classes": [
+        {
+          "classId": 208,
+          "name": "Door",
+          "namePointer": "0x53c770",
+          "objectSize": 808,
+          "parentRaw": 66584584,
+          "tasktype_callsite": "0x4464e1"
+        }
+      ]
+    },
+    {
+      "position": 85,
+      "registrar": "0x444bf0",
+      "qtask_callsite": "0x402ade",
+      "class_count": 1,
+      "class_ids": [
+        209
+      ],
+      "classes": [
+        {
+          "classId": 209,
+          "name": "Switch",
+          "namePointer": "0x53c6f4",
+          "objectSize": 552,
+          "parentRaw": 66584593,
+          "tasktype_callsite": "0x444c0f"
+        }
+      ]
+    },
+    {
+      "position": 86,
+      "registrar": "0x443ed0",
+      "qtask_callsite": "0x402ae3",
+      "class_count": 2,
+      "class_ids": [
+        210,
+        211
+      ],
+      "classes": [
+        {
+          "classId": 210,
+          "name": "Cabinet",
+          "namePointer": "0x53c6d4",
+          "objectSize": 312,
+          "parentRaw": 66584593,
+          "tasktype_callsite": "0x443eef"
+        },
+        {
+          "classId": 211,
+          "name": "Drawer",
+          "namePointer": "0x53c6cc",
+          "objectSize": 352,
+          "parentRaw": 65994761,
+          "tasktype_callsite": "0x4440f4"
+        }
+      ]
+    },
+    {
+      "position": 87,
+      "registrar": "0x443680",
+      "qtask_callsite": "0x402ae8",
+      "class_count": 1,
+      "class_ids": [
+        212
+      ],
+      "classes": [
+        {
+          "classId": 212,
+          "name": "Terminal",
+          "namePointer": "0x53c684",
+          "objectSize": 672,
+          "parentRaw": 136,
+          "tasktype_callsite": "0x44369f"
+        }
+      ]
+    },
+    {
+      "position": 88,
+      "registrar": "0x440fd0",
+      "qtask_callsite": "0x402aed",
+      "class_count": 3,
+      "class_ids": [
+        213,
+        214,
+        215
+      ],
+      "classes": [
+        {
+          "classId": 213,
+          "name": "SCamera",
+          "namePointer": "0x53c5e0",
+          "objectSize": 456,
+          "parentRaw": 66584593,
+          "tasktype_callsite": "0x440fef"
+        },
+        {
+          "classId": 214,
+          "name": "SCameraLens",
+          "namePointer": "0x53c5d4",
+          "objectSize": 9704,
+          "parentRaw": 66584593,
+          "tasktype_callsite": "0x441351"
+        },
+        {
+          "classId": 215,
+          "name": "SCameraLensViewCone",
+          "namePointer": "0x53c5c0",
+          "objectSize": 312,
+          "parentRaw": 66584585,
+          "tasktype_callsite": "0x4414ac"
+        }
+      ]
+    },
+    {
+      "position": 89,
+      "registrar": "0x440c20",
+      "qtask_callsite": "0x402af2",
+      "class_count": 1,
+      "class_ids": [
+        216
+      ],
+      "classes": [
+        {
+          "classId": 216,
+          "name": "SCameraControl",
+          "namePointer": "0x53c580",
+          "objectSize": 760,
+          "parentRaw": 212,
+          "tasktype_callsite": "0x440c3f"
+        }
+      ]
+    },
+    {
+      "position": 90,
+      "registrar": "0x440710",
+      "qtask_callsite": "0x402af7",
+      "class_count": 1,
+      "class_ids": [
+        217
+      ],
+      "classes": [
+        {
+          "classId": 217,
+          "name": "AlarmControl",
+          "namePointer": "0x53c540",
+          "objectSize": 848,
+          "parentRaw": 66584788,
+          "tasktype_callsite": "0x44072f"
+        }
+      ]
+    },
+    {
+      "position": 91,
+      "registrar": "0x4403e0",
+      "qtask_callsite": "0x402afc",
+      "class_count": 1,
+      "class_ids": [
+        218
+      ],
+      "classes": [
+        {
+          "classId": 218,
+          "name": "Ladder",
+          "namePointer": "0x53c538",
+          "objectSize": 320,
+          "parentRaw": 66584585,
+          "tasktype_callsite": "0x4403f9"
+        }
+      ]
+    },
+    {
+      "position": 92,
+      "registrar": "0x43f900",
+      "qtask_callsite": "0x402b01",
+      "class_count": 1,
+      "class_ids": [
+        219
+      ],
+      "classes": [
+        {
+          "classId": 219,
+          "name": "Fence",
+          "namePointer": "0x53c510",
+          "objectSize": 376,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x43f91f"
+        }
+      ]
+    },
+    {
+      "position": 93,
+      "registrar": "0x43eff0",
+      "qtask_callsite": "0x402b06",
+      "class_count": 1,
+      "class_ids": [
+        220
+      ],
+      "classes": [
+        {
+          "classId": 220,
+          "name": "Wire",
+          "namePointer": "0x53c4dc",
+          "objectSize": 312,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x43f00f"
+        }
+      ]
+    },
+    {
+      "position": 94,
+      "registrar": "0x43e8d0",
+      "qtask_callsite": "0x402b0b",
+      "class_count": 1,
+      "class_ids": [
+        221
+      ],
+      "classes": [
+        {
+          "classId": 221,
+          "name": "GenericPhysicsObj",
+          "namePointer": "0x53c4c8",
+          "objectSize": 1824,
+          "parentRaw": 65994811,
+          "tasktype_callsite": "0x43e8ef"
+        }
+      ]
+    },
+    {
+      "position": 95,
+      "registrar": "0x43e4f0",
+      "qtask_callsite": "0x402b10",
+      "class_count": 1,
+      "class_ids": [
+        222
+      ],
+      "classes": [
+        {
+          "classId": 222,
+          "name": "GenericPhysicsMagicObj",
+          "namePointer": "0x53c490",
+          "objectSize": 1896,
+          "parentRaw": 60,
+          "tasktype_callsite": "0x43e509"
+        }
+      ]
+    },
+    {
+      "position": 96,
+      "registrar": "0x43cc70",
+      "qtask_callsite": "0x402b15",
+      "class_count": 1,
+      "class_ids": [
+        223
+      ],
+      "classes": [
+        {
+          "classId": 223,
+          "name": "Elevator",
+          "namePointer": "0x53c3ec",
+          "objectSize": 1608,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x43cc92"
+        }
+      ]
+    },
+    {
+      "position": 97,
+      "registrar": "0x43c6d0",
+      "qtask_callsite": "0x402b1a",
+      "class_count": 1,
+      "class_ids": [
+        224
+      ],
+      "classes": [
+        {
+          "classId": 224,
+          "name": "ElevatorFloorIndicator",
+          "namePointer": "0x53c364",
+          "objectSize": 584,
+          "parentRaw": 66584584,
+          "tasktype_callsite": "0x43c6ef"
+        }
+      ]
+    },
+    {
+      "position": 98,
+      "registrar": "0x43bfd0",
+      "qtask_callsite": "0x402b1f",
+      "class_count": 1,
+      "class_ids": [
+        225
+      ],
+      "classes": [
+        {
+          "classId": 225,
+          "name": "ExplodeMagicObj",
+          "namePointer": "0x53c354",
+          "objectSize": 336,
+          "parentRaw": 66650121,
+          "tasktype_callsite": "0x43bfe9"
+        }
+      ]
+    },
+    {
+      "position": 99,
+      "registrar": "0x43b850",
+      "qtask_callsite": "0x402b24",
+      "class_count": 1,
+      "class_ids": [
+        226
+      ],
+      "classes": [
+        {
+          "classId": 226,
+          "name": "SimpointObjGenerator",
+          "namePointer": "0x53c320",
+          "objectSize": 344,
+          "parentRaw": 8,
+          "tasktype_callsite": "0x43b86f"
+        }
+      ]
+    },
+    {
+      "position": 100,
+      "registrar": "0x43b2f0",
+      "qtask_callsite": "0x402b29",
+      "class_count": 1,
+      "class_ids": [
+        227
+      ],
+      "classes": [
+        {
+          "classId": 227,
+          "name": "Generator",
+          "namePointer": "0x53c300",
+          "objectSize": 704,
+          "parentRaw": 66650248,
+          "tasktype_callsite": "0x43b30f"
+        }
+      ]
+    },
+    {
+      "position": 101,
+      "registrar": "0x43ad80",
+      "qtask_callsite": "0x402b2e",
+      "class_count": 1,
+      "class_ids": [
+        228
+      ],
+      "classes": [
+        {
+          "classId": 228,
+          "name": "Radio",
+          "namePointer": "0x53c2f4",
+          "objectSize": 744,
+          "parentRaw": 66650248,
+          "tasktype_callsite": "0x43ada2"
+        }
+      ]
+    },
+    {
+      "position": 102,
+      "registrar": "0x43a840",
+      "qtask_callsite": "0x402b33",
+      "class_count": 1,
+      "class_ids": [
+        229
+      ],
+      "classes": [
+        {
+          "classId": 229,
+          "name": "MineField",
+          "namePointer": "0x53c2d4",
+          "objectSize": 208,
+          "parentRaw": 66650173,
+          "tasktype_callsite": "0x43a85f"
+        }
+      ]
+    },
+    {
+      "position": 103,
+      "registrar": "0x4397c0",
+      "qtask_callsite": "0x402b38",
+      "class_count": 2,
+      "class_ids": [
+        230,
+        231
+      ],
+      "classes": [
+        {
+          "classId": 230,
+          "name": "AlarmLight",
+          "namePointer": "0x53c2b4",
+          "objectSize": 504,
+          "parentRaw": 66650129,
+          "tasktype_callsite": "0x4397e1"
+        },
+        {
+          "classId": 231,
+          "name": "AlarmLightReflector",
+          "namePointer": "0x53c28c",
+          "objectSize": 320,
+          "parentRaw": 66650121,
+          "tasktype_callsite": "0x4399ca"
+        }
+      ]
+    },
+    {
+      "position": 104,
+      "registrar": "0x438df0",
+      "qtask_callsite": "0x402b3d",
+      "class_count": 1,
+      "class_ids": [
+        232
+      ],
+      "classes": [
+        {
+          "classId": 232,
+          "name": "RotatingObject",
+          "namePointer": "0x53c1f4",
+          "objectSize": 512,
+          "parentRaw": 5701640,
+          "tasktype_callsite": "0x438e0f"
+        }
+      ]
+    },
+    {
+      "position": 105,
+      "registrar": "0x4388b0",
+      "qtask_callsite": "0x402b42",
+      "class_count": 1,
+      "class_ids": [
+        233
+      ],
+      "classes": [
+        {
+          "classId": 233,
+          "name": "PlaceExplosiveTBA",
+          "namePointer": "0x53c1e0",
+          "objectSize": 688,
+          "parentRaw": 66650319,
+          "tasktype_callsite": "0x4388cf"
+        }
+      ]
+    },
+    {
+      "position": 106,
+      "registrar": "0x438390",
+      "qtask_callsite": "0x402b47",
+      "class_count": 1,
+      "class_ids": [
+        234
+      ],
+      "classes": [
+        {
+          "classId": 234,
+          "name": "GunShotEffect",
+          "namePointer": "0x53c1cc",
+          "objectSize": 32,
+          "parentRaw": 66650112,
+          "tasktype_callsite": "0x4383a6"
+        }
+      ]
+    },
+    {
+      "position": 107,
+      "registrar": "0x437510",
+      "qtask_callsite": "0x402b4c",
+      "class_count": 1,
+      "class_ids": [
+        235
+      ],
+      "classes": [
+        {
+          "classId": 235,
+          "name": "Smoke",
+          "namePointer": "0x53c128",
+          "objectSize": 376,
+          "parentRaw": 10747965,
+          "tasktype_callsite": "0x437654"
+        }
+      ]
+    },
+    {
+      "position": 108,
+      "registrar": "0x436b10",
+      "qtask_callsite": "0x402b51",
+      "class_count": 1,
+      "class_ids": [
+        236
+      ],
+      "classes": [
+        {
+          "classId": 236,
+          "name": "EnvironmentSound",
+          "namePointer": "0x53c0a4",
+          "objectSize": 92,
+          "parentRaw": 5701632,
+          "tasktype_callsite": "0x436b29"
+        }
+      ]
+    },
+    {
+      "position": 109,
+      "registrar": "0x436780",
+      "qtask_callsite": "0x402b56",
+      "class_count": 1,
+      "class_ids": [
+        237
+      ],
+      "classes": [
+        {
+          "classId": 237,
+          "name": "RainEffect",
+          "namePointer": "0x53c098",
+          "objectSize": 136,
+          "parentRaw": 66650112,
+          "tasktype_callsite": "0x4367c7"
+        }
+      ]
+    },
+    {
+      "position": 110,
+      "registrar": "0x4361d0",
+      "qtask_callsite": "0x402b5b",
+      "class_count": 1,
+      "class_ids": [
+        238
+      ],
+      "classes": [
+        {
+          "classId": 238,
+          "name": "Rudder",
+          "namePointer": "0x53c084",
+          "objectSize": 320,
+          "parentRaw": 5701641,
+          "tasktype_callsite": "0x4361e9"
+        }
+      ]
+    },
+    {
+      "position": 111,
+      "registrar": "0x435d90",
+      "qtask_callsite": "0x402b60",
+      "class_count": 1,
+      "class_ids": [
+        239
+      ],
+      "classes": [
+        {
+          "classId": 239,
+          "name": "Hatch",
+          "namePointer": "0x53c01c",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x435da9"
+        }
+      ]
+    },
+    {
+      "position": 112,
+      "registrar": "0x435870",
+      "qtask_callsite": "0x402b65",
+      "class_count": 1,
+      "class_ids": [
+        240
+      ],
+      "classes": [
+        {
+          "classId": 240,
+          "name": "Gear",
+          "namePointer": "0x53bfa4",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x435889"
+        }
+      ]
+    },
+    {
+      "position": 113,
+      "registrar": "0x4351e0",
+      "qtask_callsite": "0x402b6a",
+      "class_count": 1,
+      "class_ids": [
+        241
+      ],
+      "classes": [
+        {
+          "classId": 241,
+          "name": "CockpitShield",
+          "namePointer": "0x53bfec",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x4351f9"
+        }
+      ]
+    },
+    {
+      "position": 114,
+      "registrar": "0x4330f0",
+      "qtask_callsite": "0x402b6f",
+      "class_count": 1,
+      "class_ids": [
+        242
+      ],
+      "classes": [
+        {
+          "classId": 242,
+          "name": "Plane",
+          "namePointer": "0x53bfc4",
+          "objectSize": 2184,
+          "parentRaw": 88,
+          "tasktype_callsite": "0x43310f"
+        }
+      ]
+    },
+    {
+      "position": 115,
+      "registrar": "0x4310f0",
+      "qtask_callsite": "0x402b79",
+      "class_count": 1,
+      "class_ids": [
+        243
+      ],
+      "classes": [
+        {
+          "classId": 243,
+          "name": "Heli",
+          "namePointer": "0x53bed0",
+          "objectSize": 11520,
+          "parentRaw": 4391000,
+          "tasktype_callsite": "0x431113"
+        }
+      ]
+    },
+    {
+      "position": 116,
+      "registrar": "0x42ff00",
+      "qtask_callsite": "0x402b7e",
+      "class_count": 1,
+      "class_ids": [
+        244
+      ],
+      "classes": [
+        {
+          "classId": 244,
+          "name": "Wheel",
+          "namePointer": "0x53be4c",
+          "objectSize": 344,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x42ff19"
+        }
+      ]
+    },
+    {
+      "position": 117,
+      "registrar": "0x42fe40",
+      "qtask_callsite": "0x402b83",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 118,
+      "registrar": "0x42dcf0",
+      "qtask_callsite": "0x402b88",
+      "class_count": 1,
+      "class_ids": [
+        245
+      ],
+      "classes": [
+        {
+          "classId": 245,
+          "name": "Car",
+          "namePointer": "0x53be28",
+          "objectSize": 11992,
+          "parentRaw": 4325464,
+          "tasktype_callsite": "0x42dd13"
+        }
+      ]
+    },
+    {
+      "position": 119,
+      "registrar": "0x42dac0",
+      "qtask_callsite": "0x402b8d",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    },
+    {
+      "position": 120,
+      "registrar": "0x42d2b0",
+      "qtask_callsite": "0x402b92",
+      "class_count": 1,
+      "class_ids": [
+        246
+      ],
+      "classes": [
+        {
+          "classId": 246,
+          "name": "Rotor",
+          "namePointer": "0x53bda0",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x42d2c9"
+        }
+      ]
+    },
+    {
+      "position": 121,
+      "registrar": "0x42beb0",
+      "qtask_callsite": "0x402b97",
+      "class_count": 1,
+      "class_ids": [
+        247
+      ],
+      "classes": [
+        {
+          "classId": 247,
+          "name": "Afterburner",
+          "namePointer": "0x53bd74",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x42bec9"
+        }
+      ]
+    },
+    {
+      "position": 122,
+      "registrar": "0x42acc0",
+      "qtask_callsite": "0x402b9c",
+      "class_count": 1,
+      "class_ids": [
+        248
+      ],
+      "classes": [
+        {
+          "classId": 248,
+          "name": "Train",
+          "namePointer": "0x53bd1c",
+          "objectSize": 2272,
+          "parentRaw": 88,
+          "tasktype_callsite": "0x42acdf"
+        }
+      ]
+    },
+    {
+      "position": 123,
+      "registrar": "0x427ff0",
+      "qtask_callsite": "0x402ba1",
+      "class_count": 1,
+      "class_ids": [
+        249
+      ],
+      "classes": [
+        {
+          "classId": 249,
+          "name": "Missile",
+          "namePointer": "0x53bc80",
+          "objectSize": 2200,
+          "parentRaw": 66650200,
+          "tasktype_callsite": "0x42800f"
+        }
+      ]
+    },
+    {
+      "position": 124,
+      "registrar": "0x427d90",
+      "qtask_callsite": "0x402ba6",
+      "class_count": 1,
+      "class_ids": [
+        250
+      ],
+      "classes": [
+        {
+          "classId": 250,
+          "name": "HitZone",
+          "namePointer": "0x53bb84",
+          "objectSize": 328,
+          "parentRaw": 5701641,
+          "tasktype_callsite": "0x427da9"
+        }
+      ]
+    },
+    {
+      "position": 125,
+      "registrar": "0x427830",
+      "qtask_callsite": "0x402bab",
+      "class_count": 1,
+      "class_ids": [
+        251
+      ],
+      "classes": [
+        {
+          "classId": 251,
+          "name": "RocketPod",
+          "namePointer": "0x53bb54",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x427849"
+        }
+      ]
+    },
+    {
+      "position": 126,
+      "registrar": "0x4272a0",
+      "qtask_callsite": "0x402bb0",
+      "class_count": 1,
+      "class_ids": [
+        252
+      ],
+      "classes": [
+        {
+          "classId": 252,
+          "name": "HeliDoor",
+          "namePointer": "0x53bb30",
+          "objectSize": 328,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x4272b9"
+        }
+      ]
+    },
+    {
+      "position": 127,
+      "registrar": "0x426d90",
+      "qtask_callsite": "0x402bb5",
+      "class_count": 1,
+      "class_ids": [
+        253
+      ],
+      "classes": [
+        {
+          "classId": 253,
+          "name": "HeliWheel",
+          "namePointer": "0x53bb0c",
+          "objectSize": 320,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x426da9"
+        }
+      ]
+    },
+    {
+      "position": 128,
+      "registrar": "0x426630",
+      "qtask_callsite": "0x402bba",
+      "class_count": 1,
+      "class_ids": [
+        254
+      ],
+      "classes": [
+        {
+          "classId": 254,
+          "name": "CarDoor",
+          "namePointer": "0x53bad4",
+          "objectSize": 328,
+          "parentRaw": 9,
+          "tasktype_callsite": "0x426649"
+        }
+      ]
+    },
+    {
+      "position": 129,
+      "registrar": "0x425c80",
+      "qtask_callsite": "0x402bbf",
+      "class_count": 1,
+      "class_ids": [
+        255
+      ],
+      "classes": [
+        {
+          "classId": 255,
+          "name": "CarAI",
+          "namePointer": "0x53ba90",
+          "objectSize": 132,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x425c9f"
+        }
+      ]
+    },
+    {
+      "position": 130,
+      "registrar": "0x424e80",
+      "qtask_callsite": "0x402bc4",
+      "class_count": 1,
+      "class_ids": [
+        256
+      ],
+      "classes": [
+        {
+          "classId": 256,
+          "name": "ConditionalSound",
+          "namePointer": "0x53ba00",
+          "objectSize": 296,
+          "parentRaw": 65994752,
+          "tasktype_callsite": "0x424e9f"
+        }
+      ]
+    },
+    {
+      "position": 131,
+      "registrar": "0x4170a0",
+      "qtask_callsite": "0x402bc9",
+      "class_count": 1,
+      "class_ids": [
+        257
+      ],
+      "classes": [
+        {
+          "classId": 257,
+          "name": "MenuManager",
+          "namePointer": "0x53982c",
+          "objectSize": 10392,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4170d5"
+        }
+      ]
+    },
+    {
+      "position": 132,
+      "registrar": "0x424b90",
+      "qtask_callsite": "0x402bce",
+      "class_count": 1,
+      "class_ids": [
+        258
+      ],
+      "classes": [
+        {
+          "classId": 258,
+          "name": "Cursor",
+          "namePointer": "0x53b9f8",
+          "objectSize": 64,
+          "parentRaw": 66650112,
+          "tasktype_callsite": "0x424ba6"
+        }
+      ]
+    },
+    {
+      "position": 133,
+      "registrar": "0x423fc0",
+      "qtask_callsite": "0x402bd3",
+      "class_count": 1,
+      "class_ids": [
+        259
+      ],
+      "classes": [
+        {
+          "classId": 259,
+          "name": "MenuWindow",
+          "namePointer": "0x53b9ec",
+          "objectSize": 84,
+          "parentRaw": 6029312,
+          "tasktype_callsite": "0x423fd6"
+        }
+      ]
+    },
+    {
+      "position": 134,
+      "registrar": "0x4230a0",
+      "qtask_callsite": "0x402bd8",
+      "class_count": 1,
+      "class_ids": [
+        260
+      ],
+      "classes": [
+        {
+          "classId": 260,
+          "name": "ControlsMenu",
+          "namePointer": "0x53b8c0",
+          "objectSize": 868,
+          "parentRaw": 259,
+          "tasktype_callsite": "0x4230b9"
+        }
+      ]
+    },
+    {
+      "position": 135,
+      "registrar": "0x422b40",
+      "qtask_callsite": "0x402bdd",
+      "class_count": 1,
+      "class_ids": [
+        261
+      ],
+      "classes": [
+        {
+          "classId": 261,
+          "name": "ModelViewBox",
+          "namePointer": "0x53b858",
+          "objectSize": 200,
+          "parentRaw": 259,
+          "tasktype_callsite": "0x422b5f"
+        }
+      ]
+    },
+    {
+      "position": 136,
+      "registrar": "0x4223d0",
+      "qtask_callsite": "0x402be2",
+      "class_count": 1,
+      "class_ids": [
+        262
+      ],
+      "classes": [
+        {
+          "classId": 262,
+          "name": "MenuFrame",
+          "namePointer": "0x53b83c",
+          "objectSize": 180,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x422403"
+        }
+      ]
+    },
+    {
+      "position": 137,
+      "registrar": "0x421750",
+      "qtask_callsite": "0x402be7",
+      "class_count": 1,
+      "class_ids": [
+        263
+      ],
+      "classes": [
+        {
+          "classId": 263,
+          "name": "MenuScreen",
+          "namePointer": "0x53b804",
+          "objectSize": 420,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x42176f"
+        }
+      ]
+    },
+    {
+      "position": 138,
+      "registrar": "0x421430",
+      "qtask_callsite": "0x402bec",
+      "class_count": 1,
+      "class_ids": [
+        264
+      ],
+      "classes": [
+        {
+          "classId": 264,
+          "name": "MenuButton",
+          "namePointer": "0x53b7f4",
+          "objectSize": 152,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x42144f"
+        }
+      ]
+    },
+    {
+      "position": 139,
+      "registrar": "0x420cc0",
+      "qtask_callsite": "0x402bf1",
+      "class_count": 1,
+      "class_ids": [
+        265
+      ],
+      "classes": [
+        {
+          "classId": 265,
+          "name": "MenuText",
+          "namePointer": "0x53b7e4",
+          "objectSize": 368,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x420cdf"
+        }
+      ]
+    },
+    {
+      "position": 140,
+      "registrar": "0x420300",
+      "qtask_callsite": "0x402bf6",
+      "class_count": 1,
+      "class_ids": [
+        266
+      ],
+      "classes": [
+        {
+          "classId": 266,
+          "name": "MenuTextConditional",
+          "namePointer": "0x53b744",
+          "objectSize": 536,
+          "parentRaw": 259,
+          "tasktype_callsite": "0x42031f"
+        }
+      ]
+    },
+    {
+      "position": 141,
+      "registrar": "0x41f340",
+      "qtask_callsite": "0x402bfb",
+      "class_count": 1,
+      "class_ids": [
+        267
+      ],
+      "classes": [
+        {
+          "classId": 267,
+          "name": "SlideBar",
+          "namePointer": "0x53b6c0",
+          "objectSize": 592,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41f35f"
+        }
+      ]
+    },
+    {
+      "position": 142,
+      "registrar": "0x41e690",
+      "qtask_callsite": "0x402c00",
+      "class_count": 1,
+      "class_ids": [
+        268
+      ],
+      "classes": [
+        {
+          "classId": 268,
+          "name": "ListBox",
+          "namePointer": "0x53b698",
+          "objectSize": 3384,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41e6af"
+        }
+      ]
+    },
+    {
+      "position": 143,
+      "registrar": "0x41dc50",
+      "qtask_callsite": "0x402c05",
+      "class_count": 1,
+      "class_ids": [
+        269
+      ],
+      "classes": [
+        {
+          "classId": 269,
+          "name": "ToggleBox",
+          "namePointer": "0x53b678",
+          "objectSize": 332,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41dc6f"
+        }
+      ]
+    },
+    {
+      "position": 144,
+      "registrar": "0x41d080",
+      "qtask_callsite": "0x402c0a",
+      "class_count": 1,
+      "class_ids": [
+        270
+      ],
+      "classes": [
+        {
+          "classId": 270,
+          "name": "InputBox",
+          "namePointer": "0x53b644",
+          "objectSize": 424,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41d09f"
+        }
+      ]
+    },
+    {
+      "position": 145,
+      "registrar": "0x41c700",
+      "qtask_callsite": "0x402c0f",
+      "class_count": 1,
+      "class_ids": [
+        271
+      ],
+      "classes": [
+        {
+          "classId": 271,
+          "name": "AsciiBox",
+          "namePointer": "0x53b5f8",
+          "objectSize": 248,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41c71f"
+        }
+      ]
+    },
+    {
+      "position": 146,
+      "registrar": "0x41b8e0",
+      "qtask_callsite": "0x402c14",
+      "class_count": 1,
+      "class_ids": [
+        272
+      ],
+      "classes": [
+        {
+          "classId": 272,
+          "name": "ScrollListBox",
+          "namePointer": "0x53b5a0",
+          "objectSize": 5116,
+          "parentRaw": 4260099,
+          "tasktype_callsite": "0x41b903"
+        }
+      ]
+    },
+    {
+      "position": 147,
+      "registrar": "0x41b310",
+      "qtask_callsite": "0x402c19",
+      "class_count": 1,
+      "class_ids": [
+        273
+      ],
+      "classes": [
+        {
+          "classId": 273,
+          "name": "PictureBox",
+          "namePointer": "0x53b590",
+          "objectSize": 2556,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41b32f"
+        }
+      ]
+    },
+    {
+      "position": 148,
+      "registrar": "0x41aaf0",
+      "qtask_callsite": "0x402c1e",
+      "class_count": 1,
+      "class_ids": [
+        274
+      ],
+      "classes": [
+        {
+          "classId": 274,
+          "name": "TextBox",
+          "namePointer": "0x53b584",
+          "objectSize": 8772,
+          "parentRaw": 4260099,
+          "tasktype_callsite": "0x41ab13"
+        }
+      ]
+    },
+    {
+      "position": 149,
+      "registrar": "0x41a1e0",
+      "qtask_callsite": "0x402c23",
+      "class_count": 1,
+      "class_ids": [
+        275
+      ],
+      "classes": [
+        {
+          "classId": 275,
+          "name": "TypeWriterBox",
+          "namePointer": "0x53b540",
+          "objectSize": 136,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x41a1ff"
+        }
+      ]
+    },
+    {
+      "position": 150,
+      "registrar": "0x4199f0",
+      "qtask_callsite": "0x402c28",
+      "class_count": 1,
+      "class_ids": [
+        276
+      ],
+      "classes": [
+        {
+          "classId": 276,
+          "name": "DialogWindow",
+          "namePointer": "0x539c2c",
+          "objectSize": 92,
+          "parentRaw": 66650371,
+          "tasktype_callsite": "0x419a1d"
+        }
+      ]
+    },
+    {
+      "position": 151,
+      "registrar": "0x419760",
+      "qtask_callsite": "0x402c2d",
+      "class_count": 1,
+      "class_ids": [
+        277
+      ],
+      "classes": [
+        {
+          "classId": 277,
+          "name": "BackgroundFX",
+          "namePointer": "0x539c18",
+          "objectSize": 36,
+          "parentRaw": 66650112,
+          "tasktype_callsite": "0x419776"
+        }
+      ]
+    },
+    {
+      "position": 152,
+      "registrar": "0x4190e0",
+      "qtask_callsite": "0x402c32",
+      "class_count": 1,
+      "class_ids": [
+        278
+      ],
+      "classes": [
+        {
+          "classId": 278,
+          "name": "MenuLoader",
+          "namePointer": "0x539ae0",
+          "objectSize": 292,
+          "parentRaw": 0,
+          "tasktype_callsite": "0x4190ff"
+        }
+      ]
+    },
+    {
+      "position": 153,
+      "registrar": "0x402f50",
+      "qtask_callsite": "0x402c37",
+      "class_count": 0,
+      "class_ids": [],
+      "classes": []
+    }
+  ],
+  "camtask": {
+    "expected_class_id": 45,
+    "expected_name": "CamTask",
+    "observed_registrar": "0x508f80",
+    "tasktype_callsite": "0x530239",
+    "object_size": 136
+  },
+  "order_check": {
+    "reference": "executed prefix of static QTask_RegisterClasses order (call VA+5), 0x4C1780 removed",
+    "compared_positions": 153,
+    "mismatch_count": 0,
+    "mismatches": [],
+    "dead_tail_note": "linear static positions after 0x00402C37 are skipped by the jmp at that address and are not part of the runtime order"
+  }
+}
