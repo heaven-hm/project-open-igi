@@ -1120,3 +1120,28 @@ presence byte at `+0x1C`, and a `0x4B0B00` call writing at `+0x04..+0x24`. The t
 
 `0x4B0B00` is called with four arguments and is not yet identified; that plus the tail are the
 remaining gaps before this native can be transcribed.
+
+### 0x401927 tail captured and callee resolved
+
+```
+; non-sentinel path (0x4019CD..0x4019DD)
+eax = 0xA96AE0 + edi*4; esi = dword [eax]
+for (edx = 0xFE; edx != 0; --edx) {          ; 254 iterations, stride 0x600
+    eax += 0x600; [ecx] = esi; ecx += 0x600   ; replicate the first row's value down the column
+}
+call 0x4014B0                                 ; refresh slot words (landed native)
+return (word) bp                              ; returns the slot index it registered
+```
+
+Sentinel path (`0x4019EB`): `eax = 0xA96AE0 + ebp*4; dword [eax] = 0;` then the same 254-iteration
+`0x600`-stride propagation with a zero value.
+
+So the table is a **254-row by N-column grid at 0x600 (1536) row stride**, and this writer either
+propagates a slot's existing value down all 254 rows or clears the column. That row stride was not
+visible from `0x401400`'s read side at all.
+
+`0x4B0B00` resolution: no `native_4b0b00.cpp` exists, but the address is already implemented inside
+`engine/src/retail/core/task_types.cpp` (referenced there as retail 0x004B0B00), so it is **not** a
+new dependency - checked first this time, per the round-104 lesson.
+
+With the tail and callee resolved by evidence, `0x401927` is transcription-ready.
