@@ -26,14 +26,11 @@ namespace igi::retail::core {
 // offset, and the name is the last field so nothing after it shifts.
 struct TaskTypeSlot
 {
-    std::uint32_t name_index;                // +0x00, 0x00AF5EE0: the retail
-                                              // stores the name pointer here, and
-                                              // the retail is 32-bit, so the
-                                              // port keeps the slot layout by
-                                              // holding the name by index.
+    std::uint32_t name;                      // +0x00, 0x00AF5EE0: the class-name pointer (32-bit target only)
     std::uint32_t object_size;               // +0x04, 0x00AF5EE4
     std::uint16_t parent_type;               // +0x08, 0x00AF5EE8
-    std::uint8_t unknown_0x0A[0x1A];
+    std::uint8_t unknown_0x0A[0x02];
+    std::int32_t task_list[6];               // +0x0C..+0x23, written by 0x004B0B00
     std::uint8_t has_task_list;              // +0x24, 0x00AF5F04
     std::uint8_t in_use;                     // +0x25, 0x00AF5F05
     std::uint8_t unknown_0x26[0x02];
@@ -45,6 +42,7 @@ static_assert(offsetof(TaskTypeSlot, handler_mask) == 0x28, "the retail slot lay
 static_assert(sizeof(TaskTypeSlot) == 0x30, "the retail slot is 0x30 bytes");
 static_assert(offsetof(TaskTypeSlot, object_size) == 0x04, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, parent_type) == 0x08, "the retail slot layout");
+static_assert(offsetof(TaskTypeSlot, task_list) == 0x0C, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, in_use) == 0x25, "the retail slot layout");
 static_assert(offsetof(TaskTypeSlot, inherited_flags) == 0x2C, "the retail slot layout");
 
@@ -67,6 +65,11 @@ inline constexpr std::uint8_t first_event_id = 0x20U;
 } // namespace igi::retail::core
 
 extern "C" {
+
+// Native: TaskType_RefreshHandlerMask() - VA 0x004014B0.
+// Behavior: for every in-use type slot, stores the 16-bit per-phase handler mask
+// from 0x004014E0 at slot+0x28.
+void TaskType_RefreshHandlerMask();
 
 // The retail task type table at 0x00AF5EE0. The retail scans the in-use byte
 // at 0x00AF5F05, which is slot + 0x25.

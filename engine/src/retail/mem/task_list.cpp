@@ -3,6 +3,7 @@
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; 5 blocks, callee 0x004B0C60 Mem_Alloc; spec build/audit/main-0x48F530/level1-closure/20261024T023630Z/NEXT-COMMITS-SPEC.md §1.3.
 // Behavior/CFG: alignment=max(arg4,4); stride=element_size rounded up to alignment; descriptor[5]=element_size stored before allocating; base=Mem_Alloc((stride+4)*count, alignment); descriptor = [0]=base, [1]=base+stride*count (index table), [2]=0, [3]=count, [4]=stride, [5]=element_size; index_table[i]=i; returns count (0 when count<=0).
 // Status/limits: TRANSCRIBED; no runtime evidence; only transcribed caller will be TaskType_Register 0x401900.
+#include "igi/retail/mem/task_list.hpp"
 #include "igi/retail/mem/mem_alloc.hpp"
 #include <cstdint>
 

@@ -8,16 +8,15 @@
 #define NATIVE_DECL
 #endif
 
+#include "igi/retail/core/retail_error.hpp"
+#include "igi/retail/mem/task_list.hpp"
+
 #include <cstring>
 #include <stdexcept>
 #include <string>
 
 namespace {
 
-// The registered class names, indexed by the slot's name_index. The retail
-// stores the name pointer directly in the slot; the port keeps one name entry
-// per type slot so the replayed 279-class registration keeps every name.
-const char* g_type_names[igi::retail::core::task_type_slot_count] = {};
 
 // The retail's link native computes the handler table index as
 // class_id + phase * 384 and stores the handler at 0x00A96AE0 + index * 4.
@@ -358,31 +357,26 @@ std::uint32_t QTask_LinkedHandlerCounter = 0xFFFFFFFFU;
 std::uint32_t QTask_ContextHandlerCount = 0U;
 std::uint32_t QTask_NoContextHandlerCount = 0U;
 
-// Native: TaskType_Register; retail VA 0x00401900.
+// Native: TaskType_Register; retail VA 0x00401900 (0x00401900-0x00401A10, 273 bytes, 18 blocks).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
-// Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x00401900..0x004019DA; live
-//           capture of the 279 registrations at level 1 through
-//           scripts/frida_register_trace.js (docs/fidelity/evidence/
-//           0x00401900-retail-registration-order.json).
-// Behavior/CFG: scans the type table for a free 0x30-byte slot from 0x00AF5EE0, marks it used at
-//           slot+0x25, stores the name pointer at slot+0x00, the object size at slot+0x04 and
-//           the parent type's low 16 bits at slot+0x08, and takes the inherited flags at
-//           slot+0x2C from the parent slot, except for the parent 0x0181 which carries
-//           0x20000000. The fourth stack slot is the task-list argument: when it is non-zero the
-//           retail creates the class task list through 0x004B0B00 at slot+0x0C and sets the
-//           has_task_list byte at slot+0x24. It returns the 16-bit type id.
-// Status/limits: STRUCTURALLY_VERIFIED; the slot layout and the inheritance rule are the retail's,
-//           and the returned ids matched the live capture for all 279 registrations. Gaps against
-//           the retail tail (0x00401982..0x004019DA): the port does not create the class task
-//           list through 0x004B0B00 (it records the argument only) and it does not copy the
-//           parent's handler phases through the 0x004019CD loop. The classes the port dispatches
-//           link their handlers explicitly after registration, so the phase table stays correct
-//           for them; classes that only inherit handlers keep null entries here.
+// Tools/evidence: Binary Ninja MCP disassembly/decompile and radare2 6.2.0 bytes for the whole
+//           range; live capture of the 279 level-1 registrations through
+//           scripts/frida_register_trace.js (docs/fidelity/evidence/0x00401900-retail-registration-order.json).
+// Behavior/CFG: scans the 384 0x30-byte type slots at 0x00AF5EE0 for a free in-use byte (+0x25);
+//           scan failure calls Debug_Error("Unable to allocate task type") and never returns. On
+//           a slot: in_use=1, name pointer at +0x00, object size at +0x04, parent word at +0x08,
+//           inherited flags at +0x2C (0x20000000 for parent 0x0181, else copied from the parent
+//           slot); a non-zero fourth argument creates the class task list at +0x0C through
+//           0x004B0B00 and sets +0x24; 254 handler-table entries at phase stride 0x180 are copied
+//           from the parent type (or zeroed for parent 0x0181); then 0x004014B0 refreshes the
+//           per-type handler masks. Returns the 16-bit type id in AX.
+// Status/limits: TRANSCRIBED (body); the VA extent and tail behavior are the retail's. 32-bit
+//           target only: the name pointer is stored as a 32-bit dword. Mask values depend on
+//           0x0054FF24 (0x004014B0/0x004014E0) whose writers are not yet transcribed.
 std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t object_size,
                                                 std::uint16_t parent_type,
-                                                std::uint32_t task_list_argument)
+                                                std::uint32_t task_list_count)
 {
-    (void)task_list_argument;
     std::uint32_t type_id = 0U;
     for (; type_id < igi::retail::core::task_type_slot_count; ++type_id)
     {
@@ -393,32 +387,56 @@ std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t obje
     }
     if (type_id >= igi::retail::core::task_type_slot_count)
     {
-        return 0U;
-    }
-    igi::retail::core::TaskTypeSlot& slot = QTask_TypeTable[type_id];
-    slot.in_use = 1U;
-    slot.object_size = object_size;
-    if (name != nullptr)
-    {
-        for (std::size_t index = 0; index < igi::retail::core::task_type_slot_count; ++index)
+        // 0x00401918-0x00401925: push "Unable to allocate task type"; call Debug_Error; jmp $.
+        Debug_Error("Unable to allocate task type");
+        for (;;)
         {
-            if (g_type_names[index] == nullptr)
-            {
-                g_type_names[index] = name;
-                slot.name_index = static_cast<std::uint32_t>(index);
-                break;
-            }
         }
     }
+    igi::retail::core::TaskTypeSlot& slot = QTask_TypeTable[type_id];
+    // 0x0040193C-0x00401949: in_use=1; size at +0x04; name pointer at +0x00.
+    slot.in_use = 1U;
+    slot.object_size = object_size;
+    slot.name = reinterpret_cast<std::uint32_t>(name);
+    // 0x00401954: parent word at +0x08.
     slot.parent_type = parent_type;
+    // 0x0040195B-0x0040197D: +0x2C = 0x20000000 for parent 0x0181, else the parent slot's
+    // +0x2C value; the retail indexes the parent slot without a bounds check.
     if (parent_type == 0x0181U)
     {
         slot.inherited_flags = 0x20000000U;
     }
-    else if (parent_type < igi::retail::core::task_type_slot_count)
+    else
     {
         slot.inherited_flags = QTask_TypeTable[parent_type].inherited_flags;
     }
+    // 0x00401982-0x004019A4: non-zero fourth argument creates the class task list.
+    if (task_list_count != 0U)
+    {
+        (void)Mem_AllocIndexedBlock_4B0B00(slot.task_list, static_cast<std::int32_t>(object_size),
+                                           static_cast<std::int32_t>(task_list_count), 0);
+        slot.has_task_list = 1U;
+    }
+    else
+    {
+        slot.has_task_list = 0U;
+    }
+    // 0x004019AD-0x00401A05: copy the parent's 254 handler-table entries, or zero them for the
+    // root type 0x0181; index = phase*0x180 + type_id.
+    for (std::uint32_t phase = 0U; phase < 0xFEU; ++phase)
+    {
+        if (parent_type == 0x0181U)
+        {
+            QTask_HandlerTable[phase * igi::retail::core::task_phase_stride + type_id] = nullptr;
+        }
+        else
+        {
+            QTask_HandlerTable[phase * igi::retail::core::task_phase_stride + type_id] =
+                QTask_HandlerTable[phase * igi::retail::core::task_phase_stride + parent_type];
+        }
+    }
+    // 0x004019DF / 0x00401A05: refresh every in-use slot's handler mask, then return AX.
+    TaskType_RefreshHandlerMask();
     return static_cast<std::uint16_t>(type_id);
 }
 
@@ -547,7 +565,7 @@ void NATIVE_DECL QTask_ClearTaskTypes()
 {
     for (std::size_t slot = 0U; slot < igi::retail::core::task_type_slot_count; ++slot)
     {
-        QTask_TypeTable[slot].name_index = 0U;
+        QTask_TypeTable[slot].name = 0U;
         QTask_TypeTable[slot].in_use = 0U;
     }
 }

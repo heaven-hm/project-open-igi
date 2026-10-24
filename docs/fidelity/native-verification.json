@@ -4135,7 +4135,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/task_types.cpp",
-        "sha256": "5c52639e082b7aded343badaf91d5295b1af492b1448698c9c90cd80a7b6c773",
+        "sha256": "ad4f59283e74b6e3715541ce73204663c0d690d958139f59ba56d1fd184d3098",
         "signature": "unknown"
       },
       "game_natives": {
@@ -4144,7 +4144,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "TRANSCRIBED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
@@ -4196,7 +4196,8 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x00401900-behavioral.json",
           "evidence_sha256": "0410168c64e5b9ad0b3f235138f615a76e50b3868acfcbd30543c4ed461cc186"
-        }
+        },
+        "notes": "Body replaced with the retail tail (0x00401900-0x00401A10): failure path, 0x4B0B00 task list, parent phase copy/zero, 0x4014B0 refresh. Gate re-run pending; mask values limited by 0x0054FF24 writers."
       }
     },
     {
