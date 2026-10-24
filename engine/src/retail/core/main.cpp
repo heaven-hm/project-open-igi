@@ -169,14 +169,17 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
 
     // 0x0048F754 GetScreenMode -> CreateWindowExA style:
     //   mode != 0 -> 0x96000000, mode == 0 -> 0x37C80000 (neg/sbb/and/add).
+    // 0x48F72A-0x48F751 retail order: GetSystemMetrics(1) -> y=(cy-480)/2
+    // pushed first, then GetSystemMetrics(0) -> x=(cx-640)/2, and only then the
+    // screen-mode getter whose sign feeds the style word.
+    int const screen_height = ::GetSystemMetrics(SM_CYSCREEN); // 0x48F737 push 1
+    int const window_y = (screen_height - 480) / 2;           // cdq/sub/sar
+    int const screen_width = ::GetSystemMetrics(SM_CXSCREEN);  // 0x48F73B push 0
+    int const window_x = (screen_width - 640) / 2;            // cdq/sub/sar
     std::uintptr_t const style =
         (Display_GetScreenMode_48F130() != 0)
             ? (static_cast<std::uintptr_t>(0x5E380000U) + 0x37C80000U)
             : static_cast<std::uintptr_t>(0x37C80000U);
-    int const screen_width = ::GetSystemMetrics(SM_CXSCREEN);
-    int const screen_height = ::GetSystemMetrics(SM_CYSCREEN);
-    int const window_x = (screen_width - 640) / 2;
-    int const window_y = (screen_height - 480) / 2;
     // 0x0048F770 CreateWindowExA(0, "Innerloop", "Innerloop", style, x, y, 640,
     // 480, NULL, NULL, hInstance, NULL).
     window = ::CreateWindowExA(0, "Innerloop", "Innerloop", static_cast<DWORD>(style),
@@ -232,15 +235,29 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
         {
             ::DestroyWindow(window);
         }
-        if (::GetMessageA(&message, nullptr, 0, 0) == 0)
+        // 0x48F841: the pump is entered only when PeekMessageA reports a
+        // message; the inner loop then gets/dispatches until nothing is pending.
+        if (::PeekMessageA(&message, nullptr, 0, 0, PM_NOREMOVE) != 0)
         {
+            while (::GetMessageA(&message, nullptr, 0, 0) != 0)
+            {
+                ::TranslateMessage(&message);
+                ::DispatchMessageA(&message);
+                if (::PeekMessageA(&message, nullptr, 0, 0, PM_NOREMOVE) == 0)
+                {
+                    break;
+                }
+            }
+            // 0x48F884: GetMessageA returned 0 -> MSG.wParam is the exit code.
             exit_code = static_cast<int>(message.wParam);
-            Loop_StatusByte = 0U;
+        }
+        // 0x48F88A: the loop re-tests the status byte after the pump.
+        if (Loop_StatusByte == 0U)
+        {
             break;
         }
-        ::TranslateMessage(&message);
-        ::DispatchMessageA(&message);
     }
+    Loop_StatusByte = 0U;
 
     // 0x0048F8A7 shutdown: SetForegroundWindow, UnregisterClassA("Innerloop"),
     // CoUninitialize, ReleaseMutex, return exit code.
