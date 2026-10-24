@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1020",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "45bad708a056fb2010e6b53c9b63339d28052b2a30b127655dc08d07e89f5a9b",
+  "implementation_path": "engine/src/retail/qfile/native_4b1020.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "351 retail bytes, 146 instructions, 17 blocks, 25 edges; candidate 17/25, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Blocks and edges match retail exactly (17/25); the full 17-block lattice was enumerated from the bytes and the emitted body reproduces it, including the three exits."
+    },
+    {
+      "name": "exits",
+      "result": "passed",
+      "rationale": "Ret matches: return 0 at 0x004B10BA on no match; return [esp+0x10] at 0x004B117E on a match; and the noreturn Debug_Error spin at 0x004B110A. All three are present."
+    },
+    {
+      "name": "matching",
+      "result": "passed",
+      "rationale": "Uses the landed retail callee Resource_MatchPrefix (0x004AAD10) with count = strlen(record name), not a port strncmp."
+    },
+    {
+      "name": "copies",
+      "result": "passed",
+      "rationale": "Three strlen+1 unbounded copies in retail's order: alias to destination and to 0x00943A18 on the no-match path; target+name_length to destination and destination to 0x00943A18 on the match path."
+    },
+    {
+      "name": "segment_walk",
+      "result": "passed",
+      "rationale": "Skips `depth` semicolons with the CRT strchr helper, then tests for one more to decide the returned depth+1 versus 0, and copies chars up to ';' or NUL without storing the terminator - the append supplies it."
+    },
+    {
+      "name": "bound_conversion",
+      "result": "passed",
+      "rationale": "The table end is expressed as record >= &g_942330[0x1280] because a port table is not linked at retail's 0x009435B0; the byte arithmetic is identical."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4B1020-provenance-defect.md and section 22 of the evidence sheet",
+  "limitations": [
+    "Runtime unobserved.",
+    "Retail runtime shows the reader reached 4096+ times with all depth 0 and every output byte-identical to its input alias, because the table keys (INTROSCREEN: etc) never appear as reader inputs; the match branch is therefore STATICALLY derived, not runtime observed.",
+    "The 0x00943A18 buffer extent 0x80 is inferred from the next referenced global at 0x00943A98; no instruction states a size and both copies are unbounded, as retail's are.",
+    "0x009423C0 handles are read as a separate array because the tree splits them; in retail they are record+0x90 and consolidating the two tables is an open structural decision."
+  ]
+}

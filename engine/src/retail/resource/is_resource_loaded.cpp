@@ -41,7 +41,7 @@ std::int32_t Is_ResourceLoaded(const char* resource_path, ResourceHashNode** out
 
     do
     {
-        depth = qfile::QFile_AliasResolve(alias_buffer, resource_path, depth);
+        depth = qfile::QFile_AliasResolve_4B1020(alias_buffer, resource_path, depth);
         sys::Resource_CanonicalizePath(name_buffer, alias_buffer);
 
         if (name_buffer[0] != 0)

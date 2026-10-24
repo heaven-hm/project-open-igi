@@ -74,7 +74,7 @@ void* Resource_Load(const char* resource_path, std::int32_t* out_size)
         }
         if (g_sys_resource != nullptr)
         {
-            return g_sys_resource(qfile::QFile_GetResolvedAlias(), data_4, item_4);
+            return g_sys_resource(qfile::QFile_GetResolvedAlias_4B1FB0(), data_4, item_4);
         }
         return data_4;
     }

@@ -1,35 +1,33 @@
 #pragma once
 
-#include <cstddef>
 #include <cstdint>
+
+#if defined(_MSC_VER) && defined(_M_IX86)
+#define NATIVE_DECL __cdecl
+#elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
+#define NATIVE_DECL __attribute__((cdecl))
+#else
+#define NATIVE_DECL
+#endif
+
+// Retail 0x004B1020 and 0x004B1FB0 operate on the alias record table at 0x00942330 (32 records of 0x94 bytes,
+// name at +0x00, target at +0x10, handle at +0x90) and the resolved-alias buffer at 0x00943A18. That storage is
+// owned by qfile/native_4b13a0.cpp, qfile/native_4b12d0.cpp and qfile/native_4b1020.cpp; this header declares only
+// the two natives.
 
 namespace igi::retail::qfile {
 
-// Device/alias table entry, laid out exactly as the retail walk expects:
-//   +0x00  device name (NUL-terminated, compared with strncmp)
-//   +0x10  alias string (semicolon separated)
-//   +0x90  active flag (entry is skipped when zero)
-// Entries are 0x94 bytes apart; the retail table spans 0x00942330..0x009435B0.
-struct DeviceEntry {
-    char name[0x10];
-    char alias[0x80];
-    std::int32_t active;
-};
+// 0x004B1020 - QFile_AliasResolve_4B1020.
+// Walks the 32 alias records, matches the record name as a prefix of `alias` with Resource_MatchPrefix (0x004AAD10),
+// then substitutes the depth-th ';'-separated segment of the record's target, appends the remainder of `alias` after
+// the matched name, copies the text into the 0x00943A18 buffer, and copies the result into `destination`.
+// Returns depth+1 when another ';' follows the chosen segment, 0 when it is the last segment or when no record matched.
+// Running out of segments while skipping calls Debug_Error with the record's target and then spins, as retail does.
+std::int32_t NATIVE_DECL QFile_AliasResolve_4B1020(char* destination, const char* alias, std::int32_t depth);
 
-static_assert(sizeof(DeviceEntry) == 0x94U, "device entry stride must match the retail table");
-
-inline constexpr std::size_t device_entry_count = (0x009435B0U - 0x00942330U) / 0x94U;
-
-// 0x004B1020 - QFile_AliasResolve.
-// Replaces the leading device name of `alias` with the device's alias path, appending the rest
-// of `alias`. `depth` selects which semicolon-separated alias segment to use. Returns depth + 1
-// when the chosen segment has a remainder, otherwise 0. When no device matches, `alias` is
-// copied unchanged and 0 is returned. The resolved text is also stored in the global alias
-// buffer at 0x00943A18.
-std::int32_t QFile_AliasResolve(char* destination, const char* alias, std::int32_t depth);
-
-// Port-owned storage for the retail device table (0x00942330) and alias buffer (0x00943A18).
-[[nodiscard]] DeviceEntry* QFile_GetDeviceTable();
-[[nodiscard]] const char* QFile_GetResolvedAlias();
+// 0x004B1FB0 - QFile_GetResolvedAlias_4B1FB0. No arguments, returns the 0x00943A18 buffer address.
+char* NATIVE_DECL QFile_GetResolvedAlias_4B1FB0();
 
 } // namespace igi::retail::qfile
+
+#undef NATIVE_DECL

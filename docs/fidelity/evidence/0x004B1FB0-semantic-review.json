@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1FB0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "71d773737e0a70c573b5c4491eed16e636c9909274d0a591c2452beba1a69100",
+  "implementation_path": "engine/src/retail/qfile/native_4b1fb0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "6 retail bytes, 2 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "Returns the 0x00943A18 buffer address; the four immediates of that address in the image are the two copies inside 0x004B1020, the byte store in 0x004B1200 and this getter."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4B1020-provenance-defect.md and section 22 of the evidence sheet",
+  "limitations": [
+    "Runtime unobserved.",
+    "Replaces the deleted port helper QFile_GetResolvedAlias so the resource path reads the retail buffer rather than port storage."
+  ]
+}

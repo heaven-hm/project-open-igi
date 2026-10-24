@@ -26,7 +26,7 @@ char* NATIVE_DECL QFile_GetDeviceName_4B1DE0(std::int32_t index);
 std::int32_t NATIVE_DECL QFile_DispatchDevicePath_4B1420(const char* path, void* callback, std::int32_t context)
 {
     char buffer[0x80];                                                          // 0x004B1424: sub esp,0x80
-    std::int32_t depth = igi::retail::qfile::QFile_AliasResolve(buffer, path, 0); // 0x004B1436
+    std::int32_t depth = igi::retail::qfile::QFile_AliasResolve_4B1020(buffer, path, 0); // 0x004B1436
     std::int32_t index = QFile_DeviceIndex_4B11A0(buffer);                      // 0x004B1442
 
     if (index > 0)                                                              // 0x004B144A/0x004B144C
@@ -75,7 +75,7 @@ std::int32_t NATIVE_DECL QFile_DispatchDevicePath_4B1420(const char* path, void*
                 return handler_result;                                          // 0x004B14FA-0x004B1504
             }
 
-            depth = igi::retail::qfile::QFile_AliasResolve(buffer, path, depth); // 0x004B14B5
+            depth = igi::retail::qfile::QFile_AliasResolve_4B1020(buffer, path, depth); // 0x004B14B5
             index = QFile_DeviceIndex_4B11A0(buffer);                           // 0x004B14C1
             if (index <= 0)                                                     // 0x004B14C9/0x004B14CB
             {

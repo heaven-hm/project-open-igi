@@ -39,7 +39,7 @@ std::int32_t NATIVE_DECL QFile_DeviceIndex_4B11A0(const char* resolved_path)
         record = reinterpret_cast<DeviceRecord*>(
             reinterpret_cast<std::uint8_t*>(record) + 0x8CU);             // 0x004B11D4
         ++index;                                                         // 0x004B11DA
-    } while (reinterpret_cast<std::uintptr_t>(record) < 0x009439E8U);    // 0x004B11DB/0x004B11E1
+    } while (record < &::g_9436ec[5]);                             // 0x004B11DB/0x004B11E1: cmp esi,0x009439E8; jl (record 5's base)
     return 0;                                                            // 0x004B11E6: xor eax, eax
 }
 
