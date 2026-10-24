@@ -528,3 +528,30 @@ rather than by transcribing retail's `_output`/`_flsbuf` path. That is pre-exist
 debt in the error module - not something introduced by this work - but it means the logging
 path `0x4AF810` would sit on a non-retail implementation, so claiming it VERIFIED later
 requires flagging that dependency scope explicitly.
+
+### 0x4B0D60 decoded (34 B, 1 block) - stack-pop helper; three unowned globals
+
+```
+eax = dword [0x00A960E0]          ; current stack index
+cl  = byte  [0x009422FD]          ; saved flag
+dl  = byte  [arg]                 ; new flag value
+eax -= 1; [0x00A960E0] = eax
+[0x009422FD] = dl
+byte [eax + 0x009422E8] = cl      ; store previous flag at base + index
+ret
+```
+
+It decrements the index, records the previous flag into the array at `0x009422E8`, and
+installs the caller's flag - i.e. a stack pop/restore of a state flag, the counterpart of
+the `push 1` that `0x4BAAC0` performs through this same routine (`call 0x4B0D60(1)`).
+
+Ownership problem: **none of the three globals exist in `engine/`** (`0x00A960E0`,
+`0x009422FD`, `0x009422E8` all return no match). This routine only *consumes* them, so it
+cannot define them - a faithful transcription needs the retail initializer/owner to be
+transcribed first, or the body stays unwritten. Writing `int g_x = 0;` here to satisfy the
+linker would be inventing storage outside a retail writer, which the rules forbid.
+
+So the NodeCriteria chain now has a second kind of blocker beyond missing callees:
+unowned retail state. This is the same situation as `0x4AF810`'s `0x00936274`, which
+suggests the next productive step is transcribing the module initializer that sets these
+globals rather than continuing to decode their consumers.
