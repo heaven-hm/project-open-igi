@@ -1007,3 +1007,13 @@ the per-slot table and esi is an index at that point (i.e. the imul/add at 0x401
 an address). Settle by reading the raw bytes of 0x00401345-0x00401352 with a second decoder and by finding the reader
 of the value stored there. Writing it either way now would be guessing, which is what produced the four false records
 already withdrawn.
+
+Round 168 follow-up on the ambiguous store: the two fields involved are read elsewhere, which narrows the reading.
+  rec+0x20 (0xaf5f00) is loaded as a POINTER at 0x4016E4, 0x401729 and 0x40175B (destructor/delete paths); the
+  allocator loads it into edx and stores through it at 0x40134E.
+  rec+0x0C (0xaf5eec) is loaded at 0x401716 and its ADDRESS is taken with lea at 0x40198E and 0x401A3A (type
+  registration/unregistration paths), which fits an embedded list head rather than a pool base.
+So the most likely reading is: +0x0C begins an embedded list head, the pooled object is found by slot*elemSize from
+some other source, and +0x20 is the pool base used for the tail store. That is still not proven - the type
+registration writer 0x401900/0x4014B0 chain must be derived to establish which field is the base. Do not write
+0x4012F0 from this reading alone.
