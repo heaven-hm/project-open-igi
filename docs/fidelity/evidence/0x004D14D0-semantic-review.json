@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004D14D0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7f74952720f11ecc4b3b17f85301a6f9fa8c666f1985333d96058d77b360f2fc",
+  "implementation_path": "engine/src/retail/render/native_4d14d0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "6 bytes, two instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No arguments and no stack use."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Returns the byte at 0x00548440, the exact displacement in retail's load."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Single ret, no branch, no side effect."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; no transcribed caller reads this word yet.",
+    "The word at 0x00548440 has no other owner, so it starts zeroed in this build; retail's initial value is unknown from this routine alone.",
+    "Codegen deviation recorded: retail writes only AL, while a std::uint8_t return zero-extends EAX. Semantically equal for byte consumption, different for upper-bit readers."
+  ]
+}
