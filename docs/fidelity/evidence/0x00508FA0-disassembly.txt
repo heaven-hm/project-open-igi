@@ -328,3 +328,41 @@ put a fabricated ABI under the AI-graph registrar. Next evidence: read the calle
 frame around `0x00509153` (what `[esp+0x14]` holds at the call) or compare with a
 decompiler view of the same site; the caller body is single-block, so its locals are fully
 visible.
+
+### 0x4F1A80 ABI RESOLVED: fifth argument is passed via the previous call's stack leftovers
+
+Reading the caller at `0x00509136-0x00509158` settles the contradiction:
+
+```
+push 0
+push 7
+call 0x4F0F80              ; 2 args, NOT cleaned here
+lea ecx,[var_88h]; push eax
+mov eax,[0xa7b2cc]; lea edx,[var_ch]
+push ecx; push edx; push eax
+call 0x4F1A80             ; 4 explicit pushes
+add esp, 0x18             ; 24 bytes = 6 dwords cleaned at once
+```
+
+The single `add esp,0x18` cleans **both** the two `0x4F0F80` arguments and the four
+`0x4F1A80` arguments - the two-argument push pair is still on the stack when `0x4F1A80`
+is called. So at `0x4F1A80`'s entry:
+
+- `+4` container, `+8` local pointer, `+0xC` local pointer, `+0x10` value (its four
+  declared pushes),
+- `+0x14` = **7** (the leftover first argument of the preceding `0x4F0F80` call),
+- `+0x18` = 0 (its second leftover).
+
+The body's "fifth slot" read (`byte` at `+0x14`, then a dword from the same slot) therefore
+reads the *deterministically present* leftover argument - not uninitialised caller memory.
+Second site confirms the mechanism with 5 instead of 7. So the routine takes **five**
+arguments, with the fifth supplied by stack reuse rather than an explicit push before its
+own call.
+
+Consequence for transcription: declare five parameters and pass the fifth explicitly with
+the same value the preceding `0x4F0F80` call receives (7, then 5, ...). That preserves the
+record field and the stack-argument semantics without pretending a fifth push exists in the
+listing. The four `record` writes and the count reload pattern stay exactly as decoded.
+Blocker therefore cleared: `0x4F1A80` is writable once `0x4F0F80` (already transcribed,
+called 6 times) is confirmed to be its source of the fifth value at every site - which the
+`add esp,0x18` cleanup count at each of the seven sites can verify mechanically.
