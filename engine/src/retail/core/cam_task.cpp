@@ -9,7 +9,7 @@
 extern "C" {
 
 // Retail global at VA 0x0054F768: the CamTask class id (16-bit store in the retail body).
-std::uint16_t g_54f768 = 0U;
+std::uint16_t g_54f768 = 0x0181U; // retail 0x0054F768, .data image init 0x0181
 
 std::int32_t CamTask_Init()
 {
