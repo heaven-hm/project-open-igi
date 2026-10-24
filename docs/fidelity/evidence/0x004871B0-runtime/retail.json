@@ -1,0 +1,181 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T21:25:22.462218+00:00",
+  "targets": [
+    {
+      "address": "0x004871B0",
+      "name": "probe",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/docs/fidelity/evidence/0x004871B0-runtime/probe_0x004871B0.js",
+      "probe_sha256": "5830745524967d2dbc7a4cdddcd2e888388b12ae7dcad14245b618d6010228c7",
+      "observations": {
+        "name": null,
+        "entries": 1,
+        "returns": 1
+      },
+      "retailName": "probe"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "preferred_base": "0x00400000",
+    "module": "igi.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 64.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 4,
+    "native_size": null,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "address": "0x004871B0",
+      "name": "probe",
+      "module": "igi.exe",
+      "moduleBase": "0x400000",
+      "target": "0x4871b0",
+      "rva": "0x871b0",
+      "preferredBase": 4194304,
+      "argWords": 4,
+      "memArg": null,
+      "maxCalls": 256,
+      "retailVA": "0x004871B0",
+      "sideAddress": "0x004871B0"
+    }
+  ],
+  "evidence_input": null,
+  "entries": [
+    {
+      "type": "observed",
+      "callIndex": 1,
+      "address": "0x004871B0",
+      "phase": "entry",
+      "esp": "0x22f780",
+      "caller": "0x447dc5",
+      "at": 1792877136091,
+      "args": [
+        {
+          "value": 80,
+          "hex": "0x50",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 1230,
+          "hex": "0x4ce",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4892306,
+          "hex": "0x4aa692",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 66,
+          "hex": "0x42",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "memory": null,
+      "watch": null
+    }
+  ],
+  "returns": [
+    {
+      "type": "observed",
+      "callIndex": 1,
+      "address": "0x004871B0",
+      "phase": "return",
+      "esp": "0x22f780",
+      "caller": "0x447dc5",
+      "at": 1792877136091,
+      "args": [
+        {
+          "value": 80,
+          "hex": "0x50",
+          "source": "stack[esp+4+0]"
+        },
+        {
+          "value": 1230,
+          "hex": "0x4ce",
+          "source": "stack[esp+4+4]"
+        },
+        {
+          "value": 4892306,
+          "hex": "0x4aa692",
+          "source": "stack[esp+4+8]"
+        },
+        {
+          "value": 66,
+          "hex": "0x42",
+          "source": "stack[esp+4+12]"
+        }
+      ],
+      "eax": "0x5c8a4c",
+      "eaxValue": 6064716,
+      "memory": null,
+      "returnMemory": null,
+      "watch": null
+    }
+  ],
+  "messages": 2,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 632,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "exited_before_observe_end": null,
+    "alive_at_end": true
+  },
+  "summaries": [
+    {
+      "address": "0x004871B0",
+      "name": "Sys_GetBlock5C8A4C_4871B0",
+      "hooksInstalled": 1,
+      "callsObserved": 1,
+      "entryMessages": 1,
+      "returnMessages": 1,
+      "overflow": false,
+      "errors": []
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 1,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}
