@@ -10,6 +10,8 @@
 __pycache__
 .pyc
 *.pyc
+scripts/__pycache__
+scripts/*.pyc
 
 # The native transcriptions are the source of the port, so the renamed files
 # have to stay trackable even though the rest of scripts/ is not.
@@ -44,3 +46,4 @@ scripts/__pycache__/native_gate.cpython-312.pyc
 scripts/__pycache__/smart_end_to_end_verification.cpython-312.pyc
 scripts/__pycache__/verification_scope.cpython-312.pyc
 scripts/__pycache__/verify_v4_catalog.cpython-312.pyc
+*.pyc

@@ -3,60 +3,282 @@
  "kind": "semantic-review-report",
  "result": "passed",
  "address": "0x004AF7B0",
+ "function_name": "Debug_Error",
  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
- "implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+ "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+ "implementation_path": "engine/src/retail/core/retail_error.cpp",
+ "implementation_sha256": "7437e43d1ecaad013a318f41cb8ca40461c940a45d459746223b751083af9e04",
+ "header_path": "engine/include/igi/retail/core/retail_error.hpp",
+ "header_sha256": "24721a26b3eff6d2e0c1dbcac3fec489c78bd88a5f193711933ff6a7b84a4693",
  "reviewed": true,
- "reviewed_by": "Automated static review (Binary Ninja + Radare2 CFG, signature, behaviour note)",
- "runtime_contract": {
-  "scope": "typed-per-native-probe",
-  "probe_sha256": "ae22655d68e5d4bee10a9e52aadd5fdda6bc3fbae6f79fda00166f75261fbdad",
-  "required_observables": {
-   "inputs": [
-    "args"
+ "reviewed_by": "Delegated coding agent; fresh Radare2 6.2.0 and angr 10.0.4.post1 recovery of retail igi.exe, plus the previously captured Binary Ninja 6.0.10601 MCP artifact for the unchanged retail image. The live Binary Ninja MCP endpoint (127.0.0.1:24642) was unavailable in this round (connection refused).",
+ "recorded_at": "2026-10-23T17:06:57Z",
+ "scope": "Symbol disambiguation and source-semantic review of retail Debug_Error (0x004AF7B0), including the display/exit callbacks, the genuine null-callback return and the installed non-returning exit path. No paired retail/candidate game-process runtime capture exists; behaviour is not claimed as RUNTIME_TESTED or VERIFIED.",
+ "decompiler": {
+  "selected": "binary_ninja",
+  "tool_version": "binaryninja_ui_mcp 0.1.0 (retail artifact recorded before this round)",
+  "live_availability": "unavailable this round: connection refused at 127.0.0.1:24642",
+  "reported_prototype": "int32_t(char* arg1)",
+  "reviewed_signature": "int32_t __cdecl Debug_Error(const char* format, ...)",
+  "prototype_note": "Binary Ninja reports a non-variadic one-argument prototype. The 274 retail call sites clean 4, 8 or more stack bytes after the call, and the body builds a va_list pointer to [esp+8] at 0x004AF7CD-0x004AF7D1, so cdecl variadic is the ABI the call sites and the body prove."
+ },
+ "retail_structure": {
+  "entry": "0x004AF7B0",
+  "end_inclusive": "0x004AF808",
+  "end_exclusive": "0x004AF809",
+  "size_bytes": 89,
+  "bytes_sha256": "1c20410541c863f90a17d98f1088afa496d65e0a6a62a8f4447fbd46ac37d72e",
+  "bytes_hex": "a16862930085c074445768b86d5400684046a800e8ea5bffff8b4c24108d4424145051bf4046a80083c9ff33c0f2aef7d14981c14046a80051e8145fffff684046a800ff156862930083c4185fa16c62930085c07402ffe0c3",
+  "instruction_count": 29,
+  "basic_blocks": 5,
+  "edges": 5,
+  "cfg": {
+   "nodes": [
+    {
+     "address": "0x004AF7B0"
+    },
+    {
+     "address": "0x004AF7B9"
+    },
+    {
+     "address": "0x004AF7FD"
+    },
+    {
+     "address": "0x004AF806"
+    },
+    {
+     "address": "0x004AF808"
+    }
    ],
-   "outputs": [
-    "outputs"
-   ],
-   "sideEffects": []
+   "edges": [
+    {
+     "source": "0x004AF7B0",
+     "target": "0x004AF7B9",
+     "kind": "conditional"
+    },
+    {
+     "source": "0x004AF7B0",
+     "target": "0x004AF7FD",
+     "kind": "conditional"
+    },
+    {
+     "source": "0x004AF7B9",
+     "target": "0x004AF7FD",
+     "kind": "unconditional"
+    },
+    {
+     "source": "0x004AF7FD",
+     "target": "0x004AF806",
+     "kind": "conditional"
+    },
+    {
+     "source": "0x004AF7FD",
+     "target": "0x004AF808",
+     "kind": "conditional"
+    }
+   ]
   },
-  "no_side_effects": true,
-  "note": "The live differential compares the calls that naturally happened, with the argument words and the result of each call. A pointer value from one process is not the data of the other, so a non-scalar argument is compared as the word it was, and the report says which scope it used."
+  "abi": {
+   "calling_convention": "cdecl (x86)",
+   "variadic": true,
+   "arguments": [
+    "[esp+4] const char* format",
+    "[esp+8] and above: variadic substitutions"
+   ],
+   "return_value": "EAX; 0 when the exit callback 0x0093626C is null (retn at 0x004AF808), otherwise the exit callback result forwarded by jmp eax at 0x004AF806",
+   "stack_cleanup": "caller; 274 call sites, e.g. 0x00415B6A add esp,8 after 0x00415B65, 0x00415F8D add esp,4 after 0x00415F88"
+  },
+  "globals": [
+   {
+    "address": "0x00936268",
+    "role": "display callback pointer; zero in the file image; set to 0x004988D0 by 0x00498900 through setter 0x004AF860"
+   },
+   {
+    "address": "0x0093626C",
+    "role": "exit callback pointer; zero in the file image; set to 0x00498930 by 0x00498900 through setter 0x004AF8A0"
+   },
+   {
+    "address": "0x00A84640",
+    "role": "global message buffer; sprintf writes \"Fatal error:\\n\\n\", String_VFormat appends the formatted message at the first NUL"
+   }
+  ],
+  "callers": {
+   "count": 274,
+   "variadic_examples": [
+    "0x00415B5F push [0x539560]; 0x00415B60 push \"The mission ID %d does not exist.\"; 0x00415B65 call; 0x00415B6A add esp,8",
+    "0x00415F83 push \"EXCEPTION FAULT: 0x000001\"; 0x00415F88 call; 0x00415F8D add esp,4"
+   ],
+   "terminal_examples": [
+    "0x00415B65 call -> 0x00415B6D jmp $",
+    "0x00415F88 call -> 0x00415F90 jmp $",
+    "0x0044DFE8 call -> 0x0044DFF0 jmp $",
+    "0x005144F7/0x00514504",
+    "0x005146F1/0x005146F9",
+    "0x004D2425/0x004D242D",
+    "0x004D2434/0x004D243C"
+   ]
+  },
+  "callback_paths": {
+   "installer": "0x00498900: push 0x00498930; call 0x004AF8A0 (sets exit 0x0093626C); push 0x004988D0; call 0x004AF860 (sets display 0x00936268); also sets 0x00936274 and 0x0093625C. 0x00498950 first calls 0x004AF8C0 to zero all six hooks, then jumps to 0x00498900; 0x00532400 calls 0x00498950 at 0x00532405.",
+   "display_callback_0x004988D0": "ShowCursor(1); MessageBoxA(g_5c8bc4, buffer, g_5c8bd4, MB_ICONHAND=0x10); ShowCursor(0); returns.",
+   "exit_callback_0x00498930": "call 0x0048F1B0; if EAX != 0 DebugBreak(); push 1; call 0x004A5AD5 (CRT exit); the following bytes are NOP padding, so the installed path does not return. 0x004A5AD5 -> 0x004A5AF7, which calls TerminateProcess(GetCurrentProcess(), code) when shutdown has begun or ExitProcess(code) otherwise.",
+   "non_returning_case": "Only after 0x00498930 is installed. Debug_Error itself still has a genuine return: null exit callback -> EAX=0 at 0x004AF808. The examined fatal callers append `jmp $`, so the call sequence is terminal either way."
+  },
+  "branch_semantics": [
+   "0x004AF7B0: mov eax,[0x00936268]; test eax,eax; je 0x004AF7FD - the whole report block is skipped when the display callback is null.",
+   "0x004AF7B9-0x004AF7FC: sprintf(buffer, \"Fatal error:\\n\\n\"); repne scasb scans buffer for its NUL; String_VFormat(buffer + (~i - 1), format, va_list([esp+0x14])); call [0x00936268] with buffer; add esp,0x18; pop edi.",
+   "0x004AF7FD: mov eax,[0x0093626C]; test eax,eax; je 0x004AF808 - return 0 when null; otherwise jmp eax."
+  ]
+ },
+ "candidate_structure": {
+  "implementation_path": "engine/src/retail/core/retail_error.cpp",
+  "implementation_sha256": "7437e43d1ecaad013a318f41cb8ca40461c940a45d459746223b751083af9e04",
+  "object_path": "build-clean-win32/CMakeFiles/igi.dir/engine/src/retail/core/retail_error.cpp.obj",
+  "object_sha256": "47a2727964fb9d6a4f003cfa919facb38436c66e517be5daa91edd9eb5065ea7",
+  "linked_binary_sha256": "57b93fd945b0a90d92eb2876902e562e02655047712e139574ce4b6b20d31f03",
+  "linked_symbol": "Debug_Error at 0x0041FC10 (exactly one definition)",
+  "object_function_size_bytes": 138,
+  "instruction_bytes": 128,
+  "basic_blocks_object": 8,
+  "edges_object": 9,
+  "call_sequence": [
+   "Error_GetGlobals() - port accessor for 0x00936268/0x0093626C/0x00A84640",
+   "sprintf(buffer, \"Fatal error:\\n\\n\") - compiles to __mingw_sprintf",
+   "strlen(buffer) - GCC lowering of the NUL scan",
+   "igi::retail::error::String_VFormat(buffer + strlen, format, va_list)",
+   "call dword [display callback] with buffer (when non-null)",
+   "read exit callback; if null xor eax,eax and ret; otherwise call eax and return its result"
+  ],
+  "disassembly_summary": "0x0041FC10 sub esp,0x14; mov [esp+0xC],ebx; call Error_GetGlobals; mov ebx,eax; mov eax,[eax]; test eax,eax; je 0x0041FC71; lea esi,[ebx+8]; mov [esp],esi; call __mingw_sprintf; cmp byte [ebx+8],0; je 0x0041FC88; lea eax,[ebx+9]; call strlen; lea edx,[esi+eax+1]; lea eax,[esp+0x1C] (va_list); call String_VFormat; mov [esp],esi; call [ebx]; ... 0x0041FC71 mov eax,[ebx+4]; test eax,eax; je 0x0041FC90; call eax; ... ret; 0x0041FC90 xor eax,eax; ret",
+  "codegen_divergences": [
+   "Retail scans the prefix with inline repne scasb; GCC lowers the same loop to a strlen call. The resulting append offset is identical for the NUL-terminated prefix.",
+   "Retail tail-dispatches the exit callback with jmp eax; the candidate emits call eax followed by a normal epilogue, which still returns the callback result. The call targets and state effects are identical.",
+   "Retail addresses 0x00936268/0x0093626C/0x00A84640 absolutely; the candidate reads the same three fields from port-owned ErrorGlobalsState via Error_GetGlobals().",
+   "The candidate installs neither callback; retail installs them at 0x00498900. Until that installer is ported the candidate takes the null-callback path and returns 0 silently."
+  ]
  },
  "checks": [
   {
    "name": "function_identity",
    "result": "passed",
-   "rationale": "Binary Ninja and Radare2 both identify a single function entry at 0x004AF7B0 with matching CFG node and edge sets (recorded similarity 1.000); the candidate implements that entry."
-  },
-  {
-   "name": "constants_and_scaling",
-   "result": "passed",
-   "rationale": "The chunk tag constants, the node offsets and the record sizes are the literal values the retail instructions compare and read."
+   "detail": "Retail 0x004AF7B0 is the 89-byte Debug_Error dispatcher: 5 blocks/5 edges, 274 call sites, variadic cdecl. The candidate defines exactly one Debug_Error (0x0041FC10) and no Error_Show."
   },
   {
    "name": "argument_mapping",
    "result": "passed",
-   "rationale": "The candidate takes the retail's arguments in the retail's order: the chunk list or form and the searched tag for the searches, and the chunk for the payload."
+   "detail": "Retail: [esp+4] format, va_list pointer built from [esp+8] and passed to String_VFormat; candidate: same C cdecl variadic signature, lea eax,[esp+0x1C] after its own frame points at the first substitution. The 274 call sites clean 4/8/0xC stack bytes."
   },
   {
-   "name": "calls_and_side_effects",
+   "name": "constants_and_scaling",
    "result": "passed",
-   "rationale": "The candidate performs the retail's sibling and child walk and returns the retail's null or payload pointer; it has no other side effect."
-  },
-  {
-   "name": "floating_point_semantics",
-   "result": "not_applicable",
-   "rationale": "The candidate reads the retail data as it is stored; it performs no float arithmetic."
+   "detail": "The only embedded data are the prefix \"Fatal error:\\n\\n\" at 0x00546DB8 and the three field offsets 0/4/8 in the globals block; the candidate writes the same 14-byte prefix and uses the same field roles. No scaling arithmetic exists."
   },
   {
    "name": "memory_layout_and_access",
    "result": "passed",
-   "rationale": "The chunk node layout and the payload offsets are the ones the retail instructions read, and the port reads the same fields."
+   "detail": "Retail reads 0x00936268/0x0093626C and appends into 0x00A84640 at the first NUL. The candidate reads the same three fields through ErrorGlobalsState (g_936268, g_93626c, g_a84640[0x1000]) and appends at buffer + strlen. Size and access order match; absolute addresses are not reproduced."
+  },
+  {
+   "name": "calls_and_side_effects",
+   "result": "passed",
+   "detail": "Call order matches: sprintf(prefix), NUL scan, String_VFormat(append), display callback(buffer), then exit callback. Retail uses repne scasb and jmp eax; GCC uses strlen and call/return. Those are reviewed codegen-equivalent differences. The callback installers remain unported and are recorded as a limitation."
   },
   {
    "name": "return_and_error_paths",
    "result": "passed",
-   "rationale": "The candidate returns the retail's null for a missing chunk and the retail's payload pointer for a found one, on the same branches as the retail code."
+   "detail": "Null exit callback -> EAX=0 at 0x004AF808; candidate xor eax,eax/ret. Non-null -> retail jmp eax forwards the callback result; candidate call eax/return forwards the same value. The installed 0x00498930 callback exits the process and never returns; examined fatal callers append jmp $."
+  },
+  {
+   "name": "floating_point_semantics",
+   "result": "not_applicable",
+   "rationale": "The function formats and dispatches text; it performs no floating-point arithmetic. The differential covers literal and signed-integer formats only."
+  },
+  {
+   "name": "caller_routing",
+   "result": "passed",
+   "detail": "Twelve former error::Error_Show call sites now call Debug_Error, the retail symbol; callers that already used Debug_Error are unchanged."
+  },
+  {
+   "name": "behavioural_differential",
+   "result": "passed",
+   "detail": "error_show_diff_runner.py: retail VEX execution versus the compiled candidate for 16 cases (flags 0/1/2/3, literal and signed formats), comparing return, 0x1000 buffer, display/exit side effects. Emulator/host evidence only."
+  },
+  {
+   "name": "build",
+   "result": "passed",
+   "detail": "Compiles for i686-w64-mingw32 -O3 -DNDEBUG and links one Debug_Error at 0x0041FC10."
   }
+ ],
+ "signature_comparison": {
+  "reviewed": true,
+  "result": "abi-adapted",
+  "rationale": "Binary Ninja reports int32_t(char* arg1). The body and the 274 call sites prove x86 cdecl variadic int32_t(const char* format, ...). The candidate matches the proven ABI; the decompiler prototype is a simplification."
+ },
+ "disambiguation": {
+  "catalog_name": "Debug_Error",
+  "candidate_symbol_after": "Debug_Error",
+  "removed_symbols": [
+   {
+    "name": "igi::retail::error::Error_Show(char const*, ...)",
+    "source": "engine/src/retail/error/error_show.cpp",
+    "classification": "port scaffolding, not a retail function",
+    "reason": "It reproduced the same retail VA 0x004AF7B0 body under a second name, creating two candidate answers for one address.",
+    "call_sites_rerouted": 12
+   }
+  ],
+  "retained_symbol": {
+   "name": "Debug_Error",
+   "source": "engine/src/retail/core/retail_error.cpp",
+   "declaration": "extern \"C\" int Debug_Error(const char* format, ...)"
+  },
+  "candidate_symbols_after_nm": [
+   {
+    "name": "Debug_Error",
+    "address": "0x0041FC10",
+    "type": "T"
+   },
+   {
+    "name": "igi::retail::error::String_VFormat(char*, char const*, char*)",
+    "address": "0x004223F0",
+    "type": "T"
+   },
+   {
+    "name": "igi::retail::error::Error_GetGlobals()",
+    "address": "0x00422420",
+    "type": "T"
+   }
+  ],
+  "note": "Error_Show is not a second retail function: the same 89-byte body at 0x004AF7B0 is the only implementation. Removing the duplicate and routing callers to Debug_Error leaves one candidate symbol per retail address and matches the catalog name."
+ },
+ "evidence": {
+  "radare2": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF7B0-radare2-20261023.json",
+   "evidence_sha256": "4eb1182991ca057b043953f482cc3be76e449c1b4f1b078b654c8b42b192c131"
+  },
+  "angr": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF7B0-angr-20261023.json",
+   "evidence_sha256": "6744959b248df992ef714f226cf3c5d0282dc6f04d16366b11d4bc93962d4530"
+  },
+  "build": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF7B0-build-20261023.json",
+   "evidence_sha256": "5899013744067cb9e484288e0f4b3f982ba0d374fce0fd7a2285d38ab4a028bd"
+  },
+  "behavioral": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF7B0-behavioral-20261023.json",
+   "evidence_sha256": "c27d7b342ea4495c0bb3972091e2a1750e8475b63b494f1253c07077bd4248af"
+  },
+  "binary_ninja": {
+   "evidence_path": "docs/fidelity/evidence/0x004AF7B0-binaryninja-20261023.json",
+   "evidence_sha256": "edc42f813c9c6214c9caac017a90456bee2db0ec0603c9cc39cff02623849006"
+  }
+ },
+ "limitations": [
+  "No paired retail/candidate game-process runtime capture exists for this address. RUNTIME_TESTED and VERIFIED are not claimed.",
+  "The candidate installs neither callback global. Retail installs them at 0x00498900 (display 0x004988D0 MessageBoxA/MB_ICONHAND, exit 0x00498930 DebugBreak+exit(1)); those bodies remain unported, so the candidate currently takes the silent null-callback return.",
+  "Retail tail-dispatches with jmp eax; the candidate emits call/return. This preserves the callback result but is not instruction-identical.",
+  "Retail uses repne scasb; GCC emits strlen. The append offset is identical for a NUL-terminated prefix.",
+  "The candidate uses port-owned storage through Error_GetGlobals() instead of the absolute retail addresses.",
+  "The behavioural differential is emulator/host execution, not a live paired retail/candidate game process, and models formatters and callbacks explicitly.",
+  "The live Binary Ninja MCP endpoint was unavailable this round; the retail Binary Ninja artifact is a previously captured, byte-bound record for the unchanged retail image."
  ]
 }
