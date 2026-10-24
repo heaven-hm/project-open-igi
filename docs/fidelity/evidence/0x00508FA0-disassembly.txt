@@ -1523,3 +1523,21 @@ adds one more owner in front of the chain:
 
 This is the same ordering discipline that has unblocked every previous step; recorded rather than
 short-circuited by declaring a second copy of the global.
+
+### 0x4EF5xx owner: extent probed, boundary still unresolved (round 123)
+
+```
+r2 af @ 0x4EF5A0 -> size 589, 3 blocks, 153 instructions, but minaddr == 0x4EF5A0
+                     (again mid-function; the tool accepted the seeded address as the entry)
+padding search /x c3909090 in 0x4EF000-0x4EF585 -> NO hits
+```
+
+So the routine that owns `0x00A70CA0` (writer at `0x4EF585`) ends somewhere after `0x4EF5A0` with no
+`ret`+nop padding before the writer, and there is no detectable prologue/padding boundary above it.
+This is the third region in a row where static boundary recovery by seeding fails, so the validated
+runtime technique (used successfully for `0x4FAA60`) is the appropriate instrument again: probe
+retail startup for call targets in `0x4EF400`-`0x4EF600` and read the actual entries and argument
+counts, instead of guessing.
+
+Recorded rather than transcribed: the getter `0x4F1020` remains blocked on this owner, and the
+stream init `0x4FAA60` depends on the getter only through `0x4F1020`'s 10 calls.
