@@ -66,3 +66,31 @@ The earlier framing "position 1 registers ids 0..43" was inherited from a flat
 chain table; the retail evidence says the executed ids are 0..122 assigned through
 97 registrar functions. Any transcription that reproduces a 44-class group and
 stops is wrong by 79 classes.
+
+## Round 26: dormant-site identification - attempts and their failures
+
+Goal: name the 4 static sites (of 127) that do not execute, by intersecting
+per-function static sites with the 279 observed sites. Three approaches tried,
+none produced the list; recording exactly why so the next attempt starts further
+along:
+
+1. `callsum.json` in the inventory only summarises the **top-level** functions
+   (`402930, 508f80, 5183d0, 508fa0, 530270, 5309c0`), not all 97 registrar
+   functions - it yields 1 static `0x401900` site for the whole tree, so it cannot
+   answer the question.
+2. Batch r2 disassembly (`af`, then `pdj N @ VA` for all 537 nodes in one
+   invocation): 537 command pairs were issued but the output could not be split
+   back into per-function JSON arrays with a line-oriented parser (0 blobs
+   recovered). The method is sound; the parsing strategy is wrong. Next attempt
+   should use `pdfj` per function individually, or `pdj` with an explicit output
+   delimiter per invocation.
+3. `axt 0x401900` after `af @ 0x401900`: returned zero xrefs, i.e. r2 needs a
+   fuller analysis pass (`aaa`/`aac`) before call xrefs exist on this binary.
+
+Status: the 4 dormant sites remain unidentified; the 123-vs-127 difference is
+still interpreted (branch-skipped registrations inside functions that do run) and
+that interpretation stays labelled as interpretation until the list exists.
+
+Cost note for the next round: one `aaa` pass over 13 MB is cheaper than 97 separate
+r2 launches; run it once, dump `axt` for every `0x401900` caller, then intersect
+with observed sites.
