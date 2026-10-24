@@ -470,3 +470,28 @@ initializer is most likely in the `0x4B0Bxx-0x4B0Cxx` range rather than far away
 Practical consequence: both `0x4B0D60` (stack pop) and `0x4AF810` (log emitter) remain
 blocked on **state ownership**, and that ownership is what the next round should chase -
 not more consumer decodes, which keep multiplying unowned globals.
+
+## Round 70: CORRECTION - two of the three "unowned" globals do exist
+
+The round-69/68 claim that `0x00A960E0`, `0x009422FD`, `0x009422E8` are all unowned was
+**wrong**, and the cause was mechanical: those greps searched for uppercase/hex-literal
+spellings, while the tree names them by field:
+
+- `0x00A960E0` -> `g_a960e0` = `MemGlobals::state_a960e0`, already **written** by the
+  existing, VERIFIED `Mem_InitHeapState` (`0x004B0BA0`): `g_a960e0 = 0x10` at the retail's
+  `mov dword [0xa960e0],0x10` (`0x004B0BCA`).
+- `0x009422FD` -> `g_9422fd` = `MemGlobals::qhash_flag_9422fd`, with existing writers at
+  `0x4B0D40` (set 1) and `0x4B0D50` (set 0).
+- `0x009422E8` -> **still absent**: `MemGlobals` has no field for the 16-byte flag array that
+  `0x4B0D60` writes into (`byte [eax + 0x9422E8]`).
+
+Byte-reference search (`/r`, not `axt`) recovered the writers and is the technique to use
+here: it found `0x004B0BCA` for the index global and the `0x4B0D40/0x4B0D50` flag writers,
+where `axt`/`axf` returned nothing at all.
+
+So `0x4B0D60` is blocked on exactly **one** missing storage item (the flag array), and that
+array's only writers are the stack push/pop pair themselves (`0x4B0D40`, `0x4B0D60`,
+`0x4B0D90`, `0x4B0DA2`), so defining it inside that pair's transcription is legitimate
+ownership rather than invented storage. Note also that the engine stores `g_9422fd` as a
+32-bit field while retail touches a single byte - the transcription must write the byte to
+match.
