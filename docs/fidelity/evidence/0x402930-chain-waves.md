@@ -142,3 +142,17 @@ The same window proves a second object: 0x005C8A74 is used as a 16-bit value fiv
 
 Both are now declarable without guessing. No native was landed from this discovery in this round: the routine that owns the copy is
 larger than the window inspected here, and its boundary needs the same treatment before transcription.
+
+## Both generator pools are exhausted (round 255)
+
+`scripts/gen_ready_getters.py` reports "no ready getters left in the closure" and `scripts/gen_narrow_getters.py` returns an empty pick list.
+Between them they landed 190 game natives at CFG 1.000 across this session, each with a review file, a catalog candidate and a retail probe
+where the native was reachable.
+
+There is no mechanical batch work left. The closure's remaining ~1,670 natives are not leaves: they need reading, and the boundary at
+0x00402930 needs 133 callees each with its own closure. That is the honest reason this session ends at 190 rather than at a playable game:
+the tractable supply above the boundary was finite and is now spent.
+
+What a follow-up should not do: re-run the generators expecting more, or relax the leaf test to manufacture candidates. The test was
+two-instruction bodies with no calls and no branches, and loosening it would trade exactness for a bigger number - the one trade this work
+must never make.
