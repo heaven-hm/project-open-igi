@@ -91,6 +91,7 @@ add_executable(igi WIN32
     engine/src/retail/qfile/native_4b19c0.cpp
     engine/src/retail/config/native_4071d0.cpp
     engine/src/retail/config/native_4167d0.cpp
+    engine/src/retail/config/native_416860.cpp
     engine/src/retail/config/native_4167e0.cpp
     engine/src/retail/config/native_4167f0.cpp
     engine/src/retail/config/native_416810.cpp
@@ -102,6 +103,17 @@ add_executable(igi WIN32
     engine/src/retail/config/native_416880.cpp
     engine/src/retail/config/native_416890.cpp
     engine/src/retail/sys/native_4aa0a0.cpp
+    engine/src/retail/sys/native_4f0fc0.cpp
+    engine/src/retail/sys/native_4f1210.cpp
+    engine/src/retail/sys/native_4f1220.cpp
+    engine/src/retail/sys/native_4f1010.cpp
+    engine/src/retail/sys/native_4d9fa0.cpp
+    engine/src/retail/sys/native_4f0f50.cpp
+    engine/src/retail/sys/native_4f0f70.cpp
+    engine/src/retail/sys/native_4c48c0.cpp
+    engine/src/retail/sys/native_424850.cpp
+    engine/src/retail/sys/native_4f0fe0.cpp
+    engine/src/retail/sys/native_4d9fb0.cpp
     engine/src/retail/sys/native_4ad36e.cpp
     engine/src/retail/sys/native_4b4720.cpp
     engine/src/retail/sys/native_4f1c90.cpp

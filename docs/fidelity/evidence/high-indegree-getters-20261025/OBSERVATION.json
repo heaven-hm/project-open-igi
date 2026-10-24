@@ -1,0 +1,41 @@
+{
+  "schema": "high-indegree-getter-runtime-capture",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "captures": [
+    {
+      "file": "retail-0x004D9FA0.json",
+      "result": "observed",
+      "counts": {
+        "entry": 256,
+        "return_": 256,
+        "unmatched_entries": 0
+      }
+    },
+    {
+      "file": "retail-0x004D9FA0.owned.json",
+      "result": null,
+      "counts": null
+    },
+    {
+      "file": "retail-0x004F0FC0.json",
+      "result": "observed",
+      "counts": {
+        "entry": 115,
+        "return_": 115,
+        "unmatched_entries": 0
+      }
+    },
+    {
+      "file": "retail-0x004F0FC0.owned.json",
+      "result": null,
+      "counts": null
+    }
+  ],
+  "candidate": "not captured: the candidate exits 3 at 0x00402930 before any game native runs, and a candidate-side run of this probe also hit the documented Frida setup timeout in the previous round",
+  "notes": [
+    "These getters were selected by in-degree inside the 0x402930 closure rather than by size: 0x004F0FC0 is called by 43 distinct natives, 0x004D9FA0 by 24, so landing them unblocks the largest wave.",
+    "0x004F0FC0: 115 entries and 115 returns in a level-1 startup window - reached repeatedly, not just once.",
+    "0x004D9FA0: 256 entries and 256 returns, the observation cap, so it is called more often than recorded.",
+    "Both are 6-byte mov/ret bodies: the Interceptor hook installs, unlike the 3-byte form that cannot be hooked."
+  ]
+}

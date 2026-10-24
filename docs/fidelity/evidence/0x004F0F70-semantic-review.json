@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004F0F70",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "2a42ec9f9dde9dae10afafccf4a84df2b114de0d8c5d8c83ccb0f9c2df2e0792",
+  "implementation_path": "engine/src/retail/sys/native_4f0f70.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "6 retail bytes, 2 instructions, 1 block, 0 edges; candidate 1/0 at CFG 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No ABI arguments: the routine takes void and reads only the static object."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "One constant: the address 0x00A70C6C. No scale, mask, offset or rounding is applied."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Exactly one dword load from 0x00A70C6C; no store, no bounds check, no indirect access. The 4-byte access width is the only proven fact about the object, and this native's file is its defining file."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No call and no store: the only effect is the returned value, so there is no side effect to compare."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "One entry and one exit: the single ret at +5. No branch, no early return and no error path."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "The body performs no floating-point load, store or arithmetic; it moves one integer value."
+    }
+  ],
+  "runtime_contract": {
+    "scope": "paired retail/candidate observation of the getter entry and return during level-1 startup",
+    "probe_sha256": "91014c941914e0e37d03fa7f498a5934c81e81b317e092c4f0dfcf1e6fa26578",
+    "required_observables": {
+      "inputs": [],
+      "outputs": [
+        "return_value"
+      ],
+      "sideEffects": []
+    },
+    "no_arguments": true,
+    "no_side_effects": true
+  },
+  "evidence": "docs/fidelity/evidence/high-indegree-getters-20261025",
+  "limitations": [
+    "Runtime not yet paired: the candidate exits at 0x00402930 before game natives. This getter is called by 22 distinct natives in the 0x00402930 closure, which is why it was chosen before its callers.",
+    "The value's meaning is not established by this body."
+  ]
+}

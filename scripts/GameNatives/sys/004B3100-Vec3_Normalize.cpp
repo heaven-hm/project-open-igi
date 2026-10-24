@@ -1,0 +1,15 @@
+// IGI native provenance: Vec3_Normalize - 0x004B3100 - CFG score 100.0% (PASS; structural only); runtime behavior not verified.
+// Evidence: 004B3100-Sys_FreeMemory_11.md; REA/Ghidra static record; catalog: assets/BinaryNinja/IGINatives_VERIFIED.json.
+#include "004B3100-Vec3_Normalize.hpp"
+int Vec3_Normalize(double* context)
+
+{
+    int result;
+    long double fp0;
+    fp0 = Sys_OpenFileStream_11(context);
+    long double fpu_val_7_1 = 1.0 / fp0;
+    *context = fpu_val_7_1 * *context;
+    context[1] = fpu_val_7_1 * context[1];
+    context[2] = fpu_val_7_1 * context[2];
+    return result;
+}
