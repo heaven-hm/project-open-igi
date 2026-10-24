@@ -102,9 +102,11 @@ def main() -> int:
         body = span(functions, instructions, addresses, va)
         if len(body) != 2 or body[1][1] != "ret" or CRT_LO <= va < CRT_HI:
             continue
-        match = re.match(r"mov\s+0x([0-9a-f]+),%eax$", body[0][1])
+        match = re.match(r"mov\s+0x([0-9a-f]+),%(eax|ax|al)$", body[0][1])
         if match:
-            picks.append((va, int(match.group(1), 16)))
+            width = {2: 46, 61: 46}.get(46, None)  # placeholder replaced below
+            register = match.group(2)
+            picks.append((va, int(match.group(1), 16), register))
         if len(picks) >= options.count:
             break
 
@@ -122,7 +124,7 @@ def main() -> int:
         name = f"Sys_GetGlobal32_{va:06X}"
         symbol = f"g_{address:06x}"
         owners = [line for line in subprocess.run(
-            ["grep", "-rlE", rf"^\s*(std::)?uint32_t {symbol}\s*(=|;)", "engine/src/retail", "--include=*.cpp"],
+            ["grep", "-rlE", rf'^\s*(extern\s+"C"\s+)?(std::)?uint32_t\s+{symbol}\b', "engine/src/retail", "--include=*.cpp"],
             cwd=ROOT, capture_output=True, text=True).stdout.split()
             if f"native_{va:06x}" not in line]
         owner_note = (f"// 0x{address:08X}: four-byte object, defined by {owners[0].split('/')[-1]} which assigns it; this file only reads it."

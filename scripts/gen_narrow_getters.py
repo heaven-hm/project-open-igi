@@ -52,7 +52,7 @@ t=(R/'CMakeLists.txt').read_text(); tpl=(R/'scripts/tester/frida_native_probe_te
 for va,addr,w in picks:
     a8=f'0x{va:08X}'; ct={1:'std::uint8_t',2:'std::uint16_t'}[w]; dw={1:'one-byte',2:'two-byte'}[w]
     name=f'Sys_GetGlobal{w*8}_{va:06X}'; sym=f'g_{addr:06x}'
-    owners=[x for x in subprocess.run(['grep','-rlE',rf'^\s*(std::)?uint{w*8}_t {sym}\s*(=|;)','engine/src/retail','--include=*.cpp'],capture_output=True,text=True).stdout.split() if f'native_{va:06x}' not in x]
+    owners=[x for x in subprocess.run(['grep','-rlE',rf'^\s*(extern\s+"C"\s+)?(std::)?uint{w*8}_t\s+{sym}\b','engine/src/retail','--include=*.cpp'],capture_output=True,text=True).stdout.split() if f'native_{va:06x}' not in x]
     own = (f'// 0x{addr:08X}: {dw} object, defined by {owners[0].split("/")[-1]} which assigns it; this file only reads it.' if owners
            else f'// 0x{addr:08X}: the {dw} object this getter reads; nothing else in the tree owns it yet.')
     decl=f'extern {ct} {sym};' if owners else f'{ct} {sym};'
