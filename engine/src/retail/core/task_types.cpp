@@ -516,8 +516,8 @@ std::uint16_t NATIVE_DECL QTask_GetCurrentType()
 //           free entry it marks the entry used at 0x0054F932 + id * 6, stores the argument in the
 //           entry's word at 0x0054F930 + id * 6 and marks the entry at 0x0054F933 + id * 6 used.
 //           The event id is returned in AL.
-// Status/limits: STRUCTURALLY_VERIFIED; the scan, the three writes and the AL return match the
-//           retail exactly.
+// Status/limits: STRUCTURALLY_VERIFIED; the scan, the three writes and the AL return match the retail.
+//           The exhaustion branch now matches too: Debug_Error("Unable to allocate event") then jmp $.
 std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
 {
     std::uint32_t event_id = igi::retail::core::first_event_id;
@@ -528,7 +528,12 @@ std::uint8_t NATIVE_DECL QTask_AllocateEvent(std::uint16_t value)
     }
     if (event_id >= igi::retail::core::event_table_entry_count)
     {
-        return 0U;
+        // 0x004017DB-0x004017E8: push str.Unable_to_allocate_event; call Debug_Error (0x004AF7B0);
+        // add esp,4; then `jmp $` at 0x004017E8 - the retail never returns from exhaustion.
+        Debug_Error("Unable to allocate event");
+        for (;;)
+        {
+        }
     }
     const std::size_t entry = static_cast<std::size_t>(event_id) * 6U;
     QTask_EventTable[entry] = static_cast<std::uint8_t>(value & 0xFFU);

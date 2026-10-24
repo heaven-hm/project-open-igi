@@ -3962,7 +3962,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/task_types.cpp",
-        "sha256": "5c52639e082b7aded343badaf91d5295b1af492b1448698c9c90cd80a7b6c773",
+        "sha256": "338c506e0d33b607af82549c84569289df2d0ce30f0128df84e3b762680e92dd",
         "signature": "int32_t QTask_UnableToAllocateEven(int16_t param_1);"
       },
       "game_natives": {
@@ -5019,9 +5019,9 @@
           "rationale": "No implementation exists: the file at this path is a fail-closed stub that throws std::logic_error, so there are no retail instructions to compare."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
           "Must not count toward transcribed or verified totals. Blocked on the registrar sequence (0x401530/0x401400 chain) being transcribed first.",
-          "PARTIAL transcription only: the registrar aborts by design through ReportNotTranscribed before the AI graph, so class ids after that point cannot match retail. Not a completed transcription and must not count toward the totals."
+          "PARTIAL transcription only: the registrar aborts by design through ReportNotTranscribed before the AI graph, so class ids after that point cannot match retail. Not a completed transcription and must not count toward the totals.",
+          "No implementation of the retail instruction sequence exists: the file is a fail-closed stub that aborts before the AI graph registrar, so class ids after that point cannot match retail."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
