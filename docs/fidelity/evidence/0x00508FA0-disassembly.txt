@@ -878,3 +878,33 @@ done from the consumer side.
 Remaining: the tail from `0x4C0373` (field stores and the second allocation's size/count
 plumbing) must be captured before writing. Dependency count is low: `Mem_Alloc` is landed and
 this routine appears to have no other callees.
+
+### 0x4C0360 complete decode (87 B, 5 blocks) - bucket array with self-linked sentinels
+
+```
+h = Mem_Alloc(8)                ; 0x4C0362/0x4C0366 (8 in arg1 slot; the pushed 4 is stray)
+h[4] = count                    ; 0x4C0376
+size = count*12 (lea + shl 2)   ; 0x4C0373/0x4C0379
+h[0] = Mem_Alloc(size)          ; 0x4C037C/0x4C037D - note: ONE pushed argument here
+if (count <= 0) goto end
+for (i = 0; i < count; ++i) {
+    bucket = h[0] + i*12
+    bucket[0] = bucket + 4      ; 0x4C0397: next -> own +4
+    bucket[8] = bucket          ; 0x4C03A1: back-pointer -> self
+    bucket[4] = 0               ; 0x4C03A6: cleared
+}
+return h                        ; 0x4C03AD: mov eax,esi
+```
+
+**Arity observation worth recording:** the two `Mem_Alloc` calls in this function push a
+different number of arguments - `push 4; push 8; call` for the header but `push eax; call` for
+the bucket block. A cdecl callee cannot vary its argument count, so `Mem_Alloc` must read only
+its first argument (`size`) and ignore extra stack traffic; the pushed `4` here is stray, the
+same benign pattern already documented for `0x4D9730`. The engine's current
+`Mem_Alloc(std::int32_t context, std::int32_t arg2)` therefore needs checking against retail
+before it is called from a faithful transcription, because reading a second argument would make
+the stray-push call wrong.
+
+With this, `0x4C0360` is otherwise self-contained: no globals, one callee, and the 12-byte
+self-linked bucket layout matches what `0x4C04B0` walks (`next` at +0, key at +8, back at +4/-4
+as the inserts use).
