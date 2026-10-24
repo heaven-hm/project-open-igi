@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <cstring>
 
-extern "C" int __cdecl _setjmp3(void* buffer, int count);   // 0x004A5000
+extern "C" int __cdecl Native_004A5000(void* buffer, unsigned count, ...);   // 0x004A5000
 extern std::uint8_t g_54f8e0[];
 extern void (__cdecl* g_a970e0[])(void* context);
 
@@ -13,7 +13,7 @@ void __cdecl Loop_SetStatusByte(std::int8_t value);   // 0x0048F480
 
 void __cdecl QTask_OpenEvent(void)
 {
-    if (_setjmp3(g_54f8e0, 0) == 0)
+    if (Native_004A5000(g_54f8e0, 0) == 0)
     {
         std::uint32_t index = *reinterpret_cast<std::uint16_t*>(static_cast<std::uint8_t*>(Game_GetContext()) + 0x1C);
         void (__cdecl* handler)(void*) = g_a970e0[index];

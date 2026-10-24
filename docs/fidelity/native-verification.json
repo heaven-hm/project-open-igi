@@ -73271,6 +73271,45 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `FreeCamera_Init_5310E0` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x004A5000",
+      "name": "Native_004A5000",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp",
+        "sha256": "9f868eab61d2155869ba7ed74f65eef98d20cc67515bf97cdff952a4b5ef3ae7",
+        "signature": "int __cdecl Native_004A5000(void* buffer, unsigned count, ...);"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp",
+        "sha256": "9f868eab61d2155869ba7ed74f65eef98d20cc67515bf97cdff952a4b5ef3ae7",
+        "signature": "int __cdecl Native_004A5000(void* buffer, unsigned count, ...);"
+      },
+      "verification": {
+        "status": "BUILD_VERIFIED",
+        "radare2": {
+          "evidence_id": "r2:live:0x004A5000",
+          "evidence_path": "docs/fidelity/evidence/0x004A5000-radare2.json"
+        },
+        "angr": {
+          "evidence_path": "docs/fidelity/evidence/0x004A5000-angr.json"
+        },
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004A5000-semantic-review.json"
+        },
+        "build": {
+          "result": "pass",
+          "candidate_x86_text_prefix_bytes": 123,
+          "retail_candidate_byte_equal": true
+        },
+        "limitations": [
+          "Binary Ninja MCP was unavailable; no second decompiler was substituted.",
+          "No paired retail/candidate game-runtime capture observes this address; status is not RUNTIME_TESTED or VERIFIED.",
+          "The bytes establish behavior but not an original source-level symbol or variable names."
+        ]
+      },
+      "notes": "Corrected from the erroneous Camera_ApplyLineFilter_3 transcription; address-qualified placeholder retained until source-level naming is independently established."
     }
   ],
   "integration": {

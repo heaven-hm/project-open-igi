@@ -3104,7 +3104,7 @@ at the end and must not be transcribed as standalone natives.
 | `0x004A4D10` | `BandFilter_Cleanup_6` | PASS | VERIFIED | `scripts/GameNatives/bandfilter/004A4D10-BandFilter_Cleanup_6 2.cpp` |
 | `0x004A4F60` | `Camera_UpdateTransform_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A4F60-Camera_UpdateTransform_3 2.cpp` |
 | `0x004A4FF0` | `Camera_SetFieldOfView_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A4FF0-Camera_SetFieldOfView_3 2.cpp` |
-| `0x004A5000` | `Camera_ApplyLineFilter_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A5000-Camera_ApplyLineFilter_3 2.cpp` |
+| `0x004A5000` | `Native_004A5000` | BLOCKED | BUILD_VERIFIED | `scripts/GameNatives/qtask/004A5000-Native_004A5000 2.cpp` |
 | `0x004A507C` | `Camera_ApplyBandFilter_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A507C-Camera_ApplyBandFilter_3 2.cpp` |
 | `0x004A50F5` | `Camera_ApplyHandiCam_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A50F5-Camera_ApplyHandiCam_3 2.cpp` |
 | `0x004A51EB` | `Camera_UpdateViewCone_3` | PASS | VERIFIED | `scripts/GameNatives/camera/004A51EB-Camera_UpdateViewCone_3 2.cpp` |

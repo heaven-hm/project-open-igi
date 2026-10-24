@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "tool_version": "6.2.0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004A5000",
+  "function_size": 123,
+  "signature": "cdecl; first two observed arguments are buffer and count; remaining arguments are variadic",
+  "cfg": {
+    "basic_block_count": 10,
+    "edge_count": 14,
+    "unresolved_flow": false,
+    "entry_callers": ["0x0040105B"]
+  },
+  "bytes_sha256": "c24e8aaed4de58907df11c265260404d68e8b92e1a6373d11e2db8e73238e755",
+  "observations": [
+    "stores EBP, EBX, EDI, ESI, ESP and the return address at buffer offsets 0x00..0x14",
+    "stores 0x56433230 at buffer+0x20 and zero at buffer+0x24",
+    "stores fs:[0] at buffer+0x18 and handles the -1 sentinel",
+    "when count is nonzero, consumes the observed variadic unwind values and copies at most six DWORDs to buffer+0x28",
+    "returns zero via sub eax,eax; ret"
+  ],
+  "limits": [
+    "The retail bytes establish behavior, not an original source-level symbol or variable names.",
+    "This address is not a camera routine; the former camera transcription was removed."
+  ]
+}

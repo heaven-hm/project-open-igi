@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review",
+  "retail_va": "0x004A5000",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "candidate_name": "Native_004A5000",
+  "review_result": "static_match",
+  "candidate_scope": "x86 Win32 only; naked inline assembly transcription",
+  "verified_observables": [
+    "buffer offsets 0x00, 0x04, 0x08, 0x0C, 0x10, 0x14",
+    "cookie 0x56433230 at offset 0x20",
+    "fs:[0] at offset 0x18",
+    "count branches and six-DWORD maximum copy",
+    "zero return"
+  ],
+  "source_level_names": "unresolved; no guessed camera or CRT symbol name is asserted",
+  "runtime_contract": null,
+  "blocking_limits": [
+    "Frida provider is blocked by workflow doctor.",
+    "The current candidate does not yet have a paired game-runtime probe that observes this address.",
+    "Therefore this record is not RUNTIME_TESTED or VERIFIED."
+  ]
+}
