@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1DC0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7577f461ee717a3642074de9d6e1b1eae8853ca78222627298a1304ba6b7530a",
+  "implementation_path": "engine/src/retail/qfile/native_4b1dc0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "28 bytes, seven instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Two cdecl arguments: index at [esp+4], value at [esp+8]; nothing else is read."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Store target record+0x40 at 0x9436F0 with the 0x8C stride; GCC strength-reduces (index*8-index)*5*4 to imul 0x8C with the same blocks, edges and offset."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One dword store, no calls."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns void through a single ret."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved; no transcribed caller installs this field yet.",
+    "The field's meaning is not established, only its offset."
+  ]
+}

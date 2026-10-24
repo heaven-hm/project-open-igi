@@ -50459,6 +50459,46 @@
       }
     },
     {
+      "address": "0x004B1760",
+      "name": "QFile_InvokeDriverSlot_4B1760",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b1760.cpp",
+        "sha256": "4756d5f61a7a9ad901c0093175e8c6514c0aa7ceaba32cc6ed0040b228ea8d7e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B1760-Sys_DispatchOpcode_4 2.cpp",
+        "sha256": "f344a9695590f44517e35fdafa1d9d191af0a6eee6d92156fd8a0d139d3c5246",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B1760",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1760-binaryninja.json",
+          "evidence_sha256": "4045987c70259c7d05a7fb0a1ad2a6ae891f9af565ad5ad2e48183553b6bceac"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B1760",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1760-radare2.json",
+          "evidence_sha256": "3b1211eb5e98bd05d5c09809e6b67dc3ab98970a9854f836b4b32608b7b812e3"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B1760-semantic-review.json",
+          "evidence_sha256": "8d1d08abf636731853361f4dfda91050961726543cd12f8d0c89c8181c1b5f81"
+        }
+      }
+    },
+    {
       "address": "0x004B1780",
       "name": "Device_GetStreamPosition",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -50526,6 +50566,86 @@
         "behavioral": {
           "evidence_path": "docs/fidelity/evidence/0x004b1780-harvest-behavioral.json",
           "evidence_sha256": "e9113c13bd60d679bb9d8ccab4e70e002cacbeb8d5dc2738f8ac6417c6f41816"
+        }
+      }
+    },
+    {
+      "address": "0x004B17A0",
+      "name": "QFile_InvokeDriverSlot_4B17A0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b17a0.cpp",
+        "sha256": "1ee6a5ac3688bdf991af968019a4c96b171b9d75a7a1ef1b8b8baf97f56f6faa",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B17A0-Sys_PopStack_4 2.cpp",
+        "sha256": "7e16c32213f3a8f78f29fac9ef495e2b52119a90fc0da027df790bcc8f1b5764",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B17A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B17A0-binaryninja.json",
+          "evidence_sha256": "eb7b8608995c2eca1b17225504255f258f2af0cfd9c6f0e76dd5ac2fc2f44e22"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B17A0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B17A0-radare2.json",
+          "evidence_sha256": "a0ff11712e12dd635fa05bbf2c4cb81019c9f1350f9675faccbc4ae1313b5ce5"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B17A0-semantic-review.json",
+          "evidence_sha256": "14a82c517be6fbb3445dfd2ef91fee81dde6bbc80e6feddd23ee314efdec6296"
+        }
+      }
+    },
+    {
+      "address": "0x004B17C0",
+      "name": "QFile_InvokeDriverSlot_4B17C0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b17c0.cpp",
+        "sha256": "7d65454275cd366215118d761f93d0b4745e148f3bfdfe0d9931ccb6eb196586",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B17C0-Sys_ResolveSymbol_4 2.cpp",
+        "sha256": "5d266fe6323d97ac34cd608a7b782b7f99091adddd0917cc16db2c925374ea76",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B17C0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B17C0-binaryninja.json",
+          "evidence_sha256": "9c64932e7cee716da818592e86cd1f1b06090872a8642a6274bb4c64dc5d10d2"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B17C0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B17C0-radare2.json",
+          "evidence_sha256": "439f3c77e737d3f3a6e5e749ec7a905841d23595ea0a64ae8ba0b40c6d42fadf"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B17C0-semantic-review.json",
+          "evidence_sha256": "7ffc3bf9f849c671721dfdb5787eba16a07dfa9e1f2ee2cdb4feccd31ad77f83"
         }
       }
     },
@@ -51232,6 +51352,46 @@
       }
     },
     {
+      "address": "0x004B1D80",
+      "name": "QFile_SetDriverField_4B1D80",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b1d80.cpp",
+        "sha256": "04c9207418e2ba56ceebea6f3ad61479afadb8739f6a78ad2e5c06ae7cf4f67a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B1D80-Sys_PushStack_6 2.cpp",
+        "sha256": "93e211f6e05af90a4042fac8edc3d829c6677149cdba2f56e1b8056014931a63",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B1D80",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1D80-binaryninja.json",
+          "evidence_sha256": "f225ad52865d00c70ab1a56ed0d4f69075011ee80579f1785ebf018ecddfa738"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B1D80",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1D80-radare2.json",
+          "evidence_sha256": "ebc542a79c573ba71a35f6ed0da2dbe38031a65c5b970efa2ededd24c641073e"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B1D80-semantic-review.json",
+          "evidence_sha256": "438586f88c7ee7f2428416949041ef86c0548320ceaf51c4af7af9b097e6b88c"
+        }
+      }
+    },
+    {
       "address": "0x004B1DA0",
       "name": "QFile_SetDriverHandler_4B1DA0",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -51268,6 +51428,46 @@
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004B1DA0-semantic-review.json",
           "evidence_sha256": "300ff6a7ce2a33091e24d7ba43163777814f659da8fa500b2bb752b97f254a3a"
+        }
+      }
+    },
+    {
+      "address": "0x004B1DC0",
+      "name": "QFile_SetDriverField_4B1DC0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/qfile/native_4b1dc0.cpp",
+        "sha256": "7577f461ee717a3642074de9d6e1b1eae8853ca78222627298a1304ba6b7530a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B1DC0-Sys_ResolveSymbol_6 2.cpp",
+        "sha256": "bc95da2fed6b32b6373d8f76667714b2773492861288f5760ff218fbe53f66a7",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B1DC0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1DC0-binaryninja.json",
+          "evidence_sha256": "cb050be876401d31fb44ccde4fc1391dfefe850603c3fd472ba8d3a46aec2a6e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B1DC0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B1DC0-radare2.json",
+          "evidence_sha256": "1484e4dab5652afac593bc92e05d294460716c2088efbe8db397df5c3be177aa"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B1DC0-semantic-review.json",
+          "evidence_sha256": "9fd7a5449ef0685cff0f7166463ea44784b7bbbf7d68446663cb44a11b8501cb"
         }
       }
     },

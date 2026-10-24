@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B17A0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1ee6a5ac3688bdf991af968019a4c96b171b9d75a7a1ef1b8b8baf97f56f6faa",
+  "implementation_path": "engine/src/retail/qfile/native_4b17a0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Extent and instructions from the retail listing; generated artifacts match 1 block / 0 edges."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument, the context pointer; the device index is read from *context, and the slot is called with (index, context)."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One indirect call through record+0x30 (0x9436E0); push context, push index, add esp,8."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "0x8C stride and the slot displacement from the retail load/call pair."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the slot's EAX; no branch, and the stack is cleaned by the retail amount before ret."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved; the slot is populated only once the qfile init chain lands, so this build calls a null slot.",
+    "The slot's return type is unproven."
+  ]
+}

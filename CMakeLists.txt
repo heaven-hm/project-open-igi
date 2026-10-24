@@ -59,7 +59,12 @@ add_executable(igi WIN32
     engine/src/retail/qfile/native_4b1d00.cpp
     engine/src/retail/qfile/native_4b1180.cpp
     engine/src/retail/qfile/native_4b1700.cpp
+    engine/src/retail/qfile/native_4b1760.cpp
+    engine/src/retail/qfile/native_4b17a0.cpp
+    engine/src/retail/qfile/native_4b17c0.cpp
     engine/src/retail/qfile/native_4b1d60.cpp
+    engine/src/retail/qfile/native_4b1d80.cpp
+    engine/src/retail/qfile/native_4b1dc0.cpp
     engine/src/retail/qfile/native_4b1da0.cpp
     engine/src/retail/qfile/native_50a5a0.cpp
     engine/src/retail/qfile/native_50a5b0.cpp
