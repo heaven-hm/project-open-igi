@@ -2488,6 +2488,16 @@
       "reviewed": true,
       "rationale": "The header declared the wrong int(float,float) Profile_ValueSet prototype for 0x004B8A50. The retail signature established from the call sites and the x87 return is cdecl long double(void* argument_frame, int32_t index); the corrected reconstruction is the .cpp under scripts/GameNatives/qvm. The wrong original is archived at docs/fidelity/evidence/superseded/004B8A50-Profile_ValueSet-ghidra-dump-20261023.hpp.",
       "replacedBy": "scripts/GameNatives/qvm/004B8A50-Qvm_GetFloatArg.cpp"
+    },
+    {
+      "path": "build/retired/gamenatives/0048F530-FX_Igimutex 2.cpp",
+      "sha256": "a644b5a3526c6b17ccb98a1e1d90d38e68cae52bf02f87b2bc18cd193409c85f",
+      "reason": "retired duplicate GameNatives candidate for 0x0048F530; superseded by engine/src/retail/core/main.cpp so the gate has a single implementation"
+    },
+    {
+      "path": "build/retired/gamenatives/0048F530-FX_Igimutex.cpp",
+      "sha256": "616a37da263f9bb50d33ac7f5a2b4715d373ab74c5fe9043ba8d0fe48951ae3c",
+      "reason": "retired duplicate GameNatives candidate for 0x0048F530; superseded by engine/src/retail/core/main.cpp so the gate has a single implementation"
     }
   ],
   "retired_natives": [
@@ -42247,8 +42257,8 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/main.cpp",
-        "sha256": "5a6855eda560299750d731737f08c810ef4960de27b3206d6ca3b68712eb1e72",
-        "signature": "int __cdecl Main(const igi::retail::core::MainConfig* config)"
+        "sha256": "0af26b6b748415bd9154c72c225f204614700fb542c1086811389437b05d1205",
+        "signature": "int __stdcall Main(void* const h_instance, void* const h_previous_instance, char* const command_line, int const show_command)"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F530-Main.hpp",
@@ -42257,119 +42267,73 @@
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "selected_decompiler": "binary_ninja",
         "signature_comparison": {
           "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Binary Ninja reports the retail entry as WPARAM __stdcall(HINSTANCE arg1, int32_t arg2 @ 0xc) with a 994-byte body, 26 blocks and 37 edges; Radare2 reports the same entry and the same node/edge sets; angr CFGFast recovers the exact entry with no unresolved jumps. The candidate exposes an ABI-adapted host entry, int __cdecl Main(const igi::retail::core::MainConfig*), with an 821-byte/22-block/31-edge CFG at 0x0041FCA0. The reviewed mutex prefix consumes neither retail argument, so the IGIMUTEX transcription is independent of the adaptation, but the interfaces and full CFGs are not identical. The 2026-10-23 rename changed only the translation-unit filename and this unit-local type name (RetailMainConfig -> MainConfig); the object sections are byte-identical (docs/fidelity/evidence/0x0048F530-main-rename-identity-20261023.json)."
+          "result": "retail-shape-4-arg-stdcall",
+          "rationale": "Binary Ninja prints the retail entry with a two-argument view (HINSTANCE arg1, int32_t arg2 @ 0xc) because it cannot infer the WinMain-style stack arguments, but the epilogue is `add esp,0x464; retn 0x10` (0x48F8D8-0x48F8DE), which proves a four-argument __stdcall boundary: hInstance at [esp+4], hPrevInstance at [esp+8], lpCmdLine at [esp+0xC] and nCmdShow at [esp+0x10]. Radare2 recovers the same single entry (0x48F530, 994 bytes, 26 blocks / 37 edges) and angr CFGFast recovers the exact entry with no unresolved jumps. The candidate exposes the same four-argument __stdcall shape and consumes command_line (the third retail argument) through StoreCommandLine 0x0048F0C0 at the retail position 0x48F5F3. The window shell is retail-shaped (WNDCLASSA/RegisterClassA with style 3, lpfnWndProc 0x0048F970, hbrBackground 7, menu and class name \"Innerloop\", LoadIconA/LoadCursorA(0x7F00), CreateWindowExA 640x480 centered) and the message pump follows 0x48F841/0x48F854/0x48F869/0x48F875/0x48F884/0x48F88A. No candidate-vs-retail CFG similarity is claimed; the recorded 1.0 similarity is the Binary-Ninja-vs-Radare2 agreement on the retail image only."
         },
         "limitations": [
-          "The candidate Main is ABI-adapted (__cdecl, one MainConfig pointer) and is not called by the diagnostic WinMain, so call-site compatibility with the retail __stdcall(HINSTANCE, int) boundary is not demonstrated.",
-          "The candidate uses WNDCLASSEXW/RegisterClassExW and CreateWindowExW with wide-string message APIs, while retail uses WNDCLASSA/RegisterClassA and CreateWindowExA. Semantic equivalence of the window shell is not established.",
-          "Retail does not test the RegisterClassA result at 0x0048F5E6, and it shows MessageBoxA(NULL, \"Couldn't open window\", \"Innerloop\", MB_ICONERROR) then returns 0 when CreateWindowExA returns NULL (0x0048F77F -> 0x0048F78B -> 0x0048F8FC). The candidate returns 1 without a box on both failures, so those error paths are not retail-faithful yet.",
-          "Retail normal teardown calls SetForegroundWindow, UnregisterClassA and CoUninitialize in addition to ReleaseMutex; the candidate calls only ReleaseMutex. Retail can also return the WM_QUIT wParam stored at [esp+0x14] (0x0048F8A3); the candidate returns 0.",
-          "The diagnostic Win32 shell (engine/platform/windows/scene_main.cpp WinMain) has its own mutex path, never calls ReleaseMutex or CloseHandle, and releases the mutex only through process exit. The reconstructed Main is not wired into the shell.",
-          "No paired retail/candidate runtime capture exists. The recorded CFG similarity 1.0 is the Binary Ninja-vs-Radare2 score for the retail image only; the candidate CFG is 22 blocks/31 edges at 0x0041FCA0 versus retail 26/37, and only the mutex prefix and shared failure block were compared structurally.",
-          "2026-10-23 startup ordering fix: Main now calls AppContext_SetIsActive(1) and AppContext_SetTerrainLightmapsUsed(1) after RegisterClassExW and before CreateWindowExW (candidate 0x0041FDD4 and 0x0041FDE0; retail 0x0048F615 and 0x0048F63D). The retail calls 0x0048F120, 0x0048F1A0, 0x0048F1C0, 0x0048F1E0 and 0x0048F240 between them are still not wired.",
-          "The two new startup calls are proven by disassembly of retail and of the linked candidate only; no paired runtime capture covers them, so the status stays STRUCTURALLY_VERIFIED.",
-          "2026-10-23 Main-unit rename: engine/src/retail/core/retail_main.cpp and engine/include/igi/retail/core/retail_main.hpp became main.cpp and main.hpp, the unit-local type RetailMainConfig became MainConfig, and Retail-derived wording was removed from the unit's commentary and provenance block. The shared IGI_RETAIL_CDECL macro, the igi::retail namespace and the engine/src/retail directory layer were deliberately left unchanged. The compiled translation-unit sections are byte-identical, and the pre-rename image 846ce507 was reproduced byte for byte and compared with the new image: all sixteen PE sections, the 3454-function table and all 3454 function bodies are identical, and the images differ in 19 bytes only - the PE link timestamp, the PE checksum and the COFF symbol-table source-file name (docs/fidelity/evidence/0x0048F530-main-rename-identity-20261023.json). No status was raised: this native remains STRUCTURALLY_VERIFIED.",
-          "verification.addressability still points at docs/fidelity/evidence/engine-defect-fixes-addressability-20261023.json, which names the pre-rename source path engine/src/retail/core/retail_main.cpp. The addressability facts (external linkage, emitted at 0x0041FCA0, no call sites) are unchanged because the object code is unchanged, but that evidence file is owned by another task and has not been rebound."
+          "Retail WinProc registry initialization 0x48F674-0x48F6A6 (0x180-byte zeroing of the 16 nodes at 0x005C8D28 plus head 0x005C8DF0 -> sentinel 0x005C8DF4, tail 0x005C8DF8 -> head and sentinel.next = 0) is not transcribed yet.",
+          "0x00498460 (x87 truncate-rounding control-word setter) is not linked: the call at 0x48F7A5, the per-frame call at 0x48F80D and the FPU self-check 0x48F7E5-0x48F807 with its 0x48F8E1 Debug_Error/spin path are missing, and the loop still calls the non-retail helper FP_InitExtendedPrecision().",
+          "Message-pump exit path is not instruction-faithful yet: the candidate stores the exit code after every pump entry instead of only on GetMessageA==0 (retail 0x48F85F -> 0x48F898), and a WM_QUIT does not bypass the post-pump status re-test (retail exits at 0x48F898 unconditionally, the candidate re-tests the status byte first).",
+          "0x00498480 DirectX probe (0x48F6E2) and its 0x700-tier requirement box are not linked; the DX branch is an explicitly recorded gap, not faked.",
+          "QTask_CreateTask 0x00401000 throws inside QTask_RegisterClasses because the registrars are not transcribed, so the AL spill into 0x005C8DE8, the HardcoreGerman parser call, the loop and the shutdown sequence are not runtime-observable in the candidate yet.",
+          "No paired retail/candidate runtime capture exists for 0x48F530. The runtime contract under build/audit/main-0x48F530/level1-closure/20261024T005502Z/runtime-contract-0x0048F530.json is authored for the provable startup prefix 0x0048F530-0x48F7AA but has not been authorized by Tester, and its probe sha256 is still to be bound.",
+          "The mutex name differs in IGI_TESTING_MUTEX builds (\"IGI1MUTEX\" instead of retail \"IGIMUTEX\") so the verification build can run beside retail; production builds must use the retail name.",
+          "scripts/GameNatives/fx/0048F530-FX_Igimutex 2.cpp and 0048F530-FX_Igimutex.cpp are retired provenance candidates, not implementations; engine/src/retail/core/main.cpp is the single implementation for this VA."
         ],
-        "selected_decompiler": "binary_ninja",
         "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F530-radare2.json",
-          "evidence_sha256": "0cdc966699f4b5f2d9904775b961d67362303c8699fd00070c03560bfd9be4e3",
+          "evidence_path": "docs/fidelity/evidence/0x0048f530-radare2.json",
+          "evidence_sha256": "4ff8997b4b4310a73d84fc117b712eebb146faba1b0cdab68c376755bbc48548",
           "evidence_id": "r2:live:0x0048F530",
           "signature": "not restated"
         },
         "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F530-binaryninja.json",
-          "evidence_sha256": "2764ef4982dd2f1ce0f0d49568498309588a447b01c0d3fa545af6b8e5acf5ce",
+          "evidence_path": "docs/fidelity/evidence/0x0048f530-binaryninja.json",
+          "evidence_sha256": "9d3d9f49ead48c3013b949cd9a0925968be2ae3f3dba44cd32807c41b444f075",
           "evidence_id": "bn:live:0x0048F530",
           "signature": "not restated"
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0048F530-semantic-review.json",
-          "evidence_sha256": "e94b9e85caaca0ac9a99eb47f39aa68c40875ed8ba47124b2ffe50b6aee6ce72"
+          "evidence_path": "docs/fidelity/evidence/0x0048f530-semantic-review.json",
+          "evidence_sha256": "b4e12e0829e0b80e7eeab0b55fcf71149664811ac31178da49af00d3d5e1e3da",
+          "result": "blocked"
         },
         "build": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F530-build.json",
-          "evidence_sha256": "3cc58304a3a2b094899fb4c173414caf4a18278c68758a0ef02dd3cc865b5f97"
+          "evidence_path": "docs/fidelity/evidence/0x0048f530-build.json",
+          "evidence_sha256": "b09e7dabebcea460ac089e3a2cb4dfb30dcdafe62cbf666e77febb4a0662190f"
         },
         "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x0048F530-behavioral.json",
-          "evidence_sha256": "651a5f749f23093f30492e22a4bc98c4e50ce07a24ecbb0f3d622794a5649b9b"
+          "evidence_path": "docs/fidelity/evidence/0x0048f530-behavioral.json",
+          "evidence_sha256": "1b885b607e8d6cfb4bfa119b205cbf78dec54832e90ce0f7f0bc23f4e083ed8c",
+          "result": "not_performed"
         },
-        "structural_comparison": {
-          "evidence_path": "docs/fidelity/evidence/0048F530-structural-comparison.json",
-          "evidence_sha256": "336ed4215403132728bc1a5ac64c245e713ac139cdff9649c3e262869c572f10"
-        },
-        "cfg_comparison": {
-          "value": 1.0,
-          "method": "scripts/native_gate.py cfg_score: 0.35 * Jaccard(nodes) + 0.65 * Jaccard(edges)",
-          "scope": "retail image only (Binary Ninja vs Radare2 on igi.exe)",
-          "candidate_vs_retail": "not an address-bound equivalence score; candidate CFG is 22 blocks / 31 edges at 0x0041FCA0 versus retail 26/37, and the compared properties are recorded in verification.structural_comparison"
-        },
-        "decompiler_selection_note": "Binary Ninja is the single selected decompiler for retail. Radare2 and angr provide independent CFG evidence. No Ghidra analysis was run for these targets.",
-        "behavioral_status": "not_performed: no paired retail/candidate runtime capture exists; strict behavioral mode must fail closed.",
-        "recorded_at": "2026-10-23T13:02:28Z",
-        "candidate_sha256": "209f500b18bbbe93f33b2fdd9e228d10b24fe2836d0870be56eb07dbba54fcdb",
-        "candidate_receipt_sha256": "8f8551cbb9cbfbd132810bcf56f6dcea3e1802f85ed94a85fde67ca432e5725f",
-        "candidate_symbol": "Main",
-        "candidate_address": "0x0041FCA0",
-        "addressability": {
-          "linkage": "external",
-          "object_emitted": true,
-          "linked_image_emitted": true,
-          "linked_image_vaddr": "0x0041FCA0",
-          "call_sites_in_image": 0,
-          "callers_in_image": [],
-          "call_site_addresses": [],
-          "reachable_statically": true,
-          "evidence_path": "docs/fidelity/evidence/engine-defect-fixes-addressability-20261023.json",
-          "evidence_sha256": "2efcf9b5af0504d636f9b2b186b60d8e01b4ea0a8c8b8023babe8c72f56d1a30",
-          "note": "Main is the reconstructed entry point; its two startup app-context calls are at 0x0041FDD4 and 0x0041FDE0 in the linked image."
-        },
-        "rename": {
-          "recorded_at": "2026-10-23T14:45:00Z",
-          "previous_path": "engine/src/retail/core/retail_main.cpp",
-          "new_path": "engine/src/retail/core/main.cpp",
-          "header": {
-            "previous_path": "engine/include/igi/retail/core/retail_main.hpp",
-            "new_path": "engine/include/igi/retail/core/main.hpp",
-            "new_sha256": "ea3b2742361217d3e7462e6d979a499d185ec94e58efc9b47e840c6ffe64fbee"
-          },
-          "previous_implementation_sha256": "b52f3a9de917127a57976ef42f2f4d068aef09007b6bc079ae6c3fb12642f617",
-          "new_implementation_sha256": "f5043ca45c4f4dde1e0d3e7995f8242d8e80d31126c11f6264b12e817c829dac",
-          "local_type_renamed": {
-            "from": "igi::retail::core::RetailMainConfig",
-            "to": "igi::retail::core::MainConfig"
-          },
-          "unchanged_shared_names": [
-            "IGI_RETAIL_CDECL",
-            "namespace igi::retail",
-            "engine/src/retail",
-            "engine/include/igi/retail"
-          ],
-          "object_sections_identical": true,
-          "object_symbol_table_identical": true,
-          "image_sections_identical": true,
-          "image_differences": [
-            "PE COFF header TimeDateStamp",
-            "PE optional header CheckSum",
-            "COFF symbol-table source-file name (retail_main.cpp -> main.cpp)"
-          ],
-          "image_differing_byte_count": 19,
-          "functions_compared": 3454,
-          "functions_with_differing_bodies": 0,
-          "identity_evidence": {
-            "evidence_path": "docs/fidelity/evidence/0x0048F530-main-rename-identity-20261023.json",
-            "evidence_sha256": "a4143100b02701f6294b12a74d8346b07ba1d1ba8e2ff6b161af41d9f535ab2d"
-          },
-          "candidate_sha256": "209f500b18bbbe93f33b2fdd9e228d10b24fe2836d0870be56eb07dbba54fcdb",
-          "candidate_receipt_sha256": "8f8551cbb9cbfbd132810bcf56f6dcea3e1802f85ed94a85fde67ca432e5725f",
-          "note": "The rename is comment and type-name only. The pre-rename image file 846ce507 was replaced in the shared build directory by a concurrent relink before it could be copied, so it was reproduced byte for byte: the rename build's 81 objects in the target's own order, with the pre-rename main-unit object compiled from git show HEAD:engine/src/retail/core/retail_main.cpp (digest b52f3a9d..., the digest the 846ce507 receipt recorded), linked under SOURCE_DATE_EPOCH=1792759387, the link second recorded by that receipt. The result hashes to 846ce507d42d42b7d25ec1e193fb7fa2157d4ab8930b5193e8bc54b9f0822ad4, so the comparison is against the actual pre-rename image. All sixteen PE sections, the 3454-function (address, size, name) table and all 3454 function bodies are identical; the images differ in 19 bytes: link timestamp, checksum and COFF source-file name."
+        "runtime_contract": {
+          "evidence_path": "build/audit/main-0x48F530/level1-closure/20261024T005502Z/runtime-contract-0x0048F530.json",
+          "scope": "0x0048F530-0x48F7AA",
+          "authorized": false
         }
+      },
+      "provenance": {
+        "retired_candidates": [
+          {
+            "path": "scripts/GameNatives/fx/0048F530-FX_Igimutex 2.cpp",
+            "sha256": "a644b5a3526c6b17ccb98a1e1d90d38e68cae52bf02f87b2bc18cd193409c85f",
+            "reason": "duplicate macOS copy artifact; superseded by engine/src/retail/core/main.cpp; never VERIFIED"
+          },
+          {
+            "path": "scripts/GameNatives/fx/0048F530-FX_Igimutex.cpp",
+            "sha256": "616a37da263f9bb50d33ac7f5a2b4715d373ab74c5fe9043ba8d0fe48951ae3c",
+            "reason": "old GameNatives candidate; superseded by the engine transcription; provenance only"
+          },
+          {
+            "path": "scripts/GameNatives/fx/0048F530-Main.hpp",
+            "sha256": "b028175197ba0ebec583ec7858928c1db8a9f77267b6cc1a48198c9feaf53f63",
+            "reason": "candidate declaration used during early reconstruction; provenance only"
+          }
+        ]
       }
     },
     {
