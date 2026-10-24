@@ -739,3 +739,23 @@ so the provenance must state that the copy shape is behavioural, not instruction
 
 Argument count for `0x4C0560` still to confirm from its call sites (list is `[ebp]`/`[ebp+4]`,
 value is `ebx`); recorded as open rather than assumed.
+
+### 0x4C0560 ABI: THREE arguments (both call sites)
+
+Two call sites, both push three dwords:
+
+```
+0x4BAEC  (inside 0x4BAAC0): push esi; push eax; push ecx; call; add esp,0x18 afterwards
+0x4BAEC4 (inside another routine): push ebp; push edx(&local); push eax; call; add esp via
+         the caller's normal cleanup (add esi,0x20 follows)
+```
+
+So `f(arg1, arg2, arg3)` with `arg1 = list` (used as `[ebp]` bucket array and `[ebp+4]` count),
+`arg2 = value` string (used for strlen/Debug_Error/hash), and a third argument that the
+0x4BAAC0 site supplies as the record pointer (`push esi` where esi is the 28-byte record) -
+consistent with the body filling `[record+8]` etc. The open question from round 83 is closed:
+three arguments.
+
+Note the 0x4BAAC0 site's cleanup is `add esp,0x18` covering its own earlier pushes, which is
+why the apparent mismatch with three pushed dwords appeared; the callee itself is a plain
+three-argument cdecl.
