@@ -26,6 +26,11 @@ struct MemGlobals {
     NewHandlerFn new_handler_936254 = nullptr;      // 0x00936254 (g_936254)
     std::uint32_t heap_mode_c3242c = 0;             // 0x00C3242C (g_c3242c)
     void* heap_handle_c32428 = nullptr;             // 0x00C32428 (g_c32428)
+    std::uint32_t pool_slot_count_c321e4 = 0;       // 0x00C321E4 (g_c321e4)
+    void* pool_block_c321ec = nullptr;              // 0x00C321EC (g_c321ec)
+    std::uint32_t pool_used_c321f0 = 0;             // 0x00C321F0 (g_c321f0)
+    std::uint32_t pool_next_c321f4 = 0;             // 0x00C321F4 (g_c321f4)
+    void* pool_base_c321f8 = nullptr;               // 0x00C321F8 (g_c321f8)
     std::uint32_t pool_threshold_c321fc = 0;        // 0x00C321FC (g_c321fc)
     std::uint32_t free_list_bound_5466d4 = 0;       // 0x005466D4 (g_5466d4)
 };
@@ -47,6 +52,11 @@ extern std::uint32_t& g_936250;
 extern NewHandlerFn& g_936254;
 extern std::uint32_t& g_c3242c;
 extern void*& g_c32428;
+extern std::uint32_t& g_c321e4;
+extern void*& g_c321ec;
+extern std::uint32_t& g_c321f0;
+extern std::uint32_t& g_c321f4;
+extern void*& g_c321f8;
 extern std::uint32_t& g_c321fc;
 extern std::uint32_t& g_5466d4;
 

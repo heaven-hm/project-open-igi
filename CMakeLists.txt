@@ -38,6 +38,8 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4d9730.cpp
     engine/src/retail/dynobj/native_004e5370.cpp
     engine/src/retail/core/native_4c5900.cpp
+    engine/src/retail/mem/native_4aad48.cpp
+    engine/src/retail/mem/native_4aad90.cpp
     engine/src/retail/core/app_startup_globals.cpp
     engine/src/retail/core/app_startup_natives.cpp
     engine/src/retail/core/class_registration.cpp
