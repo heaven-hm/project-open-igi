@@ -1104,3 +1104,16 @@ What is actually known: the script prints nothing at all for 0x004014E0 and "bui
 printed a BN/r2 block comparison and wrote artifacts. The discriminator is somewhere in discover()/canonical_source()
 or in how the address is matched, and it has not been found. Do not repeat the catalog claim as fact; the next
 investigation step is to print `discover()` and check whether 0x004014E0 appears in the candidate list at all.
+
+## The destructor listing is NOT complete and the tabulation was withdrawn (round 184)
+
+Tabulating 0x4015F0-retail-listing.txt produced a 32-row table ending at 0x00401777. Checking the arithmetic instead
+of shipping it: the function extent is 0x004015F0-0x00401777 = 391 bytes, so 32 instructions would average 12 bytes per
+instruction, and the same file holds 97 addressed lines of which 65 sit between 0x00401777 and 0x0040180A - a range that
+belongs to the next function (0x004017C0 is the event allocator). So the listing is not a complete linear decode of
+0x4015F0 and the table derived from it was wrong; it has been deleted rather than committed as evidence.
+
+Actionable correction for the next pass: do not use `pd N @ <addr>` for this function. Use a real function-scoped
+disassembly (`af` then `pdf`, or `pdr` with the function boundary from the 391-byte extent) and verify the row count
+against the byte length before transcribing. The dependency note (0x4015F0-dependencies.md) is unaffected: it read call
+targets, and the four it lists all appear in the listing.
