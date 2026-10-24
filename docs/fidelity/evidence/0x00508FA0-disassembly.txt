@@ -410,3 +410,20 @@ Blocker: `0x004B8810` is **not** in `engine/` (no provenance line matches), so t
 cannot link yet. It is the only missing dependency for `0x5186C0`; landing it makes this
 routine writable. Remaining startup distance is therefore `0x4F9460`, `0x4F9DF0`, the
 newly-found `0x4B8810`, plus `0x5186C0` itself.
+
+### 0x4B8810 decoded (32 B, 1 block) - thin wrapper over 0x4BAAC0
+
+```
+f(a, b) { return 0x004BAAC0(a, 0x004B8830, b, 4, 2, 1, 0); }
+```
+
+Seven arguments pushed in retail order (pushed 0, 1, 2, 4, b, 0x4B8830, a - so arg1 = a,
+arg2 = the function pointer 0x4B8830, arg3 = b, then constants 4, 2, 1, 0) and cleaned with
+`add esp,0x1c`. So `0x5186C0` records a node-criteria entry by handing the value and mask to
+a generic registration primitive along with the criteria callback `0x4B8830` and flags
+4/2/1/0.
+
+Remaining dependency for the NodeCriteria path: `0x004BAAC0` (and the callback body
+`0x004B8830`). Neither has a provenance line in `engine/` yet, so `0x4B8810` and `0x5186C0`
+both stay unwritten until that primitive exists. Chain: `0x5186C0 -> 0x4B8810 ->
+0x4BAAC0 -> {0x4B8830 callback}`.
