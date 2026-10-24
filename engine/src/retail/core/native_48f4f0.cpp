@@ -1,4 +1,5 @@
-// Native: WinProc_RemoveHandler (placeholder name until VERIFIED; retail BN alias FX_UnableToRemoveWinpro)
+// Native: WinProc_RemoveHandler; retail VA 0x0048F4F0.
+//   previous note: Native: WinProc_RemoveHandler (placeholder name until VERIFIED; retail BN alias FX_UnableToRemoveWinpro)
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x0048F4F0-0x0048F52E.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 bytes; 7 basic blocks; spec build/audit/main-0x48F530/level1-closure/20261024T022900Z/TRANSCRIPTION-SPECS.md §1.6.
 // Behavior/CFG: walks from the chain head while the current node has a non-null next word, compares handler (+0x08) with the argument and on a match unlinks with HeapList_Remove(0x004AF960), clears the handler and returns the remove result; not-found path calls Debug_Error("Unable to remove WinProc callback") and jumps forever (0x48F51B).

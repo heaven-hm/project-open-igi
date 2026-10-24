@@ -1,4 +1,5 @@
-// Native: Mem_AllocIndexedBlock (placeholder name until VERIFIED; retail BN alias Sys_FreeMemory_2 is wrong - this allocates).
+// Native: Mem_AllocIndexedBlock; retail VA 0x004B0B00.
+//   previous note: Native: Mem_AllocIndexedBlock (placeholder name until VERIFIED; retail BN alias Sys_FreeMemory_2 is wrong - this allocates).
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01; VA 0x004B0B00-0x004B0B64.
 // Tools/evidence: Binary Ninja MCP disassembly/decompile + radare2 6.2.0 bytes; 5 blocks, callee 0x004B0C60 Mem_Alloc; spec build/audit/main-0x48F530/level1-closure/20261024T023630Z/NEXT-COMMITS-SPEC.md §1.3.
 // Behavior/CFG: alignment=max(arg4,4); stride=element_size rounded up to alignment; descriptor[5]=element_size stored before allocating; base=Mem_Alloc((stride+4)*count, alignment); descriptor = [0]=base, [1]=base+stride*count (index table), [2]=0, [3]=count, [4]=stride, [5]=element_size; index_table[i]=i; returns count (0 when count<=0).

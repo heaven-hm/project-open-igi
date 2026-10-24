@@ -1,4 +1,5 @@
-// Native: unnamed in retail; Binary Ninja's `DynObj_ParseConfigFile_6` name contradicts the body.
+// Native: unnamed in retail; Binary Ninja's `DynObj_ParseConfigFile_6` name contradicts the body.; retail VA 0x004C5810.
+//   previous note: Native: unnamed in retail; Binary Ninja's `DynObj_ParseConfigFile_6` name contradicts the body.
 // Retail VA 0x004C5810; x86 cdecl `int32_t(void)`.
 // Artifact: retail igi.exe SHA-256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01,
 //   1,384,448 bytes, image base 0x00400000, entry 0x004A50F5, machine i386.

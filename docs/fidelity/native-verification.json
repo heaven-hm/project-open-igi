@@ -39354,6 +39354,45 @@
       }
     },
     {
+      "address": "0x00489560",
+      "name": "AI_Detection_Init",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_489560.cpp",
+        "sha256": "a2e416d0369d67bd9f6b2c96cf378433d1a4914fbd957a7ed88db47b06a04b8e",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/00489560-FX_SmokeEmit_12 2.cpp",
+        "sha256": "055ad0ed31099751cb2e4a6795fd7d764023e6ab92a91496696b3666dc8a6061",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00489560",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00489560-binaryninja.json",
+          "evidence_sha256": "7b49e29276a50587a3990de0bd9d59f36c86c14b9927f7713056e602635a431e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00489560",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00489560-radare2.json",
+          "evidence_sha256": "5fe7683a66ba5636ee10d316a6047ab2d00b876eb7af7b059fe799f44be99309"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "limitations": [
+          "Generated CFG artifacts contain one block and zero edges, which does not describe this body; the structural claim is withheld until the CFG is re-inspected. (0x004C1780 does not need this caveat: it is a genuine one-byte ret.)"
+        ]
+      }
+    },
+    {
       "address": "0x00489E70",
       "name": "Human_StateAnimation",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -42744,18 +42783,35 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_48f490.cpp",
-        "sha256": "7df43dea2c19db0a18f87f7dbaf4174e1fefca240a4b008291bc29e821684314",
-        "signature": "std::int32_t* __cdecl(std::int32_t* handler)"
+        "sha256": "fab9ca51197fe0b425b4f9dd4d6b9845e8b1ec7dcaa8abd78a9899c329425a67",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0048F490-FX_FailedToRegisterWinp 2.cpp",
+        "sha256": "165bee2424d29e6d14766d6710c70dc3a144f60a4af9f643ae07e02baa2d3d5f",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No runtime evidence; not called by any transcribed startup path.",
-          "Retail direct callers: exactly 6 (0x424C00 Cursor_Init, 0x48A728 FX_DebrisSpawn_16, 0x48FEB8 FX_CouldNotCreateDirect, 0x490109 FX_CouldNotCreateDirect_2, 0x49065F Display_OpenDevice_2, 0x493803 Display_Direct3D); none of those caller functions is transcribed in engine/ or the manifest."
-        ],
-        "notes": "Only reachable from the six untranscribed callers today; do not claim runtime reachability."
-      },
-      "notes": "Renamed from `WinProc_RegisterHandler_48F490` when the address suffix was stripped; the retail VA in this record is unchanged."
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0048F490",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F490-binaryninja.json",
+          "evidence_sha256": "10e4ea1f15ca776be7916bbc13987c3a07c90b2d4c45f01567ad3f6512a1f10e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0048F490",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F490-radare2.json",
+          "evidence_sha256": "2e4bd93d2a7799042e76a39b372324a40e0da283d08c3de1014723f4fbf1fe43"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
     },
     {
       "address": "0x0048F4F0",
@@ -42763,18 +42819,35 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/native_48f4f0.cpp",
-        "sha256": "508bedb782983037547dff0a7e476ea100267bebad30a6703d639da0fda91d68",
-        "signature": "std::int32_t* __cdecl(std::int32_t* front_link)"
+        "sha256": "c47c2e5b20b827c06c233cefc2456df5f4c83f02d8e643a5e5ebe399d3e66b6a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0048F4F0-FX_UnableToRemoveWinpro 2.cpp",
+        "sha256": "58cd3de427578ed1b2ae198f9106e43feb2102855dac7bc104b5975da8d94383",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No runtime evidence; not called by any transcribed startup path.",
-          "Retail direct callers: exactly 5 (0x48A8A5 FX_TrailUpdate_16, 0x48FFE9 FX_DebrisSpawn_27, 0x490339 Display_SetDisplayMode, 0x4903C1 Display_CreateSurface, 0x49506F Display_RestoreDevice_7); none of those caller functions is transcribed in engine/ or the manifest."
-        ],
-        "notes": "Only reachable from the five untranscribed callers today; do not claim runtime reachability."
-      },
-      "notes": "Renamed from `WinProc_RemoveHandler_48F4F0` when the address suffix was stripped; the retail VA in this record is unchanged."
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0048F4F0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F4F0-binaryninja.json",
+          "evidence_sha256": "11aa96d47f0022744d587d040c1630da9ba54b0445ab58b085f6fc8042a7a4c3"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0048F4F0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F4F0-radare2.json",
+          "evidence_sha256": "091c84f2c4ca1c4d298bc00facdd57feed7d3408149849c923615e8707e87d03"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
     },
     {
       "address": "0x0048F530",
@@ -49371,19 +49444,35 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/mem/task_list.cpp",
-        "sha256": "0607748116512ba2d3998e5c08734f1c9dfd347434705c75cc06366b9546b269",
-        "signature": "std::int32_t __cdecl(std::int32_t* descriptor, std::int32_t element_size, std::int32_t count, std::int32_t alignment)"
+        "sha256": "b3ac405b8a0de390cd5f4dc27e21da9edbfa66f1bcb611041d5fde16402b2d50",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B0B00-Sys_FreeMemory_2 2.cpp",
+        "sha256": "24d237a33976188cba08a9f33dcf33d119320d56f5ea2aee48e87962c03c4f9b",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No game process has executed the candidate implementation; runtime evidence is absent.",
-          "Retail Binary Ninja alias Sys_FreeMemory_2 is wrong: the body allocates an indexed block; the implementation records the discrepancy.",
-          "Static reachability: 32 direct retail callers; transcribed callers are listed below, the remainder are untranscribed and not exercised."
-        ],
-        "notes": "New native added by the commit 800fec7f lineage; status must remain TRANSCRIBED until a typed runtime comparison exists."
-      },
-      "notes": "Renamed from `Mem_AllocIndexedBlock_4B0B00` when the address suffix was stripped; the retail VA in this record is unchanged."
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B0B00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0B00-binaryninja.json",
+          "evidence_sha256": "afc0a9e20de462c6332c98de7cd025d4a4bf0221d451b7ecb5fa4c9780ae40a3"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B0B00",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B0B00-radare2.json",
+          "evidence_sha256": "fe2654565a2832006e37b24e0c1ce4f2f56c84cf8a70a1efc8855b9d0140a6d7"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
     },
     {
       "address": "0x004B0B90",
@@ -53801,6 +53890,42 @@
       }
     },
     {
+      "address": "0x004C1780",
+      "name": "AnimSound_LoadParameters",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_4c1780.cpp",
+        "sha256": "ddfe99c6fdfcacb91d10c009eac25a53eccc1c468768a95f4a58b252a9000a0c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/animsound/004C1780-AnimSound_LoadParameters 2.cpp",
+        "sha256": "5b61a2fcaec2648b97e3e665571a6bce19ed56663a7c3bb4532d51dde0c554f0",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004C1780",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C1780-binaryninja.json",
+          "evidence_sha256": "4095ea4e01f1afb0cada0e7e8843728de5f984f5edd3c11916718318bef9c29a"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004C1780",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C1780-radare2.json",
+          "evidence_sha256": "42db40c1fe50cf6867b405c2344305b91fca05bca0cc1ab7e12857eff2f1a949"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004C1790",
       "name": "QTaskList_Register",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -54080,80 +54205,41 @@
     },
     {
       "address": "0x004C5810",
-      "name": "DynObj_ParseConfigFile_6",
+      "name": "unnamed in retail",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/terrain/terrain_scene_state.cpp",
-        "sha256": "64135dedac6471f7e6b64d7156d0ff0c972f128d4fd63b7b2aba4a2dddd48385",
-        "signature": "int DynObj_ParseConfigFile_6(void)"
+        "sha256": "9e8cc9dde0db617ffb7d51b928a30bf482b81792858346f11991ed8312a1dbe4",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/dynobj/004C5810-DynObj_ParseConfigFile_6.cpp",
-        "sha256": "1742020875869193950a9932ffe0f9a5a4ab354f9b1a3adf71c0ece96d0717b9",
-        "signature": "int DynObj_ParseConfigFile_6()"
+        "path": "scripts/GameNatives/004C5810-DynObj_ParseConfigFile_6 2.cpp",
+        "sha256": "11215fad1dfc8d483f1a436883a492c88024481da104fed6669c5fcc298b89b0",
+        "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
-        "selected_decompiler": "binary_ninja",
-        "recorded_at": "2026-10-23T03:05:00Z",
-        "signature_comparison": {
-          "reviewed": true,
-          "result": "exact",
-          "rationale": "Binary Ninja reports int32_t() and radare2 reports cdecl with 0 arguments; the candidate defines int DynObj_ParseConfigFile_6(void). The no-argument cdecl int32-return ABI is identical, and the retail body contains no reads of the stack frame."
-        },
+        "status": "TRANSCRIBED",
         "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004C5810-binaryninja-20261023.json",
-          "evidence_sha256": "10e69b992f4eef9b32608039d9703f0ba958849932ed382a6b8d3be67d8212f3",
-          "evidence_id": "bn:20261023:0x004C5810",
-          "signature": "int32_t __cdecl DynObj_ParseConfigFile_6(void)"
+          "evidence_id": "bn:live:0x004C5810",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C5810-binaryninja.json",
+          "evidence_sha256": "01f80e66b32c68d90a89e3b2cc0b2d4fa2a170d85a249623ee35eeec56673eb5"
         },
         "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004C5810-radare2-20261023.json",
-          "evidence_sha256": "5498345a43d75f33d8cffd94d0000f3157a1017e2b3e98c2061e84bdc6cb6795",
-          "evidence_id": "r2:20261023:0x004C5810",
-          "signature": "int32_t __cdecl DynObj_ParseConfigFile_6(void)"
+          "evidence_id": "r2:live:0x004C5810",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004C5810-radare2.json",
+          "evidence_sha256": "b21794ff9c44608cb1b5baa3a9de580c7ef2ffbdd4444274f4dfe14d127204a4"
         },
-        "structural_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004C5810-structural-review-20261023.json",
-          "evidence_sha256": "e560d5b56e6742247fba41ef931850e1bdb25820d7084c65bb6cb1efcb2f999b"
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "Structural verification is source-level plus retail CFG: retail is one basic block of seven instructions (xor eax; five dword zero stores; retn) and the candidate compiles to one basic block of seven instructions (five dword zero stores; xor eax; ret). Neither contains a branch, call or memory read.",
-          "The candidate object was produced by GCC 16.2.0, not the retail MSVC 6 toolchain; GCC schedules xor eax,eax between the first and second store. The store set, order, width and values are identical and the block/edge shape (1 node / 0 edges) matches, so the structural claim holds.",
-          "No candidate executable, link, behavioral test or runtime capture is claimed. The eleven retail callers and the runtime meaning of the cleared globals are outside this review.",
-          "The candidate is declared int DynObj_ParseConfigFile_6(void) here while engine/include/igi/retail/terrain/terrain_quadtree.hpp declares it void; the i386 cdecl ABI is identical and every retail caller ignores EAX. The header is outside this task's ownership and was not changed.",
-          "DynObj_ParseConfigFile_6 is a Binary Ninja label; the function parses no configuration file. It clears five terrain scene globals: 0x00B97DF4, 0x00B97D24, 0x00B97DF8, 0x00BA2058 and 0x00BA5060.",
-          "The recorded cfg_similarity 1.0 is the gate's Binary Ninja-vs-radare2 score over the two retail artifacts (1 node / 0 edges each). It is retail structural agreement, not candidate equivalence.",
-          "The five globals are defined with external linkage in engine/src/retail/terrain/terrain_loaders.cpp; terrain_scene_state.cpp is listed in the working-tree CMakeLists.txt (uncommitted when this record was written). No full link or host build was performed by this task.",
-          "Historical evidence from the previous GameNatives candidate is not bound to this TU and is listed under historical_evidence."
-        ],
-        "historical_evidence": [
-          {
-            "evidence_path": "docs/fidelity/evidence/0x004C5810-binaryninja.json",
-            "note": "retail artifact captured for the previous GameNatives implementation path"
-          },
-          {
-            "evidence_path": "docs/fidelity/evidence/0x004C5810-radare2.json",
-            "note": "retail artifact captured for the previous GameNatives implementation path"
-          },
-          {
-            "evidence_path": "docs/fidelity/evidence/0x004C5810-semantic-review.json",
-            "note": "semantic review bound to scripts/GameNatives/dynobj/004C5810-DynObj_ParseConfigFile_6.cpp"
-          },
-          {
-            "evidence_path": "docs/fidelity/evidence/0x004C5810-build.json",
-            "note": "build report bound to the previous GameNatives implementation path"
-          },
-          {
-            "evidence_path": "docs/fidelity/evidence/0x004C5810-behavioral.json",
-            "note": "behavioral report bound to the previous GameNatives implementation path"
-          }
-        ],
         "cfg_similarity": 1.0,
-        "semantic_review": {
-          "evidence_path": "docs/fidelity/evidence/0x004C5810-semantic-review-20261023.json",
-          "evidence_sha256": "e5dd62fc0cb45fa4d87cc7501e3dfa2e9cfecd82057be01a53e5c3dd7a18a760"
-        }
+        "limitations": [
+          "Generated CFG artifacts contain one block and zero edges, which does not describe this body; the structural claim is withheld until the CFG is re-inspected. (0x004C1780 does not need this caveat: it is a genuine one-byte ret.)"
+        ]
       }
     },
     {
