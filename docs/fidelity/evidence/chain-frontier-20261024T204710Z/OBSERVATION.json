@@ -1,0 +1,43 @@
+{
+  "schema": "chain-frontier-runtime-capture",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "captures": [
+    {
+      "file": "candidate-0x004B4720.json",
+      "exe": null,
+      "exe_sha256": null,
+      "result": "unobserved",
+      "counts": {
+        "entry": 0,
+        "return_": 0,
+        "unmatched_entries": 0
+      },
+      "error": null
+    },
+    {
+      "file": "retail-0x004AD36E.json",
+      "exe": null,
+      "exe_sha256": null,
+      "result": "failed",
+      "counts": null,
+      "error": "RPCException: Error: unable to intercept function at 004AD36E; please file a bug\n    at value (/frida/runtime/core.js:374:9)\n    at install (/script1.js:212:38)\n    at hook (/script1.js:283:21)\n    at"
+    },
+    {
+      "file": "retail-0x004B4720.json",
+      "exe": null,
+      "exe_sha256": null,
+      "result": "observed",
+      "counts": {
+        "entry": 256,
+        "return_": 256,
+        "unmatched_entries": 0
+      },
+      "error": null
+    }
+  ],
+  "notes": [
+    "Retail 0x004B4720: 256 entries / 256 returns, the driver's observation cap, so the call site is reached far more often than observed.",
+    "Retail 0x004AD36E: the probe could not be installed - Frida Interceptor rejects a 3-byte function (unable to intercept function at 004AD36E). This is a tooling limit of the probe, not evidence about the native; the body is 2 instructions and cannot be hooked this way.",
+    "Candidate 0x004B4720: 0 entries, 0 returns, because the candidate exits 3 at the 0x00402930 boundary before any game native runs. Paired comparison therefore fails on the candidate side, not on a mismatch."
+  ]
+}

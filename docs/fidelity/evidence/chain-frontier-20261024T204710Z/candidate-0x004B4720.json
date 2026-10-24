@@ -1,0 +1,112 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "unobserved",
+  "verified": false,
+  "captured_at": "2026-10-24T20:46:38.649917+00:00",
+  "targets": [
+    {
+      "address": "0x004B4720",
+      "name": "probe",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/tester/20261024T204548Z/probes/probe_0x004B4720.js",
+      "probe_sha256": "c3f78bcc0a6b1e89d54a098ac7338a4c7a3b570b85cba3b574b9ed732a1aa1ba",
+      "observations": {
+        "entries": 0,
+        "returns": 0
+      },
+      "retailName": "probe"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Downloads/IGI/igi1.exe",
+    "sha256": "bfb35cdfe529fd19f5d27eacb597c74442b81be4f205726d2be56a69fdb103c1",
+    "preferred_base": "0x00400000",
+    "module": "igi1.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 15.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 4,
+    "native_size": null,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "address": "0x004B4720",
+      "name": "probe",
+      "module": "igi1.exe",
+      "moduleBase": "0x400000",
+      "target": "0x4b4720",
+      "rva": "0xb4720",
+      "preferredBase": 4194304,
+      "argWords": 4,
+      "memArg": null,
+      "maxCalls": 256,
+      "retailVA": "0x004B4720",
+      "sideAddress": "0x004B4720"
+    }
+  ],
+  "evidence_input": null,
+  "entries": [],
+  "returns": [],
+  "messages": 0,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 1356,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Downloads\\IGI\\igi1.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "session_detach": {
+      "reason": "process-terminated",
+      "at": 1792874801.4925828,
+      "crash": null
+    },
+    "exited_before_observe_end": {
+      "at": 1792874801.718837,
+      "elapsed_seconds": 2.569
+    },
+    "alive_at_end": false
+  },
+  "summaries": [],
+  "summary_errors": [
+    {
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/tester/20261024T204548Z/probes/probe_0x004B4720.js",
+      "error": "InvalidOperationError: script has been destroyed"
+    }
+  ],
+  "counts": {
+    "entry": 0,
+    "return_": 0,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}
