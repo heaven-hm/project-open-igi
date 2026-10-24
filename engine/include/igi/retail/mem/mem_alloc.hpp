@@ -17,7 +17,11 @@ struct MemGlobals {
     void* sentinel_a960f4 = nullptr;                // 0x00A960F4 (g_a960f4)
     void* free_list_back_a960f8 = nullptr;          // 0x00A960F8 (g_a960f8)
     std::int32_t state_a960e0 = 0;                  // 0x00A960E0 (g_a960e0)
-    std::uint32_t qhash_flag_9422fd = 0;            // 0x009422FD (g_9422fd)
+    // Retail's live flag byte 0x009422FD is the second byte of the dword at
+    // 0x009422FC, so it aliases heap_init_9422fc rather than being separate
+    // storage. g_9422fd below aliases that byte; the 16-entry saved-flag
+    // array at 0x009422E8 is the stack used by 0x004B0D60/0x004B0D90.
+    std::uint8_t qhash_stack_9422e8[16] = {};       // 0x009422E8 (saved flags)
     std::uint32_t bucket_sentinel_936250 = 0;       // 0x00936250 (g_936250)
     NewHandlerFn new_handler_936254 = nullptr;      // 0x00936254 (g_936254)
     std::uint32_t heap_mode_c3242c = 0;             // 0x00C3242C (g_c3242c)
@@ -37,7 +41,8 @@ extern void*& g_a960f0;
 extern void*& g_a960f4;
 extern void*& g_a960f8;
 extern std::int32_t& g_a960e0;
-extern std::uint32_t& g_9422fd;
+extern std::uint8_t& g_9422fd;
+extern std::uint8_t (&g_9422e8)[16];
 extern std::uint32_t& g_936250;
 extern NewHandlerFn& g_936254;
 extern std::uint32_t& g_c3242c;

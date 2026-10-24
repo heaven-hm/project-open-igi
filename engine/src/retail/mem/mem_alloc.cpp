@@ -17,7 +17,10 @@ void*& g_a960f0 = g_mem_globals.free_list_head_a960f0;
 void*& g_a960f4 = g_mem_globals.sentinel_a960f4;
 void*& g_a960f8 = g_mem_globals.free_list_back_a960f8;
 std::int32_t& g_a960e0 = g_mem_globals.state_a960e0;
-std::uint32_t& g_9422fd = g_mem_globals.qhash_flag_9422fd;
+// 0x009422FD is the second byte of the retail dword at 0x009422FC, so this reference
+// aliases heap_init_9422fc instead of owning separate storage.
+std::uint8_t& g_9422fd = reinterpret_cast<std::uint8_t*>(&g_mem_globals.heap_init_9422fc)[1];
+std::uint8_t (&g_9422e8)[16] = g_mem_globals.qhash_stack_9422e8;
 std::uint32_t& g_936250 = g_mem_globals.bucket_sentinel_936250;
 NewHandlerFn& g_936254 = g_mem_globals.new_handler_936254;
 std::uint32_t& g_c3242c = g_mem_globals.heap_mode_c3242c;
