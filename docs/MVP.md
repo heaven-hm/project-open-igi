@@ -21,7 +21,7 @@ The demo targets the runtime-reachable Level 1 gameplay methods. Catalog members
 
 - Per-native verification (address, name, gate status, BN check, CLEAN path): `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md`.
 - Each native was checked with `bn_function_info` against `igi.exe`: **3,035 name-verified, 15 name conflicts, 0 lookup errors.** Conflicting entries are used by **address only**, never by the catalog label.
-- Inventory by subsystem: `NATIVES_CALL_INFO.md` §23. Build-order mapping: `NATIVES_CALL_INFO.md` §24.
+- Inventory by subsystem: `NATIVES_DATABASE.md` §23. Build-order mapping: `NATIVES_DATABASE.md` §24.
 
 ## Required implementation order
 

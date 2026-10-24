@@ -1,0 +1,36 @@
+{
+  "kind": "igi-native-automation-validation",
+  "schema_version": 1,
+  "result": "infrastructure_checked_native_acceptance_incomplete",
+  "infrastructure_tests": 8,
+  "git_hook_configured": true,
+  "cmake_targets": [
+    "verify_natives_changed",
+    "verify_natives_all"
+  ],
+  "integrity_check": "passed",
+  "native_pilot": {
+    "address": "0x0048F0F0",
+    "status": "blocked",
+    "error": "missing per-native reviewed runtime_probe.path; runtime blocked",
+    "verified": false
+  },
+  "demo": {
+    "engine_records": 50,
+    "source_hash_matches": 50,
+    "fresh_paired_passes": 0,
+    "copy_eligible_sources": []
+  },
+  "cleanup": {
+    "duplicate_documents_removed": 5,
+    "duplicate_runner_implementations_consolidated": 2,
+    "tracked_python_cache_files_removed": 118
+  },
+  "limitations": [
+    "CI workflow needs the provisioned self-hosted runtime runner and has not run remotely.",
+    "Demo audit does not launch gameplay; no demo runtime equivalence or code-match percentage is claimed.",
+    "Custom source-reviewed native probes/ABI are mandatory; missing probes block runtime acceptance.",
+    "No game-native source or manifest status was added/promoted.",
+    "Persistent watch is a foreground command; no detached verifier service is claimed."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "kind": "static-call-order-tool-correction",
+  "result": "passed",
+  "ordered_rows": 3073,
+  "private_capture_preserves_order": true,
+  "qtask_game_addresses_included": {
+    "0x401000": true,
+    "0x401050": true,
+    "0x401400": true,
+    "0x401530": true
+  },
+  "first_four": [
+    "`0x48F530`",
+    "`0x48F0C0`",
+    "`0x48F0D0`",
+    "`0x48F0F0`"
+  ],
+  "capture": {
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "disassembly_sha256": "837b9e3ffd3e617930a4a5838d8d2ce6b71622099d7cea8d30484d0a569f7ce0",
+    "functions_sha256": "39dd65332035e5d7d4ab6855ac6d6e1ac3fc0a2cc7cb62b7776b1687623cf0d7"
+  },
+  "limitations": [
+    "Static direct calls only; not runtime or universal CFG coverage.",
+    "Remaining legacy CRT ranges are provisional.",
+    "Source-path inventory does not establish linkage or acceptance."
+  ],
+  "files": {
+    "scripts/flow_order.py": "8e12ccba6f34195d19abfc9162ecc5e2773285347d0a736d356bcdd5ceaa9ba1",
+    "docs/fidelity/evidence/chronological-native-order.md": "d18b379e92f5e819dcbd29da59c8c3c8fcd573cf389194319c512f2b7c2f9008"
+  }
+}

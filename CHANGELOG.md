@@ -11,6 +11,16 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - automatic native intake and verification, repository cleanup (internal tooling, no release)
+
+- Added one entry point, `scripts/native_autoverify.py`: changed/all/staged/commit-range discovery, a persistent sequential watch queue, source/build/probe/evidence invalidation, static BN/r2/angr capture, and the existing strict semantic/behavioral/paired-runtime checker. It never assigns native verification statuses or invents probes.
+- Enabled staged native checks in the configured Git hook; added CMake changed/all verification targets and a self-hosted runtime CI workflow. Unknown addresses, incomplete staging, stale images/receipts, missing custom probes, unknown ABI or mismatching outputs/side effects block approval. CI is configured, not claimed to have run remotely.
+- Validation: eight infrastructure tests, real SetConfigFileName static capture (runtime correctly blocked for missing reviewed probe registration), CMake target discovery, compatibility CLI checks and the gate-integrity check. Evidence: `docs/fidelity/evidence/native-auto-20261025/validation.json`.
+- Audited the preserved demo image `9e7cdced...` against `game-engine-flow`: 50 engine-native records have matching historical source hashes; zero fresh paired runtime passes are available for that image. The reuse allowlist is empty. This is not a gameplay comparison or a zero-percent-correctness claim; no demo code was copied.
+- Removed five byte-identical duplicate root documents, retaining canonical copies under `docs/`; consolidated two duplicated runner implementations into compatibility entry points. Updated references without deleting historical evidence. Removed 118 tracked generated Python cache files; source scripts and ignore rules remain.
+- Fixed chronological discovery: game QTask addresses are no longer excluded as CRT; default walk begins at WinMain; the full 3,073-row direct-call order is retained. Function/disassembly inputs are now private and image/hash-bound instead of relying on shared `/tmp/afl.json`. Static direct-call order is not universal runtime coverage.
+
+
 ### 2026-10-25 - Startup init sequence measured: the guard's own figures are wrong (internal build, no release)
 
 - **Evidence added**: `docs/fidelity/evidence/startup-402930-call-sequence.md` - the ordered call inventory of `0x00402930..0x00402F50`.

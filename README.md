@@ -42,4 +42,11 @@ Default `./build.sh [--probe path --level N]` builds a diagnostic candidate firs
 
 ## Automated native analysis and runtime checks
 
+The single automatic entry point is `python3 scripts/native_autoverify.py`:
+`scan`, `run --scope changed`, `run --scope all`, `watch`, and `audit-demo`.
+Git's configured pre-commit hook checks staged native changes; CMake provides
+`verify_natives_changed` / `verify_natives_all`. See the
+[automatic verification guide](docs/fidelity/native-feature-verification.md#automatic-entry-point)
+for custom per-native probes, reports, CI runner requirements and reuse rules.
+
 The current candidate is `igi1.exe`. The integration build is diagnostic; native acceptance remains separate. See [the active MVP verification commands](MVP.md#automated-checks-on-this-branch) for CTest per-native static collection, a shared candidate receipt fixture and typed paired-runtime checks. Missing tools/probes/stale evidence block rather than pass. Reconfigure CMake after source changes so its pinned native scope stays current.

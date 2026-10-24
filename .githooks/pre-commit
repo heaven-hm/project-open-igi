@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# Pre-commit: intentionally does nothing.
-#
-# Owner instruction (2026-10-24): commits must not run native verification or any
-# integrity/build reporting. Verification runs only from build.sh; build_no_verify.sh
-# is verification-free. Keeping this hook silent also stops the editor/agent commit
-# path from echoing the gate-integrity file list on every commit.
-exit 0
+# Owner's later instruction: automatically test newly added/edited natives.
+# Staged sources must equal the working sources tested by the verifier.
+set -euo pipefail
+root="$(git rev-parse --show-toplevel)"
+exec python3 "$root/scripts/native_autoverify.py" run \
+    --scope "${IGI_NATIVE_COMMIT_SCOPE:-staged}" \
+    --level "${IGI_NATIVE_TEST_LEVEL:-1}" --retry

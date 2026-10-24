@@ -342,10 +342,10 @@ The engine's `mef_render_data.cpp` uses **32-byte format-0** and **40-byte forma
 - `0x0049FB10` contains `add edi, 0x20` in the format-0 loop → **32-byte stride supported**.
 - The other branch stores `0x28` (40) into a descriptor field → **40-byte stride supported**.
 
-So the earlier note in `NATIVES_CALL_INFO.md` §17 ("the only observed stride is `0x14`/20; stride unverified") was
+So the earlier note in `NATIVES_DATABASE.md` §17 ("the only observed stride is `0x14`/20; stride unverified") was
 **too pessimistic for the vertex stream**: the `0x14` (20) record belongs to the `TXAN` record array inside
 `0x004CF390`, which is a different structure. Status is upgraded to **"supported: 32 / 40, loop not yet fully
-traced"**. `NATIVES_CALL_INFO.md` §17 has been updated to match.
+traced"**. `NATIVES_DATABASE.md` §17 has been updated to match.
 
 ## 14. Caveats
 

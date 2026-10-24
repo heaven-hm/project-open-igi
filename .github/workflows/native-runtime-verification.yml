@@ -1,0 +1,53 @@
+name: Native static and retail runtime verification
+on:
+  pull_request:
+    paths: ['engine/**', 'cmake/**', 'CMakeLists.txt', 'scripts/**', 'docs/fidelity/native-verification.json']
+  push:
+    paths: ['engine/**', 'cmake/**', 'CMakeLists.txt', 'scripts/**', 'docs/fidelity/native-verification.json']
+  workflow_dispatch:
+    inputs:
+      scope:
+        type: choice
+        options: [changed, all]
+        default: all
+permissions:
+  contents: read
+concurrency:
+  group: igi-retail-native-runtime
+  cancel-in-progress: false
+jobs:
+  native-runtime:
+    # Requires owner-provided retail assets, Windows x86 compiler, BN, r2,
+    # angr and the local CrossOver/CrossWine Frida service. Hosted Linux
+    # cannot demonstrate the original game's behavior.
+    runs-on: [self-hosted, macOS, igi-retail]
+    timeout-minutes: 720
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Run selected native static and paired runtime checks
+        shell: bash
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+          HEAD: ${{ github.sha }}
+          SCOPE: ${{ inputs.scope || 'changed' }}
+        run: |
+          set -euo pipefail
+          if [[ "$EVENT" == workflow_dispatch && "$SCOPE" == changed ]]; then
+            python3 scripts/native_autoverify.py run --scope range --base HEAD^ --head HEAD
+          elif [[ "$EVENT" == workflow_dispatch || -z "$BASE" || "$BASE" =~ ^0+$ ]]; then
+            python3 scripts/native_autoverify.py run --scope all
+          else
+            python3 scripts/native_autoverify.py run --scope range --base "$BASE" --head "$HEAD"
+          fi
+      - name: Preserve reports, including failures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-verification-evidence
+          path: |
+            build/native-auto/
+            build/native-one/
+          if-no-files-found: error

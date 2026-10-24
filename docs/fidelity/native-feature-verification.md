@@ -1,5 +1,56 @@
 # Per-native feature verification
 
+## Automatic entry point
+
+Use `python3 scripts/native_autoverify.py` for discovery, persistent tasks and
+strict sequential verification. It does not modify manifest statuses.
+
+| Command | Scope |
+| --- | --- |
+| `scan --scope changed` | Inventory edited/untracked natives; no acceptance |
+| `run --scope changed --retry` | Analyze and test the changed native closure |
+| `run --scope all --retry` | Analyze and test every mapped engine native |
+| `run --address 0x0048F0F0 --retry` | One explicit native increment |
+| `watch` | Foreground worker; detects committed and uncommitted changes, one job at a time |
+| `audit-demo --demo-ref game-engine-flow --demo-candidate PATH` | Read-only historical source/image audit and reuse allowlist |
+
+The existing configured `.githooks/pre-commit` now runs `run --scope staged`.
+`IGI_NATIVE_COMMIT_SCOPE=all` selects all natives, and
+`IGI_NATIVE_TEST_LEVEL=1` selects the same level for both programs. Partially
+staged code or unstaged build/verification inputs block native commits. A commit
+with no native changes can proceed, but is never reported as native acceptance.
+Use `--retry` after fixing a missing dependency or an unchanged blocked job.
+
+CMake exposes `verify_natives_changed` and `verify_natives_all`; configure
+`IGI_AUTOVERIFY_LEVEL` to select the level. These are explicit targets, not
+dependencies of the unaccepted candidate (which must compile before runtime
+verification). Default `./build.sh` still uses the mandatory strict `--changed`
+feature gate. Diagnostic builds still grant no acceptance.
+Only the exact hash-pinned verifier-target module and its include are classified
+as tooling-only CMake changes. Changes to game sources, compiler/link settings,
+other CMake modules or headers select the complete native closure.
+
+Tasks and raw logs live under `build/native-auto/`. Source/header/build/tool,
+probe and reviewed-evidence changes invalidate cached results. A different
+candidate image or invalid compiler receipt also invalidates a saved pass.
+Missing address mappings, custom `verification.runtime_probe.path`, source-bound
+semantic reviews, understood ABI, tools, observations, or typed side effects
+block approval. No generic raw-pointer probe is generated to obtain a pass.
+Retail runs first; the candidate uses the exact compiled bytes and the same
+reviewed probe, level, arguments and actions. Every ordered call is checked.
+
+`.github/workflows/native-runtime-verification.yml` supplies CI range/all modes
+and retains failures. It requires an owner-provisioned self-hosted macOS runner
+labelled `igi-retail` with the retail assets, compiler, BN/r2/angr and Frida.
+Hosted Linux cannot claim game-runtime parity. Committing the workflow does not
+prove that a remote runner is provisioned or that CI has run. No deployment is
+performed by this workflow.
+
+The demo audit never imports historical VERIFIED labels as new approvals. Only
+fresh strict reports bound to both the demo source bytes and its exact image
+can populate its reuse allowlist. Unmapped scene helpers remain unapproved.
+Zero accepted observations is an evidence gap, not zero percent code accuracy.
+
 The default is `./build.sh`, using `native_gate.py --changed`. This selects
 staged, unstaged and untracked edited native sources. It does not discover all
 runtime calls or prove that an edited function is reached. The resulting

@@ -1,0 +1,106 @@
+"""Automation fixtures only. These do not verify any game native."""
+import argparse
+import contextlib
+import io
+import json
+from pathlib import Path
+import subprocess
+import sys
+import tempfile
+import unittest
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+import native_autoverify as auto
+
+
+class AutomaticNativeVerification(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        for folder in ('engine/src/retail/core', 'engine/include', 'scripts', 'docs/fidelity', 'cmake'):
+            (self.root / folder).mkdir(parents=True)
+        (self.root / 'CMakeLists.txt').write_text('project(automation_fixture)\n')
+        (self.root / 'scripts/igi-workflow.json').write_text(json.dumps({'candidate':'build/fixture.exe'}))
+        self.source = self.root / 'engine/src/retail/core/fixture.cpp'
+        self.source.write_text('// Native: Fixture; retail VA 0x0048F0C0.\nvoid Fixture() {}\n')
+        self.manifest = self.root / 'docs/fidelity/native-verification.json'
+        self.record = dict(address='0x0048F0C0', name='Fixture',
+            implementation={'path':str(self.source.relative_to(self.root)), 'sha256':auto.digest(self.source)},
+            verification={'status':'TRANSCRIBED'})
+        self.manifest.write_text(json.dumps({'natives':[self.record]}))
+        for args in [('init','-q'),('config','user.email','fixture@example.invalid'),
+                     ('config','user.name','Automation fixture'),('add','.'),('commit','-qm','fixture baseline')]:
+            subprocess.run(['git',*args],cwd=self.root,check=True,capture_output=True)
+
+    def test_committed_native_is_still_in_all_scope(self):
+        jobs, _, issues, _ = auto.inventory(self.root)
+        self.assertFalse(issues)
+        self.assertEqual(auto.selected_paths(self.root, 'changed'), set())
+        self.assertEqual(auto.select(self.root,jobs,None,[]), {'0x0048F0C0'})
+
+    def test_header_and_source_edits_invalidate_fingerprint(self):
+        before = auto.inventory(self.root)[0]['0x0048F0C0']['fingerprint']
+        (self.root/'engine/include/fixture.hpp').write_text('struct Changed {};\n')
+        after = auto.inventory(self.root)[0]['0x0048F0C0']['fingerprint']
+        self.assertNotEqual(before,after)
+        self.source.write_text(self.source.read_text()+'// changed\n')
+        self.assertNotEqual(after,auto.inventory(self.root)[0]['0x0048F0C0']['fingerprint'])
+
+    def test_unregistered_file_cannot_hide_behind_no_provenance(self):
+        path=self.root/'engine/src/retail/core/unregistered.cpp'
+        path.write_text('void Unregistered() {}\n')
+        issues=auto.inventory(self.root)[2]
+        self.assertTrue(any(i['path'].endswith('unregistered.cpp') for i in issues))
+
+    def test_real_cmake_build_change_selects_all_natives(self):
+        jobs=auto.inventory(self.root)[0]
+        (self.root/'CMakeLists.txt').write_text('project(automation_fixture)\nadd_compile_definitions(CHANGED)\n')
+        self.assertEqual(auto.select(self.root,jobs,{'CMakeLists.txt'},[]),{'0x0048F0C0'})
+
+    def test_verifier_only_targets_are_not_a_native_acceptance_scope(self):
+        module=Path(auto.__file__).resolve().parents[1]/'cmake/NativeAutoVerification.cmake'
+        (self.root/'cmake/NativeAutoVerification.cmake').write_bytes(module.read_bytes())
+        with (self.root/'CMakeLists.txt').open('a') as stream:
+            stream.write('include(cmake/NativeAutoVerification.cmake)\n')
+        jobs=auto.inventory(self.root)[0]
+        paths={'CMakeLists.txt','cmake/NativeAutoVerification.cmake'}
+        self.assertEqual(auto.select(self.root,jobs,paths,[]),set())
+        with (self.root/'cmake/NativeAutoVerification.cmake').open('a') as stream:
+            stream.write('add_compile_definitions(CHANGED)\n')
+        self.assertEqual(auto.select(self.root,jobs,paths,[]),{'0x0048F0C0'})
+
+    def test_native_order_starts_with_main(self):
+        path=self.root/'docs/fidelity/evidence/chronological-native-order.md'
+        path.parent.mkdir(parents=True)
+        path.write_text('| 1 | `0x48F530` | WinMain |\n| 2 | `0x48F0C0` | StoreCommandLine |\n')
+        self.assertEqual(auto.work_order(self.root,{'0x0048F0C0','0x0048F530'}),
+                         ['0x0048F530','0x0048F0C0'])
+
+    def test_partial_staging_is_blocked(self):
+        self.source.write_text(self.source.read_text()+'// staged\n')
+        subprocess.run(['git','add','.'],cwd=self.root,check=True)
+        self.source.write_text(self.source.read_text()+'// unstaged\n')
+        args=argparse.Namespace(state=None,scope='staged',base=None,head='HEAD',address=[],
+            command='scan',level=1,timeout=1,retry=False)
+        with contextlib.redirect_stdout(io.StringIO()):
+            code=auto.cycle(self.root,args)
+        self.assertEqual(code,1)
+        data=json.loads((self.root/'build/native-auto/state.json').read_text())
+        self.assertFalse(data['verified'])
+        self.assertTrue(any('partial-stage' in i.get('error','') for i in data['issues']))
+
+    def test_passing_flag_without_paired_phases_is_not_evidence(self):
+        job={'address':'0x0048F0C0','source_sha256':'source'}
+        report=dict(schema_version=1,kind='igi-one-native-verification',verified=True,result='passed',
+            address=job['address'],implementation_sha256='source',binary_sha256='retail',
+            candidate_sha256='candidate',phases={})
+        self.assertFalse(auto.complete_report(report,job,{'retail_sha256':'retail'},'candidate'))
+        report['phases']={k:{'exit_code':0} for k in
+            ('static_semantic_behavioral','paired_runtime_capture','typed_runtime_comparison')}
+        self.assertTrue(auto.complete_report(report,job,{'retail_sha256':'retail'},'candidate'))
+        self.assertFalse(auto.complete_report(report,job,{'retail_sha256':'retail'},'different image'))
+
+
+if __name__ == '__main__':
+    unittest.main()

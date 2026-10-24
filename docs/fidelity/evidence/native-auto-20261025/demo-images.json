@@ -1,0 +1,32 @@
+[
+  {
+    "path": ".worktrees/codex-f0f0-runtime/build-win32-no-verify-gate/engine/platform/windows/open-igi.exe",
+    "sha256": "9e7cdced283b689e40c93d3cde937588eb981af11683722d65d5de9a98687d16",
+    "symbols": [
+      "00587a40 t __GLOBAL__sub_I__Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "00423eb0 T __Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "005aa060 b __ZZ19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbbE11game_object",
+      "005aa040 b __ZZ19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbbE13scene_handler"
+    ]
+  },
+  {
+    "path": ".worktrees/codex-f0f0-runtime/build-win32-f0f0/engine/platform/windows/open-igi.exe",
+    "sha256": "fce979a04ef64c1cf8ead3b4b638215dcc6bf5f7308e9c8a2a4baef60076a85d",
+    "symbols": [
+      "00587a40 t __GLOBAL__sub_I__Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "00423eb0 T __Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "005aa060 b __ZZ19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbbE11game_object",
+      "005aa040 b __ZZ19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbbE13scene_handler"
+    ]
+  },
+  {
+    "path": ".worktrees/deepseek-smart-workflow/build-clean-win32/igi1.exe",
+    "sha256": "fbb620a37d87239b3fa5d7e48e10e516b88f4d4a7b9aebe14cb8674780e8aaab",
+    "symbols": [
+      "00406b60 T _WinMain@16",
+      "0059e0b0 t __GLOBAL__sub_I__Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "00475830 T __Z19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbb",
+      "00701320 b __ZZ19RunRetailModelSceneP11HINSTANCE__iRKNSt10filesystem7__cxx114pathEjS5_bbbE10lod_record"
+    ]
+  }
+]

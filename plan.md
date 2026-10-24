@@ -57,7 +57,7 @@ A Binary Ninja name/address match is an inventory observation only. Native accep
 
 **Deliverable:** The first in-game 3-D demo. Execute the verified QVM/task/object-creation path for Level 1 and render the actual model instances at their retail positions, orientations, and rotations with their resolved original materials/textures.
 
-**Checks:** REA evidence for the QVM/task/native call path and model/render data; independent boundary checks for selected natives; tests against Level 1 scripts and model assets; logs for every instantiated object (task/native identity, model/resource ID, source transform, resulting world transform, material/texture resolution); CrossOver run and game-window screenshot. Do not hard-code scene coordinates or substitute a metadata-only window for rendered geometry. Do **not** implement the `XTRV`/`DNER` stride from the unverified document claim (see `NATIVES_CALL_INFO.md` §17).
+**Checks:** REA evidence for the QVM/task/native call path and model/render data; independent boundary checks for selected natives; tests against Level 1 scripts and model assets; logs for every instantiated object (task/native identity, model/resource ID, source transform, resulting world transform, material/texture resolution); CrossOver run and game-window screenshot. Do not hard-code scene coordinates or substitute a metadata-only window for rendered geometry. Do **not** implement the `XTRV`/`DNER` stride from the unverified document claim (see `docs/NATIVES_DATABASE.md` §17).
 
 **Exit gate:** The demo visibly contains Level 1 3-D models placed from the original script path. Submit the screenshot, logs, test/build results, and known gaps for manual review.
 
@@ -173,7 +173,7 @@ No sound implementation is scheduled for this demo checkpoint.
 | 12 Animation | `anim*`, `frames`, `*dyncubeobj` | 71 | 71 |
 | 12 Interaction | `door`, `doorcabinet`, `switch`, `terminal`, `elevator`, `glass` | 192 | 192 |
 
-Per-native addresses, gate status, BN verification result and CLEAN path: `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md`. Inventory by subsystem: `NATIVES_CALL_INFO.md` §23; build-order mapping: §24.
+Per-native addresses, gate status, BN verification result and CLEAN path: `assets/BinaryNinja/natives/CLEAN/VERIFICATION.md`. Inventory by subsystem: `docs/NATIVES_DATABASE.md` §23; build-order mapping: §24.
 
 *Note: 15 catalog names conflict with the binary (see the rule above); they are listed in the manifest and must be used by address.*
 

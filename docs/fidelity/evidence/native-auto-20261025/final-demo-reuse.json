@@ -1,0 +1,472 @@
+{
+  "copy_eligible_sources": [],
+  "demo_commit": "43a97625be86bab7643c6e56f7aeb95fbbe9602a",
+  "demo_image": "/Users/haseeb-mir/Documents/Code/project-open-igi/.worktrees/codex-f0f0-runtime/build-win32-no-verify-gate/engine/platform/windows/open-igi.exe",
+  "demo_image_sha256": "9e7cdced283b689e40c93d3cde937588eb981af11683722d65d5de9a98687d16",
+  "engine_native_records": 50,
+  "fresh_paired_passes": 0,
+  "kind": "igi-demo-reuse-audit",
+  "limitations": [
+    "No historical VERIFIED label is accepted as current paired runtime evidence.",
+    "Zero tested passes means unverified, not zero percent correct.",
+    "Unmapped scene/controller helpers are not authorized for engine copying.",
+    "This audit does not launch or validate full demo gameplay. Native probes/ABI must be reviewed first."
+  ],
+  "natives": [
+    {
+      "address": "0x0048F1B0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "App_ContextGetDebugged",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/app_context.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463"
+    },
+    {
+      "address": "0x0048F240",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "App_ContextSetLightmapsUsed",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/app_context.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463"
+    },
+    {
+      "address": "0x00491D40",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Display_ComputeScreenAspect",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/render/view_block.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d"
+    },
+    {
+      "address": "0x00497D70",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Transcontext_BuildViewBlock",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/render/view_block.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cf2569235f12db3df34b00ff0898cec5f7bfdfccccde0a3827390cd7e8cbd65d"
+    },
+    {
+      "address": "0x004A2600",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Camera_ResetMatrix",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/render/camera_transform.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "d970b768395ccffa1523f6cd08355114d24f5e279bfb66a9f3cc9a7c60a1ebb4"
+    },
+    {
+      "address": "0x004A26C0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Camera_UpdateFogPalette",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/render/camera_transform.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "d970b768395ccffa1523f6cd08355114d24f5e279bfb66a9f3cc9a7c60a1ebb4"
+    },
+    {
+      "address": "0x004A53B3",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Game_DataSymbolLoad",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/error/error_show.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e"
+    },
+    {
+      "address": "0x004A5702",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "String_VFormat",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/error/error_show.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e"
+    },
+    {
+      "address": "0x004AA6AE",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Mem_AllocateRawBlock",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/mem/mem_alloc.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "89718a8c5e45b18b3257e9bda21fa16e3451a4ed3542f3ee66a2d2c2dcad6df7"
+    },
+    {
+      "address": "0x004AF7B0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Error_Show",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/error/error_show.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e"
+    },
+    {
+      "address": "0x004B0BA0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Mem_InitHeapState",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/mem/mem_alloc.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "89718a8c5e45b18b3257e9bda21fa16e3451a4ed3542f3ee66a2d2c2dcad6df7"
+    },
+    {
+      "address": "0x004B0C60",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Mem_Alloc",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/mem/mem_alloc.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "89718a8c5e45b18b3257e9bda21fa16e3451a4ed3542f3ee66a2d2c2dcad6df7"
+    },
+    {
+      "address": "0x004B23B0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Texture_UploadMipmapPacket",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/texture/texture_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c93d1c1606a9e313212c9bec52bb4a3d728be4d8370f319f06e64e63566a2e1"
+    },
+    {
+      "address": "0x004B24C0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Texture_LoadLoopTextureFile",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/texture/texture_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c93d1c1606a9e313212c9bec52bb4a3d728be4d8370f319f06e64e63566a2e1"
+    },
+    {
+      "address": "0x004B59F0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_CreateNode",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/sys_resource.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "232c1fac171e2f4fcbfc28c0adf7c2e388a021267e71ff63c09e44c7545a2111"
+    },
+    {
+      "address": "0x004B5C90",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_FreeNode",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/sys_resource.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "232c1fac171e2f4fcbfc28c0adf7c2e388a021267e71ff63c09e44c7545a2111"
+    },
+    {
+      "address": "0x004B5F00",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_Load",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "2eb2a5c89864870bc96871cd3e9c89bde2ead79d53a28d526d12341fe864ada5"
+    },
+    {
+      "address": "0x004B5F80",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_RegisterBuffer",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/sys_resource.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "232c1fac171e2f4fcbfc28c0adf7c2e388a021267e71ff63c09e44c7545a2111"
+    },
+    {
+      "address": "0x004B60F0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_RegisterIlffContainer",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/sys_resource.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "232c1fac171e2f4fcbfc28c0adf7c2e388a021267e71ff63c09e44c7545a2111"
+    },
+    {
+      "address": "0x004B6380",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Resource_Unload",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/resource/resource_lifecycle.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "2eb2a5c89864870bc96871cd3e9c89bde2ead79d53a28d526d12341fe864ada5"
+    },
+    {
+      "address": "0x004B7CF0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Texture_UploadPalettePacket",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/texture/texture_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c93d1c1606a9e313212c9bec52bb4a3d728be4d8370f319f06e64e63566a2e1"
+    },
+    {
+      "address": "0x004B7E10",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Qvm_ReportError",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/script/qvm_native_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "a3dfcabce3c3951d9c119ddff052c0f48706a038d1629bb0f2e630cc0a2ba096"
+    },
+    {
+      "address": "0x004B80B0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Qvm_Load",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/script/qvm_native_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "a3dfcabce3c3951d9c119ddff052c0f48706a038d1629bb0f2e630cc0a2ba096"
+    },
+    {
+      "address": "0x004B83D0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Qvm_Cleanup",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/script/qvm_native_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "a3dfcabce3c3951d9c119ddff052c0f48706a038d1629bb0f2e630cc0a2ba096"
+    },
+    {
+      "address": "0x004BCFD0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Qvm_ExecuteInstructions",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/script/qvm_stack_natives.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "abb82cff357ee035f53ffb16b00414fd9a9384ced3b257ecfd1a31aeb95bc96a"
+    },
+    {
+      "address": "0x004CEAA0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Ilff_FindFormChunk",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/hash_lookup.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "72a7d7202418fa8391d19bc3730d8fc7a4b0648f43892eaf78c4c41b4fa23bd8"
+    },
+    {
+      "address": "0x004CF080",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadModelTexturePackage",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c33ccdf0058e3d50e124c31d486848e01e5426e334450683d1bfbb81385971b"
+    },
+    {
+      "address": "0x004CF330",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadPackageMeshes",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c33ccdf0058e3d50e124c31d486848e01e5426e334450683d1bfbb81385971b"
+    },
+    {
+      "address": "0x004CF390",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadModelMesh",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/local_models_mef.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "9bf9d7f07ed37294ef876c6dfc262a3f3b1fbefdbab89e45ed4e710bedb71eb6"
+    },
+    {
+      "address": "0x004CF630",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadPackageLovs",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c33ccdf0058e3d50e124c31d486848e01e5426e334450683d1bfbb81385971b"
+    },
+    {
+      "address": "0x004CF790",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadModelTextures",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/texture/texture_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c93d1c1606a9e313212c9bec52bb4a3d728be4d8370f319f06e64e63566a2e1"
+    },
+    {
+      "address": "0x004CF870",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadPackagePalettes",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c33ccdf0058e3d50e124c31d486848e01e5426e334450683d1bfbb81385971b"
+    },
+    {
+      "address": "0x004CF910",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "DynObj_LoadPackageAnimations",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/dynobj/mtp_package_loader.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c33ccdf0058e3d50e124c31d486848e01e5426e334450683d1bfbb81385971b"
+    },
+    {
+      "address": "0x004D14E0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Terrain_TraverseContourQuadtree",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x004EDB60",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "LODSettings_LoadParameters",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/render/lod_settings.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "42619ba0462ea8d100675697b8a67b8843c2385f9d03906b8ecbaf31557f6a92"
+    },
+    {
+      "address": "0x004F82B0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "TerrainLightMap_Init_2",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x00505E40",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "TextureModifier_Push",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x00506F00",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "HeightMap_Enter",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x00510010",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Terrain_DecodeChunkCommands",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x00512C30",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Terrain_Draw",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/terrain/terrain_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "cafd3fb20a63b6922371370b9c7bc8ac94a77f553a8a22f70c7c7c11b8600ee0"
+    },
+    {
+      "address": "0x0048F0E0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "SetWindowHandle",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/native_0048f0e0.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "3c0c3ec858945116ce3f10cd6d9999332163fbf1b61d3623ad80a383a0cf5acb"
+    },
+    {
+      "address": "0x0048F1A0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "AppContext_SetDebugged",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/app_context.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "36dfab538f4a1dc868f7765363ba61e834aa2cf310adf4b9f26cd1c69b76c463"
+    },
+    {
+      "address": "0x004012A0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "QTask_RegisterInputPortHandler",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/input/input_port_process.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "7e852c6618ee9b77053dccf39f2fee2cef150edd4acf63e622b2b7135ecb98bd"
+    },
+    {
+      "address": "0x004012F0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "QTask_AllocateInputPort",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/input/input_port_process.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "7e852c6618ee9b77053dccf39f2fee2cef150edd4acf63e622b2b7135ecb98bd"
+    },
+    {
+      "address": "0x005175A0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Terrain_LoadTexturePackage",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/texture/texture_loaders.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "1c93d1c1606a9e313212c9bec52bb4a3d728be4d8370f319f06e64e63566a2e1"
+    },
+    {
+      "address": "0x004F1160",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Script_ParseEnumReal32_5",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/script/script_mode.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "bef5155c54f3c9e935577c85b4819aaa26f9c80e7aba287c74fb723d4f467679"
+    },
+    {
+      "address": "0x004D67A0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "AnimIff_LoadAnimationFile",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/model/iff_skeleton.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "653b49a90cd9d6ea770636b25e4c447c1356a1d9720e5c343443d0ef7ac3a1a9"
+    },
+    {
+      "address": "0x0048F0C0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Native_0048F0C0",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/app_startup_natives.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "589d6f0f21026b3403395613484af2a422d520e81391d225ac8e17188705232f"
+    },
+    {
+      "address": "0x0048F0D0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Native_0048F0D0",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/native_0048f0d0.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "d63d359cda4ae94b849da4db5dea746f690d7017291bb61fe7602e8cc75642a9"
+    },
+    {
+      "address": "0x0048F0F0",
+      "fresh_paired_pass_for_this_demo_image": false,
+      "name": "Native_0048F0F0",
+      "reuse_allowed": false,
+      "source": "engine/src/retail/core/native_0048f0f0.cpp",
+      "source_matches_historical_record": true,
+      "source_sha256": "e1de0ca9089df268d47f245e0b8c73431becacb2f6bbbb4570e8da2bf96b0207"
+    }
+  ],
+  "result": "provisional",
+  "schema_version": 1,
+  "source_hash_matches": 50,
+  "unverified": 50,
+  "verified": false
+}

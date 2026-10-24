@@ -1,0 +1,37 @@
+[
+  {
+    "removed": "FORMAT_NATIVE_MAPPING.md",
+    "canonical": "docs/FORMAT_NATIVE_MAPPING.md",
+    "sha256": "9fd8f4c0b6d4a777e85926972c5fc5b13bc66f8fc28b1a012d6eee4c3a716ae1"
+  },
+  {
+    "removed": "GAMEPLAY_DEMO_PLAN.md",
+    "canonical": "docs/GAMEPLAY_DEMO_PLAN.md",
+    "sha256": "1b626c89a4409f7a02b09e6c6ff33b69a6fcb5a1b3ae03f05551cd7bf9ddb52b"
+  },
+  {
+    "removed": "LICENSE_SCOPE.md",
+    "canonical": "docs/LICENSE_SCOPE.md",
+    "sha256": "58a881f6f74f2a730e4f4cbb4262eb3190b00eadaf6f79599245abc86644f2b1"
+  },
+  {
+    "removed": "NATIVES_CALL_INFO.md",
+    "canonical": "docs/NATIVES_DATABASE.md",
+    "sha256": "227d661a4437ed276df09a6c564d0569a3c16606617a76d370a59d82e829cd5e"
+  },
+  {
+    "removed": "NATIVES_DATABASE.md",
+    "canonical": "docs/NATIVES_DATABASE.md",
+    "sha256": "227d661a4437ed276df09a6c564d0569a3c16606617a76d370a59d82e829cd5e"
+  },
+  {
+    "compatibility_entry": "scripts/native_unicorn_runner_deepseek.py",
+    "canonical": "scripts/native_unicorn_runner.py",
+    "original_sha256": "df79fa2de4c65993084f1b2aedebf2ac82aabc89e21be6669dd857721cf0d5a1"
+  },
+  {
+    "compatibility_entry": "scripts/resource_sys_diff_runner_deepseek.py",
+    "canonical": "scripts/resource_sys_diff_runner.py",
+    "original_sha256": "dbb75e495ddb531be5989ccf9e2c55c3cc52ab551153da5665951348d374e07c"
+  }
+]
