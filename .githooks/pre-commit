@@ -1,30 +1,12 @@
 #!/usr/bin/env bash
+# Pre-commit: integrity guard only.
+#
+# Native verification is NOT run on commits. Per owner instruction (2026-10-24),
+# the strict native gate runs only from build.sh (and build.sh's release path);
+# build_no_verify.sh is deliberately verification-free for development builds.
+# This keeps small, reviewable commits possible while all native status promotion
+# remains gated by build.sh plus paired runtime evidence.
 set -euo pipefail
 
 root="$(git rev-parse --show-toplevel)"
-bash "$root/scripts/check_gate_integrity.sh"
-
-# VERIFIED remains the normal commit requirement. A user may explicitly opt in
-# to a diagnostic integration commit while runtime evidence is unavailable;
-# this lower threshold is not an acceptance result and must stay visible as such.
-if [[ "${IGI_ALLOW_UNVERIFIED_DIAGNOSTIC_MERGE:-}" == "1" ]]; then
-    report="$root/build/native-gate-diagnostic-report.json"
-    log="$root/build/native-gate-diagnostic.log"
-    mkdir -p "$root/build"
-    echo "!! DIAGNOSTIC MERGE: running structural gate; this does not verify native behavior." >&2
-    if python3 "$root/scripts/native_gate.py" --root "$root" --staged \
-        --threshold STRUCTURALLY_VERIFIED --cfg-threshold 0.85 --allow-structural-only \
-        --report "$report" >"$log" 2>&1; then
-        tail -n 8 "$log"
-    else
-        gate_status=$?
-        echo "!! STRUCTURAL GATE BLOCKED (exit $gate_status). Allowing this explicitly requested diagnostic integration only; see:" >&2
-        echo "   $report" >&2
-        echo "   $log" >&2
-        tail -n 12 "$log" >&2
-        echo "!! This commit must not be described as native-verified or gameplay-accepted." >&2
-    fi
-else
-    python3 "$root/scripts/native_gate.py" --root "$root" --staged \
-        --threshold VERIFIED --cfg-threshold 0.85
-fi
+exec bash "$root/scripts/check_gate_integrity.sh"
