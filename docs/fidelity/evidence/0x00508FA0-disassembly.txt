@@ -779,3 +779,34 @@ Open items recorded rather than guessed: this routine reads stack slots up to `+
 takes **at least seven** arguments (the caller site is one of the registrar push-pairs), and the
 generated return value is whatever `0x4B0D90` leaves in eax rather than an explicit mov - both
 need confirmation from the caller's push sequence before writing the body.
+
+### 0x4BAAC0 ABI resolved: SEVEN arguments
+
+Call-site push sequence (registrar push-pair pattern, e.g. 0x4B7E80-0x4B7E9C):
+
+```
+mov eax,[esp+8]; mov ecx,[esp+4]
+push 1; push 1; push 0; push 4; push eax; push 0x4B7EA0; push ecx
+call 0x4BAAC0; add esp,0x1c        ; 7 dwords
+```
+
+So the signature is `f(arg1, arg2, arg3, arg4, arg5, arg6, arg7)` and, recomputing the stack
+slots inside the body (2 callee pushes + 6 pushed dwords before the field stores), the field
+mapping is exact:
+
+| record field | source |
+| --- | --- |
+| `+0x14` | key returned by `0x4C0560(list, arg3, record)` |
+| `+0x10` | arg2 |
+| `+0x18` | arg3 |
+| `+0xC` | arg4 |
+| `+0` | arg5 |
+| `+4` | arg6 |
+| `+8` | arg7 |
+
+and the site values are `arg2 = 0x4B7EA0` (a handler/callback address), `arg3 = the name string`,
+`arg4 = 4`, `arg5 = 0`, `arg6 = 1`, `arg7 = 1`. This matches the independently decoded
+`0x4B8810` site, which passes `(a, 0x4B8830, b, 4, 2, 1, 0)` - same shape, different constants.
+
+So the round-87 "at least seven arguments" and "field source unknown" questions are closed:
+exactly seven arguments, and `0x4B8830`/`0x4B7EA0` are handler addresses passed as arg2.
