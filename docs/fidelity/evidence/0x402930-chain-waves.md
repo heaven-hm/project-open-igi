@@ -77,3 +77,16 @@ four such inner entries were rejected during this round's selection for that rea
 
 Natives landed from the frontier this round: 0x004AD36E, 0x004C0230, 0x004C0240, 0x004F1C90 - all measured 1 block / 0
 edges at score 1.000.
+
+## CRT-range natives in the closure (round 220 finding)
+
+Some readiness blockers are not game code and must not be transcribed as natives. 0x004A54A0, ranked second in the closure by
+in-degree, is the MSVC stack-probe helper: it compares with 0x1000, walks the stack down page by page touching each guard page,
+then restores esp from eax and finishes with `push eax; ret` to jump to the real return address. That is compiler plumbing with
+no C++ body that preserves it, and the standing rule for this work is that pre-WinMain CRT/compiler territory is outside the
+reconstruction boundary (retail WinMain at 0x0048F530 is the boundary).
+
+Consequence for the work order: the closure must be classified, not only measured. A closure member is either (a) a game native to
+transcribe, (b) a CRT/runtime helper that the compiler supplies in the candidate, or (c) an inner entry of an already transcribed
+function. Only (a) counts against readiness; listing 0x004A54A0 as "ready" was noise, and treating it as a required transcription
+would have been a fabricated native.
