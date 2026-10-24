@@ -1420,3 +1420,30 @@ honest sequence is 0x004B1420 then 0x00484E60 then 0x00485150 then 0x00484F30.
 
 The figure to keep in view while doing this: ten natives verified at CFG 1.000 in 201 rounds, 55 rounds left, and the
 measured closure is 1,242 natives at depth 3. The user has accepted that trajectory knowingly.
+
+## Round 211: the toolchain boundary is not part of the reconstruction (owner instruction)
+
+The owner's instruction this round settles a question that evidence logs kept raising as a "gap": the candidate enters through
+MinGW's `WinMainCRTStartup`, not through retail's own pre-`WinMain` path. That is **not** an unverified fidelity gap and it must
+stop being recorded as one.
+
+- CRT/startup stubs (`WinMainCRTStartup`, `mainCRTStartup`, `__tmainCRTStartup`, `_initterm`, SEH setup, `atexit` wiring),
+  `windows.h` plumbing, import thunks and compiler support routines are **toolchain territory**. The compiler emits them for
+  any correct C++ program on this target. They have no retail VA to transcribe and transcribing them would be inventing code.
+- The reconstruction boundary is **retail `WinMain` at 0x0048F530** and everything it calls that has a retail VA. The
+  provenance rule, the CFG gate, the manifest and the runtime comparisons apply inside that boundary only.
+- Consequence for evidence: "the candidate uses the MinGW CRT entry" is a recorded, accepted property of the build, not a
+  blocker, not a missing native, and not something to fix by writing a hand-rolled startup path. §10.10 already says the
+  diagnostic Win32 shell is infrastructure; this says the same for the CRT prologue in every build.
+
+What stays in scope from that same region: retail code that runs *before* visible game work but has a retail VA — the
+`0x00402930` startup init sequence, the qfile/device registration chain, the config loaders. Those are game code and remain
+unfinished/boundary-blocked as already recorded.
+
+### Lesson: token-presence ownership is not ownership
+
+0x004B0F70 stores 0xFFFFFFFF into 0x00A94A64. The landability sweep marked that word "owner" because
+`engine/src/retail/texture/texture_loaders.cpp` contains a `g_a94a64`. It is in an **anonymous namespace** - internal linkage -
+so the real global had no external definition at all and the build failed to link twice before I checked `nm` instead of the
+grep hit. Rule from now on: an "owned" claim in the sweep table means a token match; before relying on it, confirm the symbol
+is a real external definition (nm shows a global, not `_GLOBAL__N_1`) or have the landing file define the word itself.

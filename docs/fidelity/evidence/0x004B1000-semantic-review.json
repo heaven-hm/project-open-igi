@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1000",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "3e018364fda8dc7def57b1d548ead7b50b944acacd838861c2296a40f01db818",
+  "implementation_path": "engine/src/retail/sys/native_4b1000.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "32 bytes, eleven instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Three cdecl arguments: the index pair and the single argument forwarded to the slot."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One indirect call through 0x00A950A4 + (first*0x82 + second)*4 with one pushed argument, removed by pop ecx; returns the callee's EAX."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "The same first*0x82 + second index as 0x004B0EC0, from the same shift/add/lea sequence."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the slot's EAX; no branch."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; a slot is only non-null after 0x004B0EC0 stores one, so an unset slot is a null call in this build.",
+    "The callee's return type is unproven.",
+    "The table definition size is a definition choice, not a retail fact."
+  ]
+}

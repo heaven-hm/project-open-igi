@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B0F70",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "2952c9a80a64774030d3821f95c21ce92c7148fa36d28ba1993c317573b5b66e",
+  "implementation_path": "engine/src/retail/sys/native_4b0f70.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "11 bytes, two instructions, one block, zero edges; generated artifacts match 1/0."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No arguments and no stack use."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Stores -1 (0xFFFFFFFF) at 0x00A94A64, the exact absolute destination and immediate in retail's mov."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One dword store, no calls."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns void through a single ret."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved; no transcribed reader of 0x00A94A64 exists yet at external linkage.",
+    "The ownership row in the sweep was a token match on a same-named anonymous-namespace static, so this file defines the real global.",
+    "The word's meaning is unproven beyond its address and the -1 constant."
+  ]
+}
