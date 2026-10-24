@@ -39135,6 +39135,42 @@
       }
     },
     {
+      "address": "0x0048F090",
+      "name": "GetInstanceHandle_48F090",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/input/native_48f090.cpp",
+        "sha256": "2faf632682184a3759a06e2ae13e98f78e1a576fb62ee01a573342def0b484b3",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0048F090-FX_TrailUpdate_21 2.cpp",
+        "sha256": "a40e76b3dbd3d4d349d0fd5eec4324c963370ff95079400f8859d50cdd95def7",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0048F090",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F090-binaryninja.json",
+          "evidence_sha256": "c6a2f5f8593cbf4b31be1a9394e8deff6bee233ab8d8e3fb30e4070f90f1f1f1"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0048F090",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F090-radare2.json",
+          "evidence_sha256": "2d95ad52d3b81ad7991456ca0fe63b49da9ec65914f7bfaf27b74c9773a1ebc0"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x0048F0B0",
       "name": "GetAppTitle",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -41744,6 +41780,42 @@
       "cfg_similarity": 1.0
     },
     {
+      "address": "0x0048F270",
+      "name": "Input_GetInstance_48F270",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/input/native_48f270.cpp",
+        "sha256": "f861b4d117fc617c380365b4d367e3798cf044ce3c55c3e2f2419e0bca4d3354",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/0048F270-FX_SmokeEmit_25 2.cpp",
+        "sha256": "442eb931ae128a15539e2335ff67f9ea463583ffa5bc56e8acded5809131abc9",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x0048F270",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F270-binaryninja.json",
+          "evidence_sha256": "8c1d12de58249793238a1603e1503580c9b7817f4818624d2771e6bc941c60fd"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x0048F270",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x0048F270-radare2.json",
+          "evidence_sha256": "09709c7bd61c20371cf839ff32e10998729c61b106c9512aa5fabc837d735674"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x0048F280",
       "name": "Input_SetUseWin32Input_48F280",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -42253,6 +42325,42 @@
       "status": "STRUCTURALLY_VERIFIED"
     },
     {
+      "address": "0x0048F490",
+      "name": "WinProc_RegisterHandler_48F490",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f490.cpp",
+        "sha256": "7df43dea2c19db0a18f87f7dbaf4174e1fefca240a4b008291bc29e821684314",
+        "signature": "std::int32_t* __cdecl(std::int32_t* handler)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No runtime evidence; not called by any transcribed startup path.",
+          "Retail direct callers: exactly 6 (0x424C00 Cursor_Init, 0x48A728 FX_DebrisSpawn_16, 0x48FEB8 FX_CouldNotCreateDirect, 0x490109 FX_CouldNotCreateDirect_2, 0x49065F Display_OpenDevice_2, 0x493803 Display_Direct3D); none of those caller functions is transcribed in engine/ or the manifest."
+        ],
+        "notes": "Only reachable from the six untranscribed callers today; do not claim runtime reachability."
+      }
+    },
+    {
+      "address": "0x0048F4F0",
+      "name": "WinProc_RemoveHandler_48F4F0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/core/native_48f4f0.cpp",
+        "sha256": "508bedb782983037547dff0a7e476ea100267bebad30a6703d639da0fda91d68",
+        "signature": "std::int32_t* __cdecl(std::int32_t* front_link)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No runtime evidence; not called by any transcribed startup path.",
+          "Retail direct callers: exactly 5 (0x48A8A5 FX_TrailUpdate_16, 0x48FFE9 FX_DebrisSpawn_27, 0x490339 Display_SetDisplayMode, 0x4903C1 Display_CreateSurface, 0x49506F Display_RestoreDevice_7); none of those caller functions is transcribed in engine/ or the manifest."
+        ],
+        "notes": "Only reachable from the five untranscribed callers today; do not claim runtime reachability."
+      }
+    },
+    {
       "address": "0x0048F530",
       "name": "Main",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -42623,6 +42731,78 @@
         "evidence": [
           "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
         ]
+      }
+    },
+    {
+      "address": "0x00490340",
+      "name": "Display_SetVSyncFlag_490340",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/render/native_490340.cpp",
+        "sha256": "7672fc601cb752ec420b72a703ec021d0ac0c87091250eecd8050b1371c6c2d2",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/display/00490340-Display_SyncVSync 2.cpp",
+        "sha256": "2467fff7c67a044006a3403e13f977375a3310871c7e0fcdb24b0dc545d6ecd3",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00490340",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490340-binaryninja.json",
+          "evidence_sha256": "1fbbcb0a7e870e32f7c3882dcdd4db51324fa8b9491a83412dc5620fc5c02ad5"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00490340",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490340-radare2.json",
+          "evidence_sha256": "23c087b2d1fb7d5e6c679b0e22eda89d0e7c24b750627882b25a6fddacd235b6"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
+      "address": "0x00490350",
+      "name": "Display_SetSwapFlag_490350",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/render/native_490350.cpp",
+        "sha256": "3d4d75f13776f12cf7766cace5f57665642a1406ccd81557ee9052b006ec7772",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/display/00490350-Display_SwapBuffers 2.cpp",
+        "sha256": "f2e1729fbdb09c1f68face3c25d1e6b4c4e331b4abeb86a80fa4f5e9453c2b37",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x00490350",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490350-binaryninja.json",
+          "evidence_sha256": "c211f8b306d8e0bc1c30d1eacb48b799cce1ce85e3f0b0c8d7e9a6561781078b"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x00490350",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x00490350-radare2.json",
+          "evidence_sha256": "802dd83c53749e82d8553c13063090ea8498e09f77132473d3531bfd0ef2db5c"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
       }
     },
     {
@@ -47610,6 +47790,25 @@
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
+    },
+    {
+      "address": "0x004B0B00",
+      "name": "Mem_AllocIndexedBlock_4B0B00",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/mem/task_list.cpp",
+        "sha256": "0607748116512ba2d3998e5c08734f1c9dfd347434705c75cc06366b9546b269",
+        "signature": "std::int32_t __cdecl(std::int32_t* descriptor, std::int32_t element_size, std::int32_t count, std::int32_t alignment)"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "limitations": [
+          "No game process has executed the candidate implementation; runtime evidence is absent.",
+          "Retail Binary Ninja alias Sys_FreeMemory_2 is wrong: the body allocates an indexed block; the implementation records the discrepancy.",
+          "Static reachability: 32 direct retail callers; transcribed callers are listed below, the remainder are untranscribed and not exercised."
+        ],
+        "notes": "New native added by the commit 800fec7f lineage; status must remain TRANSCRIBED until a typed runtime comparison exists."
+      }
     },
     {
       "address": "0x004B0B90",
@@ -70558,61 +70757,6 @@
           "evidence_path": "docs/fidelity/evidence/0x0052C5A0-behavioral.json",
           "evidence_sha256": "160b6c41511dfbaccd82f0493287d894ea18c6f64395c76ef3cd7d110951c3fe"
         }
-      }
-    },
-    {
-      "address": "0x004B0B00",
-      "name": "Mem_AllocIndexedBlock_4B0B00",
-      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-      "implementation": {
-        "path": "engine/src/retail/mem/task_list.cpp",
-        "sha256": "0607748116512ba2d3998e5c08734f1c9dfd347434705c75cc06366b9546b269",
-        "signature": "std::int32_t __cdecl(std::int32_t* descriptor, std::int32_t element_size, std::int32_t count, std::int32_t alignment)"
-      },
-      "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No game process has executed the candidate implementation; runtime evidence is absent.",
-          "Retail Binary Ninja alias Sys_FreeMemory_2 is wrong: the body allocates an indexed block; the implementation records the discrepancy.",
-          "Static reachability: 32 direct retail callers; transcribed callers are listed below, the remainder are untranscribed and not exercised."
-        ],
-        "notes": "New native added by the commit 800fec7f lineage; status must remain TRANSCRIBED until a typed runtime comparison exists."
-      }
-    },
-    {
-      "address": "0x0048F490",
-      "name": "WinProc_RegisterHandler_48F490",
-      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-      "implementation": {
-        "path": "engine/src/retail/core/native_48f490.cpp",
-        "sha256": "7df43dea2c19db0a18f87f7dbaf4174e1fefca240a4b008291bc29e821684314",
-        "signature": "std::int32_t* __cdecl(std::int32_t* handler)"
-      },
-      "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No runtime evidence; not called by any transcribed startup path.",
-          "Retail direct callers: exactly 6 (0x424C00 Cursor_Init, 0x48A728 FX_DebrisSpawn_16, 0x48FEB8 FX_CouldNotCreateDirect, 0x490109 FX_CouldNotCreateDirect_2, 0x49065F Display_OpenDevice_2, 0x493803 Display_Direct3D); none of those caller functions is transcribed in engine/ or the manifest."
-        ],
-        "notes": "Only reachable from the six untranscribed callers today; do not claim runtime reachability."
-      }
-    },
-    {
-      "address": "0x0048F4F0",
-      "name": "WinProc_RemoveHandler_48F4F0",
-      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-      "implementation": {
-        "path": "engine/src/retail/core/native_48f4f0.cpp",
-        "sha256": "508bedb782983037547dff0a7e476ea100267bebad30a6703d639da0fda91d68",
-        "signature": "std::int32_t* __cdecl(std::int32_t* front_link)"
-      },
-      "verification": {
-        "status": "TRANSCRIBED",
-        "limitations": [
-          "No runtime evidence; not called by any transcribed startup path.",
-          "Retail direct callers: exactly 5 (0x48A8A5 FX_TrailUpdate_16, 0x48FFE9 FX_DebrisSpawn_27, 0x490339 Display_SetDisplayMode, 0x4903C1 Display_CreateSurface, 0x49506F Display_RestoreDevice_7); none of those caller functions is transcribed in engine/ or the manifest."
-        ],
-        "notes": "Only reachable from the five untranscribed callers today; do not claim runtime reachability."
       }
     }
   ],
