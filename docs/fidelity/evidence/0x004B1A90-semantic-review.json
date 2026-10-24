@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1A90",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "880e897e10dd7b865d101d6414ce71e8df14bc8b8b0459a99dc44c0e29c7c2de",
+  "implementation_path": "engine/src/retail/qfile/native_4b1a90.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "45 bytes, 17 instructions, 6 blocks, 8 edges; both decoders and the emitted candidate report 6/8, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Block and edge counts match retail exactly (6/8), including the two exits: the mid-loop match return and the post-loop spin."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument read from [esp+4] after four saved registers, compared against record+0x18; nothing else is read."
+    },
+    {
+      "name": "call_and_error_path",
+      "result": "passed",
+      "rationale": "Debug_Error is called with the exact retail format bytes 'No files loaded at address: %p' and the argument forwarded as a pointer, then the routine spins at 0x004B1ABA with jmp $, which the transcription reproduces as an empty infinite loop."
+    },
+    {
+      "name": "loop_shape",
+      "result": "passed",
+      "rationale": "Retail loads the current record's next pointer before comparing the record's own +0x18, so the walk entry and every continuation require a non-null next. The C++ keeps that ordering rather than rewriting it as a normal 'while (node)' walk."
+    },
+    {
+      "name": "return_value",
+      "result": "passed",
+      "rationale": "The match path returns without loading EAX, so the transcription returns void; no return value is invented."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "The head word 0x00943970 has no other owner in the tree, so this file defines it and it starts null; retail's head is populated elsewhere. The routine dereferences it without a null check exactly as retail does.",
+    "Because the next pointer must be non-null before a record is compared, the last record of an acyclic list is never examined. That is retail's observable shape and is transcribed rather than corrected; whether the real list is circular is unproven.",
+    "Record layout beyond +0x00 and +0x18 is not established; the middle is opaque padding rather than a described structure."
+  ]
+}
