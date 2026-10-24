@@ -69,6 +69,7 @@ add_executable(igi WIN32
     engine/src/retail/dynobj/local_models_mef.cpp
     engine/src/retail/dynobj/mtp_package_loader.cpp
     engine/src/retail/error/error_show.cpp
+    engine/src/retail/error/native_4af810.cpp
     engine/src/retail/error/native_4af870.cpp
     engine/src/retail/error/native_4af880.cpp
     engine/src/retail/human/human_camera_eye.cpp
