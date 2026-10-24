@@ -6216,3 +6216,25 @@ This corrects the earlier framing in §21.5 that treated "no transcribed registr
 statement is that the registrar exists, is now transcribed, and is dead code in this executable, while the table's initial
 (and, in the observed static image, permanent) state is empty. Whether any runtime path writes the table by other means -
 direct stores from untranscribed code - is not established by this scan and is left open.
+
+### §22.1 Correction: the registrar IS called (round 205)
+
+The first claim in §22 is wrong and is withdrawn. 0x004B1B90 has a direct caller: **0x005098BA** calls it inside
+
+  0x005098B0: push 0x00509F50 / push "LOCAL:" (0x0053F30C) / call 0x004B1B90 / add esp,8 / ret
+
+so the device-registration routine is reachable, and it registers the "LOCAL:" device with callback 0x00509F50. The 32-bit
+immediate 0x00509F50 appears twice (0x005098B1 inside this routine and 0x00509F59 inside the callback itself).
+
+Why the error: the scan that produced §22 walked each PE section separately and reported nothing, while a whole-file scan
+(W == file offset + 0x400000, valid because .text/.rdata/.data all have raw == virtual address here) finds the call
+immediately. A false negative from a defective scanner was then written up as a measured fact about the binary - the same
+class of mistake as the withdrawn 88-row instruction table in section 18.
+
+Rule adopted: before reporting a NEGATIVE from a scan, re-run the same scan for a target known to be present and confirm it
+finds it. For address reference scans the known-positive control is 0x004E7530 (88 direct calls).
+
+What survives from §22: the table at 0x009436EC is BSS, so it starts with five empty records; and the registration path
+0x005098B0 -> 0x004B1B90 is itself not reached by any transcribed startup code yet. So the running port still observes
+empty records, but for a different reason than §22 claimed - not "retail cannot populate the table", rather "the
+population path exists and is not yet transcribed on the path being executed".
