@@ -11,6 +11,23 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - reverse-engineering skills applied: retail registrar names mined (internal build, no release)
+
+- **Selected skills** (recorded in `docs/agents/re-skills-applied.md`): `igi-auto-re-agent` for registrar push-pair mining,
+  `igi-validation` for the dual-engine Gate/Ghidra+radare2 rule, `reverse-engineering` as the technique catalogue. Checked and
+  recorded: radare2 present; **Ghidra headless MCP on `127.0.0.1:8771` is not answering**, so no dual-engine score can be claimed yet;
+  `igi-validation`'s documented image path does not exist on this machine (this repo's authority image is the Downloads copy).
+- **Added**: `scripts/registrar_pairs.py` - for every `call` into the four retail registrars (`0x4B8890`, `0x4BAAC0`, `0x4B88C0`,
+  `0x4B88F0`) it back-decodes the preceding pushes (cdecl: the name string is pushed last, so the push nearest the call is the name),
+  reads the C string from the image and cross-references the function with the manifest.
+- **Result**: **167 call sites, 166 unique registered natives, 88 already implemented here, 78 missing** (19 call sites undecoded).
+  Table: `docs/fidelity/evidence/registrar-pairs.md`. This is the only source of authoritative retail names for these routines:
+  `Flow_RequestEvent` (`0x00402780`), `GOStart` (`0x00403660`), `Game_SetMission` (`0x00415890`), the `MenuManager_*` family,
+  `MovieSubtitle_RegisterFont/RegisterText`, `Game_SetMusicVolume/SetSFXVolume`, and 70 more.
+- **Structural finding**: none of the missing named natives is a direct callee of `0x00402930` and none appears in the call-order walk -
+  they are script natives invoked indirectly by the QVM through the registry, so static call-graph work can never reach them; they have to
+  be landed from the script/mission requirements. This is a gap the call-order list alone cannot show.
+
 ### 2026-10-25 - corrected the two QTask link natives from retail operands (internal build, no release)
 
 - **Corrected (fidelity defect, found by `chain-worker`, fixed by Lead)**: `QTask_LinkQTaskEventHandler` (`0x00401400`) had its two
