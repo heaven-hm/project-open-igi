@@ -989,3 +989,24 @@ Two findings that change the plan:
 
 So the "cheapest remaining target" assessment from round 98 was too optimistic: recursion plus
 three unowned tables means this is a substantial increment, not a quick leaf.
+
+### 0x401400 dependencies checked (round 100)
+
+Ownership of the three tables:
+
+| table | status |
+| --- | --- |
+| `0x00A96AE0` | already owned - `engine/src/retail/core/flow.cpp` |
+| `0x0054FF34` | already owned - `engine/src/retail/core/task_types.cpp` |
+| `0x00AF5EE8` | **unowned**, and it is BSS: the only word-level writer is `mov word [esi+0xAF5EE8], di` at `0x401954` |
+
+So `0xAF5EE8` is filled at runtime by the registration routine around `0x40195x`, not by static
+initialised data. `0x401400` only reads it (`mov edi,0xAF5EE8` at `0x401453` and `0x40157D`), so
+its owner is that writer - to be identified next - not this native.
+
+Callee `0x4014B0`: 43 bytes, 5 blocks, 18 instructions - small enough to transcribe directly once
+its own dependencies are checked.
+
+Net effect: `0x401400` is closer than round 99 suggested - two of three tables are already owned,
+and the third is a runtime-filled BSS table whose writer must land first (same ordering rule that
+has held throughout this arc). The recursion remains the only structural novelty.
