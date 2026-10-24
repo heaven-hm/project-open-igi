@@ -56,6 +56,10 @@ inline constexpr std::size_t task_type_slot_count = 0x4800U / 0x30U;
 // The handler table index stride per class: 384 phases. The retail computes
 // the index as class_id + phase * 384 at 0x00401400.
 inline constexpr std::uint32_t task_phase_stride = 0x180U;
+// Phase count of the handler/state tables, from retail 0x004019C1 (`mov edx,0xFE`) and the initialiser's
+// zero-fill count at 0x0040117D (`mov ecx,0x17d00` = 0xFE * 0x180). The stride is the class count; these are
+// two different dimensions and must not be used interchangeably for sizing.
+inline constexpr std::size_t task_phase_count = 0xFEU;
 
 // The retail event table at 0x0054F930. Each entry is six bytes, and the
 // retail allocates the event identifiers from 0x20.
@@ -96,7 +100,7 @@ extern std::uint16_t QTask_CurrentType;
 
 // The retail's first-link flag table at 0x0054FF34.
 extern std::uint8_t QTask_FirstLinkFlag[igi::retail::core::task_type_slot_count *
-                                  igi::retail::core::task_phase_stride];
+                                  igi::retail::core::task_phase_count];
 
 // The retail's linked-handler counter at 0x00536148.
 extern std::uint32_t QTask_LinkedHandlerCounter;

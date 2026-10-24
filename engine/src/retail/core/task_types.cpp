@@ -348,11 +348,11 @@ igi::retail::core::TaskTypeSlot QTask_TypeTable[igi::retail::core::task_type_slo
 // captured; writers are the 0x00401400/0x00401530 link natives).
 std::uint8_t g_54ff24[16] = {};
 igi::retail::core::FrameHandler QTask_HandlerTable[igi::retail::core::task_type_slot_count *
-                                       igi::retail::core::task_phase_stride] = {};
+                                       igi::retail::core::task_phase_count] = {};
 std::uint8_t QTask_EventTable[igi::retail::core::event_table_entry_count * 6U] = {};
 std::uint16_t QTask_CurrentType = 0U;
 std::uint8_t QTask_FirstLinkFlag[igi::retail::core::task_type_slot_count *
-                           igi::retail::core::task_phase_stride] = {};
+                           igi::retail::core::task_phase_count] = {};
 std::uint32_t QTask_LinkedHandlerCounter = 0xFFFFFFFFU;
 std::uint32_t QTask_ContextHandlerCount = 0U;
 std::uint32_t QTask_NoContextHandlerCount = 0U;
