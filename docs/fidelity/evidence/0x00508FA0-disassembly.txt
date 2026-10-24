@@ -1706,3 +1706,31 @@ Consequence: `0x4F9DF0` and `0x4FAA60` are confirmed a **mutual pair** - the emi
 lists whose head/enable fields only the init establishes, while the init calls the emitter 5 times.
 Neither can be declared before the other without inventing storage, so they must be transcribed and
 committed together, with `0x4FAA60` as the owner of `0xA774A0`/`0xA76D18`.
+
+### Dependency correction: the stream init is ALSO blocked, and the real bottom is 0x4EE970
+
+Checked before writing the pair rather than after (the round-128 lesson):
+
+```
+0xA774A0 / 0xA76D18   not defined anywhere in engine/ - owned by 0x4FAA60 (it self-links both heads)
+0x4FAA60 -> calls 0x4F1020 (2x)
+0x4F1020 -> returns [0x00A70CA0]
+0x00A70CA0 -> only writer 0x4EF585, inside 0x4EE970 (3452 bytes, not transcribed)
+```
+
+So `0x4FAA60` is **not** transcribable yet either: it calls the getter `0x4F1020`, whose global is
+owned by `0x4EE970`. Both of the pair's members are blocked, and the true bottom of this chain is the
+3452-byte catalogue routine `0x4EE970`.
+
+Revised order, driven by ownership rather than address:
+
+```
+1. 0x4EE970 (catalogue, owner of 0xA70CA0 and more)   <- real bottom, needs incremental transcription
+2. 0x4F1020 (6-byte getter, then linkable)
+3. 0x4FAA60 (stream init, owner of 0xA774A0/0xA76D18)
+4. 0x4F9DF0 (emitter, then linkable)
+5. 0x5183D0-region init sequence -> 0x508FA0 registrar -> 0x508F80 thunk
+```
+
+Recorded so the next rounds do not repeat the attempt-then-block cycle: none of 2-4 can land before
+1, and 1 is large enough that it must be transcribed by registration block across multiple rounds.
