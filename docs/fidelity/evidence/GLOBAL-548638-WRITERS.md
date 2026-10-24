@@ -312,3 +312,34 @@ Dependency chain now visible and all small:
 
 Status: three decoded bodies (`0x4D9790`, `0x401A20`, `0x4B0B70`) wait on
 `0x4B0D10`; recorded in dependency order so the next round starts at the leaf.
+
+## Round 43: 0x4B0D10 decoded - two further callees, one engine global
+
+42-byte cdecl `0x004B0D10-0x004B0D39`, 1 block:
+
+```
+eax = arg
+edx = dword [0x00942300]
+eax = (arg - 4) & 0xFFFFFFFC      ; add eax,-4; and al,0xFC  (only the low two bits are masked)
+edx -= 1; dword [0x00942300] = edx
+esi = dword [eax]
+call 0x004AF960(esi)
+call 0x004A6A50(esi)
+add esp, 8
+ret
+```
+
+Reading: it decrements a 32-bit counter at `0x00942300`, derives a pointer by
+rounding `arg-4` down to a 4-byte boundary and dereferences it, then calls two
+functions with that value. The masking quirk (`and al,0xFC` only) is recorded so a
+transcription does not "tidy" it into a full-address mask - retail masks the low
+byte only, and the high bits of `arg-4` pass through unchanged.
+
+New blockers: `0x004AF960` and `0x004A6A50` are not transcribed, and the counter
+global `0x00942300` needs a definition with its retail VA. Chain extends to:
+
+`0x4D9790` -> `0x401A20` -> `0x4B0B70` -> `0x4B0D10` -> {`0x4AF960`, `0x4A6A50`} + `0x00942300`
+
+This is the point where the "small leaf" strategy stops being cheap: the subtree
+under the registrar path is deep, and each leaf introduces two more. That is the
+honest state of the denominator, and it is why 113 of 123 ids remain unlanded.
