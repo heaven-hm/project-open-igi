@@ -1333,3 +1333,32 @@ writable, then `0x508FA0` + `0x508F80`.
 Note also `0x4FA140` is a second consumer of the same list; it is not yet inventoried in the
 registrar's call list, so it may belong to a different call path and should be checked when that
 path is reached.
+
+### Stream init routine partially captured (owner of 0xA774A0/0xA76D18) - MUTUAL dependency with 0x4F9DF0
+
+```
+0x4FAC71  loop: [eax] = edi(0); eax += 8; cmp eax,0xA7724C; jl   ; zero 8-byte table to 0xA7724C
+0x4FAC81  ax = word [0x54E364]
+0x4FAC87  push 0x240; push eax; call 0x4F9460                     ; node size 576 (landed native)
+0x4FAC95  [0xA774A0] = 0xA774A4; [0xA774A8] = 0xA774A0; [0xA774A4] = 0  ; list A self-linked
+0x4FACAF  [0xA76D18] = 0xA76D1C; [0xA76D20] = 0xA76D18; [0xA76D1C] = 0  ; list B self-linked
+0x4FACC9  for (esi = 0xA76D28; esi < 0xA77228; esi += 0x14) {
+              [esi] = 0; [esi+4] = 0; 0x4AF8F0(esi, 0xA76D18)       ; 20-byte nodes linked into B
+          }
+0x4FACEC  0x4F9DF0("nMaxNodes", 5, 0x4FAEE0)
+0x4FACFD  0x4F9DF0("nNodeID",   5, 0x4FAF50)
+0x4FAD0E  0x4F9DF0(..., 5, 0x4FAF80)                              ; more follow
+```
+
+Two important structure facts:
+
+1. **Mutual dependency**: this init calls `0x4F9DF0` (the emitter) to register node criteria, while
+   `0x4F9DF0` needs the two globals this init owns. That is fine at link time (extern + definition in
+   one translation unit pair) but means the two must be transcribed as a matching pair, and neither
+   can be "blocked on the other" any longer.
+2. Node pool entries are **20 bytes** (`esi += 0x14`) from `0xA76D28` to `0xA77228` - 96 nodes -
+   while the registrar's separate id table at `0xA77228`..`0xA7724C` is 8-byte entries, and the
+   `0x240` (576) node size set through `0x4F9460` is already landed.
+
+Still to capture: the routine's true prologue (before `0x4FAC71`) and the remaining `0x4F9DF0`
+registration calls after `0x4FAD0E`.
