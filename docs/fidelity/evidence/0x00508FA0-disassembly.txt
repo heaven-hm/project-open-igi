@@ -1170,3 +1170,40 @@ correction rather than silently reused.
 Consequence: `0x401927` must be transcribed as `0x401900` with its full multi-exit CFG; the earlier
 decode of the registration body remains valid, but block count and entry will differ from the
 round-102 estimate.
+
+### MAJOR CORRECTION (round 108): 0x401900 and 0x401400 are ALREADY transcribed
+
+```
+engine/include/igi/retail/core/task_types.hpp:115  // Native: TaskType_Register() - VA 0x00401900
+engine/include/igi/retail/core/task_types.hpp:129  std::uint16_t NATIVE_DECL TaskType_Register(
+                                                       const char* name, std::uint32_t object_size, ...)
+engine/src/retail/core/task_types.cpp              implements the 0x4B0B00 call, the +0x24 inheritance
+                                                   and the 254-entry handler-table copy at phase stride
+engine/src/retail/core/task_types.cpp              // VA 0x00401400 (the recursive allocator)
+```
+
+Callers already in tree: `native_005310e0.cpp` (FreeCamera, `TaskType_Register("FreeCamera", 0x90, ...)`)
+and `native_00530a80.cpp` (FlashTask, `TaskType_Register("FlashTask", 0x88, ..., 2)`).
+
+So rounds 105-108 decoded a native that already exists, under a wrong boundary (`0x401927` mid-body
+rather than `0x401900`). No file was written, so no duplicate landed - but four rounds of decode were
+spent re-deriving `TaskType_Register`. This is the third duplicate near-miss of the project and the
+largest; the round-104 "check before naming a callee" lesson was recorded but not applied to a
+target I was *transcribing*, only to its callees.
+
+Re-verified state of the registrar's remaining call inventory from round 97:
+
+| target | status |
+| --- | --- |
+| `0x401400` (9 calls) | **already transcribed** in task_types.cpp |
+| `0x4F1A80` (7) | landed |
+| `0x4F0F80` (6) | **MISSING** |
+| `0x5186C0` (3) | landed |
+| `0x401530` (2) | landed |
+| `0x4F9DF0` (1) | **MISSING** |
+| `0x4F9460` (1) | landed |
+| `0x4F9280` (1) | **MISSING** |
+
+New standing rule adopted from here: before decoding any VA, run the `VA 0x<va>` provenance grep
+across `engine/` **first** - the same check used for callees - and record the result in the same
+round. Only `0x4F0F80`, `0x4F9280`, `0x4F9DF0` (and its `0x4AF810` dependency) remain.
