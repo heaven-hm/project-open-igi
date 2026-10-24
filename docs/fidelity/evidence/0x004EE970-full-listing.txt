@@ -1,3 +1,6 @@
+# 0x004EE970 complete listing (pD 3709 @ 0x4EE970)
+# retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01
+# radare2 6.2.0, base 0x400000
             0x004ee970      53             push ebx
             0x004ee971      57             push edi
             0x004ee972      33db           xor ebx, ebx
@@ -948,7 +951,6 @@
             0x004ef729      6808df5400     push str.Angle              ; 0x54df08 ; "Angle"
             0x004ef72e      e88d220000     call 0x4f19c0
             0x004ef733      8b157018a700   mov edx, dword [0xa71870]   ; [0xa71870:4]=0
-            0x004ef733      8b157018a700   mov edx, dword [0xa71870]   ; [0xa71870:4]=0
             0x004ef739      a3840ca700     mov dword [0xa70c84], eax   ; [0xa70c84:4]=0
             0x004ef73e      52             push edx
             0x004ef73f      6800df5400     push str.Degrees            ; 0x54df00 ; "Degrees"
@@ -996,15 +998,3 @@
             0x004ef7ea      5f             pop edi
             0x004ef7eb      5b             pop ebx
             0x004ef7ec      c3             ret
-            0x004ef7ed      90             nop
-            0x004ef7ee      90             nop
-            0x004ef7ef      90             nop
-            0x004ef7f0      8b442404       mov eax, dword [esp + 4]
-            0x004ef7f4      56             push esi
-            0x004ef7f5      57             push edi
-            0x004ef7f6      50             push eax
-            0x004ef7f7      e884190000     call 0x4f1180
-            0x004ef7fc      8bf8           mov edi, eax
-            0x004ef7fe      83c9ff         or ecx, 0xffffffff          ; -1
-            0x004ef801      33c0           xor eax, eax
-            0x004ef803      83c404         add esp, 4
