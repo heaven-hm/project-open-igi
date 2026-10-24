@@ -1177,3 +1177,28 @@ Process lesson for the one-process rule: a crashed or abandoned run reparents to
 `list_agents` while still holding the mutex. The lease protocol needs a liveness check that includes PPID-1 game
 processes, not just teammate status - otherwise every future runtime pass can be silently blocked by a session nobody
 can see.
+
+## b071553f boundary observation: PASS, diagnostic (round 188, Tester report)
+
+Deployed b071553f (HEAD f9b418aa; no engine diff since) observed four times with the game directory as cwd:
+
+  cold 1  4 s  exit 3    cold 2 (60 s cooldown)  2 s  exit 3
+  warm    1 s  exit 3    +seh                    1 s  exit 3
+
+stderr is the same fail-closed throw every time:
+  terminate called after throwing an instance of 'std::logic_error'
+    what():  QTask_RegisterClasses (0x00402930): the AI graph registrar is outside the MVP scope and is not
+             transcribed, so the class ids after it do not match the retail's
++seh: 71 x 0x80000026, no 0x6ba. stdout 0 bytes in all four runs.
+
+Position 1 / id 0 confirmed: ReportNotTranscribed("AI graph") is the first statement of QTask_RegisterClasses, no class
+is registered, and nothing after the boundary runs - no Flow_CreateHandler, no registrar, model, terrain or player line.
+
+Caveat carried into the record: the receipt is diagnostic-candidate-build, so this is a diagnostic observation and NOT a
+strict-gate release attestation. It establishes that the boundary result survived the allocator rewrite, the unlink
+native and the reader wiring; it does not verify any of them behaviourally, because none of them is reachable before the
+throw.
+
+Lease hygiene resolved the same round: 41746 was a stale sol candidate (5f749d26, not ours), and 93434/93436/93439 were
+the Tester's own orphaned frida-server tree (d4b0b8af). Cleared with evidence recorded first; winedevice/CrossOver GUI
+and the shared wineserver left alone.
