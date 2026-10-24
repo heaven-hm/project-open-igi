@@ -63,6 +63,10 @@ add_executable(igi WIN32
     engine/src/retail/input/input_port_process.cpp
     engine/src/retail/mem/heap_list.cpp
     engine/src/retail/mem/task_list.cpp
+    engine/src/retail/render/native_4f0f80.cpp
+    engine/src/retail/render/native_4f1000.cpp
+    engine/src/retail/script/native_4f1a60.cpp
+    engine/src/retail/script/native_4f1a70.cpp
     engine/src/retail/mem/mem_alloc.cpp
     engine/src/retail/model/iff_chunk_tree.cpp
     engine/src/retail/model/iff_skeleton.cpp
