@@ -50795,89 +50795,38 @@
       "implementation": {
         "path": "engine/src/retail/mem/heap_list.cpp",
         "sha256": "87207084ffac4f5fd29e55548ac3e7214fc99b6b97fecbb958a07c09b53ca0ae",
-        "signature": "void* __cdecl HeapList_Insert(void* container, void** node);"
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/camera/004AF8F0-HeapList_Insert.cpp",
-        "sha256": "ed463d2f443a5cb24a09ada8e4356dc8ace5e3b6022408d0704dfae0e2dd7b92",
-        "signature": "void* __cdecl HeapList_Insert(void* container, void** node);"
+        "path": "scripts/GameNatives/004AF8F0-Camera_SetFieldOfView_33 2.cpp",
+        "sha256": "1cc722d5e13007de722edeca37a183612940b28db1e1258f215ffad6c8597651",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004AF8F0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-binaryninja.json",
+          "evidence_sha256": "b4f24c1d2cbc624be183f84799e9b8e1eec180ce9b6e55cecc3ebca5a6d2c6f6"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004AF8F0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-radare2.json",
+          "evidence_sha256": "15317d61d94adbfb44be69bc9edf95c97ec5df82558f1760fe9728770d903d39"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
-          "rationale": "Retail 0x004AF8F0 (HeapList_Insert): ecx=head; edx=[node+8]; [head+4]=edx; [head]=node+4; edx=[node+8]; [edx]=head; [node+8]=head. The candidate is the same instruction sequence in C++ using the retail global addresses. No Frida run yet."
-        },
-        "limitations": [
-          "The retained level-1 retail trace build/runtime-traces/early-L1.json records this address in observed_order, establishing retail reachability only; it does not supply typed arguments, returns or state for this address.",
-          "Behavioral evidence for this record is the documented angr/ESIL differential, not a live game-process argument/return capture.",
-          "Build evidence covers the Windows x86 translation-unit compile; it does not relink or bind build-clean-win32/igi1.exe. The receipt's source hash for this file predates the final comment-only edits, so no candidate-binding claim is made.",
-          "These tests cover valid list layouts and first/middle/last removal positions; they do not test invalid pointers or malformed list state.",
-          "Execution is instruction-level VEX under angr, not a live retail game process.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004AF8F0-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_heaplist_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 900
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-radare2.json",
-          "evidence_sha256": "9e11cea5186e6b31dd226cba8c6d8423e788b64908e66e5edb56ccb859c78bbf",
-          "evidence_id": "r2:live:0x004AF8F0",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-binaryninja.json",
-          "evidence_sha256": "6fea2fa6286bd6e6ecb801181223cc80b10aa2d7521a226c873f381c8e72d9ff",
-          "evidence_id": "bn:live:0x004AF8F0",
-          "signature": "not restated"
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004AF8F0-semantic-review.json",
-          "evidence_sha256": "de6fac34beef1295c83438040082d3a6a24611a9ec26b01a51689820e8f2c1f3"
-        },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-build.json",
-          "evidence_sha256": "86b4e75b3010d02ae1d74d722033f0fa7edda097b5542b84156d91a878371140"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004AF8F0-behavioral.json",
-          "evidence_sha256": "89a6a56d42b681b7fb75cb98794ab762fe67ab15fdfc97c1a6a03a870fe6dc61"
-        },
-        "recorded_at": "2026-10-23T12:12:12+05:30",
-        "rebind": {
-          "recorded_at": "2026-10-23T12:12:12+05:30",
-          "previous_implementation_sha256": "908083ddaf288042179496ac0fdd6d17aade441ca96a78375fdcb9cd43be0f50",
-          "new_implementation_sha256": "1465553fdf323540f4ea79ac40cade281260ea7ef5919eabf9457640b175dc97",
-          "previous_status": "VERIFIED",
-          "new_status": "VERIFIED",
-          "behavioral_result": "passed",
-          "behavioral_tests": "12/12",
-          "retail_trace_observation": "not_observed",
-          "stale_reason": "verification.behavioral evidence_sha256 differed from the current behavioral file; the semantic-review runtime_contract probe hash predated scripts/frida_native_diff.js (expected current 028d60b7f0e1); source Status comments said STRUCTURALLY_VERIFIED while the manifest said VERIFIED.",
-          "note": "Build, static CFG, semantic review and the behavioral differential were regenerated from the current translation unit and the retail image. No behavioral divergence was found; the status is retained with tightened limitations.",
-          "observation_correction": "2026-10-23 runtime-claims audit: corrected from 'observed'. No live retail game-process trace exists for this record; the cited differential executes retail code bytes under angr VEX (retail code bytes executed in an emulator). A trace that merely lists this address in observed_order proves retail reachability only and does not supply typed arguments, returns or state."
-        },
-        "notes": "32-bit target only; 64-bit branch removed (build.sh cross-compiles i686-w64-mingw32-g++)."
-      },
-      "status": "STRUCTURALLY_VERIFIED"
+          "evidence_sha256": "4c87628f90a871b0679d162d3d6b671541b8bbe566e5e37354fdaa9af48e0bad"
+        }
+      }
     },
     {
       "address": "0x004AF910",

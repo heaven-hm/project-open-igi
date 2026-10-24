@@ -694,7 +694,7 @@ the end of this document instead of being counted here.
 | `Sys_StoreWord_4AF890` | `unestablished` | `0x004AF890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF890-semantic-review.json` |
 | `Sys_StoreWord_4AF8A0` | `unestablished` | `0x004AF8A0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8A0-semantic-review.json` |
 | `Sys_StoreWord_4AF8B0` | `unestablished` | `0x004AF8B0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8B0-semantic-review.json` |
-| `HeapList_Insert` | `void* __cdecl HeapList_Insert(void* container, void** node);` | `0x004AF8F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8F0-semantic-review.json`; paired behavioral runner; 32-bit target only; 64-bit branch removed (build.sh cross-compiles i686-w64-mingw32-g++). |
+| `HeapList_Insert` | `unestablished` | `0x004AF8F0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF8F0-semantic-review.json` |
 | `Script_QHashListInsert` | `unestablished` | `0x004AF910` | 1.000 | CFG 1.000; bn+r2 agree |
 | `HeapList_Remove` | `void** __cdecl HeapList_Remove(void** node);` | `0x004AF960` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004AF960-semantic-review.json`; paired behavioral runner |
 | `Mem_AllocIndexedBlock` | `unestablished` | `0x004B0B00` | 1.000 | CFG 1.000; bn+r2 agree |

@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004AF8F0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "c3c56c8aacc60c0f2256c8502ed9a82bdf3424c6f2aee009b8b05f1a0115be97",
+  "implementation_path": "engine/src/retail/sys/native_4af8f0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "28 retail bytes, 10 instructions, 1 block, 0 edges; candidate 1/0 at CFG 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Two cdecl arguments read from [esp+4] (head) and [esp+8] (node); neither is modified in place by the call, the registers are scratch."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Offsets +0x00, +0x04 and +0x08 only; no scale, mask or arithmetic."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Four pointer reads and four pointer stores, all within the two objects passed in - no global is touched, so no storage ownership question arises."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No call. Side effects are the four stores in retail's order: node back pointer, node forward pointer, previous tail's forward pointer, head tail pointer."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "One entry, one exit: the ret at +0x1B. No branch, no early return and no error path."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Pointer arithmetic only; no floating-point register is touched."
+    }
+  ],
+  "runtime_contract": {
+    "scope": "paired retail/candidate observation of the four stores during level-1 startup",
+    "probe_sha256": "f0328b9c0ac662b91ce45f4840ce53fd6ba3fd568253c1c2e2e91b3efae76a49",
+    "required_observables": {
+      "inputs": [
+        "head",
+        "node"
+      ],
+      "outputs": [],
+      "sideEffects": [
+        "head+0x08",
+        "node+0x00",
+        "node+0x04",
+        "previous+0x00"
+      ]
+    },
+    "no_return": true
+  },
+  "evidence": "docs/fidelity/evidence/0x004AF8F0-runtime",
+  "limitations": [
+    "Runtime not yet paired: the candidate exits at 0x00402930 before any game native runs.",
+    "The node type beyond its first two pointer fields is not established; the list layout is inferred jointly from this body and 0x004F1D60 and stated as such."
+  ]
+}
