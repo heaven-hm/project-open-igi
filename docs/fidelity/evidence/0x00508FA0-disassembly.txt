@@ -682,3 +682,28 @@ must not be "fixed".
 
 With this, `0x4C04B0` is ready to write: signature `f(void* list, void** out, const char* value)`,
 plus the already-landed `0x4C0530` hash.
+
+### 0x4C0560 partial decode (192 B, 4 blocks) - register node, duplicate -> Debug_Error + spin
+
+```
+ebx = arg3 (value string); ebp = arg2 (list)
+lea eax,[esp+0x10]                      ; out slot on stack
+call 0x4C04B0(list, &out, value)
+if (al) {                               ; already present
+    Debug_Error("Symbol %s already registered", value); jmp $   ; 0x4C057E/0x4C0583, spin 0x4C058B
+}
+push esi; push edi
+edi = ebx; ecx = -1; eax = 0; push 4; repne scasb; not ecx
+ecx += 0x10                             ; strlen(value) + 16
+push ecx; call 0x4B0C60                 ; Mem_Alloc(len + 0x10, 4)  [Mem_Alloc is VERIFIED]
+ecx = eax + 0x10; [esp+0x20] = eax; [eax+8] = ecx   ; record header: key storage at +0x10
+```
+
+Facts: the 16-byte header is followed by the inline key string; the record's `+8` field holds
+the key pointer; the duplicate path reports through `Debug_Error` with the byte-identical
+string `"Symbol %s already registered"` and then spins (`jmp $`), which must be preserved
+rather than turned into a return.
+
+Remaining: the tail from `0x004C05B7` (the key copy and list link) must be captured before the
+body can be written. Named dependency confirmations: `0x4C04B0` (landed) and `0x4B0C60`
+(Mem_Alloc, landed) are both available.
