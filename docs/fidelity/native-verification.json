@@ -42543,13 +42543,13 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/frame_natives.cpp",
-        "sha256": "43ec834d62a49b762b309632f94d5c22c86321bce39635f93147b046c3e9111b",
-        "signature": "void __cdecl Loop_SetStatusByte(std::int8_t value);"
+        "sha256": "f3f4a18696f02a90a771714795b8b21c4126617528ec175b77158d84d7fdeae4",
+        "signature": "std::uint32_t __cdecl Loop_SetStatusByte(std::uint8_t value); returns the stored byte; retail defines only AL, candidate zero-extends"
       },
       "game_natives": {
         "path": "scripts/GameNatives/fx/0048F480-Loop_SetStatusByte.cpp",
         "sha256": "2ee3d22d4c611b6dc56c083086e0e66e82e353d4e862a9dae321deeca126570a",
-        "signature": "void __cdecl Loop_SetStatusByte(std::int8_t value);"
+        "signature": "std::uint32_t __cdecl Loop_SetStatusByte(std::uint8_t value); returns the stored byte; retail defines only AL, candidate zero-extends"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
@@ -42560,7 +42560,8 @@
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x0048F480-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
+          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x0048F480-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+          "Retail writes only AL at 0x0048F484, so EAX[31:8] is undefined by retail; the candidate returns the zero-extended byte. No paired runtime observation."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",

@@ -14,7 +14,7 @@
 extern "C" {
 
 std::jmp_buf QTask_SetjmpFrame{};
-// Retail 0x005C8C00 loop status byte, written by Loop_SetStatusByte (0x0048F480).
+// Retail 0x005C8DE8 loop status byte, written by Loop_SetStatusByte (0x0048F480).
 // frame_natives.hpp declares it extern, so it needs exactly one definition here.
 std::uint8_t Loop_StatusByte = 0U;
 std::int32_t AppContext_IsActive = 0;
@@ -43,11 +43,13 @@ std::uint32_t NATIVE_DECL Flow_SetState(std::uint32_t value)
     return value;
 }
 
-// Native: Loop_SetStatusByte; retail VA 0x0048F480; signature/calling convention unknown.
+// Native: Loop_SetStatusByte; retail VA 0x0048F480; x86 cdecl, one std::uint8_t argument, returns the stored byte.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x0048F480-0x0048F48A, 10 bytes, digest ee3c22c2c4363e72b7199c5ea3ec80e0c5661a1354a9c93b5b3ff1b4fd0e1464.
 // Behavior/CFG: stores `value` into the global loop status byte at 0x005C8DE8. radare2 1 block/0 edges; Binary Ninja 1 block; 100% structural agreement.
-// Status/limits: VERIFIED; high for exact instruction behavior, checked against the retail's own bytes under unicorn in 8 of 8 cases.
+// Status/limits: STRUCTURALLY_VERIFIED. Retail `mov al,byte [esp+4]` / `mov byte [0x5C8DE8],al` / `ret` leaves
+//           only AL defined, so EAX[31:8] is not established by those instructions; the candidate returns the
+//           zero-extended byte. No paired runtime observation exists for this native.
 std::uint32_t NATIVE_DECL Loop_SetStatusByte(std::uint8_t value)
 {
     // 0x0048F480 mov al,byte [esp+4] / 0x0048F484 mov byte [0x5C8DE8],al / 0x0048F489 ret - the loaded
