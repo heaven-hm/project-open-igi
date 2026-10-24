@@ -171,3 +171,36 @@ Method rules learned the hard way this arc:
 - `0x4F1000`, `0x4F1010`, `0x4F1020` are 6-byte getters of `0xA70C90`, `0xA70C88`, `0xA70CA0`; all
   three globals are written inside `0x4EE970` (at `0x4EF4DA`, `0x4EF767`, and the `"Graph"` handle
   store), which is exactly why the catalogue must land before them.
+
+## Round 150: registration chain landed; frozen b59ecbc9; two integrity findings
+
+- Landed and compiled: `0x4C5900` (QTask_InitPhaseHandlers, owner of `0x548176`/`0x548177` and the
+  17 dwords at `0xA44348`), `0x401D30` (phase/slot byte setter + tail `jmp 0x4014B0`),
+  `0x4CEA10`/`0x4CEA20` (the two state getters), and `0x401860`, `0x4D9730`, `0x4E5370`, which had
+  provenance files but no CMakeLists entry and had therefore never been compiled.
+- `0x4C5900`'s entry and zero-argument ABI came from a retail-only Frida range probe: entered by a
+  real `E8` at `0x531DB5` (return `0x531DBA`), 0 stack arguments, eax 0; both writers
+  (`0x4C5983`, `0x4C5992`) are fallthrough inside it, and `[esp]` at those sites holds the constant
+  pushed at `0x4C597E` and the callback pointer pushed at `0x4C598D` - not return addresses.
+- `0x401D30` binds r2=6/7, score **0.058**, because retail ends in an unconditional
+  `jmp 0x4014B0` and r2's seeded recovery follows the jump into the callee. The transcription keeps
+  both byte stores and calls the landed `TaskType_RefreshHandlerMask`; retail leaves the two cdecl
+  arguments for the caller's `add esp,0x40` while the call pops them. Status stays TRANSCRIBED with a
+  documented structural divergence; do not present it as verified and do not "fix" the score.
+- Frozen pair: `b59ecbc9`
+  (`b59ecbc968179ef990fa29623e9988d466f121135b15a933f2a52c57a3c4b013`), `compiled_sources` **149**
+  after a clean rebuild; deployed hash-verified; Tester asked to re-verify independently.
+- FINDING (important for freezing): `scripts/candidate_build_receipt.py` collects any `*.obj` in
+  `build-win32-no-verify-gate/CMakeFiles/igi.dir` that still has a matching `*.obj.d`, so objects
+  orphaned by a wire/unwire experiment keep counting toward `compiled_sources`. A mass-wiring trial
+  left 41 orphan objects and inflated the count to 187. Always `rm -rf build-win32-no-verify-gate`
+  and rebuild before freezing, and treat any count jump that does not match the CMakeLists delta as
+  this bug, not as landed natives.
+- FINDING (open task): 41 native sources under `engine/src/retail` have no CMakeLists entry, so they
+  are not compiled. Mass-wiring them fails the link with duplicate definitions (`g_548638`,
+  `g_54875c`) and undefined globals (`g_5c8e1c`, `g_c28f80/81`, `g_5c8e0c/08/10`). This is a separate
+  integrity task: each needs its ownership resolved before wiring. `engine/src/retail/input/native_48fa80.cpp`
+  was patched in this round only to make its case labels compile (narrowing); it is still unwired.
+- Still missing for `0x4EE970`: `0x4F1180` and its lookup chain (`0x4F11A0`, `0x4F0C90`, `0x401B20`,
+  `0x4B0D10`, `0x4A6A50`, then the allocator internals `0x4AAD90`, `0x4AADBB`, `0x4AB7F5`,
+  `0x4AB84C`). `0x4CEA10`/`0x4CEA20` are now landed, closing the other two-thirds of that gap.
