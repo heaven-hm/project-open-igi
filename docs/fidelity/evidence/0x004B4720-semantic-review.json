@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B4720",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "7c783102fd1a5f035f69bdda76a76c35e24addd2f64476280fc0915cb617158a",
+  "implementation_path": "engine/src/retail/sys/native_4b4720.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "25 retail bytes, 5 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "Stores 0xC8FB1A07 at target+0, 0x39EA7756 at target+4 and 0x7FF13CCD at target+8."
+    },
+    {
+      "name": "constants",
+      "result": "passed",
+      "rationale": "The three values are stored as raw dword immediates, matching retail byte for byte; nothing here interprets them or implies a float conversion."
+    },
+    {
+      "name": "return",
+      "result": "passed",
+      "rationale": "eax holds the argument pointer as a leftover of the load; no return value is declared so no caller can rely on it, which is what the bytes support."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x402930-chain-waves.md",
+  "limitations": [
+    "Runtime unobserved.",
+    "The three constants' meaning is not established.",
+    "The destination is an unvalidated caller pointer, as in retail."
+  ]
+}

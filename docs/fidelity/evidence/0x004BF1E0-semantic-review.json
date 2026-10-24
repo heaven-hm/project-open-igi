@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004BF1E0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "8eee808aca4f492dbf31e8fe1f1fcc09ba65d39b5928753d5b53a129b6eb05eb",
+  "implementation_path": "engine/src/retail/dynobj/native_4bf1e0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "12 retail bytes, 5 instructions, 1 block, 0 edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0; the indirect call is preserved."
+    },
+    {
+      "name": "behavior",
+      "result": "passed",
+      "rationale": "Passes the single argument unchanged through the handler pointer at object+0x18 and returns the callee's value."
+    },
+    {
+      "name": "dispatch",
+      "result": "passed",
+      "rationale": "The handler is loaded from the object, so there is no direct callee; the +0x18 slot's installer is not transcribed and an unset slot would call null exactly as retail would."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x402930-chain-waves.md",
+  "limitations": [
+    "Runtime unobserved.",
+    "The object type is not established beyond the +0x18 slot."
+  ]
+}

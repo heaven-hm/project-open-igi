@@ -52846,6 +52846,46 @@
       }
     },
     {
+      "address": "0x004B4720",
+      "name": "Sys_StoreThreeWords_4B4720",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4b4720.cpp",
+        "sha256": "7c783102fd1a5f035f69bdda76a76c35e24addd2f64476280fc0915cb617158a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004B4720-Sys_ResolveSymbol_13 2.cpp",
+        "sha256": "d17e9301250fc8107ea0c7eefb1ee11672860492979b80142f7c09fde88ec4c8",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004B4720",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B4720-binaryninja.json",
+          "evidence_sha256": "6687685950146089f03483c3743bc44e046541930d00cfce3a861fa050769450"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004B4720",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004B4720-radare2.json",
+          "evidence_sha256": "1b09d07b64af850aabb8f49411abed9aeaed399d4f4069e74bdf3b689a4c175f"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004B4720-semantic-review.json",
+          "evidence_sha256": "9dce7be4c1196cf49072386e85bc50631fad3081f2a57d71456c7e177a85075f"
+        }
+      }
+    },
+    {
       "address": "0x004B59F0",
       "name": "Resource_CreateNode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -55647,6 +55687,46 @@
           "status": "PASS",
           "evidence_path": "docs/fidelity/evidence/0x004bda00-frida-runtime.json",
           "evidence_sha256": "dc1f3d4988917370d51c073dd532859408b7af4b416cd62e7ad7ad34235e2188"
+        }
+      }
+    },
+    {
+      "address": "0x004BF1E0",
+      "name": "DynObj_InvokeField18_4BF1E0",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/dynobj/native_4bf1e0.cpp",
+        "sha256": "8eee808aca4f492dbf31e8fe1f1fcc09ba65d39b5928753d5b53a129b6eb05eb",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/sys/004BF1E0-Sys_CheckHeap_30 2.cpp",
+        "sha256": "545dfa5607e0661652503a2b19f3f9fa29f44ceca1e4b113fa3c2e076d70df77",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004BF1E0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004BF1E0-binaryninja.json",
+          "evidence_sha256": "702cc2e23f81926a9c258d387a42cca79d9b95570ece3facf82144247548bfa0"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004BF1E0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004BF1E0-radare2.json",
+          "evidence_sha256": "0ab5973266cceee3844877ea9bd4f5757863d82d8fc5639a62b83f80602831b1"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004BF1E0-semantic-review.json",
+          "evidence_sha256": "bf792fb703e5d9e9960466d29aa59db96d0ca613936078140fc674f19c21abfa"
         }
       }
     },
