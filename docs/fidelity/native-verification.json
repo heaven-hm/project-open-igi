@@ -63343,6 +63343,42 @@
       }
     },
     {
+      "address": "0x004F9460",
+      "name": "Script_NodeSizeTable_Set_4F9460",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/script/native_4f9460.cpp",
+        "sha256": "f57e8e5b29edd9f2db9de9090c9c15b6188a046a3a89352519da2e047898970a",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/script/004F9460-Script_NoFreeNodesizeElemen 2.cpp",
+        "sha256": "176242939fb85d4e4b7ca81a74ccc9bfec32f115b72aa24efbb6821914a9f923",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004F9460",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F9460-binaryninja.json",
+          "evidence_sha256": "d148cede7dc7137c54abb457bd88fc84bb87d049844a94400f3ce1d6de6af177"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004F9460",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004F9460-radare2.json",
+          "evidence_sha256": "b52e1277bc81e6dbdf415d94865fabc071fb841f8703bd7cf93d9085c5400a5d"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004a5350",
       "name": "FileOpen",
       "implementation": {
