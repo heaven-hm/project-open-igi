@@ -952,3 +952,26 @@ So 0x004017C0 is behaviour-verified by hand but not gate-verified. Closing that 
 BN graph JSON, the radare2 graph JSON, a semantic-review JSON authorising the runtime contract, then promote only if
 the gate passes. Also note the gate treats a multi-line Behavior/CFG section as a malformed five-line block; the
 allocator's provenance is now a genuine five-line block.
+
+## 0x004017C0 evidence closed to the honest limit (round 167)
+
+Gate progression on `--file engine/src/retail/core/task_types.cpp --address 0x004017C0 --threshold VERIFIED`:
+6 issues -> 2 -> 11 (after the semantic-review reference made the gate start validating its contents) -> 2.
+
+Fixed along the way: generated docs/fidelity/evidence/0x004017C0-binaryninja.json and -radare2.json with
+build_native_records.py (bn=6/7 r2=6/7, CFG 1.000), and wrote 0x004017C0-semantic-review.json with result passed and
+all eight checks the gate demands: function_identity, cfg_match, argument_mapping, calls_and_side_effects,
+constants_and_scaling, floating_point_semantics (not_applicable), memory_layout_and_access, return_and_error_paths.
+
+The remaining two issues are honest and must NOT be papered over:
+1. `status STRUCTURALLY_VERIFIED is below required VERIFIED`;
+2. `semantic review has no authorized runtime_contract`.
+Both follow from one fact: the startup boundary throws at QTask_RegisterClasses (0x00402930) before this native is ever
+reached, so no Frida observation can exist. Authoring a runtime_contract with a probe SHA and "typed required
+observables" for an unobservable native would fabricate execution evidence - exactly the class of false record this
+session has already withdrawn four times (QTask_RegisterClasses, FramesSet, 0x401530, 0x4012F0).
+
+Consequence for the process: pre-boundary natives cannot pass a VERIFIED threshold. Either the gate is run with
+`--threshold STRUCTURALLY_VERIFIED` for them, or the boundary must be lifted by transcribing the registrar.
+
+Do not manufacture a runtime contract for an unobservable native; record the blocker instead.
