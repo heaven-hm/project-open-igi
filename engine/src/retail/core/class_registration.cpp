@@ -4,6 +4,9 @@
 #include "igi/retail/core/game_flow.hpp"
 #include "igi/retail/core/native_4c1780.hpp"
 
+// retail 0x00489560: AI-detection registration position, transcribed body.
+extern "C" std::int32_t AI_Detection_Init_489560();
+
 #if defined(_MSC_VER) && defined(_M_IX86)
 #define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
@@ -52,7 +55,8 @@ extern "C" {
 void NATIVE_DECL QTask_RegisterClasses()
 {
     ReportNotTranscribed("AI graph");
-    ReportNotTranscribed("AI detection");
+    // 0x489560: transcribed body (position 2); registers no classes in the retail capture.
+    (void)AI_Detection_Init_489560();
     ReportNotTranscribed("material defines");
     ReportNotTranscribed("level flow");
     ReportNotTranscribed("game options");
