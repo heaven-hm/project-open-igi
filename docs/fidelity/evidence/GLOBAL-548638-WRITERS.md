@@ -412,3 +412,42 @@ than transcription.
 Sequence to land the chain, in order, all from retail listings:
 `0x4A6A50` (10 blocks, blocked on nothing but decode) -> `0x4B0D10` -> `0x4B0B70`
 -> `0x401A20` -> `0x4D9790`.
+
+## Round 46: 0x4A6A50 fully decoded - it is a heap-free dispatcher, not a camera routine
+
+105 bytes, 10 blocks, cdecl, one stack argument, ebp frame with one local:
+
+```
+esi = arg; if (!esi) return;
+eax = dword [0x00C3242C]                 ; allocation-mode global
+if (eax == 3) {
+    call 0x4AAD90(esi);                  ; 43 B
+    if (result == 0) goto heap_free;
+    call 0x4AADBB(result);               ; pop ecx twice
+    return;
+}
+if (eax == 2) {
+    call 0x4AB7F5(esi, &local, &arg);    ; three pushes, add esp,0xC
+    if (result == 0) goto heap_free;
+    call 0x4AB84C(local, arg, result);   ; add esp,0xC
+    return;
+}
+heap_free:
+push esi; push 0; push dword [0x00C32428]; call [KERNEL32 HeapFree]
+return;
+```
+
+This confirms the catalogue name `Camera_UpdateTransform_9` is **wrong**: the routine
+frees a heap block either directly or after a mode-dependent hand-off (mode 2 =
+custom pool, mode 3 = another free path) using the allocator handle at `0x00C32428`
+and the mode global at `0x00C3242C`. Naming it a camera transform would have
+misrepresented a memory routine.
+
+New dependency set (all untranscribed): `0x4AAD90` (43 B), `0x4AADBB`, `0x4AB7F5`,
+`0x4AB84C`, plus the two globals `0x00C32428`/`0x00C3242C` and the KERNEL32
+`HeapFree` import already used elsewhere in the tree.
+
+Honest assessment: this is a **four-callee dispatcher**, not a leaf. Landing it means
+landing that pool-free family first. So the "chain to unblock ids 2/3" is deeper than
+the round-44 correction implied, and the cheap route to more landed natives is still
+the leaf batches (getters, slot helpers) rather than this subtree.
