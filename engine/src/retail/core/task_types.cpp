@@ -575,8 +575,9 @@ void NATIVE_DECL QTask_ClearTaskTypes()
 // Tools/evidence: Binary Ninja MCP and Radare2 on retail IGI.EXE; VA 0x004010D0..0x004011B0.
 // Behavior/CFG: zeroes the 0x40 dwords at 0x00AFA6E0, clears the word at
 //           0x00AFA7E0 and the dword at 0x0054F92C, clears the event table
-//           through 0x004011D0, the 0x17D00-dword handler table at 0x00A96AE0 (0x0040117D-0x0040118F)
-//           and the task type table through 0x004011B0,
+//           through 0x004011D0 and the task type table through 0x004011B0, and only after the class
+//           registration (0x00401130) and the phase links (0x0040113E-0x00401176) clears the
+//           0x17D00-dword handler table at 0x00A96AE0 (0x0040117D-0x0040118F), the order retail uses,
 //           fills the 0x3F dwords at 0x00A969E0 with -1, registers the
 //           "QTask" class with a 0x20 byte object and the parent 0x0181, keeps
 //           the class id at 0x0054F928, and links the phase handlers.
@@ -587,14 +588,16 @@ void NATIVE_DECL QTask_ClearTaskTypes()
 //           own phase table.
 void NATIVE_DECL QTask_Init()
 {
-    // 0x0040117B xor eax,eax / 0x0040117D mov ecx,0x17d00 / 0x00401183 mov edi,0xa96ae0 /
-    // 0x0040118F rep stosd - the handler/state table is zeroed in full here, 254 phases x 384 classes.
-    for (std::size_t handler_index = 0U; handler_index < 0x17D00U; ++handler_index) {
-        QTask_HandlerTable[handler_index] = nullptr;
-    }
     QTask_ClearEventTable();
     QTask_ClearTaskTypes();
     QTask_CurrentType = TaskType_Register("QTask", 0x20U, 0x0181U, 0U);
+    // 0x0040117B xor eax,eax / 0x0040117D mov ecx,0x17d00 / 0x00401183 mov edi,0xa96ae0 /
+    // 0x0040118F rep stosd - the handler/state table is zeroed here, after the registration and after the
+    // phase 0..3 links at 0x0040113E-0x00401176 (not yet transcribed), and before the 0x4B0B00 and 0x4B8810
+    // calls at 0x00401196/0x004011A5. 254 phases x 384 classes = 0x17D00 dwords.
+    for (std::size_t handler_index = 0U; handler_index < 0x17D00U; ++handler_index) {
+        QTask_HandlerTable[handler_index] = nullptr;
+    }
 }
 
 } // extern "C"
