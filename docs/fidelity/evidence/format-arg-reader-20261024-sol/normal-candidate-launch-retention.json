@@ -1,0 +1,6 @@
+{
+  "raw_gzip": "normal-candidate-launch.raw.log.gz",
+  "raw_uncompressed_sha256": "6b0d8f83d043db007cfb81c20a6188748d8b6d4ff4f0f30fe629d1989ea280fa",
+  "readable_log": "normal-candidate-launch.log",
+  "note": "Readable text uses LF to match Git normalization; the gzip preserves exact original mixed line endings."
+}
