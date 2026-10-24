@@ -186,3 +186,23 @@ rather than from retail bytes.
 Recorded, not acted on: transcribing a window registration that calls through a retail function pointer requires knowing what that
 pointer is initialised to, and inventing that binding is exactly what the rules forbid. The next increment is to trace where
 0x00567C6C and 0x00567C70 are assigned.
+
+## Third layer resolved: the pointer globals are CRT internals (round 239)
+
+The two globals that the first window-registration callees call through are assigned only inside the routines that read them:
+
+    0x00401435: mov %ecx,0x00567C6C        0x0040149D: mov %eax,0x00567C6C
+    0x0040155C: mov %ecx,0x00567C70        0x004015C7: mov %eax,0x00567C70
+
+and those routines live in 0x00401000-0x00402000, the MSVC CRT/startup support region of this image. 0x00401400 increments a counter
+at 0x00536148, forms an index of `(arg & 0xff) * 3 << 7` from its arguments and writes through a large table at 0x00A96AE0; it is
+runtime-support code with a cached entry pointer, not game state.
+
+Consequence, and it is the useful part of this round: the "third dependency layer" is compiler/runtime territory. Under the standing
+boundary rule the candidate supplies CRT behaviour from its own toolchain rather than transcribing retail's internal stubs, so those two
+globals do not need retail transcription and must not be declared as game natives. The window-registration callees are therefore gated
+only on their game-side dependencies - the WNDCLASS statics (0x0054097C, 0x005C8A90), the string pointers they pass, and the routines
+they call that are not in the CRT range - and those are tractable in the same way the getter waves were.
+
+So the dependency tree of the boundary ends at CRT on one side and at game statics on the other. The next increment is one
+window-registration callee transcribed end to end, with every CRT call left to the toolchain and every game static owned explicitly.
