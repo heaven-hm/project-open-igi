@@ -383,3 +383,30 @@ body is written, two small facts still need confirming rather than assuming:
 (1) `Debug_Error`'s engine-side declaration/signature for the `arg4 == -1` fail-closed path,
 and (2) that the value passed to the preceding `0x4F0F80` is what the record's fifth field
 receives at each site (verified for the first two sites: 7 and 5).
+
+### 0x5186C0 decoded (84 B, 6 blocks) - NodeCriteria registration; blocked on 0x4B8810
+
+```
+ecx = 0; eax = 0x00A800F8
+loop: if (byte [eax] == 0) -> found slot (ecx)
+      eax += 8; ecx++
+      if (eax < 0x00A801F8) goto loop
+      Debug_Error("Unable to register NodeCriteria %s", arg); jmp $   ; 0x005186E9
+found:
+eax = arg; push esi; esi = 1
+byte [ecx*8 + 0x00A800F8] = 1
+esi <<= cl
+dword [ecx*8 + 0x00A800FC] = eax
+call 0x004B8810(arg, esi)     ; push esi; push eax  => arg1 = value, arg2 = 1<<index
+return esi                    ; the bit mask
+```
+
+Facts recorded: the table at `0x00A800F8` has 8-byte slots and spans to `0x00A801F8`
+(**32 slots**), each `{used byte, 32-bit value}`; the function returns the slot mask
+`1 << index`; the failure message is byte-identical
+`"Unable to register NodeCriteria %s"` (0x0054ECDC), followed by the retail `jmp $`.
+
+Blocker: `0x004B8810` is **not** in `engine/` (no provenance line matches), so this body
+cannot link yet. It is the only missing dependency for `0x5186C0`; landing it makes this
+routine writable. Remaining startup distance is therefore `0x4F9460`, `0x4F9DF0`, the
+newly-found `0x4B8810`, plus `0x5186C0` itself.
