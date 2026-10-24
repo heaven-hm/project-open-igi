@@ -1,0 +1,97 @@
+{
+  "kind": "igi-single-native-verification-run",
+  "schema_version": 1,
+  "address": "0x0048F0D0",
+  "result": "passed",
+  "verified": true,
+  "scope": "Declared StoreInstanceHandle native scope only; active manifest promotion remains separate",
+  "candidate_sha256": "e8caac38b98906eeacdf7fdf5818b51622ea3388107bae083c674cc31c7c6bd7",
+  "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+  "gate_sha256": "d8748ae425dbf3f55ecfe750e45c83f63980e37c50191f7f219bfd946c4665e2",
+  "differential_sha256": "b5b71fea08678a0f43903c1d3991efdb84ad0568a1b38ddf6cca4745f037392e",
+  "phases": [
+    {
+      "name": "natural",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/capture_store_instance_handle_natural.py",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/natural"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "controlled",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/frida_app_startup_store_5c8bc0_pair.py",
+        "--candidate",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--receipt",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/controlled.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "gate",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/native_gate.py",
+        "--root",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi",
+        "--manifest",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/proposed-manifest.json",
+        "--file",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/engine/src/retail/core/app_startup_natives.cpp",
+        "--address",
+        "0x0048F0D0",
+        "--threshold",
+        "VERIFIED",
+        "--cfg-threshold",
+        "0.85",
+        "--require-semantic-evidence",
+        "--require-behavioral-tests",
+        "--require-frida-probes",
+        "--report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/gate.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "typed-comparison",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/check_store_instance_handle_pair.py",
+        "--pair",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/controlled.json",
+        "--natural",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/natural",
+        "--gate-report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/gate.json",
+        "--candidate",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--receipt",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/diagnostic-receipt.json",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/differential.json"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "runtime-checker",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/check_frida_differential.py",
+        "--gate-report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/gate.json",
+        "--candidate-exe",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build-first-native-sol/igi1.exe",
+        "--report",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-2/differential.json"
+      ],
+      "exit_code": 0
+    }
+  ]
+}

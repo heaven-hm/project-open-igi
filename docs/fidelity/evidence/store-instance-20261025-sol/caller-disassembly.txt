@@ -1,0 +1,7 @@
+            0x0048f5f3      51             push ecx
+            0x0048f5f4      e8c7faffff     call 0x48f0c0
+            0x0048f5f9      55             push ebp
+            0x0048f5fa      e8d1faffff     call 0x48f0d0
+            0x0048f5ff      68c01e5400     push str.filesys.cfg        ; 0x541ec0 ; "filesys.cfg"
+            0x0048f604      e8e7faffff     call 0x48f0f0
+            0x0048f609      6834b55300     push str.Innerloop          ; 0x53b534 ; "Innerloop"

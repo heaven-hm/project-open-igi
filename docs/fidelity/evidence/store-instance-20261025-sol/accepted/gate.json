@@ -1,0 +1,157 @@
+{
+  "angr_analysis": {
+    "analysis": "CFGFast",
+    "angr_version": "10.0.4.post1",
+    "batch_size": 1,
+    "batches": [
+      {
+        "addresses": [
+          "0x0048F0D0"
+        ],
+        "result": "pass",
+        "stderr": ""
+      }
+    ],
+    "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "bits": 32,
+    "command": [
+      [
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/angr_analyze.py",
+        "--binary",
+        "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "--address",
+        "0x0048F0D0"
+      ]
+    ],
+    "functions": {
+      "0x0048F0D0": {
+        "baseline_has_unresolved_jumps": false,
+        "block_count": 1,
+        "edges": [],
+        "function_entry": "0x0048F0D0",
+        "has_unresolved_jumps": false,
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "name": "sub_48f0d0",
+        "nodes": [
+          "0x0048F0D0"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true
+      }
+    },
+    "helper_sha256": "4457073ba23b236a5c229a175d80ef93c2bb8e4b4a925c2f22d599d144f30dc1",
+    "kind": "angr-analysis",
+    "limitations": [
+      "CFGFast is approximate static analysis",
+      "This result does not prove semantic or behavioral equivalence"
+    ],
+    "mapped_base": "0x400000",
+    "result": "pass",
+    "schema_version": 1,
+    "tool": "angr"
+  },
+  "backup_analysis_tools": [],
+  "behavioral_tests_required": true,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cfg_threshold": 0.85,
+  "checked_files": [
+    "engine/src/retail/core/app_startup_natives.cpp"
+  ],
+  "checked_native_count": 1,
+  "checked_natives": [
+    {
+      "address": "0x0048F0D0",
+      "angr": {
+        "baseline_has_unresolved_jumps": false,
+        "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "block_count": 1,
+        "edges": [],
+        "function_entry": "0x0048F0D0",
+        "has_unresolved_jumps": false,
+        "helper_sha256": "4457073ba23b236a5c229a175d80ef93c2bb8e4b4a925c2f22d599d144f30dc1",
+        "implementation_sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "limitations": [
+          "CFGFast is approximate static analysis",
+          "This result does not prove semantic or behavioral equivalence"
+        ],
+        "name": "sub_48f0d0",
+        "nodes": [
+          "0x0048F0D0"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true,
+        "version": "10.0.4.post1"
+      },
+      "behavioral_tests": {
+        "result": "passed",
+        "runner": "scripts/frida_app_startup_store_5c8bc0_pair.py",
+        "tests_failed": 0,
+        "tests_passed": 11,
+        "tests_total": 11
+      },
+      "cfg_similarity": 1.0,
+      "errors": [],
+      "path": "engine/src/retail/core/app_startup_natives.cpp",
+      "runtime_contract": {
+        "no_arguments": false,
+        "no_return": false,
+        "no_side_effects": false,
+        "note": "Controlled pre-resume word-copy replay only; the natural instance-handle call is a separate required observation. No arbitrary word is dereferenced.",
+        "probe_sha256": "29ee30170826e40d20517cd58b2d435cd3cab2e087d8849a0fb3b35f8ef2c2e7",
+        "required_observables": {
+          "inputs": [
+            "value",
+            "initial_state"
+          ],
+          "outputs": [
+            "return_value",
+            "state_delta"
+          ],
+          "sideEffects": [
+            "global_0x005C8BC0_after"
+          ]
+        },
+        "scope": "startup-scalar-store"
+      },
+      "selected_decompiler": "binary_ninja",
+      "status": "VERIFIED_WITH_DOCUMENTED_SCOPE"
+    }
+  ],
+  "deleted_files": [],
+  "failures": [],
+  "frida_probes_required": true,
+  "mode": "tree",
+  "primary_analysis_tools": [
+    "selected_decompiler",
+    "radare2"
+  ],
+  "requested_addresses": [
+    "0x0048F0D0"
+  ],
+  "result": "passed",
+  "root": "/Users/haseeb-mir/Documents/Code/project-open-igi",
+  "schema_version": 1,
+  "semantic_review_required": true,
+  "supplemental_analysis_tools": [
+    "angr"
+  ],
+  "threshold": "VERIFIED",
+  "v4_catalog": {
+    "binarySha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "catalog": "assets/IGINatives_v4.json",
+    "entries": 0,
+    "gameNativesNamesChecked": 270
+  },
+  "warnings": [
+    "0x0048F0D0: five-line comment status does not match manifest status VERIFIED_WITH_DOCUMENTED_SCOPE"
+  ]
+}

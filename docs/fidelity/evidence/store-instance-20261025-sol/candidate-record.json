@@ -1,0 +1,98 @@
+{
+  "address": "0x0048F0D0",
+  "name": "StoreInstanceHandle",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation": {
+    "path": "engine/src/retail/core/app_startup_natives.cpp",
+    "sha256": "0cd758f2ad54db1e376f379e730f907a4c5dfb986d519302642cb948d41fdc08",
+    "signature": "void* __cdecl StoreInstanceHandle(void*)"
+  },
+  "game_natives": {
+    "path": "scripts/GameNatives/fx/0048F0D0-StoreInstanceHandle.hpp",
+    "sha256": "6f2dc67a06b2b56262846617802113e103b16b275135c49e1f84fc7482c58ab7",
+    "signature": "int __cdecl int32_t(int32_t)"
+  },
+  "verification": {
+    "status": "STRUCTURALLY_VERIFIED",
+    "selected_decompiler": "binary_ninja",
+    "candidate_symbol": "_StoreInstanceHandle",
+    "runtime_layout": {
+      "retail": {
+        "stateVA": "0x005C8BC0"
+      },
+      "candidate": {
+        "stateVA": "_InstanceHandle"
+      }
+    },
+    "signature_comparison": {
+      "reviewed": true,
+      "result": "abi-adapted",
+      "rationale": "Binary Ninja, radare2 and angr CFGFast agree on the entry at 0x0048F0D0: one basic block of 10 bytes, 8b442404 a3c08b5c00 c3, loads the 32-bit cdecl argument, stores it at the 0x005C8BC0 global and returns the same bits in EAX. The candidate now keeps the same load, the same store and the same return; the earlier candidate returned 0, which the retail bytes cannot produce for a non-zero argument."
+    },
+    "cfg_similarity": 1.0,
+    "cfg_evidence_scope": "Retail BN/r2 graph agreement only; current candidate byte/global mapping checked by natural probe.",
+    "binary_ninja": {
+      "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/binaryninja.json",
+      "evidence_sha256": "b9cbbcc90884ef2ee0998e612f1eff39317d3efbdb565f537bcbd343fb3f0792",
+      "evidence_id": "bn:capture:20261025:0x0048F0D0",
+      "signature": "int32_t __cdecl(int32_t)"
+    },
+    "radare2": {
+      "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/radare2.json",
+      "evidence_sha256": "f256fceb6f60b218f6214e964ab96565eea344b20a5ba99eab86fbfbf508c156",
+      "evidence_id": "r2:capture:20261025:0x0048F0D0",
+      "signature": "int32_t __cdecl(int32_t)"
+    },
+    "angr": {
+      "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/angr.json",
+      "evidence_sha256": "4a78fbbf7f5470fbc65cc872b2597bfc9ce0d21be6848c3981986aa713934779"
+    },
+    "semantic_review": {
+      "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/semantic-review.json",
+      "evidence_sha256": "763fe85ebb163e0f694b55dbf86c23a93f18bf9e81482cf937ce516893c2ca69"
+    },
+    "runtime_contract": {
+      "scope": "startup-scalar-store",
+      "probe_sha256": "29ee30170826e40d20517cd58b2d435cd3cab2e087d8849a0fb3b35f8ef2c2e7",
+      "required_observables": {
+        "inputs": [
+          "value",
+          "initial_state"
+        ],
+        "outputs": [
+          "return_value",
+          "state_delta"
+        ],
+        "sideEffects": [
+          "global_0x005C8BC0_after"
+        ]
+      },
+      "no_arguments": false,
+      "no_return": false,
+      "no_side_effects": false,
+      "note": "Controlled pre-resume word-copy replay only; the natural instance-handle call is a separate required observation. No arbitrary word is dereferenced."
+    },
+    "prior_record": {
+      "evidence_path": "docs/fidelity/evidence/store-instance-20261025-sol/prior-record.json",
+      "evidence_sha256": "683c39c77316b103886990203b032e21b823d7f8e0acbd257b94adf5e54c617d"
+    },
+    "behavioral_runner": {
+      "path": "scripts/frida_app_startup_store_5c8bc0_pair.py",
+      "args": [
+        "--address",
+        "{address}",
+        "--binary",
+        "{binary}",
+        "--binary-sha256",
+        "{binary_sha256}",
+        "--implementation",
+        "{implementation}",
+        "--implementation-sha256",
+        "{implementation_sha256}",
+        "--root",
+        "{root}"
+      ],
+      "timeout_seconds": 150
+    }
+  }
+}

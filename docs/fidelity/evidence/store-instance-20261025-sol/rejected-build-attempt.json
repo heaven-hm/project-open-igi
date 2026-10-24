@@ -1,0 +1,20 @@
+{
+  "kind": "igi-single-native-verification-run",
+  "schema_version": 1,
+  "address": "0x0048F0D0",
+  "result": "blocked",
+  "verified": false,
+  "error": "ValueError('natural failed; no acceptance')",
+  "phases": [
+    {
+      "name": "natural",
+      "command": [
+        "/Users/haseeb-mir/Library/Application Support/pipx/venvs/frida-tools/bin/python",
+        "scripts/tester/capture_store_instance_handle_natural.py",
+        "--out",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/store-instance-acceptance-20261025-sol-1/natural"
+      ],
+      "exit_code": 1
+    }
+  ]
+}

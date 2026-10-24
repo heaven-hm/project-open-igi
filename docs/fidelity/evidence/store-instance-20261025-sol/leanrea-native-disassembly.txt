@@ -1,0 +1,10 @@
+
+/private/tmp/igi-instance-leanrea-d8hlncj1/igi.exe:     file format pei-i386
+
+
+Disassembly of section .text:
+
+0048f0d0 <.text+0x8e0d0>:
+  48f0d0:	8b 44 24 04          	mov    eax,DWORD PTR [esp+0x4]
+  48f0d4:	a3 c0 8b 5c 00       	mov    ds:0x5c8bc0,eax
+  48f0d9:	c3                   	ret

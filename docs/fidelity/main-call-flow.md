@@ -22,8 +22,8 @@ CreateWindowExA path, then the per-frame loop body). Imported Win32/CRT calls ar
 
 | # | call site | target VA | name | manifest status | implementation | linked in candidate |
 | - | --------- | --------- | ---- | --------------- | -------------- | ------------------- |
-| 2 | 0x0048F5F4 | 0x0048F0C0 | StoreCommandLine | RUNTIME_TESTED | engine/src/retail/core/app_startup_natives.cpp | yes |
-| 3 | 0x0048F5FA | 0x0048F0D0 | StoreInstanceHandle | RUNTIME_TESTED | engine/src/retail/core/app_startup_natives.cpp | yes |
+| 2 | 0x0048F5F4 | 0x0048F0C0 | StoreCommandLine | VERIFIED_WITH_DOCUMENTED_SCOPE | engine/src/retail/core/app_startup_natives.cpp | yes |
+| 3 | 0x0048F5FA | 0x0048F0D0 | StoreInstanceHandle | VERIFIED_WITH_DOCUMENTED_SCOPE | engine/src/retail/core/app_startup_natives.cpp | yes |
 | 4 | 0x0048F604 | 0x0048F0F0 | SetConfigFileName | STRUCTURALLY_VERIFIED | engine/src/retail/core/native_0048f0f0.cpp | yes |
 | 5 | 0x0048F60E | 0x0048F100 | SetAppTitle | STRUCTURALLY_VERIFIED | scripts/GameNatives/fx/0048F100-SetAppTitle.cpp | GameNatives only |
 | 6 | 0x0048F615 | 0x0048F140 | AppContext_SetIsActive | RUNTIME_TESTED | engine/src/retail/core/frame_natives.cpp | yes |

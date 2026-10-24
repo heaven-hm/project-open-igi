@@ -1,0 +1,6 @@
+{
+  "kind": "capture-comparator-negative-check",
+  "result": "passed",
+  "mutation": "Tampered return word of existing recorded case zero; no native code or fixture inputs changed.",
+  "exit_code": 1
+}

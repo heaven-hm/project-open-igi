@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x0048F0D0",
+  "signature": "int32_t __cdecl(int32_t)",
+  "function_bytes": "8b442404a3c08b5c00c3",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x0048F0D0"
+      }
+    ],
+    "edges": []
+  },
+  "raw_capture": {
+    "path": "docs/fidelity/evidence/store-instance-20261025-sol/capture.json",
+    "sha256": "f11e66fba17eeabd34c7f13aaf02c8ef40427bba6054d41a743498e6ac77a502"
+  },
+  "notes": [
+    "FX_SmokeEmit_22 is a provider annotation, not a supported native name."
+  ],
+  "tool": "radare2",
+  "version": "6.2.0"
+}
