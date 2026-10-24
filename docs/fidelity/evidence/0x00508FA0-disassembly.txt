@@ -1590,3 +1590,29 @@ Assessment recorded honestly: the remaining chain is now four large routines (0x
 therefore a multi-round effort with boundary recovery needed per routine; the runtime probe technique
 the Tester validated is the reliable instrument for each boundary, and each transcription must still
 pass the CFG gate before landing.
+
+### 0x4EE970 owner routine: listing capture started (first 400 lines)
+
+Listing (truncated at 400 decoded lines, no `ret` yet) saved as
+`docs/fidelity/evidence/0x004EE970-listing.txt`. It is a **registration catalogue**, not general
+logic - call inventory of the captured prefix:
+
+```
+31x 0x4F1BC0     <- dominant property/attribute registrar
+10x 0x401530     (event-handler link, landed)
+ 7x 0x401400     (task-type register, transcribed)
+ 6x 0x4F1B60
+ 6x 0x4F19C0
+ 5x 0x4F1BB0
+ 5x 0x4F1BA0
+ 5x 0x4F1B90
+```
+
+So `0x4EE970` (3452 bytes) registers a long series of properties/attributes through the
+`0x4F1B60`-`0x4F1BC0` family plus task-type and handler links, and only owns `0x00A70CA0` in passing.
+Because it is a catalogue, it can be transcribed **incrementally by registration block** once the
+`0x4F1Bxx` family is identified - each block is independent, so this is the natural way to land it
+without holding 3400 bytes in one step.
+
+Dependency question newly raised: the `0x4F1B60`-`0x4F1BC0` family (8 distinct addresses, ~70 calls
+here) is the real workhorse. Its provenance must be checked before this routine is transcribed.

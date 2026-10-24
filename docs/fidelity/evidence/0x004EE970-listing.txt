@@ -1,0 +1,400 @@
+            0x004ee970      53             push ebx
+            0x004ee971      57             push edi
+            0x004ee972      33db           xor ebx, ebx
+            0x004ee974      b900100000     mov ecx, 0x1000
+            0x004ee979      33c0           xor eax, eax
+            0x004ee97b      bf9018a700     mov edi, 0xa71890
+            0x004ee980      53             push ebx
+            0x004ee981      53             push ebx
+            0x004ee982      f3ab           rep stosd dword es:[edi], eax
+            0x004ee984      e8672ff1ff     call 0x4018f0
+            0x004ee989      50             push eax
+            0x004ee98a      6a38           push 0x38                   ; '8' ; 56
+            0x004ee98c      6888965300     push str.Level              ; 0x539688 ; "Level"
+            0x004ee991      e86a2ff1ff     call 0x401900
+            0x004ee996      83c414         add esp, 0x14
+            0x004ee999      66a30cdd5400   mov word [0x54dd0c], ax     ; [0x54dd0c:2]=385
+            0x004ee99f      53             push ebx
+            0x004ee9a0      53             push ebx
+            0x004ee9a1      e84a2ff1ff     call 0x4018f0
+            0x004ee9a6      50             push eax
+            0x004ee9a7      6a20           push 0x20                   ; 32
+            0x004ee9a9      6804e05400     push str.Static             ; 0x54e004 ; "Static"
+            0x004ee9ae      e84d2ff1ff     call 0x401900
+            0x004ee9b3      83c414         add esp, 0x14
+            0x004ee9b6      66a30edd5400   mov word [0x54dd0e], ax     ; [0x54dd0e:2]=385
+            0x004ee9bc      53             push ebx
+            0x004ee9bd      53             push ebx
+            0x004ee9be      e82d2ff1ff     call 0x4018f0
+            0x004ee9c3      50             push eax
+            0x004ee9c4      6a20           push 0x20                   ; 32
+            0x004ee9c6      68fcdf5400     push str.Dynamic            ; 0x54dffc ; "Dynamic"
+            0x004ee9cb      e8302ff1ff     call 0x401900
+            0x004ee9d0      83c414         add esp, 0x14
+            0x004ee9d3      66a310dd5400   mov word [0x54dd10], ax     ; [0x54dd10:2]=385
+            0x004ee9d9      53             push ebx
+            0x004ee9da      53             push ebx
+            0x004ee9db      e8102ff1ff     call 0x4018f0
+            0x004ee9e0      50             push eax
+            0x004ee9e1      6a20           push 0x20                   ; 32
+            0x004ee9e3      68a41b5400     push str.Idle               ; 0x541ba4 ; "Idle"
+            0x004ee9e8      e8132ff1ff     call 0x401900
+            0x004ee9ed      83c414         add esp, 0x14
+            0x004ee9f0      66a312dd5400   mov word [0x54dd12], ax     ; [0x54dd12:2]=385
+            0x004ee9f6      53             push ebx
+            0x004ee9f7      53             push ebx
+            0x004ee9f8      e8f32ef1ff     call 0x4018f0
+            0x004ee9fd      50             push eax
+            0x004ee9fe      6a20           push 0x20                   ; 32
+            0x004eea00      68f0df5400     push str.CameraBase         ; 0x54dff0 ; "CameraBase"
+            0x004eea05      e8f62ef1ff     call 0x401900
+            0x004eea0a      53             push ebx
+            0x004eea0b      66a314dd5400   mov word [0x54dd14], ax     ; [0x54dd14:2]=385
+            0x004eea11      e8aa2df1ff     call 0x4017c0
+            0x004eea16      53             push ebx
+            0x004eea17      a2a4dd5400     mov byte [0x54dda4], al     ; [0x54dda4:1]=255
+            0x004eea1c      e89f2df1ff     call 0x4017c0
+            0x004eea21      53             push ebx
+            0x004eea22      a2a5dd5400     mov byte [0x54dda5], al     ; [0x54dda5:1]=255
+            0x004eea27      e8e42df1ff     call 0x401810
+            0x004eea2c      53             push ebx
+            0x004eea2d      a3a8dd5400     mov dword [0x54dda8], eax   ; [0x54dda8:4]=255
+            0x004eea32      e8d92df1ff     call 0x401810
+            0x004eea37      53             push ebx
+            0x004eea38      a3acdd5400     mov dword [0x54ddac], eax   ; [0x54ddac:4]=255
+            0x004eea3d      e8ce2df1ff     call 0x401810
+            0x004eea42      a3b0dd5400     mov dword [0x54ddb0], eax   ; [0x54ddb0:4]=255
+            0x004eea47      66a10cdd5400   mov ax, word [0x54dd0c]     ; [0x54dd0c:2]=385
+            0x004eea4d      6880054f00     push 0x4f0580
+            0x004eea52      6a01           push 1                      ; 1
+            0x004eea54      50             push eax
+            0x004eea55      e8d62af1ff     call 0x401530
+            0x004eea5a      668b0d0cdd..   mov cx, word [0x54dd0c]     ; [0x54dd0c:2]=385
+            0x004eea61      6800064f00     push 0x4f0600
+            0x004eea66      53             push ebx
+            0x004eea67      51             push ecx
+            0x004eea68      e89329f1ff     call 0x401400
+            0x004eea6d      668b150cdd..   mov dx, word [0x54dd0c]     ; [0x54dd0c:2]=385
+            0x004eea74      83c440         add esp, 0x40
+            0x004eea77      6810064f00     push 0x4f0610
+            0x004eea7c      6a02           push 2                      ; 2
+            0x004eea7e      52             push edx
+            0x004eea7f      e8ac2af1ff     call 0x401530
+            0x004eea84      66a10edd5400   mov ax, word [0x54dd0e]     ; [0x54dd0e:2]=385
+            0x004eea8a      6810374d00     push 0x4d3710               ; '\x107M'
+            0x004eea8f      6a01           push 1                      ; 1
+            0x004eea91      50             push eax
+            0x004eea92      e8992af1ff     call 0x401530
+            0x004eea97      668b0d0edd..   mov cx, word [0x54dd0e]     ; [0x54dd0e:2]=385
+            0x004eea9e      6820064f00     push 0x4f0620
+            0x004eeaa3      53             push ebx
+            0x004eeaa4      51             push ecx
+            0x004eeaa5      e85629f1ff     call 0x401400
+            0x004eeaaa      668b150edd..   mov dx, word [0x54dd0e]     ; [0x54dd0e:2]=385
+            0x004eeab1      6840064f00     push 0x4f0640
+            0x004eeab6      6a02           push 2                      ; 2
+            0x004eeab8      52             push edx
+            0x004eeab9      e8722af1ff     call 0x401530
+            0x004eeabe      83c430         add esp, 0x30
+            0x004eeac1      68207e4800     push 0x487e20               ; ' ~H'
+            0x004eeac6      e855fffdff     call 0x4cea20
+            0x004eeacb      50             push eax
+            0x004eeacc      66a10edd5400   mov ax, word [0x54dd0e]     ; [0x54dd0e:2]=385
+            0x004eead2      50             push eax
+            0x004eead3      e82829f1ff     call 0x401400
+            0x004eead8      83c40c         add esp, 0xc
+            0x004eeadb      68907d4800     push 0x487d90
+            0x004eeae0      e82bfffdff     call 0x4cea10
+            0x004eeae5      668b0d0edd..   mov cx, word [0x54dd0e]     ; [0x54dd0e:2]=385
+            0x004eeaec      50             push eax
+            0x004eeaed      51             push ecx
+            0x004eeaee      e80d29f1ff     call 0x401400
+            0x004eeaf3      668b1510dd..   mov dx, word [0x54dd10]     ; [0x54dd10:2]=385
+            0x004eeafa      6860064f00     push 0x4f0660
+            0x004eeaff      6a01           push 1                      ; 1
+            0x004eeb01      52             push edx
+            0x004eeb02      e8292af1ff     call 0x401530
+            0x004eeb07      66a110dd5400   mov ax, word [0x54dd10]     ; [0x54dd10:2]=385
+            0x004eeb0d      68e0064f00     push 0x4f06e0
+            0x004eeb12      53             push ebx
+            0x004eeb13      50             push eax
+            0x004eeb14      e8e728f1ff     call 0x401400
+            0x004eeb19      668b0d10dd..   mov cx, word [0x54dd10]     ; [0x54dd10:2]=385
+            0x004eeb20      68f0064f00     push 0x4f06f0
+            0x004eeb25      6a02           push 2                      ; 2
+            0x004eeb27      51             push ecx
+            0x004eeb28      e8032af1ff     call 0x401530
+            0x004eeb2d      668b1512dd..   mov dx, word [0x54dd12]     ; [0x54dd12:2]=385
+            0x004eeb34      6810374d00     push 0x4d3710               ; '\x107M'
+            0x004eeb39      6a01           push 1                      ; 1
+            0x004eeb3b      52             push edx
+            0x004eeb3c      e8ef29f1ff     call 0x401530
+            0x004eeb41      66a112dd5400   mov ax, word [0x54dd12]     ; [0x54dd12:2]=385
+            0x004eeb47      6800074f00     push 0x4f0700
+            0x004eeb4c      53             push ebx
+            0x004eeb4d      50             push eax
+            0x004eeb4e      e8ad28f1ff     call 0x401400
+            0x004eeb53      668b0d12dd..   mov cx, word [0x54dd12]     ; [0x54dd12:2]=385
+            0x004eeb5a      83c448         add esp, 0x48
+            0x004eeb5d      6810074f00     push 0x4f0710
+            0x004eeb62      6a02           push 2                      ; 2
+            0x004eeb64      51             push ecx
+            0x004eeb65      e8c629f1ff     call 0x401530
+            0x004eeb6a      668b1514dd..   mov dx, word [0x54dd14]     ; [0x54dd14:2]=385
+            0x004eeb71      6800874800     push 0x488700
+            0x004eeb76      6a01           push 1                      ; 1
+            0x004eeb78      52             push edx
+            0x004eeb79      e8b229f1ff     call 0x401530
+            0x004eeb7e      66a114dd5400   mov ax, word [0x54dd14]     ; [0x54dd14:2]=385
+            0x004eeb84      6820074f00     push 0x4f0720
+            0x004eeb89      53             push ebx
+            0x004eeb8a      50             push eax
+            0x004eeb8b      e87028f1ff     call 0x401400
+            0x004eeb90      668b0d14dd..   mov cx, word [0x54dd14]     ; [0x54dd14:2]=385
+            0x004eeb97      6830074f00     push 0x4f0730
+            0x004eeb9c      6a02           push 2                      ; 2
+            0x004eeb9e      51             push ecx
+            0x004eeb9f      e88c29f1ff     call 0x401530
+            0x004eeba4      6aff           push 0xffffffffffffffff
+            0x004eeba6      68e8df5400     push str.Quat32             ; 0x54dfe8 ; "Quat32"
+            0x004eebab      e8102e0000     call 0x4f19c0
+            0x004eebb0      83c438         add esp, 0x38
+            0x004eebb3      a37818a700     mov dword [0xa71878], eax   ; [0xa71878:4]=0
+            0x004eebb8      68e0fc4e00     push 0x4efce0
+            0x004eebbd      e89e2f0000     call 0x4f1b60
+            0x004eebc2      8b157818a700   mov edx, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eebc8      50             push eax
+            0x004eebc9      52             push edx
+            0x004eebca      e8f12f0000     call 0x4f1bc0
+            0x004eebcf      83c40c         add esp, 0xc
+            0x004eebd2      6850fd4e00     push 0x4efd50
+            0x004eebd7      e8a42f0000     call 0x4f1b80
+            0x004eebdc      50             push eax
+            0x004eebdd      a17818a700     mov eax, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eebe2      50             push eax
+            0x004eebe3      e8d82f0000     call 0x4f1bc0
+            0x004eebe8      83c40c         add esp, 0xc
+            0x004eebeb      68e0fe4e00     push 0x4efee0
+            0x004eebf0      e8ab2f0000     call 0x4f1ba0
+            0x004eebf5      8b0d7818a700   mov ecx, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eebfb      50             push eax
+            0x004eebfc      51             push ecx
+            0x004eebfd      e8be2f0000     call 0x4f1bc0
+            0x004eec02      83c40c         add esp, 0xc
+            0x004eec05      6800ff4e00     push 0x4eff00
+            0x004eec0a      e8a12f0000     call 0x4f1bb0
+            0x004eec0f      8b157818a700   mov edx, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eec15      50             push eax
+            0x004eec16      52             push edx
+            0x004eec17      e8a42f0000     call 0x4f1bc0
+            0x004eec1c      83c40c         add esp, 0xc
+            0x004eec1f      6820ff4e00     push 0x4eff20
+            0x004eec24      e8672f0000     call 0x4f1b90
+            0x004eec29      50             push eax
+            0x004eec2a      a17818a700     mov eax, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eec2f      50             push eax
+            0x004eec30      e88b2f0000     call 0x4f1bc0
+            0x004eec35      83c40c         add esp, 0xc
+            0x004eec38      6800fb4e00     push 0x4efb00
+            0x004eec3d      e82e2f0000     call 0x4f1b70
+            0x004eec42      8b0d7818a700   mov ecx, dword [0xa71878]   ; [0xa71878:4]=0
+            0x004eec48      50             push eax
+            0x004eec49      51             push ecx
+            0x004eec4a      e8712f0000     call 0x4f1bc0
+            0x004eec4f      6aff           push 0xffffffffffffffff
+            0x004eec51      68e0df5400     push str.Real32             ; 0x54dfe0 ; "Real32"
+            0x004eec56      e8652d0000     call 0x4f19c0
+            0x004eec5b      83c414         add esp, 0x14
+            0x004eec5e      a37018a700     mov dword [0xa71870], eax   ; [0xa71870:4]=0
+            0x004eec63      68e0f94e00     push 0x4ef9e0
+            0x004eec68      e8f32e0000     call 0x4f1b60
+            0x004eec6d      8b157018a700   mov edx, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eec73      50             push eax
+            0x004eec74      52             push edx
+            0x004eec75      e8462f0000     call 0x4f1bc0
+            0x004eec7a      83c40c         add esp, 0xc
+            0x004eec7d      6820fa4e00     push 0x4efa20
+            0x004eec82      e8f92e0000     call 0x4f1b80
+            0x004eec87      50             push eax
+            0x004eec88      a17018a700     mov eax, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eec8d      50             push eax
+            0x004eec8e      e82d2f0000     call 0x4f1bc0
+            0x004eec93      83c40c         add esp, 0xc
+            0x004eec96      6890fa4e00     push 0x4efa90
+            0x004eec9b      e8002f0000     call 0x4f1ba0
+            0x004eeca0      8b0d7018a700   mov ecx, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eeca6      50             push eax
+            0x004eeca7      51             push ecx
+            0x004eeca8      e8132f0000     call 0x4f1bc0
+            0x004eecad      83c40c         add esp, 0xc
+            0x004eecb0      68a0fa4e00     push 0x4efaa0
+            0x004eecb5      e8f62e0000     call 0x4f1bb0
+            0x004eecba      8b157018a700   mov edx, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eecc0      50             push eax
+            0x004eecc1      52             push edx
+            0x004eecc2      e8f92e0000     call 0x4f1bc0
+            0x004eecc7      83c40c         add esp, 0xc
+            0x004eecca      68707d4200     push 0x427d70               ; 'p}B'
+            0x004eeccf      e8bc2e0000     call 0x4f1b90
+            0x004eecd4      50             push eax
+            0x004eecd5      a17018a700     mov eax, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eecda      50             push eax
+            0x004eecdb      e8e02e0000     call 0x4f1bc0
+            0x004eece0      83c40c         add esp, 0xc
+            0x004eece3      6810fa4e00     push 0x4efa10
+            0x004eece8      e8832e0000     call 0x4f1b70
+            0x004eeced      8b0d7018a700   mov ecx, dword [0xa71870]   ; [0xa71870:4]=0
+            0x004eecf3      50             push eax
+            0x004eecf4      51             push ecx
+            0x004eecf5      e8c62e0000     call 0x4f1bc0
+            0x004eecfa      6aff           push 0xffffffffffffffff
+            0x004eecfc      68d4df5400     push str.Real32x3           ; 0x54dfd4 ; "Real32x3"
+            0x004eed01      e8ba2c0000     call 0x4f19c0
+            0x004eed06      83c414         add esp, 0x14
+            0x004eed09      a3680ca700     mov dword [0xa70c68], eax   ; [0xa70c68:4]=0
+            0x004eed0e      68b0fa4e00     push 0x4efab0
+            0x004eed13      e8482e0000     call 0x4f1b60
+            0x004eed18      8b15680ca700   mov edx, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed1e      50             push eax
+            0x004eed1f      52             push edx
+            0x004eed20      e89b2e0000     call 0x4f1bc0
+            0x004eed25      83c40c         add esp, 0xc
+            0x004eed28      6810fb4e00     push 0x4efb10
+            0x004eed2d      e84e2e0000     call 0x4f1b80
+            0x004eed32      50             push eax
+            0x004eed33      a1680ca700     mov eax, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed38      50             push eax
+            0x004eed39      e8822e0000     call 0x4f1bc0
+            0x004eed3e      83c40c         add esp, 0xc
+            0x004eed41      6860fb4e00     push 0x4efb60
+            0x004eed46      e8552e0000     call 0x4f1ba0
+            0x004eed4b      8b0d680ca700   mov ecx, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed51      50             push eax
+            0x004eed52      51             push ecx
+            0x004eed53      e8682e0000     call 0x4f1bc0
+            0x004eed58      83c40c         add esp, 0xc
+            0x004eed5b      6880fb4e00     push 0x4efb80
+            0x004eed60      e84b2e0000     call 0x4f1bb0
+            0x004eed65      8b15680ca700   mov edx, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed6b      50             push eax
+            0x004eed6c      52             push edx
+            0x004eed6d      e84e2e0000     call 0x4f1bc0
+            0x004eed72      83c40c         add esp, 0xc
+            0x004eed75      68a0ba5100     push 0x51baa0
+            0x004eed7a      e8112e0000     call 0x4f1b90
+            0x004eed7f      50             push eax
+            0x004eed80      a1680ca700     mov eax, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed85      50             push eax
+            0x004eed86      e8352e0000     call 0x4f1bc0
+            0x004eed8b      83c40c         add esp, 0xc
+            0x004eed8e      6800fb4e00     push 0x4efb00
+            0x004eed93      e8d82d0000     call 0x4f1b70
+            0x004eed98      8b0d680ca700   mov ecx, dword [0xa70c68]   ; [0xa70c68:4]=0
+            0x004eed9e      50             push eax
+            0x004eed9f      51             push ecx
+            0x004eeda0      e81b2e0000     call 0x4f1bc0
+            0x004eeda5      6aff           push 0xffffffffffffffff
+            0x004eeda7      68c8df5400     push str.Real32x9           ; 0x54dfc8 ; "Real32x9"
+            0x004eedac      e80f2c0000     call 0x4f19c0
+            0x004eedb1      83c414         add esp, 0x14
+            0x004eedb4      a36c0ca700     mov dword [0xa70c6c], eax   ; [0xa70c6c:4]=0
+            0x004eedb9      68a0fb4e00     push 0x4efba0
+            0x004eedbe      e89d2d0000     call 0x4f1b60
+            0x004eedc3      8b156c0ca700   mov edx, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eedc9      50             push eax
+            0x004eedca      52             push edx
+            0x004eedcb      e8f02d0000     call 0x4f1bc0
+            0x004eedd0      83c40c         add esp, 0xc
+            0x004eedd3      6810fc4e00     push 0x4efc10
+            0x004eedd8      e8a32d0000     call 0x4f1b80
+            0x004eeddd      50             push eax
+            0x004eedde      a16c0ca700     mov eax, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eede3      50             push eax
+            0x004eede4      e8d72d0000     call 0x4f1bc0
+            0x004eede9      83c40c         add esp, 0xc
+            0x004eedec      6890fc4e00     push 0x4efc90
+            0x004eedf1      e8aa2d0000     call 0x4f1ba0
+            0x004eedf6      8b0d6c0ca700   mov ecx, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eedfc      50             push eax
+            0x004eedfd      51             push ecx
+            0x004eedfe      e8bd2d0000     call 0x4f1bc0
+            0x004eee03      83c40c         add esp, 0xc
+            0x004eee06      68b0fc4e00     push 0x4efcb0
+            0x004eee0b      e8a02d0000     call 0x4f1bb0
+            0x004eee10      50             push eax
+            0x004eee11      8b156c0ca700   mov edx, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eee17      52             push edx
+            0x004eee18      e8a32d0000     call 0x4f1bc0
+            0x004eee1d      83c40c         add esp, 0xc
+            0x004eee20      68d0fc4e00     push 0x4efcd0
+            0x004eee25      e8662d0000     call 0x4f1b90
+            0x004eee2a      50             push eax
+            0x004eee2b      a16c0ca700     mov eax, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eee30      50             push eax
+            0x004eee31      e88a2d0000     call 0x4f1bc0
+            0x004eee36      83c40c         add esp, 0xc
+            0x004eee39      6800fb4e00     push 0x4efb00
+            0x004eee3e      e82d2d0000     call 0x4f1b70
+            0x004eee43      8b0d6c0ca700   mov ecx, dword [0xa70c6c]   ; [0xa70c6c:4]=0
+            0x004eee49      50             push eax
+            0x004eee4a      51             push ecx
+            0x004eee4b      e8702d0000     call 0x4f1bc0
+            0x004eee50      6aff           push 0xffffffffffffffff
+            0x004eee52      68c0df5400     push str.Real64             ; 0x54dfc0 ; "Real64"
+            0x004eee57      e8642b0000     call 0x4f19c0
+            0x004eee5c      83c414         add esp, 0x14
+            0x004eee5f      a37418a700     mov dword [0xa71874], eax   ; [0xa71874:4]=0
+            0x004eee64      6830ff4e00     push 0x4eff30
+            0x004eee69      e8f22c0000     call 0x4f1b60
+            0x004eee6e      8b157418a700   mov edx, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eee74      50             push eax
+            0x004eee75      52             push edx
+            0x004eee76      e8452d0000     call 0x4f1bc0
+            0x004eee7b      83c40c         add esp, 0xc
+            0x004eee7e      6860ff4e00     push 0x4eff60
+            0x004eee83      e8f82c0000     call 0x4f1b80
+            0x004eee88      50             push eax
+            0x004eee89      a17418a700     mov eax, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eee8e      50             push eax
+            0x004eee8f      e82c2d0000     call 0x4f1bc0
+            0x004eee94      83c40c         add esp, 0xc
+            0x004eee97      6890ff4e00     push 0x4eff90
+            0x004eee9c      e8ff2c0000     call 0x4f1ba0
+            0x004eeea1      8b0d7418a700   mov ecx, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eeea7      50             push eax
+            0x004eeea8      51             push ecx
+            0x004eeea9      e8122d0000     call 0x4f1bc0
+            0x004eeeae      83c40c         add esp, 0xc
+            0x004eeeb1      68b0ff4e00     push 0x4effb0
+            0x004eeeb6      e8f52c0000     call 0x4f1bb0
+            0x004eeebb      8b157418a700   mov edx, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eeec1      50             push eax
+            0x004eeec2      52             push edx
+            0x004eeec3      e8f82c0000     call 0x4f1bc0
+            0x004eeec8      83c40c         add esp, 0xc
+            0x004eeecb      68807f4200     push 0x427f80
+            0x004eeed0      e8bb2c0000     call 0x4f1b90
+            0x004eeed5      50             push eax
+            0x004eeed6      a17418a700     mov eax, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eeedb      50             push eax
+            0x004eeedc      e8df2c0000     call 0x4f1bc0
+            0x004eeee1      83c40c         add esp, 0xc
+            0x004eeee4      6810fa4e00     push 0x4efa10
+            0x004eeee9      e8822c0000     call 0x4f1b70
+            0x004eeeee      8b0d7418a700   mov ecx, dword [0xa71874]   ; [0xa71874:4]=0
+            0x004eeef4      50             push eax
+            0x004eeef5      51             push ecx
+            0x004eeef6      e8c52c0000     call 0x4f1bc0
+            0x004eeefb      6aff           push 0xffffffffffffffff
+            0x004eeefd      68b4df5400     push str.Real64x3           ; 0x54dfb4 ; "Real64x3"
+            0x004eef02      e8b92a0000     call 0x4f19c0
+            0x004eef07      83c414         add esp, 0x14
+            0x004eef0a      a39058a700     mov dword [0xa75890], eax   ; [0xa75890:4]=0
+            0x004eef0f      68d0ff4e00     push 0x4effd0
+            0x004eef14      e8472c0000     call 0x4f1b60
+            0x004eef19      8b159058a700   mov edx, dword [0xa75890]   ; [0xa75890:4]=0
+            0x004eef1f      50             push eax
+            0x004eef20      52             push edx
+            0x004eef21      e89a2c0000     call 0x4f1bc0
+            0x004eef26      83c40c         add esp, 0xc
+            0x004eef29      6820004f00     push 0x4f0020               ; ' '
