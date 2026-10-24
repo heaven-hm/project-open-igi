@@ -338,3 +338,26 @@ absent here, so the effective gap is slightly smaller than the number below.
 | 307 | `0x00402F33` | `0x00489430` | (no manifest record) | absent |
 | 308 | `0x00402F38` | `0x004082B0` | HumanPlayer_LoadParameters_2 | implemented - scripts/GameNatives/humanplayer/004082B0-HumanPlayer_LoadParameters_2.cpp |
 | 309 | `0x00402F3D` | `0x004895D0` | (no manifest record) | absent |
+
+## Size profile of the 277 absent callees (upper-bound extents)
+
+Extents are measured as "distance to the next known function start" over a 3664-entry start universe (manifest addresses plus every address recorded
+in the direct-call walk), so they are **upper bounds** - a function whose true successor is not in that universe is overestimated. Treat them as a
+sizing signal, not as exact function lengths.
+
+| bucket | count |
+| --- | --- |
+| <= 200 B | 137 |
+| 201-800 B | 44 |
+| > 800 B | 96 |
+
+min 16 B, p25 32 B, median 224 B, p75 1168 B, max 4128 B, mean 686 B.
+
+**Correction to this document's own earlier wording**: an earlier revision said the sequence is "dominated by per-class registration routines" and
+implied a large set of uniformly small functions. The distribution does not support that: 96 of the 277 absent callees are large systems, and only 137
+are cheap. The honest picture is a bimodal set - roughly half cheap registrars/thunks (many exactly 32-48 B, which the ordered inventory shows arriving
+in runs such as `0x004192B0`, `0x004199B0`, `0x0041A1A0`, `0x0041AAC0`, ... spaced a few hundred bytes apart), and roughly a third substantial
+subsystems that must be transcribed on their own evidence.
+
+The cheap 137 in call order are the practical first batch; the first few are `0x00485A40` (~144 B), `0x00484F30` (~48 B), `0x0047CF20` (~48 B),
+`0x0046DF10` (~160 B), `0x0042FE40` (~192 B, already transcribed as an untracked handler file), then the `0x00419xxx`-`0x00420xxx` run of ~48 B routines.
