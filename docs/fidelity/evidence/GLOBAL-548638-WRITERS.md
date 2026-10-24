@@ -225,3 +225,33 @@ never reads** - a retail stack artefact, not a fifth parameter.
 3. The two `push 0` sequence is therefore "one stray dword + arg4 = 0", not two
    meaningful arguments - and the QObj registration still receives parent from
    `0x4018F0` (arg3) and 0 (arg4), matching what the capture implies for QObj.
+
+## Round 40: 0x4D9790 decoded (next candidate, dependencies being checked)
+
+65-byte single-block body `0x004D9790-0x004D97D0`:
+
+```
+mov ax, word [0x548638]      ; read the QObj class id
+push eax; call 0x401A20      ; some call taking the id
+push 7
+mov word [0x548638], 0x181   ; <-- overwrites the QObj id with the root type 0x181
+call 0x4018C0                ; per-phase call, phase 7
+push 4; call 0x4018C0        ; phase 4
+push 5; call 0x4018C0        ; phase 5
+push 6; call 0x4018C0        ; phase 6
+mov cl, byte [0x54863A]
+push ecx; call 0x4018C0      ; one more call with the remembered byte
+add esp, 0x18; ret
+```
+
+Reading: this is the counterpart of `0x4D9730` - it consumes the QObj id it just
+registered, then **restores the current-type global to the root value `0x181`**
+and re-points the phase handlers 4/5/6/7 plus one extra slot at `0x4018C0`. That
+is consistent with QObj being a temporary "current class" during registration and
+`0x181` being the restored root type; it also confirms the earlier hypothesis
+about `0x181` as the root discriminator, now with a concrete write site.
+
+Blockers before transcribing: the callees `0x401A20` and `0x4018C0` are not
+transcribed (`engine/` has no match), so this body cannot link yet and is recorded
+rather than written. Both are small leaf-like helpers in the 0x4018xx/0x401A2x
+task-type range and are the natural next bottom-of-tree targets.
