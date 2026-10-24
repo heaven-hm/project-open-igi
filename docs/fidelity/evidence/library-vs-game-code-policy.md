@@ -83,3 +83,30 @@ registrar cannot link without them, and inventing a signature for a handler the 
 
 Next increment: establish the extent and ABI of 0x0042DCE0/0x0042FEF0 (trivial, three instructions each) and of 0x0042DB00/0x0042FE80, then
 transcribe the four handlers and the two registrars. That is the shortest real path into the startup chain.
+
+## Handler extents established, and an ABI discrepancy that blocks them
+
+Measured this round, so the next session starts from facts:
+
+- **0x0042DB00**: 171 instructions, prologue `push ebx; push ebp; push esi; mov 0x14(%esp),%esi; push edi`, body ends at 0x0042DCD8
+  with nop padding through 0x0042DCDF, so the next entry is 0x0042DCE0. It reads the first argument as a pointer to two dwords
+  (`mov (%esi),%ebp; mov 0x4(%esi),%edi`), calls 0x004EE0E0 and 0x004F45F0, and indexes 0x00A96AE0 with the same `(x & 0xFF) * 0x180 +
+  (y & 0xFFFF)` shape as the linker.
+- **0x0042DCE0**: 11 bytes, `mov 0x8(%esp),%eax; movl $0x2C0,(%eax); ret`, then nop padding to 0x0042DCF0.
+- **0x0042FE80** and **0x0042FEF0** are the same pair for the second registrar; 0x0042FEF0 writes `0x2F0` instead of `0x2C0`.
+
+**The blocker**: `engine/include/igi/retail/core/task_types.hpp` declares `using FrameHandler = void (*)(void*);` - one argument - but
+the call site that invokes a linked handler passes two:
+
+```
+0x4012D8: mov 0x14(%esp),%edx
+0x4012DC: push %edx
+0x4012DD: push %esi
+0x4012DE: call *%eax
+```
+
+and 0x0042DCE0 reads its second stack argument (`mov 0x8(%esp),%eax`) and writes through it. So at least some handlers are
+`void (*)(void* record, void* arg)`, while the tree's type says one parameter. Transcribing handlers against the one-argument type would
+silently drop the second argument and fabricate the contract, so the type and the registrar signatures have to be settled from retail first
+(which handlers read a second argument, and whether the second argument is a record's field pointer or a frame value). That is the first
+task of the next increment; the handler bodies are small enough to land in one pass once the ABI is decided.
