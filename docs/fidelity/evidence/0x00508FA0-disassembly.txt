@@ -427,3 +427,31 @@ Remaining dependency for the NodeCriteria path: `0x004BAAC0` (and the callback b
 `0x004B8830`). Neither has a provenance line in `engine/` yet, so `0x4B8810` and `0x5186C0`
 both stay unwritten until that primitive exists. Chain: `0x5186C0 -> 0x4B8810 ->
 0x4BAAC0 -> {0x4B8830 callback}`.
+
+### 0x4BAAC0 partial decode (104 B, 1 block) - node record allocator/initialiser
+
+First half, from the listing:
+
+```
+push esi; push edi
+call 0x4B0D60(1)                 ; acquire lock/section? (1)
+call 0x4B0C60(0x1C, 4)           ; Mem_Alloc(28, 4)   [Mem_Alloc is VERIFIED in mem/]
+esi = result; ecx = 7; eax = 0; edi = esi
+rep stosd                        ; zero the 28-byte record (7 dwords)
+eax = [arg_18h]                  ; one of the arguments
+ecx = [0x00A43E88]               ; a global list head
+push esi; push eax; push ecx; call 0x004C0560   ; insert/lookup into the list
+esi[0x14] = eax                  ; store returned handle
+edx = [arg_28h]; ecx = [arg_30h]; eax = [arg_2ch]; edx2 = [arg_34h]
+esi[0x10] = edx; esi[0x18] = eax; esi[0xc] = ecx; esi[0] = edx2 ...
+add esp, 0x18
+```
+
+So it allocates a 28-byte node record through the verified allocator, zeroes it with
+`rep stosd` (7 dwords), registers it in the list at `0x00A43E88` via `0x004C0560`, then
+fills it from the stack arguments. The 28-byte size matches the seven-dword argument count
+of `0x4B8810` and the seven-dword record layout being filled here.
+
+Dependencies: `0x004B0D60` and `0x004C0560` have no provenance lines in `engine/` yet, so
+this routine stays unwritten. Its own tail (from `0x004BAB18`) still needs capture before a
+transcription attempt - recorded here so the decode is not restarted.
