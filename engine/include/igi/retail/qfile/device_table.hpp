@@ -5,8 +5,9 @@
 // observed by transcribed code so far: +0x00 the dispatch handler, +0x1C the present word, +0x40 the
 // NUL-terminated device name. The rest stays padding and is deliberately unnamed.
 //
-// The retail writer of +0x1C is 0x004B1B90, which is NOT transcribed yet, so this storage is port-owned and
-// starts zeroed; until that registrar lands every dispatch takes the "Device not present" path.
+// The retail writer of +0x1C is 0x004B1B90, now transcribed in native_4b1b90.cpp; nothing in the current startup path
+// calls it yet (its own caller is not transcribed), so this storage still starts zeroed and every dispatch takes the
+// "Device not present" path until a transcribed caller reaches the registrar.
 
 #include <cstdint>
 
