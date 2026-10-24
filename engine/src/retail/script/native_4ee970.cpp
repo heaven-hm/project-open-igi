@@ -15,8 +15,7 @@ extern std::uint8_t g_54dda4;          // 0x0054DDA4
 extern std::uint8_t g_54dda5;          // 0x0054DDA5
 extern std::uint32_t g_54dda8;         // 0x0054DDA8
 
-std::uint8_t QTask_AllocateEvent();                                     // 0x004EEA11/0x004EEA1C: call 0x4017c0
-std::uint32_t QTask_NewQTaskEventNoContextFn();                         // 0x004EEA27: call 0x401810
+std::uint8_t QTask_NewQTaskEventNoContextFn(std::uint16_t value);        // 0x004EEA27: call 0x401810, one argument (retail pushes zero), returns AL
 
 void Script_InitTypeCatalogue_4EE970()
 {
@@ -29,9 +28,9 @@ void Script_InitTypeCatalogue_4EE970()
     g_54dd0c[2] = TaskType_Register("Dynamic", 0x20, QTask_GetCurrentType(), 0);     // 0x004EE9BC..0x004EE9D3
     g_54dd0c[3] = TaskType_Register("Idle", 0x20, QTask_GetCurrentType(), 0);        // 0x004EE9D9..0x004EE9F0
     g_54dd0c[4] = TaskType_Register("CameraBase", 0x20, QTask_GetCurrentType(), 0);  // 0x004EE9F6..0x004EEA0B
-    g_54dda4 = QTask_AllocateEvent();                                    // 0x004EEA11: call 0x4017c0; 0x004EEA17: mov byte [0x54dda4],al
-    g_54dda5 = QTask_AllocateEvent();                                    // 0x004EEA1C: call 0x4017c0; 0x004EEA22: mov byte [0x54dda5],al
-    g_54dda8 = QTask_NewQTaskEventNoContextFn();                         // 0x004EEA27: call 0x401810; 0x004EEA2D: mov dword [0x54dda8],eax
+    g_54dda4 = QTask_AllocateEvent(0);                                  // 0x004EEA11: call 0x4017c0 with the zero pushed at 0x004EEA0A; 0x004EEA17: mov byte [0x54dda4],al
+    g_54dda5 = QTask_AllocateEvent(0);                                  // 0x004EEA1C: call 0x4017c0 with the zero pushed at 0x004EEA16; 0x004EEA22: mov byte [0x54dda5],al
+    g_54dda8 = QTask_NewQTaskEventNoContextFn(0);                        // 0x004EEA27: call 0x401810 with the zero pushed at 0x004EEA21; 0x004EEA2D: mov dword [0x54dda8],eax (AL zero-extended)
 }
 
 } // extern "C"
