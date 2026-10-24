@@ -20,10 +20,11 @@
 namespace igi::retail::core {
 
 // One entry of the retail's window message chain. The next entry is at
-// +0x00 and the handler at +0x08.
+// +0x00, the back-link at +0x04 and the handler at +0x08 (12-byte stride).
 struct WindowHandlerEntry
 {
     WindowHandlerEntry* next;
+    WindowHandlerEntry* prev_link;
     std::intptr_t (*handler)(void* window, std::uint32_t message, std::uintptr_t wparam,
                               std::intptr_t lparam);
 };
@@ -34,6 +35,15 @@ extern "C" {
 
 // Retail global at VA 0x005C8DF0: the head of the window message chain.
 extern igi::retail::core::WindowHandlerEntry* WindowHandlerChain;
+
+// Relocated retail storage for the WinProc handler-chain container:
+//   0x005C8D28  WindowHandlerPool[16]   (16 nodes, stride 0xC, ends at Loop_StatusByte)
+//   0x005C8DF0  WindowHandlerChain      (head; empty list is &WindowHandlerTerminator)
+//   0x005C8DF4  WindowHandlerTerminator (4-byte end-of-list cell, value 0)
+//   0x005C8DF8  WindowHandlerTail       (pointer to the last node address slot)
+extern igi::retail::core::WindowHandlerEntry WindowHandlerPool[16];
+extern igi::retail::core::WindowHandlerEntry** WindowHandlerTail;
+extern std::uintptr_t WindowHandlerTerminator;
 
 // Retail global at VA 0x005C8DE8: the loop status byte the procedure reads
 // before it walks the chain. Loop_SetStatusByte owns this global, so the name

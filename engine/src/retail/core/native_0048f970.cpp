@@ -31,6 +31,11 @@ constexpr std::uintptr_t VIRTUAL_KEY_F12 = 0x12U;
 extern "C" {
 
 igi::retail::core::WindowHandlerEntry* WindowHandlerChain = nullptr;
+// Relocated retail WinProc chain storage (see native_0048f970.hpp): the pool at
+// 0x005C8D28, the terminators/head words at 0x005C8DF0/0x005C8DF4/0x005C8DF8.
+igi::retail::core::WindowHandlerEntry WindowHandlerPool[16] = {};
+igi::retail::core::WindowHandlerEntry** WindowHandlerTail = nullptr;
+std::uintptr_t WindowHandlerTerminator = 0U;
 // Loop_StatusByte is the retail 0x005C8DE8 global that Loop_SetStatusByte owns;
 // frame_natives.hpp declares it and frame_natives.cpp defines it, so this unit
 // only links against it. Defining it here too broke the mingw link with

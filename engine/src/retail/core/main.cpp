@@ -52,6 +52,8 @@
 
 #if defined(_WIN32)
 #include <windows.h>
+
+#include <cstring>
 #endif
 
 extern "C" {
@@ -149,6 +151,20 @@ int WINAPI WinMain(HINSTANCE const h_instance, HINSTANCE const h_previous_instan
     // retail observes as 1 for this call.
     (void)AppContext_SetLanguage_48F300("");
     (void)AppMain_Set5C8C04_48F200(0);
+
+    // 0x48F674-0x48F6A6: WinProc handler-chain container init.
+    // 0x48F674 mov ecx,0x30; xor eax,eax; mov edi,0x005C8D28; rep stosd -> the
+    // 16-node pool (12-byte stride) is cleared, ending at Loop_StatusByte.
+    std::memset(::WindowHandlerPool, 0, sizeof ::WindowHandlerPool);
+    // 0x48F68C head = 0x005C8DF4 (address of the terminator cell).
+    ::WindowHandlerChain = reinterpret_cast<igi::retail::core::WindowHandlerEntry*>(
+        &::WindowHandlerTerminator);
+    // 0x48F696 tail = 0x005C8DF0 (&head).
+    ::WindowHandlerTail = &::WindowHandlerChain;
+    // 0x48F6A0 [0x005C8DF4] = ebx (0).
+    ::WindowHandlerTerminator = 0U;
+    // 0x48F6A6 call 0x0048F360 ("Window", 0x0048F350) follows as the first of
+    // the four parser registrations below.
 
     // 0x0048F680/0x48F687-0x48F6D3: four parser registrations with the retail
     // handler bodies. Registration alone never dispatches a handler; dispatch is
