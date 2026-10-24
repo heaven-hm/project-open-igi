@@ -1,70 +1,65 @@
 {
   "schema_version": 1,
-  "kind": "native-semantic-review",
+  "kind": "semantic-review-report",
   "address": "0x004015F0",
-  "name": "QTask_DestroyTask_4015F0",
-  "artifact": {
-    "sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-    "base_address": "0x00400000"
-  },
-  "implementation": {
-    "path": "engine/src/retail/core/native_4015f0.cpp"
-  },
-  "reviewer": {
-    "agent": "lead",
-    "method": "instruction-level review against the committed section 18 tiling plus emitted-listing codegen checks"
-  },
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "b44df78beca28c21429783bf27c0720df2a3dd81892c92cd0539c921ff136b8c",
+  "implementation_path": "engine/src/retail/core/native_4015f0.cpp",
   "result": "passed",
   "checks": [
     {
-      "id": "function_identity",
+      "name": "function_identity",
       "result": "passed",
-      "detail": "Extent 0x004015F0-0x00401776 (391 bytes) from the cross-decoded tiling; 25 blocks and 37 edges match retail exactly (bn 25/37, r2 25/37, score 1.000)."
+      "rationale": "Extent 0x004015F0-0x00401776 (391 bytes) from the cross-decoded tiling; 25 blocks and 37 edges match retail exactly (bn 25/37, r2 25/37, score 1.000)."
     },
     {
-      "id": "cfg_match",
+      "name": "cfg_match",
       "result": "passed",
-      "detail": "Candidate emits 25 blocks and 37 edges against retail's 25/37; block count did not collapse despite GCC merging retail's two returns."
+      "rationale": "Candidate emits 25 blocks and 37 edges against retail's 25/37; block count did not collapse despite GCC merging retail's two returns."
     },
     {
-      "id": "argument_mapping",
+      "name": "argument_mapping",
       "result": "passed",
-      "detail": "One dword at all 120 retail call sites; argument is the task object, used as the QTask header and passed unchanged to both handlers, the recursion, 0x004015D0 and 0x004B0D10."
+      "rationale": "One dword at all 120 retail call sites; argument is the task object, used as the QTask header and passed unchanged to both handlers, the recursion, 0x004015D0 and 0x004B0D10."
     },
     {
-      "id": "calls_and_side_effects",
+      "name": "calls_and_side_effects",
       "result": "passed",
-      "detail": "Direct: self at 0x0040165F, unlink 0x004015D0 at 0x004016C5, free 0x004B0D10 at 0x0040176A. Indirect: phase-3 handler 0x0040164F and phase-2 handler 0x00401682 through 0x00A96AE0."
+      "rationale": "Direct: self at 0x0040165F, unlink 0x004015D0 at 0x004016C5, free 0x004B0D10 at 0x0040176A. Indirect: phase-3 handler 0x0040164F and phase-2 handler 0x00401682 through 0x00A96AE0."
     },
     {
-      "id": "constants_and_scaling",
+      "name": "constants_and_scaling",
       "result": "passed",
-      "detail": "Handler index 3*0x180 and 2*0x180 for phase 3 and 2; class record 0x00AF5EE0 + type*0x30; pooled element address base + index*elemSize."
+      "rationale": "Handler index 3*0x180 and 2*0x180 for phase 3 and 2; class record 0x00AF5EE0 + type*0x30; pooled element address base + index*elemSize."
     },
     {
-      "id": "floating_point_semantics",
+      "name": "floating_point_semantics",
       "result": "not_applicable",
-      "detail": "No floating-point instruction in the retail function."
+      "rationale": "No floating-point instruction in the retail function."
     },
     {
-      "id": "memory_layout_and_access",
+      "name": "memory_layout_and_access",
       "result": "passed",
-      "detail": "Codegen checks in the emitted listing: six separate type-word loads at task+0x1C; live-count decrement is the first memory write (subl $1,0x6260A0) and is the same symbol the allocator increments; child-tail load 0x10(%ebx) after the phase-3 call and before the recursive call; the three pool swap stores in retail order A (indices[position]) then B (indices[lastPosition]) then C (*(lastElement+tail))."
+      "rationale": "Codegen checks in the emitted listing: six separate type-word loads at task+0x1C; live-count decrement is the first memory write (subl $1,0x6260A0) and is the same symbol the allocator increments; child-tail load 0x10(%ebx) after the phase-3 call and before the recursive call; the three pool swap stores in retail order A (indices[position]) then B (indices[lastPosition]) then C (*(lastElement+tail))."
     },
     {
-      "id": "return_and_error_paths",
+      "name": "return_and_error_paths",
       "result": "passed",
-      "detail": "Both retail returns are plain ret with no value read by any caller; the candidate declares void, and the two returns appear as the pool-swap early exit and the function end."
+      "rationale": "Both retail returns are plain ret with no value read by any caller; the candidate declares void, and the two returns appear as the pool-swap early exit and the function end."
     },
     {
-      "id": "retail_absences_preserved",
+      "name": "retail_absences_preserved",
       "result": "passed",
-      "detail": "No null check, no double-destroy guard, no cycle check and no logging, matching retail; recorded as gap 18.8.4 rather than silently added."
+      "rationale": "No null check, no double-destroy guard, no cycle check and no logging, matching retail; recorded as gap 18.8.4 rather than silently added."
     }
   ],
   "limitations": [
     "Static only: no runtime observation of this native, and it is unreachable before the QTask_RegisterClasses boundary.",
     "Retail semantics of the 0x004016E4 class+0x20 word and of the allocator's matching store at 0x0040134E remain unsettled (section 17.7); the candidate reads and writes them literally as retail does.",
     "The dispatch-stack fixup purpose is unproven (section 18.8); the mechanics are transcribed exactly."
-  ]
+  ],
+  "reviewed_by": "lead",
+  "review_scope": "static: retail instructions, CFG shape and emitted candidate listing",
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 18 plus docs/fidelity/evidence/0x4015F0-dependencies.md",
+  "reviewed": true
 }
