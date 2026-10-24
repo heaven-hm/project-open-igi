@@ -343,3 +343,38 @@ global `0x00942300` needs a definition with its retail VA. Chain extends to:
 This is the point where the "small leaf" strategy stops being cheap: the subtree
 under the registrar path is deep, and each leaf introduces two more. That is the
 honest state of the denominator, and it is why 113 of 123 ids remain unlanded.
+
+## Round 45: candidate comparison for 0x4B0D10 - rejected, masking defect found
+
+The catalogued candidate `scripts/GameNatives/sys/004B0D10-Mem_DeAllocFn 2.cpp`
+(13 lines, "CFG score 100.0% structural only") reads:
+
+```c
+int* data_val = context - 4;
+data_val &= 0xfc;          // <-- masks a POINTER to 0xFC
+g_942300 -= 1;
+int* source_val = *data_val;
+return Camera_UpdateTransform_9(HeapList_Remove(source_val));
+```
+
+Against the retail listing (`and al, 0xFC` masks only the **low byte** of
+`(arg - 4)`, leaving the high 24 bits intact), `data_val &= 0xfc` is a **semantic
+defect**: it reduces the address to at most 0xFC instead of rounding it to a 4-byte
+boundary. It also binds `HeapList_Remove`'s result into a further call, whereas
+retail calls `0x004AF960` and `0x004A6A50` with the *same* `esi` value in sequence.
+
+So the candidate is **rejected for reuse**; a fresh transcription from the retail
+instructions is required (this is precisely why candidates need re-checking and why
+a structural CFG score cannot be accepted as behaviour). The correct shape is:
+
+```
+value = (arg - 4) & ~0x3 only in the low byte   // and al,0xFC
+counter 0x00942300 -= 1                          // order preserved
+esi = *(uint32_t*)value
+HeapList_Remove(esi)                             // 0x004AF960, already in engine/mem
+0x004A6A50(esi)                                  // still untranscribed
+```
+
+Status: still blocked on `0x004A6A50`; `0x004AF960` is confirmed present as
+`HeapList_Remove`. The catalogued name `Camera_UpdateTransform_9` for 0x4A6A50 is a
+name-project artifact and must not be adopted without evidence.
