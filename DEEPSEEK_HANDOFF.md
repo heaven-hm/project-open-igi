@@ -1017,3 +1017,21 @@ So the most likely reading is: +0x0C begins an embedded list head, the pooled ob
 some other source, and +0x20 is the pool base used for the tail store. That is still not proven - the type
 registration writer 0x401900/0x4014B0 chain must be derived to establish which field is the base. Do not write
 0x4012F0 from this reading alone.
+
+## FrameHandler ABI blast radius measured (round 169)
+
+Retail evidence (section 17): the wrappers call the phase-0 handler with TWO cdecl arguments and clean 8 bytes -
+`push arg3; push obj; call eax; add esp,8` at 0x4012D8-0x4012E0, and 0x401D80 does the same. The tree's type is
+`using FrameHandler = void (*)(void*)` (task_types.hpp:50), one argument.
+
+Measured scope of the correction:
+- 32 references to FrameHandler across engine/src and engine/include (declarations, the handler table, flow registry)
+- 2 direct `(void*)`-only handler signatures
+- 9 natives declared as `void NATIVE_DECL ...(void* ...)` with a single pointer argument
+
+That is the full set that must change in ONE commit, because a partial change leaves handlers with mismatched ABIs:
+some would receive the second argument in a register the callee does not expect, and the phase-0 dispatch would push
+two words into a one-argument prototype (the x86 cdecl caller cleans, so it links but reads garbage). Before writing it,
+confirm for each of the nine natives that its retail body actually reads a second argument at [esp+8]; handlers that
+read only [esp+4] are still ABI-compatible with a two-argument type (they simply ignore the second), so the type change
+is safe for them and only the call sites' cleanliness has to be right.
