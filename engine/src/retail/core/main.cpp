@@ -194,8 +194,10 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
     ::ShowWindow(window, 10); // 0x48F799 SW_SHOWDEFAULT (10)
 
     (void)SetWindowHandle(window); // 0x48F7A0 0x0048F0E0 -> [0x005C8BC4]
-    // 0x0048F7A5 0x00498460 (x87 truncate rounding) is not linked yet; the loop
-    // uses the port's FP helper below and records the substitution.
+    // 0x0048F7A5 call 0x00498460: retail x87 rounding-mode setter; the transcribed
+    // native (fpu_state.cpp, provenance VA 0x00498460) writes the 0x0C00 bits at
+    // [0x006E5BC4]. The loop-top call at 0x48F80D uses the same native.
+    igi::retail::core::FP_InitExtendedPrecision();
 
     // 0x0048F7AA QTask_CreateTask: the retail call, uncatched like the original.
     int const task_result = QTask_CreateTask(); // 0x0048F7AA
@@ -213,11 +215,13 @@ int __stdcall Main(void* const h_instance, void* const h_previous_instance,
         return 0;
     }
 
-    // 0x0048F7D3-0x48F8F0 loop: FPU self-check, 0x498460, GetIsActive ->
+    // 0x0048F7D3-0x48F8F0 loop: 0x498460 at the top (0x48F80D), GetIsActive ->
     // QTask_OpenEvent or Sleep(500), DestroyWindow when the status byte is 0,
-    // GetMessageA/TranslateMessage/DispatchMessageA pump. The loop leaves only
-    // when GetMessageA returns 0; MSG.wParam becomes the return code and the
-    // status byte is cleared.
+    // PeekMessageA-gated GetMessageA/TranslateMessage/DispatchMessageA pump.
+    // WM_QUIT (GetMessageA == 0) stores MSG.wParam into the exit-code local,
+    // clears [0x5C8DE8] and leaves the loop; 0x48F88A re-tests the byte otherwise.
+    // Still open: per-iteration x87 self-check 0x48F7E5-0x48F807 and the
+    // 0x48F8E1 error path (Debug_Error 0x4AF7B0).
     MSG message{};
     int exit_code = 0;
     bool quit = false;
