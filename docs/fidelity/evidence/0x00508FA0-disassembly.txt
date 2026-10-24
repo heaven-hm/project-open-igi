@@ -1504,3 +1504,22 @@ Capture: `docs/fidelity/evidence/0x004FAA60-listing.txt` (837 B, 5 blocks, 225 i
 
 The caller `0x518484` sits immediately before `0x5186C0`'s region, consistent with the AI-graph
 registrar driving this init - so the goal chain is now: this init -> `0x4F9DF0` -> `0x508FA0`.
+
+### 0x4F1020 is a 6-byte getter of 0xA70CA0; its global's writer is 0x4EF585 (unowned)
+
+```
+0x004F1020  mov eax,[0x00A70CA0]; ret        ; ignores its argument, returns the global
+0x004EF585  mov [0x00A70CA0], eax            ; the only writer, inside the 0x4EF5xx routine
+readers:    0x4EF595/0x4EF5AD/0x4EF5C7/0x4EF5E2/0x4EF5FA and the registration sites
+```
+
+So `0x4F1020` is trivial to transcribe but cannot link until the `0x4EF5xx` routine that owns
+`0x00A70CA0` is transcribed (reader-only natives cannot legitimately declare their storage). That
+adds one more owner in front of the chain:
+
+```
+0x4EF5xx (owns 0xA70CA0) -> 0x4F1020 -> 0x4FAA60 (stream init) -> 0x4F9DF0 -> 0x508FA0
+```
+
+This is the same ordering discipline that has unblocked every previous step; recorded rather than
+short-circuited by declaring a second copy of the global.
