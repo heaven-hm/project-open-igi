@@ -176,3 +176,31 @@ parenthesis). Both then bind:
 
 Note both are the *retail-derived* CFGs the builder writes; the score is
 tool-to-tool agreement, not a claim about the C++ transcription.
+
+## Round 18: the jump-table gap is in radare2's *edge* recovery, not its blocks
+
+`r2 af/agfj` on `0x490190` returns **all 10 blocks** - including the eight
+jump-table case targets `0x4901AB/1B1/1B7/1BD/1C3/1C9/1CF/1E8` - but marks only
+the head's conditional edges:
+
+```
+0x490190 jump=0x4901e8 fail=0x49019c
+0x49019c ... 0x4901cf   (no jump/fail fields)
+0x4901ab ... 0x4901e8   (no jump/fail fields)
+```
+
+No block carries `switch_op`, i.e. r2 did not resolve `jmp dword [eax*4 + table]`
+as a switch, so the case targets exist as blocks but have no incoming edges.
+Binary Ninja resolves those indirect targets, giving 10 edges. Hence 0.480 with
+identical node sets.
+
+So the disagreement is **indirect-branch edge attribution**, and it is fixable on
+the evidence side without touching the 0.85 threshold: the case targets are
+readable from the retail jump tables (`0x490174`, `0x4901F4`, `0x48FF78`) as image
+data, and every target is already confirmed as a basic-block start by r2. The
+legitimate repair is to recover those edges from the table bytes (recording the
+table VA and entry index per edge), then re-score both artifacts - not to lower
+the threshold and not to copy BN's edge list wholesale.
+
+Same structure applies to `0x490120` (table `0x490174`) and `0x48FED0` (table
+`0x48FF78`); `0x48FA80` (0.939) is a jump table too but already passes.
