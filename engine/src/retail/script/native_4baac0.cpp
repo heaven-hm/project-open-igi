@@ -9,7 +9,7 @@
 
 extern "C" {
 
-void* g_a43e88;                                                                     // 0x00A43E88, owned by 0x4BACD0
+extern "C" void* g_a43e88;                                                                     // 0x00A43E88, owned by 0x4BACD0
 void Mem_FlagStackPop_4B0D60(std::uint8_t flag);                                    // 0x004B0D60
 void Mem_FlagStackPush_4B0D90();                                                    // 0x004B0D90
 void* Script_QHashSymbolRegister_4C0560(void* list, char const* value, void* owner); // 0x004C0560

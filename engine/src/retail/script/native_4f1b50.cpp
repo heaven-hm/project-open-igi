@@ -7,7 +7,7 @@
 
 extern "C" {
 
-std::uint8_t g_a758c8[16]; // 0x00A758C8, owned by 0x4F1B20
+extern std::uint8_t g_a758c8[16]; // 0x00A758C8, owned by 0x4F1B20
 
 void Script_ParameterEventSlotClear_4F1B50(std::int8_t const index)
 {

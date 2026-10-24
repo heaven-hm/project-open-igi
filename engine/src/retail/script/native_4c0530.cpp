@@ -7,7 +7,7 @@
 
 extern "C" {
 
-std::int32_t Script_Hash32_4C0530(char const* const text, std::int32_t const bucket_count)
+std::int32_t Script_Hash32_4C0530(char const* text, std::int32_t const bucket_count)
 {
     std::uint32_t hash = 0;                                 // 0x004C0534: xor eax,eax
     char c = *text;                                         // 0x004C0536: mov cl,[edx]

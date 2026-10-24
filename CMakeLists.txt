@@ -32,6 +32,7 @@ add_executable(igi WIN32
     engine/src/retail/core/cam_task.cpp
     engine/src/retail/core/native_4014b0.cpp
     engine/src/retail/core/native_4014e0.cpp
+    engine/src/retail/core/native_4018c0.cpp
     engine/src/retail/core/app_startup_globals.cpp
     engine/src/retail/core/app_startup_natives.cpp
     engine/src/retail/core/class_registration.cpp
@@ -81,6 +82,23 @@ add_executable(igi WIN32
     engine/src/retail/render/native_4f1000.cpp
     engine/src/retail/script/native_4f1a60.cpp
     engine/src/retail/script/native_4f1a70.cpp
+    engine/src/retail/script/native_4af910.cpp
+    engine/src/retail/script/native_4b8810.cpp
+    engine/src/retail/script/native_4baac0.cpp
+    engine/src/retail/script/native_4bacd0.cpp
+    engine/src/retail/script/native_4c0360.cpp
+    engine/src/retail/script/native_4c04b0.cpp
+    engine/src/retail/script/native_4c0530.cpp
+    engine/src/retail/script/native_4c0560.cpp
+    engine/src/retail/script/native_4f1840.cpp
+    engine/src/retail/script/native_4f18c0.cpp
+    engine/src/retail/script/native_4f1950.cpp
+    engine/src/retail/script/native_4f1980.cpp
+    engine/src/retail/script/native_4f1a80.cpp
+    engine/src/retail/script/native_4f1b20.cpp
+    engine/src/retail/script/native_4f1b50.cpp
+    engine/src/retail/script/native_4f9460.cpp
+    engine/src/retail/script/native_4f9e70.cpp
     engine/src/retail/mem/mem_alloc.cpp
     engine/src/retail/mem/native_4b0d50.cpp
     engine/src/retail/mem/native_4b0d60.cpp

@@ -7,7 +7,7 @@
 
 extern "C" {
 
-std::uint8_t g_54e0e4[8]; // 0x0054E0E4..0x0054E0EB, owned by 0x4F1840
+extern std::uint8_t g_54e0e4[8]; // 0x0054E0E4..0x0054E0EB, owned by 0x4F1A60
 
 void Script_ParameterEventSlotClear_4F1B50(std::int8_t index);
 void TaskEventTable_ClearSlot_4018C0(std::uint32_t index);

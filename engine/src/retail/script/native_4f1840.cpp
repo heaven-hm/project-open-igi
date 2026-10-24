@@ -9,12 +9,12 @@
 
 extern "C" {
 
-std::uint8_t g_a758c8[16];      // 0x00A758C8, owned by 0x4F1B20
+extern std::uint8_t g_a758c8[16]; // 0x00A758C8, owned by 0x4F1B20
 std::int32_t g_a758cc = 0;      // 0x00A758CC
 std::int32_t g_a758d0 = 0;      // 0x00A758D0
 std::int32_t g_a758d4 = 0;      // 0x00A758D4
 std::uint32_t g_a758e0[0x4C0] = {}; // 0x00A758E0, 0x4C0 dwords cleared by rep stosd
-std::uint8_t g_54e0e4[8] = {};  // 0x0054E0E4..0x0054E0EB state bytes
+extern std::uint8_t g_54e0e4[8]; // 0x0054E0E4..0x0054E0EB, owned by 0x4F1A60
 
 std::int32_t Script_ParameterEventSlotAlloc_4F1B20();
 
@@ -26,9 +26,9 @@ void Script_ParameterEventInit_4F1840()
     for (std::int32_t i = 0; i < 0x4C0; i += 1)                           // 0x004F185C: rep stosd
         g_a758e0[i] = 0;
     *reinterpret_cast<std::int32_t*>(&g_a758d4) = 0;                      // 0x004F185F
-    std::uint8_t const first = igi::retail::core::QTask_AllocateEvent(0); // 0x004F1864
+    std::uint8_t const first = QTask_AllocateEvent(0); // 0x004F1864
     g_54e0e4[0] = first;                                                  // 0x004F186B
-    std::uint8_t const second = igi::retail::core::QTask_AllocateEvent(0); // 0x004F1870
+    std::uint8_t const second = QTask_AllocateEvent(0); // 0x004F1870
     g_54e0e4[1] = second;                                                 // 0x004F1878
     g_54e0e4[7] = static_cast<std::uint8_t>(Script_ParameterEventSlotAlloc_4F1B20()); // 0x004F1882 -> 0x54E0EB
     g_54e0e4[6] = static_cast<std::uint8_t>(Script_ParameterEventSlotAlloc_4F1B20()); // 0x004F188C -> 0x54E0EA
