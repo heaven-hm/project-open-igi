@@ -3706,14 +3706,15 @@
         "signature": "x86 cdecl uint32_t(uint32_t, uint32_t, uint32_t)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "TRANSCRIBED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Binary Ninja and radare2 agree on the entry at 0x004012A0: it allocates the port record through the native at 0x004012F0, links it into the handler list at 0x004AF8F0 when the context is not null, and then dispatches it: the record's dispatch index at +0x1C selects the handler in the table at 0x00A96AE0, and the handler is called with the record and the object. The candidate keeps the same calls, the same index read and the same dispatch."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Section 17 proves the retail body is not an input-port routine but the task allocator/wrapper. The tree implementation drops the pool-recycle branch (unconditional Mem_Alloc), drops the Mem_Lock/Mem_Unlock pair, drops the pool tail write and poolUsed increment, replaces the empty-list init with offsetof constants, takes the pooled flag from the type pool-present byte so a heap instance can be flagged pooled, adds a null check retail does not have, and the wrapper passes the allocator arguments in the wrong order (arg2,arg3 instead of arg1,arg2) and guards the insert on arg3 where retail tests arg1. VERIFIED/STRUCTURALLY_VERIFIED was therefore unsupported; withdrawn pending a full rewrite from the section 17 instruction tables."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -3777,14 +3778,15 @@
         "signature": "x86 cdecl void*(uint32_t, uint32_t)"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "TRANSCRIBED",
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Binary Ninja and radare2 agree on the entry at 0x004012F0: it increments the port counter at 0x00567C58, reads the class's task list from the task type slot, appends the port index to it when the list has room, and otherwise allocates the port record with the class's object size through the native at 0x004B0C60. The record is cleared, its port index, dispatch index and appended flag are stored, and the list node is linked. The candidate keeps the same counter, the same slot reads, the same allocation and the same record writes."
         },
         "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
+          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
+          "Section 17 proves the retail body is not an input-port routine but the task allocator/wrapper. The tree implementation drops the pool-recycle branch (unconditional Mem_Alloc), drops the Mem_Lock/Mem_Unlock pair, drops the pool tail write and poolUsed increment, replaces the empty-list init with offsetof constants, takes the pooled flag from the type pool-present byte so a heap instance can be flagged pooled, adds a null check retail does not have, and the wrapper passes the allocator arguments in the wrong order (arg2,arg3 instead of arg1,arg2) and guards the insert on arg3 where retail tests arg1. VERIFIED/STRUCTURALLY_VERIFIED was therefore unsupported; withdrawn pending a full rewrite from the section 17 instruction tables."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
@@ -44678,13 +44680,14 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
-          "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Retail is variadic cdecl (char*, char*, ...); the candidate is variadic cdecl (char*, const char*, ...). The va_list stack layout is preserved."
+          "reviewed": false,
+          "result": "blocked",
+          "rationale": "2026-10-24 source audit: no body for this retail entry exists in the mapped implementation; error_show.hpp imports MinGW ::sprintf. An ABI-compatible library declaration cannot establish matching native flow."
         },
         "limitations": [
+          "2026-10-24 source audit withdraws the contradictory VERIFIED label. Fresh retail BN/r2/angr evidence is docs/fidelity/evidence/startup-format-audit-20261024-sol/. The cited semantic artifact is absent; no paired current-source game-process evidence authorizes acceptance. Prior record retained in prior-records.json.",
           "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
           "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
           "The port delegates to host vsprintf rather than transcribing the retail _iobuf/_output path, so host-CRT differences remain.",
@@ -44777,13 +44780,14 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "STRUCTURALLY_VERIFIED",
+        "status": "ANALYZED",
         "signature_comparison": {
-          "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Retail's third argument is the 32-bit va_list pointer; the candidate declares std::va_list, which is char* on i386. cdecl and the argument order are preserved."
+          "reviewed": false,
+          "result": "blocked",
+          "rationale": "2026-10-24 source audit: the candidate substitutes std::vsprintf for the retail _iobuf/_output/_flsbuf calls; native body and side effects have not passed matching-decompilation review."
         },
         "limitations": [
+          "2026-10-24 source audit withdraws source-structural acceptance. The cited review discusses ILFF chunk nodes instead of formatting and declares no_side_effects despite the destination-buffer writes; its hash also differs from the manifest. It cannot authorize a runtime contract. Prior record and artifact retained in docs/fidelity/evidence/startup-format-audit-20261024-sol/.",
           "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
           "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
           "Host-CRT delegation and the same format-family limits as sprintf apply.",

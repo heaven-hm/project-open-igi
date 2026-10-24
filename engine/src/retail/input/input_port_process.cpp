@@ -167,7 +167,9 @@ void InsertInputPortRecord(HeapList* list, InputPortRecord* record) noexcept
 extern "C" {
 
 std::uint16_t InputPort_CurrentIndex = 0U;
-std::uint32_t QTask_InputPortCounter = 0xFFFFFFFFU;
+// Retail 0x00567C58 is a zero-initialised live-count dword (evidence sheet section 17.4); the previous
+// 0xFFFFFFFFU initialiser was 0x00536148's image value, a separate monotonic invocation counter.
+std::uint32_t QTask_InputPortCounter = 0U;
 
 // Native: InputPort_Process; retail VA 0x004ED5C0.
 // Artifact: retail igi.exe SHA256 dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01.
