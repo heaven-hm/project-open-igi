@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - T0/T1 start: flow order tool, dead-code and port-constant fixes (internal build, no release)
+
+- **Task state**: T1 (3D objects + terrain visible) is **not** started because T0 blocks it: the candidate still fails closed at
+  `QTask_RegisterClasses (0x00402930)`, which is the retail startup init sequence, not a registrar. Nothing in this entry is a release.
+- **Added**: `scripts/flow_order.py` and `docs/fidelity/evidence/chronological-native-order.md` - the retail call flow from the PE entry
+  point in call order: 3022 functions, 678 implemented, 2344 missing. This is the work order for not missing any method in the flow.
+- **Added**: `docs/fidelity/MVP-task-breakdown.md` - the owner's small stacked tasks T0-T7 (startup chain, 3D objects, terrain,
+  human player, weapons, AI, sound, menu) with the static + runtime + screenshot + changelog acceptance rule for each.
+- **Fixed**: `flow.cpp` per-frame dispatch called a hardcoded `phase = 1U`; retail `0x00402462` calls `0x004E7530`, which is already
+  transcribed as `Core_GetEventWord_4E7530`, so the dispatch now calls it. One port-only constant removed from the dispatch path.
+- **Fixed**: removed the unused `link_handler` helper from `task_types.cpp` (dead code, rule 16); no native called it.
+- **Launch attempt**: the candidate was copied to the game directory and started through the CrossOver wine launcher; no running game
+  window and no 3D output were verified, and the capture `screenshots/internal/2026-10-25-igi1-t0-launch-attempt.png` is recorded as a
+  launch attempt only, not as game evidence. No screenshot claim is made for T1.
+
 
 ### 2026-10-24 — startup-prefix internal build (no release)
 - **State**: builds and starts, then terminates by design at `QTask_RegisterClasses`
