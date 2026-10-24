@@ -255,3 +255,32 @@ Blockers before transcribing: the callees `0x401A20` and `0x4018C0` are not
 transcribed (`engine/` has no match), so this body cannot link yet and is recorded
 rather than written. Both are small leaf-like helpers in the 0x4018xx/0x401A2x
 task-type range and are the natural next bottom-of-tree targets.
+
+## Round 41: 0x401A20 decoded (task-type slot teardown) - one callee still missing
+
+50-byte cdecl function `0x00401A20-0x00401A51`, 2 blocks:
+
+```
+eax = arg & 0xFFFF
+esi = eax * 3; esi <<= 4              ; idx * 0x30 -> task-type slot at 0x00AF5EE0
+if (slot[0x24] != 0)                   ; 0x00AF5F04 flag byte
+    call 0x004B0B70(&slot[0x0C]);      ; 0x00AF5EEC payload
+slot[0x25] = 0;                        ; 0x00AF5F05 in-use byte cleared
+return eax (eax semantics: low byte was overwritten by the flag read)
+```
+
+So it is the **task-type slot teardown**: conditionally frees/deletes the slot's
+payload through `0x004B0B70`, then clears the in-use byte that
+`TaskType_Register`'s scan at `0x00AF5F05` looks for. This explains why
+`0x4D9790` calls it with the QObj id right before restoring the root type: the QObj
+slot is being released, not merely re-pointed.
+
+Dependency: `0x004B0B70` is **not** in `engine/` (nor is `0x004B0B00`, the task-list
+build path already recorded as untranscribed). So `0x401A20` cannot link yet and is
+recorded rather than written - the same discipline as `0x4D9790`.
+
+Return-value caveat worth preserving: `mov al, byte [esi+0xAF5F04]` overwrites the
+low byte of the `arg & 0xFFFF` value, so the returned `eax` is not simply the input
+id. The transcription must reproduce the retail instruction order rather than
+"return the argument", and the return type should stay unverified until a caller is
+seen consuming it.
