@@ -1337,3 +1337,23 @@ Supersedes b071553f for runtime observation. Diagnostic receipt again, so it is 
 strict-gate release attestation. Handed to the Tester with an explicit request to record the new stderr verbatim, confirm
 the behaviour is identical apart from the text, and report whether any igi1 or frida-server process survived the run -
 the last two lease handoffs were blocked by 17-hour-old orphans, so that check belongs in every report from now on.
+
+## faf2b948 observed: message-only change, no behavioural delta (round 193, Tester report)
+
+Four runs on the deployed copy, game directory as cwd: cold1 7 s, cold2 (60 s cooldown) 4 s, warm 1 s, +seh 1 s - all
+exit 3, stdout 0 bytes, +seh 71 x 0x80000026 and no 0x6ba. New stderr captured verbatim (451 bytes vs 333 before):
+
+  terminate called after throwing an instance of 'std::logic_error'
+    what():  QTask_RegisterClasses (0x00402930): the retail function at this address is the startup init sequence, 155
+             ordered init/open/load calls ending in a tail jump to 0x004CEF30, not a class registrar; it is not
+             transcribed, 134 of its 155 callees are absent, and it stops at AI graph
+
+The ONLY difference from b071553f is the message text (line 170 -> 288 bytes): exit code, boundary address, empty stdout,
+absence of registered classes, absence of later output and the SEH frame counts are all unchanged. ReportNotTranscribed is
+still the first statement, so position 1 / id 0 still holds. Trace lines are all from faf2b948; none carried over.
+
+Process hygiene held this time: pre-run and post-run checks found no igi1.exe, winewrapper.exe, frida-server or open game
+handle, and no process survived the run. That check is now part of the requested report format.
+
+Identity: plain faf2b9484e736421, normalised 3cbcd6d7, deployed byte-identical and hash-stable, diagnostic receipt, source
+HEAD 3929910e with an empty engine diff to current HEAD 94e963cc.
