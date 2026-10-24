@@ -1232,3 +1232,26 @@ Next increment, in order:
   1. Transcribe 0x004015F0 (88 instructions, 25 blocks, 391 bytes, table committed at
      docs/fidelity/evidence/0x4015F0-instruction-table.md; every direct dependency already in the tree).
   2. Then 0x00402930's remaining dependency chain, which is what actually moves the startup wall.
+
+## Destructor codegen checks, partial (round 190)
+
+Emitted function _QTask_DestroyTask_4015F0 at 0x00416CC0 (248 instructions vs retail's 134; GCC expands the volatile
+class accesses and merges retail's two returns, as section 18.7 anticipated).
+
+Confirmed in the emitted listing:
+- SIX separate loads of the type word at task+0x1C ("0x1c(" occurs six times) - retail re-reads it around both handlers
+  and three times in the pooled release, so a cached type would have shown up as one or two loads.
+- The live-count decrement is the first memory write: subl $0x1,0x6260A0, before every call. Note the counter moved from
+  0x625F80 to 0x6260A0 because this translation unit added BSS (the 0x100-byte dispatch stack); nm shows ONE symbol
+  B _QTask_InputPortCounter and the allocator's increment references the same 0x6260A0, so writer and destructor still
+  share storage.
+- The child-tail load (0x10(%ebx)) comes AFTER the phase-3 indirect call and before the recursive self-call, which is
+  retail's order at 0x0040164F then 0x00401654.
+
+Not yet confirmed: the third swap store. Store A (indices[position]=moved, 0x416...: mov %edi,(%esi,%eax,4)) and store C
+(*(lastElement+tail)=position: mov %ecx,(%edx,%eax,1)) are both present and in order, but store B
+(indices[lastPosition]=mySlot) was not located in the dump window used, which may simply be because the function extends
+past the 0x2C0-byte window I disassembled. Do not claim the A->B->C order until the full function is dumped.
+
+Status stays TRANSCRIBED: two of the four section-18 codegen checks pass, one is unresolved, and the CFG comparison has
+not been run.
