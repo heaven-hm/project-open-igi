@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B19C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "8982b8dde375b7a2318c6f8fa774c4d8dfff14035dc11629ed01224c0cdb378c",
+  "implementation_path": "engine/src/retail/qfile/native_4b19c0.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "104 bytes, 45 instructions, one block, zero edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0; retail has no branch in this routine."
+    },
+    {
+      "name": "call_order",
+      "result": "passed",
+      "rationale": "strlen -> Mem_Alloc(length+0x1C, 4) -> 0x1C-byte header clear -> next/link_04 zero stores -> HeapList_Insert(&g_943970, record) -> name pointer at +0x08 -> strlen again -> name copy -> return record. Every step is in retail's order, including the redundant second strlen and the repeated zero stores."
+    },
+    {
+      "name": "storage",
+      "result": "passed",
+      "rationale": "The record layout and head word are shared with native_4b1a90.cpp through loaded_file_record.hpp, which removed the duplicate definition that would otherwise have been an ODR violation."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the record; retail has no failure branch when Mem_Alloc returns null and none was invented."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "GCC inlines the header clear and calls CRT strlen/memcpy where retail uses rep sequences, so the candidate is 145 bytes against 104 with the same call order and block count.",
+    "Retail dereferences the allocation result with no null check; the transcription does the same and therefore crashes if Mem_Alloc fails, which is retail behaviour rather than a guard I added."
+  ]
+}

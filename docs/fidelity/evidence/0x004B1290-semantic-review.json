@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1290",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "9e3a55ac2788923d3078ce2f316c216419e40be93f94931a2ce0a383003ae6c0",
+  "implementation_path": "engine/src/retail/qfile/native_4b1290.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "61 bytes, 24 instructions, one block, zero edges; generated artifacts match 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Three cdecl arguments: index at [esp+4], unused second at [esp+8], source pointer at [esp+0xC]."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Destination is the 0x8C-stride record's name buffer at record+0x7C (0x0094372C), matching the lea chain and the table geometry in section 22.2."
+    },
+    {
+      "name": "copy_semantics",
+      "result": "passed",
+      "rationale": "strlen+1 bytes are copied including the NUL, and there is no destination bound, matching retail's unbounded rep movs. DOCUMENTED DIFFERENCE: retail inlines repne scasb/rep movsd/movsb where GCC emits CRT strlen and a tail call into memcpy or inline copy; blocks and the store target match, instruction count does not."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "The second argument is pushed by callers but never read here, exactly as retail; its meaning is therefore unknown.",
+    "The CRT-vs-inline copy difference is recorded rather than described as identical codegen."
+  ]
+}

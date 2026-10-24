@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B6420",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1149147503dfe468cf9351498fc9f1ec78a7fedb79f1aff5fbd7b70def7d8830",
+  "implementation_path": "engine/src/retail/resource/native_4b6420.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "30 bytes, 12 instructions, one block, zero edges; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Three cdecl arguments forwarded into the callee's six-argument call as (context, null, data, size, 3, null), matching the push order 0,3,size,data,0,context reversed into cdecl positions."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Single call to Resource_CreateNode(0x004B59F0) with the fixed kind 3, 0x18 bytes cleaned, no store and no data reference."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the callee's pointer unchanged; no branch. DOCUMENTED DIFFERENCE: GCC builds the outgoing argument area with sub esp/movl and a real call where retail uses six pushes; same arguments, same slots, 59 bytes against 30."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "Resource_CreateNode is VERIFIED, but this wrapper's own reachability is unproven.",
+    "The three wrapper parameters' meanings beyond their callee slots are not established."
+  ]
+}

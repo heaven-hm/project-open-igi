@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B0B70",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "9280617eefadf1b58b4acd68c41d3b87a93f127de0ace785c151fd4f84b304e5",
+  "implementation_path": "engine/src/retail/qfile/native_4b0b70.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "24 bytes, 9 instructions, one block, zero edges; 33 direct call sites; candidate 1/0, score 1.000."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders and the candidate report 1/0."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument: a pointer to the block pointer it releases and clears."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "Calls Mem_DeAllocFn(0x004B0D10) with the loaded pointer, then stores null through the caller's pointer, matching the load/call/store sequence."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "No branch and no return value; retail has no error path here."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md sections 22.2-22.3",
+  "limitations": [
+    "Runtime unobserved.",
+    "Mem_DeAllocFn is TRANSCRIBED but not VERIFIED, so the release path's downstream behaviour is unproven.",
+    "The candidate is 29 bytes against retail's 24 because GCC materialises an aligned outgoing argument slot; blocks and edges match."
+  ]
+}
