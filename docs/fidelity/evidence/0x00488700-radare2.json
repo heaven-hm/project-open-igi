@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "radare2",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x00488700",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x00488700"
+      },
+      {
+        "address": "0x0048870C"
+      },
+      {
+        "address": "0x00488710"
+      },
+      {
+        "address": "0x00488717"
+      },
+      {
+        "address": "0x0048871D"
+      },
+      {
+        "address": "0x00488727"
+      },
+      {
+        "address": "0x00488729"
+      },
+      {
+        "address": "0x00488748"
+      },
+      {
+        "address": "0x00488754"
+      },
+      {
+        "address": "0x00488766"
+      },
+      {
+        "address": "0x00488767"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x00488700",
+        "target": "0x0048870C",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488700",
+        "target": "0x00488767",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048870C",
+        "target": "0x00488710",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048870C",
+        "target": "0x00488767",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488710",
+        "target": "0x00488717",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488717",
+        "target": "0x0048871D",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488717",
+        "target": "0x00488727",
+        "kind": "branch"
+      },
+      {
+        "source": "0x0048871D",
+        "target": "0x00488729",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488727",
+        "target": "0x00488729",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488729",
+        "target": "0x00488748",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488729",
+        "target": "0x00488754",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488748",
+        "target": "0x00488754",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488754",
+        "target": "0x00488717",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488754",
+        "target": "0x00488766",
+        "kind": "branch"
+      },
+      {
+        "source": "0x00488766",
+        "target": "0x00488767",
+        "kind": "branch"
+      }
+    ]
+  }
+}
