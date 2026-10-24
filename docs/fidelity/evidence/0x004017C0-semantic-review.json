@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "result": "passed_with_documented_scope",
+  "reviewed": true,
+  "reviewed_by": "lead source-to-binary review against evidence sheet sections 12-17",
+  "address": "0x004017C0",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "d901419bb55f8929df11585a50202cc97168020d1761730d4829af97bf962a3c",
+  "review_scope": "QTask_AllocateEvent: 6-byte event-table scan from id 0x20, three-field store, event id return and the exhaustion branch",
+  "evidence": [
+    "docs/fidelity/evidence/0x004017C0-binaryninja.json",
+    "docs/fidelity/evidence/0x004017C0-radare2.json",
+    "docs/fidelity/evidence/0x4EE970-data-extents.md sections 13.8, 17.4"
+  ],
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "Entry 0x004017C0 recovered exactly by both Binary Ninja and radare2 CFG with the same extent 0x004017C0-0x0040180C."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "bn=6/7 r2=6/7, CFG similarity 1.000, above the 0.85 threshold."
+    },
+    {
+      "name": "scan_bounds",
+      "result": "passed",
+      "rationale": "Retail scans 0x0054F9F2 to 0x54FF26 with a 6-byte stride from id 0x20; the candidate tests the same bounds through event_table_entry_count = 0x5F4/6 = 254 and first_event_id = 0x20."
+    },
+    {
+      "name": "store_order",
+      "result": "passed",
+      "rationale": "Retail 0x4017F7 sets +2, 0x4017FD stores one 16-bit word at +0, 0x401804 sets +3. The candidate's emitted order is verified identical in the frozen artifact (0x41a3fc, 0x41a403, 0x41a40a) after the volatile ordering fix."
+    },
+    {
+      "name": "return_value",
+      "result": "passed",
+      "rationale": "Retail leaves the full id in EAX (inc eax at 0x4017D2); the candidate returns std::uint32_t and the emitted sequence is mov %edx,%eax."
+    },
+    {
+      "name": "exhaustion_path",
+      "result": "passed",
+      "rationale": "Retail pushes 0x5361A8 ('Unable to allocate event'), calls Debug_Error 0x4AF7B0 and jumps to itself at 0x4017E8. The candidate calls Debug_Error with the same literal and then self-spins; verified in the artifact at 0x41a430."
+    }
+  ],
+  "limitations": [
+    "The allocation path is not reached before the startup boundary, so no runtime observation exists for a successful allocation or for exhaustion; the review is source-to-binary plus emitted-code comparison only.",
+    "Status remains STRUCTURALLY_VERIFIED: no Frida probe has observed this native in either binary."
+  ],
+  "runtime_contract": {
+    "required": false,
+    "reason": "Native is unreachable in the current build because QTask_Init runs before it and the startup boundary stops execution earlier."
+  }
+}

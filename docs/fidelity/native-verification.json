@@ -4034,68 +4034,41 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/task_types.cpp",
-        "sha256": "338c506e0d33b607af82549c84569289df2d0ce30f0128df84e3b762680e92dd",
-        "signature": "int32_t QTask_UnableToAllocateEven(int16_t param_1);"
+        "sha256": "d901419bb55f8929df11585a50202cc97168020d1761730d4829af97bf962a3c",
+        "signature": "unknown"
       },
       "game_natives": {
-        "path": "scripts/GameNatives/qtask/004017C0-QTask_AllocateEvent.cpp",
-        "sha256": "0960f0ddcf3d723cd84681d3ab1c0903786798e21bc9b78741d3ebd461677ccc",
-        "signature": "int32_t QTask_UnableToAllocateEven(int16_t param_1);"
+        "path": "scripts/GameNatives/004017C0-QTask_AllocateEvent 2.cpp",
+        "sha256": "a354507b905b457cc754fe34383e7bbb14b3056380775015f74c70ce85049ebd",
+        "signature": "unknown"
       },
       "verification": {
         "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004017C0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004017C0-binaryninja.json",
+          "evidence_sha256": "64ac4daa4bf25df8b136ee0bb5bd484c6bcce3abbaa3c1546eca84693be6e350"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004017C0",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004017C0-radare2.json",
+          "evidence_sha256": "4e9e5f7e1a3a42867bc9e16ca0693fbe7872f1c8552591db524b39b96f0c6fb0"
+        },
         "signature_comparison": {
           "reviewed": true,
           "result": "abi-adapted",
           "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
         },
-        "limitations": [
-          "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers."
-        ],
-        "behavioral_runner": {
-          "path": "scripts/native_diff_runner.py",
-          "args": [
-            "--address",
-            "{address}",
-            "--binary",
-            "{binary}",
-            "--binary-sha256",
-            "{binary_sha256}",
-            "--implementation",
-            "{implementation}",
-            "--implementation-sha256",
-            "{implementation_sha256}",
-            "--root",
-            "{root}"
-          ],
-          "timeout_seconds": 360
-        },
-        "selected_decompiler": "binary_ninja",
-        "radare2": {
-          "evidence_path": "docs/fidelity/evidence/0x004017C0-radare2.json",
-          "evidence_sha256": "8d81ffc1a1187ae68958b7a41df3cd30666e79a866a5a266ca36ba3d477e899c",
-          "evidence_id": "r2:live:0x004017C0",
-          "signature": "not restated"
-        },
-        "binary_ninja": {
-          "evidence_path": "docs/fidelity/evidence/0x004017C0-binaryninja.json",
-          "evidence_sha256": "1345997d362ae5cfc356089ebdf394df11c2a0628e44b6debbb8762bc5394c82",
-          "evidence_id": "bn:live:0x004017C0",
-          "signature": "not restated"
-        },
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004017C0-semantic-review.json",
-          "evidence_sha256": "74e8a19877d362dfcb50b978e509ee87a04b9ec77bb550c4785200b5f987bcef"
+          "evidence_sha256": "91d5b52eb1e869091576ec37c17908a77bba7cc1b4f0c275a4dfcfc44dcd0dfa"
         },
-        "build": {
-          "evidence_path": "docs/fidelity/evidence/0x004017C0-build.json",
-          "evidence_sha256": "ed0a99ca559905e9e4dbc4142c34bcf68091a7a9f7fc63f3d6eefd9d9c809a16"
-        },
-        "behavioral": {
-          "evidence_path": "docs/fidelity/evidence/0x004017C0-behavioral.json",
-          "evidence_sha256": "c724e9d70dd3ca6eff5adcdf67f31ed38aa9c657f18efa392b6ea640f0fb144d"
-        }
+        "limitations": [
+          "Gate threshold VERIFIED is unreachable for this native until the startup boundary is lifted: it is never reached at runtime, so no Frida observation can exist. Structurally and semantically reviewed instead; the artificial promotion to VERIFIED would be false."
+        ]
       }
     },
     {
@@ -4227,23 +4200,6 @@
       "notes": "Renamed from `TaskEventTable_ClearSlot_4018C0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x004018e0",
-      "name": "QTask_DeleteQTaskEventNoContext",
-      "implementation": {
-        "path": "scripts/GameNatives/004018e0-QTask_DeleteQTaskEventNoContext.cpp",
-        "sha256": "6e1d6f81f5e22a876dc86117613d8c8ae4d16d28fd1e8c31ab147ea0aab3dcd0"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x004018F0",
       "name": "QTask_GetCurrentType",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -4311,6 +4267,23 @@
           "evidence_path": "docs/fidelity/evidence/0x004018F0-behavioral.json",
           "evidence_sha256": "5d4cd6ef5b09ceeaddc8539bbed835d72a9bafc4b08ff55665c838bfb6756395"
         }
+      }
+    },
+    {
+      "address": "0x004018e0",
+      "name": "QTask_DeleteQTaskEventNoContext",
+      "implementation": {
+        "path": "scripts/GameNatives/004018e0-QTask_DeleteQTaskEventNoContext.cpp",
+        "sha256": "6e1d6f81f5e22a876dc86117613d8c8ae4d16d28fd1e8c31ab147ea0aab3dcd0"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
       }
     },
     {
@@ -4385,23 +4358,6 @@
       }
     },
     {
-      "address": "0x00401a20",
-      "name": "QTask_DeleteQTaskType",
-      "implementation": {
-        "path": "scripts/GameNatives/00401a20-QTask_DeleteQTaskType.cpp",
-        "sha256": "a24e1845234c1bbdd32d85eb4beb123e7f8a224dc91d12b55510032cbe5c26f8"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x00401B20",
       "name": "QHashSlotTable_Release",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -4437,23 +4393,6 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `QHashSlotTable_Release_401B20` when the address suffix was stripped; the retail VA in this record is unchanged."
-    },
-    {
-      "address": "0x00401cf0",
-      "name": "QTask_IsQTaskTypeDerived",
-      "implementation": {
-        "path": "scripts/GameNatives/00401cf0-QTask_IsQTaskTypeDerived.cpp",
-        "sha256": "e6904b00758a5deb0abd29bd3589f10e011457d7f27e48e4ebef32c9e158eff0"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
     },
     {
       "address": "0x00401D30",
@@ -4560,6 +4499,40 @@
           "evidence_path": "docs/fidelity/evidence/0x00401FC0-behavioral.json",
           "evidence_sha256": "320f2b80822bfc54db869fbfc87c29967e66118a57ceca0061cb39790bce57fa"
         }
+      }
+    },
+    {
+      "address": "0x00401a20",
+      "name": "QTask_DeleteQTaskType",
+      "implementation": {
+        "path": "scripts/GameNatives/00401a20-QTask_DeleteQTaskType.cpp",
+        "sha256": "a24e1845234c1bbdd32d85eb4beb123e7f8a224dc91d12b55510032cbe5c26f8"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x00401cf0",
+      "name": "QTask_IsQTaskTypeDerived",
+      "implementation": {
+        "path": "scripts/GameNatives/00401cf0-QTask_IsQTaskTypeDerived.cpp",
+        "sha256": "e6904b00758a5deb0abd29bd3589f10e011457d7f27e48e4ebef32c9e158eff0"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
       }
     },
     {
@@ -25514,25 +25487,6 @@
       }
     },
     {
-      "address": "0x00413b70",
-      "name": "WeaponTypeOpen",
-      "implementation": {
-        "path": "scripts/GameNatives/00413B70-Weapon_TypeOpen.cpp",
-        "sha256": "9cd9433ee9dd167e947d0487943c729c60d45bd052cfd3a5614e49d2d759656e"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x00413B90",
       "name": "HumanPlayer_TakeDamage_10",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -25600,25 +25554,6 @@
           "evidence_path": "docs/fidelity/evidence/0x00413B90-behavioral.json",
           "evidence_sha256": "687a81330aa18c6c250e2110c4341407669f03082a63ec24e9a14b4deb25dde8"
         }
-      }
-    },
-    {
-      "address": "0x00413bb0",
-      "name": "WeaponsCountGet",
-      "implementation": {
-        "path": "scripts/GameNatives/00413BB0-Weapons_CountGet.cpp",
-        "sha256": "491322548fa4c879964f8295821b8d0b56e889ff4887e63966d5264eaae47716"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -26322,6 +26257,44 @@
       }
     },
     {
+      "address": "0x00413b70",
+      "name": "WeaponTypeOpen",
+      "implementation": {
+        "path": "scripts/GameNatives/00413B70-Weapon_TypeOpen.cpp",
+        "sha256": "9cd9433ee9dd167e947d0487943c729c60d45bd052cfd3a5614e49d2d759656e"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x00413bb0",
+      "name": "WeaponsCountGet",
+      "implementation": {
+        "path": "scripts/GameNatives/00413BB0-Weapons_CountGet.cpp",
+        "sha256": "491322548fa4c879964f8295821b8d0b56e889ff4887e63966d5264eaae47716"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
       "address": "0x00414fd0",
       "name": "GameFunctions_IsDebugKeyPressed",
       "implementation": {
@@ -26483,63 +26456,6 @@
       }
     },
     {
-      "address": "0x00415a10",
-      "name": "MusicEnable",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x00415a60",
-      "name": "MusicDisable",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x00415ab0",
-      "name": "CutsceneDelete",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x00415B30",
       "name": "Level_Start",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -26611,8 +26527,8 @@
       }
     },
     {
-      "address": "0x00416550",
-      "name": "LevelQuit",
+      "address": "0x00415a10",
+      "name": "MusicEnable",
       "implementation": {
         "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
         "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
@@ -26630,19 +26546,59 @@
       }
     },
     {
-      "address": "0x00416d20",
-      "name": "Game_GetRandomState",
+      "address": "0x00415a60",
+      "name": "MusicDisable",
       "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
       },
       "verification": {
         "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
         "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x00415ab0",
+      "name": "CutsceneDelete",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x00416550",
+      "name": "LevelQuit",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
         ]
       }
     },
@@ -26715,6 +26671,23 @@
           "evidence_path": "docs/fidelity/evidence/0x00416D80-behavioral.json",
           "evidence_sha256": "b667ee0c8acce892656b3ebaa4de53929d186a3d3b4577875bee7f687068b873"
         }
+      }
+    },
+    {
+      "address": "0x00416d20",
+      "name": "Game_GetRandomState",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
       }
     },
     {
@@ -33336,25 +33309,6 @@
       }
     },
     {
-      "address": "0x0045c440",
-      "name": "SoldierExecute",
-      "implementation": {
-        "path": "scripts/GameNatives/0045C440-Soldier_Execute.cpp",
-        "sha256": "c36c13ca34faf7edb455ad128b8c66fa3b4cfd8284b2d926f78fc4ae3bf108f9"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x0045C700",
       "name": "HumanAI_ProcessAnimFrame",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -36082,6 +36036,25 @@
           "evidence_path": "docs/fidelity/evidence/0x0045FE70-behavioral.json",
           "evidence_sha256": "aff22500263917acc2e6aa5456f2528641396f7639f235a125eff69b6bfe8b7a"
         }
+      }
+    },
+    {
+      "address": "0x0045c440",
+      "name": "SoldierExecute",
+      "implementation": {
+        "path": "scripts/GameNatives/0045C440-Soldier_Execute.cpp",
+        "sha256": "c36c13ca34faf7edb455ad128b8c66fa3b4cfd8284b2d926f78fc4ae3bf108f9"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
       }
     },
     {
@@ -38936,25 +38909,6 @@
       "status": "TRANSCRIBED"
     },
     {
-      "address": "0x0047cab0",
-      "name": "AmmoTypeOpen",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x0047CAD0",
       "name": "DefineAmmoType",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -38992,6 +38946,25 @@
           "evidence_path": "docs/fidelity/evidence/0x0047CAD0-semantic-review.json",
           "evidence_sha256": "fac7d3318fbfeaa658267b96797ad30c6b46c7f989fc9ba172bb76360887d664"
         }
+      }
+    },
+    {
+      "address": "0x0047cab0",
+      "name": "AmmoTypeOpen",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
       }
     },
     {
@@ -39205,25 +39178,6 @@
       }
     },
     {
-      "address": "0x00484e60",
-      "name": "MissionOpen",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x00484F60",
       "name": "DefineMission",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -39261,6 +39215,25 @@
           "evidence_path": "docs/fidelity/evidence/0x00484F60-semantic-review.json",
           "evidence_sha256": "1bfcf08e3e1e7af6ecb0ba33fa59314943c670faf82500da13c021f321911214"
         }
+      }
+    },
+    {
+      "address": "0x00484e60",
+      "name": "MissionOpen",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
       }
     },
     {
@@ -39369,25 +39342,6 @@
           "evidence_path": "docs/fidelity/evidence/0x00489E70-behavioral.json",
           "evidence_sha256": "43c129e7f7e87c6dd02f27510920d03899d17349950a583aed2ea5925410e4d0"
         }
-      }
-    },
-    {
-      "address": "0x0048a440",
-      "name": "LoadingScreenShow",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -42632,27 +42586,6 @@
       }
     },
     {
-      "address": "0x0048f360",
-      "name": "AppMain_ParseCmdLineArgs",
-      "implementation": {
-        "path": "scripts/GameNatives/0048f360-AppMain_ParseCmdLineArgs.cpp",
-        "sha256": "b8a4229f30e6422ac42b4174490c2cc1d3bd9b91c3f77657d2cb8e57fad257c9"
-      },
-      "verification": {
-        "status": "RUNTIME_TESTED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
-          "Static axis PASS_WITH_DOCUMENTED_SCOPE (live capture as static evidence; no repository evidence artifact); runtime batch covers this native within the pre-throw window."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-          "build/tester/20261024T002148Z/MATRIX.md",
-          "build/tester/20261024T002148Z/BATCH.md",
-          "build/tester/20261024T002148Z/runtime/batch-comparison.json"
-        ]
-      }
-    },
-    {
       "address": "0x0048F480",
       "name": "Loop_SetStatusByte",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -43084,23 +43017,6 @@
       "notes": "Renamed from `DirectInput_ErrorText_48FA80` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x0048fc20",
-      "name": "Mouse_Update",
-      "implementation": {
-        "path": "scripts/GameNatives/0048fc20-Mouse_Update.cpp",
-        "sha256": "4a57da4a5a246a97b3ffb11934e16e6262e7abf17370d812a2b65f2fcb43d196"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x0048FD90",
       "name": "Input_MouseGetCaps",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -43173,6 +43089,63 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `Mouse_WinProc_48FED0` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x0048a440",
+      "name": "LoadingScreenShow",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x0048f360",
+      "name": "AppMain_ParseCmdLineArgs",
+      "implementation": {
+        "path": "scripts/GameNatives/0048f360-AppMain_ParseCmdLineArgs.cpp",
+        "sha256": "b8a4229f30e6422ac42b4174490c2cc1d3bd9b91c3f77657d2cb8e57fad257c9"
+      },
+      "verification": {
+        "status": "RUNTIME_TESTED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
+          "Static axis PASS_WITH_DOCUMENTED_SCOPE (live capture as static evidence; no repository evidence artifact); runtime batch covers this native within the pre-throw window."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+          "build/tester/20261024T002148Z/MATRIX.md",
+          "build/tester/20261024T002148Z/BATCH.md",
+          "build/tester/20261024T002148Z/runtime/batch-comparison.json"
+        ]
+      }
+    },
+    {
+      "address": "0x0048fc20",
+      "name": "Mouse_Update",
+      "implementation": {
+        "path": "scripts/GameNatives/0048fc20-Mouse_Update.cpp",
+        "sha256": "4a57da4a5a246a97b3ffb11934e16e6262e7abf17370d812a2b65f2fcb43d196"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
     },
     {
       "address": "0x00490120",
@@ -43427,40 +43400,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004903A0-behavioral.json",
           "evidence_sha256": "8c86e246d9940bf89d807c874439cef284160d7eac0d507bbb59b76a5b69f430"
         }
-      }
-    },
-    {
-      "address": "0x00491a90",
-      "name": "Display_SetMode",
-      "implementation": {
-        "path": "scripts/GameNatives/00491a90-Display_SetMode.cpp",
-        "sha256": "e907a5a99030a933b0f0c9c0f49fa38332c56f7094f76a5da85e9a4d7fd0d7b7"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x00491cf0",
-      "name": "Display_GetActiveMode",
-      "implementation": {
-        "path": "scripts/GameNatives/00491cf0-Display_GetActiveMode.cpp",
-        "sha256": "8d2b8b37961c5503dfac96f24cdbd13268aea777a72e357b56bf014ff75f1a55"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
       }
     },
     {
@@ -43979,6 +43918,40 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `Display_CreateSurface_5_491E60` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x00491a90",
+      "name": "Display_SetMode",
+      "implementation": {
+        "path": "scripts/GameNatives/00491a90-Display_SetMode.cpp",
+        "sha256": "e907a5a99030a933b0f0c9c0f49fa38332c56f7094f76a5da85e9a4d7fd0d7b7"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x00491cf0",
+      "name": "Display_GetActiveMode",
+      "implementation": {
+        "path": "scripts/GameNatives/00491cf0-Display_GetActiveMode.cpp",
+        "sha256": "8d2b8b37961c5503dfac96f24cdbd13268aea777a72e357b56bf014ff75f1a55"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
     },
     {
       "address": "0x00491e70",
@@ -44801,25 +44774,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004A50F5-behavioral.json",
           "evidence_sha256": "6402a7cb69dca15d435f7b10d078085e0dd7054a5db16ed108de0f0a7f5e85bd"
         }
-      }
-    },
-    {
-      "address": "0x004a5350",
-      "name": "FileOpen",
-      "implementation": {
-        "path": "scripts/GameNatives/004A5350-File_Open.cpp",
-        "sha256": "4398989b6784c446080dce66f2c1f6c1e4f0d62220c4e8b41b7515985ee6e49a"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -49539,25 +49493,6 @@
       "status": "STRUCTURALLY_VERIFIED"
     },
     {
-      "address": "0x004b0be0",
-      "name": "MemoryDealloc",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004B0C60",
       "name": "Mem_Alloc",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -49909,23 +49844,6 @@
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
-    },
-    {
-      "address": "0x004b0f90",
-      "name": "RenderMode_PopRenderMode",
-      "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
     },
     {
       "address": "0x004B1690",
@@ -50691,57 +50609,6 @@
       }
     },
     {
-      "address": "0x004b3320",
-      "name": "Real64x3_NullVector",
-      "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004b38e0",
-      "name": "Real32x9_Create",
-      "implementation": {
-        "path": "scripts/GameNatives/004b38e0-Real32x9_Create.cpp",
-        "sha256": "dd29875a25a90f3e8f9118657792e94399ed89208b47aec7c0f9b242c5df524b"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004b53b0",
-      "name": "Qsprite_Register4Az",
-      "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x004B59F0",
       "name": "Resource_CreateNode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -51108,25 +50975,6 @@
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
-    },
-    {
-      "address": "0x004b5b90",
-      "name": "IsResourceLoaded",
-      "implementation": {
-        "path": "scripts/GameNatives/004B5B90-Is_ResourceLoaded.cpp",
-        "sha256": "d4cf3c78fea3ec7fc137b66905763082078b261418afa798e708b62c3ecdcc5e"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
     },
     {
       "address": "0x004B5C90",
@@ -51651,57 +51499,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004B63D0-behavioral.json",
           "evidence_sha256": "e4898aa20b99548c5efee0af6214550c136281fe076d35972f8c586f0d1e7288"
         }
-      }
-    },
-    {
-      "address": "0x004b6e60",
-      "name": "Picture_Register",
-      "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004b6e70",
-      "name": "Picture_GetWidth",
-      "implementation": {
-        "path": "scripts/GameNatives/004b6e70-Picture_GetWidth.cpp",
-        "sha256": "1ccbb611ec5de50b2e127c6c342fa18759fd8c5e8413d4855ea3f2ec1c64c235"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004b6e80",
-      "name": "Picture_GetHeight",
-      "implementation": {
-        "path": "scripts/GameNatives/004b6e80-Picture_GetHeight.cpp",
-        "sha256": "a5d54371778d68e482fc4b94a7ed247b6839c882c03484d8179df8af2f439569"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
       }
     },
     {
@@ -52499,101 +52296,6 @@
       "status": "BUILD_VERIFIED"
     },
     {
-      "address": "0x004b7e80",
-      "name": "SymbolRegisterInt16",
-      "implementation": {
-        "path": "scripts/GameNatives/004B7E80-SymbolRegister_Int16.cpp",
-        "sha256": "c660198b30d90bf345e2e07b20490016e237f6101cf29fea9364a52bf5592602"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004b7ee0",
-      "name": "SymbolRegisterBool8",
-      "implementation": {
-        "path": "scripts/GameNatives/004B7EE0-SymbolRegister_Bool8.cpp",
-        "sha256": "506b5c9eaf08602447af10afa3b6581524b4bfbaee730030041ee0f9dc5f40fe"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004b7fa0",
-      "name": "SymbolRegisterInt32",
-      "implementation": {
-        "path": "scripts/GameNatives/004B7FA0-SymbolRegister_Int32.cpp",
-        "sha256": "7d1eb767decb31aeb43c603abaae76f25aa8c4817acd7ec5e7827833413ebc1d"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004b7fc0",
-      "name": "SymbolRegisterReal32",
-      "implementation": {
-        "path": "scripts/GameNatives/004B7FC0-SymbolRegister_Real32.cpp",
-        "sha256": "e8f6c302ac6e2bec7f802c803336bb88f627abfc6470d6235fde6a38c849ffb7"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004b80a0",
-      "name": "GameDataSymbolRemove",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004B80B0",
       "name": "Qvm_Load",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -52817,25 +52519,6 @@
       "status": "STRUCTURALLY_VERIFIED"
     },
     {
-      "address": "0x004b8410",
-      "name": "QscCompile",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004B85B0",
       "name": "Qvm_Execute",
       "implementation": {
@@ -53003,25 +52686,6 @@
       "notes": "Renamed from `Script_QHashNodeRegisterEx_4B8890` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x004b8930",
-      "name": "ScriptSetsymbolCxt",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004B8A10",
       "name": "Qvm_SetGlobalState",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -53133,23 +52797,6 @@
         }
       },
       "status": "STRUCTURALLY_VERIFIED"
-    },
-    {
-      "address": "0x004b8a20",
-      "name": "Script_EvalArgInt",
-      "implementation": {
-        "path": "scripts/GameNatives/004b8a20-Script_EvalArgInt.cpp",
-        "sha256": "c1d5f2110b979382a38fd2e71cf247da269cf0162d09005fc32ed61ad7e3b348"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
     },
     {
       "address": "0x004B8A50",
@@ -53434,44 +53081,6 @@
       "notes": "Renamed from `Script_QHashSymbolTableInit_4BACD0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x004bb270",
-      "name": "QvmAssemble",
-      "implementation": {
-        "path": "scripts/GameNatives/004BB270-QScript_Assemble.cpp",
-        "sha256": "e77ddd69cbb8cc85cb086b73ef93eaeafbe959076fc6a7e4df93fde1af08d01e"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004bbc30",
-      "name": "LogAdd",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004BCFD0",
       "name": "Qvm_ExecuteInstructions",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -53725,25 +53334,6 @@
       }
     },
     {
-      "address": "0x004c0200",
-      "name": "ScriptBufInit",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004C0250",
       "name": "DynObj_ParseConfigFile",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -53878,25 +53468,6 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `Script_QHashTableCreate_4C0360` when the address suffix was stripped; the retail VA in this record is unchanged."
-    },
-    {
-      "address": "0x004c0460",
-      "name": "SymbolRemove",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
     },
     {
       "address": "0x004C04B0",
@@ -54318,23 +53889,6 @@
       "cfg_similarity": 1.0
     },
     {
-      "address": "0x004c1830",
-      "name": "QTaskList_Delete",
-      "implementation": {
-        "path": "scripts/GameNatives/004c1830-QTaskList_Delete.cpp",
-        "sha256": "1ecb813d3f46d8efe40150c9afaa61111ff8160d31e9bfda51964225a65f93a0"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x004C2F90",
       "name": "DynObj_ParseConfigFile_4",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -54442,44 +53996,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004C4520-semantic-review.json",
           "evidence_sha256": "ac488d1a4c0f17ba5c3786a32fcf8e8a0fb86954d86c03ba6328b44a1e61eb21"
         }
-      }
-    },
-    {
-      "address": "0x004c48e0",
-      "name": "RigidDyncubeObjRead",
-      "implementation": {
-        "path": "scripts/GameNatives/004C48E0-Rigid_DyncubeObjRead.cpp",
-        "sha256": "70159e2c7a78a11c60af85bfba78768b86108fb16f9de9de66063ef67baef21a"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004c4930",
-      "name": "MagicObjLoad",
-      "implementation": {
-        "path": "scripts/GameNatives/004C4930-Magic_ObjLoad.cpp",
-        "sha256": "72d7e8fb0ac137fb581929aaf4a95c43ab304a1055ba4060482a494948defc1d"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -57234,23 +56750,6 @@
       }
     },
     {
-      "address": "0x004d3210",
-      "name": "AnimController_UpdateChannels",
-      "implementation": {
-        "path": "scripts/GameNatives/004d3210-AnimController_UpdateChannels.cpp",
-        "sha256": "ed55dad454624e2cff0447dcbf16aaca304e04b69b54d3549764c5b24703fd94"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x004D3710",
       "name": "QTask_NoOpHandler",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -57813,23 +57312,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004D74F0-behavioral.json",
           "evidence_sha256": "56200caa20fc5960e896d6904c3a46a88b156b87374c29e84d83fe0279b7aac9"
         }
-      }
-    },
-    {
-      "address": "0x004d9610",
-      "name": "BoneDynCubeObj_GetQTaskType",
-      "implementation": {
-        "path": "scripts/GameNatives/004d9610-BoneDynCubeObj_GetQTaskType.cpp",
-        "sha256": "35973349940fc15c03ac057d3ae76207902aaedfb02ae4c5a1b756112642c2e1"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
       }
     },
     {
@@ -58434,93 +57916,6 @@
       "notes": "Renamed from `DynCubeObj_Init_4E5370` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x004e6030",
-      "name": "SoundSys_SetFrequency",
-      "implementation": {
-        "path": "scripts/GameNatives/004e6030-SoundSys_SetFrequency.cpp",
-        "sha256": "98c75b35ac9335c3d22ba18cbfcacbb831bbddd4ecc6bd58c1f9200c2a8a10af"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004e68d0",
-      "name": "SoundLoad",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004e76e0",
-      "name": "TextWindow_vprintf",
-      "implementation": {
-        "path": "scripts/GameNatives/004e76e0-TextWindow_vprintf.cpp",
-        "sha256": "3812ae5c2f0230d4f06c353101e15c4f594ce1f9326594f33fe45b5b4ff931cf"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004e7b80",
-      "name": "DebugText_SetCursor",
-      "implementation": {
-        "path": "scripts/GameNatives/004e7b80-DebugText_SetCursor.cpp",
-        "sha256": "d2e52f1593acefdd725d18e741ed89dae2fe84fa69248ef47f0f71a56c11caf3"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
-      "address": "0x004e7bb0",
-      "name": "DebugText_Clear",
-      "implementation": {
-        "path": "scripts/GameNatives/004e7bb0-DebugText_Clear.cpp",
-        "sha256": "021e7509eb4037c6c955b956a7fcf191ae28876cca3f46440f57cb2be28f2be6"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x004E7C50",
       "name": "CameraControlTask_Init",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -58556,23 +57951,6 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `CameraControlTask_Init_4E7C50` when the address suffix was stripped; the retail VA in this record is unchanged."
-    },
-    {
-      "address": "0x004e8100",
-      "name": "SoundSys_EvaluateTrigger_11",
-      "implementation": {
-        "path": "scripts/GameNatives/004e8100-SoundSys_EvaluateTrigger_11.cpp",
-        "sha256": "1f33255f2586c567b2c5d42415d4a7d0791a3403805a12604e526ddc1c0a2342"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
     },
     {
       "address": "0x004E8C60",
@@ -58840,25 +58218,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004EC070-behavioral.json",
           "evidence_sha256": "0be364bb868c896851493381a662c10e99c72aa2592f0b3a1337ff2933916ccc"
         }
-      }
-    },
-    {
-      "address": "0x004ec0c0",
-      "name": "AnimTriggerLoad",
-      "implementation": {
-        "path": "scripts/GameNatives/004EC0C0-Anim_TriggerLoad.cpp",
-        "sha256": "b7ef85fdd25f890070dba69b663ff01d834ac2668d50a0b72915a90b3dd9c832"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -59184,25 +58543,6 @@
           "evidence_path": "docs/fidelity/evidence/0x004EDFE0-behavioral.json",
           "evidence_sha256": "dbed02ac446d876b2d2d8d1e3a82e857a66043bd83baa5142087d106ff042225"
         }
-      }
-    },
-    {
-      "address": "0x004ee030",
-      "name": "PhysicsObjLoad",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
       }
     },
     {
@@ -63084,63 +62424,6 @@
       }
     },
     {
-      "address": "0x004f0e10",
-      "name": "LevelLoad",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004f0e50",
-      "name": "ScriptInit",
-      "implementation": {
-        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
-      "address": "0x004f0e90",
-      "name": "QtaskUpdate",
-      "implementation": {
-        "path": "scripts/GameNatives/004F0E90-Qtask_Update.cpp",
-        "sha256": "76c42a7efaebe63f47e00a5864dba6cc7c6ef7f68686eb246157e60df39b90df"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "evidence": [
-          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
-          "scripts/GameNatives"
-        ],
-        "limitations": [
-          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
-          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
-        ]
-      }
-    },
-    {
       "address": "0x004F1160",
       "name": "Script_GetParseMode",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -65560,6 +64843,696 @@
       "notes": "Renamed from `Script_StringHash_4F9E70` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
+      "address": "0x004a5350",
+      "name": "FileOpen",
+      "implementation": {
+        "path": "scripts/GameNatives/004A5350-File_Open.cpp",
+        "sha256": "4398989b6784c446080dce66f2c1f6c1e4f0d62220c4e8b41b7515985ee6e49a"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b0be0",
+      "name": "MemoryDealloc",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b0f90",
+      "name": "RenderMode_PopRenderMode",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b3320",
+      "name": "Real64x3_NullVector",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b38e0",
+      "name": "Real32x9_Create",
+      "implementation": {
+        "path": "scripts/GameNatives/004b38e0-Real32x9_Create.cpp",
+        "sha256": "dd29875a25a90f3e8f9118657792e94399ed89208b47aec7c0f9b242c5df524b"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b53b0",
+      "name": "Qsprite_Register4Az",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b5b90",
+      "name": "IsResourceLoaded",
+      "implementation": {
+        "path": "scripts/GameNatives/004B5B90-Is_ResourceLoaded.cpp",
+        "sha256": "d4cf3c78fea3ec7fc137b66905763082078b261418afa798e708b62c3ecdcc5e"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b6e60",
+      "name": "Picture_Register",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b6e70",
+      "name": "Picture_GetWidth",
+      "implementation": {
+        "path": "scripts/GameNatives/004b6e70-Picture_GetWidth.cpp",
+        "sha256": "1ccbb611ec5de50b2e127c6c342fa18759fd8c5e8413d4855ea3f2ec1c64c235"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b6e80",
+      "name": "Picture_GetHeight",
+      "implementation": {
+        "path": "scripts/GameNatives/004b6e80-Picture_GetHeight.cpp",
+        "sha256": "a5d54371778d68e482fc4b94a7ed247b6839c882c03484d8179df8af2f439569"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004b7e80",
+      "name": "SymbolRegisterInt16",
+      "implementation": {
+        "path": "scripts/GameNatives/004B7E80-SymbolRegister_Int16.cpp",
+        "sha256": "c660198b30d90bf345e2e07b20490016e237f6101cf29fea9364a52bf5592602"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b7ee0",
+      "name": "SymbolRegisterBool8",
+      "implementation": {
+        "path": "scripts/GameNatives/004B7EE0-SymbolRegister_Bool8.cpp",
+        "sha256": "506b5c9eaf08602447af10afa3b6581524b4bfbaee730030041ee0f9dc5f40fe"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b7fa0",
+      "name": "SymbolRegisterInt32",
+      "implementation": {
+        "path": "scripts/GameNatives/004B7FA0-SymbolRegister_Int32.cpp",
+        "sha256": "7d1eb767decb31aeb43c603abaae76f25aa8c4817acd7ec5e7827833413ebc1d"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b7fc0",
+      "name": "SymbolRegisterReal32",
+      "implementation": {
+        "path": "scripts/GameNatives/004B7FC0-SymbolRegister_Real32.cpp",
+        "sha256": "e8f6c302ac6e2bec7f802c803336bb88f627abfc6470d6235fde6a38c849ffb7"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b80a0",
+      "name": "GameDataSymbolRemove",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b8410",
+      "name": "QscCompile",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b8930",
+      "name": "ScriptSetsymbolCxt",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004b8a20",
+      "name": "Script_EvalArgInt",
+      "implementation": {
+        "path": "scripts/GameNatives/004b8a20-Script_EvalArgInt.cpp",
+        "sha256": "c1d5f2110b979382a38fd2e71cf247da269cf0162d09005fc32ed61ad7e3b348"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004bb270",
+      "name": "QvmAssemble",
+      "implementation": {
+        "path": "scripts/GameNatives/004BB270-QScript_Assemble.cpp",
+        "sha256": "e77ddd69cbb8cc85cb086b73ef93eaeafbe959076fc6a7e4df93fde1af08d01e"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004bbc30",
+      "name": "LogAdd",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004c0200",
+      "name": "ScriptBufInit",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004c0460",
+      "name": "SymbolRemove",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004c1830",
+      "name": "QTaskList_Delete",
+      "implementation": {
+        "path": "scripts/GameNatives/004c1830-QTaskList_Delete.cpp",
+        "sha256": "1ecb813d3f46d8efe40150c9afaa61111ff8160d31e9bfda51964225a65f93a0"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004c48e0",
+      "name": "RigidDyncubeObjRead",
+      "implementation": {
+        "path": "scripts/GameNatives/004C48E0-Rigid_DyncubeObjRead.cpp",
+        "sha256": "70159e2c7a78a11c60af85bfba78768b86108fb16f9de9de66063ef67baef21a"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004c4930",
+      "name": "MagicObjLoad",
+      "implementation": {
+        "path": "scripts/GameNatives/004C4930-Magic_ObjLoad.cpp",
+        "sha256": "72d7e8fb0ac137fb581929aaf4a95c43ab304a1055ba4060482a494948defc1d"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004d3210",
+      "name": "AnimController_UpdateChannels",
+      "implementation": {
+        "path": "scripts/GameNatives/004d3210-AnimController_UpdateChannels.cpp",
+        "sha256": "ed55dad454624e2cff0447dcbf16aaca304e04b69b54d3549764c5b24703fd94"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004d9610",
+      "name": "BoneDynCubeObj_GetQTaskType",
+      "implementation": {
+        "path": "scripts/GameNatives/004d9610-BoneDynCubeObj_GetQTaskType.cpp",
+        "sha256": "35973349940fc15c03ac057d3ae76207902aaedfb02ae4c5a1b756112642c2e1"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004e6030",
+      "name": "SoundSys_SetFrequency",
+      "implementation": {
+        "path": "scripts/GameNatives/004e6030-SoundSys_SetFrequency.cpp",
+        "sha256": "98c75b35ac9335c3d22ba18cbfcacbb831bbddd4ecc6bd58c1f9200c2a8a10af"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004e68d0",
+      "name": "SoundLoad",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004e76e0",
+      "name": "TextWindow_vprintf",
+      "implementation": {
+        "path": "scripts/GameNatives/004e76e0-TextWindow_vprintf.cpp",
+        "sha256": "3812ae5c2f0230d4f06c353101e15c4f594ce1f9326594f33fe45b5b4ff931cf"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004e7b80",
+      "name": "DebugText_SetCursor",
+      "implementation": {
+        "path": "scripts/GameNatives/004e7b80-DebugText_SetCursor.cpp",
+        "sha256": "d2e52f1593acefdd725d18e741ed89dae2fe84fa69248ef47f0f71a56c11caf3"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004e7bb0",
+      "name": "DebugText_Clear",
+      "implementation": {
+        "path": "scripts/GameNatives/004e7bb0-DebugText_Clear.cpp",
+        "sha256": "021e7509eb4037c6c955b956a7fcf191ae28876cca3f46440f57cb2be28f2be6"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004e8100",
+      "name": "SoundSys_EvaluateTrigger_11",
+      "implementation": {
+        "path": "scripts/GameNatives/004e8100-SoundSys_EvaluateTrigger_11.cpp",
+        "sha256": "1f33255f2586c567b2c5d42415d4a7d0791a3403805a12604e526ddc1c0a2342"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
+    },
+    {
+      "address": "0x004ec0c0",
+      "name": "AnimTriggerLoad",
+      "implementation": {
+        "path": "scripts/GameNatives/004EC0C0-Anim_TriggerLoad.cpp",
+        "sha256": "b7ef85fdd25f890070dba69b663ff01d834ac2668d50a0b72915a90b3dd9c832"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004ee030",
+      "name": "PhysicsObjLoad",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004f0e10",
+      "name": "LevelLoad",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004f0e50",
+      "name": "ScriptInit",
+      "implementation": {
+        "path": "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+        "sha256": "a131fc53531d82061af6028f2bdabb61ece927d971119048c1a05ed006979d20"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
+      "address": "0x004f0e90",
+      "name": "QtaskUpdate",
+      "implementation": {
+        "path": "scripts/GameNatives/004F0E90-Qtask_Update.cpp",
+        "sha256": "76c42a7efaebe63f47e00a5864dba6cc7c6ef7f68686eb246157e60df39b90df"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "evidence": [
+          "/Users/haseeb-mir/Documents/Code/project-igi-natives/IGI_Natives/IGI-Natives.json",
+          "scripts/GameNatives"
+        ],
+        "limitations": [
+          "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json).",
+          "Recorded from the external verified catalog; no port-side static/runtime record yet for this address. Runtime parity in the candidate is not claimed."
+        ]
+      }
+    },
+    {
       "address": "0x004f9ff0",
       "name": "GraphOpen",
       "implementation": {
@@ -66218,23 +66191,6 @@
       "notes": "Renamed from `Joypad_IsAcquired_509CC0` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
-      "address": "0x00509cf0",
-      "name": "Joypad_Update",
-      "implementation": {
-        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
-        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
-      },
-      "verification": {
-        "status": "VERIFIED",
-        "limitations": [
-          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
-        ],
-        "evidence": [
-          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
-        ]
-      }
-    },
-    {
       "address": "0x00509E90",
       "name": "Joypad_ReleaseAll",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
@@ -66307,6 +66263,23 @@
         "cfg_similarity": 1.0
       },
       "notes": "Renamed from `Joypad_InitActionFlags_509F00` when the address suffix was stripped; the retail VA in this record is unchanged."
+    },
+    {
+      "address": "0x00509cf0",
+      "name": "Joypad_Update",
+      "implementation": {
+        "path": "scripts/GameNatives/EU_NATIVES_BN_COPY.md",
+        "sha256": "95e37e31c485ac2647f629f247883f8d0157fc6bdcd72c8b6721c7ad93988024"
+      },
+      "verification": {
+        "status": "VERIFIED",
+        "limitations": [
+          "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md)."
+        ],
+        "evidence": [
+          "scripts/GameNatives/EU_NATIVES_BN_COPY.md"
+        ]
+      }
     },
     {
       "address": "0x00510010",
