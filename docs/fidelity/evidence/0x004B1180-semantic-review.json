@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1180",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "8acc332f4c0b1ec60ddfc40ea861e5e6045a72ae7ddb8d65f6619bf82604ca8e",
+  "implementation_path": "engine/src/retail/qfile/native_4b1180.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "32 bytes from 0x004B1180 through ret 0x004B119F; generated candidate 1 block / 0 edges, retail's count."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No arguments; takes the counter from memory and returns the previous index in EAX."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "One store of the index into record[index]+0x54 at 0x00943704 + 0x8C*index, the counter increment at 0x0094396C, and the decrement that produces the return value."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Counter 0x0094396C, field base 0x00943704 (= 0x009436B0 + 0x54), stride 0x8C via the (index*8-index)*5*4 sequence."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns the pre-increment index: retail increments the counter, stores it, then decs the local copy before ret."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.2",
+  "limitations": [
+    "Runtime unobserved; no transcribed caller reaches the allocator yet.",
+    "This unit owns the 0x009436B0 table and 0x0094396C counter because nothing before it writes them; 0x004B1200 sets the counter to 1 and is not landed, so the counter starts at 0 here."
+  ]
+}

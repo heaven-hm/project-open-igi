@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004B1C80",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "abf7850d43c368645f90068ad2c31216086085f16d14e95cd660ac0fe367dc8f",
+  "implementation_path": "engine/src/retail/qfile/native_4b1c80.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "28 bytes, entry 0x004B1C80 through the ret at 0x004B1C9B; generated candidate is 1 block / 0 edges, retail's count."
+    },
+    {
+      "name": "cfg_match",
+      "result": "passed",
+      "rationale": "Both decoders report 1/0, score 1.000; the body is straight-line with no branch."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "Two cdecl arguments: index at [esp+4], value at [esp+8]; no other stack use and nothing is popped."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "The index scaling reproduces retail's (index*8 - index)*5*4 = index*0x8C arithmetic and stores to 0x009436B0 + 0x8C*index + 0x14."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No calls; exactly one dword store into the device-driver record, no read of the previous value."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Returns void through the single ret; no error path exists in retail."
+    }
+  ],
+  "evidence": "docs/fidelity/evidence/0x4EE970-data-extents.md section 22.2 and the retail listing of 0x004B1C80",
+  "limitations": [
+    "Runtime unobserved; no transcribed caller installs these fields yet, so the driver records stay zero.",
+    "The field's meaning is not established by the bytes; only that it is a dword slot at this offset."
+  ]
+}
