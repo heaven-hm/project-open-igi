@@ -1051,3 +1051,24 @@ Ordering for the next increments, now fully determined:
 3. `0x401400` (164 B, 7 blocks, recursive) - reads `0xAF5EE8`.
 
 `0x4B0B00` ownership not yet checked.
+
+### 0x4014B0 decoded (43 B, 5 blocks, 18 instructions) - slot word refresh
+
+```
+for (edi = 0, esi = 0xAF5F08; esi < 0xAFA708; esi += 0x30, ++edi) {
+    if (byte [esi - 3] != 0)                 ; base+0x1D used flag (0xAF5EE8 + 0x20 = 0xAF5F08)
+        word [esi] = (word) 0x4014E0(edi);   ; 0xAF5F08 = base+0x20: criteria word per used slot
+}
+```
+
+So this helper re-derives the per-slot criteria word at `+0x20` for every used descriptor slot,
+in index order, overwriting whatever was there. `+0x1D` used-flag and 48-byte stride again agree
+with `0x401927` (writer) and `0x401400` (reader).
+
+One new dependency: `0x4014E0` (returns a word in eax). Both `0x401927` (which calls this twice)
+and `0x401400` (which calls it once at its end) need it, so `0x4014E0` is now the single next
+decode before any of the three can be transcribed faithfully.
+
+Range arithmetic check: (0xAFA708 - 0xAF5F08) / 0x30 = 0x4800/0x30 = 384 slots, i.e. the iteration
+visits 384 descriptors - notably 384 = 3*128 and the 0x181 (385) sentinel used at 0x40194F means
+slot 384 is the terminating guard, consistent across all three functions.

@@ -1,0 +1,5 @@
+0x004014B0  push esi; push edi; xor edi,edi; esi = 0xAF5F08
+0x004014B9  loop: al = byte [esi-3]; if (al == 0) skip
+0x004014C0    push edi; call 0x4014E0; add esp,4; word [esi] = ax
+0x004014CC  esi += 0x30; ++edi; if (esi < 0xAFA708) loop
+0x004014D8  pop edi; pop esi; ret        (ends 0x4014DA; nop padding to 0x4014DB)
