@@ -40,3 +40,48 @@ definition of the global.
    transcription, with the retail VA in the comment - not as a standalone
    declaration invented to satisfy the linker.
 3. Re-check the three bodies after the writer lands; until then they stay blocked.
+
+## Boundary resolved, and the global's meaning identified
+
+r2 function info: `fcn.004d9730` is **83 bytes** (`0x004D9730-0x004D9782`, 1 block),
+and the next function `fcn.004d9790` is **65 bytes** (`0x004D9790-0x004D97D1`,
+1 block). So `0x4D977C` belongs to `0x4D9730` and `0x4D979E` belongs to
+`0x4D9790`; the earlier `0x5315B0` attribution was an r2 `af` artefact and is
+withdrawn.
+
+Full body of `0x004D9730` (fn 83 B, no branches):
+
+```
+push (4,0); call 0x401860      ; phase handler 4
+push (5,0); call 0x401860      ; phase handler 5
+push (6,0); call 0x401860      ; phase handler 6
+push (7,0); call 0x401860      ; phase handler 7
+push 0;     call 0x4017C0      ; some no-arg call with 0
+add esp, 0x24
+mov byte [0x54863A], al        ; stores the 0x4017C0 result byte
+push (0,0); call 0x4018F0      ; QTask_GetCurrentType()
+push eax
+push 0x50
+push "QObj"                    ; 0x0054863C
+call 0x401900                  ; TaskType_Register
+add esp, 0x14
+mov word [0x548638], ax        ; <-- g_548638 := returned id
+```
+
+**`g_548638` is the `QObj` class id**, not a parent/type discriminator: it is the
+value returned when `"QObj"` (size `0x50`) is registered, stored immediately after
+the call. That corrects the hypothesis in the previous section. It also explains
+why `0x4DA1D0`/`0x4E5370` read it: they pass the QObj class id as the **parent**
+argument to their own registrations, i.e. QObj is the base class of those objects.
+
+The `0x181` write in the neighbouring function `0x004D9790` (65 B) is therefore a
+separate object (a different class id) and must not be conflated with QObj.
+
+## What that means for blocking
+
+`0x004E5370` and `0x004DA1D0` can link as soon as `0x4D9730` is transcribed and
+defines `g_548638` with its retail VA - and that transcription is a single
+straight-line 83-byte body whose callees are `0x401860`, `0x4017C0`, `0x4018F0`
+and `0x401900`. Dependency check needed before writing: whether `0x401860` and
+`0x4017C0` exist in `engine/` (the latter apparently does, `0x4018F0`/`0x401900`
+do), and what `"QObj"`'s exact bytes are (`0x0054863C`, NUL-terminated).
