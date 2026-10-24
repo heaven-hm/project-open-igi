@@ -92,9 +92,9 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1078)
+## STRUCTURALLY_VERIFIED (1082)
 
-140 of these rows have code but no semantic review bound; the comment column says so per row.
+144 of these rows have code but no semantic review bound; the comment column says so per row.
 
 806 of these rows have no implementation file; their comment column says so and they are not
 coverage, whatever the status word.
@@ -423,10 +423,14 @@ coverage, whatever the status word.
 | `ModelViewBox_Update` | `void * ModelViewBox_Update(void * context, int arg2)` | `0x00422E40` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `ModelViewBox_LoadParameters` | `int ModelViewBox_LoadParameters(int context)` | `0x00422F30` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `ModelViewBox_OnEvent` | `int ModelViewBox_OnEvent(void * context)` | `0x00423000` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Task_WalkAndDispatchEvent_424280` | `unestablished` | `0x00424280` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_424870` | `unestablished` | `0x00424870` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424870-semantic-review.json` |
 | `Sys_GetGlobal32_424880` | `unestablished` | `0x00424880` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424880-semantic-review.json` |
 | `Sys_GetGlobal32_424890` | `unestablished` | `0x00424890` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424890-semantic-review.json` |
 | `Sys_GetGlobal8_424B80` | `unestablished` | `0x00424B80` | 1.000 | CFG 1.000; bn+r2 agree; review `0x00424B80-semantic-review.json` |
+| `Cursor_Init_424B90` | `unestablished` | `0x00424B90` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Cursor_InitState_424C10` | `unestablished` | `0x00424C10` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Cursor_WinProcMouseMove_424CA0` | `unestablished` | `0x00424CA0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Script_SetConstant_427D70` | `unestablished` | `0x00427D70` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Script_SetConstant_427F80` | `unestablished` | `0x00427F80` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal16_42FDC0` | `unestablished` | `0x0042FDC0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x0042FDC0-semantic-review.json` |
