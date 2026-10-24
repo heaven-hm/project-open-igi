@@ -9,19 +9,20 @@ namespace {
 
 struct Mode2Sentinel
 {
-    std::uint32_t next;         // 0x005446B0: links to the sentinel itself in the image
-    std::uint32_t head;         // 0x005446B4: also the sentinel itself
-    std::uint32_t payload_low;  // 0x005446B8: 0x005446C8 = sentinel + 0x18
-    std::uint32_t payload_high; // 0x005446BC: same
+    Mode2Sentinel* next;        // 0x005446B0: links to the sentinel itself in the image
+    Mode2Sentinel* head;        // 0x005446B4: also the sentinel itself
+    void* payload_low;          // 0x005446B8: 0x005446C8 = sentinel + 0x18 in the image
+    void* payload_high;         // 0x005446BC: same
     std::int32_t low;           // 0x005446C0: -1
     std::int32_t high;          // 0x005446C4: -1
+    std::uint8_t payload[0x18]; // 0x005446C8: node payload area begins here
 };
 
 Mode2Sentinel g_5446b0 = {
-    static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(&g_5446b0)), // self link
-    static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(&g_5446b0)), // head link
-    0x005446C8U,                                                             // payload pointer, image constant
-    0x005446C8U,                                                             // payload pointer, image constant
+    &g_5446b0,              // self link, relocatable like retail's image pointer
+    &g_5446b0,              // head link, same
+    &g_5446b0.payload[0],   // sentinel + 0x18, candidate-relative (was a stale retail address)
+    &g_5446b0.payload[0],   // sentinel + 0x18, candidate-relative
     -1,
     -1,
 };
@@ -33,28 +34,27 @@ extern "C" {
 void* Mem_FindBucketBlock_4AB7F5(std::uint32_t const value, std::uint32_t* const out_node,
                                  std::uint32_t* const out_base)
 {
-    const std::uint32_t root = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(&g_5446b0)); // 0x004AB7F9: mov edx, 0x5446b0
-    std::uint32_t node = root;                                                                          // 0x004AB7FF: mov ecx, edx
+    const Mode2Sentinel* const root = &g_5446b0;                                    // 0x004AB7F9: mov edx, 0x5446b0
+    const Mode2Sentinel* node = root;                                               // 0x004AB7FF: mov ecx, edx
     for (;;)
     {
-        const auto* const entry = reinterpret_cast<const Mode2Sentinel*>(static_cast<std::uintptr_t>(node));
-        if (value <= static_cast<std::uint32_t>(entry->low))                                            // 0x004AB801: cmp eax,[ecx+0x10]; jbe
+        if (value <= static_cast<std::uint32_t>(node->low))                          // 0x004AB801: cmp eax,[ecx+0x10]; jbe
         {
-            node = entry->next;                                                                         // 0x004AB80B: mov ecx,[ecx]
-            if (node == root)                                                                           // 0x004AB80D: cmp ecx,edx; je
+            node = node->next;                                                       // 0x004AB80B: mov ecx,[ecx]
+            if (node == root)                                                        // 0x004AB80D: cmp ecx,edx; je
             {
-                return nullptr;                                                                         // 0x004AB848: xor eax,eax; ret
+                return nullptr;                                                      // 0x004AB848: xor eax,eax; ret
             }
-            continue;                                                                                   // 0x004AB811: jmp
+            continue;                                                                // 0x004AB811: jmp
         }
-        if (value < static_cast<std::uint32_t>(entry->high))                                            // 0x004AB806: cmp eax,[ecx+0x14]; jb
+        if (value < static_cast<std::uint32_t>(node->high))                          // 0x004AB806: cmp eax,[ecx+0x14]; jb
         {
-            break;                                                                                      // 0x004AB813: found
+            break;                                                                   // 0x004AB813: found
         }
-        node = entry->next;                                                                             // 0x004AB80B
-        if (node == root)                                                                               // 0x004AB80D
+        node = node->next;                                                           // 0x004AB80B
+        if (node == root)                                                            // 0x004AB80D
         {
-            return nullptr;                                                                             // 0x004AB848
+            return nullptr;                                                          // 0x004AB848
         }
     }
     if ((value & 0x0FU) != 0U)                                                                          // 0x004AB813: test al,0xf; jne
@@ -65,7 +65,7 @@ void* Mem_FindBucketBlock_4AB7F5(std::uint32_t const value, std::uint32_t* const
     {
         return nullptr;                                                                                 // 0x004AB848
     }
-    *out_node = node;                                                                                   // 0x004AB82C: mov [esi], ecx
+    *out_node = static_cast<std::uint32_t>(reinterpret_cast<std::uintptr_t>(node));                      // 0x004AB82C: mov [esi], ecx
     const std::uint32_t base = value & 0xF000U;                                                         // 0x004AB834: and cx,0xf000
     *out_base = base;                                                                                   // 0x004AB83B: mov [esi], ecx
     const std::uint32_t offset = (value - base - 0x100U) >> 4;                                          // 0x004AB839/0x004AB83D/0x004AB840: sub; sub; sar eax,4
