@@ -92,7 +92,7 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1077)
+## STRUCTURALLY_VERIFIED (1078)
 
 140 of these rows have code but no semantic review bound; the comment column says so per row.
 
@@ -1009,6 +1009,7 @@ coverage, whatever the status word.
 | `Script_ParameterPropertySet` | `unestablished` | `0x004F1BC0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Qvm_CheckParameterCount` | `unestablished` | `0x004F1C20` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_InitFloatPair_4F1C90` | `unestablished` | `0x004F1C90` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1C90-semantic-review.json` |
+| `Sys_InitGlobalListHead_4F1CD0` | `unestablished` | `0x004F1CD0` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1CD0-semantic-review.json` |
 | `PhysicsTerrain_Invoke25` | `int PhysicsTerrain_Invoke25(int arg1)` | `0x004F1CF0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke3` | `void PhysicsTerrain_Invoke3(int arg1, int* arg2, int arg3)` | `0x004F1D10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Sys_GetGlobal32_4F1E00` | `unestablished` | `0x004F1E00` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E00-semantic-review.json` |
