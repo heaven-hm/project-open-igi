@@ -3,7 +3,7 @@
   "kind": "semantic-review-report",
   "address": "0x00416840",
   "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
-  "implementation_sha256": "bf6e5d9fda691d0677140a9f7c7e3b4c32a72730c14293842eb5b55f7a7a5614",
+  "implementation_sha256": "de39910354c3f9b19453fe48945a29e0428fe6117d86c6bb04b4427b789510e9",
   "implementation_path": "engine/src/retail/config/native_416840.cpp",
   "reviewed_by": "lead",
   "reviewed": true,
@@ -13,27 +13,70 @@
     {
       "name": "function_identity",
       "result": "passed",
-      "rationale": "6 retail bytes, 2 instructions (a0 49 95 53 00 c3), 1 block, 0 edges; candidate 1/0, score 1.000."
+      "rationale": "6 retail bytes, 2 instructions, 1 block, 0 edges; candidate 1/0 at CFG 1.000."
     },
     {
       "name": "cfg_match",
       "result": "passed",
-      "rationale": "Both decoders and the candidate report 1/0; the body is straight-line with no branch."
+      "rationale": "Both decoders and the candidate report 1/0; straight-line body, no branch."
     },
     {
       "name": "behavior",
       "result": "passed",
-      "rationale": "Loads byte 0x09 of 0x00539549 into al and returns. Only al is written, so the upper eax bytes are the caller's leftovers; the implementation therefore returns a byte-sized value."
+      "rationale": "Loads the setting field at 0x00539549 into al and returns; only al is written so the value is byte-sized."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "One entry and one exit: the single ret at offset +5. There is no branch, no early return and no error path to compare."
     },
     {
       "name": "extent",
       "result": "passed",
-      "rationale": "Storage extent comes from measured references, not from an instruction: the ten consecutive byte stores at 0x0041556A-0x004155D6 for the 0x00539540 region, and the dword loads at 0x00407C4A/0x00407C8F for 0x005690D8."
+      "rationale": "The region extent comes from measured references, not from an instruction: the ten consecutive byte stores at 0x0041556A-0x004155D6 for 0x00539540, and the dword loads at 0x00407C4A/0x00407C8F for 0x005690D8."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No ABI arguments: the routine takes void and reads only the static field at 0x00539549."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "One constant in the body: the displacement of 0x00539549. No scale factor, mask or rounding is applied."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Exactly one load from 0x00539549; no store, no bounds check, no indirect access."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No call and no store: the only effect is the returned byte, so there is no side effect to compare."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "The body performs no floating-point load, store or arithmetic; it moves one integer byte."
     }
   ],
+  "runtime_contract": {
+    "scope": "paired retail/candidate observation of the getter entry and return during level-1 startup",
+    "probe_sha256": "63aa22880447816af45fc1b05e4200739cedf16e39311f8881babc825972f4a2",
+    "required_observables": {
+      "inputs": [],
+      "outputs": [
+        "return_value"
+      ],
+      "sideEffects": []
+    },
+    "no_arguments": true,
+    "no_side_effects": true
+  },
   "evidence": "docs/fidelity/evidence/config-getters-20261024T205105Z/OBSERVATION.json",
   "limitations": [
-    "Runtime: the getter body is 6 bytes and the retail Interceptor hook installs, but this capture did not produce a candidate-side observation (Frida setup timeout, and the candidate exits at 0x00402930 before game natives).",
+    "Runtime not yet paired: the retail hook installs and observed the getter twice, but the candidate exits at 0x00402930 before game natives and this capture's candidate run also hit the Frida setup timeout.",
     "The setting's meaning and its writer are not established by this body."
   ]
 }

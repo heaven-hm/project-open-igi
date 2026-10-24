@@ -4,7 +4,9 @@
 // and 0x005690D8 are measured across the whole image (43 references to the first region, 5 to the second).
 // Behavior/CFG: loads one byte into al and returns; no arguments, no branch, no store, no callee. Only al is written, so the
 // upper three bytes of eax are whatever the caller left there - the declared return type is therefore byte-sized.
-// Status/limits: TRANSCRIBED; runtime UNOBSERVED. The routine returns the setting byte at 0x00539540+0x01; the region's meaning and its writers are not established by this body.
+// Status/limits: TRANSCRIBED; runtime UNOBSERVED. Static structure matches 1 block / 0 edges, but the strict gate
+// requires an authorized runtime contract and paired observations, which the candidate cannot produce while it exits at
+// the 0x00402930 boundary, so this record is not promoted. The routine returns the setting byte at 0x00539540+0x01; the region's meaning and its writers are not established by this body.
 #include "igi/retail/config/config_bytes.hpp"
 
 #include <cstdint>
