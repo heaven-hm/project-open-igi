@@ -1787,3 +1787,11 @@ directly: the array is reached through a computed base (`lea`/`base+index*stride
 immediate-reference search misses it. Next search must scan the 0x4F1x-0x4F2x disassembly for
 immediates/displacements containing `0xA758E4`/`0xA758E8` rather than asking r2 for references to the
 exact cell, e.g. `pd` a wide window and grep for `0xa758` in the rendered operands.
+
+### Frozen e0b4e70b regression: binding verified, runtime unchanged
+
+Receipt `dbdcb3f2...`, compiled_sources 134 with native_4f19c0/4f1a40/4f1bc0 present, artifact and
+deployed copy hash-identical before == after, one IGI1MUTEX. Runs 10619.565 / 2640.377 / 587.752 ms +
+`+seh` 2217.230 ms, all exit 3, boundary unchanged at position 1 / id 0; none of the three VAs in
+stderr or the unwind. Diagnostic only, no acceptance. The 10619 ms cold start is the highest observed
+but sits inside the established environment band and is not a candidate-linked signal.
