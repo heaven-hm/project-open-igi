@@ -1410,3 +1410,12 @@ the "small init" this round planned for.
 Correct decision recorded: do **not** transcribe a partial init. Capture the complete listing with a
 proper boundary (via angr CFGFast entry recovery, which is the tool for exact retail entries) before
 writing any of it, and treat `0x4F9DF0` as blocked on that boundary rather than on storage.
+
+### Frozen 996b1cb4 regression (Tester, diagnostic scope only)
+
+Full sha256 `996b1cb44ec609799888f476f303ede32f12a6ef2a47f287a7a77cc775dd0e93`, artifact and
+deployed copy identical before == after, receipt sha `38e2f407...` bound to the candidate, new
+sources present, one `IGI1MUTEX`. Runs: 8718.954 / 2932.095 / 566.635 ms (cold, cold, warm), run 4
+`+seh` 2549.513 ms; **all exit 3**, uncaught `std::logic_error`, boundary unchanged at position 1 /
+id 0 with the same `QTask_RegisterClasses` message. Verdict: usable diagnostic evidence, no native
+acceptance. The long 8718 ms cold start is environment-dominated and is not a progress signal.
