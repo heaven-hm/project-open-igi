@@ -47947,6 +47947,46 @@
       "notes": "Renamed from `Mem_MarkBucketPage_4AB84C` when the address suffix was stripped; the retail VA in this record is unchanged."
     },
     {
+      "address": "0x004ABC46",
+      "name": "Sys_MapCode_4ABC46",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/sys/native_4abc46.cpp",
+        "sha256": "926c54741280865b9276591bf158c43ffb2fbe64c162870f53a9764ead08704c",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004ABC46-Camera_UpdateViewCone_22 2.cpp",
+        "sha256": "d218c6d91bbc658f695120472f06d2b0444c462a6cc339c7f67d1b7c9d8e080e",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "TRANSCRIBED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004ABC46",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004ABC46-binaryninja.json",
+          "evidence_sha256": "f4c71e509bc9834aff6fe29ead7ae70eb9a18b8d71ea4df1f30a845dfe4974c8"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004ABC46",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004ABC46-radare2.json",
+          "evidence_sha256": "a6d492155db085b5692abd94a3a7411d216eea8dcc8df713be8340547d07b2ba"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declaration preserves the observed x86 argument boundary; both decoders agree on the entry."
+        },
+        "cfg_similarity": 1.0,
+        "semantic_review": {
+          "evidence_path": "docs/fidelity/evidence/0x004ABC46-semantic-review.json",
+          "evidence_sha256": "631bce42b935afd3edd768914f389d49fd33b86c6c166b3b6af570a66e0c232e"
+        }
+      }
+    },
+    {
       "address": "0x004AC620",
       "name": "FP_MergeControlWord",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",

@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x004ABC46",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "926c54741280865b9276591bf158c43ffb2fbe64c162870f53a9764ead08704c",
+  "implementation_path": "engine/src/retail/sys/native_4abc46.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "103 retail bytes, 26 instructions, 7 blocks, 10 edges; the candidate measures 11 blocks / 14 edges at CFG 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "One cdecl argument read from [esp+4] into ecx at 0x004ABC46; it is compared with the table codes and stored at 0x00936068 unchanged. No other argument, nothing in edx/ebx."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "Constants transcribed literally: table base 0x005466D8, limit 0x00546840, stride 8, ranges 0x13..0x24, 0xBC..0xCA, and the mapped values 0x0D, 0x08, 0x16. No scaling or interpolation is invented."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "One 8-byte-stride read-only table of 45 entries whose extent is stated by both ends in the body, plus two four-byte stores at 0x00936068 and 0x00936064. All three objects are defined in this file because nothing else in the tree owns them."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No call. Side effects are exactly the two stores: the input code is recorded before the scan, and the mapped value is written on every path. The 0x08 store precedes the 0xCA range test in the bytes and the transcription keeps that order."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "Four exits, all plain ret: table hit, 0x13..0x24 range, below 0xBC, and the 0xBC..0xCA path including the 0x16 overwrite above 0xCA. Every one stores 0x00936064 before returning."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Integer compares and stores only; no floating-point register is touched."
+    }
+  ],
+  "runtime_contract": {
+    "scope": "paired retail/candidate observation of the map routine entry, argument and the two stores during level-1 startup",
+    "probe_sha256": "6456e83e51dfd262c0a7cd5d6592606216d6572d2cbe121430f95e35666363e1",
+    "required_observables": {
+      "inputs": [
+        "code"
+      ],
+      "outputs": [],
+      "sideEffects": [
+        "g_936068",
+        "g_936064"
+      ]
+    },
+    "no_return": true
+  },
+  "evidence": "docs/fidelity/evidence/0x004ABC46-runtime/",
+  "limitations": [
+    "Runtime unobserved: the retail probe installed cleanly but recorded 0 entries in the level-1 startup window, so this routine is not exercised on that path - an error-mapping routine would only run on a failure path. Static structure and the emitted CFG match; behaviour on a real invocation is unproven.",
+    "The candidate side cannot be compared while it exits at 0x00402930.",
+    "The meaning of the codes and mapped values is not established by the body, only the mapping table's exact bytes."
+  ]
+}

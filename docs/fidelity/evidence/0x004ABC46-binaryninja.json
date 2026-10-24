@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "kind": "native-disassembly",
+  "tool": "binary_ninja",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "function_entry": "0x004ABC46",
+  "signature": "unknown",
+  "cfg": {
+    "nodes": [
+      {
+        "address": "0x004ABC46"
+      },
+      {
+        "address": "0x004ABC57"
+      },
+      {
+        "address": "0x004ABC5B"
+      },
+      {
+        "address": "0x004ABC66"
+      },
+      {
+        "address": "0x004ABC6B"
+      },
+      {
+        "address": "0x004ABC70"
+      },
+      {
+        "address": "0x004ABC7B"
+      },
+      {
+        "address": "0x004ABC88"
+      },
+      {
+        "address": "0x004ABC90"
+      },
+      {
+        "address": "0x004ABCA2"
+      },
+      {
+        "address": "0x004ABCAC"
+      }
+    ],
+    "edges": [
+      {
+        "source": "0x004ABC46",
+        "target": "0x004ABC57",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC57",
+        "target": "0x004ABC5B",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC57",
+        "target": "0x004ABC7B",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC5B",
+        "target": "0x004ABC57",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC5B",
+        "target": "0x004ABC66",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC66",
+        "target": "0x004ABC6B",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC66",
+        "target": "0x004ABC88",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC6B",
+        "target": "0x004ABC70",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC6B",
+        "target": "0x004ABC88",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC88",
+        "target": "0x004ABC90",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC88",
+        "target": "0x004ABCA2",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC90",
+        "target": "0x004ABCA2",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABC90",
+        "target": "0x004ABCAC",
+        "kind": "branch"
+      },
+      {
+        "source": "0x004ABCA2",
+        "target": "0x004ABCAC",
+        "kind": "branch"
+      }
+    ]
+  }
+}
