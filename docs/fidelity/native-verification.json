@@ -4043,7 +4043,7 @@
         "signature": "unknown"
       },
       "verification": {
-        "status": "TRANSCRIBED",
+        "status": "STRUCTURALLY_VERIFIED",
         "binary_ninja": {
           "evidence_id": "bn:live:0x004015D0",
           "signature": "unknown",
@@ -4063,7 +4063,7 @@
         },
         "cfg_similarity": 1.0,
         "limitations": [
-          "Static transcription only: no runtime observation exists because the startup boundary throws before any caller runs, and the caller that matters (the destructor 0x004015F0) is still untranscribed. Depends on HeapList_Remove 0x004AF960."
+          "Structure verified (bn=3/3, r2=3/3, CFG 1.000) but behaviour is not runtime-confirmed: the startup boundary throws before any caller runs, and the caller that matters, the destructor 0x004015F0, is still untranscribed."
         ]
       }
     },
