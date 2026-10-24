@@ -204,3 +204,32 @@ Method rules learned the hard way this arc:
 - Still missing for `0x4EE970`: `0x4F1180` and its lookup chain (`0x4F11A0`, `0x4F0C90`, `0x401B20`,
   `0x4B0D10`, `0x4A6A50`, then the allocator internals `0x4AAD90`, `0x4AADBB`, `0x4AB7F5`,
   `0x4AB84C`). `0x4CEA10`/`0x4CEA20` are now landed, closing the other two-thirds of that gap.
+
+## Round 148-149: pool chain started; frozen c7450b78 (151 sources, Tester-verified clean)
+
+- Landed: `0x4AAD48` (small-block pool initializer, owns `0x00C321E4/EC/F0/F4/F8`, `0x00C321FC`;
+  bn=3/2 r2=3/2 **1.000**) and `0x4AAD90` (pool entry finder, bn=6/7 r2=6/7 **1.000**). Storage is
+  reached through `MemGlobals` accessors in `engine/include/igi/retail/mem/mem_alloc.hpp`, which
+  gained `pool_slot_count_c321e4`, `pool_block_c321ec`, `pool_used_c321f0`, `pool_next_c321f4`,
+  `pool_base_c321f8` rather than new standalone globals - the verified `0x4B0C60` native already
+  reads the same struct.
+- `0x401D30` corrected: `88 88 e0 69 a9 00` is `mov [eax+0xA969E0], cl`, i.e. the low byte of arg2
+  (slot), NOT of arg1. The first store (`88 81 ...`) does use `al`. Still r2 6/7 score 0.058 because
+  r2's `af` merges the retail tail `jmp 0x4014B0` (`minaddr 0x4014B0`, size 2206). The Tester bounded
+  the true structure at 1 block / 0 conditional branches / 1 outgoing tail edge and confirmed the
+  6/7 is a tail-merge artifact, but did not produce a re-score: **open reviewer item**, do not accept
+  `0x401D30` on the 0.058 number and do not "fix" the score by editing the verifier.
+- Frozen `c7450b78` (`c7450b787c8d2796dea2b8b0c0025674cfa9b1514fb80915b9f6173769f94cf1`),
+  `compiled_sources` **151**, clean rebuild (no orphan objects - Tester confirmed 151 obj / 151 obj.d /
+  0 orphan / 0 missing), deployed hash-verified, boundary unchanged (position 1 / id 0, exit 3), the
+  two pool natives absent from stderr and `+seh`.
+- NEXT: `0x4AADBB` (809 bytes, ~340 instructions) - the pool allocator proper. Reading has begun; it
+  uses the heap header at `[ecx+0xC]`/`[ecx+0x10]`, a `0x204`-byte stride, a `0x144` offset, bit tests
+  on the low bit of header words, a `0x3F` clamp on `(block_word >> 4) - 1`, `[ebx+4] != [ebx+8]`
+  free-list checks, and a `0x80000000` mask (r2 renders it as the `DirectSoundCreate` import symbol,
+  which is just an address constant here - do not treat it as a call). Then `0x4AB7F5`/`0x4AB84C`
+  (mode-2 pair), then `0x4A6A50` (heap-free dispatcher, body already fully read and documented:
+  mode 3 -> `0x4AAD90`+`0x4AADBB`, mode 2 -> `0x4AB7F5`+`0x4AB84C`, else KERNEL32 `HeapFree` on
+  `g_c32428`), then `0x4B0D10` (`Mem_DeAllocFn`), which finally unblocks `QTaskList_Delete` (`0x4C1830`,
+  documented as blocked in `engine/src/retail/core/qtask_list.cpp`) and the `0x4F1180` branch of the
+  `0x4EE970` catalogue.
