@@ -1010,3 +1010,26 @@ its own dependencies are checked.
 Net effect: `0x401400` is closer than round 99 suggested - two of three tables are already owned,
 and the third is a runtime-filled BSS table whose writer must land first (same ordering rule that
 has held throughout this arc). The recursion remains the only structural novelty.
+
+### Owner of 0xAF5EE8 identified: descriptor register at 0x401927
+
+```
+0x401920  add esp,4 / 0x401925 jmp $          ; previous routine's fail-closed spin
+0x401927  mov ecx,[esp+0xC]                   ; arg3
+0x40192B  mov eax,[esp+8]                     ; arg2
+0x40192F  push esi; esi = (ebp*3) << 4        ; index * 48 = the 0x30 stride seen in 0x401400
+0x401937  push edi; edi = [esp+0x18]          ; arg4
+0x40193C  mov byte [esi+0xAF5F05], 1          ; +0x1D used flag (matches 0x401400's byte [edi+0x1D])
+0x401943  mov [esi+0xAF5EE4], ecx             ; +0xFC-ish = arg3
+0x401949  mov [esi+0xAF5EE0], eax             ; +0xF8 = arg2
+0x40194F  cmp di, 0x181                       ; 385 sentinel, same 0x181 bound as 0x4F9460
+```
+
+Confirms the layout: base `0xAF5EE8`, 48-byte stride, used-byte at +0x1D, and the same `0x181`
+sentinel constant already seen in `0x4F9460`. The function starts at `0x401927` (the preceding
+routine ends in a fail-closed `jmp $` at `0x401925`, the same family pattern as `0x5186C0`), has
+13 blocks / 53 instructions (radare2 attributed 189 bytes from the mid-store address, so the real
+extent runs from `0x401927` onward and still needs a clean boundary capture).
+
+Next: capture the complete `0x401927` body, transcribe it as the table's writer, then `0x4014B0`
+and `0x401400`.
