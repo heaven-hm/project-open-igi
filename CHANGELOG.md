@@ -11,6 +11,23 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - QTask handler ABI settled and independently re-verified (internal build, no release)
+
+- **Evidence added**: `docs/fidelity/evidence/qtask-handler-abi.md` (635 lines) settles the handler ABI from retail instructions: the
+  second handler argument is a **caller-supplied pointer to caller-owned storage**, not a record field and not the QVM argument frame -
+  size callbacks take `std::uint32_t*` out-params, parse callbacks take `void*` to a three-word `{block, argument frame, next index}`
+  record that loader `0x004EDD20` builds at `E-0x18`. `FrameHandler` is valid as the table's **storage** type only; as a call signature
+  it is proven incomplete (two-word dispatch sites carry integer second words).
+- **Two structural claims re-checked by the Lead against `build/retail-dis.txt`, both exact**: the class registrator `0x00401900` copies
+  the parent row with `0xFE` iterations and a `0x600`-byte stride (`lea 0xa96ae0(,%ebp,4)` destination, `lea 0xa96ae0(,%edi,4)` source,
+  `add $0x600` on both, `dec %edx / jne`), which proves `entry(class, phase) = 0xA96AE0 + class*4 + phase*0x600`, i.e. the 0x180-entry
+  phase stride this tree already uses; and the image references that base with exactly **791 refs across 13 folded phase bases**
+  (588/119/15/1/21/2/13/5/7/5/4/7/4) - the census in the document is accurate, and the 725 dispatch sites split 457 two-word / 268 one-word.
+- **Six handler natives written but deliberately NOT committed**: `0x0042DAC0`, `0x0042DB00`, `0x0042DCE0`, `0x0042FE40`, `0x0042FE80`,
+  `0x0042FEF0`. They are syntax-clean and stable, but adding them to the build fails at link with three undefined callees
+  (`0x004B8A20` 8x, `0x004B8A50` 6x, `0x004B8A80` 3x). Per the no-dead-code rule they stay out of the tree and out of CMake until those
+  three natives land; a safety copy is at `build/pending/handler-set-20261025.tar.gz`. The three accessors are now the assigned unblock.
+
 ### 2026-10-25 - Wave A of the startup chain: Cursor registrar and its handlers (internal build, no release)
 
 - **Integrated 4 new natives**, each with the five-line provenance block, one file per retail VA, CFG measured on both engines:
