@@ -92,9 +92,9 @@ coverage, whatever the status word.
 | `Native_004A7EFF` | `uint32_t __cdecl Native_004A7EFF(uint32_t** cursor);` | `0x004A7EFF` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `Qvm_ReportError` | `std::int32_t Qvm_ReportError(const char* format, ...)` | `0x004B7E10` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 
-## STRUCTURALLY_VERIFIED (1054)
+## STRUCTURALLY_VERIFIED (1062)
 
-117 of these rows have code but no semantic review bound; the comment column says so per row.
+125 of these rows have code but no semantic review bound; the comment column says so per row.
 
 806 of these rows have no implementation file; their comment column says so and they are not
 coverage, whatever the status word.
@@ -1015,8 +1015,13 @@ coverage, whatever the status word.
 | `Sys_GetGlobal32_4F1E10` | `unestablished` | `0x004F1E10` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E10-semantic-review.json` |
 | `Sys_GetGlobal32_4F1E20` | `unestablished` | `0x004F1E20` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F1E20-semantic-review.json` |
 | `Sys_GetGlobal8_4F1FD0` | `unestablished` | `0x004F1FD0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F1FE0` | `unestablished` | `0x004F1FE0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F1FF0` | `unestablished` | `0x004F1FF0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F2000` | `unestablished` | `0x004F2000` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F2010` | `unestablished` | `0x004F2010` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `Sys_GetGlobal32_4F2020` | `unestablished` | `0x004F2020` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F2020-semantic-review.json` |
 | `Sys_GetGlobal32_4F2030` | `unestablished` | `0x004F2030` | 1.000 | CFG 1.000; bn+r2 agree; review `0x004F2030-semantic-review.json` |
+| `Sys_GetGlobal8_4F2040` | `unestablished` | `0x004F2040` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_GetContext_4F2B80` | `int* PhysicsTerrain_GetContext_4F2B80(int* arg1)` | `0x004F2B80` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F3630` | `void* PhysicsTerrain_GetContext_4F3630(void* arg1, int* arg2)` | `0x004F3630` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetContext_4F3670` | `void* PhysicsTerrain_GetContext_4F3670(void* arg1, int* arg2)` | `0x004F3670` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
@@ -1025,6 +1030,9 @@ coverage, whatever the status word.
 | `PhysicsTerrain_GetContext_4F39F0` | `int* PhysicsTerrain_GetContext_4F39F0(int* arg1)` | `0x004F39F0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_DefaultHandler_4F3A00` | `void* PhysicsTerrain_DefaultHandler_4F3A00(void* arg1)` | `0x004F3A00` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke4_4F3CA0` | `int* PhysicsTerrain_Invoke4_4F3CA0(void* arg1, int* arg2)` | `0x004F3CA0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
+| `Sys_GetGlobal8_4F40D0` | `unestablished` | `0x004F40D0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F40E0` | `unestablished` | `0x004F40E0` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
+| `Sys_GetGlobal8_4F4110` | `unestablished` | `0x004F4110` | 1.000 | CFG 1.000; bn+r2 agree; CODE BUT NO SEMANTIC REVIEW BOUND |
 | `PhysicsTerrain_InvokeComputeNormals` | `int PhysicsTerrain_InvokeComputeNormals(float arg1, void* arg2)` | `0x004F42D0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_GetParam_4F4390` | `char* PhysicsTerrain_GetParam_4F4390(int arg1, char* arg2)` | `0x004F4390` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
 | `PhysicsTerrain_Invoke2_4F43B0` | `int PhysicsTerrain_Invoke2_4F43B0(int* arg1)` | `0x004F43B0` | 1.000 | NO IMPLEMENTATION FILE: record exists, no code backs it |
