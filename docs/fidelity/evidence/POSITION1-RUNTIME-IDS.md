@@ -122,3 +122,34 @@ Position 1's acceptance criterion is now unambiguous and closed-form: transcribe
 the 97 registrar functions reached from `0x508f80`; the candidate must emit ids
 0..122 in the observed order with the observed (name, size, arg3) triples, and the
 retail callsite -> id mapping file gives the expected sequence entry by entry.
+
+## Round 28: signatures for the position-1 entry chain (BN, retail)
+
+Read from the inventory tree (`position1-tree.json`, Binary Ninja definitions):
+
+| VA | BN definition | blocks | extent end | callees |
+| --- | --- | --- | --- | --- |
+| `0x00508F80` | `int32_t()` | 1 | `0x00508F89` | 2 |
+| `0x005183D0` | `int32_t()` | 1 | `0x00518541` | 74 |
+| `0x00508FA0` | `void*()` | 1 | `0x00509292` | 43 |
+| `0x00530270` | `int32_t()` | 1 | `0x00530292` | 7 |
+| `0x00401900` | `int32_t(int32_t arg1, int32_t arg2, int16_t arg3, int32_t arg4)` | 18 | `0x00401A10` | 4 |
+
+Two consequences worth recording before any body is written:
+
+1. **`arg3` is `int16_t`**, not a pointer. The capture's "124 pointer-like values" are
+   therefore just 16-bit values that happen to exceed a pointer heuristic - the
+   third argument is a small integer discriminator (first observed value `0x181`),
+   not a string table and not a parent pointer. The earlier "parent constant vs
+   per-class string table" question is answered: neither, it is a 16-bit argument.
+2. **`0x00508F80` returns `int32_t` while its tail-jump target `0x00508FA0` returns
+   `void*`**, i.e. the thunk passes the tail callee's `eax` straight through. That
+   ABI detail must be preserved when transcribing, and it means the thunk's return
+   must be expressed without inventing a conversion step (a plain `return` of the
+   tail call, keeping the retail's eax semantics).
+
+Transcription order and blockers: `0x00508F80` is 9 bytes but cannot link until
+`0x005183D0` and `0x00508FA0` exist as natives (74 and 43 callees respectively), so
+the entry thunk lands **after** those two, not before. The next increments are
+therefore inside the `0x5183D0` group, following the observed id order 0..122 rather
+than the flat call order.
