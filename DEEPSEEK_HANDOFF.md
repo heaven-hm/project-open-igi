@@ -327,3 +327,25 @@ CFG claim** - they are never presented as game logic and never given a CFG score
   as its own native at its retail address. Do not use this exception to skip a game routine.
 - Do not write inline-assembly `rep movsd` merely to obtain a CFG number: that would present a CRT
   primitive as game logic, which is exactly what the exception exists to avoid.
+
+## Round 151-152 status and the 0x4EE970 plan
+
+Frozen now: `e915b766` (165 sources), superseding `dfc91818` and `8467e66c`. Tester signed off the data
+extents; the BSS gap question it raised was resolved as 32-byte section alignment (array is 0xBC4, section
+pads to 0xBE0), not masking.
+
+Two defects were caught by audit rather than by the verifier in this span, both invisible to `cfg_score`:
+`0x4F19C0`/`0x4F1BC0` had an 11-slot loop bound instead of 64, and `g_hash_buckets_a70ca8` was declared
+`[0x2EF]` instead of `[0x2F1]` (a write-past-the-array waiting for the `0x4EF7C5` initializer). Standing
+pre-freeze checklist item: re-derive every literal loop bound and every declared data extent from the
+retail instruction that consumes it and cross-check it against the storage declaration.
+
+`0x4EE970` dependencies are confirmed transcribed and wired: `0x4018F0` = `QTask_GetCurrentType`
+(engine/src/retail/core/task_types.cpp:501), `0x401900` = `TaskType_Register` (task_types.cpp:360,
+273 bytes / 18 blocks), and the `0x4F1B60`..`0x4F1BC0` property family. `0x4EE970` is a flat ~1000
+instruction registrar: it clears 0x1000 dwords at 0x00A71890, registers classes through
+`0x4018F0`+`0x401900` storing the returned word into 0x0054DD0C upward, and calls `0x4F1BC0` 100 times,
+`0x4F19C0` 26 times, and each of `0x4F1B60`..`0x4F1BB0` 16-17 times. Listing:
+docs/fidelity/evidence/0x004EE970-full-listing.txt. Transcribe it into
+engine/src/retail/script/native_4ee970.cpp in reviewed sections (it must be complete before wiring), and
+do not present it as transcribable until the section-by-section pass finishes.
