@@ -601,3 +601,30 @@ New dependency named: `0x004C0530` (hash routine). Chain to the NodeCriteria pat
 `0x5186C0 -> 0x4B8810 -> 0x4BAAC0 -> 0x4C0560 -> 0x4C04B0 -> 0x4C0530`, with `0x4B8830` a
 separate callback body. All decoded leaves so far are small or one-call wrappers; the 12-block
 `0x4C04B0` is the first substantial member and needs its tail captured before transcription.
+
+### 0x4C04B0 tails captured (complete listing now) - argument mapping still open
+
+String-compare exit paths and both returns, verbatim:
+
+```
+0x4C04E9  mov dl,[eax+1]; mov cl,dl; cmp dl,[esi+1]; jne 0x4C0501
+0x4C04F3  add eax,2; add esi,2; test cl,cl; jne 0x4C04DD
+0x4C04FD  xor eax,eax; jmp 0x4C0506           ; equal, terminated -> 0
+0x4C0501  sbb eax,eax; sbb eax,0xFFFFFFFF     ; mismatch -> -1 or +1 (strcmp sign trick)
+0x4C0506  test eax,eax; je 0x4C0523           ; equal -> found path
+0x4C050A  mov ebp,edi; mov edi,[edi]; test edi,edi; jne 0x4C04D8   ; walk chain
+0x4C0512  mov ecx,[esp+0x18]; pop edi; pop esi; pop ebp
+0x4C0519  mov dword [ecx],0; xor al,al; pop ebx; ret              ; miss: *out = 0, return false
+0x4C0523  mov eax,[esp+0x18]; pop edi; pop esi
+0x4C0529  mov dword [eax],ebp; pop ebp; mov al,1; pop ebx; ret    ; hit: *out = node, return true
+```
+
+Note the comparison is a **2-byte unrolled** loop (`eax+1`/`esi+1`, then `add eax,2`), not a
+1-byte loop as the first decode suggested, and the mismatch result uses the retail `sbb eax,eax;
+sbb eax,0xFFFFFFFF` sign trick rather than producing 0/1. Both must be reproduced literally.
+
+Open question recorded instead of guessed: with four callee-saved pushes the stack slots are
+`+0x14/+0x18/+0x1C`, so which incoming argument `[esp+0x18]` corresponds to (the out-slot per
+the `0x4C0560` call shape) and whether `0x4C04B0` takes 3 or 4 arguments is not yet settled -
+`0x4C0560` pushes exactly three. Transcription of this body waits until that is resolved,
+since writing the wrong out-pointer would corrupt a caller slot.
