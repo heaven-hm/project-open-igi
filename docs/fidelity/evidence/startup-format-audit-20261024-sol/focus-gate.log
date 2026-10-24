@@ -1,0 +1,41 @@
+native_gate: angr CFGFast 2/2 exact entries recovered (structural evidence only)
+native_gate: v4 catalog consistency checked for 2 selected entries
+native_gate: checking 0x004A5702 (engine/src/retail/error/error_show.cpp)
+native_gate: 0x004A5702 BLOCKED: 14 issue(s)
+native_gate: checking 0x004A53B3 (engine/src/retail/error/error_show.cpp)
+native_gate: 0x004A53B3 BLOCKED: 13 issue(s)
+native_gate: WARNING: 0x004A5702: five-line comment status does not match manifest status ANALYZED
+native_gate: WARNING: engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Artifact: line
+native_gate: WARNING: engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Tools/evidence: line
+native_gate: WARNING: engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Behavior/CFG: line
+native_gate: WARNING: engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Status/limits: line
+native_gate: WARNING: 0x004A53B3: five-line comment status does not match manifest status ANALYZED
+native_gate: BLOCKED 2 changed native(s) (status>=VERIFIED, CFG>=0.85, behavioral-tests=required)
+  - 0x004A5702 GameNatives source: SHA-256 does not match scripts/GameNatives/string/004A5702-String_VFormat.cpp
+  - 0x004A5702: status ANALYZED is below required VERIFIED
+  - 0x004A5702 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-binaryninja.json
+  - 0x004A5702 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-radare2.json
+  - 0x004A5702: function symbol/signature comparison has not passed review
+  - 0x004A5702 semantic review: result must be 'passed'
+  - 0x004A5702 semantic review is missing a passed/not_applicable argument_mapping check
+  - 0x004A5702 semantic review is missing a passed/not_applicable calls_and_side_effects check
+  - 0x004A5702 semantic review is missing a passed/not_applicable constants_and_scaling check
+  - 0x004A5702 semantic review is missing a passed/not_applicable floating_point_semantics check
+  - 0x004A5702 semantic review is missing a passed/not_applicable function_identity check
+  - 0x004A5702 semantic review is missing a passed/not_applicable memory_layout_and_access check
+  - 0x004A5702 semantic review is missing a passed/not_applicable return_and_error_paths check
+  - 0x004A5702: semantic review has no authorized runtime_contract
+  - 0x004A53B3: status ANALYZED is below required VERIFIED
+  - 0x004A53B3 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-binaryninja.json
+  - 0x004A53B3 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-radare2.json
+  - 0x004A53B3: function symbol/signature comparison has not passed review
+  - 0x004A53B3 semantic review: result must be 'passed'
+  - 0x004A53B3 semantic review is missing a passed/not_applicable argument_mapping check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable calls_and_side_effects check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable constants_and_scaling check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable floating_point_semantics check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable function_identity check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable memory_layout_and_access check
+  - 0x004A53B3 semantic review is missing a passed/not_applicable return_and_error_paths check
+  - 0x004A53B3: semantic review has no authorized runtime_contract
+Comments and manifest status labels alone do not authorize compilation.

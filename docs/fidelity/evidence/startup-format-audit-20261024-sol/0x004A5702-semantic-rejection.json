@@ -1,0 +1,34 @@
+{
+  "kind": "semantic-review-report",
+  "schema_version": 1,
+  "result": "failed",
+  "reviewed": true,
+  "reviewed_by": "Codex source audit; retraction only, not independent acceptance",
+  "address": "0x004A5702",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+  "source_path": "engine/src/retail/error/error_show.cpp",
+  "header_sha256": "5ad5f56cf09f539e373f3a28a41a188d7a324f8a7e171af42c9f46fd52e35044",
+  "checks": [
+    {
+      "name": "calls_and_side_effects",
+      "result": "failed",
+      "rationale": "Candidate imports a toolchain CRT or calls std::vsprintf instead of preserving this retail native body, its local 32-byte stream, _output at 0x004A7720 and conditional _flsbuf at 0x004A760B."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "failed",
+      "rationale": "No current-source paired capture covers the retail counter-negative branch or establishes all error effects. For String_VFormat, the local candidate counter is never modified by std::vsprintf; it cannot model retail _output changing the stream."
+    },
+    {
+      "name": "runtime_contract",
+      "result": "failed",
+      "rationale": "No accepted typed current-candidate runtime contract. Buffer writes are side effects and must be compared as bytes, never declared absent or compared as raw process pointers."
+    }
+  ],
+  "limits": [
+    "This rejection does not transcribe or accept a replacement.",
+    "Fresh retail graphs agree at 1.0, but the candidate source flow differs.",
+    "Original Binary Ninja user annotations are hypotheses, not retail instructions."
+  ]
+}

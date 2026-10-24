@@ -1,0 +1,397 @@
+{
+  "angr_analysis": {
+    "analysis": "CFGFast",
+    "angr_version": "10.0.4.post1",
+    "batch_size": 2,
+    "batches": [
+      {
+        "addresses": [
+          "0x004A53B3",
+          "0x004A5702"
+        ],
+        "result": "pass",
+        "stderr": ""
+      }
+    ],
+    "binary_path": "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "bits": 32,
+    "command": [
+      [
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/.venv-angr/bin/python",
+        "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/angr_analyze.py",
+        "--binary",
+        "/Users/haseeb-mir/Downloads/IGI/igi.exe",
+        "--address",
+        "0x004A53B3",
+        "--address",
+        "0x004A5702"
+      ]
+    ],
+    "functions": {
+      "0x004A53B3": {
+        "baseline_has_unresolved_jumps": false,
+        "block_count": 6,
+        "edges": [
+          {
+            "kind": "unknown",
+            "source": "0x004A53B3",
+            "target": "0x004A53E1"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53E1",
+            "target": "0x004A53EB"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53E1",
+            "target": "0x004A53F3"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53EB",
+            "target": "0x004A5400"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53F3",
+            "target": "0x004A53FE"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53FE",
+            "target": "0x004A5400"
+          }
+        ],
+        "function_entry": "0x004A53B3",
+        "has_unresolved_jumps": false,
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "name": "sub_4a53b3",
+        "nodes": [
+          "0x004A53B3",
+          "0x004A53E1",
+          "0x004A53EB",
+          "0x004A53F3",
+          "0x004A53FE",
+          "0x004A5400"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true
+      },
+      "0x004A5702": {
+        "baseline_has_unresolved_jumps": false,
+        "block_count": 6,
+        "edges": [
+          {
+            "kind": "unknown",
+            "source": "0x004A5702",
+            "target": "0x004A572F"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A572F",
+            "target": "0x004A5739"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A572F",
+            "target": "0x004A5741"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A5739",
+            "target": "0x004A574E"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A5741",
+            "target": "0x004A574C"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A574C",
+            "target": "0x004A574E"
+          }
+        ],
+        "function_entry": "0x004A5702",
+        "has_unresolved_jumps": false,
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "name": "sub_4a5702",
+        "nodes": [
+          "0x004A5702",
+          "0x004A572F",
+          "0x004A5739",
+          "0x004A5741",
+          "0x004A574C",
+          "0x004A574E"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true
+      }
+    },
+    "helper_sha256": "4457073ba23b236a5c229a175d80ef93c2bb8e4b4a925c2f22d599d144f30dc1",
+    "kind": "angr-analysis",
+    "limitations": [
+      "CFGFast is approximate static analysis",
+      "This result does not prove semantic or behavioral equivalence"
+    ],
+    "mapped_base": "0x400000",
+    "result": "pass",
+    "schema_version": 1,
+    "tool": "angr"
+  },
+  "backup_analysis_tools": [],
+  "behavioral_tests_required": true,
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "cfg_threshold": 0.85,
+  "checked_files": [
+    "engine/src/retail/error/error_show.cpp"
+  ],
+  "checked_native_count": 2,
+  "checked_natives": [
+    {
+      "address": "0x004A5702",
+      "angr": {
+        "baseline_has_unresolved_jumps": false,
+        "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "block_count": 6,
+        "edges": [
+          {
+            "kind": "unknown",
+            "source": "0x004A5702",
+            "target": "0x004A572F"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A572F",
+            "target": "0x004A5739"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A572F",
+            "target": "0x004A5741"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A5739",
+            "target": "0x004A574E"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A5741",
+            "target": "0x004A574C"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A574C",
+            "target": "0x004A574E"
+          }
+        ],
+        "function_entry": "0x004A5702",
+        "has_unresolved_jumps": false,
+        "helper_sha256": "4457073ba23b236a5c229a175d80ef93c2bb8e4b4a925c2f22d599d144f30dc1",
+        "implementation_sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "limitations": [
+          "CFGFast is approximate static analysis",
+          "This result does not prove semantic or behavioral equivalence"
+        ],
+        "name": "sub_4a5702",
+        "nodes": [
+          "0x004A5702",
+          "0x004A572F",
+          "0x004A5739",
+          "0x004A5741",
+          "0x004A574C",
+          "0x004A574E"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true,
+        "version": "10.0.4.post1"
+      },
+      "behavioral_tests": {
+        "reason": "static or semantic prerequisites failed",
+        "result": "not-run"
+      },
+      "cfg_similarity": null,
+      "errors": [
+        "0x004A5702 GameNatives source: SHA-256 does not match scripts/GameNatives/string/004A5702-String_VFormat.cpp",
+        "0x004A5702: status ANALYZED is below required VERIFIED",
+        "0x004A5702 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-binaryninja.json",
+        "0x004A5702 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-radare2.json",
+        "0x004A5702: function symbol/signature comparison has not passed review",
+        "0x004A5702 semantic review: result must be 'passed'",
+        "0x004A5702 semantic review is missing a passed/not_applicable argument_mapping check",
+        "0x004A5702 semantic review is missing a passed/not_applicable calls_and_side_effects check",
+        "0x004A5702 semantic review is missing a passed/not_applicable constants_and_scaling check",
+        "0x004A5702 semantic review is missing a passed/not_applicable floating_point_semantics check",
+        "0x004A5702 semantic review is missing a passed/not_applicable function_identity check",
+        "0x004A5702 semantic review is missing a passed/not_applicable memory_layout_and_access check",
+        "0x004A5702 semantic review is missing a passed/not_applicable return_and_error_paths check",
+        "0x004A5702: semantic review has no authorized runtime_contract"
+      ],
+      "path": "engine/src/retail/error/error_show.cpp",
+      "selected_decompiler": "binary_ninja",
+      "status": "ANALYZED"
+    },
+    {
+      "address": "0x004A53B3",
+      "angr": {
+        "baseline_has_unresolved_jumps": false,
+        "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+        "block_count": 6,
+        "edges": [
+          {
+            "kind": "unknown",
+            "source": "0x004A53B3",
+            "target": "0x004A53E1"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53E1",
+            "target": "0x004A53EB"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53E1",
+            "target": "0x004A53F3"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53EB",
+            "target": "0x004A5400"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53F3",
+            "target": "0x004A53FE"
+          },
+          {
+            "kind": "unknown",
+            "source": "0x004A53FE",
+            "target": "0x004A5400"
+          }
+        ],
+        "function_entry": "0x004A53B3",
+        "has_unresolved_jumps": false,
+        "helper_sha256": "4457073ba23b236a5c229a175d80ef93c2bb8e4b4a925c2f22d599d144f30dc1",
+        "implementation_sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+        "implicit_repeat_nodes": [],
+        "initialization_model": null,
+        "limitations": [
+          "CFGFast is approximate static analysis",
+          "This result does not prove semantic or behavioral equivalence"
+        ],
+        "name": "sub_4a53b3",
+        "nodes": [
+          "0x004A53B3",
+          "0x004A53E1",
+          "0x004A53EB",
+          "0x004A53F3",
+          "0x004A53FE",
+          "0x004A5400"
+        ],
+        "reason": null,
+        "recovery_mode": "automatic",
+        "result": "pass",
+        "returning": true,
+        "version": "10.0.4.post1"
+      },
+      "behavioral_tests": {
+        "reason": "static or semantic prerequisites failed",
+        "result": "not-run"
+      },
+      "cfg_similarity": null,
+      "errors": [
+        "0x004A53B3: status ANALYZED is below required VERIFIED",
+        "0x004A53B3 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-binaryninja.json",
+        "0x004A53B3 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-radare2.json",
+        "0x004A53B3: function symbol/signature comparison has not passed review",
+        "0x004A53B3 semantic review: result must be 'passed'",
+        "0x004A53B3 semantic review is missing a passed/not_applicable argument_mapping check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable calls_and_side_effects check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable constants_and_scaling check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable floating_point_semantics check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable function_identity check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable memory_layout_and_access check",
+        "0x004A53B3 semantic review is missing a passed/not_applicable return_and_error_paths check",
+        "0x004A53B3: semantic review has no authorized runtime_contract"
+      ],
+      "path": "engine/src/retail/error/error_show.cpp",
+      "selected_decompiler": "binary_ninja",
+      "status": "ANALYZED"
+    }
+  ],
+  "deleted_files": [],
+  "failures": [
+    "0x004A5702 GameNatives source: SHA-256 does not match scripts/GameNatives/string/004A5702-String_VFormat.cpp",
+    "0x004A5702: status ANALYZED is below required VERIFIED",
+    "0x004A5702 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-binaryninja.json",
+    "0x004A5702 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A5702-radare2.json",
+    "0x004A5702: function symbol/signature comparison has not passed review",
+    "0x004A5702 semantic review: result must be 'passed'",
+    "0x004A5702 semantic review is missing a passed/not_applicable argument_mapping check",
+    "0x004A5702 semantic review is missing a passed/not_applicable calls_and_side_effects check",
+    "0x004A5702 semantic review is missing a passed/not_applicable constants_and_scaling check",
+    "0x004A5702 semantic review is missing a passed/not_applicable floating_point_semantics check",
+    "0x004A5702 semantic review is missing a passed/not_applicable function_identity check",
+    "0x004A5702 semantic review is missing a passed/not_applicable memory_layout_and_access check",
+    "0x004A5702 semantic review is missing a passed/not_applicable return_and_error_paths check",
+    "0x004A5702: semantic review has no authorized runtime_contract",
+    "0x004A53B3: status ANALYZED is below required VERIFIED",
+    "0x004A53B3 binary_ninja evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-binaryninja.json",
+    "0x004A53B3 radare2 evidence: SHA-256 does not match docs/fidelity/evidence/0x004A53B3-radare2.json",
+    "0x004A53B3: function symbol/signature comparison has not passed review",
+    "0x004A53B3 semantic review: result must be 'passed'",
+    "0x004A53B3 semantic review is missing a passed/not_applicable argument_mapping check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable calls_and_side_effects check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable constants_and_scaling check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable floating_point_semantics check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable function_identity check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable memory_layout_and_access check",
+    "0x004A53B3 semantic review is missing a passed/not_applicable return_and_error_paths check",
+    "0x004A53B3: semantic review has no authorized runtime_contract"
+  ],
+  "frida_probes_required": false,
+  "mode": "tree",
+  "primary_analysis_tools": [
+    "selected_decompiler",
+    "radare2"
+  ],
+  "requested_addresses": [
+    "0x004A53B3",
+    "0x004A5702"
+  ],
+  "result": "blocked",
+  "root": "/Users/haseeb-mir/Documents/Code/project-open-igi",
+  "schema_version": 1,
+  "semantic_review_required": true,
+  "supplemental_analysis_tools": [
+    "angr"
+  ],
+  "threshold": "VERIFIED",
+  "v4_catalog": {
+    "binarySha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "catalog": "assets/IGINatives_v4.json",
+    "entries": 2,
+    "gameNativesNamesChecked": 270
+  },
+  "warnings": [
+    "0x004A5702: five-line comment status does not match manifest status ANALYZED",
+    "engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Artifact: line",
+    "engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Tools/evidence: line",
+    "engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Behavior/CFG: line",
+    "engine/src/retail/error/error_show.cpp:39 0x004A53B3: missing Status/limits: line",
+    "0x004A53B3: five-line comment status does not match manifest status ANALYZED"
+  ]
+}

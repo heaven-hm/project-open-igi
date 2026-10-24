@@ -1,0 +1,197 @@
+[
+  {
+    "address": "0x004A53B3",
+    "name": "sprintf",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "implementation": {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+      "signature": "unknown"
+    },
+    "game_natives": {
+      "path": "scripts/GameNatives/game/004A53B3-sprintf.cpp",
+      "sha256": "2359992de5a2364c52aff0956f9da2bc6dbdf6ccbbbf5c0d78c0264d6687c02f",
+      "signature": "unknown"
+    },
+    "verification": {
+      "status": "VERIFIED",
+      "signature_comparison": {
+        "reviewed": true,
+        "result": "abi-adapted",
+        "rationale": "Retail is variadic cdecl (char*, char*, ...); the candidate is variadic cdecl (char*, const char*, ...). The va_list stack layout is preserved."
+      },
+      "limitations": [
+        "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
+        "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
+        "The port delegates to host vsprintf rather than transcribing the retail _iobuf/_output path, so host-CRT differences remain.",
+        "The differential covers bounded integer/string C-locale formats only; no floating point, overflow, invalid pointers or CRT failures.",
+        "No live paired runtime capture exists.",
+        "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+        "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+        "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
+        "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004A53B3-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+        "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (ec61ecd74a8ee095411939201ae043c5bcae371222db07246222ee5ac69afca4) does not match the artifact currently on disk (ebd3488ee853ea2e5e5e749f138b6918c237a63221eff0dafb43464e303558bf). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path.",
+        "100% human-verified by BlankNameES (EU native set; see scripts/GameNatives/EU_NATIVES_BN_COPY.md).",
+        "100% manually verified by HeavenHM (project-igi-natives/IGI_Natives/IGI-Natives.json)."
+      ],
+      "behavioral_runner": {
+        "path": "scripts/format_diff_runner.py",
+        "args": [
+          "--address",
+          "{address}",
+          "--binary",
+          "{binary}",
+          "--binary-sha256",
+          "{binary_sha256}",
+          "--implementation",
+          "{implementation}",
+          "--implementation-sha256",
+          "{implementation_sha256}",
+          "--root",
+          "{root}"
+        ],
+        "timeout_seconds": 600
+      },
+      "selected_decompiler": "binary_ninja",
+      "radare2": {
+        "evidence_path": "docs/fidelity/evidence/0x004A53B3-radare2.json",
+        "evidence_sha256": "d42249e70b734401762d9fa9c80377ddfb2fc12fa211fbe81d810c5913ac65de",
+        "evidence_id": "r2:live:0x004A53B3",
+        "signature": "not restated"
+      },
+      "binary_ninja": {
+        "evidence_path": "docs/fidelity/evidence/0x004A53B3-binaryninja.json",
+        "evidence_sha256": "6fc75e649f95fb1e8ae998b40a5341869399b6f157b3e07225c54df7caf8f650",
+        "evidence_id": "bn:live:0x004A53B3",
+        "signature": "not restated"
+      },
+      "cfg_similarity": 1.0,
+      "semantic_review": {
+        "evidence_path": "docs/fidelity/evidence/0x004A53B3-semantic-review.json",
+        "evidence_sha256": "9136d2d3159c0dc8c0177c83d1518548a15ad98ac2e986f7073c498b50a3c900"
+      },
+      "build": {
+        "evidence_path": "docs/fidelity/evidence/0x004A53B3-build.json",
+        "evidence_sha256": "54173b54a9c10af7c4c4e5a2a3f370b1bf6c65fb78e1fbe6184adc5e5f38a2e3"
+      },
+      "behavioral": {
+        "evidence_path": "docs/fidelity/evidence/0x004A53B3-behavioral.json",
+        "evidence_sha256": "08a6aa4606c26f960392ff35f10ddd979d1114cf43bb35fc80f13eb41e45ef74",
+        "status": "PASS",
+        "oracle": "retail-binary-execution",
+        "tests_passed": 10,
+        "tests_total": 10,
+        "method": "Retail formatter instructions executed in VEX; candidate PE32 CRT boundary modeled by host libc snprintf with explicit x86 va_list dword reads for bounded integer/string formats. Exact return and 512 destination bytes compared."
+      },
+      "recorded_at": "2026-10-23T07:45:22Z",
+      "rebind": {
+        "recorded_at": "2026-10-23T07:45:22Z",
+        "previous_implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+        "new_implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+        "previous_status": "VERIFIED",
+        "new_status": "STRUCTURALLY_VERIFIED",
+        "behavioral_result": "passed",
+        "behavioral_tests": "10/10",
+        "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
+        "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+      }
+    },
+    "status": "STRUCTURALLY_VERIFIED"
+  },
+  {
+    "address": "0x004A5702",
+    "name": "String_VFormat",
+    "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "implementation": {
+      "path": "engine/src/retail/error/error_show.cpp",
+      "sha256": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+      "signature": "unknown"
+    },
+    "game_natives": {
+      "path": "scripts/GameNatives/string/004A5702-String_VFormat.cpp",
+      "sha256": "155b45aad13b3f80b64d6fa9dfac70d6e7ace175f053e6ade63ca98f2f8f6eb4",
+      "signature": "unknown"
+    },
+    "verification": {
+      "status": "STRUCTURALLY_VERIFIED",
+      "signature_comparison": {
+        "reviewed": true,
+        "result": "abi-adapted",
+        "rationale": "Retail's third argument is the 32-bit va_list pointer; the candidate declares std::va_list, which is char* on i386. cdecl and the argument order are preserved."
+      },
+      "limitations": [
+        "No genuine paired retail/candidate game-process runtime capture exists for this address; runtime_tests is intentionally absent and RUNTIME_TESTED/VERIFIED is not claimed.",
+        "The former runtime_tests binding cited a behavioral-test-report (emulation or host differential), not a paired retail/candidate game-process capture; it was removed rather than rebound to that artifact.",
+        "Host-CRT delegation and the same format-family limits as sprintf apply.",
+        "No live paired runtime capture exists.",
+        "The behavioural differential is emulator/host execution (VEX, Unicorn or angr plus the compiled candidate), not a live paired retail/candidate game process.",
+        "The CFG agreement cited here is Binary Ninja vs Radare2 on the retail image; angr CFGFast was not rerun for this rebind.",
+        "cfg_similarity 1.0 is not a candidate-vs-retail CFG score; the candidate machine CFG was not compared for isomorphism.",
+        "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x004A5702-behavioral.json), which records angr VEX (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+        "2026-10-23 runtime-claims audit: verification.behavioral.evidence_sha256 (81d966dd750d275b2db2285c83a599277fc0f255fe499443efd43166b919f964) does not match the artifact currently on disk (5b6584246dbd69f07509c9752f644324e005ada71f2c5224f47a7769467d2d63). The binding is stale and must be regenerated for this record; it must not be rebound to whatever file currently sits at that path."
+      ],
+      "behavioral_runner": {
+        "path": "scripts/format_diff_runner.py",
+        "args": [
+          "--address",
+          "{address}",
+          "--binary",
+          "{binary}",
+          "--binary-sha256",
+          "{binary_sha256}",
+          "--implementation",
+          "{implementation}",
+          "--implementation-sha256",
+          "{implementation_sha256}",
+          "--root",
+          "{root}"
+        ],
+        "timeout_seconds": 600
+      },
+      "selected_decompiler": "binary_ninja",
+      "radare2": {
+        "evidence_path": "docs/fidelity/evidence/0x004A5702-radare2.json",
+        "evidence_sha256": "f43cfebf7872a62fb039bcb5a40d86343ddf807ccec7d2c16df93aabbcf8afd8",
+        "evidence_id": "r2:live:0x004A5702",
+        "signature": "not restated"
+      },
+      "binary_ninja": {
+        "evidence_path": "docs/fidelity/evidence/0x004A5702-binaryninja.json",
+        "evidence_sha256": "a51cf2ea15512e1f69f73ce1fcbd03bab9bb8881d0fa579ac0c22ed4bd91c123",
+        "evidence_id": "bn:live:0x004A5702",
+        "signature": "not restated"
+      },
+      "cfg_similarity": 1.0,
+      "semantic_review": {
+        "evidence_path": "docs/fidelity/evidence/0x004A5702-semantic-review.json",
+        "evidence_sha256": "7b00ad0659b2280a6c6994589fa7361fcdf927706e8021ba719e124fda055673"
+      },
+      "build": {
+        "evidence_path": "docs/fidelity/evidence/0x004A5702-build.json",
+        "evidence_sha256": "a75e31f450a5eeeb6f58d1308c265ebc5f37655df480c8d5e61e4cf1711e9e46"
+      },
+      "behavioral": {
+        "evidence_path": "docs/fidelity/evidence/0x004A5702-behavioral.json",
+        "evidence_sha256": "5e0e3ab036fb46612e6b045a27c5bef2dfa0e3fd6fad207bd336d2334379279f",
+        "status": "PASS",
+        "oracle": "retail-binary-execution",
+        "tests_passed": 10,
+        "tests_total": 10,
+        "method": "Retail formatter instructions executed in VEX; candidate PE32 CRT boundary modeled by host libc snprintf with explicit x86 va_list dword reads for bounded integer/string formats. Exact return and 512 destination bytes compared."
+      },
+      "recorded_at": "2026-10-23T07:45:22Z",
+      "rebind": {
+        "recorded_at": "2026-10-23T07:45:22Z",
+        "previous_implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+        "new_implementation_sha256": "e159b0edbadbe67f217119e07165c40c66245821b552b9864a987759026a3b9e",
+        "previous_status": "VERIFIED",
+        "new_status": "STRUCTURALLY_VERIFIED",
+        "behavioral_result": "passed",
+        "behavioral_tests": "10/10",
+        "stale_reason": "behavioral stale: evidence file SHA-256 differs from manifest reference; runtime_tests was bound to a behavioral-test-report, not to a paired retail/candidate runtime capture",
+        "note": "Rebound to freshly regenerated static, semantic and build evidence; the candidate translation unit was recompiled and the changed graph was re-read from retail. The behavioral differential was re-executed against the current implementation and passed; it is emulator/host evidence, not runtime_tests."
+      }
+    },
+    "status": "STRUCTURALLY_VERIFIED"
+  }
+]

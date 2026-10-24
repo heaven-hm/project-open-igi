@@ -1,0 +1,17 @@
+{
+  "kind": "format-source-audit-retention",
+  "verified": false,
+  "files": {
+    "0x004A53B3/capture.json": "1c34815dccec9ad838f9180dd5b3a7a49995f494ce63b2a0bb76e39c791461ab",
+    "0x004A53B3-semantic-rejection.json": "5f06f3c31093115a45d3cc7cb93654a22c03153f85646b5a24cba6879a333022",
+    "0x004A5702/capture.json": "b5dcac40a3bfee52ad786df213b75275bf0ec96800e9e9f5f7b0cb1bba754a60",
+    "0x004A5702-prior-semantic-review.json": "283ed6157b4694af63cfd0985dbe1bb3d22896e05fffcc0de617794f2c4478f4",
+    "0x004A5702-semantic-rejection.json": "367498e78ab6c082ea1ea3386931c392f8f8a0ed8d051ce06186dfcc8067a220",
+    "README.md": "6ae9fadc8bb0c145ec8ac365a93cbb9899687d1152db7432b46ffc49c3626135",
+    "candidate-error-show.cpp": "f246157d340ee1e808f93850d828e5cede0c0d6614906952b288483605d0b54e",
+    "candidate-error-show.hpp": "5ad5f56cf09f539e373f3a28a41a188d7a324f8a7e171af42c9f46fd52e35044",
+    "focus-gate.json": "700369005780add8dfc741622db9e783ed91a398d1757bfb1de91d5562ba9483",
+    "focus-gate.log": "42f3497d2774e62edd6c22623b277facbe23326c96774fcc75175e2585988a3b",
+    "prior-records.json": "3e33f2333e626ef93f899646bb87de002768be1000e5c1c12f70157e558c6b74"
+  }
+}
