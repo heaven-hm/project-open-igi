@@ -6,6 +6,7 @@
 /*
 !/engine/
 !/.gitignore
+!/.githooks/
 *.pyc
 __pycache__
 .pyc
@@ -36,7 +37,13 @@ cmake_install.cmake
 *.ilk
 *.exp
 
-docs
+# Fidelity records are tracked: they are the per-native evidence and the
+# manifest. Everything else under docs/ stays local. Without this, `git add -A`
+# silently skips evidence changes on modified-but-ignored paths.
+!/docs/
+/docs/*
+!/docs/fidelity/
+!/docs/fidelity/**
 
 scripts/__pycache__/build_attestation.cpython-312.pyc
 scripts/__pycache__/candidate_build_receipt.cpython-312.pyc
