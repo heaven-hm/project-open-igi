@@ -481,3 +481,27 @@ verified `HeapList_Remove`, then re-insert it into the list. A duplicate hit rep
 Dependencies: `0x4F9E70` (lookup) and `0x4AF810` (report) have no provenance lines yet;
 `0x4AF960` and `0x4AF8F0` are already transcribed. So one more leaf (`0x4F9E70`) plus a
 reporting helper stand between the tree and a writable `0x4F9DF0`.
+
+### 0x4AF810 decoded (78 B, 3 blocks) - warning-log emitter; two more deps
+
+```
+if (dword [0x00936274] == 0) return;      ; logging enabled flag / callback pointer
+push edi
+call 0x4A53B3(0x00A84640, "Warning: ...", ...)   ; format into the static buffer
+... append arg1, strlen buffer via repne scasb, append arg2 through 0x4A5702
+call dword [0x00936274](0x00A84640)       ; invoke the log callback with the buffer
+add esp,0x18; pop edi; ret
+```
+
+So this is a *log formatting/emission* helper using a static buffer at `0x00A84640`, a
+formatting routine `0x4A53B3`, an append routine `0x4A5702`, and an indirect callback
+through `0x00936274`. It is **not** the graph-stream logic; `0x4F9DF0` merely reports its
+hash collision through the general logging path.
+
+Dependencies for this: `0x4A53B3`, `0x4A5702` and globals `0x00A84640`/`0x00936274`.
+Neither routine has a provenance line, and the callback is a runtime-installed pointer
+(so a faithful transcription needs the retail's log-callback global, not a substitute).
+
+Consequence: `0x4F9DF0` cannot be written until the logging family exists, even though its
+own 7-block logic is fully decoded. That makes the logging pair the next ordered target,
+because it will also serve other nodes later.
