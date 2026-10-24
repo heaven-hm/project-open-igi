@@ -17,28 +17,18 @@
 #include <cstdint>
 
 #if defined(_MSC_VER) && defined(_M_IX86)
-#define IGI_RETAIL_CDECL __cdecl
+#define NATIVE_DECL __cdecl
 #elif defined(__i386__) && (defined(__GNUC__) || defined(__clang__))
-#define IGI_RETAIL_CDECL __attribute__((cdecl))
+#define NATIVE_DECL __attribute__((cdecl))
 #else
-#define IGI_RETAIL_CDECL
+#define NATIVE_DECL
 #endif
 
-namespace igi::retail::core {
-
-// The inputs the per-frame body needs: the registered instance, the window
-// class, the show command and the level/display selection.
-struct MainConfig
-{
-    void* window_class{};
-    void* instance{};
-    int show_command{};
-    std::uint32_t level_number{1U};
-    bool windowed{false};
-};
-
-} // namespace igi::retail::core
-
+// Retail entry point 0x0048F530. The retail function ends with
+// `add esp,0x464; retn 0x10`, i.e. a __stdcall four-argument entry called by the
+// CRT start-up: (hInstance, hPrevInstance, lpCmdLine, nShowCmd). No wrapper type
+// is introduced here; the arguments are passed exactly as the retail code reads
+// them at [esp+0x478], [esp+0x47C], [esp+0x480] and [esp+0x484].
 extern "C" {
 
 // Native: Main() - VA 0x0048F530 - complete port.
@@ -54,8 +44,8 @@ extern "C" {
 //           per-frame loop: the x87 precision setup, the app context's
 //           isActive flag, the frame dispatch or a 500 ms sleep, the loop
 //           status byte and the message pump.
-int IGI_RETAIL_CDECL Main(const igi::retail::core::MainConfig* config);
+int __stdcall Main(void* h_instance, void* h_previous_instance, char* command_line, int show_command);
 
 } // extern "C"
 
-#undef IGI_RETAIL_CDECL
+#undef NATIVE_DECL

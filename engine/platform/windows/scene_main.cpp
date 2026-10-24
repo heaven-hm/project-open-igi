@@ -2,6 +2,7 @@
 #define UNICODE
 #define _UNICODE
 #include "igi/retail/core/app_context.hpp"
+#include "igi/retail/core/main.hpp"
 #include "igi/retail/core/app_startup_natives.hpp"
 #include "igi/retail/core/debug_command_line.hpp"
 #include "igi/retail/core/frame_natives.hpp"
@@ -342,8 +343,13 @@ LRESULT CALLBACK window_procedure(HWND window_handle,
 
 } // namespace
 
-int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE, LPSTR command_line, int show_command)
+int WINAPI WinMain(HINSTANCE instance_handle, HINSTANCE previous_instance, LPSTR command_line, int show_command)
 {
+    // Retail entry: the CRT start-up calls 0x0048F530 with
+    // (hInstance, hPrevInstance, lpCmdLine, nShowCmd); the retail body reads
+    // them at [esp+0x478], [esp+0x47C], [esp+0x480], [esp+0x484]. This entry is
+    // the CRT-equivalent call and forwards exactly those four arguments.
+    return ::Main(instance_handle, previous_instance, command_line, show_command);
 
     // Retail IGI.EXE creates the single-instance mutex at 0x0048F544 with
     // CreateMutexA(NULL, TRUE, "IGIMUTEX"); the name bytes are at VA 0x00541ECC.
