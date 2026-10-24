@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "kind": "semantic-review-report",
+  "address": "0x0046B040",
+  "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "implementation_sha256": "1f08bfec3a2d4b3a9ff3efb7bcd390e47f3a94cd71baad93915df164df0d1bbd",
+  "implementation_path": "engine/src/retail/resource/native_46b040.cpp",
+  "reviewed_by": "lead",
+  "reviewed": true,
+  "review_scope": "static: retail instructions and emitted candidate listing",
+  "result": "passed",
+  "checks": [
+    {
+      "name": "function_identity",
+      "result": "passed",
+      "rationale": "6 retail bytes, 2 instructions, 1 block, 0 edges; candidate 1/0 at CFG 1.000."
+    },
+    {
+      "name": "argument_mapping",
+      "result": "passed",
+      "rationale": "No ABI arguments; no stack slot is read."
+    },
+    {
+      "name": "constants_and_scaling",
+      "result": "passed",
+      "rationale": "One constant: the address 0x005BE2B0. No offset or scale applied."
+    },
+    {
+      "name": "memory_layout_and_access",
+      "result": "passed",
+      "rationale": "Exactly one four-byte load from 0x005BE2B0, which is the width proven here. No store, no indirect access."
+    },
+    {
+      "name": "calls_and_side_effects",
+      "result": "passed",
+      "rationale": "No call and no store: the only effect is the returned dword."
+    },
+    {
+      "name": "return_and_error_paths",
+      "result": "passed",
+      "rationale": "One entry, one exit: the ret at +5. No branch and no error path."
+    },
+    {
+      "name": "floating_point_semantics",
+      "result": "not_applicable",
+      "rationale": "Integer load only; no floating-point instruction."
+    }
+  ],
+  "runtime_contract": {
+    "scope": "paired retail/candidate observation of the returned value during level-1 startup",
+    "probe_sha256": "1b8ebd27cd80ac657abb8fc2a7f30c169d2c3545c8ab454212a7b3ff237e53a9",
+    "required_observables": {
+      "inputs": [],
+      "outputs": [
+        "return_value"
+      ],
+      "sideEffects": []
+    },
+    "no_arguments": true,
+    "no_side_effects": true
+  },
+  "evidence": "docs/fidelity/evidence/0x0046B040-runtime",
+  "limitations": [
+    "Runtime not yet paired: the candidate exits at 0x00402930 before any game native runs.",
+    "The value's purpose is not established; only its four-byte width and that a caller stores through it at +0x38."
+  ]
+}
