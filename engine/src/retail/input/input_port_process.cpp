@@ -224,11 +224,11 @@ igi::retail::input::InputPortRecord* NATIVE_DECL QTask_AllocateInputPort(
     ++QTask_InputPortCounter;
     const std::uint32_t slot = port_index & 0xFFFFU;
     auto& type_slot = QTask_TypeTable[slot];
+    // Retail 0x00401360/0x0040133A: the pooled flag is 0 on the heap path and 1 only when the pool branch at
+    // 0x0040132E-0x00401358 is taken. This transcription has no pool branch yet, so it always allocates and the flag
+    // is 0. The previous code took it from the type record's task-list byte, which can mark an instance pooled when
+    // it came from the heap - a divergence recorded in section 17.6.
     std::uint8_t appended = 0U;
-    if (type_slot.has_task_list != 0U)
-    {
-        appended = 1U;
-    }
     auto* const record = static_cast<igi::retail::input::InputPortRecord*>(
         igi::retail::mem::Mem_Alloc(static_cast<std::int32_t>(type_slot.object_size), 4));
     if (record == nullptr)
