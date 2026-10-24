@@ -262,3 +262,22 @@ allocator 0x004B0C60 and the two initialisers, none of which are transcribed.
 So the boundary's dependency tree does not stop one level below the callees: it continues through code-address constants and
 allocator helpers. This is recorded so the next attempt does not mistake "small callee" for "one-step callee". The tractable order
 remains leaf-first, but the leaf set for the boundary is those allocator/initialiser helpers, not the registration routines.
+
+## 0x004AF9D0 is out of reach as a leaf (round 243)
+
+Reading it settles the question the last round left open: 0x004AF9D0 is not a small initialiser. It is 329 instructions with two
+jump tables (0x004AFE78 and 0x004AFF04), a 0x40-dword scratch class compared with `repz cmpsl`, `rep stos` fills using
+0x01010101, and per-slot flag words written to `+0x08` with values 0x100, 0x400, 0x800, 0x1000, 0x2000, 0x4000, 0x8000,
+0x10000, 0x20000 and 0x40000. That is a character-pattern compiler: it walks a bracketed pattern, expands `\` escapes and
+`a-z` ranges, and emits a 0x14-byte record per slot.
+
+It also calls 0x004AFFB0 and 0x004AFF90, neither transcribed, and those two sit beside it in 0x004AF000-0x004B0000 with the same
+shape of jump-table dispatch.
+
+Consequence for this work: this is not a leaf in any practical sense, and it may be compiler-library code rather than game logic
+(the bracket/escape expansion with `repz cmpsl`/`rep stos` idioms is what an MSVC regex or wildcard matcher looks like). Deciding that
+honestly needs the two callees read first, which is a round of its own, so no transcription was attempted and nothing was stubbed.
+
+What this does mean for the boundary: 0x004F1DB0's dependence on 0x004AF9D0 does not make 0x004F1DB0 landable now, and 0x004F1CD0 is
+gated on the code-address constant 0x004F1CF0 (which has no function body at all - the address is referenced as data only). The two
+small boundary dependencies turned out to be a list helper that is already landed (0x004AF8F0) and a 329-instruction pattern compiler.
