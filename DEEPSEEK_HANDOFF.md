@@ -1401,3 +1401,22 @@ has an owner.
 
 Next action when work resumes: either transcribe the four handlers first (extents unknown, so triage them) or pick rows
 whose immediates are all data, not code.
+
+## Scope decision taken: keep transcribing on the real path (round 201)
+
+The user was given the measured closure and chose: keep transcribing one native per round on the real retail path, rather
+than narrowing the deliverable, re-baselining MVP.md or stopping. So the port stays faithful and the wall stays; no
+diagnostic bypass will be added at the startup boundary.
+
+Consequence for planning: increases now come from the dependency order, and the "cheapest row" is not a reliable guide.
+Verified again this round: row 13's tail target 0x00485150 (31 bytes, 5 instructions, push 0 / push 0x00484E60 /
+push "LOCAL:missions" / store 0 to 0x005C89FC / call 0x004B1420 / add esp,0xC / ret) needs BOTH 0x004B1420 (229 bytes,
+14 blocks, 21 edges, absent) and the code immediate 0x00484E60 (absent, and itself large - it starts with sub esp,0x104).
+
+Next increment, chosen for the chain rather than the size: 0x004B1420 (229 B, 14 blocks, 21 edges). It is absent from the
+tree, it is a direct callee of 0x00485150, and 0x00485150 is the tail of row 13 (0x00484F30) which section 21 ranked as
+one of the two cheapest remaining rows. Landing 0x004B1420 does not finish row 13 - 0x00484E60 is still needed - so the
+honest sequence is 0x004B1420 then 0x00484E60 then 0x00485150 then 0x00484F30.
+
+The figure to keep in view while doing this: ten natives verified at CFG 1.000 in 201 rounds, 55 rounds left, and the
+measured closure is 1,242 natives at depth 3. The user has accepted that trajectory knowingly.
