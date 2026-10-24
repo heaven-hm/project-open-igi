@@ -282,3 +282,34 @@ Implementation notes:
 - CUA (`cua-driver call …`, `mcp`) also provides screen images and input automation; use it when the
   check is interaction-driven (menus, mouse look, movement) and the wrapper above when a plain capture
   is enough. Neither replaces Frida call evidence.
+
+---
+
+## 10. Build directories (and the "requires Windows x86 (PE32)" error)
+
+| Directory | Configured by | Purpose |
+|---|---|---|
+| `build/` | manual / any `cmake -S . -B build …` | diagnostic Windows x86 dev build (`igi1.exe`), gates off; also holds `build/audit`, `build/tester`, `build/runtime-traces` reports |
+| `build-win32-no-verify-gate/` | `./build_no_verify.sh` | verification-free build that is copied into `/Users/haseeb-mir/Downloads/IGI/igi1.exe` |
+| gate/release dir | `./build.sh` | strict `scripts/native_gate.py` + production gate; the only place native verification runs |
+
+`CMakeLists.txt` line 12 rejects any configuration that is not Windows x86 PE32, so a `build/`
+directory previously configured with the host compiler (e.g. Apple clang, as the repo's stale
+`build/` was) fails with:
+
+```
+CMake Error at CMakeLists.txt:12 (message):
+  The diagnostic baseline requires Windows x86 (PE32).
+```
+
+Fix — drop only the stale CMake config artifacts (keep the report subdirectories), then reconfigure
+for the mingw target:
+
+```sh
+rm -rf build/CMakeCache.txt build/CMakeFiles build/Makefile build/CTestTestfile.cmake build/DartConfiguration.tcl
+cmake -S . -B build -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_CXX_COMPILER=i686-w64-mingw32-g++ \
+      -DCMAKE_BUILD_TYPE=Release -DIGI_ENABLE_NATIVE_GATE=OFF -DIGI_FULL_PRODUCTION_GATE=OFF -DBUILD_TESTING=OFF
+cmake --build build -j 8      # produces build/igi1.exe (Windows x86)
+```
+
+Verified 2026-10-24: `cmake --build build` completes and links `build/igi1.exe` (16,062,981 bytes).
