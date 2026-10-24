@@ -1,0 +1,19 @@
+{
+  "verdict": "REGISTRAR_ACCEPTANCE_MATCH",
+  "baseline_positions": 153,
+  "observed_positions": 14779,
+  "compared_positions": 153,
+  "classes_compared": 279,
+  "extra_positions_ignored": 14626,
+  "mismatch_count": 0,
+  "first_divergence": null,
+  "mismatches": [],
+  "accepted_divergences": [
+    "relocated code/data addresses are not compared; registrar identity is executed position order",
+    "IGI1MUTEX and other declared startup-layout differences are not part of the class oracle",
+    "the tail (Flow_DeleteHandler path) is outside the oracle's executed QTask_RegisterClasses positions"
+  ],
+  "baseline": "retail-class-registration-per-registrar-v1",
+  "retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+  "trace_retail_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01"
+}
