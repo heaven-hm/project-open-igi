@@ -1093,3 +1093,30 @@ collapses: the only remaining untranscribed natives in this cluster are `0x40192
 Process lesson recorded: before naming a callee "next decode", check `engine/src/**/native_<va>*.cpp`
 and the manifest first. This is the second duplicate-native near-miss of the project (the first was
 0x004B0D40 = QHash_ValueSet); the check is cheap and the binder would have exposed it anyway.
+
+### 0x401927 partial decode (writer) - descriptor register
+
+```
+[esi+0xAF5EE8] = di (word)                  ; slot criteria word
+if (di == 0x181) [esi+0xAF5F0C] = 0x20000   ; sentinel slot gets fixed 0x20000
+else { eax = di & 0xFFFF; edx = eax*3<<4;   ; *48 = previous slot
+       [esi+0xAF5F0C] = [edx+0xAF5F0C] }    ; inherit parent's field
+if (arg_at_esp_1C != 0) {
+    call 0x4B0B00(esi+0xAF5EEC, ecx, arg, 0); [esi+0xAF5F04] = 1
+} else [esi+0xAF5F04] = 0
+if (di != 0x181) {
+    edi &= 0xFFFF
+    ecx = 0xA96AE0 + ebp*4
+    edx = 0xFE                            ; 254
+    eax = 0xA96AE0 + edi*4
+    ... loop with +0x600 stride over the handler table
+}
+```
+
+Layout facts confirmed: criteria word at `+0`, a 0x20000 constant for the `0x181` sentinel slot,
+inheritance of the field at `+0x24` from the parent slot (index `di` itself, 48-byte stride), a
+presence byte at `+0x1C`, and a `0x4B0B00` call writing at `+0x04..+0x24`. The tail from `0x4019CF`
+(the `+0x600`-stride scan and the final field fills) is still to capture.
+
+`0x4B0B00` is called with four arguments and is not yet identified; that plus the tail are the
+remaining gaps before this native can be transcribed.
