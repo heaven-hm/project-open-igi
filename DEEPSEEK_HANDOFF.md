@@ -975,3 +975,35 @@ Consequence for the process: pre-boundary natives cannot pass a VERIFIED thresho
 `--threshold STRUCTURALLY_VERIFIED` for them, or the boundary must be lifted by transcribing the registrar.
 
 Do not manufacture a runtime contract for an unobservable native; record the blocker instead.
+
+## 0x4012F0 decoded instruction-by-instruction; ONE instruction unresolved before it can be written (round 168)
+
+Registers: entry pushes ebx/ebp/esi/edi. `ebp = [esp+0x10]` = arg2 (typeId, word used). `[esp+0x14]` later =
+arg1 (owner). `edi = (typeId & 0xFFFF) * 3 << 4` = typeId * 0x30 = byte offset into the type table at 0xAF5EE0.
+
+Type-record field map proven from the absolute offsets (base = 0xAF5EE0 + typeId*0x30):
+  +0x00/0x02 word   (parent class word, readers elsewhere)
+  +0x04  dword  object size            (pushed to Mem_Alloc as (size, 4))
+  +0x0C  dword  pool base pointer      ('add esi, ecx' at 0x40134C)
+  +0x10  dword  pool slot-index array  ('mov esi,[ecx+eax*4]' at 0x40133C)
+  +0x14  dword  poolUsed               (compare at 0x40132A, inc at 0x401357, store 0x401358)
+  +0x18  dword  pool capacity          (compare at 0x40132A)
+  +0x1C  dword  element size           ('imul esi,[edi+0xaf5efc]')
+  +0x20  dword  second pointer base    (loaded at 0x401334 into edx)
+  +0x24  byte   pool-present flag      ('mov al,[edi+0xaf5f04]', test at 0x40131A)
+
+Control flow: live count load/inc/store is at 0x4012F9/0x401307/0x40130B, i.e. before every branch. Pool path taken
+only when +0x24 != 0 AND poolUsed < capacity; it sets bl = 1 (pooled) and jumps to the header writes at 0x401381.
+Otherwise 0x401360 clears bl = 0 and falls into the heap path: Mem_Lock(1) (0x4B0D60), Mem_Alloc(+0x04 size, 4)
+(0x4B0C60), add esp,0xc, Mem_Unlock (0x4B0D90). Header writes in retail order: [esi+4]=0, [esi+0]=0, [esi+0x14]=owner,
+eax=esi+0xC, ecx=esi+8, [esi+0x1E]=bl (byte), [esi+0x1C]=bp (word typeId), [esi+0x18]=0, [ecx]=eax, [eax]=0,
+[esi+0x10]=ecx; return esi.
+
+**UNRESOLVED — do not write the function until this is settled:** `0x0040134E  mov dword [edx + esi], eax`. esi has just
+become base+slot*elemSize (an address), so [edx+esi] as a store target is not self-consistent with edx = [edi+0xAF5F00]
+being a base pointer. Likely readings: (a) the second pointer at +0x20 is not a base but a negative/typed offset, (b)
+r2's decode of the ModRM is wrong and the store is [esi+something] with edx as the value, or (c) +0x20 holds a pointer to
+the per-slot table and esi is an index at that point (i.e. the imul/add at 0x401345/0x40134C produce a slot offset, not
+an address). Settle by reading the raw bytes of 0x00401345-0x00401352 with a second decoder and by finding the reader
+of the value stored there. Writing it either way now would be guessing, which is what produced the four false records
+already withdrawn.
