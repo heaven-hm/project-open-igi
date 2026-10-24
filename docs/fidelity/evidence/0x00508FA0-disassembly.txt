@@ -1677,3 +1677,32 @@ receipt's `compilation.compiled_sources`, not merely in `inputs.sources` (which 
 tree, not the target). CFG binding proves the source exists; only the compiled-sources list proves it
 was built. Print the count before and after wiring and verify the anchor matched - the silent
 `str.replace` that never matched is what hid 18 unwired natives for several rounds.
+
+### 0x4F9DF0 graph-stream emitter: full body captured (120 B, 7 blocks)
+
+```
+esi = arg1(name); push esi; call 0x4F9E70(name) -> eax = id; add esp,4
+edx = [0xA774A0]                       ; list A head sentinel (walker)
+ecx = [edx]
+if ecx != 0:
+  loop: if [edx+8] == id -> DUPLICATE path (0x4F9E58)
+        edx = ecx; ecx = [ecx]; if ecx != 0 -> loop
+L_4F9E17: esi = [0xA76D18]             ; list B free-list head
+  if [esi] == 0 -> return (nothing registered)
+  edx = arg3; ecx = esi
+  [esi+8] = id; eax = arg2
+  [ecx+0xC] = arg2 (type code); [ecx+0x10] = arg3 (handler)
+  push esi; call 0x4AF960             ; append/allocate step
+  push esi; push 0xA774A0; [esi+4]=0; [esi]=0; call 0x4AF8F0   ; link into list A
+  add esp,0xC
+0x4F9E58: push esi; push "GraphStream: collision ..."; call 0x4AF810 (WarningLog); pop; ret
+```
+
+So the node record is `{+0 next, +4 prev, +8 id, +0xC type code, +0x10 handler}`, ids come from
+`0x4F9E70(name)`, duplicates are rejected with a warning rather than silently replaced, and the
+writable list is the SAME pair the stream init owns (`0xA774A0`, `0xA76D18`).
+
+Consequence: `0x4F9DF0` and `0x4FAA60` are confirmed a **mutual pair** - the emitter walks and links
+lists whose head/enable fields only the init establishes, while the init calls the emitter 5 times.
+Neither can be declared before the other without inventing storage, so they must be transcribed and
+committed together, with `0x4FAA60` as the owner of `0xA774A0`/`0xA76D18`.
