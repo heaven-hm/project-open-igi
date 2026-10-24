@@ -910,3 +910,29 @@ the stray-push call wrong.
 With this, `0x4C0360` is otherwise self-contained: no globals, one callee, and the 12-byte
 self-linked bucket layout matches what `0x4C04B0` walks (`next` at +0, key at +8, back at +4/-4
 as the inserts use).
+
+### 0x508FA0 full listing captured: 755 B, 1 block, 196 instructions, 42 call sites -> 20 targets
+
+Listing saved verbatim as `docs/fidelity/evidence/0x00508FA0-ai-graph-listing.txt` so the decode
+is not restarted. Call inventory (count per target):
+
+```
+9  fcn.00401400     <- most frequent, not yet transcribed
+7  fcn.004f1a80     landed (container append)
+6  fcn.004f0f80     <- not yet transcribed
+3  fcn.005186c0     landed (NodeCriteria register)
+2  fcn.00401530     landed (QTask event-handler link)
+1  fcn.004f9df0     decoded, blocked on 0x4AF810
+1  fcn.004f9460     landed (node-size table)
+1  fcn.004f9280     <- not yet transcribed
+... remaining 12 targets each called once
+```
+
+So the AI-graph registrar is one straight-line block that drives the whole symbol/table setup:
+9 calls to `0x401400`, 7 to the container append, 6 to `0x4F0F80`, 3 NodeCriteria registrations,
+plus one-shot setup calls. The three untranscribed hot targets are `0x401400`, `0x4F0F80` and
+`0x4F9280`; `0x401400` is now the highest-value next decode because it is invoked nine times from
+this block alone.
+
+This capture is a checkpoint, not a transcription: writing the 196-instruction body requires the
+three untranscribed targets first, so position 1 cannot advance until they land.
