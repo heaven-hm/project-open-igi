@@ -590,9 +590,10 @@ void TaskEventTable_MarkSlotNoMask_401890(std::uint16_t value, std::uint32_t ind
 //           and the current type write are the retail's. The retail's
 //           handler links for the QTask class run through the natives at
 //           0x00401860 and 0x00401890, which the port does not use for its
-//           own phase table. INTERMEDIATE PLACEMENT: the handler-table clear sits after the class
-//           registration because retail's phase 0..3 links (0x0040113E-0x00401176) are not transcribed
-//           yet; once they land the clear must follow them, immediately before 0x4B0B00/0x4B8810.
+//           own phase table. The phase 0..3 links at 0x0040113E-0x00401176 are transcribed here, so the
+//           handler-table clear sits at its retail position: after those links and before the 0x4B0B00 and
+//           0x4B8810 calls, which are still missing. The six-byte phase records the links write at
+//           0x0054F930 + phase*6 are not yet runtime-observed.
 void NATIVE_DECL QTask_Init()
 {
     QTask_ClearEventTable();
@@ -610,8 +611,8 @@ void NATIVE_DECL QTask_Init()
     TaskEventTable_MarkSlotNoMask_401890(QTask_GetCurrentType(), 3U);
     // 0x0040117B xor eax,eax / 0x0040117D mov ecx,0x17d00 / 0x00401183 mov edi,0xa96ae0 /
     // 0x0040118F rep stosd - the handler/state table is zeroed here, after the registration and after the
-    // phase 0..3 links at 0x0040113E-0x00401176 (not yet transcribed), and before the 0x4B0B00 and 0x4B8810
-    // calls at 0x00401196/0x004011A5. 254 phases x 384 classes = 0x17D00 dwords.
+    // phase 0..3 links at 0x0040113E-0x00401176 (transcribed above), and before the 0x4B0B00 and 0x4B8810
+    // calls at 0x00401196/0x004011A5, which are not transcribed yet. 254 phases x 384 classes = 0x17D00 dwords.
     for (std::size_t handler_index = 0U; handler_index < 0x17D00U; ++handler_index) {
         QTask_HandlerTable[handler_index] = nullptr;
     }
