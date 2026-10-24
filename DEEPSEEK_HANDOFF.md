@@ -1117,3 +1117,24 @@ Actionable correction for the next pass: do not use `pd N @ <addr>` for this fun
 disassembly (`af` then `pdf`, or `pdr` with the function boundary from the 391-byte extent) and verify the row count
 against the byte length before transcribing. The dependency note (0x4015F0-dependencies.md) is unaffected: it read call
 targets, and the four it lists all appear in the listing.
+
+## The deployed igi1.exe is STALE relative to HEAD (round 186)
+
+Checked integrity directly:
+  deployed /Users/haseeb-mir/Downloads/IGI/igi1.exe SHA-256 prefix 96fc1442d712bc86
+  HEAD 7b9557b5 (evidence and docs only since the freeze)
+
+The deployed binary is the artifact frozen before the following engine changes, all of which are in HEAD but NOT in the
+deployed executable:
+  993116bf  pooled-flag derivation fixed in the allocator
+  1f3d2917  allocator 0x004012F0 and wrapper 0x004012A0 rewritten from the retail instructions
+  e04ebd71  unlink native 0x004015D0 transcribed
+  cf618047  live-count reader 0x00401A60 wired
+
+Consequence: any runtime statement about "the candidate" made from the current deployment describes code that no longer
+matches HEAD, so the boundary-at-exit-3 result must be re-established on a fresh artifact before it is cited again. The
+freeze/deploy step needs a coordinated pass: build, candidate_build_receipt.py, freeze under build/artifacts/, deploy the
+exact frozen copy, and only then hand to the Tester for the paired runtime observation.
+
+Also outstanding from earlier rounds and unchanged: the tracked scripts/__pycache__/*.pyc churn, and the frozen
+artifacts igi1-fbd69730.exe / igi1-ff02eb9c.exe which are neither HEAD nor deployed.
