@@ -3412,7 +3412,8 @@
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x00401050-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9)."
+          "2026-10-23 runtime-claims audit: status lowered from VERIFIED to STRUCTURALLY_VERIFIED. verification.runtime_tests cited the same artifact as verification.behavioral (docs/fidelity/evidence/0x00401050-behavioral.json), which records unicorn x86-32 (retail code bytes executed in an emulator), not a paired retail-and-candidate game-runtime capture. The differential result is retained as supplementary evidence, but it does not establish RUNTIME_TESTED or VERIFIED. Missing for runtime acceptance: a retail capture and a candidate capture from real instrumented processes in one documented scenario, bound to both binaries and compared with typed observables (AGENTS 10.9).",
+          "CRT-boundary substitution: the source uses std::setjmp/jmp_buf while retail calls MSVC __setjmp3 at 0x4A5000 with save-count 0 and stores the SEH head and cookie 0x56433230 into 0x54F8E0. The buffer layout and exception contract are not equivalent, and the engine has no longjmp, so the non-zero path is unobserved. Retail does pair it: 0x4010A2 call 0x4A507C restores from the same buffer. Not shown safe for the script-error path."
         ],
         "behavioral_runner": {
           "path": "scripts/native_unicorn_runner.py",
@@ -5002,7 +5003,7 @@
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
       "implementation": {
         "path": "engine/src/retail/core/class_registration.cpp",
-        "sha256": "eeed3aac634e5e8fbc7f4b5ed86d066f57b32825b02ae5b3c256029c39f7e7cd",
+        "sha256": "ba853c0c1105d5660bb21e1430b776008b06e2e7edae865af4e73c605a2ef770",
         "signature": "unknown (not transcribed; fail-closed stub throws)"
       },
       "game_natives": {
@@ -5013,13 +5014,14 @@
       "verification": {
         "status": "ANALYZED",
         "signature_comparison": {
-          "reviewed": true,
-          "result": "abi-adapted",
-          "rationale": "Binary Ninja and radare2 agree on the entry at 0X00402930: the candidate keeps the retail's instructions, globals and return."
+          "reviewed": false,
+          "result": "not-compared",
+          "rationale": "No implementation exists: the file at this path is a fail-closed stub that throws std::logic_error, so there are no retail instructions to compare."
         },
         "limitations": [
           "The candidate keeps the retail's chunk walk and payload offsets; the C++ types replace the retail's raw pointers.",
-          "NOT TRANSCRIBED. engine/src/retail/core/class_registration.cpp is a deliberate fail-closed stub that throws std::logic_error with the class-id mismatch message; it is not a transcription of retail 0x00402930. Previous STRUCTURALLY_VERIFIED status was unsupported by any implementation and has been withdrawn."
+          "NOT TRANSCRIBED. engine/src/retail/core/class_registration.cpp is a deliberate fail-closed stub that throws std::logic_error with the class-id mismatch message; it is not a transcription of retail 0x00402930. Previous STRUCTURALLY_VERIFIED status was unsupported by any implementation and has been withdrawn.",
+          "Must not count toward transcribed or verified totals. Blocked on the registrar sequence (0x401530/0x401400 chain) being transcribed first."
         ],
         "behavioral_runner": {
           "path": "scripts/native_diff_runner.py",
