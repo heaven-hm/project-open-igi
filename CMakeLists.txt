@@ -111,6 +111,7 @@ add_executable(igi WIN32
     engine/src/retail/core/native_4f9280.cpp
     engine/src/retail/core/native_48f4f0.cpp
     engine/src/retail/core/task_types.cpp
+    engine/src/retail/core/native_401890.cpp
     engine/src/retail/diagnostics/log_record.cpp
     engine/src/retail/dynobj/dynamic_cube.cpp
     engine/src/retail/dynobj/hash_lookup.cpp
