@@ -1,0 +1,85 @@
+{
+  "kind": "igi-directx-native-diagnostic-pair",
+  "retail_va": "0x00498480",
+  "checks": [
+    {
+      "side": "retail",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "requested failure injection count",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "scenario output values",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "requested failure injection count",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "scenario output values",
+      "passed": true
+    },
+    {
+      "check": "all ordered typed observations equal",
+      "passed": true
+    },
+    {
+      "check": "terminal identity counts and DLL effects equal",
+      "passed": true
+    }
+  ],
+  "differences": [],
+  "observations_match": true,
+  "verified": false,
+  "scope": "GetVersionExA output overridden to platform 2, major 4 on CrossOver, Level 1 startup",
+  "scenario": "version-major-4",
+  "limits": [
+    "Other failure branches and other OS versions are untested.",
+    "A native terminal marker covers only this native; later startup can fail.",
+    "No production intake, independent semantic approval or full WinMain acceptance."
+  ],
+  "identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-directx-candidate-sol/igi1.exe": "9e38a3a69437ca8e2ec741001ecb6c7e5e74932144f215ad9e2edbeff64a4079",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-major4-20261024-sol-pair1/probe.js": "f3bf2b58d39e3fb010e0599d499e82bd97fe992ff224ce8709b2f1ef1f72cb59",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_directx_probe.js": "efbc3f6515c69d07e59926cef53bb447563e9314c9ba5099ce109b17657fb645",
+    "build-directx-candidate-sol/diagnostic-receipt.json": "fb70657f6dfb75db8ca3652caaa4d747611952fd73b51a686271c72916d3fca3",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_directx_pair.py": "74e11953ce7ae6ace3196d06d8052be1db414854721e88c3372ea151667d4d76",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py": "0790f8118ad4459160713ef52c364a421b2aa62ac5c1f32b3a32b959607bf17f"
+  },
+  "candidate_va": "0x466eb0",
+  "candidate_extent": "0x700"
+}

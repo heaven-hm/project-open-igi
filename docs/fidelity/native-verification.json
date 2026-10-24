@@ -4064,7 +4064,7 @@
         "cfg_similarity": 1.0,
         "semantic_review": {
           "evidence_path": "docs/fidelity/evidence/0x004017C0-semantic-review.json",
-          "evidence_sha256": "91d5b52eb1e869091576ec37c17908a77bba7cc1b4f0c275a4dfcfc44dcd0dfa"
+          "evidence_sha256": "0a294e4b5678fc01d3ae48a2bdc20ea2e7c547815240f35be48e24fa7e8bb957"
         },
         "limitations": [
           "Gate threshold VERIFIED is unreachable for this native until the startup boundary is lifted: it is never reached at runtime, so no Frida observation can exist. Structurally and semantically reviewed instead; the artificial promotion to VERIFIED would be false."
@@ -44271,6 +44271,7 @@
         "limitations": [
           "Catalog candidate only; root production target is unchanged. Diagnostic linking uses a staged WinMain copy inserting the call at retail order, without inventing the unresolved <0x700 sprintf/exit path.",
           "Paired typed successful-path observations are diagnostic evidence in docs/fidelity/evidence/directx-candidate-20261024-sol/; independent semantic/runtime-contract approval and strict intake remain pending.",
+          "2026-10-24 version-branch matrix: docs/fidelity/evidence/directx-version-matrix-20261024-sol/ retains natural, API-return-zero, major-3 and non-NT comparisons against candidate 416215e8...; major-4 rejected after concurrent source change, with a separate older-image match retained as supplementary evidence. No whole-current-tree acceptance follows.",
           "Failure branches, NT4/older platform paths and other environments remain unobserved. No VERIFIED status or full WinMain equivalence is claimed.",
           "Capability/platform and SDK interface names describe evidence-backed roles; original source variable names and function symbol are unavailable."
         ]

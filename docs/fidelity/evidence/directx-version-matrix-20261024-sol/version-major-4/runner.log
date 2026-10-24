@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_directx_pair.py", line 170, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_directx_pair.py", line 161, in main
+    validate_receipt(args.receipt, ROOT, args.candidate, required_sources=required)
+  File "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/candidate_build_receipt.py", line 140, in validate_receipt
+    raise ValueError('candidate target compilation inputs differ from its receipt')
+ValueError: candidate target compilation inputs differ from its receipt

@@ -1,0 +1,27 @@
+{
+  "kind": "retained-trace-negative-controls",
+  "native_verified": false,
+  "scenarios": {
+    "none": {
+      "retained_pair_matches": true,
+      "missing_terminal_rejected": true,
+      "wrong_output_rejected": true
+    },
+    "version-api-zero": {
+      "retained_pair_matches": true,
+      "missing_terminal_rejected": true,
+      "wrong_output_rejected": true
+    },
+    "version-major-3": {
+      "retained_pair_matches": true,
+      "missing_terminal_rejected": true,
+      "wrong_output_rejected": true,
+      "both_wrong_pointer_roles_rejected": true
+    },
+    "version-platform-1": {
+      "retained_pair_matches": true,
+      "missing_terminal_rejected": true,
+      "wrong_output_rejected": true
+    }
+  }
+}

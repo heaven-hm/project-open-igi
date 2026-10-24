@@ -1,0 +1,6 @@
+DEBUG summary 0 start
+DEBUG detach 0 start
+DEBUG session detach start
+DEBUG session detach done
+observed: 0x466eb0 Native_00498480 entries=1 returns=1
+report: build/runtime-traces/directx-major4-20261024-sol-pair1/candidate.json

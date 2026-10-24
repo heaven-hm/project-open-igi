@@ -2,7 +2,12 @@
 // Single-native diagnostic comparison probe of retail 0x00498480 and its candidate.
 // The original entry, 0x44A-byte retail extent,
 // two writable DWORD outputs and import argument layouts come from the retained
-// Binary Ninja/Radare2 listing. No API return or target state is changed.
+// Binary Ninja/Radare2 listing. Natural mode changes no API return or state.
+// version-api-zero mode explicitly overrides GetVersionExA's return after its
+// real call, solely to exercise the retail 0x4984B9 conditional failure path.
+// version-major-3/4 and version-platform-1 explicitly override the two version
+// fields tested by retail, after recording the actual API output. They do not
+// represent actual runs on other Windows versions.
 // COM slots and caller sites are established by the same listing. Pointer
 // identities are local ordinals, not addresses compared across processes.
 let listeners = [];
@@ -26,6 +31,11 @@ let methodKinds = new Map();
 let hookedCreators = new Set();
 let moduleNames = new Map();
 let ownedModuleReferences = {};
+const failureMode = globalThis.IGI_DIRECTX_FAILURE_MODE || 'none';
+if (!['none', 'version-api-zero', 'version-major-3', 'version-major-4',
+      'version-platform-1'].includes(failureMode)) throw new Error('unknown failure mode');
+let injectedFailures = 0;
+let injectedVersions = 0;
 const callMethods = new Map([
     [0x98652, 'QueryInterface'], [0x987c1, 'QueryInterface'], [0x987f6, 'QueryInterface'],
     [0x98742, 'SetCooperativeLevel'], [0x98781, 'CreateSurface'],
@@ -201,6 +211,25 @@ rpc.exports = {
                 onLeave(value) {
                     if (!this.observed) return;
                     const record = {type: 'directx_api', phase: 'return', name};
+                    if (name === 'GetVersionExA' && failureMode === 'version-api-zero') {
+                        record.injectedFailure = {api: name, originalEax: value.toUInt32(), effectiveEax: 0,
+                            scope: 'real API executes; only its return value is overridden'};
+                        value.replace(0);
+                        injectedFailures++;
+                    }
+                    if (name === 'GetVersionExA' && !value.isNull() &&
+                        ['version-major-3', 'version-major-4', 'version-platform-1'].includes(failureMode)) {
+                        record.originalVersion = {
+                            major: this.version.add(4).readU32(), minor: this.version.add(8).readU32(),
+                            build: this.version.add(12).readU32(), platform: this.version.add(16).readU32()};
+                        if (failureMode === 'version-platform-1') this.version.add(16).writeU32(1);
+                        else {
+                            this.version.add(16).writeU32(2);
+                            this.version.add(4).writeU32(failureMode === 'version-major-3' ? 3 : 4);
+                        }
+                        record.injectedVersion = failureMode;
+                        injectedVersions++;
+                    }
                     if (name === 'LoadLibraryA' || name === 'GetProcAddress')
                         record.nonNull = !value.isNull();
                     else if (name !== 'OutputDebugStringA' && name !== 'CoUninitialize')
@@ -254,11 +283,13 @@ rpc.exports = {
             onLeave(value) {
                 emit({type: 'observed', phase: 'return', address, callIndex: this.callIndex,
                     capability: this.output0.readU32(), platform: this.output1.readU32(),
+                    returnEqualsCapabilityPointer: value.equals(this.output0),
                     eax: value.toUInt32()});
                 completed++;
                 owner = null;
                 send({type: 'directx_summary', nativeComplete: true, count, completed,
                     sequenceLength: events.length, issuedObjectIds, ownedModuleReferences,
+                    failureMode, injectedFailures, injectedVersions,
                     scope: 'completed native only; later game startup may still fail'});
             }
         }));

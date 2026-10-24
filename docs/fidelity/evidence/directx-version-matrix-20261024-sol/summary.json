@@ -1,0 +1,43 @@
+{
+  "kind": "igi-directx-version-branch-diagnostic",
+  "verified": false,
+  "cases": [
+    {
+      "scenario": "none",
+      "result": "observations_match",
+      "candidate_sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+      "verified": false
+    },
+    {
+      "scenario": "version-api-zero",
+      "result": "observations_match",
+      "candidate_sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+      "verified": false
+    },
+    {
+      "scenario": "version-major-3",
+      "result": "observations_match",
+      "candidate_sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+      "verified": false
+    },
+    {
+      "scenario": "version-major-4",
+      "result": "blocked_source_freshness",
+      "candidate_sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+      "verified": false
+    },
+    {
+      "scenario": "version-platform-1",
+      "result": "observations_match",
+      "candidate_sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+      "verified": false
+    }
+  ],
+  "freshness_failure": "engine/src/retail/core/task_types.cpp changed during the last pair; no comparison report or pass was generated for it.",
+  "prior_nt4": "Supplementary validated capture against older 9e38a3a6... image; its receipt is retained in ../directx-candidate-20261024-sol/diagnostic-receipt.json.",
+  "limits": [
+    "Native source unchanged; no production intake or whole-startup acceptance.",
+    "Forced API results/version fields do not represent actual runs on other Windows versions.",
+    "Other DLL/COM failure branches remain untested."
+  ]
+}

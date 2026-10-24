@@ -1,0 +1,6 @@
+DEBUG summary 0 start
+DEBUG detach 0 start
+DEBUG session detach start
+DEBUG session detach done
+observed: 0x466eb0 Native_00498480 entries=1 returns=1
+report: /Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-matrix-20261024-sol-version-platform-1/candidate.json

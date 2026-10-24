@@ -1,0 +1,8 @@
+DEBUG summary 0 start
+DEBUG summary 0 done
+DEBUG detach 0 start
+DEBUG detach 0 done
+DEBUG session detach start
+DEBUG session detach done
+observed: 0x498480 Native_00498480 entries=1 returns=1
+report: /Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-matrix-20261024-sol-none/retail.json

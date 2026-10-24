@@ -1,0 +1,181 @@
+{
+  "kind": "igi-tester-native-probe",
+  "schema_version": 1,
+  "result": "observed",
+  "verified": false,
+  "captured_at": "2026-10-24T15:26:35.784842+00:00",
+  "targets": [
+    {
+      "address": "0x466eb0",
+      "name": "Native_00498480",
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-matrix-20261024-sol-version-major-3/probe.js",
+      "probe_sha256": "76a3c7f4d0f178ec956d267c8e4dc0f1c82238eec1fc312830252ab4a72d6970",
+      "observations": {
+        "name": null,
+        "entries": 1,
+        "returns": 1
+      },
+      "retailName": "Native_00498480"
+    }
+  ],
+  "executable": {
+    "path": "/Users/haseeb-mir/Documents/Code/project-open-igi/build-directx-candidate-sol/igi1.exe",
+    "sha256": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+    "preferred_base": "0x00400000",
+    "module": "igi1.exe"
+  },
+  "probe_template_sha256": "8472074d6840df8a07f63fe4460771357e99b8b584e9a1bbc7997450359ad84c",
+  "environment": {
+    "frida_host": "127.0.0.1:27042",
+    "frida_client": "17.24.0",
+    "game_directory": "/Users/haseeb-mir/Downloads/IGI",
+    "level": 1,
+    "arguments": [
+      "window",
+      "level1"
+    ],
+    "scenario": {
+      "observe_seconds": 15.0,
+      "scripted_actions": "none (idle observation)"
+    }
+  },
+  "arguments": {
+    "arg_words": 2,
+    "native_size": 1792,
+    "mem_arg": null,
+    "return_mem": null,
+    "watch": [],
+    "max_calls": 256
+  },
+  "hooks": [
+    {
+      "installed": true,
+      "target": "0x466eb0",
+      "extent": 1792,
+      "scope": "single-native diagnostic comparison; full WinMain/game acceptance remains separate",
+      "name": "Native_00498480",
+      "retailVA": "0x466eb0",
+      "sideAddress": "0x466eb0"
+    }
+  ],
+  "entries": [
+    {
+      "type": "observed",
+      "phase": "entry",
+      "address": "0x466eb0",
+      "callIndex": 1,
+      "outputsAlias": false,
+      "callerRva": "0x66adc",
+      "scope": "DirectX capability native: ordered imports, COM operations and output stores",
+      "sequence": 1
+    }
+  ],
+  "returns": [
+    {
+      "type": "observed",
+      "phase": "return",
+      "address": "0x466eb0",
+      "callIndex": 1,
+      "capability": 0,
+      "platform": 2,
+      "returnEqualsCapabilityPointer": true,
+      "eax": 3341868,
+      "sequence": 4
+    }
+  ],
+  "messages": 5,
+  "summary": null,
+  "limitations": [
+    "Finite idle observation interval only; no scripted gameplay actions.",
+    "Only the process this driver spawned is terminated; attach mode never terminates the target.",
+    "A pointer snapshot is read only after Process.findRangeByAddress proves the range readable; unknown pointer contents remain unobserved rather than guessed.",
+    "Observed calls are not proof of behavioral parity by themselves; a typed comparator is required.",
+    "Result 'unobserved' means only that this capture did not reach the native; it is not a pass or fail."
+  ],
+  "capture": {
+    "mode": "spawn-suspended",
+    "owned_pid": 1900,
+    "arguments": [
+      "Z:\\Users\\haseeb-mir\\Documents\\Code\\project-open-igi\\build-directx-candidate-sol\\igi1.exe",
+      "window",
+      "level1"
+    ],
+    "cwd": "Z:\\Users\\haseeb-mir\\Downloads\\IGI",
+    "session_detach": {
+      "reason": "process-terminated",
+      "at": 1792855599.822109,
+      "crash": null
+    },
+    "exited_before_observe_end": {
+      "at": 1792855599.9629738,
+      "elapsed_seconds": 1.551
+    },
+    "alive_at_end": false
+  },
+  "events": [
+    {
+      "type": "directx_api",
+      "phase": "entry",
+      "name": "GetVersionExA",
+      "callerRva": "0x66ef9",
+      "structureSize": 148,
+      "outputState": {
+        "capability": null,
+        "platform": null
+      },
+      "sequence": 2
+    },
+    {
+      "type": "directx_api",
+      "phase": "return",
+      "name": "GetVersionExA",
+      "originalVersion": {
+        "major": 6,
+        "minor": 2,
+        "build": 9200,
+        "platform": 2
+      },
+      "injectedVersion": "version-major-3",
+      "eax": 1,
+      "version": {
+        "major": 3,
+        "minor": 2,
+        "build": 9200,
+        "platform": 2
+      },
+      "outputState": {
+        "capability": null,
+        "platform": null
+      },
+      "sequence": 3
+    },
+    {
+      "type": "directx_summary",
+      "nativeComplete": true,
+      "count": 1,
+      "completed": 1,
+      "sequenceLength": 4,
+      "issuedObjectIds": 0,
+      "ownedModuleReferences": {},
+      "failureMode": "version-major-3",
+      "injectedFailures": 0,
+      "injectedVersions": 1,
+      "scope": "completed native only; later game startup may still fail"
+    }
+  ],
+  "summaries": [],
+  "summary_errors": [
+    {
+      "probe": "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-matrix-20261024-sol-version-major-3/probe.js",
+      "error": "InvalidOperationError: script has been destroyed"
+    }
+  ],
+  "counts": {
+    "entry": 1,
+    "return_": 1,
+    "unmatched_entries": 0
+  },
+  "cleanup": {
+    "owned_process_exited": true
+  }
+}

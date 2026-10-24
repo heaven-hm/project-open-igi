@@ -1,0 +1,85 @@
+{
+  "kind": "igi-directx-native-diagnostic-pair",
+  "retail_va": "0x00498480",
+  "checks": [
+    {
+      "side": "retail",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "requested failure injection count",
+      "passed": true
+    },
+    {
+      "side": "retail",
+      "check": "scenario output values",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "complete native sequence and terminal marker",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "no probe failures; owned process exited",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "observed DLL references balanced",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "requested failure injection count",
+      "passed": true
+    },
+    {
+      "side": "candidate",
+      "check": "scenario output values",
+      "passed": true
+    },
+    {
+      "check": "all ordered typed observations equal",
+      "passed": true
+    },
+    {
+      "check": "terminal identity counts and DLL effects equal",
+      "passed": true
+    }
+  ],
+  "differences": [],
+  "observations_match": true,
+  "verified": false,
+  "scope": "Natural DirectX 7 successful path on CrossOver, Level 1 startup",
+  "scenario": "none",
+  "limits": [
+    "Other failure branches and other OS versions are untested.",
+    "A native terminal marker covers only this native; later startup can fail.",
+    "No production intake, independent semantic approval or full WinMain acceptance."
+  ],
+  "identities": {
+    "/Users/haseeb-mir/Downloads/IGI/igi.exe": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-directx-candidate-sol/igi1.exe": "416215e8c2143bc602d34879525fe4bafdd3cc1cbc4cb83da7ee735947ac518a",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build/runtime-traces/directx-matrix-20261024-sol-none/probe.js": "a68aa2fc31880315d6df1cded192ba84a2785ae7cee8b969652535fee5290076",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_directx_probe.js": "efbc3f6515c69d07e59926cef53bb447563e9314c9ba5099ce109b17657fb645",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/build-directx-candidate-sol/diagnostic-receipt.json": "bc936053a66996a64654ab1e4d70812b42786164876b42fd3d2f6ea5514414d7",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/capture_directx_pair.py": "74e11953ce7ae6ace3196d06d8052be1db414854721e88c3372ea151667d4d76",
+    "/Users/haseeb-mir/Documents/Code/project-open-igi/scripts/tester/frida_probe_driver.py": "0790f8118ad4459160713ef52c364a421b2aa62ac5c1f32b3a32b959607bf17f"
+  },
+  "candidate_va": "0x466eb0",
+  "candidate_extent": "0x700"
+}
