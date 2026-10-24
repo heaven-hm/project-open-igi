@@ -216,3 +216,27 @@ transcribed. Landing five more routines would make `0x00508FA0` writable, and wi
 Repeated targets by call count: `0x401400` x9, `0x4F1A80` x7, `0x4F0F80` x6,
 `0x5186C0` x3, `0x401530` x2 - so four of the five missing routines are called many
 times and are the next transcription targets.
+
+## Re-verification and sizing of the five missing routines (round 51)
+
+Presence re-checked against **provenance lines** (`Native: ... 0xVA` or `retail VA 0xVA`)
+rather than bare address mentions: all 15 reported as present are real native definitions
+in `engine/src` (e.g. `0x4F0F80`/`0x4F1000` in render, `0x4F9200`-`0x4F9280` in core,
+`0x4F1A60`/`0x4F1A70` in script). The five missing are genuinely absent:
+
+| VA | size | blocks | convention |
+| --- | --- | --- | --- |
+| `0x4F1980` | 57 B | 1 | cdecl |
+| `0x4F1A80` | 105 B | 4 | cdecl |
+| `0x4F9460` | 100 B | 11 | cdecl |
+| `0x4F9DF0` | 120 B | 7 | cdecl |
+| `0x5186C0` | 84 B | 6 | cdecl |
+
+All five are **small** (57-120 bytes). This is the entire distance between the current tree
+and a writable AI-graph registrar, which is far less than the "42-callee deep subtree"
+framing implied two rounds ago.
+
+`0x4F1980` decode begins: it takes (container, count), computes `*container + count`, calls
+`0x004F1950` with that, then copies `*container * 16` bytes from `container+8` to
+`result+8` using `rep movsd`/`rep movsb` with the same 4-byte/1-byte split retail uses.
+Its own callee `0x4F1950` is the next leaf to check.
