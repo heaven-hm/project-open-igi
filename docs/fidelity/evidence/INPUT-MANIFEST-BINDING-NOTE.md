@@ -73,3 +73,24 @@ runs, not authorship:
 
 Until then the input natives stay TRANSCRIBED and the changed-native gate
 continues to report an empty scope.
+
+## Round 13: why three VAs produce no record
+
+`build_native_records.py` never reports an error for `0x48F0A0`, `0x4AF740`,
+`0x4AE730`; it prints `would build 0 record(s)`. Reading the script explains it:
+candidates come from `discover()`, which walks `ng.changed_paths(ROOT,
+"production-tree")` and parses each source with `ng.implementation_natives(path,
+relative)`. The `--addresses` argument is only a filter applied *after* discovery,
+and a `continue` for addresses already in the manifest is silent. So these three
+files are not being parsed as natives by `implementation_natives`, and the
+builder cannot see them at all - the manifest is not the blocker here, the source
+recognizer is.
+
+Next diagnostic (not yet done): dump `ng.implementation_natives` results for
+`engine/src/retail/input/native_48f0a0.cpp`, `.../native_4af740.cpp`,
+`.../native_4ae730.cpp` and diff the provenance line shape against a file that
+was discovered (`native_48f090.cpp` built fine). Candidate causes: the
+`// Native: ...` line shape for a getter whose name has no behavior suffix, the
+`extern "C"`-only signature (no `NATIVE_DECL` token), or the `IAT thunk` phrase in
+the name. Fix belongs in the provenance/signature comment of those three files or
+in the recognizer's pattern list - not in a hand-written manifest record.
