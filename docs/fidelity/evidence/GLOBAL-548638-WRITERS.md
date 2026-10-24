@@ -378,3 +378,37 @@ HeapList_Remove(esi)                             // 0x004AF960, already in engin
 Status: still blocked on `0x004A6A50`; `0x004AF960` is confirmed present as
 `HeapList_Remove`. The catalogued name `Camera_UpdateTransform_9` for 0x4A6A50 is a
 name-project artifact and must not be adopted without evidence.
+
+## Round 46: 0x4A6A50 candidate reviewed - rejected (uninitialised local, wrong convention)
+
+Candidate `scripts/GameNatives/camera/004A6A50-Camera_UpdateTransform_9.cpp` (37 lines,
+"CFG 100.0% structural only") is unusable as a transcription:
+
+```c
+void __fastcall Camera_UpdateTransform_9(void** context)
+{
+    int* lpMem_1;
+    int* lpMem = lpMem_1;      // <-- read of an UNINITIALISED pointer
+    if (!lpMem) return;
+    ...
+```
+
+Three independent defects:
+
+1. **Uninitialised local read** (`lpMem = lpMem_1` before any assignment) - undefined
+   behaviour, not a retail instruction. Retail's incoming argument is the pointer
+   `esi` that the caller pushes.
+2. **Calling convention**: candidate declares `__fastcall`; the caller site pushes the
+   argument (`push esi; call 0x4A6A50`), i.e. cdecl-style stack passing.
+3. The body is described elsewhere as a ten-block heap-free routine, and the
+   candidate branches on a state global (`g_c3242c` compared to 2/3) while calling
+   further name-project functions for which no evidence is attached here.
+
+So `0x4A6A50` also needs a **fresh decode from the retail listing** (ten blocks), not a
+rename of the candidate. Recording this before decoding, because the next round could
+otherwise be tempted to "fix it up", which would be reconstruction by invention rather
+than transcription.
+
+Sequence to land the chain, in order, all from retail listings:
+`0x4A6A50` (10 blocks, blocked on nothing but decode) -> `0x4B0D10` -> `0x4B0B70`
+-> `0x401A20` -> `0x4D9790`.
