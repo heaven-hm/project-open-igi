@@ -1663,3 +1663,17 @@ Remaining new dependencies: `0x4F1B20` and `0x4F1B50` (both MISSING, likely furt
 the same family). Useful process note: the padding-scan heuristic worked here where seeding failed,
 so the boundary technique that reliably works on this image is "find the preceding `c3 90 90 90`,
 then skip nops" - cheaper than a runtime probe.
+
+### Frozen 4ea3b6fb: compile binding verified; runtime unchanged (Tester)
+
+Receipt sha `2b196560...`, `compiled_sources` **131** (was 113), all seven audited natives present
+with matching `igi.dir` objects and CMake references. Artifact and deployed copy identical before ==
+after (`4ea3b6fb...4bfc`), one `IGI1MUTEX`. Runs 5300.317 / 8655.223 / 579.336 ms + `+seh` 2831.880 ms,
+all exit 3, boundary unchanged at position 1 / id 0, none of the new VAs in stderr or the unwind.
+`37f3e27a` superseded. Diagnostic only, no acceptance.
+
+**Process rule adopted from this failure:** a native is not "landed" until its file appears in the
+receipt's `compilation.compiled_sources`, not merely in `inputs.sources` (which reflects the working
+tree, not the target). CFG binding proves the source exists; only the compiled-sources list proves it
+was built. Print the count before and after wiring and verify the anchor matched - the silent
+`str.replace` that never matched is what hid 18 unwired natives for several rounds.
