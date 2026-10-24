@@ -56174,6 +56174,42 @@
       }
     },
     {
+      "address": "0x004ED510",
+      "name": "InputPort_Init_4ED510",
+      "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
+      "implementation": {
+        "path": "engine/src/retail/input/native_4ed510.cpp",
+        "sha256": "21f40088d69a4f8224c44817338905bc3792285455a39bda45394a81d49522e5",
+        "signature": "unknown"
+      },
+      "game_natives": {
+        "path": "scripts/GameNatives/004ED510-InputPort_Init 2.cpp",
+        "sha256": "b942a9fe87036da77f64af9b27db9408f933db9ebc7b70d3e64f4693b6b3c775",
+        "signature": "unknown"
+      },
+      "verification": {
+        "status": "STRUCTURALLY_VERIFIED",
+        "binary_ninja": {
+          "evidence_id": "bn:live:0x004ED510",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004ED510-binaryninja.json",
+          "evidence_sha256": "7a9b5aa287b20d8aab2c121fb02f8c1a2a14996f6d8458b4543b0a854bca9b4e"
+        },
+        "radare2": {
+          "evidence_id": "r2:live:0x004ED510",
+          "signature": "unknown",
+          "evidence_path": "docs/fidelity/evidence/0x004ED510-radare2.json",
+          "evidence_sha256": "512194aab46643192954a605a417722f8349d09d5f80ad1e2d221726f1c51558"
+        },
+        "signature_comparison": {
+          "reviewed": true,
+          "result": "abi-adapted",
+          "rationale": "Portable host declarations preserve the observed x86 argument/register boundary; Binary Ninja and Radare2 report the same entry and signature."
+        },
+        "cfg_similarity": 1.0
+      }
+    },
+    {
       "address": "0x004ED5C0",
       "name": "InputPort_Process",
       "binary_sha256": "dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01",
