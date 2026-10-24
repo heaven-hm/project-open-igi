@@ -129,10 +129,10 @@ inline igi::retail::core::FrameHandler* QTask_Phase1HandlerTable()
 //           it is non-zero the retail builds the class task list through
 //           0x004B0B00 at slot+0x0C and sets the has_task_list byte at
 //           slot+0x24. It returns the 16-bit type id.
-// Limits: the port records the task-list argument but does not transcribe the
-//           0x004B0B00 creation path, and it does not copy the parent's
-//           handler phases (the retail tail loop at 0x004019CD); see
-//           task_types.cpp for the full evidence record.
+// Transcribed at engine/src/retail/core/native_401900.cpp, including the
+//           0x004B0B00 task-list creation at slot+0x0C and both tail loops over
+//           the parent's 0xFE handler phases (copy at 0x004019B4-0x004019DD,
+//           zero for parent 0x0181 at 0x004019EB-0x00401A03).
 std::uint16_t NATIVE_DECL TaskType_Register(const char* name, std::uint32_t object_size,
                                                  std::uint16_t parent_type,
                                                  std::uint32_t task_list_argument);

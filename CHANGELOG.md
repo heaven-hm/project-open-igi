@@ -11,6 +11,21 @@ number and never counts as a release.
 
 ## Unreleased
 
+### 2026-10-25 - TaskType_Register (0x00401900) moved to its own native and linked (internal build, no release)
+
+- **Atomic move, as the no-duplication rule requires**: the `TaskType_Register` definition was removed from
+  `engine/src/retail/core/task_types.cpp` (82 lines) and the existing transcription listed in `CMakeLists.txt` as
+  `engine/src/retail/core/native_401900.cpp`. The build is green and `igi1.exe` links with the native in the target (14,206,047 bytes).
+- **Linkage settled by experiment, not assumption**: the header declares the native inside its `extern "C"` block (line 74), so the
+  definition keeps C linkage. Defining it in `namespace igi::retail::core` produced `undefined reference to TaskType_Register` from six
+  call sites (cam_task, native_424b90, native_4d9730, native_004e5370, flow, game_flow) - evidence that the 279 callers bind the unmangled
+  symbol. The first attempt was wrong for exactly that reason and is recorded here rather than hidden.
+- **Manifest**: the `0x00401900` record now names `native_401900.cpp` with its SHA-256 and status `BUILD_VERIFIED`, limitations recorded
+  (runtime UNOBSERVED; tail consumers `0x00401A20`/`0x004012F0` and the `0x004B0B70` free path still untranscribed).
+- **Worker correction accepted**: my claim that `Debug_Error` (0x004AF7B0) and `Mem_AllocIndexedBlock` (0x004B0B00) had no engine
+  implementation was wrong - they are `retail_error.cpp:29` and `mem/task_list.cpp:13`, both already in the igi source list. The worker was
+  right not to duplicate them (rule 10.15). Stale "not transcribed yet" texts in `task_types.hpp` and `native_00530a80.cpp` were corrected.
+
 ### 2026-10-25 - QVM core dependency table; shared state words given external linkage (internal build, no release)
 
 - **Evidence added**: `docs/fidelity/evidence/qvm-core-dependency-table.md` - per-VA sizes, r2 CFG, ABI, callers, callees and the wave ordering
