@@ -446,3 +446,24 @@ b2adaddc and c91dc17a share normalised sha256 acfde02d4aa49678a5dd9a044432602f8c
 
 Freeze protocol from here: record both hashes for every pair, and treat the normalised hash as the code identity
 when comparing pairs or reproducing an audit.
+
+## Freeze-record corrections after the ca13 audit (round 151)
+
+1. `0x4F1C20` passed a pointer's value where retail passes the pointer. My transcription typed
+   `context[1]` as the available-count integer and passed `&available`, so the emitted code handed a stack
+   local to `0x4B8B00`, which dereferences its first argument. Retail compares `base+i` against the dword AT
+   `context[1]`. `context[1]` is a pointer (caller 0x004EF860 passes `[context+4]` into `0x4B8A50`, which uses
+   it as a context pointer). Fixed and reloaded inside the loop, where retail reloads it. Emitted code now
+   `mov 0x4(%edi),%eax ; mov %eax,(%esp) ; call`. Sixth CFG-invisible defect class: **wrong indirection**, and
+   again cfg_score saw 6/8 either way.
+2. My normalised hash for ca13e4a8 was wrong: `9a8ddc85...` is the normalised hash of the older
+   `efc3cd15` build. The cause is my own shortcut: I computed the hash by `ls build/artifacts | tail -1`
+   instead of by the tag I had just computed. Correct ca13e4a8 normalised hash:
+   `ec4a9c63cd7faa002646d2d3e8262cb80f0139ad529566e2b6eaa369d4293b21`. Rule from now on: compute the
+   normalised hash from the exact artifact path, never by listing the directory.
+3. The Tester's c91dc17a runtime trio is invalid: ca13e4a8 was deployed inside that run window, so the timings
+   cannot be attributed to one binary. c91 static checks stand; its runtime record does not.
+
+Current frozen pair: **8939c4b7**, plain `8939c4b72f4a3707aee4a8d6d9ac661ad687ad7e328ebeb32698561f296bfc9e`,
+normalised `8b95a4b8764038ad3c5f1bd5ecd58a8355d36b9ac1c21cc9bd3694d7bdb3dec8`, 175 compiled sources,
+committed 04ffb82a.
