@@ -4257,3 +4257,468 @@ r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x00401a60; pd 3'   igi
 r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004014b0; pd 20'  igi.exe   # 0x4014B0
 ```
 Python scans used for every claim above (run from `/Users/haseeb-mir/Downloads/IGI`): exhaustive `E8` enumeration over `.text` (`site+5+rel32 == 0x4015F0` → 120 sites); exhaustive 4-byte literal scans for `0x567C58` (5), `0x567C70` (4), `0x567C6C` (4), `0x536148` (7), `0x54FF34` (4), `0xA97CE0` (1), `0xA976E0` (15), `0x567C38` (5), `0x567C3C` (4), `0x567C40` (6), `0x567C48` (3); PE section arithmetic from the header (`0x536000 + 0x1A000 = 0x550000` → `0x567C58` is zero-filled); function-entry rule as stated in 16.7.
+
+## §17. APPENDED — the task-allocation chain: `0x4012F0` (allocate+construct), `0x4012A0` / `0x4013B0` (create, link, dispatch) and `0x4014B0` / `0x4014E0` (handler-mask refresh)
+
+Requested by the Lead as the increment that unlocks the task globals: the writer of `0x567C58` first, then the two wrappers, then the two zero-/one-argument routines the link handler calls. Append-only; **no `engine/` file, no manifest record, no catalogue file, no listing and no git state was touched by this pass** — this section only records evidence. Scratch work stayed in `/tmp/fa14/`. No decompiler was invoked for these five targets (r2 6.2.0 `pdj`/`afbj` plus independent Python reads of the image), no runtime evidence was collected, the game was not launched.
+
+**Artifact:** `/Users/haseeb-mir/Downloads/IGI/igi.exe`, SHA-256 `dea34892d417715873ea61d7b2ba5556655f1ad65385104348146f9679915a01`. `.text` VA `0x401000` raw `0x1000`; `.data` VA `0x536000`, raw `0x136000`, raw size `0x1A000`, virtual size `0x6FC558` (VAs ≥ `0x550000` load zeroed, which is why `0x567C58` starts at 0 while the raw-backed `0x536148` starts at `0xFFFFFFFF`).
+
+### 17.0 What this section answers
+
+| Lead question | Answer | Where |
+|---|---|---|
+| `0x4012F0`: entry/size/blocks/signature, pool branch vs `Mem_Alloc(size,4)`, header writes per offset, **the exact `0x567C58` increment site and its ordering** | `0x4012F0`, 189 B, 6 blocks, `__cdecl (owner, typeId)`; increment `0x401307`, store `0x40130B`, i.e. **before** the pool claim and **before every header write**; full store list in retail order | 17.1 |
+| `0x4012A0` / `0x4013B0`: entry/size/blocks, append vs insert, **handler argument order** | 72 B each, 5 blocks each, `__cdecl (owner, typeId, data)`; `0x4AF8F0` vs `0x4AF910`; handler called with **2 arguments, `(obj, data)`** — obj is the last push and therefore the handler's entry+4 | 17.2 |
+| `0x4014B0` / `0x4014E0`: entry/size/blocks/signature | `0x4014B0` 43 B, 5 blocks, **zero arguments**; `0x4014E0` 75 B, 5 blocks, **one argument** (class index); no callers other than `0x4014B0` for the latter | 17.3–17.4 |
+| Consequence for the manifest / storage definition | the `0x567C58` writer pair is complete; `0x4013B0`, `0x4014B0`, `0x4014E0` are absent from the manifest; `0x4012F0`/`0x4012A0` have manifest records whose recorded semantics contradict the retail body | 17.5–17.6 |
+
+### 17.1 `0x004012F0` — allocate and construct one QTask instance
+
+| fact | value | how verified |
+|---|---|---|
+| entry | `0x004012F0` | first instruction `53` `push ebx` |
+| body | `0x4012F0`–`0x4013AC`, **189 bytes** | `ret` at `0x4013AC`; r2 `afij` `size 189`, `maxaddr 0x4013AD` |
+| padding | 3 `90` at `0x4013AD`–`0x4013AF` before `0x4013B0` | raw read |
+| blocks / instructions | **6 blocks, 61 instructions, 7 edges** | r2 `afbj`/`afij` |
+| signature | **`void * __cdecl QTask_AllocateTaskInstance(void *owner, uint16 typeId)`** — 2 arguments, cdecl, caller cleans | arg2 read at `0x4012F2` with 8 bytes pushed (`0x10-8 = +8`); arg1 read at `0x401381` with 16 bytes pushed (`0x14-16 = +4`); the two callers push exactly 2 dwords and `add esp,8` |
+| return | the new instance in EAX (`0x4013A6` `mov eax,esi`) | — |
+| callers | exactly **2**: `0x4012AC` inside `0x4012A0`, `0x4013BC` inside `0x4013B0` | exhaustive `E8` scan |
+| stack frame | `afij` `stackframe 28` = 16 saved-register bytes + 8 argument bytes + 4 | — |
+| strings | none | body has no data reference to `.rdata` |
+
+#### 17.1.1 Instruction table (61 instructions)
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004012F0` | `53` | `push ebx` | save ebx |
+| `0x004012F1` | `55` | `push ebp` | save ebp |
+| `0x004012F2` | `8b6c2410` | `mov ebp, dword [esp + 0x10]` | `ebp = [esp+0x10]`; frame 8 → **entry+8 = arg2** (type id) |
+| `0x004012F6` | `56` | `push esi` | save esi |
+| `0x004012F7` | `8bc5` | `mov eax, ebp` | `eax = ebp` (type id) |
+| `0x004012F9` | `8b35587c5600` | `mov esi, dword [0x567c58]` | **`esi = QTask_LiveTaskCount`** (`0x567C58`, dword read) — ref 1/5 |
+| `0x004012FF` | `25ffff0000` | `and eax, 0xffff` | `eax = type & 0xFFFF` |
+| `0x00401304` | `57` | `push edi` | save edi |
+| `0x00401305` | `32db` | `xor bl, bl` | `bl = 0` (pool-recycled flag default) |
+| `0x00401307` | `46` | `inc esi` | **`esi++` — the increment the Lead asked for** |
+| `0x00401308` | `8d3c40` | `lea edi, [eax + eax*2]` | `edi = (type & 0xFFFF) * 3` |
+| `0x0040130B` | `8935587c5600` | `mov dword [0x567c58], esi` | **`QTask_LiveTaskCount = esi` (dword write) — ref 2/5; increment and store are adjacent and precede every other effect** |
+| `0x00401311` | `c1e704` | `shl edi, 4` | `edi <<= 4` → `edi = type * 0x30` (class-record byte offset) |
+| `0x00401314` | `8a87045faf00` | `mov al, byte [edi + 0xaf5f04]` | `al = QTask_TypeTable[type].poolPresent` (`0xAF5F04` = record+0x24, byte read) |
+| `0x0040131A` | `84c0` | `test al, al` | `test al,al` |
+| `0x0040131C` | `7444` | `je 0x401362` | no pool → heap path `0x401362` |
+| `0x0040131E` | `8b87f45eaf00` | `mov eax, dword [edi + 0xaf5ef4]` | `eax = QTask_TypeTable[type].poolUsed` (`0xAF5EF4`) |
+| `0x00401324` | `8b8ff85eaf00` | `mov ecx, dword [edi + 0xaf5ef8]` | `ecx = QTask_TypeTable[type].poolCapacity` (`0xAF5EF8`) |
+| `0x0040132A` | `3bc1` | `cmp eax, ecx` | `cmp used, capacity` (signed) |
+| `0x0040132C` | `7d32` | `jge 0x401360` | `used >= capacity` → `0x401360` (bl = 0, heap path) |
+| `0x0040132E` | `8b8ff05eaf00` | `mov ecx, dword [edi + 0xaf5ef0]` | `ecx = QTask_TypeTable[type].poolIndexArray` (`0xAF5EF0`) |
+| `0x00401334` | `8b97005faf00` | `mov edx, dword [edi + 0xaf5f00]` | `edx = QTask_TypeTable[type].poolTailOffset` (`0xAF5F00` = record+0x20) |
+| `0x0040133A` | `b301` | `mov bl, 1` | `bl = 1` — this instance comes from the pool |
+| `0x0040133C` | `8b3481` | `mov esi, dword [ecx + eax*4]` | `esi = indexArray[used]` (slot id) |
+| `0x0040133F` | `8b8fec5eaf00` | `mov ecx, dword [edi + 0xaf5eec]` | `ecx = QTask_TypeTable[type].poolBase` (`0xAF5EEC`) |
+| `0x00401345` | `0fafb7fc5eaf00` | `imul esi, dword [edi + 0xaf5efc]` | `esi *= QTask_TypeTable[type].poolElemSize` (`0xAF5EFC`) |
+| `0x0040134C` | `03f1` | `add esi, ecx` | `esi += base` (element address) |
+| `0x0040134E` | `890432` | `mov dword [edx + esi], eax` | `*(int*)(element + tailOffset) = used` — the element stores its own pool position |
+| `0x00401351` | `8b87f45eaf00` | `mov eax, dword [edi + 0xaf5ef4]` | `eax = poolUsed` (re-read) |
+| `0x00401357` | `40` | `inc eax` | `eax++` |
+| `0x00401358` | `8987f45eaf00` | `mov dword [edi + 0xaf5ef4], eax` | `poolUsed = eax` (dword write) |
+| `0x0040135E` | `eb21` | `jmp 0x401381` | → `0x401381` (header writes) |
+| `0x00401360` | `32db` | `xor bl, bl` | `bl = 0` (heap-allocated instance) |
+| `0x00401362` | `6a01` | `push 1` | push 1 (the lock class/level argument) |
+| `0x00401364` | `e8f7f90a00` | `call fcn.004b0d60` | `Mem_Lock(1)` (`0x4B0D60`, 1 argument; body reads `[esp+4]` as a byte) |
+| `0x00401369` | `8b87e45eaf00` | `mov eax, dword [edi + 0xaf5ee4]` | `eax = QTask_TypeTable[type].size` (`0xAF5EE4` = record+0x04) |
+| `0x0040136F` | `6a04` | `push 4` | push 4 (alignment) |
+| `0x00401371` | `50` | `push eax` | push size |
+| `0x00401372` | `e8e9f80a00` | `call fcn.004b0c60` | `obj = Mem_Alloc(size, 4)` (`0x4B0C60`: arg1 = size at `[esp+4]`, arg2 = align at `[esp+8]`) |
+| `0x00401377` | `83c40c` | `add esp, 0xc` | `add esp,0xC` — 3 pushed dwords (lock 1 + alloc 2) |
+| `0x0040137A` | `8bf0` | `mov esi, eax` | `esi = eax` (the new object) |
+| `0x0040137C` | `e80ffa0a00` | `call fcn.004b0d90` | `Mem_Unlock()` (`0x4B0D90`, 0 arguments) |
+| `0x00401381` | `8b4c2414` | `mov ecx, dword [esp + 0x14]` | `ecx = [esp+0x14]`; frame 16 → **entry+4 = arg1** (owner pointer) |
+| `0x00401385` | `33d2` | `xor edx, edx` | `edx = 0` |
+| `0x00401387` | `895604` | `mov dword [esi + 4], edx` | `*(uint32*)(obj+0x04) = 0` — prev link |
+| `0x0040138A` | `8916` | `mov dword [esi], edx` | `*(uint32*)(obj+0x00) = 0` — next link |
+| `0x0040138C` | `894e14` | `mov dword [esi + 0x14], ecx` | `*(uint32*)(obj+0x14) = owner` |
+| `0x0040138F` | `8d460c` | `lea eax, [esi + 0xc]` | `eax = obj + 0x0C` (terminator node) |
+| `0x00401392` | `8d4e08` | `lea ecx, [esi + 8]` | `ecx = obj + 0x08` (list head) |
+| `0x00401395` | `885e1e` | `mov byte [esi + 0x1e], bl` | `*(uint8*)(obj+0x1E) = bl` (pool-recycle flag) |
+| `0x00401398` | `66896e1c` | `mov word [esi + 0x1c], bp` | `*(uint16*)(obj+0x1C) = bp` (type id, **word** store) |
+| `0x0040139C` | `895618` | `mov dword [esi + 0x18], edx` | `*(uint32*)(obj+0x18) = 0` (registry reference count) |
+| `0x0040139F` | `8901` | `mov dword [ecx], eax` | `*(uint32*)(obj+0x08) = obj+0x0C` — head.first = &terminator |
+| `0x004013A1` | `8910` | `mov dword [eax], edx` | `*(uint32*)(obj+0x0C) = 0` — terminator.next = 0 |
+| `0x004013A3` | `894e10` | `mov dword [esi + 0x10], ecx` | `*(uint32*)(obj+0x10) = obj+0x08` — head.tail = &head |
+| `0x004013A6` | `8bc6` | `mov eax, esi` | `eax = obj` (return value) |
+| `0x004013A8` | `5f` | `pop edi` | pop edi |
+| `0x004013A9` | `5e` | `pop esi` | pop esi |
+| `0x004013AA` | `5d` | `pop ebp` | pop ebp |
+| `0x004013AB` | `5b` | `pop ebx` | pop ebx |
+| `0x004013AC` | `c3` | `ret` | ret (returns the instance in EAX) |
+
+#### 17.1.2 The `0x567C58` increment — exact site and ordering
+
+The Lead's `0x401307` is correct; the store and the surrounding order are:
+
+| order | VA | instruction | effect |
+|---|---|---|---|
+| 1 | `0x4012F9` | `8b 35 58 7c 56 00` `mov esi,[0x567c58]` | read the live count (`0x567C58`, dword) — **before** the object exists |
+| 2 | `0x401307` | `46` `inc esi` | **the increment** |
+| 3 | `0x40130B` | `89 35 58 7c 56 00` `mov [0x567c58],esi` | **the store** |
+| 4 | `0x401314`–`0x40135E` | pool present / not exhausted | claim a pool slot: write `position` into the element tail (`0x40134E`), `poolUsed++` (`0x401358`) |
+| 4′ | `0x401360`–`0x40137C` | pool absent or exhausted | `Mem_Lock(1)` → `Mem_Alloc(size,4)` → `Mem_Unlock()` |
+| 5 | `0x401381`–`0x4013A3` | object exists (either branch) | the nine header writes, in the order listed in 17.1.3 |
+| 6 | `0x4013A6`/`0x4013AC` | `mov eax,esi` / `ret` | return the instance |
+
+**What a reader can observe mid-construction:** the incremented count is published *before* the instance is allocated, before its header is initialised, and before it is linked into any owner list (linking happens in the caller `0x4012A0`/`0x4013B0`, after this function returns). There is **no failure path** in this function — no branch returns early, no branch restores the counter, and neither `Mem_Alloc` nor `Mem_Unlock` has a result test — so the increment is unconditional and the decrement exists only in the release path `0x4015F0` (`0x4015F7`/`0x4015F9`, §16.4). A reader therefore may observe `QTask_LiveTaskCount = N` while instance `N` still has an uninitialised header; a reader must not treat the counter as "fully constructed instances".
+
+The increment/store also precedes the pool write at `0x40134E` and the `poolUsed` update at `0x401358`, so the counter is not a mirror of the pool's used count either.
+
+#### 17.1.3 Header writes, in retail order, with widths
+
+| order | VA | store | width | meaning per §10/§16 |
+|---|---|---|---|---|
+| 1 | `0x401387` | `*(uint32*)(obj+0x04) = 0` | 32 | previous-sibling link |
+| 2 | `0x40138A` | `*(uint32*)(obj+0x00) = 0` | 32 | next-sibling link (the object's own list node) |
+| 3 | `0x40138C` | `*(uint32*)(obj+0x14) = arg1` | 32 | **owner pointer** (not a port index) |
+| 4 | `0x401395` | `*(uint8*)(obj+0x1E) = bl` | **8** | pool-recycled flag (1 = came from the per-class pool) |
+| 5 | `0x401398` | `*(uint16*)(obj+0x1C) = bp` | **16** | type id (low word of arg2) |
+| 6 | `0x40139C` | `*(uint32*)(obj+0x18) = 0` | 32 | registry reference count |
+| 7 | `0x40139F` | `*(uint32*)(obj+0x08) = obj+0x0C` | 32 | child-list head `.first` = address of the terminator node |
+| 8 | `0x4013A1` | `*(uint32*)(obj+0x0C) = 0` | 32 | terminator node `.next` = 0 |
+| 9 | `0x4013A3` | `*(uint32*)(obj+0x10) = obj+0x08` | 32 | child-list head `.tail` = address of `.first` |
+
+Note the write order is **not** ascending by offset (`+4`, `+0`, `+0x14`, `+0x1E`, `+0x1C`, `+0x18`, `+8`, `+0xC`, `+0x10`). A transcription that reorders these for readability changes what a concurrent reader sees; §10.13 rule 11 requires the retail order. The three self-referential head writes (7–9) construct the empty list that `0x4AF8F0`/`0x4AF910`/`0x4AF960` and the release path `0x4015F0` operate on; the exact values are what make the empty-list traversal in `0x4015F0` (`[obj+0x10]` → `[that+4]` = 0) and the backward child walk terminate.
+
+Also note: `bp` is the **low 16 bits of `ebp`**, which holds the un-masked arg2 (the `and eax,0xffff` at `0x4012FF` applies to `eax`, used only for the class offset). So a caller passing a 32-bit value with garbage above bit 15 gets the class from the low word but stores the low word as well — no difference in effect, but the store width is 16 and must stay 16.
+
+#### 17.1.4 Pool-recycle branch vs heap branch
+
+Pool-recycle (`0x40131E`–`0x40135E`), taken when `poolPresent` (`record+0x24` = `0xAF5F04`) is non-zero **and** `poolUsed < poolCapacity`:
+
+1. `slot = poolIndexArray[poolUsed]` (`0xAF5EF0[poolUsed]`, index array from the pool descriptor built by `0x4B0B00`).
+2. `obj = poolBase + slot * poolElemSize` (`0xAF5EEC`, `0xAF5EFC`).
+3. `*(int*)(obj + poolTailOffset) = poolUsed` (`0xAF5F00`) — the tail dword outside the object payload stores the object's position in the pool; this is the exact inverse of the swap-remove in `0x4015F0` (§16.2).
+4. `poolUsed++` (`0xAF5EF4`) — written **after** the tail store, so a concurrent free that reads `poolUsed` sees the pre-increment value until step 4.
+5. `bl = 1`.
+
+Heap branch (`0x401360`–`0x40137C`), taken when the pool flag is clear **or** the pool is exhausted:
+
+1. `bl = 0`.
+2. `push 1` → `Mem_Lock(1)` (`0x4B0D60`, 1 argument; the callee stores the passed byte into a lock-level stack and decrements a counter at `0xA960E0`).
+3. `push 4` (alignment), `push size` (`record+0x04` = `0xAF5EE4`) → `Mem_Alloc(size, 4)` (`0x4B0C60`; arg1 = size at `[esp+4]`, arg2 = alignment at `[esp+8]`, and the callee requests `size + alignment + 0x1C` bytes (`lea ebp,[eax+ebx+0x1c]` at `0x4B0C71`)).
+4. `add esp,0xC` (3 dwords: the lock argument + the two alloc arguments — all three callees are cdecl).
+5. `esi = eax`; `Mem_Unlock()` (`0x4B0D90`, 0 arguments).
+
+Both branches converge at `0x401381` with `esi` = the object and `bl` = "was pooled". The heap branch does **not** write the tail dword (there is no pool position), which is consistent with the release path only reading the tail on the pooled sub-path (`[obj+0x1E] != 0`).
+
+#### 17.1.5 What `0x4012F0` does not prove
+
+* Whether `poolUsed < poolCapacity` can ever be false for a type whose `poolPresent` byte is set (i.e. whether the "pool exhausted" path is reachable in practice) — the comparison is signed (`jge`) and the capacity is a dword from the pool descriptor; no runtime evidence was collected.
+* Whether the heap allocation can return null: the function has **no** null test, so retail would write the header through a null pointer. Do not add a null check to a transcription (§10.13 rule 1/11: no invented branches).
+* The meaning of the `Mem_Lock` argument `1` (the callee treats it as a byte level; only the immediate is proven).
+* The type-id → class-record mapping beyond `type * 0x30` (the record field meanings are §10's; this section only re-uses them).
+
+### 17.2 `0x004012A0` and `0x004013B0` — create, link, dispatch
+
+| fact | `0x004012A0` | `0x004013B0` |
+|---|---|---|
+| body | `0x4012A0`–`0x4012E7`, **72 bytes** | `0x4013B0`–`0x4013F7`, **72 bytes** |
+| padding | 8 `90` at `0x4012E8`–`0x4012EF` | 8 `90` at `0x4013F8`–`0x4013FF` |
+| blocks / instructions | **5 blocks, 30 instructions**, 6 edges | **5 blocks, 30 instructions**, 6 edges |
+| signature | **`void * __cdecl (void *owner, uint16 typeId, uint32 data)`** | same |
+| frame proof | arg2 at `0x4012A0` with 0 bytes pushed (`+8`); arg1 at `0x4012A6` with 8 pushed (`0xC-8 = +4`); arg3 at `0x4012D8` with 8 pushed (`0x14-8 = +0xC`) | same offsets at `0x4013B0`/`0x4013B6`/`0x4013E8` |
+| callers | **110** direct `E8` sites | **1**: `0x4F081F` (inside `0x4EE970` + `0x1EAF`) |
+| insertion call | `0x4AF8F0(owner+8, obj)` — **append as last child** | `0x4AF910(owner+8, obj)` — **insert as first child** |
+| handler call | phase-0 slot `QTask_HandlerTable[(uint16)*(uint16*)(obj+0x1C)]`, 2 arguments | identical |
+| return | the new task in EAX | identical |
+
+#### 17.2.1 Instruction table, `0x4012A0` (30 instructions)
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004012A0` | `8b442408` | `mov eax, dword [esp + 8]` | `eax = [esp+0x08]`; frame 0 → **entry+8 = arg2** (type id) |
+| `0x004012A4` | `56` | `push esi` | save esi |
+| `0x004012A5` | `57` | `push edi` | save edi |
+| `0x004012A6` | `8b7c240c` | `mov edi, dword [esp + 0xc]` | `edi = [esp+0x0C]`; frame 8 → **entry+4 = arg1** (owner / list head owner) |
+| `0x004012AA` | `50` | `push eax` | push arg2 (type id) — first of two |
+| `0x004012AB` | `57` | `push edi` | push arg1 (owner) — **last push = entry+4 of the callee** |
+| `0x004012AC` | `e83f000000` | `call fcn.004012f0` | `obj = QTask_AllocateTaskInstance(arg1, arg2)` |
+| `0x004012B1` | `83c408` | `add esp, 8` | cdecl cleanup of the 2 arguments |
+| `0x004012B4` | `8bf0` | `mov esi, eax` | `esi = obj` |
+| `0x004012B6` | `85ff` | `test edi, edi` | `test arg1, arg1` — insert only when there is an owner |
+| `0x004012B8` | `740d` | `je 0x4012c7` | owner == 0 → skip the list insert |
+| `0x004012BA` | `83c708` | `add edi, 8` | `edi = owner + 8` (the head field) |
+| `0x004012BD` | `56` | `push esi` | push `obj` (node) |
+| `0x004012BE` | `57` | `push edi` | push `owner+8` (**head** = entry+4 of the callee) |
+| `0x004012BF` | `e82ce60a00` | `call fcn.004af8f0` | `List_InsertAtEnd(owner+8, obj)` (`0x4AF8F0`) |
+| `0x004012C4` | `83c408` | `add esp, 8` | cleanup |
+| `0x004012C7` | `33c9` | `xor ecx, ecx` | `ecx = 0` |
+| `0x004012C9` | `668b4e1c` | `mov cx, word [esi + 0x1c]` | `cx = word [obj+0x1C]` (type id, 16-bit read; the value just stored at `0x401398`) |
+| `0x004012CD` | `8b048de06aa900` | `mov eax, dword [ecx*4 + 0xa96ae0]` | `handler = QTask_HandlerTable[type]` = `0xA96AE0` + type*4 (**phase 0**, offset 0) |
+| `0x004012D4` | `85c0` | `test eax, eax` | `test eax,eax` |
+| `0x004012D6` | `740b` | `je 0x4012e3` | no phase-0 handler → return |
+| `0x004012D8` | `8b542414` | `mov edx, dword [esp + 0x14]` | `edx = [esp+0x14]`; frame is 8 (esi,edi) → **entry+0x0C = arg3** (the data word) |
+| `0x004012DC` | `52` | `push edx` | push arg3 (data) — first of two |
+| `0x004012DD` | `56` | `push esi` | push `obj` — **last push = handler entry+4 = arg1** |
+| `0x004012DE` | `ffd0` | `call eax` | `handler(obj, data)` — indirect, 2 arguments |
+| `0x004012E0` | `83c408` | `add esp, 8` | cleanup of the 2 handler arguments |
+| `0x004012E3` | `8bc6` | `mov eax, esi` | `eax = obj` |
+| `0x004012E5` | `5f` | `pop edi` | pop edi |
+| `0x004012E6` | `5e` | `pop esi` | pop esi |
+| `0x004012E7` | `c3` | `ret` | ret (returns the new task) |
+
+#### 17.2.2 Instruction table, `0x4013B0` (30 instructions) — differs only at the insertion call
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004013B0` | `8b442408` | `mov eax, dword [esp + 8]` | `eax = [esp+0x08]`; **entry+8 = arg2** (type id) |
+| `0x004013B4` | `56` | `push esi` | save esi |
+| `0x004013B5` | `57` | `push edi` | save edi |
+| `0x004013B6` | `8b7c240c` | `mov edi, dword [esp + 0xc]` | `edi = [esp+0x0C]`; **entry+4 = arg1** (owner) |
+| `0x004013BA` | `50` | `push eax` | push arg2 (type id) |
+| `0x004013BB` | `57` | `push edi` | push arg1 (owner) — last push = callee entry+4 |
+| `0x004013BC` | `e82fffffff` | `call fcn.004012f0` | `obj = QTask_AllocateTaskInstance(arg1, arg2)` |
+| `0x004013C1` | `83c408` | `add esp, 8` | cleanup |
+| `0x004013C4` | `8bf0` | `mov esi, eax` | `esi = obj` |
+| `0x004013C6` | `85ff` | `test edi, edi` | `test arg1,arg1` |
+| `0x004013C8` | `740d` | `je 0x4013d7` | no owner → skip |
+| `0x004013CA` | `83c708` | `add edi, 8` | `edi = owner + 8` (head field) |
+| `0x004013CD` | `56` | `push esi` | push `obj` (node) |
+| `0x004013CE` | `57` | `push edi` | push `owner+8` (head) |
+| `0x004013CF` | `e83ce50a00` | `call fcn.004af910` | `List_InsertAtFront(owner+8, obj)` (`0x4AF910`) — **the only difference from `0x4012A0`** |
+| `0x004013D4` | `83c408` | `add esp, 8` | cleanup |
+| `0x004013D7` | `33c9` | `xor ecx, ecx` | `ecx = 0` |
+| `0x004013D9` | `668b4e1c` | `mov cx, word [esi + 0x1c]` | `cx = word [obj+0x1C]` (type id) |
+| `0x004013DD` | `8b048de06aa900` | `mov eax, dword [ecx*4 + 0xa96ae0]` | `handler = QTask_HandlerTable[type]` (phase 0) |
+| `0x004013E4` | `85c0` | `test eax, eax` | `test eax,eax` |
+| `0x004013E6` | `740b` | `je 0x4013f3` | no handler → return |
+| `0x004013E8` | `8b542414` | `mov edx, dword [esp + 0x14]` | `edx = [esp+0x14]`; frame 8 → **entry+0x0C = arg3** |
+| `0x004013EC` | `52` | `push edx` | push arg3 |
+| `0x004013ED` | `56` | `push esi` | push `obj` |
+| `0x004013EE` | `ffd0` | `call eax` | `handler(obj, data)` — 2 arguments |
+| `0x004013F0` | `83c408` | `add esp, 8` | cleanup |
+| `0x004013F3` | `8bc6` | `mov eax, esi` | `eax = obj` |
+| `0x004013F5` | `5f` | `pop edi` | pop edi |
+| `0x004013F6` | `5e` | `pop esi` | pop esi |
+| `0x004013F7` | `c3` | `ret` | ret |
+
+#### 17.2.3 Blocks and retail-order C++
+
+`0x4012A0`:
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004012A0` | 11 | `0x004012BA` | `0x004012C7`, `0x004012BA` | `obj = QTask_AllocateTaskInstance(arg1, arg2);` // 0x4012AA/0x4012AB push order: type, then owner |
+| B2 | `0x004012BA` | 5 | `0x004012C7` | `0x004012C7` | `List_InsertAtEnd((char*)arg1 + 8, obj);` // 0x4AF8F0(head, node) |
+| B3 | `0x004012C7` | 5 | `0x004012D8` | `0x004012E3`, `0x004012D8` | `handler = QTask_HandlerTable[(uint16)*(uint16*)((char*)obj + 0x1C)];` // phase 0<br>`if (handler == 0) return obj;` |
+| B4 | `0x004012D8` | 5 | `0x004012E3` | `0x004012E3` | `handler(obj, arg3);` // arg1 = obj, arg2 = arg3 (push order: arg3, then obj) |
+| B5 | `0x004012E3` | 4 | `0x004012E8` | return | `return obj;` |
+
+`0x4013B0`:
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004013B0` | 11 | `0x004013CA` | `0x004013D7`, `0x004013CA` | `obj = QTask_AllocateTaskInstance(arg1, arg2);` // 0x4013BA/0x4013BB |
+| B2 | `0x004013CA` | 5 | `0x004013D7` | `0x004013D7` | `List_InsertAtFront((char*)arg1 + 8, obj);` // 0x4AF910(head, node) |
+| B3 | `0x004013D7` | 5 | `0x004013E8` | `0x004013F3`, `0x004013E8` | `handler = QTask_HandlerTable[(uint16)*(uint16*)((char*)obj + 0x1C)];`<br>`if (handler == 0) return obj;` |
+| B4 | `0x004013E8` | 5 | `0x004013F3` | `0x004013F3` | `handler(obj, arg3);` |
+| B5 | `0x004013F3` | 4 | `0x004013F8` | return | `return obj;` |
+
+#### 17.2.4 Insert helpers, proven from their own bytes
+
+`0x4AF8F0(head, node)` — `8b 44 24 04` `8b 4c 24 08` `8b 50 08` `89 51 04` `8d 50 04` `89 11` `8b 50 08` `89 0a` `89 48 08` `c3`:
+
+```c
+head = arg1; node = arg2;
+node->prev = *(uint32*)(head + 8);          /* old tail */
+node->next = head + 4;                      /* terminator node */
+*(uint32*)(*(uint32*)(head + 8)) = node;    /* old tail's next = node */
+*(uint32*)(head + 8) = node;                /* head.tail = node */
+```
+
+`0x4AF910(head, node)` — `8b 44 24 04` `8b 4c 24 08` `8b 10` `89 41 04` `89 11` `8b 10` `89 4a 04` `89 08` `c3`:
+
+```c
+next = *(uint32*)head;                      /* old first */
+node->prev = head;
+node->next = next;
+*(uint32*)(next + 4) = node;                /* old first's prev = node */
+*(uint32*)head = node;                      /* head.first = node */
+```
+
+With `head = owner+8` and the instance's own initial values from `0x4012F0` (`.first` = `owner+0xC`, `.terminator.next` = 0 at `owner+0xC`, `.tail` = `owner+8` at `owner+0x10`), both helpers are consistent: the first child's `prev` is the head address `owner+8` and the last child's `next` is the terminator address `owner+0xC`. `0x4AF960` (unlink) restores the list from `node->prev`/`node->next`, which is why the release path can unlink a child while walking the parent. `0x4AF8F0` is also called from 67 sites elsewhere in `.text`; `0x4AF910` from 8.
+
+#### 17.2.5 Handler argument order, proven
+
+The two pushes at `0x4012DC`/`0x4012DD` (and `0x4013EC`/`0x4013ED`) are cleaned by exactly `add esp,8` (`0x4012E0` / `0x4013F0`), so **the handler takes two cdecl arguments**:
+
+| slot | value | proof |
+|---|---|---|
+| handler entry+4 (arg1) | the **new task** `obj` (pushed last at `0x4012DD`) | last push is the lowest stack address, i.e. entry+4; and the Flow phase-0 handler `0x402070` reads exactly that slot (`0x402072 mov esi,[esp+0xc]`, frame 8 → entry+4) and stores it as the task/context pointer in `0x567C8C` (`0x402079`) |
+| handler entry+8 (arg2) | the wrapper's **arg3** `data` (pushed first at `0x4012DC`, value read at `0x4012D8` from `[esp+0x14]` with frame 8 → entry+0x0C) | stack arithmetic above; the value is provably the caller's third argument |
+
+What is **not** proven: no handler inspected reads its second argument, so the *meaning* of `data` is open (see 17.7). The Flow phase-0 handler `0x402070` ignores it entirely; every call site that passes a non-zero third argument must be examined before a transcription names it. The one caller that passes a non-zero arg2 and a zero arg3 is worth stating exactly: `0x4ED5C0` (23 bytes) loads `word [0xA5EFA0]`, then `push 0` (`0x4ED5CA`), `push eax` (the 16-bit value, `0x4ED5CC`), `push ecx` (its own argument, `0x4ED5CD`), and calls `0x4012A0` — so the wrapper receives `arg1 = the input-port object`, `arg2 = the 16-bit value at 0xA5EFA0` and `arg3 = 0`, i.e. that caller uses the wrapper as (owner, type, data=0). It is consistent with arg2 being a class word and leaves arg2's non-zero-meaning still unproven for other callers.
+
+One more fact that matters for transcription: the handler index is computed from the **object's own header word** `*(uint16*)(obj+0x1C)`, i.e. the word `0x4012F0` just stored from arg2 (`0x401398`). The wrapper does not re-use the caller's arg2 register; a transcription must read the header field (this is exactly the kind of detail a "cleaner" rewrite tends to replace with the argument).
+
+### 17.3 `0x004014B0` — rebuild every in-use type's handler mask
+
+| fact | value |
+|---|---|
+| entry / body | `0x004014B0` … `0x4014DA`, **43 bytes**, `ret` at `0x4014DA`; 5 `90` at `0x4014DB`–`0x4014DF` |
+| blocks / instructions | **5 blocks, 18 instructions**, 6 edges |
+| signature | **`void __cdecl TaskType_RefreshHandlerMask(void)`** — **zero arguments**, no return value used |
+| callers | 4 direct calls: `0x40148F` (inside `0x401400`), `0x4015B9` (inside `0x401530`, the site §16 flagged), `0x4019DF` and `0x401A05` (both inside `TaskType_Register` `0x401900`: the first after the 254-entry copy loop that ends at `0x4019DD`, the second after the 254-entry clear loop that ends at `0x401A03`); plus **2 tail jumps** `0x401D49`, `0x401D70` from `0x401D30`/`0x401D50` |
+| walk | `esi = 0xAF5F08` (record+0x28), `index = 0`, stride `0x30`, bound `0xAFA708` → `(0xAFA708-0xAF5F08)/0x30 = 384` exactly |
+| condition | `*(uint8*)(esi-3)` = record+0x25 = in-use byte `0xAF5F05` |
+| write | `*(uint16*)esi = (uint16)TaskType_HandlerPhaseMask(index)` — the per-type mask word at record+0x28 |
+| callee | `0x4014E0` only (1 call site in the whole image: `0x4014C1`) |
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004014B0` | `56` | `push esi` | save esi |
+| `0x004014B1` | `57` | `push edi` | save edi |
+| `0x004014B2` | `33ff` | `xor edi, edi` | `edi = 0` (record index) |
+| `0x004014B4` | `be085faf00` | `mov esi, 0xaf5f08` | `esi = 0xAF5F08` = `&QTask_TypeTable[0].maskWord` (record+0x28) |
+| `0x004014B9` | `8a46fd` | `mov al, byte [esi - 3]` | `al = byte [esi-3]` = record+0x25 = the in-use byte `0xAF5F05` |
+| `0x004014BC` | `84c0` | `test al, al` | `test al,al` |
+| `0x004014BE` | `740c` | `je 0x4014cc` | unused record → advance |
+| `0x004014C0` | `57` | `push edi` | push the record index |
+| `0x004014C1` | `e81a000000` | `call fcn.004014e0` | `mask = TaskType_HandlerPhaseMask(index)` (`0x4014E0`, 1 argument) |
+| `0x004014C6` | `83c404` | `add esp, 4` | cleanup |
+| `0x004014C9` | `668906` | `mov word [esi], ax` | `*(uint16*)esi = (uint16)mask` — mask word written at record+0x28 |
+| `0x004014CC` | `83c630` | `add esi, 0x30` | `esi += 0x30` |
+| `0x004014CF` | `47` | `inc edi` | `edi++` |
+| `0x004014D0` | `81fe08a7af00` | `cmp esi, 0xafa708` | `cmp esi, 0xAFA708` |
+| `0x004014D6` | `7ce1` | `jl 0x4014b9` | loop while `esi < 0xAFA708`; `(0xAFA708-0xAF5F08)/0x30 = 384` records |
+| `0x004014D8` | `5f` | `pop edi` | pop edi |
+| `0x004014D9` | `5e` | `pop esi` | pop esi |
+| `0x004014DA` | `c3` | `ret` | ret (no arguments, no value used) |
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004014B0` | 4 | `0x004014B9` | `0x004014B9` | `esi = 0xAF5F08; index = 0;` // first record's mask word |
+| B2 | `0x004014B9` | 3 | `0x004014C0` | `0x004014CC`, `0x004014C0` | `if (*(uint8*)(esi - 3) == 0) goto L_4014CC;` // in-use byte at record+0x25 |
+| B3 | `0x004014C0` | 4 | `0x004014CC` | `0x004014CC` | `*(uint16*)esi = (uint16)TaskType_HandlerPhaseMask(index);` |
+| B4 | `0x004014CC` | 4 | `0x004014D8` | `0x004014B9`, `0x004014D8` | `esi += 0x30; index++; if (esi < 0xAFA708) goto L_4014B9;` |
+| B5 | `0x004014D8` | 3 | `0x004014DB` | return | `return;` |
+
+The mask word lands at **record+0x28** = `0xAF5F08 + i*0x30`; §10 records that field as a 16-bit handler mask. After this call, every in-use type's mask reflects the handler-table state at that moment, which is exactly why `0x401530` calls it once after its registration walk (`0x4015B9`).
+
+### 17.4 `0x004014E0` — build one type's 16-bit handler mask
+
+| fact | value |
+|---|---|
+| entry / body | `0x004014E0` … `0x40152A`, **75 bytes**, `ret` at `0x40152A`; 5 `90` at `0x40152B`–`0x40152F` |
+| blocks / instructions | **5 blocks, 27 instructions**, 6 edges |
+| signature | **`uint16 __cdecl TaskType_HandlerPhaseMask(uint32 classIndex)`** — **one cdecl argument** (pushed at `0x4014C0`, cleaned by `add esp,4` at `0x4014C6`; read at `0x4014E1` with frame 4 → entry+4) |
+| callers | **1**: `0x4014C1`, inside `0x4014B0` |
+| reads | byte `0x54FF24 + phase` for `phase` 0…15 (the registered event id per phase, `0xFF` = unused), and dword `0xA96AE0 + event*0x180*4 + class*4` |
+| return | `AX` = `0x8000 | ((handler != 0) << phase)` OR-ed over the 16 phases |
+| strings | none |
+
+| VA | bytes | retail instruction | note |
+|---|---|---|---|
+| `0x004014E0` | `56` | `push esi` | save esi |
+| `0x004014E1` | `8b742408` | `mov esi, dword [esp + 8]` | `esi = [esp+0x08]`; frame 4 → **entry+4 = arg1** (the class index) |
+| `0x004014E5` | `33c0` | `xor eax, eax` | `eax = 0` (mask accumulator) |
+| `0x004014E7` | `57` | `push edi` | save edi |
+| `0x004014E8` | `33c9` | `xor ecx, ecx` | `ecx = 0` (phase index) |
+| `0x004014EA` | `8a9124ff5400` | `mov dl, byte [ecx + 0x54ff24]` | `dl = byte [ecx + 0x54FF24]` — the event id registered for phase `ecx` |
+| `0x004014F0` | `80faff` | `cmp dl, 0xff` | `cmp dl, 0xFF` |
+| `0x004014F3` | `742a` | `je 0x40151f` | unused phase slot → next phase |
+| `0x004014F5` | `81e2ff000000` | `and edx, 0xff` | `edx = event & 0xFF` |
+| `0x004014FB` | `8bfe` | `mov edi, esi` | `edi = arg1` |
+| `0x004014FD` | `81e7ffff0000` | `and edi, 0xffff` | `edi = class & 0xFFFF` |
+| `0x00401503` | `8d1452` | `lea edx, [edx + edx*2]` | `edx = event * 3` |
+| `0x00401506` | `c1e207` | `shl edx, 7` | `edx <<= 7` → `event * 0x180` (handler-table row stride) |
+| `0x00401509` | `03d7` | `add edx, edi` | `edx += class` (table index) |
+| `0x0040150B` | `8b3c95e06aa900` | `mov edi, dword [edx*4 + 0xa96ae0]` | `edi = QTask_HandlerTable[event*0x180 + class]` (`0xA96AE0`, dword read) |
+| `0x00401512` | `85ff` | `test edi, edi` | `test edi,edi` |
+| `0x00401514` | `0f95c2` | `setne dl` | `dl = (handler != 0)` |
+| `0x00401517` | `660fbed2` | `movsx dx, dl` | `dx = sign_extend(dl)` (0 or 1) |
+| `0x0040151B` | `d3e2` | `shl edx, cl` | `edx <<= cl` → the bit for phase `ecx` |
+| `0x0040151D` | `0bc2` | `or eax, edx` | `eax |= edx` |
+| `0x0040151F` | `41` | `inc ecx` | `ecx++` |
+| `0x00401520` | `83f910` | `cmp ecx, 0x10` | `cmp ecx, 0x10` — **16 phases only** |
+| `0x00401523` | `7cc5` | `jl 0x4014ea` | loop while `ecx < 16` |
+| `0x00401525` | `5f` | `pop edi` | pop edi |
+| `0x00401526` | `80cc80` | `or ah, 0x80` | `or ah, 0x80` → bit 15 forced to 1 (0x8000) |
+| `0x00401529` | `5e` | `pop esi` | pop esi |
+| `0x0040152A` | `c3` | `ret` | ret (returns the 16-bit mask in AX) |
+
+| # | block VA | insns | ends | successors | retail-order C++ |
+|---|---|---|---|---|---|
+| B1 | `0x004014E0` | 5 | `0x004014EA` | `0x004014EA` | `mask = 0; ecx = 0;` // phase index |
+| B2 | `0x004014EA` | 3 | `0x004014F5` | `0x0040151F`, `0x004014F5` | `event = *(uint8*)(0x54FF24 + ecx); if (event == 0xFF) goto L_40151F;` |
+| B3 | `0x004014F5` | 12 | `0x0040151F` | `0x0040151F` | `handler = QTask_HandlerTable[event * 0x180 + (arg1 & 0xFFFF)];`<br>`mask |= (handler != 0) << ecx;` |
+| B4 | `0x0040151F` | 3 | `0x00401525` | `0x004014EA`, `0x00401525` | `ecx++; if (ecx < 16) goto L_4014EA;` |
+| B5 | `0x00401525` | 4 | `0x0040152B` | return | `return (uint16)(mask | 0x8000);` |
+
+Three facts a transcription must keep:
+
+1. **16 phases, not 254.** The loop bound is the immediate `0x10` at `0x401520`. The handler table and the flag array are 254 phases wide (`0x600`-byte rows, `0x54FF34` is 254×384 bytes), but this mask covers only phases 0–15. The event-id byte array at `0x54FF24` is exactly 16 bytes: `QTask_Init` writes four dwords `-1` at `0x401101`–`0x401118`, `0x401D30`/`0x401D50` write `[0x54FF24 + slot]` (refs `0x401D3A`, `0x401D68`), and the next global at `0x54FF34` is the phase-flag array. So `0x54FF24 + 0x10 = 0x54FF34` bounds the array at 16 entries — the same 16 that this loop uses. (This resolves a loose end left in §16.2.1's phase-arity section: the mask is a *16-slot event mask*, not a 254-phase mask.)
+2. **Bit 15 is forced.** `or ah,0x80` at `0x401526` sets `0x8000` unconditionally, after the loop, so `0x8000` is always present in the mask (and phase 15's own contribution also lands in bit 15).
+3. **The index arithmetic** is `event * 3` then `shl 7` = `event * 0x180` entries = `0x600` bytes — the same stride used by `0x401530` (`arg2 * 3 << 7`) and by `0x401D80`'s dispatch. The class is masked to 16 bits (`and edi,0xffff` at `0x4014FD`) before being added.
+
+### 17.5 Consequence: what must exist before the link handler is faithful
+
+The retail call graph around these five routines is:
+
+```
+0x4012A0 / 0x4013B0  (create: 110 / 1 call sites)
+        └── 0x4012F0  (allocate+construct; writes 0x567C58)
+                └── 0x4B0D60 / 0x4B0C60 / 0x4B0D90  (lock, alloc, unlock)
+        └── 0x4AF8F0 or 0x4AF910  (append / prepend to owner+8)
+        └── QTask_HandlerTable[type] (phase 0), 2 args
+0x401530  (link handler; 623 call sites)
+        └── 0x401530 (recursive propagation)
+        └── 0x4014B0  (refresh all masks; 0 args)
+                └── 0x4014E0  (one mask; 1 arg)
+0x401400  (sibling link handler)
+        └── 0x4014B0
+0x401900  (TaskType_Register, 273 B, 18 blocks)
+        └── 0x4014B0  (on both registration paths, 0x4019DF / 0x401A05)
+```
+
+Consequences for a faithful transcription, stated only from the above:
+
+* `0x567C58`'s **storage definition is complete on the writer side**: one incrementing writer (`0x4012F0`, `0x401307`/`0x40130B`) and one decrementing writer (`0x4015F0`, `0x4015F7`/`0x4015F9`), both 32-bit, initial value 0 (zero-filled `.data`). The remaining reader `0x401A60` (§16.6) is absent from the manifest, which is why the getter is still unwired — not the writer.
+* If `0x4014B0` or `0x4014E0` is stubbed, then any transcription of `0x401530`/`0x401400` silently stops updating the per-type mask word at `0xAF5F08`, and every consumer of that word behaves as if no handlers were registered. Both must exist as natives before either link handler is faithful; the Lead's ordering is correct.
+* `0x4014E0`'s event-id read is a **new global access** (`0x54FF24`, byte, 16 entries) not previously used by any transcribed native; a transcription must bring it with the exact terminator test (`0xFF`) and the `or 0x8000`.
+* The two wrappers differ **only** in the insertion call (`0x4012BF` vs `0x4013CF`); everything else is instruction-for-instruction identical, so one implementation each (not a shared helper — §10.14 rule 9 forbids helpers, and retail has two distinct entries at two distinct VAs).
+
+### 17.6 Contradictions with the current tree (recorded, not acted on)
+
+This pass changed no file outside the evidence sheet, but the Lead needs these before wiring anything:
+
+1. **`0x004012F0` and `0x004012A0` already have manifest records, with names and semantics that contradict the retail bodies.** `docs/fidelity/native-verification.json` records `0x004012F0` as **`QTask_AllocateInputPort`** (`engine/src/retail/input/input_port_process.cpp`, status `STRUCTURALLY_VERIFIED`) and `0x004012A0` as **`QTask_RegisterInputPortHandler`** (same file, same status). The retail bodies are the QTask **task-instance allocator/constructor** and its **create+link+phase-0-dispatch wrapper** (17.1–17.2); nothing in either body reads an input-port index, and `0x4012F0`'s `+0x14` store is the **owner pointer** (`0x40138C`, value = arg1), not a port index.
+2. **A third name exists for the same VA.** `scripts/GameNatives/VERIFICATION.md` lists `0x004012F0` as **`QTask_LinkEventHandler`** with status `PASS`/`VERIFIED`. So the catalogue, the manifest and the retail body give three different accounts of one address — exactly the class of contradiction the Lead asked to have recorded rather than resolved by deletion.
+3. **Body-level divergences** in the existing implementation of `0x4012F0` (from a read of the file, no edits made): the pool-recycle branch (`0x401314`–`0x40135E`) is replaced by an unconditional `Mem_Alloc`; `Mem_Lock(1)`/`Mem_Unlock()` (`0x401364`/`0x40137C`) are absent; the pool-position tail write and `poolUsed++` are absent; the empty-list initialisation stores fixed offsets (`offsetof(...)`) instead of `obj+0xC` / `obj+8` addresses; the pool flag `+0x1E` is set from the type's *pool-present* byte instead of from "this instance was pooled", so a heap-allocated instance can be flagged pooled; a null return is tested and `0` returned at `0x4012A0`'s call, which retail does not do; and `0x567C58` is declared and initialised as `0xFFFFFFFF` under the name `QTask_InputPortCounter`, while retail's initial value is 0 (the `0xFFFFFFFF` image value belongs to `0x536148`, §16.1.6).
+4. **Wrapper argument roles are swapped** in the same file: its `QTask_RegisterInputPortHandler(object, port_index, context)` passes `(port_index, context)` to the allocator, i.e. the wrapper's **second** argument is used as the owner and its **third** as the type id, whereas retail passes `(owner = arg1, type = arg2)` at `0x4012AB`/`0x4012BB` and guards the insert on **arg1** (`test edi,edi` at `0x4012B6`), not on arg3. Its handler call passes **one** argument; retail pushes two and cleans 8 (17.2.5). Its handler-index source is the record field it filled from arg3, not the header word written from arg2.
+
+5. **The engine's handler-pointer type is one-argument, retail's phase-0 dispatch is two-argument.** `engine/include/igi/retail/core/task_types.hpp:50` declares `using FrameHandler = void (*)(void*);` and `QTask_HandlerTable` is an array of that type, but `0x4012A0` (`0x4012DD`/`0x4012DE`) and `0x4013B0` (`0x4013ED`/`0x4013EE`) push **two** arguments and clean 8 bytes, and the event dispatch `0x401D80` does the same (§16.2.5). A handler invoked through the one-argument type cannot receive retail's second argument; the slot it would read is whatever the caller left on the stack. This is an ABI statement about a header, not a decision: it is recorded here so the Lead can settle it together with the wrapper/registrar transcriptions.
+
+These are recorded for the Lead to decide (rename, rewrite, or retire). **No manifest, engine, or catalogue file was modified, and nothing was deleted** — per the protocol, a contradiction is recorded here first.
+
+### 17.7 Not proven
+
+1. **The meaning of the wrappers' third argument (`data`).** It is provably the caller's third cdecl argument and provably lands in the phase-0 handler's arg2 slot, but no inspected handler reads it; the Flow handler `0x402070` ignores it. Do not name it "context"/"user data" in a transcription without a consumer.
+2. **The meaning of the phase-0 handler slot** relative to the `FLOW_EVENT_*` ids (§16.9 item 2): unchanged, still unresolved; this section adds no evidence for the namespace question.
+3. **The meaning of the `Mem_Lock` argument `1`** and whether `Mem_Alloc` can fail (no null test exists in retail; see 17.1.5).
+4. **Reachability of the pool-exhausted path** and of the `0x4014B0` in-use filter.
+5. **Why the mask covers only 16 phases** while the tables are 254 wide — the 16-byte event-id array at `0x54FF24` and the 16-slot initialisation are facts, the design intent is not.
+6. **`0x4014B0`'s two tail-jump callers** (`0x401D30`/`0x401D50`, the event bind/unbind pair): the jump form is proven from the bytes, but those functions' own derivations are outside this section.
+7. **`0x4B0D60`/`0x4B0C60`/`0x4B0D90` internals**: only their argument counts and the `0x1C`-byte allocator header are used here; their bodies are out of scope.
+8. **No runtime evidence** for any of these five routines (no call counts, no observed argument values). Runtime stays unobserved until the Tester can capture it.
+
+### 17.8 Reproduction
+
+```
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004012f0; pd 62' igi.exe   # allocator
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004012a0; pd 32' igi.exe   # append wrapper
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004013b0; pd 32' igi.exe   # prepend wrapper
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004014b0; pd 20' igi.exe   # refresh all
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004014e0; pd 30' igi.exe   # one mask
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004af8f0; pd 10' igi.exe   # insert-at-end
+r2 -q -e scr.color=0 -e bin.relocs.apply=true -c 'aaa; s 0x004af910; pd 8'  igi.exe   # insert-at-front
+```
+Python scans used above (run from `/Users/haseeb-mir/Downloads/IGI`): exhaustive `E8` enumeration for call sites (`0x4012F0` 2, `0x4012A0` 110, `0x4013B0` 1, `0x4014B0` 4 direct + 2 tail jumps, `0x4014E0` 1, `0x4AF8F0` 67, `0x4AF910` 8); exhaustive 4-byte literal scans for every type-table/pool field address (`0xAF5EE4`, `0xAF5EEC`, `0xAF5EF0`, `0xAF5EF4`, `0xAF5EF8`, `0xAF5EFC`, `0xAF5F00`, `0xAF5F04`, `0xAF5F05`, `0xAF5F08`, `0xAFA708`, `0x54FF24`, `0x54FF34`) so that every global in the tables is a real reference site and not an inference; PE section arithmetic for the zero-filled `.data` tail.

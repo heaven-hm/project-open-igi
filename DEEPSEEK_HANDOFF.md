@@ -891,3 +891,44 @@ flow-analyst appended §16 (730 lines). Key results:
 - **0x4012F0 = allocator** (189 B, 2 args: owner, type id) and its 0x4012A0 wrapper has indegree 110; it is on the
   critical path of every task creation. Transcribing 0x4012F0 + 0x4014B0/0x4014E0 is what unlocks the task globals.
 - Numbering: §16 holds both the 0x401530 completion and the 0x4015F0 material requested as "§14"; there is no §14.
+
+## §17 delivered: the allocator exists under the WRONG NAME with dropped behaviour (2026-10-24, round 360)
+
+flow-analyst appended §17 (463 lines). Identity: 0x4012F0 = QTask_AllocateTaskInstance(void* owner, uint16 typeId),
+189 B, 6 blocks, 2 callers; 0x4012A0 = append-as-last wrapper (72 B, indegree 110); 0x4013B0 = insert-as-first
+(72 B, 1 caller); 0x4014B0 = TaskType_RefreshHandlerMask, ZERO args, 4 calls + 2 tail jumps; 0x4014E0 =
+TaskType_HandlerPhaseMask(uint32 classIndex), 1 arg, exactly one caller (0x4014B0).
+
+**0x567C58 increment ordering (my question answered):** 0x4012F9 load -> 0x401307 `inc esi` -> 0x40130B store. That
+is BEFORE the pool test, the pool claim, Mem_Lock/Mem_Alloc/Mem_Unlock and all nine header writes, and there is no
+failure path or restore. So the increment is unconditional and a reader can observe count N while instance N still has
+an uninitialised header. Retail header write order is NOT ascending and must be preserved: +0x04, +0x00, +0x14
+(=owner), +0x1E (byte pooled flag), +0x1C (word type id), +0x18, +0x08, +0x0C, +0x10.
+
+**Wrapper handler ABI:** both wrappers push arg3 then the object and call with 2 cdecl arguments (handler arg1 = the
+new task, arg2 = the wrapper's third argument), cleaning 8 bytes. The handler index is read from the OBJECT's own
+header word *(uint16*)(obj+0x1C), not from arg2.
+
+**BLOCKING FINDINGS — the tree already has these VAs, wrongly:**
+1. `native-verification.json` names 0x4012F0/0x4012A0 `QTask_AllocateInputPort`/`QTask_RegisterInputPortHandler` in
+   `input/input_port_process.cpp` and calls them STRUCTURALLY_VERIFIED; `scripts/GameNatives/VERIFICATION.md` calls the
+   same VA `QTask_LinkEventHandler` (PASS/VERIFIED). Three accounts of one VA.
+2. That file's body diverges from retail: pool-recycle branch dropped (unconditional Mem_Alloc), Mem_Lock/Mem_Unlock
+   dropped, pool-tail write and poolUsed++ dropped, empty-list init replaced with offsetof constants, pooled flag
+   taken from the type's pool-present byte (so a heap instance can be marked pooled), an INVENTED null check, and
+   0x567C58 declared and initialised to 0xFFFFFFFF under the name QTask_InputPortCounter - retail's initial value is
+   0 and 0xFFFFFFFF is 0x536148's image value.
+3. Its wrapper swaps the allocator arguments: passes (arg2, arg3) where retail passes (arg1, arg2), and guards the
+   insert on arg3 where retail tests arg1 (0x4012B6).
+4. `FrameHandler = void (*)(void*)` in task_types.hpp:50 is a ONE-argument handler type, but retail phase-0 dispatch
+   pushes two arguments and cleans 8 bytes (0x4012DD-0x4012E0, also 0x401D80). That ABI gap touches task_types.hpp,
+   the registrar transcriptions and dispatch together and must be fixed as one change.
+
+**So my premise was wrong**: the 0x567C58 writer is not missing, it is present under the wrong name and initialiser
+with a dropped pool branch. What is genuinely absent from the manifest is the reader 0x401A60, plus 0x4013B0,
+0x4014B0 and 0x4014E0.
+
+**Next increment (ordered):** (1) rewrite 0x4012F0/0x4012A0/0x4013B0 from §17 bytes under retail names and semantics,
+deleting input_port_process.cpp's wrong version in the same change (one implementation per VA); (2) add
+0x4014B0/0x4014E0; (3) fix the FrameHandler ABI and every registrar call site as one change; (4) only then wire
+0x401A60, whose storage comes from the rewritten allocator.
