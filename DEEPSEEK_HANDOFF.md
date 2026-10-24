@@ -428,3 +428,21 @@ Next three handlers are NOT mechanical and were deliberately deferred rather tha
   against the 11 dwords the sibling 0x4EF990 copies.
 - 0x4EFA20 (100 B, 3 blocks): string walk with `repne scasb` to a terminator, `fld dword`/`fstp qword` for a
   vararg double, then `call 0x4A53B3` with the format string at 0x00547A60. Needs 0x4A53B3 identified first.
+
+## The frozen hash is a per-build identity, not a content identity (round 151)
+
+Rebuilding the tree after comment-only edits produced a different sha256 (b2adaddc -> c91dc17a) even though no
+code changed. Comparing the two binaries byte by byte: **4 bytes differ**, all inside the PE header, the
+`TimeDateStamp` at 0x88 and the derived `checksum` at 0xD8. Sizes identical, all 14 MB of code and data
+identical. So the candidate build is reproducible; only the link timestamp moves.
+
+Consequence: a frozen pair's sha256 identifies one build, not one code state, and two pairs that differ only by
+their timestamp are the same code. Use `scripts/candidate_normalised_hash.py <a> [<b>]` to
+- print the plain and the normalised (TimeDateStamp/checksum zeroed) sha256, and
+- fail loudly if two builds differ anywhere outside those two fields, so a real code difference can never be
+  mistaken for a timestamp.
+
+b2adaddc and c91dc17a share normalised sha256 acfde02d4aa49678a5dd9a044432602f8cc4e9c306407b4c0f386b2277415f34.
+
+Freeze protocol from here: record both hashes for every pair, and treat the normalised hash as the code identity
+when comparing pairs or reproducing an audit.
